@@ -1,0 +1,21 @@
+{
+  "name": "matrix-react-sdk",
+  "version": "0.0.1",
+  "description": "SDK for matrix.org using React",
+  "author": "matrix.org",
+  "license": "Apache 2",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "jsx src/ build",
+    "start": "jsx -w src/ build --source-map-inline"
+  },
+  "dependencies": {
+    "react-loader": "^1.4.0",
+    "flux": "^2.0.3",
+    "matrix-js-sdk": "0.0.4",
+    "react": "^0.13.0"
+  },
+  "devDependencies": {
+    "react-tools": "^0.13.3"
+  }
+}
