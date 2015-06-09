@@ -13,7 +13,7 @@
     "watchify": "^3.2.1"
   },
   "scripts": {
-    "build": "browserify -t [ envify --NODE_ENV production ] -t reactify -g uglifyify lib/index.jsx -o bundle.js",
-    "start": "watchify -v -d -t reactify lib/index.jsx -o bundle.js"
+    "build": "browserify -t [ envify --NODE_ENV production ] -t reactify -g uglifyify lib/index.js -o bundle.js",
+    "start": "watchify -v -d -t reactify lib/index.js -o bundle.js"
   }
 }
