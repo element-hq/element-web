@@ -10,8 +10,12 @@
   "license": "Apache 2",
   "main": "build/index.js",
   "scripts": {
-    "build": "jsx src/ build",
-    "start": "jsx -w src/ build --source-map-inline"
+    "build:js": "jsx src/ build",
+    "start:js": "jsx -w src/ build --source-map-inline",
+    "build:css": "catw 'css/**/*.css' -o bundle.css -c uglifycss --no-watch",
+    "start:css": "catw 'css/**/*.css' -o bundle.css -v",
+    "build": "npm run build:js && npm run build:css",
+    "start": "parallelshell 'npm run start:js' 'npm run start:css'"
   },
   "dependencies": {
     "react-loader": "^1.4.0",
@@ -20,6 +24,9 @@
     "react": "^0.13.0"
   },
   "devDependencies": {
-    "react-tools": "^0.13.3"
+    "catw": "^1.0.1",
+    "parallelshell": "^1.1.1",
+    "react-tools": "^0.13.3",
+    "uglifycss": "0.0.15"
   }
 }
