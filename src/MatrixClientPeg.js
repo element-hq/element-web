@@ -8,6 +8,10 @@ module.exports = {
         return matrixClient;
     },
 
+    replace: function(cli) {
+        matrixClient = cli;
+    },
+
     replaceUsingUrl: function(hs_url) {
         matrixClient = Matrix.createClient(hs_url);
     }

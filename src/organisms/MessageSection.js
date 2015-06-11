@@ -9,15 +9,15 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var messageItems = this.state.messages.map(function(ev) {
+        /*var messageItems = this.state.messages.map(function(ev) {
             return (
                 <Message ev={ev} />
             );
-        });
+        });*/
         return (
+                    //{messageItems}
             <div>
                 <ul className="message-list" ref="messageList">
-                    {messageItems}
                 </ul>
             </div>
         );
