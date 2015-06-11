@@ -1,0 +1,12 @@
+.mx_ProgressBar {
+    height: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
+.mx_ProgressBar_fill {
+    height: 100%;
+    background-color: #666;
+    transition: width 0.1s ease;
+}
