@@ -13,11 +13,11 @@
     "envify": "^3.4.0",
     "matrix-react-sdk": "../",
     "reactify": "^1.1.1",
-    "uglifyify": "^3.0.1",
+    "uglify-js": "^2.4.23",
     "watchify": "^3.2.1"
   },
   "scripts": {
-    "build": "browserify -t [ envify --NODE_ENV production ] -t reactify -g uglifyify lib/index.js -o bundle.js",
+    "build": "browserify -t [ envify --NODE_ENV production ] -t reactify lib/index.js | uglifyjs -c -m -o bundle.js",
     "start": "watchify -v -d -t reactify lib/index.js -o bundle.js"
   }
 }
