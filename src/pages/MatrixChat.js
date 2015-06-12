@@ -1,7 +1,7 @@
 var React = require('react');
 
 var RoomList = require('../organisms/RoomList');
-var MessageSection = require('../organisms/MessageSection');
+var RoomView = require('../organisms/RoomView');
 var Loader = require("react-loader");
 
 var Login = require('../templates/Login');
@@ -43,7 +43,7 @@ module.exports = React.createClass({
             return (
                 <div>
                     <RoomList />
-                    <MessageSection />
+                    <RoomView />
                 </div>
             );
         } else if (this.state.logged_in) {
