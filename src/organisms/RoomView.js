@@ -11,9 +11,24 @@ module.exports = React.createClass({
         }
     },
 
+    componentWillMount: function() {
+        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
+    },
+
+    componentWillUnmount: function() {
+        MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+    },
+
     componentWillReceiveProps: function(props) {
         this.setState({
             room: MatrixClientPeg.get().getRoom(props.room_id)
+        });
+    },
+
+    onRoomTimeline: function(ev, room, toStartOfTimeline) {
+        if (room.roomId != this.props.room_id) return;
+        this.setState({
+            room: MatrixClientPeg.get().getRoom(this.props.room_id)
         });
     },
 
