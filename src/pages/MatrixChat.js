@@ -1,7 +1,8 @@
 var React = require('react');
 
-var ThreadSection = require('../organisms/ThreadSection');
+var RoomList = require('../organisms/RoomList');
 var MessageSection = require('../organisms/MessageSection');
+var Loader = require("react-loader");
 
 var Login = require('../templates/Login');
 
@@ -12,21 +13,42 @@ var mxCliPeg = require("../MatrixClientPeg");
 module.exports = React.createClass({
     getInitialState: function() {
         return {
-            logged_in: !!(mxCliPeg.get() && mxCliPeg.get().credentials)
+            logged_in: !!(mxCliPeg.get() && mxCliPeg.get().credentials),
+            ready: false
         };
+    },
+
+    componentDidMount: function() {
+        if (this.state.logged_in) {
+            this.startMatrixClient();
+        }
     },
 
     onLoggedIn: function() {
         this.setState({logged_in: true});
+        this.startMatrixClient();
+    },
+
+    startMatrixClient: function() {
+        var cli = mxCliPeg.get();
+        var that = this;
+        cli.on('syncComplete', function() {
+            that.setState({ready: true});
+        });
+        cli.startClient();
     },
 
     render: function() {
-        if (this.state.logged_in) {
+        if (this.state.logged_in && this.state.ready) {
             return (
                 <div>
-                    <ThreadSection />
+                    <RoomList />
                     <MessageSection />
                 </div>
+            );
+        } else if (this.state.logged_in) {
+            return (
+                <Loader />
             );
         } else {
             return (

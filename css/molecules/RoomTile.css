@@ -1,0 +1,18 @@
+.mx_RoomTile {
+    height: 20px;
+    width: 250px;
+    background-color: #ddd;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    padding: 5px;
+}
+
+.mx_RoomTile_name {
+    font-size: 80%;
+    font-weight: bold;
+}
+
+.mx_RoomTile div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
