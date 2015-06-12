@@ -39,6 +39,11 @@ module.exports = React.createClass({
                     ready: false
                 });
                 break;
+            case 'view_room':
+                this.setState({
+                    currentRoom: payload.room_id
+                });
+                break;
         }
     },
 

@@ -11,6 +11,12 @@ module.exports = React.createClass({
         }
     },
 
+    componentWillReceiveProps: function(props) {
+        this.setState({
+            room: MatrixClientPeg.get().getRoom(props.room_id)
+        });
+    },
+
     getMessageTiles: function() {
         return this.state.room.timeline.map(function(mxEv) {
             return (
