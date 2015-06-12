@@ -16,16 +16,6 @@ module.exports = React.createClass({
         };
     },
 
-    /*componentWillMount: function() {
-        var that = this;
-        this.dispatcherRef = dis.register(function(payload) {
-            switch(payload.action) {
-                case 'logged_in':
-                    break;
-            }
-        });
-    },*/
-
     onLoggedIn: function() {
         this.setState({logged_in: true});
     },
