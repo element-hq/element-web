@@ -7,24 +7,27 @@ var Login = require('../templates/Login');
 
 var mxCliPeg = require("../MatrixClientPeg");
 
-var dis = require("../dispatcher");
+//var dis = require("../dispatcher");
 
 module.exports = React.createClass({
     getInitialState: function() {
         return {
-            logged_in: !!mxCliPeg.get().credentials
+            logged_in: !!(mxCliPeg.get() && mxCliPeg.get().credentials)
         };
     },
 
-    componentWillMount: function() {
+    /*componentWillMount: function() {
         var that = this;
         this.dispatcherRef = dis.register(function(payload) {
             switch(payload.action) {
                 case 'logged_in':
-                    that.setState({logged_in: true});
                     break;
             }
         });
+    },*/
+
+    onLoggedIn: function() {
+        this.setState({logged_in: true});
     },
 
     render: function() {
@@ -37,7 +40,7 @@ module.exports = React.createClass({
             );
         } else {
             return (
-                <Login />
+                <Login onLoggedIn={this.onLoggedIn} />
             );
         }
     }

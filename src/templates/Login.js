@@ -6,7 +6,7 @@ var ServerConfig = require("../molecules/ServerConfig");
 var ProgressBar = require("../molecules/ProgressBar");
 var Loader = require("react-loader");
 
-var dis = require("../dispatcher");
+//var dis = require("../dispatcher");
 
 module.exports = React.createClass({
     getInitialState: function() {
@@ -19,7 +19,7 @@ module.exports = React.createClass({
     },
 
     setStep: function(step) {
-        this.setState({ step: step, errorText: '' });
+        this.setState({ step: step, errorText: '', busy: false });
     },
 
     onHSChosen: function(ev) {
@@ -50,6 +50,11 @@ module.exports = React.createClass({
             'password': that.refs.pass.getDOMNode().value
         }).then(function(data) {
             // XXX: we assume this means we're logged in, but there could be a next stage
+            MatrixClientPeg.replace(Matrix.createClient({
+                baseUrl: that.state.hs_url,
+                userId: data.user_id,
+                accessToken: data.access_token
+            }));
             var localStorage = window.localStorage;
             if (localStorage) {
                 localStorage.setItem("mx_hs_url", that.state.hs_url);
@@ -58,9 +63,12 @@ module.exports = React.createClass({
             } else {
                 console.warn("No local storage available: can't persist session!");
             }
-            dis.dispatch({
+            if (that.props.onLoggedIn) {
+                that.props.onLoggedIn();
+            }
+            /*dis.dispatch({
                 'action': 'logged_in'
-            });
+            });*/
         }, function(error) {
             that.setStep("stage_m.login.password");
             that.setState({errorText: 'Login failed.'});

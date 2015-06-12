@@ -14,6 +14,7 @@ if (localStorage) {
             accessToken: access_token,
             userId: user_id
         });
+        matrixClient.startClient();
     }
 }
 
