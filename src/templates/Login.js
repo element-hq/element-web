@@ -24,8 +24,10 @@ module.exports = React.createClass({
 
     onHSChosen: function(ev) {
         MatrixClientPeg.replaceUsingUrl(this.refs.serverConfig.getHsUrl());
+        this.setState({hs_url: this.refs.serverConfig.getHsUrl()});
         this.setStep("fetch_stages");
         var cli = MatrixClientPeg.get();
+        this.setState({busy: true});
         var that = this;
         cli.loginFlows().then(function(result) {
             that.setState({
@@ -41,11 +43,21 @@ module.exports = React.createClass({
     },
 
     onUserPassEntered: function(ev) {
+        this.setState({busy: true});
         var that = this;
         MatrixClientPeg.get().login('m.login.password', {
             'user': that.refs.user.getDOMNode().value,
             'password': that.refs.pass.getDOMNode().value
         }).then(function(data) {
+            // XXX: we assume this means we're logged in, but there could be a next stage
+            var localStorage = window.localStorage;
+            if (localStorage) {
+                localStorage.setItem("mx_hs_url", that.state.hs_url);
+                localStorage.setItem("mx_user_id", data.user_id);
+                localStorage.setItem("mx_access_token", data.access_token);
+            } else {
+                console.warn("No local storage available: can't persist session!");
+            }
             dis.dispatch({
                 'action': 'logged_in'
             });

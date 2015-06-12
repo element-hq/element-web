@@ -12,7 +12,7 @@ var dis = require("../dispatcher");
 module.exports = React.createClass({
     getInitialState: function() {
         return {
-            logged_in: false
+            logged_in: !!mxCliPeg.get().credentials
         };
     },
 
