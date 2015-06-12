@@ -1,3 +1,8 @@
+.mx_RoomList {
+    display: table-row;
+}
+
 .mx_RoomList ul {
     padding: 0px;
+    margin: 0px;
 }

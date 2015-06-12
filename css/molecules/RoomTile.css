@@ -5,6 +5,17 @@
     margin-top: 1px;
     margin-bottom: 1px;
     padding: 5px;
+    cursor: pointer;
+    border: 2px solid white;
+    transition: background-color 0.1s ease;
+}
+
+.mx_RoomTile.selected {
+    border: 2px inset #eee;
+}
+
+.mx_RoomTile:hover {
+    background-color: #aad;
 }
 
 .mx_RoomTile_name {

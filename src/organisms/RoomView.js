@@ -1,23 +1,30 @@
 var React = require('react');
-var Message = require('../molecules/Message');
+var MessageTile = require('../molecules/MessageTile');
+var RoomHeader = require('../molecules/RoomHeader');
+
+var MatrixClientPeg = require("../MatrixClientPeg");
 
 module.exports = React.createClass({
     getInitialState: function() {
         return {
-            messages: [ { foo: "bar"} ]
+            room: MatrixClientPeg.get().getRoom(this.props.room_id)
         }
     },
 
-    render: function() {
-        /*var messageItems = this.state.messages.map(function(ev) {
+    getMessageTiles: function() {
+        return this.state.room.timeline.map(function(mxEv) {
             return (
-                <Message ev={ev} />
+                <MessageTile mxEvent={mxEv} key={mxEv.getId()} />
             );
-        });*/
+        });
+    },
+
+    render: function() {
         return (
-                    //{messageItems}
-            <div>
-                <ul className="message-list" ref="messageList">
+            <div className="mx_RoomView">
+                <RoomHeader room={this.state.room} />
+                <ul>
+                    {this.getMessageTiles()}
                 </ul>
             </div>
         );

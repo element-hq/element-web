@@ -6,8 +6,6 @@ var ServerConfig = require("../molecules/ServerConfig");
 var ProgressBar = require("../molecules/ProgressBar");
 var Loader = require("react-loader");
 
-//var dis = require("../dispatcher");
-
 module.exports = React.createClass({
     getInitialState: function() {
         return {

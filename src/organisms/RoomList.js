@@ -12,9 +12,11 @@ module.exports = React.createClass({
     },
 
     makeRoomTiles: function() {
+        var that = this;
         return this.state.roomList.map(function(room) {
+            var selected = room.roomId == that.props.selectedRoom;
             return (
-                <RoomTile room={room} key={room.roomId} />
+                <RoomTile room={room} key={room.roomId} selected={selected} />
             );
         });
     },

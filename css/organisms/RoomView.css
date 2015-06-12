@@ -1,0 +1,9 @@
+.mx_RoomView {
+    display: table-cell;
+    padding-left: 5px;
+    width: 100%;
+}
+
+.mx_RoomView ul {
+    padding: 0px;
+}

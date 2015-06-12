@@ -18,10 +18,11 @@
     "start": "parallelshell 'npm run start:js' 'npm run start:css'"
   },
   "dependencies": {
-    "react-loader": "^1.4.0",
+    "classnames": "^2.1.2",
     "flux": "^2.0.3",
     "matrix-js-sdk": "0.0.4",
-    "react": "^0.13.0"
+    "react": "^0.13.0",
+    "react-loader": "^1.4.0"
   },
   "devDependencies": {
     "catw": "^1.0.1",
