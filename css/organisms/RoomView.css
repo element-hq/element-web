@@ -6,4 +6,6 @@
 
 .mx_RoomView ul {
     padding: 0px;
+    height: 100%;
+    overflow-y: scroll;
 }

@@ -2,6 +2,7 @@
     display: table;
     table-layout: fixed;
     width: 100%;
+    height: 100%;
 }
 
 .mx_MatrixChat_leftPanel {
