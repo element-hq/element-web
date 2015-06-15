@@ -21,6 +21,7 @@ module.exports = React.createClass({
     },
 
     onHSChosen: function(ev) {
+        ev.preventDefault();
         MatrixClientPeg.replaceUsingUrl(this.refs.serverConfig.getHsUrl());
         this.setState({hs_url: this.refs.serverConfig.getHsUrl()});
         this.setStep("fetch_stages");
@@ -41,6 +42,7 @@ module.exports = React.createClass({
     },
 
     onUserPassEntered: function(ev) {
+        ev.preventDefault();
         this.setState({busy: true});
         var that = this;
         MatrixClientPeg.get().login('m.login.password', {
