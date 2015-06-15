@@ -1,3 +1,10 @@
+.mx_MatrixChat {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+
 .mx_MatrixChat_leftPanel {
     display: table-cell;
+    width: 250px;
 }

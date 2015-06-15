@@ -68,7 +68,7 @@ module.exports = React.createClass({
     render: function() {
         if (this.state.logged_in && this.state.ready) {
             return (
-                <div>
+                <div className="mx_MatrixChat">
                     <div className="mx_MatrixChat_leftPanel">
                         <MatrixToolbar />
                         <RoomList selectedRoom={this.state.currentRoom} />

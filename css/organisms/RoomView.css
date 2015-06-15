@@ -1,7 +1,7 @@
 .mx_RoomView {
     display: table-cell;
     padding-left: 5px;
-    width: 100%;
+    word-wrap: break-word;
 }
 
 .mx_RoomView ul {
