@@ -8,7 +8,7 @@ var MatrixClientPeg = require("../MatrixClientPeg");
 module.exports = React.createClass({
     getInitialState: function() {
         return {
-            room: MatrixClientPeg.get().getRoom(this.props.room_id)
+            room: MatrixClientPeg.get().getRoom(this.props.roomId)
         }
     },
 
@@ -22,14 +22,14 @@ module.exports = React.createClass({
 
     componentWillReceiveProps: function(props) {
         this.setState({
-            room: MatrixClientPeg.get().getRoom(props.room_id)
+            room: MatrixClientPeg.get().getRoom(props.roomId)
         });
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
-        if (room.roomId != this.props.room_id) return;
+        if (room.roomId != this.props.roomId) return;
         this.setState({
-            room: MatrixClientPeg.get().getRoom(this.props.room_id)
+            room: MatrixClientPeg.get().getRoom(this.props.roomId)
         });
     },
 
@@ -48,7 +48,7 @@ module.exports = React.createClass({
                 <ul>
                     {this.getMessageTiles()}
                 </ul>
-                <MessageComposer room={this.state.room} />
+                <MessageComposer roomId={this.props.roomId} />
             </div>
         );
     },
