@@ -17,7 +17,9 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+        }
     },
 
     componentWillReceiveProps: function(props) {

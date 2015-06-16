@@ -33,11 +33,12 @@ module.exports = React.createClass({
     onAction: function(payload) {
         switch (payload.action) {
             case 'logout':
-                mxCliPeg.replace(null);
                 this.setState({
                     logged_in: false,
                     ready: false
                 });
+                mxCliPeg.get().removeAllListeners();
+                mxCliPeg.replace(null);
                 break;
             case 'view_room':
                 this.setState({
