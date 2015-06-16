@@ -1,6 +1,7 @@
 var React = require('react');
 var MessageTile = require('../molecules/MessageTile');
 var RoomHeader = require('../molecules/RoomHeader');
+var MessageComposer = require('../molecules/MessageComposer');
 
 var MatrixClientPeg = require("../MatrixClientPeg");
 
@@ -35,7 +36,7 @@ module.exports = React.createClass({
     getMessageTiles: function() {
         return this.state.room.timeline.map(function(mxEv) {
             return (
-                <MessageTile mxEvent={mxEv} key={mxEv.getId()} />
+                <li><MessageTile mxEvent={mxEv} key={mxEv.getId()} /></li>
             );
         });
     },
@@ -47,6 +48,7 @@ module.exports = React.createClass({
                 <ul>
                     {this.getMessageTiles()}
                 </ul>
+                <MessageComposer room={this.state.room} />
             </div>
         );
     },
