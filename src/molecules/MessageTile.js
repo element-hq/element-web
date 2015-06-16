@@ -20,7 +20,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_MessageTile">
                 <MessageTimestamp ts={this.props.mxEvent.getTs()} />
-                <SenderProfile mxEvent={this.props.mxEvent} />:
+                <SenderProfile mxEvent={this.props.mxEvent} />
                 <TileType mxEvent={this.props.mxEvent} />
             </div>
         );
