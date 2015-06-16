@@ -1,7 +1,5 @@
 var React = require('react');
 
-var mxCliPeg = require("../MatrixClientPeg");
-
 var dis = require("../dispatcher");
 
 module.exports = React.createClass({
