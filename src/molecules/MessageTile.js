@@ -6,7 +6,8 @@ var SenderProfile = require('../molecules/SenderProfile');
 var UnknownMessageTile = require('../molecules/UnknownMessageTile');
 
 var tileTypes = {
-    'm.text': require('../molecules/MTextTile')
+    'm.text': require('../molecules/MTextTile'),
+    'm.emote': require('../molecules/MEmoteTile')
 };
 
 module.exports = React.createClass({
