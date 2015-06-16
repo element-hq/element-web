@@ -1,4 +1,10 @@
 .mx_RoomList {
+    position: relative;
+    top: -30px;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    height: 100%;
+    overflow-y: scroll;
 }
 
 .mx_RoomList ul {

@@ -8,4 +8,5 @@
 .mx_MatrixChat_leftPanel {
     display: table-cell;
     width: 250px;
+    height: 100%;
 }
