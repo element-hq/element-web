@@ -1,11 +1,14 @@
 var React = require('react');
+var ComponentBroker = require('../ComponentBroker');
 
-var RoomList = require('../organisms/RoomList');
-var RoomView = require('../organisms/RoomView');
-var MatrixToolbar = require('../molecules/MatrixToolbar');
+var RoomList = ComponentBroker.get('RoomList');
+var RoomView = ComponentBroker.get('RoomView');
+var MatrixToolbar = ComponentBroker.get('MatrixToolbar');
+var Login = ComponentBroker.get('Login');
+
+// should be atomised
 var Loader = require("react-loader");
 
-var Login = require('../templates/Login');
 
 var mxCliPeg = require("../MatrixClientPeg");
 
