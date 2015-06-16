@@ -36,7 +36,7 @@ module.exports = React.createClass({
     getMessageTiles: function() {
         return this.state.room.timeline.map(function(mxEv) {
             return (
-                <li><MessageTile mxEvent={mxEv} key={mxEv.getId()} /></li>
+                <li key={mxEv.getId()}><MessageTile mxEvent={mxEv} /></li>
             );
         });
     },
