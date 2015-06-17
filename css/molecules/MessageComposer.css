@@ -1,12 +1,10 @@
 .mx_MessageComposer {
-    position: absolute;
-    bottom: 5px;
-    right: 0px;
-    left: 0px;
-    width: 100%;
-    height: 36px;
 }
 
 .mx_MessageComposer textarea {
+    position: absolute;
     width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
 }
