@@ -1,24 +1,9 @@
 var components = {};
 
 function load(name) {
-    var types = [
-        'atoms',
-        'molecules',
-        'organisms',
-        'templates',
-        'pages'
-    ];
-    var ex = null;
-    for (var i = 0; i < types.length; ++i) {
-        try {
-            var module = require("./"+types[i]+"/"+name);
-            components[name] = module;
-            return module;
-        } catch (err) {
-            ex = err;
-        }
-    }
-    throw ex;
+    var module = require("./"+name);
+    components[name] = module;
+    return module;
 };
 
 module.exports = {
@@ -34,7 +19,21 @@ module.exports = {
     }
 };
 
+// Statically require all the components we know about,
+// otherwise browserify has no way of knowing what module to include
+// Must be in this file (because the require is file-specific) and
+// must be at the end because the components include this file.
+require('./atoms/LogoutButton');
+require('./atoms/MessageTimestamp');
+require('./molecules/MatrixToolbar');
+require('./molecules/RoomTile');
+require('./molecules/MessageTile');
+require('./molecules/SenderProfile');
+require('./molecules/UnknownMessageTile');
+require('./molecules/MTextTile');
+require('./molecules/MEmoteTile');
+require('./molecules/RoomHeader');
+require('./molecules/MessageComposer');
 require('./organisms/RoomList');
 require('./organisms/RoomView');
-require('./molecules/MatrixToolbar');
 require('./templates/Login');

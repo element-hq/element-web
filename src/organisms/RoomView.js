@@ -1,9 +1,12 @@
 var React = require('react');
-var MessageTile = require('../molecules/MessageTile');
-var RoomHeader = require('../molecules/RoomHeader');
-var MessageComposer = require('../molecules/MessageComposer');
 
 var MatrixClientPeg = require("../MatrixClientPeg");
+var ComponentBroker = require('../ComponentBroker');
+
+var MessageTile = ComponentBroker.get('molecules/MessageTile');
+var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
+var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
+
 
 module.exports = React.createClass({
     getInitialState: function() {

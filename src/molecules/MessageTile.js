@@ -1,13 +1,15 @@
 var React = require('react');
 
-var MessageTimestamp = require('../atoms/MessageTimestamp');
-var SenderProfile = require('../molecules/SenderProfile');
+var ComponentBroker = require('../ComponentBroker');
 
-var UnknownMessageTile = require('../molecules/UnknownMessageTile');
+var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
+var SenderProfile = ComponentBroker.get('molecules/SenderProfile');
+
+var UnknownMessageTile = ComponentBroker.get('molecules/UnknownMessageTile');
 
 var tileTypes = {
-    'm.text': require('../molecules/MTextTile'),
-    'm.emote': require('../molecules/MEmoteTile')
+    'm.text': ComponentBroker.get('molecules/MTextTile'),
+    'm.emote': ComponentBroker.get('molecules/MEmoteTile')
 };
 
 module.exports = React.createClass({

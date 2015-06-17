@@ -1,8 +1,9 @@
 var React = require('react');
 
 var MatrixClientPeg = require("../MatrixClientPeg");
+var ComponentBroker = require('../ComponentBroker');
 
-var RoomTile = require("../molecules/RoomTile");
+var RoomTile = ComponentBroker.get("molecules/RoomTile");
 
 module.exports = React.createClass({
     componentWillMount: function() {

@@ -1,6 +1,8 @@
 var React = require('react');
 
-var LogoutButton = require("../atoms/LogoutButton");
+var ComponentBroker = require('../ComponentBroker');
+
+var LogoutButton = ComponentBroker.get("atoms/LogoutButton");
 
 module.exports = React.createClass({
     render: function() {

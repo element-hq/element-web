@@ -1,10 +1,10 @@
 var React = require('react');
 var ComponentBroker = require('../ComponentBroker');
 
-var RoomList = ComponentBroker.get('RoomList');
-var RoomView = ComponentBroker.get('RoomView');
-var MatrixToolbar = ComponentBroker.get('MatrixToolbar');
-var Login = ComponentBroker.get('Login');
+var RoomList = ComponentBroker.get('organisms/RoomList');
+var RoomView = ComponentBroker.get('organisms/RoomView');
+var MatrixToolbar = ComponentBroker.get('molecules/MatrixToolbar');
+var Login = ComponentBroker.get('templates/Login');
 
 // should be atomised
 var Loader = require("react-loader");
