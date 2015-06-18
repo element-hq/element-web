@@ -23,8 +23,8 @@ module.exports = React.createClass({
         }
     },
 
-    componentWillReceiveProps: function() {
-        this.state.activityMap[this.props.selectedRoom] = undefined;
+    componentWillReceiveProps: function(newProps) {
+        this.state.activityMap[newProps.selectedRoom] = undefined;
         this.setState({
             activityMap: this.state.activityMap
         });
@@ -32,6 +32,7 @@ module.exports = React.createClass({
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (room.roomId == this.props.selectedRoom) return;
+        if (ev.getSender() == MatrixClientPeg.get().credentials.userId) return;
 
         // obviously this won't deep copy but we this shouldn't be necessary
         var amap = this.state.activityMap;
