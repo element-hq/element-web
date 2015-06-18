@@ -5,11 +5,40 @@ var ComponentBroker = require('../ComponentBroker');
 
 var RoomTile = ComponentBroker.get("molecules/RoomTile");
 
+
 module.exports = React.createClass({
     componentWillMount: function() {
         var cli = MatrixClientPeg.get();
+        cli.on("Room.timeline", this.onRoomTimeline);
 
-        this.setState({roomList: cli.getRooms()});
+        this.setState({
+            roomList: cli.getRooms(),
+            activityMap: {}
+        });
+    },
+
+    componentWillUnmount: function() {
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+        }
+    },
+
+    componentWillReceiveProps: function() {
+        this.state.activityMap[this.props.selectedRoom] = undefined;
+        this.setState({
+            activityMap: this.state.activityMap
+        });
+    },
+
+    onRoomTimeline: function(ev, room, toStartOfTimeline) {
+        if (room.roomId == this.props.selectedRoom) return;
+
+        // obviously this won't deep copy but we this shouldn't be necessary
+        var amap = this.state.activityMap;
+        amap[room.roomId] = 1;
+        this.setState({
+            roomMap: amap
+        });
     },
 
     makeRoomTiles: function() {
@@ -17,7 +46,12 @@ module.exports = React.createClass({
         return this.state.roomList.map(function(room) {
             var selected = room.roomId == that.props.selectedRoom;
             return (
-                <RoomTile room={room} key={room.roomId} selected={selected} />
+                <RoomTile
+                    room={room}
+                    key={room.roomId}
+                    selected={selected}
+                    unread={that.state.activityMap[room.roomId] === 1}
+                />
             );
         });
     },

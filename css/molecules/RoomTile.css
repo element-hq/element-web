@@ -13,10 +13,6 @@
     border: 2px inset #eee;
 }
 
-.mx_RoomTile:hover {
-    background-color: #aad;
-}
-
 .mx_RoomTile_name {
     font-size: 80%;
     font-weight: bold;
@@ -25,4 +21,12 @@
 .mx_RoomTile div {
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.mx_RoomTile.unread {
+    background-color: #66e;
+}
+
+.mx_RoomTile:hover {
+    background-color: #ff8;
 }

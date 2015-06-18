@@ -14,7 +14,8 @@ module.exports = React.createClass({
     render: function() {
         var classes = classNames({
             'mx_RoomTile': true,
-            'selected': this.props.selected
+            'selected': this.props.selected,
+            'unread': this.props.unread
         });
         return (
             <div className={classes} onClick={this.onClick}>
