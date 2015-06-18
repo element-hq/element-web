@@ -2,7 +2,25 @@ var React = require('react');
 
 var MatrixClientPeg = require("../MatrixClientPeg");
 
+var dis = require("../dispatcher");
+
 module.exports = React.createClass({
+    componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+    },
+
+    componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
+    },
+
+    onAction: function(payload) {
+        switch (payload.action) {
+            case 'focus_composer':
+                this.refs.textarea.getDOMNode().focus();
+                break;
+        }
+    },
+
     onKeyDown: function (ev) {
         if (ev.keyCode == 13) {
             var contentText = this.refs.textarea.getDOMNode().value;

@@ -27,10 +27,18 @@ module.exports = React.createClass({
         if (this.state.logged_in) {
             this.startMatrixClient();
         }
+        this.focusComposer = false;
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
+    },
+
+    componentDidUpdate: function() {
+        if (this.focusComposer) {
+            dis.dispatch({action: 'focus_composer'});
+            this.focusComposer = false;
+        }
     },
 
     onAction: function(payload) {
@@ -47,6 +55,7 @@ module.exports = React.createClass({
                 this.setState({
                     currentRoom: payload.room_id
                 });
+                this.focusComposer = true;
                 break;
         }
     },
@@ -65,6 +74,7 @@ module.exports = React.createClass({
                 firstRoom = cli.getRooms()[0].roomId;
             }
             that.setState({ready: true, currentRoom: firstRoom});
+            dis.dispatch({action: 'focus_composer'});
         });
         cli.startClient();
     },
