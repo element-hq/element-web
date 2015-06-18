@@ -1,5 +1,7 @@
 var React = require('react');
 
+var classNames = require("classnames");
+
 var ComponentBroker = require('../ComponentBroker');
 
 var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
@@ -20,8 +22,13 @@ module.exports = React.createClass({
         if (msgtype && tileTypes[msgtype]) {
             TileType = tileTypes[msgtype];
         }
+        var classes = classNames({
+            mx_MessageTile: true,
+            sending: this.props.mxEvent.status == 'sending',
+            not_sent: this.props.mxEvent.status == 'not_sent'
+        });
         return (
-            <div className="mx_MessageTile">
+            <div className={classes}>
                 <MessageTimestamp ts={this.props.mxEvent.getTs()} />
                 <SenderProfile mxEvent={this.props.mxEvent} />
                 <TileType mxEvent={this.props.mxEvent} />
