@@ -77,7 +77,7 @@ module.exports = React.createClass({
                         <MatrixToolbar />
                         <RoomList selectedRoom={this.state.currentRoom} />
                     </div>
-                    <RoomView roomId={this.state.currentRoom} />
+                    <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
                 </div>
             );
         } else if (this.state.logged_in) {
