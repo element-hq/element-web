@@ -8,6 +8,7 @@ var RoomTile = ComponentBroker.get("molecules/RoomTile");
 module.exports = {
     componentWillMount: function() {
         var cli = MatrixClientPeg.get();
+        cli.on("Room", this.onRoom);
         cli.on("Room.timeline", this.onRoomTimeline);
 
         this.setState({
@@ -18,6 +19,7 @@ module.exports = {
 
     componentWillUnmount: function() {
         if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
         }
     },
@@ -26,6 +28,13 @@ module.exports = {
         this.state.activityMap[newProps.selectedRoom] = undefined;
         this.setState({
             activityMap: this.state.activityMap
+        });
+    },
+
+    onRoom: function(room) {
+        var cli = MatrixClientPeg.get();
+        this.setState({
+            roomList: cli.getRooms(),
         });
     },
 
@@ -51,6 +60,7 @@ module.exports = {
                     key={room.roomId}
                     selected={selected}
                     unread={that.state.activityMap[room.roomId] === 1}
+                    highlight={that.state.activityMap[room.roomId] === 2}
                 />
             );
         });

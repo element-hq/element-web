@@ -1,3 +1,5 @@
+var React = require('react');
+
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var Matrix = require("matrix-js-sdk");
 
