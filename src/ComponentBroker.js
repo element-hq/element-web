@@ -31,6 +31,7 @@ require('./views/molecules/MessageTile');
 require('./views/molecules/SenderProfile');
 require('./views/molecules/UnknownMessageTile');
 require('./views/molecules/MTextTile');
+require('./views/molecules/MNoticeTile');
 require('./views/molecules/MEmoteTile');
 require('./views/molecules/RoomHeader');
 require('./views/molecules/MessageComposer');
