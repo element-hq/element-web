@@ -1,7 +1,7 @@
 var components = {};
 
 function load(name) {
-    var module = require("./"+name);
+    var module = require("./views/"+name);
     components[name] = module;
     return module;
 };
@@ -23,17 +23,19 @@ module.exports = {
 // otherwise browserify has no way of knowing what module to include
 // Must be in this file (because the require is file-specific) and
 // must be at the end because the components include this file.
-require('./atoms/LogoutButton');
-require('./atoms/MessageTimestamp');
-require('./molecules/MatrixToolbar');
-require('./molecules/RoomTile');
-require('./molecules/MessageTile');
-require('./molecules/SenderProfile');
-require('./molecules/UnknownMessageTile');
-require('./molecules/MTextTile');
-require('./molecules/MEmoteTile');
-require('./molecules/RoomHeader');
-require('./molecules/MessageComposer');
-require('./organisms/RoomList');
-require('./organisms/RoomView');
-require('./templates/Login');
+require('./views/atoms/LogoutButton');
+require('./views/atoms/MessageTimestamp');
+require('./views/molecules/MatrixToolbar');
+require('./views/molecules/RoomTile');
+require('./views/molecules/MessageTile');
+require('./views/molecules/SenderProfile');
+require('./views/molecules/UnknownMessageTile');
+require('./views/molecules/MTextTile');
+require('./views/molecules/MEmoteTile');
+require('./views/molecules/RoomHeader');
+require('./views/molecules/MessageComposer');
+require('./views/molecules/ProgressBar');
+require('./views/molecules/ServerConfig');
+require('./views/organisms/RoomList');
+require('./views/organisms/RoomView');
+require('./views/templates/Login');

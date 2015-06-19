@@ -1,0 +1,18 @@
+var React = require('react');
+
+var ProgressBarController = require("./../molecules/ProgressBar");
+
+module.exports = React.createClass({
+    mixins: [ProgressBarController],
+
+    render: function() {
+        // Would use an HTML5 progress tag but if that doesn't animate if you
+        // use the HTML attributes rather than styles
+        var progressStyle = {
+            width: ((this.props.value / this.props.max) * 100)+"%"
+        };
+        return (
+            <div className="mx_ProgressBar"><div className="mx_ProgressBar_fill" style={progressStyle}></div></div>
+        );
+    }
+});

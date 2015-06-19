@@ -1,1 +1,1 @@
-module.exports.MatrixChat = require("./pages/MatrixChat");
+module.exports.MatrixChat = require("./views/pages/MatrixChat");
