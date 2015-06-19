@@ -4,6 +4,7 @@ var RoomListController = require("../../controllers/organisms/RoomList");
 
 
 module.exports = React.createClass({
+    displayName: 'RoomList',
     mixins: [RoomListController],
 
     render: function() {

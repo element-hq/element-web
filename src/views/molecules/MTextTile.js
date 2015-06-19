@@ -3,6 +3,7 @@ var React = require('react');
 var MTextTileController = require("../../controllers/molecules/MTextTile");
 
 module.exports = React.createClass({
+    displayName: 'MTextTile',
     mixins: [MTextTileController],
 
     render: function() {

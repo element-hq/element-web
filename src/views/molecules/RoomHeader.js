@@ -3,6 +3,7 @@ var React = require('react');
 var RoomHeaderController = require("../../controllers/molecules/RoomHeader");
 
 module.exports = React.createClass({
+    displayName: 'RoomHeader',
     mixins: [RoomHeaderController],
 
     render: function() {

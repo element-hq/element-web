@@ -8,6 +8,7 @@ var Loader = require("react-loader");
 var LoginController = require("../../controllers/templates/Login");
 
 module.exports = React.createClass({
+    displayName: 'Login',
     mixins: [LoginController],
 
     loginContent: function() {

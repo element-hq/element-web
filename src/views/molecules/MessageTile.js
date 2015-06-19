@@ -18,6 +18,7 @@ var tileTypes = {
 var MessageTileController = require("../../controllers/molecules/MessageTile");
 
 module.exports = React.createClass({
+    displayName: 'MessageTile',
     mixins: [MessageTileController],
 
     render: function() {

@@ -7,6 +7,7 @@ var LogoutButton = ComponentBroker.get("atoms/LogoutButton");
 var MatrixToolbarController = require("../../controllers/molecules/MatrixToolbar");
 
 module.exports = React.createClass({
+    displayName: 'MatrixToolbar',
     mixins: [MatrixToolbarController],
 
     render: function() {

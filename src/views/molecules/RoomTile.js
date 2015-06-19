@@ -4,6 +4,7 @@ var classNames = require('classnames');
 var RoomTileController = require("../../controllers/molecules/RoomTile");
 
 module.exports = React.createClass({
+    displayName: 'RoomTile',
     mixins: [RoomTileController],
     render: function() {
         var classes = classNames({

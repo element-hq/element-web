@@ -13,6 +13,7 @@ var Loader = require("react-loader");
 
 
 module.exports = React.createClass({
+    displayName: 'MatrixChat',
     mixins: [MatrixChatController],
 
     render: function() {

@@ -3,6 +3,7 @@ var React = require('react');
 var MNoticeTileController = require("../../controllers/molecules/MNoticeTile");
 
 module.exports = React.createClass({
+    displayName: 'MNoticeTile',
     mixins: [MNoticeTileController],
 
     render: function() {

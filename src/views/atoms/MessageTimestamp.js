@@ -3,6 +3,7 @@ var React = require('react');
 var MessageTimestampController = require("../../controllers/atoms/MessageTimestamp");
 
 module.exports = React.createClass({
+    displayName: 'MessageTimestamp',
     mixins: [MessageTimestampController],
 
     render: function() {

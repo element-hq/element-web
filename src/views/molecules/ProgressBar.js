@@ -3,6 +3,7 @@ var React = require('react');
 var ProgressBarController = require("./../molecules/ProgressBar");
 
 module.exports = React.createClass({
+    displayName: 'ProgressBar',
     mixins: [ProgressBarController],
 
     render: function() {

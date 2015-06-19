@@ -3,6 +3,7 @@ var React = require('react');
 var ServerConfigController = require("../../controllers/molecules/ServerConfig");
 
 module.exports = React.createClass({
+    displayName: 'ServerConfig',
     mixins: [ServerConfigController],
 
     render: function() {

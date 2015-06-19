@@ -3,6 +3,7 @@ var React = require('react');
 var MEmoteTileController = require("../../controllers/molecules/MEmoteTile");
 
 module.exports = React.createClass({
+    displayName: 'MEmoteTile',
     mixins: [MEmoteTileController],
 
     render: function() {

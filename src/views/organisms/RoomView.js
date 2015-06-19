@@ -10,6 +10,7 @@ var RoomViewController = require("../../controllers/organisms/RoomView");
 
 
 module.exports = React.createClass({
+    displayName: 'RoomView',
     mixins: [RoomViewController],
 
     getMessageTiles: function() {
