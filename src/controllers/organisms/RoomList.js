@@ -10,6 +10,7 @@ module.exports = {
         var cli = MatrixClientPeg.get();
         cli.on("Room", this.onRoom);
         cli.on("Room.timeline", this.onRoomTimeline);
+        cli.on("Room.name", this.onRoomName);
 
         this.setState({
             roomList: cli.getRooms(),
@@ -21,6 +22,7 @@ module.exports = {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+            MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
         }
     },
 
@@ -46,7 +48,14 @@ module.exports = {
         var amap = this.state.activityMap;
         amap[room.roomId] = 1;
         this.setState({
-            roomMap: amap
+            activityMap: amap
+        });
+    },
+
+    onRoomName: function(room) {
+        var cli = MatrixClientPeg.get();
+        this.setState({
+            roomList: cli.getRooms(),
         });
     },
 
