@@ -22,6 +22,7 @@ module.exports = {
     },*/
 
     onRoomStateMember: function(ev, state, member) {
+        var cli = MatrixClientPeg.get();
         this.setState({
             memberDict: cli.getRoom(this.props.roomId).currentState.members
         });

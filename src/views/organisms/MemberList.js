@@ -16,10 +16,9 @@ module.exports = React.createClass({
         return Object.keys(that.state.memberDict).map(function(userId) {
             var m = that.state.memberDict[userId];
             return (
-                <li>
+                <li key={userId}>
                 <MemberTile
                     member={m}
-                    key={userId}
                 />
                 </li>
             );
