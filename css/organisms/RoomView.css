@@ -9,19 +9,34 @@
     height: 30px;
 }
 
-.mx_RoomView ul {
+.mx_RoomView .mx_RoomView_MessageList {
     padding: 0px;
     margin: 0px;
     position: absolute;
     top: 35px;
     bottom: 40px;
     left: 0px;
-    right: 0px;
+    right: 150px;
     overflow-y: scroll;
 }
 
 .mx_RoomView ul li {
     list-style-type: none;
+}
+
+.mx_RoomView .mx_MemberList {
+    position: absolute;
+    top: 35px;
+    bottom: 40px;
+    right: 0px;
+    width: 150px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.mx_RoomView .mx_MemberList ul {
+    margin: 0px;
+    padding: 0px;
 }
 
 .mx_RoomView .mx_MessageComposer {

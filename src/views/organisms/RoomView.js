@@ -4,6 +4,7 @@ var ComponentBroker = require('../../ComponentBroker');
 
 var MessageTile = ComponentBroker.get('molecules/MessageTile');
 var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
+var MemberList = ComponentBroker.get('organisms/MemberList');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
 
 var RoomViewController = require("../../controllers/organisms/RoomView");
@@ -25,9 +26,12 @@ module.exports = React.createClass({
         return (
             <div className="mx_RoomView">
                 <RoomHeader room={this.state.room} />
-                <ul ref="messageList">
-                    {this.getMessageTiles()}
-                </ul>
+                <div className="mx_RoomView_HSplit">
+                    <ul className="mx_RoomView_MessageList" ref="messageList">
+                        {this.getMessageTiles()}
+                    </ul>
+                    <MemberList roomId={this.props.roomId} key={this.props.roomId} />
+                </div>
                 <MessageComposer roomId={this.props.roomId} />
             </div>
         );

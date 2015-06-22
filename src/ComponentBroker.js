@@ -37,6 +37,8 @@ require('./views/molecules/RoomHeader');
 require('./views/molecules/MessageComposer');
 require('./views/molecules/ProgressBar');
 require('./views/molecules/ServerConfig');
+require('./views/organisms/MemberList');
+require('./views/molecules/MemberTile');
 require('./views/organisms/RoomList');
 require('./views/organisms/RoomView');
 require('./views/templates/Login');
