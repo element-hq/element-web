@@ -27,6 +27,10 @@
     background-color: #66e;
 }
 
+.mx_RoomTile.invited {
+    background-color: #6e6;
+}
+
 .mx_RoomTile:hover {
     background-color: #ff8;
 }

@@ -26,23 +26,44 @@ module.exports = {
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (room.roomId != this.props.roomId) return;
-        var messageUl = this.refs.messageList.getDOMNode();
-        this.atBottom = messageUl.scrollHeight - messageUl.scrollTop <= messageUl.clientHeight;
+        
+        if (this.refs.messageList) {
+            var messageUl = this.refs.messageList.getDOMNode();
+            this.atBottom = messageUl.scrollHeight - messageUl.scrollTop <= messageUl.clientHeight;
+        }
         this.setState({
             room: MatrixClientPeg.get().getRoom(this.props.roomId)
         });
     },
 
     componentDidMount: function() {
-        var messageUl = this.refs.messageList.getDOMNode();
-        messageUl.scrollTop = messageUl.scrollHeight;
-    },
-
-    componentDidUpdate: function() {
-        if (this.atBottom) {
+        if (this.refs.messageList) {
             var messageUl = this.refs.messageList.getDOMNode();
             messageUl.scrollTop = messageUl.scrollHeight;
         }
+    },
+
+    componentDidUpdate: function() {
+        if (this.refs.messageList && this.atBottom) {
+            var messageUl = this.refs.messageList.getDOMNode();
+            messageUl.scrollTop = messageUl.scrollHeight;
+        }
+    },
+
+    onJoinButtonClicked: function(ev) {
+        MatrixClientPeg.get().joinRoom(this.props.roomId).then(function() {
+            this.setState({
+                joining: undefined
+            });
+        }, function(error) {
+            this.setState({
+                joining: undefined,
+                joinError: error
+            });
+        });
+        this.setState({
+            joining: true
+        });
     }
 };
 

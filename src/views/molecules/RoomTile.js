@@ -3,14 +3,18 @@ var classNames = require('classnames');
 
 var RoomTileController = require("../../controllers/molecules/RoomTile");
 
+var MatrixClientPeg = require("../../MatrixClientPeg");
+
 module.exports = React.createClass({
     displayName: 'RoomTile',
     mixins: [RoomTileController],
     render: function() {
+        var myUserId = MatrixClientPeg.get().credentials.userId;
         var classes = classNames({
             'mx_RoomTile': true,
             'selected': this.props.selected,
-            'unread': this.props.unread
+            'unread': this.props.unread,
+            'invited': this.props.room.currentState.members[myUserId].membership == 'invite'
         });
         return (
             <div className={classes} onClick={this.onClick}>
