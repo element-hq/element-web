@@ -19,7 +19,7 @@ limitations under the License.
 var components = {};
 
 function load(name) {
-    var module = require("../themes/base/views/"+name);
+    var module = require("../skins/base/views/"+name);
     components[name] = module;
     return module;
 };
@@ -41,22 +41,22 @@ module.exports = {
 // otherwise browserify has no way of knowing what module to include
 // Must be in this file (because the require is file-specific) and
 // must be at the end because the components include this file.
-require('../themes/base/views/atoms/LogoutButton');
-require('../themes/base/views/atoms/MessageTimestamp');
-require('../themes/base/views/molecules/MatrixToolbar');
-require('../themes/base/views/molecules/RoomTile');
-require('../themes/base/views/molecules/MessageTile');
-require('../themes/base/views/molecules/SenderProfile');
-require('../themes/base/views/molecules/UnknownMessageTile');
-require('../themes/base/views/molecules/MTextTile');
-require('../themes/base/views/molecules/MNoticeTile');
-require('../themes/base/views/molecules/MEmoteTile');
-require('../themes/base/views/molecules/RoomHeader');
-require('../themes/base/views/molecules/MessageComposer');
-require('../themes/base/views/molecules/ProgressBar');
-require('../themes/base/views/molecules/ServerConfig');
-require('../themes/base/views/organisms/MemberList');
-require('../themes/base/views/molecules/MemberTile');
-require('../themes/base/views/organisms/RoomList');
-require('../themes/base/views/organisms/RoomView');
-require('../themes/base/views/templates/Login');
+require('../skins/base/views/atoms/LogoutButton');
+require('../skins/base/views/atoms/MessageTimestamp');
+require('../skins/base/views/molecules/MatrixToolbar');
+require('../skins/base/views/molecules/RoomTile');
+require('../skins/base/views/molecules/MessageTile');
+require('../skins/base/views/molecules/SenderProfile');
+require('../skins/base/views/molecules/UnknownMessageTile');
+require('../skins/base/views/molecules/MTextTile');
+require('../skins/base/views/molecules/MNoticeTile');
+require('../skins/base/views/molecules/MEmoteTile');
+require('../skins/base/views/molecules/RoomHeader');
+require('../skins/base/views/molecules/MessageComposer');
+require('../skins/base/views/molecules/ProgressBar');
+require('../skins/base/views/molecules/ServerConfig');
+require('../skins/base/views/organisms/MemberList');
+require('../skins/base/views/molecules/MemberTile');
+require('../skins/base/views/organisms/RoomList');
+require('../skins/base/views/organisms/RoomView');
+require('../skins/base/views/templates/Login');

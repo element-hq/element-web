@@ -10,10 +10,10 @@
   "license": "Apache 2",
   "main": "src/index.js",
   "scripts": {
-    "build:js": "jsx themes/base/views/ build",
-    "start:js": "jsx -w themes/base/views/ build --source-map-inline",
-    "build:css": "catw 'themes/base/css/**/*.css' -o bundle.css -c uglifycss --no-watch",
-    "start:css": "catw 'themes/base/css/**/*.css' -o bundle.css -v",
+    "build:js": "jsx skins/base/views/ build",
+    "start:js": "jsx -w skins/base/views/ build --source-map-inline",
+    "build:css": "catw 'skins/base/css/**/*.css' -o bundle.css -c uglifycss --no-watch",
+    "start:css": "catw 'skins/base/css/**/*.css' -o bundle.css -v",
     "build": "npm run build:js && npm run build:css",
     "start": "parallelshell 'npm run start:js' 'npm run start:css'"
   },

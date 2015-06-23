@@ -16,4 +16,4 @@ limitations under the License.
 
 'use strict';
 
-module.exports.MatrixChat = require("../themes/base/views/pages/MatrixChat");
+module.exports.MatrixChat = require("../skins/base/views/pages/MatrixChat");
