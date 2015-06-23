@@ -25,14 +25,6 @@
 }
 
 .mx_RoomView .mx_RoomView_invitePrompt {
-    text-align: center;
-    background-color: #ddd;
-    border: 1px solid black;
-    width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 200px;
-    padding: 50px;
 }
 
 .mx_RoomView .mx_MemberList {

@@ -1,12 +1,9 @@
 .mx_RoomTile {
     height: 20px;
-    background-color: #ddd;
     margin-top: 1px;
     margin-bottom: 1px;
     padding: 5px;
     cursor: pointer;
-    border: 2px solid white;
-    transition: background-color 0.1s ease;
 }
 
 .mx_RoomTile.selected {
@@ -32,5 +29,4 @@
 }
 
 .mx_RoomTile:hover {
-    background-color: #ff8;
 }

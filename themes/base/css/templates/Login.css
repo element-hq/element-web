@@ -1,12 +1,6 @@
 .mx_Login {
     width: 600px;
     height: 350px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 10px;
-    text-align: center;
-    background-color: #eee;
-    border: 1px solid black;
     position: relative;
 }
 
