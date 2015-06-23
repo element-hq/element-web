@@ -25,6 +25,9 @@ module.exports = {
     },*/
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
+        // no point handling anything while we're waiting for the join to finish:
+        // we'll only be showing a spinner.
+        if (this.state.joining) return;
         if (room.roomId != this.props.roomId) return;
         
         if (this.refs.messageList) {
@@ -51,13 +54,15 @@ module.exports = {
     },
 
     onJoinButtonClicked: function(ev) {
+        var that = this;
         MatrixClientPeg.get().joinRoom(this.props.roomId).then(function() {
-            this.setState({
-                joining: undefined
+            that.setState({
+                joining: false,
+                room: MatrixClientPeg.get().getRoom(that.props.roomId)
             });
         }, function(error) {
-            this.setState({
-                joining: undefined,
+            that.setState({
+                joining: false,
                 joinError: error
             });
         });
