@@ -1,12 +1,12 @@
 var React = require('react');
-var ComponentBroker = require('../../ComponentBroker');
+var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var RoomList = ComponentBroker.get('organisms/RoomList');
 var RoomView = ComponentBroker.get('organisms/RoomView');
 var MatrixToolbar = ComponentBroker.get('molecules/MatrixToolbar');
 var Login = ComponentBroker.get('templates/Login');
 
-var MatrixChatController = require("../../controllers/pages/MatrixChat");
+var MatrixChatController = require("../../../../src/controllers/pages/MatrixChat");
 
 // should be atomised
 var Loader = require("react-loader");

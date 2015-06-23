@@ -1,6 +1,6 @@
 var React = require('react');
 
-var ProgressBarController = require("./../molecules/ProgressBar");
+var ProgressBarController = require("../../../../src/controllers/molecules/ProgressBar");
 
 module.exports = React.createClass({
     displayName: 'ProgressBar',

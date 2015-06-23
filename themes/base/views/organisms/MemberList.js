@@ -1,8 +1,8 @@
 var React = require('react');
 
-var MemberListController = require("../../controllers/organisms/MemberList");
+var MemberListController = require("../../../../src/controllers/organisms/MemberList");
 
-var ComponentBroker = require('../../ComponentBroker');
+var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var MemberTile = ComponentBroker.get("molecules/MemberTile");
 

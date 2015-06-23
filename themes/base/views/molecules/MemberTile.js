@@ -1,6 +1,6 @@
 var React = require('react');
 
-var MemberTileController = require("../../controllers/molecules/MemberTile");
+var MemberTileController = require("../../../../src/controllers/molecules/MemberTile");
 
 module.exports = React.createClass({
     displayName: 'MemberTile',

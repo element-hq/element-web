@@ -1,10 +1,10 @@
 var React = require('react');
 
-var ComponentBroker = require('../../ComponentBroker');
+var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var LogoutButton = ComponentBroker.get("atoms/LogoutButton");
 
-var MatrixToolbarController = require("../../controllers/molecules/MatrixToolbar");
+var MatrixToolbarController = require("../../../../src/controllers/molecules/MatrixToolbar");
 
 module.exports = React.createClass({
     displayName: 'MatrixToolbar',

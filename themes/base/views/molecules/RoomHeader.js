@@ -1,6 +1,6 @@
 var React = require('react');
 
-var RoomHeaderController = require("../../controllers/molecules/RoomHeader");
+var RoomHeaderController = require("../../../../src/controllers/molecules/RoomHeader");
 
 module.exports = React.createClass({
     displayName: 'RoomHeader',

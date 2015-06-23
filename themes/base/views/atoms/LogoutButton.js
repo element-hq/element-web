@@ -1,6 +1,6 @@
 var React = require('react');
 
-var LogoutButtonController = require("../../controllers/atoms/LogoutButton");
+var LogoutButtonController = require("../../../../src/controllers/atoms/LogoutButton");
 
 module.exports = React.createClass({
     displayName: 'LogoutButton',

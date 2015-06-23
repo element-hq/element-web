@@ -1,15 +1,15 @@
 var React = require('react');
 
-var MTextTileController = require("../../controllers/molecules/MTextTile");
+var MNoticeTileController = require("../../../../src/controllers/molecules/MNoticeTile");
 
 module.exports = React.createClass({
-    displayName: 'MTextTile',
-    mixins: [MTextTileController],
+    displayName: 'MNoticeTile',
+    mixins: [MNoticeTileController],
 
     render: function() {
         var content = this.props.mxEvent.getContent();
         return (
-            <span className="mx_MTextTile">
+            <span className="mx_MNoticeTile">
                 {content.body}
             </span>
         );

@@ -1,6 +1,6 @@
 var React = require('react');
 
-var SenderProfileController = require("../../controllers/molecules/SenderProfile");
+var SenderProfileController = require("../../../../src/controllers/molecules/SenderProfile");
 
 module.exports = React.createClass({
     displayName: 'SenderProfile',

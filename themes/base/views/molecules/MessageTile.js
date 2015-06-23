@@ -2,7 +2,7 @@ var React = require('react');
 
 var classNames = require("classnames");
 
-var ComponentBroker = require('../../ComponentBroker');
+var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
 var SenderProfile = ComponentBroker.get('molecules/SenderProfile');
@@ -15,7 +15,7 @@ var tileTypes = {
     'm.emote': ComponentBroker.get('molecules/MEmoteTile')
 };
 
-var MessageTileController = require("../../controllers/molecules/MessageTile");
+var MessageTileController = require("../../../../src/controllers/molecules/MessageTile");
 
 module.exports = React.createClass({
     displayName: 'MessageTile',

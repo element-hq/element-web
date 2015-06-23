@@ -1,9 +1,9 @@
 var React = require('react');
 var classNames = require('classnames');
 
-var RoomTileController = require("../../controllers/molecules/RoomTile");
+var RoomTileController = require("../../../../src/controllers/molecules/RoomTile");
 
-var MatrixClientPeg = require("../../MatrixClientPeg");
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
 module.exports = React.createClass({
     displayName: 'RoomTile',

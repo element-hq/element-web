@@ -1,6 +1,6 @@
 var React = require('react');
 
-var ServerConfigController = require("../../controllers/molecules/ServerConfig");
+var ServerConfigController = require("../../../../src/controllers/molecules/ServerConfig");
 
 module.exports = React.createClass({
     displayName: 'ServerConfig',

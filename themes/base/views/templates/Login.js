@@ -1,11 +1,11 @@
 var React = require('react');
 
-var ComponentBroker = require("../../ComponentBroker");
+var ComponentBroker = require("../../../../src/ComponentBroker");
 
 var ProgressBar = ComponentBroker.get("molecules/ProgressBar");
 var Loader = require("react-loader");
 
-var LoginController = require("../../controllers/templates/Login");
+var LoginController = require("../../../../src/controllers/templates/Login");
 
 module.exports = React.createClass({
     displayName: 'Login',

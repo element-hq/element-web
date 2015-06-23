@@ -1,6 +1,6 @@
 var React = require('react');
 
-var RoomListController = require("../../controllers/organisms/RoomList");
+var RoomListController = require("../../../../src/controllers/organisms/RoomList");
 
 
 module.exports = React.createClass({

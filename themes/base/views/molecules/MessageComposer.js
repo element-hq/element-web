@@ -1,6 +1,6 @@
 var React = require('react');
 
-var MessageComposerController = require("../../controllers/molecules/MessageComposer");
+var MessageComposerController = require("../../../../src/controllers/molecules/MessageComposer");
 
 module.exports = React.createClass({
     displayName: 'MessageComposer',

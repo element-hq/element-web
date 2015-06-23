@@ -1,15 +1,15 @@
 var React = require('react');
 
-var MatrixClientPeg = require("../../MatrixClientPeg");
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
-var ComponentBroker = require('../../ComponentBroker');
+var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var MessageTile = ComponentBroker.get('molecules/MessageTile');
 var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
 var MemberList = ComponentBroker.get('organisms/MemberList');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
 
-var RoomViewController = require("../../controllers/organisms/RoomView");
+var RoomViewController = require("../../../../src/controllers/organisms/RoomView");
 
 var Loader = require("react-loader");
 

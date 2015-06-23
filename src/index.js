@@ -1,1 +1,1 @@
-module.exports.MatrixChat = require("./views/pages/MatrixChat");
+module.exports.MatrixChat = require("../themes/base/views/pages/MatrixChat");

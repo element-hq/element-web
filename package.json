@@ -8,12 +8,12 @@
     "url": "https://github.com/matrix-org/matrix-react-sdk"
   },
   "license": "Apache 2",
-  "main": "build/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "build:js": "jsx src/ build",
-    "start:js": "jsx -w src/ build --source-map-inline",
-    "build:css": "catw 'css/**/*.css' -o bundle.css -c uglifycss --no-watch",
-    "start:css": "catw 'css/**/*.css' -o bundle.css -v",
+    "build:js": "jsx themes/base/views/ build",
+    "start:js": "jsx -w themes/base/views/ build --source-map-inline",
+    "build:css": "catw 'themes/base/css/**/*.css' -o bundle.css -c uglifycss --no-watch",
+    "start:css": "catw 'themes/base/css/**/*.css' -o bundle.css -v",
     "build": "npm run build:js && npm run build:css",
     "start": "parallelshell 'npm run start:js' 'npm run start:css'"
   },
