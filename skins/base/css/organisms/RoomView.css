@@ -51,6 +51,7 @@ limitations under the License.
     width: 150px;
     margin: 0px;
     padding: 0px;
+    overflow-y: scroll;
 }
 
 .mx_RoomView .mx_MemberList ul {
