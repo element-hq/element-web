@@ -18,6 +18,8 @@ limitations under the License.
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
+var dis = require("../../dispatcher");
+
 var PAGINATE_SIZE = 20;
 
 module.exports = {
@@ -28,13 +30,25 @@ module.exports = {
     },
 
     componentWillMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         this.atBottom = true;
     },
 
     componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+        }
+    },
+
+    onAction: function(payload) {
+        switch (payload.action) {
+            case 'message_sent':
+                this.setState({
+                    room: MatrixClientPeg.get().getRoom(this.props.roomId)
+                });
+                break;
         }
     },
 

@@ -54,7 +54,11 @@ module.exports = {
                 };
             }
 
-            MatrixClientPeg.get().sendMessage(this.props.roomId, content);
+            MatrixClientPeg.get().sendMessage(this.props.roomId, content).then(function() {
+                dis.dispatch({
+                    action: 'message_sent'
+                });
+            });
             this.refs.textarea.getDOMNode().value = '';
             ev.preventDefault();
         }
