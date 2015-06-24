@@ -18,6 +18,8 @@ limitations under the License.
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
+var PAGINATE_SIZE = 20;
+
 module.exports = {
     getInitialState: function() {
         return {
@@ -43,6 +45,12 @@ module.exports = {
     },*/
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
+        // ignore anything that comes in whilst pagingating: we get one
+        // event for each new matrix event so this would cause a huge
+        // number of UI updates. Just update the UI when the paginate
+        // call returns.
+        if (this.state.paginating) return;
+
         // no point handling anything while we're waiting for the join to finish:
         // we'll only be showing a spinner.
         if (this.state.joining) return;
@@ -55,20 +63,57 @@ module.exports = {
         this.setState({
             room: MatrixClientPeg.get().getRoom(this.props.roomId)
         });
+
+        if (toStartOfTimeline && !this.state.paginating) {
+            this.fillSpace();
+        }
     },
 
     componentDidMount: function() {
         if (this.refs.messageList) {
             var messageUl = this.refs.messageList.getDOMNode();
             messageUl.scrollTop = messageUl.scrollHeight;
+
+            this.fillSpace();
         }
     },
 
     componentDidUpdate: function() {
-        if (this.refs.messageList && this.atBottom) {
-            var messageUl = this.refs.messageList.getDOMNode();
+        if (!this.refs.messageList) return;
+
+        var messageUl = this.refs.messageList.getDOMNode();
+
+        if (this.state.paginating && !this.waiting_for_paginate) {
+            var heightGained = messageUl.scrollHeight - this.oldScrollHeight;
+            messageUl.scrollTop += heightGained;
+            this.oldScrollHeight = undefined;
+            if (!this.fillSpace()) {
+                this.setState({paginating: false});
+            }
+        } else if (this.atBottom) {
             messageUl.scrollTop = messageUl.scrollHeight;
         }
+    },
+
+    fillSpace: function() {
+        var messageUl = this.refs.messageList.getDOMNode();
+        if (messageUl.scrollTop < messageUl.clientHeight) {
+            this.setState({paginating: true});
+            this.waiting_for_paginate = true;
+
+            this.oldScrollHeight = messageUl.scrollHeight;
+
+            var that = this;
+            MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(function() {
+                that.waiting_for_paginate = false;
+                that.setState({
+                    room: MatrixClientPeg.get().getRoom(that.props.roomId)
+                });
+                // wait and set paginating to false when the component updates
+            });
+            return true;
+        }
+        return false;
     },
 
     onJoinButtonClicked: function(ev) {
@@ -87,6 +132,14 @@ module.exports = {
         this.setState({
             joining: true
         });
+    },
+
+    onMessageListScroll: function(ev) {
+        if (this.refs.messageList) {
+            var messageUl = this.refs.messageList.getDOMNode();
+            this.atBottom = messageUl.scrollHeight - messageUl.scrollTop <= messageUl.clientHeight;
+        }
+        if (!this.state.paginating) this.fillSpace();
     }
 };
 

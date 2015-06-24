@@ -21,6 +21,7 @@ var React = require('react');
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
 var ComponentBroker = require('../../../../src/ComponentBroker');
+var classNames = require("classnames");
 
 var MessageTile = ComponentBroker.get('molecules/MessageTile');
 var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
@@ -68,11 +69,17 @@ module.exports = React.createClass({
                 );
             }
         } else {
+            var scrollheader_classes = classNames({
+                mx_RoomView_scrollheader: true,
+                loading: this.state.paginating
+            });
             return (
                 <div className="mx_RoomView">
                     <RoomHeader room={this.state.room} />
                     <div className="mx_RoomView_HSplit">
-                        <ul className="mx_RoomView_MessageList" ref="messageList">
+                        <ul className="mx_RoomView_MessageList" ref="messageList" onScroll={this.onMessageListScroll}>
+                            <li className={scrollheader_classes}>
+                            </li>
                             {this.getMessageTiles()}
                         </ul>
                         <MemberList roomId={this.props.roomId} key={this.props.roomId} />
