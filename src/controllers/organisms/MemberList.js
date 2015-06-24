@@ -24,8 +24,9 @@ module.exports = {
         var cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
 
+        var members = this.roomMembers();
         this.setState({
-            memberDict: cli.getRoom(this.props.roomId).currentState.members
+            memberDict: members
         });
     },
 
@@ -40,10 +41,25 @@ module.exports = {
     },*/
 
     onRoomStateMember: function(ev, state, member) {
-        var cli = MatrixClientPeg.get();
+        var members = this.roomMembers();
         this.setState({
-            memberDict: cli.getRoom(this.props.roomId).currentState.members
+            memberDict: members
         });
+    },
+
+    roomMembers() {
+        var cli = MatrixClientPeg.get();
+        var all_members = cli.getRoom(this.props.roomId).currentState.members;
+        var to_display = {};
+        for (var i = 0; i < Object.keys(all_members).length; ++i) {
+            var user_id = Object.keys(all_members)[i];
+            var m = all_members[user_id];
+
+            if (m.membership == 'join' || m.membership == 'invite') {
+                to_display[user_id] = m;
+            }
+        }
+        return to_display;
     }
 };
 
