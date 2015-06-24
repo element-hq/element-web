@@ -47,7 +47,7 @@ module.exports = {
         });
     },
 
-    roomMembers() {
+    roomMembers: function() {
         var cli = MatrixClientPeg.get();
         var all_members = cli.getRoom(this.props.roomId).currentState.members;
         var all_user_ids = Object.keys(all_members);
