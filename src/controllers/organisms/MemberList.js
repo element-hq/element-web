@@ -19,21 +19,34 @@ limitations under the License.
 var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
+var INITIAL_LOAD_NUM_MEMBERS = 50;
+
 module.exports = {
+    getInitialState: function() {
+        var members = this.roomMembers(INITIAL_LOAD_NUM_MEMBERS);
+        return {
+            memberDict: members
+        };
+    },
+
     componentWillMount: function() {
         var cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
-
-        var members = this.roomMembers();
-        this.setState({
-            memberDict: members
-        });
     },
 
     componentWillUnmount: function() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
+    },
+
+    componentDidMount: function() {
+        var that = this;
+        setTimeout(function() {
+            that.setState({
+                memberDict: that.roomMembers()
+            });
+        }, 50);
     },
 
     // Remember to set 'key' on a MemberList to the ID of the room it's for
@@ -47,17 +60,19 @@ module.exports = {
         });
     },
 
-    roomMembers: function() {
+    roomMembers: function(limit) {
         var cli = MatrixClientPeg.get();
         var all_members = cli.getRoom(this.props.roomId).currentState.members;
         var all_user_ids = Object.keys(all_members);
         var to_display = {};
-        for (var i = 0; i < all_user_ids.length; ++i) {
+        var count = 0;
+        for (var i = 0; i < all_user_ids.length && (limit === undefined || count < limit); ++i) {
             var user_id = all_user_ids[i];
             var m = all_members[user_id];
 
             if (m.membership == 'join' || m.membership == 'invite') {
                 to_display[user_id] = m;
+                ++count;
             }
         }
         return to_display;
