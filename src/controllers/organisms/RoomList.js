@@ -59,6 +59,7 @@ module.exports = {
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
+        if (toStartOfTimeline) return;
         if (room.roomId == this.props.selectedRoom) return;
         if (ev.getSender() == MatrixClientPeg.get().credentials.userId) return;
 
