@@ -113,7 +113,7 @@ module.exports = {
 
     fillSpace: function() {
         var messageUl = this.refs.messageList.getDOMNode();
-        if (messageUl.scrollTop < messageUl.clientHeight) {
+        if (messageUl.scrollTop < messageUl.clientHeight && this.state.room.oldState.paginationToken) {
             this.setState({paginating: true});
 
             this.oldScrollHeight = messageUl.scrollHeight;
