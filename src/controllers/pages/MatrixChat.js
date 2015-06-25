@@ -37,10 +37,12 @@ module.exports = {
             this.startMatrixClient();
         }
         this.focusComposer = false;
+        document.addEventListener("keydown", this.onKeyDown);
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
+        document.removeEventListener("keydown", this.onKeyDown);
     },
 
     componentDidUpdate: function() {
@@ -51,6 +53,8 @@ module.exports = {
     },
 
     onAction: function(payload) {
+        var roomIndexDelta = 1;
+
         switch (payload.action) {
             case 'logout':
                 this.setState({
@@ -65,6 +69,22 @@ module.exports = {
                     currentRoom: payload.room_id
                 });
                 this.focusComposer = true;
+                break;
+            case 'view_prev_room':
+                roomIndexDelta = -1;
+            case 'view_next_room':
+                var allRooms = mxCliPeg.get().getRooms();
+                var roomIndex = -1;
+                for (var i = 0; i < allRooms.length; ++i) {
+                    if (allRooms[i].roomId == this.state.currentRoom) {
+                        roomIndex = i;
+                        break;
+                    }
+                }
+                roomIndex = (roomIndex + roomIndexDelta) % allRooms.length;
+                this.setState({
+                    currentRoom: allRooms[roomIndex].roomId
+                });
                 break;
         }
     },
@@ -87,5 +107,20 @@ module.exports = {
         });
         cli.startClient();
     },
+
+    onKeyDown: function(ev) {
+        if (ev.altKey) {
+            switch (ev.keyCode) {
+                case 38:
+                    dis.dispatch({action: 'view_prev_room'});
+                    ev.stopPropagation();
+                    break;
+                case 40:
+                    dis.dispatch({action: 'view_next_room'});
+                    ev.stopPropagation();
+                    break;
+            }
+        }
+    }
 };
 
