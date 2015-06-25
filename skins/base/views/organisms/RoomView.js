@@ -38,11 +38,16 @@ module.exports = React.createClass({
     mixins: [RoomViewController],
 
     getMessageTiles: function() {
-        return this.state.room.timeline.map(function(mxEv) {
-            return (
+        var ret = [];
+        var count = 0;
+        for (var i = this.state.room.timeline.length-1; i >= 0 && count < this.state.messageCap; --i) {
+            var mxEv = this.state.room.timeline[i];
+            ret.unshift(
                 <li key={mxEv.getId()}><MessageTile mxEvent={mxEv} /></li>
             );
-        });
+            ++count;
+        }
+        return ret;
     },
 
     render: function() {

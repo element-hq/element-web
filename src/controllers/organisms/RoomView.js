@@ -21,11 +21,13 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
 
 var PAGINATE_SIZE = 20;
+var INITIAL_SIZE = 100;
 
 module.exports = {
     getInitialState: function() {
         return {
-            room: MatrixClientPeg.get().getRoom(this.props.roomId)
+            room: MatrixClientPeg.get().getRoom(this.props.roomId),
+            messageCap: INITIAL_SIZE
         }
     },
 
@@ -113,18 +115,27 @@ module.exports = {
         var messageUl = this.refs.messageList.getDOMNode();
         if (messageUl.scrollTop < messageUl.clientHeight) {
             this.setState({paginating: true});
-            this.waiting_for_paginate = true;
 
             this.oldScrollHeight = messageUl.scrollHeight;
 
-            var that = this;
-            MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(function() {
-                that.waiting_for_paginate = false;
-                that.setState({
-                    room: MatrixClientPeg.get().getRoom(that.props.roomId)
+            if (this.state.messageCap < this.state.room.timeline.length) {
+                this.waiting_for_paginate = false;
+                var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
+                this.setState({messageCap: cap, paginating: true});
+            } else {
+                this.waiting_for_paginate = true;
+                var cap = this.state.messageCap + PAGINATE_SIZE;
+                this.setState({messageCap: cap, paginating: true});
+                var that = this;
+                MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(function() {
+                    that.waiting_for_paginate = false;
+                    that.setState({
+                        room: MatrixClientPeg.get().getRoom(that.props.roomId)
+                    });
+                    // wait and set paginating to false when the component updates
                 });
-                // wait and set paginating to false when the component updates
-            });
+            }
+
             return true;
         }
         return false;
