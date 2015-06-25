@@ -43,6 +43,7 @@ module.exports = {
     componentDidMount: function() {
         var that = this;
         setTimeout(function() {
+            if (!that.isMounted()) return;
             that.setState({
                 memberDict: that.roomMembers()
             });

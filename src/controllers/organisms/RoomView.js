@@ -61,6 +61,8 @@ module.exports = {
     },*/
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
+        if (!this.isMounted()) return;
+
         // ignore anything that comes in whilst pagingating: we get one
         // event for each new matrix event so this would cause a huge
         // number of UI updates. Just update the UI when the paginate
@@ -129,9 +131,11 @@ module.exports = {
                 var that = this;
                 MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(function() {
                     that.waiting_for_paginate = false;
-                    that.setState({
-                        room: MatrixClientPeg.get().getRoom(that.props.roomId)
-                    });
+                    if (that.isMounted()) {
+                        that.setState({
+                            room: MatrixClientPeg.get().getRoom(that.props.roomId)
+                        });
+                    }
                     // wait and set paginating to false when the component updates
                 });
             }
