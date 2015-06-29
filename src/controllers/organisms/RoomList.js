@@ -63,9 +63,16 @@ module.exports = {
         if (room.roomId == this.props.selectedRoom) return;
         if (ev.getSender() == MatrixClientPeg.get().credentials.userId) return;
 
+        var hl = 1;
+
+        var actions = ev.getPushActions(MatrixClientPeg.get());
+        if (actions || actions.tweaks && actions.tweaks.highlight) {
+            hl = 2;
+        }
+
         // obviously this won't deep copy but we this shouldn't be necessary
         var amap = this.state.activityMap;
-        amap[room.roomId] = 1;
+        amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
         this.setState({
             activityMap: amap
         });

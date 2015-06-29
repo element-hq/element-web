@@ -32,6 +32,7 @@ module.exports = React.createClass({
             'mx_RoomTile': true,
             'selected': this.props.selected,
             'unread': this.props.unread,
+            'highlight': this.props.highlight,
             'invited': this.props.room.currentState.members[myUserId].membership == 'invite'
         });
         return (

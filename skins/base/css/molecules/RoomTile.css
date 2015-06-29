@@ -40,6 +40,10 @@ limitations under the License.
     background-color: #66e;
 }
 
+.mx_RoomTile.highlight {
+    background-color: lime;
+}
+
 .mx_RoomTile.invited {
     background-color: #6e6;
 }
