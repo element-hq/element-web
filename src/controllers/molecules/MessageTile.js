@@ -16,6 +16,13 @@ limitations under the License.
 
 'use strict';
 
+var MatrixClientPeg = require("../../MatrixClientPeg");
+
 module.exports = {
+    shouldHighlight: function() {
+        var actions = this.props.mxEvent.getPushActions(MatrixClientPeg.get());
+        if (!actions || !actions.tweaks) { return false; }
+        return actions.tweaks.highlight;
+    }
 };
 

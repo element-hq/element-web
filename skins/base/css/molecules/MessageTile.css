@@ -24,3 +24,7 @@ limitations under the License.
 .mx_MessageTile.not_sent {
     color: #f11;
 }
+
+.mx_MessageTile.highlight {
+    color: #00f;
+}
