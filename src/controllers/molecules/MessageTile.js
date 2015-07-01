@@ -20,7 +20,7 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 
 module.exports = {
     shouldHighlight: function() {
-        var actions = this.props.mxEvent.getPushActions(MatrixClientPeg.get());
+        var actions = MatrixClientPeg.get().getPushActionsForEvent(this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
         return actions.tweaks.highlight;
     }

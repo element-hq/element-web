@@ -65,7 +65,7 @@ module.exports = {
 
         var hl = 1;
 
-        var actions = ev.getPushActions(MatrixClientPeg.get());
+        var actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions && actions.tweaks && actions.tweaks.highlight) {
             hl = 2;
         }
