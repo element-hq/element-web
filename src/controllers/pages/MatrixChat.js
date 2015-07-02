@@ -19,14 +19,14 @@ limitations under the License.
 // should be atomised
 var Loader = require("react-loader");
 
-var mxCliPeg = require("../../MatrixClientPeg");
+var MatrixClientPeg = require("../../MatrixClientPeg");
 
 var dis = require("../../dispatcher");
 
 module.exports = {
     getInitialState: function() {
         return {
-            logged_in: !!(mxCliPeg.get() && mxCliPeg.get().credentials),
+            logged_in: !!(MatrixClientPeg.get() && mxCliPeg.get().credentials),
             ready: false
         };
     },
@@ -61,8 +61,8 @@ module.exports = {
                     logged_in: false,
                     ready: false
                 });
-                mxCliPeg.get().removeAllListeners();
-                mxCliPeg.replace(null);
+                MatrixClientPeg.get().removeAllListeners();
+                MatrixClientPeg.replace(null);
                 break;
             case 'view_room':
                 this.setState({
@@ -73,7 +73,7 @@ module.exports = {
             case 'view_prev_room':
                 roomIndexDelta = -1;
             case 'view_next_room':
-                var allRooms = mxCliPeg.get().getRooms();
+                var allRooms = MatrixClientPeg.get().getRooms();
                 var roomIndex = -1;
                 for (var i = 0; i < allRooms.length; ++i) {
                     if (allRooms[i].roomId == this.state.currentRoom) {
@@ -95,7 +95,7 @@ module.exports = {
     },
 
     startMatrixClient: function() {
-        var cli = mxCliPeg.get();
+        var cli = MatrixClientPeg.get();
         var that = this;
         cli.on('syncComplete', function() {
             var firstRoom = null;
