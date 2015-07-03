@@ -18,24 +18,21 @@ limitations under the License.
 
 var React = require('react');
 
-var ComponentBroker = require('../../../../src/ComponentBroker');
-
-var LogoutButton = ComponentBroker.get("atoms/LogoutButton");
-var EnableNotificationsButton = ComponentBroker.get("atoms/EnableNotificationsButton");
-
-var MatrixToolbarController = require("../../../../src/controllers/molecules/MatrixToolbar");
+var EnableNotificationsButtonController = require("../../../../src/controllers/atoms/EnableNotificationsButton");
 
 module.exports = React.createClass({
-    displayName: 'MatrixToolbar',
-    mixins: [MatrixToolbarController],
+    displayName: 'EnableNotificationsButton',
+    mixins: [EnableNotificationsButtonController],
 
     render: function() {
-        return (
-            <div className="mx_MatrixToolbar">
-                <LogoutButton />
-                <EnableNotificationsButton />
-            </div>
-        );
+        if (this.enabled()) {
+            return (
+                <button className="mx_EnableNotificationsButton" onClick={this.onClick}>Disable Notifications</button>
+            );
+        } else {
+            return (
+                <button className="mx_EnableNotificationsButton" onClick={this.onClick}>Enable Notifications</button>
+            );
+        }
     }
 });
-

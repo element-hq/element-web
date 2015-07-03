@@ -23,10 +23,14 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 
 var dis = require("../../dispatcher");
 
+var ComponentBroker = require('../../ComponentBroker');
+
+var Notifier = ComponentBroker.get('organisms/Notifier');
+
 module.exports = {
     getInitialState: function() {
         return {
-            logged_in: !!(MatrixClientPeg.get() && mxCliPeg.get().credentials),
+            logged_in: !!(MatrixClientPeg.get() && MatrixClientPeg.get().credentials),
             ready: false
         };
     },
@@ -61,14 +65,15 @@ module.exports = {
                     logged_in: false,
                     ready: false
                 });
+                Notifier.stop();
                 MatrixClientPeg.get().removeAllListeners();
                 MatrixClientPeg.replace(null);
                 break;
             case 'view_room':
+                this.focusComposer = true;
                 this.setState({
                     currentRoom: payload.room_id
                 });
-                this.focusComposer = true;
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -105,6 +110,7 @@ module.exports = {
             that.setState({ready: true, currentRoom: firstRoom});
             dis.dispatch({action: 'focus_composer'});
         });
+        Notifier.start();
         cli.startClient();
     },
 

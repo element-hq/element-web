@@ -42,6 +42,7 @@ module.exports = {
 // Must be in this file (because the require is file-specific) and
 // must be at the end because the components include this file.
 require('../skins/base/views/atoms/LogoutButton');
+require('../skins/base/views/atoms/EnableNotificationsButton');
 require('../skins/base/views/atoms/MessageTimestamp');
 require('../skins/base/views/molecules/MatrixToolbar');
 require('../skins/base/views/molecules/RoomTile');
@@ -60,3 +61,4 @@ require('../skins/base/views/molecules/MemberTile');
 require('../skins/base/views/organisms/RoomList');
 require('../skins/base/views/organisms/RoomView');
 require('../skins/base/views/templates/Login');
+require('../skins/base/views/organisms/Notifier');

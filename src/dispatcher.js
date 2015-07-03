@@ -17,4 +17,21 @@ limitations under the License.
 'use strict';
 
 var flux = require("flux");
-module.exports = new flux.Dispatcher();
+var extend = require("./extend");
+
+var MatrixDispatcher = function() {
+    flux.Dispatcher.call(this);
+};
+
+extend(MatrixDispatcher.prototype, flux.Dispatcher.prototype);
+MatrixDispatcher.prototype.dispatch = function(payload) {
+    if (this.dispatching) {
+        setTimeout(flux.Dispatcher.prototype.dispatch.bind(this, payload), 0);
+    } else {
+        this.dispatching = true;
+        flux.Dispatcher.prototype.dispatch.call(this, payload);
+        this.dispatching = false;
+    }
+}
+
+module.exports = new MatrixDispatcher();
