@@ -69,6 +69,9 @@ module.exports = {
         if (actions && actions.tweaks && actions.tweaks.highlight) {
             hl = 2;
         }
+        if (!actions.notify) {
+            return;
+        }
 
         // obviously this won't deep copy but we this shouldn't be necessary
         var amap = this.state.activityMap;
