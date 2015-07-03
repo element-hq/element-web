@@ -25,7 +25,7 @@ var dis = require("../../../../src/dispatcher");
 
 var NotifierView = {
     notificationMessageForEvent: function(ev) {
-        var senderDisplayName = ev.sender.name;
+        var senderDisplayName = ev.sender ? ev.sender.name : '';
         var message = null;
 
         if (ev.event.type === "m.room.message") {
