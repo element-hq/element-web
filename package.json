@@ -7,15 +7,17 @@
     "type": "git",
     "url": "https://github.com/matrix-org/matrix-react-sdk"
   },
-  "license": "Apache 2",
+  "license": "Apache-2.0",
   "main": "src/index.js",
+  "style": "bundle.css",
   "scripts": {
     "build:js": "jsx skins/base/views/ build",
     "start:js": "jsx -w skins/base/views/ build --source-map-inline",
     "build:css": "catw 'skins/base/css/**/*.css' -o bundle.css -c uglifycss --no-watch",
     "start:css": "catw 'skins/base/css/**/*.css' -o bundle.css -v",
     "build": "npm run build:js && npm run build:css",
-    "start": "parallelshell 'npm run start:js' 'npm run start:css'"
+    "start": "parallelshell 'npm run start:js' 'npm run start:css'",
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "classnames": "^2.1.2",
