@@ -25,7 +25,7 @@ automatically, but the same will not apply for the CSS.
 To have the CSS bundle also rebuild as you change it:
 
 1. `cd matrix-react-sdk`
-2. `npm start:css`
+2. `npm run start:css`
 
 Note that you may need to restart the CSS builder if you add a new file. Note
 that `npm start` builds debug versions of the the javascript and CSS, which are
