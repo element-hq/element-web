@@ -18,14 +18,13 @@ Matrix client.
 Using the example app for development
 =====================================
 
-The above commands will let you start working on the app, and any changes you
-make to the javascript source files will cause the javascript to be rebuilt
-automatically, but the same will not apply for the CSS.
+To work on the CSS and Javascript and have the bundle files update as you
+change the source files, you'll need to do two extra things:
 
-To have the CSS bundle also rebuild as you change it:
-
-1. `cd matrix-react-sdk`
-2. `npm run start:css`
+1. Link the react sdk package into the example:
+   `cd matrix-react-sdk/example; npm link ..`
+2. Start a watcher for the CSS files:
+   `cd matrix-react-sdk; npm run start:css`
 
 Note that you may need to restart the CSS builder if you add a new file. Note
 that `npm start` builds debug versions of the the javascript and CSS, which are
