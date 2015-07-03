@@ -32,7 +32,7 @@ module.exports = {
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (toStartOfTimeline) return;
-        if (ev.sender.userId == MatrixClientPeg.get().credentials.userId) return;
+        if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) return;
 
         var enabled = global.localStorage.getItem('notifications_enabled');
         if (enabled === 'false') return;
