@@ -38,7 +38,7 @@ var NotifierView = {
         } else if (ev.event.type == "m.room.member") {
             if (ev.event.state_key !== MatrixClientPeg.get().credentials.userId  && "join" === ev.getContent().membership) {
                 // Notify when another user joins
-                message = ev.target.name + " joined";
+                message = senderDisplayName + " joined";
             } else if (ev.event.state_key === MatrixClientPeg.get().credentials.userId  && "invite" === ev.getContent().membership) {
                 // notify when you are invited
                 message = senderDisplayName + " invited you to a room";
@@ -59,9 +59,9 @@ var NotifierView = {
         if (!msg) return;
 
         var title;
-        if (room.name == ev.sender.name) {
+        if (!ev.sender ||  room.name == ev.sender.name) {
             title = room.name;
-        } else {
+        } else if (ev.sender) {
             title = ev.sender.name + " (" + room.name + ")";
         }
 
