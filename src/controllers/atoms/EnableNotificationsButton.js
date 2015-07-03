@@ -43,7 +43,9 @@ module.exports = {
 
     enable: function() {
         if (!this.havePermission()) {
-            global.Notification.requestPermission();
+            global.Notification.requestPermission(function() {
+                this.forceUpdate();
+            });
         }
 
         if (!global.localStorage) return;
