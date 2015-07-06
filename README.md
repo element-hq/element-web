@@ -8,9 +8,11 @@ Getting started with the trivial example
 
 1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
 2. Clone the repo: `git clone https://github.com/matrix-org/matrix-react-sdk.git` 
-3. Switch to the example directory: `cd matrix-react-sdk/examples/trivial`
+3. Switch to the SDK directory: `cd matrix-react-sdk`
 4. Install the prerequisites: `npm install`
-5. Build the example and start a server: `npm start`
+5. Switch to the example directory: `cd examples/trivial`
+6. Install the example app prerequisites: `npm install`
+7. Build the example and start a server: `npm start`
 
 Now open http://127.0.0.1:8080/ in your browser to see your newly built
 Matrix client.
