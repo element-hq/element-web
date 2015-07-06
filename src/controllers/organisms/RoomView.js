@@ -17,11 +17,19 @@ limitations under the License.
 'use strict';
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var React = require("react");
 
 var dis = require("../../dispatcher");
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 100;
+
+var ComponentBroker = require('../../ComponentBroker');
+
+var tileTypes = {
+    'm.room.message': ComponentBroker.get('molecules/MessageTile'),
+    'm.room.member': ComponentBroker.get('molecules/MRoomMemberTile')
+};
 
 module.exports = {
     getInitialState: function() {
@@ -169,6 +177,22 @@ module.exports = {
             this.atBottom = messageUl.scrollHeight - messageUl.scrollTop <= messageUl.clientHeight;
         }
         if (!this.state.paginating) this.fillSpace();
+    },
+
+    getEventTiles: function() {
+        var ret = [];
+        var count = 0;
+
+        for (var i = this.state.room.timeline.length-1; i >= 0 && count < this.state.messageCap; --i) {
+            var mxEv = this.state.room.timeline[i];
+            var TileType = tileTypes[mxEv.getType()];
+            if (!TileType) continue;
+            ret.unshift(
+                <li key={mxEv.getId()}><TileType mxEvent={mxEv} /></li>
+            );
+            ++count;
+        }
+        return ret;
     }
 };
 

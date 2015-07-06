@@ -37,19 +37,6 @@ module.exports = React.createClass({
     displayName: 'RoomView',
     mixins: [RoomViewController],
 
-    getMessageTiles: function() {
-        var ret = [];
-        var count = 0;
-        for (var i = this.state.room.timeline.length-1; i >= 0 && count < this.state.messageCap; --i) {
-            var mxEv = this.state.room.timeline[i];
-            ret.unshift(
-                <li key={mxEv.getId()}><MessageTile mxEvent={mxEv} /></li>
-            );
-            ++count;
-        }
-        return ret;
-    },
-
     render: function() {
         var myUserId = MatrixClientPeg.get().credentials.userId;
         if (this.state.room.currentState.members[myUserId].membership == 'invite') {
@@ -85,7 +72,7 @@ module.exports = React.createClass({
                         <ul className="mx_RoomView_MessageList" ref="messageList" onScroll={this.onMessageListScroll}>
                             <li className={scrollheader_classes}>
                             </li>
-                            {this.getMessageTiles()}
+                            {this.getEventTiles()}
                         </ul>
                         <MemberList roomId={this.props.roomId} key={this.props.roomId} />
                     </div>
