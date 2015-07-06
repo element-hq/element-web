@@ -30,3 +30,10 @@ Note that you may need to restart the CSS builder if you add a new file. Note
 that `npm start` builds debug versions of the the javascript and CSS, which are
 much larger than the production versions build by the `npm run build` commands.
 
+IMPORTANT: If you customise components in your application (and hence require
+react from your app) you must be sure to:
+
+1. Make your app depend on react directly
+2. If you `npm link` matrix-react-sdk, manually remove the 'react' directory
+   from matrix-react-sdk's `node_modules` folder, otherwise browserify will
+   pull in both copies of react which causes the app to break.

@@ -16,31 +16,48 @@ limitations under the License.
 
 'use strict';
 
-var components = {};
-
 function load(name) {
     var module = require("../skins/base/views/"+name);
-    components[name] = module;
     return module;
 };
 
-module.exports = {
-    get: function(name) {
-        if (components[name]) return components[name];
+var ComponentBroker = function() {
+    this.components = {};
+};
 
-        components[name] = load(name);
-        return components[name];
+ComponentBroker.prototype = {
+    get: function(name) {
+        if (this.components[name]) {
+            return this.components[name];
+        }
+
+        this.components[name] = load(name);
+        return this.components[name];
     },
 
     set: function(name, module) {
-        components[name] = module;
+        this.components[name] = module;
     }
 };
 
-// Statically require all the components we know about,
-// otherwise browserify has no way of knowing what module to include
+// We define one Component Broker globally, because the intention is
+// very much that it is a singleton. Relying on there only being one
+// copy of the module can be dicey and not work as browserify's
+// behaviour with multiple copies of files etc. is erratic at best.
+// XXX: We can still end up with the same file twice in the resulting
+// JS bundle which is nonideal.
+if (global.componentBroker === undefined) {
+    global.componentBroker = new ComponentBroker();
+}
+module.exports = global.componentBroker;
+
+// We need to tell browserify to include all the components
+// by direct require syntax in here, but we don't want them
+// to be evaluated in this file because then we wouldn't be
+// able to override them. if (0) does this.
 // Must be in this file (because the require is file-specific) and
 // must be at the end because the components include this file.
+if (0) {
 require('../skins/base/views/atoms/LogoutButton');
 require('../skins/base/views/atoms/EnableNotificationsButton');
 require('../skins/base/views/atoms/MessageTimestamp');
@@ -62,3 +79,4 @@ require('../skins/base/views/organisms/RoomList');
 require('../skins/base/views/organisms/RoomView');
 require('../skins/base/views/templates/Login');
 require('../skins/base/views/organisms/Notifier');
+}
