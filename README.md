@@ -22,7 +22,7 @@ To work on the CSS and Javascript and have the bundle files update as you
 change the source files, you'll need to do two extra things:
 
 1. Link the react sdk package into the example:
-   `cd matrix-react-sdk/example; npm link ..`
+   `cd matrix-react-sdk/examples/trivial; npm link ../../`
 2. Start a watcher for the CSS files:
    `cd matrix-react-sdk; npm run start:css`
 

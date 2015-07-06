@@ -98,6 +98,9 @@ module.exports = {
     componentDidMount: function() {
         if (this.refs.messageList) {
             var messageUl = this.refs.messageList.getDOMNode();
+
+            messageUl.addEventListener('drop', handleDrop);
+
             messageUl.scrollTop = messageUl.scrollHeight;
 
             this.fillSpace();
