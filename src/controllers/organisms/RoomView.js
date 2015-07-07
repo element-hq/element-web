@@ -46,6 +46,10 @@ module.exports = {
     },
 
     componentWillUnmount: function() {
+        if (this.refs.messageWrapper) {
+            var messageWrapper = this.refs.messageWrapper.getDOMNode();
+            messageWrapper.removeEventListener('drop', this.handleDrop);
+        }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
@@ -82,9 +86,9 @@ module.exports = {
         if (this.state.joining) return;
         if (room.roomId != this.props.roomId) return;
         
-        if (this.refs.messageList) {
-            var messageUl = this.refs.messageList.getDOMNode();
-            this.atBottom = messageUl.scrollHeight - messageUl.scrollTop <= messageUl.clientHeight;
+        if (this.refs.messageWrapper) {
+            var messageWrapper = this.refs.messageWrapper.getDOMNode();
+            this.atBottom = messageWrapper.scrollHeight - messageWrapper.scrollTop <= messageWrapper.clientHeight;
         }
         this.setState({
             room: MatrixClientPeg.get().getRoom(this.props.roomId)
@@ -96,40 +100,40 @@ module.exports = {
     },
 
     componentDidMount: function() {
-        if (this.refs.messageList) {
-            var messageUl = this.refs.messageList.getDOMNode();
+        if (this.refs.messageWrapper) {
+            var messageWrapper = this.refs.messageWrapper.getDOMNode();
 
-            messageUl.addEventListener('drop', handleDrop);
+            messageWrapper.addEventListener('drop', this.handleDrop);
 
-            messageUl.scrollTop = messageUl.scrollHeight;
+            messageWrapper.scrollTop = messageWrapper.scrollHeight;
 
             this.fillSpace();
         }
     },
 
     componentDidUpdate: function() {
-        if (!this.refs.messageList) return;
+        if (!this.refs.messageWrapper) return;
 
-        var messageUl = this.refs.messageList.getDOMNode();
+        var messageWrapper = this.refs.messageWrapper.getDOMNode();
 
         if (this.state.paginating && !this.waiting_for_paginate) {
-            var heightGained = messageUl.scrollHeight - this.oldScrollHeight;
-            messageUl.scrollTop += heightGained;
+            var heightGained = messageWrapper.scrollHeight - this.oldScrollHeight;
+            messageWrapper.scrollTop += heightGained;
             this.oldScrollHeight = undefined;
             if (!this.fillSpace()) {
                 this.setState({paginating: false});
             }
         } else if (this.atBottom) {
-            messageUl.scrollTop = messageUl.scrollHeight;
+            messageWrapper.scrollTop = messageWrapper.scrollHeight;
         }
     },
 
     fillSpace: function() {
-        var messageUl = this.refs.messageList.getDOMNode();
-        if (messageUl.scrollTop < messageUl.clientHeight && this.state.room.oldState.paginationToken) {
+        var messageWrapper = this.refs.messageWrapper.getDOMNode();
+        if (messageWrapper.scrollTop < messageWrapper.clientHeight && this.state.room.oldState.paginationToken) {
             this.setState({paginating: true});
 
-            this.oldScrollHeight = messageUl.scrollHeight;
+            this.oldScrollHeight = messageWrapper.scrollHeight;
 
             if (this.state.messageCap < this.state.room.timeline.length) {
                 this.waiting_for_paginate = false;
@@ -175,11 +179,18 @@ module.exports = {
     },
 
     onMessageListScroll: function(ev) {
-        if (this.refs.messageList) {
-            var messageUl = this.refs.messageList.getDOMNode();
-            this.atBottom = messageUl.scrollHeight - messageUl.scrollTop <= messageUl.clientHeight;
+        if (this.refs.messageWrapper) {
+            var messageWrapper = this.refs.messageWrapper.getDOMNode();
+            this.atBottom = messageWrapper.scrollHeight - messageWrapper.scrollTop <= messageWrapper.clientHeight;
         }
         if (!this.state.paginating) this.fillSpace();
+    },
+
+    handleDrop: function(ev) {
+        ev.stopPropagation();
+        var files = evt.dataTransfer.files;
+
+        
     },
 
     getEventTiles: function() {

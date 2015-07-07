@@ -70,8 +70,8 @@ module.exports = React.createClass({
                     <RoomHeader room={this.state.room} />
                     <div className="mx_RoomView_roomWrapper">
                         <div className="mx_RoomView_messagePanel">
-                            <div className="mx_RoomView_messageListWrapper">
-                                <div className="mx_RoomView_MessageList" ref="messageList" aria-live="polite" onScroll={this.onMessageListScroll}>
+                            <div ref="messageWrapper" className="mx_RoomView_messageListWrapper" onScroll={this.onMessageListScroll}>
+                                <div className="mx_RoomView_MessageList" aria-live="polite">
                                     <div className={scrollheader_classes}>
                                     </div>
                                     {this.getEventTiles()}
