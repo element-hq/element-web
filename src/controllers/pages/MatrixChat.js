@@ -42,6 +42,7 @@ module.exports = {
         }
         this.focusComposer = false;
         document.addEventListener("keydown", this.onKeyDown);
+        window.addEventListener("focus", this.onFocus);
     },
 
     componentWillUnmount: function() {
@@ -127,6 +128,10 @@ module.exports = {
                     break;
             }
         }
+    },
+
+    onFocus: function(ev) {
+        dis.dispatch({action: 'focus_composer'});
     }
 };
 
