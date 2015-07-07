@@ -15,9 +15,6 @@ limitations under the License.
 */
 
 .mx_RoomTile {
-    height: 20px;
-    margin-top: 1px;
-    margin-bottom: 1px;
     padding: 5px;
     cursor: pointer;
 }
