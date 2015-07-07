@@ -25,11 +25,11 @@ var React = require("react");
 
 // We pull in the component broker first, separately, as we need to replace
 // components before the SDK loads.
-var ComponenetBroker = require("matrix-react-sdk/src/ComponentBroker");
+var ComponentBroker = require("matrix-react-sdk/src/ComponentBroker");
 
 var CustomMTextTile = require('./CustomMTextTile');
 
-ComponenetBroker.set('molecules/MTextTile', CustomMTextTile);
+ComponentBroker.set('molecules/MTextTile', CustomMTextTile);
 
 var MatrixReactSdk = require("matrix-react-sdk");
 //var MatrixReactSdk = require("../../src/index");
