@@ -72,6 +72,8 @@ module.exports = React.createClass({
                         <div className="mx_RoomView_messagePanel">
                             <div className="mx_RoomView_messageListWrapper">
                                 <div className="mx_RoomView_MessageList" ref="messageList" aria-live="polite" onScroll={this.onMessageListScroll}>
+                                    <div className={scrollheader_classes}>
+                                    </div>
                                     {this.getEventTiles()}
                                 </div>
                             </div>
