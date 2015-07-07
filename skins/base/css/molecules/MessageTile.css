@@ -18,7 +18,7 @@ limitations under the License.
 	display: table-row;
 }
 
-.mx_MessageTile .mx_MessageTileType {
+.mx_MessageTile .mx_messageTileType {
 	display: table-cell;
 }
 
