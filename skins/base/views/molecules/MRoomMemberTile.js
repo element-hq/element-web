@@ -20,6 +20,9 @@ var React = require('react');
 
 var MRoomMemberTileController = require("../../../../src/controllers/molecules/MRoomMemberTile");
 
+var ComponentBroker = require('../../../../src/ComponentBroker');
+var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
+
 module.exports = React.createClass({
     displayName: 'MRoomMemberTile',
     mixins: [MRoomMemberTileController],
@@ -37,10 +40,15 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        // XXX: for now, just cheekily borrow the css from message tile...
         return (
-            <span className="mx_MemberTile">
-                {this.getMemberEventText()}
-            </span>
+            <div className="mx_MessageTile">
+                <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                <span className="mx_SenderProfile"></span>
+                <span className="mx_messageTileType">
+                    {this.getMemberEventText()}
+                </span>
+            </div>
         );
     },
 });
