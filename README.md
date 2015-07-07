@@ -127,5 +127,23 @@ In practice this means:
     of the modularity requirements it brings to the table.
 
 With all this in mind, here's how you go about skinning the react SDK UI
-components to embed a Matrix client into your app:  TODO. For now, check out
-the examples and work it out for yourself...
+components to embed a Matrix client into your app:
+
+  * Create a new NPM project. Be sure to directly depend on react, (otherwise
+    you can end up with two copies of react).
+  * Create an index.js file that sets up react. Add require statements for
+    React, the ComponentBroker and matrix-react-sdk and a call to Render
+    the root React element as in the examples.
+  * Create React classes for any custom components you wish to add. These
+    can be based off the files in `views` in the `matrix-react-sdk` package,
+    modifying the require() statement appropriately.
+    You only need to copy files you want to customise.
+  * Add a ComponentBroker.set() call for each of your custom components. These
+    must come *before* `require("matrix-react-sdk")`.
+  * Add a way to build your project: we suggest copying the browserify calls
+    from the example projects, but you could use grunt or gulp.
+  * Create an index.html file pulling in your compiled index.js file, the
+    CSS bundle from matrix-react-sdk.
+
+For more specific detail on any of these steps, look at the `custom` example in
+matrix-react-sdk/examples.
