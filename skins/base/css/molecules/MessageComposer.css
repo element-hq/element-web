@@ -14,13 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MessageComposer {
-}
-
 .mx_MessageComposer textarea {
-    position: absolute;
     width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0px;
+    margin: auto;
 }

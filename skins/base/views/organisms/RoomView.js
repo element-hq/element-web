@@ -39,7 +39,7 @@ module.exports = React.createClass({
     getMessageTiles: function() {
         return this.state.room.timeline.map(function(mxEv) {
             return (
-                <li key={mxEv.getId()}><MessageTile mxEvent={mxEv} /></li>
+                <MessageTile key={mxEv.getId()} mxEvent={mxEv} />
             );
         });
     },
@@ -71,13 +71,17 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomView">
                     <RoomHeader room={this.state.room} />
-                    <div className="mx_RoomView_HSplit">
-                        <ul className="mx_RoomView_MessageList" ref="messageList">
-                            {this.getMessageTiles()}
-                        </ul>
+                    <div className="mx_RoomView_roomWrapper">
+                        <div className="mx_RoomView_messagePanel">
+                            <div className="mx_RoomView_messageListWrapper">
+                                <div className="mx_RoomView_MessageList" ref="messageList">
+                                    {this.getMessageTiles()}
+                                </div>
+                            </div>
+                            <MessageComposer roomId={this.props.roomId} />
+                        </div>
                         <MemberList roomId={this.props.roomId} key={this.props.roomId} />
                     </div>
-                    <MessageComposer roomId={this.props.roomId} />
                 </div>
             );
         }

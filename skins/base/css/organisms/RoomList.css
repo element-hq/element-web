@@ -16,12 +16,3 @@ limitations under the License.
 
 .mx_RoomList {
 }
-
-.mx_RoomList ul {
-    padding: 0px;
-    margin: 0px;
-}
-
-.mx_RoomList ul li {
-    list-style-type: none;
-}
