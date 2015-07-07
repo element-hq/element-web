@@ -15,6 +15,11 @@ limitations under the License.
 */
 
 .mx_MessageTile {
+	display: table-row;
+}
+
+.mx_MessageTile .mx_messageTileType {
+	display: table-cell;
 }
 
 .mx_MessageTile.sending {

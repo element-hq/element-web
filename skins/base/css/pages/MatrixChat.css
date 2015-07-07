@@ -20,29 +20,69 @@ limitations under the License.
     height: 100%;
 }
 
-.mx_MatrixChat_leftPanel {
+.mx_MatrixChat_chatWrapper {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
     position: absolute;
-    left: 0px;
+    width: 100%;
+    top: 0px;
+    bottom: 42px;
+}
+
+.mx_MatrixChat_leftPanel {
+    -webkit-box-ordinal-group: 1;
+    -moz-box-ordinal-group: 1;
+    -ms-flex-order: 1;
+    -webkit-order: 1;
+    order: 1;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+
+    /* background-color: #f00; */
     width: 250px;
     height: 100%;
 }
 
 .mx_MatrixChat_leftPanel .mx_MatrixToolbar {
-    position: absolute;
-    height: 20px;
+    -webkit-box-ordinal-group: 1;
+    -moz-box-ordinal-group: 1;
+    -ms-flex-order: 1;
+    -webkit-order: 1;
+    order: 1;
+
+    width: 100%;
+    height: 40px;
 }
 
 .mx_MatrixChat_leftPanel .mx_RoomList {
-    position: absolute;
-    top: 20px;
-    bottom: 0px;
-    width: 250px;
+    -webkit-box-ordinal-group: 2;
+    -moz-box-ordinal-group: 2;
+    -ms-flex-order: 2;
+    -webkit-order: 2;
+    order: 2;
+
+    /* background-color: #0ff; */
+    width: 100%;
+    height: 100%;
     overflow-y: scroll;
 }
 
 .mx_MatrixChat .mx_RoomView {
-    position: absolute;
-    left: 255px;
-    right: 0px;
-    height: 100%;
+    -webkit-box-ordinal-group: 2;
+    -moz-box-ordinal-group: 2;
+    -ms-flex-order: 2;
+    -webkit-order: 2;
+    order: 2;
+
+    /* background-color: #00f; */
+    width: 100%;
+    height: 100%;       
 }

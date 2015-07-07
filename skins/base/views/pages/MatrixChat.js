@@ -38,11 +38,13 @@ module.exports = React.createClass({
         if (this.state.logged_in && this.state.ready) {
             return (
                 <div className="mx_MatrixChat">
-                    <div className="mx_MatrixChat_leftPanel">
-                        <MatrixToolbar />
-                        <RoomList selectedRoom={this.state.currentRoom} />
+                    <div className="mx_MatrixChat_chatWrapper">
+                        <div className="mx_MatrixChat_leftPanel">
+                            <MatrixToolbar />
+                            <RoomList selectedRoom={this.state.currentRoom} />
+                        </div>
+                        <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
                     </div>
-                    <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
                 </div>
             );
         } else if (this.state.logged_in) {

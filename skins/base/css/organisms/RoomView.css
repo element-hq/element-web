@@ -16,53 +16,67 @@ limitations under the License.
 
 .mx_RoomView {
     word-wrap: break-word;
+    position: relative;
 }
 
-.mx_RoomView .mx_RoomHeader {
-    position: absolute;
-    top: 0px;
-    width: 100%;
+.mx_RoomHeader {
     height: 30px;
 }
 
-.mx_RoomView .mx_RoomView_MessageList {
-    padding: 0px;
-    margin: 0px;
+.mx_RoomView_roomWrapper {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;    
     position: absolute;
-    top: 35px;
-    bottom: 40px;
-    left: 0px;
-    right: 150px;
+    width: 100%;
+    top: 32px;
+    bottom: 0px;
+}
+
+.mx_RoomView_messagePanel {
+    -webkit-box-ordinal-group: 1;
+    -moz-box-ordinal-group: 1;
+    -ms-flex-order: 1;
+    -webkit-order: 1;
+    order: 1;
+    width: 100%;
+    height: 100%;
+    /* background-color: #ff0; */
+}
+
+.mx_RoomView_messageListWrapper {
+    height: 100%;
+    overflow-y: scroll;    
+}
+
+.mx_RoomView_MessageList {
+    display: table;
+}
+
+.mx_RoomView_invitePrompt {
+}
+
+.mx_MemberList {
+    -webkit-box-ordinal-group: 2;
+    -moz-box-ordinal-group: 2;
+    -ms-flex-order: 2;
+    -webkit-order: 2;
+    order: 2;
+
+    /* background-color: #0f0; */
+    width: 250px;
     overflow-y: scroll;
+    height: 100%;
 }
 
-.mx_RoomView ul li {
-    list-style-type: none;
-}
-
-.mx_RoomView .mx_RoomView_invitePrompt {
-}
-
-.mx_RoomView .mx_MemberList {
-    position: absolute;
-    top: 35px;
-    bottom: 40px;
-    right: 0px;
-    width: 150px;
-    margin: 0px;
-    padding: 0px;
-    overflow-y: scroll;
-}
-
-.mx_RoomView .mx_MemberList ul {
+.mx_MemberList ul {
     margin: 0px;
     padding: 0px;
 }
 
-.mx_RoomView .mx_MessageComposer {
-    position: absolute;
-    bottom: 5px;
-    right: 0px;
-    left: 0px;
-    height: 36px;
+.mx_MessageComposer {
+    width: 100%;
+    bottom: 0px;
 }

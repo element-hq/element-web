@@ -28,9 +28,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_RoomList">
-                <ul>
-                    {this.makeRoomTiles()}
-                </ul>
+                {this.makeRoomTiles()}
             </div>
         );
     }

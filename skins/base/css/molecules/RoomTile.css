@@ -23,12 +23,10 @@ limitations under the License.
 }
 
 .mx_RoomTile.selected {
-    border: 2px inset #eee;
+    text-decoration: underline;
 }
 
 .mx_RoomTile_name {
-    font-size: 80%;
-    font-weight: bold;
 }
 
 .mx_RoomTile div {
@@ -37,7 +35,7 @@ limitations under the License.
 }
 
 .mx_RoomTile.unread {
-    background-color: #66e;
+    font-weight: bold;
 }
 
 .mx_RoomTile.highlight {
@@ -45,7 +43,7 @@ limitations under the License.
 }
 
 .mx_RoomTile.invited {
-    background-color: #6e6;
+    font-weight: bold;
 }
 
 .mx_RoomTile:hover {

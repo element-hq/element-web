@@ -68,15 +68,17 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomView">
                     <RoomHeader room={this.state.room} />
-                    <div className="mx_RoomView_HSplit">
-                        <ul className="mx_RoomView_MessageList" ref="messageList" aria-live="polite" onScroll={this.onMessageListScroll}>
-                            <li className={scrollheader_classes}>
-                            </li>
-                            {this.getEventTiles()}
-                        </ul>
+                    <div className="mx_RoomView_roomWrapper">
+                        <div className="mx_RoomView_messagePanel">
+                            <div className="mx_RoomView_messageListWrapper">
+                                <div className="mx_RoomView_MessageList" ref="messageList" aria-live="polite" onScroll={this.onMessageListScroll}>
+                                    {this.getEventTiles()}
+                                </div>
+                            </div>
+                            <MessageComposer roomId={this.props.roomId} />
+                        </div>
                         <MemberList roomId={this.props.roomId} key={this.props.roomId} />
                     </div>
-                    <MessageComposer roomId={this.props.roomId} />
                 </div>
             );
         }
