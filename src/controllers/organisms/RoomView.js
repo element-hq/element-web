@@ -191,7 +191,7 @@ module.exports = {
             var TileType = tileTypes[mxEv.getType()];
             if (!TileType) continue;
             ret.unshift(
-                <li key={mxEv.getId()}><TileType mxEvent={mxEv} /></li>
+                <TileType key={mxEv.getId()} mxEvent={mxEv} />
             );
             ++count;
         }
