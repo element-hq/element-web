@@ -95,7 +95,7 @@ module.exports = {
         });
     },
 
-    getRoomList() {
+    getRoomList: function() {
         return RoomListSorter.mostRecentActivityFirst(MatrixClientPeg.get().getRooms());
     },
 
