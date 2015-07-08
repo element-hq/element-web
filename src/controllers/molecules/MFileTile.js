@@ -24,11 +24,13 @@ module.exports = {
         }
 
         var additionals = [];
-        if (content.info.mimetype && content.info.mimetype.length > 0) {
-            additionals.push(content.info.mimetype);
-        }
-        if (content.info.size && content.info.size.length > 0) {
-            additionals.push(filesize(content.info.size));
+        if (content.info) {
+            if (content.info.mimetype && content.info.mimetype.length > 0) {
+                additionals.push(content.info.mimetype);
+            }
+            if (content.info.size && content.info.size.length > 0) {
+                additionals.push(filesize(content.info.size));
+            }
         }
 
         if (additionals.length > 0) {
