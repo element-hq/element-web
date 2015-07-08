@@ -20,6 +20,7 @@ limitations under the License.
 var Loader = require("react-loader");
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var RoomListSorter = require("../../RoomListSorter");
 
 var dis = require("../../dispatcher");
 
@@ -106,7 +107,9 @@ module.exports = {
         cli.on('syncComplete', function() {
             var firstRoom = null;
             if (cli.getRooms() && cli.getRooms().length) {
-                firstRoom = cli.getRooms()[0].roomId;
+                firstRoom = RoomListSorter.mostRecentFirst(
+                    cli.getRooms()
+                )[0].roomId;
             }
             that.setState({ready: true, currentRoom: firstRoom});
             dis.dispatch({action: 'focus_composer'});

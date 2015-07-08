@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var RoomListSorter = require("../../RoomListSorter");
 
 var ComponentBroker = require('../../ComponentBroker');
 
@@ -30,8 +31,9 @@ module.exports = {
         cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
 
+        var rooms = this.getRoomList();
         this.setState({
-            roomList: cli.getRooms(),
+            roomList: rooms,
             activityMap: {}
         });
     },
@@ -52,40 +54,49 @@ module.exports = {
     },
 
     onRoom: function(room) {
-        var cli = MatrixClientPeg.get();
-        this.setState({
-            roomList: cli.getRooms(),
-        });
+        this.refreshRoomList();
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (toStartOfTimeline) return;
-        if (room.roomId == this.props.selectedRoom) return;
-        if (ev.getSender() == MatrixClientPeg.get().credentials.userId) return;
 
-        var hl = 1;
+        var newState = {
+            roomList: this.getRoomList()
+        };
+        if (
+            room.roomId != this.props.selectedRoom &&
+            ev.getSender() != MatrixClientPeg.get().credentials.userId)
+        {
+            var hl = 1;
 
-        var actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
-        if (actions && actions.tweaks && actions.tweaks.highlight) {
-            hl = 2;
+            var actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
+            if (actions && actions.tweaks && actions.tweaks.highlight) {
+                hl = 2;
+            }
+            if (actions.notify) {
+                // obviously this won't deep copy but this shouldn't be necessary
+                var amap = this.state.activityMap;
+                amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
+
+                newState.activityMap = amap;
+            }
         }
-        if (!actions.notify) {
-            return;
-        }
-
-        // obviously this won't deep copy but this shouldn't be necessary
-        var amap = this.state.activityMap;
-        amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
-        this.setState({
-            activityMap: amap
-        });
+        this.setState(newState);
     },
 
     onRoomName: function(room) {
-        var cli = MatrixClientPeg.get();
+        this.refreshRoomList();
+    },
+
+    refreshRoomList: function() {
+        var rooms = this.getRoomList();
         this.setState({
-            roomList: cli.getRooms(),
+            roomList: rooms
         });
+    },
+
+    getRoomList() {
+        return RoomListSorter.mostRecentFirst(MatrixClientPeg.get().getRooms());
     },
 
     makeRoomTiles: function() {
