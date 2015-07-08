@@ -45,6 +45,7 @@ limitations under the License.
     display: -webkit-flex;
     display: flex;
     flex-direction: column;
+    -webkit-flex-direction: column;
 
     /* background-color: #f00; */
     width: 250px;
