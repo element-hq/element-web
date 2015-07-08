@@ -36,7 +36,7 @@ module.exports = {
         }
 
         if (additionals.length > 0) {
-            linkText += ' (' + additionals.join(',') + ')';
+            linkText += ' (' + additionals.join(', ') + ')';
         }
         return linkText;
     }
