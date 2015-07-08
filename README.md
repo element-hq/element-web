@@ -50,8 +50,8 @@ provides a very vanilla whitelabelled 'base skin'.  In future the SDK could
 provide alternative skins (probably by extending the base skin) that provide more
 specific look and feels (e.g. "IRC-style", "Skype-style") etc.  However, unlike
 Wordpress themes and similar, we don't normally expect app developers to define
-reusable skins and instead just go and incorporate their view customisations into
-their actual app.
+reusable skins.  Instead you just go and incorporate your view customisations
+into your actual app.
 
 The SDK uses the 'atomic' design pattern as seen at http://patternlab.io to
 encourage a very modular and reusable architecture, making it easy to
