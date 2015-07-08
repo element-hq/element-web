@@ -31,7 +31,8 @@ var tileTypes = {
     'm.text': ComponentBroker.get('molecules/MTextTile'),
     'm.notice': ComponentBroker.get('molecules/MNoticeTile'),
     'm.emote': ComponentBroker.get('molecules/MEmoteTile'),
-    'm.image': ComponentBroker.get('molecules/MImageTile')
+    'm.image': ComponentBroker.get('molecules/MImageTile'),
+    'm.file': ComponentBroker.get('molecules/MFileTile')
 };
 
 var MessageTileController = require("../../../../src/controllers/molecules/MessageTile");

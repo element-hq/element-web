@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "classnames": "^2.1.2",
+    "filesize": "^3.1.2",
     "flux": "^2.0.3",
     "matrix-js-sdk": "0.1.1",
     "q": "^1.4.1",

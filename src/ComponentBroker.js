@@ -70,6 +70,7 @@ require('../skins/base/views/molecules/MTextTile');
 require('../skins/base/views/molecules/MNoticeTile');
 require('../skins/base/views/molecules/MEmoteTile');
 require('../skins/base/views/molecules/MImageTile');
+require('../skins/base/views/molecules/MFileTile');
 require('../skins/base/views/molecules/MRoomMemberTile');
 require('../skins/base/views/molecules/RoomHeader');
 require('../skins/base/views/molecules/MessageComposer');
