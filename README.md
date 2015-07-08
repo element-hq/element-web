@@ -43,10 +43,15 @@ react from your app) you must be sure to:
 How to customise the SDK
 ========================
 
-The matrix-react-sdk has been built to be heavily customisable - letting
-developers both create new skins by extending/overriding the CSS and View
-classes provided in the base skin, as well as entirely replacing components as
-required.
+The matrix-react-sdk provides well-defined reusable UI components which may be
+customised/replaced by the developer to build into an app.  A set of consistent
+UI components (View + CSS classes) is called a 'skin' - currently the SDK
+provides a very vanilla whitelabelled 'base skin'.  In future the SDK could
+provide alternative skins (probably by extending the base skin) that provide more
+specific look and feels (e.g. "IRC-style", "Skype-style") etc.  However, unlike
+Wordpress themes and similar, we don't normally expect app developers to define
+reusable skins and instead just go and incorporate their view customisations into
+their actual app.
 
 The SDK uses the 'atomic' design pattern as seen at http://patternlab.io to
 encourage a very modular and reusable architecture, making it easy to
@@ -69,13 +74,6 @@ In practice this means:
    * templates: "a reusable configuration of organisms" - used to combine and
      style organisms into a well-defined global look and feel
    * pages: specific instances of templates.
-
- * "Skins" refer to a suite of components (views and css) which define the look
-   and feel of the Matrix UI used in the target app.  We provide a 'base' skin
-   in skins/base which provides generic plain UI for typical chat functions.
-   To change the look and feel to embed the SDK into your own app, users can
-   define a new skin which inherits from the base one, or override components
-   in the app itself.  TODO: spell out how.
 
  Good separation between the components is maintained by adopting various best
  practices that anyone working with the SDK needs to be be aware of and uphold:
