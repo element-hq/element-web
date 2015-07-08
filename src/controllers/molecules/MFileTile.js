@@ -16,6 +16,8 @@ limitations under the License.
 
 'use strict';
 
+var filesize = require('filesize');
+
 module.exports = {
     presentableTextForFile: function(content) {
         var linkText = 'Attachment';
@@ -28,7 +30,7 @@ module.exports = {
             if (content.info.mimetype && content.info.mimetype.length > 0) {
                 additionals.push(content.info.mimetype);
             }
-            if (content.info.size && content.info.size.length > 0) {
+            if (content.info.size) {
                 additionals.push(filesize(content.info.size));
             }
         }

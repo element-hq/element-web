@@ -17,7 +17,6 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var filesize = require('filesize');
 
 var MFileTileController = require("../../../../src/controllers/molecules/MFileTile");
 
