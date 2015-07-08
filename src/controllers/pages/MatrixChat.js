@@ -107,7 +107,7 @@ module.exports = {
         cli.on('syncComplete', function() {
             var firstRoom = null;
             if (cli.getRooms() && cli.getRooms().length) {
-                firstRoom = RoomListSorter.mostRecentFirst(
+                firstRoom = RoomListSorter.mostRecentActivityFirst(
                     cli.getRooms()
                 )[0].roomId;
             }

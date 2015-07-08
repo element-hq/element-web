@@ -96,7 +96,7 @@ module.exports = {
     },
 
     getRoomList() {
-        return RoomListSorter.mostRecentFirst(MatrixClientPeg.get().getRooms());
+        return RoomListSorter.mostRecentActivityFirst(MatrixClientPeg.get().getRooms());
     },
 
     makeRoomTiles: function() {

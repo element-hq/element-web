@@ -20,12 +20,12 @@ function tsOfNewestEvent(room) {
     return room.timeline[room.timeline.length - 1].getTs();
 }
 
-function mostRecentFirst(roomList) {
+function mostRecentActivityFirst(roomList) {
     return roomList.sort(function(a,b) {
         return tsOfNewestEvent(b) - tsOfNewestEvent(a);
     });
 }
 
 module.exports = {
-    mostRecentFirst: mostRecentFirst
+    mostRecentActivityFirst: mostRecentActivityFirst
 };
