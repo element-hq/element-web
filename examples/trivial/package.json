@@ -13,7 +13,6 @@
     "envify": "^3.4.0",
     "http-server": "^0.8.0",
     "matrix-react-sdk": "../../",
-    "npm-css": "^0.2.3",
     "parallelshell": "^1.2.0",
     "reactify": "^1.1.1",
     "uglify-js": "^2.4.23",
