@@ -23,6 +23,7 @@
     "classnames": "^2.1.2",
     "flux": "^2.0.3",
     "matrix-js-sdk": "0.1.1",
+    "q": "^1.4.1",
     "react": "^0.13.0",
     "react-loader": "^1.4.0"
   },

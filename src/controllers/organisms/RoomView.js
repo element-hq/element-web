@@ -18,6 +18,8 @@ limitations under the License.
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var React = require("react");
+var q = require("q");
+var ContentMessages = require("../../ContentMessages");
 
 var dis = require("../../dispatcher");
 
@@ -48,7 +50,7 @@ module.exports = {
     componentWillUnmount: function() {
         if (this.refs.messageWrapper) {
             var messageWrapper = this.refs.messageWrapper.getDOMNode();
-            messageWrapper.removeEventListener('drop', this.handleDrop);
+            messageWrapper.removeEventListener('drop', this.onDrop);
         }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
@@ -103,7 +105,8 @@ module.exports = {
         if (this.refs.messageWrapper) {
             var messageWrapper = this.refs.messageWrapper.getDOMNode();
 
-            messageWrapper.addEventListener('drop', this.handleDrop);
+            messageWrapper.addEventListener('drop', this.onDrop);
+            messageWrapper.addEventListener('dragover', this.onDragOver);
 
             messageWrapper.scrollTop = messageWrapper.scrollHeight;
 
@@ -186,11 +189,34 @@ module.exports = {
         if (!this.state.paginating) this.fillSpace();
     },
 
-    handleDrop: function(ev) {
+    onDragOver: function(ev) {
         ev.stopPropagation();
-        var files = evt.dataTransfer.files;
+        ev.preventDefault();
 
-        
+        ev.dataTransfer.dropEffect = 'none';
+
+        var items = ev.dataTransfer.items;
+        if (items.length == 1) {
+            if (items[0].kind == 'file') {
+                ev.dataTransfer.dropEffect = 'copy';
+            }
+        }
+    },
+
+    onDrop: function(ev) {
+        ev.stopPropagation();
+        ev.preventDefault();
+        var files = ev.dataTransfer.files;
+
+        if (files.length == 1) {
+            ContentMessages.sendContentToRoom(
+                files[0], this.props.roomId, MatrixClientPeg.get()
+            ).progress(function(ev) {
+                //console.log("Upload: "+ev.loaded+" / "+ev.total);
+            }).done(undefined, function() {
+                // display error message
+            });
+        }
     },
 
     getEventTiles: function() {
