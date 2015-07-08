@@ -73,7 +73,7 @@ module.exports = {
             return;
         }
 
-        // obviously this won't deep copy but we this shouldn't be necessary
+        // obviously this won't deep copy but this shouldn't be necessary
         var amap = this.state.activityMap;
         amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
         this.setState({
