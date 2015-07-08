@@ -80,7 +80,9 @@ module.exports = {
             case 'view_prev_room':
                 roomIndexDelta = -1;
             case 'view_next_room':
-                var allRooms = MatrixClientPeg.get().getRooms();
+                var allRooms = RoomListSorter.mostRecentActivityFirst(
+                    MatrixClientPeg.get().getRooms()
+                );
                 var roomIndex = -1;
                 for (var i = 0; i < allRooms.length; ++i) {
                     if (allRooms[i].roomId == this.state.currentRoom) {
