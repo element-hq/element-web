@@ -29,13 +29,15 @@ module.exports = React.createClass({
 
     getMemberEventText: function() {
         var ev = this.props.mxEvent;
+        // XXX: SYJS-16
+        var senderName = ev.sender ? ev.sender.name : "Someone";
         switch (ev.getContent().membership) {
             case 'invite':
-                return ev.sender.name + " invited " + ev.target.name + ".";
+                return senderName + " invited " + ev.target.name + ".";
             case 'join':
-                return ev.sender.name + " joined the room.";
+                return senderName + " joined the room.";
             case 'leave':
-                return ev.sender.name + " left the room.";
+                return senderName + " left the room.";
         }
     },
 
