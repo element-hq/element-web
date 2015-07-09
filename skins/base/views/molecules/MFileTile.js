@@ -32,7 +32,7 @@ module.exports = React.createClass({
 
         return (
             <span className="mx_MFileTile">
-                <a href={cli.mxcUrlToHttp(content.url)}>
+                <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
                     {this.presentableTextForFile(content)}
                 </a>
             </span>
