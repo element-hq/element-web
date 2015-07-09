@@ -16,5 +16,10 @@ limitations under the License.
 
 'use strict';
 
+var linkifyElement = require('linkifyjs/element');
+
 module.exports = {
+    componentDidMount: function() {
+        linkifyElement(this.refs.content.getDOMNode());
+    }
 };
