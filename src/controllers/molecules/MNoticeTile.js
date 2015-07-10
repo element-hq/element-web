@@ -16,10 +16,13 @@ limitations under the License.
 
 'use strict';
 
+var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
+var linkifyMatrix = require('../../linkify-matrix.js');
+linkifyMatrix(linkify);
 
 module.exports = {
     componentDidMount: function() {
-        linkifyElement(this.refs.content.getDOMNode());
+        linkifyElement(this.refs.content.getDOMNode(), linkifyMatrix.options);
     }
 };
