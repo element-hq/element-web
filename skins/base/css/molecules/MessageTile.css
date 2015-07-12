@@ -18,18 +18,18 @@ limitations under the License.
 	display: table-row;
 }
 
-.mx_MessageTile .mx_messageTileType {
+.mx_MessageTile_content {
 	display: table-cell;
 }
 
-.mx_MessageTile.sending {
+.mx_MessageTile_sending {
     color: #ddd;
 }
 
-.mx_MessageTile.not_sent {
+.mx_MessageTile_notSent {
     color: #f11;
 }
 
-.mx_MessageTile.highlight {
+.mx_MessageTile_highlight {
     color: #00f;
 }

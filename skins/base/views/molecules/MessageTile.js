@@ -50,9 +50,9 @@ module.exports = React.createClass({
         }
         var classes = classNames({
             mx_MessageTile: true,
-            sending: this.props.mxEvent.status == 'sending',
-            not_sent: this.props.mxEvent.status == 'not_sent',
-            highlight: this.shouldHighlight()
+            mx_MessageTile_sending: this.props.mxEvent.status == 'sending',
+            mx_MessageTile_notSent: this.props.mxEvent.status == 'not_sent',
+            mx_MessageTile_highlight: this.shouldHighlight()
         });
         return (
             <div className={classes}>
