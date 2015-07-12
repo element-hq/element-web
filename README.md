@@ -30,7 +30,7 @@ change the source files, you'll need to do two extra things:
    `cd matrix-react-sdk; npm run start:css`
 
 Note that you may need to restart the CSS builder if you add a new file. Note
-that `npm start` builds debug versions of the the javascript and CSS, which are
+that `npm start` builds debug versions of the javascript and CSS, which are
 much larger than the production versions build by the `npm run build` commands.
 
 IMPORTANT: If you customise components in your application (and hence require
