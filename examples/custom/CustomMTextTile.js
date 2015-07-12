@@ -27,7 +27,7 @@ module.exports = React.createClass({
     render: function() {
         var content = this.props.mxEvent.getContent();
         return (
-            <span ref="content" className="mx_MTextTile mx_messageTileType" onClick={this.onClick}>
+            <span ref="content" className="mx_MTextTile mx_MessageTile_content" onClick={this.onClick}>
                 {content.body}
             </span>
         );

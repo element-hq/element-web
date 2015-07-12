@@ -40,8 +40,8 @@ module.exports = React.createClass({
                 <div className="mx_MatrixChat">
                     <div className="mx_MatrixChat_chatWrapper">
                         <div className="mx_MatrixChat_leftPanel">
-                            <MatrixToolbar />
                             <RoomList selectedRoom={this.state.currentRoom} />
+                            <MatrixToolbar />
                         </div>
                         <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
                     </div>

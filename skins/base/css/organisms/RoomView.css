@@ -19,7 +19,7 @@ limitations under the License.
     position: relative;
 }
 
-.mx_RoomHeader {
+.mx_RoomView .mx_RoomHeader {
     height: 30px;
 }
 
@@ -58,7 +58,7 @@ limitations under the License.
 .mx_RoomView_invitePrompt {
 }
 
-.mx_MemberList {
+.mx_RoomView .mx_MemberList {
     -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
@@ -71,12 +71,12 @@ limitations under the License.
     height: 100%;
 }
 
-.mx_MemberList ul {
+.mx_RoomView .mx_MemberList ul {
     margin: 0px;
     padding: 0px;
 }
 
-.mx_MessageComposer {
+.mx_RoomView .mx_MessageComposer {
     width: 100%;
     bottom: 0px;
 }
