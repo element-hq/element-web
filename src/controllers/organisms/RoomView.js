@@ -226,9 +226,20 @@ module.exports = {
         for (var i = this.state.room.timeline.length-1; i >= 0 && count < this.state.messageCap; --i) {
             var mxEv = this.state.room.timeline[i];
             var TileType = tileTypes[mxEv.getType()];
+            var continuation = false;
+            if (i > 0 &&
+                count < this.state.messageCap - 1 &&
+                this.state.room.timeline[i].sender &&
+                this.state.room.timeline[i - 1].sender &&
+                this.state.room.timeline[i].sender.userId ===
+                    this.state.room.timeline[i - 1].sender.userId)
+            {
+                console.log("i=" + i + ", continuation=true");
+                continuation = true;
+            }
             if (!TileType) continue;
             ret.unshift(
-                <TileType key={mxEv.getId()} mxEvent={mxEv} />
+                <TileType key={mxEv.getId()} mxEvent={mxEv} continuation={continuation}/>
             );
             ++count;
         }

@@ -52,7 +52,8 @@ module.exports = React.createClass({
             mx_MessageTile: true,
             mx_MessageTile_sending: this.props.mxEvent.status == 'sending',
             mx_MessageTile_notSent: this.props.mxEvent.status == 'not_sent',
-            mx_MessageTile_highlight: this.shouldHighlight()
+            mx_MessageTile_highlight: this.shouldHighlight(),
+            mx_MessageTile_continuation: this.props.continuation,
         });
         return (
             <div className={classes}>

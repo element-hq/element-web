@@ -29,6 +29,16 @@ limitations under the License.
 	float: left;	
 }
 
+.mx_MessageTile_continuation {
+	margin-top: 8px ! important;
+}
+
+.mx_MessageTile_continuation .mx_MessageTile_avatar,
+.mx_MessageTile_continuation .mx_SenderProfile
+{
+	display: none ! important;
+}
+
 .mx_MessageTile .mx_SenderProfile {
 	color: #acacac;
 	font-size: 13px;
@@ -43,6 +53,8 @@ limitations under the License.
 }
 
 .mx_MessageTile_content {
+	padding-right: 100px;
+	display: block;
 }
 
 .mx_MessageTile_sending {
