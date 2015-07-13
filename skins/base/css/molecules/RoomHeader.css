@@ -25,6 +25,7 @@ limitations under the License.
 
 .mx_RoomHeader_leftRow {
 	display: table-row;
+	margin-left: 12px;
 	height: 50px;
 	float: left;
 }
@@ -32,6 +33,7 @@ limitations under the License.
 .mx_RoomHeader_rightRow {
 	display: table-row;
 	height: 50px;
+	margin-right: -26px;
 	float: right;
 }
 
