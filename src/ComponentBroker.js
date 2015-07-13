@@ -82,4 +82,11 @@ require('../skins/base/views/organisms/RoomList');
 require('../skins/base/views/organisms/RoomView');
 require('../skins/base/views/templates/Login');
 require('../skins/base/views/organisms/Notifier');
+// new for vector
+require('../skins/base/views/organisms/LeftPanel');
+require('../skins/base/views/organisms/RightPanel');
+require('../skins/base/views/molecules/RoomCreate');
+require('../skins/base/views/molecules/RoomDropTarget');
+require('../skins/base/views/molecules/DirectoryMenu');
+
 }

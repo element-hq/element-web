@@ -19,9 +19,9 @@ limitations under the License.
 var React = require('react');
 var ComponentBroker = require('../../../../src/ComponentBroker');
 
-var RoomList = ComponentBroker.get('organisms/RoomList');
+var LeftPanel = ComponentBroker.get('organisms/LeftPanel');
 var RoomView = ComponentBroker.get('organisms/RoomView');
-var MatrixToolbar = ComponentBroker.get('molecules/MatrixToolbar');
+var RightPanel = ComponentBroker.get('organisms/RightPanel');
 var Login = ComponentBroker.get('templates/Login');
 
 var MatrixChatController = require("../../../../src/controllers/pages/MatrixChat");
@@ -38,13 +38,9 @@ module.exports = React.createClass({
         if (this.state.logged_in && this.state.ready) {
             return (
                 <div className="mx_MatrixChat">
-                    <div className="mx_MatrixChat_chatWrapper">
-                        <div className="mx_MatrixChat_leftPanel">
-                            <RoomList selectedRoom={this.state.currentRoom} />
-                            <MatrixToolbar />
-                        </div>
-                        <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
-                    </div>
+                    <LeftPanel selectedRoom={this.state.currentRoom} />
+                    <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
+                    <RightPanel roomId={this.state.currentRoom} />
                 </div>
             );
         } else if (this.state.logged_in) {

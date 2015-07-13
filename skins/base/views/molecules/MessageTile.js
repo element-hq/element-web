@@ -56,6 +56,9 @@ module.exports = React.createClass({
         });
         return (
             <div className={classes}>
+                <div className="mx_MessageTile_avatar">
+                    <img src="/img/placeholder.png" width="32" height="32"/>
+                </div>
                 <MessageTimestamp ts={this.props.mxEvent.getTs()} />
                 <SenderProfile mxEvent={this.props.mxEvent} />
                 <TileType mxEvent={this.props.mxEvent} />

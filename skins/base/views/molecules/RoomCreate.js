@@ -17,31 +17,27 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var ComponentBroker = require('../../../../src/ComponentBroker');
+var classNames = require('classnames');
 
-var RoomDropTarget = ComponentBroker.get('molecules/RoomDropTarget');
+//var RoomCreateController = require("../../../../src/controllers/molecules/RoomCreateController");
 
-var RoomListController = require("../../../../src/controllers/organisms/RoomList");
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
 module.exports = React.createClass({
-    displayName: 'RoomList',
-    mixins: [RoomListController],
-
+    displayName: 'RoomCreate',
+    // mixins: [RoomCreateController],
     render: function() {
         return (
-            <div className="mx_RoomList">
-                <h2>Favourites</h2>
-                <RoomDropTarget text="Drop here to favourite"/>
-
-                <h2>Recents</h2>
-                <div className="mx_RoomList_recents">
-                    {this.makeRoomTiles()}
+            <div className="mx_RoomCreate">
+                <div className="mx_RoomCreate_table">
+                    <div className="mx_RoomTile">
+                        <div className="mx_RoomTile_avatar">
+                            <img src="img/create.png" width="32" height="32" alt="(+)"/>
+                        </div>
+                        <div className="mx_RoomTile_name">Create new room</div>
+                    </div>
                 </div>
-
-                <h2>Archive</h2>
-                <RoomDropTarget text="Drop here to archive"/>
             </div>
         );
     }
 });
-

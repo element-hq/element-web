@@ -15,6 +15,45 @@ limitations under the License.
 */
 
 .mx_RoomHeader {
-    height: 1em;
-    padding: 0px;
+}
+
+.mx_RoomHeader_wrapper {
+	max-width: 720px;
+	margin: auto;
+	height: 50px;
+}
+
+.mx_RoomHeader_leftRow {
+	display: table-row;
+	height: 50px;
+	float: left;
+}
+
+.mx_RoomHeader_rightRow {
+	display: table-row;
+	height: 50px;
+	float: right;
+}
+
+.mx_RoomHeader_name {
+	display: table-cell;
+	vertical-align: middle;
+	height: 50px;
+	font-weight: 400;
+	font-size: 20px;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.mx_RoomHeader_avatar {
+	display: table-cell;
+	height: 50px;
+	vertical-align: middle;
+}
+
+.mx_RoomHeader_button {
+	height: 50px;
+	display: table-cell;
+	vertical-align: middle;
+	padding-right: 16px;	
 }

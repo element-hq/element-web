@@ -17,66 +17,74 @@ limitations under the License.
 .mx_RoomView {
     word-wrap: break-word;
     position: relative;
-}
 
-.mx_RoomView .mx_RoomHeader {
-    height: 30px;
-}
-
-.mx_RoomView_roomWrapper {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
-    display: flex;    
-    position: absolute;
+    display: flex;
     width: 100%;
-    top: 32px;
-    bottom: 0px;
+    flex-direction: column;
+    -webkit-flex-direction: column;
 }
 
-.mx_RoomView_messagePanel {
+.mx_RoomView .mx_RoomHeader {
     -webkit-box-ordinal-group: 1;
     -moz-box-ordinal-group: 1;
     -ms-flex-order: 1;
     -webkit-order: 1;
     order: 1;
-    width: 100%;
-    height: 100%;
-    /* background-color: #ff0; */
+
+    flex: 0 0 50px;
+    border-bottom: 1px solid #d8d8d8;
 }
 
-.mx_RoomView_messageListWrapper {
-    height: 100%;
-    overflow-y: scroll;    
-}
-
-.mx_RoomView_MessageList {
-    display: table;
-}
-
-.mx_RoomView_invitePrompt {
-}
-
-.mx_RoomView .mx_MemberList {
+.mx_RoomView_auxPanel {
     -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
     -webkit-order: 2;
     order: 2;
 
-    /* background-color: #0f0; */
-    width: 250px;
-    overflow-y: scroll;
-    height: 100%;
+    width: 100%;
+    height: 0%;
 }
 
-.mx_RoomView .mx_MemberList ul {
-    margin: 0px;
-    padding: 0px;
+.mx_RoomView_messagePanel {
+    -webkit-box-ordinal-group: 3;
+    -moz-box-ordinal-group: 3;
+    -ms-flex-order: 3;
+    -webkit-order: 3;
+    order: 3;
+
+    width: 100%;
+    height: 100%;
+    margin-bottom: 60px;
+    /* background-color: #ff0; */
+
+    overflow-y: scroll;    
+}
+
+.mx_RoomView_messageListWrapper {
+    max-width: 720px;
+    margin: auto;
+}
+
+.mx_RoomView_MessageList {
+    width: 100%;
+}
+
+.mx_RoomView_invitePrompt {
 }
 
 .mx_RoomView .mx_MessageComposer {
+    -webkit-box-ordinal-group: 4;
+    -moz-box-ordinal-group: 4;
+    -ms-flex-order: 4;
+    -webkit-order: 4;
+    order: 4;
+
     width: 100%;
-    bottom: 0px;
+    flex: 0 0 50px;    
+    /* background-color: #ff0; */
 }

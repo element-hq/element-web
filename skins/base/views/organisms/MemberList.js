@@ -34,11 +34,7 @@ module.exports = React.createClass({
         return Object.keys(that.state.memberDict).map(function(userId) {
             var m = that.state.memberDict[userId];
             return (
-                <li key={userId}>
-                <MemberTile
-                    member={m}
-                />
-                </li>
+                <MemberTile key={userId} member={m} />
             );
         });
     },
@@ -46,9 +42,17 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_MemberList">
-                <ul>
+                <div className="mx_MemberList_chevron">
+                    <img src="img/chevron.png" width="24" height="13"/>
+                </div>
+                <div className="mx_MemberList_wrapper">
+                    <h2>Members</h2>
                     {this.makeMemberTiles()}
-                </ul>
+                    <div className="mx_MemberTile">
+                        <div className="mx_MemberTile_avatar"><img src="img/create.png" width="32" height="32" alt="()"/></div>            
+                        <div className="mx_MemberTile_name">Invite</div>
+                    </div>
+                </div>
             </div>
         );
     }

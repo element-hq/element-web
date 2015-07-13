@@ -26,6 +26,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_MemberTile">
+                <div className="mx_MemberTile_avatar"><img src="img/placeholder.png" width="32" height="32" alt="()"/></div>            
                 <div className="mx_MemberTile_name">{this.props.member.name}</div>
             </div>
         );

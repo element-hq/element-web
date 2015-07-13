@@ -25,7 +25,6 @@ var classNames = require("classnames");
 
 var MessageTile = ComponentBroker.get('molecules/MessageTile');
 var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
-var MemberList = ComponentBroker.get('organisms/MemberList');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
 
 var RoomViewController = require("../../../../src/controllers/organisms/RoomView");
@@ -68,19 +67,16 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomView">
                     <RoomHeader room={this.state.room} />
-                    <div className="mx_RoomView_roomWrapper">
-                        <div className="mx_RoomView_messagePanel">
-                            <div ref="messageWrapper" className="mx_RoomView_messageListWrapper" onScroll={this.onMessageListScroll}>
-                                <div className="mx_RoomView_MessageList" aria-live="polite">
-                                    <div className={scrollheader_classes}>
-                                    </div>
-                                    {this.getEventTiles()}
+                    <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={this.onMessageListScroll}>
+                        <div className="mx_RoomView_messageListWrapper">
+                            <div className="mx_RoomView_MessageList" aria-live="polite">
+                                <div className={scrollheader_classes}>
                                 </div>
+                                {this.getEventTiles()}
                             </div>
-                            <MessageComposer roomId={this.props.roomId} />
                         </div>
-                        <MemberList roomId={this.props.roomId} key={this.props.roomId} />
                     </div>
+                    <MessageComposer roomId={this.props.roomId} />
                 </div>
             );
         }

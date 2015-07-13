@@ -14,48 +14,75 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MatrixChat {
+.mx_LeftPanel {
     position: relative;
-    width: 100%;
-    height: 100%;
 
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+
+    border-right: 1px solid #d8d8d8;
 }
 
-.mx_MatrixChat .mx_LeftPanel {
+.mx_LeftPanel_hideButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.mx_LeftPanel .mx_RoomList {
     -webkit-box-ordinal-group: 1;
     -moz-box-ordinal-group: 1;
     -ms-flex-order: 1;
     -webkit-order: 1;
     order: 1;
 
-    flex: 0 0 230px;
+    padding-left: 16px;
+    padding-right: 16px;
+
+    /* background-color: #0ff; */
     height: 100%;
+    overflow-y: scroll;
 }
 
-.mx_MatrixChat .mx_RoomView {
+.mx_LeftPanel .mx_RoomCreate {
     -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
     -webkit-order: 2;
     order: 2;
 
-    /* background-color: #00f; */
-    width: 100%;
-    height: 100%;       
+    padding-left: 16px;
+    padding-right: 16px;
+    min-height: 46px;
+
+    border-top: 1px solid #d8d8d8;
+    border-bottom: 1px solid #d8d8d8;
 }
 
-.mx_MatrixChat .mx_RightPanel {
+.mx_LeftPanel .mx_RoomCreate .mx_RoomCreate_table {
+    display: table;
+    width: 100%;
+    height: 46px;
+}
+
+.mx_LeftPanel .mx_DirectoryMenu {
     -webkit-box-ordinal-group: 3;
     -moz-box-ordinal-group: 3;
     -ms-flex-order: 3;
     -webkit-order: 3;
     order: 3;
 
-    flex: 0 0 230px;
-    height: 100%;       
+    min-height: 150px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.mx_LeftPanel .mx_DirectoryMenu .mx_DirectoryMenu_options {
+    margin-top: -12px;
+    width: 100%;
 }

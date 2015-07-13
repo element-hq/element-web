@@ -15,11 +15,31 @@ limitations under the License.
 */
 
 .mx_MessageTile {
-	display: table-row;
+	width: 100%;
+	clear: both;
+	margin-top: 32px;
+}
+
+.mx_MessageTile_avatar {
+	padding-left: 12px;
+	padding-right: 12px;
+	margin-top: -7px;
+	float: left;
+}
+
+.mx_MessageTile .mx_SenderProfile {
+	color: #acacac;
+	font-size: 13px;
+	display: block;
+}
+
+.mx_MessageTile .mx_MessageTimestamp {
+	color: #acacac;
+	font-size: 13px;
+	float: right;
 }
 
 .mx_MessageTile_content {
-	display: table-cell;
 }
 
 .mx_MessageTile_sending {

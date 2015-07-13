@@ -19,27 +19,20 @@ limitations under the License.
 var React = require('react');
 var ComponentBroker = require('../../../../src/ComponentBroker');
 
-var RoomDropTarget = ComponentBroker.get('molecules/RoomDropTarget');
-
-var RoomListController = require("../../../../src/controllers/organisms/RoomList");
+var RoomList = ComponentBroker.get('organisms/RoomList');
+var DirectoryMenu = ComponentBroker.get('molecules/DirectoryMenu');
+var RoomCreate = ComponentBroker.get('molecules/RoomCreate');
 
 module.exports = React.createClass({
-    displayName: 'RoomList',
-    mixins: [RoomListController],
+    displayName: 'LeftPanel',
 
     render: function() {
         return (
-            <div className="mx_RoomList">
-                <h2>Favourites</h2>
-                <RoomDropTarget text="Drop here to favourite"/>
-
-                <h2>Recents</h2>
-                <div className="mx_RoomList_recents">
-                    {this.makeRoomTiles()}
-                </div>
-
-                <h2>Archive</h2>
-                <RoomDropTarget text="Drop here to archive"/>
+            <div className="mx_LeftPanel">
+                <img className="mx_LeftPanel_hideButton" src="img/hide.png" width="32" height="32" alt="<"/>
+                <RoomList selectedRoom={this.props.currentRoom} />
+                <RoomCreate/>
+                <DirectoryMenu />
             </div>
         );
     }

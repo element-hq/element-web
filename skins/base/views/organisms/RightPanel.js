@@ -19,27 +19,19 @@ limitations under the License.
 var React = require('react');
 var ComponentBroker = require('../../../../src/ComponentBroker');
 
-var RoomDropTarget = ComponentBroker.get('molecules/RoomDropTarget');
-
-var RoomListController = require("../../../../src/controllers/organisms/RoomList");
+var MemberList = ComponentBroker.get('organisms/MemberList');
 
 module.exports = React.createClass({
-    displayName: 'RoomList',
-    mixins: [RoomListController],
+    displayName: 'RightPanel',
 
     render: function() {
         return (
-            <div className="mx_RoomList">
-                <h2>Favourites</h2>
-                <RoomDropTarget text="Drop here to favourite"/>
-
-                <h2>Recents</h2>
-                <div className="mx_RoomList_recents">
-                    {this.makeRoomTiles()}
+            <div className="mx_RightPanel">
+                <div className="mx_RightPanel_header">
+                    <img className="mx_RightPanel_headerButton" src="img/file.png" width="32" height="32" alt="Files"/>
+                    <img className="mx_RightPanel_headerButton" src="img/members.png" width="32" height="32" alt="Members"/>
                 </div>
-
-                <h2>Archive</h2>
-                <RoomDropTarget text="Drop here to archive"/>
+                <MemberList roomId={this.props.roomId} key={this.props.roomId} />
             </div>
         );
     }

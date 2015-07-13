@@ -27,7 +27,28 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_RoomHeader">
-                {this.props.room.name}
+                <div className="mx_RoomHeader_wrapper">
+                    <div className="mx_RoomHeader_leftRow">
+                        <div className="mx_RoomHeader_avatar">
+                            <img src="img/placeholder.png" width="32" height="32" alt="(+)"/>
+                        </div>
+                        <div className="mx_RoomHeader_name">{this.props.room.name}</div>
+                        <div className="mx_RoomHeader_button">
+                            <img src="img/info.png" width="32" height="32"/>
+                        </div>
+                    </div>
+                    <div className="mx_RoomHeader_rightRow">
+                        <div className="mx_RoomHeader_button">
+                            <img src="img/search.png" width="32" height="32"/>
+                        </div>
+                        <div className="mx_RoomHeader_button">
+                            <img src="img/video.png" width="32" height="32"/>
+                        </div>
+                        <div className="mx_RoomHeader_button">
+                            <img src="img/voip.png" width="32" height="32"/>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     },

@@ -14,5 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SenderProfile {
+.mx_MemberTile {
+    cursor: pointer;
+    display: table-row;
+}
+
+.mx_MemberTile_avatar {
+	display: table-cell;
+	padding-right: 12px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	vertical-align: middle;
+	width: 32px;
+	height: 32px;
+}
+
+.mx_MemberTile_name {
+	display: table-cell;
+	vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

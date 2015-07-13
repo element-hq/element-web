@@ -15,31 +15,40 @@ limitations under the License.
 */
 
 .mx_RoomTile {
-    padding: 5px;
     cursor: pointer;
+    display: table-row;
 }
 
-.mx_RoomTile.selected {
+.mx_RoomTile_selected {
     text-decoration: underline;
 }
 
-.mx_RoomTile_name {
+.mx_RoomTile_avatar {
+	display: table-cell;
+	padding-right: 12px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	vertical-align: middle;
+	width: 32px;
+	height: 32px;
 }
 
-.mx_RoomTile div {
+.mx_RoomTile_name {
+	display: table-cell;
+	vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.mx_RoomTile.unread {
+.mx_RoomTile_unread {
     font-weight: bold;
 }
 
-.mx_RoomTile.highlight {
+.mx_RoomTile_highlight {
     background-color: lime;
 }
 
-.mx_RoomTile.invited {
+.mx_RoomTile_invited {
     font-weight: bold;
 }
 

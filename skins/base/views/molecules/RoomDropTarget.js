@@ -14,5 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SenderProfile {
-}
+'use strict';
+
+var React = require('react');
+var classNames = require('classnames');
+
+//var RoomDropTargetController = require("../../../../src/controllers/molecules/RoomDropTargetController");
+
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+
+module.exports = React.createClass({
+    displayName: 'RoomDropTarget',
+    // mixins: [RoomDropTargetController],
+    render: function() {
+        return (
+            <div className="mx_RoomDropTarget">
+                {this.props.text}
+            </div>
+        );
+    }
+});

@@ -30,13 +30,14 @@ module.exports = React.createClass({
         var myUserId = MatrixClientPeg.get().credentials.userId;
         var classes = classNames({
             'mx_RoomTile': true,
-            'selected': this.props.selected,
-            'unread': this.props.unread,
-            'highlight': this.props.highlight,
-            'invited': this.props.room.currentState.members[myUserId].membership == 'invite'
+            'mx_RoomTile_selected': this.props.selected,
+            'mx_RoomTile_unread': this.props.unread,
+            'mx_RoomTile_highlight': this.props.highlight,
+            'mx_RoomTile_invited': this.props.room.currentState.members[myUserId].membership == 'invite'
         });
         return (
             <div className={classes} onClick={this.onClick}>
+                <div className="mx_RoomTile_avatar"><img src="img/placeholder.png" width="32" height="32" alt="()"/></div>
                 <div className="mx_RoomTile_name">{this.props.room.name}</div>
             </div>
         );
