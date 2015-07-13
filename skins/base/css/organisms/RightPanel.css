@@ -32,6 +32,8 @@ limitations under the License.
     -ms-flex-order: 1;
     -webkit-order: 1;
     order: 1;
+
+    -webkit-flex: 0 0 50px;
     flex: 0 0 50px;    
 
     text-align: right;

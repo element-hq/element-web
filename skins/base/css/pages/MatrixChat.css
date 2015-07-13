@@ -33,6 +33,7 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
+    -webkit-flex: 0 0 230px;
     flex: 0 0 230px;
     height: 100%;
 }
@@ -56,6 +57,7 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
+    -webkit-flex: 0 0 230px;
     flex: 0 0 230px;
     height: 100%;       
 }
