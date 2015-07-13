@@ -15,21 +15,24 @@ limitations under the License.
 */
 
 .mx_MessageTile {
-	width: 100%;
+	max-width: 100%;
 	clear: both;
 	margin-top: 32px;
+	margin-left: 56px;
 }
 
 .mx_MessageTile_avatar {
 	padding-left: 12px;
 	padding-right: 12px;
+	margin-left: -56px;
 	margin-top: -7px;
-	float: left;
+	float: left;	
 }
 
 .mx_MessageTile .mx_SenderProfile {
 	color: #acacac;
 	font-size: 13px;
+	margin-bottom: 4px;
 	display: block;
 }
 
