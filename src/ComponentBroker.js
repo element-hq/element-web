@@ -81,5 +81,6 @@ require('../skins/base/views/molecules/MemberTile');
 require('../skins/base/views/organisms/RoomList');
 require('../skins/base/views/organisms/RoomView');
 require('../skins/base/views/templates/Login');
+require('../skins/base/views/templates/Register');
 require('../skins/base/views/organisms/Notifier');
 }

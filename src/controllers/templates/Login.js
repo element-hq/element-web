@@ -20,6 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var Matrix = require("matrix-js-sdk");
+var dis = require("../../dispatcher");
 
 var ComponentBroker = require("../../ComponentBroker");
 
@@ -85,9 +86,6 @@ module.exports = {
             if (that.props.onLoggedIn) {
                 that.props.onLoggedIn();
             }
-            /*dis.dispatch({
-                'action': 'logged_in'
-            });*/
         }, function(error) {
             that.setStep("stage_m.login.password");
             that.setState({errorText: 'Login failed.'});
@@ -118,4 +116,10 @@ module.exports = {
                 );
         }
     },
+
+    showRegister: function() {
+        dis.dispatch({
+            action: 'start_registration'
+        });
+    }
 };

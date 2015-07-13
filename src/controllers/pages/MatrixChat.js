@@ -67,9 +67,24 @@ module.exports = {
                     logged_in: false,
                     ready: false
                 });
+                localStorage.removeItem("mx_hs_url");
+                localStorage.removeItem("mx_user_id");
+                localStorage.removeItem("mx_access_token");
                 Notifier.stop();
                 MatrixClientPeg.get().removeAllListeners();
                 MatrixClientPeg.replace(null);
+                break;
+            case 'start_registration':
+                if (this.state.logged_in) return;
+                this.setState({
+                    screen: 'register'
+                });
+                break;
+            case 'start_login':
+                if (this.state.logged_in) return;
+                this.setState({
+                    screen: 'login'
+                });
                 break;
             case 'view_room':
                 this.focusComposer = true;
@@ -99,7 +114,10 @@ module.exports = {
     },
 
     onLoggedIn: function() {
-        this.setState({logged_in: true});
+        this.setState({
+            screen: 'register',
+            logged_in: true
+        });
         this.startMatrixClient();
     },
 
