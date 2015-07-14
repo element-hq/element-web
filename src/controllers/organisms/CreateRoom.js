@@ -20,6 +20,16 @@ var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
 module.exports = {
+    propTypes: {
+        onRoomCreated: React.PropTypes.func,
+    },
+
+    getDefaultProps: function() {
+        return {
+            onRoomCreated: function() {},
+        };
+    },
+
     onCreateRoom: function() {
         var options = {};
 
@@ -46,5 +56,9 @@ module.exports = {
         }
 
         var deferred = MatrixClientPeg.get().createRoom(options);
+
+        deferred.done(function () {
+            this.props.onRoomCreated();
+        });
     }
 };
