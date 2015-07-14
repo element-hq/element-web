@@ -23,10 +23,6 @@ module.exports = {
         default_preset: React.PropTypes.string
     },
 
-    onValueChanged: function(ev) {
-        this.setState({preset: ev.target.value})
-    },
-
     getDefaultProps: function() {
         return {
             default_preset: 'private_chat',

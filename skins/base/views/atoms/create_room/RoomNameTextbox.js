@@ -24,6 +24,10 @@ module.exports = React.createClass({
     displayName: 'CreateRoomButton',
     mixins: [RoomNameTextboxController],
 
+    onValueChanged: function(ev) {
+        this.setState({room_name: ev.target.value})
+    },
+
     render: function() {
         return (
             <input type="text" className="mx_RoomNameTextbox" placeholder="ex. MyNewRoom" onChange={this.onValueChanged}/>

@@ -24,6 +24,10 @@ module.exports = React.createClass({
     displayName: 'CreateRoomPresets',
     mixins: [PresetsController],
 
+    onValueChanged: function(ev) {
+        this.setState({preset: ev.target.value})
+    },
+
     render: function() {
         return (
             <select className="mx_PresetOption" onChange={this.onValueChanged} defaultValue={this.state.preset}>

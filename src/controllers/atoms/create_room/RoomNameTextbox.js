@@ -23,10 +23,6 @@ module.exports = {
         default_name: React.PropTypes.string
     },
 
-    onValueChanged: function(ev) {
-        this.setState({room_name: ev.target.value})
-    },
-
     getDefaultProps: function() {
         return {
             default_name: '',
