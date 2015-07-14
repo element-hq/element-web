@@ -31,6 +31,7 @@ limitations under the License.
 	vertical-align: middle;
 	width: 32px;
 	height: 32px;
+	border-radius: 16px;	
 }
 
 .mx_RoomTile_name {
@@ -40,12 +41,24 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
+.mx_RoomTile_badge {	
+	float: right;
+	background-color: #d8d8d8;
+	color: #747474;
+	border-radius: 10px;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 22px;
+	width: 34px;
+	height: 20px;
+	vertical-align: top;
+	text-align: center;
+}
+
 .mx_RoomTile_unread {
-    font-weight: bold;
 }
 
 .mx_RoomTile_highlight {
-    background-color: lime;
 }
 
 .mx_RoomTile_invited {

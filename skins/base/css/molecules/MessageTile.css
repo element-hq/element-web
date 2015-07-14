@@ -29,6 +29,12 @@ limitations under the License.
 	float: left;	
 }
 
+.mx_MessageTile_avatar img {
+	background-color: #dbdbdb;
+	border-radius: 16px;
+	border: 0px;
+}
+
 .mx_MessageTile_continuation {
 	margin-top: 8px ! important;
 }

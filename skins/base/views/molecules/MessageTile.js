@@ -20,6 +20,7 @@ var React = require('react');
 
 var classNames = require("classnames");
 
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
@@ -58,7 +59,7 @@ module.exports = React.createClass({
         return (
             <div className={classes}>
                 <div className="mx_MessageTile_avatar">
-                    <img src="img/placeholder.png" width="32" height="32"/>
+                    <img src={ this.props.mxEvent.sender ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.sender, 32, 32, "crop") : null } width="32" height="32"/>
                 </div>
                 <MessageTimestamp ts={this.props.mxEvent.getTs()} />
                 <SenderProfile mxEvent={this.props.mxEvent} />

@@ -234,7 +234,6 @@ module.exports = {
                 this.state.room.timeline[i].sender.userId ===
                     this.state.room.timeline[i - 1].sender.userId)
             {
-                console.log("i=" + i + ", continuation=true");
                 continuation = true;
             }
             if (!TileType) continue;

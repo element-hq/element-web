@@ -35,10 +35,18 @@ module.exports = React.createClass({
             'mx_RoomTile_highlight': this.props.highlight,
             'mx_RoomTile_invited': this.props.room.currentState.members[myUserId].membership == 'invite'
         });
+        var name = this.props.room.name.replace(":", ":\u200b");
+        var badge;
+        if (this.props.highlight) {
+            badge = <div className="mx_RoomTile_badge">!</div>;
+        }
+        else if (this.props.unread) {
+            badge = <div className="mx_RoomTile_badge">1</div>;
+        }
         return (
             <div className={classes} onClick={this.onClick}>
                 <div className="mx_RoomTile_avatar"><img src="img/placeholder.png" width="32" height="32" alt="()"/></div>
-                <div className="mx_RoomTile_name">{this.props.room.name}</div>
+                <div className="mx_RoomTile_name">{name}{ badge }</div>
             </div>
         );
     }

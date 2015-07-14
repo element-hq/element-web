@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var MemberTileController = require("../../../../src/controllers/molecules/MemberTile");
 
 module.exports = React.createClass({
@@ -26,7 +27,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_MemberTile">
-                <div className="mx_MemberTile_avatar"><img src="img/placeholder.png" width="32" height="32" alt="()"/></div>            
+                <div className="mx_MemberTile_avatar"><img src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 32, 32, "crop") : null } width="32" height="32"/></div>            
                 <div className="mx_MemberTile_name">{this.props.member.name}</div>
             </div>
         );
