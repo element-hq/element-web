@@ -30,7 +30,7 @@ module.exports = {
         return {
             onHsUrlChanged: function() {},
             onIsUrlChanged: function() {},
-            default_hs_url: 'https://matrix.org/',
+            default_hs_url: 'http://localhost:8008',
             default_is_url: 'https://matrix.org/'
         };
     },

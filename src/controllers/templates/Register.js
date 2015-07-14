@@ -87,7 +87,6 @@ module.exports = {
 
         if (this.savedParams.email != '') {
             return emailFlow;
-t
         } else {
             return otherFlow;
         }
@@ -95,8 +94,14 @@ t
 
     onInitialStageSubmit: function(ev) {
         ev.preventDefault();
-        MatrixClientPeg.replaceUsingUrl(this.refs.serverConfig.getHsUrl());
-        this.setState({hs_url: this.refs.serverConfig.getHsUrl()});
+        MatrixClientPeg.replaceUsingUrls(
+            this.refs.serverConfig.getHsUrl(),
+            this.refs.serverConfig.getIsUrl()
+        );
+        this.setState({
+            hs_url: this.refs.serverConfig.getHsUrl(),
+            is_url: this.refs.serverConfig.getIsUrl()
+        });
         var cli = MatrixClientPeg.get();
         this.setState({busy: true});
         var self = this;
@@ -119,7 +124,7 @@ t
                     busy: true
                 });
                 var cli = MatrixClientPeg.get();
-                this.savedParams.client_secret = cli.generarteClientSecret();
+                this.savedParams.client_secret = cli.generateClientSecret();
                 this.savedParams.send_attempt = 1;
                 cli.requestEmailToken(
                     this.savedParams.email,
@@ -150,6 +155,7 @@ t
     onRegistered: function(user_id, access_token) {
         MatrixClientPeg.replace(Matrix.createClient({
             baseUrl: this.state.hs_url,
+            idBaseUrl: this.state.is_url,
             userId: user_id,
             accessToken: access_token
         }));

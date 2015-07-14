@@ -42,8 +42,14 @@ module.exports = {
 
     onHSChosen: function(ev) {
         ev.preventDefault();
-        MatrixClientPeg.replaceUsingUrl(this.refs.serverConfig.getHsUrl());
-        this.setState({hs_url: this.refs.serverConfig.getHsUrl()});
+        MatrixClientPeg.replaceUsingUrls(
+            this.refs.serverConfig.getHsUrl(),
+            this.refs.serverConfig.getIsUrl()
+        );
+        this.setState({
+            hs_url: this.refs.serverConfig.getHsUrl(),
+            is_url: this.refs.serverConfig.getIsUrl()
+        });
         this.setStep("fetch_stages");
         var cli = MatrixClientPeg.get();
         this.setState({busy: true});
@@ -72,12 +78,14 @@ module.exports = {
             // XXX: we assume this means we're logged in, but there could be a next stage
             MatrixClientPeg.replace(Matrix.createClient({
                 baseUrl: that.state.hs_url,
+                idBaseUrl: that.state.is_url,
                 userId: data.user_id,
                 accessToken: data.access_token
             }));
             var localStorage = window.localStorage;
             if (localStorage) {
                 localStorage.setItem("mx_hs_url", that.state.hs_url);
+                localStorage.setItem("mx_is_url", that.state.is_url);
                 localStorage.setItem("mx_user_id", data.user_id);
                 localStorage.setItem("mx_access_token", data.access_token);
             } else {
