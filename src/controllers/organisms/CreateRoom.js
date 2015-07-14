@@ -24,9 +24,23 @@ module.exports = {
         onRoomCreated: React.PropTypes.func,
     },
 
+    phases: {
+        CONFIG: "CONFIG",
+        CREATING: "CREATING",
+        CREATED: "CREATED",
+        ERROR: "ERROR",
+    },
+
     getDefaultProps: function() {
         return {
             onRoomCreated: function() {},
+        };
+    },
+
+    getInitialState: function() {
+        return {
+            phase: this.phases.CONFIG,
+            error_string: "",
         };
     },
 
@@ -57,8 +71,22 @@ module.exports = {
 
         var deferred = MatrixClientPeg.get().createRoom(options);
 
-        deferred.done(function () {
-            this.props.onRoomCreated();
+        this.setState({
+            phase: this.phases.CREATING,
+        });
+
+        var self = this;
+
+        deferred.then(function () {
+            self.setState({
+                phase: self.phases.CREATED,
+            });
+            self.props.onRoomCreated();
+        }, function(err) {
+            self.setState({
+                phase: self.phases.ERROR,
+                error_string: err.toString(),
+            });
         });
     }
 };

@@ -45,13 +45,29 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        return (
-            <div className="mx_CreateRoom">
-                <label>Room Name <RoomNameTextbox ref="name_textbox" /></label>
-                <Presets ref="presets"/>
-                <UserSelector ref="user_selector"/>
-                <CreateRoomButton onCreateRoom={this.onCreateRoom} />
-            </div>
-        );
+        var curr_phase = this.state.phase;
+        if (curr_phase == this.phases.CREATING) {
+            return (
+                <div>Creating...</div>
+            );
+        } else {
+            var error_box = "";
+            if (curr_phase == this.phases.ERROR) {
+                error_box = (
+                    <div className="mx_Error">
+                        An error occured: {this.state.error_string}
+                    </div>
+                );
+            }
+            return (
+                <div className="mx_CreateRoom">
+                    <label>Room Name <RoomNameTextbox ref="name_textbox" /></label>
+                    <Presets ref="presets"/>
+                    <UserSelector ref="user_selector"/>
+                    <CreateRoomButton onCreateRoom={this.onCreateRoom} />
+                    {error_box}
+                </div>
+            );
+        }
     }
 });
