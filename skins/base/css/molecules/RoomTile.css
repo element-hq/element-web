@@ -31,7 +31,11 @@ limitations under the License.
     vertical-align: middle;
     width: 32px;
     height: 32px;
-    border-radius: 16px;    
+}
+
+.mx_RoomTile_avatar img {
+    border-radius: 16px;
+    background-color: #dbdbdb;
 }
 
 .mx_RoomTile_name {

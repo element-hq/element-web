@@ -45,12 +45,14 @@ module.exports = React.createClass({
                 <div className="mx_MemberList_chevron">
                     <img src="img/chevron.png" width="24" height="13"/>
                 </div>
-                <div className="mx_MemberList_wrapper">
+                <div className="mx_MemberList_border">
                     <h2>Members</h2>
-                    {this.makeMemberTiles()}
-                    <div className="mx_MemberTile">
-                        <div className="mx_MemberTile_avatar"><img src="img/create.png" width="32" height="32" alt="()"/></div>            
-                        <div className="mx_MemberTile_name">Invite</div>
+                    <div className="mx_MemberList_wrapper">
+                        {this.makeMemberTiles()}
+                        <div className="mx_MemberTile">
+                            <div className="mx_MemberTile_avatar"><img src="img/create.png" width="32" height="32" alt="()"/></div>            
+                            <div className="mx_MemberTile_name">Invite</div>
+                        </div>
                     </div>
                 </div>
             </div>
