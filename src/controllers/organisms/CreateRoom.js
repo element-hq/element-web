@@ -25,10 +25,10 @@ module.exports = {
     },
 
     phases: {
-        CONFIG: "CONFIG",
-        CREATING: "CREATING",
-        CREATED: "CREATED",
-        ERROR: "ERROR",
+        CONFIG: "CONFIG",  // We're waiting for user to configure and hit create.
+        CREATING: "CREATING",  // We're sending the request.
+        CREATED: "CREATED",  // We successfully created the room.
+        ERROR: "ERROR",  // There was an error while trying to create room.
     },
 
     getDefaultProps: function() {
