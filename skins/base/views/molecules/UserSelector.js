@@ -31,13 +31,13 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div>
-                <ul className="mx_UserIdList" ref="list">
+                <ul className="mx_UserSelector_UserIdList" ref="list">
                     {this.state.selected_users.map(function(user_id, i) {
                         return <li key={user_id}>{user_id}</li>
                     })}
                 </ul>
-                <input type="text" ref="user_id_input" className="mx_UserIdInput" placeholder="ex. @bob:example.com"/>
-                <button onClick={this.onAddUserId} className="mx_AddUserId">Add User</button>
+                <input type="text" ref="user_id_input" className="mx_UserSelector_userIdInput" placeholder="ex. @bob:example.com"/>
+                <button onClick={this.onAddUserId} className="mx_UserSelector_AddUserId">Add User</button>
             </div>
         );
     }

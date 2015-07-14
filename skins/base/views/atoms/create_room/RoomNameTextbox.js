@@ -21,7 +21,7 @@ var React = require('react');
 var RoomNameTextboxController = require("../../../../../src/controllers/atoms/create_room/RoomNameTextbox");
 
 module.exports = React.createClass({
-    displayName: 'CreateRoomButton',
+    displayName: 'RoomNameTextbox',
     mixins: [RoomNameTextboxController],
 
     onValueChanged: function(ev) {

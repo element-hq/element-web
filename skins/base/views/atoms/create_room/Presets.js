@@ -30,7 +30,7 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <select className="mx_PresetOption" onChange={this.onValueChanged} defaultValue={this.state.preset}>
+            <select className="mx_Presets" onChange={this.onValueChanged} defaultValue={this.state.preset}>
                 <option value="private_chat">Private Chat</option>
                 <option value="public_chat">Public Chat</option>
             </select>
