@@ -20,6 +20,7 @@ var React = require('react');
 
 var MRoomMemberTileController = require("../../../../src/controllers/molecules/MRoomMemberTile");
 
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../src/ComponentBroker');
 var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
 
@@ -45,6 +46,9 @@ module.exports = React.createClass({
         // XXX: for now, just cheekily borrow the css from message tile...
         return (
             <div className="mx_MessageTile">
+                <div className="mx_MessageTile_avatar">
+                    <img src={ this.props.mxEvent.sender ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.sender, 32, 32, "crop") : null } width="32" height="32"/>
+                </div>            
                 <MessageTimestamp ts={this.props.mxEvent.getTs()} />
                 <span className="mx_SenderProfile"></span>
                 <span className="mx_MessageTile_content">
