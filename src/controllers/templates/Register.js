@@ -36,6 +36,17 @@ module.exports = {
         };
     },
 
+    componentDidUpdate: function() {
+        // Just putting a script tag into the returned jsx doesn't work, annoyingly,
+        // so we do this instead.
+        if (this.refs.recaptchaContainer) {
+            var scriptTag = document.createElement('script');
+            window.mx_on_recaptcha_loaded = this.onCaptchaLoaded;
+            scriptTag.setAttribute('src', "https://www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit");
+            this.refs.recaptchaContainer.getDOMNode().appendChild(scriptTag);
+        }
+    },
+
     setStep: function(step) {
         this.setState({ step: step, errorText: '', busy: false });
     },
@@ -76,6 +87,7 @@ module.exports = {
 
         if (this.savedParams.email != '') {
             return emailFlow;
+t
         } else {
             return otherFlow;
         }
@@ -89,44 +101,57 @@ module.exports = {
         this.setState({busy: true});
         var self = this;
 
-        var email = this.refs.email.getDOMNode().value;
-        var username = this.refs.username.getDOMNode().value;
-        var password = this.refs.password.getDOMNode().value;
-
         this.savedParams = {
-            email: email,
-            username: username,
-            password: password
+            email: this.refs.email.getDOMNode().value,
+            username: this.refs.username.getDOMNode().value,
+            password: this.refs.password.getDOMNode().value
         };
 
-        cli.register(username, password).done(function(result) {
-            self.onRegistered();
-        }, function(error) {
-            if (error.httpStatus == 401) {
-                var flow = self.chooseFlow(error.data.flows);
+        this.tryRegister();
+    },
+
+    startStage: function(stageName) {
+        var self = this;
+        this.setStep('stage_'+stageName);
+        switch(stageName) {
+            case 'm.login.email.identity':
                 self.setState({
-                    busy: false,
-                    flows: flow,
-                    currentStep: 1,
-                    totalSteps: flow.stages.length+1,
-                    flowStage: 0
+                    busy: true
                 });
-                self.setStep('stage_'+flow.stages[0]);
-            } else {
-                self.setStep("initial");
-                self.setState({
-                    busy: false,
-                    errorText: 'Unable to contact the given Home Server'
+                var cli = MatrixClientPeg.get();
+                this.savedParams.client_secret = cli.generarteClientSecret();
+                this.savedParams.send_attempt = 1;
+                cli.requestEmailToken(
+                    this.savedParams.email,
+                    this.savedParams.client_secret,
+                    this.savedParams.send_attempt
+                ).done(function(response) {
+                    self.setState({
+                        busy: false,
+                    });
+                    self.setStep('stage_m.login.email.identity');
+                }, function(error) {
+                    self.setState({
+                        busy: false,
+                        errorText: 'Unable to contact the given Home Server'
+                    });
                 });
-            }
-        });
+                break;
+            case 'm.login.recaptcha':
+                if (!this.authParams || !this.authParams['m.login.recaptcha'].public_key) {
+                    this.setState({
+                        errorText: "This server has not supplied enough information for Recaptcha authentication"
+                    });
+                }
+                break;
+        }
     },
 
     onRegistered: function(user_id, access_token) {
         MatrixClientPeg.replace(Matrix.createClient({
             baseUrl: this.state.hs_url,
-            userId: data.user_id,
-            accessToken: data.access_token
+            userId: user_id,
+            accessToken: access_token
         }));
         var localStorage = window.localStorage;
         if (localStorage) {
@@ -136,8 +161,8 @@ module.exports = {
         } else {
             console.warn("No local storage available: can't persist session!");
         }
-        if (that.props.onLoggedIn) {
-            that.props.onLoggedIn();
+        if (this.props.onLoggedIn) {
+            this.props.onLoggedIn();
         }
     },
 
@@ -164,11 +189,60 @@ module.exports = {
                 );
             case 'stage_m.login.recaptcha':
                 return (
-                    <div>
-                        This is the recaptcha stage. Sucks, doesn't it.
+                    <div ref="recaptchaContainer">
+                        This Home Server would like to make sure you're not a robot
+                        <div id="mx_recaptcha"></div>
                     </div>
                 );
         }
+    },
+
+    onCaptchaLoaded: function() {
+        if (this.refs.recaptchaContainer) {
+            var sitekey = this.authParams['m.login.recaptcha'].public_key;
+            global.grecaptcha.render('mx_recaptcha', {
+                'sitekey': sitekey,
+                'callback': this.onCaptchaDone
+            });
+        }
+    },
+
+    onCaptchaDone: function(captcha_response) {
+        this.tryRegister({
+            type: 'm.login.recaptcha',
+            response: captcha_response
+        });
+    },
+
+    tryRegister: function(auth) {
+        var self = this;
+        MatrixClientPeg.get().register(
+            this.savedParams.username,
+            this.savedParams.password,
+            this.authSessionId,
+            auth
+        ).done(function(result) {
+            self.onRegistered(result.user_id, result.access_token);
+        }, function(error) {
+            if (error.httpStatus == 401) {
+                self.authParams = error.data.params;
+                var flow = self.chooseFlow(error.data.flows);
+                self.setState({
+                    busy: false,
+                    flows: flow,
+                    currentStep: 1,
+                    totalSteps: flow.stages.length+1,
+                    flowStage: 0
+                });
+                self.startStage(flow.stages[0]);
+            } else {
+                self.setStep("initial");
+                self.setState({
+                    busy: false,
+                    errorText: 'Unable to contact the given Home Server'
+                });
+            }
+        });
     },
 
     showLogin: function() {
