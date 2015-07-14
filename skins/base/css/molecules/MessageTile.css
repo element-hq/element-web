@@ -15,52 +15,52 @@ limitations under the License.
 */
 
 .mx_MessageTile {
-	max-width: 100%;
-	clear: both;
-	margin-top: 32px;
-	margin-left: 56px;
+    max-width: 100%;
+    clear: both;
+    margin-top: 32px;
+    margin-left: 56px;
 }
 
 .mx_MessageTile_avatar {
-	padding-left: 12px;
-	padding-right: 12px;
-	margin-left: -56px;
-	margin-top: -7px;
-	float: left;	
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-left: -56px;
+    margin-top: -7px;
+    float: left;    
 }
 
 .mx_MessageTile_avatar img {
-	background-color: #dbdbdb;
-	border-radius: 16px;
-	border: 0px;
+    background-color: #dbdbdb;
+    border-radius: 16px;
+    border: 0px;
 }
 
 .mx_MessageTile_continuation {
-	margin-top: 8px ! important;
+    margin-top: 8px ! important;
 }
 
 .mx_MessageTile_continuation .mx_MessageTile_avatar,
 .mx_MessageTile_continuation .mx_SenderProfile
 {
-	display: none ! important;
+    display: none ! important;
 }
 
 .mx_MessageTile .mx_SenderProfile {
-	color: #acacac;
-	font-size: 13px;
-	margin-bottom: 4px;
-	display: block;
+    color: #acacac;
+    font-size: 13px;
+    margin-bottom: 4px;
+    display: block;
 }
 
 .mx_MessageTile .mx_MessageTimestamp {
-	color: #acacac;
-	font-size: 13px;
-	float: right;
+    color: #acacac;
+    font-size: 13px;
+    float: right;
 }
 
 .mx_MessageTile_content {
-	padding-right: 100px;
-	display: block;
+    padding-right: 100px;
+    display: block;
 }
 
 .mx_MessageTile_sending {

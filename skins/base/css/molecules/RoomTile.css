@@ -24,35 +24,35 @@ limitations under the License.
 }
 
 .mx_RoomTile_avatar {
-	display: table-cell;
-	padding-right: 12px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	vertical-align: middle;
-	width: 32px;
-	height: 32px;
-	border-radius: 16px;	
+    display: table-cell;
+    padding-right: 12px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    vertical-align: middle;
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;    
 }
 
 .mx_RoomTile_name {
-	display: table-cell;
-	vertical-align: middle;
+    display: table-cell;
+    vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.mx_RoomTile_badge {	
-	float: right;
-	background-color: #d8d8d8;
-	color: #747474;
-	border-radius: 10px;
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 22px;
-	width: 34px;
-	height: 20px;
-	vertical-align: top;
-	text-align: center;
+.mx_RoomTile_badge {    
+    float: right;
+    background-color: #d8d8d8;
+    color: #747474;
+    border-radius: 10px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    width: 34px;
+    height: 20px;
+    vertical-align: top;
+    text-align: center;
 }
 
 .mx_RoomTile_unread {

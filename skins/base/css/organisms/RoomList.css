@@ -18,8 +18,8 @@ limitations under the License.
 }
 
 .mx_RoomList_recents {
-	margin-top: -12px;
-	display: table;
-	table-layout: fixed;
-	width: 100%;
+    margin-top: -12px;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
 }

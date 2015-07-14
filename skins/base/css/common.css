@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 body {
-	font-family: 'Muli', Helvetica, Arial, Sans-Serif;
+    font-family: 'Muli', Helvetica, Arial, Sans-Serif;
     font-weight: 300;
     font-size: 15px;
-	color: #747474;
-	border: 0px;
-	margin: 0px;
+    color: #747474;
+    border: 0px;
+    margin: 0px;
 }
 
 div.error {

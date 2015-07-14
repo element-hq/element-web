@@ -18,44 +18,44 @@ limitations under the License.
 }
 
 .mx_RoomHeader_wrapper {
-	max-width: 720px;
-	margin: auto;
-	height: 50px;
+    max-width: 720px;
+    margin: auto;
+    height: 50px;
 }
 
 .mx_RoomHeader_leftRow {
-	display: table-row;
-	margin-left: 12px;
-	height: 50px;
-	float: left;
+    display: table-row;
+    margin-left: 12px;
+    height: 50px;
+    float: left;
 }
 
 .mx_RoomHeader_rightRow {
-	display: table-row;
-	height: 50px;
-	margin-right: -26px;
-	float: right;
+    display: table-row;
+    height: 50px;
+    margin-right: -26px;
+    float: right;
 }
 
 .mx_RoomHeader_name {
-	display: table-cell;
-	vertical-align: middle;
-	height: 50px;
-	font-weight: 400;
-	font-size: 20px;
-	padding-left: 16px;
-	padding-right: 16px;
+    display: table-cell;
+    vertical-align: middle;
+    height: 50px;
+    font-weight: 400;
+    font-size: 20px;
+    padding-left: 16px;
+    padding-right: 16px;
 }
 
 .mx_RoomHeader_avatar {
-	display: table-cell;
-	height: 50px;
-	vertical-align: middle;
+    display: table-cell;
+    height: 50px;
+    vertical-align: middle;
 }
 
 .mx_RoomHeader_button {
-	height: 50px;
-	display: table-cell;
-	vertical-align: middle;
-	padding-right: 16px;	
+    height: 50px;
+    display: table-cell;
+    vertical-align: middle;
+    padding-right: 16px;    
 }

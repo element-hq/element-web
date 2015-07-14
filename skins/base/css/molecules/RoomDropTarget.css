@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 .mx_RoomDropTarget {
-	font-size: 14px;
-	text-align: center;
-	margin-left: -8px;
-	margin-right: -8px;
-	padding-top: 16px;
-	padding-bottom: 16px;
-	background-color: #fbfbfb;
-	border: 1px dashed #d7d7d7;
-	border-radius: 8px;
+    font-size: 14px;
+    text-align: center;
+    margin-left: -8px;
+    margin-right: -8px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    background-color: #fbfbfb;
+    border: 1px dashed #d7d7d7;
+    border-radius: 8px;
 }

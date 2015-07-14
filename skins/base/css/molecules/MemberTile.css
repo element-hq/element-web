@@ -20,23 +20,23 @@ limitations under the License.
 }
 
 .mx_MemberTile_avatar {
-	display: table-cell;
-	padding-right: 12px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	vertical-align: middle;
-	width: 32px;
-	height: 32px;
+    display: table-cell;
+    padding-right: 12px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    vertical-align: middle;
+    width: 32px;
+    height: 32px;
 }
 
 .mx_MemberTile_avatar img {
-	border-radius: 16px;	
-	background-color: #dbdbdb;
+    border-radius: 16px;    
+    background-color: #dbdbdb;
 }
 
 .mx_MemberTile_name {
-	display: table-cell;
-	vertical-align: middle;
+    display: table-cell;
+    vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
 }
