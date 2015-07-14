@@ -29,7 +29,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        console.log("Render");
         return (
             <div>
                 <ul className="mx_UserIdList" ref="list">
