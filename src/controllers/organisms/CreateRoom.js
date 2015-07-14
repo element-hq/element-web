@@ -21,15 +21,21 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 
 module.exports = {
     onCreateRoom: function() {
-        var room_name = this.refs.name_textbox.getName();
-        console.log("Create room clicked. Name: " + room_name);
+        var options = {};
 
-        var options = {
-            preset: this.refs.presets.getPreset(),
-        };
-
+        var room_name = this.getName();
         if (room_name) {
             options.name = room_name;
+        }
+
+        var preset = this.getPreset();
+        if (preset) {
+            options.preset = preset;
+        }
+
+        var invited_users = this.getInvitedUsers();
+        if (invited_users) {
+            options.invite = invited_users;
         }
 
         var cli = MatrixClientPeg.get();
