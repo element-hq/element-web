@@ -24,7 +24,30 @@ var React = require("react");
 // maps cannot pass through two stages).
 var MatrixReactSdk = require("../../src/index");
 
-React.render(
-    <MatrixReactSdk.MatrixChat />,
+function routeUrl(location) {
+    if (location.hash.indexOf('#/register') == 0) {
+        var hashparts = location.hash.split('?');
+        if (hashparts.length != 2) return;
+        var pairs = hashparts[1].split('&');
+        var params = {};
+        for (var i = 0; i < pairs.length; ++i) {
+            var parts = pairs[i].split('=');
+            if (parts.length != 2) continue;
+            params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+        }
+        window.matrixChat.resumeRegistration(params);
+    }
+}
+
+window.onload = function() {
+    routeUrl(window.location);
+}
+
+var onNewScreen = function(screen) {
+    window.location.hash = '#/'+screen;
+}
+
+window.matrixChat = React.render(
+    <MatrixReactSdk.MatrixChat onNewScreen={onNewScreen} />,
     document.getElementById('matrixchat')
 );

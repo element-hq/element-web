@@ -125,7 +125,8 @@ module.exports = {
         }
     },
 
-    showRegister: function() {
+    showRegister: function(ev) {
+        ev.preventDefault();
         dis.dispatch({
             action: 'start_registration'
         });

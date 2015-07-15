@@ -54,7 +54,10 @@ module.exports = React.createClass({
             );
         } else if (this.state.screen == 'register') {
             return (
-                <Register onLoggedIn={this.onLoggedIn} />
+                <Register onLoggedIn={this.onLoggedIn} clientSecret={this.state.register_client_secret}
+                    sessionId={this.state.register_session_id} idSid={this.state.register_id_sid}
+                    hsUrl={this.state.register_hs_url} isUrl={this.state.register_is_url}
+                />
             );
         } else {
             return (

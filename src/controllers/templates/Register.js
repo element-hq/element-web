@@ -36,6 +36,45 @@ module.exports = {
         };
     },
 
+    componentWillMount: function() {
+        this.readNewProps();
+    },
+
+    componentWillReceiveProps: function() {
+        this.readNewProps();
+    },
+
+    readNewProps: function() {
+        if (this.props.clientSecret && this.props.hsUrl &&
+                this.props.isUrl && this.props.sessionId &&
+                this.props.idSid) {
+            this.authSessionId = this.props.sessionId;
+            MatrixClientPeg.replaceUsingUrls(
+                this.props.hsUrl,
+                this.props.isUrl
+            );
+            this.setState({
+                hs_url: this.props.hsUrl,
+                is_url: this.props.isUrl
+            });
+            this.savedParams = {client_secret: this.props.clientSecret};
+            this.setState({busy: true});
+
+            var isLocation = document.createElement('a');
+            isLocation.href = this.props.isUrl;
+
+            var auth = {
+                type: 'm.login.email.identity',
+                threepid_creds: {
+                    sid: this.props.idSid,
+                    client_secret: this.savedParams.client_secret,
+                    id_server: isLocation.host
+                }
+            };
+            this.tryRegister(auth);
+        }
+    },
+
     componentDidUpdate: function() {
         // Just putting a script tag into the returned jsx doesn't work, annoyingly,
         // so we do this instead.
@@ -85,11 +124,34 @@ module.exports = {
             }
         }
 
-        if (this.savedParams.email != '') {
+        if (
+            this.savedParams.email != '' ||
+            this.completedStages.indexOf('m.login.email.identity' > -1)
+        ) {
             return emailFlow;
         } else {
             return otherFlow;
         }
+    },
+
+    firstUncompletedStageIndex: function(flow) {
+        if (this.completedStages === undefined) return 0;
+        for (var i = 0; i < flow.stages.length; ++i) {
+            if (this.completedStages.indexOf(flow.stages[i]) == -1) {
+                return i;
+            }
+        }
+    },
+
+    numCompletedStages: function(flow) {
+        if (this.completedStages === undefined) return 0;
+        var nCompleted = 0;
+        for (var i = 0; i < flow.stages.length; ++i) {
+            if (this.completedStages.indexOf(flow.stages[i]) > -1) {
+                ++nCompleted;
+            }
+        }
+        return nCompleted;
     },
 
     onInitialStageSubmit: function(ev) {
@@ -126,10 +188,24 @@ module.exports = {
                 var cli = MatrixClientPeg.get();
                 this.savedParams.client_secret = cli.generateClientSecret();
                 this.savedParams.send_attempt = 1;
+
+                var nextLink = window.location.protocol + '//' +
+                               window.location.host +
+                               window.location.pathname +
+                               '#/register?client_secret=' +
+                               encodeURIComponent(this.savedParams.client_secret) +
+                               "&hs_url=" +
+                               encodeURIComponent(this.state.hs_url) +
+                               "&is_url=" +
+                               encodeURIComponent(this.state.is_url) +
+                               "&session_id=" +
+                               encodeURIComponent(this.authSessionId);
+
                 cli.requestEmailToken(
                     this.savedParams.email,
                     this.savedParams.client_secret,
-                    this.savedParams.send_attempt
+                    this.savedParams.send_attempt,
+                    nextLink
                 ).done(function(response) {
                     self.setState({
                         busy: false,
@@ -230,28 +306,41 @@ module.exports = {
         ).done(function(result) {
             self.onRegistered(result.user_id, result.access_token);
         }, function(error) {
-            if (error.httpStatus == 401) {
+            if (error.httpStatus == 401 && error.data.flows) {
                 self.authParams = error.data.params;
+                self.authSessionId = error.data.session;
+
+                self.completedStages = error.data.completed;
+
                 var flow = self.chooseFlow(error.data.flows);
+
+                var flowStage = self.firstUncompletedStageIndex(flow);
+                var numDone = self.numCompletedStages(flow);
+
                 self.setState({
                     busy: false,
                     flows: flow,
-                    currentStep: 1,
+                    currentStep: 1+numDone,
                     totalSteps: flow.stages.length+1,
-                    flowStage: 0
+                    flowStage: flowStage
                 });
-                self.startStage(flow.stages[0]);
+                self.startStage(flow.stages[flowStage]);
             } else {
+                var errorText = "Unable to contact the given Home Server";
+                if (error.httpStatus == 401) {
+                    errorText = "Authorisation failed!";
+                }
                 self.setStep("initial");
                 self.setState({
                     busy: false,
-                    errorText: 'Unable to contact the given Home Server'
+                    errorText: errorText
                 });
             }
         });
     },
 
-    showLogin: function() {
+    showLogin: function(ev) {
+        ev.preventDefault();
         dis.dispatch({
             action: 'start_login'
         });

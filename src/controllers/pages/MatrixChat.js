@@ -44,6 +44,11 @@ module.exports = {
         this.focusComposer = false;
         document.addEventListener("keydown", this.onKeyDown);
         window.addEventListener("focus", this.onFocus);
+        if (this.state.logged_in) {
+            this.notifyNewScreen('');
+        } else {
+            this.notifyNewScreen('login');
+        }
     },
 
     componentWillUnmount: function() {
@@ -63,7 +68,7 @@ module.exports = {
 
         switch (payload.action) {
             case 'logout':
-                this.setState({
+                this.replaceState({
                     logged_in: false,
                     ready: false
                 });
@@ -76,15 +81,17 @@ module.exports = {
                 break;
             case 'start_registration':
                 if (this.state.logged_in) return;
-                this.setState({
+                this.replaceState({
                     screen: 'register'
                 });
+                this.notifyNewScreen('register');
                 break;
             case 'start_login':
                 if (this.state.logged_in) return;
-                this.setState({
+                this.replaceState({
                     screen: 'login'
                 });
+                this.notifyNewScreen('login');
                 break;
             case 'view_room':
                 this.focusComposer = true;
@@ -115,10 +122,11 @@ module.exports = {
 
     onLoggedIn: function() {
         this.setState({
-            screen: 'register',
+            screen: undefined,
             logged_in: true
         });
         this.startMatrixClient();
+        this.notifyNewScreen('');
     },
 
     startMatrixClient: function() {
@@ -155,6 +163,30 @@ module.exports = {
 
     onFocus: function(ev) {
         dis.dispatch({action: 'focus_composer'});
+    },
+
+    resumeRegistration(params) {
+        if (!params.hs_url) return false;
+        if (!params.is_url) return false;
+        if (!params.client_secret) return false;
+        if (!params.session_id) return false;
+        if (!params.sid) return false;
+        if (this.state.logged_in) return false;
+
+        this.setState({
+            screen: 'register',
+            register_client_secret: params.client_secret,
+            register_session_id: params.session_id,
+            register_hs_url: params.hs_url,
+            register_is_url: params.is_url,
+            register_id_sid: params.sid
+        });
+    },
+
+    notifyNewScreen: function(screen) {
+        if (this.props.onNewScreen) {
+            this.props.onNewScreen(screen);
+        }
     }
 };
 
