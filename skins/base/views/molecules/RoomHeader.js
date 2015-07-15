@@ -30,6 +30,38 @@ module.exports = React.createClass({
         var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
         topic = topic ? <div className="mx_RoomHeader_topic">{ topic.getContent().topic }</div> : null;
 
+        var callButtons;
+        if (this.state) {
+            switch (this.state.callState) {
+                case "INBOUND":
+                    callButtons = (
+                        <div>
+                        <div className="mx_RoomHeader_button" onClick={this.onAnswerClick}>
+                        YUP
+                        </div>
+                        <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
+                        NOPE
+                        </div>
+                        </div>
+                    );
+                    break;
+                case "OUTBOUND":
+                    callButtons = (
+                        <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
+                        BYEBYE
+                        </div>
+                    );
+                    break;
+                case "IN_CALL":
+                    callButtons = (
+                        <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
+                        BYEBYE
+                        </div>
+                    );
+                    break;
+            }
+        }
+
         return (
             <div className="mx_RoomHeader">
                 <div className="mx_RoomHeader_wrapper">
@@ -49,13 +81,7 @@ module.exports = React.createClass({
                         <div className="mx_RoomHeader_button">
                             <img src="img/search.png" width="32" height="32"/>
                         </div>
-                        {
-                            this.state && this.state.inCall ?
-                            <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
-                                <img src="img/video.png" width="64" height="32"/>
-                            </div>
-                            : null
-                        }
+                        {callButtons}
                         <div className="mx_RoomHeader_button" onClick={this.onVideoClick}>
                             <img src="img/video.png" width="32" height="32"/>
                         </div>

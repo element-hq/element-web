@@ -18,7 +18,7 @@ limitations under the License.
 
 /*
  * State vars:
- * this.state.inCall = boolean
+ * this.state.callState = OUTBOUND|INBOUND|IN_CALL|NO_CALL
  */
 
 var dis = require("../../dispatcher");
@@ -28,7 +28,7 @@ module.exports = {
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         this.setState({
-            inCall: false
+            callState: "NO_CALL"
         });
     },
 
@@ -45,8 +45,24 @@ module.exports = {
         if (payload.action !== 'call_state') {
             return;
         }
+        var call = CallHandler.getCall(payload.room_id);
+        var callState = 'NO_CALL';
+        if (call && call.state !== 'ended') {
+            if (call.state === 'connected') {
+                callState = "IN_CALL";
+            }
+            else if (call.direction === 'outbound') {
+                callState = "OUTBOUND";
+            }
+            else if (call.direction === 'inbound') {
+                callState = "INBOUND";
+            }
+            else {
+                console.error("Cannot determine call state.");
+            }
+        }
         this.setState({
-            inCall: (CallHandler.getCall(payload.room_id) !== null)
+            callState: callState
         });
     },
 
@@ -67,6 +83,12 @@ module.exports = {
     onHangupClick: function() {
         dis.dispatch({
             action: 'hangup',
+            room_id: this.props.room.roomId
+        });
+    },
+    onAnswerClick: function() {
+        dis.dispatch({
+            action: 'answer',
             room_id: this.props.room.roomId
         });
     }
