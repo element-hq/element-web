@@ -16,6 +16,14 @@ limitations under the License.
 
 'use strict';
 
+var MatrixClientPeg = require("../../MatrixClientPeg");
+
 module.exports = {
+    onVideoClick: function() {
+        console.log("video clicked");
+    },
+    onVoiceClick: function() {
+        console.log("voice clicked");
+    }
 };
 

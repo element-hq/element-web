@@ -22,7 +22,6 @@ var ComponentBroker = require('../../../../src/ComponentBroker');
 var LeftPanel = ComponentBroker.get('organisms/LeftPanel');
 var RoomView = ComponentBroker.get('organisms/RoomView');
 var RightPanel = ComponentBroker.get('organisms/RightPanel');
-var VideoView = ComponentBroker.get('organisms/VideoView');
 var Login = ComponentBroker.get('templates/Login');
 
 var MatrixChatController = require("../../../../src/controllers/pages/MatrixChat");
@@ -41,7 +40,6 @@ module.exports = React.createClass({
                 <div className="mx_MatrixChat">
                     <LeftPanel selectedRoom={this.state.currentRoom} />
                     <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
-                    <VideoView />
                     <RightPanel roomId={this.state.currentRoom} />
                 </div>
             );

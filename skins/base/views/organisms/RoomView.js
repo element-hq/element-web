@@ -26,6 +26,7 @@ var classNames = require("classnames");
 var MessageTile = ComponentBroker.get('molecules/MessageTile');
 var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
+var VideoView = ComponentBroker.get("molecules/VideoView");
 
 var RoomViewController = require("../../../../src/controllers/organisms/RoomView");
 
@@ -35,6 +36,10 @@ var Loader = require("react-loader");
 module.exports = React.createClass({
     displayName: 'RoomView',
     mixins: [RoomViewController],
+
+    getVideoView: function() {
+        return this.refs.video;
+    },
 
     render: function() {
         var myUserId = MatrixClientPeg.get().credentials.userId;
@@ -67,7 +72,9 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomView">
                     <RoomHeader room={this.state.room} />
-                    <div className="mx_RoomView_auxPanel"></div>
+                    <div className="mx_RoomView_auxPanel">
+                        <VideoView ref="video" />
+                    </div>
                     <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={this.onMessageListScroll}>
                         <div className="mx_RoomView_messageListWrapper">
                             <div className="mx_RoomView_MessageList" aria-live="polite">

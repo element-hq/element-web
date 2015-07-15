@@ -89,6 +89,6 @@ require('../skins/base/views/organisms/RightPanel');
 require('../skins/base/views/molecules/RoomCreate');
 require('../skins/base/views/molecules/RoomDropTarget');
 require('../skins/base/views/molecules/DirectoryMenu');
-require('../skins/base/views/organisms/VideoView');
+require('../skins/base/views/molecules/VideoView');
 
 }
