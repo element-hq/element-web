@@ -32,7 +32,6 @@ limitations under the License.
 
 .mx_RoomHeader_leftRow {
     display: table-row;
-    margin-left: 12px;
     height: 48px;
 
     -webkit-box-ordinal-group: 1;
@@ -40,6 +39,8 @@ limitations under the License.
     -ms-flex-order: 1;
     -webkit-order: 1;
     order: 1;
+
+    width: 100%;
 }
 
 .mx_RoomHeader_rightRow {
