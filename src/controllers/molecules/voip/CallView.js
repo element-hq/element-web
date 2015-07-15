@@ -15,20 +15,23 @@ limitations under the License.
 */
 
 'use strict';
+var dis = require("../../../dispatcher");
+var CallHandler = require("../../../CallHandler");
 
 /*
  * State vars:
- * this.state.inCall = boolean
+ * this.state.call = MatrixCall|null
+ *
+ * Props:
+ * this.props.room = Room (JS SDK)
  */
 
-var dis = require("../../dispatcher");
-var CallHandler = require("../../CallHandler");
-
 module.exports = {
+
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         this.setState({
-            inCall: false
+            call: null
         });
     },
 
@@ -46,28 +49,7 @@ module.exports = {
             return;
         }
         this.setState({
-            inCall: (CallHandler.getCall(payload.room_id) !== null)
-        });
-    },
-
-    onVideoClick: function() {
-        dis.dispatch({
-            action: 'place_call',
-            type: "video",
-            room_id: this.props.room.roomId
-        });
-    },
-    onVoiceClick: function() {
-        dis.dispatch({
-            action: 'place_call',
-            type: "voice",
-            room_id: this.props.room.roomId
-        });
-    },
-    onHangupClick: function() {
-        dis.dispatch({
-            action: 'hangup',
-            room_id: this.props.room.roomId
+            call: CallHandler.getCall(payload.room_id)
         });
     }
 };

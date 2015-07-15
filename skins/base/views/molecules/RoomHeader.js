@@ -49,6 +49,13 @@ module.exports = React.createClass({
                         <div className="mx_RoomHeader_button">
                             <img src="img/search.png" width="32" height="32"/>
                         </div>
+                        {
+                            this.state && this.state.inCall ?
+                            <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
+                                <img src="img/video.png" width="64" height="32"/>
+                            </div>
+                            : null
+                        }
                         <div className="mx_RoomHeader_button" onClick={this.onVideoClick}>
                             <img src="img/video.png" width="32" height="32"/>
                         </div>

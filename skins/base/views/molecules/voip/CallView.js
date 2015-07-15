@@ -20,20 +20,24 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../../src/ComponentBroker');
-var CallHandlerController = require(
-    "../../../../../src/controllers/molecules/voip/CallHandler"
+var CallViewController = require(
+    "../../../../../src/controllers/molecules/voip/CallView"
 );
 var VideoView = ComponentBroker.get('molecules/voip/VideoView');
 
 module.exports = React.createClass({
-    displayName: 'CallHandler',
-    mixins: [CallHandlerController],
+    displayName: 'CallView',
+    mixins: [CallViewController],
 
     getVideoView: function() {
         return this.refs.video;
     },
 
     render: function(){
+        return (
+            <VideoView ref="video"/>
+        );
+        /*
         if (this.state && this.state.call) {
             if (this.state.call.type === "video") {
                 return (
@@ -49,6 +53,6 @@ module.exports = React.createClass({
         }
         return (
             <div></div>
-        );
+        ); */
     }
 });
