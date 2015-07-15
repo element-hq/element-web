@@ -18,10 +18,10 @@ limitations under the License.
 
 var React = require('react');
 
-var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
-var ComponentBroker = require('../../../../src/ComponentBroker');
-var VideoViewController = require("../../../../src/controllers/molecules/VideoView");
-var VideoFeed = ComponentBroker.get('atoms/VideoFeed');
+var MatrixClientPeg = require("../../../../../src/MatrixClientPeg");
+var ComponentBroker = require('../../../../../src/ComponentBroker');
+var VideoViewController = require("../../../../../src/controllers/molecules/voip/VideoView");
+var VideoFeed = ComponentBroker.get('atoms/voip/VideoFeed');
 
 module.exports = React.createClass({
     displayName: 'VideoView',

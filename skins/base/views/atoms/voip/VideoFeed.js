@@ -16,23 +16,19 @@ limitations under the License.
 
 'use strict';
 
-var dis = require("../../dispatcher");
+var React = require('react');
 
-module.exports = {
+var VideoFeedController = require("../../../../../src/controllers/atoms/voip/VideoFeed");
 
-    componentDidMount: function() {
-        this.dispatcherRef = dis.register(this.onAction);
+module.exports = React.createClass({
+    displayName: 'VideoFeed',
+    mixins: [VideoFeedController],
+
+    render: function() {
+        return (
+            <video>
+            </video>
+        );
     },
-
-    onAction: function(payload) {
-        switch(payload.action) {
-            case 'place_call':
-                console.log("Place %s call in %s", payload.type, payload.room_id);
-                break;
-            case 'incoming_call':
-                console.log("Incoming call: %s", payload.call);
-                break;
-        }
-    }
-};
+});
 

@@ -26,7 +26,7 @@ var classNames = require("classnames");
 var MessageTile = ComponentBroker.get('molecules/MessageTile');
 var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
-var VideoView = ComponentBroker.get("molecules/VideoView");
+var VideoView = ComponentBroker.get("molecules/voip/VideoView");
 
 var RoomViewController = require("../../../../src/controllers/organisms/RoomView");
 
