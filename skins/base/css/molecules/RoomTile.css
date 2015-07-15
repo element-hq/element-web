@@ -34,7 +34,7 @@ limitations under the License.
 }
 
 .mx_RoomTile_avatar img {
-    border-radius: 16px;
+    border-radius: 20px;
     background-color: #dbdbdb;
 }
 
@@ -47,15 +47,14 @@ limitations under the License.
 
 .mx_RoomTile_badge {    
     float: right;
-    background-color: #d8d8d8;
-    color: #747474;
+    background-color: #80cef4;
+    color: #fff;
     border-radius: 10px;
     font-weight: 400;
     font-size: 14px;
-    line-height: 22px;
-    width: 34px;
-    height: 20px;
-    vertical-align: top;
+    line-height: 28px;
+    width: 26px;
+    height: 26px;
     text-align: center;
 }
 

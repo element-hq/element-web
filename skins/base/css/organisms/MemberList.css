@@ -22,7 +22,7 @@ limitations under the License.
 
 .mx_MemberList_chevron {
     position: absolute;
-    right: 20px;
+    right: 35px;
     margin-top: -13px;
 }
 
@@ -33,6 +33,7 @@ limitations under the License.
     max-height: 75%;
     border-radius: 8px;
     padding: 20px 14px 14px 24px;
+    background-color: #fff;
 }
 
 .mx_MemberList_wrapper {

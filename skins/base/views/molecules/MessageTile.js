@@ -56,12 +56,13 @@ module.exports = React.createClass({
             mx_MessageTile_highlight: this.shouldHighlight(),
             mx_MessageTile_continuation: this.props.continuation,
         });
+        var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
         return (
             <div className={classes}>
                 <div className="mx_MessageTile_avatar">
-                    <img src={ this.props.mxEvent.sender ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.sender, 32, 32, "crop") : null } width="32" height="32"/>
+                    <img src={ this.props.mxEvent.sender ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.sender, 40, 40, "crop") : null } width="40" height="40"/>
                 </div>
-                <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                { timestamp }
                 <SenderProfile mxEvent={this.props.mxEvent} />
                 <TileType mxEvent={this.props.mxEvent} />
             </div>

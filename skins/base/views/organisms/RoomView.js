@@ -67,6 +67,7 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomView">
                     <RoomHeader room={this.state.room} />
+                    <div className="mx_RoomView_auxPanel"></div>
                     <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={this.onMessageListScroll}>
                         <div className="mx_RoomView_messageListWrapper">
                             <div className="mx_RoomView_MessageList" aria-live="polite">
@@ -76,7 +77,7 @@ module.exports = React.createClass({
                             </div>
                         </div>
                     </div>
-                    <MessageComposer roomId={this.props.roomId} />
+                    <MessageComposer room={this.state.room} />
                 </div>
             );
         }

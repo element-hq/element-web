@@ -33,18 +33,28 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    -webkit-flex: 0 0 50px;
-    flex: 0 0 50px;    
+    -webkit-flex: 0 0 66px;
+    flex: 0 0 66px;    
+}
 
-    text-align: right;
+/** Fixme - factor this out with the main header **/
 
-    height: 50px;
-    border-bottom: 1px solid #d8d8d8;
+.mx_RightPanel_headerButtonGroup {
+    margin-top: 18px;
+    height: 48px;
+    float: right;
+    background-color: #fff;
+    border-radius: 48px;
+    border: 1px solid #e1e1e1;
+    margin-right: 22px;
 }
 
 .mx_RightPanel_headerButton {
-    margin-top: 9px;
-    margin-right: 16px;
+    height: 48px;
+    display: table-cell;
+    vertical-align: middle;    
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 .mx_RightPanel .mx_MemberList {

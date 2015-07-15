@@ -45,7 +45,7 @@ module.exports = React.createClass({
         }
         return (
             <div className={classes} onClick={this.onClick}>
-                <div className="mx_RoomTile_avatar"><img src="img/placeholder.png" width="32" height="32" alt="()"/></div>
+                <div className="mx_RoomTile_avatar"><img src={ MatrixClientPeg.get().getAvatarUrlForRoom(this.props.room, 40, 40, "crop") } width="40" height="40"/></div>
                 <div className="mx_RoomTile_name">{name}{ badge }</div>
             </div>
         );

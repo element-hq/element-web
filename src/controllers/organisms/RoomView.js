@@ -227,6 +227,10 @@ module.exports = {
             var mxEv = this.state.room.timeline[i];
             var TileType = tileTypes[mxEv.getType()];
             var continuation = false;
+            var last = false;
+            if (i == this.state.room.timeline.length - 1) {
+                last = true;
+            }
             if (i > 0 &&
                 count < this.state.messageCap - 1 &&
                 this.state.room.timeline[i].sender &&
@@ -238,7 +242,7 @@ module.exports = {
             }
             if (!TileType) continue;
             ret.unshift(
-                <TileType key={mxEv.getId()} mxEvent={mxEv} continuation={continuation}/>
+                <TileType key={mxEv.getId()} mxEvent={mxEv} continuation={continuation} last={last}/>
             );
             ++count;
         }

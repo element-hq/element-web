@@ -54,7 +54,7 @@ module.exports = {
                 };
             }
 
-            MatrixClientPeg.get().sendMessage(this.props.roomId, content).then(function() {
+            MatrixClientPeg.get().sendMessage(this.props.room.roomId, content).then(function() {
                 dis.dispatch({
                     action: 'message_sent'
                 });

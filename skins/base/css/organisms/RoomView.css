@@ -35,9 +35,8 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    -webkit-flex: 0 0 50px;
-    flex: 0 0 50px;
-    border-bottom: 1px solid #d8d8d8;
+    -webkit-flex: 0 0 86px;
+    flex: 0 0 86px;
 }
 
 .mx_RoomView_auxPanel {
@@ -47,7 +46,10 @@ limitations under the License.
     -webkit-order: 2;
     order: 2;
 
+    max-width: 720px;
     width: 100%;
+    margin: auto;
+    border-top: 1px solid #a8dbf3;
     height: 0%;
 }
 
@@ -86,7 +88,7 @@ limitations under the License.
     order: 4;
 
     width: 100%;
-    -webkit-flex: 0 0 50px;
-    flex: 0 0 50px;    
-    /* background-color: #ff0; */
+    -webkit-flex: 0 0 63px;
+    flex: 0 0 63px;
+    margin-left: 3px;
 }

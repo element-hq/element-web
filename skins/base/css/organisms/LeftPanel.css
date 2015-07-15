@@ -49,6 +49,7 @@ limitations under the License.
     overflow-y: scroll;
 }
 
+/*
 .mx_LeftPanel .mx_RoomCreate {
     -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
@@ -69,6 +70,7 @@ limitations under the License.
     width: 100%;
     height: 46px;
 }
+*/
 
 .mx_LeftPanel .mx_DirectoryMenu {
     -webkit-box-ordinal-group: 3;
@@ -77,12 +79,14 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
-    min-height: 150px;
+    -webkit-flex: 0 0 170px;
+    flex: 0 0 170px;
+
     padding-left: 16px;
     padding-right: 16px;
 }
 
 .mx_LeftPanel .mx_DirectoryMenu .mx_DirectoryMenu_options {
-    margin-top: -12px;
+    margin-top: 12px;
     width: 100%;
 }

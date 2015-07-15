@@ -31,7 +31,6 @@ module.exports = React.createClass({
             <div className="mx_LeftPanel">
                 <img className="mx_LeftPanel_hideButton" src="img/hide.png" width="32" height="32" alt="<"/>
                 <RoomList selectedRoom={this.props.currentRoom} />
-                <RoomCreate/>
                 <DirectoryMenu />
             </div>
         );

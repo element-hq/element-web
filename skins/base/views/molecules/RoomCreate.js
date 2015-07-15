@@ -32,7 +32,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomCreate_table">
                     <div className="mx_RoomTile">
                         <div className="mx_RoomTile_avatar">
-                            <img src="img/create.png" width="32" height="32" alt="(+)"/>
+                            <img src="img/create.png" width="32" height="32"/>
                         </div>
                         <div className="mx_RoomTile_name">Create new room</div>
                     </div>

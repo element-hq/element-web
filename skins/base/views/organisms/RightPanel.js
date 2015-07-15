@@ -28,8 +28,14 @@ module.exports = React.createClass({
         return (
             <div className="mx_RightPanel">
                 <div className="mx_RightPanel_header">
-                    <img className="mx_RightPanel_headerButton" src="img/file.png" width="32" height="32" alt="Files"/>
-                    <img className="mx_RightPanel_headerButton" src="img/members.png" width="32" height="32" alt="Members"/>
+                    <div className="mx_RightPanel_headerButtonGroup">
+                        <div className="mx_RightPanel_headerButton">
+                            <img src="img/file.png" width="32" height="32" alt="Files"/>
+                        </div>
+                        <div className="mx_RightPanel_headerButton">
+                            <img src="img/members.png" width="32" height="32" alt="Members"/>
+                        </div>
+                    </div>
                 </div>
                 <MemberList roomId={this.props.roomId} key={this.props.roomId} />
             </div>

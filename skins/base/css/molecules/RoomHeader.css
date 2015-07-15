@@ -20,31 +20,69 @@ limitations under the License.
 .mx_RoomHeader_wrapper {
     max-width: 720px;
     margin: auto;
-    height: 50px;
+    height: 86px;
+    margin-top: 18px;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;    
 }
 
 .mx_RoomHeader_leftRow {
     display: table-row;
     margin-left: 12px;
-    height: 50px;
-    float: left;
+    height: 48px;
+
+    -webkit-box-ordinal-group: 1;
+    -moz-box-ordinal-group: 1;
+    -ms-flex-order: 1;
+    -webkit-order: 1;
+    order: 1;
 }
 
 .mx_RoomHeader_rightRow {
     display: table-row;
-    height: 50px;
-    margin-right: -26px;
-    float: right;
+    height: 48px;
+    background-color: #fff;
+    border-radius: 48px;
+    border: 1px solid #e1e1e1;
+
+    -webkit-box-ordinal-group: 2;
+    -moz-box-ordinal-group: 2;
+    -ms-flex-order: 2;
+    -webkit-order: 2;
+    order: 2;
+
+    -webkit-flex: 0 0 200px;
+    flex: 0 0 200px;    
+}
+
+.mx_RoomHeader_info {
+    display: table-cell;
+    height: 48px;
+    vertical-align: middle;
 }
 
 .mx_RoomHeader_name {
-    display: table-cell;
     vertical-align: middle;
-    height: 50px;
+    height: 28px;
+    color: #80cef4;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 18px;
     padding-left: 16px;
     padding-right: 16px;
+}
+
+.mx_RoomHeader_topic {
+    vertical-align: bottom;
+    float: left;
+    max-height: 38px;
+    color: #80cef4;    
+    padding-left: 16px;
+    padding-right: 16px;
+    overflow: scroll;
 }
 
 .mx_RoomHeader_avatar {
@@ -53,9 +91,14 @@ limitations under the License.
     vertical-align: middle;
 }
 
+.mx_RoomHeader_avatar img {
+	border-radius: 24px;
+}
+
 .mx_RoomHeader_button {
-    height: 50px;
+    height: 48px;
     display: table-cell;
     vertical-align: middle;
-    padding-right: 16px;    
+    padding-left: 8px;
+    padding-right: 8px;
 }

@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var MessageComposerController = require("../../../../src/controllers/molecules/MessageComposer");
 
 module.exports = React.createClass({
@@ -25,15 +26,19 @@ module.exports = React.createClass({
     mixins: [MessageComposerController],
 
     render: function() {
+        var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         return (
             <div className="mx_MessageComposer">
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         <div className="mx_MessageComposer_avatar">
-                            <img src="img/placeholder.png" width="32" height="32" alt="(+)"/>
+                            <img src={ MatrixClientPeg.get().getAvatarUrlForMember(me, 40, 40, "crop") } width="40" height="40"/>
                         </div>
                         <div className="mx_MessageComposer_input">
                             <textarea ref="textarea" onKeyDown={this.onKeyDown} placeholder="Type a message" />
+                        </div>
+                        <div className="mx_MessageComposer_upload">
+                            <img src="img/upload.png" width="32" height="32"/>
                         </div>
                     </div>
                 </div>
