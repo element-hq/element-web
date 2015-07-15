@@ -28,7 +28,25 @@ var VideoView = ComponentBroker.get('molecules/voip/VideoView');
 module.exports = React.createClass({
     displayName: 'CallHandler',
     mixins: [CallHandlerController],
+
+    getVideoView: function() {
+        return this.refs.video;
+    },
+
     render: function(){
+        if (this.state && this.state.call) {
+            if (this.state.call.type === "video") {
+                return (
+                    <VideoView ref="video"/>
+                );
+            }
+            else if (this.state.call.type === "voice") {
+                // <WaveformView /> in the future.
+                return (
+                    <div></div>
+                );
+            }
+        }
         return (
             <div></div>
         );
