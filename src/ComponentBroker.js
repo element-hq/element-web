@@ -61,6 +61,9 @@ if (0) {
 require('../skins/base/views/atoms/LogoutButton');
 require('../skins/base/views/atoms/EnableNotificationsButton');
 require('../skins/base/views/atoms/MessageTimestamp');
+require('../skins/base/views/atoms/create_room/CreateRoomButton');
+require('../skins/base/views/atoms/create_room/RoomNameTextbox');
+require('../skins/base/views/atoms/create_room/Presets');
 require('../skins/base/views/molecules/MatrixToolbar');
 require('../skins/base/views/molecules/RoomTile');
 require('../skins/base/views/molecules/MessageTile');
@@ -82,6 +85,8 @@ require('../skins/base/views/organisms/RoomList');
 require('../skins/base/views/organisms/RoomView');
 require('../skins/base/views/templates/Login');
 require('../skins/base/views/organisms/Notifier');
+require('../skins/base/views/organisms/CreateRoom');
+require('../skins/base/views/molecules/UserSelector');
 // new for vector
 require('../skins/base/views/organisms/LeftPanel');
 require('../skins/base/views/organisms/RightPanel');
