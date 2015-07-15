@@ -19,19 +19,20 @@ limitations under the License.
 var dis = require("../../dispatcher");
 
 module.exports = {
-    onVideoClick: function() {
-        dis.dispatch({
-            action: 'place_call',
-            type: "video",
-            room_id: this.props.room.roomId
-        });
+
+    componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
     },
-    onVoiceClick: function() {
-        dis.dispatch({
-            action: 'place_call',
-            type: "voice",
-            room_id: this.props.room.roomId
-        });
+
+    onAction: function(payload) {
+        switch(payload.action) {
+            case 'place_call':
+                console.log("Place %s call in %s", payload.type, payload.room_id);
+                break;
+            case 'incoming_call':
+                console.log("Incoming call: %s", payload.call);
+                break;
+        }
     }
 };
 

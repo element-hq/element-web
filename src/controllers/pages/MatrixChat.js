@@ -116,6 +116,12 @@ module.exports = {
             that.setState({ready: true, currentRoom: firstRoom});
             dis.dispatch({action: 'focus_composer'});
         });
+        cli.on('Call.incoming', function(call) {
+            dis.dispatch({
+                action: 'incoming_call',
+                call: call
+            });
+        });
         Notifier.start();
         cli.startClient();
     },

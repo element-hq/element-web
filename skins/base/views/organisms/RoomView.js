@@ -37,10 +37,6 @@ module.exports = React.createClass({
     displayName: 'RoomView',
     mixins: [RoomViewController],
 
-    getVideoView: function() {
-        return this.refs.video;
-    },
-
     render: function() {
         var myUserId = MatrixClientPeg.get().credentials.userId;
         if (this.state.room.currentState.members[myUserId].membership == 'invite') {
@@ -73,7 +69,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomView">
                     <RoomHeader room={this.state.room} />
                     <div className="mx_RoomView_auxPanel">
-                        <VideoView ref="video" />
+                        <VideoView/>
                     </div>
                     <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={this.onMessageListScroll}>
                         <div className="mx_RoomView_messageListWrapper">

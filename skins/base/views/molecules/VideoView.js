@@ -20,11 +20,12 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../src/ComponentBroker');
-
+var VideoViewController = require("../../../../src/controllers/molecules/VideoView");
 var VideoFeed = ComponentBroker.get('atoms/VideoFeed');
 
 module.exports = React.createClass({
     displayName: 'VideoView',
+    mixins: [VideoViewController],
 
     getRemoteVideoElement: function() {
         return this.refs.remote.getDOMNode();
@@ -45,5 +46,5 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    },
+    }
 });
