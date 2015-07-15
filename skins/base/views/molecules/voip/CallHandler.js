@@ -16,8 +16,21 @@ limitations under the License.
 
 'use strict';
 
-var dis = require("../../../dispatcher");
+var React = require('react');
 
-module.exports = {
-};
+var MatrixClientPeg = require("../../../../../src/MatrixClientPeg");
+var ComponentBroker = require('../../../../../src/ComponentBroker');
+var CallHandlerController = require(
+    "../../../../../src/controllers/molecules/voip/CallHandler"
+);
+var VideoView = ComponentBroker.get('molecules/voip/VideoView');
 
+module.exports = React.createClass({
+    displayName: 'CallHandler',
+    mixins: [CallHandlerController],
+    render: function(){
+        return (
+            <div></div>
+        );
+    }
+});

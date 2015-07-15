@@ -26,7 +26,7 @@ var classNames = require("classnames");
 var MessageTile = ComponentBroker.get('molecules/MessageTile');
 var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
-var VideoView = ComponentBroker.get("molecules/voip/VideoView");
+var CallHandler = ComponentBroker.get("molecules/voip/CallHandler");
 
 var RoomViewController = require("../../../../src/controllers/organisms/RoomView");
 
@@ -69,7 +69,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomView">
                     <RoomHeader room={this.state.room} />
                     <div className="mx_RoomView_auxPanel">
-                        <VideoView/>
+                        <CallHandler room={this.state.room}/>
                     </div>
                     <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={this.onMessageListScroll}>
                         <div className="mx_RoomView_messageListWrapper">

@@ -96,6 +96,7 @@ require('../skins/base/views/molecules/RoomDropTarget');
 require('../skins/base/views/molecules/DirectoryMenu');
 require('../skins/base/views/atoms/voip/VideoFeed');
 require('../skins/base/views/molecules/voip/VideoView');
+require('../skins/base/views/molecules/voip/CallHandler');
 
 
 }
