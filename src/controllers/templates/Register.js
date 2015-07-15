@@ -189,10 +189,8 @@ module.exports = {
                 this.savedParams.client_secret = cli.generateClientSecret();
                 this.savedParams.send_attempt = 1;
 
-                var nextLink = window.location.protocol + '//' +
-                               window.location.host +
-                               window.location.pathname +
-                               '#/register?client_secret=' +
+                var nextLink = this.props.registrationUrl +
+                               '?client_secret=' +
                                encodeURIComponent(this.savedParams.client_secret) +
                                "&hs_url=" +
                                encodeURIComponent(this.state.hs_url) +
@@ -254,9 +252,9 @@ module.exports = {
                 return (
                     <div>
                         <form onSubmit={this.onInitialStageSubmit}>
-                        Email: <input ref="email" /><br />
-                        Username: <input ref="username" /><br />
-                        Password: <input ref="password" /><br />
+                        Email: <input type="text" ref="email" /><br />
+                        Username: <input type="text" ref="username" /><br />
+                        Password: <input type="password" ref="password" /><br />
                         <ServerConfig ref="serverConfig" />
                         <input type="submit" value="Continue" />
                         </form>

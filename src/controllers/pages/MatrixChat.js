@@ -81,9 +81,23 @@ module.exports = {
                 break;
             case 'start_registration':
                 if (this.state.logged_in) return;
-                this.replaceState({
-                    screen: 'register'
-                });
+                var newState = payload.params || {};
+                newState.screen = 'register';
+                if (
+                    payload.params &&
+                    payload.params.client_secret &&
+                    payload.params.session_id &&
+                    payload.params.hs_url &&
+                    payload.params.is_url &&
+                    payload.params.sid
+                ) {
+                    newState.register_client_secret = payload.params.client_secret;
+                    newState.register_session_id = payload.params.session_id;
+                    newState.register_hs_url = payload.params.hs_url;
+                    newState.register_is_url = payload.params.is_url;
+                    newState.register_id_sid = payload.params.sid;
+                }
+                this.replaceState(newState);
                 this.notifyNewScreen('register');
                 break;
             case 'start_login':
@@ -165,22 +179,18 @@ module.exports = {
         dis.dispatch({action: 'focus_composer'});
     },
 
-    resumeRegistration(params) {
-        if (!params.hs_url) return false;
-        if (!params.is_url) return false;
-        if (!params.client_secret) return false;
-        if (!params.session_id) return false;
-        if (!params.sid) return false;
-        if (this.state.logged_in) return false;
-
-        this.setState({
-            screen: 'register',
-            register_client_secret: params.client_secret,
-            register_session_id: params.session_id,
-            register_hs_url: params.hs_url,
-            register_is_url: params.is_url,
-            register_id_sid: params.sid
-        });
+    showScreen(screen, params) {
+        if (screen == 'register') {
+            dis.dispatch({
+                action: 'start_registration',
+                params: params
+            });
+        } else if (screen == 'login') {
+            dis.dispatch({
+                action: 'start_login',
+                params: params
+            });
+        }
     },
 
     notifyNewScreen: function(screen) {
