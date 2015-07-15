@@ -22,6 +22,7 @@ module.exports = {
     propTypes: {
         onValueChanged: React.PropTypes.func,
         initalValue: React.PropTypes.string,
+        placeHolder: React.PropTypes.string,
     },
 
     Phases: {
@@ -33,6 +34,7 @@ module.exports = {
         return {
             onValueChanged: function() {},
             initalValue: '',
+            placeHolder: 'Click to set',
         };
     },
 

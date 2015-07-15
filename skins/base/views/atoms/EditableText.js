@@ -43,14 +43,22 @@ module.exports = React.createClass({
     },
 
     onFinish: function(ev) {
-        this.setValue(ev.target.value);
+        if (ev.target.value) {
+            this.setValue(ev.target.value);
+        } else {
+            this.cancelEdit();
+        }
     },
 
     render: function() {
         var editable_el;
 
         if (this.state.phase == this.Phases.Display) {
-            editable_el = <div ref="display_div" onClick={this.onClickDiv}>{this.state.value}</div>;
+            if (this.state.value) {
+                editable_el = <div ref="display_div" onClick={this.onClickDiv}>{this.state.value}</div>;
+            } else {
+                editable_el = <div ref="display_div" onClick={this.onClickDiv}><i>{this.props.placeHolder}</i></div>;
+            }
         } else if (this.state.phase == this.Phases.Edit) {
             editable_el = (
                 <div>
