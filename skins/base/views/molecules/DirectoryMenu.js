@@ -19,6 +19,8 @@ limitations under the License.
 var React = require('react');
 var classNames = require('classnames');
 
+var dis = require("../../../../src/dispatcher");
+
 //var DirectoryMenuController = require("../../../../src/controllers/molecules/DirectoryMenuController");
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
@@ -26,6 +28,11 @@ var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 module.exports = React.createClass({
     displayName: 'DirectoryMenu',
     // mixins: [DirectoryMenuController],
+
+    onSettingsClick: function() {
+        dis.dispatch({action: 'view_user_settings'});
+    },
+
     render: function() {
         return (
             <div className="mx_DirectoryMenu">
@@ -42,7 +49,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_RoomTile_name">Directory</div>
                     </div>
-                    <div className="mx_RoomTile">
+                    <div className="mx_RoomTile" onClick={this.onSettingsClick}>
                         <div className="mx_RoomTile_avatar">
                             <img src="img/settings-big.png" width="42" height="42"/>
                         </div>

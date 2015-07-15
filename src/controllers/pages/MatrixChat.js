@@ -29,10 +29,16 @@ var ComponentBroker = require('../../ComponentBroker');
 var Notifier = ComponentBroker.get('organisms/Notifier');
 
 module.exports = {
+    PageTypes: {
+        RoomView: "room_view",
+        UserSettings: "user_settings",
+    },
+
     getInitialState: function() {
         return {
             logged_in: !!(MatrixClientPeg.get() && MatrixClientPeg.get().credentials),
-            ready: false
+            ready: false,
+            page_type: this.PageTypes.RoomView,
         };
     },
 
@@ -74,7 +80,8 @@ module.exports = {
             case 'view_room':
                 this.focusComposer = true;
                 this.setState({
-                    currentRoom: payload.room_id
+                    currentRoom: payload.room_id,
+                    page_type: this.PageTypes.RoomView,
                 });
                 break;
             case 'view_prev_room':
@@ -93,6 +100,11 @@ module.exports = {
                 roomIndex = (roomIndex + roomIndexDelta) % allRooms.length;
                 this.setState({
                     currentRoom: allRooms[roomIndex].roomId
+                });
+                break;
+            case 'view_user_settings':
+                this.setState({
+                    page_type: this.PageTypes.UserSettings,
                 });
                 break;
         }
@@ -139,4 +151,3 @@ module.exports = {
         dis.dispatch({action: 'focus_composer'});
     }
 };
-

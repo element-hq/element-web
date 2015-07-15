@@ -23,6 +23,7 @@ var LeftPanel = ComponentBroker.get('organisms/LeftPanel');
 var RoomView = ComponentBroker.get('organisms/RoomView');
 var RightPanel = ComponentBroker.get('organisms/RightPanel');
 var Login = ComponentBroker.get('templates/Login');
+var UserSettings = ComponentBroker.get('organisms/UserSettings');
 
 var MatrixChatController = require("../../../../src/controllers/pages/MatrixChat");
 
@@ -36,11 +37,24 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.state.logged_in && this.state.ready) {
+
+            var page_element;
+            var right_panel = "";
+
+            if (this.state.page_type == this.PageTypes.RoomView) {
+                page_element = <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
+                right_panel = <RightPanel roomId={this.state.currentRoom} />
+            } else if (this.state.page_type == this.PageTypes.UserSettings) {
+                page_element = <UserSettings />
+            }
+
             return (
                 <div className="mx_MatrixChat">
                     <LeftPanel selectedRoom={this.state.currentRoom} />
-                    <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
-                    <RightPanel roomId={this.state.currentRoom} />
+                    <div className="mx_MainView">
+                        {page_element}
+                    </div>
+                    {right_panel}
                 </div>
             );
         } else if (this.state.logged_in) {
@@ -54,4 +68,3 @@ module.exports = React.createClass({
         }
     }
 });
-
