@@ -64,6 +64,7 @@ require('../skins/base/views/atoms/MessageTimestamp');
 require('../skins/base/views/atoms/create_room/CreateRoomButton');
 require('../skins/base/views/atoms/create_room/RoomNameTextbox');
 require('../skins/base/views/atoms/create_room/Presets');
+require('../skins/base/views/atoms/EditableText');
 require('../skins/base/views/molecules/MatrixToolbar');
 require('../skins/base/views/molecules/RoomTile');
 require('../skins/base/views/molecules/MessageTile');
