@@ -25,29 +25,15 @@ var dis = require("../../dispatcher");
 var CallHandler = require("../../CallHandler");
 
 module.exports = {
-    componentDidMount: function() {
-        this.dispatcherRef = dis.register(this.onAction);
-        this.setState({
-            callState: "NO_CALL"
-        });
-    },
-
-    componentWillUnmount: function() {
-        dis.unregister(this.dispatcherRef);
-    },
-
-    onAction: function(payload) {
-        // if we were given a room_id to track, don't handle anything else.
-        if (payload.room_id && this.props.room && 
-                this.props.room.roomId !== payload.room_id) {
+    _setCallState: function(call) {
+        if (!call) {
+            this.setState({
+                callState: "NO_CALL"
+            });
             return;
         }
-        if (payload.action !== 'call_state') {
-            return;
-        }
-        var call = CallHandler.getCall(payload.room_id);
         var callState = 'NO_CALL';
-        if (call && call.state !== 'ended') {
+        if (call.state !== 'ended') {
             if (call.state === 'connected') {
                 callState = "IN_CALL";
             }
@@ -64,6 +50,32 @@ module.exports = {
         this.setState({
             callState: callState
         });
+    },
+
+    componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+        var call;
+        if (this.props.room) {
+            call = CallHandler.getCall(this.props.room.roomId);
+        }
+        this._setCallState(call);
+    },
+
+    componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
+    },
+
+    onAction: function(payload) {
+        // if we were given a room_id to track, don't handle anything else.
+        if (payload.room_id && this.props.room && 
+                this.props.room.roomId !== payload.room_id) {
+            return;
+        }
+        if (payload.action !== 'call_state') {
+            return;
+        }
+        var call = CallHandler.getCall(payload.room_id);
+        this._setCallState(call);
     },
 
     onVideoClick: function() {

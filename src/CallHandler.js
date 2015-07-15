@@ -19,7 +19,7 @@ limitations under the License.
 /*
  * Manages a list of all the currently active calls.
  *
- * This handler dispatches when voip calls are added/removed from this list:
+ * This handler dispatches when voip calls are added/updated/removed from this list:
  * {
  *   action: 'call_state'
  *   room_id: <room ID of the call>
@@ -33,6 +33,8 @@ limitations under the License.
  * {
  *   action: 'place_call',
  *   type: 'voice|video',
+ *   remote_element: DOMVideoElement, // only if type: video
+ *   local_element: DOMVideoElement,  // only if type: video
  *   room_id: <room that the place call button was pressed in>
  * }
  *
@@ -48,6 +50,8 @@ limitations under the License.
  *
  * {
  *   action: 'answer'
+ *   remote_element: DOMVideoElement, // only if type: video
+ *   local_element: DOMVideoElement,  // only if type: video
  *   room_id: <room that the answer button was pressed in>
  * }
  */
@@ -128,6 +132,7 @@ dis.register(function(payload) {
                 return; // no call to answer
             }
             calls[payload.room_id].answer();
+            _setCallState(calls[payload.room_id], payload.room_id);
             break;
     }
 });
