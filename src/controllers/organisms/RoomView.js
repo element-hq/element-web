@@ -36,6 +36,8 @@ var tileTypes = {
     'm.call.hangup': ComponentBroker.get('molecules/voip/MCallHangupTile')
 };
 
+var DateSeparator = ComponentBroker.get('molecules/DateSeparator');
+
 module.exports = {
     getInitialState: function() {
         return {
@@ -231,22 +233,33 @@ module.exports = {
             var TileType = tileTypes[mxEv.getType()];
             var continuation = false;
             var last = false;
+            var dateSeparator = null;
             if (i == this.state.room.timeline.length - 1) {
                 last = true;
             }
-            if (i > 0 &&
-                count < this.state.messageCap - 1 &&
-                this.state.room.timeline[i].sender &&
-                this.state.room.timeline[i - 1].sender &&
-                this.state.room.timeline[i].sender.userId ===
+            if (i > 0 && count < this.state.messageCap - 1) {
+                if (this.state.room.timeline[i].sender &&
+                    this.state.room.timeline[i - 1].sender &&
+                    this.state.room.timeline[i].sender.userId ===
                     this.state.room.timeline[i - 1].sender.userId)
-            {
-                continuation = true;
-            }
+                {
+                    continuation = true;
+                }
+
+                var ts0 = this.state.room.timeline[i - 1].getTs();
+                var ts1 = this.state.room.timeline[i].getTs();
+                if (new Date(ts0).toDateString() !== new Date(ts1).toDateString()) {
+                    dateSeparator = <DateSeparator key={ts1} ts={ts1}/>;
+                    continuation = false;
+                }
+            } 
             if (!TileType) continue;
             ret.unshift(
                 <TileType key={mxEv.getId()} mxEvent={mxEv} continuation={continuation} last={last}/>
             );
+            if (dateSeparator) {
+                ret.unshift(dateSeparator);
+            }
             ++count;
         }
         return ret;

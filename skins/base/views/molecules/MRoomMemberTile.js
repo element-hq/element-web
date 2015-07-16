@@ -45,12 +45,14 @@ module.exports = React.createClass({
 
     render: function() {
         // XXX: for now, just cheekily borrow the css from message tile...
+        var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
+
         return (
             <div className="mx_MessageTile">
                 <div className="mx_MessageTile_avatar">
                     <img src={ this.props.mxEvent.target ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.target, 40, 40, "crop") : null } width="40" height="40"/>
                 </div>            
-                <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                { timestamp }
                 <span className="mx_SenderProfile"></span>
                 <span className="mx_MessageTile_content">
                     {this.getMemberEventText()}

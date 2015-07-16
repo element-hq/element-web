@@ -64,7 +64,6 @@ limitations under the License.
     width: 100%;
     height: 100%;
     margin-bottom: 60px;
-    /* background-color: #ff0; */
 
     overflow-y: scroll;
 }
@@ -76,6 +75,14 @@ limitations under the License.
 
 .mx_RoomView_MessageList {
     width: 100%;
+}
+
+.mx_RoomView_MessageList h2 {
+    clear: both;
+    margin-top: 32px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #a8dbf3;
 }
 
 .mx_RoomView_invitePrompt {
