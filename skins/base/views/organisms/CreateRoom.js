@@ -24,6 +24,8 @@ var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var CreateRoomButton = ComponentBroker.get("atoms/create_room/CreateRoomButton");
 var RoomNameTextbox = ComponentBroker.get("atoms/create_room/RoomNameTextbox");
+var RoomTopic = ComponentBroker.get("atoms/create_room/RoomTopic");
+var RoomAlias = ComponentBroker.get("atoms/create_room/RoomAlias");
 var Presets = ComponentBroker.get("atoms/create_room/Presets");
 var UserSelector = ComponentBroker.get("molecules/UserSelector");
 
@@ -61,10 +63,12 @@ module.exports = React.createClass({
             }
             return (
                 <div className="mx_CreateRoom">
-                    <label>Room Name <RoomNameTextbox ref="name_textbox" /></label>
-                    <Presets ref="presets"/>
-                    <UserSelector ref="user_selector"/>
-                    <CreateRoomButton onCreateRoom={this.onCreateRoom} />
+                    <RoomNameTextbox ref="name_textbox" /> <br />
+                    <Presets ref="presets"/> <br />
+                    <RoomTopic /> <br />
+                    <RoomAlias /> <br />
+                    <UserSelector ref="user_selector"/> <br />
+                    <CreateRoomButton onCreateRoom={this.onCreateRoom} /> <br />
                     {error_box}
                 </div>
             );

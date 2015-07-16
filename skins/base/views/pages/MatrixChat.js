@@ -25,16 +25,26 @@ var RightPanel = ComponentBroker.get('organisms/RightPanel');
 var Login = ComponentBroker.get('templates/Login');
 var UserSettings = ComponentBroker.get('organisms/UserSettings');
 var Register = ComponentBroker.get('templates/Register');
+var CreateRoom = ComponentBroker.get('organisms/CreateRoom');
 
 var MatrixChatController = require("../../../../src/controllers/pages/MatrixChat");
 
 // should be atomised
 var Loader = require("react-loader");
 
+var dis = require("../../../../src/dispatcher");
+
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
     mixins: [MatrixChatController],
+
+    onRoomCreated: function(room_id) {
+        dis.dispatch({
+            action: "view_room",
+            room_id: room_id,
+        });
+    },
 
     render: function() {
         if (this.state.logged_in && this.state.ready) {
@@ -42,11 +52,17 @@ module.exports = React.createClass({
             var page_element;
             var right_panel = "";
 
-            if (this.state.page_type == this.PageTypes.RoomView) {
-                page_element = <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
-                right_panel = <RightPanel roomId={this.state.currentRoom} />
-            } else if (this.state.page_type == this.PageTypes.UserSettings) {
-                page_element = <UserSettings />
+            switch (this.state.page_type) {
+                case this.PageTypes.RoomView:
+                    page_element = <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
+                    right_panel = <RightPanel roomId={this.state.currentRoom} />
+                    break;
+                case this.PageTypes.UserSettings:
+                    page_element = <UserSettings />
+                    break;
+                case this.PageTypes.CreateRoom:
+                    page_element = <CreateRoom onRoomCreated={this.onRoomCreated}/>
+                    break;
             }
 
             return (

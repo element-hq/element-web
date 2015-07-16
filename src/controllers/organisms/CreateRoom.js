@@ -77,11 +77,11 @@ module.exports = {
 
         var self = this;
 
-        deferred.then(function () {
+        deferred.then(function (resp) {
             self.setState({
                 phase: self.phases.CREATED,
             });
-            self.props.onRoomCreated();
+            self.props.onRoomCreated(resp.room_id);
         }, function(err) {
             self.setState({
                 phase: self.phases.ERROR,

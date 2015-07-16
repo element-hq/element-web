@@ -18,19 +18,20 @@ limitations under the License.
 
 var React = require('react');
 
-var RoomNameTextboxController = require("../../../../../src/controllers/atoms/create_room/RoomNameTextbox");
+var RoomTopicController = require("../../../../../src/controllers/atoms/create_room/RoomTopic");
 
 module.exports = React.createClass({
-    displayName: 'RoomNameTextbox',
-    mixins: [RoomNameTextboxController],
+    displayName: 'RoomTopic',
+    mixins: [RoomTopicController],
 
     onValueChanged: function(ev) {
-        this.setState({room_name: ev.target.value})
+        this.setState({room_topic: ev.target.value})
     },
 
     render: function() {
         return (
-            <input type="text" className="mx_RoomNameTextbox" placeholder="Name" onChange={this.onValueChanged}/>
+            <textarea className="mx_RoomTopic" placeholder="Description" onChange={this.onValueChanged}>
+            </textarea>
         );
     }
 });
