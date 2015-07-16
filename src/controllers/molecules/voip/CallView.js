@@ -15,26 +15,24 @@ limitations under the License.
 */
 
 'use strict';
+var dis = require("../../../dispatcher");
+var CallHandler = require("../../../CallHandler");
 
 /*
  * State vars:
- * this.state.call_state = the UI state of the call (see CallHandler)
+ * this.state.call = MatrixCall|null
+ *
+ * Props:
+ * this.props.room = Room (JS SDK)
  */
-
-var dis = require("../../dispatcher");
-var CallHandler = require("../../CallHandler");
 
 module.exports = {
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        if (this.props.room) {
-            var call = CallHandler.getCall(this.props.room.roomId);
-            var callState = call ? call.call_state : "ended";
-            this.setState({
-                call_state: callState
-            });
-        }
+        this.setState({
+            call: null
+        });
     },
 
     componentWillUnmount: function() {
@@ -51,37 +49,16 @@ module.exports = {
             return;
         }
         var call = CallHandler.getCall(payload.room_id);
-        var callState = call ? call.call_state : "ended";
-        this.setState({
-            call_state: callState
-        });
-    },
-
-    onVideoClick: function() {
-        dis.dispatch({
-            action: 'place_call',
-            type: "video",
-            room_id: this.props.room.roomId
-        });
-    },
-    onVoiceClick: function() {
-        dis.dispatch({
-            action: 'place_call',
-            type: "voice",
-            room_id: this.props.room.roomId
-        });
-    },
-    onHangupClick: function() {
-        dis.dispatch({
-            action: 'hangup',
-            room_id: this.props.room.roomId
-        });
-    },
-    onAnswerClick: function() {
-        dis.dispatch({
-            action: 'answer',
-            room_id: this.props.room.roomId
-        });
+        if (call && call.type === "video") {
+            this.getVideoView().getLocalVideoElement().style.display = "initial";
+            this.getVideoView().getRemoteVideoElement().style.display = "initial";
+            call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
+            call.setRemoteVideoElement(this.getVideoView().getRemoteVideoElement());
+        }
+        else {
+            this.getVideoView().getLocalVideoElement().style.display = "none";
+            this.getVideoView().getRemoteVideoElement().style.display = "none";
+        }
     }
 };
 

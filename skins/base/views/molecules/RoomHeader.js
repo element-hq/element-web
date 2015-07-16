@@ -30,6 +30,32 @@ module.exports = React.createClass({
         var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
         topic = topic ? <div className="mx_RoomHeader_topic">{ topic.getContent().topic }</div> : null;
 
+        var callButtons;
+        if (this.state) {
+            switch (this.state.call_state) {
+                case "ringing":
+                    callButtons = (
+                        <div>
+                        <div className="mx_RoomHeader_button" onClick={this.onAnswerClick}>
+                        YUP
+                        </div>
+                        <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
+                        NOPE
+                        </div>
+                        </div>
+                    );
+                    break;
+                case "ringback":
+                case "connected":
+                    callButtons = (
+                        <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
+                        BYEBYE
+                        </div>
+                    );
+                    break;
+            }
+        }
+
         return (
             <div className="mx_RoomHeader">
                 <div className="mx_RoomHeader_wrapper">
@@ -49,10 +75,11 @@ module.exports = React.createClass({
                         <div className="mx_RoomHeader_button">
                             <img src="img/search.png" width="32" height="32"/>
                         </div>
-                        <div className="mx_RoomHeader_button">
+                        {callButtons}
+                        <div className="mx_RoomHeader_button" onClick={this.onVideoClick}>
                             <img src="img/video.png" width="32" height="32"/>
                         </div>
-                        <div className="mx_RoomHeader_button">
+                        <div className="mx_RoomHeader_button" onClick={this.onVoiceClick}>
                             <img src="img/voip.png" width="32" height="32"/>
                         </div>
                     </div>
