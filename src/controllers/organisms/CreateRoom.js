@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var PresetValues = require('../atoms/create_room/Presets').Presets;
 
 module.exports = {
     propTypes: {
@@ -41,6 +42,9 @@ module.exports = {
         return {
             phase: this.phases.CONFIG,
             error_string: "",
+            is_private: true,
+            share_history: false,
+            default_preset: PresetValues.PrivateChat
         };
     },
 
@@ -52,14 +56,41 @@ module.exports = {
             options.name = room_name;
         }
 
+        var room_topic = this.getTopic();
+        if (room_name) {
+            options.topic = room_topic;
+        }
+
         var preset = this.getPreset();
         if (preset) {
-            options.preset = preset;
+            if (preset != PresetValues.Custom) {
+                options.preset = preset;
+            } else {
+                options.initial_state = [
+                    {
+                        type: "m.room.join_rules",
+                        content: {
+                            "join_rules": this.state.is_private ? "invite" : "public"
+                        }
+                    },
+                    {
+                        type: "m.room.history_visibility",
+                        content: {
+                            "history_visibility": this.state.share_history ? "shared" : "invited"
+                        }
+                    },
+                ];
+            }
         }
 
         var invited_users = this.getInvitedUsers();
         if (invited_users) {
             options.invite = invited_users;
+        }
+
+        var alias = this.getAliasLocalpart();
+        if (alias) {
+            options.room_alias_name = alias;
         }
 
         var cli = MatrixClientPeg.get();

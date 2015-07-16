@@ -35,7 +35,15 @@ module.exports = {
         }
     },
 
-    getAlias: function() {
-        return this.state.room_alias;
+    getAliasLocalpart: function() {
+        var room_alias = this.state.room_alias;
+
+        if (room_alias) {
+            if (room_alias.startsWith("#") && room_alias.endsWith("example.com")) {
+                room_alias = room_alias.slice(1, -":example.com".length);
+            }
+        }
+
+        return room_alias;
     },
 };

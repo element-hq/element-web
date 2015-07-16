@@ -22,6 +22,8 @@ var CreateRoomController = require("../../../../src/controllers/organisms/Create
 
 var ComponentBroker = require('../../../../src/ComponentBroker');
 
+var PresetValues = require('../../../../src/controllers/atoms/create_room/Presets').Presets;
+
 var CreateRoomButton = ComponentBroker.get("atoms/create_room/CreateRoomButton");
 var RoomNameTextbox = ComponentBroker.get("atoms/create_room/RoomNameTextbox");
 var RoomTopic = ComponentBroker.get("atoms/create_room/RoomTopic");
@@ -42,8 +44,55 @@ module.exports = React.createClass({
         return this.refs.name_textbox.getName();
     },
 
+    getTopic: function() {
+        return this.refs.topic.getTopic();
+    },
+
+    getAliasLocalpart: function() {
+        return this.refs.alias.getAliasLocalpart();
+    },
+
     getInvitedUsers: function() {
         return this.refs.user_selector.getUserIds();
+    },
+
+    onPresetChanged: function() {
+        var preset = this.refs.presets.getPreset();
+        switch (preset) {
+            case PresetValues.PrivateChat:
+                this.setState({
+                    preset: preset,
+                    is_private: true,
+                    share_history: false,
+                });
+                break;
+            case PresetValues.PublicChat:
+                this.setState({
+                    preset: preset,
+                    is_private: false,
+                    share_history: true,
+                });
+                break;
+            case PresetValues.Custom:
+                this.setState({
+                    preset: preset,
+                });
+                break;
+        }
+    },
+
+    onPrivateChanged: function(ev) {
+        this.setState({
+            preset: PresetValues.Custom,
+            is_private: ev.target.checked,
+        });
+    },
+
+    onShareHistoryChanged: function(ev) {
+        this.setState({
+            preset: PresetValues.Custom,
+            share_history: ev.target.checked,
+        });
     },
 
     render: function() {
@@ -64,10 +113,13 @@ module.exports = React.createClass({
             return (
                 <div className="mx_CreateRoom">
                     <RoomNameTextbox ref="name_textbox" /> <br />
-                    <Presets ref="presets"/> <br />
-                    <RoomTopic /> <br />
-                    <RoomAlias /> <br />
+                    <RoomTopic ref="topic"/> <br />
+                    <RoomAlias ref="alias"/> <br />
                     <UserSelector ref="user_selector"/> <br />
+                    <Presets ref="presets" onChange={this.onPresetChanged} preset={this.state.preset}/> <br />
+                    <label><input type="checkbox" ref="is_private" checked={this.state.is_private} onChange={this.onPrivateChanged}/> Make this room private</label>
+                    <label><input type="checkbox" ref="share_history" checked={this.state.share_history} onChange={this.onShareHistoryChanged}/> Share message history with new users</label>
+                    <label><input type="checkbox"/> Encrypt room</label>
                     <CreateRoomButton onCreateRoom={this.onCreateRoom} /> <br />
                     {error_box}
                 </div>
