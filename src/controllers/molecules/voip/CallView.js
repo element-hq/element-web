@@ -49,7 +49,7 @@ module.exports = {
             return;
         }
         var call = CallHandler.getCall(payload.room_id);
-        if (call) {
+        if (call && call.type === "video") {
             this.getVideoView().getLocalVideoElement().style.display = "initial";
             this.getVideoView().getRemoteVideoElement().style.display = "initial";
             call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
