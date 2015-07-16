@@ -36,10 +36,17 @@ module.exports = React.createClass({
         switch (ev.getContent().membership) {
             case 'invite':
                 return senderName + " invited " + targetName + ".";
+            case 'ban':
+                return senderName + " banned " + targetName + ".";
             case 'join':
                 return targetName + " joined the room.";
             case 'leave':
-                return targetName + " left the room.";
+                if (ev.getSender() === ev.getStateKey()) {
+                    return targetName + " left the room.";
+                }
+                else {
+                    return senderName + " unbanned " + targetName + ".";
+                }
         }
     },
 
