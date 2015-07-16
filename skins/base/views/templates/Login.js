@@ -31,6 +31,24 @@ module.exports = React.createClass({
     displayName: 'Login',
     mixins: [LoginController],
 
+    getHsUrl: function() {
+        return this.refs.serverConfig.getHsUrl();
+    },
+
+    getIsUrl: function() {
+        return this.refs.serverConfig.getIsUrl();
+    },
+
+    /**
+     * Gets the form field values for the current login stage
+     */
+    getFormVals: function() {
+        return {
+            'username': this.refs.user.getDOMNode().value,
+            'password': this.refs.pass.getDOMNode().value
+        };
+    },
+
     componentForStep: function(step) {
         switch (step) {
             case 'choose_hs':
