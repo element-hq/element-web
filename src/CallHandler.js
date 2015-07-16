@@ -122,6 +122,18 @@ dis.register(function(payload) {
             if (calls[payload.room_id]) {
                 return; // don't allow >1 call to be placed.
             }
+            var room = MatrixClientPeg.get().getRoom(payload.room_id);
+            if (!room) {
+                console.error("Room %s does not exist.", payload.room_id);
+                return;
+            }
+            if (room.getJoinedMembers().length !== 2) {
+                console.error(
+                    "Fail: There are %s joined members in this room, not 2.",
+                    room.getJoinedMembers().length
+                );
+                return;
+            }
             console.log("Place %s call in %s", payload.type, payload.room_id);
             var call = Matrix.createNewMatrixCall(
                 MatrixClientPeg.get(), payload.room_id
