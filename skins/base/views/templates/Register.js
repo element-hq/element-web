@@ -24,9 +24,60 @@ var Loader = require("react-loader");
 
 var RegisterController = require("../../../../src/controllers/templates/Register");
 
+var ServerConfig = ComponentBroker.get("molecules/ServerConfig");
+
 module.exports = React.createClass({
     displayName: 'Register',
     mixins: [RegisterController],
+
+    getRegFormVals: function() {
+        return {
+            email: this.refs.email.getDOMNode().value,
+            username: this.refs.username.getDOMNode().value,
+            password: this.refs.password.getDOMNode().value,
+            confirmPassword: this.refs.confirmPassword.getDOMNode().value
+        };
+    },
+
+    getHsUrl: function() {
+        return this.refs.serverConfig.getHsUrl();
+    },
+
+    getIsUrl: function() {
+        return this.refs.serverConfig.getIsUrl();
+    },
+
+    componentForStep: function(step) {
+        switch (step) {
+            case 'initial':
+                return (
+                    <div>
+                        <form onSubmit={this.onInitialStageSubmit}>
+                        Email: <input type="text" ref="email" /><br />
+                        Username: <input type="text" ref="username" /><br />
+                        Password: <input type="password" ref="password" /><br />
+                        Confirm Password: <input type="password" ref="confirmPassword" /><br />
+                        <ServerConfig ref="serverConfig" />
+                        <input type="submit" value="Continue" />
+                        </form>
+                    </div>
+                );
+            // XXX: clearly these should be separate organisms
+            case 'stage_m.login.email.identity':
+                return (
+                    <div>
+                        Please check your email to continue registration.
+                    </div>
+                );
+            case 'stage_m.login.recaptcha':
+                return (
+                    <div ref="recaptchaContainer">
+                        This Home Server would like to make sure you're not a robot
+                        <div id="mx_recaptcha"></div>
+                    </div>
+                );
+        }
+    },
 
     registerContent: function() {
         if (this.state.busy) {
@@ -43,6 +94,22 @@ module.exports = React.createClass({
                 </div>
             );
         }
+    },
+
+    onBadFields: function(bad) {
+        var keys = Object.keys(bad);
+        var strings = [];
+        for (var i = 0; i < keys.length; ++i) {
+            switch (bad[keys[i]]) {
+                case this.FieldErrors.PasswordMismatch:
+                    strings.push("Passwords don't match");
+                    break;
+            }
+        }
+        var errtxt = strings.join(', ');
+        this.setState({
+            errorText: errtxt
+        });
     },
 
     render: function() {

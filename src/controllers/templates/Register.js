@@ -24,9 +24,12 @@ var dis = require("../../dispatcher");
 
 var ComponentBroker = require("../../ComponentBroker");
 
-var ServerConfig = ComponentBroker.get("molecules/ServerConfig");
-
 module.exports = {
+    FieldErrors: {
+        PasswordMismatch: 'PasswordMismatch',
+        PasswordLength: 'PasswordLength'
+    },
+
     getInitialState: function() {
         return {
             step: 'initial',
@@ -126,7 +129,7 @@ module.exports = {
 
         if (
             this.savedParams.email != '' ||
-            this.completedStages.indexOf('m.login.email.identity' > -1)
+            this.completedStages.indexOf('m.login.email.identity') > -1
         ) {
             return emailFlow;
         } else {
@@ -156,22 +159,34 @@ module.exports = {
 
     onInitialStageSubmit: function(ev) {
         ev.preventDefault();
+
+        var formVals = this.getRegFormVals();
+
+        var badFields = {};
+        if (formVals.password != formVals.confirmPassword) {
+            badFields.confirmPassword = this.FieldErrors.PasswordMismatch;
+        }
+        if (formVals.password.length < 6) {
+            badFields.password = this.FieldErrors.PasswordLength;
+        }
+        this.onBadFields(badFields);
+
         MatrixClientPeg.replaceUsingUrls(
-            this.refs.serverConfig.getHsUrl(),
-            this.refs.serverConfig.getIsUrl()
+            this.getHsUrl(),
+            this.getIsUrl()
         );
         this.setState({
-            hs_url: this.refs.serverConfig.getHsUrl(),
-            is_url: this.refs.serverConfig.getIsUrl()
+            hs_url: this.getHsUrl(),
+            is_url: this.getIsUrl()
         });
         var cli = MatrixClientPeg.get();
         this.setState({busy: true});
         var self = this;
 
         this.savedParams = {
-            email: this.refs.email.getDOMNode().value,
-            username: this.refs.username.getDOMNode().value,
-            password: this.refs.password.getDOMNode().value
+            email: formVals.email,
+            username: formVals.username,
+            password: formVals.password
         };
 
         this.tryRegister();
@@ -246,37 +261,6 @@ module.exports = {
         }
     },
 
-    componentForStep: function(step) {
-        switch (step) {
-            case 'initial':
-                return (
-                    <div>
-                        <form onSubmit={this.onInitialStageSubmit}>
-                        Email: <input type="text" ref="email" /><br />
-                        Username: <input type="text" ref="username" /><br />
-                        Password: <input type="password" ref="password" /><br />
-                        <ServerConfig ref="serverConfig" />
-                        <input type="submit" value="Continue" />
-                        </form>
-                    </div>
-                );
-            // XXX: clearly these should be separate organisms
-            case 'stage_m.login.email.identity':
-                return (
-                    <div>
-                        Please check your email to continue registration.
-                    </div>
-                );
-            case 'stage_m.login.recaptcha':
-                return (
-                    <div ref="recaptchaContainer">
-                        This Home Server would like to make sure you're not a robot
-                        <div id="mx_recaptcha"></div>
-                    </div>
-                );
-        }
-    },
-
     onCaptchaLoaded: function() {
         if (this.refs.recaptchaContainer) {
             var sitekey = this.authParams['m.login.recaptcha'].public_key;
@@ -308,7 +292,7 @@ module.exports = {
                 self.authParams = error.data.params;
                 self.authSessionId = error.data.session;
 
-                self.completedStages = error.data.completed;
+                self.completedStages = error.data.completed || [];
 
                 var flow = self.chooseFlow(error.data.flows);
 
