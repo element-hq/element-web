@@ -33,11 +33,15 @@ module.exports = React.createClass({
         dis.dispatch({action: 'view_user_settings'});
     },
 
+    onCreateRoomClick: function() {
+        dis.dispatch({action: 'view_create_room'});
+    },
+
     render: function() {
         return (
             <div className="mx_DirectoryMenu">
                 <div className="mx_DirectoryMenu_options">
-                    <div className="mx_RoomTile">
+                    <div className="mx_RoomTile" onClick={this.onCreateRoomClick}>
                         <div className="mx_RoomTile_avatar">
                             <img src="img/create-big.png" width="42" height="42"/>
                         </div>

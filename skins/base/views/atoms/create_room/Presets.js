@@ -25,14 +25,15 @@ module.exports = React.createClass({
     mixins: [PresetsController],
 
     onValueChanged: function(ev) {
-        this.setState({preset: ev.target.value})
+        this.props.onChange(ev.target.value)
     },
 
     render: function() {
         return (
-            <select className="mx_Presets" onChange={this.onValueChanged} defaultValue={this.state.preset}>
-                <option value="private_chat">Private Chat</option>
-                <option value="public_chat">Public Chat</option>
+            <select className="mx_Presets" onChange={this.onValueChanged} value={this.props.preset}>
+                <option value={this.Presets.PrivateChat}>Private Chat</option>
+                <option value={this.Presets.PublicChat}>Public Chat</option>
+                <option value={this.Presets.Custom}>Custom</option>
             </select>
         );
     }

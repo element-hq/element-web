@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var PresetValues = require('../atoms/create_room/Presets').Presets;
 
 module.exports = {
     propTypes: {
@@ -41,25 +42,52 @@ module.exports = {
         return {
             phase: this.phases.CONFIG,
             error_string: "",
+            is_private: true,
+            share_history: false,
+            default_preset: PresetValues.PrivateChat,
+            topic: '',
+            room_name: '',
+            invited_users: [],
         };
     },
 
     onCreateRoom: function() {
         var options = {};
 
-        var room_name = this.getName();
-        if (room_name) {
-            options.name = room_name;
+        if (this.state.room_name) {
+            options.name = this.state.room_name;
         }
 
-        var preset = this.getPreset();
-        if (preset) {
-            options.preset = preset;
+        if (this.state.topic) {
+            options.topic = this.state.topic;
         }
 
-        var invited_users = this.getInvitedUsers();
-        if (invited_users) {
-            options.invite = invited_users;
+        if (this.state.preset) {
+            if (this.state.preset != PresetValues.Custom) {
+                options.preset = this.state.preset;
+            } else {
+                options.initial_state = [
+                    {
+                        type: "m.room.join_rules",
+                        content: {
+                            "join_rules": this.state.is_private ? "invite" : "public"
+                        }
+                    },
+                    {
+                        type: "m.room.history_visibility",
+                        content: {
+                            "history_visibility": this.state.share_history ? "shared" : "invited"
+                        }
+                    },
+                ];
+            }
+        }
+
+        options.invite = this.state.invited_users;
+
+        var alias = this.getAliasLocalpart();
+        if (alias) {
+            options.room_alias_name = alias;
         }
 
         var cli = MatrixClientPeg.get();
@@ -77,11 +105,11 @@ module.exports = {
 
         var self = this;
 
-        deferred.then(function () {
+        deferred.then(function (resp) {
             self.setState({
                 phase: self.phases.CREATED,
             });
-            self.props.onRoomCreated();
+            self.props.onRoomCreated(resp.room_id);
         }, function(err) {
             self.setState({
                 phase: self.phases.ERROR,
