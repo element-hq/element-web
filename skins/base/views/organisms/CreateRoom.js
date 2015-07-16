@@ -25,8 +25,6 @@ var ComponentBroker = require('../../../../src/ComponentBroker');
 var PresetValues = require('../../../../src/controllers/atoms/create_room/Presets').Presets;
 
 var CreateRoomButton = ComponentBroker.get("atoms/create_room/CreateRoomButton");
-var RoomNameTextbox = ComponentBroker.get("atoms/create_room/RoomNameTextbox");
-var RoomTopic = ComponentBroker.get("atoms/create_room/RoomTopic");
 var RoomAlias = ComponentBroker.get("atoms/create_room/RoomAlias");
 var Presets = ComponentBroker.get("atoms/create_room/Presets");
 var UserSelector = ComponentBroker.get("molecules/UserSelector");
