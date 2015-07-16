@@ -32,34 +32,40 @@ module.exports = React.createClass({
         var target = ev.target;
         var curr_val = ev.target.value;
 
-        if (curr_val == "") {
-            target.value = "#:example.com";
-            setTimeout(function() {
-                target.setSelectionRange(1, 1);
-            }, 0);
-        } else {
-            setTimeout(function() {
-                target.setSelectionRange(
-                    curr_val.startsWith("#") ? 1 : 0,
-                    curr_val.endsWith(":example.com") ? (target.value.length - ":example.com".length) : target.value.length
-                );
-            }, 0);
+        if (this.props.homeserver) {
+            if (curr_val == "") {
+                setTimeout(function() {
+                    target.value = "#:" + this.props.homeserver;
+                    target.setSelectionRange(1, 1);
+                }, 0);
+            } else {
+                var suffix = ":" + this.props.homeserver;
+                setTimeout(function() {
+                    target.setSelectionRange(
+                        curr_val.startsWith("#") ? 1 : 0,
+                        curr_val.endsWith(suffix) ? (target.value.length - suffix.length) : target.value.length
+                    );
+                }, 0);
+            }
         }
     },
 
     onBlur: function(ev) {
         var curr_val = ev.target.value;
 
-        if (curr_val == "#:example.com") {
-            ev.target.value = "";
-            return;
-        }
+        if (this.props.homeserver) {
+            if (curr_val == "#:" + this.props.homeserver) {
+                ev.target.value = "";
+                return;
+            }
 
-        if (curr_val != "") {
-            var new_val = ev.target.value;
-            if (!curr_val.startsWith("#")) new_val = "#" + new_val;
-            if (!curr_val.endsWith(":example.com")) new_val = new_val + ":example.com";
-            ev.target.value = new_val;
+            if (curr_val != "") {
+                var new_val = ev.target.value;
+                var suffix = ":" + this.props.homeserver;
+                if (!curr_val.startsWith("#")) new_val = "#" + new_val;
+                if (!curr_val.endsWith(suffix)) new_val = new_val + suffix;
+                ev.target.value = new_val;
+            }
         }
     },
 
