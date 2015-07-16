@@ -53,7 +53,7 @@ module.exports = React.createClass({
                 return <Loader />
             case this.Phases.Display:
                 return (
-                    <div className="mx_UserSettings" style={{maxWidth: "720px", margin: "auto"}}>
+                    <div className="mx_UserSettings">
                         <div className="mx_UserSettings_User">
                             <h1>User Settings</h1>
                             <hr/>
