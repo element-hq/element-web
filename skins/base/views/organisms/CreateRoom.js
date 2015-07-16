@@ -31,6 +31,8 @@ var RoomAlias = ComponentBroker.get("atoms/create_room/RoomAlias");
 var Presets = ComponentBroker.get("atoms/create_room/Presets");
 var UserSelector = ComponentBroker.get("molecules/UserSelector");
 
+var Loader = require("react-loader");
+
 
 module.exports = React.createClass({
     displayName: 'CreateRoom',
@@ -99,7 +101,7 @@ module.exports = React.createClass({
         var curr_phase = this.state.phase;
         if (curr_phase == this.phases.CREATING) {
             return (
-                <div>Creating...</div>
+                <Loader/>
             );
         } else {
             var error_box = "";
