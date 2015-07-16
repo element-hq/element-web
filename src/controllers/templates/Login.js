@@ -41,18 +41,18 @@ module.exports = {
     onHSChosen: function(ev) {
         ev.preventDefault();
         MatrixClientPeg.replaceUsingUrls(
-            this.refs.serverConfig.getHsUrl(),
-            this.refs.serverConfig.getIsUrl()
+            this.getHsUrl(),
+            this.getIsUrl()
         );
         this.setState({
-            hs_url: this.refs.serverConfig.getHsUrl(),
-            is_url: this.refs.serverConfig.getIsUrl()
+            hs_url: this.getHsUrl(),
+            is_url: this.getIsUrl()
         });
         this.setStep("fetch_stages");
         var cli = MatrixClientPeg.get();
         this.setState({busy: true});
         var that = this;
-        cli.loginFlows().then(function(result) {
+        cli.loginFlows().done(function(result) {
             that.setState({
                 flows: result.flows,
                 currentStep: 1,
@@ -69,9 +69,12 @@ module.exports = {
         ev.preventDefault();
         this.setState({busy: true});
         var that = this;
+
+        var formVals = this.getFormVals();
+
         MatrixClientPeg.get().login('m.login.password', {
-            'user': that.refs.user.getDOMNode().value,
-            'password': that.refs.pass.getDOMNode().value
+            'user': formVals.username,
+            'password': formVals.password
         }).done(function(data) {
             // XXX: we assume this means we're logged in, but there could be a next stage
             MatrixClientPeg.replace(Matrix.createClient({

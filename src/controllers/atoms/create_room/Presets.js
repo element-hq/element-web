@@ -18,24 +18,23 @@ limitations under the License.
 
 var React = require('react');
 
+var Presets = {
+    PrivateChat: "private_chat",
+    PublicChat: "public_chat",
+    Custom: "custom",
+};
+
 module.exports = {
     propTypes: {
-        default_preset: React.PropTypes.string
+        onChange: React.PropTypes.func,
+        preset: React.PropTypes.string
     },
+
+    Presets: Presets,
 
     getDefaultProps: function() {
         return {
-            default_preset: 'private_chat',
+            onChange: function() {},
         };
-    },
-
-    getInitialState: function() {
-        return {
-            preset: this.props.default_preset,
-        }
-    },
-
-    getPreset: function() {
-        return this.state.preset;
     },
 };
