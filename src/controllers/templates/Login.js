@@ -82,10 +82,15 @@ module.exports = {
             }));
             var localStorage = window.localStorage;
             if (localStorage) {
-                localStorage.setItem("mx_hs_url", that.state.hs_url);
-                localStorage.setItem("mx_is_url", that.state.is_url);
-                localStorage.setItem("mx_user_id", data.user_id);
-                localStorage.setItem("mx_access_token", data.access_token);
+                try {
+                    localStorage.clear();
+                    localStorage.setItem("mx_hs_url", that.state.hs_url);
+                    localStorage.setItem("mx_is_url", that.state.is_url);
+                    localStorage.setItem("mx_user_id", data.user_id);
+                    localStorage.setItem("mx_access_token", data.access_token);
+                } catch (e) {
+                    console.warn("Error using local storage: can't persist session!");
+                }
             } else {
                 console.warn("No local storage available: can't persist session!");
             }

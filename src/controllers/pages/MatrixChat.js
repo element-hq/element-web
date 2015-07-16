@@ -78,9 +78,9 @@ module.exports = {
                     logged_in: false,
                     ready: false
                 });
-                localStorage.removeItem("mx_hs_url");
-                localStorage.removeItem("mx_user_id");
-                localStorage.removeItem("mx_access_token");
+                if (window.localStorage) {
+                    window.localStorage.clear();
+                }
                 Notifier.stop();
                 MatrixClientPeg.get().removeAllListeners();
                 MatrixClientPeg.replace(null);
