@@ -27,7 +27,9 @@ var ComponentBroker = require("../../ComponentBroker");
 module.exports = {
     FieldErrors: {
         PasswordMismatch: 'PasswordMismatch',
-        PasswordLength: 'PasswordLength'
+        TooShort: 'TooShort',
+        Missing: 'Missing',
+        InUse: 'InUse'
     },
 
     getInitialState: function() {
@@ -40,6 +42,12 @@ module.exports = {
     },
 
     componentWillMount: function() {
+        this.savedParams = {
+            email: '',
+            username: '',
+            password: '',
+            confirmPassword: ''
+        };
         this.readNewProps();
     },
 
@@ -161,15 +169,24 @@ module.exports = {
         ev.preventDefault();
 
         var formVals = this.getRegFormVals();
+        this.savedParams = formVals;
 
         var badFields = {};
         if (formVals.password != formVals.confirmPassword) {
             badFields.confirmPassword = this.FieldErrors.PasswordMismatch;
         }
-        if (formVals.password.length < 6) {
-            badFields.password = this.FieldErrors.PasswordLength;
+        if (formVals.password == '') {
+            badFields.password = this.FieldErrors.Missing;
+        } else if (formVals.password.length < 6) {
+            badFields.password = this.FieldErrors.Length;
         }
-        this.onBadFields(badFields);
+        if (formVals.username == '') {
+            badFields.username = this.FieldErrors.Missing;
+        }
+        if (Object.keys(badFields).length > 0) {
+            this.onBadFields(badFields);
+            return;
+        }
 
         MatrixClientPeg.replaceUsingUrls(
             this.getHsUrl(),
@@ -308,15 +325,20 @@ module.exports = {
                 });
                 self.startStage(flow.stages[flowStage]);
             } else {
-                var errorText = "Unable to contact the given Home Server";
-                if (error.httpStatus == 401) {
-                    errorText = "Authorisation failed!";
-                }
                 self.setStep("initial");
-                self.setState({
+                var newState = {
                     busy: false,
-                    errorText: errorText
-                });
+                    errorText: "Unable to contact the given Home Server"
+                };
+                if (error.name == 'M_USER_IN_USE') {
+                    delete newState.errorText;
+                    self.onBadFields({
+                        username: self.FieldErrors.InUse
+                    });
+                } else if (error.httpStatus == 401) {
+                    newState.errorText = "Authorisation failed!";
+                }
+                self.setState(newState);
             }
         });
     },

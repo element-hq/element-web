@@ -53,10 +53,10 @@ module.exports = React.createClass({
                 return (
                     <div>
                         <form onSubmit={this.onInitialStageSubmit}>
-                        Email: <input type="text" ref="email" /><br />
-                        Username: <input type="text" ref="username" /><br />
-                        Password: <input type="password" ref="password" /><br />
-                        Confirm Password: <input type="password" ref="confirmPassword" /><br />
+                        Email: <input type="text" ref="email" defaultValue={this.savedParams.email} /><br />
+                        Username: <input type="text" ref="username" defaultValue={this.savedParams.username} /><br />
+                        Password: <input type="password" ref="password" defaultValue={this.savedParams.password} /><br />
+                        Confirm Password: <input type="password" ref="confirmPassword" defaultValue={this.savedParams.confirmPassword} /><br />
                         <ServerConfig ref="serverConfig" />
                         <input type="submit" value="Continue" />
                         </form>
@@ -103,6 +103,15 @@ module.exports = React.createClass({
             switch (bad[keys[i]]) {
                 case this.FieldErrors.PasswordMismatch:
                     strings.push("Passwords don't match");
+                    break;
+                case this.FieldErrors.Missing:
+                    strings.push("Missing "+keys[i]);
+                    break;
+                case this.FieldErrors.TooShort:
+                    strings.push(keys[i]+" is too short");
+                    break;
+                case this.FieldErrors.InUse:
+                    strings.push(keys[i]+" is already taken");
                     break;
             }
         }
