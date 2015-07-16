@@ -39,6 +39,11 @@ module.exports = React.createClass({
         };
     },
 
+    componentWillMount: function() {
+        this.customHsUrl = this.DEFAULT_HS_URL;
+        this.customIsUrl = this.DEFAULT_IS_URL;
+    },
+
     getRegFormVals: function() {
         return {
             email: this.refs.email.getDOMNode().value,
@@ -50,7 +55,7 @@ module.exports = React.createClass({
 
     getHsUrl: function() {
         if (this.state.serverConfigVisible) {
-            return this.refs.serverConfig.getHsUrl();
+            return this.customHsUrl;
         } else {
             return this.DEFAULT_HS_URL;
         }
@@ -58,7 +63,7 @@ module.exports = React.createClass({
 
     getIsUrl: function() {
         if (this.state.serverConfigVisible) {
-            return this.refs.serverConfig.getIsUrl();
+            return this.customIsUrl;
         } else {
             return this.DEFAULT_IS_URL;
         }
@@ -82,6 +87,8 @@ module.exports = React.createClass({
     },
 
     onServerUrlChanged: function(newUrl) {
+        this.customHsUrl = this.refs.serverConfig.getHsUrl();
+        this.customIsUrl = this.refs.serverConfig.getIsUrl();
         this.forceUpdate();
     },
 
@@ -104,7 +111,7 @@ module.exports = React.createClass({
                         Use custom server options (advanced)
                         <div style={serverConfigStyle}>
                         <ServerConfig ref="serverConfig"
-                            defaultHsUrl={this.default_hs_url} defaultIsUrl={this.DEFAULT_IS_URL}
+                            defaultHsUrl={this.customHsUrl} defaultIsUrl={this.customIsUrl}
                             onHsUrlChanged={this.onServerUrlChanged} onIsUrlChanged={this.onServerUrlChanged} />
                         </div>
                         <br />
