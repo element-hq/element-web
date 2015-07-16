@@ -140,7 +140,7 @@ module.exports = React.createClass({
                     <h1>Create an account</h1>
                     {this.componentForStep(this.state.step)}
                     <div className="error">{this.state.errorText}</div>
-                    <a onClick={this.showLogin} href="#">Sign in with existing account</a>
+                    <a onClick={this.showLogin} href="#">I already have an account</a>
                 </div>
             );
         }
