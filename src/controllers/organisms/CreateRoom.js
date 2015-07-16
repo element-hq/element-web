@@ -44,21 +44,22 @@ module.exports = {
             error_string: "",
             is_private: true,
             share_history: false,
-            default_preset: PresetValues.PrivateChat
+            default_preset: PresetValues.PrivateChat,
+            topic: '',
+            room_name: '',
+            invited_users: [],
         };
     },
 
     onCreateRoom: function() {
         var options = {};
 
-        var room_name = this.getName();
-        if (room_name) {
-            options.name = room_name;
+        if (this.state.room_name) {
+            options.name = this.state.room_name;
         }
 
-        var room_topic = this.getTopic();
-        if (room_name) {
-            options.topic = room_topic;
+        if (this.state.topic) {
+            options.topic = this.state.topic;
         }
 
         var preset = this.getPreset();
@@ -83,10 +84,7 @@ module.exports = {
             }
         }
 
-        var invited_users = this.getInvitedUsers();
-        if (invited_users) {
-            options.invite = invited_users;
-        }
+        options.invite = this.state.invited_users;
 
         var alias = this.getAliasLocalpart();
         if (alias) {

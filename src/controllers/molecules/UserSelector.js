@@ -20,38 +20,26 @@ var React = require('react');
 
 module.exports = {
     propTypes: {
-        initially_selected: React.PropTypes.arrayOf(React.PropTypes.string),
+        onChange: React.PropTypes.func,
+        selected_users: React.PropTypes.arrayOf(React.PropTypes.string),
     },
 
     getDefaultProps: function() {
         return {
-            initially_selected: [],
+            onChange: function() {},
+            selected: [],
         };
     },
 
-    getInitialState: function() {
-        return {
-            selected_users: this.props.initially_selected,
-        }
-    },
-
     addUser: function(user_id) {
-        if (this.state.selected_users.indexOf(user_id == -1)) {
-            this.setState({
-                selected_users: this.state.selected_users.concat([user_id]),
-            });
+        if (this.props.selected_users.indexOf(user_id == -1)) {
+            this.props.onChange(this.props.selected_users.concat([user_id]));
         }
     },
 
     removeUser: function(user_id) {
-        this.setState({
-            selected_users: this.state.selected_users.filter(function(e) {
-                return e != user_id;
-            }),
-        });
+        this.props.onChange(this.state.selected_users.filter(function(e) {
+            return e != user_id;
+        }));
     },
-
-    getUserIds: function() {
-        return this.state.selected_users;
-    }
 };

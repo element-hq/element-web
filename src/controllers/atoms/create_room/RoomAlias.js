@@ -23,23 +23,19 @@ module.exports = {
         // Specifying a homeserver will make magical things happen when you,
         // e.g. start typing in the room alias box.
         homeserver: React.PropTypes.string,
-        default_alias: React.PropTypes.string
+        alias: React.PropTypes.string,
+        onChange: React.PropTypes.func,
     },
 
     getDefaultProps: function() {
         return {
-            default_alias: '',
+            onChange: function() {},
+            alias: '',
         };
     },
 
-    getInitialState: function() {
-        return {
-            room_alias: this.props.default_alias,
-        }
-    },
-
     getAliasLocalpart: function() {
-        var room_alias = this.state.room_alias;
+        var room_alias = this.props.alias;
 
         if (room_alias && this.props.homeserver) {
             var suffix = ":" + this.props.homeserver;

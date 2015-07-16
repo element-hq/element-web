@@ -32,7 +32,7 @@ module.exports = React.createClass({
         return (
             <div>
                 <ul className="mx_UserSelector_UserIdList" ref="list">
-                    {this.state.selected_users.map(function(user_id, i) {
+                    {this.props.selected_users.map(function(user_id, i) {
                         return <li key={user_id}>{user_id}</li>
                     })}
                 </ul>

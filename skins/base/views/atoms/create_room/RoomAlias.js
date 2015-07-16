@@ -25,7 +25,7 @@ module.exports = React.createClass({
     mixins: [RoomAliasController],
 
     onValueChanged: function(ev) {
-        this.setState({room_alias: ev.target.value})
+        this.props.onChange(ev.target.value);
     },
 
     onFocus: function(ev) {
@@ -72,7 +72,8 @@ module.exports = React.createClass({
     render: function() {
         return (
             <input type="text" className="mx_RoomAlias" placeholder="Alias (optional)"
-                onChange={this.onValueChanged} onFocus={this.onFocus} onBlur={this.onBlur}/>
+                onChange={this.onValueChanged} onFocus={this.onFocus} onBlur={this.onBlur}
+                value={this.props.alias}/>
         );
     }
 });

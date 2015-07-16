@@ -97,6 +97,30 @@ module.exports = React.createClass({
         });
     },
 
+    onTopicChange: function(ev) {
+        this.setState({
+            topic: ev.target.value,
+        });
+    },
+
+    onNameChange: function(ev) {
+        this.setState({
+            room_name: ev.target.value,
+        });
+    },
+
+    onInviteChanged: function(invited_users) {
+        this.setState({
+            invited_users: invited_users,
+        });
+    },
+
+    onAliasChanged: function(alias) {
+        this.setState({
+            alias: alias
+        })
+    },
+
     render: function() {
         var curr_phase = this.state.phase;
         if (curr_phase == this.phases.CREATING) {
@@ -114,10 +138,10 @@ module.exports = React.createClass({
             }
             return (
                 <div className="mx_CreateRoom">
-                    <RoomNameTextbox ref="name_textbox" /> <br />
-                    <RoomTopic ref="topic"/> <br />
-                    <RoomAlias ref="alias"/> <br />
-                    <UserSelector ref="user_selector"/> <br />
+                    <input type="text" ref="room_name" value={this.state.room_name} onChange={this.onNameChange} placeholder="Name"/> <br />
+                    <textarea ref="topic" value={this.state.topic} onChange={this.onTopicChange} placeholder="Description"/> <br />
+                    <RoomAlias ref="alias" alias={this.state.alias} onChange={this.onAliasChanged}/> <br />
+                    <UserSelector ref="user_selector" selected_users={this.state.invited_users} onChange={this.onInviteChanged}/> <br />
                     <Presets ref="presets" onChange={this.onPresetChanged} preset={this.state.preset}/> <br />
                     <label><input type="checkbox" ref="is_private" checked={this.state.is_private} onChange={this.onPrivateChanged}/> Make this room private</label>
                     <label><input type="checkbox" ref="share_history" checked={this.state.share_history} onChange={this.onShareHistoryChanged}/> Share message history with new users</label>
