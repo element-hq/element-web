@@ -44,6 +44,11 @@ module.exports = {
         this.focusComposer = false;
         document.addEventListener("keydown", this.onKeyDown);
         window.addEventListener("focus", this.onFocus);
+        if (this.state.logged_in) {
+            this.notifyNewScreen('');
+        } else {
+            this.notifyNewScreen('login');
+        }
     },
 
     componentWillUnmount: function() {
@@ -63,13 +68,44 @@ module.exports = {
 
         switch (payload.action) {
             case 'logout':
-                this.setState({
+                this.replaceState({
                     logged_in: false,
                     ready: false
                 });
+                localStorage.removeItem("mx_hs_url");
+                localStorage.removeItem("mx_user_id");
+                localStorage.removeItem("mx_access_token");
                 Notifier.stop();
                 MatrixClientPeg.get().removeAllListeners();
                 MatrixClientPeg.replace(null);
+                break;
+            case 'start_registration':
+                if (this.state.logged_in) return;
+                var newState = payload.params || {};
+                newState.screen = 'register';
+                if (
+                    payload.params &&
+                    payload.params.client_secret &&
+                    payload.params.session_id &&
+                    payload.params.hs_url &&
+                    payload.params.is_url &&
+                    payload.params.sid
+                ) {
+                    newState.register_client_secret = payload.params.client_secret;
+                    newState.register_session_id = payload.params.session_id;
+                    newState.register_hs_url = payload.params.hs_url;
+                    newState.register_is_url = payload.params.is_url;
+                    newState.register_id_sid = payload.params.sid;
+                }
+                this.replaceState(newState);
+                this.notifyNewScreen('register');
+                break;
+            case 'start_login':
+                if (this.state.logged_in) return;
+                this.replaceState({
+                    screen: 'login'
+                });
+                this.notifyNewScreen('login');
                 break;
             case 'view_room':
                 this.focusComposer = true;
@@ -99,8 +135,12 @@ module.exports = {
     },
 
     onLoggedIn: function() {
-        this.setState({logged_in: true});
+        this.setState({
+            screen: undefined,
+            logged_in: true
+        });
         this.startMatrixClient();
+        this.notifyNewScreen('');
     },
 
     startMatrixClient: function() {
@@ -137,6 +177,26 @@ module.exports = {
 
     onFocus: function(ev) {
         dis.dispatch({action: 'focus_composer'});
+    },
+
+    showScreen(screen, params) {
+        if (screen == 'register') {
+            dis.dispatch({
+                action: 'start_registration',
+                params: params
+            });
+        } else if (screen == 'login') {
+            dis.dispatch({
+                action: 'start_login',
+                params: params
+            });
+        }
+    },
+
+    notifyNewScreen: function(screen) {
+        if (this.props.onNewScreen) {
+            this.props.onNewScreen(screen);
+        }
     }
 };
 

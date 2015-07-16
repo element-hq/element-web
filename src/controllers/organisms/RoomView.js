@@ -36,7 +36,7 @@ var tileTypes = {
 module.exports = {
     getInitialState: function() {
         return {
-            room: MatrixClientPeg.get().getRoom(this.props.roomId),
+            room: this.props.roomId ? MatrixClientPeg.get().getRoom(this.props.roomId) : null,
             messageCap: INITIAL_SIZE
         }
     },

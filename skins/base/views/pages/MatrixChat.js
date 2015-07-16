@@ -23,6 +23,7 @@ var RoomList = ComponentBroker.get('organisms/RoomList');
 var RoomView = ComponentBroker.get('organisms/RoomView');
 var MatrixToolbar = ComponentBroker.get('molecules/MatrixToolbar');
 var Login = ComponentBroker.get('templates/Login');
+var Register = ComponentBroker.get('templates/Register');
 
 var MatrixChatController = require("../../../../src/controllers/pages/MatrixChat");
 
@@ -50,6 +51,14 @@ module.exports = React.createClass({
         } else if (this.state.logged_in) {
             return (
                 <Loader />
+            );
+        } else if (this.state.screen == 'register') {
+            return (
+                <Register onLoggedIn={this.onLoggedIn} clientSecret={this.state.register_client_secret}
+                    sessionId={this.state.register_session_id} idSid={this.state.register_id_sid}
+                    hsUrl={this.state.register_hs_url} isUrl={this.state.register_is_url}
+                    registrationUrl={this.props.registrationUrl}
+                />
             );
         } else {
             return (

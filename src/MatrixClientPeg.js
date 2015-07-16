@@ -24,11 +24,13 @@ var matrixClient = null;
 var localStorage = window.localStorage;
 if (localStorage) {
     var hs_url = localStorage.getItem("mx_hs_url");
+    var is_url = localStorage.getItem("mx_is_url") || 'https://matrix.org';
     var access_token = localStorage.getItem("mx_access_token");
     var user_id = localStorage.getItem("mx_user_id");
     if (access_token && user_id && hs_url) {
         matrixClient = Matrix.createClient({
             baseUrl: hs_url,
+            idBaseUrl: is_url,
             accessToken: access_token,
             userId: user_id
         });
@@ -44,8 +46,11 @@ module.exports = {
         matrixClient = cli;
     },
 
-    replaceUsingUrl: function(hs_url) {
-        matrixClient = Matrix.createClient(hs_url);
+    replaceUsingUrls: function(hs_url, is_url) {
+        matrixClient = Matrix.createClient({
+            baseUrl: hs_url,
+            idBaseUrl: is_url
+        });
     }
 };
 
