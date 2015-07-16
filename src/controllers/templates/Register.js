@@ -42,6 +42,12 @@ module.exports = {
     },
 
     componentWillMount: function() {
+        this.savedParams = {
+            email: '',
+            username: '',
+            password: '',
+            confirmPassword: ''
+        };
         this.readNewProps();
     },
 
@@ -163,6 +169,7 @@ module.exports = {
         ev.preventDefault();
 
         var formVals = this.getRegFormVals();
+        this.savedParams = formVals;
 
         var badFields = {};
         if (formVals.password != formVals.confirmPassword) {
