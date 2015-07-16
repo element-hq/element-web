@@ -104,6 +104,15 @@ module.exports = React.createClass({
                 case this.FieldErrors.PasswordMismatch:
                     strings.push("Passwords don't match");
                     break;
+                case this.FieldErrors.Missing:
+                    strings.push("Missing "+keys[i]);
+                    break;
+                case this.FieldErrors.TooShort:
+                    strings.push(keys[i]+" is too short");
+                    break;
+                case this.FieldErrors.InUse:
+                    strings.push(keys[i]+" is already taken");
+                    break;
             }
         }
         var errtxt = strings.join(', ');
