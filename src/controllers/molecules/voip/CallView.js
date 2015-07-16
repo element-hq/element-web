@@ -50,8 +50,14 @@ module.exports = {
         }
         var call = CallHandler.getCall(payload.room_id);
         if (call) {
+            this.getVideoView().getLocalVideoElement().style.display = "initial";
+            this.getVideoView().getRemoteVideoElement().style.display = "initial";
             call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
             call.setRemoteVideoElement(this.getVideoView().getRemoteVideoElement());
+        }
+        else {
+            this.getVideoView().getLocalVideoElement().style.display = "none";
+            this.getVideoView().getRemoteVideoElement().style.display = "none";
         }
     }
 };
