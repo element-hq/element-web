@@ -68,7 +68,6 @@ module.exports = {
                 phase: self.Phases.Success,
                 errorString: '',
             })
-            // self.props.onFinished();
         }, function(err) {
             self.setState({
                 phase: self.Phases.Error,
