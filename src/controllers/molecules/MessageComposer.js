@@ -22,7 +22,9 @@ var dis = require("../../dispatcher");
 var KeyCode = {
     ENTER: 13,
     TAB: 9,
-    SHIFT: 16
+    SHIFT: 16,
+    UP: 38,
+    DOWN: 40
 };
 
 module.exports = {
@@ -33,10 +35,105 @@ module.exports = {
             original: null,
             index: 0
         };
+        this.sentHistory = {
+            // The list of typed messages. Index 0 is more recent
+            data: [],
+            // The position in data currently displayed
+            position: -1,
+            // The room the history is for.
+            roomId: null,
+            // The original text before they hit UP
+            originalText: null,
+            // The textarea element to set text to.
+            element: null,
+
+            init: function(element, roomId) {
+                this.roomId = roomId;
+                this.element = element;
+                this.position = -1;
+                var storedData = window.sessionStorage.getItem(
+                    "history_" + roomId
+                );
+                if (storedData) {
+                    this.data = JSON.parse(storedData);
+                }
+                if (this.roomId) {
+                    this.setLastTextEntry();
+                }
+            },
+
+            push: function(text) {
+                // store a message in the sent history
+                this.data.unshift(text);
+                window.sessionStorage.setItem(
+                    "history_" + this.roomId,
+                    JSON.stringify(this.data)
+                );
+                // reset history position
+                this.position = -1;
+                this.originalText = null;
+            },
+
+            // move in the history. Returns true if we managed to move.
+            next: function(offset) {
+                if (this.position === -1) {
+                    // user is going into the history, save the current line.
+                    this.originalText = this.element.value;
+                }
+                else {
+                    // user may have modified this line in the history; remember it.
+                    this.data[this.position] = this.element.value;
+                }
+
+                if (offset > 0 && this.position === (this.data.length - 1)) {
+                    // we've run out of history
+                    return false;
+                }
+
+                // retrieve the next item (bounded).
+                var newPosition = this.position + offset;
+                newPosition = Math.max(-1, newPosition);
+                newPosition = Math.min(newPosition, this.data.length - 1);
+                this.position = newPosition;
+
+                if (this.position !== -1) {
+                    // show the message
+                    this.element.value = this.data[this.position];
+                }
+                else if (this.originalText) {
+                    // restore the original text the user was typing.
+                    this.element.value = this.originalText;
+                }
+                return true;
+            },
+
+            saveLastTextEntry: function() {
+                // save the currently entered text in order to restore it later.
+                // NB: This isn't 'originalText' because we want to restore
+                // sent history items too!
+                var text = this.element.value;
+                window.sessionStorage.setItem("input_" + this.roomId, text);
+            },
+
+            setLastTextEntry: function() {
+                var text = window.sessionStorage.getItem("input_" + this.roomId);
+                if (text) {
+                    this.element.value = text;
+                }
+            }
+        };
+    },
+
+    componentDidMount: function() {
+        this.sentHistory.init(
+            this.refs.textarea.getDOMNode(),
+            this.props.room.roomId
+        );
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
+        this.sentHistory.saveLastTextEntry();
     },
 
     onAction: function(payload) {
@@ -49,6 +146,7 @@ module.exports = {
 
     onKeyDown: function (ev) {
         if (ev.keyCode === KeyCode.ENTER) {
+            this.sentHistory.push(this.refs.textarea.getDOMNode().value);
             this.onEnter(ev);
         }
         else if (ev.keyCode === KeyCode.TAB) {
@@ -57,6 +155,12 @@ module.exports = {
                 members = this.props.room.getJoinedMembers();
             }
             this.onTab(ev, members);
+        }
+        else if (ev.keyCode === KeyCode.UP || ev.keyCode === KeyCode.DOWN) {
+            this.sentHistory.next(
+                ev.keyCode === KeyCode.UP ? 1 : -1
+            );
+            ev.preventDefault();
         }
         else if (ev.keyCode !== KeyCode.SHIFT && this.tabStruct.completing) {
             // they're resuming typing; reset tab complete state vars.
