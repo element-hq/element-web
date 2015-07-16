@@ -32,13 +32,14 @@ module.exports = React.createClass({
         var ev = this.props.mxEvent;
         // XXX: SYJS-16
         var senderName = ev.sender ? ev.sender.name : "Someone";
+        var targetName = ev.target ? ev.target.name : "Someone";
         switch (ev.getContent().membership) {
             case 'invite':
-                return senderName + " invited " + ev.target.name + ".";
+                return senderName + " invited " + targetName + ".";
             case 'join':
-                return senderName + " joined the room.";
+                return targetName + " joined the room.";
             case 'leave':
-                return senderName + " left the room.";
+                return targetName + " left the room.";
         }
     },
 
@@ -47,7 +48,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_MessageTile">
                 <div className="mx_MessageTile_avatar">
-                    <img src={ this.props.mxEvent.sender ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.sender, 40, 40, "crop") : null } width="40" height="40"/>
+                    <img src={ this.props.mxEvent.target ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.target, 40, 40, "crop") : null } width="40" height="40"/>
                 </div>            
                 <MessageTimestamp ts={this.props.mxEvent.getTs()} />
                 <span className="mx_SenderProfile"></span>
