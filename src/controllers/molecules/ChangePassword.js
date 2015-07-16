@@ -30,6 +30,7 @@ module.exports = {
         Edit: "edit",
         Uploading: "uploading",
         Error: "error",
+        Success: "Success"
     },
 
     getDefaultProps: function() {
@@ -41,10 +42,38 @@ module.exports = {
     getInitialState: function() {
         return {
             phase: this.Phases.Edit,
+            errorString: ''
         }
     },
 
     changePassword: function(old_password, new_password) {
-        // DO SOMETHING.
+        var cli = MatrixClientPeg.get();
+
+        var authDict = {
+            type: 'm.login.password',
+            user: cli.credentials.userId,
+            password: old_password
+        };
+
+        this.setState({
+            phase: this.Phases.Uploading,
+            errorString: '',
+        })
+
+        var d = cli.setPassword(authDict, new_password);
+
+        var self = this;
+        d.then(function() {
+            self.setState({
+                phase: self.Phases.Success,
+                errorString: '',
+            })
+            // self.props.onFinished();
+        }, function(err) {
+            self.setState({
+                phase: self.Phases.Error,
+                errorString: err.toString()
+            })
+        });
     },
 }

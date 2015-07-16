@@ -19,11 +19,26 @@ limitations under the License.
 var React = require('react');
 
 var ChangePasswordController = require("../../../../src/controllers/molecules/ChangePassword");
+var Loader = require("react-loader");
 
 
 module.exports = React.createClass({
     displayName: 'ChangePassword',
     mixins: [ChangePasswordController],
+
+    onClickChange: function() {
+        var old_password = this.refs.old_input.getDOMNode().value;
+        var new_password = this.refs.new_input.getDOMNode().value;
+        var confirm_password = this.refs.confirm_input.getDOMNode().value;
+        if (new_password != confirm_password) {
+            this.setState({
+                state: this.Phases.Error,
+                errorString: "Passwords don't match"
+            });
+        } else {
+            this.changePassword(old_password, new_password);
+        }
+    },
 
     render: function() {
         switch (this.state.phase) {
@@ -31,11 +46,12 @@ module.exports = React.createClass({
             case this.Phases.Error:
                 return (
                     <div>
-                        <label>Old password <input type="password" /></label>
-                        <label>New password <input type="password" /></label>
-                        <label>Confirm password <input type="password" /></label>
+                        <div>{this.state.errorString}</div>
+                        <label>Old password <input type="password" ref="old_input"/></label>
+                        <label>New password <input type="password" ref="new_input"/></label>
+                        <label>Confirm password <input type="password" ref="confirm_input"/></label>
                         <div>
-                            <button>Change Password</button>
+                            <button onClick={this.onClickChange}>Change Password</button>
                             <button onClick={this.props.onFinished}>Cancel</button>
                         </div>
                     </div>
@@ -44,6 +60,13 @@ module.exports = React.createClass({
                 return (
                     <Loader />
                 );
+            case this.Phases.Success:
+                return (
+                    <div>
+                        Success!
+                        <button onClick={this.props.onFinished}>Ok</button>
+                    </div>
+                )
         }
     }
 });
