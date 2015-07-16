@@ -20,6 +20,7 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 var React = require("react");
 var q = require('q');
 var dis = require("../../dispatcher");
+var version = require('../../../package.json').version;
 
 var ComponentBroker = require('../../ComponentBroker');
 
@@ -34,7 +35,7 @@ module.exports = {
             displayName: null,
             avatarUrl: null,
             threePids: [],
-            clientVersion: "v0.X.Y",
+            clientVersion: version,
             phase: this.Phases.Loading,
         };
     },
