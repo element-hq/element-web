@@ -25,40 +25,16 @@ var dis = require("../../dispatcher");
 var CallHandler = require("../../CallHandler");
 
 module.exports = {
-    _setCallState: function(call) {
-        if (!call) {
-            this.setState({
-                callState: "NO_CALL"
-            });
-            return;
-        }
-        var callState = 'NO_CALL';
-        if (call.state !== 'ended') {
-            if (call.state === 'connected') {
-                callState = "IN_CALL";
-            }
-            else if (call.direction === 'outbound') {
-                callState = "OUTBOUND";
-            }
-            else if (call.direction === 'inbound') {
-                callState = "INBOUND";
-            }
-            else {
-                console.error("Cannot determine call state.");
-            }
-        }
-        this.setState({
-            callState: callState
-        });
-    },
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        var call;
         if (this.props.room) {
-            call = CallHandler.getCall(this.props.room.roomId);
+            var call = CallHandler.getCall(this.props.room.roomId);
+            var callState = call ? call.call_state : "ended";
+            this.setState({
+                call_state: callState
+            });
         }
-        this._setCallState(call);
     },
 
     componentWillUnmount: function() {
@@ -75,7 +51,10 @@ module.exports = {
             return;
         }
         var call = CallHandler.getCall(payload.room_id);
-        this._setCallState(call);
+        var callState = call ? call.call_state : "ended";
+        this.setState({
+            call_state: callState
+        });
     },
 
     onVideoClick: function() {

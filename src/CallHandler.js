@@ -22,7 +22,8 @@ limitations under the License.
  * This handler dispatches when voip calls are added/updated/removed from this list:
  * {
  *   action: 'call_state'
- *   room_id: <room ID of the call>
+ *   room_id: <room ID of the call>,
+ *   status: ringing|ringback|connected|ended|busy|stop_ringback|stop_ringing
  * }
  *
  * To know if the call was added/removed, this handler exposes a getter to
@@ -33,8 +34,6 @@ limitations under the License.
  * {
  *   action: 'place_call',
  *   type: 'voice|video',
- *   remote_element: DOMVideoElement, // only if type: video
- *   local_element: DOMVideoElement,  // only if type: video
  *   room_id: <room that the place call button was pressed in>
  * }
  *
@@ -67,19 +66,51 @@ function _setCallListeners(call) {
         console.error("Call error: %s", err);
         console.error(err.stack);
         call.hangup();
-        _setCallState(undefined, call.roomId);
+        _setCallState(undefined, call.roomId, "ended");
     });
     call.on("hangup", function() {
-        _setCallState(undefined, call.roomId);
+        _setCallState(undefined, call.roomId, "ended");
+    });
+    // map web rtc states to dummy UI state
+    // ringing|ringback|connected|ended|busy|stop_ringback|stop_ringing
+    call.on("state", function(newState, oldState) {
+        if (newState === "ringing") {
+            _setCallState(call, call.roomId, "ringing");
+        }
+        else if (newState === "invite_sent") {
+            _setCallState(call, call.roomId, "ringback");
+        }
+        else if (newState === "ended" && oldState === "connected") {
+            _setCallState(call, call.roomId, "ended");
+        }
+        else if (newState === "ended" && oldState === "invite_sent" &&
+                (call.hangupParty === "remote" ||
+                (call.hangupParty === "local" && call.hangupReason === "invite_timeout")
+                )) {
+            _setCallState(call, call.roomId, "busy");
+        }
+        else if (oldState === "invite_sent") {
+            _setCallState(call, call.roomId, "stop_ringback");
+        }
+        else if (oldState === "ringing") {
+            _setCallState(call, call.roomId, "stop_ringing");
+        }
+        else if (newState === "connected") {
+            _setCallState(call, call.roomId, "connected");
+        }
     });
 }
 
-function _setCallState(call, roomId) {
-    console.log("_setState >>> %s >>> %s ", call, roomId);
+function _setCallState(call, roomId, status) {
+    console.log("_setState >>> %s >>> %s >> %s", call, roomId, status);
     calls[roomId] = call;
+    if (call) {
+        call.call_state = status;
+    }
     dis.dispatch({
         action: 'call_state',
-        room_id: roomId
+        room_id: roomId,
+        status: status
     });
 }
 
@@ -94,7 +125,7 @@ dis.register(function(payload) {
                 MatrixClientPeg.get(), payload.room_id
             );
             _setCallListeners(call);
-            _setCallState(call, call.roomId);
+            _setCallState(call, call.roomId, "ringback");
             if (payload.type === 'voice') {
                 call.placeVoiceCall();
             }
@@ -116,21 +147,21 @@ dis.register(function(payload) {
             }
             var call = payload.call;
             _setCallListeners(call);
-            _setCallState(call, call.roomId);
+            _setCallState(call, call.roomId, "ringing");
             break;
         case 'hangup':
             if (!calls[payload.room_id]) {
                 return; // no call to hangup
             }
             calls[payload.room_id].hangup();
-            _setCallState(null, payload.room_id);
+            _setCallState(null, payload.room_id, "ended");
             break;
         case 'answer':
             if (!calls[payload.room_id]) {
                 return; // no call to answer
             }
             calls[payload.room_id].answer();
-            _setCallState(calls[payload.room_id], payload.room_id);
+            _setCallState(calls[payload.room_id], payload.room_id, "connected");
             break;
     }
 });

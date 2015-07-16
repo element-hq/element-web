@@ -32,8 +32,8 @@ module.exports = React.createClass({
 
         var callButtons;
         if (this.state) {
-            switch (this.state.callState) {
-                case "INBOUND":
+            switch (this.state.call_state) {
+                case "ringing":
                     callButtons = (
                         <div>
                         <div className="mx_RoomHeader_button" onClick={this.onAnswerClick}>
@@ -45,14 +45,8 @@ module.exports = React.createClass({
                         </div>
                     );
                     break;
-                case "OUTBOUND":
-                    callButtons = (
-                        <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
-                        BYEBYE
-                        </div>
-                    );
-                    break;
-                case "IN_CALL":
+                case "ringback":
+                case "connected":
                     callButtons = (
                         <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
                         BYEBYE
