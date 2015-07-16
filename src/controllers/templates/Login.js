@@ -72,7 +72,7 @@ module.exports = {
         MatrixClientPeg.get().login('m.login.password', {
             'user': that.refs.user.getDOMNode().value,
             'password': that.refs.pass.getDOMNode().value
-        }).then(function(data) {
+        }).done(function(data) {
             // XXX: we assume this means we're logged in, but there could be a next stage
             MatrixClientPeg.replace(Matrix.createClient({
                 baseUrl: that.state.hs_url,
