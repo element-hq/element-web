@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 
 var ComponentBroker = require("../../../../src/ComponentBroker");
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
 var ProgressBar = ComponentBroker.get("molecules/ProgressBar");
 var Loader = require("react-loader");
@@ -48,7 +49,7 @@ module.exports = React.createClass({
 
     getHsUrl: function() {
         if (this.state.serverConfigVisible) {
-            return this.refs.serverConfig.getHsUrl();
+            return this.customHsUrl;
         } else {
             return this.DEFAULT_HS_URL;
         }
@@ -56,7 +57,7 @@ module.exports = React.createClass({
 
     getIsUrl: function() {
         if (this.state.serverConfigVisible) {
-            return this.refs.serverConfig.getIsUrl();
+            return this.customIsUrl;
         } else {
             return this.DEFAULT_IS_URL;
         }
@@ -65,7 +66,7 @@ module.exports = React.createClass({
     onServerConfigVisibleChange: function(ev) {
         this.setState({
             serverConfigVisible: ev.target.checked
-        });
+        }, this.onHsUrlChanged);
     },
 
     /**
@@ -79,12 +80,23 @@ module.exports = React.createClass({
     },
 
     onHsUrlChanged: function() {
-        this.customHsUrl = this.getHsUrl();
-        this.customIsUrl = this.getIsUrl();
-        if (this.updateHsTimeout) {
+        this.customHsUrl = this.refs.serverConfig.getHsUrl();
+        this.customIsUrl = this.refs.serverConfig.getIsUrl();
+        MatrixClientPeg.replaceUsingUrls(
+            this.getHsUrl(),
+            this.getIsUrl()
+        );
+        this.setState({
+            hs_url: this.getHsUrl(),
+            is_url: this.getIsUrl()
+        });
+        // XXX: HSes do not have to offer password auth, so we
+        // need to update and maybe show a different component
+        // when a new HS is entered.
+        /*if (this.updateHsTimeout) {
             clearTimeout(this.updateHsTimeout);
         }
-        /*var self = this;
+        var self = this;
         this.updateHsTimeout = setTimeout(function() {
             self.onHSChosen();
         }, 500);*/
