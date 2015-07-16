@@ -22,13 +22,13 @@ limitations under the License.
  * This handler dispatches when voip calls are added/updated/removed from this list:
  * {
  *   action: 'call_state'
- *   room_id: <room ID of the call>,
- *   status: ringing|ringback|connected|ended|busy|stop_ringback|stop_ringing
+ *   room_id: <room ID of the call>
  * }
  *
- * To know if the call was added/removed, this handler exposes a getter to
+ * To know the state of the call, this handler exposes a getter to
  * obtain the call for a room:
- *   CallHandler.getCall(roomId)
+ *   var call = CallHandler.getCall(roomId)
+ *   var state = call.call_state; // ringing|ringback|connected|ended|busy|stop_ringback|stop_ringing
  *
  * This handler listens for and handles the following actions:
  * {
@@ -111,8 +111,7 @@ function _setCallState(call, roomId, status) {
     }
     dis.dispatch({
         action: 'call_state',
-        room_id: roomId,
-        status: status
+        room_id: roomId
     });
 }
 
