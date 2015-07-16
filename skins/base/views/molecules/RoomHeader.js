@@ -33,18 +33,6 @@ module.exports = React.createClass({
         var callButtons;
         if (this.state) {
             switch (this.state.call_state) {
-                case "ringing":
-                    callButtons = (
-                        <div>
-                        <div className="mx_RoomHeader_button" onClick={this.onAnswerClick}>
-                        YUP
-                        </div>
-                        <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
-                        NOPE
-                        </div>
-                        </div>
-                    );
-                    break;
                 case "ringback":
                 case "connected":
                     callButtons = (

@@ -101,6 +101,7 @@ require('../skins/base/views/molecules/DirectoryMenu');
 require('../skins/base/views/atoms/voip/VideoFeed');
 require('../skins/base/views/molecules/voip/VideoView');
 require('../skins/base/views/molecules/voip/CallView');
+require('../skins/base/views/molecules/voip/IncomingCallBox');
 require('../skins/base/views/molecules/voip/MCallInviteTile');
 require('../skins/base/views/molecules/voip/MCallAnswerTile');
 require('../skins/base/views/molecules/voip/MCallHangupTile');

@@ -21,6 +21,7 @@ var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var RoomList = ComponentBroker.get('organisms/RoomList');
 var DirectoryMenu = ComponentBroker.get('molecules/DirectoryMenu');
+var IncomingCallBox = ComponentBroker.get('molecules/voip/IncomingCallBox');
 var RoomCreate = ComponentBroker.get('molecules/RoomCreate');
 
 module.exports = React.createClass({
@@ -30,6 +31,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_LeftPanel">
                 <img className="mx_LeftPanel_hideButton" src="img/hide.png" width="32" height="32" alt="<"/>
+                <IncomingCallBox />
                 <RoomList selectedRoom={this.props.currentRoom} />
                 <DirectoryMenu />
             </div>

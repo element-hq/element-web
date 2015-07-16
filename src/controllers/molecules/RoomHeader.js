@@ -76,12 +76,6 @@ module.exports = {
             action: 'hangup',
             room_id: this.props.room.roomId
         });
-    },
-    onAnswerClick: function() {
-        dis.dispatch({
-            action: 'answer',
-            room_id: this.props.room.roomId
-        });
     }
 };
 
