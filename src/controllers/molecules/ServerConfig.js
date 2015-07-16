@@ -30,26 +30,28 @@ module.exports = {
         return {
             onHsUrlChanged: function() {},
             onIsUrlChanged: function() {},
-            default_hs_url: 'https://matrix.org/',
-            default_is_url: 'https://matrix.org/'
+            defaultHsUrl: 'https://matrix.org/',
+            defaultIsUrl: 'https://matrix.org/'
         };
     },
 
     getInitialState: function() {
         return {
-            hs_url: this.props.default_hs_url,
-            is_url: this.props.default_is_url,
+            hs_url: this.props.defaultHsUrl,
+            is_url: this.props.defaultIsUrl,
         }
     },
 
     hsChanged: function(ev) {
-        this.setState({hs_url: ev.target.value});
-        this.props.onHsUrlChanged(this.state.hs_url);
+        this.setState({hs_url: ev.target.value}, function() {
+            this.props.onHsUrlChanged(this.state.hs_url);
+        });
     },
 
     isChanged: function(ev) {
-        this.setState({is_url: ev.target.value});
-        this.props.onIsUrlChanged(this.state.is_url);
+        this.setState({is_url: ev.target.value}, function() {
+            this.props.onIsUrlChanged(this.state.is_url);
+        });
     },
 
     getHsUrl: function() {

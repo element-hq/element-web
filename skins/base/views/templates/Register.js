@@ -27,8 +27,17 @@ var RegisterController = require("../../../../src/controllers/templates/Register
 var ServerConfig = ComponentBroker.get("molecules/ServerConfig");
 
 module.exports = React.createClass({
+    DEFAULT_HS_URL: 'https://matrix.org',
+    DEFAULT_IS_URL: 'https://matrix.org',
+
     displayName: 'Register',
     mixins: [RegisterController],
+
+    getInitialState: function() {
+        return {
+            serverConfigVisible: false
+        };
+    },
 
     getRegFormVals: function() {
         return {
@@ -40,24 +49,65 @@ module.exports = React.createClass({
     },
 
     getHsUrl: function() {
-        return this.refs.serverConfig.getHsUrl();
+        if (this.state.serverConfigVisible) {
+            return this.refs.serverConfig.getHsUrl();
+        } else {
+            return this.DEFAULT_HS_URL;
+        }
     },
 
     getIsUrl: function() {
-        return this.refs.serverConfig.getIsUrl();
+        if (this.state.serverConfigVisible) {
+            return this.refs.serverConfig.getIsUrl();
+        } else {
+            return this.DEFAULT_IS_URL;
+        }
+    },
+
+    onServerConfigVisibleChange: function(ev) {
+        this.setState({
+            serverConfigVisible: ev.target.checked
+        });
+    },
+
+    getUserIdSuffix: function() {
+        var actualHsUrl = document.createElement('a');
+        actualHsUrl.href = this.getHsUrl();
+        var defaultHsUrl = document.createElement('a');
+        defaultHsUrl.href = this.DEFAULT_HS_URL;
+        if (actualHsUrl.host == defaultHsUrl.host) {
+            return ':matrix.org';
+        }
+        return '';
+    },
+
+    onServerUrlChanged: function(newUrl) {
+        this.forceUpdate();
     },
 
     componentForStep: function(step) {
         switch (step) {
             case 'initial':
+                var serverConfigStyle = {};
+                if (!this.state.serverConfigVisible) {
+                    serverConfigStyle.display = 'none';
+                }
                 return (
                     <div>
                         <form onSubmit={this.onInitialStageSubmit}>
                         Email: <input type="text" ref="email" defaultValue={this.savedParams.email} /><br />
-                        Username: <input type="text" ref="username" defaultValue={this.savedParams.username} /><br />
+                        Username: <input type="text" ref="username" defaultValue={this.savedParams.username} />{this.getUserIdSuffix()}<br />
                         Password: <input type="password" ref="password" defaultValue={this.savedParams.password} /><br />
                         Confirm Password: <input type="password" ref="confirmPassword" defaultValue={this.savedParams.confirmPassword} /><br />
-                        <ServerConfig ref="serverConfig" />
+
+                        <input type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
+                        Use custom server options (advanced)
+                        <div style={serverConfigStyle}>
+                        <ServerConfig ref="serverConfig"
+                            defaultHsUrl={this.default_hs_url} defaultIsUrl={this.DEFAULT_IS_URL}
+                            onHsUrlChanged={this.onServerUrlChanged} onIsUrlChanged={this.onServerUrlChanged} />
+                        </div>
+                        <br />
                         <input type="submit" value="Continue" />
                         </form>
                     </div>
@@ -87,7 +137,7 @@ module.exports = React.createClass({
         } else {
             return (
                 <div>
-                    <h1>Create a new account:</h1>
+                    <h1>Create an account</h1>
                     {this.componentForStep(this.state.step)}
                     <div className="error">{this.state.errorText}</div>
                     <a onClick={this.showLogin} href="#">Sign in with existing account</a>
