@@ -52,7 +52,7 @@ module.exports = {
         var cli = MatrixClientPeg.get();
         this.setState({busy: true});
         var that = this;
-        cli.loginFlows().then(function(result) {
+        cli.loginFlows().done(function(result) {
             that.setState({
                 flows: result.flows,
                 currentStep: 1,
