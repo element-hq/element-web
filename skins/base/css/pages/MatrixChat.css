@@ -38,7 +38,7 @@ limitations under the License.
     height: 100%;
 }
 
-.mx_MatrixChat .mx_MainView {
+.mx_MatrixChat .mx_MatrixChat_MiddleView {
     -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
