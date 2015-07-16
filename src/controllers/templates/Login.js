@@ -24,8 +24,6 @@ var dis = require("../../dispatcher");
 
 var ComponentBroker = require("../../ComponentBroker");
 
-var ServerConfig = ComponentBroker.get("molecules/ServerConfig");
-
 module.exports = {
     getInitialState: function() {
         return {
@@ -98,31 +96,6 @@ module.exports = {
             that.setStep("stage_m.login.password");
             that.setState({errorText: 'Login failed.'});
         });
-    },
-
-    componentForStep: function(step) {
-        switch (step) {
-            case 'choose_hs':
-                return (
-                    <div>
-                        <form onSubmit={this.onHSChosen}>
-                        <ServerConfig ref="serverConfig" />
-                        <input type="submit" value="Continue" />
-                        </form>
-                    </div>
-                );
-            // XXX: clearly these should be separate organisms
-            case 'stage_m.login.password':
-                return (
-                    <div>
-                        <form onSubmit={this.onUserPassEntered}>
-                        <input ref="user" type="text" placeholder="username" /><br />
-                        <input ref="pass" type="password" placeholder="password" /><br />
-                        <input type="submit" value="Log in" />
-                        </form>
-                    </div>
-                );
-        }
     },
 
     showRegister: function(ev) {

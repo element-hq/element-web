@@ -197,7 +197,7 @@ module.exports = {
         dis.dispatch({action: 'focus_composer'});
     },
 
-    showScreen(screen, params) {
+    showScreen: function(screen, params) {
         if (screen == 'register') {
             dis.dispatch({
                 action: 'start_registration',
