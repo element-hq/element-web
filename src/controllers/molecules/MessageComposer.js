@@ -26,7 +26,7 @@ var KeyCode = {
 };
 
 module.exports = {
-    componentDidMount: function() {
+    componentWillMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         this.tabStruct = {
             completing: false,
