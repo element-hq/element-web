@@ -89,6 +89,9 @@ require('../skins/base/views/templates/Register');
 require('../skins/base/views/organisms/Notifier');
 require('../skins/base/views/organisms/CreateRoom');
 require('../skins/base/views/molecules/UserSelector');
+require('../skins/base/views/organisms/UserSettings');
+require('../skins/base/views/molecules/ChangeAvatar');
+require('../skins/base/views/molecules/ChangePassword');
 // new for vector
 require('../skins/base/views/organisms/LeftPanel');
 require('../skins/base/views/organisms/RightPanel');

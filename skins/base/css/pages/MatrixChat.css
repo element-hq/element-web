@@ -38,7 +38,7 @@ limitations under the License.
     height: 100%;
 }
 
-.mx_MatrixChat .mx_RoomView {
+.mx_MatrixChat .mx_MatrixChat_MiddleView {
     -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
@@ -47,7 +47,7 @@ limitations under the License.
 
     background-color: #f3f8fa;
     width: 100%;
-    height: 100%;       
+    height: 100%;
 }
 
 .mx_MatrixChat .mx_RightPanel {
@@ -60,5 +60,5 @@ limitations under the License.
     background-color: #f3f8fa;
     -webkit-flex: 0 0 230px;
     flex: 0 0 230px;
-    height: 100%;       
+    height: 100%;
 }

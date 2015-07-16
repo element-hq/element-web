@@ -17,58 +17,36 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var MatrixClientPeg = require("../../MatrixClientPeg");
+
+var dis = require("../../dispatcher");
 
 module.exports = {
     propTypes: {
-        onValueChanged: React.PropTypes.func,
-        initalValue: React.PropTypes.string,
-        placeHolder: React.PropTypes.string,
+        onFinished: React.PropTypes.func,
+        initialAvatarUrl: React.PropTypes.string.isRequired,
     },
 
     Phases: {
         Display: "display",
-        Edit: "edit",
+        Uploading: "uploading",
+        Error: "error",
     },
 
     getDefaultProps: function() {
         return {
-            onValueChanged: function() {},
-            initalValue: '',
-            placeHolder: 'Click to set',
+            onFinished: function() {},
         };
     },
 
     getInitialState: function() {
         return {
-            value: this.props.initalValue,
+            avatarUrl: this.props.initialAvatarUrl,
             phase: this.Phases.Display,
         }
     },
 
-    getValue: function() {
-        return this.state.value;
-    },
+    uploadNewAvatar: function() {
 
-    setValue: function(val) {
-        this.setState({
-            value: val,
-            phase: this.Phases.Display,
-        }, this.onValueChanged);
     },
-
-    edit: function() {
-        this.setState({
-            phase: this.Phases.Edit,
-        });
-    },
-
-    cancelEdit: function() {
-        this.setState({
-            phase: this.Phases.Display,
-        });
-    },
-
-    onValueChanged: function() {
-        this.props.onValueChanged(this.state.value);
-    },
-};
+}
