@@ -27,7 +27,6 @@ var Presets = {
 module.exports = {
     propTypes: {
         onChange: React.PropTypes.func,
-        default_preset: React.PropTypes.string,
         preset: React.PropTypes.string
     },
 
@@ -36,25 +35,6 @@ module.exports = {
     getDefaultProps: function() {
         return {
             onChange: function() {},
-            default_preset: Presets.PrivateChat,
         };
-    },
-
-    getInitialState: function() {
-        return {
-            preset: this.props.preset || this.props.default_preset,
-        }
-    },
-
-    componentWillReceiveProps: function(new_props) {
-        if (new_props.preset) {
-            this.setState({
-                preset: new_props.preset
-            });
-        }
-    },
-
-    getPreset: function() {
-        return this.state.preset;
     },
 };

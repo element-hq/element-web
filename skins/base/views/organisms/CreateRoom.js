@@ -58,8 +58,7 @@ module.exports = React.createClass({
         return this.refs.user_selector.getUserIds();
     },
 
-    onPresetChanged: function() {
-        var preset = this.refs.presets.getPreset();
+    onPresetChanged: function(preset) {
         switch (preset) {
             case PresetValues.PrivateChat:
                 this.setState({

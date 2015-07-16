@@ -62,10 +62,9 @@ module.exports = {
             options.topic = this.state.topic;
         }
 
-        var preset = this.getPreset();
-        if (preset) {
-            if (preset != PresetValues.Custom) {
-                options.preset = preset;
+        if (this.state.preset) {
+            if (this.state.preset != PresetValues.Custom) {
+                options.preset = this.state.preset;
             } else {
                 options.initial_state = [
                     {
