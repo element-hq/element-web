@@ -52,7 +52,7 @@ module.exports = {
         var cli = MatrixClientPeg.get();
         this.setState({busy: true});
         var that = this;
-        cli.loginFlows().then(function(result) {
+        cli.loginFlows().done(function(result) {
             that.setState({
                 flows: result.flows,
                 currentStep: 1,
@@ -75,7 +75,7 @@ module.exports = {
         MatrixClientPeg.get().login('m.login.password', {
             'user': formVals.username,
             'password': formVals.password
-        }).then(function(data) {
+        }).done(function(data) {
             // XXX: we assume this means we're logged in, but there could be a next stage
             MatrixClientPeg.replace(Matrix.createClient({
                 baseUrl: that.state.hs_url,
