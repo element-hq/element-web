@@ -37,6 +37,12 @@ module.exports = React.createClass({
     mixins: [RoomViewController],
 
     render: function() {
+        if (!this.state.room) {
+            return (
+                <div />
+            );
+        }
+
         var myUserId = MatrixClientPeg.get().credentials.userId;
         if (this.state.room.currentState.members[myUserId].membership == 'invite') {
             if (this.state.joining) {

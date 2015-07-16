@@ -20,16 +20,15 @@ var React = require('react');
 
 var ComponentBroker = require("../../../../src/ComponentBroker");
 
-var ProgressBar = ComponentBroker.get("molecules/ProgressBar");
 var Loader = require("react-loader");
 
-var LoginController = require("../../../../src/controllers/templates/Login");
+var RegisterController = require("../../../../src/controllers/templates/Register");
 
 module.exports = React.createClass({
-    displayName: 'Login',
-    mixins: [LoginController],
+    displayName: 'Register',
+    mixins: [RegisterController],
 
-    loginContent: function() {
+    registerContent: function() {
         if (this.state.busy) {
             return (
                 <Loader />
@@ -37,10 +36,10 @@ module.exports = React.createClass({
         } else {
             return (
                 <div>
-                    <h1>Please log in:</h1>
+                    <h1>Create a new account:</h1>
                     {this.componentForStep(this.state.step)}
                     <div className="error">{this.state.errorText}</div>
-                    <a onClick={this.showRegister} href="#">Create a new account</a>
+                    <a onClick={this.showLogin} href="#">Sign in with existing account</a>
                 </div>
             );
         }
@@ -48,9 +47,8 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_Login">
-            <ProgressBar value={this.state.currentStep} max={this.state.totalSteps} />
-            {this.loginContent()}
+            <div className="mx_Register">
+            {this.registerContent()}
             </div>
         );
     }
