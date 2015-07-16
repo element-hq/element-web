@@ -30,7 +30,10 @@ var ComponentBroker = require('../../ComponentBroker');
 
 var tileTypes = {
     'm.room.message': ComponentBroker.get('molecules/MessageTile'),
-    'm.room.member': ComponentBroker.get('molecules/MRoomMemberTile')
+    'm.room.member': ComponentBroker.get('molecules/MRoomMemberTile'),
+    'm.call.invite': ComponentBroker.get('molecules/voip/MCallInviteTile'),
+    'm.call.answer': ComponentBroker.get('molecules/voip/MCallAnswerTile'),
+    'm.call.hangup': ComponentBroker.get('molecules/voip/MCallHangupTile')
 };
 
 module.exports = {
