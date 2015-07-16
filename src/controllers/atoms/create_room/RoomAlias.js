@@ -20,6 +20,8 @@ var React = require('react');
 
 module.exports = {
     propTypes: {
+        // Specifying a homeserver will make magical things happen when you,
+        // e.g. start typing in the room alias box.
         homeserver: React.PropTypes.string,
         default_alias: React.PropTypes.string
     },
