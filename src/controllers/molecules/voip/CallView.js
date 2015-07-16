@@ -48,9 +48,11 @@ module.exports = {
         if (payload.action !== 'call_state') {
             return;
         }
-        this.setState({
-            call: CallHandler.getCall(payload.room_id)
-        });
+        var call = CallHandler.getCall(payload.room_id);
+        if (call) {
+            call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
+            call.setRemoteVideoElement(this.getVideoView().getRemoteVideoElement());
+        }
     }
 };
 

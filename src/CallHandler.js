@@ -50,8 +50,6 @@ limitations under the License.
  *
  * {
  *   action: 'answer'
- *   remote_element: DOMVideoElement, // only if type: video
- *   local_element: DOMVideoElement,  // only if type: video
  *   room_id: <room that the answer button was pressed in>
  * }
  */
