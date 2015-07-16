@@ -35,6 +35,11 @@ module.exports = React.createClass({
                 state: this.Phases.Error,
                 errorString: "Passwords don't match"
             });
+        } else if (new_password == '' || old_password == '') {
+            this.setState({
+                state: this.Phases.Error,
+                errorString: "Passwords can't be empty"
+            });
         } else {
             this.changePassword(old_password, new_password);
         }
