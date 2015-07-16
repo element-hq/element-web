@@ -26,17 +26,19 @@ module.exports = React.createClass({
 
     onAddUserId: function() {
         this.addUser(this.refs.user_id_input.getDOMNode().value);
+        this.refs.user_id_input.getDOMNode().value = "";
     },
 
     render: function() {
+        var self = this;
         return (
             <div>
                 <ul className="mx_UserSelector_UserIdList" ref="list">
                     {this.props.selected_users.map(function(user_id, i) {
-                        return <li key={user_id}>{user_id}</li>
+                        return <li key={user_id}>{user_id} - <span onClick={function() {self.removeUser(user_id);}}>X</span></li>
                     })}
                 </ul>
-                <input type="text" ref="user_id_input" className="mx_UserSelector_userIdInput" placeholder="ex. @bob:example.com"/>
+                <input type="text" ref="user_id_input" defaultValue="" className="mx_UserSelector_userIdInput" placeholder="ex. @bob:example.com"/>
                 <button onClick={this.onAddUserId} className="mx_UserSelector_AddUserId">Add User</button>
             </div>
         );

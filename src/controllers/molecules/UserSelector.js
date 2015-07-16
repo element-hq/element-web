@@ -38,7 +38,7 @@ module.exports = {
     },
 
     removeUser: function(user_id) {
-        this.props.onChange(this.state.selected_users.filter(function(e) {
+        this.props.onChange(this.props.selected_users.filter(function(e) {
             return e != user_id;
         }));
     },
