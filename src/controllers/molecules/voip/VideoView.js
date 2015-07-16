@@ -16,8 +16,6 @@ limitations under the License.
 
 'use strict';
 
-var dis = require("../../../dispatcher");
-
 module.exports = {
 };
 

@@ -18,7 +18,7 @@ limitations under the License.
 
 /*
  * State vars:
- * this.state.callState = OUTBOUND|INBOUND|IN_CALL|NO_CALL
+ * this.state.call_state = the UI state of the call (see CallHandler)
  */
 
 var dis = require("../../dispatcher");

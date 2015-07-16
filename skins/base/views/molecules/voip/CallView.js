@@ -37,22 +37,5 @@ module.exports = React.createClass({
         return (
             <VideoView ref="video"/>
         );
-        /*
-        if (this.state && this.state.call) {
-            if (this.state.call.type === "video") {
-                return (
-                    <VideoView ref="video"/>
-                );
-            }
-            else if (this.state.call.type === "voice") {
-                // <WaveformView /> in the future.
-                return (
-                    <div></div>
-                );
-            }
-        }
-        return (
-            <div></div>
-        ); */
     }
 });
