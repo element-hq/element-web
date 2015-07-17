@@ -57,6 +57,7 @@ module.exports = {
         if (this.refs.messageWrapper) {
             var messageWrapper = this.refs.messageWrapper.getDOMNode();
             messageWrapper.removeEventListener('drop', this.onDrop);
+            messageWrapper.removeEventListener('dragover', this.onDragOver);
         }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
