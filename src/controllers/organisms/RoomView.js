@@ -252,8 +252,11 @@ module.exports = {
             if (i > 0 && count < this.state.messageCap - 1) {
                 if (this.state.room.timeline[i].sender &&
                     this.state.room.timeline[i - 1].sender &&
-                    this.state.room.timeline[i].sender.userId ===
-                    this.state.room.timeline[i - 1].sender.userId)
+                    (this.state.room.timeline[i].sender.userId ===
+                        this.state.room.timeline[i - 1].sender.userId) &&
+                    (this.state.room.timeline[i].getType() ==
+                        this.state.room.timeline[i - 1].getType())
+                    )
                 {
                     continuation = true;
                 }
