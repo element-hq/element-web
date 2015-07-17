@@ -35,7 +35,9 @@ var commands = {
     // Change your nickname
     nick: function(room_id, args) {
         if (args) {
-            return MatrixClientPeg.get().setDisplayName(args);
+            return success(
+                MatrixClientPeg.get().setDisplayName(args)
+            );
         }
         return reject("Usage: /nick <display_name>");
     },
