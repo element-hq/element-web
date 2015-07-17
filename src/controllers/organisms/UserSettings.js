@@ -50,16 +50,6 @@ module.exports = {
         );
     },
 
-    changeAvatarUrl: function(new_avatar_url) {
-        if (this.state.avatarUrl == new_avatar_url) return;
-
-        var self = this;
-        return MatrixClientPeg.get().setAvatarUrl(new_avatar_url).then(
-            function() { self.setState({displayName: new_displayname}); },
-            function(err) { console.err(err); }
-        );
-    },
-
     componentWillMount: function() {
         var self = this;
         var cli = MatrixClientPeg.get();

@@ -33,7 +33,7 @@ module.exports = React.createClass({
 
     onError: function(error) {
         this.setState({
-            errorText: "Failed to set profile picture!"
+            errorText: "Failed to upload profile picture!"
         });
     },
 

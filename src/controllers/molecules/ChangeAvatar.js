@@ -55,9 +55,7 @@ module.exports = {
         var self = this;
         MatrixClientPeg.get().uploadContent(file).then(function(url) {
             newUrl = url;
-            return MatrixClientPeg.get().setProfileInfo('avatar_url', {
-                avatar_url: url
-            });
+            return MatrixClientPeg.get().setAvatarUrl(url);
         }).done(function() {
             self.setState({
                 phase: self.Phases.Display,

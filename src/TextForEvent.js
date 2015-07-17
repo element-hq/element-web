@@ -13,7 +13,7 @@ function textForMemberEvent(ev) {
             return senderName + " banned " + targetName + "." + reason;
         case 'join':
             if (ev.getPrevContent() && ev.getPrevContent().membership == 'join') {
-                if (ev.getPrevContent().displayname && ev.getContent().displayname) {
+                if (ev.getPrevContent().displayname && ev.getContent().displayname && ev.getPrevContent().displayname != ev.getContent().displayname) {
                     return ev.getSender() + " changed their display name from " +
                         ev.getPrevContent().displayname + " to " +
                         ev.getContent().displayname;
@@ -23,7 +23,7 @@ function textForMemberEvent(ev) {
                     return ev.getSender() + " removed their display name";
                 } else if (ev.getPrevContent().avatar_url && !ev.getContent().avatar_url) {
                     return ev.getSender() + " removed their profile picture";
-                } else if (ev.getPrevContent().avatar_url && ev.getContent().avatar_url) {
+                } else if (ev.getPrevContent().avatar_url && ev.getContent().avatar_url && ev.getPrevContent().avatar_url != ev.getContent().avatar_url) {
                     return ev.getSender() + " changed their profile picture";
                 } else if (!ev.getPrevContent().avatar_url && ev.getContent().avatar_url) {
                     return ev.getSender() + " set a profile picture";
