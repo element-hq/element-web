@@ -49,6 +49,12 @@ function textForMemberEvent(ev) {
     }
 };
 
+function textForTopicEvent(ev) {
+    var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+
+    return senderDisplayName + ' changed the topic to, "' + ev.getContent().topic + '"';
+};
+
 function textForMessageEvent(ev) {
     var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
@@ -63,6 +69,7 @@ function textForMessageEvent(ev) {
 
 var handlers = {
     'm.room.message': textForMessageEvent,
+    'm.room.topic': textForTopicEvent,
     'm.room.member': textForMemberEvent
 };
 
