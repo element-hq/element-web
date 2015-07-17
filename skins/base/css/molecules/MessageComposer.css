@@ -62,6 +62,16 @@ limitations under the License.
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;    
+
+    /* needed for FF */
+    font-family: 'Muli', Helvetica, Arial, Sans-Serif;
+    font-weight: 300;
+    font-size: 15px;    
+}
+
+/* hack for FF as vertical alignment of custom placeholder text is broken */
+.mx_MessageComposer_input textarea::-moz-placeholder {
+    line-height: 100%;
 }
 
 .mx_MessageComposer_upload {
