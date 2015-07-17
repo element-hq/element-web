@@ -72,6 +72,8 @@ limitations under the License.
     font-size: 18px;
     padding-left: 16px;
     padding-right: 16px;
+    overflow: scroll;
+    text-overflow: ellipsis;
 }
 
 .mx_RoomHeader_topic {
@@ -82,6 +84,7 @@ limitations under the License.
     padding-left: 16px;
     padding-right: 16px;
     overflow: scroll;
+    text-overflow: ellipsis;
 }
 
 .mx_RoomHeader_avatar {
