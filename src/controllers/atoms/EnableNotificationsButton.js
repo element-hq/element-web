@@ -43,9 +43,9 @@ module.exports = {
 
     enable: function() {
         if (!this.havePermission()) {
-            var that = this;
+            var self = this;
             global.Notification.requestPermission(function() {
-                that.forceUpdate();
+                self.forceUpdate();
             });
         }
 

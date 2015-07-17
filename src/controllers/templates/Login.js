@@ -50,24 +50,24 @@ module.exports = {
         this.setStep("fetch_stages");
         var cli = MatrixClientPeg.get();
         this.setState({busy: true});
-        var that = this;
+        var self = this;
         cli.loginFlows().done(function(result) {
-            that.setState({
+            self.setState({
                 flows: result.flows,
                 currentStep: 1,
                 totalSteps: result.flows.length+1
             });
-            that.setStep('stage_'+result.flows[0].type);
+            self.setStep('stage_'+result.flows[0].type);
         }, function(error) {
-            that.setStep("choose_hs");
-            that.setState({errorText: 'Unable to contact the given Home Server'});
+            self.setStep("choose_hs");
+            self.setState({errorText: 'Unable to contact the given Home Server'});
         });
     },
 
     onUserPassEntered: function(ev) {
         ev.preventDefault();
         this.setState({busy: true});
-        var that = this;
+        var self = this;
 
         var formVals = this.getFormVals();
 
@@ -77,8 +77,8 @@ module.exports = {
         }).done(function(data) {
             // XXX: we assume this means we're logged in, but there could be a next stage
             MatrixClientPeg.replace(Matrix.createClient({
-                baseUrl: that.state.hs_url,
-                idBaseUrl: that.state.is_url,
+                baseUrl: self.state.hs_url,
+                idBaseUrl: self.state.is_url,
                 userId: data.user_id,
                 accessToken: data.access_token
             }));
@@ -86,8 +86,8 @@ module.exports = {
             if (localStorage) {
                 try {
                     localStorage.clear();
-                    localStorage.setItem("mx_hs_url", that.state.hs_url);
-                    localStorage.setItem("mx_is_url", that.state.is_url);
+                    localStorage.setItem("mx_hs_url", self.state.hs_url);
+                    localStorage.setItem("mx_is_url", self.state.is_url);
                     localStorage.setItem("mx_user_id", data.user_id);
                     localStorage.setItem("mx_access_token", data.access_token);
                 } catch (e) {
@@ -96,12 +96,12 @@ module.exports = {
             } else {
                 console.warn("No local storage available: can't persist session!");
             }
-            if (that.props.onLoggedIn) {
-                that.props.onLoggedIn();
+            if (self.props.onLoggedIn) {
+                self.props.onLoggedIn();
             }
         }, function(error) {
-            that.setStep("stage_m.login.password");
-            that.setState({errorText: 'Login failed.'});
+            self.setStep("stage_m.login.password");
+            self.setState({errorText: 'Login failed.'});
         });
     },
 

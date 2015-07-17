@@ -41,11 +41,11 @@ module.exports = {
     },
 
     componentDidMount: function() {
-        var that = this;
+        var self = this;
         setTimeout(function() {
-            if (!that.isMounted()) return;
-            that.setState({
-                memberDict: that.roomMembers()
+            if (!self.isMounted()) return;
+            self.setState({
+                memberDict: self.roomMembers()
             });
         }, 50);
     },

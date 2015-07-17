@@ -30,9 +30,9 @@ module.exports = React.createClass({
     mixins: [MemberListController],
 
     makeMemberTiles: function() {
-        var that = this;
-        return Object.keys(that.state.memberDict).map(function(userId) {
-            var m = that.state.memberDict[userId];
+        var self = this;
+        return Object.keys(self.state.memberDict).map(function(userId) {
+            var m = self.state.memberDict[userId];
             return (
                 <MemberTile key={userId} member={m} />
             );

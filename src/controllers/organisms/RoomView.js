@@ -163,12 +163,12 @@ module.exports = {
                 this.waiting_for_paginate = true;
                 var cap = this.state.messageCap + PAGINATE_SIZE;
                 this.setState({messageCap: cap, paginating: true});
-                var that = this;
+                var self = this;
                 MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(function() {
-                    that.waiting_for_paginate = false;
-                    if (that.isMounted()) {
-                        that.setState({
-                            room: MatrixClientPeg.get().getRoom(that.props.roomId)
+                    self.waiting_for_paginate = false;
+                    if (self.isMounted()) {
+                        self.setState({
+                            room: MatrixClientPeg.get().getRoom(self.props.roomId)
                         });
                     }
                     // wait and set paginating to false when the component updates
@@ -181,14 +181,14 @@ module.exports = {
     },
 
     onJoinButtonClicked: function(ev) {
-        var that = this;
+        var self = this;
         MatrixClientPeg.get().joinRoom(this.props.roomId).then(function() {
-            that.setState({
+            self.setState({
                 joining: false,
-                room: MatrixClientPeg.get().getRoom(that.props.roomId)
+                room: MatrixClientPeg.get().getRoom(self.props.roomId)
             });
         }, function(error) {
-            that.setState({
+            self.setState({
                 joining: false,
                 joinError: error
             });

@@ -169,7 +169,7 @@ module.exports = {
 
     startMatrixClient: function() {
         var cli = MatrixClientPeg.get();
-        var that = this;
+        var self = this;
         cli.on('syncComplete', function() {
             var firstRoom = null;
             if (cli.getRooms() && cli.getRooms().length) {
@@ -177,7 +177,7 @@ module.exports = {
                     cli.getRooms()
                 )[0].roomId;
             }
-            that.setState({ready: true, currentRoom: firstRoom});
+            self.setState({ready: true, currentRoom: firstRoom});
             dis.dispatch({action: 'focus_composer'});
         });
         cli.on('Call.incoming', function(call) {
