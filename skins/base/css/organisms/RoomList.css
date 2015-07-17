@@ -23,3 +23,8 @@ limitations under the License.
     table-layout: fixed;
     width: 100%;
 }
+
+.mx_RoomList h2 {
+    padding-left: 16px;
+    padding-right: 16px;
+}

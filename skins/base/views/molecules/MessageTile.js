@@ -57,13 +57,21 @@ module.exports = React.createClass({
             mx_MessageTile_continuation: this.props.continuation,
         });
         var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
-        return (
-            <div className={classes}>
+        var avatar;
+        var sender;
+        if (!this.props.continuation) {
+            avatar = (
                 <div className="mx_MessageTile_avatar">
                     <img src={ this.props.mxEvent.sender ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.sender, 40, 40, "crop") : null } width="40" height="40" alt=""/>
                 </div>
+            );
+            sender = <SenderProfile mxEvent={this.props.mxEvent} />;
+        }
+        return (
+            <div className={classes}>
+                { avatar }
                 { timestamp }
-                <SenderProfile mxEvent={this.props.mxEvent} />
+                { sender }
                 <TileType mxEvent={this.props.mxEvent} />
             </div>
         );

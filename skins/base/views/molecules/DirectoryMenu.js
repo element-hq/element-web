@@ -45,7 +45,7 @@ module.exports = React.createClass({
                         <div className="mx_RoomTile_avatar">
                             <img src="img/create-big.png" width="42" height="42"/>
                         </div>
-                        <div className="mx_RoomTile_name">Create Room</div>
+                        <div className="mx_RoomTile_name">Create new room</div>
                     </div>
                     <div className="mx_RoomTile">
                         <div className="mx_RoomTile_avatar">

@@ -20,7 +20,8 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var EventAsTextTileController = require("../../../../src/controllers/molecules/EventAsTextTile");
-
+var ComponentBroker = require('../../../../src/ComponentBroker');
+var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
 var TextForEvent = require("../../../../src/TextForEvent");
 
 module.exports = React.createClass({
@@ -31,7 +32,7 @@ module.exports = React.createClass({
         var text = TextForEvent.textForEvent(this.props.mxEvent);
         var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
         return (
-            <div className="mx_MessageTile">
+            <div className="mx_MessageTile mx_MessageTile_notice">
                 <div className="mx_MessageTile_avatar">
                     <img src={ this.props.mxEvent.sender ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.sender, 40, 40, "crop") : null } width="40" height="40" alt=""/>
                 </div>            

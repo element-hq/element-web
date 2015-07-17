@@ -38,6 +38,10 @@ module.exports = React.createClass({
         var name = this.props.room.name.replace(":", ":\u200b");
         var badge;
         if (this.props.highlight) {
+            badge = <img src="/img/badge.png" width="15" height="15" alt=""/>;
+        }
+        /*
+        if (this.props.highlight) {
             badge = <div className="mx_RoomTile_badge">!</div>;
         }
         else if (this.props.unread) {
@@ -50,10 +54,11 @@ module.exports = React.createClass({
         else {
             nameCell = <div className="mx_RoomTile_name">{name}</div>;
         }
+        */
         return (
             <div className={classes} onClick={this.onClick}>
-                <div className="mx_RoomTile_avatar"><img src={ MatrixClientPeg.get().getAvatarUrlForRoom(this.props.room, 40, 40, "crop") } width="40" height="40" alt=""/></div>
-                { nameCell }
+                <div className="mx_RoomTile_avatar"><img src={ MatrixClientPeg.get().getAvatarUrlForRoom(this.props.room, 40, 40, "crop") } width="40" height="40" alt=""/>{ badge }</div>
+                <div className="mx_RoomTile_name">{name}</div>
             </div>
         );
     }

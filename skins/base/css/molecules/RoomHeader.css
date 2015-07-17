@@ -71,7 +71,7 @@ limitations under the License.
     height: 28px;
     color: #80cef4;
     font-weight: 400;
-    font-size: 18px;
+    font-size: 20px;
     padding-left: 16px;
     padding-right: 16px;
     overflow: scroll;
@@ -82,7 +82,8 @@ limitations under the License.
     vertical-align: bottom;
     float: left;
     max-height: 38px;
-    color: #80cef4;    
+    color: #70b5d7;  
+    font-weight: 300;  
     padding-left: 16px;
     padding-right: 16px;
     overflow: scroll;

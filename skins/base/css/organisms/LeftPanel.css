@@ -39,9 +39,6 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    padding-left: 16px;
-    padding-right: 16px;
-
     height: 100%;
     overflow-y: scroll;
 }
@@ -56,10 +53,11 @@ limitations under the License.
     -webkit-flex: 0 0 170px;
     flex: 0 0 170px;
 
-    padding-left: 16px;
-    padding-right: 16px;
-
     border-top: 1px solid #f3f8fa;
+}
+
+.mx_LeftPanel .mx_DirectoryMenu .mx_RoomTile {
+    color: #378bb4;
 }
 
 .mx_LeftPanel .mx_DirectoryMenu .mx_DirectoryMenu_options {

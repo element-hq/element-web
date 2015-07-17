@@ -39,28 +39,28 @@ limitations under the License.
     margin-top: 8px ! important;
 }
 
-.mx_MessageTile_continuation .mx_MessageTile_avatar,
-.mx_MessageTile_continuation .mx_SenderProfile
-{
-    display: none ! important;
-}
-
 .mx_MessageTile .mx_SenderProfile {
-    color: #acacac;
-    font-size: 13px;
+    color: #454545;
+    opacity: 0.5;
+    font-size: 14px;
     margin-bottom: 4px;
     display: block;
 }
 
 .mx_MessageTile .mx_MessageTimestamp {
-    color: #acacac;
-    font-size: 13px;
+    color: #454545;
+    opacity: 0.5;
+    font-size: 14px;
     float: right;
 }
 
 .mx_MessageTile_content {
     padding-right: 100px;
     display: block;
+}
+
+.mx_MessageTile_notice {
+    opacity: 0.5;
 }
 
 .mx_MessageTile_sending {
