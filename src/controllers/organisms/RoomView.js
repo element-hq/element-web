@@ -49,6 +49,7 @@ module.exports = {
     componentWillMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
+        MatrixClientPeg.get().on("Room.name", this.onRoomName);
         this.atBottom = true;
     },
 
@@ -60,6 +61,7 @@ module.exports = {
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+            MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
         }
     },
 
@@ -103,6 +105,14 @@ module.exports = {
 
         if (toStartOfTimeline && !this.state.paginating) {
             this.fillSpace();
+        }
+    },
+
+    onRoomName: function(room) {
+        if (room.roomId == this.props.roomId) {
+            this.setState({
+                room: room
+            });
         }
     },
 

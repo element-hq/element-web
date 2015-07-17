@@ -59,7 +59,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_RoomHeader_info">
                             <div className="mx_RoomHeader_name">
-                                <EditableText initalValue={this.props.room.name} onValueChanged={this.onNameChange} />
+                                <EditableText initialValue={this.props.room.name} onValueChanged={this.onNameChange} />
                             </div>
                             { topic }
                         </div>

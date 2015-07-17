@@ -21,7 +21,7 @@ var React = require('react');
 module.exports = {
     propTypes: {
         onValueChanged: React.PropTypes.func,
-        initalValue: React.PropTypes.string,
+        initialValue: React.PropTypes.string,
         placeHolder: React.PropTypes.string,
     },
 
@@ -33,16 +33,22 @@ module.exports = {
     getDefaultProps: function() {
         return {
             onValueChanged: function() {},
-            initalValue: '',
+            initialValue: '',
             placeHolder: 'Click to set',
         };
     },
 
     getInitialState: function() {
         return {
-            value: this.props.initalValue,
+            value: this.props.initialValue,
             phase: this.Phases.Display,
         }
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this.setState({
+            value: nextProps.initialValue
+        });
     },
 
     getValue: function() {

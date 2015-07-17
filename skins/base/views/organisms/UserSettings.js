@@ -64,7 +64,7 @@ module.exports = React.createClass({
                                 </div>
 
                                 <div className="mx_UserSettings_DisplayName">
-                                    <EditableText ref="displayname" initalValue={this.state.displayName} placeHolder="Click to set display name." onValueChanged={this.changeDisplayname}/>
+                                    <EditableText ref="displayname" initialValue={this.state.displayName} placeHolder="Click to set display name." onValueChanged={this.changeDisplayname}/>
                                     <div className="mx_UserSettings_DisplayName_Edit" onClick={this.editDisplayName}>Edit</div>
                                 </div>
 
