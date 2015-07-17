@@ -33,19 +33,28 @@ module.exports = React.createClass({
         // XXX: SYJS-16
         var senderName = ev.sender ? ev.sender.name : "Someone";
         var targetName = ev.target ? ev.target.name : "Someone";
+        var reason = ev.getContent().reason ? (
+            " Reason: " + ev.getContent().reason
+        ) : "";
         switch (ev.getContent().membership) {
             case 'invite':
                 return senderName + " invited " + targetName + ".";
             case 'ban':
-                return senderName + " banned " + targetName + ".";
+                return senderName + " banned " + targetName + "." + reason;
             case 'join':
                 return targetName + " joined the room.";
             case 'leave':
                 if (ev.getSender() === ev.getStateKey()) {
                     return targetName + " left the room.";
                 }
-                else {
+                else if (ev.getPrevContent().membership === "ban") {
                     return senderName + " unbanned " + targetName + ".";
+                }
+                else if (ev.getPrevContent().membership === "join") {
+                    return senderName + " kicked " + targetName + "." + reason;
+                }
+                else {
+                    return targetName + " left the room.";
                 }
         }
     },
