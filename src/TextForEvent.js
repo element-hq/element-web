@@ -59,7 +59,7 @@ var handlers = {
 };
 
 module.exports = {
-    textForEvent(ev) {
+    textForEvent: function(ev) {
         var hdlr = handlers[ev.getType()];
         if (!hdlr) return "";
         return hdlr(ev);
