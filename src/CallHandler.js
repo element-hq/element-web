@@ -175,6 +175,10 @@ dis.register(function(payload) {
             }
             calls[payload.room_id].answer();
             _setCallState(calls[payload.room_id], payload.room_id, "connected");
+            dis.dispatch({
+                action: "view_room",
+                room_id: payload.room_id
+            });
             break;
     }
 });
