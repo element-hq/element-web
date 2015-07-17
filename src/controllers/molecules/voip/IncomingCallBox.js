@@ -43,8 +43,17 @@ module.exports = {
             this.setState({
                 incomingCallRoomId: null
             });
+            this.getRingAudio().pause();
             return;
         }
+        if (call.call_state === "ringing") {
+            this.getRingAudio().load();
+            this.getRingAudio().play();
+        }
+        else {
+            this.getRingAudio().pause();
+        }
+
         this.setState({
             incomingCallRoomId: call.roomId
         });

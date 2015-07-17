@@ -26,14 +26,27 @@ module.exports = React.createClass({
     displayName: 'IncomingCallBox',
     mixins: [IncomingCallBoxController],
 
+    getRingAudio: function() {
+        return this.refs.ringAudio.getDOMNode();
+    },
+
     render: function() {
         if (!this.state.incomingCallRoomId) {
             return (
-                <div></div>
+                <div>
+                    <audio ref="ringAudio" loop>
+                        <source src="media/ring.ogg" type="audio/ogg" />
+                        <source src="media/ring.mp3" type="audio/mpeg" />
+                    </audio>
+                </div>
             );
         }
         return (
             <div className="mx_IncomingCallBox">
+                <audio ref="ringAudio" loop>
+                    <source src="media/ring.ogg" type="audio/ogg" />
+                    <source src="media/ring.mp3" type="audio/mpeg" />
+                </audio>
                 <div className="mx_IncomingCallBox_avatar">
                     <img src="img/voip.png" width="42" height="42"/>
                 </div>
