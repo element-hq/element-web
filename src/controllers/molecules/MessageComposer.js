@@ -176,18 +176,19 @@ module.exports = {
         var cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
         if (cmd) {
             ev.preventDefault();
+            if (!cmd.error) {
+                this.refs.textarea.getDOMNode().value = '';
+            }
             if (cmd.promise) {
                 cmd.promise.done(function() {
                     console.log("Command success.");
                 }, function(err) {
                     console.error("Command failure: %s", err);
                 });
-                this.refs.textarea.getDOMNode().value = '';
             }
             else if (cmd.error) {
                 console.error(cmd.error);
             }
-
             return;
         }
 
