@@ -27,7 +27,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_MemberTile">
-                <div className="mx_MemberTile_avatar"><img src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 32, 32, "crop") : null } width="32" height="32" alt=""/></div>            
+                <div className="mx_MemberTile_avatar"><img src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 40, 40, "crop") : null } width="40" height="40" alt=""/></div>
                 <div className="mx_MemberTile_name">{this.props.member.name}</div>
             </div>
         );
