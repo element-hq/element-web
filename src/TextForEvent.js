@@ -61,7 +61,7 @@ var handlers = {
 module.exports = {
     textForEvent(ev) {
         var hdlr = handlers[ev.getType()];
-        if (!hdlr) return "Unknown entry event";
+        if (!hdlr) return "";
         return hdlr(ev);
     }
 }
