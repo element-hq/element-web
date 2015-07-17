@@ -3,9 +3,14 @@ function textForMemberEvent(ev) {
     // XXX: SYJS-16
     var senderName = ev.sender ? ev.sender.name : ev.getSender();
     var targetName = ev.target ? ev.target.name : ev.getContent().target;
+    var reason = ev.getContent().reason ? (
+        " Reason: " + ev.getContent().reason
+    ) : "";
     switch (ev.getContent().membership) {
         case 'invite':
             return senderName + " invited " + targetName + ".";
+        case 'ban':
+            return senderName + " banned " + targetName + "." + reason;
         case 'join':
             if (ev.getPrevContent() && ev.getPrevContent().membership == 'join') {
                 if (ev.getPrevContent().displayname && ev.getContent().displayname) {
@@ -21,7 +26,18 @@ function textForMemberEvent(ev) {
                 return targetName + " joined the room.";
             }
         case 'leave':
-            return targetName + " left the room.";
+            if (ev.getSender() === ev.getStateKey()) {
+                return targetName + " left the room.";
+            }
+            else if (ev.getPrevContent().membership === "ban") {
+                return senderName + " unbanned " + targetName + ".";
+            }
+            else if (ev.getPrevContent().membership === "join") {
+                return senderName + " kicked " + targetName + "." + reason;
+            }
+            else {
+                return targetName + " left the room.";
+            }
     }
 };
 
