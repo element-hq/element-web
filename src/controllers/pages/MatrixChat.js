@@ -66,6 +66,7 @@ module.exports = {
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
+        window.removeEventListener("focus", this.onFocus);
     },
 
     componentDidUpdate: function() {
