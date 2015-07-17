@@ -50,7 +50,7 @@ module.exports = React.createClass({
                     <div className="mx_MemberList_wrapper">
                         {this.makeMemberTiles()}
                         <div className="mx_MemberTile">
-                            <div className="mx_MemberTile_avatar"><img src="img/create.png" width="32" height="32" alt="()"/></div>            
+                            <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="40" height="40" alt=""/></div>            
                             <div className="mx_MemberTile_name">Invite</div>
                         </div>
                     </div>
