@@ -20,10 +20,22 @@ var React = require('react');
 
 var ChangeAvatarController = require("../../../../src/controllers/molecules/ChangeAvatar");
 
+var Loader = require("react-loader");
+
 
 module.exports = React.createClass({
     displayName: 'ChangeAvatar',
     mixins: [ChangeAvatarController],
+
+    onFileSelected: function(ev) {
+        this.setAvatarFromFile(ev.target.files[0]);
+    },
+
+    onError: function(error) {
+        this.setState({
+            errorText: "Failed to set profile picture!"
+        });
+    },
 
     render: function() {
         switch (this.state.phase) {
@@ -33,7 +45,9 @@ module.exports = React.createClass({
                     <div>
                         <img src={this.state.avatarUrl} />
                         <div>
-                            <button>Upload new</button>
+                            Upload new:
+                            <input type="file" onChange={this.onFileSelected}/>
+                            {this.state.errorText}
                             <button onClick={this.props.onFinished}>Cancel</button>
                         </div>
                     </div>

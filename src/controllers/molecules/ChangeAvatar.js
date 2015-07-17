@@ -46,7 +46,28 @@ module.exports = {
         }
     },
 
-    uploadNewAvatar: function() {
+    setAvatarFromFile: function(file) {
+        var newUrl = null;
 
+        this.setState({
+            phase: this.Phases.Uploading
+        });
+        var self = this;
+        MatrixClientPeg.get().uploadContent(file).then(function(url) {
+            newUrl = url;
+            return MatrixClientPeg.get().setProfileInfo('avatar_url', {
+                avatar_url: url
+            });
+        }).done(function() {
+            self.setState({
+                phase: self.Phases.Display,
+                avatarUrl: MatrixClientPeg.get().mxcUrlToHttp(newUrl)
+            });
+        }, function(error) {
+            self.setState({
+                phase: this.Phases.Error
+            });
+            self.onError(error);
+        });
     },
 }

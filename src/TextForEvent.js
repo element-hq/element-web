@@ -21,11 +21,18 @@ function textForMemberEvent(ev) {
                     return ev.getSender() + " set their display name to " + ev.getContent().displayname;
                 } else if (ev.getPrevContent().displayname && !ev.getContent().displayname) {
                     return ev.getSender() + " removed their display name";
+                } else if (ev.getPrevContent().avatar_url && !ev.getContent().avatar_url) {
+                    return ev.getSender() + " removed their profile picture";
+                } else if (ev.getPrevContent().avatar_url && ev.getContent().avatar_url) {
+                    return ev.getSender() + " changed their profile picture";
+                } else if (!ev.getPrevContent().avatar_url && ev.getContent().avatar_url) {
+                    return ev.getSender() + " set a profile picture";
                 }
             } else {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
                 return targetName + " joined the room.";
             }
+            return '';
         case 'leave':
             if (ev.getSender() === ev.getStateKey()) {
                 return targetName + " left the room.";
