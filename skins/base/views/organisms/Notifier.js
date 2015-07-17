@@ -43,8 +43,18 @@ var NotifierView = {
         var title;
         if (!ev.sender ||  room.name == ev.sender.name) {
             title = room.name;
+            // notificationMessageForEvent includes sender,
+            // but we already have the sender here
+            if (ev.getContent().body) msg = ev.getContent().body;
+        } else if (ev.getType() == 'm.room.member') {
+            // context is all in the message here, we don't need
+            // to display sender info
+            title = room.name;
         } else if (ev.sender) {
             title = ev.sender.name + " (" + room.name + ")";
+            // notificationMessageForEvent includes sender,
+            // but we've just out sender in the title
+            if (ev.getContent().body) msg = ev.getContent().body;
         }
 
         var notification = new global.Notification(

@@ -25,7 +25,20 @@ function textForMemberEvent(ev) {
     }
 };
 
+function textForMessageEvent(ev) {
+    var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+
+    var message = senderDisplayName + ': ' + ev.getContent().body;
+    if (ev.getContent().msgtype === "m.emote") {
+        message = "* " + senderDisplayName + " " + message;
+    } else if (ev.getContent().msgtype === "m.image") {
+        message = senderDisplayName + " sent an image.";
+    }
+    return message;
+};
+
 var handlers = {
+    'm.room.message': textForMessageEvent,
     'm.room.member': textForMemberEvent
 };
 
