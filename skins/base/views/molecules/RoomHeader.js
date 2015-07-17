@@ -17,13 +17,19 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var RoomHeaderController = require("../../../../src/controllers/molecules/RoomHeader");
+var EditableText = ComponentBroker.get("atoms/EditableText");
 
 module.exports = React.createClass({
     displayName: 'RoomHeader',
     mixins: [RoomHeaderController],
+
+    onNameChange: function(new_name) {
+        MatrixClientPeg.get().setRoomName(this.props.room.roomId, new_name);
+    },
 
     render: function() {
 
@@ -52,7 +58,9 @@ module.exports = React.createClass({
                             <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(this.props.room, 48, 48, "crop") } width="48" height="48"/>
                         </div>
                         <div className="mx_RoomHeader_info">
-                            <div className="mx_RoomHeader_name">{ this.props.room.name }</div>
+                            <div className="mx_RoomHeader_name">
+                                <EditableText initalValue={this.props.room.name} onValueChanged={this.onNameChange} />
+                            </div>
                             { topic }
                         </div>
                     </div>
@@ -76,4 +84,3 @@ module.exports = React.createClass({
         );
     },
 });
-

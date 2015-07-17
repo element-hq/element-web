@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 
 var ComponentBroker = require("../../../../src/ComponentBroker");
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
 var ProgressBar = ComponentBroker.get("molecules/ProgressBar");
 var Loader = require("react-loader");
@@ -28,15 +29,44 @@ var LoginController = require("../../../../src/controllers/templates/Login");
 var ServerConfig = ComponentBroker.get("molecules/ServerConfig");
 
 module.exports = React.createClass({
+    DEFAULT_HS_URL: 'https://matrix.org',
+    DEFAULT_IS_URL: 'https://matrix.org',
+
     displayName: 'Login',
     mixins: [LoginController],
 
+    getInitialState: function() {
+        return {
+            serverConfigVisible: false
+        };
+    },
+
+    componentWillMount: function() {
+        this.onHSChosen();
+        this.customHsUrl = this.DEFAULT_HS_URL;
+        this.customIsUrl = this.DEFAULT_IS_URL;
+    },
+
     getHsUrl: function() {
-        return this.refs.serverConfig.getHsUrl();
+        if (this.state.serverConfigVisible) {
+            return this.customHsUrl;
+        } else {
+            return this.DEFAULT_HS_URL;
+        }
     },
 
     getIsUrl: function() {
-        return this.refs.serverConfig.getIsUrl();
+        if (this.state.serverConfigVisible) {
+            return this.customIsUrl;
+        } else {
+            return this.DEFAULT_IS_URL;
+        }
+    },
+
+    onServerConfigVisibleChange: function(ev) {
+        this.setState({
+            serverConfigVisible: ev.target.checked
+        }, this.onHsUrlChanged);
     },
 
     /**
@@ -49,15 +79,46 @@ module.exports = React.createClass({
         };
     },
 
+    onHsUrlChanged: function() {
+        this.customHsUrl = this.refs.serverConfig.getHsUrl();
+        this.customIsUrl = this.refs.serverConfig.getIsUrl();
+        MatrixClientPeg.replaceUsingUrls(
+            this.getHsUrl(),
+            this.getIsUrl()
+        );
+        this.setState({
+            hs_url: this.getHsUrl(),
+            is_url: this.getIsUrl()
+        });
+        // XXX: HSes do not have to offer password auth, so we
+        // need to update and maybe show a different component
+        // when a new HS is entered.
+        /*if (this.updateHsTimeout) {
+            clearTimeout(this.updateHsTimeout);
+        }
+        var self = this;
+        this.updateHsTimeout = setTimeout(function() {
+            self.onHSChosen();
+        }, 500);*/
+    },
+
     componentForStep: function(step) {
         switch (step) {
             case 'choose_hs':
+                var serverConfigStyle = {};
+                if (!this.state.serverConfigVisible) {
+                    serverConfigStyle.display = 'none';
+                }
                 return (
                     <div>
-                        <form onSubmit={this.onHSChosen}>
-                        <ServerConfig ref="serverConfig" />
-                        <input type="submit" value="Continue" />
-                        </form>
+                        <input type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
+                        Use custom server options (advanced)
+                        <div style={serverConfigStyle}>
+                        <ServerConfig ref="serverConfig"
+                            defaultHsUrl={this.customHsUrl} defaultIsUrl={this.customIsUrl}
+                            onHsUrlChanged={this.onHsUrlChanged}
+                        />
+                        </div>
                     </div>
                 );
             // XXX: clearly these should be separate organisms
@@ -67,6 +128,7 @@ module.exports = React.createClass({
                         <form onSubmit={this.onUserPassEntered}>
                         <input ref="user" type="text" placeholder="username" /><br />
                         <input ref="pass" type="password" placeholder="password" /><br />
+                        {this.componentForStep('choose_hs')}
                         <input type="submit" value="Log in" />
                         </form>
                     </div>
@@ -94,7 +156,6 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_Login">
-            <ProgressBar value={this.state.currentStep} max={this.state.totalSteps} />
             {this.loginContent()}
             </div>
         );

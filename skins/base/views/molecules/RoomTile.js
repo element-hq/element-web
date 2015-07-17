@@ -43,10 +43,17 @@ module.exports = React.createClass({
         else if (this.props.unread) {
             badge = <div className="mx_RoomTile_badge">1</div>;
         }
+        var nameCell;
+        if (badge) {
+            nameCell = <div className="mx_RoomTile_nameBadge"><div className="mx_RoomTile_name">{name}</div><div className="mx_RoomTile_badgeCell">{badge}</div></div>;
+        }
+        else {
+            nameCell = <div className="mx_RoomTile_name">{name}</div>;
+        }
         return (
             <div className={classes} onClick={this.onClick}>
                 <div className="mx_RoomTile_avatar"><img src={ MatrixClientPeg.get().getAvatarUrlForRoom(this.props.room, 40, 40, "crop") } width="40" height="40"/></div>
-                <div className="mx_RoomTile_name">{name}{ badge }</div>
+                { nameCell }
             </div>
         );
     }

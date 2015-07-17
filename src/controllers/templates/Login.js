@@ -38,8 +38,7 @@ module.exports = {
         this.setState({ step: step, errorText: '', busy: false });
     },
 
-    onHSChosen: function(ev) {
-        ev.preventDefault();
+    onHSChosen: function() {
         MatrixClientPeg.replaceUsingUrls(
             this.getHsUrl(),
             this.getIsUrl()
