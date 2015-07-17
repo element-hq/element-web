@@ -61,6 +61,25 @@ var calls = {
     //room_id: MatrixCall
 };
 
+function play(audioId) {
+    // TODO: Attach an invisible element for this instead
+    // which listens?
+    var audio = document.getElementById(audioId);
+    if (audio) {
+        audio.load();
+        audio.play();
+    }
+}
+
+function pause(audioId) {
+    // TODO: Attach an invisible element for this instead
+    // which listens?
+    var audio = document.getElementById(audioId);
+    if (audio) {
+        audio.pause();
+    }
+}
+
 function _setCallListeners(call) {
     call.on("error", function(err) {
         console.error("Call error: %s", err);
@@ -76,27 +95,36 @@ function _setCallListeners(call) {
     call.on("state", function(newState, oldState) {
         if (newState === "ringing") {
             _setCallState(call, call.roomId, "ringing");
+            pause("ringbackAudio");
         }
         else if (newState === "invite_sent") {
             _setCallState(call, call.roomId, "ringback");
+            play("ringbackAudio");
         }
         else if (newState === "ended" && oldState === "connected") {
             _setCallState(call, call.roomId, "ended");
+            pause("ringbackAudio");
+            play("callendAudio");
         }
         else if (newState === "ended" && oldState === "invite_sent" &&
                 (call.hangupParty === "remote" ||
                 (call.hangupParty === "local" && call.hangupReason === "invite_timeout")
                 )) {
             _setCallState(call, call.roomId, "busy");
+            pause("ringbackAudio");
+            play("busyAudio");
         }
         else if (oldState === "invite_sent") {
             _setCallState(call, call.roomId, "stop_ringback");
+            pause("ringbackAudio");
         }
         else if (oldState === "ringing") {
             _setCallState(call, call.roomId, "stop_ringing");
+            pause("ringbackAudio");
         }
         else if (newState === "connected") {
             _setCallState(call, call.roomId, "connected");
+            pause("ringbackAudio");
         }
     });
 }
