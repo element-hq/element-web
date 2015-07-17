@@ -30,7 +30,6 @@ var KeyCode = {
 
 module.exports = {
     componentWillMount: function() {
-        this.dispatcherRef = dis.register(this.onAction);
         this.tabStruct = {
             completing: false,
             original: null,
@@ -126,6 +125,7 @@ module.exports = {
     },
 
     componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
         this.sentHistory.init(
             this.refs.textarea.getDOMNode(),
             this.props.room.roomId

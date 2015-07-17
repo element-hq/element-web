@@ -30,9 +30,9 @@ module.exports = {
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.setState({
-            call: null
-        });
+        if (this.props.room) {
+            this.showCall(this.props.room.roomId);
+        }
     },
 
     componentWillUnmount: function() {
@@ -48,8 +48,12 @@ module.exports = {
         if (payload.action !== 'call_state') {
             return;
         }
-        var call = CallHandler.getCall(payload.room_id);
-        if (call && call.type === "video") {
+        this.showCall(payload.room_id);
+    },
+
+    showCall: function(roomId) {
+        var call = CallHandler.getCall(roomId);
+        if (call && call.type === "video" && call.state !== 'ended') {
             this.getVideoView().getLocalVideoElement().style.display = "initial";
             this.getVideoView().getRemoteVideoElement().style.display = "initial";
             call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
