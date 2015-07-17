@@ -28,7 +28,7 @@ module.exports = React.createClass({
 
     getHangupText: function(event) {
         var senderName = event.sender ? event.sender.name : "Someone";
-        return senderName + " hung up.";
+        return senderName + " ended the call.";
     },
 
     render: function() {
