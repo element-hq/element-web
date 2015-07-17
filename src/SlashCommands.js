@@ -42,6 +42,16 @@ var commands = {
         return reject("Usage: /nick <display_name>");
     },
 
+    // Change the room topic
+    topic: function(room_id, args) {
+        if (args) {
+            return success(
+                MatrixClientPeg.get().setRoomTopic(room_id, args)
+            );
+        }
+        return reject("Usage: /topic <topic>");
+    },
+
     // Invite a user
     invite: function(room_id, args) {
         if (args) {
