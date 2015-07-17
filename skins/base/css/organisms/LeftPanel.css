@@ -24,8 +24,6 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     -webkit-flex-direction: column;
-
-    border-right: 1px solid #d8d8d8;
 }
 
 .mx_LeftPanel_hideButton {
@@ -47,29 +45,6 @@ limitations under the License.
     height: 100%;
     overflow-y: scroll;
 }
-
-/*
-.mx_LeftPanel .mx_RoomCreate {
-    -webkit-box-ordinal-group: 2;
-    -moz-box-ordinal-group: 2;
-    -ms-flex-order: 2;
-    -webkit-order: 2;
-    order: 2;
-
-    padding-left: 16px;
-    padding-right: 16px;
-    min-height: 46px;
-
-    border-top: 1px solid #d8d8d8;
-    border-bottom: 1px solid #d8d8d8;
-}
-
-.mx_LeftPanel .mx_RoomCreate .mx_RoomCreate_table {
-    display: table;
-    width: 100%;
-    height: 46px;
-}
-*/
 
 .mx_LeftPanel .mx_DirectoryMenu {
     -webkit-box-ordinal-group: 3;
