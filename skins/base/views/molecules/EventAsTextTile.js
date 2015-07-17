@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var EventAsTextTileController = require("../../../../src/controllers/molecules/EventAsTextTile");
 
 var TextForEvent = require("../../../../src/TextForEvent");
@@ -28,10 +29,18 @@ module.exports = React.createClass({
 
     render: function() {
         var text = TextForEvent.textForEvent(this.props.mxEvent);
+        var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
         return (
-            <span ref="content" className="mx_EventAsTextTile mx_MessageTile_content">
-                {TextForEvent.textForEvent(this.props.mxEvent)}
-            </span>
+            <div className="mx_MessageTile">
+                <div className="mx_MessageTile_avatar">
+                    <img src={ this.props.mxEvent.sender ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.sender, 40, 40, "crop") : null } width="40" height="40" alt=""/>
+                </div>            
+                { timestamp }
+                <span className="mx_SenderProfile"></span>
+                <span className="mx_MessageTile_content">
+                    {TextForEvent.textForEvent(this.props.mxEvent)}
+                </span>
+            </div>
         );
     },
 });
