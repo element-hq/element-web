@@ -21,7 +21,7 @@ limitations under the License.
     margin: auto;
     background-color: #fff;
     border-radius: 25px;
-    border: 1px solid #e1e1e1;
+    border: 1px solid #a9dbf4;
 }
 
 .mx_MessageComposer_row {
@@ -40,7 +40,7 @@ limitations under the License.
 .mx_MessageComposer .mx_MessageComposer_avatar img {
     margin-top: 5px;
     border-radius: 20px;
-    background-color: #bdbdbd;
+    background-color: #dbdbdb;
 }
 
 .mx_MessageComposer_input {
