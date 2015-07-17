@@ -22,6 +22,7 @@ var MRoomMemberTileController = require("../../../../src/controllers/molecules/M
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../src/ComponentBroker');
+var TextForEvent = require('../../../../src/TextForEvent');
 var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
 
 module.exports = React.createClass({
@@ -29,18 +30,7 @@ module.exports = React.createClass({
     mixins: [MRoomMemberTileController],
 
     getMemberEventText: function() {
-        var ev = this.props.mxEvent;
-        // XXX: SYJS-16
-        var senderName = ev.sender ? ev.sender.name : "Someone";
-        var targetName = ev.target ? ev.target.name : "Someone";
-        switch (ev.getContent().membership) {
-            case 'invite':
-                return senderName + " invited " + targetName + ".";
-            case 'join':
-                return targetName + " joined the room.";
-            case 'leave':
-                return targetName + " left the room.";
-        }
+        return TextForEvent.textForEvent(this.props.mxEvent);
     },
 
     render: function() {

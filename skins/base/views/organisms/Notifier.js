@@ -19,32 +19,14 @@ limitations under the License.
 var NotifierController = require("../../../../src/controllers/organisms/Notifier");
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+var TextForEvent = require("../../../../src/TextForEvent");
 var extend = require("../../../../src/extend");
 var dis = require("../../../../src/dispatcher");
 
 
 var NotifierView = {
     notificationMessageForEvent: function(ev) {
-        var senderDisplayName = ev.sender ? ev.sender.name : '';
-        var message = null;
-
-        if (ev.event.type === "m.room.message") {
-            message = ev.getContent().body;
-            if (ev.getContent().msgtype === "m.emote") {
-                message = "* " + senderDisplayName + " " + message;
-            } else if (ev.getContent().msgtype === "m.image") {
-                message = senderDisplayName + " sent an image.";
-            }
-        } else if (ev.event.type == "m.room.member") {
-            if (ev.event.state_key !== MatrixClientPeg.get().credentials.userId  && "join" === ev.getContent().membership) {
-                // Notify when another user joins
-                message = senderDisplayName + " joined";
-            } else if (ev.event.state_key === MatrixClientPeg.get().credentials.userId  && "invite" === ev.getContent().membership) {
-                // notify when you are invited
-                message = senderDisplayName + " invited you to a room";
-            }
-        }
-        return message;
+        return TextForEvent.textForEvent(ev);
     },
 
     displayNotification: function(ev, room) {
