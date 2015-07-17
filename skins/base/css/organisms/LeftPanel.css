@@ -58,6 +58,8 @@ limitations under the License.
 
     padding-left: 16px;
     padding-right: 16px;
+
+    border-top: 1px solid #f3f8fa;
 }
 
 .mx_LeftPanel .mx_DirectoryMenu .mx_DirectoryMenu_options {
