@@ -2,7 +2,7 @@
 function textForMemberEvent(ev) {
     // XXX: SYJS-16
     var senderName = ev.sender ? ev.sender.name : ev.getSender();
-    var targetName = ev.target ? ev.target.name : ev.getContent().target;
+    var targetName = ev.target ? ev.target.name : ev.getContent().state_key;
     var reason = ev.getContent().reason ? (
         " Reason: " + ev.getContent().reason
     ) : "";
@@ -23,6 +23,7 @@ function textForMemberEvent(ev) {
                     return ev.getSender() + " removed their display name";
                 }
             } else {
+                if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
                 return targetName + " joined the room.";
             }
         case 'leave':
