@@ -20,8 +20,8 @@ limitations under the License.
 .mx_RoomHeader_wrapper {
     max-width: 720px;
     margin: auto;
-    height: 86px;
-    margin-top: 18px;
+    height: 88px;
+    border-bottom: 1px solid #a8dbf3;
 
     display: -webkit-box;
     display: -moz-box;
@@ -32,6 +32,7 @@ limitations under the License.
 
 .mx_RoomHeader_leftRow {
     height: 48px;
+    margin-top: 18px;
 
     -webkit-box-ordinal-group: 1;
     -moz-box-ordinal-group: 1;
@@ -44,6 +45,7 @@ limitations under the License.
 
 .mx_RoomHeader_rightRow {
     height: 48px;
+    margin-top: 18px;
     background-color: #fff;
     border-radius: 48px;
     border: 1px solid #e1e1e1;

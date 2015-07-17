@@ -68,7 +68,7 @@ module.exports = React.createClass({
             return (
                 <div className="mx_MatrixChat">
                     <LeftPanel selectedRoom={this.state.currentRoom} />
-                    <div className="mx_MatrixChat_MiddleView">
+                    <div className="mx_MatrixChat_middlePanel">
                         {page_element}
                     </div>
                     {right_panel}

@@ -36,8 +36,8 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    -webkit-flex: 0 0 86px;
-    flex: 0 0 86px;
+    -webkit-flex: 0 0 88px;
+    flex: 0 0 88px;
 }
 
 .mx_RoomView_auxPanel {
@@ -50,7 +50,6 @@ limitations under the License.
     max-width: 720px;
     width: 100%;
     margin: auto;
-    border-top: 1px solid #a8dbf3;
     height: 0%;
 }
 

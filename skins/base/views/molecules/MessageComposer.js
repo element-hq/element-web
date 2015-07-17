@@ -32,7 +32,7 @@ module.exports = React.createClass({
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         <div className="mx_MessageComposer_avatar">
-                            <img src={ MatrixClientPeg.get().getAvatarUrlForMember(me, 40, 40, "crop") } width="40" height="40"/>
+                            <img src={ MatrixClientPeg.get().getAvatarUrlForMember(me, 40, 40, "crop") } width="40" height="40" alt=""/>
                         </div>
                         <div className="mx_MessageComposer_input">
                             <textarea ref="textarea" onKeyDown={this.onKeyDown} placeholder="Type a message" />

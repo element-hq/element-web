@@ -40,7 +40,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_MessageTile">
                 <div className="mx_MessageTile_avatar">
-                    <img src={ this.props.mxEvent.target ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.target, 40, 40, "crop") : null } width="40" height="40"/>
+                    <img src={ this.props.mxEvent.target ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.target, 40, 40, "crop") : null } width="40" height="40" alt=""/>
                 </div>            
                 { timestamp }
                 <span className="mx_SenderProfile"></span>

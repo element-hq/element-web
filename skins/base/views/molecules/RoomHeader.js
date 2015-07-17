@@ -55,7 +55,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_leftRow">
                         <div className="mx_RoomHeader_avatar">
-                            <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(this.props.room, 48, 48, "crop") } width="48" height="48"/>
+                            <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(this.props.room, 48, 48, "crop") } width="48" height="48" alt=""/>
                         </div>
                         <div className="mx_RoomHeader_info">
                             <div className="mx_RoomHeader_name">
