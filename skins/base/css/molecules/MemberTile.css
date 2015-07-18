@@ -27,11 +27,22 @@ limitations under the License.
     vertical-align: middle;
     width: 40px;
     height: 40px;
+    position: relative;
 }
 
-.mx_MemberTile_avatar img {
+.mx_MemberTile_avatarImg {
+    z-index: 20;
     border-radius: 20px;    
     background-color: #dbdbdb;
+}
+
+.mx_MemberTile_power {
+    z-index: 10;
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    left: -4px;
+    top: -1px;
 }
 
 .mx_MemberTile_name {

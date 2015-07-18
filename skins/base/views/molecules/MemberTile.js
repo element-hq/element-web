@@ -25,9 +25,15 @@ module.exports = React.createClass({
     displayName: 'MemberTile',
     mixins: [MemberTileController],
     render: function() {
+        var power;
+        if (this.props.member) {
+            var img = "/img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
+            power = <img src={ img } className="mx_MemberTile_power" width="48" height="48" alt=""/>;
+        }
+
         return (
             <div className="mx_MemberTile">
-                <div className="mx_MemberTile_avatar"><img src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 40, 40, "crop") : null } width="40" height="40" alt=""/></div>
+                <div className="mx_MemberTile_avatar"><img className="mx_MemberTile_avatarImg" src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 40, 40, "crop") : null } width="40" height="40" alt=""/>{ power }</div>
                 <div className="mx_MemberTile_name">{this.props.member.name}</div>
             </div>
         );
