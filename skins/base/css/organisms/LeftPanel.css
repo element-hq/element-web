@@ -60,6 +60,10 @@ limitations under the License.
     color: #378bb4;
 }
 
+.mx_LeftPanel .mx_DirectoryMenu .mx_RoomTile_avatar {
+    padding-left: 14px;
+}
+
 .mx_LeftPanel .mx_DirectoryMenu .mx_DirectoryMenu_options {
     margin-top: 12px;
     width: 100%;

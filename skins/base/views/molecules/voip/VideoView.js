@@ -37,12 +37,12 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div>
-                <div>
-                <VideoFeed ref="remote"/>
+            <div className="mx_VideoView">
+                <div className="mx_VideoView_remoteVideoFeed">
+                    <VideoFeed ref="remote"/>
                 </div>
-                <div>
-                <VideoFeed ref="local"/>
+                <div className="mx_VideoView_localVideoFeed">                
+                    <VideoFeed ref="local"/>
                 </div>
             </div>
         );

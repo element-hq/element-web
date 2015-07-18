@@ -13,3 +13,28 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+.mx_VideoView {
+    width: 100%;
+    position: relative;
+    z-index: 30;
+    margin-top: 12px;
+}
+
+.mx_VideoView video {
+    width: 100%;
+}
+
+.mx_VideoView_remoteVideoFeed {
+    width: 100%;
+    border-bottom: 12px solid #f3f8fa;
+    background-color: #000;
+}
+
+.mx_VideoView_localVideoFeed {
+    width: 20%;
+    position: absolute;
+    left: 16px;
+    bottom: 28px;
+    z-index: 100;
+}
