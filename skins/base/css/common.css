@@ -34,6 +34,15 @@ h2 {
     margin-bottom: 16px;
 }
 
+/* FIXME: show them on hoverover, and fix for firefox */
+::-webkit-scrollbar {
+    display: none;
+}
+
+html {
+    overflow: -moz-scrollbars-none;
+}
+
 .mx_Dialog_Background {
     position: fixed;
     top: 0;
