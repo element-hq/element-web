@@ -36,7 +36,8 @@ module.exports = React.createClass({
     render: function() {
         // XXX: for now, just cheekily borrow the css from message tile...
         var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
-
+        var text = this.getMemberEventText();
+        if (!text) return <div/>;
         return (
             <div className="mx_MessageTile mx_MessageTile_notice">
                 <div className="mx_MessageTile_avatar">
@@ -45,7 +46,7 @@ module.exports = React.createClass({
                 { timestamp }
                 <span className="mx_SenderProfile"></span>
                 <span className="mx_MessageTile_content">
-                    {this.getMemberEventText()}
+                    { text }
                 </span>
             </div>
         );
