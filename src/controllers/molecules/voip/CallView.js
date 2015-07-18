@@ -53,11 +53,14 @@ module.exports = {
 
     showCall: function(roomId) {
         var call = CallHandler.getCall(roomId);
+        if (call) {
+            call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
+            // N.B. the remote video element is used for playback for audio for voice calls
+            call.setRemoteVideoElement(this.getVideoView().getRemoteVideoElement());
+        }
         if (call && call.type === "video" && call.state !== 'ended') {
             this.getVideoView().getLocalVideoElement().style.display = "initial";
             this.getVideoView().getRemoteVideoElement().style.display = "initial";
-            call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
-            call.setRemoteVideoElement(this.getVideoView().getRemoteVideoElement());
         }
         else {
             this.getVideoView().getLocalVideoElement().style.display = "none";
