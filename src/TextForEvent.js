@@ -32,7 +32,7 @@ function textForMemberEvent(ev) {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
                 return targetName + " joined the room.";
             }
-            return 'Unrecognised join event';
+            return '';
         case 'leave':
             if (ev.getSender() === ev.getStateKey()) {
                 return targetName + " left the room.";
