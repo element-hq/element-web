@@ -59,7 +59,7 @@ limitations under the License.
     display: block;
 }
 
-.mx_MessageTile_notice {
+.mx_MessageTile_notice .mx_MessageTile_content {
     opacity: 0.5;
 }
 

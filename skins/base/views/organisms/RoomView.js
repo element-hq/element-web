@@ -86,6 +86,10 @@ module.exports = React.createClass({
                             </div>
                         </div>
                     </div>
+                    <div className="mx_RoomView_statusArea">
+                        <div className="mx_RoomView_statusAreaBox">
+                        </div>
+                    </div>
                     <MessageComposer room={this.state.room} />
                 </div>
             );

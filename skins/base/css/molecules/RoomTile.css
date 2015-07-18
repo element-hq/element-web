@@ -29,6 +29,7 @@ limitations under the License.
     vertical-align: middle;
     width: 40px;
     height: 40px;
+    position: relative;
 }
 
 .mx_RoomTile_avatar img {
@@ -69,6 +70,17 @@ limitations under the License.
     text-align: center;
 }
 */
+
+.mx_RoomTile_badge {    
+    background-color: #ff0064;
+    border: 3px solid #fff;
+    border-radius: 16px;
+    width: 9px;
+    height: 9px;
+    position: absolute;
+    right: 10px;
+    bottom: 4px;
+}
 
 .mx_RoomTile_unread {
     font-weight: bold;

@@ -62,7 +62,8 @@ limitations under the License.
 
     width: 100%;
     height: 100%;
-    margin-bottom: 60px;
+    margin-top: 1px;
+    margin-bottom: 18px;
 
     overflow-y: scroll;
 }
@@ -87,12 +88,30 @@ limitations under the License.
 .mx_RoomView_invitePrompt {
 }
 
-.mx_RoomView .mx_MessageComposer {
+.mx_RoomView_statusArea {
     -webkit-box-ordinal-group: 4;
     -moz-box-ordinal-group: 4;
     -ms-flex-order: 4;
     -webkit-order: 4;
     order: 4;
+
+    width: 100%;
+    -webkit-flex: 0 0 58px;
+    flex: 0 0 58px;
+}
+
+.mx_RoomView_statusAreaBox {
+    max-width: 720px;
+    margin: auto;    
+    border-top: 1px solid #a8dbf3;
+}
+
+.mx_RoomView .mx_MessageComposer {
+    -webkit-box-ordinal-group: 5;
+    -moz-box-ordinal-group: 5;
+    -ms-flex-order: 5;
+    -webkit-order: 5;
+    order: 5;
 
     width: 100%;
     -webkit-flex: 0 0 63px;

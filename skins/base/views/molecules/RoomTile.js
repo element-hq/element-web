@@ -38,7 +38,7 @@ module.exports = React.createClass({
         var name = this.props.room.name.replace(":", ":\u200b");
         var badge;
         if (this.props.highlight) {
-            badge = <img src="/img/badge.png" width="15" height="15" alt=""/>;
+            badge = <div className="mx_RoomTile_badge"/>;
         }
         /*
         if (this.props.highlight) {
