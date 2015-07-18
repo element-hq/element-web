@@ -29,6 +29,7 @@ limitations under the License.
     width: 100%;
     border-bottom: 12px solid #f3f8fa;
     background-color: #000;
+    z-index: 50;
 }
 
 .mx_VideoView_localVideoFeed {
