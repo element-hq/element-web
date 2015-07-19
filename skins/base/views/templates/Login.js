@@ -124,14 +124,22 @@ module.exports = React.createClass({
                 return (
                     <div>
                         <form onSubmit={this.onUserPassEntered}>
-                        <input className="mx_Login_field" ref="user" type="text" placeholder="Email or user name" /><br />
-                        <input className="mx_Login_field" ref="pass" type="password" placeholder="Password" /><br />
+                        <input className="mx_Login_field" ref="user" type="text" value={this.state.username} onChange={this.onUsernameChanged} placeholder="Email or user name" /><br />
+                        <input className="mx_Login_field" ref="pass" type="password" value={this.state.password} onChange={this.onPasswordChanged} placeholder="Password" /><br />
                         {this.componentForStep('choose_hs')}
                         <input className="mx_Login_submit" type="submit" value="Log in" />
                         </form>
                     </div>
                 );
         }
+    },
+
+    onUsernameChanged: function(ev) {
+        this.setState({username: ev.target.value});
+    },
+
+    onPasswordChanged: function(ev) {
+        this.setState({password: ev.target.value});
     },
 
     loginContent: function() {
