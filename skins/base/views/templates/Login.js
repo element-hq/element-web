@@ -106,12 +106,10 @@ module.exports = React.createClass({
         switch (step) {
             case 'choose_hs':
                 var serverConfigStyle = {};
-                if (!this.state.serverConfigVisible) {
-                    serverConfigStyle.display = 'none';
-                }
+                serverConfigStyle.display = this.state.serverConfigVisible ? 'block' : 'none';
                 return (
                     <div>
-                        <input className="mx_Login_advanced_checkbox" id="advanced" type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
+                        <input className="mx_Login_checkbox" id="advanced" type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
                         <label className="mx_Login_label" htmlFor="advanced">Use custom server options (advanced)</label>
                         <div style={serverConfigStyle}>
                             <ServerConfig ref="serverConfig"

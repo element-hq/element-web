@@ -76,6 +76,7 @@ module.exports = React.createClass({
     },
 
     getUserIdSuffix: function() {
+        return '';
         var actualHsUrl = document.createElement('a');
         actualHsUrl.href = this.getHsUrl();
         var defaultHsUrl = document.createElement('a');
@@ -96,26 +97,24 @@ module.exports = React.createClass({
         switch (step) {
             case 'initial':
                 var serverConfigStyle = {};
-                if (!this.state.serverConfigVisible) {
-                    serverConfigStyle.display = 'none';
-                }
+                serverConfigStyle.display = this.state.serverConfigVisible ? 'block' : 'none';
                 return (
                     <div>
                         <form onSubmit={this.onInitialStageSubmit}>
-                        Email: <input type="text" ref="email" defaultValue={this.savedParams.email} /><br />
-                        Username: <input type="text" ref="username" defaultValue={this.savedParams.username} />{this.getUserIdSuffix()}<br />
-                        Password: <input type="password" ref="password" defaultValue={this.savedParams.password} /><br />
-                        Confirm Password: <input type="password" ref="confirmPassword" defaultValue={this.savedParams.confirmPassword} /><br />
+                        <input className="mx_Login_field" type="text" ref="email" placeholder="Email address" defaultValue={this.savedParams.email} /><br />
+                        <input className="mx_Login_field" type="text" ref="username" placeholder="User name" defaultValue={this.savedParams.username} />{this.getUserIdSuffix()}<br />
+                        <input className="mx_Login_field" type="password" ref="password" placeholder="Password" defaultValue={this.savedParams.password} /><br />
+                        <input className="mx_Login_field" type="password" ref="confirmPassword" placeholder="Confirm password" defaultValue={this.savedParams.confirmPassword} /><br />
 
-                        <input type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
-                        Use custom server options (advanced)
+                        <input className="mx_Login_checkbox" id="advanced" type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
+                        <label for="advanced">Use custom server options (advanced)</label>
                         <div style={serverConfigStyle}>
                         <ServerConfig ref="serverConfig"
                             defaultHsUrl={this.customHsUrl} defaultIsUrl={this.customIsUrl}
                             onHsUrlChanged={this.onServerUrlChanged} onIsUrlChanged={this.onServerUrlChanged} />
                         </div>
                         <br />
-                        <input type="submit" value="Continue" />
+                        <input className="mx_Login_submit" type="submit" value="Register" />
                         </form>
                     </div>
                 );
@@ -144,10 +143,10 @@ module.exports = React.createClass({
         } else {
             return (
                 <div>
-                    <h1>Create an account</h1>
+                    <h2>Create an account</h2>
                     {this.componentForStep(this.state.step)}
-                    <div className="error">{this.state.errorText}</div>
-                    <a onClick={this.showLogin} href="#">I already have an account</a>
+                    <div className="mx_Login_error">{this.state.errorText}</div>
+                    <a className="mx_Login_create" onClick={this.showLogin} href="#">I already have an account</a>
                 </div>
             );
         }
