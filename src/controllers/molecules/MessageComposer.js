@@ -28,6 +28,9 @@ var KeyCode = {
     DOWN: 40
 };
 
+var TYPING_USER_TIMEOUT = 10000;
+var TYPING_SERVER_TIMEOUT = 30000;
+
 module.exports = {
     componentWillMount: function() {
         this.tabStruct = {
@@ -168,6 +171,15 @@ module.exports = {
             this.tabStruct.completing = false;
             this.tabStruct.index = 0;
         }
+
+        var self = this;
+        setTimeout(function() {
+            if (self.refs.textarea.getDOMNode().value != '') {
+                self.onTypingActivity();
+            } else {
+                self.onFinishedTyping();
+            }
+        }, 10);
     },
 
     onEnter: function(ev) {
@@ -310,6 +322,66 @@ module.exports = {
         }
         // prevent the default TAB operation (typically focus shifting)
         ev.preventDefault();
+    },
+
+    onTypingActivity: function() {
+        this.isTyping = true;
+        if (!this.userTypingTimer) {
+            this.sendTyping(true);
+        }
+        this.startUserTypingTimer();
+        this.startServerTypingTimer();
+    },
+
+    onFinishedTyping: function() {
+        this.isTyping = false;
+        this.sendTyping(false);
+        this.stopUserTypingTimer();
+        this.stopServerTypingTimer();
+    },
+
+    startUserTypingTimer() {
+        this.stopUserTypingTimer();
+        var self = this;
+        this.userTypingTimer = setTimeout(function() {
+            self.isTyping = false;
+            self.sendTyping(self.isTyping);
+            self.userTypingTimer = null;
+        }, TYPING_USER_TIMEOUT);
+    },
+
+    stopUserTypingTimer() {
+        clearTimeout(this.userTypingTimer);
+    },
+
+    startServerTypingTimer() {
+        var self = this;
+        this.serverTypingTimer = setTimeout(function() {
+            self.sendTyping(self.isTyping);
+            self.startServerTypingTimer();
+        }, TYPING_SERVER_TIMEOUT / 2);
+    },
+
+    stopServerTypingTimer() {
+        if (this.serverTypingTimer) {
+            clearTimeout(this.servrTypingTimer);
+            this.serverTypingTimer = null;
+        }
+    },
+
+    sendTyping(isTyping) {
+        MatrixClientPeg.get().sendTyping(
+            this.props.room.roomId,
+            this.isTyping, TYPING_SERVER_TIMEOUT
+        ).done();
+    },
+
+    refreshTyping: function() {
+        if (this.typingTimeout) {
+            clearTimeout(this.typingTimeout);
+            this.typingTimeout = null;
+        }
+
     }
 };
 
