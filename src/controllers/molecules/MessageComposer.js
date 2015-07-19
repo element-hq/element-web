@@ -351,15 +351,22 @@ module.exports = {
     },
 
     stopUserTypingTimer: function() {
-        clearTimeout(this.userTypingTimer);
+        if (this.userTypingTimer) {
+            clearTimeout(this.userTypingTimer);
+            this.userTypingTimer = null;
+        }
     },
 
     startServerTypingTimer: function() {
-        var self = this;
-        this.serverTypingTimer = setTimeout(function() {
-            self.sendTyping(self.isTyping);
-            self.startServerTypingTimer();
-        }, TYPING_SERVER_TIMEOUT / 2);
+        if (!this.serverTypingTimer) {
+            var self = this;
+            this.serverTypingTimer = setTimeout(function() {
+                if (self.isTyping) {
+                    self.sendTyping(self.isTyping);
+                    self.startServerTypingTimer();
+                }
+            }, TYPING_SERVER_TIMEOUT / 2);
+        }
     },
 
     stopServerTypingTimer: function() {
