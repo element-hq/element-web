@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var classNames = require('classnames');
+var MatrixClientPeg = require("../../../../../src/MatrixClientPeg");
 var IncomingCallBoxController = require(
     "../../../../../src/controllers/molecules/voip/IncomingCallBox"
 );
@@ -31,7 +31,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        if (!this.state.incomingCallRoomId) {
+        if (!this.state.incomingCall || !this.state.incomingCall.roomId) {
             return (
                 <div>
                     <audio ref="ringAudio" loop>
@@ -41,26 +41,27 @@ module.exports = React.createClass({
                 </div>
             );
         }
+        var caller = MatrixClientPeg.get().getRoom(this.state.incomingCall.roomId).name;
         return (
             <div className="mx_IncomingCallBox">
+                <img className="mx_IncomingCallBox_chevron" src="/img/chevron-left.png" width="9" height="16" />
                 <audio ref="ringAudio" loop>
                     <source src="media/ring.ogg" type="audio/ogg" />
                     <source src="media/ring.mp3" type="audio/mpeg" />
                 </audio>
-                <div className="mx_IncomingCallBox_avatar">
-                    <img src="img/voip.png" width="42" height="42"/>
-                </div>
                 <div className="mx_IncomingCallBox_title">
-                    General Incoming Call
+                    Incoming { this.state.incomingCall ? this.state.incomingCall.type : '' } call from { caller }
                 </div>
                 <div className="mx_IncomingCallBox_buttons">
-                    <div className="mx_IncomingCallBox_buttons_decline"
-                    onClick={this.onRejectClick}>
-                        Decline
+                    <div className="mx_IncomingCallBox_buttons_cell">
+                        <div className="mx_IncomingCallBox_buttons_decline" onClick={this.onRejectClick}>
+                            Decline
+                        </div>
                     </div>
-                    <div className="mx_IncomingCallBox_buttons_accept"
-                    onClick={this.onAnswerClick}>
-                        Accept
+                    <div className="mx_IncomingCallBox_buttons_cell">
+                        <div className="mx_IncomingCallBox_buttons_accept" onClick={this.onAnswerClick}>
+                            Accept
+                        </div>
                     </div>
                 </div>
             </div>

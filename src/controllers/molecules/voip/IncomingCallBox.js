@@ -30,7 +30,7 @@ module.exports = {
 
     getInitialState: function() {
         return {
-            incomingCallRoomId: null
+            incomingCall: null
         }
     },
 
@@ -41,7 +41,7 @@ module.exports = {
         var call = CallHandler.getCall(payload.room_id);
         if (!call || call.call_state !== 'ringing') {
             this.setState({
-                incomingCallRoomId: null
+                incomingCall: null,
             });
             this.getRingAudio().pause();
             return;
@@ -55,20 +55,20 @@ module.exports = {
         }
 
         this.setState({
-            incomingCallRoomId: call.roomId
+            incomingCall: call
         });
     },
 
     onAnswerClick: function() {
         dis.dispatch({
             action: 'answer',
-            room_id: this.state.incomingCallRoomId
+            room_id: this.state.incomingCall.roomId
         });
     },
     onRejectClick: function() {
         dis.dispatch({
             action: 'hangup',
-            room_id: this.state.incomingCallRoomId
+            room_id: this.state.incomingCall.roomId
         });
     }
 };
