@@ -20,6 +20,7 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 var React = require("react");
 var q = require("q");
 var ContentMessages = require("../../ContentMessages");
+var WhoIsTyping = require("../../WhoIsTyping");
 
 var dis = require("../../dispatcher");
 
@@ -51,6 +52,7 @@ module.exports = {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
+        MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         this.atBottom = true;
     },
 
@@ -64,6 +66,7 @@ module.exports = {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
         }
     },
 
@@ -116,6 +119,10 @@ module.exports = {
                 room: room
             });
         }
+    },
+
+    onRoomMemberTyping: function(ev, member) {
+        this.forceUpdate();
     },
 
     componentDidMount: function() {
@@ -234,6 +241,10 @@ module.exports = {
                 // display error message
             });
         }
+    },
+
+    getWhoIsTypingString() {
+        return WhoIsTyping.whoIsTypingString(this.state.room);
     },
 
     getEventTiles: function() {

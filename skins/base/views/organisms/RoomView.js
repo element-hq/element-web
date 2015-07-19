@@ -71,6 +71,20 @@ module.exports = React.createClass({
                 mx_RoomView_scrollheader: true,
                 loading: this.state.paginating
             });
+
+            var statusBar = (
+                <div />
+            );
+
+            var typingString = this.getWhoIsTypingString();
+            if (typingString) {
+                statusBar = (
+                    <div className="mx_RoomView_typingBar">
+                        {typingString}
+                    </div>
+                );
+            }
+
             return (
                 <div className="mx_RoomView">
                     <RoomHeader room={this.state.room} />
@@ -88,6 +102,7 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_RoomView_statusArea">
                         <div className="mx_RoomView_statusAreaBox">
+                            {statusBar}
                         </div>
                     </div>
                     <MessageComposer room={this.state.room} />
