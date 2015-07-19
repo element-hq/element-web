@@ -107,7 +107,7 @@ module.exports = React.createClass({
                         <input className="mx_Login_field" type="password" ref="confirmPassword" placeholder="Confirm password" defaultValue={this.savedParams.confirmPassword} /><br />
 
                         <input className="mx_Login_checkbox" id="advanced" type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
-                        <label for="advanced">Use custom server options (advanced)</label>
+                        <label htmlFor="advanced">Use custom server options (advanced)</label>
                         <div style={serverConfigStyle}>
                         <ServerConfig ref="serverConfig"
                             defaultHsUrl={this.customHsUrl} defaultIsUrl={this.customIsUrl}
