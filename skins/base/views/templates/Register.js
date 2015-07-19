@@ -182,7 +182,7 @@ module.exports = React.createClass({
             <div className="mx_Login">
                 <div className="mx_Login_box">
                     <div className="mx_Login_logo">
-                        <img  src="/img/logo.png" width="249" height="76" alt="vector"/>
+                        <img  src="img/logo.png" width="249" height="76" alt="vector"/>
                     </div>
                     {this.registerContent()}
                 </div>

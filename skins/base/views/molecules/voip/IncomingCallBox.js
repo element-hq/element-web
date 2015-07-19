@@ -44,7 +44,7 @@ module.exports = React.createClass({
         var caller = MatrixClientPeg.get().getRoom(this.state.incomingCall.roomId).name;
         return (
             <div className="mx_IncomingCallBox">
-                <img className="mx_IncomingCallBox_chevron" src="/img/chevron-left.png" width="9" height="16" />
+                <img className="mx_IncomingCallBox_chevron" src="img/chevron-left.png" width="9" height="16" />
                 <audio ref="ringAudio" loop>
                     <source src="media/ring.ogg" type="audio/ogg" />
                     <source src="media/ring.mp3" type="audio/mpeg" />
