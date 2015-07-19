@@ -243,7 +243,7 @@ module.exports = {
         }
     },
 
-    getWhoIsTypingString() {
+    getWhoIsTypingString: function() {
         return WhoIsTyping.whoIsTypingString(this.state.room);
     },
 

@@ -340,7 +340,7 @@ module.exports = {
         this.stopServerTypingTimer();
     },
 
-    startUserTypingTimer() {
+    startUserTypingTimer: function() {
         this.stopUserTypingTimer();
         var self = this;
         this.userTypingTimer = setTimeout(function() {
@@ -350,11 +350,11 @@ module.exports = {
         }, TYPING_USER_TIMEOUT);
     },
 
-    stopUserTypingTimer() {
+    stopUserTypingTimer: function() {
         clearTimeout(this.userTypingTimer);
     },
 
-    startServerTypingTimer() {
+    startServerTypingTimer: function() {
         var self = this;
         this.serverTypingTimer = setTimeout(function() {
             self.sendTyping(self.isTyping);
@@ -362,14 +362,14 @@ module.exports = {
         }, TYPING_SERVER_TIMEOUT / 2);
     },
 
-    stopServerTypingTimer() {
+    stopServerTypingTimer: function() {
         if (this.serverTypingTimer) {
             clearTimeout(this.servrTypingTimer);
             this.serverTypingTimer = null;
         }
     },
 
-    sendTyping(isTyping) {
+    sendTyping: function(isTyping) {
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
             this.isTyping, TYPING_SERVER_TIMEOUT
