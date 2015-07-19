@@ -111,13 +111,13 @@ module.exports = React.createClass({
                 }
                 return (
                     <div>
-                        <input type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
-                        Use custom server options (advanced)
+                        <input className="mx_Login_advanced_checkbox" id="advanced" type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
+                        <label className="mx_Login_label" htmlFor="advanced">Use custom server options (advanced)</label>
                         <div style={serverConfigStyle}>
-                        <ServerConfig ref="serverConfig"
-                            defaultHsUrl={this.customHsUrl} defaultIsUrl={this.customIsUrl}
-                            onHsUrlChanged={this.onHsUrlChanged}
-                        />
+                            <ServerConfig ref="serverConfig"
+                                defaultHsUrl={this.customHsUrl} defaultIsUrl={this.customIsUrl}
+                                onHsUrlChanged={this.onHsUrlChanged}
+                            />
                         </div>
                     </div>
                 );
@@ -126,10 +126,10 @@ module.exports = React.createClass({
                 return (
                     <div>
                         <form onSubmit={this.onUserPassEntered}>
-                        <input ref="user" type="text" placeholder="username" /><br />
-                        <input ref="pass" type="password" placeholder="password" /><br />
+                        <input className="mx_Login_field" ref="user" type="text" placeholder="Email or user name" /><br />
+                        <input className="mx_Login_field" ref="pass" type="password" placeholder="Password" /><br />
                         {this.componentForStep('choose_hs')}
-                        <input type="submit" value="Log in" />
+                        <input className="mx_Login_submit" type="submit" value="Log in" />
                         </form>
                     </div>
                 );
@@ -144,10 +144,10 @@ module.exports = React.createClass({
         } else {
             return (
                 <div>
-                    <h1>Please log in:</h1>
+                    <h2>Sign in</h2>
                     {this.componentForStep(this.state.step)}
-                    <div className="error">{this.state.errorText}</div>
-                    <a onClick={this.showRegister} href="#">Create a new account</a>
+                    <div className="mx_Login_error">{this.state.errorText}</div>
+                    <a className="mx_Login_create" onClick={this.showRegister} href="#">Create a new account</a>
                 </div>
             );
         }
@@ -156,7 +156,12 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_Login">
-            {this.loginContent()}
+                <div className="mx_Login_box">
+                    <div className="mx_Login_logo">
+                        <img  src="/img/logo.png" width="249" height="76" alt="vector"/>
+                    </div>
+                    {this.loginContent()}
+                </div>
             </div>
         );
     }

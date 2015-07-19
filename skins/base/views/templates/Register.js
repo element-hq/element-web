@@ -129,7 +129,7 @@ module.exports = React.createClass({
             case 'stage_m.login.recaptcha':
                 return (
                     <div ref="recaptchaContainer">
-                        This Home Server would like to make sure you're not a robot
+                        This Home Server would like to make sure you are not a robot
                         <div id="mx_recaptcha"></div>
                     </div>
                 );
@@ -180,8 +180,13 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_Register">
-            {this.registerContent()}
+            <div className="mx_Login">
+                <div className="mx_Login_box">
+                    <div className="mx_Login_logo">
+                        <img  src="/img/logo.png" width="249" height="76" alt="vector"/>
+                    </div>
+                    {this.registerContent()}
+                </div>
             </div>
         );
     }
