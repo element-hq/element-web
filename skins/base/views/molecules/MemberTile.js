@@ -27,7 +27,7 @@ module.exports = React.createClass({
     render: function() {
         var power;
         if (this.props.member) {
-            var img = "/img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
+            var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
             power = <img src={ img } className="mx_MemberTile_power" width="48" height="48" alt=""/>;
         }
 
