@@ -47,7 +47,7 @@ module.exports = React.createClass({
         return Object.keys(self.state.memberDict).map(function(userId) {
             var m = self.state.memberDict[userId];
             return (
-                <MemberTile key={userId} member={m} />
+                <MemberTile key={userId} member={m} ref={userId} />
             );
         });
     },

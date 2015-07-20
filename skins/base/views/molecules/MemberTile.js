@@ -46,9 +46,21 @@ module.exports = React.createClass({
             var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
             power = <img src={ img } className="mx_MemberTile_power" width="48" height="48" alt=""/>;
         }
+        var presenceClass = "mx_MemberTile_offline";
+        var mainClassName = "mx_MemberTile ";
+        if (this.props.member.user) {
+            if (this.props.member.user.presence === "online") {
+                presenceClass = "mx_MemberTile_online";
+            }
+            else if (this.props.member.user.presence === "unavailable") {
+                presenceClass = "mx_MemberTile_unavailable";
+            }
+        }
+        mainClassName += presenceClass;
 
         return (
-            <div className="mx_MemberTile" onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave } >
+            <div className={mainClassName} onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }
+            >
                 <div className="mx_MemberTile_avatar">
                     <img className="mx_MemberTile_avatarImg"
                          src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 40, 40, "crop") : null }

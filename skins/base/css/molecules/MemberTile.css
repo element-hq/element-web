@@ -51,3 +51,11 @@ limitations under the License.
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.mx_MemberTile_unavailable {
+    opacity: 0.75;
+}
+
+.mx_MemberTile_offline {
+    opacity: 0.5;
+}

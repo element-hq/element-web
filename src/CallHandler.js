@@ -116,6 +116,10 @@ function _setCallListeners(call) {
             _setCallState(call, call.roomId, "busy");
             pause("ringbackAudio");
             play("busyAudio");
+            Modal.createDialog(ErrorDialog, {
+                title: "Call Timeout",
+                description: "The remote side failed to pick up."
+            });
         }
         else if (oldState === "invite_sent") {
             _setCallState(call, call.roomId, "stop_ringback");

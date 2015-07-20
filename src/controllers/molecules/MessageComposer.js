@@ -106,7 +106,7 @@ module.exports = {
                     // show the message
                     this.element.value = this.data[this.position];
                 }
-                else if (this.originalText) {
+                else if (this.originalText !== undefined) {
                     // restore the original text the user was typing.
                     this.element.value = this.originalText;
                 }

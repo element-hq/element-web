@@ -18,6 +18,9 @@ limitations under the License.
 
 var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var Modal = require("../../Modal");
+var ComponentBroker = require('../../ComponentBroker');
+var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
 
 var INITIAL_LOAD_NUM_MEMBERS = 50;
 
@@ -37,6 +40,7 @@ module.exports = {
     componentWillUnmount: function() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
+            MatrixClientPeg.get().removeListener("User.presence", this.userPresenceFn);
         }
     },
 
@@ -48,8 +52,19 @@ module.exports = {
                 memberDict: self.roomMembers()
             });
         }, 50);
-    },
 
+        // Attach a SINGLE listener for global presence changes then locate the
+        // member tile and re-render it. This is more efficient than every tile
+        // evar attaching their own listener.
+        function updateUserState(event, user) {
+            var tile = self.refs[user.userId];
+            if (tile) {
+                tile.forceUpdate();
+            }
+        }
+        MatrixClientPeg.get().on("User.presence", updateUserState);
+        this.userPresenceFn = updateUserState;
+    },
     // Remember to set 'key' on a MemberList to the ID of the room it's for
     /*componentWillReceiveProps: function(newProps) {
     },*/
@@ -67,6 +82,10 @@ module.exports = {
         inputText = inputText.trim(); // react requires es5-shim so we know trim() exists
         if (inputText[0] !== '@' || inputText.indexOf(":") === -1) {
             console.error("Bad user ID to invite: %s", inputText);
+            Modal.createDialog(ErrorDialog, {
+                title: "Invite Error",
+                description: "Malformed user ID. Should look like '@localpart:domain'"
+            });
             return;
         }
         self.setState({
@@ -81,6 +100,10 @@ module.exports = {
             });
         }, function(err) {
             console.error("Failed to invite: %s", JSON.stringify(err));
+            Modal.createDialog(ErrorDialog, {
+                title: "Invite Server Error",
+                description: err.message
+            });
             self.setState({
                 inviting: false
             });
