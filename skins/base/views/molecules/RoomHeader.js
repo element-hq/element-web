@@ -44,8 +44,8 @@ module.exports = React.createClass({
                 case "ringback":
                 case "connected":
                     callButtons = (
-                        <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
-                        BYEBYE
+                        <div className="mx_RoomHeader_hangupButton" onClick={this.onHangupClick}>
+                            End call
                         </div>
                     );
                     break;
@@ -66,6 +66,7 @@ module.exports = React.createClass({
                             { topic }
                         </div>
                     </div>
+                    {callButtons}
                     <div className="mx_RoomHeader_rightRow">
                         <div className="mx_RoomHeader_button">
                             <img src="img/settings.png" width="32" height="32"/>
@@ -73,7 +74,6 @@ module.exports = React.createClass({
                         <div className="mx_RoomHeader_button">
                             <img src="img/search.png" width="32" height="32"/>
                         </div>
-                        {callButtons}
                         <div className="mx_RoomHeader_button" onClick={this.onVideoClick}>
                             <img src="img/video.png" width="32" height="32"/>
                         </div>
