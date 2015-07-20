@@ -61,6 +61,32 @@ module.exports = {
         });
     },
 
+    onInvite: function(inputText) {
+        var self = this;
+        // sanity check the input
+        inputText = inputText.trim(); // react requires es5-shim so we know trim() exists
+        if (inputText[0] !== '@' || inputText.indexOf(":") === -1) {
+            console.error("Bad user ID to invite: %s", inputText);
+            return;
+        }
+        self.setState({
+            inviting: true
+        });
+        console.log("Invite %s to %s", inputText, this.props.roomId);
+        MatrixClientPeg.get().invite(this.props.roomId, inputText).done(
+        function(res) {
+            console.log("Invited");
+            self.setState({
+                inviting: false
+            });
+        }, function(err) {
+            console.error("Failed to invite: %s", JSON.stringify(err));
+            self.setState({
+                inviting: false
+            });
+        });
+    },
+
     roomMembers: function(limit) {
         if (!this.props.roomId) return {};
         var cli = MatrixClientPeg.get();

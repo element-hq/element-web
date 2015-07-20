@@ -44,7 +44,7 @@ module.exports = React.createClass({
 
     onFinish: function(ev) {
         if (ev.target.value) {
-            this.setValue(ev.target.value);
+            this.setValue(ev.target.value, ev.key === "Enter");
         } else {
             this.cancelEdit();
         }

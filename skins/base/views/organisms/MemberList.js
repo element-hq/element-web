@@ -23,6 +23,7 @@ var MemberListController = require("../../../../src/controllers/organisms/Member
 var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var MemberTile = ComponentBroker.get("molecules/MemberTile");
+var EditableText = ComponentBroker.get("atoms/EditableText");
 
 
 module.exports = React.createClass({
@@ -39,6 +40,31 @@ module.exports = React.createClass({
         });
     },
 
+    onPopulateInvite: function(inputText, shouldSubmit) {
+        // reset back to placeholder
+        this.refs.invite.setValue("Invite", false, true);
+        if (!shouldSubmit) {
+            return; // enter key wasn't pressed
+        }
+        this.onInvite(inputText);
+    },
+
+    inviteTile: function() {
+        if (this.state.inviting) {
+            return (
+                <div></div>
+            );
+        }
+        return (
+            <div className="mx_MemberTile">
+                <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="40" height="40" alt=""/></div>            
+                <div className="mx_MemberTile_name">
+                    <EditableText ref="invite" placeHolder="Invite" onValueChanged={this.onPopulateInvite}/>
+                </div>
+            </div>
+        );
+    },
+
     render: function() {
         return (
             <div className="mx_MemberList">
@@ -49,10 +75,7 @@ module.exports = React.createClass({
                     <h2>Members</h2>
                     <div className="mx_MemberList_wrapper">
                         {this.makeMemberTiles()}
-                        <div className="mx_MemberTile">
-                            <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="40" height="40" alt=""/></div>            
-                            <div className="mx_MemberTile_name">Invite</div>
-                        </div>
+                        {this.inviteTile()}
                     </div>
                 </div>
             </div>
