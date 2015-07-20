@@ -21,7 +21,7 @@ var Loader = require("react-loader");
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var RoomListSorter = require("../../RoomListSorter");
-
+var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
 
 var ComponentBroker = require('../../ComponentBroker');
@@ -89,6 +89,7 @@ module.exports = {
                     window.localStorage.clear();
                 }
                 Notifier.stop();
+                Presence.stop();
                 MatrixClientPeg.get().removeAllListeners();
                 MatrixClientPeg.replace(null);
                 break;
@@ -187,6 +188,7 @@ module.exports = {
             });
         });
         Notifier.start();
+        Presence.start();
         cli.startClient();
     },
 
