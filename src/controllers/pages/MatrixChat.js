@@ -173,14 +173,18 @@ module.exports = {
         var cli = MatrixClientPeg.get();
         var self = this;
         cli.on('syncComplete', function() {
-            var firstRoom = null;
-            if (cli.getRooms() && cli.getRooms().length) {
-                firstRoom = RoomListSorter.mostRecentActivityFirst(
-                    cli.getRooms()
-                )[0].roomId;
+            if (!self.state.currentRoom) {
+                var firstRoom = null;
+                if (cli.getRooms() && cli.getRooms().length) {
+                    firstRoom = RoomListSorter.mostRecentActivityFirst(
+                        cli.getRooms()
+                    )[0].roomId;
+                }
+                self.setState({ready: true, currentRoom: firstRoom});
+                self.notifyNewScreen('room/'+firstRoom);
+            } else {
+                self.setState({ready: true});
             }
-            self.setState({ready: true, currentRoom: firstRoom});
-            self.notifyNewScreen('room/'+firstRoom);
             dis.dispatch({action: 'focus_composer'});
         });
         cli.on('Call.incoming', function(call) {
