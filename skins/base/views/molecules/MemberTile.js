@@ -59,8 +59,7 @@ module.exports = React.createClass({
         mainClassName += presenceClass;
 
         return (
-            <div className={mainClassName} onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }
-            >
+            <div className={mainClassName} onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">
                     <img className="mx_MemberTile_avatarImg"
                          src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 40, 40, "crop") : null }

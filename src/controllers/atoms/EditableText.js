@@ -22,6 +22,7 @@ module.exports = {
     propTypes: {
         onValueChanged: React.PropTypes.func,
         initialValue: React.PropTypes.string,
+        label: React.PropTypes.string,
         placeHolder: React.PropTypes.string,
     },
 
@@ -34,7 +35,8 @@ module.exports = {
         return {
             onValueChanged: function() {},
             initialValue: '',
-            placeHolder: 'Click to set',
+            label: 'Click to set',
+            placeholder: '',
         };
     },
 
@@ -77,6 +79,7 @@ module.exports = {
         this.setState({
             phase: this.Phases.Display,
         });
+        this.onValueChanged(false);
     },
 
     onValueChanged: function(shouldSubmit) {

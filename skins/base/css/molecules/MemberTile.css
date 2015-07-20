@@ -17,6 +17,7 @@ limitations under the License.
 .mx_MemberTile {
     cursor: pointer;
     display: table-row;
+    height: 49px;
 }
 
 .mx_MemberTile_avatar {
@@ -34,6 +35,24 @@ limitations under the License.
     z-index: 20;
     border-radius: 20px;    
     background-color: #dbdbdb;
+}
+
+.mx_MemberTile_inviteEditing .mx_MemberTile_avatar {
+    display: none;
+}
+
+.mx_MemberTile_inviteEditing .mx_MemberTile_name {
+    position: absolute;
+    width: 200px;
+}
+
+.mx_MemberTile_inviteEditing .mx_MemberTile_name input {
+    border-radius: 3px;
+    border: 1px solid #c7c7c7;
+    font-weight: 300;
+    font-size: 14px;
+    padding: 9px;
+    margin-top: 6px;
 }
 
 .mx_MemberTile_power {
