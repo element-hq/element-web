@@ -22,6 +22,7 @@ var UserSettingsController = require("../../../../src/controllers/organisms/User
 var EditableText = ComponentBroker.get('atoms/EditableText');
 var ChangeAvatar = ComponentBroker.get('molecules/ChangeAvatar');
 var ChangePassword = ComponentBroker.get('molecules/ChangePassword');
+var LogoutPrompt = ComponentBroker.get('organisms/LogoutPrompt');
 var Loader = require("react-loader");
 
 var Modal = require("../../../../src/Modal")
@@ -45,6 +46,14 @@ module.exports = React.createClass({
 
     changePassword: function() {
         Modal.createDialog(ChangePassword);
+    },
+
+    onLogoutClicked: function(ev) {
+        this.logoutModal = Modal.createDialog(LogoutPrompt, {onCancel: this.onLogoutPromptCancel});
+    },
+
+    onLogoutPromptCancel: function() {
+        this.logoutModal.closeDialog();
     },
 
     render: function() {
@@ -87,6 +96,9 @@ module.exports = React.createClass({
                                 </div>
                                 <div className="mx_UserSettings_ClientVersion">
                                     Version {this.state.clientVersion}
+                                </div>
+                                <div className="mx_UserSettings_Logout">
+                                    <button onClick={this.onLogoutClicked}>Sign Out</button>
                                 </div>
                             </div>
                         </div>

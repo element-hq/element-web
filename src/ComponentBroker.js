@@ -95,6 +95,7 @@ require('../skins/base/views/molecules/ChangePassword');
 // new for vector
 require('../skins/base/views/organisms/LeftPanel');
 require('../skins/base/views/organisms/RightPanel');
+require('../skins/base/views/organisms/LogoutPrompt');
 require('../skins/base/views/molecules/RoomCreate');
 require('../skins/base/views/molecules/RoomDropTarget');
 require('../skins/base/views/molecules/DirectoryMenu');
