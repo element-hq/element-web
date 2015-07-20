@@ -27,7 +27,7 @@ module.exports = React.createClass({
     mixins: [MessageComposerController],
 
     onUploadClick(ev) {
-        //this.refs.uploadInput.getDOMNode.
+        this.refs.uploadInput.getDOMNode().click();
     },
 
     onUploadFileSelected: function(ev) {
@@ -38,7 +38,7 @@ module.exports = React.createClass({
 
     render: function() {
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
-        var uploadInputStyle = {display: 'block'};
+        var uploadInputStyle = {display: 'none'};
         return (
             <div className="mx_MessageComposer">
                 <div className="mx_MessageComposer_wrapper">
