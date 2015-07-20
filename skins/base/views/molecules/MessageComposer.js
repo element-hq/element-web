@@ -26,7 +26,7 @@ module.exports = React.createClass({
     displayName: 'MessageComposer',
     mixins: [MessageComposerController],
 
-    onUploadClick(ev) {
+    onUploadClick: function(ev) {
         this.refs.uploadInput.getDOMNode().click();
     },
 
