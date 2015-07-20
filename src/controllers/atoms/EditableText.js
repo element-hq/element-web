@@ -55,11 +55,16 @@ module.exports = {
         return this.state.value;
     },
 
-    setValue: function(val) {
+    setValue: function(val, shouldSubmit, suppressListener) {
+        var self = this;
         this.setState({
             value: val,
             phase: this.Phases.Display,
-        }, this.onValueChanged);
+        }, function() {
+            if (!suppressListener) {
+                self.onValueChanged(shouldSubmit);
+            }
+        });
     },
 
     edit: function() {
@@ -74,7 +79,7 @@ module.exports = {
         });
     },
 
-    onValueChanged: function() {
-        this.props.onValueChanged(this.state.value);
+    onValueChanged: function(shouldSubmit) {
+        this.props.onValueChanged(this.state.value, shouldSubmit);
     },
 };
