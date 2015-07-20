@@ -69,7 +69,7 @@ module.exports = React.createClass({
                 <div className="mx_MemberInfo_field">{this.props.member.userId}</div>
                 <div className="mx_MemberInfo_field">Presence: {this.state.presence}</div>
                 <div className="mx_MemberInfo_field">Last active: {activeAgo}</div>
-                <div className="mx_MemberInfo_button">Start chat</div>
+                <div className="mx_MemberInfo_button" onClick={this.onChatClick}>Start chat</div>
             </div>
         );
     }

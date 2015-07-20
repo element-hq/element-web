@@ -22,6 +22,7 @@ limitations under the License.
 
 'use strict';
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var dis = require("../../dispatcher");
 
 module.exports = {
     componentDidMount: function() {
@@ -53,6 +54,55 @@ module.exports = {
 
     componentWillUnmount: function() {
         MatrixClientPeg.get().removeListener("User.presence", this.userPresenceFn);
+    },
+
+    onChatClick: function() {
+        // check if there are any existing rooms with just us and them (1:1)
+        // If so, just view that room. If not, create a private room with them.
+        var rooms = MatrixClientPeg.get().getRooms();
+        var userIds = [
+            this.props.member.userId,
+            MatrixClientPeg.get().credentials.userId
+        ];
+        var existingRoomId = null;
+        for (var i = 0; i < rooms.length; i++) {
+            var members = rooms[i].getJoinedMembers();
+            if (members.length === 2) {
+                var hasTargetUsers = true;
+                for (var j = 0; j < members.length; j++) {
+                    if (userIds.indexOf(members[j].userId) === -1) {
+                        hasTargetUsers = false;
+                        break;
+                    }
+                }
+                if (hasTargetUsers) {
+                    existingRoomId = rooms[i].roomId;
+                    break;
+                }
+            }
+        }
+
+        if (existingRoomId) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: existingRoomId
+            });
+        }
+        else {
+            MatrixClientPeg.get().createRoom({
+                invite: [this.props.member.userId],
+                preset: "private_chat"
+            }).done(function(res) {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: res.room_id
+                });
+            }, function(err) {
+                console.error(
+                    "Failed to create room: %s", JSON.stringify(err)
+                );
+            });
+        }
     },
 
     getInitialState: function() {
