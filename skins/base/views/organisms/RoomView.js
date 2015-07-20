@@ -179,7 +179,7 @@ module.exports = React.createClass({
                         <CallView room={this.state.room}/>
                         { roomEdit }
                     </div>
-                    <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={this.onMessageListScroll}>
+                    <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
                         <div className="mx_RoomView_messageListWrapper">
                             <div className="mx_RoomView_MessageList" aria-live="polite">
                                 <div className={scrollheader_classes}>

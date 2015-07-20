@@ -22,7 +22,7 @@ limitations under the License.
     position: absolute;
     width: 200px;
     margin-left: -295px;
-    margin-top: -12px;
+    margin-top: 0px;
     z-index: 1000;
     padding: 6px;
 }
@@ -32,6 +32,17 @@ limitations under the License.
     position: absolute;
     right: -21px;
     top: 0px;
+}
+
+/*
+ * a hacky shim to extend the hitmask of the overlay to overlap
+ * better with the main menu itself
+ */
+.mx_MemberInfo_shim {
+    position: absolute;
+    left: 212px;
+    width: 40px;
+    height: 100%;
 }
 
 .mx_MemberInfo_avatar {
@@ -44,7 +55,6 @@ limitations under the License.
 
 .mx_MemberInfo_field {
     padding: 6px;
-    font-weight: bold;
 }
 
 .mx_MemberInfo_button {

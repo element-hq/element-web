@@ -44,6 +44,8 @@ module.exports = {
             if (props && props.onFinished) props.onFinished.apply(arguments);
         };
 
+        // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
+        // property set here so you can't close the dialog from a button click!
         var dialog = (
             <div className="mx_Dialog_Wrapper">
                 <div className="mx_Dialog">

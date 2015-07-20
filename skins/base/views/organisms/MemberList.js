@@ -30,6 +30,18 @@ module.exports = React.createClass({
     displayName: 'MemberList',
     mixins: [MemberListController],
 
+    // FIXME: combine this more nicely with the MemberInfo positioning stuff...
+    onMemberListScroll: function(ev) {
+        if (this.refs.memberListScroll) {
+            var memberListScroll = this.refs.memberListScroll.getDOMNode();
+            // offset the current MemberInfo bubble
+            var memberInfo = document.getElementsByClassName("mx_MemberInfo")[0];
+            if (memberInfo) {
+                memberInfo.style.top = (memberInfo.parentElement.offsetTop - memberListScroll.scrollTop) + "px";
+            }
+        }
+    },
+
     makeMemberTiles: function() {
         var self = this;
         return Object.keys(self.state.memberDict).map(function(userId) {
@@ -71,7 +83,7 @@ module.exports = React.createClass({
                 <div className="mx_MemberList_chevron">
                     <img src="img/chevron.png" width="24" height="13"/>
                 </div>
-                <div className="mx_MemberList_border">
+                <div className="mx_MemberList_border" ref="memberListScroll" onScroll={ this.onMemberListScroll }>
                     <h2>Members</h2>
                     <div className="mx_MemberList_wrapper">
                         {this.makeMemberTiles()}

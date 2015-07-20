@@ -18,6 +18,9 @@ limitations under the License.
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var SlashCommands = require("../../SlashCommands");
+var Modal = require("../../Modal");
+var ComponentBroker = require('../../ComponentBroker');
+var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
 
 var dis = require("../../dispatcher");
 var KeyCode = {
@@ -196,10 +199,18 @@ module.exports = {
                     console.log("Command success.");
                 }, function(err) {
                     console.error("Command failure: %s", err);
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Server Error",
+                        description: err.message
+                    });
                 });
             }
             else if (cmd.error) {
                 console.error(cmd.error);
+                Modal.createDialog(ErrorDialog, {
+                    title: "Command Error",
+                    description: cmd.error
+                });
             }
             return;
         }
