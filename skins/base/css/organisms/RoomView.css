@@ -117,3 +117,14 @@ limitations under the License.
     flex: 0 0 63px;
     margin-right: 2px;
 }
+
+.mx_RoomView_uploadProgressOuter {
+    width: 100%;
+    background-color: black;
+    height: 5px;
+}
+
+.mx_RoomView_uploadProgressInner {
+    background-color: blue;
+    height: 5px;
+}

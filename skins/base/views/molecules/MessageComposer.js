@@ -32,14 +32,8 @@ module.exports = React.createClass({
 
     onUploadFileSelected: function(ev) {
         var files = ev.target.files;
-
-        ContentMessages.sendContentToRoom(
-            files[0], this.props.room.roomId, MatrixClientPeg.get()
-        ).progress(function(ev) {
-            //console.log("Upload: "+ev.loaded+" / "+ev.total);
-        }).done(undefined, function() {
-            // display error message
-        });
+        // MessageComposer shouldn't have to rely on it's parent passing in a callback to upload a file
+        this.props.uploadFile(files[0]);
     },
 
     render: function() {

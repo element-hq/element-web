@@ -231,16 +231,38 @@ module.exports = {
         ev.stopPropagation();
         ev.preventDefault();
         var files = ev.dataTransfer.files;
-
         if (files.length == 1) {
-            ContentMessages.sendContentToRoom(
-                files[0], this.props.roomId, MatrixClientPeg.get()
-            ).progress(function(ev) {
-                //console.log("Upload: "+ev.loaded+" / "+ev.total);
-            }).done(undefined, function() {
-                // display error message
-            });
+            this.uploadFile(files[0]);
         }
+    },
+
+    uploadFile: function(file) {
+        this.setState({
+            upload: {
+                fileName: file.name,
+                uploadedBytes: 0,
+                totalBytes: file.size
+            }
+        });
+        var self = this;
+        ContentMessages.sendContentToRoom(
+            file, this.props.roomId, MatrixClientPeg.get()
+        ).progress(function(ev) {
+            //console.log("Upload: "+ev.loaded+" / "+ev.total);
+            self.setState({
+                upload: {
+                    fileName: file.name,
+                    uploadedBytes: ev.loaded,
+                    totalBytes: ev.total
+                }
+            });
+        }).finally(function() {
+            self.setState({
+                upload: undefined
+            });
+        }).done(undefined, function() {
+            // display error message
+        });
     },
 
     getWhoIsTypingString: function() {

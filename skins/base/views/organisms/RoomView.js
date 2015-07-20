@@ -22,6 +22,7 @@ var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
 var ComponentBroker = require('../../../../src/ComponentBroker');
 var classNames = require("classnames");
+var filesize = require('filesize');
 
 var MessageTile = ComponentBroker.get('molecules/MessageTile');
 var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
@@ -76,13 +77,30 @@ module.exports = React.createClass({
                 <div />
             );
 
-            var typingString = this.getWhoIsTypingString();
-            if (typingString) {
+            if (this.state.upload) {
+                var innerProgressStyle = {
+                    width: ((this.state.upload.uploadedBytes / this.state.upload.totalBytes) * 100) + '%'
+                };
                 statusBar = (
-                    <div className="mx_RoomView_typingBar">
-                        {typingString}
+                    <div className="mx_RoomView_uploadBar">
+                        <span className="mx_RoomView_uploadFilename">Uploading {this.state.upload.fileName}</span>
+                        <span className="mx_RoomView_uploadBytes">
+                        {filesize(this.state.upload.uploadedBytes)} / {filesize(this.state.upload.totalBytes)}
+                        </span>
+                        <div className="mx_RoomView_uploadProgressOuter">
+                            <div className="mx_RoomView_uploadProgressInner" style={innerProgressStyle}></div>
+                        </div>
                     </div>
                 );
+            } else {
+                var typingString = this.getWhoIsTypingString();
+                if (typingString) {
+                    statusBar = (
+                        <div className="mx_RoomView_typingBar">
+                            {typingString}
+                        </div>
+                    );
+                }
             }
 
             return (
@@ -105,7 +123,7 @@ module.exports = React.createClass({
                             {statusBar}
                         </div>
                     </div>
-                    <MessageComposer room={this.state.room} />
+                    <MessageComposer room={this.state.room} uploadFile={this.uploadFile} />
                 </div>
             );
         }
