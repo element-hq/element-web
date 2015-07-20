@@ -40,6 +40,7 @@ module.exports = {
     componentWillUnmount: function() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
+            MatrixClientPeg.get().removeListener("User.presence", this.userPresenceFn);
         }
     },
 
@@ -51,8 +52,19 @@ module.exports = {
                 memberDict: self.roomMembers()
             });
         }, 50);
-    },
 
+        // Attach a SINGLE listener for global presence changes then locate the
+        // member tile and re-render it. This is more efficient than every tile
+        // evar attaching their own listener.
+        function updateUserState(event, user) {
+            var tile = self.refs[user.userId];
+            if (tile) {
+                tile.forceUpdate();
+            }
+        }
+        MatrixClientPeg.get().on("User.presence", updateUserState);
+        this.userPresenceFn = updateUserState;
+    },
     // Remember to set 'key' on a MemberList to the ID of the room it's for
     /*componentWillReceiveProps: function(newProps) {
     },*/
