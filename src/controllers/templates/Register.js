@@ -259,20 +259,9 @@ module.exports = {
     },
 
     onRegistered: function(user_id, access_token) {
-        MatrixClientPeg.replace(Matrix.createClient({
-            baseUrl: this.state.hs_url,
-            idBaseUrl: this.state.is_url,
-            userId: user_id,
-            accessToken: access_token
-        }));
-        var localStorage = window.localStorage;
-        if (localStorage) {
-            localStorage.setItem("mx_hs_url", this.state.hs_url);
-            localStorage.setItem("mx_user_id", user_id);
-            localStorage.setItem("mx_access_token", access_token);
-        } else {
-            console.warn("No local storage available: can't persist session!");
-        }
+        MatrixClientPeg.replaceUsingAccessToken(
+            this.state.hs_url, this.state.is_url, user_id, access_token
+        );
         if (this.props.onLoggedIn) {
             this.props.onLoggedIn();
         }
