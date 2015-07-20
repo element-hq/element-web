@@ -25,6 +25,16 @@ module.exports = React.createClass({
     displayName: 'MemberInfo',
     mixins: [MemberInfoController],
 
+    componentDidMount: function() {
+        var self = this;
+
+        var memberInfo = this.getDOMNode();
+        var memberListScroll = document.getElementsByClassName("mx_MemberList_border")[0];
+        if (memberListScroll) {
+            memberInfo.style.top = (memberInfo.parentElement.offsetTop - memberListScroll.scrollTop) + "px";
+        }
+    },
+
     getDuration: function(time) {
         if (!time) return;
         var t = parseInt(time / 1000);
@@ -61,6 +71,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_MemberInfo">
                 <img className="mx_MemberInfo_chevron" src="img/chevron-right.png" width="9" height="16" />
+                <div className="mx_MemberInfo_shim"></div>
                 <div className="mx_MemberInfo_avatar">
                     <img className="mx_MemberInfo_avatarImg"
                          src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 128, 128, "crop") : null }
