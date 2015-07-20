@@ -76,6 +76,7 @@ limitations under the License.
     display: table-cell;
     vertical-align: middle;
     padding-right: 15px;
+    cursor: pointer;
 }
 
 .mx_MessageComposer_upload img {

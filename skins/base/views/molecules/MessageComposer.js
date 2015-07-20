@@ -20,13 +20,31 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var MessageComposerController = require("../../../../src/controllers/molecules/MessageComposer");
+var ContentMessages = require("../../../../src/ContentMessages");
 
 module.exports = React.createClass({
     displayName: 'MessageComposer',
     mixins: [MessageComposerController],
 
+    onUploadClick(ev) {
+        //this.refs.uploadInput.getDOMNode.
+    },
+
+    onUploadFileSelected: function(ev) {
+        var files = ev.target.files;
+
+        ContentMessages.sendContentToRoom(
+            files[0], this.props.room.roomId, MatrixClientPeg.get()
+        ).progress(function(ev) {
+            //console.log("Upload: "+ev.loaded+" / "+ev.total);
+        }).done(undefined, function() {
+            // display error message
+        });
+    },
+
     render: function() {
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
+        var uploadInputStyle = {display: 'block'};
         return (
             <div className="mx_MessageComposer">
                 <div className="mx_MessageComposer_wrapper">
@@ -37,8 +55,9 @@ module.exports = React.createClass({
                         <div className="mx_MessageComposer_input">
                             <textarea ref="textarea" onKeyDown={this.onKeyDown} placeholder="Type a message" />
                         </div>
-                        <div className="mx_MessageComposer_upload">
+                        <div className="mx_MessageComposer_upload" onClick={this.onUploadClick}>
                             <img src="img/upload.png" width="32" height="32"/>
+                            <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
                         </div>
                     </div>
                 </div>
