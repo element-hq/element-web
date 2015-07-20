@@ -54,6 +54,9 @@ limitations under the License.
  */
 
 var MatrixClientPeg = require("./MatrixClientPeg");
+var Modal = require("./Modal");
+var ComponentBroker = require('./ComponentBroker');
+var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
 var Matrix = require("matrix-js-sdk");
 var dis = require("./dispatcher");
 
@@ -154,7 +157,12 @@ dis.register(function(payload) {
                 console.error("Room %s does not exist.", payload.room_id);
                 return;
             }
-            if (room.getJoinedMembers().length !== 2) {
+            var members = room.getJoinedMembers();
+            if (members.length !== 2) {
+                var text = members.length === 1 ? "yourself." : "more than 2 people.";
+                Modal.createDialog(ErrorDialog, {
+                    description: "You cannot place a call with " + text
+                });
                 console.error(
                     "Fail: There are %s joined members in this room, not 2.",
                     room.getJoinedMembers().length

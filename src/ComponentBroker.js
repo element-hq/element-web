@@ -109,4 +109,5 @@ require('../skins/base/views/molecules/voip/MCallAnswerTile');
 require('../skins/base/views/molecules/voip/MCallHangupTile');
 require('../skins/base/views/molecules/EventAsTextTile');
 require('../skins/base/views/molecules/MemberInfo');
+require('../skins/base/views/organisms/ErrorDialog');
 }

@@ -68,5 +68,15 @@ html {
     max-width: 500px;
     z-index: -100;
     position: relative;
-    top: 100px;
+    top: 200px;
+}
+
+.mx_ErrorDialogTitle {
+    background-color: #d2322d;
+    min-height: 16px;
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    font-weight: bold;
+    line-height: 1.4;
+    color: #fff;
 }

@@ -25,7 +25,7 @@ var ChangePassword = ComponentBroker.get('molecules/ChangePassword');
 var LogoutPrompt = ComponentBroker.get('organisms/LogoutPrompt');
 var Loader = require("react-loader");
 
-var Modal = require("../../../../src/Modal")
+var Modal = require("../../../../src/Modal");
 
 module.exports = React.createClass({
     displayName: 'UserSettings',

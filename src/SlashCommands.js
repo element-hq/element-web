@@ -100,22 +100,18 @@ var commands = {
                 else {
                     // attempt to join this alias.
                     return success(
-                        MatrixClientPeg.get().joinRoom(room_alias).done(
+                        MatrixClientPeg.get().joinRoom(room_alias).then(
                         function(room) {
                             dis.dispatch({
                                 action: 'view_room',
                                 room_id: room.roomId
                             });
-                        }, function(err) {
-                            console.error(
-                                "Failed to join room: %s", JSON.stringify(err)
-                            );
                         })
                     );
                 }
             }
         }
-        return reject("Usage: /join <room_alias> [NOT IMPLEMENTED]");
+        return reject("Usage: /join <room_alias>");
     },
 
     // Kick a user from the room with an optional reason
