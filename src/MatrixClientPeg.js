@@ -49,6 +49,10 @@ module.exports = {
         return matrixClient;
     },
 
+    unset: function() {
+        matrixClient = null;
+    },
+
     replaceUsingUrls: function(hs_url, is_url) {
         matrixClient = Matrix.createClient({
             baseUrl: hs_url,

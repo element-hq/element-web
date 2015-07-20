@@ -90,7 +90,7 @@ module.exports = {
                 }
                 Notifier.stop();
                 MatrixClientPeg.get().removeAllListeners();
-                MatrixClientPeg.replace(null);
+                MatrixClientPeg.unset();
                 break;
             case 'start_registration':
                 if (this.state.logged_in) return;

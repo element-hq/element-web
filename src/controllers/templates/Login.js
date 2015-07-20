@@ -76,11 +76,11 @@ module.exports = {
             'password': formVals.password
         }).done(function(data) {
             MatrixClientPeg.replaceUsingAccessToken(
-                that.state.hs_url, that.state.is_url,
+                self.state.hs_url, self.state.is_url,
                 data.user_id, data.access_token
             );
-            if (that.props.onLoggedIn) {
-                that.props.onLoggedIn();
+            if (self.props.onLoggedIn) {
+                self.props.onLoggedIn();
             }
         }, function(error) {
             self.setStep("stage_m.login.password");
