@@ -68,7 +68,6 @@ module.exports = React.createClass({
         }
 
         var old_history_visibility = this.state.room.currentState.getStateEvents('m.room.history_visibility', '');
-        console.log(old_history_visibility);
         if (old_history_visibility) {
             old_history_visibility = old_history_visibility.getContent().history_visibility;
         } else {
