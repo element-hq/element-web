@@ -107,6 +107,5 @@ require('../skins/base/views/molecules/voip/MCallInviteTile');
 require('../skins/base/views/molecules/voip/MCallAnswerTile');
 require('../skins/base/views/molecules/voip/MCallHangupTile');
 require('../skins/base/views/molecules/EventAsTextTile');
-
-
+require('../skins/base/views/molecules/MemberInfo');
 }

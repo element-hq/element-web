@@ -29,6 +29,7 @@ module.exports = React.createClass({
     displayName: 'DirectoryMenu',
     // mixins: [DirectoryMenuController],
 
+    // FIXME: should these onClicks be in the controller instead?
     onSettingsClick: function() {
         dis.dispatch({action: 'view_user_settings'});
     },

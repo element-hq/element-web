@@ -82,16 +82,12 @@ limitations under the License.
     bottom: 3px;
 }
 
-.mx_RoomTile_unread {
+.mx_RoomTile_unread,
+.mx_RoomTile_highlight,
+.mx_RoomTile_invited
+{
     font-weight: bold;
-}
-
-.mx_RoomTile_highlight {
-    font-weight: bold;
-}
-
-.mx_RoomTile_invited {
-    font-weight: bold;
+    color: #000;
 }
 
 .mx_RoomTile_selected {

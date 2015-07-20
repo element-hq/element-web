@@ -19,11 +19,27 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+var ComponentBroker = require('../../../../src/ComponentBroker');
 var MemberTileController = require("../../../../src/controllers/molecules/MemberTile");
+var MemberInfo = ComponentBroker.get('molecules/MemberInfo');
 
 module.exports = React.createClass({
     displayName: 'MemberTile',
     mixins: [MemberTileController],
+
+    // XXX: should these be in the controller?
+    getInitialState: function() {
+        return { 'hover': false };
+    },
+
+    mouseEnter: function(e) {
+        this.setState({ 'hover': true });
+    },
+
+    mouseLeave: function(e) {
+        this.setState({ 'hover': false });
+    },
+
     render: function() {
         var power;
         if (this.props.member) {
@@ -32,9 +48,17 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="mx_MemberTile">
-                <div className="mx_MemberTile_avatar"><img className="mx_MemberTile_avatarImg" src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 40, 40, "crop") : null } width="40" height="40" alt=""/>{ power }</div>
-                <div className="mx_MemberTile_name">{this.props.member.name}</div>
+            <div className="mx_MemberTile" onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave } >
+                <div className="mx_MemberTile_avatar">
+                    <img className="mx_MemberTile_avatarImg"
+                         src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 40, 40, "crop") : null }
+                         width="40" height="40" alt=""/>
+                         { power }
+                </div>
+                <div className="mx_MemberTile_name">
+                    { this.state.hover ? <MemberInfo member={this.props.member} /> : null }
+                    {this.props.member.name}
+                </div>
             </div>
         );
     }
