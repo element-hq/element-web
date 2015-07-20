@@ -37,6 +37,33 @@ module.exports = React.createClass({
         return this.refs.share_history.getDOMNode().checked ? "shared" : "invited";
     },
 
+    getPowerLevels: function() {
+        if (!this.state.power_levels_changed) return undefined;
+
+        var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
+        power_levels = power_levels.getContent();
+
+        var new_power_levels = {
+            ban: parseInt(this.refs.ban.getDOMNode().value),
+            kick: parseInt(this.refs.kick.getDOMNode().value),
+            redact: parseInt(this.refs.redact.getDOMNode().value),
+            invite: parseInt(this.refs.invite.getDOMNode().value),
+            events_default: parseInt(this.refs.events_default.getDOMNode().value),
+            state_default: parseInt(this.refs.state_default.getDOMNode().value),
+            users_default: parseInt(this.refs.users_default.getDOMNode().value),
+            users: power_levels.users,
+            events: power_levels.events,
+        };
+
+        return new_power_levels;
+    },
+
+    onPowerLevelsChanged: function() {
+        this.setState({
+            power_levels_changed: true
+        });
+    },
+
     render: function() {
         var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
         if (topic) topic = topic.getContent().topic;
@@ -83,31 +110,39 @@ module.exports = React.createClass({
                 <div className="mx_RoomSettings_power_levels">
                     <div>
                         <label htmlFor="mx_RoomSettings_ban_level">Ban level</label>
-                        <input type="text" defaultValue={ban_level} size="3" id="mx_RoomSettings_ban_level" disabled={!can_change_levels || current_user_level < ban_level}/>
+                        <input type="text" defaultValue={ban_level} size="3" ref="ban" id="mx_RoomSettings_ban_level"
+                            disabled={!can_change_levels || current_user_level < ban_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div>
                         <label htmlFor="mx_RoomSettings_kick_level">Kick level</label>
-                        <input type="text" defaultValue={kick_level} size="3" id="mx_RoomSettings_kick_level" disabled={!can_change_levels || current_user_level < kick_level}/>
+                        <input type="text" defaultValue={kick_level} size="3" ref="kick" id="mx_RoomSettings_kick_level"
+                            disabled={!can_change_levels || current_user_level < kick_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div>
                         <label htmlFor="mx_RoomSettings_redact_level">Redact level</label>
-                        <input type="text" defaultValue={redact_level} size="3" id="mx_RoomSettings_redact_level" disabled={!can_change_levels || current_user_level < redact_level}/>
+                        <input type="text" defaultValue={redact_level} size="3" ref="redact" id="mx_RoomSettings_redact_level"
+                            disabled={!can_change_levels || current_user_level < redact_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div>
                         <label htmlFor="mx_RoomSettings_invite_level">Invite level</label>
-                        <input type="text" defaultValue={invite_level} size="3" id="mx_RoomSettings_invite_level" disabled={!can_change_levels || current_user_level < invite_level}/>
+                        <input type="text" defaultValue={invite_level} size="3" ref="invite" id="mx_RoomSettings_invite_level"
+                            disabled={!can_change_levels || current_user_level < invite_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div>
                         <label htmlFor="mx_RoomSettings_event_level">Send event level</label>
-                        <input type="text" defaultValue={send_level} size="3" id="mx_RoomSettings_event_level" disabled={!can_change_levels || current_user_level < send_level}/>
+                        <input type="text" defaultValue={send_level} size="3" ref="events_default" id="mx_RoomSettings_event_level"
+                            disabled={!can_change_levels || current_user_level < send_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div>
                         <label htmlFor="mx_RoomSettings_state_level">Set state level</label>
-                        <input type="text" defaultValue={state_level} size="3" id="mx_RoomSettings_state_level" disabled={!can_change_levels || current_user_level < state_level}/>
+                        <input type="text" defaultValue={state_level} size="3" ref="state_default" id="mx_RoomSettings_state_level"
+                            disabled={!can_change_levels || current_user_level < state_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div>
                         <label htmlFor="mx_RoomSettings_user_level">Default user level</label>
-                        <input type="text" defaultValue={default_user_level} size="3" id="mx_RoomSettings_user_level" disabled={!can_change_levels || current_user_level < default_user_level}/>
+                        <input type="text" defaultValue={default_user_level} size="3" ref="users_default"
+                            id="mx_RoomSettings_user_level" disabled={!can_change_levels || current_user_level < default_user_level}
+                            onChange={this.onPowerLevelsChanged}/>
                     </div>
                 </div>
 

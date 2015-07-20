@@ -22,4 +22,10 @@ module.exports = {
     propTypes: {
         room: React.PropTypes.object.isRequired,
     },
+
+    getInitialState: function() {
+        return {
+            power_levels_changed: false
+        };
+    }
 };

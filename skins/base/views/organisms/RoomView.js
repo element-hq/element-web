@@ -50,6 +50,7 @@ module.exports = React.createClass({
         var new_topic = this.refs.room_settings.getTopic();
         var new_join_rule = this.refs.room_settings.getJoinRules();
         var new_history_visibility = this.refs.room_settings.getHistoryVisibility();
+        var new_power_levels = this.refs.room_settings.getPowerLevels();
 
         var old_name = this.state.room.name;
 
@@ -96,6 +97,12 @@ module.exports = React.createClass({
                 this.state.room.roomId, "m.room.history_visibility", {
                     history_visibility: new_history_visibility,
                 }, ""
+            );
+        }
+
+        if (new_power_levels) {
+            MatrixClientPeg.get().sendStateEvent(
+                this.state.room.roomId, "m.room.power_levels", new_power_levels, ""
             );
         }
     },
