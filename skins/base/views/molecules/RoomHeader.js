@@ -28,7 +28,9 @@ module.exports = React.createClass({
     mixins: [RoomHeaderController],
 
     onNameChange: function(new_name) {
-        MatrixClientPeg.get().setRoomName(this.props.room.roomId, new_name);
+        if (this.props.room.name != new_name) {
+            MatrixClientPeg.get().setRoomName(this.props.room.roomId, new_name);
+        }
     },
 
     render: function() {
