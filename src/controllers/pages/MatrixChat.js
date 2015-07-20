@@ -127,6 +127,7 @@ module.exports = {
                     currentRoom: payload.room_id,
                     page_type: this.PageTypes.RoomView,
                 });
+                this.notifyNewScreen('room/'+payload.room_id);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -179,6 +180,7 @@ module.exports = {
                 )[0].roomId;
             }
             self.setState({ready: true, currentRoom: firstRoom});
+            self.notifyNewScreen('room/'+firstRoom);
             dis.dispatch({action: 'focus_composer'});
         });
         cli.on('Call.incoming', function(call) {
@@ -221,6 +223,12 @@ module.exports = {
             dis.dispatch({
                 action: 'start_login',
                 params: params
+            });
+        } else if (screen.indexOf('room/') == 0) {
+            var roomId = screen.split('/')[1];
+            dis.dispatch({
+                action: 'view_room',
+                room_id: roomId
             });
         }
     },
