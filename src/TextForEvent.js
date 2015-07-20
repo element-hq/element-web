@@ -2,7 +2,7 @@
 function textForMemberEvent(ev) {
     // XXX: SYJS-16
     var senderName = ev.sender ? ev.sender.name : ev.getSender();
-    var targetName = ev.target ? ev.target.name : ev.getContent().state_key;
+    var targetName = ev.target ? ev.target.name : ev.getStateKey();
     var reason = ev.getContent().reason ? (
         " Reason: " + ev.getContent().reason
     ) : "";
