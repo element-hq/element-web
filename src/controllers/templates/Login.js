@@ -76,27 +76,10 @@ module.exports = {
             'user': formVals.username,
             'password': formVals.password
         }).done(function(data) {
-            // XXX: we assume this means we're logged in, but there could be a next stage
-            MatrixClientPeg.replace(Matrix.createClient({
-                baseUrl: that.state.hs_url,
-                idBaseUrl: that.state.is_url,
-                userId: data.user_id,
-                accessToken: data.access_token
-            }));
-            var localStorage = window.localStorage;
-            if (localStorage) {
-                try {
-                    localStorage.clear();
-                    localStorage.setItem("mx_hs_url", that.state.hs_url);
-                    localStorage.setItem("mx_is_url", that.state.is_url);
-                    localStorage.setItem("mx_user_id", data.user_id);
-                    localStorage.setItem("mx_access_token", data.access_token);
-                } catch (e) {
-                    console.warn("Error using local storage: can't persist session!");
-                }
-            } else {
-                console.warn("No local storage available: can't persist session!");
-            }
+            MatrixClientPeg.replaceUsingAccessToken(
+                that.state.hs_url, that.state.is_url,
+                data.user_id, data.access_token
+            );
             if (that.props.onLoggedIn) {
                 that.props.onLoggedIn();
             }
