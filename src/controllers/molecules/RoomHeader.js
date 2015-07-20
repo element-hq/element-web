@@ -21,10 +21,25 @@ limitations under the License.
  * this.state.call_state = the UI state of the call (see CallHandler)
  */
 
+var React = require('react');
 var dis = require("../../dispatcher");
 var CallHandler = require("../../CallHandler");
 
 module.exports = {
+    propTypes: {
+        room: React.PropTypes.object.isRequired,
+        editing: React.PropTypes.bool,
+        onSettingsClick: React.PropTypes.func,
+        onSaveClick: React.PropTypes.func,
+    },
+
+    getDefaultProps: function() {
+        return {
+            editing: false,
+            onSettingsClick: function() {},
+            onSaveClick: function() {},
+        };
+    },
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
@@ -43,7 +58,7 @@ module.exports = {
 
     onAction: function(payload) {
         // if we were given a room_id to track, don't handle anything else.
-        if (payload.room_id && this.props.room && 
+        if (payload.room_id && this.props.room &&
                 this.props.room.roomId !== payload.room_id) {
             return;
         }
@@ -78,4 +93,3 @@ module.exports = {
         });
     }
 };
-

@@ -44,7 +44,8 @@ module.exports = {
     getInitialState: function() {
         return {
             room: this.props.roomId ? MatrixClientPeg.get().getRoom(this.props.roomId) : null,
-            messageCap: INITIAL_SIZE
+            messageCap: INITIAL_SIZE,
+            editingRoomSettings: false,
         }
     },
 
@@ -99,7 +100,7 @@ module.exports = {
         // we'll only be showing a spinner.
         if (this.state.joining) return;
         if (room.roomId != this.props.roomId) return;
-        
+
         if (this.refs.messageWrapper) {
             var messageWrapper = this.refs.messageWrapper.getDOMNode();
             this.atBottom = messageWrapper.scrollHeight - messageWrapper.scrollTop <= messageWrapper.clientHeight;
@@ -300,7 +301,7 @@ module.exports = {
                     dateSeparator = <DateSeparator key={ts1} ts={ts1}/>;
                     continuation = false;
                 }
-            } 
+            }
             if (!TileType) continue;
             ret.unshift(
                 <TileType key={mxEv.getId()} mxEvent={mxEv} continuation={continuation} last={last}/>
@@ -313,4 +314,3 @@ module.exports = {
         return ret;
     }
 };
-

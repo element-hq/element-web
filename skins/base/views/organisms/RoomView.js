@@ -28,6 +28,7 @@ var MessageTile = ComponentBroker.get('molecules/MessageTile');
 var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
 var CallView = ComponentBroker.get("molecules/voip/CallView");
+var RoomSettings = ComponentBroker.get("molecules/RoomSettings");
 
 var RoomViewController = require("../../../../src/controllers/organisms/RoomView");
 
@@ -37,6 +38,68 @@ var Loader = require("react-loader");
 module.exports = React.createClass({
     displayName: 'RoomView',
     mixins: [RoomViewController],
+
+    onSettingsClick: function() {
+        this.setState({editingRoomSettings: true});
+    },
+
+    onSaveClick: function() {
+        this.setState({editingRoomSettings: false});
+
+        var new_name = this.refs.header.getRoomName();
+        var new_topic = this.refs.room_settings.getTopic();
+        var new_join_rule = this.refs.room_settings.getJoinRules();
+        var new_history_visibility = this.refs.room_settings.getHistoryVisibility();
+
+        var old_name = this.state.room.name;
+
+        var old_topic = this.state.room.currentState.getStateEvents('m.room.topic', '');
+        if (old_topic) {
+            old_topic = old_topic.getContent().topic;
+        } else {
+            old_topic = "";
+        }
+
+        var old_join_rule = this.state.room.currentState.getStateEvents('m.room.join_rules', '');
+        if (old_join_rule) {
+            old_join_rule = old_join_rule.getContent().join_rule;
+        } else {
+            old_join_rule = "invite";
+        }
+
+        var old_history_visibility = this.state.room.currentState.getStateEvents('m.room.history_visibility', '');
+        console.log(old_history_visibility);
+        if (old_history_visibility) {
+            old_history_visibility = old_history_visibility.getContent().history_visibility;
+        } else {
+            old_history_visibility = "shared";
+        }
+
+
+        if (old_name != new_name && new_name != undefined) {
+            MatrixClientPeg.get().setRoomName(this.state.room.roomId, new_name);
+        }
+
+        if (old_topic != new_topic && new_topic != undefined) {
+            MatrixClientPeg.get().setRoomTopic(this.state.room.roomId, new_topic);
+        }
+
+        if (old_join_rule != new_join_rule && new_join_rule != undefined) {
+            MatrixClientPeg.get().sendStateEvent(
+                this.state.room.roomId, "m.room.join_rules", {
+                    join_rule: new_join_rule,
+                }, ""
+            );
+        }
+
+        if (old_history_visibility != new_history_visibility && new_history_visibility != undefined) {
+            MatrixClientPeg.get().sendStateEvent(
+                this.state.room.roomId, "m.room.history_visibility", {
+                    history_visibility: new_history_visibility,
+                }, ""
+            );
+        }
+    },
 
     render: function() {
         if (!this.state.room) {
@@ -103,11 +166,19 @@ module.exports = React.createClass({
                 }
             }
 
+            var roomEdit = null;
+
+            if (this.state.editingRoomSettings) {
+                roomEdit = <RoomSettings ref="room_settings" room={this.state.room} />;
+            }
+
             return (
                 <div className="mx_RoomView">
-                    <RoomHeader room={this.state.room} />
+                    <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings}
+                        onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick}/>
                     <div className="mx_RoomView_auxPanel">
                         <CallView room={this.state.room}/>
+                        { roomEdit }
                     </div>
                     <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={this.onMessageListScroll}>
                         <div className="mx_RoomView_messageListWrapper">
@@ -129,4 +200,3 @@ module.exports = React.createClass({
         }
     },
 });
-

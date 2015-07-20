@@ -33,10 +33,13 @@ module.exports = React.createClass({
         }
     },
 
+    getRoomName: function() {
+        return this.refs.name_edit.getDOMNode().value;
+    },
+
     render: function() {
 
         var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
-        topic = topic ? <div className="mx_RoomHeader_topic">{ topic.getContent().topic }</div> : null;
 
         var callButtons;
         if (this.state) {
@@ -52,6 +55,28 @@ module.exports = React.createClass({
             }
         }
 
+        var name = null;
+        var topic_el = null;
+        var save_button = null;
+        var settings_button = null;
+        if (this.props.editing) {
+            name = <input type="text" defaultValue={this.props.room.name} ref="name_edit"/>;
+            // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
+            save_button = (
+                <div className="mx_RoomHeader_button"onClick={this.props.onSaveClick}>
+                    Save
+                </div>
+            );
+        } else {
+            name = <EditableText initialValue={this.props.room.name} onValueChanged={this.onNameChange} />;
+            if (topic) topic_el = <div className="mx_RoomHeader_topic">{ topic.getContent().topic }</div>;
+            settings_button = (
+                <div className="mx_RoomHeader_button" onClick={this.props.onSettingsClick}>
+                    <img src="img/settings.png" width="32" height="32"/>
+                </div>
+            );
+        }
+
         return (
             <div className="mx_RoomHeader">
                 <div className="mx_RoomHeader_wrapper">
@@ -61,15 +86,14 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_RoomHeader_info">
                             <div className="mx_RoomHeader_name">
-                                <EditableText initialValue={this.props.room.name} onValueChanged={this.onNameChange} />
+                                { name }
                             </div>
-                            { topic }
+                            { topic_el }
                         </div>
                     </div>
                     <div className="mx_RoomHeader_rightRow">
-                        <div className="mx_RoomHeader_button">
-                            <img src="img/settings.png" width="32" height="32"/>
-                        </div>
+                        { save_button }
+                        { settings_button }
                         <div className="mx_RoomHeader_button">
                             <img src="img/search.png" width="32" height="32"/>
                         </div>
