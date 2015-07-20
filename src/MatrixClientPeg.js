@@ -40,7 +40,7 @@ if (localStorage) {
     var access_token = localStorage.getItem("mx_access_token");
     var user_id = localStorage.getItem("mx_user_id");
     if (access_token && user_id && hs_url) {
-        matrixClient = createClient(hs_url, is_url, user_id, access_token);
+        createClient(hs_url, is_url, user_id, access_token);
     }
 }
 
@@ -54,10 +54,10 @@ module.exports = {
             baseUrl: hs_url,
             idBaseUrl: is_url
         });
-    }
+    },
 
     replaceUsingAccessToken: function(hs_url, is_url, user_id, access_token) {
-        matrixClient = createClient(hs_url, is_url, user_id, access_token);
+        createClient(hs_url, is_url, user_id, access_token);
         if (localStorage) {
             try {
                 localStorage.clear();
