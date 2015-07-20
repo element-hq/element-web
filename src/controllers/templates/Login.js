@@ -76,10 +76,9 @@ module.exports = {
             'password': formVals.password
         }).done(function(data) {
             MatrixClientPeg.replaceUsingAccessToken(
-                this.state.hs_url, this.state.is_url,
+                that.state.hs_url, that.state.is_url,
                 data.user_id, data.access_token
             );
-            }));
             if (that.props.onLoggedIn) {
                 that.props.onLoggedIn();
             }
