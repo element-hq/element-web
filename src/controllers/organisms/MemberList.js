@@ -18,6 +18,9 @@ limitations under the License.
 
 var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var Modal = require("../../Modal");
+var ComponentBroker = require('../../ComponentBroker');
+var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
 
 var INITIAL_LOAD_NUM_MEMBERS = 50;
 
@@ -67,6 +70,10 @@ module.exports = {
         inputText = inputText.trim(); // react requires es5-shim so we know trim() exists
         if (inputText[0] !== '@' || inputText.indexOf(":") === -1) {
             console.error("Bad user ID to invite: %s", inputText);
+            Modal.createDialog(ErrorDialog, {
+                title: "Invite Error",
+                description: "Malformed user ID. Should look like '@localpart:domain'"
+            });
             return;
         }
         self.setState({
@@ -81,6 +88,10 @@ module.exports = {
             });
         }, function(err) {
             console.error("Failed to invite: %s", JSON.stringify(err));
+            Modal.createDialog(ErrorDialog, {
+                title: "Invite Server Error",
+                description: err.message
+            });
             self.setState({
                 inviting: false
             });
