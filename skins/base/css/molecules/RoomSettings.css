@@ -14,32 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomSettings_power_levels {
+.mx_RoomSettings_settings {
     display: table;
     margin: 5px 0;
 }
 
-.mx_RoomSettings_power_levels > div {
+.mx_RoomSettings_settings > div {
     display: table-row;
 }
 
-.mx_RoomSettings_power_levels > div > * {
-    display: table-cell;
-
-    margin: 0 10px;
-}
-
-
-.mx_RoomSettings_user_levels {
-    display: table;
-    margin: 5px 0;
-}
-
-.mx_RoomSettings_user_levels > div {
-    display: table-row;
-}
-
-.mx_RoomSettings_user_levels > div > * {
+.mx_RoomSettings_settings > div > * {
     display: table-cell;
 
     margin: 0 10px;

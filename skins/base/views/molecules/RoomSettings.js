@@ -86,6 +86,7 @@ module.exports = React.createClass({
         var default_user_level = parseInt(power_levels.users_default);
 
         var user_levels = power_levels.users;
+        var events_levels = power_levels.events;
 
         var user_id = MatrixClientPeg.get().credentials.userId;
 
@@ -107,7 +108,7 @@ module.exports = React.createClass({
                 <label><input type="checkbox" /> Encrypt room</label> <br/>
 
                 Power levels:
-                <div className="mx_RoomSettings_power_levels">
+                <div className="mx_RoomSettings_power_levels mx_RoomSettings_settings">
                     <div>
                         <label htmlFor="mx_RoomSettings_ban_level">Ban level</label>
                         <input type="text" defaultValue={ban_level} size="3" ref="ban" id="mx_RoomSettings_ban_level"
@@ -147,12 +148,24 @@ module.exports = React.createClass({
                 </div>
 
                 User levels:
-                <div className="mx_RoomSettings_user_levels">
+                <div className="mx_RoomSettings_user_levels mx_RoomSettings_settings">
                     {Object.keys(user_levels).map(function(user, i) {
                         return (
                             <div key={user}>
                                 <label htmlFor={"mx_RoomSettings_user_"+i}>{user}</label>
                                 <input type="text" defaultValue={user_levels[user]} size="3" id={"mx_RoomSettings_user_"+i} disabled/>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                Event levels:
+                <div className="mx_RoomSettings_event_lvels mx_RoomSettings_settings">
+                    {Object.keys(events_levels).map(function(event_type, i) {
+                        return (
+                            <div key={event_type}>
+                                <label htmlFor={"mx_RoomSettings_event_"+i}>{event_type}</label>
+                                <input type="text" defaultValue={events_levels[event_type]} size="3" id={"mx_RoomSettings_event_"+i} disabled/>
                             </div>
                         );
                     })}
