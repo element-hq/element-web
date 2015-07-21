@@ -121,12 +121,11 @@ module.exports = React.createClass({
             );
         }
 
-        console.log("deferreds " + deferreds.length);
-
         if (deferreds.length) {
             var self = this;
             q.all(deferreds).fail(function(err) {
                 // TODO: Handle err
+                console.error(err);
             }).finally(function() {
                 self.setState({
                     uploadingRoomSettings: false,
@@ -213,7 +212,6 @@ module.exports = React.createClass({
             }
 
             if (this.state.uploadingRoomSettings) {
-                console.log("Uploading");
                 roomEdit = <Loader/>;
             }
 
