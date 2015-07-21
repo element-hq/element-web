@@ -67,6 +67,23 @@ module.exports = React.createClass({
         if (this.state.active >= 0) {
             activeAgo = this.getDuration(this.state.active);
         }
+        var kickButton, banButton, muteButton;
+        if (this.state.can.kick) {
+            kickButton = <div className="mx_MemberInfo_button" onClick={this.onKick}>
+                Kick
+            </div>;
+        }
+        if (this.state.can.ban) {
+            banButton = <div className="mx_MemberInfo_button" onClick={this.onBan}>
+                Ban
+            </div>;
+        }
+        if (this.state.can.mute) {
+            var muteLabel = this.state.muted ? "Unmute" : "Mute";
+            muteButton = <div className="mx_MemberInfo_button" onClick={this.onMuteToggle}>
+                {muteLabel}
+            </div>;
+        }
 
         return (
             <div className="mx_MemberInfo">
@@ -81,6 +98,9 @@ module.exports = React.createClass({
                 <div className="mx_MemberInfo_field">Presence: {this.state.presence}</div>
                 <div className="mx_MemberInfo_field">Last active: {activeAgo}</div>
                 <div className="mx_MemberInfo_button" onClick={this.onChatClick}>Start chat</div>
+                {muteButton}
+                {kickButton}
+                {banButton}
             </div>
         );
     }
