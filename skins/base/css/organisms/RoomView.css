@@ -64,7 +64,7 @@ limitations under the License.
     order: 3;
 
     width: 100%;
-    flex: 1;
+    flex: 1 1 0;
     margin-top: 18px;
     margin-bottom: 18px;
 
