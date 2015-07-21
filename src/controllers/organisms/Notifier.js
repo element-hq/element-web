@@ -55,16 +55,23 @@ module.exports = {
                 global.Notification.requestPermission(function() {
                     if (callback) {
                         callback();
+                        dis.dispatch({
+                            action: "notifier_enabled",
+                            value: true
+                        });
                     }
                 });
             }
 
             if (!global.localStorage) return;
             global.localStorage.setItem('notifications_enabled', 'true');
-            dis.dispatch({
-                action: "notifier_enabled",
-                value: true
-            });
+
+            if (this.havePermission) {
+                dis.dispatch({
+                    action: "notifier_enabled",
+                    value: true
+                });
+            }
         }
         else {
             if (!global.localStorage) return;
