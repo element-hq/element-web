@@ -23,7 +23,8 @@ limitations under the License.
  *   ban: boolean,
  *   mute: boolean
  * },
- * 'muted': boolean
+ * 'muted': boolean,
+ * 'isTargetOp': boolean
  */
 
 'use strict';
@@ -62,10 +63,7 @@ module.exports = {
             if ([myUserId, self.props.member.userId].indexOf(member.userId) === -1) {
                 return;
             }
-            self.setState({
-                can: self._calculateOpsPermissions(),
-                muted: self._isMuted(self.props.member)
-            });
+            self.setState(self._calculateOpsPermissions());
         }
         MatrixClientPeg.get().on("RoomMember.powerLevel", updatePowerLevel);
         this.updatePowerLevelFn = updatePowerLevel;
@@ -73,12 +71,10 @@ module.exports = {
         // work out the current state
         if (this.props.member) {
             var usr = MatrixClientPeg.get().getUser(this.props.member.userId) || {};
-            this.setState({
-                presence: usr.presence || "offline",
-                active: usr.lastActiveAgo || -1,
-                can: this._calculateOpsPermissions(),
-                muted: this._isMuted(this.props.member)
-            });
+            var memberState = this._calculateOpsPermissions();
+            memberState.presence = usr.presence || "offline";
+            memberState.active = usr.lastActiveAgo || -1;
+            this.setState(memberState);
         }
     },
 
@@ -220,53 +216,43 @@ module.exports = {
                 ban: false,
                 mute: false
             },
-            muted: false
+            muted: false,
+            isTargetOp: false
         }
     },
 
-    _isMuted: function(member) {
-        var room = MatrixClientPeg.get().getRoom(member.roomId);
+    _calculateOpsPermissions: function() {
+        var defaultPerms = {
+            can: {},
+            muted: false
+        };
+        var room = MatrixClientPeg.get().getRoom(this.props.member.roomId);
         if (!room) {
-            return false;
+            return defaultPerms;
         }
         var powerLevels = room.currentState.getStateEvents(
             "m.room.power_levels", ""
         );
         if (!powerLevels) {
-            return false;
+            return defaultPerms;
         }
-        powerLevels = powerLevels.getContent();
-        var levelToSend = (
-            (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
-            powerLevels.events_default
-        );
-        return member.powerLevel < levelToSend;
+        var me = room.getMember(MatrixClientPeg.get().credentials.userId);
+        var them = this.props.member;
+        return {
+            can: this._calculateCanPermissions(
+                me, them, powerLevels.getContent()
+            ),
+            muted: this._isMuted(them, powerLevels.getContent()),
+            isTargetOp: them.powerLevel >= me.powerLevel && them.powerLevel > 0
+        };
     },
 
-    _calculateOpsPermissions: function() {
+    _calculateCanPermissions: function(me, them, powerLevels) {
         var can = {
             kick: false,
             ban: false,
             mute: false
         };
-        var them = this.props.member;
-        var room = MatrixClientPeg.get().getRoom(this.props.member.roomId);
-        if (!room) {
-            console.error("No room found");
-            return can;
-        }
-        var myUserId = MatrixClientPeg.get().credentials.userId;
-        var me = room.getMember(myUserId);
-        var powerLevels = room.currentState.getStateEvents(
-            "m.room.power_levels", ""
-        );
-        if (powerLevels) {
-            powerLevels = powerLevels.getContent();
-        }
-        else {
-            console.log("No power level event found in %s", room.roomId);
-            return can; // no power level event, don't allow anything.
-        }
         var canAffectUser = them.powerLevel < me.powerLevel;
         if (!canAffectUser) {
             console.log("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
@@ -280,6 +266,17 @@ module.exports = {
         can.ban = me.powerLevel >= powerLevels.ban;
         can.mute = me.powerLevel >= editPowerLevel;
         return can;
+    },
+
+    _isMuted: function(member, powerLevelContent) {
+        if (!powerLevelContent || !member) {
+            return false;
+        }
+        var levelToSend = (
+            (powerLevelContent.events ? powerLevelContent.events["m.room.message"] : null) ||
+            powerLevelContent.events_default
+        );
+        return member.powerLevel < levelToSend;
     }
 };
 

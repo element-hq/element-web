@@ -84,7 +84,10 @@ module.exports = React.createClass({
                 {muteLabel}
             </div>;
         }
-
+        var opLabel;
+        if (this.state.isTargetOp) {
+            opLabel = <div className="mx_MemberInfo_field">Moderator</div>
+        }
         return (
             <div className="mx_MemberInfo">
                 <img className="mx_MemberInfo_chevron" src="img/chevron-right.png" width="9" height="16" />
@@ -95,6 +98,7 @@ module.exports = React.createClass({
                          width="128" height="128" alt=""/>
                 </div>
                 <div className="mx_MemberInfo_field">{this.props.member.userId}</div>
+                {opLabel}
                 <div className="mx_MemberInfo_field">Presence: {this.state.presence}</div>
                 <div className="mx_MemberInfo_field">Last active: {activeAgo}</div>
                 <div className="mx_MemberInfo_button" onClick={this.onChatClick}>Start chat</div>
