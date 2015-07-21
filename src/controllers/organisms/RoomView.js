@@ -32,6 +32,7 @@ var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 100;
 
 var ComponentBroker = require('../../ComponentBroker');
+var Notifier = ComponentBroker.get('organisms/Notifier');
 
 var tileTypes = {
     'm.room.message': ComponentBroker.get('molecules/MessageTile'),
@@ -82,6 +83,9 @@ module.exports = {
                 this.setState({
                     room: MatrixClientPeg.get().getRoom(this.props.roomId)
                 });
+                break;
+            case'notifier_enabled':
+                this.forceUpdate();
                 break;
         }
     },

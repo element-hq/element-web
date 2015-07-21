@@ -25,7 +25,6 @@ var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
 
 var ComponentBroker = require('../../ComponentBroker');
-
 var Notifier = ComponentBroker.get('organisms/Notifier');
 
 module.exports = {
@@ -162,9 +161,6 @@ module.exports = {
                 this.setState({
                     page_type: this.PageTypes.RoomDirectory,
                 });
-                break;
-            case'notifier_enabled':
-                this.forceUpdate();
                 break;
         }
     },

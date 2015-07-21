@@ -31,7 +31,8 @@ var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
 var CallView = ComponentBroker.get("molecules/voip/CallView");
 var RoomSettings = ComponentBroker.get("molecules/RoomSettings");
-
+var Notifier = ComponentBroker.get('organisms/Notifier');
+var MatrixToolbar = ComponentBroker.get('molecules/MatrixToolbar');
 var RoomViewController = require("../../../../src/controllers/organisms/RoomView");
 
 var Loader = require("react-loader");
@@ -142,8 +143,14 @@ module.exports = React.createClass({
                 roomEdit = <Loader/>;
             }
 
+            var top_bar;
+            if (!Notifier.isEnabled()) {
+                top_bar = <MatrixToolbar />;
+            }
+
             return (
                 <div className="mx_RoomView">
+                    {top_bar}
                     <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings}
                         onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick}/>
                     <div className="mx_RoomView_auxPanel">
