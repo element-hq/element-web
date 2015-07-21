@@ -21,6 +21,7 @@ var React = require('react');
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
 var ComponentBroker = require('../../../../src/ComponentBroker');
+var Modal = require("../../../../src/Modal");
 var classNames = require("classnames");
 var filesize = require('filesize');
 var q = require('q');
@@ -30,6 +31,7 @@ var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
 var CallView = ComponentBroker.get("molecules/voip/CallView");
 var RoomSettings = ComponentBroker.get("molecules/RoomSettings");
+var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
 
 var RoomViewController = require("../../../../src/controllers/organisms/RoomView");
 
@@ -124,8 +126,10 @@ module.exports = React.createClass({
         if (deferreds.length) {
             var self = this;
             q.all(deferreds).fail(function(err) {
-                // TODO: Handle err
-                console.error(err);
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failed to set state",
+                    description: err.toString()
+                });
             }).finally(function() {
                 self.setState({
                     uploadingRoomSettings: false,
