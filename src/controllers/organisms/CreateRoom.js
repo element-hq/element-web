@@ -19,6 +19,7 @@ limitations under the License.
 var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var PresetValues = require('../atoms/create_room/Presets').Presets;
+var q = require('q');
 
 module.exports = {
     propTypes: {
@@ -97,7 +98,28 @@ module.exports = {
             return;
         }
 
-        var deferred = MatrixClientPeg.get().createRoom(options);
+        var deferred = cli.createRoom(options);
+
+        var response;
+
+        if (this.state.encrypt) {
+            var deferred = deferred.then(function(res) {
+                response = res;
+                return cli.downloadKeys([cli.credentials.userId]);
+            }).then(function(res) {
+                // TODO: Check the keys are valid.
+                return cli.downloadKeys(options.invite);
+            }).then(function(res) {
+                return cli.setRoomEncryption(response.room_id, {
+                    algorithm: "m.olm.v1.curve25519-aes-sha2",
+                    members: options.invite,
+                });
+            }).then(function(res) {
+                var d = q.defer();
+                d.resolve(response);
+                return d.promise;
+            });
+        }
 
         this.setState({
             phase: this.phases.CREATING,

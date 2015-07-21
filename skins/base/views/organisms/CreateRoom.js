@@ -118,6 +118,12 @@ module.exports = React.createClass({
         })
     },
 
+    onEncryptChanged: function(ev) {
+        this.setState({
+            encrypt: ev.target.checked,
+        });
+    },
+
     render: function() {
         var curr_phase = this.state.phase;
         if (curr_phase == this.phases.CREATING) {
@@ -142,7 +148,7 @@ module.exports = React.createClass({
                     <Presets ref="presets" onChange={this.onPresetChanged} preset={this.state.preset}/> <br />
                     <label><input type="checkbox" ref="is_private" checked={this.state.is_private} onChange={this.onPrivateChanged}/> Make this room private</label>
                     <label><input type="checkbox" ref="share_history" checked={this.state.share_history} onChange={this.onShareHistoryChanged}/> Share message history with new users</label>
-                    <label><input type="checkbox"/> Encrypt room</label>
+                    <label><input type="checkbox" ref="encrypt" checked={this.state.encrypt} onChange={this.onEncryptChanged}/> Encrypt room</label>
                     <CreateRoomButton onCreateRoom={this.onCreateRoom} /> <br />
                     {error_box}
                 </div>
