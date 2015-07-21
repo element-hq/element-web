@@ -91,7 +91,7 @@ module.exports = React.createClass({
                 if (rooms[i].aliases[0]) name += " (" + rooms[i].aliases[0] + ")";
             }
             rows.unshift(
-                <tr key={ rooms[i].room_id } onClick={ function() { self.joinRoom(rooms[i].room_id); } }>
+                <tr key={ rooms[i].room_id } onClick={self.joinRoom.bind(null, rooms[i].room_id)}>
                     <td><img src={ MatrixClientPeg.get().getAvatarUrlForRoom(rooms[i].room_id, 40, 40, "crop") } width="40" height="40" alt=""/> { name }</td>
                     <td>{ rooms[i].topic }</td>
                     <td style={ {'text-align' : 'center'} }>{ rooms[i].num_joined_members }</td>
