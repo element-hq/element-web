@@ -166,6 +166,7 @@ module.exports = React.createClass({
                 if (typingString) {
                     statusBar = (
                         <div className="mx_RoomView_typingBar">
+                            <img src="img/typing.png" width="40" height="40" alt=""/>
                             {typingString}
                         </div>
                     );

@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var classNames = require('classnames');
 
 var MemberListController = require("../../../../src/controllers/organisms/MemberList");
 
@@ -29,6 +30,10 @@ var EditableText = ComponentBroker.get("atoms/EditableText");
 module.exports = React.createClass({
     displayName: 'MemberList',
     mixins: [MemberListController],
+
+    getInitialState: function() {
+        return { editing: false };
+    },
 
     // FIXME: combine this more nicely with the MemberInfo positioning stuff...
     onMemberListScroll: function(ev) {
@@ -55,23 +60,40 @@ module.exports = React.createClass({
     onPopulateInvite: function(inputText, shouldSubmit) {
         // reset back to placeholder
         this.refs.invite.setValue("Invite", false, true);
+        this.setState({ editing: false });
         if (!shouldSubmit) {
             return; // enter key wasn't pressed
         }
         this.onInvite(inputText);
     },
 
+    onClickInvite: function(ev) {
+        this.setState({ editing: true });
+        this.refs.invite.onClickDiv();
+        console.log("forcing update on memberlist after having clicked invite");
+        ev.stopPropagation();
+        ev.preventDefault();
+    },
+
     inviteTile: function() {
-        if (this.state.inviting) {
-            return (
-                <div></div>
-            );
-        }
+        // if (this.state.inviting) {
+        //     return (
+        //         <div></div>
+        //     );
+        // }
+
+        var classes = classNames({
+            mx_MemberTile: true,
+            mx_MemberTile_inviteEditing: this.state.editing,
+        });
+
+        console.log("rendering inviteTile, with phase as " + (this.refs.invite ? this.refs.invite.state.phase : "unknown"));
+
         return (
-            <div className="mx_MemberTile">
+            <div className={ classes } onClick={ this.onClickInvite } >
                 <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="40" height="40" alt=""/></div>            
                 <div className="mx_MemberTile_name">
-                    <EditableText ref="invite" placeHolder="Invite" onValueChanged={this.onPopulateInvite}/>
+                    <EditableText ref="invite" label="Invite" placeHolder="@user:domain.com" initialValue="" onValueChanged={this.onPopulateInvite}/>
                 </div>
             </div>
         );

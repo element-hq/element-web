@@ -39,46 +39,55 @@ module.exports = React.createClass({
 
     render: function() {
 
-        var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
+        var header;
+        if (this.props.simpleHeader) {
+            header =
+                <div className="mx_RoomHeader_wrapper">
+                    <div className="mx_RoomHeader_simpleHeader">
+                        { this.props.simpleHeader }
+                    </div>
+                </div>
+        }
+        else {
+            var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
 
-        var callButtons;
-        if (this.state) {
-            switch (this.state.call_state) {
-                case "ringback":
-                case "connected":
-                    callButtons = (
-                        <div className="mx_RoomHeader_button" onClick={this.onHangupClick}>
-                        BYEBYE
-                        </div>
-                    );
-                    break;
+            var callButtons;
+            if (this.state) {
+                switch (this.state.call_state) {
+                    case "ringback":
+                    case "connected":
+                        callButtons = (
+                            <div className="mx_RoomHeader_hangupButton" onClick={this.onHangupClick}>
+                                End call
+                            </div>
+                        );
+                        break;
+                }
             }
-        }
 
-        var name = null;
-        var topic_el = null;
-        var save_button = null;
-        var settings_button = null;
-        if (this.props.editing) {
-            name = <input type="text" defaultValue={this.props.room.name} ref="name_edit"/>;
-            // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
-            save_button = (
-                <div className="mx_RoomHeader_button"onClick={this.props.onSaveClick}>
-                    Save
-                </div>
-            );
-        } else {
-            name = <EditableText initialValue={this.props.room.name} onValueChanged={this.onNameChange} />;
-            if (topic) topic_el = <div className="mx_RoomHeader_topic">{ topic.getContent().topic }</div>;
-            settings_button = (
-                <div className="mx_RoomHeader_button" onClick={this.props.onSettingsClick}>
-                    <img src="img/settings.png" width="32" height="32"/>
-                </div>
-            );
-        }
+            var name = null;
+            var topic_el = null;
+            var save_button = null;
+            var settings_button = null;
+            if (this.props.editing) {
+                name = <input type="text" defaultValue={this.props.room.name} ref="name_edit"/>;
+                // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
+                save_button = (
+                    <div className="mx_RoomHeader_button"onClick={this.props.onSaveClick}>
+                        Save
+                    </div>
+                );
+            } else {
+                name = <EditableText initialValue={this.props.room.name} onValueChanged={this.onNameChange} />;
+                if (topic) topic_el = <div className="mx_RoomHeader_topic">{ topic.getContent().topic }</div>;
+                settings_button = (
+                    <div className="mx_RoomHeader_button" onClick={this.props.onSettingsClick}>
+                        <img src="img/settings.png" width="32" height="32"/>
+                    </div>
+                );
+            }
 
-        return (
-            <div className="mx_RoomHeader">
+            header =
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_leftRow">
                         <div className="mx_RoomHeader_avatar">
@@ -91,13 +100,13 @@ module.exports = React.createClass({
                             { topic_el }
                         </div>
                     </div>
+                    {callButtons}
                     <div className="mx_RoomHeader_rightRow">
                         { save_button }
                         { settings_button }
                         <div className="mx_RoomHeader_button">
                             <img src="img/search.png" width="32" height="32"/>
                         </div>
-                        {callButtons}
                         <div className="mx_RoomHeader_button" onClick={this.onVideoClick}>
                             <img src="img/video.png" width="32" height="32"/>
                         </div>
@@ -106,6 +115,11 @@ module.exports = React.createClass({
                         </div>
                     </div>
                 </div>
+        }
+
+        return (
+            <div className="mx_RoomHeader">
+                { header }
             </div>
         );
     },

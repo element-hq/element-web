@@ -43,7 +43,7 @@ limitations under the License.
     overflow-y: scroll;
 }
 
-.mx_LeftPanel .mx_DirectoryMenu {
+.mx_LeftPanel .mx_BottomLeftMenu {
     -webkit-box-ordinal-group: 3;
     -moz-box-ordinal-group: 3;
     -ms-flex-order: 3;
@@ -56,15 +56,15 @@ limitations under the License.
     border-top: 1px solid #f3f8fa;
 }
 
-.mx_LeftPanel .mx_DirectoryMenu .mx_RoomTile {
+.mx_LeftPanel .mx_BottomLeftMenu .mx_RoomTile {
     color: #378bb4;
 }
 
-.mx_LeftPanel .mx_DirectoryMenu .mx_RoomTile_avatar {
+.mx_LeftPanel .mx_BottomLeftMenu .mx_RoomTile_avatar {
     padding-left: 14px;
 }
 
-.mx_LeftPanel .mx_DirectoryMenu .mx_DirectoryMenu_options {
+.mx_LeftPanel .mx_BottomLeftMenu .mx_BottomLeftMenu_options {
     margin-top: 12px;
     width: 100%;
 }

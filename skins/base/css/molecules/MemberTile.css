@@ -17,6 +17,7 @@ limitations under the License.
 .mx_MemberTile {
     cursor: pointer;
     display: table-row;
+    height: 49px;
 }
 
 .mx_MemberTile_avatar {
@@ -36,6 +37,24 @@ limitations under the License.
     background-color: #dbdbdb;
 }
 
+.mx_MemberTile_inviteEditing .mx_MemberTile_avatar {
+    display: none;
+}
+
+.mx_MemberTile_inviteEditing .mx_MemberTile_name {
+    position: absolute;
+    width: 200px;
+}
+
+.mx_MemberTile_inviteEditing .mx_MemberTile_name input {
+    border-radius: 3px;
+    border: 1px solid #c7c7c7;
+    font-weight: 300;
+    font-size: 14px;
+    padding: 9px;
+    margin-top: 6px;
+}
+
 .mx_MemberTile_power {
     z-index: 10;
     position: absolute;
@@ -52,10 +71,14 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
-.mx_MemberTile_unavailable {
+.mx_MemberTile_unavailable .mx_MemberTile_avatar,
+.mx_MemberTile_unavailable .mx_MemberTile_name
+{
     opacity: 0.75;
 }
 
-.mx_MemberTile_offline {
+.mx_MemberTile_offline .mx_MemberTile_avatar,
+.mx_MemberTile_offline .mx_MemberTile_name
+{
     opacity: 0.5;
 }

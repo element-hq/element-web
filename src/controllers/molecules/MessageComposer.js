@@ -200,7 +200,7 @@ module.exports = {
                 }, function(err) {
                     console.error("Command failure: %s", err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Server Error",
+                        title: "Server error",
                         description: err.message
                     });
                 });
@@ -208,7 +208,7 @@ module.exports = {
             else if (cmd.error) {
                 console.error(cmd.error);
                 Modal.createDialog(ErrorDialog, {
-                    title: "Command Error",
+                    title: "Command error",
                     description: cmd.error
                 });
             }

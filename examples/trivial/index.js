@@ -40,8 +40,16 @@ function routeUrl(location) {
             }
         }
         window.matrixChat.showScreen('register', params);
+    } else {
+        window.matrixChat.showScreen(location.hash.substring(2));
     }
 }
+
+function onHashChange(ev) {
+    routeUrl(window.location);
+}
+
+window.addEventListener('hashchange', onHashChange);
 
 var loaded = false;
 

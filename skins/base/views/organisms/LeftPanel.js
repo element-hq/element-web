@@ -20,7 +20,7 @@ var React = require('react');
 var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var RoomList = ComponentBroker.get('organisms/RoomList');
-var DirectoryMenu = ComponentBroker.get('molecules/DirectoryMenu');
+var BottomLeftMenu = ComponentBroker.get('molecules/BottomLeftMenu');
 var IncomingCallBox = ComponentBroker.get('molecules/voip/IncomingCallBox');
 var RoomCreate = ComponentBroker.get('molecules/RoomCreate');
 
@@ -33,7 +33,7 @@ module.exports = React.createClass({
                 <img className="mx_LeftPanel_hideButton" src="img/hide.png" width="32" height="32" alt="<"/>
                 <IncomingCallBox />
                 <RoomList selectedRoom={this.props.selectedRoom} />
-                <DirectoryMenu />
+                <BottomLeftMenu />
             </div>
         );
     }

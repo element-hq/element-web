@@ -33,6 +33,7 @@ module.exports = {
         RoomView: "room_view",
         UserSettings: "user_settings",
         CreateRoom: "create_room",
+        RoomDirectory: "room_directory",
     },
 
     AuxPanel: {
@@ -43,7 +44,7 @@ module.exports = {
         return {
             logged_in: !!(MatrixClientPeg.get() && MatrixClientPeg.get().credentials),
             ready: false,
-            page_type: this.PageTypes.RoomView,
+            page_type: MatrixClientPeg.get().getRooms().length ? this.PageTypes.RoomView : this.PageTypes.RoomDirectory,
             aux_panel: null,
         };
     },
@@ -127,6 +128,7 @@ module.exports = {
                     currentRoom: payload.room_id,
                     page_type: this.PageTypes.RoomView,
                 });
+                this.notifyNewScreen('room/'+payload.room_id);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -156,6 +158,11 @@ module.exports = {
                     page_type: this.PageTypes.CreateRoom,
                 });
                 break;
+            case 'view_room_directory':
+                this.setState({
+                    page_type: this.PageTypes.RoomDirectory,
+                });
+                break;
         }
     },
 
@@ -172,13 +179,18 @@ module.exports = {
         var cli = MatrixClientPeg.get();
         var self = this;
         cli.on('syncComplete', function() {
-            var firstRoom = null;
-            if (cli.getRooms() && cli.getRooms().length) {
-                firstRoom = RoomListSorter.mostRecentActivityFirst(
-                    cli.getRooms()
-                )[0].roomId;
+            if (!self.state.currentRoom) {
+                var firstRoom = null;
+                if (cli.getRooms() && cli.getRooms().length) {
+                    firstRoom = RoomListSorter.mostRecentActivityFirst(
+                        cli.getRooms()
+                    )[0].roomId;
+                }
+                self.setState({ready: true, currentRoom: firstRoom});
+                self.notifyNewScreen('room/'+firstRoom);
+            } else {
+                self.setState({ready: true});
             }
-            self.setState({ready: true, currentRoom: firstRoom});
             dis.dispatch({action: 'focus_composer'});
         });
         cli.on('Call.incoming', function(call) {
@@ -221,6 +233,12 @@ module.exports = {
             dis.dispatch({
                 action: 'start_login',
                 params: params
+            });
+        } else if (screen.indexOf('room/') == 0) {
+            var roomId = screen.split('/')[1];
+            dis.dispatch({
+                action: 'view_room',
+                room_id: roomId
             });
         }
     },

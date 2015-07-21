@@ -24,20 +24,53 @@ var MemberList = ComponentBroker.get('organisms/MemberList');
 module.exports = React.createClass({
     displayName: 'RightPanel',
 
+    Phase : {
+        Blank: 'Blank',
+        None: 'None',
+        MemberList: 'MemberList',
+        FileList: 'FileList',
+    },
+
+    getInitialState: function() {
+        return {
+            phase : this.Phase.None
+        }
+    },
+
+    onMemberListButtonClick: function() {
+        if (this.state.phase == this.Phase.None) {
+            this.setState({ phase: this.Phase.MemberList });            
+        }
+        else {
+            this.setState({ phase: this.Phase.None });
+        }
+    },
+
     render: function() {
-        return (
-            <div className="mx_RightPanel">
-                <div className="mx_RightPanel_header">
+        var buttonGroup;
+        var panel;
+        if (this.props.roomId) {
+            buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
                         <div className="mx_RightPanel_headerButton">
                             <img src="img/file.png" width="32" height="32" alt="Files"/>
                         </div>
-                        <div className="mx_RightPanel_headerButton">
+                        <div className="mx_RightPanel_headerButton" onClick={ this.onMemberListButtonClick }>
                             <img src="img/members.png" width="32" height="32" alt="Members"/>
                         </div>
-                    </div>
+                    </div>;
+
+            if (this.state.phase == this.Phase.MemberList) {
+                panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
+            }
+        }
+
+        return (
+            <div className="mx_RightPanel">
+                <div className="mx_RightPanel_header">
+                    { buttonGroup }
                 </div>
-                <MemberList roomId={this.props.roomId} key={this.props.roomId} />
+                { panel }
             </div>
         );
     }

@@ -43,6 +43,26 @@ limitations under the License.
     width: 100%;
 }
 
+.mx_RoomHeader_hangupButton {
+    height: 48px;
+    margin-top: 18px;
+    background-color: #80cef4;
+    border-radius: 48px;
+    margin-right: 8px;
+    color: #fff;
+    line-height: 48px;
+    text-align: center;
+
+    -webkit-box-ordinal-group: 2;
+    -moz-box-ordinal-group: 2;
+    -ms-flex-order: 2;
+    -webkit-order: 2;
+    order: 2;
+
+    -webkit-flex: 0 0 90px;
+    flex: 0 0 90px;
+}
+
 .mx_RoomHeader_rightRow {
     height: 48px;
     margin-top: 18px;
@@ -50,11 +70,11 @@ limitations under the License.
     border-radius: 48px;
     border: 1px solid #a9dbf4;
 
-    -webkit-box-ordinal-group: 2;
-    -moz-box-ordinal-group: 2;
-    -ms-flex-order: 2;
-    -webkit-order: 2;
-    order: 2;
+    -webkit-box-ordinal-group: 3;
+    -moz-box-ordinal-group: 3;
+    -ms-flex-order: 3;
+    -webkit-order: 3;
+    order: 3;
 
     -webkit-flex: 0 0 200px;
     flex: 0 0 200px;    
@@ -64,6 +84,15 @@ limitations under the License.
     display: table-cell;
     height: 48px;
     vertical-align: middle;
+}
+
+.mx_RoomHeader_simpleHeader {
+    line-height: 88px;
+    color: #80cef4;
+    font-weight: 400;
+    font-size: 20px;
+    overflow: scroll;
+    text-overflow: ellipsis;
 }
 
 .mx_RoomHeader_name {

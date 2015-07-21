@@ -26,6 +26,7 @@ var Login = ComponentBroker.get('templates/Login');
 var UserSettings = ComponentBroker.get('organisms/UserSettings');
 var Register = ComponentBroker.get('templates/Register');
 var CreateRoom = ComponentBroker.get('organisms/CreateRoom');
+var RoomDirectory = ComponentBroker.get('organisms/RoomDirectory');
 
 var MatrixChatController = require("../../../../src/controllers/pages/MatrixChat");
 
@@ -59,9 +60,15 @@ module.exports = React.createClass({
                     break;
                 case this.PageTypes.UserSettings:
                     page_element = <UserSettings />
+                    right_panel = <RightPanel/>
                     break;
                 case this.PageTypes.CreateRoom:
                     page_element = <CreateRoom onRoomCreated={this.onRoomCreated}/>
+                    right_panel = <RightPanel/>
+                    break;
+                case this.PageTypes.RoomDirectory:
+                    page_element = <RoomDirectory />
+                    right_panel = <RightPanel/>
                     break;
             }
 

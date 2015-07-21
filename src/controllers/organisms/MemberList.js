@@ -101,7 +101,7 @@ module.exports = {
         }, function(err) {
             console.error("Failed to invite: %s", JSON.stringify(err));
             Modal.createDialog(ErrorDialog, {
-                title: "Invite Server Error",
+                title: "Server error whilst inviting",
                 description: err.message
             });
             self.setState({
