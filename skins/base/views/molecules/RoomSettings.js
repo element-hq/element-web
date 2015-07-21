@@ -75,30 +75,54 @@ module.exports = React.createClass({
         if (history_visibility) history_visibility = history_visibility.getContent().history_visibility;
 
         var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
-        power_levels = power_levels.getContent();
 
-        var ban_level = parseInt(power_levels.ban);
-        var kick_level = parseInt(power_levels.kick);
-        var redact_level = parseInt(power_levels.redact);
-        var invite_level = parseInt(power_levels.invite);
-        var send_level = parseInt(power_levels.events_default);
-        var state_level = parseInt(power_levels.state_default);
-        var default_user_level = parseInt(power_levels.users_default);
+        if (power_levels) {
+            power_levels = power_levels.getContent();
 
-        var user_levels = power_levels.users;
-        var events_levels = power_levels.events;
+            var ban_level = parseInt(power_levels.ban);
+            var kick_level = parseInt(power_levels.kick);
+            var redact_level = parseInt(power_levels.redact);
+            var invite_level = parseInt(power_levels.invite || 0);
+            var send_level = parseInt(power_levels.events_default || 0);
+            var state_level = parseInt(power_levels.state_default || 0);
+            var default_user_level = parseInt(power_levels.users_default || 0);
 
-        var user_id = MatrixClientPeg.get().credentials.userId;
+            if (power_levels.ban == undefined) ban_level = 50;
+            if (power_levels.kick == undefined) kick_level = 50;
+            if (power_levels.redact == undefined) redact_level = 50;
 
-        var current_user_level = user_levels[user_id];
-        if (current_user_level == undefined) current_user_level = default_user_level;
+            var user_levels = power_levels.users || [];
+            var events_levels = power_levels.events || [];
 
-        var power_level_level = power_levels.events["m.room.power_levels"];
-        if (power_level_level == undefined) {
-            power_level_level = state_level;
+            var user_id = MatrixClientPeg.get().credentials.userId;
+
+            var current_user_level = user_levels[user_id];
+            if (current_user_level == undefined) current_user_level = default_user_level;
+
+            var power_level_level = events_levels["m.room.power_levels"];
+            if (power_level_level == undefined) {
+                power_level_level = state_level;
+            }
+
+            var can_change_levels = current_user_level >= power_level_level;
+        } else {
+            var ban_level = 50;
+            var kick_level = 50;
+            var redact_level = 50;
+            var invite_level = 0;
+            var send_level = 0;
+            var state_level = 0;
+            var default_user_level = 0;
+
+            var user_levels = [];
+            var events_levels = [];
+
+            var current_user_level = 0;
+
+            var power_level_level = 0;
+
+            var can_change_levels = false;
         }
-
-        var can_change_levels = current_user_level >= power_level_level;
 
         return (
             <div className="mx_RoomSettings">
