@@ -76,7 +76,9 @@ module.exports = {
             return;
         }
         state = newState;
-        MatrixClientPeg.get().setPresence(state).catch(function(err) {
+        MatrixClientPeg.get().setPresence(state).done(function() {
+            console.log("Presence: %s", newState);
+        }, function(err) {
             console.error("Failed to set presence: %s", err);
         });
     },
