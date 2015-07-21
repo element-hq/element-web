@@ -50,6 +50,10 @@ limitations under the License.
     max-width: 720px;
     width: 100%;
     margin: auto;
+
+    overflow: scroll;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
 }
 
 .mx_RoomView_messagePanel {

@@ -86,7 +86,7 @@ module.exports = {
                 });
                 this.forceUpdate();
                 break;
-            case'notifier_enabled':
+            case 'notifier_enabled':
                 this.forceUpdate();
                 break;
         }
