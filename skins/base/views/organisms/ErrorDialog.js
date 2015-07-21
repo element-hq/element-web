@@ -40,10 +40,14 @@ module.exports = React.createClass({
                 <div className="mx_ErrorDialogTitle">
                     {this.props.title}
                 </div>
-                {this.props.description}<br />
-                <button onClick={this.props.onFinished} autoFocus={this.props.focus}>
-                    {this.props.button}
-                </button>
+                <div className="mx_Dialog_content">
+                    {this.props.description}
+                </div>
+                <div className="mx_Dialog_buttons">
+                    <button onClick={this.props.onFinished} autoFocus={this.props.focus}>
+                        {this.props.button}
+                    </button>
+                </div>
             </div>
         );
     }

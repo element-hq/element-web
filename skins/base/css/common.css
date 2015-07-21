@@ -49,9 +49,9 @@ html {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #ccc;
-    opacity: 0.5;
-    z-index: -200;
+    background-color: #000;
+    opacity: 0.2;
+    z-index: 2000;
 }
 
 .mx_Dialog_Wrapper {
@@ -64,19 +64,43 @@ html {
 
 .mx_Dialog {
     background-color: #fff;
+    color: #747474;
+    text-align: center;
     margin: auto;
     max-width: 500px;
-    z-index: -100;
+    z-index: 2010;
+    font-weight: 300;
+    font-size: 16px;
     position: relative;
+    border-radius: 8px;
     top: 200px;
 }
 
-.mx_ErrorDialogTitle {
-    background-color: #d2322d;
-    min-height: 16px;
-    padding: 15px;
-    border-bottom: 1px solid #e5e5e5;
-    font-weight: bold;
-    line-height: 1.4;
+.mx_Dialog_content {
+    margin: 35px;
+}
+
+.mx_Dialog_buttons {
+    padding-bottom: 35px;
+}
+
+.mx_Dialog button {
+    border: 0px;
+    width: 80px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 36px;
+    font-weight: 400;
+    font-size: 16px;
     color: #fff;
+    background-color: #80cef4;
+}
+
+.mx_ErrorDialogTitle {
+    min-height: 16px;
+    padding: 12px;
+    border-bottom: 1px solid #a9dbf4;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 1.4;
 }
