@@ -27,11 +27,14 @@ var UserSettings = ComponentBroker.get('organisms/UserSettings');
 var Register = ComponentBroker.get('templates/Register');
 var CreateRoom = ComponentBroker.get('organisms/CreateRoom');
 var RoomDirectory = ComponentBroker.get('organisms/RoomDirectory');
+var MatrixToolbar = ComponentBroker.get('molecules/MatrixToolbar');
+var Notifier = ComponentBroker.get('organisms/Notifier');
 
 var MatrixChatController = require("../../../../src/controllers/pages/MatrixChat");
 
 // should be atomised
 var Loader = require("react-loader");
+var classNames = require("classnames");
 
 var dis = require("../../../../src/dispatcher");
 
@@ -72,15 +75,31 @@ module.exports = React.createClass({
                     break;
             }
 
-            return (
-                <div className="mx_MatrixChat">
-                    <LeftPanel selectedRoom={this.state.currentRoom} />
-                    <div className="mx_MatrixChat_middlePanel">
-                        {page_element}
-                    </div>
-                    {right_panel}
-                </div>
-            );
+            if (!Notifier.isEnabled()) {
+                return (
+                        <div className="mx_MatrixChat_wrapper">
+                            <MatrixToolbar />
+                            <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
+                                <LeftPanel selectedRoom={this.state.currentRoom} />
+                                <div className="mx_MatrixChat_middlePanel">
+                                    {page_element}
+                                </div>
+                                {right_panel}
+                            </div>
+                        </div>
+                );
+            }
+            else {
+                return (
+                        <div className="mx_MatrixChat">
+                            <LeftPanel selectedRoom={this.state.currentRoom} />
+                            <div className="mx_MatrixChat_middlePanel">
+                                {page_element}
+                            </div>
+                            {right_panel}
+                        </div>
+                );
+            }
         } else if (this.state.logged_in) {
             return (
                 <Loader />

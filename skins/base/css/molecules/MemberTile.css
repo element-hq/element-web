@@ -37,12 +37,15 @@ limitations under the License.
     background-color: #dbdbdb;
 }
 
+.mx_MemberTile_inviteEditing {
+    display: initial ! important;
+}
+
 .mx_MemberTile_inviteEditing .mx_MemberTile_avatar {
     display: none;
 }
 
 .mx_MemberTile_inviteEditing .mx_MemberTile_name {
-    position: absolute;
     width: 200px;
 }
 

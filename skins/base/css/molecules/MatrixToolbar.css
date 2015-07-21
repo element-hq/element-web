@@ -15,10 +15,14 @@ limitations under the License.
 */
 
 .mx_MatrixToolbar {
+    width: 100%;
     text-align: center;
-    height: 25px;
-    background-color: #a9dbf4;
-    border-bottom: 1px solid #000;
+    background-color: #ff0064;
+    color: #fff;
+    font-weight: bold;
     padding: 6px;
-    z-index: 50;
+}
+
+.mx_MatrixToolbar button {
+    margin-left: 12px;
 }

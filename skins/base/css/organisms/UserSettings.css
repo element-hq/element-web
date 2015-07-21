@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 .mx_UserSettings {
-    max-width: 720px;
-    margin: auto;
+    width: 720px;
+    margin-left: auto;
+    margin-right: auto;
 }
