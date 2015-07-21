@@ -23,6 +23,7 @@ var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../src/ComponentBroker');
 var classNames = require("classnames");
 var filesize = require('filesize');
+var q = require('q');
 
 var MessageTile = ComponentBroker.get('molecules/MessageTile');
 var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
@@ -44,7 +45,10 @@ module.exports = React.createClass({
     },
 
     onSaveClick: function() {
-        this.setState({editingRoomSettings: false});
+        this.setState({
+            editingRoomSettings: false,
+            uploadingRoomSettings: true,
+        });
 
         var new_name = this.refs.header.getRoomName();
         var new_topic = this.refs.room_settings.getTopic();
@@ -75,35 +79,64 @@ module.exports = React.createClass({
             old_history_visibility = "shared";
         }
 
+        var deferreds = [];
 
         if (old_name != new_name && new_name != undefined) {
-            MatrixClientPeg.get().setRoomName(this.state.room.roomId, new_name);
+            deferreds.push(
+                MatrixClientPeg.get().setRoomName(this.state.room.roomId, new_name)
+            );
         }
 
         if (old_topic != new_topic && new_topic != undefined) {
-            MatrixClientPeg.get().setRoomTopic(this.state.room.roomId, new_topic);
+            deferreds.push(
+                MatrixClientPeg.get().setRoomTopic(this.state.room.roomId, new_topic)
+            );
         }
 
         if (old_join_rule != new_join_rule && new_join_rule != undefined) {
-            MatrixClientPeg.get().sendStateEvent(
-                this.state.room.roomId, "m.room.join_rules", {
-                    join_rule: new_join_rule,
-                }, ""
+            deferreds.push(
+                MatrixClientPeg.get().sendStateEvent(
+                    this.state.room.roomId, "m.room.join_rules", {
+                        join_rule: new_join_rule,
+                    }, ""
+                )
             );
         }
 
         if (old_history_visibility != new_history_visibility && new_history_visibility != undefined) {
-            MatrixClientPeg.get().sendStateEvent(
-                this.state.room.roomId, "m.room.history_visibility", {
-                    history_visibility: new_history_visibility,
-                }, ""
+            deferreds.push(
+                MatrixClientPeg.get().sendStateEvent(
+                    this.state.room.roomId, "m.room.history_visibility", {
+                        history_visibility: new_history_visibility,
+                    }, ""
+                )
             );
         }
 
         if (new_power_levels) {
-            MatrixClientPeg.get().sendStateEvent(
-                this.state.room.roomId, "m.room.power_levels", new_power_levels, ""
+            deferreds.push(
+                MatrixClientPeg.get().sendStateEvent(
+                    this.state.room.roomId, "m.room.power_levels", new_power_levels, ""
+                )
             );
+        }
+
+        console.log("deferreds " + deferreds.length);
+
+        if (deferreds.length) {
+            var self = this;
+            q.all(deferreds).fail(function(err) {
+                // TODO: Handle err
+            }).finally(function() {
+                self.setState({
+                    uploadingRoomSettings: false,
+                });
+            });
+        } else {
+            this.setState({
+                editingRoomSettings: false,
+                uploadingRoomSettings: false,
+            });
         }
     },
 
@@ -177,6 +210,11 @@ module.exports = React.createClass({
 
             if (this.state.editingRoomSettings) {
                 roomEdit = <RoomSettings ref="room_settings" room={this.state.room} />;
+            }
+
+            if (this.state.uploadingRoomSettings) {
+                console.log("Uploading");
+                roomEdit = <Loader/>;
             }
 
             return (

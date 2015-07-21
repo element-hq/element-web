@@ -46,6 +46,7 @@ module.exports = {
             room: this.props.roomId ? MatrixClientPeg.get().getRoom(this.props.roomId) : null,
             messageCap: INITIAL_SIZE,
             editingRoomSettings: false,
+            uploadingRoomSettings: false,
         }
     },
 
