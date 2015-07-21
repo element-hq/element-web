@@ -18,6 +18,7 @@ limitations under the License.
 
 var MatrixClientPeg = require("./MatrixClientPeg");
 var dis = require("./dispatcher");
+var encryption = require("./encryption");
 
 var reject = function(msg) {
     return {
@@ -40,6 +41,25 @@ var commands = {
             );
         }
         return reject("Usage: /nick <display_name>");
+    },
+
+    encrypt: function(room_id, args) {
+        if (args == "on") {
+            var client = MatrixClientPeg.get();
+            var members = client.getRoom(room_id).currentState.members;
+            var user_ids = Object.keys(members);
+            return success(
+                encryption.enableEncryption(client, room_id, user_ids)
+            );
+        }
+        if (args == "off") {
+            var client = MatrixClientPeg.get();
+            return success(
+                encryption.disableEncryption(client, room_id)
+            );
+
+        }
+        return reject("Usage: encrypt <on/off>");
     },
 
     // Change the room topic

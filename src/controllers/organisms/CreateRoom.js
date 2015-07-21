@@ -20,6 +20,7 @@ var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var PresetValues = require('../atoms/create_room/Presets').Presets;
 var q = require('q');
+var encryption = require("../../encryption");
 
 module.exports = {
     propTypes: {
@@ -103,22 +104,14 @@ module.exports = {
         var response;
 
         if (this.state.encrypt) {
-            var deferred = deferred.then(function(res) {
+            deferred = deferred.then(function(res) {
                 response = res;
-                return cli.downloadKeys([cli.credentials.userId]);
-            }).then(function(res) {
-                // TODO: Check the keys are valid.
-                return cli.downloadKeys(options.invite);
-            }).then(function(res) {
-                return cli.setRoomEncryption(response.room_id, {
-                    algorithm: "m.olm.v1.curve25519-aes-sha2",
-                    members: options.invite,
-                });
-            }).then(function(res) {
-                var d = q.defer();
-                d.resolve(response);
-                return d.promise;
-            });
+                return encryption.enableEncryption(
+                    cli, response.roomId, options.invite
+                );
+            }).then(function() {
+                return q(response) }
+            );
         }
 
         this.setState({
