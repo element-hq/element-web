@@ -21,13 +21,16 @@ var React = require('react');
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
 var ComponentBroker = require('../../../../src/ComponentBroker');
+var Modal = require("../../../../src/Modal");
 var classNames = require("classnames");
 var filesize = require('filesize');
+var q = require('q');
 
 var MessageTile = ComponentBroker.get('molecules/MessageTile');
 var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
 var CallView = ComponentBroker.get("molecules/voip/CallView");
+var RoomSettings = ComponentBroker.get("molecules/RoomSettings");
 
 var RoomViewController = require("../../../../src/controllers/organisms/RoomView");
 
@@ -37,6 +40,31 @@ var Loader = require("react-loader");
 module.exports = React.createClass({
     displayName: 'RoomView',
     mixins: [RoomViewController],
+
+    onSettingsClick: function() {
+        this.setState({editingRoomSettings: true});
+    },
+
+    onSaveClick: function() {
+        this.setState({
+            editingRoomSettings: false,
+            uploadingRoomSettings: true,
+        });
+
+        var new_name = this.refs.header.getRoomName();
+        var new_topic = this.refs.room_settings.getTopic();
+        var new_join_rule = this.refs.room_settings.getJoinRules();
+        var new_history_visibility = this.refs.room_settings.getHistoryVisibility();
+        var new_power_levels = this.refs.room_settings.getPowerLevels();
+
+        this.uploadNewState(
+            new_name,
+            new_topic,
+            new_join_rule,
+            new_history_visibility,
+            new_power_levels
+        );
+    },
 
     render: function() {
         if (!this.state.room) {
@@ -104,11 +132,23 @@ module.exports = React.createClass({
                 }
             }
 
+            var roomEdit = null;
+
+            if (this.state.editingRoomSettings) {
+                roomEdit = <RoomSettings ref="room_settings" room={this.state.room} />;
+            }
+
+            if (this.state.uploadingRoomSettings) {
+                roomEdit = <Loader/>;
+            }
+
             return (
                 <div className="mx_RoomView">
-                    <RoomHeader room={this.state.room} />
+                    <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings}
+                        onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick}/>
                     <div className="mx_RoomView_auxPanel">
                         <CallView room={this.state.room}/>
+                        { roomEdit }
                     </div>
                     <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
                         <div className="mx_RoomView_messageListWrapper">
@@ -130,4 +170,3 @@ module.exports = React.createClass({
         }
     },
 });
-
