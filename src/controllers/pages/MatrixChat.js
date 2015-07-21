@@ -33,6 +33,7 @@ module.exports = {
         RoomView: "room_view",
         UserSettings: "user_settings",
         CreateRoom: "create_room",
+        RoomDirectory: "room_directory",
     },
 
     AuxPanel: {
@@ -43,7 +44,7 @@ module.exports = {
         return {
             logged_in: !!(MatrixClientPeg.get() && MatrixClientPeg.get().credentials),
             ready: false,
-            page_type: this.PageTypes.RoomView,
+            page_type: MatrixClientPeg.get().getRooms().length ? this.PageTypes.RoomView : this.PageTypes.RoomDirectory,
             aux_panel: null,
         };
     },
@@ -155,6 +156,11 @@ module.exports = {
             case 'view_create_room':
                 this.setState({
                     page_type: this.PageTypes.CreateRoom,
+                });
+                break;
+            case 'view_room_directory':
+                this.setState({
+                    page_type: this.PageTypes.RoomDirectory,
                 });
                 break;
         }

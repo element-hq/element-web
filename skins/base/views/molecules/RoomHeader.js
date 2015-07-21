@@ -35,25 +35,34 @@ module.exports = React.createClass({
 
     render: function() {
 
-        var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
-        topic = topic ? <div className="mx_RoomHeader_topic">{ topic.getContent().topic }</div> : null;
-
-        var callButtons;
-        if (this.state) {
-            switch (this.state.call_state) {
-                case "ringback":
-                case "connected":
-                    callButtons = (
-                        <div className="mx_RoomHeader_hangupButton" onClick={this.onHangupClick}>
-                            End call
-                        </div>
-                    );
-                    break;
-            }
+        var header;
+        if (this.props.simpleHeader) {
+            header =
+                <div className="mx_RoomHeader_wrapper">
+                    <div className="mx_RoomHeader_simpleHeader">
+                        { this.props.simpleHeader }
+                    </div>
+                </div>
         }
+        else {
+            var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
+            topic = topic ? <div className="mx_RoomHeader_topic">{ topic.getContent().topic }</div> : null;
 
-        return (
-            <div className="mx_RoomHeader">
+            var callButtons;
+            if (this.state) {
+                switch (this.state.call_state) {
+                    case "ringback":
+                    case "connected":
+                        callButtons = (
+                            <div className="mx_RoomHeader_hangupButton" onClick={this.onHangupClick}>
+                                End call
+                            </div>
+                        );
+                        break;
+                }
+            }
+
+            header = 
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_leftRow">
                         <div className="mx_RoomHeader_avatar">
@@ -82,6 +91,11 @@ module.exports = React.createClass({
                         </div>
                     </div>
                 </div>
+        }
+
+        return (
+            <div className="mx_RoomHeader">
+                { header }
             </div>
         );
     },

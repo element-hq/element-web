@@ -21,17 +21,17 @@ var classNames = require('classnames');
 
 var dis = require("../../../../src/dispatcher");
 
-//var DirectoryMenuController = require("../../../../src/controllers/molecules/DirectoryMenuController");
-
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
 module.exports = React.createClass({
-    displayName: 'DirectoryMenu',
-    // mixins: [DirectoryMenuController],
+    displayName: 'BottomLeftMenu',
 
-    // FIXME: should these onClicks be in the controller instead?
     onSettingsClick: function() {
         dis.dispatch({action: 'view_user_settings'});
+    },
+
+    onRoomDirectoryClick: function() {
+        dis.dispatch({action: 'view_room_directory'});
     },
 
     onCreateRoomClick: function() {
@@ -40,15 +40,15 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_DirectoryMenu">
-                <div className="mx_DirectoryMenu_options">
+            <div className="mx_BottomLeftMenu">
+                <div className="mx_BottomLeftMenu_options">
                     <div className="mx_RoomTile" onClick={this.onCreateRoomClick}>
                         <div className="mx_RoomTile_avatar">
                             <img src="img/create-big.png" width="42" height="42"/>
                         </div>
                         <div className="mx_RoomTile_name">Create new room</div>
                     </div>
-                    <div className="mx_RoomTile">
+                    <div className="mx_RoomTile" onClick={this.onRoomDirectoryClick}>
                         <div className="mx_RoomTile_avatar">
                             <img src="img/directory-big.png" width="42" height="42"/>
                         </div>
