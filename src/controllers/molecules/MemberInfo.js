@@ -21,10 +21,11 @@ limitations under the License.
  * 'can': {
  *   kick: boolean,
  *   ban: boolean,
- *   mute: boolean
+ *   mute: boolean,
+ *   modifyLevel: boolean
  * },
  * 'muted': boolean,
- * 'isTargetOp': boolean
+ * 'isTargetMod': boolean
  */
 
 'use strict';
@@ -158,6 +159,40 @@ module.exports = {
         });
     },
 
+    onModToggle: function() {
+        var roomId = this.props.member.roomId;
+        var target = this.props.member.userId;
+        var room = MatrixClientPeg.get().getRoom(roomId);
+        if (!room) {
+            return;
+        }
+        var powerLevelEvent = room.currentState.getStateEvents(
+            "m.room.power_levels", ""
+        );
+        if (!powerLevelEvent) {
+            return;
+        }
+        var me = room.getMember(MatrixClientPeg.get().credentials.userId);
+        if (!me) {
+            return;
+        }
+        var defaultLevel = powerLevelEvent.getContent().users_default;
+        var modLevel = me.powerLevel - 1;
+        // toggle the level
+        var newLevel = this.state.isTargetMod ? defaultLevel : modLevel;
+        MatrixClientPeg.get().setPowerLevel(roomId, target, newLevel, powerLevelEvent).done(
+        function() {
+            // NO-OP; rely on the m.room.member event coming down else we could
+            // get out of sync if we force setState here!
+            console.log("Mod toggle success");
+        }, function(err) {
+            Modal.createDialog(ErrorDialog, {
+                title: "Mod error",
+                description: err.message
+            });
+        });
+    },
+
     onChatClick: function() {
         // check if there are any existing rooms with just us and them (1:1)
         // If so, just view that room. If not, create a private room with them.
@@ -214,17 +249,19 @@ module.exports = {
             can: {
                 kick: false,
                 ban: false,
-                mute: false
+                mute: false,
+                modifyLevel: false
             },
             muted: false,
-            isTargetOp: false
+            isTargetMod: false
         }
     },
 
     _calculateOpsPermissions: function() {
         var defaultPerms = {
             can: {},
-            muted: false
+            muted: false,
+            modifyLevel: false
         };
         var room = MatrixClientPeg.get().getRoom(this.props.member.roomId);
         if (!room) {
@@ -243,7 +280,7 @@ module.exports = {
                 me, them, powerLevels.getContent()
             ),
             muted: this._isMuted(them, powerLevels.getContent()),
-            isTargetOp: them.powerLevel >= me.powerLevel && them.powerLevel > 0
+            isTargetMod: them.powerLevel > powerLevels.getContent().users_default
         };
     },
 
@@ -251,7 +288,8 @@ module.exports = {
         var can = {
             kick: false,
             ban: false,
-            mute: false
+            mute: false,
+            modifyLevel: false
         };
         var canAffectUser = them.powerLevel < me.powerLevel;
         if (!canAffectUser) {
@@ -265,6 +303,7 @@ module.exports = {
         can.kick = me.powerLevel >= powerLevels.kick;
         can.ban = me.powerLevel >= powerLevels.ban;
         can.mute = me.powerLevel >= editPowerLevel;
+        can.modifyLevel = me.powerLevel > them.powerLevel;
         return can;
     },
 

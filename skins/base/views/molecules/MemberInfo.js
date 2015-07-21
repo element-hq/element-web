@@ -67,7 +67,7 @@ module.exports = React.createClass({
         if (this.state.active >= 0) {
             activeAgo = this.getDuration(this.state.active);
         }
-        var kickButton, banButton, muteButton;
+        var kickButton, banButton, muteButton, giveModButton;
         if (this.state.can.kick) {
             kickButton = <div className="mx_MemberInfo_button" onClick={this.onKick}>
                 Kick
@@ -84,9 +84,17 @@ module.exports = React.createClass({
                 {muteLabel}
             </div>;
         }
+        if (this.state.can.modifyLevel) {
+            var giveOpLabel = this.state.isTargetMod ? "Revoke Mod" : "Make Mod";
+            giveModButton = <div className="mx_MemberInfo_button" onClick={this.onModToggle}>
+                {giveOpLabel}
+            </div>
+        }
+
         var opLabel;
-        if (this.state.isTargetOp) {
-            opLabel = <div className="mx_MemberInfo_field">Moderator</div>
+        if (this.state.isTargetMod) {
+            var level = this.props.member.powerLevelNorm + "%";
+            opLabel = <div className="mx_MemberInfo_field">Moderator ({level})</div>
         }
         return (
             <div className="mx_MemberInfo">
@@ -105,6 +113,7 @@ module.exports = React.createClass({
                 {muteButton}
                 {kickButton}
                 {banButton}
+                {giveModButton}
             </div>
         );
     }
