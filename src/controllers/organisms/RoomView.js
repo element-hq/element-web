@@ -79,10 +79,12 @@ module.exports = {
 
     onAction: function(payload) {
         switch (payload.action) {
+            case 'message_send_failed':
             case 'message_sent':
                 this.setState({
                     room: MatrixClientPeg.get().getRoom(this.props.roomId)
                 });
+                this.forceUpdate();
                 break;
             case'notifier_enabled':
                 this.forceUpdate();

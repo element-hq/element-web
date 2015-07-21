@@ -232,6 +232,10 @@ module.exports = {
             dis.dispatch({
                 action: 'message_sent'
             });
+        }, function() {
+            dis.dispatch({
+                action: 'message_send_failed'
+            });
         });
         this.refs.textarea.getDOMNode().value = '';
         ev.preventDefault();

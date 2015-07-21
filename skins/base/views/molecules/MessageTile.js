@@ -57,8 +57,7 @@ module.exports = React.createClass({
             mx_MessageTile_continuation: this.props.continuation,
         });
         var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
-        var avatar;
-        var sender;
+        var avatar, sender, resend;
         if (!this.props.continuation) {
             avatar = (
                 <div className="mx_MessageTile_avatar">
@@ -67,10 +66,16 @@ module.exports = React.createClass({
             );
             sender = <SenderProfile mxEvent={this.props.mxEvent} />;
         }
+        if (this.props.mxEvent.status === "not_sent" && !this.state.resending) {
+            resend = <button className="mx_MessageTile_msgOption" onClick={this.onResend}>
+                Resend
+            </button>;
+        }
         return (
             <div className={classes}>
                 { avatar }
                 { timestamp }
+                { resend }
                 { sender }
                 <TileType mxEvent={this.props.mxEvent} />
             </div>

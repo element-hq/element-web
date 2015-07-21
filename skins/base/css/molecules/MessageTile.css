@@ -74,3 +74,7 @@ limitations under the License.
 .mx_MessageTile_highlight {
     color: #00f;
 }
+
+.mx_MessageTile_msgOption {
+    float: right;
+}
