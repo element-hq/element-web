@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 /*
- * Usage: 
+ * Usage:
  * Modal.createDialog(ErrorDialog, {
  *   title: "some text", (default: "Error")
  *   description: "some more text",
@@ -28,31 +28,11 @@ limitations under the License.
  */
 
 var React = require('react');
+var ErrorDialogController = require("../../../../src/controllers/organisms/ErrorDialog");
 
 module.exports = React.createClass({
     displayName: 'ErrorDialog',
-
-    // can't use getDefaultProps, see Modal.js
-    componentWillMount: function() {
-        if (!this.props.title) {
-            this.props.title = "Error";
-        }
-        if (!this.props.description) {
-            this.props.description = "An error has occurred.";
-        }
-        if (!this.props.button) {
-            this.props.button = "OK";
-        }
-        if (this.props.focus === undefined) {
-            this.props.focus = true;
-        }
-        if (!this.props.onClose) {
-            var self = this;
-            this.props.onClose = function() {
-                self.props.onFinished();
-            };
-        }
-    },
+    mixins: [ErrorDialogController],
 
     render: function() {
         return (
@@ -61,11 +41,10 @@ module.exports = React.createClass({
                     {this.props.title}
                 </div>
                 {this.props.description}<br />
-                <button onClick={this.props.onClose} autoFocus={this.props.focus}>
+                <button onClick={this.props.onFinished} autoFocus={this.props.focus}>
                     {this.props.button}
                 </button>
             </div>
         );
     }
 });
-
