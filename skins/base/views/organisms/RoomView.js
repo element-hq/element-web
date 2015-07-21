@@ -83,7 +83,7 @@ module.exports = React.createClass({
 
         var deferreds = [];
 
-        if (old_name != new_name && new_name != undefined) {
+        if (old_name != new_name && new_name != undefined && new_name) {
             deferreds.push(
                 MatrixClientPeg.get().setRoomName(this.state.room.roomId, new_name)
             );

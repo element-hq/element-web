@@ -28,7 +28,7 @@ module.exports = React.createClass({
     mixins: [RoomHeaderController],
 
     onNameChange: function(new_name) {
-        if (this.props.room.name != new_name) {
+        if (this.props.room.name != new_name && new_name) {
             MatrixClientPeg.get().setRoomName(this.props.room.roomId, new_name);
         }
     },
@@ -69,8 +69,10 @@ module.exports = React.createClass({
             var topic_el = null;
             var save_button = null;
             var settings_button = null;
+            var actual_name = this.props.room.currentState.getStateEvents('m.room.name', '');
+            if (actual_name) actual_name = actual_name.getContent().name;
             if (this.props.editing) {
-                name = <input type="text" defaultValue={this.props.room.name} ref="name_edit"/>;
+                name = <input type="text" defaultValue={actual_name} placeHolder="Name" ref="name_edit"/>;
                 // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
                 save_button = (
                     <div className="mx_RoomHeader_button"onClick={this.props.onSaveClick}>
@@ -78,7 +80,7 @@ module.exports = React.createClass({
                     </div>
                 );
             } else {
-                name = <EditableText initialValue={this.props.room.name} onValueChanged={this.onNameChange} />;
+                name = <EditableText label={this.props.room.name} initialValue={actual_name} placeHolder="Name" onValueChanged={this.onNameChange} />;
                 if (topic) topic_el = <div className="mx_RoomHeader_topic">{ topic.getContent().topic }</div>;
                 settings_button = (
                     <div className="mx_RoomHeader_button" onClick={this.props.onSettingsClick}>
