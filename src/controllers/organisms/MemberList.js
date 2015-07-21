@@ -115,6 +115,18 @@ module.exports = {
         var cli = MatrixClientPeg.get();
         var all_members = cli.getRoom(this.props.roomId).currentState.members;
         var all_user_ids = Object.keys(all_members);
+
+        all_user_ids.sort(function(userIdA, userIdB) {
+            var userA = all_members[userIdA].user;
+            var userB = all_members[userIdB].user;
+
+            var latA = userA ? userA.lastActiveAgo || Number.MAX_VALUE : Number.MAX_VALUE;
+            var latB = userB ? userB.lastActiveAgo || Number.MAX_VALUE : Number.MAX_VALUE;
+
+            return latA - latB;
+        });
+
+
         var to_display = {};
         var count = 0;
         for (var i = 0; i < all_user_ids.length && (limit === undefined || count < limit); ++i) {
