@@ -58,6 +58,21 @@ module.exports = React.createClass({
         }
         mainClassName += presenceClass;
 
+        var name;
+        if (this.state.hover) {
+            name =
+                <div className="mx_MemberTile_nameWrapper">
+                    <MemberInfo member={this.props.member} />
+                    <span className="mx_MemberTile_nameSpan">{this.props.member.name}</span>
+                </div>
+        }
+        else {
+            name =
+                <div className="mx_MemberTile_name">
+                    {this.props.member.name}
+                </div>
+        }
+
         return (
             <div className={mainClassName} onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">
@@ -66,10 +81,7 @@ module.exports = React.createClass({
                          width="40" height="40" alt=""/>
                          { power }
                 </div>
-                <div className="mx_MemberTile_name">
-                    { this.state.hover ? <MemberInfo member={this.props.member} /> : null }
-                    {this.props.member.name}
-                </div>
+                { name }
             </div>
         );
     }

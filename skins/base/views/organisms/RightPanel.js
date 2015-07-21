@@ -33,7 +33,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            phase : this.Phase.None
+            phase : this.Phase.MemberList
         }
     },
 

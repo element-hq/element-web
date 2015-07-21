@@ -71,14 +71,26 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
+.mx_MemberTile_nameWrapper {
+    display: table-cell;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mx_MemberTile_nameSpan {
+}
+
 .mx_MemberTile_unavailable .mx_MemberTile_avatar,
-.mx_MemberTile_unavailable .mx_MemberTile_name
+.mx_MemberTile_unavailable .mx_MemberTile_name,
+.mx_MemberTile_unavailable .mx_MemberTile_nameSpan
 {
     opacity: 0.75;
 }
 
 .mx_MemberTile_offline .mx_MemberTile_avatar,
-.mx_MemberTile_offline .mx_MemberTile_name
+.mx_MemberTile_offline .mx_MemberTile_name,
+.mx_MemberTile_offline .mx_MemberTile_nameSpan
 {
     opacity: 0.5;
 }
