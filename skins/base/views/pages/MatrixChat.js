@@ -27,6 +27,8 @@ var UserSettings = ComponentBroker.get('organisms/UserSettings');
 var Register = ComponentBroker.get('templates/Register');
 var CreateRoom = ComponentBroker.get('organisms/CreateRoom');
 var RoomDirectory = ComponentBroker.get('organisms/RoomDirectory');
+var Notifier = ComponentBroker.get('organisms/Notifier');
+var MatrixToolbar = ComponentBroker.get('molecules/MatrixToolbar');
 
 var MatrixChatController = require("../../../../src/controllers/pages/MatrixChat");
 
@@ -52,6 +54,11 @@ module.exports = React.createClass({
 
             var page_element;
             var right_panel = "";
+            var top_bar;
+
+            if (!Notifier.isEnabled()) {
+                top_bar = <MatrixToolbar />;
+            }
 
             switch (this.state.page_type) {
                 case this.PageTypes.RoomView:
@@ -74,6 +81,7 @@ module.exports = React.createClass({
 
             return (
                 <div className="mx_MatrixChat">
+                    {top_bar}
                     <LeftPanel selectedRoom={this.state.currentRoom} />
                     <div className="mx_MatrixChat_middlePanel">
                         {page_element}

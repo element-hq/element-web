@@ -163,6 +163,9 @@ module.exports = {
                     page_type: this.PageTypes.RoomDirectory,
                 });
                 break;
+            case'notifier_enabled':
+                this.forceUpdate();
+                break;
         }
     },
 

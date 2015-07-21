@@ -32,8 +32,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_MatrixToolbar">
-                <LogoutButton />
-                <EnableNotificationsButton />
+                You are not receiving desktop notifications. <EnableNotificationsButton />
             </div>
         );
     }
