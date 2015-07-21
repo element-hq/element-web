@@ -72,7 +72,7 @@ module.exports = React.createClass({
             var actual_name = this.props.room.currentState.getStateEvents('m.room.name', '');
             if (actual_name) actual_name = actual_name.getContent().name;
             if (this.props.editing) {
-                name = <input type="text" defaultValue={actual_name} placeHolder="Name" ref="name_edit"/>;
+                name = <input type="text" defaultValue={actual_name} placeholder="Name" ref="name_edit"/>;
                 // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
                 save_button = (
                     <div className="mx_RoomHeader_button"onClick={this.props.onSaveClick}>

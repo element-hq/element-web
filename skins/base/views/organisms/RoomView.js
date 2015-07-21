@@ -31,7 +31,6 @@ var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
 var CallView = ComponentBroker.get("molecules/voip/CallView");
 var RoomSettings = ComponentBroker.get("molecules/RoomSettings");
-var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
 
 var RoomViewController = require("../../../../src/controllers/organisms/RoomView");
 
@@ -58,89 +57,13 @@ module.exports = React.createClass({
         var new_history_visibility = this.refs.room_settings.getHistoryVisibility();
         var new_power_levels = this.refs.room_settings.getPowerLevels();
 
-        var old_name = this.state.room.name;
-
-        var old_topic = this.state.room.currentState.getStateEvents('m.room.topic', '');
-        if (old_topic) {
-            old_topic = old_topic.getContent().topic;
-        } else {
-            old_topic = "";
-        }
-
-        var old_join_rule = this.state.room.currentState.getStateEvents('m.room.join_rules', '');
-        if (old_join_rule) {
-            old_join_rule = old_join_rule.getContent().join_rule;
-        } else {
-            old_join_rule = "invite";
-        }
-
-        var old_history_visibility = this.state.room.currentState.getStateEvents('m.room.history_visibility', '');
-        if (old_history_visibility) {
-            old_history_visibility = old_history_visibility.getContent().history_visibility;
-        } else {
-            old_history_visibility = "shared";
-        }
-
-        var deferreds = [];
-
-        if (old_name != new_name && new_name != undefined && new_name) {
-            deferreds.push(
-                MatrixClientPeg.get().setRoomName(this.state.room.roomId, new_name)
-            );
-        }
-
-        if (old_topic != new_topic && new_topic != undefined) {
-            deferreds.push(
-                MatrixClientPeg.get().setRoomTopic(this.state.room.roomId, new_topic)
-            );
-        }
-
-        if (old_join_rule != new_join_rule && new_join_rule != undefined) {
-            deferreds.push(
-                MatrixClientPeg.get().sendStateEvent(
-                    this.state.room.roomId, "m.room.join_rules", {
-                        join_rule: new_join_rule,
-                    }, ""
-                )
-            );
-        }
-
-        if (old_history_visibility != new_history_visibility && new_history_visibility != undefined) {
-            deferreds.push(
-                MatrixClientPeg.get().sendStateEvent(
-                    this.state.room.roomId, "m.room.history_visibility", {
-                        history_visibility: new_history_visibility,
-                    }, ""
-                )
-            );
-        }
-
-        if (new_power_levels) {
-            deferreds.push(
-                MatrixClientPeg.get().sendStateEvent(
-                    this.state.room.roomId, "m.room.power_levels", new_power_levels, ""
-                )
-            );
-        }
-
-        if (deferreds.length) {
-            var self = this;
-            q.all(deferreds).fail(function(err) {
-                Modal.createDialog(ErrorDialog, {
-                    title: "Failed to set state",
-                    description: err.toString()
-                });
-            }).finally(function() {
-                self.setState({
-                    uploadingRoomSettings: false,
-                });
-            });
-        } else {
-            this.setState({
-                editingRoomSettings: false,
-                uploadingRoomSettings: false,
-            });
-        }
+        this.uploadNewState(
+            new_name,
+            new_topic,
+            new_join_rule,
+            new_history_visibility,
+            new_power_levels
+        );
     },
 
     render: function() {
