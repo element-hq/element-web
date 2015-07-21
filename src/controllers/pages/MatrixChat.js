@@ -40,12 +40,19 @@ module.exports = {
     },
 
     getInitialState: function() {
-        return {
+        var s = {
             logged_in: !!(MatrixClientPeg.get() && MatrixClientPeg.get().credentials),
             ready: false,
-            page_type: MatrixClientPeg.get().getRooms().length ? this.PageTypes.RoomView : this.PageTypes.RoomDirectory,
             aux_panel: null,
         };
+        if (s.logged_in) {
+            if (MatrixClientPeg.get().getRooms().length) {
+                s.page_type = this.PageTypes.RoomView;
+            } else {
+                s.page_type = this.PageTypes.RoomDirectory;
+            }
+        }
+        return s;
     },
 
     componentDidMount: function() {
