@@ -124,6 +124,8 @@ module.exports = React.createClass({
             var can_change_levels = false;
         }
 
+        var banned = this.props.room.getMembersWithMemership("ban");
+
         return (
             <div className="mx_RoomSettings">
                 <textarea placeholder="Description" defaultValue={topic} ref="topic"/> <br/>
@@ -190,6 +192,17 @@ module.exports = React.createClass({
                             <div key={event_type}>
                                 <label htmlFor={"mx_RoomSettings_event_"+i}>{event_type}</label>
                                 <input type="text" defaultValue={events_levels[event_type]} size="3" id={"mx_RoomSettings_event_"+i} disabled/>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                Banned users:
+                <div className="mx_RoomSettings_banned">
+                    {banned.map(function(member, i) {
+                        return (
+                            <div key={i}>
+                                {member.userId}
                             </div>
                         );
                     })}
