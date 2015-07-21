@@ -20,6 +20,7 @@ var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var UserSettingsController = require("../../../../src/controllers/organisms/UserSettings");
 
 var EditableText = ComponentBroker.get('atoms/EditableText');
+var EnableNotificationsButton = ComponentBroker.get('atoms/EnableNotificationsButton');
 var ChangeAvatar = ComponentBroker.get('molecules/ChangeAvatar');
 var ChangePassword = ComponentBroker.get('molecules/ChangePassword');
 var LogoutPrompt = ComponentBroker.get('organisms/LogoutPrompt');
@@ -96,6 +97,9 @@ module.exports = React.createClass({
                                 </div>
                                 <div className="mx_UserSettings_ClientVersion">
                                     Version {this.state.clientVersion}
+                                </div>
+                                <div className="mx_UserSettings_EnableNotifications">
+                                    <EnableNotificationsButton />
                                 </div>
                                 <div className="mx_UserSettings_Logout">
                                     <button onClick={this.onLogoutClicked}>Sign Out</button>
