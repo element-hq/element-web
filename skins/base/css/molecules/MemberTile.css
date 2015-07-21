@@ -71,10 +71,14 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
-.mx_MemberTile_unavailable {
+.mx_MemberTile_unavailable .mx_MemberTile_avatar,
+.mx_MemberTile_unavailable .mx_MemberTile_name
+{
     opacity: 0.75;
 }
 
-.mx_MemberTile_offline {
+.mx_MemberTile_offline .mx_MemberTile_avatar,
+.mx_MemberTile_offline .mx_MemberTile_name
+{
     opacity: 0.5;
 }
