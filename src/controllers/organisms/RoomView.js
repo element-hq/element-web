@@ -52,6 +52,7 @@ module.exports = {
             messageCap: INITIAL_SIZE,
             editingRoomSettings: false,
             uploadingRoomSettings: false,
+            numUnreadMessages: 0
         }
     },
 
@@ -130,8 +131,23 @@ module.exports = {
                 (messageWrapper.clientHeight + 150)
             );
         }
+
+        var currentUnread = this.state.numUnreadMessages;
+        if (!toStartOfTimeline && 
+                (ev.getSender() !== MatrixClientPeg.get().credentials.userId)) {
+            // update unread count when scrolled up
+            if (this.atBottom) {
+                currentUnread = 0;
+            }
+            else {
+                currentUnread += 1;
+            }
+        }
+
+
         this.setState({
-            room: MatrixClientPeg.get().getRoom(this.props.roomId)
+            room: MatrixClientPeg.get().getRoom(this.props.roomId),
+            numUnreadMessages: currentUnread
         });
 
         if (toStartOfTimeline && !this.state.paginating) {
@@ -178,6 +194,9 @@ module.exports = {
             }
         } else if (this.atBottom) {
             messageWrapper.scrollTop = messageWrapper.scrollHeight;
+            if (this.state.numUnreadMessages !== 0) {
+                this.setState({numUnreadMessages: 0});
+            }
         }
     },
 
@@ -234,7 +253,11 @@ module.exports = {
     onMessageListScroll: function(ev) {
         if (this.refs.messageWrapper) {
             var messageWrapper = this.refs.messageWrapper.getDOMNode();
+            var wasAtBottom = this.atBottom;
             this.atBottom = messageWrapper.scrollHeight - messageWrapper.scrollTop <= messageWrapper.clientHeight;
+            if (this.atBottom && !wasAtBottom) {
+                this.forceUpdate(); // remove unread msg count
+            }
         }
         if (!this.state.paginating) this.fillSpace();
     },

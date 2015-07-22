@@ -64,6 +64,13 @@ module.exports = React.createClass({
         );
     },
 
+    getUnreadMessagesString: function() {
+        if (!this.state.numUnreadMessages) {
+            return "";
+        }
+        return this.state.numUnreadMessages + " unread messages";
+    },
+
     render: function() {
         if (!this.state.room) {
             return (
@@ -120,7 +127,18 @@ module.exports = React.createClass({
                 );
             } else {
                 var typingString = this.getWhoIsTypingString();
-                if (typingString) {
+                var unreadMsgs = this.getUnreadMessagesString();
+                // unread count trumps who is typing since the unread count is only
+                // set when you've scrolled up
+                if (unreadMsgs) {
+                    statusBar = (
+                        <div className="mx_RoomView_typingBar">
+                            <img src="img/typing.png" width="40" height="40" alt=""/>
+                            {unreadMsgs}
+                        </div>
+                    );
+                }
+                else if (typingString) {
                     statusBar = (
                         <div className="mx_RoomView_typingBar">
                             <img src="img/typing.png" width="40" height="40" alt=""/>
