@@ -17,6 +17,8 @@ limitations under the License.
 'use strict';
 
 var dis = require("../../dispatcher");
+var Modal = require("../../Modal");
+var Loader = require("react-loader");
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
@@ -27,4 +29,21 @@ module.exports = {
             user_id: this.props.member.userId
         });
     },
+
+    onLeaveClick: function() {
+        var d = MatrixClientPeg.get().leave(this.props.member.roomId);
+
+        var modal = Modal.createDialog(Loader);
+
+        d.then(function() {
+            modal.close();
+            dis.dispatch({action: 'view_next_room'});
+        }, function(err) {
+            modal.close();
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to leave room",
+                description: err.toString()
+            });
+        });
+    }
 };

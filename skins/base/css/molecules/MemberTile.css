@@ -33,7 +33,7 @@ limitations under the License.
 
 .mx_MemberTile_avatarImg {
     z-index: 20;
-    border-radius: 20px;    
+    border-radius: 20px;
     background-color: #dbdbdb;
 }
 
@@ -96,4 +96,9 @@ limitations under the License.
 .mx_MemberTile_offline .mx_MemberTile_nameSpan
 {
     opacity: 0.5;
+}
+
+
+.mx_MemberTile_leave {
+    float: right;
 }

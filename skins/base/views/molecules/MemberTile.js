@@ -20,8 +20,10 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../src/ComponentBroker');
+var Modal = require("../../../../src/Modal");
 var MemberTileController = require("../../../../src/controllers/molecules/MemberTile");
 var MemberInfo = ComponentBroker.get('molecules/MemberInfo');
+var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
 
 module.exports = React.createClass({
     displayName: 'MemberTile',
@@ -41,6 +43,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var isMyUser = MatrixClientPeg.get().credentials.userId == this.props.member.userId;
+
         var power;
         if (this.props.member) {
             var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
@@ -58,18 +62,23 @@ module.exports = React.createClass({
         }
         mainClassName += presenceClass;
 
-        var name;
+        var name = this.props.member.name;
+        if (isMyUser) name += " (me)";
+        var leave = isMyUser ? <span className="mx_MemberTile_leave" onClick={this.onLeaveClick}>X</span> : null;
+        var nameEl;
         if (this.state.hover) {
-            name =
+            nameEl =
                 <div className="mx_MemberTile_nameWrapper">
                     <MemberInfo member={this.props.member} />
-                    <span className="mx_MemberTile_nameSpan">{this.props.member.name}</span>
+                    <span className="mx_MemberTile_nameSpan">{name}</span>
+                    {leave}
                 </div>
         }
         else {
-            name =
+            nameEl =
                 <div className="mx_MemberTile_name">
-                    {this.props.member.name}
+                    {name}
+                    {leave}
                 </div>
         }
 
@@ -81,7 +90,7 @@ module.exports = React.createClass({
                          width="40" height="40" alt=""/>
                          { power }
                 </div>
-                { name }
+                { nameEl }
             </div>
         );
     }

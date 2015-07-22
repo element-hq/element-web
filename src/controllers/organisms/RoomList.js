@@ -96,7 +96,12 @@ module.exports = {
     },
 
     getRoomList: function() {
-        return RoomListSorter.mostRecentActivityFirst(MatrixClientPeg.get().getRooms());
+        return RoomListSorter.mostRecentActivityFirst(
+            MatrixClientPeg.get().getRooms().filter(function(room) {
+                var member = room.getMember(MatrixClientPeg.get().credentials.userId);
+                return member && (member.membership == "join" || member.membership == "invite");
+            })
+        );
     },
 
     makeRoomTiles: function() {
@@ -115,4 +120,3 @@ module.exports = {
         });
     },
 };
-

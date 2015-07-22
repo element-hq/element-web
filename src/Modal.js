@@ -56,5 +56,7 @@ module.exports = {
         );
 
         React.render(dialog, this.getOrCreateContainer());
+
+        return {close: closeDialog};
     },
 };
