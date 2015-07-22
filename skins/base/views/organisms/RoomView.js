@@ -21,7 +21,6 @@ var React = require('react');
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
 var ComponentBroker = require('../../../../src/ComponentBroker');
-var Modal = require("../../../../src/Modal");
 var classNames = require("classnames");
 var filesize = require('filesize');
 var q = require('q');

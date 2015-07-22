@@ -51,11 +51,13 @@ module.exports = React.createClass({
             case this.Phases.Error:
                 return (
                     <div>
-                        <div>{this.state.errorString}</div>
-                        <label>Old password <input type="password" ref="old_input"/></label>
-                        <label>New password <input type="password" ref="new_input"/></label>
-                        <label>Confirm password <input type="password" ref="confirm_input"/></label>
-                        <div>
+                        <div className="mx_Dialog_content">
+                            <div>{this.state.errorString}</div>
+                            <div><label>Old password <input type="password" ref="old_input"/></label></div>
+                            <div><label>New password <input type="password" ref="new_input"/></label></div>
+                            <div><label>Confirm password <input type="password" ref="confirm_input"/></label></div>
+                        </div>
+                        <div className="mx_Dialog_buttons">
                             <button onClick={this.onClickChange}>Change Password</button>
                             <button onClick={this.props.onFinished}>Cancel</button>
                         </div>
@@ -63,13 +65,19 @@ module.exports = React.createClass({
                 );
             case this.Phases.Uploading:
                 return (
-                    <Loader />
+                    <div className="mx_Dialog_content">
+                        <Loader />
+                    </div>
                 );
             case this.Phases.Success:
                 return (
                     <div>
-                        Success!
-                        <button onClick={this.props.onFinished}>Ok</button>
+                        <div className="mx_Dialog_content">
+                            Success!
+                        </div>
+                        <div className="mx_Dialog_buttons">
+                            <button onClick={this.props.onFinished}>Ok</button>
+                        </div>
                     </div>
                 )
         }

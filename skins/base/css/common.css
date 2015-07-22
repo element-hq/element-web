@@ -86,14 +86,16 @@ html {
 
 .mx_Dialog button {
     border: 0px;
-    width: 80px;
     height: 36px;
-    line-height: 36px;
     border-radius: 36px;
     font-weight: 400;
     font-size: 16px;
     color: #fff;
     background-color: #80cef4;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .mx_ErrorDialogTitle {

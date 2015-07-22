@@ -26,10 +26,14 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_LogoutPrompt">
-                Sign out?<br />
-                <button onClick={this.logOut}>Sign Out</button>
-                <button onClick={this.cancelPrompt}>Cancel</button>
+            <div>
+                <div className="mx_Dialog_content">
+                    Sign out?
+                </div>
+                <div className="mx_Dialog_buttons">
+                    <button onClick={this.logOut}>Sign Out</button>
+                    <button onClick={this.cancelPrompt}>Cancel</button>
+                </div>
             </div>
         );
     },
