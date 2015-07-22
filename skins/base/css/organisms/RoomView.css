@@ -47,9 +47,12 @@ limitations under the License.
     -webkit-order: 2;
     order: 2;
 
+    min-width: 0px;
     max-width: 720px;
     width: 100%;
     margin: auto;
+
+    border-bottom: 1px solid #a8dbf3;
 
     overflow: scroll;
     -webkit-flex: 0 0 auto;

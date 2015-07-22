@@ -133,7 +133,7 @@ module.exports = React.createClass({
             var roomEdit = null;
 
             if (this.state.editingRoomSettings) {
-                roomEdit = <RoomSettings ref="room_settings" room={this.state.room} />;
+                roomEdit = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
             }
 
             if (this.state.uploadingRoomSettings) {
@@ -143,7 +143,7 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomView">
                     <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings}
-                        onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick}/>
+                        onSettingsClick={this.onSettingsClick}/>
                     <div className="mx_RoomView_auxPanel">
                         <CallView room={this.state.room}/>
                         { roomEdit }

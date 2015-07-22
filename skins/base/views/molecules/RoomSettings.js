@@ -128,12 +128,12 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_RoomSettings">
-                <textarea placeholder="Description" defaultValue={topic} ref="topic"/> <br/>
+                <textarea className="mx_RoomSettings_description" placeholder="Topic" defaultValue={topic} ref="topic"/> <br/>
                 <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label> <br/>
                 <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility == "shared"}/> Share message history with new users</label> <br/>
                 <label><input type="checkbox" /> Encrypt room</label> <br/>
 
-                Power levels:
+                <h3>Power levels</h3>
                 <div className="mx_RoomSettings_power_levels mx_RoomSettings_settings">
                     <div>
                         <label htmlFor="mx_RoomSettings_ban_level">Ban level</label>
@@ -173,7 +173,7 @@ module.exports = React.createClass({
                     </div>
                 </div>
 
-                User levels:
+                <h3>User levels</h3>
                 <div className="mx_RoomSettings_user_levels mx_RoomSettings_settings">
                     {Object.keys(user_levels).map(function(user, i) {
                         return (
@@ -185,7 +185,7 @@ module.exports = React.createClass({
                     })}
                 </div>
 
-                Event levels:
+                <h3>Event levels</h3>
                 <div className="mx_RoomSettings_event_lvels mx_RoomSettings_settings">
                     {Object.keys(events_levels).map(function(event_type, i) {
                         return (
@@ -197,7 +197,7 @@ module.exports = React.createClass({
                     })}
                 </div>
 
-                Banned users:
+                <h3>Banned users</h3>
                 <div className="mx_RoomSettings_banned">
                     {banned.map(function(member, i) {
                         return (
@@ -206,6 +206,12 @@ module.exports = React.createClass({
                             </div>
                         );
                     })}
+                </div>
+
+                <div className="mx_RoomSettings_buttons">
+                    <div className="mx_RoomSettings_button" onClick={this.props.onSaveClick}>
+                        Save this room
+                    </div>
                 </div>
             </div>
         );
