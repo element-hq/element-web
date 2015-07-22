@@ -57,8 +57,9 @@ module.exports = React.createClass({
             mx_MessageTile_notSent: this.props.mxEvent.status == 'not_sent',
             mx_MessageTile_highlight: this.shouldHighlight(),
             mx_MessageTile_continuation: this.props.continuation,
+            mx_MessageTile_last: this.props.last
         });
-        var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
+        var timestamp = <MessageTimestamp ts={this.props.mxEvent.getTs()} />
         var avatar, sender, resend;
         if (!this.props.continuation) {
             avatar = (
@@ -84,4 +85,3 @@ module.exports = React.createClass({
         );
     },
 });
-
