@@ -42,20 +42,6 @@ module.exports = React.createClass({
         this.setState({ 'hover': false });
     },
 
-    onLeaveClick: function() {
-        var d = MatrixClientPeg.get().leave(this.props.member.roomId);
-        // TODO: Add spinner
-
-        d.then(function() {
-            // TODO: Change to another room.
-        }, function(err) {
-            Modal.createDialog(ErrorDialog, {
-                title: "Failed to leave room",
-                description: err.toString()
-            });
-        });
-    },
-
     render: function() {
         var isMyUser = MatrixClientPeg.get().credentials.userId == this.props.member.userId;
 

@@ -122,4 +122,3 @@ module.exports = {
         });
     },
 };
-

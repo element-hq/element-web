@@ -27,4 +27,19 @@ module.exports = {
             user_id: this.props.member.userId
         });
     },
+
+    onLeaveClick: function() {
+        var d = MatrixClientPeg.get().leave(this.props.member.roomId);
+        // TODO: Add spinner
+
+        d.then(function() {
+            // TODO: Change to another room.
+            dis.dispatch({action: 'view_next_room'});
+        }, function(err) {
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to leave room",
+                description: err.toString()
+            });
+        });
+    }
 };
