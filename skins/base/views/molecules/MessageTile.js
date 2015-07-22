@@ -20,6 +20,7 @@ var React = require('react');
 
 var classNames = require("classnames");
 
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
@@ -52,12 +53,30 @@ module.exports = React.createClass({
             mx_MessageTile: true,
             mx_MessageTile_sending: this.props.mxEvent.status == 'sending',
             mx_MessageTile_notSent: this.props.mxEvent.status == 'not_sent',
-            mx_MessageTile_highlight: this.shouldHighlight()
+            mx_MessageTile_highlight: this.shouldHighlight(),
+            mx_MessageTile_continuation: this.props.continuation,
         });
+        var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
+        var avatar, sender, resend;
+        if (!this.props.continuation) {
+            avatar = (
+                <div className="mx_MessageTile_avatar">
+                    <img src={ this.props.mxEvent.sender ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.sender, 40, 40, "crop") : null } width="40" height="40" alt=""/>
+                </div>
+            );
+            sender = <SenderProfile mxEvent={this.props.mxEvent} />;
+        }
+        if (this.props.mxEvent.status === "not_sent" && !this.state.resending) {
+            resend = <button className="mx_MessageTile_msgOption" onClick={this.onResend}>
+                Resend
+            </button>;
+        }
         return (
             <div className={classes}>
-                <MessageTimestamp ts={this.props.mxEvent.getTs()} />
-                <SenderProfile mxEvent={this.props.mxEvent} />
+                { avatar }
+                { timestamp }
+                { resend }
+                { sender }
                 <TileType mxEvent={this.props.mxEvent} />
             </div>
         );

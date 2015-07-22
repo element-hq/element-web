@@ -26,17 +26,12 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="HomeServerTextBox">
-                <table className="serverConfig">
-                <tr>
-                <td>Home Server URL</td>
-                <td><input type="text" value={this.state.hs_url} onChange={this.hsChanged} /></td>
-                </tr>
-                <tr>
-                <td>Identity Server URL</td>
-                <td><input type="text" value={this.state.is_url} onChange={this.isChanged} /></td>
-                </tr>
-                </table>
+            <div className="mx_ServerConfig">
+                <label className="mx_Login_label mx_ServerConfig_hslabel" htmlFor="hsurl">Home server URL</label>
+                <input className="mx_Login_field" id="hsurl" type="text" value={this.state.hs_url} onChange={this.hsChanged} />
+                <label className="mx_Login_label mx_ServerConfig_islabel" htmlFor="isurl">Identity server URL</label>
+                <input className="mx_Login_field" type="text" value={this.state.is_url} onChange={this.isChanged} />
+                <a className="mx_ServerConfig_help" href="#">What does this mean?</a>
             </div>
         );
     }

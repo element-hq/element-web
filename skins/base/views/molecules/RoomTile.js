@@ -30,14 +30,35 @@ module.exports = React.createClass({
         var myUserId = MatrixClientPeg.get().credentials.userId;
         var classes = classNames({
             'mx_RoomTile': true,
-            'selected': this.props.selected,
-            'unread': this.props.unread,
-            'highlight': this.props.highlight,
-            'invited': this.props.room.currentState.members[myUserId].membership == 'invite'
+            'mx_RoomTile_selected': this.props.selected,
+            'mx_RoomTile_unread': this.props.unread,
+            'mx_RoomTile_highlight': this.props.highlight,
+            'mx_RoomTile_invited': this.props.room.currentState.members[myUserId].membership == 'invite'
         });
+        var name = this.props.room.name.replace(":", ":\u200b");
+        var badge;
+        if (this.props.highlight) {
+            badge = <div className="mx_RoomTile_badge"/>;
+        }
+        /*
+        if (this.props.highlight) {
+            badge = <div className="mx_RoomTile_badge">!</div>;
+        }
+        else if (this.props.unread) {
+            badge = <div className="mx_RoomTile_badge">1</div>;
+        }
+        var nameCell;
+        if (badge) {
+            nameCell = <div className="mx_RoomTile_nameBadge"><div className="mx_RoomTile_name">{name}</div><div className="mx_RoomTile_badgeCell">{badge}</div></div>;
+        }
+        else {
+            nameCell = <div className="mx_RoomTile_name">{name}</div>;
+        }
+        */
         return (
             <div className={classes} onClick={this.onClick}>
-                <div className="mx_RoomTile_name">{this.props.room.name}</div>
+                <div className="mx_RoomTile_avatar"><img src={ MatrixClientPeg.get().getAvatarUrlForRoom(this.props.room, 40, 40, "crop") } width="40" height="40" alt=""/>{ badge }</div>
+                <div className="mx_RoomTile_name">{name}</div>
             </div>
         );
     }

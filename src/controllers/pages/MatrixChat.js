@@ -21,19 +21,38 @@ var Loader = require("react-loader");
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var RoomListSorter = require("../../RoomListSorter");
-
+var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
 
 var ComponentBroker = require('../../ComponentBroker');
-
 var Notifier = ComponentBroker.get('organisms/Notifier');
 
 module.exports = {
+    PageTypes: {
+        RoomView: "room_view",
+        UserSettings: "user_settings",
+        CreateRoom: "create_room",
+        RoomDirectory: "room_directory",
+    },
+
+    AuxPanel: {
+        RoomSettings: "room_settings",
+    },
+
     getInitialState: function() {
-        return {
+        var s = {
             logged_in: !!(MatrixClientPeg.get() && MatrixClientPeg.get().credentials),
-            ready: false
+            ready: false,
+            aux_panel: null,
         };
+        if (s.logged_in) {
+            if (MatrixClientPeg.get().getRooms().length) {
+                s.page_type = this.PageTypes.RoomView;
+            } else {
+                s.page_type = this.PageTypes.RoomDirectory;
+            }
+        }
+        return s;
     },
 
     componentDidMount: function() {
@@ -54,6 +73,7 @@ module.exports = {
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
+        window.removeEventListener("focus", this.onFocus);
     },
 
     componentDidUpdate: function() {
@@ -76,8 +96,9 @@ module.exports = {
                     window.localStorage.clear();
                 }
                 Notifier.stop();
+                Presence.stop();
                 MatrixClientPeg.get().removeAllListeners();
-                MatrixClientPeg.replace(null);
+                MatrixClientPeg.unset();
                 break;
             case 'start_registration':
                 if (this.state.logged_in) return;
@@ -110,8 +131,10 @@ module.exports = {
             case 'view_room':
                 this.focusComposer = true;
                 this.setState({
-                    currentRoom: payload.room_id
+                    currentRoom: payload.room_id,
+                    page_type: this.PageTypes.RoomView,
                 });
+                this.notifyNewScreen('room/'+payload.room_id);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -131,6 +154,24 @@ module.exports = {
                     currentRoom: allRooms[roomIndex].roomId
                 });
                 break;
+            case 'view_user_settings':
+                this.setState({
+                    page_type: this.PageTypes.UserSettings,
+                });
+                break;
+            case 'view_create_room':
+                this.setState({
+                    page_type: this.PageTypes.CreateRoom,
+                });
+                break;
+            case 'view_room_directory':
+                this.setState({
+                    page_type: this.PageTypes.RoomDirectory,
+                });
+                break;
+            case 'notifier_enabled':
+                this.forceUpdate();
+                break;
         }
     },
 
@@ -145,18 +186,30 @@ module.exports = {
 
     startMatrixClient: function() {
         var cli = MatrixClientPeg.get();
-        var that = this;
+        var self = this;
         cli.on('syncComplete', function() {
-            var firstRoom = null;
-            if (cli.getRooms() && cli.getRooms().length) {
-                firstRoom = RoomListSorter.mostRecentActivityFirst(
-                    cli.getRooms()
-                )[0].roomId;
+            if (!self.state.currentRoom) {
+                var firstRoom = null;
+                if (cli.getRooms() && cli.getRooms().length) {
+                    firstRoom = RoomListSorter.mostRecentActivityFirst(
+                        cli.getRooms()
+                    )[0].roomId;
+                }
+                self.setState({ready: true, currentRoom: firstRoom});
+                self.notifyNewScreen('room/'+firstRoom);
+            } else {
+                self.setState({ready: true});
             }
-            that.setState({ready: true, currentRoom: firstRoom});
             dis.dispatch({action: 'focus_composer'});
         });
+        cli.on('Call.incoming', function(call) {
+            dis.dispatch({
+                action: 'incoming_call',
+                call: call
+            });
+        });
         Notifier.start();
+        Presence.start();
         cli.startClient();
     },
 
@@ -190,6 +243,12 @@ module.exports = {
                 action: 'start_login',
                 params: params
             });
+        } else if (screen.indexOf('room/') == 0) {
+            var roomId = screen.split('/')[1];
+            dis.dispatch({
+                action: 'view_room',
+                room_id: roomId
+            });
         }
     },
 
@@ -199,4 +258,3 @@ module.exports = {
         }
     }
 };
-

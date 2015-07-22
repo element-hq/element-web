@@ -13,24 +13,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-'use strict';
-
-var React = require('react');
-
-var RoomNameTextboxController = require("../../../../../src/controllers/atoms/create_room/RoomNameTextbox");
-
-module.exports = React.createClass({
-    displayName: 'RoomNameTextbox',
-    mixins: [RoomNameTextboxController],
-
-    onValueChanged: function(ev) {
-        this.setState({room_name: ev.target.value})
-    },
-
-    render: function() {
-        return (
-            <input type="text" className="mx_RoomNameTextbox" placeholder="ex. MyNewRoom" onChange={this.onValueChanged}/>
-        );
-    }
-});

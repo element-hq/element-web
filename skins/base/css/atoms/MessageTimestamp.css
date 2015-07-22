@@ -15,6 +15,4 @@ limitations under the License.
 */
 
 .mx_MessageTimestamp {
-    display: table-cell;
-    white-space: pre;
 }

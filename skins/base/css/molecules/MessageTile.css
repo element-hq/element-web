@@ -15,11 +15,52 @@ limitations under the License.
 */
 
 .mx_MessageTile {
-	display: table-row;
+    max-width: 100%;
+    clear: both;
+    margin-top: 32px;
+    margin-left: 56px;
+}
+
+.mx_MessageTile_avatar {
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-left: -64px;
+    margin-top: -7px;
+    float: left;    
+}
+
+.mx_MessageTile_avatar img {
+    background-color: #dbdbdb;
+    border-radius: 20px;
+    border: 0px;
+}
+
+.mx_MessageTile_continuation {
+    margin-top: 8px ! important;
+}
+
+.mx_MessageTile .mx_SenderProfile {
+    color: #454545;
+    opacity: 0.5;
+    font-size: 14px;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.mx_MessageTile .mx_MessageTimestamp {
+    color: #454545;
+    opacity: 0.5;
+    font-size: 14px;
+    float: right;
 }
 
 .mx_MessageTile_content {
-	display: table-cell;
+    padding-right: 100px;
+    display: block;
+}
+
+.mx_MessageTile_notice .mx_MessageTile_content {
+    opacity: 0.5;
 }
 
 .mx_MessageTile_sending {
@@ -32,4 +73,8 @@ limitations under the License.
 
 .mx_MessageTile_highlight {
     color: #00f;
+}
+
+.mx_MessageTile_msgOption {
+    float: right;
 }

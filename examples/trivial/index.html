@@ -2,9 +2,22 @@
 <html lang="en" style="height: 100%; overflow: hidden">
   <head>
     <meta charset="utf-8">
-    <title>Matrix React SDK Example</title>
+    <title>vector</title>
+    <link href='fonts/Lato.css' rel='stylesheet' type='text/css'>
   </head>
   <body style="height: 100%;">
+    <audio id="ringbackAudio" loop>
+        <source src="media/ringback.ogg" type="audio/ogg" />
+        <source src="media/ringback.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="callendAudio">
+        <source src="media/callend.ogg" type="audio/ogg" />
+        <source src="media/callend.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="busyAudio">
+        <source src="media/busy.ogg" type="audio/ogg" />
+        <source src="media/busy.mp3" type="audio/mpeg" />
+    </audio>
     <section id="matrixchat" style="height: 100%;"></section>
     <script src="bundle.js"></script>
     <link rel="stylesheet" href="node_modules/matrix-react-sdk/bundle.css">

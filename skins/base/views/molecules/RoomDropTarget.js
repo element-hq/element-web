@@ -17,25 +17,20 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var classNames = require('classnames');
 
-module.exports = {
-    propTypes: {
-        default_name: React.PropTypes.string
-    },
+//var RoomDropTargetController = require("../../../../src/controllers/molecules/RoomDropTargetController");
 
-    getDefaultProps: function() {
-        return {
-            default_name: '',
-        };
-    },
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
-    getInitialState: function() {
-        return {
-            room_name: this.props.default_name,
-        }
-    },
-
-    getName: function() {
-        return this.state.room_name;
-    },
-};
+module.exports = React.createClass({
+    displayName: 'RoomDropTarget',
+    // mixins: [RoomDropTargetController],
+    render: function() {
+        return (
+            <div className="mx_RoomDropTarget">
+                {this.props.text}
+            </div>
+        );
+    }
+});

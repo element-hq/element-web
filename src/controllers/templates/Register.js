@@ -326,6 +326,14 @@ module.exports = {
                     });
                 } else if (error.httpStatus == 401) {
                     newState.errorText = "Authorisation failed!";
+                } else if (error.httpStatus >= 400 && error.httpStatus < 500) {
+                    newState.errorText = "Registration failed!";
+                } else if (error.httpStatus >= 500 && error.httpStatus < 600) {
+                    newState.errorText = "Server error during registration!";
+                } else if (error.name == "M_MISSING_PARAM") {
+                    // The HS hasn't remembered the login params from
+                    // the first try when the login email was sent.
+                    newState.errorText = "This home server does not support resuming registration.";
                 }
                 self.setState(newState);
             }

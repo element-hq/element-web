@@ -38,8 +38,7 @@ module.exports = {
         this.setState({ step: step, errorText: '', busy: false });
     },
 
-    onHSChosen: function(ev) {
-        ev.preventDefault();
+    onHSChosen: function() {
         MatrixClientPeg.replaceUsingUrls(
             this.getHsUrl(),
             this.getIsUrl()
@@ -51,24 +50,24 @@ module.exports = {
         this.setStep("fetch_stages");
         var cli = MatrixClientPeg.get();
         this.setState({busy: true});
-        var that = this;
+        var self = this;
         cli.loginFlows().done(function(result) {
-            that.setState({
+            self.setState({
                 flows: result.flows,
                 currentStep: 1,
                 totalSteps: result.flows.length+1
             });
-            that.setStep('stage_'+result.flows[0].type);
+            self.setStep('stage_'+result.flows[0].type);
         }, function(error) {
-            that.setStep("choose_hs");
-            that.setState({errorText: 'Unable to contact the given Home Server'});
+            self.setStep("choose_hs");
+            self.setState({errorText: 'Unable to contact the given Home Server'});
         });
     },
 
     onUserPassEntered: function(ev) {
         ev.preventDefault();
         this.setState({busy: true});
-        var that = this;
+        var self = this;
 
         var formVals = this.getFormVals();
 
@@ -77,15 +76,15 @@ module.exports = {
             'password': formVals.password
         }).done(function(data) {
             MatrixClientPeg.replaceUsingAccessToken(
-                that.state.hs_url, that.state.is_url,
+                self.state.hs_url, self.state.is_url,
                 data.user_id, data.access_token
             );
-            if (that.props.onLoggedIn) {
-                that.props.onLoggedIn();
+            if (self.props.onLoggedIn) {
+                self.props.onLoggedIn();
             }
         }, function(error) {
-            that.setStep("stage_m.login.password");
-            that.setState({errorText: 'Login failed.'});
+            self.setStep("stage_m.login.password");
+            self.setState({errorText: 'Login failed.'});
         });
     },
 

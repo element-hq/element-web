@@ -33,6 +33,7 @@ module.exports = React.createClass({
     },
 
     onClickDiv: function() {
+        console.log("onClickDiv triggered");
         this.setState({
             phase: this.Phases.Edit,
         })
@@ -43,18 +44,26 @@ module.exports = React.createClass({
     },
 
     onFinish: function(ev) {
-        this.setValue(ev.target.value);
+        if (ev.target.value) {
+            this.setValue(ev.target.value, ev.key === "Enter");
+        } else {
+            this.cancelEdit();
+        }
     },
 
     render: function() {
         var editable_el;
 
         if (this.state.phase == this.Phases.Display) {
-            editable_el = <div ref="display_div" onClick={this.onClickDiv}>{this.state.value}</div>;
+            if (this.state.value) {
+                editable_el = <div ref="display_div" onClick={this.onClickDiv}>{this.state.value}</div>;
+            } else {
+                editable_el = <div ref="display_div" onClick={this.onClickDiv}>{this.props.label}</div>;
+            }
         } else if (this.state.phase == this.Phases.Edit) {
             editable_el = (
                 <div>
-                    <input type="text" defaultValue={this.state.value} onKeyUp={this.onKeyUp} onFocus={this.onFocus} onBlur={this.onFinish} autoFocus/>
+                    <input type="text" defaultValue={this.state.value} onKeyUp={this.onKeyUp} onFocus={this.onFocus} onBlur={this.onFinish} placeholder={this.props.placeHolder} autoFocus/>
                 </div>
             );
         }

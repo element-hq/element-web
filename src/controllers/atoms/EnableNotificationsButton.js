@@ -15,53 +15,43 @@ limitations under the License.
 */
 
 'use strict';
+var ComponentBroker = require("../../ComponentBroker");
+var Notifier = ComponentBroker.get('organisms/Notifier');
+var dis = require("../../dispatcher");
 
 module.exports = {
-    notificationsAvailable: function() {
-        return !!global.Notification;
+
+    componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
     },
 
-    havePermission: function() {
-        return global.Notification.permission == 'granted';
+    componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
+    },
+
+    onAction: function(payload) {
+        if (payload.action !== "notifier_enabled") {
+            return;
+        }
+        this.forceUpdate();
     },
 
     enabled: function() {
-        if (!this.havePermission()) return false;
-
-        if (!global.localStorage) return true;
-
-        var enabled = global.localStorage.getItem('notifications_enabled');
-        if (enabled === null) return true;
-        return enabled === 'true';
-    },
-
-    disable: function() {
-        if (!global.localStorage) return;
-        global.localStorage.setItem('notifications_enabled', 'false');
-        this.forceUpdate();
-    },
-
-    enable: function() {
-        if (!this.havePermission()) {
-            var that = this;
-            global.Notification.requestPermission(function() {
-                that.forceUpdate();
-            });
-        }
-
-        if (!global.localStorage) return;
-        global.localStorage.setItem('notifications_enabled', 'true');
-        this.forceUpdate();
+        return Notifier.isEnabled();
     },
 
     onClick: function() {
-        if (!this.notificationsAvailable()) {
+        var self = this;
+        if (!Notifier.supportsDesktopNotifications()) {
             return;
         }
-        if (!this.enabled()) {
-            this.enable();
+        if (!Notifier.isEnabled()) {
+            Notifier.setEnabled(true, function() {
+                self.forceUpdate();
+            });
         } else {
-            this.disable();
+            Notifier.setEnabled(false);
         }
+        this.forceUpdate();
     },
 };

@@ -29,7 +29,7 @@ module.exports = React.createClass({
         var content = mxEvent.getContent();
         var name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
         return (
-            <span className="mx_MEmoteTile mx_MessageTile_content">
+            <span ref="content" className="mx_MEmoteTile mx_MessageTile_content">
                 * {name} {content.body}
             </span>
         );

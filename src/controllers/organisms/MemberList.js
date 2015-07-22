@@ -18,6 +18,9 @@ limitations under the License.
 
 var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var Modal = require("../../Modal");
+var ComponentBroker = require('../../ComponentBroker');
+var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
 
 var INITIAL_LOAD_NUM_MEMBERS = 50;
 
@@ -37,19 +40,31 @@ module.exports = {
     componentWillUnmount: function() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
+            MatrixClientPeg.get().removeListener("User.presence", this.userPresenceFn);
         }
     },
 
     componentDidMount: function() {
-        var that = this;
+        var self = this;
         setTimeout(function() {
-            if (!that.isMounted()) return;
-            that.setState({
-                memberDict: that.roomMembers()
+            if (!self.isMounted()) return;
+            self.setState({
+                memberDict: self.roomMembers()
             });
         }, 50);
-    },
 
+        // Attach a SINGLE listener for global presence changes then locate the
+        // member tile and re-render it. This is more efficient than every tile
+        // evar attaching their own listener.
+        function updateUserState(event, user) {
+            var tile = self.refs[user.userId];
+            if (tile) {
+                tile.forceUpdate();
+            }
+        }
+        MatrixClientPeg.get().on("User.presence", updateUserState);
+        this.userPresenceFn = updateUserState;
+    },
     // Remember to set 'key' on a MemberList to the ID of the room it's for
     /*componentWillReceiveProps: function(newProps) {
     },*/
@@ -61,10 +76,59 @@ module.exports = {
         });
     },
 
+    onInvite: function(inputText) {
+        var self = this;
+        // sanity check the input
+        inputText = inputText.trim(); // react requires es5-shim so we know trim() exists
+        if (inputText[0] !== '@' || inputText.indexOf(":") === -1) {
+            console.error("Bad user ID to invite: %s", inputText);
+            Modal.createDialog(ErrorDialog, {
+                title: "Invite Error",
+                description: "Malformed user ID. Should look like '@localpart:domain'"
+            });
+            return;
+        }
+        self.setState({
+            inviting: true
+        });
+        console.log("Invite %s to %s", inputText, this.props.roomId);
+        MatrixClientPeg.get().invite(this.props.roomId, inputText).done(
+        function(res) {
+            console.log("Invited");
+            self.setState({
+                inviting: false
+            });
+        }, function(err) {
+            console.error("Failed to invite: %s", JSON.stringify(err));
+            Modal.createDialog(ErrorDialog, {
+                title: "Server error whilst inviting",
+                description: err.message
+            });
+            self.setState({
+                inviting: false
+            });
+        });
+    },
+
     roomMembers: function(limit) {
+        if (!this.props.roomId) return {};
         var cli = MatrixClientPeg.get();
-        var all_members = cli.getRoom(this.props.roomId).currentState.members;
+        var room = cli.getRoom(this.props.roomId);
+        if (!room) return {};
+        var all_members = room.currentState.members;
         var all_user_ids = Object.keys(all_members);
+
+        all_user_ids.sort(function(userIdA, userIdB) {
+            var userA = all_members[userIdA].user;
+            var userB = all_members[userIdB].user;
+
+            var latA = userA ? userA.lastActiveAgo || Number.MAX_VALUE : Number.MAX_VALUE;
+            var latB = userB ? userB.lastActiveAgo || Number.MAX_VALUE : Number.MAX_VALUE;
+
+            return latA - latB;
+        });
+
+
         var to_display = {};
         var count = 0;
         for (var i = 0; i < all_user_ids.length && (limit === undefined || count < limit); ++i) {

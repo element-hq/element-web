@@ -16,6 +16,80 @@ limitations under the License.
 
 'use strict';
 
-module.exports = {
-};
+/*
+ * State vars:
+ * this.state.call_state = the UI state of the call (see CallHandler)
+ */
 
+var React = require('react');
+var dis = require("../../dispatcher");
+var CallHandler = require("../../CallHandler");
+
+module.exports = {
+    propTypes: {
+        room: React.PropTypes.object.isRequired,
+        editing: React.PropTypes.bool,
+        onSettingsClick: React.PropTypes.func,
+        onSaveClick: React.PropTypes.func,
+    },
+
+    getDefaultProps: function() {
+        return {
+            editing: false,
+            onSettingsClick: function() {},
+            onSaveClick: function() {},
+        };
+    },
+
+    componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+        if (this.props.room) {
+            var call = CallHandler.getCall(this.props.room.roomId);
+            var callState = call ? call.call_state : "ended";
+            this.setState({
+                call_state: callState
+            });
+        }
+    },
+
+    componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
+    },
+
+    onAction: function(payload) {
+        // if we were given a room_id to track, don't handle anything else.
+        if (payload.room_id && this.props.room &&
+                this.props.room.roomId !== payload.room_id) {
+            return;
+        }
+        if (payload.action !== 'call_state') {
+            return;
+        }
+        var call = CallHandler.getCall(payload.room_id);
+        var callState = call ? call.call_state : "ended";
+        this.setState({
+            call_state: callState
+        });
+    },
+
+    onVideoClick: function() {
+        dis.dispatch({
+            action: 'place_call',
+            type: "video",
+            room_id: this.props.room.roomId
+        });
+    },
+    onVoiceClick: function() {
+        dis.dispatch({
+            action: 'place_call',
+            type: "voice",
+            room_id: this.props.room.roomId
+        });
+    },
+    onHangupClick: function() {
+        dis.dispatch({
+            action: 'hangup',
+            room_id: this.props.room.roomId
+        });
+    }
+};

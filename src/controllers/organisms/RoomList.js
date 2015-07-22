@@ -100,16 +100,16 @@ module.exports = {
     },
 
     makeRoomTiles: function() {
-        var that = this;
+        var self = this;
         return this.state.roomList.map(function(room) {
-            var selected = room.roomId == that.props.selectedRoom;
+            var selected = room.roomId == self.props.selectedRoom;
             return (
                 <RoomTile
                     room={room}
                     key={room.roomId}
                     selected={selected}
-                    unread={that.state.activityMap[room.roomId] === 1}
-                    highlight={that.state.activityMap[room.roomId] === 2}
+                    unread={self.state.activityMap[room.roomId] === 1}
+                    highlight={self.state.activityMap[room.roomId] === 2}
                 />
             );
         });

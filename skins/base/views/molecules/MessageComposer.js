@@ -18,16 +18,46 @@ limitations under the License.
 
 var React = require('react');
 
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var MessageComposerController = require("../../../../src/controllers/molecules/MessageComposer");
+var ContentMessages = require("../../../../src/ContentMessages");
 
 module.exports = React.createClass({
     displayName: 'MessageComposer',
     mixins: [MessageComposerController],
 
+    onUploadClick: function(ev) {
+        this.refs.uploadInput.getDOMNode().click();
+    },
+
+    onUploadFileSelected: function(ev) {
+        var files = ev.target.files;
+        // MessageComposer shouldn't have to rely on it's parent passing in a callback to upload a file
+        if (files && files.length > 0) {
+            this.props.uploadFile(files[0]);
+        }
+        this.refs.uploadInput.getDOMNode().value = null;
+    },
+
     render: function() {
+        var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
+        var uploadInputStyle = {display: 'none'};
         return (
             <div className="mx_MessageComposer">
-                <textarea ref="textarea" onKeyDown={this.onKeyDown} />
+                <div className="mx_MessageComposer_wrapper">
+                    <div className="mx_MessageComposer_row">
+                        <div className="mx_MessageComposer_avatar">
+                            <img src={ MatrixClientPeg.get().getAvatarUrlForMember(me, 40, 40, "crop") } width="40" height="40" alt=""/>
+                        </div>
+                        <div className="mx_MessageComposer_input">
+                            <textarea ref="textarea" onKeyDown={this.onKeyDown} placeholder="Type a message" />
+                        </div>
+                        <div className="mx_MessageComposer_upload" onClick={this.onUploadClick}>
+                            <img src="img/upload.png" width="32" height="32"/>
+                            <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     },

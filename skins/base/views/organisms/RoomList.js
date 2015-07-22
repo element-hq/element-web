@@ -17,9 +17,11 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ComponentBroker = require('../../../../src/ComponentBroker');
+
+var RoomDropTarget = ComponentBroker.get('molecules/RoomDropTarget');
 
 var RoomListController = require("../../../../src/controllers/organisms/RoomList");
-
 
 module.exports = React.createClass({
     displayName: 'RoomList',
@@ -28,7 +30,16 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_RoomList">
-                {this.makeRoomTiles()}
+                <h2>Favourites</h2>
+                <RoomDropTarget text="Drop here to favourite"/>
+
+                <h2>Recents</h2>
+                <div className="mx_RoomList_recents">
+                    {this.makeRoomTiles()}
+                </div>
+
+                <h2>Archive</h2>
+                <RoomDropTarget text="Drop here to archive"/>
             </div>
         );
     }

@@ -20,7 +20,9 @@ var React = require('react');
 
 var MRoomMemberTileController = require("../../../../src/controllers/molecules/MRoomMemberTile");
 
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../src/ComponentBroker');
+var TextForEvent = require('../../../../src/TextForEvent');
 var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
 
 module.exports = React.createClass({
@@ -28,27 +30,23 @@ module.exports = React.createClass({
     mixins: [MRoomMemberTileController],
 
     getMemberEventText: function() {
-        var ev = this.props.mxEvent;
-        // XXX: SYJS-16
-        var senderName = ev.sender ? ev.sender.name : "Someone";
-        switch (ev.getContent().membership) {
-            case 'invite':
-                return senderName + " invited " + ev.target.name + ".";
-            case 'join':
-                return senderName + " joined the room.";
-            case 'leave':
-                return senderName + " left the room.";
-        }
+        return TextForEvent.textForEvent(this.props.mxEvent);
     },
 
     render: function() {
         // XXX: for now, just cheekily borrow the css from message tile...
+        var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
+        var text = this.getMemberEventText();
+        if (!text) return <div/>;
         return (
-            <div className="mx_MessageTile">
-                <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+            <div className="mx_MessageTile mx_MessageTile_notice">
+                <div className="mx_MessageTile_avatar">
+                    <img src={ this.props.mxEvent.target ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.target, 40, 40, "crop") : null } width="40" height="40" alt=""/>
+                </div>            
+                { timestamp }
                 <span className="mx_SenderProfile"></span>
                 <span className="mx_MessageTile_content">
-                    {this.getMemberEventText()}
+                    { text }
                 </span>
             </div>
         );

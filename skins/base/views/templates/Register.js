@@ -27,8 +27,22 @@ var RegisterController = require("../../../../src/controllers/templates/Register
 var ServerConfig = ComponentBroker.get("molecules/ServerConfig");
 
 module.exports = React.createClass({
+    DEFAULT_HS_URL: 'https://matrix.org',
+    DEFAULT_IS_URL: 'https://matrix.org',
+
     displayName: 'Register',
     mixins: [RegisterController],
+
+    getInitialState: function() {
+        return {
+            serverConfigVisible: false
+        };
+    },
+
+    componentWillMount: function() {
+        this.customHsUrl = this.DEFAULT_HS_URL;
+        this.customIsUrl = this.DEFAULT_IS_URL;
+    },
 
     getRegFormVals: function() {
         return {
@@ -40,25 +54,67 @@ module.exports = React.createClass({
     },
 
     getHsUrl: function() {
-        return this.refs.serverConfig.getHsUrl();
+        if (this.state.serverConfigVisible) {
+            return this.customHsUrl;
+        } else {
+            return this.DEFAULT_HS_URL;
+        }
     },
 
     getIsUrl: function() {
-        return this.refs.serverConfig.getIsUrl();
+        if (this.state.serverConfigVisible) {
+            return this.customIsUrl;
+        } else {
+            return this.DEFAULT_IS_URL;
+        }
+    },
+
+    onServerConfigVisibleChange: function(ev) {
+        this.setState({
+            serverConfigVisible: ev.target.checked
+        });
+    },
+
+    getUserIdSuffix: function() {
+        return '';
+        var actualHsUrl = document.createElement('a');
+        actualHsUrl.href = this.getHsUrl();
+        var defaultHsUrl = document.createElement('a');
+        defaultHsUrl.href = this.DEFAULT_HS_URL;
+        if (actualHsUrl.host == defaultHsUrl.host) {
+            return ':matrix.org';
+        }
+        return '';
+    },
+
+    onServerUrlChanged: function(newUrl) {
+        this.customHsUrl = this.refs.serverConfig.getHsUrl();
+        this.customIsUrl = this.refs.serverConfig.getIsUrl();
+        this.forceUpdate();
     },
 
     componentForStep: function(step) {
         switch (step) {
             case 'initial':
+                var serverConfigStyle = {};
+                serverConfigStyle.display = this.state.serverConfigVisible ? 'block' : 'none';
                 return (
                     <div>
                         <form onSubmit={this.onInitialStageSubmit}>
-                        Email: <input type="text" ref="email" defaultValue={this.savedParams.email} /><br />
-                        Username: <input type="text" ref="username" defaultValue={this.savedParams.username} /><br />
-                        Password: <input type="password" ref="password" defaultValue={this.savedParams.password} /><br />
-                        Confirm Password: <input type="password" ref="confirmPassword" defaultValue={this.savedParams.confirmPassword} /><br />
-                        <ServerConfig ref="serverConfig" />
-                        <input type="submit" value="Continue" />
+                        <input className="mx_Login_field" type="text" ref="email" placeholder="Email address" defaultValue={this.savedParams.email} /><br />
+                        <input className="mx_Login_field" type="text" ref="username" placeholder="User name" defaultValue={this.savedParams.username} />{this.getUserIdSuffix()}<br />
+                        <input className="mx_Login_field" type="password" ref="password" placeholder="Password" defaultValue={this.savedParams.password} /><br />
+                        <input className="mx_Login_field" type="password" ref="confirmPassword" placeholder="Confirm password" defaultValue={this.savedParams.confirmPassword} /><br />
+
+                        <input className="mx_Login_checkbox" id="advanced" type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
+                        <label htmlFor="advanced">Use custom server options (advanced)</label>
+                        <div style={serverConfigStyle}>
+                        <ServerConfig ref="serverConfig"
+                            defaultHsUrl={this.customHsUrl} defaultIsUrl={this.customIsUrl}
+                            onHsUrlChanged={this.onServerUrlChanged} onIsUrlChanged={this.onServerUrlChanged} />
+                        </div>
+                        <br />
+                        <input className="mx_Login_submit" type="submit" value="Register" />
                         </form>
                     </div>
                 );
@@ -72,7 +128,7 @@ module.exports = React.createClass({
             case 'stage_m.login.recaptcha':
                 return (
                     <div ref="recaptchaContainer">
-                        This Home Server would like to make sure you're not a robot
+                        This Home Server would like to make sure you are not a robot
                         <div id="mx_recaptcha"></div>
                     </div>
                 );
@@ -87,10 +143,10 @@ module.exports = React.createClass({
         } else {
             return (
                 <div>
-                    <h1>Create a new account:</h1>
+                    <h2>Create an account</h2>
                     {this.componentForStep(this.state.step)}
-                    <div className="error">{this.state.errorText}</div>
-                    <a onClick={this.showLogin} href="#">Sign in with existing account</a>
+                    <div className="mx_Login_error">{this.state.errorText}</div>
+                    <a className="mx_Login_create" onClick={this.showLogin} href="#">I already have an account</a>
                 </div>
             );
         }
@@ -123,8 +179,13 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_Register">
-            {this.registerContent()}
+            <div className="mx_Login">
+                <div className="mx_Login_box">
+                    <div className="mx_Login_logo">
+                        <img src="img/logo.png" width="249" height="76" alt="vector"/>
+                    </div>
+                    {this.registerContent()}
+                </div>
             </div>
         );
     }
