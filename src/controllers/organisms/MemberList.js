@@ -35,10 +35,12 @@ module.exports = {
     componentWillMount: function() {
         var cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
+        cli.on("Room", this.onRoom); // invites
     },
 
     componentWillUnmount: function() {
         if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
             MatrixClientPeg.get().removeListener("User.presence", this.userPresenceFn);
         }
@@ -69,7 +71,21 @@ module.exports = {
     /*componentWillReceiveProps: function(newProps) {
     },*/
 
+    onRoom: function(room) {
+        if (room.roomId !== this.props.roomId) {
+            return;
+        }
+        // We listen for room events because when we accept an invite
+        // we need to wait till the room is fully populated with state
+        // before refreshing the member list else we get a stale list.
+        this._updateList();
+    },
+
     onRoomStateMember: function(ev, state, member) {
+        this._updateList();
+    },
+
+    _updateList: function() {
         var members = this.roomMembers();
         this.setState({
             memberDict: members
