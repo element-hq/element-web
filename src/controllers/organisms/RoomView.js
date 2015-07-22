@@ -89,6 +89,17 @@ module.exports = {
             case 'notifier_enabled':
                 this.forceUpdate();
                 break;
+            case 'call_state':
+                if (this.props.roomId !== payload.room_id) {
+                    break;
+                }
+                // scroll to bottom
+                var messageWrapper = this.refs.messageWrapper;
+                if (messageWrapper) {
+                    messageWrapper = messageWrapper.getDOMNode();
+                    messageWrapper.scrollTop = messageWrapper.scrollHeight;
+                }
+                break;
         }
     },
 
