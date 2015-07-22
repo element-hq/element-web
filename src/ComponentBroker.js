@@ -103,6 +103,7 @@ require('../skins/base/views/molecules/RoomDropTarget');
 require('../skins/base/views/molecules/BottomLeftMenu');
 require('../skins/base/views/molecules/DateSeparator');
 require('../skins/base/views/atoms/voip/VideoFeed');
+require('../skins/base/views/atoms/ImageView');
 require('../skins/base/views/molecules/voip/VideoView');
 require('../skins/base/views/molecules/voip/CallView');
 require('../skins/base/views/molecules/voip/IncomingCallBox');

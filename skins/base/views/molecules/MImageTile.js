@@ -21,6 +21,10 @@ var React = require('react');
 var MImageTileController = require("../../../../src/controllers/molecules/MImageTile");
 
 var MatrixClientPeg = require('../../../../src/MatrixClientPeg');
+var Modal = require('../../../../src/Modal');
+var ComponentBroker = require('../../../../src/ComponentBroker');
+
+var ImageView = ComponentBroker.get("atoms/ImageView");
 
 module.exports = React.createClass({
     displayName: 'MImageTile',
@@ -48,6 +52,17 @@ module.exports = React.createClass({
         }
     },
 
+    onClick: function(ev) {
+        ev.preventDefault();
+        var content = this.props.mxEvent.getContent();
+        var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(content.url);
+        Modal.createDialog(ImageView, {
+            src: httpUrl,
+            width: content.info.w,
+            height: content.info.h
+        });
+    },
+
     render: function() {
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
@@ -60,7 +75,7 @@ module.exports = React.createClass({
 
         return (
             <span className="mx_MImageTile">
-                <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
+                <a href="#" onClick={this.onClick}>
                     <img src={cli.mxcUrlToHttp(content.url, 320, 240)} alt={content.body} style={imgStyle} />
                 </a>
             </span>
