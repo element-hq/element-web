@@ -96,7 +96,14 @@ module.exports = {
     },
 
     getRoomList: function() {
-        return RoomListSorter.mostRecentActivityFirst(MatrixClientPeg.get().getRooms());
+        return RoomListSorter.mostRecentActivityFirst(
+            MatrixClientPeg.get().getRooms().filter(function(room) {
+                return room.hasMembershipState(
+                    MatrixClientPeg.get().credentials.userId,
+                    "join"
+                );
+            })
+        );
     },
 
     makeRoomTiles: function() {
