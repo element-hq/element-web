@@ -1,31 +1,30 @@
-matrix-react-sdk
-================
+Vector/Web
+==========
 
-This is a react-based SDK for inserting a Matrix chat/voip client into a web page.
-It provides reusable and customisable UI components backed by the matrix-js-sdk.
+Vector is a Matrix web client built using the Matrix React SDK (https://github.com/matrix-org/matrix-react-sdk).
 
-Getting started with the trivial example
-========================================
+Getting started
+===============
 
 1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
 2. Clone the repo: `git clone https://github.com/matrix-org/matrix-react-sdk.git` 
 3. Switch to the SDK directory: `cd matrix-react-sdk`
 4. Install the prerequisites: `npm install`
-5. Switch to the example directory: `cd examples/trivial`
+5. Switch to the example directory: `cd examples/vector`
 6. Install the example app prerequisites: `npm install`
 7. Build the example and start a server: `npm start`
 
 Now open http://127.0.0.1:8080/ in your browser to see your newly built
-Matrix client.
+Vector.
 
-Using the example app for development
-=====================================
+Development
+===========
 
 To work on the CSS and Javascript and have the bundle files update as you
 change the source files, you'll need to do two extra things:
 
 1. Link the react sdk package into the example:
-   `cd matrix-react-sdk/examples/trivial; npm link ../../`
+   `cd matrix-react-sdk/examples/vector; npm link ../../`
 2. Start a watcher for the CSS files:
    `cd matrix-react-sdk; npm run start:css`
 
