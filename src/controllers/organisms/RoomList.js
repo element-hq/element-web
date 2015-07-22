@@ -98,10 +98,8 @@ module.exports = {
     getRoomList: function() {
         return RoomListSorter.mostRecentActivityFirst(
             MatrixClientPeg.get().getRooms().filter(function(room) {
-                return room.hasMembershipState(
-                    MatrixClientPeg.get().credentials.userId,
-                    "join"
-                );
+                var member = room.getMember(MatrixClientPeg.get().credentials.userId);
+                return member && (member.membership == "join" || member.membership == "invite");
             })
         );
     },
