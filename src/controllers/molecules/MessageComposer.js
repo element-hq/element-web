@@ -153,7 +153,12 @@ module.exports = {
 
     onKeyDown: function (ev) {
         if (ev.keyCode === KeyCode.ENTER) {
-            this.sentHistory.push(this.refs.textarea.getDOMNode().value);
+            var input = this.refs.textarea.getDOMNode().value;
+            if (input.length === 0) {
+                ev.preventDefault();
+                return;
+            }
+            this.sentHistory.push(input);
             this.onEnter(ev);
         }
         else if (ev.keyCode === KeyCode.TAB) {
