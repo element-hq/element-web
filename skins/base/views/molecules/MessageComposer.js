@@ -33,7 +33,10 @@ module.exports = React.createClass({
     onUploadFileSelected: function(ev) {
         var files = ev.target.files;
         // MessageComposer shouldn't have to rely on it's parent passing in a callback to upload a file
-        this.props.uploadFile(files[0]);
+        if (files && files.length > 0) {
+            this.props.uploadFile(files[0]);
+        }
+        this.refs.uploadInput.getDOMNode().value = null;
     },
 
     render: function() {
