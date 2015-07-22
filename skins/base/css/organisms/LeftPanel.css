@@ -40,7 +40,7 @@ limitations under the License.
     order: 1;
 
     overflow-y: scroll;
-    flex: 1;
+    flex: 1 1 0;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu {
