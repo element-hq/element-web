@@ -114,7 +114,10 @@ module.exports = {
 
         if (this.refs.messageWrapper) {
             var messageWrapper = this.refs.messageWrapper.getDOMNode();
-            this.atBottom = messageWrapper.scrollHeight - messageWrapper.scrollTop <= messageWrapper.clientHeight;
+            this.atBottom = (
+                messageWrapper.scrollHeight - messageWrapper.scrollTop <= 
+                (messageWrapper.clientHeight + 150)
+            );
         }
         this.setState({
             room: MatrixClientPeg.get().getRoom(this.props.roomId)
