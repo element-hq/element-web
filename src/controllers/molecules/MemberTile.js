@@ -17,6 +17,8 @@ limitations under the License.
 'use strict';
 
 var dis = require("../../dispatcher");
+var Modal = require("../../Modal");
+var Loader = require("react-loader");
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
@@ -30,12 +32,14 @@ module.exports = {
 
     onLeaveClick: function() {
         var d = MatrixClientPeg.get().leave(this.props.member.roomId);
-        // TODO: Add spinner
+
+        var modal = Modal.createDialog(Loader);
 
         d.then(function() {
-            // TODO: Change to another room.
+            modal.close();
             dis.dispatch({action: 'view_next_room'});
         }, function(err) {
+            modal.close();
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to leave room",
                 description: err.toString()
