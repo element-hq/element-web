@@ -153,6 +153,7 @@ module.exports = {
                 this.setState({
                     currentRoom: allRooms[roomIndex].roomId
                 });
+                this.notifyNewScreen('room/'+allRooms[roomIndex].roomId);
                 break;
             case 'view_user_settings':
                 this.setState({
