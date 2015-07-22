@@ -57,7 +57,7 @@ module.exports = React.createClass({
                     case "ringback":
                     case "connected":
                         callButtons = (
-                            <div className="mx_RoomHeader_hangupButton" onClick={this.onHangupClick}>
+                            <div className="mx_RoomHeader_textButton" onClick={this.onHangupClick}>
                                 End call
                             </div>
                         );
@@ -72,15 +72,16 @@ module.exports = React.createClass({
             var actual_name = this.props.room.currentState.getStateEvents('m.room.name', '');
             if (actual_name) actual_name = actual_name.getContent().name;
             if (this.props.editing) {
-                name = <input type="text" defaultValue={actual_name} placeholder="Name" ref="name_edit"/>;
-                // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
-                save_button = (
-                    <div className="mx_RoomHeader_button"onClick={this.props.onSaveClick}>
-                        Save
+                name = 
+                    <div className="mx_RoomHeader_nameEditing">
+                        <input className="mx_RoomHeader_nameInput" type="text" defaultValue={actual_name} placeholder="Name" ref="name_edit"/>
                     </div>
-                );
+                // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
             } else {
-                name = <EditableText label={this.props.room.name} initialValue={actual_name} placeHolder="Name" onValueChanged={this.onNameChange} />;
+                name =
+                    <div className="mx_RoomHeader_name">
+                        <EditableText label={this.props.room.name} initialValue={actual_name} placeHolder="Name" onValueChanged={this.onNameChange} />
+                    </div>
                 if (topic) topic_el = <div className="mx_RoomHeader_topic">{ topic.getContent().topic }</div>;
                 settings_button = (
                     <div className="mx_RoomHeader_button" onClick={this.props.onSettingsClick}>
@@ -96,15 +97,12 @@ module.exports = React.createClass({
                             <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(this.props.room, 48, 48, "crop") } width="48" height="48" alt=""/>
                         </div>
                         <div className="mx_RoomHeader_info">
-                            <div className="mx_RoomHeader_name">
-                                { name }
-                            </div>
+                            { name }
                             { topic_el }
                         </div>
                     </div>
                     {callButtons}
                     <div className="mx_RoomHeader_rightRow">
-                        { save_button }
                         { settings_button }
                         <div className="mx_RoomHeader_button">
                             <img src="img/search.png" width="32" height="32"/>

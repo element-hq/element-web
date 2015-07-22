@@ -40,10 +40,10 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    width: 100%;
+    flex: 1;
 }
 
-.mx_RoomHeader_hangupButton {
+.mx_RoomHeader_textButton {
     height: 48px;
     margin-top: 18px;
     background-color: #80cef4;
@@ -75,9 +75,6 @@ limitations under the License.
     -ms-flex-order: 3;
     -webkit-order: 3;
     order: 3;
-
-    -webkit-flex: 0 0 200px;
-    flex: 0 0 200px;    
 }
 
 .mx_RoomHeader_info {
@@ -105,6 +102,22 @@ limitations under the License.
     padding-right: 16px;
     overflow: scroll;
     text-overflow: ellipsis;
+}
+
+.mx_RoomHeader_nameEditing {
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-top: -5px;
+}
+
+.mx_RoomHeader_nameInput {
+    border-radius: 3px;
+    width: 260px;
+    border: 1px solid #c7c7c7;
+    font-weight: 300;
+    font-size: 14px;
+    padding: 9px;
+    margin-top: 6px;
 }
 
 .mx_RoomHeader_topic {

@@ -16,6 +16,7 @@ limitations under the License.
 
 .mx_RoomSettings {
     max-height: 250px;
+    padding-top: 12px;
 }
 
 .mx_RoomSettings_settings {
@@ -31,4 +32,34 @@ limitations under the License.
     display: table-cell;
 
     margin: 0 10px;
+}
+
+.mx_RoomSettings input,
+.mx_RoomSettings textarea  {
+    border-radius: 3px;
+    border: 1px solid #c7c7c7;
+    font-weight: 300;
+    font-size: 14px;
+    padding: 9px;
+    margin-top: 6px;
+}
+
+.mx_RoomSettings_buttons {
+    text-align: right;
+}
+
+.mx_RoomSettings_button {
+    display: inline;
+    border: 0px;
+    height: 36px;
+    border-radius: 36px;
+    font-weight: 400;
+    font-size: 16px;
+    color: #fff;
+    background-color: #80cef4;
+    width: auto;
+    margin: auto;
+    padding: 6px;
+    padding-left: 1em;
+    padding-right: 1em;
 }
