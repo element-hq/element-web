@@ -76,10 +76,16 @@ module.exports = {
     },
 
     replaceUsingAccessToken: function(hs_url, is_url, user_id, access_token) {
-        createClient(hs_url, is_url, user_id, access_token);
         if (localStorage) {
             try {
                 localStorage.clear();
+            } catch (e) {
+                console.warn("Error using local storage");
+            }
+        }
+        createClient(hs_url, is_url, user_id, access_token);
+        if (localStorage) {
+            try {
                 localStorage.setItem("mx_hs_url", hs_url);
                 localStorage.setItem("mx_is_url", is_url);
                 localStorage.setItem("mx_user_id", user_id);
