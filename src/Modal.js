@@ -41,7 +41,7 @@ module.exports = {
         var closeDialog = function() {
             React.unmountComponentAtNode(self.getOrCreateContainer());
 
-            if (props && props.onFinished) props.onFinished.apply(arguments);
+            if (props && props.onFinished) props.onFinished.apply(null, arguments);
         };
 
         // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
