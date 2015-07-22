@@ -18,7 +18,7 @@
     "build:css": "catw 'skins/base/css/**/*.css' -o bundle.css -c uglifycss --no-watch",
     "start:css": "catw 'skins/base/css/**/*.css' -o bundle.css -v",
     "build": "npm run build:js && npm run build:css",
-    "start": "parallelshell 'npm run start:js' 'npm run start:css'",
+    "start": "parallelshell \"npm run start:js\" \"npm run start:css\"",
     "prepublish": "npm run build"
   },
   "dependencies": {
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "catw": "^1.0.1",
-    "parallelshell": "^1.1.1",
+    "parallelshell": "^1.2.0",
     "react-tools": "^0.13.3",
     "uglifycss": "0.0.15"
   }
