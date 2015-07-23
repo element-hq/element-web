@@ -18,6 +18,18 @@ limitations under the License.
     height: 100%;
     margin-bottom: 100px;
     padding: 8px;
+
+    -webkit-flex: 1;
+    flex: 1;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    flex-direction: column;
+    -webkit-flex-direction: column;
 }
 
 .mx_MemberList_chevron {
@@ -29,11 +41,12 @@ limitations under the License.
 .mx_MemberList_border {
     border: 1px solid #a9dbf4;
     overflow-y: scroll;
-    height: auto;
-    max-height: 75%;
     border-radius: 8px;
     padding: 20px 14px 14px 24px;
     background-color: #fff;
+
+    order: 1;
+    flex: 1 1 0px;
 }
 
 .mx_MemberList_wrapper {
