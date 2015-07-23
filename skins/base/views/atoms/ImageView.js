@@ -25,6 +25,9 @@ module.exports = React.createClass({
     mixins: [ImageViewController],
 
     render: function() {
+
+        // XXX: can't we just do max-width: 80%, max-height: 80% on the CSS?
+        
         var width = this.props.width || 500;
         var height = this.props.height || 500;
 
