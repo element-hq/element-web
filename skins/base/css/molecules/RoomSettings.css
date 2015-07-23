@@ -44,8 +44,13 @@ limitations under the License.
     margin-top: 6px;
 }
 
+.mx_RoomSettings_description {
+    width: 330px;
+}
+
 .mx_RoomSettings_buttons {
     text-align: right;
+    margin-bottom: 16px;
 }
 
 .mx_RoomSettings_button {
