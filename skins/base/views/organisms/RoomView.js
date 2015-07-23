@@ -92,8 +92,10 @@ module.exports = React.createClass({
                 var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
                 return (
                     <div className="mx_RoomView">
+                        <RoomHeader ref="header" room={this.state.room} simpleHeader="Room invite"/>
                         <div className="mx_RoomView_invitePrompt">
                             <div>{inviteEvent.user_id} has invited you to a room</div>
+                            <br/>
                             <button ref="joinButton" onClick={this.onJoinButtonClicked}>Join</button>
                             <div className="error">{joinErrorText}</div>
                         </div>
