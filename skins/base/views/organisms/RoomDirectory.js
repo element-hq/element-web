@@ -76,26 +76,26 @@ module.exports = React.createClass({
 
         var rooms = this.state.publicRooms.filter(function(a) {
             // FIXME: if incrementally typing, keep narrowing down the search set
-            return (a.aliases[0].search(filter) >= 0);
+            return (a.aliases[0].search(filter) >= 0 && a.num_joined_members > 0);
         }).sort(function(a,b) {
-            return a.num_joined_members > b.num_joined_members;
+            return a.num_joined_members - b.num_joined_members;
         });
         var rows = [];
         var self = this;
         for (var i = 0; i < rooms.length; i++) {
             var name = rooms[i].name;
-            if (!name) {
-                if (rooms[i].aliases[0]) name = rooms[i].aliases[0] 
-            }
-            else {
-                if (rooms[i].aliases[0]) name += " (" + rooms[i].aliases[0] + ")";
-            }
+            // <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(rooms[i].room_id, 40, 40, "crop") } width="40" height="40" alt=""/>
             rows.unshift(
-                <tr key={ rooms[i].room_id } onClick={self.joinRoom.bind(null, rooms[i].room_id)}>
-                    <td><img src={ MatrixClientPeg.get().getAvatarUrlForRoom(rooms[i].room_id, 40, 40, "crop") } width="40" height="40" alt=""/> { name }</td>
-                    <td>{ rooms[i].topic }</td>
-                    <td style={ {'text-align' : 'center'} }>{ rooms[i].num_joined_members }</td>
-                </tr>
+                <tbody key={ rooms[i].room_id }>
+                    <tr onClick={self.joinRoom.bind(null, rooms[i].room_id)}>
+                        <td className="mx_RoomDirectory_name">{ name }</td>
+                        <td>{ rooms[i].aliases[0] }</td>
+                        <td>{ rooms[i].num_joined_members }</td>
+                    </tr>
+                    <tr>
+                        <td className="mx_RoomDirectory_topic" colSpan="3">{ rooms[i].topic }</td>
+                    </tr>
+                </tbody>
             );
         }
         return rows;
@@ -118,10 +118,12 @@ module.exports = React.createClass({
                 <RoomHeader simpleHeader="Public Rooms" />
                 <div className="mx_RoomDirectory_list">
                     <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
-                    <table className="mx_RoomDirectory_table">
-                        <tr><th>Room</th><th>Topic</th><th>Users</th></tr>
-                        { this.getRows(this.state.roomAlias) }
-                    </table>
+                    <div className="mx_RoomDirectory_tableWrapper">
+                        <table className="mx_RoomDirectory_table">
+                            <tr><th>Room</th><th>Alias</th><th>Members</th></tr>
+                            { this.getRows(this.state.roomAlias) }
+                        </table>
+                    </div>
                 </div>
             </div>
         );

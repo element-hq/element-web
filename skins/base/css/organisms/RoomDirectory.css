@@ -18,6 +18,7 @@ limitations under the License.
     width: 720px;
     margin-left: auto;
     margin-right: auto;
+    color: #4a4a4a;
 }
 
 .mx_RoomDirectory_input {
@@ -31,8 +32,33 @@ limitations under the License.
     margin-bottom: 12px;
 }
 
+.mx_RoomDirectory_tableWrapper {
+    overflow-y: scroll;
+    height: 400px;
+}
+
 .mx_RoomDirectory_table {
     width: 100%;
+    text-align: left;
+}
+
+.mx_RoomDirectory_table th {
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.mx_RoomDirectory_table td {
+    font-weight: 300;
+    font-size: 16px;
+}
+
+.mx_RoomDirectory_table .mx_RoomDirectory_name {
+    font-weight: 400;
+}
+
+.mx_RoomDirectory_table .mx_RoomDirectory_topic {
+    font-weight: 400;
+    font-size: 12px;
 }
 
 .mx_RoomDirectory_table td,
