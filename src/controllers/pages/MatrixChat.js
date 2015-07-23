@@ -195,9 +195,11 @@ module.exports = {
                     firstRoom = RoomListSorter.mostRecentActivityFirst(
                         cli.getRooms()
                     )[0].roomId;
+                    self.setState({ready: true, currentRoom: firstRoom});
+                    self.notifyNewScreen('room/'+firstRoom);
+                } else {
+                    self.setState({ready: true});
                 }
-                self.setState({ready: true, currentRoom: firstRoom});
-                self.notifyNewScreen('room/'+firstRoom);
             } else {
                 self.setState({ready: true});
             }
