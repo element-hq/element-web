@@ -99,6 +99,7 @@ module.exports = {
                 Presence.stop();
                 MatrixClientPeg.get().removeAllListeners();
                 MatrixClientPeg.unset();
+                this.notifyNewScreen('');
                 break;
             case 'start_registration':
                 if (this.state.logged_in) return;
