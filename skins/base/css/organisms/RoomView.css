@@ -66,8 +66,10 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
-    width: 100%;
+    -webkit-flex: 1 1 0;
     flex: 1 1 0;
+
+    width: 100%;
     margin-top: 18px;
     margin-bottom: 18px;
 
