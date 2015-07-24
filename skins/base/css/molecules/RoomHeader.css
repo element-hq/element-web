@@ -148,3 +148,7 @@ limitations under the License.
     padding-left: 8px;
     padding-right: 8px;
 }
+
+.mx_RoomHeader_button img {
+    cursor: pointer;
+}

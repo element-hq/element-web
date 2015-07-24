@@ -105,13 +105,13 @@ module.exports = React.createClass({
                     <div className="mx_RoomHeader_rightRow">
                         { settings_button }
                         <div className="mx_RoomHeader_button mx_RoomHeader_search">
-                            <img src="img/search.png" width="32" height="32"/>
+                            <img src="img/search.png" title="Search" alt="Search" width="32" height="32"/>
                         </div>
                         <div className="mx_RoomHeader_button mx_RoomHeader_video" onClick={this.onVideoClick}>
-                            <img src="img/video.png" width="32" height="32"/>
+                            <img src="img/video.png" title="Video call" alt="Video call" width="32" height="32"/>
                         </div>
                         <div className="mx_RoomHeader_button mx_RoomHeader_voice" onClick={this.onVoiceClick}>
-                            <img src="img/voip.png" width="32" height="32"/>
+                            <img src="img/voip.png" title="VoIP call" alt="VoIP call" width="32" height="32"/>
                         </div>
                     </div>
                 </div>
