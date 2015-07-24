@@ -44,6 +44,7 @@ module.exports = {
     },
 
     havePermission: function() {
+        if (!this.supportsDesktopNotifications()) return false;
         return global.Notification.permission == 'granted';
     },
 
