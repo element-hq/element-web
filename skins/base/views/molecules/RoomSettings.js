@@ -131,7 +131,7 @@ module.exports = React.createClass({
                 <textarea className="mx_RoomSettings_description" placeholder="Topic" defaultValue={topic} ref="topic"/> <br/>
                 <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label> <br/>
                 <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility == "shared"}/> Share message history with new users</label> <br/>
-                <label><input type="checkbox" /> Encrypt room</label> <br/>
+                <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label> <br/>
 
                 <h3>Power levels</h3>
                 <div className="mx_RoomSettings_power_levels mx_RoomSettings_settings">

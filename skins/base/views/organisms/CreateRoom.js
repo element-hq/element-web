@@ -155,7 +155,7 @@ module.exports = React.createClass({
                         <div>
                             <label><input type="checkbox" ref="share_history" checked={this.state.share_history} onChange={this.onShareHistoryChanged}/> Share message history with new users</label>
                         </div>
-                        <div>
+                        <div className="mx_CreateRoom_encrypt">
                             <label><input type="checkbox" ref="encrypt" checked={this.state.encrypt} onChange={this.onEncryptChanged}/> Encrypt room</label>
                         </div>
                         <div>

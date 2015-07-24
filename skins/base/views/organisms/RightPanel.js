@@ -52,7 +52,7 @@ module.exports = React.createClass({
         if (this.props.roomId) {
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
-                        <div className="mx_RightPanel_headerButton">
+                        <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton">
                             <img src="img/file.png" width="32" height="32" alt="Files"/>
                         </div>
                         <div className="mx_RightPanel_headerButton" onClick={ this.onMemberListButtonClick }>

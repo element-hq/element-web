@@ -30,15 +30,15 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_RoomList">
-                <h2>Favourites</h2>
+                <h2 className="mx_RoomList_favourites_label">Favourites</h2>
                 <RoomDropTarget text="Drop here to favourite"/>
 
-                <h2>Recents</h2>
+                <h2 className="mx_RoomList_recents_label">Recents</h2>
                 <div className="mx_RoomList_recents">
                     {this.makeRoomTiles()}
                 </div>
 
-                <h2>Archive</h2>
+                <h2 className="mx_RoomList_archive_label">Archive</h2>
                 <RoomDropTarget text="Drop here to archive"/>
             </div>
         );
