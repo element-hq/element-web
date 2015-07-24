@@ -75,7 +75,7 @@ module.exports = React.createClass({
                     break;
             }
 
-            if (!Notifier.isEnabled()) {
+            if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled()) {
                 return (
                         <div className="mx_MatrixChat_wrapper">
                             <MatrixToolbar />
