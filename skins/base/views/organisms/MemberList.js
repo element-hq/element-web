@@ -70,7 +70,6 @@ module.exports = React.createClass({
     onClickInvite: function(ev) {
         this.setState({ editing: true });
         this.refs.invite.onClickDiv();
-        console.log("forcing update on memberlist after having clicked invite");
         ev.stopPropagation();
         ev.preventDefault();
     },
@@ -86,8 +85,6 @@ module.exports = React.createClass({
             mx_MemberTile: true,
             mx_MemberTile_inviteEditing: this.state.editing,
         });
-
-        console.log("rendering inviteTile, with phase as " + (this.refs.invite ? this.refs.invite.state.phase : "unknown"));
 
         return (
             <div className={ classes } onClick={ this.onClickInvite } >
