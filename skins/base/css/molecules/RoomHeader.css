@@ -100,7 +100,6 @@ limitations under the License.
     font-size: 20px;
     padding-left: 16px;
     padding-right: 16px;
-    overflow: scroll;
     text-overflow: ellipsis;
 }
 
@@ -128,8 +127,7 @@ limitations under the License.
     font-weight: 300;  
     padding-left: 16px;
     padding-right: 16px;
-    overflow: scroll;
-    text-overflow: ellipsis;
+    overflow-y: scroll;
 }
 
 .mx_RoomHeader_avatar {
