@@ -43,6 +43,8 @@ html {
     overflow: -moz-scrollbars-none;
 }
 
+/* FIXME: why is all the dialog stuff in here rather than in per-component files? */
+
 .mx_Dialog_Background {
     position: fixed;
     top: 0;
@@ -111,7 +113,8 @@ html {
     padding-right: 1em;
 }
 
-.mx_ErrorDialogTitle {
+.mx_ErrorDialogTitle,
+.mx_QuestionDialogTitle {
     min-height: 16px;
     padding: 12px;
     border-bottom: 1px solid #a9dbf4;

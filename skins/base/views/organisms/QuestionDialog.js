@@ -45,13 +45,13 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_QuestionDialog">
-                <div className="mx_QuestionDialog">
+                <div className="mx_QuestionDialogTitle">
                     {this.props.title}
                 </div>
-                <div className="mx_QuestionDialog">
+                <div className="mx_Dialog_content">
                     {this.props.description}
                 </div>
-                <div className="mx_QuestionDialog_buttons">
+                <div className="mx_Dialog_buttons">
                     <button onClick={this.onOk} autoFocus={this.props.focus}>
                         {this.props.button}
                     </button>
