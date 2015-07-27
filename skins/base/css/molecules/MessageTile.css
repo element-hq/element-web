@@ -26,7 +26,7 @@ limitations under the License.
     padding-right: 12px;
     margin-left: -64px;
     margin-top: -7px;
-    float: left;    
+    float: left;
 }
 
 .mx_MessageTile_avatar img {
@@ -77,4 +77,16 @@ limitations under the License.
 
 .mx_MessageTile_msgOption {
     float: right;
+}
+
+.mx_MessageTimestamp {
+    display: none;
+}
+
+.mx_MessageTile_last .mx_MessageTimestamp {
+    display: block;
+}
+
+.mx_MessageTile:hover .mx_MessageTimestamp {
+    display: block;
 }
