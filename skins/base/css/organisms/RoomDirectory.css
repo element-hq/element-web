@@ -18,7 +18,30 @@ limitations under the License.
     width: 720px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 12px;
     color: #4a4a4a;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;    
+
+    flex-direction: column;
+    -webkit-flex-direction: column;
+}
+
+.mx_RoomDirectory_list {
+    flex: 1;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;    
+
+    flex-direction: column;
+    -webkit-flex-direction: column;
 }
 
 .mx_RoomDirectory_input {
@@ -34,12 +57,13 @@ limitations under the License.
 
 .mx_RoomDirectory_tableWrapper {
     overflow-y: scroll;
-    height: 400px;
+    flex: 1 1 0;
 }
 
 .mx_RoomDirectory_table {
     width: 100%;
     text-align: left;
+    table-layout: fixed;
 }
 
 .mx_RoomDirectory_table th {
@@ -47,9 +71,15 @@ limitations under the License.
     font-size: 12px;
 }
 
+.mx_RoomDirectory_table tbody {
+    cursor: pointer;
+}
+
 .mx_RoomDirectory_table td {
     font-weight: 300;
     font-size: 16px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 .mx_RoomDirectory_table .mx_RoomDirectory_name {
