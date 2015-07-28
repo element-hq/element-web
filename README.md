@@ -7,8 +7,8 @@ Getting started
 ===============
 
 1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
-2. Clone the repo: `git clone https://github.com/matrix-org/matrix-react-sdk.git` 
-3. Switch to the SDK directory: `cd matrix-react-sdk`
+2. Clone the repo: `git clone https://github.com/vector-im/vector-web.git` 
+3. Switch to the SDK directory: `cd vector-web`
 4. Install the prerequisites: `npm install`
 5. Switch to the example directory: `cd examples/vector`
 6. Install the example app prerequisites: `npm install`
@@ -24,9 +24,9 @@ To work on the CSS and Javascript and have the bundle files update as you
 change the source files, you'll need to do two extra things:
 
 1. Link the react sdk package into the example:
-   `cd matrix-react-sdk/examples/vector; npm link ../../`
+   `cd vector-web/examples/vector; npm link ../../`
 2. Start a watcher for the CSS files:
-   `cd matrix-react-sdk; npm run start:css`
+   `cd vector-web; npm run start:css`
 
 Note that you may need to restart the CSS builder if you add a new file. Note
 that `npm start` builds debug versions of the javascript and CSS, which are
