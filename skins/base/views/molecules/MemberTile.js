@@ -25,6 +25,10 @@ var MemberTileController = require("../../../../src/controllers/molecules/Member
 var MemberInfo = ComponentBroker.get('molecules/MemberInfo');
 var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
 
+// The Lato WOFF doesn't include sensible combining diacritics, so Chrome chokes on rendering them.
+// Revert to Arial when this happens, which on OSX works at least.
+var zalgo = /[\u0300-\u036f\u1ab0-\u1aff\u1dc0-\u1dff\u20d0-\u20ff\ufe20-\ufe2f]/;
+
 module.exports = React.createClass({
     displayName: 'MemberTile',
     mixins: [MemberTileController],
@@ -65,18 +69,24 @@ module.exports = React.createClass({
         var name = this.props.member.name;
         if (isMyUser) name += " (me)";
         var leave = isMyUser ? <span className="mx_MemberTile_leave" onClick={this.onLeaveClick}>X</span> : null;
+
+        var nameClass = this.state.hover ? "mx_MemberTile_nameSpan" : "mx_MemberTile_name";
+        if (zalgo.test(name)) {
+            nameClass += " mx_MemberTile_zalgo";
+        }
+
         var nameEl;
         if (this.state.hover) {
             nameEl =
                 <div className="mx_MemberTile_nameWrapper">
                     <MemberInfo member={this.props.member} />
-                    <span className="mx_MemberTile_nameSpan">{name}</span>
+                    <span className={nameClass}>{name}</span>
                     {leave}
                 </div>
         }
         else {
             nameEl =
-                <div className="mx_MemberTile_name">
+                <div className={nameClass}>
                     {name}
                     {leave}
                 </div>

@@ -98,6 +98,9 @@ limitations under the License.
     opacity: 0.5;
 }
 
+.mx_MemberTile_zalgo {
+    font-family: Helvetica, Arial, Sans-Serif;
+}
 
 .mx_MemberTile_leave {
     float: right;
