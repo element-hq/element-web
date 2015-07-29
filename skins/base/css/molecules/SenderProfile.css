@@ -16,4 +16,5 @@ limitations under the License.
 
 .mx_SenderProfile_zalgo {
     font-family: Helvetica, Arial, Sans-Serif;
+    display: table-row;
 }
