@@ -49,14 +49,7 @@ function onHashChange(ev) {
     routeUrl(window.location);
 }
 
-window.addEventListener('hashchange', onHashChange);
-
 var loaded = false;
-
-window.onload = function() {
-    routeUrl(window.location);
-    loaded = true;
-}
 
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
@@ -81,3 +74,10 @@ window.matrixChat = React.render(
     <MatrixReactSdk.MatrixChat onNewScreen={onNewScreen} registrationUrl={makeRegistrationUrl()} />,
     document.getElementById('matrixchat')
 );
+
+window.addEventListener('hashchange', onHashChange);
+window.onload = function() {
+    routeUrl(window.location);
+    loaded = true;
+}
+
