@@ -242,10 +242,14 @@ module.exports = {
                     });
                     self.setStep('stage_m.login.email.identity');
                 }, function(error) {
-                    self.setState({
-                        busy: false,
-                        errorText: 'Unable to contact the given Home Server'
-                    });
+                    self.setStep('initial');
+                    var newState = {busy: false};
+                    if (error.errcode == 'THREEPID_IN_USE') {
+                        self.onBadFields({email: self.FieldErrors.InUse});
+                    } else {
+                        newState.errorText = 'Unable to contact the given Home Server';
+                    }
+                    self.setState(newState);
                 });
                 break;
             case 'm.login.recaptcha':
