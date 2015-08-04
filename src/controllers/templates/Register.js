@@ -200,12 +200,6 @@ module.exports = {
         this.setState({busy: true});
         var self = this;
 
-        this.savedParams = {
-            email: formVals.email,
-            username: formVals.username,
-            password: formVals.password
-        };
-
         this.tryRegister();
     },
 
