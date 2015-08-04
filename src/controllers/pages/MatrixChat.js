@@ -97,6 +97,7 @@ module.exports = {
                 }
                 Notifier.stop();
                 Presence.stop();
+                MatrixClientPeg.get().stopClient();
                 MatrixClientPeg.get().removeAllListeners();
                 MatrixClientPeg.unset();
                 this.notifyNewScreen('');
