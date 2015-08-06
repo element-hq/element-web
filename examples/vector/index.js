@@ -24,6 +24,8 @@ var React = require("react");
 // maps cannot pass through two stages).
 var MatrixReactSdk = require("../../src/index");
 
+var lastLocationHashSet = null;
+
 // Here, we do some crude URL analysis to allow
 // deep-linking. We only support registration
 // deep-links in this example.
@@ -46,6 +48,10 @@ function routeUrl(location) {
 }
 
 function onHashChange(ev) {
+    if (decodeURIComponent(window.location.hash) == lastLocationHashSet) {
+        // we just set this: no need to route it!
+        return;
+    }
     routeUrl(window.location);
 }
 
@@ -55,7 +61,9 @@ var loaded = false;
 // so a web page can update the URL bar appropriately.
 var onNewScreen = function(screen) {
     if (!loaded) return;
-    window.location.hash = '#/'+screen;
+    var hash = '#/' + screen;
+    lastLocationHashSet = hash;
+    window.location.hash = hash;
 }
 
 // We use this to work out what URL the SDK should

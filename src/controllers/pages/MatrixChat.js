@@ -23,9 +23,11 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 var RoomListSorter = require("../../RoomListSorter");
 var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
+var q = require("q");
 
 var ComponentBroker = require('../../ComponentBroker');
 var Notifier = ComponentBroker.get('organisms/Notifier');
+var MatrixTools = require('../../MatrixTools');
 
 module.exports = {
     PageTypes: {
@@ -136,7 +138,13 @@ module.exports = {
                     currentRoom: payload.room_id,
                     page_type: this.PageTypes.RoomView,
                 });
-                this.notifyNewScreen('room/'+payload.room_id);
+                var presentedId = payload.room_id;
+                var room = MatrixClientPeg.get().getRoom(payload.room_id);
+                if (room) {
+                    var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
+                    if (theAlias) presentedId = theAlias;
+                }
+                this.notifyNewScreen('room/'+presentedId);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -249,10 +257,26 @@ module.exports = {
                 params: params
             });
         } else if (screen.indexOf('room/') == 0) {
-            var roomId = screen.split('/')[1];
-            dis.dispatch({
-                action: 'view_room',
-                room_id: roomId
+            var roomString = screen.split('/')[1];
+            var defer = q.defer();
+            if (roomString[0] == '#') {
+                var self = this;
+                MatrixClientPeg.get().getRoomIdForAlias(roomString).done(function(result) {
+                    self.setState({ready: true});
+                    defer.resolve(result.room_id);
+                }, function() {
+                    self.setState({ready: true});
+                    defer.resolve(null);
+                });
+                this.setState({ready: false});
+            } else {
+                defer.resolve(roomString);
+            }
+            defer.promise.done(function(roomId) {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: roomId
+                });
             });
         }
     },
