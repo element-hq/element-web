@@ -30,7 +30,7 @@ module.exports = React.createClass({
         var senderName = event.sender ? event.sender.name : "Someone";
         // FIXME: Find a better way to determine this from the event?
         var type = "voice";
-        if (event.getContent().offer &&
+        if (event.getContent().offer && event.getContent().offer.sdp &&
                 event.getContent().offer.sdp.indexOf('m=video') !== -1) {
             type = "video";
         }
