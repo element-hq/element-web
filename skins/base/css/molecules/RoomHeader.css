@@ -127,7 +127,8 @@ limitations under the License.
     font-weight: 300;  
     padding-left: 16px;
     padding-right: 16px;
-    overflow-y: scroll;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .mx_RoomHeader_avatar {

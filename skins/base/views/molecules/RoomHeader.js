@@ -82,7 +82,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomHeader_name">
                         <EditableText label={this.props.room.name} initialValue={actual_name} placeHolder="Name" onValueChanged={this.onNameChange} />
                     </div>
-                if (topic) topic_el = <div className="mx_RoomHeader_topic">{ topic.getContent().topic }</div>;
+                if (topic) topic_el = <div className="mx_RoomHeader_topic" title={topic.getContent().topic}>{ topic.getContent().topic }</div>;
                 settings_button = (
                     <div className="mx_RoomHeader_button" onClick={this.props.onSettingsClick}>
                         <img src="img/settings.png" width="32" height="32"/>
