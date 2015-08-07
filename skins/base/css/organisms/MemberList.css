@@ -40,7 +40,7 @@ limitations under the License.
 
 .mx_MemberList_border {
     border: 1px solid #a9dbf4;
-    overflow-y: scroll;
+    overflow-y: auto;
     border-radius: 8px;
     padding: 20px 14px 14px 24px;
     background-color: #fff;
