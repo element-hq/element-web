@@ -88,7 +88,7 @@ limitations under the License.
     color: #80cef4;
     font-weight: 400;
     font-size: 20px;
-    overflow: scroll;
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 
