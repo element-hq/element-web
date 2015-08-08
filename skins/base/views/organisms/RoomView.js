@@ -75,7 +75,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomView">
                     <RoomHeader room={this.state.room} />
                     <div className="mx_RoomView_roomWrapper">
-                        <div className="mx_RoomView_messagePanel">
+                        <main className="mx_RoomView_messagePanel">
                             <div ref="messageWrapper" className="mx_RoomView_messageListWrapper" onScroll={this.onMessageListScroll}>
                                 <div className="mx_RoomView_MessageList">
                                     <div className={scrollheader_classes}>
@@ -86,8 +86,10 @@ module.exports = React.createClass({
                                 </div>
                             </div>
                             <MessageComposer roomId={this.props.roomId} />
-                        </div>
-                        <MemberList roomId={this.props.roomId} key={this.props.roomId} />
+                        </main>
+                        <aside>
+                            <MemberList roomId={this.props.roomId} key={this.props.roomId} />
+                        </aside>
                     </div>
                 </div>
             );
