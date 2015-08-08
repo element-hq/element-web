@@ -55,6 +55,10 @@ limitations under the License.
     display: table;
 }
 
+.mx_RoomView_MessageList_ul {
+    list-style-type: none;
+}
+
 .mx_RoomView_invitePrompt {
 }
 
