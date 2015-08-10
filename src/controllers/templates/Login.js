@@ -91,7 +91,11 @@ module.exports = {
             }
         }, function(error) {
             self.setStep("stage_m.login.password");
-            self.setState({errorText: 'Login failed.'});
+            if (error.httpStatus == 400 && loginParams.medium) {
+                self.setState({errorText: 'This Home Server does not support login using email address.'});
+            } else {
+                self.setState({errorText: 'Login failed.'});
+            }
         });
     },
 
