@@ -55,11 +55,11 @@ module.exports = React.createClass({
             mx_MessageTile_highlight: this.shouldHighlight()
         });
         return (
-            <div className={classes}>
+            <li className={classes}>
                 <MessageTimestamp ts={this.props.mxEvent.getTs()} />
                 <SenderProfile mxEvent={this.props.mxEvent} />
                 <TileType mxEvent={this.props.mxEvent} />
-            </div>
+            </li>
         );
     },
 });
