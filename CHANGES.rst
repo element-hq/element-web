@@ -1,4 +1,4 @@
-Changes in vector v0.1.0 (2015-08-10)
+Changes in vector v0.1.1 (2015-08-10)
 ======================================
 
  * Support logging in with an email address
@@ -14,3 +14,7 @@ Changes in vector v0.1.0 (2015-08-10)
  * Support command-click / middle click to open image in a new tab
  * Improved room directory
  * Fix display of text with many combining unicode points
+
+Changes in vector v0.1.0 (2015-08-10)
+======================================
+Initial release
