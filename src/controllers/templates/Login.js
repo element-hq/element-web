@@ -71,10 +71,17 @@ module.exports = {
 
         var formVals = this.getFormVals();
 
-        MatrixClientPeg.get().login('m.login.password', {
-            'user': formVals.username,
-            'password': formVals.password
-        }).done(function(data) {
+        var loginParams = {
+            password: formVals.password
+        };
+        if (formVals.username.indexOf('@') > 0) {
+            loginParams.medium = 'email';
+            loginParams.address = formVals.username;
+        } else {
+            loginParams.user = formVals.username;
+        }
+
+        MatrixClientPeg.get().login('m.login.password', loginParams).done(function(data) {
             MatrixClientPeg.replaceUsingAccessToken(
                 self.state.hs_url, self.state.is_url,
                 data.user_id, data.access_token
@@ -84,7 +91,11 @@ module.exports = {
             }
         }, function(error) {
             self.setStep("stage_m.login.password");
-            self.setState({errorText: 'Login failed.'});
+            if (error.httpStatus == 400 && loginParams.medium) {
+                self.setState({errorText: 'This Home Server does not support login using email address.'});
+            } else {
+                self.setState({errorText: 'Login failed.'});
+            }
         });
     },
 
