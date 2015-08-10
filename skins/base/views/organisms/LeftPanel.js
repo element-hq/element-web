@@ -29,12 +29,12 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_LeftPanel">
+            <aside className="mx_LeftPanel">
                 <img className="mx_LeftPanel_hideButton" src="img/hide.png" width="32" height="32" alt="<"/>
                 <IncomingCallBox />
                 <RoomList selectedRoom={this.props.selectedRoom} />
                 <BottomLeftMenu />
-            </div>
+            </aside>
         );
     }
 });

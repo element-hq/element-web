@@ -66,12 +66,12 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="mx_RightPanel">
+            <aside className="mx_RightPanel">
                 <div className="mx_RightPanel_header">
                     { buttonGroup }
                 </div>
                 { panel }
-            </div>
+            </aside>
         );
     }
 });

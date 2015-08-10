@@ -353,7 +353,7 @@ module.exports = {
             }
             if (!TileType) continue;
             ret.unshift(
-                <TileType key={mxEv.getId()} mxEvent={mxEv} continuation={continuation} last={last}/>
+                <li><TileType key={mxEv.getId()} mxEvent={mxEv} continuation={continuation} last={last}/></li>
             );
             if (dateSeparator) {
                 ret.unshift(dateSeparator);

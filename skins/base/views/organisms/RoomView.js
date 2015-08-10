@@ -170,11 +170,11 @@ module.exports = React.createClass({
                     </div>
                     <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
                         <div className="mx_RoomView_messageListWrapper">
-                            <div className="mx_RoomView_MessageList" aria-live="polite">
-                                <div className={scrollheader_classes}>
-                                </div>
+                            <ol className="mx_RoomView_MessageList" aria-live="polite">
+                                <li className={scrollheader_classes}>
+                                </li>
                                 {this.getEventTiles()}
-                            </div>
+                            </ol>
                         </div>
                     </div>
                     <div className="mx_RoomView_statusArea">
