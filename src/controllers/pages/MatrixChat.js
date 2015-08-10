@@ -205,13 +205,13 @@ module.exports = {
                     firstRoom = RoomListSorter.mostRecentActivityFirst(
                         cli.getRooms()
                     )[0].roomId;
-                    self.setState({ready: true, currentRoom: firstRoom});
+                    self.setState({ready: true, currentRoom: firstRoom, page_type: self.PageTypes.RoomView});
                     self.notifyNewScreen('room/'+firstRoom);
                 } else {
-                    self.setState({ready: true});
+                    self.setState({ready: true, page_type: self.PageTypes.RoomDirectory});
                 }
             } else {
-                self.setState({ready: true});
+                self.setState({ready: true, page_type: self.PageTypes.RoomDirectory});
             }
             dis.dispatch({action: 'focus_composer'});
         });
