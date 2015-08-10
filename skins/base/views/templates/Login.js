@@ -30,7 +30,7 @@ var ServerConfig = ComponentBroker.get("molecules/ServerConfig");
 
 module.exports = React.createClass({
     DEFAULT_HS_URL: 'https://matrix.org',
-    DEFAULT_IS_URL: 'https://matrix.org',
+    DEFAULT_IS_URL: 'https://vector.im',
 
     displayName: 'Login',
     mixins: [LoginController],

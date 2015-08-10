@@ -31,7 +31,7 @@ module.exports = {
             onHsUrlChanged: function() {},
             onIsUrlChanged: function() {},
             defaultHsUrl: 'https://matrix.org/',
-            defaultIsUrl: 'https://vector.im/'
+            defaultIsUrl: 'https://matrix.org/'
         };
     },
 
