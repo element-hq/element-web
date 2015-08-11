@@ -27,10 +27,14 @@ var dis = require("../../dispatcher");
  * }
  */
 
+// XXX: This isn't an organism surely in the atomic sense of the word 
+// what on earth is it doing here?!
+
 module.exports = {
     start: function() {
         this.boundOnRoomTimeline = this.onRoomTimeline.bind(this);
         MatrixClientPeg.get().on('Room.timeline', this.boundOnRoomTimeline);
+        this.state = { 'toolbarHidden' : false };
     },
 
     stop: function() {
@@ -82,6 +86,8 @@ module.exports = {
                 value: false
             });
         }
+
+        this.setToolbarHidden(false);
     },
 
     isEnabled: function() {
@@ -92,6 +98,18 @@ module.exports = {
         var enabled = global.localStorage.getItem('notifications_enabled');
         if (enabled === null) return true;
         return enabled === 'true';
+    },
+
+    setToolbarHidden: function(hidden) {
+        this.state.toolbarHidden = hidden;
+        dis.dispatch({
+            action: "notifier_enabled",
+            value: this.isEnabled()
+        });
+    },
+
+    isToolbarHidden: function() {
+        return this.state.toolbarHidden;
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {

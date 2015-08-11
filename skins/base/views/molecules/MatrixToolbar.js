@@ -24,15 +24,21 @@ var LogoutButton = ComponentBroker.get("atoms/LogoutButton");
 var EnableNotificationsButton = ComponentBroker.get("atoms/EnableNotificationsButton");
 
 var MatrixToolbarController = require("../../../../src/controllers/molecules/MatrixToolbar");
+var Notifier = ComponentBroker.get('organisms/Notifier');
 
 module.exports = React.createClass({
     displayName: 'MatrixToolbar',
     mixins: [MatrixToolbarController],
 
+    hideToolbar: function() {
+        Notifier.setToolbarHidden(true);
+    },
+
     render: function() {
         return (
             <div className="mx_MatrixToolbar">
                 You are not receiving desktop notifications. <EnableNotificationsButton />
+                <div className="mx_MatrixToolbar_close"><img src="img/close-white.png" width="16" height="16" onClick={ this.hideToolbar } /></div>
             </div>
         );
     }

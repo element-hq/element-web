@@ -26,3 +26,9 @@ limitations under the License.
 .mx_MatrixToolbar button {
     margin-left: 12px;
 }
+
+.mx_MatrixToolbar_close {
+    float: right;
+    margin-top: 3px;
+    margin-right: 12px;
+}
