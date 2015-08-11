@@ -212,7 +212,7 @@ module.exports = {
                     self.setState({ready: true, page_type: self.PageTypes.RoomDirectory});
                 }
             } else {
-                self.setState({ready: true, page_type: self.PageTypes.RoomDirectory});
+                self.setState({ready: true, currentRoom: self.state.currentRoom});
             }
             dis.dispatch({action: 'focus_composer'});
         });
