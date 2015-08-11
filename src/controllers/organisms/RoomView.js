@@ -201,8 +201,8 @@ module.exports = {
     },
 
     fillSpace: function() {
+        if (!this.refs.messageWrapper) return;
         var messageWrapper = this.refs.messageWrapper.getDOMNode();
-        if (!messageWrapper) return;
         if (messageWrapper.scrollTop < messageWrapper.clientHeight && this.state.room.oldState.paginationToken) {
             this.setState({paginating: true});
 
