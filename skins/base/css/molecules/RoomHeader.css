@@ -40,6 +40,7 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
+    -webkit-flex: 1;
     flex: 1;
 }
 

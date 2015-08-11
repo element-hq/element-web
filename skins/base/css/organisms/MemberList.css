@@ -46,6 +46,7 @@ limitations under the License.
     background-color: #fff;
 
     order: 1;
+    -webkit-flex: 1 1 0;
     flex: 1 1 0px;
 }
 
