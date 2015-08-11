@@ -50,7 +50,7 @@ module.exports = React.createClass({
         var isMyUser = MatrixClientPeg.get().credentials.userId == this.props.member.userId;
 
         var power;
-        if (this.props.member) {
+        if (this.props.member && this.props.member.powerLevelNorm > 0) {
             var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
             power = <img src={ img } className="mx_MemberTile_power" width="48" height="48" alt=""/>;
         }
