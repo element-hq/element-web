@@ -138,13 +138,20 @@ module.exports = {
                     currentRoom: payload.room_id,
                     page_type: this.PageTypes.RoomView,
                 });
-                var presentedId = payload.room_id;
-                var room = MatrixClientPeg.get().getRoom(payload.room_id);
-                if (room) {
-                    var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
-                    if (theAlias) presentedId = theAlias;
+                if (this.sdkReady) {
+                    // if the SDK is not ready yet, remember what room
+                    // we're supposed to be on but don't notify about
+                    // the new screen yet (we won't be showing it yet)
+                    // The normal case where this happens is navigating
+                    // to the room in the URL bar on page load.
+                    var presentedId = payload.room_id;
+                    var room = MatrixClientPeg.get().getRoom(payload.room_id);
+                    if (room) {
+                        var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
+                        if (theAlias) presentedId = theAlias;
+                    }
+                    this.notifyNewScreen('room/'+presentedId);
                 }
-                this.notifyNewScreen('room/'+presentedId);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -200,6 +207,7 @@ module.exports = {
         var cli = MatrixClientPeg.get();
         var self = this;
         cli.on('syncComplete', function() {
+            self.sdkReady = true;
             if (!self.state.currentRoom) {
                 var firstRoom = null;
                 if (cli.getRooms() && cli.getRooms().length) {
@@ -207,13 +215,22 @@ module.exports = {
                         cli.getRooms()
                     )[0].roomId;
                     self.setState({ready: true, currentRoom: firstRoom, page_type: self.PageTypes.RoomView});
-                    self.notifyNewScreen('room/'+firstRoom);
                 } else {
                     self.setState({ready: true, page_type: self.PageTypes.RoomDirectory});
                 }
             } else {
                 self.setState({ready: true, currentRoom: self.state.currentRoom});
             }
+
+            // we notifyNewScreen now because now the room will actually be displayed,
+            // and (mostly) now we can get the correct alias.
+            var presentedId = self.state.currentRoom;
+            var room = MatrixClientPeg.get().getRoom(self.state.currentRoom);
+            if (room) {
+                var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
+                if (theAlias) presentedId = theAlias;
+            }
+            self.notifyNewScreen('room/'+presentedId);
             dis.dispatch({action: 'focus_composer'});
         });
         cli.on('Call.incoming', function(call) {
