@@ -293,7 +293,7 @@ module.exports = {
         };
         var canAffectUser = them.powerLevel < me.powerLevel;
         if (!canAffectUser) {
-            console.log("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
+            //console.log("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
             return can;
         }
         var editPowerLevel = (
