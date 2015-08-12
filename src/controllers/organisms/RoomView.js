@@ -353,7 +353,8 @@ module.exports = {
             }
             if (!TileType) continue;
             ret.unshift(
-                <li><TileType key={mxEv.getId()} mxEvent={mxEv} continuation={continuation} last={last}/></li>
+                // XXX: don't wrap everything in a needless li - make the TileType a li if we must :(
+                <li key={mxEv.getId()}><TileType mxEvent={mxEv} continuation={continuation} last={last}/></li>
             );
             if (dateSeparator) {
                 ret.unshift(dateSeparator);
