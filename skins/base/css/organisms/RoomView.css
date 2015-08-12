@@ -52,6 +52,7 @@ limitations under the License.
     width: 100%;
     margin: auto;
 
+    overflow: auto;
     border-bottom: 1px solid #a8dbf3;
 
     -webkit-flex: 0 0 auto;
