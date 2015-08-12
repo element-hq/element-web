@@ -60,6 +60,8 @@ limitations under the License.
     -webkit-order: 2;
     order: 2;
 
+    cursor: pointer;
+
     -webkit-flex: 0 0 90px;
     flex: 0 0 90px;
 }
