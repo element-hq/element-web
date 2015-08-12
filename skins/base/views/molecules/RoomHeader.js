@@ -67,6 +67,7 @@ module.exports = React.createClass({
 
             var name = null;
             var topic_el = null;
+            var cancel_button = null;
             var save_button = null;
             var settings_button = null;
             var actual_name = this.props.room.currentState.getStateEvents('m.room.name', '');
@@ -77,6 +78,8 @@ module.exports = React.createClass({
                         <input className="mx_RoomHeader_nameInput" type="text" defaultValue={actual_name} placeholder="Name" ref="name_edit"/>
                     </div>
                 // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
+                cancel_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onCancelClick}>Cancel</div>
+                save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save Changes</div>
             } else {
                 name =
                     <div className="mx_RoomHeader_name">
@@ -102,6 +105,8 @@ module.exports = React.createClass({
                         </div>
                     </div>
                     {callButtons}
+                    {cancel_button}
+                    {save_button}
                     <div className="mx_RoomHeader_rightRow">
                         { settings_button }
                         <div className="mx_RoomHeader_button mx_RoomHeader_search">

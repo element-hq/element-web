@@ -64,6 +64,10 @@ module.exports = React.createClass({
         );
     },
 
+    onCancelClick: function() {
+        this.setState(this.getInitialState());
+    },
+
     getUnreadMessagesString: function() {
         if (!this.state.numUnreadMessages) {
             return "";
@@ -163,7 +167,7 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomView">
                     <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings}
-                        onSettingsClick={this.onSettingsClick}/>
+                        onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} />
                     <div className="mx_RoomView_auxPanel">
                         <CallView room={this.state.room}/>
                         { roomEdit }
