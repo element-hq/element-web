@@ -36,11 +36,11 @@ var Notifier = ComponentBroker.get('organisms/Notifier');
 
 var tileTypes = {
     'm.room.message': ComponentBroker.get('molecules/MessageTile'),
-    'm.room.member': ComponentBroker.get('molecules/MRoomMemberTile'),
-    'm.call.invite': ComponentBroker.get('molecules/voip/MCallInviteTile'),
-    'm.call.answer': ComponentBroker.get('molecules/voip/MCallAnswerTile'),
-    'm.call.hangup': ComponentBroker.get('molecules/voip/MCallHangupTile'),
-    'm.room.topic': ComponentBroker.get('molecules/EventAsTextTile'),
+    'm.room.member' : ComponentBroker.get('molecules/EventAsTextTile'),
+    'm.call.invite' : ComponentBroker.get('molecules/EventAsTextTile'),
+    'm.call.answer' : ComponentBroker.get('molecules/EventAsTextTile'),
+    'm.call.hangup' : ComponentBroker.get('molecules/EventAsTextTile'),
+    'm.room.topic'  : ComponentBroker.get('molecules/EventAsTextTile'),
 };
 
 var DateSeparator = ComponentBroker.get('molecules/DateSeparator');

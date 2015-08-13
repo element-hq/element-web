@@ -67,10 +67,34 @@ function textForMessageEvent(ev) {
     return message;
 };
 
+function textForCallAnswerEvent(event) {
+    var senderName = event.sender ? event.sender.name : "Someone";
+    return senderName + " answered the call.";
+};
+
+function textForCallHangupEvent(event) {
+    var senderName = event.sender ? event.sender.name : "Someone";
+    return senderName + " ended the call.";
+};
+
+function textForCallInviteEvent(event) {
+    var senderName = event.sender ? event.sender.name : "Someone";
+    // FIXME: Find a better way to determine this from the event?
+    var type = "voice";
+    if (event.getContent().offer && event.getContent().offer.sdp &&
+            event.getContent().offer.sdp.indexOf('m=video') !== -1) {
+        type = "video";
+    }
+    return senderName + " placed a " + type + " call.";
+};
+
 var handlers = {
     'm.room.message': textForMessageEvent,
     'm.room.topic': textForTopicEvent,
-    'm.room.member': textForMemberEvent
+    'm.room.member': textForMemberEvent,
+    'm.call.invite': textForCallInviteEvent,
+    'm.call.answer': textForCallAnswerEvent,
+    'm.call.hangup': textForCallHangupEvent,
 };
 
 module.exports = {
