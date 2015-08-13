@@ -73,13 +73,11 @@ module.exports = {
             if (actions && actions.tweaks && actions.tweaks.highlight) {
                 hl = 2;
             }
-            if (actions.notify) {
-                // obviously this won't deep copy but this shouldn't be necessary
-                var amap = this.state.activityMap;
-                amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
+            // obviously this won't deep copy but this shouldn't be necessary
+            var amap = this.state.activityMap;
+            amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
 
-                newState.activityMap = amap;
-            }
+            newState.activityMap = amap;
         }
         this.setState(newState);
     },
