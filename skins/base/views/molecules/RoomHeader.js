@@ -22,6 +22,7 @@ var ComponentBroker = require('../../../../src/ComponentBroker');
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var RoomHeaderController = require("../../../../src/controllers/molecules/RoomHeader");
 var EditableText = ComponentBroker.get("atoms/EditableText");
+var RoomAvatar = ComponentBroker.get('atoms/RoomAvatar');
 
 module.exports = React.createClass({
     displayName: 'RoomHeader',
@@ -93,11 +94,18 @@ module.exports = React.createClass({
                 );
             }
 
+            var roomAvatar = null;
+            if (this.props.room) {
+                roomAvatar = (
+                    <RoomAvatar room={this.props.room} />
+                );
+            }
+
             header =
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_leftRow">
                         <div className="mx_RoomHeader_avatar">
-                            <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(this.props.room, 48, 48, "crop") } width="48" height="48" alt=""/>
+                            { roomAvatar }
                         </div>
                         <div className="mx_RoomHeader_info">
                             { name }

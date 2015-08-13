@@ -24,6 +24,7 @@ var Modal = require("../../../../src/Modal");
 var MemberTileController = require("../../../../src/controllers/molecules/MemberTile");
 var MemberInfo = ComponentBroker.get('molecules/MemberInfo');
 var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
+var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
 
 // The Lato WOFF doesn't include sensible combining diacritics, so Chrome chokes on rendering them.
 // Revert to Arial when this happens, which on OSX works at least.
@@ -95,10 +96,8 @@ module.exports = React.createClass({
         return (
             <div className={mainClassName} onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">
-                    <img className="mx_MemberTile_avatarImg"
-                         src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 40, 40, "crop") : null }
-                         width="40" height="40" alt=""/>
-                         { power }
+                    <MemberAvatar member={this.props.member} />
+                     { power }
                 </div>
                 { nameEl }
             </div>

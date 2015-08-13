@@ -22,6 +22,9 @@ var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var MessageComposerController = require("../../../../src/controllers/molecules/MessageComposer");
 var ContentMessages = require("../../../../src/ContentMessages");
 
+var ComponentBroker = require('../../../../src/ComponentBroker');
+var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
+
 module.exports = React.createClass({
     displayName: 'MessageComposer',
     mixins: [MessageComposerController],
@@ -47,7 +50,7 @@ module.exports = React.createClass({
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         <div className="mx_MessageComposer_avatar">
-                            <img src={ MatrixClientPeg.get().getAvatarUrlForMember(me, 40, 40, "crop") } width="40" height="40" alt=""/>
+                            <MemberAvatar member={me} />
                         </div>
                         <div className="mx_MessageComposer_input">
                             <textarea ref="textarea" onKeyDown={this.onKeyDown} placeholder="Type a message" />

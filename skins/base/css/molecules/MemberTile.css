@@ -31,12 +31,6 @@ limitations under the License.
     position: relative;
 }
 
-.mx_MemberTile_avatarImg {
-    z-index: 20;
-    border-radius: 20px;
-    background-color: #dbdbdb;
-}
-
 .mx_MemberTile_inviteEditing {
     display: initial ! important;
 }

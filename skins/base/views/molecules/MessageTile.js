@@ -25,6 +25,7 @@ var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
 var SenderProfile = ComponentBroker.get('molecules/SenderProfile');
+var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
 
 var UnknownMessageTile = ComponentBroker.get('molecules/UnknownMessageTile');
 
@@ -64,7 +65,7 @@ module.exports = React.createClass({
         if (!this.props.continuation) {
             avatar = (
                 <div className="mx_MessageTile_avatar">
-                    <img src={ this.props.mxEvent.sender ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.sender, 40, 40, "crop") : null } width="40" height="40" alt=""/>
+                    <MemberAvatar member={this.props.mxEvent.sender} />
                 </div>
             );
             sender = <SenderProfile mxEvent={this.props.mxEvent} />;

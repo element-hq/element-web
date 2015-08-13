@@ -23,6 +23,9 @@ var RoomTileController = require("../../../../src/controllers/molecules/RoomTile
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
+var ComponentBroker = require('../../../../src/ComponentBroker');
+var RoomAvatar = ComponentBroker.get('atoms/RoomAvatar');
+
 module.exports = React.createClass({
     displayName: 'RoomTile',
     mixins: [RoomTileController],
@@ -57,7 +60,10 @@ module.exports = React.createClass({
         */
         return (
             <div className={classes} onClick={this.onClick}>
-                <div className="mx_RoomTile_avatar"><img src={ MatrixClientPeg.get().getAvatarUrlForRoom(this.props.room, 40, 40, "crop") } width="40" height="40" alt=""/>{ badge }</div>
+                <div className="mx_RoomTile_avatar">
+                    <RoomAvatar room={this.props.room} />
+                    { badge }
+                </div>
                 <div className="mx_RoomTile_name">{name}</div>
             </div>
         );

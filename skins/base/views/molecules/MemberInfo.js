@@ -20,6 +20,8 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var MemberInfoController = require("../../../../src/controllers/molecules/MemberInfo");
+var ComponentBroker = require('../../../../src/ComponentBroker');
+var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
 
 module.exports = React.createClass({
     displayName: 'MemberInfo',
@@ -96,9 +98,7 @@ module.exports = React.createClass({
                 <img className="mx_MemberInfo_chevron" src="img/chevron-right.png" width="9" height="16" />
                 <div className="mx_MemberInfo_shim"></div>
                 <div className="mx_MemberInfo_avatar">
-                    <img className="mx_MemberInfo_avatarImg"
-                         src={ this.props.member ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.member, 128, 128, "crop") : null }
-                         width="128" height="128" alt=""/>
+                    <MemberAvatar member={this.props.member} width={128} height={128} />
                 </div>
                 <div className="mx_MemberInfo_field">{this.props.member.userId}</div>
                 {opLabel}

@@ -23,6 +23,9 @@ var TextForEvent = require("../../../../src/TextForEvent");
 var extend = require("../../../../src/extend");
 var dis = require("../../../../src/dispatcher");
 
+var ComponentBroker = require("../../../../src/ComponentBroker");
+var MemberAvatar = ComponentBroker.get("atoms/MemberAvatar");
+
 
 var NotifierView = {
     notificationMessageForEvent: function(ev) {
@@ -57,11 +60,13 @@ var NotifierView = {
             if (ev.getContent().body) msg = ev.getContent().body;
         }
 
+        var avatarUrlrl = MemberAvatar.avatarUrlForMember(ev.sender);
+
         var notification = new global.Notification(
             title,
             {
                 "body": msg,
-                "icon": MatrixClientPeg.get().getAvatarUrlForMember(ev.sender)
+                "icon": avatarUrl
             }
         );
 

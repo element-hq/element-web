@@ -24,6 +24,7 @@ var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../src/ComponentBroker');
 var TextForEvent = require('../../../../src/TextForEvent');
 var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
+var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
 
 module.exports = React.createClass({
     displayName: 'MRoomMemberTile',
@@ -41,7 +42,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_MessageTile mx_MessageTile_notice">
                 <div className="mx_MessageTile_avatar">
-                    <img src={ this.props.mxEvent.target ? MatrixClientPeg.get().getAvatarUrlForMember(this.props.mxEvent.target, 40, 40, "crop") : null } width="40" height="40" alt=""/>
+                    <MemberAvatar member={this.props.mxEvent.sender} />
                 </div>            
                 { timestamp }
                 <span className="mx_SenderProfile"></span>
