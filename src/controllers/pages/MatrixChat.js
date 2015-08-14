@@ -280,10 +280,10 @@ module.exports = {
             if (roomString[0] == '#') {
                 var self = this;
                 MatrixClientPeg.get().getRoomIdForAlias(roomString).done(function(result) {
-                    self.setState({ready: true});
+                    if (self.sdkReady) self.setState({ready: true});
                     defer.resolve(result.room_id);
                 }, function() {
-                    self.setState({ready: true});
+                    if (self.sdkReady) self.setState({ready: true});
                     defer.resolve(null);
                 });
                 this.setState({ready: false});
