@@ -166,7 +166,7 @@ module.exports = {
                         break;
                     }
                 }
-                roomIndex = (roomIndex + roomIndexDelta) % allRooms.length;
+                roomIndex = Math.max((roomIndex + roomIndexDelta) % allRooms.length, 0);
                 this.focusComposer = true;
                 this.setState({
                     currentRoom: allRooms[roomIndex].roomId
