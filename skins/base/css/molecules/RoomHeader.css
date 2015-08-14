@@ -62,9 +62,13 @@ limitations under the License.
 
     cursor: pointer;
 
+/*  
     -webkit-flex: 0 0 90px;
     flex: 0 0 90px;
-}
+*/
+    padding-left: 12px;
+    padding-right: 12px;
+    }
 
 .mx_RoomHeader_rightRow {
     height: 48px;
