@@ -182,12 +182,12 @@ module.exports = {
 
         var self = this;
         setTimeout(function() {
-            if (self.refs.textarea.getDOMNode().value != '') {
+            if (self.refs.textarea && self.refs.textarea.getDOMNode().value != '') {
                 self.onTypingActivity();
             } else {
                 self.onFinishedTyping();
             }
-        }, 10);
+        }, 10); // XXX: what is this 10ms setTimeout doing?  Looks hacky :(
     },
 
     onEnter: function(ev) {

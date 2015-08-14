@@ -166,7 +166,8 @@ module.exports = {
                         break;
                     }
                 }
-                roomIndex = Math.max((roomIndex + roomIndexDelta) % allRooms.length, 0);
+                roomIndex = (roomIndex + roomIndexDelta) % allRooms.length;
+                if (roomIndex < 0) roomIndex = allRooms.length - 1;
                 this.focusComposer = true;
                 this.setState({
                     currentRoom: allRooms[roomIndex].roomId
@@ -250,10 +251,12 @@ module.exports = {
                 case 38:
                     dis.dispatch({action: 'view_prev_room'});
                     ev.stopPropagation();
+                    ev.preventDefault();
                     break;
                 case 40:
                     dis.dispatch({action: 'view_next_room'});
                     ev.stopPropagation();
+                    ev.preventDefault();
                     break;
             }
         }
