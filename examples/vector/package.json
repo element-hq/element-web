@@ -10,7 +10,6 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "browserify": "^10.2.3",
-    "envify": "^3.4.0",
     "http-server": "^0.8.0",
     "matrix-react-sdk": "../../",
     "parallelshell": "^1.2.0",
@@ -19,7 +18,7 @@
     "watchify": "^3.2.1"
   },
   "scripts": {
-    "build": "browserify --ignore olm -t [ envify --NODE_ENV production ] -t reactify index.js | uglifyjs -c -m -o bundle.js",
+    "build": "NODE_ENV=production browserify --ignore olm -t reactify index.js | uglifyjs -c -m -o bundle.js",
     "start": "parallelshell \"watchify --ignore olm -v -d -t reactify index.js -o bundle.js\" \"http-server\""
   }
 }
