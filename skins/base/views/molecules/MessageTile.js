@@ -61,6 +61,12 @@ module.exports = React.createClass({
             mx_MessageTile_last: this.props.last,
         });
         var timestamp = <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+
+        var aux = null;
+        if (msgtype === 'm.image') aux = "sent an image";
+        else if (msgtype === 'm.video') aux = "sent a video";
+        else if (msgtype === 'm.file') aux = "uploaded a file";
+
         var avatar, sender, resend;
         if (!this.props.continuation) {
             avatar = (
@@ -68,7 +74,7 @@ module.exports = React.createClass({
                     <MemberAvatar member={this.props.mxEvent.sender} />
                 </div>
             );
-            sender = <SenderProfile mxEvent={this.props.mxEvent} />;
+            sender = <SenderProfile mxEvent={this.props.mxEvent} aux={aux} />;
         }
         if (this.props.mxEvent.status === "not_sent" && !this.state.resending) {
             resend = <button className="mx_MessageTile_msgOption" onClick={this.onResend}>

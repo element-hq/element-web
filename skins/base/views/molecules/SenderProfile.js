@@ -45,7 +45,7 @@ module.exports = React.createClass({
         }
         return (
             <span className={classes}>
-                {name}
+                {name} { this.props.aux }
             </span>
         );
     },

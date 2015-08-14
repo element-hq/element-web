@@ -32,9 +32,12 @@ module.exports = React.createClass({
 
         return (
             <span className="mx_MFileTile">
-                <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
-                    {this.presentableTextForFile(content)}
-                </a>
+                <div className="mx_MImageTile_download">
+                    <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
+                        <img src="img/download.png" width="10" height="12"/>
+                        Download {this.presentableTextForFile(content)}
+                    </a>
+                </div>                
             </span>
         );
     },

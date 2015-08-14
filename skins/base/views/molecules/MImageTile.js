@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var filesize = require('filesize');
 
 var MImageTileController = require("../../../../src/controllers/molecules/MImageTile");
 
@@ -78,9 +79,15 @@ module.exports = React.createClass({
 
         return (
             <span className="mx_MImageTile">
-                <a href={cli.mxcUrlToHttp(content.url)} onClick={this.onClick}>
-                    <img src={cli.mxcUrlToHttp(content.url, 320, 240)} alt={content.body} style={imgStyle} />
+                <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
+                    <img className="mx_MImageTile_thumbnail" src={cli.mxcUrlToHttp(content.url, 320, 240)} alt={content.body} style={imgStyle} />
                 </a>
+                <div className="mx_MImageTile_download">
+                    <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
+                        <img src="img/download.png" width="10" height="12"/>
+                        Download {content.body} ({ filesize(content.info.size) })
+                    </a>
+                </div>
             </span>
         );
     },

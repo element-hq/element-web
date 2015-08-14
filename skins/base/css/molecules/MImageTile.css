@@ -14,6 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MImageTile {
+.mx_MImageTile_thumbnail {
+    background-color: #fff;
+    border: 2px solid #fff;
+    border-radius: 1px;
 }
 
+.mx_MImageTile_download {
+    color: #80cef4;
+    cursor: pointer;
+}
+
+.mx_MImageTile_download a {
+    color: #80cef4;
+    text-decoration: none;
+}
+
+.mx_MImageTile_download img {
+    padding-right: 8px;
+}
