@@ -51,11 +51,11 @@ module.exports = {
 
     onError: function(ev) {
         // don't tightloop if the browser can't load a data url
-        if (ev.target.src == this.defaultAvatarUrl()) {
+        if (ev.target.src == this.defaultAvatarUrl(this.props.room)) {
             return;
         }
         this.setState({
-            imageUrl: this.defaultAvatarUrl()
+            imageUrl: this.defaultAvatarUrl(this.props.room)
         });
     },
 
