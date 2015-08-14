@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 .mx_MemberTile {
-    cursor: pointer;
     display: table-row;
     height: 49px;
+    position: relative;
 }
 
 .mx_MemberTile_avatar {
     display: table-cell;
+    padding-left: 14px;
     padding-right: 12px;
     padding-top: 3px;
     padding-bottom: 3px;
@@ -29,6 +30,10 @@ limitations under the License.
     width: 40px;
     height: 40px;
     position: relative;
+}
+
+.mx_MemberTile_inviteTile {
+    cursor: pointer;
 }
 
 .mx_MemberTile_inviteEditing {
@@ -50,14 +55,14 @@ limitations under the License.
     font-size: 14px;
     padding: 9px;
     margin-top: 6px;
+    margin-left: 14px;
 }
 
 .mx_MemberTile_power {
-    z-index: 10;
     position: absolute;
     width: 48px;
     height: 48px;
-    left: -4px;
+    left: 10px;
     top: -1px;
 }
 
@@ -68,6 +73,12 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
+.mx_MemberTile_details {
+    display: table-cell;
+    padding-right: 14px;
+    vertical-align: middle;
+}
+
 .mx_MemberTile_hover {
     background-color: #f0f0f0;
     font-size: 12px;
@@ -76,6 +87,16 @@ limitations under the License.
 
 .mx_MemberTile_userId {
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mx_MemberTile_leave {
+    cursor: pointer;
+    margin-top: 8px;
+    margin-right: -4px;
+    margin-left: 6px;
+    float: right;
 }
 
 /*
@@ -106,8 +127,4 @@ limitations under the License.
 
 .mx_MemberTile_zalgo {
     font-family: Helvetica, Arial, Sans-Serif;
-}
-
-.mx_MemberTile_leave {
-    float: right;
 }

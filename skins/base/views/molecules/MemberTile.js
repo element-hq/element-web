@@ -70,8 +70,12 @@ module.exports = React.createClass({
     },
 
     getPrettyPresence: function(user) {
+        if (!user) return "Unknown";
         var presence = user.presence;
-        return presence.charAt(0).toUpperCase() + presence.slice(1);
+        if (presence === "online") return "Online";
+        if (presence === "unavailable") return "Idle"; // XXX: is this actually right?
+        if (presence === "offline") return "Offline";
+        return "Unknown";
     },
 
     render: function() {
@@ -110,7 +114,7 @@ module.exports = React.createClass({
         if (this.state.hover) {
             var presence;
             // FIXME: make presence data update whenever User.presence changes...
-            var active = this.props.member.user.lastActiveAgo || -1;
+            var active = this.props.member.user ? (this.props.member.user.lastActiveAgo || -1) : -1;
             if (active >= 0) {
                 presence = <div className="mx_MemberTile_presence">{ this.getPrettyPresence(this.props.member.user) } for { this.getDuration(active) }</div>;
             }
@@ -118,12 +122,12 @@ module.exports = React.createClass({
                 presence = <div className="mx_MemberTile_presence">{ this.getPrettyPresence(this.props.member.user) }</div>;
             }
 
+            // <MemberInfo member={this.props.member} />
             nameEl =
                 <div className="mx_MemberTile_details">
-                    <MemberInfo member={this.props.member} />
-                    <div className="mx_MemberTile_userId">{ this.props.member.userId }</div>
-                    { presence }
                     { leave }
+                    <div className="mx_MemberTile_userId" title={ this.props.member.userId }>{ this.props.member.userId }</div>
+                    { presence }
                 </div>
         }
         else {

@@ -42,7 +42,6 @@ limitations under the License.
     border: 1px solid #a9dbf4;
     overflow-y: auto;
     border-radius: 8px;
-    padding: 20px 14px 14px 24px;
     background-color: #fff;
 
     order: 1;
@@ -57,5 +56,5 @@ limitations under the License.
 }
 
 .mx_MemberList h2 {
-    margin-top: 0px;
+    margin: 14px;
 }

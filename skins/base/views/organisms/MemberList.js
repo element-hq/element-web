@@ -75,14 +75,9 @@ module.exports = React.createClass({
     },
 
     inviteTile: function() {
-        // if (this.state.inviting) {
-        //     return (
-        //         <div></div>
-        //     );
-        // }
-
         var classes = classNames({
             mx_MemberTile: true,
+            mx_MemberTile_inviteTile: true,
             mx_MemberTile_inviteEditing: this.state.editing,
         });
 
