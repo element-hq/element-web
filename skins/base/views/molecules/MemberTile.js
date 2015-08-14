@@ -47,6 +47,33 @@ module.exports = React.createClass({
         this.setState({ 'hover': false });
     },
 
+    getDuration: function(time) {
+        if (!time) return;
+        var t = parseInt(time / 1000);
+        var s = t % 60;
+        var m = parseInt(t / 60) % 60;
+        var h = parseInt(t / (60 * 60)) % 24;
+        var d = parseInt(t / (60 * 60 * 24));
+        if (t < 60) {
+            if (t < 0) {
+                return "0s";
+            }
+            return s + "s";
+        }
+        if (t < 60 * 60) {
+            return m + "m";
+        }
+        if (t < 24 * 60 * 60) {
+            return h + "h";
+        }
+        return d + "d ";
+    },
+
+    getPrettyPresence: function(user) {
+        var presence = user.presence;
+        return presence.charAt(0).toUpperCase() + presence.slice(1);
+    },
+
     render: function() {
         var isMyUser = MatrixClientPeg.get().credentials.userId == this.props.member.userId;
 
@@ -66,30 +93,43 @@ module.exports = React.createClass({
             }
         }
         mainClassName += presenceClass;
+        if (this.state.hover) {
+            mainClassName += " mx_MemberTile_hover";
+        }
 
         var name = this.props.member.name;
         if (isMyUser) name += " (me)";
-        var leave = isMyUser ? <span className="mx_MemberTile_leave" onClick={this.onLeaveClick}>X</span> : null;
+        var leave = isMyUser ? <img className="mx_MemberTile_leave" src="img/delete.png" width="10" height="10" onClick={this.onLeaveClick}/> : null;
 
-        var nameClass = this.state.hover ? "mx_MemberTile_nameSpan" : "mx_MemberTile_name";
+        var nameClass = "mx_MemberTile_name";
         if (zalgo.test(name)) {
             nameClass += " mx_MemberTile_zalgo";
         }
 
         var nameEl;
         if (this.state.hover) {
+            var presence;
+            // FIXME: make presence data update whenever User.presence changes...
+            var active = this.props.member.user.lastActiveAgo || -1;
+            if (active >= 0) {
+                presence = <div className="mx_MemberTile_presence">{ this.getPrettyPresence(this.props.member.user) } for { this.getDuration(active) }</div>;
+            }
+            else {
+                presence = <div className="mx_MemberTile_presence">{ this.getPrettyPresence(this.props.member.user) }</div>;
+            }
+
             nameEl =
-                <div className="mx_MemberTile_nameWrapper">
+                <div className="mx_MemberTile_details">
                     <MemberInfo member={this.props.member} />
-                    <span className={nameClass}>{name}</span>
-                    {leave}
+                    <div className="mx_MemberTile_userId">{ this.props.member.userId }</div>
+                    { presence }
+                    { leave }
                 </div>
         }
         else {
             nameEl =
                 <div className={nameClass}>
-                    {name}
-                    {leave}
+                    { name }
                 </div>
         }
 

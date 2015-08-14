@@ -68,6 +68,17 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
+.mx_MemberTile_hover {
+    background-color: #f0f0f0;
+    font-size: 12px;
+    color: #747474;    
+}
+
+.mx_MemberTile_userId {
+    font-weight: bold;
+}
+
+/*
 .mx_MemberTile_nameWrapper {
     display: table-cell;
     vertical-align: middle;
@@ -77,19 +88,20 @@ limitations under the License.
 
 .mx_MemberTile_nameSpan {
 }
+*/
 
 .mx_MemberTile_unavailable .mx_MemberTile_avatar,
 .mx_MemberTile_unavailable .mx_MemberTile_name,
 .mx_MemberTile_unavailable .mx_MemberTile_nameSpan
 {
-    opacity: 0.75;
+    opacity: 0.66;
 }
 
 .mx_MemberTile_offline .mx_MemberTile_avatar,
 .mx_MemberTile_offline .mx_MemberTile_name,
 .mx_MemberTile_offline .mx_MemberTile_nameSpan
 {
-    opacity: 0.5;
+    opacity: 0.25;
 }
 
 .mx_MemberTile_zalgo {
