@@ -174,6 +174,19 @@ module.exports = {
                 });
                 this.notifyNewScreen('room/'+allRooms[roomIndex].roomId);
                 break;
+            case 'view_indexed_room':
+                var allRooms = RoomListSorter.mostRecentActivityFirst(
+                    MatrixClientPeg.get().getRooms()
+                );
+                var roomIndex = payload.roomIndex;
+                if (allRooms[roomIndex]) {
+                    this.focusComposer = true;
+                    this.setState({
+                        currentRoom: allRooms[roomIndex].roomId
+                    });
+                    this.notifyNewScreen('room/'+allRooms[roomIndex].roomId);
+                }
+                break;
             case 'view_user_settings':
                 this.setState({
                     page_type: this.PageTypes.UserSettings,
@@ -247,6 +260,15 @@ module.exports = {
 
     onKeyDown: function(ev) {
         if (ev.altKey) {
+            if (ev.ctrlKey && ev.keyCode > 48 && ev.keyCode < 58) {
+                dis.dispatch({
+                    action: 'view_indexed_room',
+                    roomIndex: ev.keyCode - 49,
+                });
+                ev.stopPropagation();
+                ev.preventDefault();
+                return;                
+            }
             switch (ev.keyCode) {
                 case 38:
                     dis.dispatch({action: 'view_prev_room'});
