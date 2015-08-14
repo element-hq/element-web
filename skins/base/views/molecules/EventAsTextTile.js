@@ -31,6 +31,8 @@ module.exports = React.createClass({
 
     render: function() {
         var text = TextForEvent.textForEvent(this.props.mxEvent);
+        if (text == null || text.length == 0) return null;
+
         var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
         return (
             <div className="mx_MessageTile mx_MessageTile_notice">
