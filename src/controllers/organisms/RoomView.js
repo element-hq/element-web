@@ -179,10 +179,9 @@ module.exports = {
             messageWrapper.addEventListener('dragleave', this.onDragLeaveOrEnd);
             messageWrapper.addEventListener('dragend', this.onDragLeaveOrEnd);
 
-            //messageWrapper.scrollTop = messageWrapper.scrollHeight;
+            messageWrapper.scrollTop = messageWrapper.scrollHeight;
 
-            setTimeout(this.fillSpace, 50);
-            //this.fillSpace();
+            this.fillSpace();
         }
     },
 
