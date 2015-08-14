@@ -31,7 +31,7 @@ module.exports = {
     // takes member as an arg so it can be used if the
     // avatars are required outsode of components
     // (eg. in html5 desktop notifs, although this is not)
-    avatarUrlForRoom(room) {
+    avatarUrlForRoom: function(room) {
         var url = MatrixClientPeg.get().getAvatarUrlForRoom(
             room,
             this.props.width, this.props.height, this.props.resizeMethod,
