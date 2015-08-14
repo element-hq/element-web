@@ -24,6 +24,23 @@ module.exports = React.createClass({
     displayName: 'ImageView',
     mixins: [ImageViewController],
 
+    // XXX: keyboard shortcuts for managing dialogs should be done by the modal dialog base class omehow, surely...
+    componentDidMount: function() {
+        document.addEventListener("keydown", this.onKeyDown);
+    },
+
+    componentWillUnmount: function() {
+        document.removeEventListener("keydown", this.onKeyDown);
+    },
+
+    onKeyDown: function(ev) {
+        if (ev.keyCode == 27) { // escape
+            ev.stopPropagation();
+            ev.preventDefault();
+            this.props.onFinished();
+        }
+    },
+
     render: function() {
 
         // XXX: can't we just do max-width: 80%, max-height: 80% on the CSS?
