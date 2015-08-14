@@ -27,7 +27,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <img className="mx_MemberAvatar" src={this.state.imageUrl}
-                onerror={this.onError}
+                onError={this.onError}
                 width={this.props.width} height={this.props.height} />
         );
     }
