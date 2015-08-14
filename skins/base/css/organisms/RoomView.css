@@ -165,6 +165,22 @@ limitations under the License.
     border-top: 1px solid #a8dbf3;
 }
 
+.mx_RoomView_unreadMessagesBar {
+    margin-top: 13px;
+    color: #fff;
+    font-weight: bold;
+    background-color: #ff0064;
+    border-radius: 30px;
+    height: 30px;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.mx_RoomView_unreadMessagesBar img {
+    padding-left: 22px;
+    padding-right: 22px;
+}
+
 .mx_RoomView_typingBar {
     margin-top: 17px;
     margin-left: 56px;

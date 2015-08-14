@@ -72,7 +72,13 @@ module.exports = React.createClass({
         if (!this.state.numUnreadMessages) {
             return "";
         }
-        return this.state.numUnreadMessages + " unread messages";
+        return this.state.numUnreadMessages + " new messages";
+    },
+
+    scrollToBottom: function() {
+        if (!this.refs.messageWrapper) return;
+        var messageWrapper = this.refs.messageWrapper.getDOMNode();
+        messageWrapper.scrollTop = messageWrapper.scrollHeight;
     },
 
     render: function() {
@@ -138,8 +144,8 @@ module.exports = React.createClass({
                 // set when you've scrolled up
                 if (unreadMsgs) {
                     statusBar = (
-                        <div className="mx_RoomView_typingBar">
-                            <img src="img/typing.png" width="40" height="40" alt=""/>
+                        <div className="mx_RoomView_unreadMessagesBar" onClick={ this.scrollToBottom }>
+                            <img src="img/newmessages.png" width="10" height="12" alt=""/>
                             {unreadMsgs}
                         </div>
                     );
