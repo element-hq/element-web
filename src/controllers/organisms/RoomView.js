@@ -52,7 +52,8 @@ module.exports = {
             messageCap: INITIAL_SIZE,
             editingRoomSettings: false,
             uploadingRoomSettings: false,
-            numUnreadMessages: 0
+            numUnreadMessages: 0,
+            draggingFile: false,
         }
     },
 
@@ -69,6 +70,8 @@ module.exports = {
             var messageWrapper = this.refs.messageWrapper.getDOMNode();
             messageWrapper.removeEventListener('drop', this.onDrop);
             messageWrapper.removeEventListener('dragover', this.onDragOver);
+            messageWrapper.removeEventListener('dragleave', this.onDragLeaveOrEnd);
+            messageWrapper.removeEventListener('dragend', this.onDragLeaveOrEnd);
         }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
@@ -173,6 +176,8 @@ module.exports = {
 
             messageWrapper.addEventListener('drop', this.onDrop);
             messageWrapper.addEventListener('dragover', this.onDragOver);
+            messageWrapper.addEventListener('dragleave', this.onDragLeaveOrEnd);
+            messageWrapper.addEventListener('dragend', this.onDragLeaveOrEnd);
 
             messageWrapper.scrollTop = messageWrapper.scrollHeight;
 
@@ -272,6 +277,7 @@ module.exports = {
         var items = ev.dataTransfer.items;
         if (items.length == 1) {
             if (items[0].kind == 'file') {
+                this.setState({ draggingFile : true });
                 ev.dataTransfer.dropEffect = 'copy';
             }
         }
@@ -280,10 +286,17 @@ module.exports = {
     onDrop: function(ev) {
         ev.stopPropagation();
         ev.preventDefault();
+        this.setState({ draggingFile : false });
         var files = ev.dataTransfer.files;
         if (files.length == 1) {
             this.uploadFile(files[0]);
         }
+    },
+
+    onDragLeaveOrEnd: function(ev) {
+        ev.stopPropagation();
+        ev.preventDefault();
+        this.setState({ draggingFile : false });
     },
 
     uploadFile: function(file) {

@@ -155,13 +155,21 @@ module.exports = React.createClass({
             }
 
             var roomEdit = null;
-
             if (this.state.editingRoomSettings) {
                 roomEdit = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
             }
-
             if (this.state.uploadingRoomSettings) {
                 roomEdit = <Loader/>;
+            }
+
+            var fileDropTarget = null;
+            if (this.state.draggingFile) {
+                fileDropTarget = <div className="mx_RoomView_fileDropTarget">
+                                    <div className="mx_RoomView_fileDropTargetLabel">
+                                        <img src="img/upload-big.png" width="46" height="61" alt="Drop File Here"/><br/>
+                                        Drop File Here
+                                    </div>
+                                 </div>;
             }
 
             return (
@@ -174,6 +182,7 @@ module.exports = React.createClass({
                     </div>
                     <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
                         <div className="mx_RoomView_messageListWrapper">
+                            { fileDropTarget }    
                             <ol className="mx_RoomView_MessageList" aria-live="polite">
                                 <li className={scrollheader_classes}>
                                 </li>
