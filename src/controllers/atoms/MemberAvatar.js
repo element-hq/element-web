@@ -16,8 +16,7 @@ limitations under the License.
 
 'use strict';
 
-var MatrixClientPeg = require('../../MatrixClientPeg');
-var DefaultAvatar = require('../../DefaultAvatar');
+var Avatar = require('../../Avatar');
 
 var React = require('react');
 
@@ -37,23 +36,8 @@ module.exports = {
         }
     },
 
-    // takes member as an arg so it can be used if the
-    // avatars are required outsode of components
-    // (eg. in html5 desktop notifs)
-    avatarUrlForMember: function(member) {
-        var url = MatrixClientPeg.get().getAvatarUrlForMember(
-            member,
-            this.props.width, this.props.height, this.props.resizeMethod,
-            false
-        );
-        if (url === null) {
-            url = this.defaultAvatarUrl(member);
-        }
-        return url;
-    },
-
     defaultAvatarUrl: function(member) {
-        return DefaultAvatar.defaultAvatarUrlForString(
+        return Avatar.defaultAvatarUrlForString(
             member.userId
         );
     },
@@ -70,7 +54,11 @@ module.exports = {
 
     getInitialState: function() {
         return {
-            imageUrl: this.avatarUrlForMember(this.props.member)
+            imageUrl: Avatar.avatarUrlForMember(
+                this.props.member,
+                this.props.width, this.props.height,
+                this.props.resizeMethod
+            )
         };
     }
 };

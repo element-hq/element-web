@@ -23,8 +23,7 @@ var TextForEvent = require("../../../../src/TextForEvent");
 var extend = require("../../../../src/extend");
 var dis = require("../../../../src/dispatcher");
 
-var ComponentBroker = require("../../../../src/ComponentBroker");
-var MemberAvatar = ComponentBroker.get("atoms/MemberAvatar");
+var Avatar = require("../../../../src/Avatar");
 
 
 var NotifierView = {
@@ -60,7 +59,9 @@ var NotifierView = {
             if (ev.getContent().body) msg = ev.getContent().body;
         }
 
-        var avatarUrlrl = MemberAvatar.avatarUrlForMember(ev.sender);
+        var avatarUrl = Avatar.avatarUrlForMember(
+            ev.sender, 40, 40, 'crop'
+        );
 
         var notification = new global.Notification(
             title,
