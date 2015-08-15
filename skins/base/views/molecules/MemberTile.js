@@ -34,17 +34,17 @@ module.exports = React.createClass({
     displayName: 'MemberTile',
     mixins: [MemberTileController],
 
-    // XXX: should these be in the controller?
-    getInitialState: function() {
-        return { 'hover': false };
-    },
-
     mouseEnter: function(e) {
         this.setState({ 'hover': true });
     },
 
     mouseLeave: function(e) {
         this.setState({ 'hover': false });
+    },
+
+    onClick: function(e) {
+        this.setState({ 'menu': true });
+        this.setState(this._calculateOpsPermissions());        
     },
 
     getDuration: function(time) {
@@ -78,6 +78,14 @@ module.exports = React.createClass({
         return "Unknown";
     },
 
+    getPowerLabel: function() {
+        var label = this.props.member.userId;
+        if (this.state.isTargetMod) {
+            label += " - Mod (" + this.props.member.powerLevelNorm + "%)";
+        }
+        return label;
+    },
+
     render: function() {
         var isMyUser = MatrixClientPeg.get().credentials.userId == this.props.member.userId;
 
@@ -102,12 +110,47 @@ module.exports = React.createClass({
         }
 
         var name = this.props.member.name;
-        if (isMyUser) name += " (me)";
+        // if (isMyUser) name += " (me)"; // this does nothing other than introduce line wrapping and pain
         var leave = isMyUser ? <img className="mx_MemberTile_leave" src="img/delete.png" width="10" height="10" onClick={this.onLeaveClick}/> : null;
 
         var nameClass = "mx_MemberTile_name";
         if (zalgo.test(name)) {
             nameClass += " mx_MemberTile_zalgo";
+        }
+
+        var menu;
+        if (this.state.menu) {
+            var kickButton, banButton, muteButton, giveModButton;
+            if (this.state.can.kick) {
+                kickButton = <div className="mx_MemberTile_menuItem" onClick={this.onKick}>
+                    Kick
+                </div>;
+            }
+            if (this.state.can.ban) {
+                banButton = <div className="mx_MemberTile_menuItem" onClick={this.onBan}>
+                    Ban
+                </div>;
+            }
+            if (this.state.can.mute) {
+                var muteLabel = this.state.muted ? "Unmute" : "Mute";
+                muteButton = <div className="mx_MemberTile_menuItem" onClick={this.onMuteToggle}>
+                    {muteLabel}
+                </div>;
+            }
+            if (this.state.can.modifyLevel) {
+                var giveOpLabel = this.state.isTargetMod ? "Revoke Mod" : "Make Mod";
+                giveModButton = <div className="mx_MemberTile_menuItem" onClick={this.onModToggle}>
+                    {giveOpLabel}
+                </div>
+            }
+            menu = <div className="mx_MemberTile_menu">
+                        <img className="mx_MemberTile_chevron" src="img/chevron-right.png" width="9" height="16" />
+                        <div className="mx_MemberTile_menuItem" onClick={this.onChatClick}>Chat</div>
+                        {muteButton}
+                        {kickButton}
+                        {banButton}
+                        {giveModButton}
+                   </div>;
         }
 
         var nameEl;
@@ -122,11 +165,10 @@ module.exports = React.createClass({
                 presence = <div className="mx_MemberTile_presence">{ this.getPrettyPresence(this.props.member.user) }</div>;
             }
 
-            // <MemberInfo member={this.props.member} />
             nameEl =
                 <div className="mx_MemberTile_details">
                     { leave }
-                    <div className="mx_MemberTile_userId" title={ this.props.member.userId }>{ this.props.member.userId }</div>
+                    <div className="mx_MemberTile_userId">{ this.props.member.userId }</div>
                     { presence }
                 </div>
         }
@@ -138,7 +180,8 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className={mainClassName} onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
+            <div className={mainClassName} title={ this.getPowerLabel } onClick={ this.onClick } onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
+                { menu }
                 <div className="mx_MemberTile_avatar">
                     <MemberAvatar member={this.props.member} />
                      { power }

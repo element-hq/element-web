@@ -25,11 +25,167 @@ var Loader = require("react-loader");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
 module.exports = {
-    onClick: function() {
-        dis.dispatch({
-            action: 'view_user',
-            user_id: this.props.member.userId
+    // onClick: function() {
+    //     dis.dispatch({
+    //         action: 'view_user',
+    //         user_id: this.props.member.userId
+    //     });
+    // },
+
+    onKick: function() {
+        var roomId = this.props.member.roomId;
+        var target = this.props.member.userId;
+        var self = this;
+        MatrixClientPeg.get().kick(roomId, target).done(function() {
+            // NO-OP; rely on the m.room.member event coming down else we could
+            // get out of sync if we force setState here!
+            console.log("Kick success");
+        }, function(err) {
+            Modal.createDialog(ErrorDialog, {
+                title: "Kick error",
+                description: err.message
+            });
         });
+    },
+
+    onBan: function() {
+        var roomId = this.props.member.roomId;
+        var target = this.props.member.userId;
+        var self = this;
+        MatrixClientPeg.get().ban(roomId, target).done(function() {
+            // NO-OP; rely on the m.room.member event coming down else we could
+            // get out of sync if we force setState here!
+            console.log("Ban success");
+        }, function(err) {
+            Modal.createDialog(ErrorDialog, {
+                title: "Ban error",
+                description: err.message
+            });
+        });
+    },
+
+    onMuteToggle: function() {
+        var roomId = this.props.member.roomId;
+        var target = this.props.member.userId;
+        var self = this;
+        var room = MatrixClientPeg.get().getRoom(roomId);
+        if (!room) {
+            return;
+        }
+        var powerLevelEvent = room.currentState.getStateEvents(
+            "m.room.power_levels", ""
+        );
+        if (!powerLevelEvent) {
+            return;
+        }
+        var isMuted = this.state.muted;
+        var powerLevels = powerLevelEvent.getContent();
+        var levelToSend = (
+            (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
+            powerLevels.events_default
+        );
+        var level;
+        if (isMuted) { // unmute
+            level = levelToSend;
+        }
+        else { // mute
+            level = levelToSend - 1;
+        }
+
+        MatrixClientPeg.get().setPowerLevel(roomId, target, level, powerLevelEvent).done(
+        function() {
+            // NO-OP; rely on the m.room.member event coming down else we could
+            // get out of sync if we force setState here!
+            console.log("Mute toggle success");
+        }, function(err) {
+            Modal.createDialog(ErrorDialog, {
+                title: "Mute error",
+                description: err.message
+            });
+        });
+    },
+
+    onModToggle: function() {
+        var roomId = this.props.member.roomId;
+        var target = this.props.member.userId;
+        var room = MatrixClientPeg.get().getRoom(roomId);
+        if (!room) {
+            return;
+        }
+        var powerLevelEvent = room.currentState.getStateEvents(
+            "m.room.power_levels", ""
+        );
+        if (!powerLevelEvent) {
+            return;
+        }
+        var me = room.getMember(MatrixClientPeg.get().credentials.userId);
+        if (!me) {
+            return;
+        }
+        var defaultLevel = powerLevelEvent.getContent().users_default;
+        var modLevel = me.powerLevel - 1;
+        // toggle the level
+        var newLevel = this.state.isTargetMod ? defaultLevel : modLevel;
+        MatrixClientPeg.get().setPowerLevel(roomId, target, newLevel, powerLevelEvent).done(
+        function() {
+            // NO-OP; rely on the m.room.member event coming down else we could
+            // get out of sync if we force setState here!
+            console.log("Mod toggle success");
+        }, function(err) {
+            Modal.createDialog(ErrorDialog, {
+                title: "Mod error",
+                description: err.message
+            });
+        });
+    },
+
+    onChatClick: function() {
+        // check if there are any existing rooms with just us and them (1:1)
+        // If so, just view that room. If not, create a private room with them.
+        var rooms = MatrixClientPeg.get().getRooms();
+        var userIds = [
+            this.props.member.userId,
+            MatrixClientPeg.get().credentials.userId
+        ];
+        var existingRoomId = null;
+        for (var i = 0; i < rooms.length; i++) {
+            var members = rooms[i].getJoinedMembers();
+            if (members.length === 2) {
+                var hasTargetUsers = true;
+                for (var j = 0; j < members.length; j++) {
+                    if (userIds.indexOf(members[j].userId) === -1) {
+                        hasTargetUsers = false;
+                        break;
+                    }
+                }
+                if (hasTargetUsers) {
+                    existingRoomId = rooms[i].roomId;
+                    break;
+                }
+            }
+        }
+
+        if (existingRoomId) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: existingRoomId
+            });
+        }
+        else {
+            MatrixClientPeg.get().createRoom({
+                invite: [this.props.member.userId],
+                preset: "private_chat"
+            }).done(function(res) {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: res.room_id
+                });
+            }, function(err) {
+                console.error(
+                    "Failed to create room: %s", JSON.stringify(err)
+                );
+            });
+        }
     },
 
     onLeaveClick: function() {
@@ -56,5 +212,84 @@ module.exports = {
                 }
             }
         });
-    }
+    },
+
+    getInitialState: function() {
+        return {
+            hover: false,
+            menu: false,
+
+            // presence: "offline",
+            // active: -1,
+            can: {
+                kick: false,
+                ban: false,
+                mute: false,
+                modifyLevel: false
+            },
+            muted: false,
+            isTargetMod: false,
+        }
+    },
+
+    _calculateOpsPermissions: function() {
+        var defaultPerms = {
+            can: {},
+            muted: false,
+            modifyLevel: false
+        };
+        var room = MatrixClientPeg.get().getRoom(this.props.member.roomId);
+        if (!room) {
+            return defaultPerms;
+        }
+        var powerLevels = room.currentState.getStateEvents(
+            "m.room.power_levels", ""
+        );
+        if (!powerLevels) {
+            return defaultPerms;
+        }
+        var me = room.getMember(MatrixClientPeg.get().credentials.userId);
+        var them = this.props.member;
+        return {
+            can: this._calculateCanPermissions(
+                me, them, powerLevels.getContent()
+            ),
+            muted: this._isMuted(them, powerLevels.getContent()),
+            isTargetMod: them.powerLevel > powerLevels.getContent().users_default
+        };
+    },
+
+    _calculateCanPermissions: function(me, them, powerLevels) {
+        var can = {
+            kick: false,
+            ban: false,
+            mute: false,
+            modifyLevel: false
+        };
+        var canAffectUser = them.powerLevel < me.powerLevel;
+        if (!canAffectUser) {
+            //console.log("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
+            return can;
+        }
+        var editPowerLevel = (
+            (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
+            powerLevels.state_default
+        );
+        can.kick = me.powerLevel >= powerLevels.kick;
+        can.ban = me.powerLevel >= powerLevels.ban;
+        can.mute = me.powerLevel >= editPowerLevel;
+        can.modifyLevel = me.powerLevel > them.powerLevel;
+        return can;
+    },
+
+    _isMuted: function(member, powerLevelContent) {
+        if (!powerLevelContent || !member) {
+            return false;
+        }
+        var levelToSend = (
+            (powerLevelContent.events ? powerLevelContent.events["m.room.message"] : null) ||
+            powerLevelContent.events_default
+        );
+        return member.powerLevel < levelToSend;
+    },
 };
