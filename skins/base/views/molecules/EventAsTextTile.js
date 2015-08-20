@@ -34,10 +34,11 @@ module.exports = React.createClass({
         if (text == null || text.length == 0) return null;
 
         var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
+        var avatar = this.props.mxEvent.sender ? <MemberAvatar member={this.props.mxEvent.sender} /> : null;
         return (
             <div className="mx_MessageTile mx_MessageTile_notice">
                 <div className="mx_MessageTile_avatar">
-                    <MemberAvatar member={this.props.mxEvent.sender} />
+                    { avatar }
                 </div>            
                 { timestamp }
                 <span className="mx_SenderProfile"></span>
