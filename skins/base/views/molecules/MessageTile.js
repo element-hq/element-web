@@ -69,11 +69,13 @@ module.exports = React.createClass({
 
         var avatar, sender, resend;
         if (!this.props.continuation) {
-            avatar = (
-                <div className="mx_MessageTile_avatar">
-                    <MemberAvatar member={this.props.mxEvent.sender} />
-                </div>
-            );
+            if (this.props.mxEvent.sender) {
+                avatar = (
+                    <div className="mx_MessageTile_avatar">
+                        <MemberAvatar member={this.props.mxEvent.sender} />
+                    </div>
+                );
+            }
             sender = <SenderProfile mxEvent={this.props.mxEvent} aux={aux} />;
         }
         if (this.props.mxEvent.status === "not_sent" && !this.state.resending) {
