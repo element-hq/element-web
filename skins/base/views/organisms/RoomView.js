@@ -83,9 +83,17 @@ module.exports = React.createClass({
 
     render: function() {
         if (!this.state.room) {
-            return (
-                <div />
-            );
+            if (this.props.roomId) {
+                return (
+                    <div>
+                    <button onClick={this.onJoinButtonClicked}>Join Room</button>
+                    </div>
+                );
+            } else {
+                return (
+                    <div />
+                );
+            }
         }
 
         var myUserId = MatrixClientPeg.get().credentials.userId;
