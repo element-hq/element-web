@@ -17,15 +17,6 @@ limitations under the License.
 .mx_Login {
     width: 100%;
     height: 100%;
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-align-items: center;
-    align-items: center;
-    -webkit-justify-content: center;
-    justify-content: center;
 }
 
 .mx_Login h2 {
@@ -37,6 +28,8 @@ limitations under the License.
 
 .mx_Login_box {
     width: 300px;
+    margin: auto;
+    padding-top: 100px;
 }
 
 .mx_Login_logo {

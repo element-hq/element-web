@@ -110,7 +110,7 @@ module.exports = React.createClass({
         var self = this;
         this.updateHsTimeout = setTimeout(function() {
             self.onHSChosen();
-        }, 500);
+        }, 1000);
     },
 
     componentForStep: function(step) {
