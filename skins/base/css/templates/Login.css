@@ -82,11 +82,19 @@ limitations under the License.
     opacity: 0.8;
 }
 
+.mx_Login_loader {
+    position: absolute;
+    left: 50%;
+    margin-top: 12px;
+}
+
 .mx_Login_error {
     color: #ff2020;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 24px;
+    height: 24px;
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
 
 .mx_Login_create:link {
