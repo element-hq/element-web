@@ -80,8 +80,19 @@ module.exports = React.createClass({
     },
 
     onHsUrlChanged: function() {
-        this.customHsUrl = this.refs.serverConfig.getHsUrl().trim();
-        this.customIsUrl = this.refs.serverConfig.getIsUrl().trim();
+        var newHsUrl = this.refs.serverConfig.getHsUrl().trim();
+        var newIsUrl = this.refs.serverConfig.getIsUrl().trim();
+
+        if (newHsUrl == this.customHsUrl &&
+            newIsUrl == this.customIsUrl)
+        {
+            return;
+        }
+        else {
+            this.customHsUrl = newHsUrl;
+            this.customIsUrl = newIsUrl;
+        }
+
         MatrixClientPeg.replaceUsingUrls(
             this.getHsUrl(),
             this.getIsUrl()
