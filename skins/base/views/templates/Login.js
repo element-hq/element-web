@@ -74,14 +74,25 @@ module.exports = React.createClass({
      */
     getFormVals: function() {
         return {
-            'username': this.refs.user.getDOMNode().value,
-            'password': this.refs.pass.getDOMNode().value
+            'username': this.refs.user.getDOMNode().value.trim(),
+            'password': this.refs.pass.getDOMNode().value.trim()
         };
     },
 
     onHsUrlChanged: function() {
-        this.customHsUrl = this.refs.serverConfig.getHsUrl();
-        this.customIsUrl = this.refs.serverConfig.getIsUrl();
+        var newHsUrl = this.refs.serverConfig.getHsUrl().trim();
+        var newIsUrl = this.refs.serverConfig.getIsUrl().trim();
+
+        if (newHsUrl == this.customHsUrl &&
+            newIsUrl == this.customIsUrl)
+        {
+            return;
+        }
+        else {
+            this.customHsUrl = newHsUrl;
+            this.customIsUrl = newIsUrl;
+        }
+
         MatrixClientPeg.replaceUsingUrls(
             this.getHsUrl(),
             this.getIsUrl()
@@ -93,23 +104,24 @@ module.exports = React.createClass({
         // XXX: HSes do not have to offer password auth, so we
         // need to update and maybe show a different component
         // when a new HS is entered.
-        /*if (this.updateHsTimeout) {
+        if (this.updateHsTimeout) {
             clearTimeout(this.updateHsTimeout);
         }
         var self = this;
         this.updateHsTimeout = setTimeout(function() {
             self.onHSChosen();
-        }, 500);*/
+        }, 1000);
     },
 
     componentForStep: function(step) {
         switch (step) {
             case 'choose_hs':
+            case 'fetch_stages':
                 var serverConfigStyle = {};
                 serverConfigStyle.display = this.state.serverConfigVisible ? 'block' : 'none';
                 return (
                     <div>
-                        <input className="mx_Login_checkbox" id="advanced" type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
+                        <input className="mx_Login_checkbox" id="advanced" type="checkbox" checked={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
                         <label className="mx_Login_label" htmlFor="advanced">Use custom server options (advanced)</label>
                         <div style={serverConfigStyle}>
                             <ServerConfig ref="serverConfig"
@@ -126,7 +138,7 @@ module.exports = React.createClass({
                         <form onSubmit={this.onUserPassEntered}>
                         <input className="mx_Login_field" ref="user" type="text" value={this.state.username} onChange={this.onUsernameChanged} placeholder="Email or user name" /><br />
                         <input className="mx_Login_field" ref="pass" type="password" value={this.state.password} onChange={this.onPasswordChanged} placeholder="Password" /><br />
-                        {this.componentForStep('choose_hs')}
+                        { this.componentForStep('choose_hs') }
                         <input className="mx_Login_submit" type="submit" value="Log in" />
                         </form>
                     </div>
@@ -143,20 +155,18 @@ module.exports = React.createClass({
     },
 
     loginContent: function() {
-        if (this.state.busy) {
-            return (
-                <Loader />
-            );
-        } else {
-            return (
-                <div>
-                    <h2>Sign in</h2>
-                    {this.componentForStep(this.state.step)}
-                    <div className="mx_Login_error">{this.state.errorText}</div>
-                    <a className="mx_Login_create" onClick={this.showRegister} href="#">Create a new account</a>
+        var loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
+        return (
+            <div>
+                <h2>Sign in</h2>
+                {this.componentForStep(this.state.step)}
+                <div className="mx_Login_error">
+                        { loader }
+                        {this.state.errorText}
                 </div>
-            );
-        }
+                <a className="mx_Login_create" onClick={this.showRegister} href="#">Create a new account</a>
+            </div>
+        );
     },
 
     render: function() {

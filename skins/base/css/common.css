@@ -83,6 +83,7 @@ html {
     font-size: 16px;
     position: relative;
     border-radius: 8px;
+    max-width: 75%;
 }
 
 .mx_ImageView {

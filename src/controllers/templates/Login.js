@@ -35,7 +35,7 @@ module.exports = {
     },
 
     setStep: function(step) {
-        this.setState({ step: step, errorText: '', busy: false });
+        this.setState({ step: step, busy: false });
     },
 
     onHSChosen: function() {
@@ -45,11 +45,14 @@ module.exports = {
         );
         this.setState({
             hs_url: this.getHsUrl(),
-            is_url: this.getIsUrl()
+            is_url: this.getIsUrl(),
         });
         this.setStep("fetch_stages");
         var cli = MatrixClientPeg.get();
-        this.setState({busy: true});
+        this.setState({
+            busy: true,
+            errorText: "",
+        });
         var self = this;
         cli.loginFlows().done(function(result) {
             self.setState({
@@ -66,7 +69,10 @@ module.exports = {
 
     onUserPassEntered: function(ev) {
         ev.preventDefault();
-        this.setState({busy: true});
+        this.setState({
+            busy: true,
+            errorText: "",
+        });
         var self = this;
 
         var formVals = this.getFormVals();
