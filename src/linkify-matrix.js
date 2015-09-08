@@ -20,11 +20,11 @@ var extend = require('./extend');
 
 function matrixLinkify(linkify) {
     // Text tokens
-	var TT = linkify.scanner.TOKENS;
+    var TT = linkify.scanner.TOKENS;
     var TextToken = TT.Base;
     // Multi tokens
-	var MT = linkify.parser.TOKENS;
-	var MultiToken = MT.Base;
+    var MT = linkify.parser.TOKENS;
+    var MultiToken = MT.Base;
     var S_START = linkify.parser.start;
 
 
@@ -35,12 +35,12 @@ function matrixLinkify(linkify) {
     };
     ROOMALIAS.prototype = new MultiToken();
 
-	var S_HASH = new linkify.parser.State();
-	var S_HASH_NAME = new linkify.parser.State();
-	var S_HASH_NAME_COLON = new linkify.parser.State();
-	var S_HASH_NAME_COLON_DOMAIN = new linkify.parser.State();
-	var S_HASH_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
-	var S_ROOMALIAS = new linkify.parser.State(ROOMALIAS);
+    var S_HASH = new linkify.parser.State();
+    var S_HASH_NAME = new linkify.parser.State();
+    var S_HASH_NAME_COLON = new linkify.parser.State();
+    var S_HASH_NAME_COLON_DOMAIN = new linkify.parser.State();
+    var S_HASH_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
+    var S_ROOMALIAS = new linkify.parser.State(ROOMALIAS);
 
     var roomname_tokens = [
         TT.DOT,
@@ -50,10 +50,10 @@ function matrixLinkify(linkify) {
         TT.TLD
     ];
 
-	S_START.on(TT.POUND, S_HASH);
+    S_START.on(TT.POUND, S_HASH);
 
-	S_HASH.on(roomname_tokens, S_HASH_NAME);
-	S_HASH_NAME.on(roomname_tokens, S_HASH_NAME);
+    S_HASH.on(roomname_tokens, S_HASH_NAME);
+    S_HASH_NAME.on(roomname_tokens, S_HASH_NAME);
     S_HASH_NAME.on(TT.DOMAIN, S_HASH_NAME);
 
     S_HASH_NAME.on(TT.COLON, S_HASH_NAME_COLON);
@@ -71,12 +71,12 @@ function matrixLinkify(linkify) {
     };
     USERID.prototype = new MultiToken();
 
-	var S_AT = new linkify.parser.State();
-	var S_AT_NAME = new linkify.parser.State();
-	var S_AT_NAME_COLON = new linkify.parser.State();
-	var S_AT_NAME_COLON_DOMAIN = new linkify.parser.State();
-	var S_AT_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
-	var S_USERID = new linkify.parser.State(USERID);
+    var S_AT = new linkify.parser.State();
+    var S_AT_NAME = new linkify.parser.State();
+    var S_AT_NAME_COLON = new linkify.parser.State();
+    var S_AT_NAME_COLON_DOMAIN = new linkify.parser.State();
+    var S_AT_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
+    var S_USERID = new linkify.parser.State(USERID);
 
     var username_tokens = [
         TT.DOT,
@@ -86,10 +86,10 @@ function matrixLinkify(linkify) {
         TT.TLD
     ];
 
-	S_START.on(TT.AT, S_AT);
+    S_START.on(TT.AT, S_AT);
 
-	S_AT.on(username_tokens, S_AT_NAME);
-	S_AT_NAME.on(username_tokens, S_AT_NAME);
+    S_AT.on(username_tokens, S_AT_NAME);
+    S_AT_NAME.on(username_tokens, S_AT_NAME);
     S_AT_NAME.on(TT.DOMAIN, S_AT_NAME);
 
     S_AT_NAME.on(TT.COLON, S_AT_NAME_COLON);
