@@ -8,17 +8,11 @@
     "url": "https://github.com/matrix-org/matrix-react-sdk"
   },
   "license": "Apache-2.0",
-  "main": "build/src/index.js",
-  "style": "bundle.css",
+  "main": "lib/index.js",
   "scripts": {
-    "build:skins": "jsx skins build/skins",
-    "build:logic": "jsx src build/src",
-    "build:js": "npm run build:skins && npm run build:logic",
-    "start:js": "jsx -w skins/base/views/ build --source-map-inline",
-    "build:css": "catw 'skins/base/css/**/*.css' -o bundle.css -c uglifycss --no-watch",
-    "start:css": "catw 'skins/base/css/**/*.css' -o bundle.css -v",
-    "build": "npm run build:js && npm run build:css",
-    "start": "parallelshell 'npm run start:js' 'npm run start:css'",
+    "build": "jsx src lib",
+    "start": "jsx -w --source-map-inline src lib",
+    "clean": "rimraf lib",
     "prepublish": "npm run build"
   },
   "dependencies": {
@@ -28,13 +22,11 @@
     "matrix-js-sdk": "0.2.0",
     "q": "^1.4.1",
     "react": "^0.13.3",
-    "react-loader": "^1.4.0",
     "linkifyjs": "^2.0.0-beta.4"
   },
   "devDependencies": {
     "catw": "^1.0.1",
-    "parallelshell": "^1.1.1",
     "react-tools": "^0.13.3",
-    "uglifycss": "0.0.15"
+    "rimraf": "^2.4.3"
   }
 }
