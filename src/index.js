@@ -16,4 +16,4 @@ limitations under the License.
 
 'use strict';
 
-module.exports.MatrixChat = require("../skins/base/views/pages/MatrixChat");
+module.exports.ComponentBroker = require("./ComponentBroker");
