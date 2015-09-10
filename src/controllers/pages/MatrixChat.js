@@ -16,9 +16,6 @@ limitations under the License.
 
 'use strict';
 
-// should be atomised
-var Loader = require("react-loader");
-
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var RoomListSorter = require("../../RoomListSorter");
 
