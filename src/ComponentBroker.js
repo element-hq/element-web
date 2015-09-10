@@ -16,11 +16,6 @@ limitations under the License.
 
 'use strict';
 
-function load(name) {
-    var module = require("../skins/base/views/"+name);
-    return module;
-};
-
 var ComponentBroker = function() {
     this.components = {};
 };
@@ -30,9 +25,7 @@ ComponentBroker.prototype = {
         if (this.components[name]) {
             return this.components[name];
         }
-
-        this.components[name] = load(name);
-        return this.components[name];
+        return null;
     },
 
     set: function(name, module) {
@@ -51,42 +44,3 @@ if (global.componentBroker === undefined) {
 }
 module.exports = global.componentBroker;
 
-// We need to tell browserify to include all the components
-// by direct require syntax in here, but we don't want them
-// to be evaluated in this file because then we wouldn't be
-// able to override them. if (0) does this.
-// Must be in this file (because the require is file-specific) and
-// must be at the end because the components include this file.
-if (0) {
-require('../skins/base/views/atoms/LogoutButton');
-require('../skins/base/views/atoms/EnableNotificationsButton');
-require('../skins/base/views/atoms/MessageTimestamp');
-require('../skins/base/views/atoms/create_room/CreateRoomButton');
-require('../skins/base/views/atoms/create_room/RoomNameTextbox');
-require('../skins/base/views/atoms/create_room/Presets');
-require('../skins/base/views/atoms/EditableText');
-require('../skins/base/views/molecules/MatrixToolbar');
-require('../skins/base/views/molecules/RoomTile');
-require('../skins/base/views/molecules/MessageTile');
-require('../skins/base/views/molecules/SenderProfile');
-require('../skins/base/views/molecules/UnknownMessageTile');
-require('../skins/base/views/molecules/MTextTile');
-require('../skins/base/views/molecules/MNoticeTile');
-require('../skins/base/views/molecules/MEmoteTile');
-require('../skins/base/views/molecules/MImageTile');
-require('../skins/base/views/molecules/MFileTile');
-require('../skins/base/views/molecules/MRoomMemberTile');
-require('../skins/base/views/molecules/RoomHeader');
-require('../skins/base/views/molecules/MessageComposer');
-require('../skins/base/views/molecules/ProgressBar');
-require('../skins/base/views/molecules/ServerConfig');
-require('../skins/base/views/organisms/MemberList');
-require('../skins/base/views/molecules/MemberTile');
-require('../skins/base/views/organisms/RoomList');
-require('../skins/base/views/organisms/RoomView');
-require('../skins/base/views/templates/Login');
-require('../skins/base/views/templates/Register');
-require('../skins/base/views/organisms/Notifier');
-require('../skins/base/views/organisms/CreateRoom');
-require('../skins/base/views/molecules/UserSelector');
-}
