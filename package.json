@@ -10,8 +10,8 @@
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "scripts": {
-    "build": "jsx src lib",
-    "start": "jsx -w --source-map-inline src lib",
+    "build": "babel src -d lib --source-maps",
+    "start": "babel src -w -d lib --source-maps",
     "clean": "rimraf lib",
     "prepublish": "npm run build"
   },
@@ -25,8 +25,8 @@
     "linkifyjs": "^2.0.0-beta.4"
   },
   "devDependencies": {
+    "babel": "^5.8.23",
     "catw": "^1.0.1",
-    "react-tools": "^0.13.3",
     "rimraf": "^2.4.3"
   }
 }
