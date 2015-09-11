@@ -21,8 +21,11 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 var RoomListSorter = require("../../RoomListSorter");
 
 var ComponentBroker = require('../../ComponentBroker');
+var ConferenceHandler = require("../../ConferenceHandler");
 
 var RoomTile = ComponentBroker.get("molecules/RoomTile");
+
+var HIDE_CONFERENCE_CHANS = true;
 
 module.exports = {
     componentWillMount: function() {
@@ -97,7 +100,24 @@ module.exports = {
         return RoomListSorter.mostRecentActivityFirst(
             MatrixClientPeg.get().getRooms().filter(function(room) {
                 var member = room.getMember(MatrixClientPeg.get().credentials.userId);
-                return member && (member.membership == "join" || member.membership == "invite");
+                var shouldShowRoom =  (
+                    member && (member.membership == "join" || member.membership == "invite")
+                );
+                // hiding conf rooms only ever toggles shouldShowRoom to false
+                if (shouldShowRoom && HIDE_CONFERENCE_CHANS) {
+                    // we want to hide the 1:1 conf<->user room and not the group chat
+                    var joinedMembers = room.getJoinedMembers();
+                    if (joinedMembers.length === 2) {
+                        var otherMember = joinedMembers.filter(function(m) {
+                            return m.userId !== member.userId
+                        })[0];
+                        if (ConferenceHandler.isConferenceUser(otherMember)) {
+                            console.log("Hiding conference 1:1 room %s", room.roomId);
+                            shouldShowRoom = false;
+                        }
+                    }
+                }
+                return shouldShowRoom;
             })
         );
     },

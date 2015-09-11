@@ -57,7 +57,7 @@ var MatrixClientPeg = require("./MatrixClientPeg");
 var Modal = require("./Modal");
 var ComponentBroker = require('./ComponentBroker');
 var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
-var ConferenceHandler = require("./ConferenceHandler");
+var ConferenceCall = require("./ConferenceHandler").ConferenceCall;
 var Matrix = require("matrix-js-sdk");
 var dis = require("./dispatcher");
 
@@ -196,10 +196,10 @@ dis.register(function(payload) {
             }
             else { // > 2
                 console.log("Place conference call in %s", payload.room_id);
-                var confHandler = new ConferenceHandler(
+                var confCall = new ConferenceCall(
                     MatrixClientPeg.get(), payload.room_id
                 );
-                confHandler.setup().done(function(call) {
+                confCall.setup().done(function(call) {
                     placeCall(call);
                 }, function(err) {
                     console.error("Failed to setup conference call: %s", err);
