@@ -57,6 +57,7 @@ var MatrixClientPeg = require("./MatrixClientPeg");
 var Modal = require("./Modal");
 var ComponentBroker = require('./ComponentBroker');
 var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
+var ConferenceHandler = require("./ConferenceHandler");
 var Matrix = require("matrix-js-sdk");
 var dis = require("./dispatcher");
 
@@ -161,37 +162,49 @@ dis.register(function(payload) {
                 console.error("Room %s does not exist.", payload.room_id);
                 return;
             }
+
+            function placeCall(newCall) {
+                _setCallListeners(newCall);
+                _setCallState(newCall, newCall.roomId, "ringback");
+                if (payload.type === 'voice') {
+                    newCall.placeVoiceCall();
+                }
+                else if (payload.type === 'video') {
+                    newCall.placeVideoCall(
+                        payload.remote_element,
+                        payload.local_element
+                    );
+                }
+                else {
+                    console.error("Unknown conf call type: %s", payload.type);
+                }
+            }
+
             var members = room.getJoinedMembers();
-            if (members.length !== 2) {
-                var text = members.length === 1 ? "yourself." : "more than 2 people.";
+            if (members.length <= 1) {
                 Modal.createDialog(ErrorDialog, {
-                    description: "You cannot place a call with " + text
+                    description: "You cannot place a call with yourself."
                 });
-                console.error(
-                    "Fail: There are %s joined members in this room, not 2.",
-                    room.getJoinedMembers().length
-                );
                 return;
             }
-            console.log("Place %s call in %s", payload.type, payload.room_id);
-            var call = Matrix.createNewMatrixCall(
-                MatrixClientPeg.get(), payload.room_id
-            );
-            _setCallListeners(call);
-            _setCallState(call, call.roomId, "ringback");
-            if (payload.type === 'voice') {
-                call.placeVoiceCall();
-            }
-            else if (payload.type === 'video') {
-                call.placeVideoCall(
-                    payload.remote_element,
-                    payload.local_element
+            else if (members.length === 2) {
+                console.log("Place %s call in %s", payload.type, payload.room_id);
+                var call = Matrix.createNewMatrixCall(
+                    MatrixClientPeg.get(), payload.room_id
                 );
+                placeCall(call);
             }
-            else {
-                console.error("Unknown call type: %s", payload.type);
+            else { // > 2
+                console.log("Place conference call in %s", payload.room_id);
+                var confHandler = new ConferenceHandler(
+                    MatrixClientPeg.get(), payload.room_id
+                );
+                confHandler.setup().done(function(call) {
+                    placeCall(call);
+                }, function(err) {
+                    console.error("Failed to setup conference call: %s", err);
+                });
             }
-            
             break;
         case 'incoming_call':
             if (calls[payload.call.roomId]) {
