@@ -30,15 +30,8 @@ ConferenceHandler.prototype._joinConferenceUser = function() {
     if (!groupRoom) {
         return q.reject("Bad group room ID");
     }
-    var members = groupRoom.getJoinedMembers();
-    var confUserExists = false;
-    for (var i = 0; i < members.length; i++) {
-        if (members[i].userId === this.confUserId) {
-            confUserExists = true;
-            break;
-        }
-    }
-    if (confUserExists) {
+    var member = groupRoom.getMember(this.confUserId);
+    if (member && member.membership === "join") {
         return q();
     }
     return this.client.invite(this.groupRoomId, this.confUserId);
@@ -49,7 +42,8 @@ ConferenceHandler.prototype._getConferenceUserRoom = function() {
     var rooms = this.client.getRooms();
     var confRoom = null;
     for (var i = 0; i < rooms.length; i++) {
-        if (rooms[i].hasMembershipState(this.confUserId, "join") &&
+        var confUser = rooms[i].getMember(this.confUserId);
+        if (confUser && confUser.membership === "join" &&
                 rooms[i].getJoinedMembers().length === 2) {
             confRoom = rooms[i];
             break;
