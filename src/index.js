@@ -16,4 +16,8 @@ limitations under the License.
 
 'use strict';
 
-module.exports.ComponentBroker = require("./ComponentBroker");
+module.exports.atoms = {};
+module.exports.molecules = {};
+module.exports.organisms = {};
+module.exports.templates = {};
+module.exports.pages = {};
