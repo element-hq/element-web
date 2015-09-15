@@ -206,6 +206,14 @@ module.exports = {
         });
     },
 
+    onConferenceNotificationClick: function() {
+        dis.dispatch({
+            action: 'place_call',
+            type: "video",
+            room_id: this.props.roomId
+        });
+    },
+
     componentDidMount: function() {
         if (this.refs.messageWrapper) {
             var messageWrapper = this.refs.messageWrapper.getDOMNode();

@@ -179,7 +179,7 @@ module.exports = React.createClass({
             var conferenceCallNotification = null;
             if (this.state.displayConfCallNotification) {
                 conferenceCallNotification = (
-                    <div className="mx_RoomView_ongoingConfCallNotification">
+                    <div className="mx_RoomView_ongoingConfCallNotification" onClick={this.onConferenceNotificationClick}>
                         Ongoing conference call
                     </div>
                 );
