@@ -187,22 +187,21 @@ module.exports = {
     },
 
     _updateConfCallNotification: function() {
-        var member = MatrixClientPeg.get().getRoom(this.props.roomId).getMember(
+        var confMember = MatrixClientPeg.get().getRoom(this.props.roomId).getMember(
             ConferenceHandler.getConferenceUserIdForRoom(this.props.roomId)
         );
 
-        if (!member) {
+        if (!confMember) {
             return;
         }
-        console.log("_updateConfCallNotification");
-        var confCall = CallHandler.getConferenceCall(member.roomId);
+        var confCall = CallHandler.getConferenceCall(confMember.roomId);
 
         // A conf call notification should be displayed if there is an ongoing
         // conf call but this cilent isn't a part of it.
         this.setState({
             displayConfCallNotification: (
                 (!confCall || confCall.call_state === "ended") &&
-                member.membership === "join"
+                confMember.membership === "join"
             )
         });
     },

@@ -99,9 +99,9 @@ module.exports = {
     getRoomList: function() {
         return RoomListSorter.mostRecentActivityFirst(
             MatrixClientPeg.get().getRooms().filter(function(room) {
-                var member = room.getMember(MatrixClientPeg.get().credentials.userId);
+                var me = room.getMember(MatrixClientPeg.get().credentials.userId);
                 var shouldShowRoom =  (
-                    member && (member.membership == "join" || member.membership == "invite")
+                    me && (me.membership == "join" || me.membership == "invite")
                 );
                 // hiding conf rooms only ever toggles shouldShowRoom to false
                 if (shouldShowRoom && HIDE_CONFERENCE_CHANS) {
@@ -109,7 +109,7 @@ module.exports = {
                     var joinedMembers = room.getJoinedMembers();
                     if (joinedMembers.length === 2) {
                         var otherMember = joinedMembers.filter(function(m) {
-                            return m.userId !== member.userId
+                            return m.userId !== me.userId
                         })[0];
                         if (ConferenceHandler.isConferenceUser(otherMember)) {
                             // console.log("Hiding conference 1:1 room %s", room.roomId);
