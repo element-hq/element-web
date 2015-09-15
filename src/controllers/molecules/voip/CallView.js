@@ -57,19 +57,16 @@ module.exports = {
     },
 
     onAction: function(payload) {
-        // if we were given a room_id to track, don't handle anything else.
-        if (payload.room_id && this._trackedRoom &&
-                this._trackedRoom.roomId !== payload.room_id) {
-            return;
-        }
-        if (payload.action !== 'call_state') {
+        // don't filter out payloads for room IDs other than props.room because
+        // we may be interested in the conf 1:1 room
+        if (payload.action !== 'call_state' || !payload.room_id) {
             return;
         }
         this.showCall(payload.room_id);
     },
 
     showCall: function(roomId) {
-        var call = CallHandler.getCall(roomId);
+        var call = CallHandler.getCallForRoom(roomId);
         if (call) {
             call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
             // N.B. the remote video element is used for playback for audio for voice calls

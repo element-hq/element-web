@@ -80,7 +80,8 @@ module.exports = React.createClass({
             // active call, show the call element - we need to do this to make
             // audio/video not crap out
             if (this.state.active_call && (
-                    !this.state.currentRoom || !CallHandler.getCall(this.state.currentRoom))) {
+                    !this.state.currentRoom ||
+                    !CallHandler.getCallForRoom(this.state.currentRoom))) {
                 console.log(
                     "Creating global CallView for active call in room %s",
                     this.state.active_call.roomId

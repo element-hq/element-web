@@ -58,6 +58,7 @@ var Modal = require("./Modal");
 var ComponentBroker = require('./ComponentBroker');
 var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
 var ConferenceCall = require("./ConferenceHandler").ConferenceCall;
+var ConferenceHandler = require("./ConferenceHandler");
 var Matrix = require("matrix-js-sdk");
 var dis = require("./dispatcher");
 
@@ -241,8 +242,30 @@ dis.register(function(payload) {
 });
 
 module.exports = {
+
+    getCallForRoom: function(roomId) {
+        return (
+            module.exports.getCall(roomId) ||
+            module.exports.getConferenceCall(roomId)
+        );
+    },
+
     getCall: function(roomId) {
         return calls[roomId] || null;
+    },
+
+    getConferenceCall: function(roomId) {
+        // search for a conference 1:1 call for this group chat room ID
+        var activeCall = module.exports.getAnyActiveCall();
+        if (activeCall && activeCall.confUserId) {
+            var thisRoomConfUserId = ConferenceHandler.getConferenceUserIdForRoom(
+                roomId
+            );
+            if (thisRoomConfUserId === activeCall.confUserId) {
+                return activeCall;
+            }
+        }
+        return null;
     },
 
     getAnyActiveCall: function() {

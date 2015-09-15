@@ -27,7 +27,6 @@ limitations under the License.
 var React = require('react');
 var dis = require("../../dispatcher");
 var CallHandler = require("../../CallHandler");
-var ConferenceHandler = require("../../ConferenceHandler");
 
 module.exports = {
     propTypes: {
@@ -48,7 +47,7 @@ module.exports = {
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         if (this.props.room) {
-            var call = this._getCall(this.props.room.roomId);
+            var call = CallHandler.getCallForRoom(this.props.room.roomId);
             var callState = call ? call.call_state : "ended";
             this.setState({
                 call_state: callState
@@ -66,7 +65,7 @@ module.exports = {
         if (payload.action !== 'call_state' || !payload.room_id) {
             return;
         }
-        var call = this._getCall(payload.room_id);
+        var call = CallHandler.getCallForRoom(payload.room_id);
         var callState = call ? call.call_state : "ended";
         this.setState({
             call_state: callState
@@ -88,7 +87,7 @@ module.exports = {
         });
     },
     onHangupClick: function() {
-        var call = this._getCall(this.props.room.roomId);
+        var call = CallHandler.getCallForRoom(this.props.room.roomId);
         if (!call) { return; }
         dis.dispatch({
             action: 'hangup',
@@ -96,22 +95,5 @@ module.exports = {
             // (e.g. conferences which will hangup the 1:1 room instead)
             room_id: call.roomId
         });
-    },
-
-    _getCall: function(roomId) {
-        var call = CallHandler.getCall(roomId);
-        if (!call) {
-            // search for a conference 1:1 call
-            var activeCall = CallHandler.getAnyActiveCall();
-            if (activeCall && activeCall.confUserId) {
-                var thisRoomConfUserId = ConferenceHandler.getConferenceUserIdForRoom(
-                    roomId
-                );
-                if (thisRoomConfUserId === activeCall.confUserId) {
-                    call = activeCall;
-                }
-            }
-        }
-        return call;
     }
 };
