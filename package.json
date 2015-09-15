@@ -31,7 +31,6 @@
   },
   "devDependencies": {
     "babel": "^5.8.23",
-    "catw": "^1.0.1",
     "rimraf": "^2.4.3"
   }
 }
