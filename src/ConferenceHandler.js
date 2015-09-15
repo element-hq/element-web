@@ -9,9 +9,7 @@ var DOMAIN = "matrix.org";
 function ConferenceCall(matrixClient, groupChatRoomId) {
     this.client = matrixClient;
     this.groupRoomId = groupChatRoomId;
-    // abuse browserify's core node Buffer support (strip padding ='s)
-    var base64RoomId = new Buffer(groupChatRoomId).toString("base64").replace(/=/g, "");
-    this.confUserId = "@" + USER_PREFIX + base64RoomId + ":" + DOMAIN;
+    this.confUserId = module.exports.getConferenceUserIdForRoom(this.groupRoomId);
 }
 
 ConferenceCall.prototype.setup = function() {
@@ -19,8 +17,12 @@ ConferenceCall.prototype.setup = function() {
     return this._joinConferenceUser().then(function() {
         return self._getConferenceUserRoom();
     }).then(function(room) {
-        // return a call for *this* room to be placed.
-        return Matrix.createNewMatrixCall(self.client, room.roomId);
+        // return a call for *this* room to be placed. We also tack on
+        // confUserId to speed up lookups (else we'd need to loop every room
+        // looking for a 1:1 room with this conf user ID!)
+        var call = Matrix.createNewMatrixCall(self.client, room.roomId);
+        call.confUserId = self.confUserId;
+        return call;
     });
 };
 
@@ -76,6 +78,12 @@ module.exports.isConferenceUser = function(roomMember) {
         return /^!.+:.+/.test(decoded);
     }
     return false;
+};
+
+module.exports.getConferenceUserIdForRoom = function(roomId) {
+    // abuse browserify's core node Buffer support (strip padding ='s)
+    var base64RoomId = new Buffer(roomId).toString("base64").replace(/=/g, "");
+    return "@" + USER_PREFIX + base64RoomId + ":" + DOMAIN;
 };
 
 module.exports.ConferenceCall = ConferenceCall;
