@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 var dis = require("../../../dispatcher");
 var CallHandler = require("../../../CallHandler");
+var MatrixClientPeg = require("../../../MatrixClientPeg");
 
 /*
  * State vars:
@@ -24,14 +25,30 @@ var CallHandler = require("../../../CallHandler");
  *
  * Props:
  * this.props.room = Room (JS SDK)
+ *
+ * Internal state:
+ * this._trackedRoom = (either from props.room or programatically set)
  */
 
 module.exports = {
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        this._trackedRoom = null;
         if (this.props.room) {
-            this.showCall(this.props.room.roomId);
+            this._trackedRoom = this.props.room;
+            this.showCall(this._trackedRoom.roomId);
+        }
+        else {
+            var call = CallHandler.getAnyActiveCall();
+            if (call) {
+                console.log(
+                    "Global CallView is now tracking active call in room %s",
+                    call.roomId
+                );
+                this._trackedRoom = MatrixClientPeg.get().getRoom(call.roomId);
+                this.showCall(call.roomId);
+            }
         }
     },
 
@@ -41,8 +58,8 @@ module.exports = {
 
     onAction: function(payload) {
         // if we were given a room_id to track, don't handle anything else.
-        if (payload.room_id && this.props.room && 
-                this.props.room.roomId !== payload.room_id) {
+        if (payload.room_id && this._trackedRoom &&
+                this._trackedRoom.roomId !== payload.room_id) {
             return;
         }
         if (payload.action !== 'call_state') {

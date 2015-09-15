@@ -106,7 +106,7 @@ function _setCallListeners(call) {
             play("ringbackAudio");
         }
         else if (newState === "ended" && oldState === "connected") {
-            _setCallState(call, call.roomId, "ended");
+            _setCallState(undefined, call.roomId, "ended");
             pause("ringbackAudio");
             play("callendAudio");
         }
@@ -239,5 +239,16 @@ dis.register(function(payload) {
 module.exports = {
     getCall: function(roomId) {
         return calls[roomId] || null;
+    },
+
+    getAnyActiveCall: function() {
+        var roomsWithCalls = Object.keys(calls);
+        for (var i = 0; i < roomsWithCalls.length; i++) {
+            if (calls[roomsWithCalls[i]] &&
+                    calls[roomsWithCalls[i]].call_state !== "ended") {
+                return calls[roomsWithCalls[i]];
+            }
+        }
+        return null;
     }
 };

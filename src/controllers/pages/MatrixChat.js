@@ -26,6 +26,7 @@ var dis = require("../../dispatcher");
 var q = require("q");
 
 var ComponentBroker = require('../../ComponentBroker');
+var CallHandler = require("../../CallHandler");
 var Notifier = ComponentBroker.get('organisms/Notifier');
 var MatrixTools = require('../../MatrixTools');
 
@@ -204,6 +205,13 @@ module.exports = {
                 break;
             case 'notifier_enabled':
                 this.forceUpdate();
+                break;
+            case 'call_state':
+                // listen for call state changes to prod the render method, which
+                // may hide the global CallView if the call it is tracking is dead
+                this.setState({
+                    active_call: CallHandler.getAnyActiveCall()
+                });
                 break;
         }
     },
