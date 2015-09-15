@@ -218,3 +218,12 @@ limitations under the License.
     background-color: blue;
     height: 5px;
 }
+
+.mx_RoomView_ongoingConfCallNotification {
+    width: 100%;
+    text-align: center;
+    background-color: #ff0064;
+    color: #fff;
+    font-weight: bold;
+    padding: 6px;
+}

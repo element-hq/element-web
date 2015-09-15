@@ -112,7 +112,7 @@ module.exports = {
                             return m.userId !== member.userId
                         })[0];
                         if (ConferenceHandler.isConferenceUser(otherMember)) {
-                            console.log("Hiding conference 1:1 room %s", room.roomId);
+                            // console.log("Hiding conference 1:1 room %s", room.roomId);
                             shouldShowRoom = false;
                         }
                     }

@@ -89,6 +89,7 @@ module.exports = React.createClass({
                 call_element = <CallView className="mx_MatrixChat_callView"/>
             }
 
+            // TODO: Fix duplication here and do conditionals like we do above
             if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
                 return (
                         <div className="mx_MatrixChat_wrapper">
