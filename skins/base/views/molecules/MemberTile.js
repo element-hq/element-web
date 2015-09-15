@@ -180,7 +180,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className={mainClassName} title={ this.getPowerLabel } onClick={ this.onClick } onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
+            <div className={mainClassName} title={ this.getPowerLabel() } onClick={ this.onClick } onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
                 { menu }
                 <div className="mx_MemberTile_avatar">
                     <MemberAvatar member={this.props.member} />
