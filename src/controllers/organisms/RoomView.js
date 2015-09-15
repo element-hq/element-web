@@ -26,12 +26,7 @@ var dis = require("../../dispatcher");
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 100;
 
-var ComponentBroker = require('../../ComponentBroker');
-
-var tileTypes = {
-    'm.room.message': ComponentBroker.get('molecules/MessageTile'),
-    'm.room.member': ComponentBroker.get('molecules/MRoomMemberTile')
-};
+var sdk = require('../../index');
 
 module.exports = {
     getInitialState: function() {
@@ -220,6 +215,11 @@ module.exports = {
     },
 
     getEventTiles: function() {
+        var tileTypes = {
+            'm.room.message': sdk.getComponent('molecules.MessageTile'),
+            'm.room.member': sdk.getComponent('molecules.MRoomMemberTile')
+        };
+
         var ret = [];
         var count = 0;
 

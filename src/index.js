@@ -14,10 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+var Skinner = require('./Skinner');
 
-module.exports.atoms = {};
-module.exports.molecules = {};
-module.exports.organisms = {};
-module.exports.templates = {};
-module.exports.pages = {};
+module.exports.loadSkin = function(skinObject) {
+    Skinner.load(skinObject);
+};
+
+module.exports.resetSkin = function() {
+    Skinner.reset();
+};
+
+module.exports.getComponent = function(componentName) {
+    return Skinner.getComponent(componentName);
+};
+

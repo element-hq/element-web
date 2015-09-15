@@ -22,6 +22,15 @@ try {
     process.exit(1);
 }
 
+var skinfoFile = path.join('src', 'skins', skin, 'skinfo.json');
+
+try {
+    fs.accessSync(skinfoFile, fs.F_OK);
+} catch (e) {
+    console.log("Skin "+skin+" has no skinfo.json");
+    process.exit(1);
+}
+
 try {
     fs.accessSync(path.join('src', 'skins', skin, 'views'), fs.F_OK);
 } catch (e) {
@@ -46,7 +55,16 @@ strm.write(" * so you'd just be trying to swim upstream like a salmon.\n");
 strm.write(" * You are not a salmon.\n");
 strm.write(" */\n\n");
 
-strm.write("var sdk = require('matrix-react-sdk');\n\n");
+var mySkinfo = JSON.parse(fs.readFileSync(skinfoFile, "utf8"));
+
+strm.write("var skin = {\n");
+strm.write("    atoms: {},\n");
+strm.write("    molecules: {},\n");
+strm.write("    organisms: {},\n");
+strm.write("    templates: {},\n");
+strm.write("    pages: {}\n");
+strm.write("};\n");
+strm.write('\n');
 
 var tree = {
     atoms: {},
@@ -71,15 +89,26 @@ for (var i = 0; i < files.length; ++i) {
     while (restOfPath.length) {
         currentPath += '.'+restOfPath[0];
         if (subtree[restOfPath[0]] == undefined) {
-            strm.write('sdk.'+currentPath+' = {};\n');
+            strm.write('skin.'+currentPath+' = {};\n');
             strm.uncork();
         }
         subtree[restOfPath[0]] = {};
         restOfPath = restOfPath.slice(1);
     }
 
-    strm.write('sdk.'+module+" = require('./views/"+file+"');\n");
+    strm.write('skin.'+module+" = require('./views/"+file+"');\n");
     strm.uncork();
 }
+
+strm.write("\n");
+
+if (mySkinfo.baseSkin) {
+    strm.write("module.exports = require('"+mySkinfo.baseSkin+"');");
+    strm.write("var extend = require('matrix-react-sdk/lib/extend');\n");
+    strm.write("extend(module.exports, skin);\n");
+} else {
+    strm.write("module.exports = skin;");
+}
+
 strm.end();
 

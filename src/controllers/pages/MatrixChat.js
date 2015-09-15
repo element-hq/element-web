@@ -21,9 +21,7 @@ var RoomListSorter = require("../../RoomListSorter");
 
 var dis = require("../../dispatcher");
 
-var ComponentBroker = require('../../ComponentBroker');
-
-var Notifier = ComponentBroker.get('organisms/Notifier');
+var sdk = require('../../index');
 
 module.exports = {
     getInitialState: function() {
@@ -62,6 +60,7 @@ module.exports = {
 
     onAction: function(payload) {
         var roomIndexDelta = 1;
+        var Notifier = sdk.getComponent('organisms.Notifier');
 
         switch (payload.action) {
             case 'logout':
@@ -141,8 +140,10 @@ module.exports = {
     },
 
     startMatrixClient: function() {
+        var Notifier = sdk.getComponent('organisms.Notifier');
+
         var cli = MatrixClientPeg.get();
-        var that = this;
+        var self = this;
         cli.on('syncComplete', function() {
             var firstRoom = null;
             if (cli.getRooms() && cli.getRooms().length) {
@@ -150,7 +151,7 @@ module.exports = {
                     cli.getRooms()
                 )[0].roomId;
             }
-            that.setState({ready: true, currentRoom: firstRoom});
+            self.setState({ready: true, currentRoom: firstRoom});
             dis.dispatch({action: 'focus_composer'});
         });
         Notifier.start();

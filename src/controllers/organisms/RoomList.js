@@ -20,9 +20,7 @@ var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var RoomListSorter = require("../../RoomListSorter");
 
-var ComponentBroker = require('../../ComponentBroker');
-
-var RoomTile = ComponentBroker.get("molecules/RoomTile");
+var sdk = require('../../index');
 
 module.exports = {
     componentWillMount: function() {
@@ -100,16 +98,17 @@ module.exports = {
     },
 
     makeRoomTiles: function() {
-        var that = this;
+        var RoomTile = sdk.getComponent('molecules.RoomTile');
+        var self = this;
         return this.state.roomList.map(function(room) {
-            var selected = room.roomId == that.props.selectedRoom;
+            var selected = room.roomId == self.props.selectedRoom;
             return (
                 <RoomTile
                     room={room}
                     key={room.roomId}
                     selected={selected}
-                    unread={that.state.activityMap[room.roomId] === 1}
-                    highlight={that.state.activityMap[room.roomId] === 2}
+                    unread={self.state.activityMap[room.roomId] === 1}
+                    highlight={self.state.activityMap[room.roomId] === 2}
                 />
             );
         });

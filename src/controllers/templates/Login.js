@@ -22,8 +22,6 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 var Matrix = require("matrix-js-sdk");
 var dis = require("../../dispatcher");
 
-var ComponentBroker = require("../../ComponentBroker");
-
 module.exports = {
     getInitialState: function() {
         return {
