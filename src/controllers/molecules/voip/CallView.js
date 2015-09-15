@@ -73,7 +73,11 @@ module.exports = {
             call.setRemoteVideoElement(this.getVideoView().getRemoteVideoElement());
         }
         if (call && call.type === "video" && call.state !== 'ended') {
-            this.getVideoView().getLocalVideoElement().style.display = "initial";
+            // if this call is a conf call, don't display local video as the
+            // conference will have us in it
+            this.getVideoView().getLocalVideoElement().style.display = (
+                call.confUserId ? "none" : "initial"
+            );
             this.getVideoView().getRemoteVideoElement().style.display = "initial";
         }
         else {
