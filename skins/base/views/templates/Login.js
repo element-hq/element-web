@@ -165,6 +165,13 @@ module.exports = React.createClass({
                         {this.state.errorText}
                 </div>
                 <a className="mx_Login_create" onClick={this.showRegister} href="#">Create a new account</a>
+                <br/>
+                <div className="mx_Login_links">
+                    <a href="https://medium.com/@Vector">blog</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                    <a href="https://twitter.com/@VectorCo">twitter</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                    <a href="https://github.com/vector-im/vector-web">github</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                    <a href="https://matrix.org">powered by Matrix</a>
+                </div>
             </div>
         );
     },
