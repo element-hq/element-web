@@ -154,7 +154,11 @@ function _setCallState(call, roomId, status) {
 dis.register(function(payload) {
     switch (payload.action) {
         case 'place_call':
-            if (calls[payload.room_id]) {
+            if (module.exports.getAnyActiveCall()) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Existing Call",
+                    description: "You are already in a call."
+                });
                 return; // don't allow >1 call to be placed.
             }
             var room = MatrixClientPeg.get().getRoom(payload.room_id);
@@ -207,7 +211,7 @@ dis.register(function(payload) {
             }
             break;
         case 'incoming_call':
-            if (calls[payload.call.roomId]) {
+            if (module.exports.getAnyActiveCall()) {
                 payload.call.hangup("busy");
                 return; // don't allow >1 call to be received, hangup newer one.
             }
