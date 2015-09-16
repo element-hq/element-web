@@ -91,6 +91,14 @@ var commands = {
             var matches = args.match(/^(\S+)$/);
             if (matches) {
                 var room_alias = matches[1];
+                if (room_alias[0] !== '#') {
+                    return reject("Usage: /join #alias:domain");
+                }
+                if (!room_alias.match(/:/)) {
+                    var domain = MatrixClientPeg.get().credentials.userId.replace(/^.*:/, '');
+                    room_alias += ':' + domain;
+                }
+
                 // Try to find a room with this alias
                 var rooms = MatrixClientPeg.get().getRooms();
                 var roomId;
@@ -132,6 +140,52 @@ var commands = {
             }
         }
         return reject("Usage: /join <room_alias>");
+    },
+
+    part: function(room_id, args) {
+        var targetRoomId;
+        if (args) {
+            var matches = args.match(/^(\S+)$/);
+            if (matches) {
+                var room_alias = matches[1];
+                if (room_alias[0] !== '#') {
+                    return reject("Usage: /part [#alias:domain]");
+                }
+                if (!room_alias.match(/:/)) {
+                    var domain = MatrixClientPeg.get().credentials.userId.replace(/^.*:/, '');
+                    room_alias += ':' + domain;
+                }
+
+                // Try to find a room with this alias
+                var rooms = MatrixClientPeg.get().getRooms();
+                for (var i = 0; i < rooms.length; i++) {
+                    var aliasEvents = rooms[i].currentState.getStateEvents(
+                        "m.room.aliases"
+                    );
+                    for (var j = 0; j < aliasEvents.length; j++) {
+                        var aliases = aliasEvents[j].getContent().aliases || [];
+                        for (var k = 0; k < aliases.length; k++) {
+                            if (aliases[k] === room_alias) {
+                                targetRoomId = rooms[i].roomId;
+                                break;
+                            }
+                        }
+                        if (targetRoomId) { break; }
+                    }
+                    if (targetRoomId) { break; }
+                }
+            }
+            if (!targetRoomId) {
+                return reject("Unrecognised room alias: " + room_alias);
+            }
+        }
+        if (!targetRoomId) targetRoomId = room_id;
+        return success(
+            MatrixClientPeg.get().leave(targetRoomId).then(
+            function() {
+                dis.dispatch({action: 'view_next_room'});
+            })
+        );
     },
 
     // Kick a user from the room with an optional reason
@@ -227,6 +281,9 @@ var commands = {
     }
 };
 
+// helpful aliases
+commands.j = commands.join;
+
 module.exports = {
     /**
      * Process the given text for /commands and perform them.
@@ -244,8 +301,12 @@ module.exports = {
             var bits = input.match(/^(\S+?)( +(.*))?$/);
             var cmd = bits[1].substring(1).toLowerCase();
             var args = bits[3];
+            if (cmd === "me") return null;
             if (commands[cmd]) {
                 return commands[cmd](roomId, args);
+            }
+            else {
+                return reject("Unrecognised command: " + input);
             }
         }
         return null; // not a command
