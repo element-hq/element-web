@@ -21,7 +21,9 @@ var React = require('react');
 module.exports = {
     propTypes: {
         onValueChanged: React.PropTypes.func,
-        initalValue: React.PropTypes.string,
+        initialValue: React.PropTypes.string,
+        label: React.PropTypes.string,
+        placeHolder: React.PropTypes.string,
     },
 
     Phases: {
@@ -32,37 +34,55 @@ module.exports = {
     getDefaultProps: function() {
         return {
             onValueChanged: function() {},
-            initalValue: '',
+            initialValue: '',
+            label: 'Click to set',
+            placeholder: '',
         };
     },
 
     getInitialState: function() {
         return {
-            value: this.props.initalValue,
+            value: this.props.initialValue,
             phase: this.Phases.Display,
         }
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this.setState({
+            value: nextProps.initialValue
+        });
     },
 
     getValue: function() {
         return this.state.value;
     },
 
-    setValue: function(val) {
+    setValue: function(val, shouldSubmit, suppressListener) {
+        var self = this;
         this.setState({
             value: val,
             phase: this.Phases.Display,
+        }, function() {
+            if (!suppressListener) {
+                self.onValueChanged(shouldSubmit);
+            }
         });
+    },
 
-        this.onValueChanged();
+    edit: function() {
+        this.setState({
+            phase: this.Phases.Edit,
+        });
     },
 
     cancelEdit: function() {
         this.setState({
             phase: this.Phases.Display,
         });
+        this.onValueChanged(false);
     },
 
-    onValueChanged: function() {
-        this.props.onValueChanged(this.state.value);
+    onValueChanged: function(shouldSubmit) {
+        this.props.onValueChanged(this.state.value, shouldSubmit);
     },
 };
