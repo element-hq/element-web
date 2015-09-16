@@ -17,7 +17,12 @@ limitations under the License.
 'use strict';
 
 function tsOfNewestEvent(room) {
-    return room.timeline[room.timeline.length - 1].getTs();
+    if (room.timeline.length) {
+        return room.timeline[room.timeline.length - 1].getTs();
+    }
+    else {
+        return Number.MAX_SAFE_INTEGER;
+    }
 }
 
 function mostRecentActivityFirst(roomList) {
