@@ -82,7 +82,7 @@ for (var i = 0; i < files.length; ++i) {
     // create objects for submodules
     // NB. that we do not support creating additional
     // top level modules. Perhaps we should?
-    var subtree = tree;
+    var subtree = tree[module.split('.')[0]];
     var restOfPath = module.split('.').slice(0, -1);
     var currentPath = restOfPath[0];
     restOfPath = restOfPath.slice(1);
@@ -91,8 +91,9 @@ for (var i = 0; i < files.length; ++i) {
         if (subtree[restOfPath[0]] == undefined) {
             strm.write('skin.'+currentPath+' = {};\n');
             strm.uncork();
+            subtree[restOfPath[0]] = {};
         }
-        subtree[restOfPath[0]] = {};
+        subtree = subtree[restOfPath[0]];
         restOfPath = restOfPath.slice(1);
     }
 
