@@ -19,9 +19,11 @@ limitations under the License.
 var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var RoomListSorter = require("../../RoomListSorter");
+var dis = require("../../dispatcher");
 
 var ComponentBroker = require('../../ComponentBroker');
 var ConferenceHandler = require("../../ConferenceHandler");
+var CallHandler = require("../../CallHandler");
 
 var RoomTile = ComponentBroker.get("molecules/RoomTile");
 
@@ -41,7 +43,22 @@ module.exports = {
         });
     },
 
+    componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+    },
+
+    onAction: function(payload) {
+        switch (payload.action) {
+            // listen for call state changes to prod the render method, which
+            // may hide the global CallView if the call it is tracking is dead
+            case 'call_state':
+                this._recheckCallElement(this.props.selectedRoom);
+                break;
+        }
+    },
+
     componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
@@ -51,6 +68,7 @@ module.exports = {
 
     componentWillReceiveProps: function(newProps) {
         this.state.activityMap[newProps.selectedRoom] = undefined;
+        this._recheckCallElement(newProps.selectedRoom);
         this.setState({
             activityMap: this.state.activityMap
         });
@@ -122,6 +140,18 @@ module.exports = {
         );
     },
 
+    _recheckCallElement: function(selectedRoomId) {
+        // if we aren't viewing a room with an ongoing call, but there is an
+        // active call, show the call element - we need to do this to make
+        // audio/video not crap out
+        var activeCall = CallHandler.getAnyActiveCall();
+        var callForRoom = CallHandler.getCallForRoom(selectedRoomId);
+        var showCall = (activeCall && !callForRoom);
+        this.setState({
+            show_call_element: showCall
+        });
+    },
+
     makeRoomTiles: function() {
         var self = this;
         return this.state.roomList.map(function(room) {
@@ -136,5 +166,5 @@ module.exports = {
                 />
             );
         });
-    },
+    }
 };

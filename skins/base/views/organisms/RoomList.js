@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var ComponentBroker = require('../../../../src/ComponentBroker');
-
+var CallView = ComponentBroker.get('molecules/voip/CallView');
 var RoomDropTarget = ComponentBroker.get('molecules/RoomDropTarget');
 
 var RoomListController = require("../../../../src/controllers/organisms/RoomList");
@@ -28,8 +28,14 @@ module.exports = React.createClass({
     mixins: [RoomListController],
 
     render: function() {
+        var callElement;
+        if (this.state.show_call_element) {
+            callElement = <CallView className="mx_MatrixChat_callView"/>
+        }
+
         return (
             <div className="mx_RoomList">
+                {callElement}
                 <h2 className="mx_RoomList_favourites_label">Favourites</h2>
                 <RoomDropTarget text="Drop here to favourite"/>
 

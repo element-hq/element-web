@@ -18,7 +18,6 @@ limitations under the License.
 
 var React = require('react');
 var ComponentBroker = require('../../../../src/ComponentBroker');
-var CallHandler = require('../../../../src/CallHandler');
 
 var LeftPanel = ComponentBroker.get('organisms/LeftPanel');
 var RoomView = ComponentBroker.get('organisms/RoomView');
@@ -30,7 +29,6 @@ var CreateRoom = ComponentBroker.get('organisms/CreateRoom');
 var RoomDirectory = ComponentBroker.get('organisms/RoomDirectory');
 var MatrixToolbar = ComponentBroker.get('molecules/MatrixToolbar');
 var Notifier = ComponentBroker.get('organisms/Notifier');
-var CallView = ComponentBroker.get('molecules/voip/CallView');
 
 var MatrixChatController = require('../../../../src/controllers/pages/MatrixChat');
 
@@ -55,7 +53,7 @@ module.exports = React.createClass({
     render: function() {
         if (this.state.logged_in && this.state.ready) {
 
-            var page_element, call_element;
+            var page_element;
             var right_panel = "";
 
             switch (this.state.page_type) {
@@ -76,18 +74,6 @@ module.exports = React.createClass({
                     right_panel = <RightPanel/>
                     break;
             }
-            // if we aren't viewing a room with an ongoing call, but there is an
-            // active call, show the call element - we need to do this to make
-            // audio/video not crap out
-            if (this.state.active_call && (
-                    !this.state.currentRoom ||
-                    !CallHandler.getCallForRoom(this.state.currentRoom))) {
-                console.log(
-                    "Creating global CallView for active call in room %s",
-                    this.state.active_call.roomId
-                );
-                call_element = <CallView className="mx_MatrixChat_callView"/>
-            }
 
             // TODO: Fix duplication here and do conditionals like we do above
             if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
@@ -96,7 +82,6 @@ module.exports = React.createClass({
                             <MatrixToolbar />
                             <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
                                 <LeftPanel selectedRoom={this.state.currentRoom} />
-                                {call_element}
                                 <main className="mx_MatrixChat_middlePanel">
                                     {page_element}
                                 </main>
@@ -109,7 +94,6 @@ module.exports = React.createClass({
                 return (
                         <div className="mx_MatrixChat">
                             <LeftPanel selectedRoom={this.state.currentRoom} />
-                            {call_element}
                             <main className="mx_MatrixChat_middlePanel">
                                 {page_element}
                             </main>
