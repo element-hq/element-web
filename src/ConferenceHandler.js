@@ -3,6 +3,10 @@ var q = require("q");
 var Matrix = require("matrix-js-sdk");
 var Room = Matrix.Room;
 
+// FIXME: This currently forces Vector to try to hit the matrix.org AS for conferencing.
+// This is bad because it prevents people running their own ASes from being used.
+// This isn't permanent and will be customisable in the future: see the proposal
+// at docs/conferencing.md for more info.
 var USER_PREFIX = "fs_";
 var DOMAIN = "matrix.org";
 
