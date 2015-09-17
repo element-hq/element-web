@@ -16,7 +16,6 @@ limitations under the License.
 
 'use strict';
 var sdk = require('../../index');
-var Notifier = sdk.getComponent('organisms/Notifier');
 var dis = require("../../dispatcher");
 
 module.exports = {
@@ -37,10 +36,12 @@ module.exports = {
     },
 
     enabled: function() {
+        var Notifier = sdk.getComponent('organisms.Notifier');
         return Notifier.isEnabled();
     },
 
     onClick: function() {
+        var Notifier = sdk.getComponent('organisms.Notifier');
         var self = this;
         if (!Notifier.supportsDesktopNotifications()) {
             return;

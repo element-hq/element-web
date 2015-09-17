@@ -19,7 +19,6 @@ limitations under the License.
 var dis = require("../../dispatcher");
 var Modal = require("../../Modal");
 var sdk = require('../../index.js');
-var QuestionDialog = ComponentBroker.get("organisms/QuestionDialog");
 var Loader = require("react-loader");
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
@@ -33,6 +32,8 @@ module.exports = {
     },
 
     onLeaveClick: function() {
+        var QuestionDialog = sdk.getComponent("organisms.QuestionDialog");
+
         var roomId = this.props.member.roomId;
         Modal.createDialog(QuestionDialog, {
             title: "Leave room",
