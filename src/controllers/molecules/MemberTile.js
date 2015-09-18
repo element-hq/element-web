@@ -24,6 +24,10 @@ var Loader = require("react-loader");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
 module.exports = {
+    getInitialState: function() {
+        return {};
+    },
+
     onClick: function() {
         dis.dispatch({
             action: 'view_user',
