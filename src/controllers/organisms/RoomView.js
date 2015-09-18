@@ -31,7 +31,8 @@ var dis = require("../../dispatcher");
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 100;
 
-var ComponentBroker = require('../../ComponentBroker');
+var ConferenceHandler = require("../../ConferenceHandler");
+var CallHandler = require("../../CallHandler");
 var Notifier = ComponentBroker.get('organisms/Notifier');
 
 var tileTypes = {
@@ -62,6 +63,7 @@ module.exports = {
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
+        MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         this.atBottom = true;
     },
 
@@ -78,6 +80,7 @@ module.exports = {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
+            MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
     },
 
@@ -94,15 +97,20 @@ module.exports = {
                 this.forceUpdate();
                 break;
             case 'call_state':
-                if (this.props.roomId !== payload.room_id) {
-                    break;
+                if (CallHandler.getCallForRoom(this.props.roomId)) {
+                    // Call state has changed so we may be loading video elements
+                    // which will obscure the message log.
+                    // scroll to bottom
+                    var messageWrapper = this.refs.messageWrapper;
+                    if (messageWrapper) {
+                        messageWrapper = messageWrapper.getDOMNode();
+                        messageWrapper.scrollTop = messageWrapper.scrollHeight;
+                    }
                 }
-                // scroll to bottom
-                var messageWrapper = this.refs.messageWrapper;
-                if (messageWrapper) {
-                    messageWrapper = messageWrapper.getDOMNode();
-                    messageWrapper.scrollTop = messageWrapper.scrollHeight;
-                }
+
+                // possibly remove the conf call notification if we're now in
+                // the conf
+                this._updateConfCallNotification();
                 break;
         }
     },
@@ -170,6 +178,42 @@ module.exports = {
         this.forceUpdate();
     },
 
+    onRoomStateMember: function(ev, state, member) {
+        if (member.roomId !== this.props.roomId ||
+                member.userId !== ConferenceHandler.getConferenceUserIdForRoom(member.roomId)) {
+            return;
+        }
+        this._updateConfCallNotification();
+    },
+
+    _updateConfCallNotification: function() {
+        var confMember = MatrixClientPeg.get().getRoom(this.props.roomId).getMember(
+            ConferenceHandler.getConferenceUserIdForRoom(this.props.roomId)
+        );
+
+        if (!confMember) {
+            return;
+        }
+        var confCall = CallHandler.getConferenceCall(confMember.roomId);
+
+        // A conf call notification should be displayed if there is an ongoing
+        // conf call but this cilent isn't a part of it.
+        this.setState({
+            displayConfCallNotification: (
+                (!confCall || confCall.call_state === "ended") &&
+                confMember.membership === "join"
+            )
+        });
+    },
+
+    onConferenceNotificationClick: function() {
+        dis.dispatch({
+            action: 'place_call',
+            type: "video",
+            room_id: this.props.roomId
+        });
+    },
+
     componentDidMount: function() {
         if (this.refs.messageWrapper) {
             var messageWrapper = this.refs.messageWrapper.getDOMNode();
@@ -183,6 +227,7 @@ module.exports = {
 
             this.fillSpace();
         }
+        this._updateConfCallNotification();
     },
 
     componentDidUpdate: function() {

@@ -30,7 +30,7 @@ var RoomDirectory = ComponentBroker.get('organisms/RoomDirectory');
 var MatrixToolbar = ComponentBroker.get('molecules/MatrixToolbar');
 var Notifier = ComponentBroker.get('organisms/Notifier');
 
-var MatrixChatController = require("../../../../src/controllers/pages/MatrixChat");
+var MatrixChatController = require('../../../../src/controllers/pages/MatrixChat');
 
 // should be atomised
 var Loader = require("react-loader");
@@ -75,6 +75,7 @@ module.exports = React.createClass({
                     break;
             }
 
+            // TODO: Fix duplication here and do conditionals like we do above
             if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
                 return (
                         <div className="mx_MatrixChat_wrapper">
