@@ -23,6 +23,28 @@ module.exports = {
         var actions = MatrixClientPeg.get().getPushActionsForEvent(this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
         return actions.tweaks.highlight;
+    },
+
+    getInitialState: function() {
+        return {
+            resending: false
+        };
+    },
+
+    onResend: function() {
+        var self = this;
+        self.setState({
+            resending: true
+        });
+        MatrixClientPeg.get().resendEvent(
+            this.props.mxEvent, MatrixClientPeg.get().getRoom(
+                this.props.mxEvent.getRoomId()
+            )
+        ).finally(function() {
+            self.setState({
+                resending: false
+            });
+        })
     }
 };
 
