@@ -32,6 +32,8 @@ var dis = require("../../dispatcher");
 var Modal = require("../../Modal");
 var ComponentBroker = require('../../ComponentBroker');
 var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
+var QuestionDialog = ComponentBroker.get("organisms/QuestionDialog");
+var Loader = require("react-loader");
 
 module.exports = {
     componentDidMount: function() {
@@ -59,6 +61,7 @@ module.exports = {
                 description: err.message
             });
         });
+        this.props.onFinished();
     },
 
     onBan: function() {
@@ -75,6 +78,7 @@ module.exports = {
                 description: err.message
             });
         });
+        this.props.onFinished();
     },
 
     onMuteToggle: function() {
@@ -83,12 +87,14 @@ module.exports = {
         var self = this;
         var room = MatrixClientPeg.get().getRoom(roomId);
         if (!room) {
+            this.props.onFinished();
             return;
         }
         var powerLevelEvent = room.currentState.getStateEvents(
             "m.room.power_levels", ""
         );
         if (!powerLevelEvent) {
+            this.props.onFinished();
             return;
         }
         var isMuted = this.state.muted;
@@ -116,6 +122,7 @@ module.exports = {
                 description: err.message
             });
         });
+        this.props.onFinished();        
     },
 
     onModToggle: function() {
@@ -123,16 +130,19 @@ module.exports = {
         var target = this.props.member.userId;
         var room = MatrixClientPeg.get().getRoom(roomId);
         if (!room) {
+            this.props.onFinished();
             return;
         }
         var powerLevelEvent = room.currentState.getStateEvents(
             "m.room.power_levels", ""
         );
         if (!powerLevelEvent) {
+            this.props.onFinished();
             return;
         }
         var me = room.getMember(MatrixClientPeg.get().credentials.userId);
         if (!me) {
+            this.props.onFinished();
             return;
         }
         var defaultLevel = powerLevelEvent.getContent().users_default;
@@ -150,6 +160,7 @@ module.exports = {
                 description: err.message
             });
         });
+        this.props.onFinished();        
     },
 
     onChatClick: function() {
@@ -199,6 +210,37 @@ module.exports = {
                 );
             });
         }
+        this.props.onFinished();                
+    },
+
+    // FIXME: this is horribly duplicated with MemberTile's onLeaveClick.
+    // Not sure what the right solution to this is.
+    onLeaveClick: function() {
+        console.log("leaving room");
+        var roomId = this.props.member.roomId;
+        Modal.createDialog(QuestionDialog, {
+            title: "Leave room",
+            description: "Are you sure you want to leave the room?",
+            onFinished: function(should_leave) {
+                if (should_leave) {
+                    var d = MatrixClientPeg.get().leave(roomId);
+
+                    var modal = Modal.createDialog(Loader);
+
+                    d.then(function() {
+                        modal.close();
+                        dis.dispatch({action: 'view_next_room'});
+                    }, function(err) {
+                        modal.close();
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Failed to leave room",
+                            description: err.toString()
+                        });
+                    });
+                }
+            }
+        });
+        this.props.onFinished();        
     },
 
     getInitialState: function() {

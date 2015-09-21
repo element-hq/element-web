@@ -28,7 +28,14 @@ module.exports = React.createClass({
     mixins: [MemberInfoController],
 
     render: function() {
-        var kickButton, banButton, muteButton, giveModButton;
+        var interactButton, kickButton, banButton, muteButton, giveModButton;
+        if (this.props.member.userId === MatrixClientPeg.get().credentials.userId) {
+            interactButton = <div className="mx_ContextualMenu_field" onClick={this.onLeaveClick}>Leave room</div>;
+        }
+        else {
+            interactButton = <div className="mx_ContextualMenu_field" onClick={this.onChatClick}>Start chat</div>;
+        }
+
         if (this.state.can.kick) {
             kickButton = <div className="mx_ContextualMenu_field" onClick={this.onKick}>
                 Kick
@@ -54,7 +61,7 @@ module.exports = React.createClass({
 
         return (
             <div>
-                <div className="mx_ContextualMenu_field" onClick={this.onChatClick}>Start chat</div>
+                {interactButton}
                 {muteButton}
                 {kickButton}
                 {banButton}

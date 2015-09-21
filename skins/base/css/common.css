@@ -54,12 +54,12 @@ html {
 }
 
 .mx_ContextualMenu {
-    text-align: center;
     border: 1px solid #a9dbf4;
     border-radius: 8px;
     background-color: #fff;
+    color: #747474;
     position: fixed;
-    z-index: 1000;
+    z-index: 2001;
     padding: 6px;
 }
 
@@ -71,7 +71,8 @@ html {
 }
 
 .mx_ContextualMenu_field {
-    padding: 6px;
+    padding: 3px 6px 3px 6px;
+    cursor: pointer;
 }
 
 

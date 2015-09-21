@@ -44,10 +44,15 @@ module.exports = React.createClass({
     },
 
     onClick: function(e) {
+        var self = this;
+        self.setState({ 'menu': true });
         ContextualMenu.createMenu(MemberInfo, {
-            member: this.props.member,
+            member: self.props.member,
             right: window.innerWidth - e.pageX,
             top: e.pageY,
+            onFinished: function() {
+                self.setState({ 'menu': false });
+            }
         });
     },
 
@@ -109,7 +114,7 @@ module.exports = React.createClass({
             }
         }
         mainClassName += presenceClass;
-        if (this.state.hover) {
+        if (this.state.hover || this.state.menu) {
             mainClassName += " mx_MemberTile_hover";
         }
 
@@ -123,7 +128,7 @@ module.exports = React.createClass({
         }
 
         var nameEl;
-        if (this.state.hover) {
+        if (this.state.hover || this.state.menu) {
             var presence;
             // FIXME: make presence data update whenever User.presence changes...
             var active = this.props.member.user ? (this.props.member.user.lastActiveAgo || -1) : -1;
