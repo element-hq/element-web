@@ -43,9 +43,39 @@ html {
     overflow: -moz-scrollbars-none;
 }
 
-/* FIXME: why is all the dialog stuff in here rather than in per-component files? */
+.mx_ContextualMenu_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1.0;
+    z-index: 2000;
+}
 
-.mx_Dialog_Background {
+.mx_ContextualMenu {
+    text-align: center;
+    border: 1px solid #a9dbf4;
+    border-radius: 8px;
+    background-color: #fff;
+    position: fixed;
+    z-index: 1000;
+    padding: 6px;
+}
+
+.mx_ContextualMenu_chevron {
+    padding: 12px;
+    position: absolute;
+    right: -21px;
+    top: 0px;
+}
+
+.mx_ContextualMenu_field {
+    padding: 6px;
+}
+
+
+.mx_Dialog_background {
     position: fixed;
     top: 0;
     left: 0;
@@ -56,7 +86,7 @@ html {
     z-index: 2000;
 }
 
-.mx_Dialog_Wrapper {
+.mx_Dialog_wrapper {
     position: fixed;
     top: 0;
     left: 0;

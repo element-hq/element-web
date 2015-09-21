@@ -16,8 +16,6 @@ limitations under the License.
 
 /*
  * State vars:
- * 'presence' : string (online|offline|unavailable etc)
- * 'active' : number (ms ago; can be -1)
  * 'can': {
  *   kick: boolean,
  *   ban: boolean,
@@ -38,52 +36,13 @@ var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
 module.exports = {
     componentDidMount: function() {
         var self = this;
-        // listen for presence changes
-        function updateUserState(event, user) {
-            if (!self.props.member) { return; }
-
-            if (user.userId === self.props.member.userId) {
-                self.setState({
-                    presence: user.presence,
-                    active: user.lastActiveAgo
-                });
-            }
-        }
-        MatrixClientPeg.get().on("User.presence", updateUserState);
-        this.userPresenceFn = updateUserState;
-
-        // listen for power level changes
-        function updatePowerLevel(event, member) {
-            if (!self.props.member) { return; }
-
-            if (member.roomId !== self.props.member.roomId) {
-                return;
-            }
-            // only interested in changes to us or them
-            var myUserId = MatrixClientPeg.get().credentials.userId;
-            if ([myUserId, self.props.member.userId].indexOf(member.userId) === -1) {
-                return;
-            }
-            self.setState(self._calculateOpsPermissions());
-        }
-        MatrixClientPeg.get().on("RoomMember.powerLevel", updatePowerLevel);
-        this.updatePowerLevelFn = updatePowerLevel;
 
         // work out the current state
         if (this.props.member) {
             var usr = MatrixClientPeg.get().getUser(this.props.member.userId) || {};
             var memberState = this._calculateOpsPermissions();
-            memberState.presence = usr.presence || "offline";
-            memberState.active = usr.lastActiveAgo || -1;
             this.setState(memberState);
         }
-    },
-
-    componentWillUnmount: function() {
-        MatrixClientPeg.get().removeListener("User.presence", this.userPresenceFn);
-        MatrixClientPeg.get().removeListener(
-            "RoomMember.powerLevel", this.updatePowerLevelFn
-        );
     },
 
     onKick: function() {
@@ -244,8 +203,6 @@ module.exports = {
 
     getInitialState: function() {
         return {
-            presence: "offline",
-            active: -1,
             can: {
                 kick: false,
                 ban: false,

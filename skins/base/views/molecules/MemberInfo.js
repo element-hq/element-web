@@ -27,84 +27,34 @@ module.exports = React.createClass({
     displayName: 'MemberInfo',
     mixins: [MemberInfoController],
 
-    componentDidMount: function() {
-        var self = this;
-
-        var memberInfo = this.getDOMNode();
-        var memberListScroll = document.getElementsByClassName("mx_MemberList_border")[0];
-        if (memberListScroll) {
-            memberInfo.style.top = (memberInfo.parentElement.offsetTop - memberListScroll.scrollTop) + "px";
-        }
-    },
-
-    getDuration: function(time) {
-        if (!time) return;
-        var t = parseInt(time / 1000);
-        var s = t % 60;
-        var m = parseInt(t / 60) % 60;
-        var h = parseInt(t / (60 * 60)) % 24;
-        var d = parseInt(t / (60 * 60 * 24));
-        if (t < 60) {
-            if (t < 0) {
-                return "0s";
-            }
-            return s + "s";
-        }
-        if (t < 60 * 60) {
-            return m + "m";
-        }
-        if (t < 24 * 60 * 60) {
-            return h + "h";
-        }
-        return d + "d ";
-    },
-
     render: function() {
-        var activeAgo = "unknown";
-        if (this.state.active >= 0) {
-            activeAgo = this.getDuration(this.state.active);
-        }
         var kickButton, banButton, muteButton, giveModButton;
         if (this.state.can.kick) {
-            kickButton = <div className="mx_MemberInfo_button" onClick={this.onKick}>
+            kickButton = <div className="mx_ContextualMenu_field" onClick={this.onKick}>
                 Kick
             </div>;
         }
         if (this.state.can.ban) {
-            banButton = <div className="mx_MemberInfo_button" onClick={this.onBan}>
+            banButton = <div className="mx_ContextualMenu_field" onClick={this.onBan}>
                 Ban
             </div>;
         }
         if (this.state.can.mute) {
             var muteLabel = this.state.muted ? "Unmute" : "Mute";
-            muteButton = <div className="mx_MemberInfo_button" onClick={this.onMuteToggle}>
+            muteButton = <div className="mx_ContextualMenu_field" onClick={this.onMuteToggle}>
                 {muteLabel}
             </div>;
         }
         if (this.state.can.modifyLevel) {
             var giveOpLabel = this.state.isTargetMod ? "Revoke Mod" : "Make Mod";
-            giveModButton = <div className="mx_MemberInfo_button" onClick={this.onModToggle}>
+            giveModButton = <div className="mx_ContextualMenu_field" onClick={this.onModToggle}>
                 {giveOpLabel}
             </div>
         }
 
-        var opLabel;
-        if (this.state.isTargetMod) {
-            var level = this.props.member.powerLevelNorm + "%";
-            opLabel = <div className="mx_MemberInfo_field">Moderator ({level})</div>
-        }
         return (
-            <div className="mx_MemberInfo">
-                <img className="mx_MemberInfo_chevron" src="img/chevron-right.png" width="9" height="16" />
-                <div className="mx_MemberInfo_shim"></div>
-                <div className="mx_MemberInfo_avatar">
-                    <MemberAvatar member={this.props.member} width={128} height={128} />
-                </div>
-                <div className="mx_MemberInfo_field">{this.props.member.userId}</div>
-                {opLabel}
-                <div className="mx_MemberInfo_field">Presence: {this.state.presence}</div>
-                <div className="mx_MemberInfo_field">Last active: {activeAgo}</div>
-                <div className="mx_MemberInfo_button" onClick={this.onChatClick}>Start chat</div>
+            <div>
+                <div className="mx_ContextualMenu_field" onClick={this.onChatClick}>Start chat</div>
                 {muteButton}
                 {kickButton}
                 {banButton}

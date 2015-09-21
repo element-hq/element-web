@@ -21,6 +21,7 @@ var React = require('react');
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../src/ComponentBroker');
 var Modal = require("../../../../src/Modal");
+var ContextualMenu = require("../../../../src/ContextualMenu");
 var MemberTileController = require("../../../../src/controllers/molecules/MemberTile");
 var MemberInfo = ComponentBroker.get('molecules/MemberInfo');
 var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
@@ -43,8 +44,11 @@ module.exports = React.createClass({
     },
 
     onClick: function(e) {
-        this.setState({ 'menu': true });
-        this.setState(this._calculateOpsPermissions());        
+        ContextualMenu.createMenu(MemberInfo, {
+            member: this.props.member,
+            right: window.innerWidth - e.pageX,
+            top: e.pageY,
+        });
     },
 
     getDuration: function(time) {
@@ -118,41 +122,6 @@ module.exports = React.createClass({
             nameClass += " mx_MemberTile_zalgo";
         }
 
-        var menu;
-        if (this.state.menu) {
-            var kickButton, banButton, muteButton, giveModButton;
-            if (this.state.can.kick) {
-                kickButton = <div className="mx_MemberTile_menuItem" onClick={this.onKick}>
-                    Kick
-                </div>;
-            }
-            if (this.state.can.ban) {
-                banButton = <div className="mx_MemberTile_menuItem" onClick={this.onBan}>
-                    Ban
-                </div>;
-            }
-            if (this.state.can.mute) {
-                var muteLabel = this.state.muted ? "Unmute" : "Mute";
-                muteButton = <div className="mx_MemberTile_menuItem" onClick={this.onMuteToggle}>
-                    {muteLabel}
-                </div>;
-            }
-            if (this.state.can.modifyLevel) {
-                var giveOpLabel = this.state.isTargetMod ? "Revoke Mod" : "Make Mod";
-                giveModButton = <div className="mx_MemberTile_menuItem" onClick={this.onModToggle}>
-                    {giveOpLabel}
-                </div>
-            }
-            menu = <div className="mx_MemberTile_menu">
-                        <img className="mx_MemberTile_chevron" src="img/chevron-right.png" width="9" height="16" />
-                        <div className="mx_MemberTile_menuItem" onClick={this.onChatClick}>Chat</div>
-                        {muteButton}
-                        {kickButton}
-                        {banButton}
-                        {giveModButton}
-                   </div>;
-        }
-
         var nameEl;
         if (this.state.hover) {
             var presence;
@@ -181,7 +150,6 @@ module.exports = React.createClass({
 
         return (
             <div className={mainClassName} title={ this.getPowerLabel() } onClick={ this.onClick } onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
-                { menu }
                 <div className="mx_MemberTile_avatar">
                     <MemberAvatar member={this.props.member} />
                      { power }
