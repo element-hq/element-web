@@ -71,13 +71,11 @@ module.exports = {
             if (actions && actions.tweaks && actions.tweaks.highlight) {
                 hl = 2;
             }
-            if (actions.notify) {
-                // obviously this won't deep copy but this shouldn't be necessary
-                var amap = this.state.activityMap;
-                amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
+            // obviously this won't deep copy but this shouldn't be necessary
+            var amap = this.state.activityMap;
+            amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
 
-                newState.activityMap = amap;
-            }
+            newState.activityMap = amap;
         }
         this.setState(newState);
     },
@@ -94,7 +92,12 @@ module.exports = {
     },
 
     getRoomList: function() {
-        return RoomListSorter.mostRecentActivityFirst(MatrixClientPeg.get().getRooms());
+        return RoomListSorter.mostRecentActivityFirst(
+            MatrixClientPeg.get().getRooms().filter(function(room) {
+                var member = room.getMember(MatrixClientPeg.get().credentials.userId);
+                return member && (member.membership == "join" || member.membership == "invite");
+            })
+        );
     },
 
     makeRoomTiles: function() {
@@ -114,4 +117,3 @@ module.exports = {
         });
     },
 };
-
