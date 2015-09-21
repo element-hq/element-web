@@ -90,7 +90,7 @@ module.exports = {
         if (this.refs.recaptchaContainer) {
             var scriptTag = document.createElement('script');
             window.mx_on_recaptcha_loaded = this.onCaptchaLoaded;
-            scriptTag.setAttribute('src', "https://www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit");
+            scriptTag.setAttribute('src', global.location.protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit");
             this.refs.recaptchaContainer.getDOMNode().appendChild(scriptTag);
         }
     },
