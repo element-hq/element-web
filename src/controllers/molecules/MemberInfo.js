@@ -216,7 +216,6 @@ module.exports = {
     // FIXME: this is horribly duplicated with MemberTile's onLeaveClick.
     // Not sure what the right solution to this is.
     onLeaveClick: function() {
-        console.log("leaving room");
         var roomId = this.props.member.roomId;
         Modal.createDialog(QuestionDialog, {
             title: "Leave room",
