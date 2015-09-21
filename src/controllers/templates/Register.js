@@ -198,12 +198,6 @@ module.exports = {
         this.setState({busy: true});
         var self = this;
 
-        this.savedParams = {
-            email: formVals.email,
-            username: formVals.username,
-            password: formVals.password
-        };
-
         this.tryRegister();
     },
 
@@ -240,10 +234,14 @@ module.exports = {
                     });
                     self.setStep('stage_m.login.email.identity');
                 }, function(error) {
-                    self.setState({
-                        busy: false,
-                        errorText: 'Unable to contact the given Home Server'
-                    });
+                    self.setStep('initial');
+                    var newState = {busy: false};
+                    if (error.errcode == 'THREEPID_IN_USE') {
+                        self.onBadFields({email: self.FieldErrors.InUse});
+                    } else {
+                        newState.errorText = 'Unable to contact the given Home Server';
+                    }
+                    self.setState(newState);
                 });
                 break;
             case 'm.login.recaptcha':
@@ -324,6 +322,14 @@ module.exports = {
                     });
                 } else if (error.httpStatus == 401) {
                     newState.errorText = "Authorisation failed!";
+                } else if (error.httpStatus >= 400 && error.httpStatus < 500) {
+                    newState.errorText = "Registration failed!";
+                } else if (error.httpStatus >= 500 && error.httpStatus < 600) {
+                    newState.errorText = "Server error during registration!";
+                } else if (error.name == "M_MISSING_PARAM") {
+                    // The HS hasn't remembered the login params from
+                    // the first try when the login email was sent.
+                    newState.errorText = "This home server does not support resuming registration.";
                 }
                 self.setState(newState);
             }
