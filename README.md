@@ -40,6 +40,13 @@ react from your app) you must be sure to:
    from matrix-react-sdk's `node_modules` folder, otherwise browserify will
    pull in both copies of react which causes the app to break.
 
+Deployment
+==========
+
+Just run `npm build` in the `examples/vector` directory, and then mount the
+`examples/vector` directory on your webserver to actually serve up the app,
+which is entirely static content.
+
 How to customise the SDK
 ========================
 

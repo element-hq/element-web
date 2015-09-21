@@ -57,6 +57,8 @@ var MatrixClientPeg = require("./MatrixClientPeg");
 var Modal = require("./Modal");
 var ComponentBroker = require('./ComponentBroker');
 var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
+var ConferenceCall = require("./ConferenceHandler").ConferenceCall;
+var ConferenceHandler = require("./ConferenceHandler");
 var Matrix = require("matrix-js-sdk");
 var dis = require("./dispatcher");
 
@@ -105,7 +107,7 @@ function _setCallListeners(call) {
             play("ringbackAudio");
         }
         else if (newState === "ended" && oldState === "connected") {
-            _setCallState(call, call.roomId, "ended");
+            _setCallState(undefined, call.roomId, "ended");
             pause("ringbackAudio");
             play("callendAudio");
         }
@@ -153,7 +155,11 @@ function _setCallState(call, roomId, status) {
 dis.register(function(payload) {
     switch (payload.action) {
         case 'place_call':
-            if (calls[payload.room_id]) {
+            if (module.exports.getAnyActiveCall()) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Existing Call",
+                    description: "You are already in a call."
+                });
                 return; // don't allow >1 call to be placed.
             }
             var room = MatrixClientPeg.get().getRoom(payload.room_id);
@@ -161,40 +167,52 @@ dis.register(function(payload) {
                 console.error("Room %s does not exist.", payload.room_id);
                 return;
             }
+
+            function placeCall(newCall) {
+                _setCallListeners(newCall);
+                _setCallState(newCall, newCall.roomId, "ringback");
+                if (payload.type === 'voice') {
+                    newCall.placeVoiceCall();
+                }
+                else if (payload.type === 'video') {
+                    newCall.placeVideoCall(
+                        payload.remote_element,
+                        payload.local_element
+                    );
+                }
+                else {
+                    console.error("Unknown conf call type: %s", payload.type);
+                }
+            }
+
             var members = room.getJoinedMembers();
-            if (members.length !== 2) {
-                var text = members.length === 1 ? "yourself." : "more than 2 people.";
+            if (members.length <= 1) {
                 Modal.createDialog(ErrorDialog, {
-                    description: "You cannot place a call with " + text
+                    description: "You cannot place a call with yourself."
                 });
-                console.error(
-                    "Fail: There are %s joined members in this room, not 2.",
-                    room.getJoinedMembers().length
-                );
                 return;
             }
-            console.log("Place %s call in %s", payload.type, payload.room_id);
-            var call = Matrix.createNewMatrixCall(
-                MatrixClientPeg.get(), payload.room_id
-            );
-            _setCallListeners(call);
-            _setCallState(call, call.roomId, "ringback");
-            if (payload.type === 'voice') {
-                call.placeVoiceCall();
-            }
-            else if (payload.type === 'video') {
-                call.placeVideoCall(
-                    payload.remote_element,
-                    payload.local_element
+            else if (members.length === 2) {
+                console.log("Place %s call in %s", payload.type, payload.room_id);
+                var call = Matrix.createNewMatrixCall(
+                    MatrixClientPeg.get(), payload.room_id
                 );
+                placeCall(call);
             }
-            else {
-                console.error("Unknown call type: %s", payload.type);
+            else { // > 2
+                console.log("Place conference call in %s", payload.room_id);
+                var confCall = new ConferenceCall(
+                    MatrixClientPeg.get(), payload.room_id
+                );
+                confCall.setup().done(function(call) {
+                    placeCall(call);
+                }, function(err) {
+                    console.error("Failed to setup conference call: %s", err);
+                });
             }
-            
             break;
         case 'incoming_call':
-            if (calls[payload.call.roomId]) {
+            if (module.exports.getAnyActiveCall()) {
                 payload.call.hangup("busy");
                 return; // don't allow >1 call to be received, hangup newer one.
             }
@@ -224,7 +242,40 @@ dis.register(function(payload) {
 });
 
 module.exports = {
+
+    getCallForRoom: function(roomId) {
+        return (
+            module.exports.getCall(roomId) ||
+            module.exports.getConferenceCall(roomId)
+        );
+    },
+
     getCall: function(roomId) {
         return calls[roomId] || null;
+    },
+
+    getConferenceCall: function(roomId) {
+        // search for a conference 1:1 call for this group chat room ID
+        var activeCall = module.exports.getAnyActiveCall();
+        if (activeCall && activeCall.confUserId) {
+            var thisRoomConfUserId = ConferenceHandler.getConferenceUserIdForRoom(
+                roomId
+            );
+            if (thisRoomConfUserId === activeCall.confUserId) {
+                return activeCall;
+            }
+        }
+        return null;
+    },
+
+    getAnyActiveCall: function() {
+        var roomsWithCalls = Object.keys(calls);
+        for (var i = 0; i < roomsWithCalls.length; i++) {
+            if (calls[roomsWithCalls[i]] &&
+                    calls[roomsWithCalls[i]].call_state !== "ended") {
+                return calls[roomsWithCalls[i]];
+            }
+        }
+        return null;
     }
 };
