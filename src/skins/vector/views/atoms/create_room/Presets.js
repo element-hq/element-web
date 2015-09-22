@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var PresetsController = require("../../../../../src/controllers/atoms/create_room/Presets");
+var PresetsController = require('matrix-react-sdk/lib/controllers/atoms/create_room/Presets')
 
 module.exports = React.createClass({
     displayName: 'CreateRoomPresets',

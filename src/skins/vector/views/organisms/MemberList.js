@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 var classNames = require('classnames');
 
-var MemberListController = require("../../../../src/controllers/organisms/MemberList");
+var MemberListController = require('matrix-react-sdk/lib/controllers/organisms/MemberList')
 
 var ComponentBroker = require('../../../../src/ComponentBroker');
 

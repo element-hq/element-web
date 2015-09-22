@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
-var EventAsTextTileController = require("../../../../src/controllers/molecules/EventAsTextTile");
+var EventAsTextTileController = require('matrix-react-sdk/lib/controllers/molecules/EventAsTextTile')
 var ComponentBroker = require('../../../../src/ComponentBroker');
 var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
 var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');

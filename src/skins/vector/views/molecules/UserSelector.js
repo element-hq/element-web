@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var UserSelectorController = require("../../../../src/controllers/molecules/UserSelector");
+var UserSelectorController = require('matrix-react-sdk/lib/controllers/molecules/UserSelector')
 
 module.exports = React.createClass({
     displayName: 'UserSelector',

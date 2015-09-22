@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var MFileTileController = require("../../../../src/controllers/molecules/MFileTile");
+var MFileTileController = require('matrix-react-sdk/lib/controllers/molecules/MFileTile')
 
 var MatrixClientPeg = require('../../../../src/MatrixClientPeg');
 

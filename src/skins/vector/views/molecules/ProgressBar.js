@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var ProgressBarController = require("../../../../src/controllers/molecules/ProgressBar");
+var ProgressBarController = require('matrix-react-sdk/lib/controllers/molecules/ProgressBar')
 
 module.exports = React.createClass({
     displayName: 'ProgressBar',

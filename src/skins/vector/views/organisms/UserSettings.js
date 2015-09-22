@@ -17,7 +17,7 @@ var React = require('react');
 var ComponentBroker = require('../../../../src/ComponentBroker');
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
-var UserSettingsController = require("../../../../src/controllers/organisms/UserSettings");
+var UserSettingsController = require('matrix-react-sdk/lib/controllers/organisms/UserSettings')
 
 var EditableText = ComponentBroker.get('atoms/EditableText');
 var EnableNotificationsButton = ComponentBroker.get('atoms/EnableNotificationsButton');

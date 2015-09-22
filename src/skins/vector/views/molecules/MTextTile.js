@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var MTextTileController = require("../../../../src/controllers/molecules/MTextTile");
+var MTextTileController = require('matrix-react-sdk/lib/controllers/molecules/MTextTile')
 
 module.exports = React.createClass({
     displayName: 'MTextTile',

@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var MEmoteTileController = require("../../../../src/controllers/molecules/MEmoteTile");
+var MEmoteTileController = require('matrix-react-sdk/lib/controllers/molecules/MEmoteTile')
 
 module.exports = React.createClass({
     displayName: 'MEmoteTile',

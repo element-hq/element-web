@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var CreateRoomButtonController = require("../../../../../src/controllers/atoms/create_room/CreateRoomButton");
+var CreateRoomButtonController = require('matrix-react-sdk/lib/controllers/atoms/create_room/CreateRoomButton')
 
 module.exports = React.createClass({
     displayName: 'CreateRoomButton',

@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var EditableTextController = require("../../../../src/controllers/atoms/EditableText");
+var EditableTextController = require('matrix-react-sdk/lib/controllers/atoms/EditableText')
 
 module.exports = React.createClass({
     displayName: 'EditableText',

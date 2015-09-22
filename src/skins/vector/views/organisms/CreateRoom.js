@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var CreateRoomController = require("../../../../src/controllers/organisms/CreateRoom");
+var CreateRoomController = require('matrix-react-sdk/lib/controllers/organisms/CreateRoom')
 
 var ComponentBroker = require('../../../../src/ComponentBroker');
 

@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
-var MemberInfoController = require("../../../../src/controllers/molecules/MemberInfo");
+var MemberInfoController = require('matrix-react-sdk/lib/controllers/molecules/MemberInfo')
 var ComponentBroker = require('../../../../src/ComponentBroker');
 var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
 

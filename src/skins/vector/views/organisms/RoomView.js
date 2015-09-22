@@ -30,7 +30,7 @@ var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
 var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
 var CallView = ComponentBroker.get("molecules/voip/CallView");
 var RoomSettings = ComponentBroker.get("molecules/RoomSettings");
-var RoomViewController = require("../../../../src/controllers/organisms/RoomView");
+var RoomViewController = require('matrix-react-sdk/lib/controllers/organisms/RoomView')
 
 var Loader = require("react-loader");
 

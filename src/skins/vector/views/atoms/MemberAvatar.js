@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var MemberAvatarController = require("../../../../src/controllers/atoms/MemberAvatar");
+var MemberAvatarController = require('matrix-react-sdk/lib/controllers/atoms/MemberAvatar')
 
 module.exports = React.createClass({
     displayName: 'MemberAvatar',

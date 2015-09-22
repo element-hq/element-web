@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var RoomAliasController = require("../../../../../src/controllers/atoms/create_room/RoomAlias");
+var RoomAliasController = require('matrix-react-sdk/lib/controllers/atoms/create_room/RoomAlias')
 
 module.exports = React.createClass({
     displayName: 'RoomAlias',

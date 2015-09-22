@@ -30,7 +30,7 @@ var RoomDirectory = ComponentBroker.get('organisms/RoomDirectory');
 var MatrixToolbar = ComponentBroker.get('molecules/MatrixToolbar');
 var Notifier = ComponentBroker.get('organisms/Notifier');
 
-var MatrixChatController = require('../../../../src/controllers/pages/MatrixChat');
+var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/MatrixChat')
 
 // should be atomised
 var Loader = require("react-loader");

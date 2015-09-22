@@ -28,7 +28,7 @@ limitations under the License.
  */
 
 var React = require('react');
-var ErrorDialogController = require("../../../../src/controllers/organisms/ErrorDialog");
+var ErrorDialogController = require('matrix-react-sdk/lib/controllers/organisms/ErrorDialog')
 
 module.exports = React.createClass({
     displayName: 'ErrorDialog',

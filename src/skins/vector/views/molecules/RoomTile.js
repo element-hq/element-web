@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 var classNames = require('classnames');
 
-var RoomTileController = require("../../../../src/controllers/molecules/RoomTile");
+var RoomTileController = require('matrix-react-sdk/lib/controllers/molecules/RoomTile')
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 

@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 var classNames = require("classnames");
 
-var SenderProfileController = require("../../../../src/controllers/molecules/SenderProfile");
+var SenderProfileController = require('matrix-react-sdk/lib/controllers/molecules/SenderProfile')
 
 // The Lato WOFF doesn't include sensible combining diacritics, so Chrome chokes on rendering them.
 // Revert to Arial when this happens, which on OSX works at least.

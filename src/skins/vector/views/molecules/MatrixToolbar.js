@@ -23,7 +23,7 @@ var ComponentBroker = require('../../../../src/ComponentBroker');
 var LogoutButton = ComponentBroker.get("atoms/LogoutButton");
 var EnableNotificationsButton = ComponentBroker.get("atoms/EnableNotificationsButton");
 
-var MatrixToolbarController = require("../../../../src/controllers/molecules/MatrixToolbar");
+var MatrixToolbarController = require('matrix-react-sdk/lib/controllers/molecules/MatrixToolbar')
 var Notifier = ComponentBroker.get('organisms/Notifier');
 
 module.exports = React.createClass({

@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var VideoFeedController = require("../../../../../src/controllers/atoms/voip/VideoFeed");
+var VideoFeedController = require('matrix-react-sdk/lib/controllers/atoms/voip/VideoFeed')
 
 module.exports = React.createClass({
     displayName: 'VideoFeed',

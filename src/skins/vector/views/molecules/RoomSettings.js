@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
-var RoomSettingsController = require("../../../../src/controllers/molecules/RoomSettings");
+var RoomSettingsController = require('matrix-react-sdk/lib/controllers/molecules/RoomSettings')
 
 module.exports = React.createClass({
     displayName: 'RoomSettings',

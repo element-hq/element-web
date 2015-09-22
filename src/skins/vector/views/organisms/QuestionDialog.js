@@ -28,7 +28,7 @@ limitations under the License.
  */
 
 var React = require('react');
-var QuestionDialogController = require("../../../../src/controllers/organisms/QuestionDialog");
+var QuestionDialogController = require('matrix-react-sdk/lib/controllers/organisms/QuestionDialog')
 
 module.exports = React.createClass({
     displayName: 'QuestionDialog',

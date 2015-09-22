@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var MRoomMemberTileController = require("../../../../src/controllers/molecules/MRoomMemberTile");
+var MRoomMemberTileController = require('matrix-react-sdk/lib/controllers/molecules/MRoomMemberTile')
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var ComponentBroker = require('../../../../src/ComponentBroker');

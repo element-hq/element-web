@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var ChangePasswordController = require("../../../../src/controllers/molecules/ChangePassword");
+var ChangePasswordController = require('matrix-react-sdk/lib/controllers/molecules/ChangePassword')
 var Loader = require("react-loader");
 
 

@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var ChangeAvatarController = require("../../../../src/controllers/molecules/ChangeAvatar");
+var ChangeAvatarController = require('matrix-react-sdk/lib/controllers/molecules/ChangeAvatar')
 
 var Loader = require("react-loader");
 

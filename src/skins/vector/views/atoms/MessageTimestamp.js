@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var MessageTimestampController = require("../../../../src/controllers/atoms/MessageTimestamp");
+var MessageTimestampController = require('matrix-react-sdk/lib/controllers/atoms/MessageTimestamp')
 
 module.exports = React.createClass({
     displayName: 'MessageTimestamp',

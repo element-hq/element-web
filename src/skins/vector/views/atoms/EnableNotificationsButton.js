@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var EnableNotificationsButtonController = require("../../../../src/controllers/atoms/EnableNotificationsButton");
+var EnableNotificationsButtonController = require('matrix-react-sdk/lib/controllers/atoms/EnableNotificationsButton')
 
 module.exports = React.createClass({
     displayName: 'EnableNotificationsButton',

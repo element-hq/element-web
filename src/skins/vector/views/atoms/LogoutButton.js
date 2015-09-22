@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var LogoutButtonController = require("../../../../src/controllers/atoms/LogoutButton");
+var LogoutButtonController = require('matrix-react-sdk/lib/controllers/atoms/LogoutButton')
 
 module.exports = React.createClass({
     displayName: 'LogoutButton',

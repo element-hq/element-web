@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var LogoutPromptController = require("../../../../src/controllers/organisms/LogoutPrompt");
+var LogoutPromptController = require('matrix-react-sdk/lib/controllers/organisms/LogoutPrompt')
 
 module.exports = React.createClass({
     displayName: 'LogoutPrompt',

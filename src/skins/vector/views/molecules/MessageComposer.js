@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
-var MessageComposerController = require("../../../../src/controllers/molecules/MessageComposer");
+var MessageComposerController = require('matrix-react-sdk/lib/controllers/molecules/MessageComposer')
 var ContentMessages = require("../../../../src/ContentMessages");
 
 var ComponentBroker = require('../../../../src/ComponentBroker');

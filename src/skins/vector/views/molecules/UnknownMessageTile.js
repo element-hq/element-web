@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var UnknownMessageTileController = require("../../../../src/controllers/molecules/UnknownMessageTile");
+var UnknownMessageTileController = require('matrix-react-sdk/lib/controllers/molecules/UnknownMessageTile')
 
 module.exports = React.createClass({
     displayName: 'UnknownMessageTile',

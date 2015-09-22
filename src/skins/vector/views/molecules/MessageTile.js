@@ -37,7 +37,7 @@ var tileTypes = {
     'm.file': ComponentBroker.get('molecules/MFileTile')
 };
 
-var MessageTileController = require("../../../../src/controllers/molecules/MessageTile");
+var MessageTileController = require('matrix-react-sdk/lib/controllers/molecules/MessageTile')
 
 module.exports = React.createClass({
     displayName: 'MessageTile',

@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var MNoticeTileController = require("../../../../src/controllers/molecules/MNoticeTile");
+var MNoticeTileController = require('matrix-react-sdk/lib/controllers/molecules/MNoticeTile')
 
 module.exports = React.createClass({
     displayName: 'MNoticeTile',

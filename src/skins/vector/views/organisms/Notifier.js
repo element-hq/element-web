@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 
-var NotifierController = require("../../../../src/controllers/organisms/Notifier");
+var NotifierController = require('matrix-react-sdk/lib/controllers/organisms/Notifier')
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var TextForEvent = require("../../../../src/TextForEvent");

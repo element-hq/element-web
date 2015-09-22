@@ -20,7 +20,7 @@ var React = require('react');
 var ComponentBroker = require('../../../../src/ComponentBroker');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
-var RoomHeaderController = require("../../../../src/controllers/molecules/RoomHeader");
+var RoomHeaderController = require('matrix-react-sdk/lib/controllers/molecules/RoomHeader')
 var EditableText = ComponentBroker.get("atoms/EditableText");
 var RoomAvatar = ComponentBroker.get('atoms/RoomAvatar');
 

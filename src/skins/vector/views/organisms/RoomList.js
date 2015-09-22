@@ -21,7 +21,7 @@ var ComponentBroker = require('../../../../src/ComponentBroker');
 var CallView = ComponentBroker.get('molecules/voip/CallView');
 var RoomDropTarget = ComponentBroker.get('molecules/RoomDropTarget');
 
-var RoomListController = require("../../../../src/controllers/organisms/RoomList");
+var RoomListController = require('matrix-react-sdk/lib/controllers/organisms/RoomList')
 
 module.exports = React.createClass({
     displayName: 'RoomList',
