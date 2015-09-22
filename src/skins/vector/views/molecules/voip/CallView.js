@@ -19,11 +19,10 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require("../../../../../src/MatrixClientPeg");
-var ComponentBroker = require('../../../../../src/ComponentBroker');
+var sdk = require('matrix-react-sdk')
 var CallViewController = require(
-    "../../../../../src/controllers/molecules/voip/CallView"
+    "matrix-react-sdk/lib/controllers/molecules/voip/CallView"
 );
-var VideoView = ComponentBroker.get('molecules/voip/VideoView');
 
 module.exports = React.createClass({
     displayName: 'CallView',
@@ -34,6 +33,7 @@ module.exports = React.createClass({
     },
 
     render: function(){
+        var VideoView = sdk.getComponent('molecules.voip.VideoView');
         return (
             <VideoView ref="video"/>
         );

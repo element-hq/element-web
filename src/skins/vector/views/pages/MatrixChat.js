@@ -17,18 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var ComponentBroker = require('../../../../src/ComponentBroker');
-
-var LeftPanel = ComponentBroker.get('organisms/LeftPanel');
-var RoomView = ComponentBroker.get('organisms/RoomView');
-var RightPanel = ComponentBroker.get('organisms/RightPanel');
-var Login = ComponentBroker.get('templates/Login');
-var UserSettings = ComponentBroker.get('organisms/UserSettings');
-var Register = ComponentBroker.get('templates/Register');
-var CreateRoom = ComponentBroker.get('organisms/CreateRoom');
-var RoomDirectory = ComponentBroker.get('organisms/RoomDirectory');
-var MatrixToolbar = ComponentBroker.get('molecules/MatrixToolbar');
-var Notifier = ComponentBroker.get('organisms/Notifier');
+var sdk = require('matrix-react-sdk')
 
 var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/MatrixChat')
 
@@ -52,6 +41,16 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.state.logged_in && this.state.ready) {
+            var LeftPanel = sdk.getComponent('organisms.LeftPanel');
+            var RoomView = sdk.getComponent('organisms.RoomView');
+            var RightPanel = sdk.getComponent('organisms.RightPanel');
+            var Login = sdk.getComponent('templates.Login');
+            var UserSettings = sdk.getComponent('organisms.UserSettings');
+            var Register = sdk.getComponent('templates.Register');
+            var CreateRoom = sdk.getComponent('organisms.CreateRoom');
+            var RoomDirectory = sdk.getComponent('organisms.RoomDirectory');
+            var MatrixToolbar = sdk.getComponent('molecules.MatrixToolbar');
+            var Notifier = sdk.getComponent('organisms.Notifier');
 
             var page_element;
             var right_panel = "";

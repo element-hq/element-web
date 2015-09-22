@@ -17,12 +17,10 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var ComponentBroker = require('../../../../src/ComponentBroker');
+var sdk = require('matrix-react-sdk')
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var RoomHeaderController = require('matrix-react-sdk/lib/controllers/molecules/RoomHeader')
-var EditableText = ComponentBroker.get("atoms/EditableText");
-var RoomAvatar = ComponentBroker.get('atoms/RoomAvatar');
 
 module.exports = React.createClass({
     displayName: 'RoomHeader',
@@ -39,6 +37,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var EditableText = sdk.getComponent("atoms.EditableText");
+        var RoomAvatar = sdk.getComponent('atoms.RoomAvatar');
 
         var header;
         if (this.props.simpleHeader) {

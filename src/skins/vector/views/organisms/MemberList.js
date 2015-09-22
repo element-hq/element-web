@@ -21,10 +21,7 @@ var classNames = require('classnames');
 
 var MemberListController = require('matrix-react-sdk/lib/controllers/organisms/MemberList')
 
-var ComponentBroker = require('../../../../src/ComponentBroker');
-
-var MemberTile = ComponentBroker.get("molecules/MemberTile");
-var EditableText = ComponentBroker.get("atoms/EditableText");
+var sdk = require('matrix-react-sdk')
 
 
 module.exports = React.createClass({
@@ -48,6 +45,8 @@ module.exports = React.createClass({
     },
 
     makeMemberTiles: function() {
+        var MemberTile = sdk.getComponent("molecules.MemberTile");
+
         var self = this;
         return Object.keys(self.state.memberDict).map(function(userId) {
             var m = self.state.memberDict[userId];
@@ -81,6 +80,7 @@ module.exports = React.createClass({
             mx_MemberTile_inviteEditing: this.state.editing,
         });
 
+        var EditableText = sdk.getComponent("atoms.EditableText");
         return (
             <div className={ classes } onClick={ this.onClickInvite } >
                 <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="40" height="40" alt=""/></div>            

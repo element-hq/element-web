@@ -20,8 +20,6 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var MemberInfoController = require('matrix-react-sdk/lib/controllers/molecules/MemberInfo')
-var ComponentBroker = require('../../../../src/ComponentBroker');
-var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
 
 module.exports = React.createClass({
     displayName: 'MemberInfo',

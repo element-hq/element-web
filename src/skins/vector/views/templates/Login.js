@@ -18,15 +18,12 @@ limitations under the License.
 
 var React = require('react');
 
-var ComponentBroker = require("../../../../src/ComponentBroker");
+var sdk = require('matrix-react-sdk')
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
-var ProgressBar = ComponentBroker.get("molecules/ProgressBar");
 var Loader = require("react-loader");
 
 var LoginController = require('matrix-react-sdk/lib/controllers/templates/Login')
-
-var ServerConfig = ComponentBroker.get("molecules/ServerConfig");
 
 module.exports = React.createClass({
     DEFAULT_HS_URL: 'https://matrix.org',
@@ -119,6 +116,8 @@ module.exports = React.createClass({
             case 'fetch_stages':
                 var serverConfigStyle = {};
                 serverConfigStyle.display = this.state.serverConfigVisible ? 'block' : 'none';
+                var ServerConfig = sdk.getComponent("molecules.ServerConfig");
+
                 return (
                     <div>
                         <input className="mx_Login_checkbox" id="advanced" type="checkbox" checked={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />

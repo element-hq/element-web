@@ -18,23 +18,21 @@ limitations under the License.
 
 var React = require('react');
 
-var ComponentBroker = require('../../../../src/ComponentBroker');
-
-var LogoutButton = ComponentBroker.get("atoms/LogoutButton");
-var EnableNotificationsButton = ComponentBroker.get("atoms/EnableNotificationsButton");
+var sdk = require('matrix-react-sdk')
 
 var MatrixToolbarController = require('matrix-react-sdk/lib/controllers/molecules/MatrixToolbar')
-var Notifier = ComponentBroker.get('organisms/Notifier');
 
 module.exports = React.createClass({
     displayName: 'MatrixToolbar',
     mixins: [MatrixToolbarController],
 
     hideToolbar: function() {
+        var Notifier = sdk.getComponent('organisms.Notifier');
         Notifier.setToolbarHidden(true);
     },
 
     render: function() {
+        var EnableNotificationsButton = sdk.getComponent("atoms.EnableNotificationsButton");
         return (
             <div className="mx_MatrixToolbar">
                 You are not receiving desktop notifications. <EnableNotificationsButton />

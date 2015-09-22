@@ -19,9 +19,8 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require("../../../../../src/MatrixClientPeg");
-var ComponentBroker = require('../../../../../src/ComponentBroker');
+var sdk = require('matrix-react-sdk')
 var VideoViewController = require('matrix-react-sdk/lib/controllers/molecules/voip/VideoView')
-var VideoFeed = ComponentBroker.get('atoms/voip/VideoFeed');
 
 module.exports = React.createClass({
     displayName: 'VideoView',
@@ -36,6 +35,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var VideoFeed = sdk.getComponent('atoms.voip.VideoFeed');
         return (
             <div className="mx_VideoView">
                 <div className="mx_VideoView_remoteVideoFeed">

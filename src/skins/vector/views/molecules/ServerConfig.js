@@ -18,9 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var Modal = require('../../../../src/Modal');
-var ComponentBroker = require('../../../../src/ComponentBroker');
-
-var ErrorDialog = ComponentBroker.get('organisms/ErrorDialog');
+var sdk = require('matrix-react-sdk')
 
 var ServerConfigController = require('matrix-react-sdk/lib/controllers/molecules/ServerConfig')
 
@@ -29,6 +27,7 @@ module.exports = React.createClass({
     mixins: [ServerConfigController],
 
     showHelpPopup: function() {
+        var ErrorDialog = sdk.getComponent('organisms.ErrorDialog');
         Modal.createDialog(ErrorDialog, {
           title: 'Custom Server Options',
           description: "You can use the custom server options to log into other Matrix servers by specifying a different Home server URL. This allows you to use Vector with an existing Matrix account on a different Home server. You can also set a cutom Identity server but this will affect people ability to find you if you use a server in a group other than tha main Matrix.org group.",

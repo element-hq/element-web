@@ -19,13 +19,10 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
-var ComponentBroker = require('../../../../src/ComponentBroker');
+var sdk = require('matrix-react-sdk')
 var Modal = require("../../../../src/Modal");
 var ContextualMenu = require("../../../../src/ContextualMenu");
 var MemberTileController = require('matrix-react-sdk/lib/controllers/molecules/MemberTile')
-var MemberInfo = ComponentBroker.get('molecules/MemberInfo');
-var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
-var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
 
 // The Lato WOFF doesn't include sensible combining diacritics, so Chrome chokes on rendering them.
 // Revert to Arial when this happens, which on OSX works at least.
@@ -46,6 +43,7 @@ module.exports = React.createClass({
     onClick: function(e) {
         var self = this;
         self.setState({ 'menu': true });
+        var MemberInfo = sdk.getComponent('molecules.MemberInfo');
         ContextualMenu.createMenu(MemberInfo, {
             member: self.props.member,
             right: window.innerWidth - e.pageX,
@@ -153,6 +151,7 @@ module.exports = React.createClass({
                 </div>
         }
 
+        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
         return (
             <div className={mainClassName} title={ this.getPowerLabel() } onClick={ this.onClick } onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">

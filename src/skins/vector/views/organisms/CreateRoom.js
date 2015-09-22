@@ -20,15 +20,9 @@ var React = require('react');
 
 var CreateRoomController = require('matrix-react-sdk/lib/controllers/organisms/CreateRoom')
 
-var ComponentBroker = require('../../../../src/ComponentBroker');
+var sdk = require('matrix-react-sdk')
 
 var PresetValues = require('../../../../src/controllers/atoms/create_room/Presets').Presets;
-
-var CreateRoomButton = ComponentBroker.get("atoms/create_room/CreateRoomButton");
-var RoomAlias = ComponentBroker.get("atoms/create_room/RoomAlias");
-var Presets = ComponentBroker.get("atoms/create_room/Presets");
-var UserSelector = ComponentBroker.get("molecules/UserSelector");
-var RoomHeader = ComponentBroker.get("molecules/RoomHeader");
 
 var Loader = require("react-loader");
 
@@ -140,6 +134,13 @@ module.exports = React.createClass({
                     </div>
                 );
             }
+
+            var CreateRoomButton = sdk.getComponent("atoms.create_room.CreateRoomButton");
+            var RoomAlias = sdk.getComponent("atoms.create_room.RoomAlias");
+            var Presets = sdk.getComponent("atoms.create_room.Presets");
+            var UserSelector = sdk.getComponent("molecules.UserSelector");
+            var RoomHeader = sdk.getComponent("molecules.RoomHeader");
+
             return (
                 <div className="mx_CreateRoom">
                     <RoomHeader simpleHeader="Create room" />

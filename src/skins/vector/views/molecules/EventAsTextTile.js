@@ -20,7 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var EventAsTextTileController = require('matrix-react-sdk/lib/controllers/molecules/EventAsTextTile')
-var ComponentBroker = require('../../../../src/ComponentBroker');
+var sdk = require('matrix-react-sdk')
 var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
 var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
 var TextForEvent = require("../../../../src/TextForEvent");
@@ -30,6 +30,9 @@ module.exports = React.createClass({
     mixins: [EventAsTextTileController],
 
     render: function() {
+        var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
+        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+
         var text = TextForEvent.textForEvent(this.props.mxEvent);
         if (text == null || text.length == 0) return null;
 

@@ -23,9 +23,7 @@ var MImageTileController = require('matrix-react-sdk/lib/controllers/molecules/M
 
 var MatrixClientPeg = require('../../../../src/MatrixClientPeg');
 var Modal = require('../../../../src/Modal');
-var ComponentBroker = require('../../../../src/ComponentBroker');
-
-var ImageView = ComponentBroker.get("atoms/ImageView");
+var sdk = require('matrix-react-sdk')
 
 module.exports = React.createClass({
     displayName: 'MImageTile',
@@ -59,6 +57,7 @@ module.exports = React.createClass({
             ev.preventDefault();
             var content = this.props.mxEvent.getContent();
             var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(content.url);
+            var ImageView = sdk.getComponent("atoms.ImageView");
             Modal.createDialog(ImageView, {
                 src: httpUrl,
                 width: content.info.w,

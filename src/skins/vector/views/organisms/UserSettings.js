@@ -14,16 +14,11 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var ComponentBroker = require('../../../../src/ComponentBroker');
+var sdk = require('matrix-react-sdk')
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
 var UserSettingsController = require('matrix-react-sdk/lib/controllers/organisms/UserSettings')
 
-var EditableText = ComponentBroker.get('atoms/EditableText');
-var EnableNotificationsButton = ComponentBroker.get('atoms/EnableNotificationsButton');
-var ChangeAvatar = ComponentBroker.get('molecules/ChangeAvatar');
-var ChangePassword = ComponentBroker.get('molecules/ChangePassword');
-var LogoutPrompt = ComponentBroker.get('organisms/LogoutPrompt');
 var Loader = require("react-loader");
 
 var Modal = require("../../../../src/Modal");
@@ -34,6 +29,7 @@ module.exports = React.createClass({
 
     editAvatar: function() {
         var url = MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl);
+        var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
         Modal.createDialog(ChangeAvatar, {initialAvatarUrl: url});
     },
 
@@ -50,6 +46,7 @@ module.exports = React.createClass({
     },
 
     onLogoutClicked: function(ev) {
+        var LogoutPrompt = sdk.getComponent('organisms.LogoutPrompt');
         this.logoutModal = Modal.createDialog(LogoutPrompt, {onCancel: this.onLogoutPromptCancel});
     },
 
@@ -62,6 +59,9 @@ module.exports = React.createClass({
             case this.Phases.Loading:
                 return <Loader />
             case this.Phases.Display:
+                var EditableText = sdk.getComponent('atoms/EditableText');
+                var EnableNotificationsButton = sdk.getComponent('atoms/EnableNotificationsButton');
+                var ChangePassword = sdk.getComponent('molecules/ChangePassword');
                 return (
                     <div className="mx_UserSettings">
                         <div className="mx_UserSettings_User">

@@ -10,9 +10,9 @@
   "license": "Apache-2.0",
   "style": "bundle.css",
   "scripts": {
-    "reskindex": "reskindex base -h src/skins/base/header",
-    "build": "NODE_ENV=production browserify --ignore olm -t reactify src/index.js | uglifyjs -c -m -o vector/bundle.js",
-    "start": "parallelshell 'watchify --ignore olm -v -d -t reactify src/index.js -o vector/bundle.js' 'npm run start:skins:css' 'http-server vector'",
+    "reskindex": "reskindex vector -h src/skins/vector/header",
+    "build": "NODE_ENV=production browserify --ignore olm -t reactify vector/index.js | uglifyjs -c -m -o vector/bundle.js",
+    "start": "parallelshell 'watchify --ignore olm -v -d -t reactify vector/index.js -o vector/bundle.js' 'npm run start:skins:css' 'http-server vector'",
     "build:skins:js": "babel src/skins -d lib/skins --source-maps",
     "build:skins:css": "catw 'src/skins/base/css/**/*.css' -o vector/bundle.css -c uglifycss --no-watch",
     "start:skins:css": "catw 'src/skins/base/css/**/*.css' -o vector/bundle.css",

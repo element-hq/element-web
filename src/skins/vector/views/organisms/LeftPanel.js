@@ -17,17 +17,17 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var ComponentBroker = require('../../../../src/ComponentBroker');
-
-var RoomList = ComponentBroker.get('organisms/RoomList');
-var BottomLeftMenu = ComponentBroker.get('molecules/BottomLeftMenu');
-var IncomingCallBox = ComponentBroker.get('molecules/voip/IncomingCallBox');
-var RoomCreate = ComponentBroker.get('molecules/RoomCreate');
+var sdk = require('matrix-react-sdk')
 
 module.exports = React.createClass({
     displayName: 'LeftPanel',
 
     render: function() {
+        var RoomList = sdk.getComponent('organisms.RoomList');
+        var BottomLeftMenu = sdk.getComponent('molecules.BottomLeftMenu');
+        var IncomingCallBox = sdk.getComponent('molecules.voip.IncomingCallBox');
+        var RoomCreate = sdk.getComponent('molecules.RoomCreate');
+
         return (
             <aside className="mx_LeftPanel">
                 <img className="mx_LeftPanel_hideButton" src="img/hide.png" width="32" height="32" alt="<"/>

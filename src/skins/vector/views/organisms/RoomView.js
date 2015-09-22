@@ -20,16 +20,11 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
-var ComponentBroker = require('../../../../src/ComponentBroker');
+var sdk = require('matrix-react-sdk')
 var classNames = require("classnames");
 var filesize = require('filesize');
 var q = require('q');
 
-var MessageTile = ComponentBroker.get('molecules/MessageTile');
-var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
-var MessageComposer = ComponentBroker.get('molecules/MessageComposer');
-var CallView = ComponentBroker.get("molecules/voip/CallView");
-var RoomSettings = ComponentBroker.get("molecules/RoomSettings");
 var RoomViewController = require('matrix-react-sdk/lib/controllers/organisms/RoomView')
 
 var Loader = require("react-loader");
@@ -82,6 +77,11 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var RoomHeader = sdk.getComponent('molecules.RoomHeader');
+        var MessageComposer = sdk.getComponent('molecules.MessageComposer');
+        var CallView = sdk.getComponent("molecules.voip.CallView");
+        var RoomSettings = sdk.getComponent("molecules.RoomSettings");
+
         if (!this.state.room) {
             if (this.props.roomId) {
                 return (

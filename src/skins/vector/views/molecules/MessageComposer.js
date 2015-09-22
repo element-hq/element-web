@@ -22,8 +22,7 @@ var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var MessageComposerController = require('matrix-react-sdk/lib/controllers/molecules/MessageComposer')
 var ContentMessages = require("../../../../src/ContentMessages");
 
-var ComponentBroker = require('../../../../src/ComponentBroker');
-var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
+var sdk = require('matrix-react-sdk')
 
 module.exports = React.createClass({
     displayName: 'MessageComposer',
@@ -45,6 +44,7 @@ module.exports = React.createClass({
     render: function() {
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
+        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
         return (
             <div className="mx_MessageComposer">
                 <div className="mx_MessageComposer_wrapper">

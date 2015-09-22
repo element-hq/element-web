@@ -17,12 +17,8 @@ limitations under the License.
 'use strict';
 
 var React = require("react");
-// In normal usage of the module:
-//var MatrixReactSdk = require("matrix-react-sdk");
-// Or to import the source directly from the file system:
-// (This is useful for debugging the SDK as it seems source
-// maps cannot pass through two stages).
-var MatrixReactSdk = require("../../src/index");
+var sdk = require("matrix-react-sdk");
+sdk.loadSkin(require('../src/skins/vector/skindex'));
 
 var lastLocationHashSet = null;
 
@@ -78,8 +74,9 @@ var makeRegistrationUrl = function() {
            '#/register';
 }
 
+var MatrixChat = sdk.getComponent('pages.MatrixChat');
 window.matrixChat = React.render(
-    <MatrixReactSdk.MatrixChat onNewScreen={onNewScreen} registrationUrl={makeRegistrationUrl()} />,
+    <MatrixChat onNewScreen={onNewScreen} registrationUrl={makeRegistrationUrl()} />,
     document.getElementById('matrixchat')
 );
 

@@ -21,10 +21,8 @@ var React = require('react');
 var MRoomMemberTileController = require('matrix-react-sdk/lib/controllers/molecules/MRoomMemberTile')
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
-var ComponentBroker = require('../../../../src/ComponentBroker');
+var sdk = require('matrix-react-sdk')
 var TextForEvent = require('../../../../src/TextForEvent');
-var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
-var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
 
 module.exports = React.createClass({
     displayName: 'MRoomMemberTile',
@@ -39,6 +37,8 @@ module.exports = React.createClass({
         var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
         var text = this.getMemberEventText();
         if (!text) return <div/>;
+        var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
+        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
         return (
             <div className="mx_MessageTile mx_MessageTile_notice">
                 <div className="mx_MessageTile_avatar">

@@ -17,9 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var ComponentBroker = require('../../../../src/ComponentBroker');
-var CallView = ComponentBroker.get('molecules/voip/CallView');
-var RoomDropTarget = ComponentBroker.get('molecules/RoomDropTarget');
+var sdk = require('matrix-react-sdk')
 
 var RoomListController = require('matrix-react-sdk/lib/controllers/organisms/RoomList')
 
@@ -28,6 +26,9 @@ module.exports = React.createClass({
     mixins: [RoomListController],
 
     render: function() {
+        var CallView = sdk.getComponent('molecules.voip.CallView');
+        var RoomDropTarget = sdk.getComponent('molecules.RoomDropTarget');
+
         var callElement;
         if (this.state.show_call_element) {
             callElement = <CallView className="mx_MatrixChat_callView"/>

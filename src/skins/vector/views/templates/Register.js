@@ -18,13 +18,11 @@ limitations under the License.
 
 var React = require('react');
 
-var ComponentBroker = require("../../../../src/ComponentBroker");
+var sdk = require('matrix-react-sdk')
 
 var Loader = require("react-loader");
 
 var RegisterController = require('matrix-react-sdk/lib/controllers/templates/Register')
-
-var ServerConfig = ComponentBroker.get("molecules/ServerConfig");
 
 module.exports = React.createClass({
     DEFAULT_HS_URL: 'https://matrix.org',
@@ -98,6 +96,7 @@ module.exports = React.createClass({
             case 'initial':
                 var serverConfigStyle = {};
                 serverConfigStyle.display = this.state.serverConfigVisible ? 'block' : 'none';
+                var ServerConfig = sdk.getComponent("molecules.ServerConfig");
                 return (
                     <div>
                         <form onSubmit={this.onInitialStageSubmit}>

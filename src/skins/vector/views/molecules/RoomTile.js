@@ -23,8 +23,7 @@ var RoomTileController = require('matrix-react-sdk/lib/controllers/molecules/Roo
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 
-var ComponentBroker = require('../../../../src/ComponentBroker');
-var RoomAvatar = ComponentBroker.get('atoms/RoomAvatar');
+var sdk = require('matrix-react-sdk')
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -58,6 +57,7 @@ module.exports = React.createClass({
             nameCell = <div className="mx_RoomTile_name">{name}</div>;
         }
         */
+        var RoomAvatar = sdk.getComponent('atoms.RoomAvatar');
         return (
             <div className={classes} onClick={this.onClick}>
                 <div className="mx_RoomTile_avatar">

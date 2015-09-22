@@ -20,9 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
 var Modal = require("../../../../src/Modal");
-var ComponentBroker = require('../../../../src/ComponentBroker');
-var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
-var RoomHeader = ComponentBroker.get('molecules/RoomHeader');
+var sdk = require('matrix-react-sdk')
 var dis = require("../../../../src/dispatcher");
 
 var Loader = require("react-loader");
@@ -44,6 +42,7 @@ module.exports = React.createClass({
             if (err) {
                 self.setState({ loading: false });                
                 console.error("Failed to get publicRooms: %s", JSON.stringify(err));
+                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Failed to get public room list",
                     description: err.message
@@ -128,6 +127,7 @@ module.exports = React.createClass({
             );
         }
 
+        var RoomHeader = sdk.getComponent('molecules.RoomHeader');
         return (
             <div className="mx_RoomDirectory">
                 <RoomHeader simpleHeader="Public Rooms" />

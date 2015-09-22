@@ -17,9 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var ComponentBroker = require('../../../../src/ComponentBroker');
-
-var MemberList = ComponentBroker.get('organisms/MemberList');
+var sdk = require('matrix-react-sdk')
 
 module.exports = React.createClass({
     displayName: 'RightPanel',
@@ -47,6 +45,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var MemberList = sdk.getComponent('organisms.MemberList');
         var buttonGroup;
         var panel;
         if (this.props.roomId) {

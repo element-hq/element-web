@@ -21,21 +21,7 @@ var React = require('react');
 var classNames = require("classnames");
 
 var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
-var ComponentBroker = require('../../../../src/ComponentBroker');
-
-var MessageTimestamp = ComponentBroker.get('atoms/MessageTimestamp');
-var SenderProfile = ComponentBroker.get('molecules/SenderProfile');
-var MemberAvatar = ComponentBroker.get('atoms/MemberAvatar');
-
-var UnknownMessageTile = ComponentBroker.get('molecules/UnknownMessageTile');
-
-var tileTypes = {
-    'm.text': ComponentBroker.get('molecules/MTextTile'),
-    'm.notice': ComponentBroker.get('molecules/MNoticeTile'),
-    'm.emote': ComponentBroker.get('molecules/MEmoteTile'),
-    'm.image': ComponentBroker.get('molecules/MImageTile'),
-    'm.file': ComponentBroker.get('molecules/MFileTile')
-};
+var sdk = require('matrix-react-sdk')
 
 var MessageTileController = require('matrix-react-sdk/lib/controllers/molecules/MessageTile')
 
@@ -44,6 +30,20 @@ module.exports = React.createClass({
     mixins: [MessageTileController],
 
     render: function() {
+        var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
+        var SenderProfile = sdk.getComponent('molecules.SenderProfile');
+        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+
+        var UnknownMessageTile = sdk.getComponent('molecules.UnknownMessageTile');
+
+        var tileTypes = {
+            'm.text': sdk.getComponent('molecules.MTextTile'),
+            'm.notice': sdk.getComponent('molecules.MNoticeTile'),
+            'm.emote': sdk.getComponent('molecules.MEmoteTile'),
+            'm.image': sdk.getComponent('molecules.MImageTile'),
+            'm.file': sdk.getComponent('molecules.MFileTile')
+        };
+
         var content = this.props.mxEvent.getContent();
         var msgtype = content.msgtype;
         var TileType = UnknownMessageTile;
