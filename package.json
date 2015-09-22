@@ -8,18 +8,16 @@
     "url": "https://github.com/vector-im/vector-web"
   },
   "license": "Apache-2.0",
-  "main": "src/index.js",
   "style": "bundle.css",
   "scripts": {
-    "build:skins": "jsx skins build/skins",
-    "build:logic": "jsx src build/src",
-    "build:js": "npm run build:skins && npm run build:logic",
-    "start:js": "jsx -w skins/base/views/ build --source-map-inline",
-    "build:css": "catw 'skins/base/css/**/*.css' -o bundle.css -c uglifycss --no-watch",
-    "start:css": "catw 'skins/base/css/**/*.css' -o bundle.css -v",
-    "build": "npm run build:js && npm run build:css",
-    "start": "parallelshell \"npm run start:js\" \"npm run start:css\"",
-    "prepublish": "npm run build"
+    "reskindex": "reskindex base -h src/skins/base/header",
+    "build": "NODE_ENV=production browserify --ignore olm -t reactify src/index.js | uglifyjs -c -m -o vector/bundle.js",
+    "start": "parallelshell 'watchify --ignore olm -v -d -t reactify src/index.js -o vector/bundle.js' 'npm run start:skins:css' 'http-server vector'",
+    "build:skins:js": "babel src/skins -d lib/skins --source-maps",
+    "build:skins:css": "catw 'src/skins/base/css/**/*.css' -o vector/bundle.css -c uglifycss --no-watch",
+    "start:skins:css": "catw 'src/skins/base/css/**/*.css' -o vector/bundle.css",
+    "clean": "rimraf lib vector/bundle.css vector/bundle.js",
+    "prepublish": "npm run build:skins"
   },
   "dependencies": {
     "matrix-react-sdk": "^0.0.1",
@@ -32,9 +30,11 @@
     "linkifyjs": "^2.0.0-beta.4"
   },
   "devDependencies": {
+    "babel": "^5.8.23",
     "catw": "^1.0.1",
     "parallelshell": "^1.2.0",
     "react-tools": "^0.13.3",
+    "rimraf": "^2.4.3",
     "uglifycss": "0.0.15"
   }
 }
