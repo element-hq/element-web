@@ -61,7 +61,9 @@ module.exports = {
         function updateUserState(event, user) {
             var tile = self.refs[user.userId];
             if (tile) {
-                tile.forceUpdate();
+                // update the whole list to get the order right, not just this cell...
+                self.forceUpdate();
+                // tile.forceUpdate();
             }
         }
         MatrixClientPeg.get().on("User.presence", updateUserState);

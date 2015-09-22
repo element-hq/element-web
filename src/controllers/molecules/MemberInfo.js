@@ -16,8 +16,6 @@ limitations under the License.
 
 /*
  * State vars:
- * 'presence' : string (online|offline|unavailable etc)
- * 'active' : number (ms ago; can be -1)
  * 'can': {
  *   kick: boolean,
  *   ban: boolean,
@@ -34,56 +32,19 @@ var dis = require("../../dispatcher");
 var Modal = require("../../Modal");
 var ComponentBroker = require('../../ComponentBroker');
 var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
+var QuestionDialog = ComponentBroker.get("organisms/QuestionDialog");
+var Loader = require("react-loader");
 
 module.exports = {
     componentDidMount: function() {
         var self = this;
-        // listen for presence changes
-        function updateUserState(event, user) {
-            if (!self.props.member) { return; }
-
-            if (user.userId === self.props.member.userId) {
-                self.setState({
-                    presence: user.presence,
-                    active: user.lastActiveAgo
-                });
-            }
-        }
-        MatrixClientPeg.get().on("User.presence", updateUserState);
-        this.userPresenceFn = updateUserState;
-
-        // listen for power level changes
-        function updatePowerLevel(event, member) {
-            if (!self.props.member) { return; }
-
-            if (member.roomId !== self.props.member.roomId) {
-                return;
-            }
-            // only interested in changes to us or them
-            var myUserId = MatrixClientPeg.get().credentials.userId;
-            if ([myUserId, self.props.member.userId].indexOf(member.userId) === -1) {
-                return;
-            }
-            self.setState(self._calculateOpsPermissions());
-        }
-        MatrixClientPeg.get().on("RoomMember.powerLevel", updatePowerLevel);
-        this.updatePowerLevelFn = updatePowerLevel;
 
         // work out the current state
         if (this.props.member) {
             var usr = MatrixClientPeg.get().getUser(this.props.member.userId) || {};
             var memberState = this._calculateOpsPermissions();
-            memberState.presence = usr.presence || "offline";
-            memberState.active = usr.lastActiveAgo || -1;
             this.setState(memberState);
         }
-    },
-
-    componentWillUnmount: function() {
-        MatrixClientPeg.get().removeListener("User.presence", this.userPresenceFn);
-        MatrixClientPeg.get().removeListener(
-            "RoomMember.powerLevel", this.updatePowerLevelFn
-        );
     },
 
     onKick: function() {
@@ -100,6 +61,7 @@ module.exports = {
                 description: err.message
             });
         });
+        this.props.onFinished();
     },
 
     onBan: function() {
@@ -116,6 +78,7 @@ module.exports = {
                 description: err.message
             });
         });
+        this.props.onFinished();
     },
 
     onMuteToggle: function() {
@@ -124,12 +87,14 @@ module.exports = {
         var self = this;
         var room = MatrixClientPeg.get().getRoom(roomId);
         if (!room) {
+            this.props.onFinished();
             return;
         }
         var powerLevelEvent = room.currentState.getStateEvents(
             "m.room.power_levels", ""
         );
         if (!powerLevelEvent) {
+            this.props.onFinished();
             return;
         }
         var isMuted = this.state.muted;
@@ -157,6 +122,7 @@ module.exports = {
                 description: err.message
             });
         });
+        this.props.onFinished();        
     },
 
     onModToggle: function() {
@@ -164,16 +130,19 @@ module.exports = {
         var target = this.props.member.userId;
         var room = MatrixClientPeg.get().getRoom(roomId);
         if (!room) {
+            this.props.onFinished();
             return;
         }
         var powerLevelEvent = room.currentState.getStateEvents(
             "m.room.power_levels", ""
         );
         if (!powerLevelEvent) {
+            this.props.onFinished();
             return;
         }
         var me = room.getMember(MatrixClientPeg.get().credentials.userId);
         if (!me) {
+            this.props.onFinished();
             return;
         }
         var defaultLevel = powerLevelEvent.getContent().users_default;
@@ -191,6 +160,7 @@ module.exports = {
                 description: err.message
             });
         });
+        this.props.onFinished();        
     },
 
     onChatClick: function() {
@@ -240,12 +210,40 @@ module.exports = {
                 );
             });
         }
+        this.props.onFinished();                
+    },
+
+    // FIXME: this is horribly duplicated with MemberTile's onLeaveClick.
+    // Not sure what the right solution to this is.
+    onLeaveClick: function() {
+        var roomId = this.props.member.roomId;
+        Modal.createDialog(QuestionDialog, {
+            title: "Leave room",
+            description: "Are you sure you want to leave the room?",
+            onFinished: function(should_leave) {
+                if (should_leave) {
+                    var d = MatrixClientPeg.get().leave(roomId);
+
+                    var modal = Modal.createDialog(Loader);
+
+                    d.then(function() {
+                        modal.close();
+                        dis.dispatch({action: 'view_next_room'});
+                    }, function(err) {
+                        modal.close();
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Failed to leave room",
+                            description: err.toString()
+                        });
+                    });
+                }
+            }
+        });
+        this.props.onFinished();        
     },
 
     getInitialState: function() {
         return {
-            presence: "offline",
-            active: -1,
             can: {
                 kick: false,
                 ban: false,
