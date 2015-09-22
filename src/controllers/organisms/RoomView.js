@@ -25,7 +25,7 @@ var sdk = require('../../index');
 var dis = require("../../dispatcher");
 
 var PAGINATE_SIZE = 20;
-var INITIAL_SIZE = 100;
+var INITIAL_SIZE = 20;
 
 module.exports = {
     getInitialState: function() {
