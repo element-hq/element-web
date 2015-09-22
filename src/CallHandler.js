@@ -53,10 +53,9 @@ limitations under the License.
  * }
  */
 
-var MatrixClientPeg = require("./MatrixClientPeg");
-var Modal = require("./Modal");
-var ComponentBroker = require('./ComponentBroker');
-var ErrorDialog = ComponentBroker.get("organisms/ErrorDialog");
+var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
+var Modal = require("matrix-react-sdk/lib/Modal");
+var sdk = require('matrix-react-sdk');
 var ConferenceCall = require("./ConferenceHandler").ConferenceCall;
 var ConferenceHandler = require("./ConferenceHandler");
 var Matrix = require("matrix-js-sdk");
@@ -118,6 +117,7 @@ function _setCallListeners(call) {
             _setCallState(call, call.roomId, "busy");
             pause("ringbackAudio");
             play("busyAudio");
+            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Call Timeout",
                 description: "The remote side failed to pick up."

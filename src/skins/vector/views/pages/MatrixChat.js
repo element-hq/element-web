@@ -25,7 +25,7 @@ var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/Matri
 var Loader = require("react-loader");
 var classNames = require("classnames");
 
-var dis = require("../../../../src/dispatcher");
+var dis = require('matrix-react-sdk/lib/dispatcher');
 
 
 module.exports = React.createClass({

@@ -18,12 +18,12 @@ limitations under the License.
 
 var NotifierController = require('matrix-react-sdk/lib/controllers/organisms/Notifier')
 
-var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
-var TextForEvent = require("../../../../src/TextForEvent");
-var extend = require("../../../../src/extend");
-var dis = require("../../../../src/dispatcher");
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
+var extend = require('matrix-react-sdk/lib/extend');
+var dis = require('matrix-react-sdk/lib/dispatcher');
 
-var Avatar = require("../../../../src/Avatar");
+var Avatar = require('../../../../Avatar');
 
 
 var NotifierView = {

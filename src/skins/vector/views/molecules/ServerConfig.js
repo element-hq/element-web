@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var Modal = require('../../../../src/Modal');
+var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk')
 
 var ServerConfigController = require('matrix-react-sdk/lib/controllers/molecules/ServerConfig')

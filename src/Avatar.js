@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 
-var MatrixClientPeg = require('./MatrixClientPeg');
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 module.exports = {
     avatarUrlForMember: function(member, width, height, resizeMethod) {

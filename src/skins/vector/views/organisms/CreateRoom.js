@@ -22,7 +22,7 @@ var CreateRoomController = require('matrix-react-sdk/lib/controllers/organisms/C
 
 var sdk = require('matrix-react-sdk')
 
-var PresetValues = require('../../../../src/controllers/atoms/create_room/Presets').Presets;
+var PresetValues = require('matrix-react-sdk/lib/controllers/atoms/create_room/Presets').Presets;
 
 var Loader = require("react-loader");
 

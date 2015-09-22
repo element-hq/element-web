@@ -16,20 +16,5 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var classNames = require('classnames');
-
-var dis = require('matrix-react-sdk/lib/dispatcher');
-
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-
-module.exports = React.createClass({
-    displayName: 'ContextualMenu',
-
-    render: function() {
-        return (
-            <div className="mx_ContextualMenu">
-            </div>
-        );
-    }
-});
+module.exports = {
+};

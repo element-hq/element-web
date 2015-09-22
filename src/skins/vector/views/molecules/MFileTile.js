@@ -20,7 +20,7 @@ var React = require('react');
 
 var MFileTileController = require('matrix-react-sdk/lib/controllers/molecules/MFileTile')
 
-var MatrixClientPeg = require('../../../../src/MatrixClientPeg');
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 module.exports = React.createClass({
     displayName: 'MFileTile',

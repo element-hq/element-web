@@ -15,13 +15,13 @@ limitations under the License.
 
 var React = require('react');
 var sdk = require('matrix-react-sdk')
-var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 var UserSettingsController = require('matrix-react-sdk/lib/controllers/organisms/UserSettings')
 
 var Loader = require("react-loader");
 
-var Modal = require("../../../../src/Modal");
+var Modal = require('matrix-react-sdk/lib/Modal');
 
 module.exports = React.createClass({
     displayName: 'UserSettings',

@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var MemberInfoController = require('matrix-react-sdk/lib/controllers/molecules/MemberInfo')
 
 module.exports = React.createClass({

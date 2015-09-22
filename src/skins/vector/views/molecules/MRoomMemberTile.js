@@ -20,9 +20,9 @@ var React = require('react');
 
 var MRoomMemberTileController = require('matrix-react-sdk/lib/controllers/molecules/MRoomMemberTile')
 
-var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk')
-var TextForEvent = require('../../../../src/TextForEvent');
+var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
 
 module.exports = React.createClass({
     displayName: 'MRoomMemberTile',

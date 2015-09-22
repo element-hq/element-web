@@ -18,10 +18,10 @@ limitations under the License.
 
 var React = require('react');
 
-var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk')
-var Modal = require("../../../../src/Modal");
-var ContextualMenu = require("../../../../src/ContextualMenu");
+var Modal = require('matrix-react-sdk/lib/Modal');
+var ContextualMenu = require('../../../../ContextualMenu');
 var MemberTileController = require('matrix-react-sdk/lib/controllers/molecules/MemberTile')
 
 // The Lato WOFF doesn't include sensible combining diacritics, so Chrome chokes on rendering them.

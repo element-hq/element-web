@@ -19,9 +19,9 @@ limitations under the License.
 var React = require('react');
 var classNames = require('classnames');
 
-var dis = require("../../../../src/dispatcher");
+var dis = require('matrix-react-sdk/lib/dispatcher');
 
-var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 module.exports = React.createClass({
     displayName: 'BottomLeftMenu',

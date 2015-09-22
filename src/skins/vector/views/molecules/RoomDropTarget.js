@@ -21,7 +21,7 @@ var classNames = require('classnames');
 
 //var RoomDropTargetController = require('matrix-react-sdk/lib/controllers/molecules/RoomDropTargetController')
 
-var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 module.exports = React.createClass({
     displayName: 'RoomDropTarget',

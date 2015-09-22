@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 
 var sdk = require('matrix-react-sdk')
-var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 var Loader = require("react-loader");
 

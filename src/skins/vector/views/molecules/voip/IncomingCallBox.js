@@ -17,9 +17,9 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var MatrixClientPeg = require("../../../../../src/MatrixClientPeg");
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var IncomingCallBoxController = require(
-    "../../../../../src/controllers/molecules/voip/IncomingCallBox"
+    "matrix-react-sdk/lib/controllers/molecules/voip/IncomingCallBox"
 );
 
 module.exports = React.createClass({

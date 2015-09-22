@@ -21,7 +21,7 @@ var classNames = require('classnames');
 
 var RoomTileController = require('matrix-react-sdk/lib/controllers/molecules/RoomTile')
 
-var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 var sdk = require('matrix-react-sdk')
 

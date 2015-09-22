@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
-var ImageViewController = require('matrix-react-sdk/lib/controllers/atoms/ImageView')
+var ImageViewController = require('../../../../controllers/atoms/ImageView')
 
 module.exports = React.createClass({
     displayName: 'ImageView',

@@ -21,8 +21,8 @@ var filesize = require('filesize');
 
 var MImageTileController = require('matrix-react-sdk/lib/controllers/molecules/MImageTile')
 
-var MatrixClientPeg = require('../../../../src/MatrixClientPeg');
-var Modal = require('../../../../src/Modal');
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk')
 
 module.exports = React.createClass({
