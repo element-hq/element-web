@@ -33,7 +33,6 @@ module.exports = React.createClass({
     },
 
     onClickDiv: function() {
-        console.log("onClickDiv triggered");
         this.setState({
             phase: this.Phases.Edit,
         })

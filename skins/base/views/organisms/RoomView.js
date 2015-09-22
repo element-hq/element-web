@@ -72,7 +72,7 @@ module.exports = React.createClass({
         if (!this.state.numUnreadMessages) {
             return "";
         }
-        return this.state.numUnreadMessages + " new messages";
+        return this.state.numUnreadMessages + " new message" + (this.state.numUnreadMessages > 1 ? "s" : "");
     },
 
     scrollToBottom: function() {

@@ -14,3 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+'use strict';
+
+var React = require('react');
+var classNames = require('classnames');
+
+var dis = require("../../../../src/dispatcher");
+
+var MatrixClientPeg = require("../../../../src/MatrixClientPeg");
+
+module.exports = React.createClass({
+    displayName: 'ContextualMenu',
+
+    render: function() {
+        return (
+            <div className="mx_ContextualMenu">
+            </div>
+        );
+    }
+});

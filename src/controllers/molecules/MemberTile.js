@@ -25,14 +25,23 @@ var Loader = require("react-loader");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
 module.exports = {
-    onClick: function() {
-        dis.dispatch({
-            action: 'view_user',
-            user_id: this.props.member.userId
-        });
+    // onClick: function() {
+    //     dis.dispatch({
+    //         action: 'view_user',
+    //         user_id: this.props.member.userId
+    //     });
+    // },
+
+    getInitialState: function() {
+        return {
+            hover: false,
+            menu: false,
+        }
     },
 
-    onLeaveClick: function() {
+    onLeaveClick: function(ev) {
+        ev.stopPropagation();
+        ev.preventDefault();
         var roomId = this.props.member.roomId;
         Modal.createDialog(QuestionDialog, {
             title: "Leave room",
@@ -56,5 +65,5 @@ module.exports = {
                 }
             }
         });
-    }
+    }    
 };
