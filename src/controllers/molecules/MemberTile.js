@@ -28,13 +28,6 @@ module.exports = {
         return {};
     },
 
-    onClick: function() {
-        dis.dispatch({
-            action: 'view_user',
-            user_id: this.props.member.userId
-        });
-    },
-
     onLeaveClick: function() {
         var QuestionDialog = sdk.getComponent("organisms.QuestionDialog");
 
