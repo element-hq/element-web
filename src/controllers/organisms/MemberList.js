@@ -48,6 +48,8 @@ module.exports = {
 
     componentDidMount: function() {
         var self = this;
+
+        // Lazy-load in more than the first N members
         setTimeout(function() {
             if (!self.isMounted()) return;
             self.setState({
@@ -59,13 +61,23 @@ module.exports = {
         // member tile and re-render it. This is more efficient than every tile
         // evar attaching their own listener.
         function updateUserState(event, user) {
+            // evil hack to track the age of this presence info.
+            // this should be removed once syjs-28 is resolved in the JS SDK itself.
+            user.lastPresenceTs = Date.now();
+
             var tile = self.refs[user.userId];
+
+            console.log("presence event " + JSON.stringify(event) + " user = " + user + " tile = " + tile);
+
             if (tile) {
-                // update the whole list to get the order right, not just this cell...
-                self.forceUpdate();
-                // tile.forceUpdate();
+                self._updateList(); // reorder the membership list
+                self.forceUpdate(); // FIXME: is the a more efficient way of reordering with react?
+                // XXX: do we even need to do this, or is it done by the main list?
+                tile.forceUpdate();
             }
         }
+        // FIXME: we should probably also reset 'lastActiveAgo' to zero whenever
+        // we see a typing notif from a user, as we don't get presence updates for those.
         MatrixClientPeg.get().on("User.presence", updateUserState);
         this.userPresenceFn = updateUserState;
     },
@@ -136,16 +148,22 @@ module.exports = {
         var all_members = room.currentState.members;
         var all_user_ids = Object.keys(all_members);
 
+        // XXX: dirty hack until SYJS-28 is fixed
+        all_user_ids.map(function(userId) {
+            if (all_members[userId].user && !all_members[userId].user.lastPresenceTs) {
+                all_members[userId].user.lastPresenceTs = Date.now();
+            }
+        });
+
         all_user_ids.sort(function(userIdA, userIdB) {
             var userA = all_members[userIdA].user;
             var userB = all_members[userIdB].user;
 
-            var latA = userA ? userA.lastActiveAgo || Number.MAX_VALUE : Number.MAX_VALUE;
-            var latB = userB ? userB.lastActiveAgo || Number.MAX_VALUE : Number.MAX_VALUE;
+            var latA = userA ? (userA.lastPresenceTs - (userA.lastActiveAgo || userA.lastPresenceTs)) : 0;
+            var latB = userB ? (userB.lastPresenceTs - (userB.lastActiveAgo || userB.lastPresenceTs)) : 0;
 
-            return latA - latB;
+            return latB - latA;
         });
-
 
         var to_display = {};
         var count = 0;
@@ -154,6 +172,8 @@ module.exports = {
             var m = all_members[user_id];
 
             if (m.membership == 'join' || m.membership == 'invite') {
+                // XXX: this is evil, and relies on the fact that Object.keys() iterates
+                // over the keys of a dict in insertion order (if those keys are strings)
                 to_display[user_id] = m;
                 ++count;
             }
