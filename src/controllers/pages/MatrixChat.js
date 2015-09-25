@@ -39,7 +39,6 @@ module.exports = {
         var s = {
             logged_in: !!(MatrixClientPeg.get() && MatrixClientPeg.get().credentials),
             ready: false,
-            aux_panel: null,
         };
         if (s.logged_in) {
             if (MatrixClientPeg.get().getRooms().length) {
