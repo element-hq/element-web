@@ -18,7 +18,6 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var q = require('q');
 
 module.exports = {
     DialogContainerId: "mx_Dialog_Container",

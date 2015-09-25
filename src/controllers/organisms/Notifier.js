@@ -52,7 +52,6 @@ module.exports = {
     setEnabled: function(enable, callback) {
         if(enable) {
             if (!this.havePermission()) {
-                var self = this;
                 global.Notification.requestPermission(function() {
                     if (callback) {
                         callback();

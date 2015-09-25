@@ -346,9 +346,6 @@ module.exports = {
                 {
                     continuation = true;
                 }
-
-                var ts0 = this.state.room.timeline[i - 1].getTs();
-                var ts1 = this.state.room.timeline[i].getTs();
             }
             if (!TileType) continue;
             ret.unshift(

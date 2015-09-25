@@ -34,11 +34,8 @@ var Loader = require("react-loader");
 
 module.exports = {
     componentDidMount: function() {
-        var self = this;
-
         // work out the current state
         if (this.props.member) {
-            var usr = MatrixClientPeg.get().getUser(this.props.member.userId) || {};
             var memberState = this._calculateOpsPermissions();
             this.setState(memberState);
         }
@@ -48,7 +45,6 @@ module.exports = {
         var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
-        var self = this;
         MatrixClientPeg.get().kick(roomId, target).done(function() {
             // NO-OP; rely on the m.room.member event coming down else we could
             // get out of sync if we force setState here!
@@ -66,7 +62,6 @@ module.exports = {
         var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
-        var self = this;
         MatrixClientPeg.get().ban(roomId, target).done(function() {
             // NO-OP; rely on the m.room.member event coming down else we could
             // get out of sync if we force setState here!
@@ -84,7 +79,6 @@ module.exports = {
         var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
-        var self = this;
         var room = MatrixClientPeg.get().getRoom(roomId);
         if (!room) {
             this.props.onFinished();

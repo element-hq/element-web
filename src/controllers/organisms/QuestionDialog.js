@@ -26,7 +26,6 @@ module.exports = {
     },
 
     getDefaultProps: function() {
-        var self = this;
         return {
             title: "",
             description: "",

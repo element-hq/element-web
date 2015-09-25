@@ -15,9 +15,7 @@ limitations under the License.
 */
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
-var React = require("react");
 var q = require('q');
-var dis = require("../../dispatcher");
 var version = require('../../../package.json').version;
 
 module.exports = {

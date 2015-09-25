@@ -14,12 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-var React = require('react');
-
 var MatrixClientPeg = require("../../MatrixClientPeg");
-var Matrix = require("matrix-js-sdk");
 var dis = require("../../dispatcher");
 
 module.exports = {
@@ -194,9 +189,7 @@ module.exports = {
             hs_url: this.getHsUrl(),
             is_url: this.getIsUrl()
         });
-        var cli = MatrixClientPeg.get();
         this.setState({busy: true});
-        var self = this;
 
         this.tryRegister();
     },

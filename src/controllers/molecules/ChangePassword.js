@@ -19,8 +19,6 @@ limitations under the License.
 var React = require('react');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
-var dis = require("../../dispatcher");
-
 module.exports = {
     propTypes: {
         onFinished: React.PropTypes.func,

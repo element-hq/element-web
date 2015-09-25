@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var MatrixClientPeg = require('./MatrixClientPeg');
-
 module.exports = {
     /**
      * Given a room object, return the canonical alias for it
