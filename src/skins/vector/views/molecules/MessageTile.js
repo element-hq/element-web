@@ -20,7 +20,6 @@ var React = require('react');
 
 var classNames = require("classnames");
 
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk')
 
 var MessageTileController = require('matrix-react-sdk/lib/controllers/molecules/MessageTile')

@@ -52,7 +52,6 @@ module.exports = React.createClass({
     },
 
     onClick: function(ev) {
-        var ms = ev.getModifierState();
         if (ev.button == 0 && !ev.metaKey) {
             ev.preventDefault();
             var content = this.props.mxEvent.getContent();

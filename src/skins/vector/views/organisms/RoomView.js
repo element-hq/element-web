@@ -23,7 +23,6 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk')
 var classNames = require("classnames");
 var filesize = require('filesize');
-var q = require('q');
 
 var RoomViewController = require('matrix-react-sdk/lib/controllers/organisms/RoomView')
 

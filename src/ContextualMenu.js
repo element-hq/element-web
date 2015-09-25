@@ -18,7 +18,6 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var q = require('q');
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and

@@ -18,7 +18,6 @@ limitations under the License.
 
 var React = require('react');
 
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk')
 var CallViewController = require(
     "matrix-react-sdk/lib/controllers/molecules/voip/CallView"

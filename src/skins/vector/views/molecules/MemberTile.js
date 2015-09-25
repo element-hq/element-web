@@ -20,7 +20,6 @@ var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk')
-var Modal = require('matrix-react-sdk/lib/Modal');
 var ContextualMenu = require('../../../../ContextualMenu');
 var MemberTileController = require('matrix-react-sdk/lib/controllers/molecules/MemberTile')
 

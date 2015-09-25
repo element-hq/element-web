@@ -73,18 +73,6 @@ module.exports = React.createClass({
         });
     },
 
-    getUserIdSuffix: function() {
-        return '';
-        var actualHsUrl = document.createElement('a');
-        actualHsUrl.href = this.getHsUrl();
-        var defaultHsUrl = document.createElement('a');
-        defaultHsUrl.href = this.DEFAULT_HS_URL;
-        if (actualHsUrl.host == defaultHsUrl.host) {
-            return ':matrix.org';
-        }
-        return '';
-    },
-
     onServerUrlChanged: function(newUrl) {
         this.customHsUrl = this.refs.serverConfig.getHsUrl();
         this.customIsUrl = this.refs.serverConfig.getIsUrl();
@@ -101,7 +89,7 @@ module.exports = React.createClass({
                     <div>
                         <form onSubmit={this.onInitialStageSubmit}>
                         <input className="mx_Login_field" type="text" ref="email" placeholder="Email address" defaultValue={this.savedParams.email} /><br />
-                        <input className="mx_Login_field" type="text" ref="username" placeholder="User name" defaultValue={this.savedParams.username} />{this.getUserIdSuffix()}<br />
+                        <input className="mx_Login_field" type="text" ref="username" placeholder="User name" defaultValue={this.savedParams.username} /><br />
                         <input className="mx_Login_field" type="password" ref="password" placeholder="Password" defaultValue={this.savedParams.password} /><br />
                         <input className="mx_Login_field" type="password" ref="confirmPassword" placeholder="Confirm password" defaultValue={this.savedParams.confirmPassword} /><br />
 

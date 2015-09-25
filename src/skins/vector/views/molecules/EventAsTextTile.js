@@ -18,7 +18,6 @@ limitations under the License.
 
 var React = require('react');
 
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var EventAsTextTileController = require('matrix-react-sdk/lib/controllers/molecules/EventAsTextTile')
 var sdk = require('matrix-react-sdk')
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');

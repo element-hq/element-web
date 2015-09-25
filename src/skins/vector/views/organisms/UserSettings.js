@@ -42,6 +42,7 @@ module.exports = React.createClass({
     },
 
     changePassword: function() {
+        var ChangePassword = sdk.getComponent('molecules/ChangePassword');
         Modal.createDialog(ChangePassword);
     },
 
@@ -61,7 +62,6 @@ module.exports = React.createClass({
             case this.Phases.Display:
                 var EditableText = sdk.getComponent('atoms/EditableText');
                 var EnableNotificationsButton = sdk.getComponent('atoms/EnableNotificationsButton');
-                var ChangePassword = sdk.getComponent('molecules/ChangePassword');
                 return (
                     <div className="mx_UserSettings">
                         <div className="mx_UserSettings_User">

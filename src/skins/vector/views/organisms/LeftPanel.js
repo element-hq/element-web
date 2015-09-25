@@ -26,7 +26,6 @@ module.exports = React.createClass({
         var RoomList = sdk.getComponent('organisms.RoomList');
         var BottomLeftMenu = sdk.getComponent('molecules.BottomLeftMenu');
         var IncomingCallBox = sdk.getComponent('molecules.voip.IncomingCallBox');
-        var RoomCreate = sdk.getComponent('molecules.RoomCreate');
 
         return (
             <aside className="mx_LeftPanel">

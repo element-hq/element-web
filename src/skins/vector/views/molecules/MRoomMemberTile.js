@@ -20,7 +20,6 @@ var React = require('react');
 
 var MRoomMemberTileController = require('matrix-react-sdk/lib/controllers/molecules/MRoomMemberTile')
 
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk')
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
 

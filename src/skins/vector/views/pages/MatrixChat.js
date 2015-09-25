@@ -23,7 +23,6 @@ var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/Matri
 
 // should be atomised
 var Loader = require("react-loader");
-var classNames = require("classnames");
 
 var dis = require('matrix-react-sdk/lib/dispatcher');
 

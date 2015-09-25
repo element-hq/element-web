@@ -37,13 +37,10 @@ module.exports = {
         switch (total % 3) {
             case 0:
                 return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADRJREFUeNrszQENADAIACB9QjNbxSKP4eagAFnTseHFErFYLBaLxWKxWCwWi8Vi8cX4CzAABSwCRWJw31gAAAAASUVORK5CYII=";
-                break;
             case 1:
                 return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADRJREFUeNrszQENADAIACB9chOaxgCP4eagAFk9seHFErFYLBaLxWKxWCwWi8Vi8cX4CzAAtKMCks/JG8MAAAAASUVORK5CYII=";
-                break;
             case 2:
                 return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADRJREFUeNrszQENADAIACB9YzNayQCP4eagADldseHFErFYLBaLxWKxWCwWi8Vi8cX4CzAAyiACeHwPiu4AAAAASUVORK5CYII=";
-                break;
         }
     }
 }
