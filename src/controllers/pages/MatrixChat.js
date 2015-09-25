@@ -217,30 +217,45 @@ module.exports = {
         var self = this;
         cli.on('syncComplete', function() {
             self.sdkReady = true;
-            if (!self.state.currentRoom) {
-                var firstRoom = null;
-                if (cli.getRooms() && cli.getRooms().length) {
-                    firstRoom = RoomListSorter.mostRecentActivityFirst(
-                        cli.getRooms()
-                    )[0].roomId;
-                    self.setState({ready: true, currentRoom: firstRoom, page_type: self.PageTypes.RoomView});
-                } else {
-                    self.setState({ready: true, page_type: self.PageTypes.RoomDirectory});
-                }
+
+            var defer = q.defer();
+            if (self.starting_room_alias) {
+                MatrixClientPeg.get().getRoomIdForAlias(self.starting_room_alias).done(function(result) {
+                    self.setState({currentRoom: result.room_id});
+                    defer.resolve();
+                }, function(error) {
+                    defer.resolve();
+                });
             } else {
-                self.setState({ready: true, currentRoom: self.state.currentRoom});
+                defer.resolve();
             }
 
-            // we notifyNewScreen now because now the room will actually be displayed,
-            // and (mostly) now we can get the correct alias.
-            var presentedId = self.state.currentRoom;
-            var room = MatrixClientPeg.get().getRoom(self.state.currentRoom);
-            if (room) {
-                var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
-                if (theAlias) presentedId = theAlias;
-            }
-            self.notifyNewScreen('room/'+presentedId);
-            dis.dispatch({action: 'focus_composer'});
+            defer.promise.done(function() {
+                if (!self.state.currentRoom) {
+                    var firstRoom = null;
+                    if (cli.getRooms() && cli.getRooms().length) {
+                        firstRoom = RoomListSorter.mostRecentActivityFirst(
+                            cli.getRooms()
+                        )[0].roomId;
+                        self.setState({ready: true, currentRoom: firstRoom, page_type: self.PageTypes.RoomView});
+                    } else {
+                        self.setState({ready: true, page_type: self.PageTypes.RoomDirectory});
+                    }
+                } else {
+                    self.setState({ready: true, page_type: self.PageTypes.RoomView});
+                }
+
+                // we notifyNewScreen now because now the room will actually be displayed,
+                // and (mostly) now we can get the correct alias.
+                var presentedId = self.state.currentRoom;
+                var room = MatrixClientPeg.get().getRoom(self.state.currentRoom);
+                if (room) {
+                    var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
+                    if (theAlias) presentedId = theAlias;
+                }
+                self.notifyNewScreen('room/'+presentedId);
+                dis.dispatch({action: 'focus_composer'});
+            });
         });
         cli.on('Call.incoming', function(call) {
             dis.dispatch({
@@ -296,26 +311,14 @@ module.exports = {
             });
         } else if (screen.indexOf('room/') == 0) {
             var roomString = screen.split('/')[1];
-            var defer = q.defer();
             if (roomString[0] == '#') {
-                var self = this;
-                MatrixClientPeg.get().getRoomIdForAlias(roomString).done(function(result) {
-                    if (self.sdkReady) self.setState({ready: true});
-                    defer.resolve(result.room_id);
-                }, function() {
-                    if (self.sdkReady) self.setState({ready: true});
-                    defer.resolve(null);
-                });
-                this.setState({ready: false});
+                this.starting_room_alias = roomString;
             } else {
-                defer.resolve(roomString);
-            }
-            defer.promise.done(function(roomId) {
                 dis.dispatch({
                     action: 'view_room',
-                    room_id: roomId
+                    room_id: roomString
                 });
-            });
+            }
         }
     },
 
