@@ -31,6 +31,7 @@
     "react-loader": "^1.4.0"
   },
   "//deps": "The loader packages are here because webpack in a project that depends on us needs them in this package's node_modules folder",
+  "//depsbuglink": "https://github.com/webpack/webpack/issues/1472",
   "devDependencies": {
     "babel": "^5.8.23",
     "rimraf": "^2.4.3",
