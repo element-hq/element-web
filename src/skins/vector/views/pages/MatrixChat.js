@@ -40,18 +40,18 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        if (this.state.logged_in && this.state.ready) {
-            var LeftPanel = sdk.getComponent('organisms.LeftPanel');
-            var RoomView = sdk.getComponent('organisms.RoomView');
-            var RightPanel = sdk.getComponent('organisms.RightPanel');
-            var Login = sdk.getComponent('templates.Login');
-            var UserSettings = sdk.getComponent('organisms.UserSettings');
-            var Register = sdk.getComponent('templates.Register');
-            var CreateRoom = sdk.getComponent('organisms.CreateRoom');
-            var RoomDirectory = sdk.getComponent('organisms.RoomDirectory');
-            var MatrixToolbar = sdk.getComponent('molecules.MatrixToolbar');
-            var Notifier = sdk.getComponent('organisms.Notifier');
+        var LeftPanel = sdk.getComponent('organisms.LeftPanel');
+        var RoomView = sdk.getComponent('organisms.RoomView');
+        var RightPanel = sdk.getComponent('organisms.RightPanel');
+        var Login = sdk.getComponent('templates.Login');
+        var UserSettings = sdk.getComponent('organisms.UserSettings');
+        var Register = sdk.getComponent('templates.Register');
+        var CreateRoom = sdk.getComponent('organisms.CreateRoom');
+        var RoomDirectory = sdk.getComponent('organisms.RoomDirectory');
+        var MatrixToolbar = sdk.getComponent('molecules.MatrixToolbar');
+        var Notifier = sdk.getComponent('organisms.Notifier');
 
+        if (this.state.logged_in && this.state.ready) {
             var page_element;
             var right_panel = "";
 
