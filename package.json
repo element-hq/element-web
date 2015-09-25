@@ -30,8 +30,11 @@
     "react": "^0.13.3",
     "react-loader": "^1.4.0"
   },
+  "//deps": "The loader packages are here because webpack in a project that depends on us needs them in this package's node_modules folder",
   "devDependencies": {
     "babel": "^5.8.23",
-    "rimraf": "^2.4.3"
+    "rimraf": "^2.4.3",
+    "json-loader": "^0.5.3",
+    "source-map-loader": "^0.1.5"
   }
 }
