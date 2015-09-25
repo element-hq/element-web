@@ -18,7 +18,7 @@
     "start:js": "webpack -w src/vector/index.js vector/bundle.js",
     "start:skins:css": "catw 'src/skins/vector/css/**/*.css' -o vector/bundle.css",
     "start": "parallelshell 'npm run start:js' 'npm run start:skins:css' 'http-server vector'",
-    "clean": "rimraf lib vector/bundle.css vector/bundle.js vector/bundle.js.map vector/bundle.webpack.js vector/bundle.webpack.js.map",
+    "clean": "rimraf lib vector/bundle.css vector/bundle.js vector/bundle.js.map",
     "prepublish": "npm run build:css && npm run build:compile"
   },
   "dependencies": {
