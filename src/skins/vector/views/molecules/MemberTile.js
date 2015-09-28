@@ -128,9 +128,9 @@ module.exports = React.createClass({
         if (this.state.hover || this.state.menu) {
             var presence;
             // FIXME: make presence data update whenever User.presence changes...
-            var active = this.props.member.user ? (this.props.member.user.lastActiveAgo || -1) : -1;
+            var active = this.props.member.user ? ((Date.now() - (this.props.member.user.lastPresenceTs - this.props.member.user.lastActiveAgo)) || -1) : -1;
             if (active >= 0) {
-                presence = <div className="mx_MemberTile_presence">{ this.getPrettyPresence(this.props.member.user) } for { this.getDuration(active) }</div>;
+                presence = <div className="mx_MemberTile_presence">{ this.getPrettyPresence(this.props.member.user) } { this.getDuration(active) } ago</div>;
             }
             else {
                 presence = <div className="mx_MemberTile_presence">{ this.getPrettyPresence(this.props.member.user) }</div>;
