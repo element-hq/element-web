@@ -59,23 +59,23 @@ if (localStorage) {
     }
 }
 
-module.exports = {
-    get: function() {
+class MatrixClient {
+    get() {
         return matrixClient;
-    },
+    }
 
-    unset: function() {
+    unset() {
         matrixClient = null;
-    },
+    }
 
-    replaceUsingUrls: function(hs_url, is_url) {
+    replaceUsingUrls(hs_url, is_url) {
         matrixClient = Matrix.createClient({
             baseUrl: hs_url,
             idBaseUrl: is_url
         });
-    },
+    }
 
-    replaceUsingAccessToken: function(hs_url, is_url, user_id, access_token) {
+    replaceUsingAccessToken(hs_url, is_url, user_id, access_token) {
         if (localStorage) {
             try {
                 localStorage.clear();
@@ -97,5 +97,9 @@ module.exports = {
             console.warn("No local storage available: can't persist session!");
         }
     }
-};
+}
 
+if (!global.mxMatrixClient) {
+    global.mxMatrixClient = new MatrixClient();
+}
+module.exports = global.mxMatrixClient;
