@@ -19,6 +19,19 @@ limitations under the License.
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 module.exports = {
+    avatarUrlForMember: function(member, width, height, resizeMethod) {
+        var url = MatrixClientPeg.get().getAvatarUrlForMember(
+            member,
+            width,
+            height,
+            resizeMethod
+        );
+        if (!url) {
+            url = this.defaultAvatarUrlForString(member.userId);
+        }
+        return url;
+    },
+
     defaultAvatarUrlForString: function(s) {
         var total = 0;
         for (var i = 0; i < s.length; ++i) {
