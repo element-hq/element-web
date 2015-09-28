@@ -45,7 +45,6 @@ skin.atoms.voip.VideoFeed = require('./views/atoms/voip/VideoFeed');
 skin.molecules.BottomLeftMenu = require('./views/molecules/BottomLeftMenu');
 skin.molecules.ChangeAvatar = require('./views/molecules/ChangeAvatar');
 skin.molecules.ChangePassword = require('./views/molecules/ChangePassword');
-skin.molecules.ContextualMenu = require('./views/molecules/ContextualMenu');
 skin.molecules.DateSeparator = require('./views/molecules/DateSeparator');
 skin.molecules.EventAsTextTile = require('./views/molecules/EventAsTextTile');
 skin.molecules.MEmoteTile = require('./views/molecules/MEmoteTile');
