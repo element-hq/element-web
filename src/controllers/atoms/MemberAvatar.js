@@ -35,7 +35,10 @@ module.exports = {
         }
     },
 
-    defaultAvatarUrl: function(member) {
+    defaultAvatarUrl: function(member, width, height, resizeMethod) {
+        if (this.skinnedDefaultAvatarUrl) {
+            return this.skinnedDefaultAvatarUrl(member, width, height, resizeMethod);
+        }
         return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADRJREFUeNrszQENADAIACB9QjNbxSKP4eagAFnTseHFErFYLBaLxWKxWCwWi8Vi8cX4CzAABSwCRWJw31gAAAAASUVORK5CYII=";
     },
 
@@ -50,13 +53,23 @@ module.exports = {
     },
 
     getInitialState: function() {
-        return {
-            imageUrl: MatrixClientPeg.get().getAvatarUrlForMember(
+        var url = MatrixClientPeg.get().getAvatarUrlForMember(
+            this.props.member,
+            this.props.width,
+            this.props.height,
+            this.props.resizeMethod,
+            false
+        );
+        if (!url) {
+            url = this.defaultAvatarUrl(
                 this.props.member,
                 this.props.width,
                 this.props.height,
                 this.props.resizeMethod
-            )
+            );
+        }
+        return {
+            imageUrl: url
         };
     }
 };
