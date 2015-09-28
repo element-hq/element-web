@@ -24,10 +24,13 @@ class MatrixDispatcher extends flux.Dispatcher {
             setTimeout(super.dispatch.bind(this, payload), 0);
         } else {
             this.dispatching = true;
-            super.dispatch.call(this, payload);
+            super.dispatch(payload);
             this.dispatching = false;
         }
     }
 };
 
-module.exports = new MatrixDispatcher();
+if (global.mxDispatcher === undefined) {
+    global.mxDispatcher = new MatrixDispatcher();
+}
+module.exports = global.mxDispatcher;
