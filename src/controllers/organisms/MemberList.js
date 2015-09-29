@@ -61,7 +61,7 @@ module.exports = {
         // member tile and re-render it. This is more efficient than every tile
         // evar attaching their own listener.
         function updateUserState(event, user) {
-            // evil hack to track the age of this presence info.
+            // XXX: evil hack to track the age of this presence info.
             // this should be removed once syjs-28 is resolved in the JS SDK itself.
             user.lastPresenceTs = Date.now();
 
@@ -148,7 +148,7 @@ module.exports = {
         var all_members = room.currentState.members;
         var all_user_ids = Object.keys(all_members);
 
-        // XXX: dirty hack until SYJS-28 is fixed
+        // XXX: evil hack until SYJS-28 is fixed
         all_user_ids.map(function(userId) {
             if (all_members[userId].user && !all_members[userId].user.lastPresenceTs) {
                 all_members[userId].user.lastPresenceTs = Date.now();
