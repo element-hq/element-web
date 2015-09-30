@@ -15,9 +15,14 @@ limitations under the License.
 */
 
 var Skinner = require('./Skinner');
+var Modulator = require('./Modulator');
 
 module.exports.loadSkin = function(skinObject) {
     Skinner.load(skinObject);
+};
+
+module.exports.loadModule = function(moduleObject) {
+    Modulator.loadModule(moduleObject);
 };
 
 module.exports.resetSkin = function() {

@@ -14,18 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-function extractComponent(object, path) {
-    var subObject = object[path[0]]
-    if  (subObject === undefined) {
-        return undefined;
-    }
-    if (path.length == 1) {
-        return subObject;
-    } else {
-        return extractComponent(subObject, path.slice(1));
-    }
-}
-
 class Skinner {
     constructor() {
         this.components = null;
@@ -40,7 +28,7 @@ class Skinner {
                 " b) A component has called getComponent at the root level"
             );
         }
-        var comp = extractComponent(this.components, name.split('.'));
+        var comp = this.components[name];
         if (comp) {
             return comp;
         }

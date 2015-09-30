@@ -57,47 +57,15 @@ strm.write(" */\n\n");
 
 var mySkinfo = JSON.parse(fs.readFileSync(skinfoFile, "utf8"));
 
-strm.write("var skin = {\n");
-strm.write("    atoms: {},\n");
-strm.write("    molecules: {},\n");
-strm.write("    organisms: {},\n");
-strm.write("    templates: {},\n");
-strm.write("    pages: {}\n");
-strm.write("};\n");
+strm.write("var skin = {};\n");
 strm.write('\n');
-
-var tree = {
-    atoms: {},
-    molecules: {},
-    organisms: {},
-    templates: {},
-    pages: {}
-};
 
 var files = glob.sync('**/*.js', {cwd: viewsDir});
 for (var i = 0; i < files.length; ++i) {
     var file = files[i].replace('.js', '');
     var module = (file.replace(/\//g, '.'));
 
-    // create objects for submodules
-    // NB. that we do not support creating additional
-    // top level modules. Perhaps we should?
-    var subtree = tree[module.split('.')[0]];
-    var restOfPath = module.split('.').slice(0, -1);
-    var currentPath = restOfPath[0];
-    restOfPath = restOfPath.slice(1);
-    while (restOfPath.length) {
-        currentPath += '.'+restOfPath[0];
-        if (subtree[restOfPath[0]] == undefined) {
-            strm.write('skin.'+currentPath+' = {};\n');
-            strm.uncork();
-            subtree[restOfPath[0]] = {};
-        }
-        subtree = subtree[restOfPath[0]];
-        restOfPath = restOfPath.slice(1);
-    }
-
-    strm.write('skin.'+module+" = require('./views/"+file+"');\n");
+    strm.write("skin['"+module+"'] = require('./views/"+file+"');\n");
     strm.uncork();
 }
 
