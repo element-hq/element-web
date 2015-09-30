@@ -16,8 +16,10 @@ limitations under the License.
 
 'use strict';
 var dis = require("../../../dispatcher");
-var CallHandler = require("../../../CallHandler");
+var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 var MatrixClientPeg = require("../../../MatrixClientPeg");
+
+var VectorConferenceHandler = require('./VectorConferenceHandler');
 
 /*
  * State vars:
@@ -66,7 +68,10 @@ module.exports = {
     },
 
     showCall: function(roomId) {
-        var call = CallHandler.getCallForRoom(roomId);
+        var call = (
+            CallHandler.getCallForRoom(roomId) ||
+            VectorConferenceHandler.getConferenceCallForRoom(roomId)
+        );
         if (call) {
             call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
             // N.B. the remote video element is used for playback for audio for voice calls

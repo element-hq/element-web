@@ -19,6 +19,7 @@ limitations under the License.
 var React = require("react");
 var sdk = require("matrix-react-sdk");
 sdk.loadSkin(require('../skins/vector/skindex'));
+sdk.loadModule(require('../modules/VectorConferenceHandler'));
 
 var lastLocationHashSet = null;
 
