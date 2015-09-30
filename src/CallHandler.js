@@ -58,9 +58,10 @@ var Matrix = require("matrix-js-sdk");
 var dis = require("./dispatcher");
 var Modulator = require("./Modulator");
 
-var calls = {
+global.mxCalls = {
     //room_id: MatrixCall
 };
+var calls = global.mxCalls;
 
 function play(audioId) {
     // TODO: Attach an invisible element for this instead
@@ -149,7 +150,7 @@ function _setCallState(call, roomId, status) {
     });
 }
 
-dis.register(function(payload) {
+function _onAction(payload) {
     function placeCall(newCall) {
         _setCallListeners(newCall);
         _setCallState(newCall, newCall.roomId, "ringback");
@@ -217,10 +218,9 @@ dis.register(function(payload) {
                 });
             } else {
                 var ConferenceHandler = Modulator.getConferenceHandler();
-                var confCall = ConferenceHandler.createNewMatrixCall(
+                ConferenceHandler.createNewMatrixCall(
                     MatrixClientPeg.get(), payload.room_id
-                );
-                confCall.setup().done(function(call) {
+                ).done(function(call) {
                     placeCall(call);
                 }, function(err) {
                     console.error("Failed to setup conference call: %s", err);
@@ -255,10 +255,14 @@ dis.register(function(payload) {
             });
             break;
     }
-});
+}
+// FIXME: Nasty way of making sure we only register
+// with the dispatcher once
+if (!global.mxCallHandler) {
+    dis.register(_onAction);
+}
 
-module.exports = {
-
+var callHandler = {
     getCallForRoom: function(roomId) {
         return (
             module.exports.getCall(roomId)
@@ -280,3 +284,12 @@ module.exports = {
         return null;
     }
 };
+// Only things in here which actually need to be global are the
+// calls list (done separately) and making sure we only register
+// with the dispatcher once (which uses this mechanism but checks
+// separately). This could be tidied up.
+if (global.mxCallHandler === undefined) {
+    global.mxCallHandler = callHandler;
+}
+
+module.exports = global.mxCallHandler;
