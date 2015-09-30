@@ -19,6 +19,7 @@ limitations under the License.
 var q = require("q");
 var Matrix = require("matrix-js-sdk");
 var Room = Matrix.Room;
+var CallHandler = require('matrix-react-sdk/lib/CallHandler');
 
 // FIXME: This currently forces Vector to try to hit the matrix.org AS for conferencing.
 // This is bad because it prevents people running their own ASes from being used.
@@ -108,9 +109,24 @@ module.exports.getConferenceUserIdForRoom = function(roomId) {
 };
 
 module.exports.createNewMatrixCall = function(client, roomId) {
-    return new ConferenceCall(
+    var confCall = new ConferenceCall(
         client, roomId
     );
+    return confCall.setup();
+};
+
+module.exports.getConferenceCallForRoom = function(roomId) {
+    // search for a conference 1:1 call for this group chat room ID
+    var activeCall = CallHandler.getAnyActiveCall();
+    if (activeCall && activeCall.confUserId) {
+        var thisRoomConfUserId = module.exports.getConferenceUserIdForRoom(
+            roomId
+        );
+        if (thisRoomConfUserId === activeCall.confUserId) {
+            return activeCall;
+        }
+    }
+    return null;
 };
 
 module.exports.ConferenceCall = ConferenceCall;

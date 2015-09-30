@@ -20,7 +20,7 @@ var React = require('react');
 
 var sdk = require('matrix-react-sdk')
 var CallViewController = require(
-    "matrix-react-sdk/lib/controllers/molecules/voip/CallView"
+    "../../../../../controllers/molecules/voip/CallView"
 );
 
 module.exports = React.createClass({

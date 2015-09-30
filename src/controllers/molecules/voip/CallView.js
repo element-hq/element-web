@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 'use strict';
-var dis = require("../../../dispatcher");
+var dis = require("matrix-react-sdk/lib/dispatcher");
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
-var MatrixClientPeg = require("../../../MatrixClientPeg");
+var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
 
-var VectorConferenceHandler = require('./VectorConferenceHandler');
+var VectorConferenceHandler = require('../../../modules/VectorConferenceHandler');
 
 /*
  * State vars:
