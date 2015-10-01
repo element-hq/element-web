@@ -44,7 +44,7 @@ module.exports = {
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         if (this.props.room) {
-            var call = CallHandler.getCall(this.props.room.roomId);
+            var call = CallHandler.getCallForRoom(this.props.room.roomId);
             var callState = call ? call.call_state : "ended";
             this.setState({
                 call_state: callState
@@ -87,9 +87,13 @@ module.exports = {
         });
     },
     onHangupClick: function() {
+        var call = CallHandler.getCallForRoom(this.props.room.roomId);
+        if (!call) { return; }
         dis.dispatch({
             action: 'hangup',
-            room_id: this.props.room.roomId
+            // hangup the call for this room, which may not be the room in props
+            // (e.g. conferences which will hangup the 1:1 room instead)
+            room_id: call.roomId
         });
     }
 };

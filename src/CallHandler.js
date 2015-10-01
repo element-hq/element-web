@@ -264,9 +264,16 @@ if (!global.mxCallHandler) {
 
 var callHandler = {
     getCallForRoom: function(roomId) {
-        return (
-            module.exports.getCall(roomId)
-        );
+        var call = module.exports.getCall(roomId);
+        if (call) return call;
+
+        if (Modulator.hasConferenceHandler()) {
+            var ConferenceHandler = Modulator.getConferenceHandler();
+            call = ConferenceHandler.getConferenceCallForRoom(roomId);
+        }
+        if (call) return call;
+
+        return null;
     },
 
     getCall: function(roomId) {
