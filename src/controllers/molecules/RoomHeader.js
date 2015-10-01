@@ -57,15 +57,12 @@ module.exports = {
     },
 
     onAction: function(payload) {
-        // if we were given a room_id to track, don't handle anything else.
-        if (payload.room_id && this.props.room &&
-                this.props.room.roomId !== payload.room_id) {
+        // don't filter out payloads for room IDs other than props.room because
+        // we may be interested in the conf 1:1 room
+        if (payload.action !== 'call_state' || !payload.room_id) {
             return;
         }
-        if (payload.action !== 'call_state') {
-            return;
-        }
-        var call = CallHandler.getCall(payload.room_id);
+        var call = CallHandler.getCallForRoom(payload.room_id);
         var callState = call ? call.call_state : "ended";
         this.setState({
             call_state: callState
