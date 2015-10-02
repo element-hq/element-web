@@ -18,11 +18,9 @@ limitations under the License.
 
 var React = require('react');
 
-//var RoomCreateController = require('matrix-react-sdk/lib/controllers/molecules/RoomCreateController')
-
 module.exports = React.createClass({
     displayName: 'RoomCreate',
-    // mixins: [RoomCreateController],
+
     render: function() {
         return (
             <div className="mx_RoomCreate">

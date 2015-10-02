@@ -14,7 +14,7 @@ Getting started
 6. Wait a few seconds for the initial build to finish.
 7. Open http://127.0.0.1:8080/ in your browser to see your newly built Vector.
 
-Wiht `npm start`, Any changes you make to the source files will cause a rebuild so
+With `npm start`, any changes you make to the source files will cause a rebuild so
 your changes will show up when you refresh.
 
 For production use, run `npm run build` to build all the necessary files

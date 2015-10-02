@@ -33,8 +33,6 @@ module.exports = React.createClass({
         var text = TextForEvent.textForEvent(this.props.mxEvent);
         if (text == null || text.length == 0) return null;
 
-        var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
-        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
         var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
         var avatar = this.props.mxEvent.sender ? <MemberAvatar member={this.props.mxEvent.sender} /> : null;
         return (
