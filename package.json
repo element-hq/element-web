@@ -39,6 +39,7 @@
     "babel-loader": "^5.3.2",
     "catw": "^1.0.1",
     "http-server": "^0.8.4",
+    "json-loader": "^0.5.3",
     "parallelshell": "^1.2.0",
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.1.5",
