@@ -14,6 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+var Skinner = require('./Skinner');
+var Modulator = require('./Modulator');
 
-module.exports.MatrixChat = require("../skins/base/views/pages/MatrixChat");
+module.exports.loadSkin = function(skinObject) {
+    Skinner.load(skinObject);
+};
+
+module.exports.loadModule = function(moduleObject) {
+    Modulator.loadModule(moduleObject);
+};
+
+module.exports.resetSkin = function() {
+    Skinner.reset();
+};
+
+module.exports.getComponent = function(componentName) {
+    return Skinner.getComponent(componentName);
+};
+

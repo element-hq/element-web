@@ -8,33 +8,34 @@
     "url": "https://github.com/matrix-org/matrix-react-sdk"
   },
   "license": "Apache-2.0",
-  "main": "src/index.js",
-  "style": "bundle.css",
+  "main": "lib/index.js",
+  "bin": {
+    "reskindex": "./reskindex.js"
+  },
   "scripts": {
-    "build:skins": "jsx skins build/skins",
-    "build:logic": "jsx src build/src",
-    "build:js": "npm run build:skins && npm run build:logic",
-    "start:js": "jsx -w skins/base/views/ build --source-map-inline",
-    "build:css": "catw 'skins/base/css/**/*.css' -o bundle.css -c uglifycss --no-watch",
-    "start:css": "catw 'skins/base/css/**/*.css' -o bundle.css -v",
-    "build": "npm run build:js && npm run build:css",
-    "start": "parallelshell 'npm run start:js' 'npm run start:css'",
+    "build": "babel src -d lib --source-maps",
+    "start": "babel src -w -d lib --source-maps",
+    "clean": "rimraf lib",
     "prepublish": "npm run build"
   },
   "dependencies": {
     "classnames": "^2.1.2",
     "filesize": "^3.1.2",
     "flux": "^2.0.3",
-    "matrix-js-sdk": "0.2.0",
+    "glob": "^5.0.14",
+    "linkifyjs": "^2.0.0-beta.4",
+    "matrix-js-sdk": "^0.2.1",
+    "optimist": "^0.6.1",
     "q": "^1.4.1",
     "react": "^0.13.3",
-    "react-loader": "^1.4.0",
-    "linkifyjs": "^2.0.0-beta.4"
+    "react-loader": "^1.4.0"
   },
+  "//deps": "The loader packages are here because webpack in a project that depends on us needs them in this package's node_modules folder",
+  "//depsbuglink": "https://github.com/webpack/webpack/issues/1472",
   "devDependencies": {
-    "catw": "^1.0.1",
-    "parallelshell": "^1.1.1",
-    "react-tools": "^0.13.3",
-    "uglifycss": "0.0.15"
+    "babel": "^5.8.23",
+    "rimraf": "^2.4.3",
+    "json-loader": "^0.5.3",
+    "source-map-loader": "^0.1.5"
   }
 }

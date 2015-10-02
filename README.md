@@ -2,57 +2,28 @@ matrix-react-sdk
 ================
 
 This is a react-based SDK for inserting a Matrix chat/voip client into a web page.
-It provides reusable and customisable UI components backed by the matrix-js-sdk.
 
-Getting started with the trivial example
-========================================
+This package provides the logic and 'controller' parts for the UI components. This
+forms one part of a complete matrix client, but it not useable in isolation. It
+must be used from a 'skin'. A skin provides:
+ * The HTML for the UI components (in the form of React `render` methods)
+ * The CSS for this HTML
+ * The containing application 
+ * Zero or more 'modules' containing non-UI functionality
 
-1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
-2. Clone the repo: `git clone https://github.com/matrix-org/matrix-react-sdk.git` 
-3. Switch to the SDK directory: `cd matrix-react-sdk`
-4. Install the prerequisites: `npm install`
-5. Switch to the example directory: `cd examples/trivial`
-6. Install the example app prerequisites: `npm install`
-7. Build the example and start a server: `npm start`
+Skins are modules are exported from such a package in the `lib` directory.
+`lib/skins` contains one directory per-skin, named after the skin, and the
+`modules` directory contains modules as their javascript files.
 
-Now open http://127.0.0.1:8080/ in your browser to see your newly built
-Matrix client.
+A basic skin is provided in the matrix-react-skin package. This also contains
+a minimal application that instantiates the basic skin making a working matrix
+client.
 
-Using the example app for development
-=====================================
-
-To work on the CSS and Javascript and have the bundle files update as you
-change the source files, you'll need to do two extra things:
-
-1. Link the react sdk package into the example:
-   `cd matrix-react-sdk/examples/trivial; npm link ../../`
-2. Start a watcher for the CSS files:
-   `cd matrix-react-sdk; npm run start:css`
-
-Note that you may need to restart the CSS builder if you add a new file. Note
-that `npm start` builds debug versions of the javascript and CSS, which are
-much larger than the production versions build by the `npm run build` commands.
-
-IMPORTANT: If you customise components in your application (and hence require
-react from your app) you must be sure to:
-
-1. Make your app depend on react directly
-2. If you `npm link` matrix-react-sdk, manually remove the 'react' directory
-   from matrix-react-sdk's `node_modules` folder, otherwise browserify will
-   pull in both copies of react which causes the app to break.
+You can use matrix-react-sdk directly, but to do this you would have to provide
+'views' for each UI component. To get started quickly, use matrix-react-skin.
 
 How to customise the SDK
 ========================
-
-The matrix-react-sdk provides well-defined reusable UI components which may be
-customised/replaced by the developer to build into an app.  A set of consistent
-UI components (View + CSS classes) is called a 'skin' - currently the SDK
-provides a very vanilla whitelabelled 'base skin'.  In future the SDK could
-provide alternative skins (probably by extending the base skin) that provide more
-specific look and feels (e.g. "IRC-style", "Skype-style") etc.  However, unlike
-Wordpress themes and similar, we don't normally expect app developers to define
-reusable skins.  Instead you just go and incorporate your view customisations
-into your actual app.
 
 The SDK uses the 'atomic' design pattern as seen at http://patternlab.io to
 encourage a very modular and reusable architecture, making it easy to
@@ -131,18 +102,41 @@ components to embed a Matrix client into your app:
   * Create a new NPM project. Be sure to directly depend on react, (otherwise
     you can end up with two copies of react).
   * Create an index.js file that sets up react. Add require statements for
-    React, the ComponentBroker and matrix-react-sdk and a call to Render
-    the root React element as in the examples.
-  * Create React classes for any custom components you wish to add. These
-    can be based off the files in `views` in the `matrix-react-sdk` package,
-    modifying the require() statement appropriately.
-    You only need to copy files you want to customise.
-  * Add a ComponentBroker.set() call for each of your custom components. These
-    must come *before* `require("matrix-react-sdk")`.
-  * Add a way to build your project: we suggest copying the browserify calls
-    from the example projects, but you could use grunt or gulp.
-  * Create an index.html file pulling in your compiled index.js file, the
-    CSS bundle from matrix-react-sdk.
+    React and matrix-react-sdk. Load a skin using the 'loadSkin' method on the
+    SDK and call Render. This can be a skin provided by a separate package or
+    a skin in the same package.
+  * Add a way to build your project: we suggest copying the scripts block 
+    from matrix-react-skin (which uses babel and webpack). You could use 
+    different tools but remember that at least the skins and modules of
+    your project should end up in plain (ie. non ES6, non JSX) javascript in
+    the lib directory at the end of the build process, as well as any
+    packaging that you might do.
+  * Create an index.html file pulling in your compiled javascript and the
+    CSS bundle from the skin you use. For now, you'll also need to manually
+    import CSS from any skins that your skin inherts from.
 
-For more specific detail on any of these steps, look at the `custom` example in
-matrix-react-sdk/examples.
+To Create Your Own Skin
+=======================
+To actually change the look of a skin, you can create a base skin (which
+does not use views from any other skin) or you can make a derived skin.
+Note that derived skins are currently experimental: for example, the CSS
+from the skins it is based on will not be automatically included.
+
+To make a skin, create React classes for any custom components you wish to add
+in a skin within `src/skins/<skin name>`. These can be based off the files in
+`views` in the `matrix-react-skin` package, modifying the require() statement
+appropriately.
+
+If you make a derived skin, you only need copy the files you wish to customise.
+
+Once you've made all your view files, you need to make a `skinfo.json`. This
+contains all the metadata for a skin. This is a JSON file with, currently, a
+single key, 'baseSkin'. Set this to the empty string if your skin is a base skin,
+or for a derived skin, set it to the path of your base skin's skinfo.json file, as
+you would use in a require call.
+
+Now you have the basis of a skin, you need to generate a skindex.json file. The
+`reskindex.js` tool in matrix-react-sdk does this for you. It is suggested that
+you add an npm script to run this, as in matrix-react-skin.
+
+For more specific detail on any of these steps, look at matrix-react-skin.

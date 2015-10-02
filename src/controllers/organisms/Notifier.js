@@ -17,11 +17,21 @@ limitations under the License.
 'use strict';
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var dis = require("../../dispatcher");
+
+/*
+ * Dispatches:
+ * {
+ *   action: "notifier_enabled",
+ *   value: boolean
+ * }
+ */
 
 module.exports = {
     start: function() {
         this.boundOnRoomTimeline = this.onRoomTimeline.bind(this);
         MatrixClientPeg.get().on('Room.timeline', this.boundOnRoomTimeline);
+        this.state = { 'toolbarHidden' : false };
     },
 
     stop: function() {
@@ -30,12 +40,80 @@ module.exports = {
         }
     },
 
+    supportsDesktopNotifications: function() {
+        return !!global.Notification;
+    },
+
+    havePermission: function() {
+        if (!this.supportsDesktopNotifications()) return false;
+        return global.Notification.permission == 'granted';
+    },
+
+    setEnabled: function(enable, callback) {
+        if(enable) {
+            if (!this.havePermission()) {
+                global.Notification.requestPermission(function() {
+                    if (callback) {
+                        callback();
+                        dis.dispatch({
+                            action: "notifier_enabled",
+                            value: true
+                        });
+                    }
+                });
+            }
+
+            if (!global.localStorage) return;
+            global.localStorage.setItem('notifications_enabled', 'true');
+
+            if (this.havePermission) {
+                dis.dispatch({
+                    action: "notifier_enabled",
+                    value: true
+                });
+            }
+        }
+        else {
+            if (!global.localStorage) return;
+            global.localStorage.setItem('notifications_enabled', 'false');
+            dis.dispatch({
+                action: "notifier_enabled",
+                value: false
+            });
+        }
+
+        this.setToolbarHidden(false);
+    },
+
+    isEnabled: function() {
+        if (!this.havePermission()) return false;
+
+        if (!global.localStorage) return true;
+
+        var enabled = global.localStorage.getItem('notifications_enabled');
+        if (enabled === null) return true;
+        return enabled === 'true';
+    },
+
+    setToolbarHidden: function(hidden) {
+        this.state.toolbarHidden = hidden;
+        dis.dispatch({
+            action: "notifier_enabled",
+            value: this.isEnabled()
+        });
+    },
+
+    isToolbarHidden: function() {
+        return this.state.toolbarHidden;
+    },
+
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (toStartOfTimeline) return;
         if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) return;
 
-        var enabled = global.localStorage.getItem('notifications_enabled');
-        if (enabled === 'false') return;
+        if (!this.isEnabled()) {
+            return;
+        }
 
         var actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions && actions.notify) {

@@ -14,17 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-var linkify = require('linkifyjs');
-var linkifyElement = require('linkifyjs/element');
-var linkifyMatrix = require('../../linkify-matrix');
-
-linkifyMatrix(linkify);
+var React = require('react');
 
 module.exports = {
-    componentDidMount: function() {
-        linkifyElement(this.refs.content.getDOMNode(), linkifyMatrix.options);
+    propTypes: {
+        room: React.PropTypes.object.isRequired,
+    },
+
+    getInitialState: function() {
+        return {
+            power_levels_changed: false
+        };
     }
 };
-

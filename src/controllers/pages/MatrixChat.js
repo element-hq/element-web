@@ -14,26 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-// should be atomised
-var Loader = require("react-loader");
-
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var RoomListSorter = require("../../RoomListSorter");
-
+var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
+var q = require("q");
 
-var ComponentBroker = require('../../ComponentBroker');
-
-var Notifier = ComponentBroker.get('organisms/Notifier');
+var sdk = require('../../index');
+var MatrixTools = require('../../MatrixTools');
 
 module.exports = {
+    PageTypes: {
+        RoomView: "room_view",
+        UserSettings: "user_settings",
+        CreateRoom: "create_room",
+        RoomDirectory: "room_directory",
+    },
+
+    AuxPanel: {
+        RoomSettings: "room_settings",
+    },
+
     getInitialState: function() {
-        return {
+        var s = {
             logged_in: !!(MatrixClientPeg.get() && MatrixClientPeg.get().credentials),
-            ready: false
+            ready: false,
         };
+        if (s.logged_in) {
+            if (MatrixClientPeg.get().getRooms().length) {
+                s.page_type = this.PageTypes.RoomView;
+            } else {
+                s.page_type = this.PageTypes.RoomDirectory;
+            }
+        }
+        return s;
     },
 
     componentDidMount: function() {
@@ -54,6 +68,7 @@ module.exports = {
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
+        window.removeEventListener("focus", this.onFocus);
     },
 
     componentDidUpdate: function() {
@@ -65,6 +80,7 @@ module.exports = {
 
     onAction: function(payload) {
         var roomIndexDelta = 1;
+        var Notifier = sdk.getComponent('organisms.Notifier');
 
         switch (payload.action) {
             case 'logout':
@@ -76,8 +92,11 @@ module.exports = {
                     window.localStorage.clear();
                 }
                 Notifier.stop();
+                Presence.stop();
+                MatrixClientPeg.get().stopClient();
                 MatrixClientPeg.get().removeAllListeners();
-                MatrixClientPeg.replace(null);
+                MatrixClientPeg.unset();
+                this.notifyNewScreen('');
                 break;
             case 'start_registration':
                 if (this.state.logged_in) return;
@@ -110,8 +129,23 @@ module.exports = {
             case 'view_room':
                 this.focusComposer = true;
                 this.setState({
-                    currentRoom: payload.room_id
+                    currentRoom: payload.room_id,
+                    page_type: this.PageTypes.RoomView,
                 });
+                if (this.sdkReady) {
+                    // if the SDK is not ready yet, remember what room
+                    // we're supposed to be on but don't notify about
+                    // the new screen yet (we won't be showing it yet)
+                    // The normal case where this happens is navigating
+                    // to the room in the URL bar on page load.
+                    var presentedId = payload.room_id;
+                    var room = MatrixClientPeg.get().getRoom(payload.room_id);
+                    if (room) {
+                        var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
+                        if (theAlias) presentedId = theAlias;
+                    }
+                    this.notifyNewScreen('room/'+presentedId);
+                }
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -127,9 +161,43 @@ module.exports = {
                     }
                 }
                 roomIndex = (roomIndex + roomIndexDelta) % allRooms.length;
+                if (roomIndex < 0) roomIndex = allRooms.length - 1;
+                this.focusComposer = true;
                 this.setState({
                     currentRoom: allRooms[roomIndex].roomId
                 });
+                this.notifyNewScreen('room/'+allRooms[roomIndex].roomId);
+                break;
+            case 'view_indexed_room':
+                var allRooms = RoomListSorter.mostRecentActivityFirst(
+                    MatrixClientPeg.get().getRooms()
+                );
+                var roomIndex = payload.roomIndex;
+                if (allRooms[roomIndex]) {
+                    this.focusComposer = true;
+                    this.setState({
+                        currentRoom: allRooms[roomIndex].roomId
+                    });
+                    this.notifyNewScreen('room/'+allRooms[roomIndex].roomId);
+                }
+                break;
+            case 'view_user_settings':
+                this.setState({
+                    page_type: this.PageTypes.UserSettings,
+                });
+                break;
+            case 'view_create_room':
+                this.setState({
+                    page_type: this.PageTypes.CreateRoom,
+                });
+                break;
+            case 'view_room_directory':
+                this.setState({
+                    page_type: this.PageTypes.RoomDirectory,
+                });
+                break;
+            case 'notifier_enabled':
+                this.forceUpdate();
                 break;
         }
     },
@@ -144,32 +212,83 @@ module.exports = {
     },
 
     startMatrixClient: function() {
+        var Notifier = sdk.getComponent('organisms.Notifier');
         var cli = MatrixClientPeg.get();
-        var that = this;
+        var self = this;
         cli.on('syncComplete', function() {
-            var firstRoom = null;
-            if (cli.getRooms() && cli.getRooms().length) {
-                firstRoom = RoomListSorter.mostRecentActivityFirst(
-                    cli.getRooms()
-                )[0].roomId;
+            self.sdkReady = true;
+
+            var defer = q.defer();
+            if (self.starting_room_alias) {
+                MatrixClientPeg.get().getRoomIdForAlias(self.starting_room_alias).done(function(result) {
+                    self.setState({currentRoom: result.room_id});
+                    defer.resolve();
+                }, function(error) {
+                    defer.resolve();
+                });
+            } else {
+                defer.resolve();
             }
-            that.setState({ready: true, currentRoom: firstRoom});
-            dis.dispatch({action: 'focus_composer'});
+
+            defer.promise.done(function() {
+                if (!self.state.currentRoom) {
+                    var firstRoom = null;
+                    if (cli.getRooms() && cli.getRooms().length) {
+                        firstRoom = RoomListSorter.mostRecentActivityFirst(
+                            cli.getRooms()
+                        )[0].roomId;
+                        self.setState({ready: true, currentRoom: firstRoom, page_type: self.PageTypes.RoomView});
+                    } else {
+                        self.setState({ready: true, page_type: self.PageTypes.RoomDirectory});
+                    }
+                } else {
+                    self.setState({ready: true, page_type: self.PageTypes.RoomView});
+                }
+
+                // we notifyNewScreen now because now the room will actually be displayed,
+                // and (mostly) now we can get the correct alias.
+                var presentedId = self.state.currentRoom;
+                var room = MatrixClientPeg.get().getRoom(self.state.currentRoom);
+                if (room) {
+                    var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
+                    if (theAlias) presentedId = theAlias;
+                }
+                self.notifyNewScreen('room/'+presentedId);
+                dis.dispatch({action: 'focus_composer'});
+            });
+        });
+        cli.on('Call.incoming', function(call) {
+            dis.dispatch({
+                action: 'incoming_call',
+                call: call
+            });
         });
         Notifier.start();
+        Presence.start();
         cli.startClient();
     },
 
     onKeyDown: function(ev) {
         if (ev.altKey) {
+            if (ev.ctrlKey && ev.keyCode > 48 && ev.keyCode < 58) {
+                dis.dispatch({
+                    action: 'view_indexed_room',
+                    roomIndex: ev.keyCode - 49,
+                });
+                ev.stopPropagation();
+                ev.preventDefault();
+                return;
+            }
             switch (ev.keyCode) {
                 case 38:
                     dis.dispatch({action: 'view_prev_room'});
                     ev.stopPropagation();
+                    ev.preventDefault();
                     break;
                 case 40:
                     dis.dispatch({action: 'view_next_room'});
                     ev.stopPropagation();
+                    ev.preventDefault();
                     break;
             }
         }
@@ -190,6 +309,16 @@ module.exports = {
                 action: 'start_login',
                 params: params
             });
+        } else if (screen.indexOf('room/') == 0) {
+            var roomString = screen.split('/')[1];
+            if (roomString[0] == '#') {
+                this.starting_room_alias = roomString;
+            } else {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: roomString
+                });
+            }
         }
     },
 
@@ -199,4 +328,3 @@ module.exports = {
         }
     }
 };
-

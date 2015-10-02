@@ -17,21 +17,20 @@ limitations under the License.
 'use strict';
 
 var flux = require("flux");
-var extend = require("./extend");
 
-var MatrixDispatcher = function() {
-    flux.Dispatcher.call(this);
+class MatrixDispatcher extends flux.Dispatcher {
+    dispatch(payload) {
+        if (this.dispatching) {
+            setTimeout(super.dispatch.bind(this, payload), 0);
+        } else {
+            this.dispatching = true;
+            super.dispatch(payload);
+            this.dispatching = false;
+        }
+    }
 };
 
-extend(MatrixDispatcher.prototype, flux.Dispatcher.prototype);
-MatrixDispatcher.prototype.dispatch = function(payload) {
-    if (this.dispatching) {
-        setTimeout(flux.Dispatcher.prototype.dispatch.bind(this, payload), 0);
-    } else {
-        this.dispatching = true;
-        flux.Dispatcher.prototype.dispatch.call(this, payload);
-        this.dispatching = false;
-    }
+if (global.mxDispatcher === undefined) {
+    global.mxDispatcher = new MatrixDispatcher();
 }
-
-module.exports = new MatrixDispatcher();
+module.exports = global.mxDispatcher;

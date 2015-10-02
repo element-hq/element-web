@@ -14,14 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-var extend = require('./extend');
-
 function matrixLinkify(linkify) {
     // Text tokens
     var TT = linkify.scanner.TOKENS;
-    var TextToken = TT.Base;
     // Multi tokens
     var MT = linkify.parser.TOKENS;
     var MultiToken = MT.Base;

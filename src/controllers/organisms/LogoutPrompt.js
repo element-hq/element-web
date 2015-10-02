@@ -14,17 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-var linkify = require('linkifyjs');
-var linkifyElement = require('linkifyjs/element');
-var linkifyMatrix = require('../../linkify-matrix');
-
-linkifyMatrix(linkify);
+var dis = require("../../dispatcher");
 
 module.exports = {
-    componentDidMount: function() {
-        linkifyElement(this.refs.content.getDOMNode(), linkifyMatrix.options);
+    logOut: function() {
+        dis.dispatch({action: 'logout'});
+        if (this.props.onFinished) {
+            this.props.onFinished();
+        }
+    },
+
+    cancelPrompt: function() {
+        if (this.props.onFinished) {
+            this.props.onFinished();
+        }
     }
 };
 

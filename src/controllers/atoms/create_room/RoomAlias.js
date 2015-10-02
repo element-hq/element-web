@@ -14,32 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 var React = require('react');
 
 module.exports = {
     propTypes: {
+        // Specifying a homeserver will make magical things happen when you,
+        // e.g. start typing in the room alias box.
+        homeserver: React.PropTypes.string,
+        alias: React.PropTypes.string,
         onChange: React.PropTypes.func,
-        selected_users: React.PropTypes.arrayOf(React.PropTypes.string),
     },
 
     getDefaultProps: function() {
         return {
             onChange: function() {},
-            selected: [],
+            alias: '',
         };
     },
 
-    addUser: function(user_id) {
-        if (this.props.selected_users.indexOf(user_id == -1)) {
-            this.props.onChange(this.props.selected_users.concat([user_id]));
-        }
-    },
+    getAliasLocalpart: function() {
+        var room_alias = this.props.alias;
 
-    removeUser: function(user_id) {
-        this.props.onChange(this.props.selected_users.filter(function(e) {
-            return e != user_id;
-        }));
+        if (room_alias && this.props.homeserver) {
+            var suffix = ":" + this.props.homeserver;
+            if (room_alias.startsWith("#") && room_alias.endsWith(suffix)) {
+                room_alias = room_alias.slice(1, -suffix.length);
+            }
+        }
+
+        return room_alias;
     },
 };

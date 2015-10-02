@@ -14,15 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-var React = require('react');
-
 var MatrixClientPeg = require("../../MatrixClientPeg");
-var Matrix = require("matrix-js-sdk");
 var dis = require("../../dispatcher");
-
-var ComponentBroker = require("../../ComponentBroker");
 
 module.exports = {
     FieldErrors: {
@@ -92,7 +85,7 @@ module.exports = {
         if (this.refs.recaptchaContainer) {
             var scriptTag = document.createElement('script');
             window.mx_on_recaptcha_loaded = this.onCaptchaLoaded;
-            scriptTag.setAttribute('src', "https://www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit");
+            scriptTag.setAttribute('src', global.location.protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit");
             this.refs.recaptchaContainer.getDOMNode().appendChild(scriptTag);
         }
     },
@@ -196,15 +189,7 @@ module.exports = {
             hs_url: this.getHsUrl(),
             is_url: this.getIsUrl()
         });
-        var cli = MatrixClientPeg.get();
         this.setState({busy: true});
-        var self = this;
-
-        this.savedParams = {
-            email: formVals.email,
-            username: formVals.username,
-            password: formVals.password
-        };
 
         this.tryRegister();
     },
@@ -242,10 +227,14 @@ module.exports = {
                     });
                     self.setStep('stage_m.login.email.identity');
                 }, function(error) {
-                    self.setState({
-                        busy: false,
-                        errorText: 'Unable to contact the given Home Server'
-                    });
+                    self.setStep('initial');
+                    var newState = {busy: false};
+                    if (error.errcode == 'THREEPID_IN_USE') {
+                        self.onBadFields({email: self.FieldErrors.InUse});
+                    } else {
+                        newState.errorText = 'Unable to contact the given Home Server';
+                    }
+                    self.setState(newState);
                 });
                 break;
             case 'm.login.recaptcha':
@@ -326,6 +315,14 @@ module.exports = {
                     });
                 } else if (error.httpStatus == 401) {
                     newState.errorText = "Authorisation failed!";
+                } else if (error.httpStatus >= 400 && error.httpStatus < 500) {
+                    newState.errorText = "Registration failed!";
+                } else if (error.httpStatus >= 500 && error.httpStatus < 600) {
+                    newState.errorText = "Server error during registration!";
+                } else if (error.name == "M_MISSING_PARAM") {
+                    // The HS hasn't remembered the login params from
+                    // the first try when the login email was sent.
+                    newState.errorText = "This home server does not support resuming registration.";
                 }
                 self.setState(newState);
             }

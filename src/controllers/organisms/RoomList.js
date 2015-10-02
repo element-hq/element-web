@@ -20,9 +20,7 @@ var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var RoomListSorter = require("../../RoomListSorter");
 
-var ComponentBroker = require('../../ComponentBroker');
-
-var RoomTile = ComponentBroker.get("molecules/RoomTile");
+var sdk = require('../../index');
 
 module.exports = {
     componentWillMount: function() {
@@ -73,13 +71,11 @@ module.exports = {
             if (actions && actions.tweaks && actions.tweaks.highlight) {
                 hl = 2;
             }
-            if (actions.notify) {
-                // obviously this won't deep copy but this shouldn't be necessary
-                var amap = this.state.activityMap;
-                amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
+            // obviously this won't deep copy but this shouldn't be necessary
+            var amap = this.state.activityMap;
+            amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
 
-                newState.activityMap = amap;
-            }
+            newState.activityMap = amap;
         }
         this.setState(newState);
     },
@@ -96,23 +92,28 @@ module.exports = {
     },
 
     getRoomList: function() {
-        return RoomListSorter.mostRecentActivityFirst(MatrixClientPeg.get().getRooms());
+        return RoomListSorter.mostRecentActivityFirst(
+            MatrixClientPeg.get().getRooms().filter(function(room) {
+                var member = room.getMember(MatrixClientPeg.get().credentials.userId);
+                return member && (member.membership == "join" || member.membership == "invite");
+            })
+        );
     },
 
     makeRoomTiles: function() {
-        var that = this;
+        var RoomTile = sdk.getComponent('molecules.RoomTile');
+        var self = this;
         return this.state.roomList.map(function(room) {
-            var selected = room.roomId == that.props.selectedRoom;
+            var selected = room.roomId == self.props.selectedRoom;
             return (
                 <RoomTile
                     room={room}
                     key={room.roomId}
                     selected={selected}
-                    unread={that.state.activityMap[room.roomId] === 1}
-                    highlight={that.state.activityMap[room.roomId] === 2}
+                    unread={self.state.activityMap[room.roomId] === 1}
+                    highlight={self.state.activityMap[room.roomId] === 2}
                 />
             );
         });
     },
 };
-
