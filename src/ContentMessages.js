@@ -53,9 +53,13 @@ function sendContentToRoom(file, roomId, matrixClient) {
         body: file.name,
         info: {
             size: file.size,
-            mimetype: file.type
         }
     };
+
+    // if we have a mime type for the file, add it to the message metadata
+    if (file.type) {
+        content.info.mimetype = file.type;
+    }
 
     var def = q.defer();
     if (file.type.indexOf('image/') == 0) {
