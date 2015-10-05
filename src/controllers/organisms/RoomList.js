@@ -17,15 +17,13 @@ limitations under the License.
 'use strict';
 
 var React = require("react");
-var MatrixClientPeg = require("../../MatrixClientPeg");
-var RoomListSorter = require("../../RoomListSorter");
-var dis = require("../../dispatcher");
+var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
+var RoomListSorter = require("matrix-react-sdk/lib/RoomListSorter");
+var dis = require("matrix-react-sdk/lib/dispatcher");
 
-var ComponentBroker = require('../../ComponentBroker');
-var ConferenceHandler = require("../../ConferenceHandler");
-var CallHandler = require("../../CallHandler");
-
-var RoomTile = ComponentBroker.get("molecules/RoomTile");
+var sdk = require('matrix-react-sdk');
+var VectorConferenceHandler = require("../../modules/VectorConferenceHandler");
+var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 
 var HIDE_CONFERENCE_CHANS = true;
 
@@ -129,7 +127,7 @@ module.exports = {
                         var otherMember = joinedMembers.filter(function(m) {
                             return m.userId !== me.userId
                         })[0];
-                        if (ConferenceHandler.isConferenceUser(otherMember)) {
+                        if (VectorConferenceHandler.isConferenceUser(otherMember)) {
                             // console.log("Hiding conference 1:1 room %s", room.roomId);
                             shouldShowRoom = false;
                         }
@@ -154,6 +152,7 @@ module.exports = {
 
     makeRoomTiles: function() {
         var self = this;
+        var RoomTile = sdk.getComponent("molecules.RoomTile");
         return this.state.roomList.map(function(room) {
             var selected = room.roomId == self.props.selectedRoom;
             return (
