@@ -43,6 +43,9 @@ function textForMemberEvent(ev) {
             else if (ev.getPrevContent().membership === "join") {
                 return senderName + " kicked " + targetName + "." + reason;
             }
+            else if (ev.getPrevContent().membership === "invite") {
+                return senderName + " withdrew " + targetName + "'s invitation." + reason;
+            }
             else {
                 return targetName + " left the room.";
             }
