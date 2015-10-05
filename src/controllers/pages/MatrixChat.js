@@ -82,6 +82,7 @@ module.exports = {
         var roomIndexDelta = 1;
         var Notifier = sdk.getComponent('organisms.Notifier');
 
+        var self = this;
         switch (payload.action) {
             case 'logout':
                 this.replaceState({
@@ -96,7 +97,7 @@ module.exports = {
                 MatrixClientPeg.get().stopClient();
                 MatrixClientPeg.get().removeAllListeners();
                 MatrixClientPeg.unset();
-                this.notifyNewScreen('');
+                this.notifyNewScreen('login');
                 break;
             case 'start_registration':
                 if (this.state.logged_in) return;
@@ -128,10 +129,10 @@ module.exports = {
                 break;
             case 'view_room':
                 this.focusComposer = true;
-                this.setState({
+                var newState = {
                     currentRoom: payload.room_id,
                     page_type: this.PageTypes.RoomView,
-                });
+                };
                 if (this.sdkReady) {
                     // if the SDK is not ready yet, remember what room
                     // we're supposed to be on but don't notify about
@@ -146,6 +147,8 @@ module.exports = {
                     }
                     this.notifyNewScreen('room/'+presentedId);
                 }
+                newState.ready = true;
+                this.setState(newState);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -180,6 +183,14 @@ module.exports = {
                     });
                     this.notifyNewScreen('room/'+allRooms[roomIndex].roomId);
                 }
+                break;
+            case 'view_room_alias':
+                MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(function(result) {
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: result.room_id
+                    });
+                });
                 break;
             case 'view_user_settings':
                 this.setState({
@@ -218,19 +229,13 @@ module.exports = {
         cli.on('syncComplete', function() {
             self.sdkReady = true;
 
-            var defer = q.defer();
             if (self.starting_room_alias) {
-                MatrixClientPeg.get().getRoomIdForAlias(self.starting_room_alias).done(function(result) {
-                    self.setState({currentRoom: result.room_id});
-                    defer.resolve();
-                }, function(error) {
-                    defer.resolve();
+                dis.dispatch({
+                    action: 'view_room_alias',
+                    room_alias: self.starting_room_alias
                 });
+                delete self.starting_room_alias;
             } else {
-                defer.resolve();
-            }
-
-            defer.promise.done(function() {
                 if (!self.state.currentRoom) {
                     var firstRoom = null;
                     if (cli.getRooms() && cli.getRooms().length) {
@@ -255,7 +260,7 @@ module.exports = {
                 }
                 self.notifyNewScreen('room/'+presentedId);
                 dis.dispatch({action: 'focus_composer'});
-            });
+            }
         });
         cli.on('Call.incoming', function(call) {
             dis.dispatch({
@@ -312,7 +317,17 @@ module.exports = {
         } else if (screen.indexOf('room/') == 0) {
             var roomString = screen.split('/')[1];
             if (roomString[0] == '#') {
-                this.starting_room_alias = roomString;
+                if (this.state.logged_in) {
+                    dis.dispatch({
+                        action: 'view_room_alias',
+                        room_alias: roomString
+                    });
+                } else {
+                    // Okay, we'll take you here soon...
+                    this.starting_room_alias = roomString;
+                    // ...but you're still going to have to log in.
+                    this.notifyNewScreen('login');
+                }
             } else {
                 dis.dispatch({
                     action: 'view_room',
