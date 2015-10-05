@@ -11,14 +11,14 @@
   "style": "bundle.css",
   "scripts": {
     "reskindex": "reskindex vector -h src/skins/vector/header",
-    "build:css": "catw 'src/skins/vector/css/**/*.css' -o vector/bundle.css -c uglifycss --no-watch",
+    "build:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/bundle.css -c uglifycss --no-watch",
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "NODE_ENV=production webpack -p lib/vector/index.js vector/bundle.js",
     "build": "npm run build:css && npm run build:compile && npm run build:bundle",
     "start:js": "webpack -w src/vector/index.js vector/bundle.js",
-    "start:skins:css": "catw 'src/skins/vector/css/**/*.css' -o vector/bundle.css",
+    "start:skins:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/bundle.css",
     "//cache": "Note the -c 1 below due to https://code.google.com/p/chromium/issues/detail?id=508270",
-    "start": "parallelshell 'npm run start:js' 'npm run start:skins:css' 'http-server -c 1 vector'",
+    "start": "parallelshell \"npm run start:js\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
     "clean": "rimraf lib vector/bundle.css vector/bundle.js vector/bundle.js.map",
     "prepublish": "npm run build:css && npm run build:compile"
   },
