@@ -53,17 +53,12 @@ module.exports = React.createClass({
             var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
 
             var callButtons;
-            if (this.state) {
-                switch (this.state.call_state) {
-                    case "ringback":
-                    case "connected":
-                        callButtons = (
-                            <div className="mx_RoomHeader_textButton" onClick={this.onHangupClick}>
-                                End call
-                            </div>
-                        );
-                        break;
-                }
+            if (this.state && this.state.call_state != 'ended') {
+                callButtons = (
+                    <div className="mx_RoomHeader_textButton" onClick={this.onHangupClick}>
+                        End call
+                    </div>
+                );
             }
 
             var name = null;
