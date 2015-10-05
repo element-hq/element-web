@@ -53,14 +53,18 @@ function onHashChange(ev) {
 }
 
 var loaded = false;
+var lastLoadedScreen = null;
 
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
 var onNewScreen = function(screen) {
-    if (!loaded) return;
-    var hash = '#/' + screen;
-    lastLocationHashSet = hash;
-    window.location.hash = hash;
+    if (!loaded) {
+        lastLoadedScreen = screen;
+    } else {
+        var hash = '#/' + screen;
+        lastLocationHashSet = hash;
+        window.location.hash = hash;
+    }
 }
 
 // We use this to work out what URL the SDK should
@@ -85,5 +89,9 @@ window.addEventListener('hashchange', onHashChange);
 window.onload = function() {
     routeUrl(window.location);
     loaded = true;
+    if (lastLoadedScreen) {
+        onNewScreen(lastLoadedScreen);
+        lastLoadedScreen = null;
+    }
 }
 
