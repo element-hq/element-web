@@ -20,13 +20,11 @@ var flux = require("flux");
 
 class MatrixDispatcher extends flux.Dispatcher {
     dispatch(payload) {
-        if (this.dispatching) {
-            setTimeout(super.dispatch.bind(this, payload), 0);
-        } else {
-            this.dispatching = true;
-            super.dispatch(payload);
-            this.dispatching = false;
-        }
+        // We always set a timeout to do this: The flux dispatcher complains
+        // if you dispatch from within a dispatch, so rather than action
+        // handlers having to worry about not calling anything that might
+        // then dispatch, we just do dispatches asynchronously.
+        setTimeout(super.dispatch.bind(this, payload), 0);
     }
 };
 
