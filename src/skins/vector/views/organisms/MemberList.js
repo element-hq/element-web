@@ -33,11 +33,14 @@ module.exports = React.createClass({
         return { editing: false };
     },
 
-    makeMemberTiles: function() {
+    makeMemberTiles: function(membership) {
         var MemberTile = sdk.getComponent("molecules.MemberTile");
 
         var self = this;
-        return Object.keys(self.state.memberDict).map(function(userId) {
+        return Object.keys(self.state.memberDict).filter(function(userId) {
+            var m = self.state.memberDict[userId];
+            return m.membership == membership;
+        }).map(function(userId) {
             var m = self.state.memberDict[userId];
             return (
                 <MemberTile key={userId} member={m} ref={userId} />
@@ -87,17 +90,32 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var invitedSection = null;
+        var invitedMemberTiles = this.makeMemberTiles('invite');
+        if (invitedMemberTiles.length > 0) {
+            invitedSection = (
+                <div>
+                    <h2>Invited</h2>
+                    <div className="mx_MemberList_wrapper">
+                        {invitedMemberTiles}
+                    </div>
+                </div>
+            );
+        }
         return (
             <div className="mx_MemberList">
                 <div className="mx_MemberList_chevron">
                     <img src="img/chevron.png" width="24" height="13"/>
                 </div>
                 <div className="mx_MemberList_border">
-                    <h2>Members</h2>
-                    <div className="mx_MemberList_wrapper">
-                        {this.makeMemberTiles()}
-                        {this.inviteTile()}
+                    <div>
+                        <h2>Members</h2>
+                        <div className="mx_MemberList_wrapper">
+                            {this.makeMemberTiles('join')}
+                        </div>
                     </div>
+                    {invitedSection}
+                    {this.inviteTile()}
                 </div>
             </div>
         );
