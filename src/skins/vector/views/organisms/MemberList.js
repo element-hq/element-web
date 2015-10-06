@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var classNames = require('classnames');
+var Loader = require('react-loader');
 
 var MemberListController = require('matrix-react-sdk/lib/controllers/organisms/MemberList')
 
@@ -69,14 +70,20 @@ module.exports = React.createClass({
         });
 
         var EditableText = sdk.getComponent("atoms.EditableText");
-        return (
-            <div className={ classes } onClick={ this.onClickInvite } >
-                <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="40" height="40" alt=""/></div>            
-                <div className="mx_MemberTile_name">
-                    <EditableText ref="invite" label="Invite" placeHolder="@user:domain.com" initialValue="" onValueChanged={this.onPopulateInvite}/>
+        if (this.state.inviting) {
+            return (
+                <Loader />
+            );
+        } else {
+            return (
+                <div className={ classes } onClick={ this.onClickInvite } >
+                    <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="40" height="40" alt=""/></div>
+                    <div className="mx_MemberTile_name">
+                        <EditableText ref="invite" label="Invite" placeHolder="@user:domain.com" initialValue="" onValueChanged={this.onPopulateInvite}/>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
     },
 
     render: function() {
