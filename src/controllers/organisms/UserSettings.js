@@ -26,22 +26,11 @@ module.exports = {
 
     getInitialState: function() {
         return {
-            displayName: null,
             avatarUrl: null,
             threePids: [],
             clientVersion: version,
             phase: this.Phases.Loading,
         };
-    },
-
-    changeDisplayname: function(new_displayname) {
-        if (this.state.displayName == new_displayname) return;
-
-        var self = this;
-        return MatrixClientPeg.get().setDisplayName(new_displayname).then(
-            function() { self.setState({displayName: new_displayname}); },
-            function(err) { console.err(err); }
-        );
     },
 
     componentWillMount: function() {
@@ -54,7 +43,6 @@ module.exports = {
         q.all([profile_d, threepid_d]).then(
             function(resps) {
                 self.setState({
-                    displayName: resps[0].displayname,
                     avatarUrl: resps[0].avatar_url,
                     threepids: resps[1].threepids,
                     phase: self.Phases.Display,
