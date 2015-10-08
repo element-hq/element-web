@@ -19,12 +19,13 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var dis = require('matrix-react-sdk/lib/dispatcher');
 
 var sdk = require('matrix-react-sdk')
 var classNames = require("classnames");
 var filesize = require('filesize');
 
-var RoomViewController = require('matrix-react-sdk/lib/controllers/organisms/RoomView')
+var RoomViewController = require('../../../../controllers/organisms/RoomView')
 
 var Loader = require("react-loader");
 
@@ -60,6 +61,14 @@ module.exports = React.createClass({
 
     onCancelClick: function() {
         this.setState(this.getInitialState());
+    },
+
+    onConferenceNotificationClick: function() {
+        dis.dispatch({
+            action: 'place_call',
+            type: "video",
+            room_id: this.props.roomId
+        });
     },
 
     getUnreadMessagesString: function() {
