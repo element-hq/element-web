@@ -127,6 +127,31 @@ module.exports = {
                 });
                 this.notifyNewScreen('login');
                 break;
+            case 'cas_login':
+                if (this.state.logged_in) return;
+
+                var self = this;
+                var client = MatrixClientPeg.get();
+                var splitLocation = window.location.href.split('/');
+                var serviceUrl = splitLocation[0] + "//" + splitLocation[2];
+
+                client.loginWithCas(payload.params.ticket, serviceUrl).done(function(data) {
+                    MatrixClientPeg.replaceUsingAccessToken(
+                        client.getHsUrl(), client.getIsUrl(),
+                        data.user_id, data.access_token
+                    );
+                    self.setState({
+                        screen: undefined,
+                        logged_in: true
+                    });
+                    self.startMatrixClient();
+                    self.notifyNewScreen('');
+                }, function(error) {
+                    self.notifyNewScreen('login');
+                    self.setState({errorText: 'Login failed.'});
+                });
+
+                break;
             case 'view_room':
                 this.focusComposer = true;
                 var newState = {
@@ -312,6 +337,11 @@ module.exports = {
         } else if (screen == 'login') {
             dis.dispatch({
                 action: 'start_login',
+                params: params
+            });
+        } else if (screen == 'cas_login') {
+            dis.dispatch({
+                action: 'cas_login',
                 params: params
             });
         } else if (screen.indexOf('room/') == 0) {
