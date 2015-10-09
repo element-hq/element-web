@@ -19,10 +19,11 @@ limitations under the License.
 var React = require('react');
 
 var sdk = require('matrix-react-sdk')
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg')
 
 var Loader = require("react-loader");
 
-var RegisterController = require('matrix-react-sdk/lib/controllers/templates/Register')
+var RegisterController = require('../../../../controllers/templates/Register')
 
 module.exports = React.createClass({
     DEFAULT_HS_URL: 'https://matrix.org',
@@ -79,6 +80,10 @@ module.exports = React.createClass({
         this.forceUpdate();
     },
 
+    onProfileContinueClicked: function() {
+        this.onAccountReady();
+    },
+
     componentForStep: function(step) {
         switch (step) {
             case 'initial':
@@ -126,6 +131,18 @@ module.exports = React.createClass({
         if (this.state.busy) {
             return (
                 <Loader />
+            );
+        } else if (this.state.step == 'profile') {
+            var ChangeDisplayName = sdk.getComponent('molecules.ChangeDisplayName');
+            var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
+            return (
+                <div className="mx_Login_profile">
+                    Set a display name:
+                    <ChangeDisplayName />
+                    Upload an avatar:
+                    <ChangeAvatar initialAvatarUrl={MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl)} />
+                    <button onClick={this.onProfileContinueClicked}>Continue</button>
+                </div>
             );
         } else {
             return (

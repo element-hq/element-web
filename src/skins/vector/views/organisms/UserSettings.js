@@ -30,7 +30,15 @@ module.exports = React.createClass({
     editAvatar: function() {
         var url = MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl);
         var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
-        Modal.createDialog(ChangeAvatar, {initialAvatarUrl: url});
+        var avatarDialog = (
+            <div>
+                <ChangeAvatar initialAvatarUrl={url} />
+                <div className="mx_Dialog_buttons">
+                    <button onClick={this.onAvatarDialogCancel}>Cancel</button>
+                </div>
+            </div>
+        );
+        this.avatarDialog = Modal.createDialogWithElement(avatarDialog);
     },
 
     addEmail: function() {
@@ -53,6 +61,10 @@ module.exports = React.createClass({
 
     onLogoutPromptCancel: function() {
         this.logoutModal.closeDialog();
+    },
+
+    onAvatarDialogCancel: function() {
+        this.avatarDialog.close();
     },
 
     render: function() {
@@ -80,7 +92,7 @@ module.exports = React.createClass({
 
                                 <div className="mx_UserSettings_3pids">
                                     {this.state.threepids.map(function(val) {
-                                        return <div>{val.address}</div>;
+                                        return <div key={val.address}>{val.address}</div>;
                                     })}
                                 </div>
 

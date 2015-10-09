@@ -51,9 +51,6 @@ module.exports = React.createClass({
                             <input type="file" onChange={this.onFileSelected}/>
                             {this.state.errorText}
                         </div>    
-                        <div className="mx_Dialog_buttons">
-                            <button onClick={this.props.onFinished}>Cancel</button>
-                        </div>
                     </div>
                 );
             case this.Phases.Uploading:
