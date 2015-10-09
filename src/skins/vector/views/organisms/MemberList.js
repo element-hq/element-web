@@ -33,15 +33,38 @@ module.exports = React.createClass({
         return { editing: false };
     },
 
+    memberSort: function(userIdA, userIdB) {
+        var userA = this.memberDict[userIdA].user;
+        var userB = this.memberDict[userIdB].user;
+
+        var presenceMap = {
+            online: 3,
+            unavailable: 2,
+            offline: 1
+        };
+
+        var presenceOrdA = userA ? presenceMap[userA.presence] : 0;
+        var presenceOrdB = userB ? presenceMap[userB.presence] : 0;
+
+        if (presenceOrdA != presenceOrdB) {
+            return presenceOrdB - presenceOrdA;
+        }
+
+        var latA = userA ? (userA.lastPresenceTs - (userA.lastActiveAgo || userA.lastPresenceTs)) : 0;
+        var latB = userB ? (userB.lastPresenceTs - (userB.lastActiveAgo || userB.lastPresenceTs)) : 0;
+
+        return latB - latA;
+    },
+
     makeMemberTiles: function(membership) {
         var MemberTile = sdk.getComponent("molecules.MemberTile");
 
         var self = this;
-        return Object.keys(self.state.memberDict).filter(function(userId) {
-            var m = self.state.memberDict[userId];
+        return self.state.members.filter(function(userId) {
+            var m = self.memberDict[userId];
             return m.membership == membership;
         }).map(function(userId) {
-            var m = self.state.memberDict[userId];
+            var m = self.memberDict[userId];
             return (
                 <MemberTile key={userId} member={m} ref={userId} />
             );
