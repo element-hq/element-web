@@ -83,7 +83,7 @@ module.exports = React.createClass({
                 <div className="mx_MImageTile_download">
                     <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
                         <img src="img/download.png" width="10" height="12"/>
-                        Download {content.body} ({ filesize(content.info.size) })
+                        Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknwon size" })
                     </a>
                 </div>
             </span>
