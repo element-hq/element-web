@@ -146,8 +146,8 @@ module.exports = {
                         if (theAlias) presentedId = theAlias;
                     }
                     this.notifyNewScreen('room/'+presentedId);
+                    newState.ready = true;
                 }
-                newState.ready = true;
                 this.setState(newState);
                 break;
             case 'view_prev_room':
