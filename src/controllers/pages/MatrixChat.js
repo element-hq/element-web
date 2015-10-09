@@ -85,10 +85,6 @@ module.exports = {
         var self = this;
         switch (payload.action) {
             case 'logout':
-                this.replaceState({
-                    logged_in: false,
-                    ready: false
-                });
                 if (window.localStorage) {
                     window.localStorage.clear();
                 }
@@ -98,6 +94,10 @@ module.exports = {
                 MatrixClientPeg.get().removeAllListeners();
                 MatrixClientPeg.unset();
                 this.notifyNewScreen('login');
+                this.replaceState({
+                    logged_in: false,
+                    ready: false
+                });
                 break;
             case 'start_registration':
                 if (this.state.logged_in) return;
