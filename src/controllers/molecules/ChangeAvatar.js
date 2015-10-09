@@ -19,7 +19,6 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 
 module.exports = {
     propTypes: {
-        onFinished: React.PropTypes.func,
         initialAvatarUrl: React.PropTypes.string.isRequired,
     },
 
@@ -27,12 +26,6 @@ module.exports = {
         Display: "display",
         Uploading: "uploading",
         Error: "error",
-    },
-
-    getDefaultProps: function() {
-        return {
-            onFinished: function() {},
-        };
     },
 
     getInitialState: function() {

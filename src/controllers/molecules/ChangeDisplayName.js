@@ -39,7 +39,7 @@ module.exports = {
         var self = this;
         cli.getProfileInfo(cli.credentials.userId).done(function(result) {
             self.setState({
-                displayname: result.displayname,
+                displayName: result.displayname,
                 busy: false
             });
         }, function(error) {
@@ -60,7 +60,10 @@ module.exports = {
 
         var self = this;
         MatrixClientPeg.get().setDisplayName(new_displayname).then(function() {
-            self.setState({busy: false});
+            self.setState({
+                busy: false,
+                displayName: new_displayname
+            });
         }, function(error) {
             self.setState({
                 busy: false,

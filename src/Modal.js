@@ -34,6 +34,29 @@ module.exports = {
         return container;
     },
 
+    createDialogWithElement: function(element, props) {
+        var self = this;
+
+        var closeDialog = function() {
+            React.unmountComponentAtNode(self.getOrCreateContainer());
+
+            if (props && props.onFinished) props.onFinished.apply(null, arguments);
+        };
+
+        var dialog = (
+            <div className="mx_Dialog_wrapper">
+                <div className="mx_Dialog">
+                    {element}
+                </div>
+                <div className="mx_Dialog_background" onClick={closeDialog}></div>
+            </div>
+        );
+
+        React.render(dialog, this.getOrCreateContainer());
+
+        return {close: closeDialog};
+    },
+
     createDialog: function (Element, props) {
         var self = this;
 
