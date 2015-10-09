@@ -22,9 +22,17 @@ var INITIAL_LOAD_NUM_MEMBERS = 50;
 
 module.exports = {
     getInitialState: function() {
+        if (!this.props.roomId) return {};
+        var cli = MatrixClientPeg.get();
+        var room = cli.getRoom(this.props.roomId);
+        if (!room) return {};
+        var all_members = room.currentState.members;
+
+        this.memberDict = this.getMemberDict();
+
         var members = this.roomMembers(INITIAL_LOAD_NUM_MEMBERS);
         return {
-            memberDict: members
+            members: members
         };
     },
 
@@ -49,7 +57,7 @@ module.exports = {
         setTimeout(function() {
             if (!self.isMounted()) return;
             self.setState({
-                memberDict: self.roomMembers()
+                members: self.roomMembers()
             });
         }, 50);
 
@@ -96,9 +104,11 @@ module.exports = {
     },
 
     _updateList: function() {
-        var members = this.roomMembers();
+        this.memberDict = this.getMemberDict();
+
+        var self = this;
         this.setState({
-            memberDict: members
+            members: self.roomMembers()
         });
     },
 
@@ -137,41 +147,38 @@ module.exports = {
         });
     },
 
-    roomMembers: function(limit) {
+    getMemberDict: function() {
         if (!this.props.roomId) return {};
         var cli = MatrixClientPeg.get();
         var room = cli.getRoom(this.props.roomId);
         if (!room) return {};
+
         var all_members = room.currentState.members;
-        var all_user_ids = Object.keys(all_members);
 
         // XXX: evil hack until SYJS-28 is fixed
-        all_user_ids.map(function(userId) {
+        Object.keys(all_members).map(function(userId) {
             if (all_members[userId].user && !all_members[userId].user.lastPresenceTs) {
                 all_members[userId].user.lastPresenceTs = Date.now();
             }
         });
 
-        all_user_ids.sort(function(userIdA, userIdB) {
-            var userA = all_members[userIdA].user;
-            var userB = all_members[userIdB].user;
+        return all_members;
+    },
 
-            var latA = userA ? (userA.lastPresenceTs - (userA.lastActiveAgo || userA.lastPresenceTs)) : 0;
-            var latB = userB ? (userB.lastPresenceTs - (userB.lastActiveAgo || userB.lastPresenceTs)) : 0;
+    roomMembers: function(limit) {
+        var all_members = this.memberDict;
+        var all_user_ids = Object.keys(all_members);
 
-            return latB - latA;
-        });
+        if (this.memberSort) all_user_ids.sort(this.memberSort);
 
-        var to_display = {};
+        var to_display = [];
         var count = 0;
         for (var i = 0; i < all_user_ids.length && (limit === undefined || count < limit); ++i) {
             var user_id = all_user_ids[i];
             var m = all_members[user_id];
 
             if (m.membership == 'join' || m.membership == 'invite') {
-                // XXX: this is evil, and relies on the fact that Object.keys() iterates
-                // over the keys of a dict in insertion order (if those keys are strings)
-                to_display[user_id] = m;
+                to_display.push(user_id);
                 ++count;
             }
         }
