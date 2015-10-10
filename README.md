@@ -34,6 +34,9 @@ changes to the react sdk, you can:
 If you add or remove any components from the Vector skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.
 
+You may need to run `npm i source-map-loader` in matrix-js-sdk if you get errors
+about "Cannot resolve module 'source-map-loader'" due to shortcomings in webpack.
+
 Deployment
 ==========
 
