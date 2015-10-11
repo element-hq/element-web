@@ -42,7 +42,7 @@ module.exports = React.createClass({
         }
 
         var recentsLabel = this.props.collapsed ? 
-                           <img onClick={ this.onShowClick } src="img/menu.png" width="27" height="20" alt=">"/> :
+                           <img style={{cursor: 'pointer'}} onClick={ this.onShowClick } src="img/menu.png" width="27" height="20" alt=">"/> :
                            "Recents";
 
         return (
