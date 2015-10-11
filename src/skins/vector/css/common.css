@@ -14,6 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+html {
+    height: 100%;
+    overflow: hidden;
+}
+
 body {
     font-family: 'Lato', Helvetica, Arial, Sans-Serif;
     font-size: 16px;
