@@ -64,8 +64,13 @@ module.exports = React.createClass({
             }
         }
 
+        var classes = "mx_RightPanel";
+        if (this.state.phase === this.Phase.None) {
+            classes += " collapsed";
+        }
+
         return (
-            <aside className="mx_RightPanel">
+            <aside className={classes}>
                 <div className="mx_RightPanel_header">
                     { buttonGroup }
                 </div>
