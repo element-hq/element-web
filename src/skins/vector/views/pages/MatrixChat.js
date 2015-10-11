@@ -31,6 +31,43 @@ module.exports = React.createClass({
     displayName: 'MatrixChat',
     mixins: [MatrixChatController],
 
+    getInitialState: function() {
+        return {
+            width: 10000,
+        }
+    },
+
+    componentDidMount: function() {
+        window.addEventListener('resize', this.handleResize);
+        this.handleResize();
+    },
+
+    componentWillUnmount: function() {
+        window.removeEventListener('resize', this.handleResize);
+    },
+
+    handleResize: function(e) {
+        var hideLhsThreshold = 1000;
+        var showLhsThreshold = 1000;
+        var hideRhsThreshold = 820;
+        var showRhsThreshold = 820;
+
+        if (this.state.width > hideLhsThreshold && window.innerWidth <= hideLhsThreshold) {
+            dis.dispatch({ action: 'hide_left_panel' });
+        }
+        if (this.state.width <= showLhsThreshold && window.innerWidth > showLhsThreshold) {
+            dis.dispatch({ action: 'show_left_panel' });
+        }
+        if (this.state.width > hideRhsThreshold && window.innerWidth <= hideRhsThreshold) {
+            dis.dispatch({ action: 'hide_right_panel' });
+        }
+        if (this.state.width <= showRhsThreshold && window.innerWidth > showRhsThreshold) {
+            dis.dispatch({ action: 'show_right_panel' });
+        }
+
+        this.setState({width: window.innerWidth});
+    },
+
     onRoomCreated: function(room_id) {
         dis.dispatch({
             action: "view_room",
@@ -57,19 +94,19 @@ module.exports = React.createClass({
             switch (this.state.page_type) {
                 case this.PageTypes.RoomView:
                     page_element = <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
-                    right_panel = <RightPanel roomId={this.state.currentRoom} />
+                    right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} />
                     break;
                 case this.PageTypes.UserSettings:
                     page_element = <UserSettings />
-                    right_panel = <RightPanel/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
                     break;
                 case this.PageTypes.CreateRoom:
                     page_element = <CreateRoom onRoomCreated={this.onRoomCreated}/>
-                    right_panel = <RightPanel/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
                     break;
                 case this.PageTypes.RoomDirectory:
                     page_element = <RoomDirectory />
-                    right_panel = <RightPanel/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
                     break;
             }
 
