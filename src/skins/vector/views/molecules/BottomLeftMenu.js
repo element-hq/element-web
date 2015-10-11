@@ -41,19 +41,19 @@ module.exports = React.createClass({
                 <div className="mx_BottomLeftMenu_options">
                     <div className="mx_RoomTile" onClick={this.onCreateRoomClick}>
                         <div className="mx_RoomTile_avatar">
-                            <img src="img/create-big.png" alt="Create new room" title="Create new room" width="42" height="42"/>
+                            <img src="img/create-big.png" alt="Create new room" title="Create new room" width="36" height="36"/>
                         </div>
                         <div className="mx_RoomTile_name">Create new room</div>
                     </div>
                     <div className="mx_RoomTile" onClick={this.onRoomDirectoryClick}>
                         <div className="mx_RoomTile_avatar">
-                            <img src="img/directory-big.png" alt="Directory" title="Directory" width="42" height="42"/>
+                            <img src="img/directory-big.png" alt="Directory" title="Directory" width="36" height="36"/>
                         </div>
                         <div className="mx_RoomTile_name">Directory</div>
                     </div>
                     <div className="mx_RoomTile" onClick={this.onSettingsClick}>
                         <div className="mx_RoomTile_avatar">
-                            <img src="img/settings-big.png" alt="Settings" title="Settings" width="42" height="42"/>
+                            <img src="img/settings-big.png" alt="Settings" title="Settings" width="36" height="36"/>
                         </div>
                         <div className="mx_RoomTile_name">Settings</div>
                     </div>

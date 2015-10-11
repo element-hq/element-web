@@ -34,13 +34,15 @@ module.exports = React.createClass({
             callElement = <CallView className="mx_MatrixChat_callView"/>
         }
 
+        var recentsLabel = this.props.collapsed ? "" : "Recents";
+
         return (
             <div className="mx_RoomList">
                 {callElement}
                 <h2 className="mx_RoomList_favourites_label">Favourites</h2>
                 <RoomDropTarget text="Drop here to favourite"/>
 
-                <h2 className="mx_RoomList_recents_label">Recents</h2>
+                <h2 className="mx_RoomList_recents_label">{ recentsLabel }&nbsp;</h2>
                 <div className="mx_RoomList_recents">
                     {this.makeRoomTiles()}
                 </div>

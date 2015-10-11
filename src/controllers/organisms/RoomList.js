@@ -159,6 +159,7 @@ module.exports = {
                 <RoomTile
                     room={room}
                     key={room.roomId}
+                    collapsed={self.props.collapsed}
                     selected={selected}
                     unread={self.state.activityMap[room.roomId] === 1}
                     highlight={self.state.activityMap[room.roomId] === 2}

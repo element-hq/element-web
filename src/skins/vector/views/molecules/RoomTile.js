@@ -28,6 +28,19 @@ var sdk = require('matrix-react-sdk')
 module.exports = React.createClass({
     displayName: 'RoomTile',
     mixins: [RoomTileController],
+
+    getInitialState: function() {
+        return( { hover : false });
+    },
+
+    onMouseEnter: function() {
+        this.setState( { hover : true });
+    },
+
+    onMouseLeave: function() {
+        this.setState( { hover : false });
+    },
+
     render: function() {
         var myUserId = MatrixClientPeg.get().credentials.userId;
         var classes = classNames({
@@ -57,14 +70,26 @@ module.exports = React.createClass({
             nameCell = <div className="mx_RoomTile_name">{name}</div>;
         }
         */
+
+        var nameElement;
+        if (!this.props.collapsed) {
+            nameElement = <div className="mx_RoomTile_name">{name}</div>;
+        }
+        else if (this.state.hover) {
+            nameElement = <div className="mx_RoomTile_tooltip">
+                            <img className="mx_RoomTile_chevron" src="img/chevron-left.png" width="9" height="16"/>
+                            { name }
+                          </div>;
+        }
+
         var RoomAvatar = sdk.getComponent('atoms.RoomAvatar');
         return (
-            <div className={classes} onClick={this.onClick}>
+            <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className="mx_RoomTile_avatar">
                     <RoomAvatar room={this.props.room} />
                     { badge }
                 </div>
-                <div className="mx_RoomTile_name">{name}</div>
+                { nameElement }
             </div>
         );
     }

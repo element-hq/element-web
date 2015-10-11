@@ -73,6 +73,11 @@ limitations under the License.
     flex: 0 0 230px;
 }
 
+.mx_MatrixChat .mx_LeftPanel.collapsed {
+    -webkit-flex: 0 0 60px;
+    flex: 0 0 60px;    
+}
+
 .mx_MatrixChat .mx_MatrixChat_middlePanel {
     -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;

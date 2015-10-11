@@ -28,8 +28,16 @@ limitations under the License.
 
 .mx_LeftPanel_hideButton {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 18px;
+    right: 8px;
+    cursor: pointer;
+}
+
+.mx_LeftPanel_showButton {
+    position: absolute;
+    top: 18px;
+    left: 16px;
+    cursor: pointer;
 }
 
 .mx_LeftPanel .mx_RoomList {

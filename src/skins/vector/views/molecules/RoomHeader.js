@@ -92,7 +92,7 @@ module.exports = React.createClass({
             var roomAvatar = null;
             if (this.props.room) {
                 roomAvatar = (
-                    <RoomAvatar room={this.props.room} />
+                    <RoomAvatar room={this.props.room} width="48" height="48" />
                 );
             }
 

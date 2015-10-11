@@ -22,16 +22,40 @@ var sdk = require('matrix-react-sdk')
 module.exports = React.createClass({
     displayName: 'LeftPanel',
 
+    getInitialState: function() {
+        return {
+            collapsed: false,
+        };
+    },
+
+    onShowClick: function() {
+        this.setState({ collapsed : false });
+    },
+
+    onHideClick: function() {
+        this.setState({ collapsed : true });
+    },
+
     render: function() {
         var RoomList = sdk.getComponent('organisms.RoomList');
         var BottomLeftMenu = sdk.getComponent('molecules.BottomLeftMenu');
         var IncomingCallBox = sdk.getComponent('molecules.voip.IncomingCallBox');
 
+        var collapseButton;
+        var classes = "mx_LeftPanel";
+        if (this.state.collapsed) {
+            classes += " collapsed";
+            collapseButton = <img className="mx_LeftPanel_showButton" onClick={ this.onShowClick } src="img/menu.png" width="27" height="20" alt=">"/>
+        }
+        else {
+            collapseButton = <img className="mx_LeftPanel_hideButton" onClick={ this.onHideClick } src="img/hide.png" width="12" height="20" alt="<"/>   
+        }
+
         return (
-            <aside className="mx_LeftPanel">
-                <img className="mx_LeftPanel_hideButton" src="img/hide.png" width="32" height="32" alt="<"/>
+            <aside className={classes}>
+                { collapseButton }
                 <IncomingCallBox />
-                <RoomList selectedRoom={this.props.selectedRoom} />
+                <RoomList selectedRoom={this.props.selectedRoom} collapsed={this.state.collapsed}/>
                 <BottomLeftMenu />
             </aside>
         );
