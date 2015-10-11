@@ -21,8 +21,8 @@ var MatrixClientPeg = require('../../MatrixClientPeg');
 module.exports = {
     getDefaultProps: function() {
         return {
-            width: 40,
-            height: 40,
+            width: 36,
+            height: 36,
             resizeMethod: 'crop'
         }
     },
