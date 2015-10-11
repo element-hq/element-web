@@ -154,8 +154,10 @@ module.exports = React.createClass({
                         <div className="mx_RoomView_uploadProgressOuter">
                             <div className="mx_RoomView_uploadProgressInner" style={innerProgressStyle}></div>
                         </div>
+                        <img className="mx_RoomView_uploadIcon" src="img/fileicon.png" width="40" height="40"/>
+                        <img className="mx_RoomView_uploadCancel" src="img/cancel.png" width="40" height="40"/>
                         <div className="mx_RoomView_uploadBytes">
-                        {filesize(this.state.upload.uploadedBytes).replace(/ .*/, '')} / {filesize(this.state.upload.totalBytes)}
+                            {filesize(this.state.upload.uploadedBytes).replace(/ .*/, '')} / {filesize(this.state.upload.totalBytes)}
                         </div>
                         <div className="mx_RoomView_uploadFilename">Uploading {this.state.upload.fileName}</div>
                     </div>

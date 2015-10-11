@@ -28,8 +28,9 @@ limitations under the License.
 
 .mx_LeftPanel_hideButton {
     position: absolute;
-    top: 18px;
-    right: 8px;
+    top: 10px;
+    right: 0px;
+    padding: 8px;
     cursor: pointer;
 }
 

@@ -212,7 +212,7 @@ limitations under the License.
 
 .mx_RoomView_uploadProgressOuter {
     width: 100%;
-    background-color: #a9dbf4;
+    background-color: rgba(169, 219, 244, 0.5);
     height: 4px;
 }
 
@@ -226,11 +226,23 @@ limitations under the License.
     margin-left: 56px;
 }
 
+.mx_RoomView_uploadIcon {
+    float: left;
+    margin-top: 6px;
+    margin-left: 5px;
+}
+
+.mx_RoomView_uploadCancel {
+    float: right;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
 .mx_RoomView_uploadBytes {
     float: right;    
     opacity: 0.5;
     margin-top: 15px;
-    margin-right: 70px;
+    margin-right: 10px;
 }
 
 .mx_RoomView_ongoingConfCallNotification {
