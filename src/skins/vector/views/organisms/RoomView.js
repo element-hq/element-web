@@ -138,19 +138,26 @@ module.exports = React.createClass({
                 <div />
             );
 
+            // for testing UI...
+            // this.state.upload = {
+            //     uploadedBytes: 123493,
+            //     totalBytes: 347534,
+            //     fileName: "testing_fooble.jpg",
+            // }
+
             if (this.state.upload) {
                 var innerProgressStyle = {
                     width: ((this.state.upload.uploadedBytes / this.state.upload.totalBytes) * 100) + '%'
                 };
                 statusBar = (
                     <div className="mx_RoomView_uploadBar">
-                        <span className="mx_RoomView_uploadFilename">Uploading {this.state.upload.fileName}</span>
-                        <span className="mx_RoomView_uploadBytes">
-                        {filesize(this.state.upload.uploadedBytes)} / {filesize(this.state.upload.totalBytes)}
-                        </span>
                         <div className="mx_RoomView_uploadProgressOuter">
                             <div className="mx_RoomView_uploadProgressInner" style={innerProgressStyle}></div>
                         </div>
+                        <div className="mx_RoomView_uploadBytes">
+                        {filesize(this.state.upload.uploadedBytes).replace(/ .*/, '')} / {filesize(this.state.upload.totalBytes)}
+                        </div>
+                        <div className="mx_RoomView_uploadFilename">Uploading {this.state.upload.fileName}</div>
                     </div>
                 );
             } else {

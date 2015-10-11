@@ -212,13 +212,25 @@ limitations under the License.
 
 .mx_RoomView_uploadProgressOuter {
     width: 100%;
-    background-color: black;
-    height: 5px;
+    background-color: #a9dbf4;
+    height: 4px;
 }
 
 .mx_RoomView_uploadProgressInner {
-    background-color: blue;
-    height: 5px;
+    background-color: #80cef4;
+    height: 4px;
+}
+
+.mx_RoomView_uploadFilename {
+    margin-top: 15px;
+    margin-left: 56px;
+}
+
+.mx_RoomView_uploadBytes {
+    float: right;    
+    opacity: 0.5;
+    margin-top: 15px;
+    margin-right: 70px;
 }
 
 .mx_RoomView_ongoingConfCallNotification {
