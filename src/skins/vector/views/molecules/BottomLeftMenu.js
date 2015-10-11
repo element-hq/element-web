@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-
+var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
 module.exports = React.createClass({
@@ -35,28 +35,24 @@ module.exports = React.createClass({
         dis.dispatch({action: 'view_create_room'});
     },
 
+    getLabel: function(name) {
+        if (!this.props.collapsed) {
+            return <div className="mx_RoomTile_name">{name}</div>
+        }
+        else if (this.state.hover) {
+            var RoomTooltip = sdk.getComponent("molecules.RoomTooltip");
+            return <RoomTooltip name={name}/>;
+        }
+    },
+
     render: function() {
+        var BottomLeftMenuTile = sdk.getComponent('molecules.BottomLeftMenuTile');
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
-                    <div className="mx_RoomTile" onClick={this.onCreateRoomClick}>
-                        <div className="mx_RoomTile_avatar">
-                            <img src="img/create-big.png" alt="Create new room" title="Create new room" width="36" height="36"/>
-                        </div>
-                        <div className="mx_RoomTile_name">Create new room</div>
-                    </div>
-                    <div className="mx_RoomTile" onClick={this.onRoomDirectoryClick}>
-                        <div className="mx_RoomTile_avatar">
-                            <img src="img/directory-big.png" alt="Directory" title="Directory" width="36" height="36"/>
-                        </div>
-                        <div className="mx_RoomTile_name">Directory</div>
-                    </div>
-                    <div className="mx_RoomTile" onClick={this.onSettingsClick}>
-                        <div className="mx_RoomTile_avatar">
-                            <img src="img/settings-big.png" alt="Settings" title="Settings" width="36" height="36"/>
-                        </div>
-                        <div className="mx_RoomTile_name">Settings</div>
-                    </div>
+                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/create-big.png" label="Create new room" onClick={ this.onCreateRoomClick }/>
+                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/directory-big.png" label="Directory" onClick={ this.onRoomDirectoryClick }/>
+                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/settings-big.png" label="Settings" onClick={ this.onSettingsClick }/>
                 </div>
             </div>
         );

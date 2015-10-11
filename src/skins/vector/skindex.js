@@ -35,6 +35,7 @@ skin['atoms.MessageTimestamp'] = require('./views/atoms/MessageTimestamp');
 skin['atoms.RoomAvatar'] = require('./views/atoms/RoomAvatar');
 skin['atoms.voip.VideoFeed'] = require('./views/atoms/voip/VideoFeed');
 skin['molecules.BottomLeftMenu'] = require('./views/molecules/BottomLeftMenu');
+skin['molecules.BottomLeftMenuTile'] = require('./views/molecules/BottomLeftMenuTile');
 skin['molecules.ChangeAvatar'] = require('./views/molecules/ChangeAvatar');
 skin['molecules.ChangeDisplayName'] = require('./views/molecules/ChangeDisplayName');
 skin['molecules.ChangePassword'] = require('./views/molecules/ChangePassword');

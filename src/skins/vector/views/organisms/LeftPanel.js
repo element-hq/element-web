@@ -48,7 +48,7 @@ module.exports = React.createClass({
                 { collapseButton }
                 <IncomingCallBox />
                 <RoomList selectedRoom={this.props.selectedRoom} collapsed={this.props.collapsed}/>
-                <BottomLeftMenu />
+                <BottomLeftMenu collapsed={this.props.collapsed}/>
             </aside>
         );
     }

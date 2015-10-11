@@ -28,25 +28,35 @@ module.exports = React.createClass({
     displayName: 'RoomTooltip',
 
     componentDidMount: function() {
-        // tell the roomlist about us
-        dis.dispatch({
-            action: 'view_tooltip',
-            tooltip: this.getDOMNode(),
-        });
+        if (!this.props.bottom) {
+            // tell the roomlist about us so it can position us
+            dis.dispatch({
+                action: 'view_tooltip',
+                tooltip: this.getDOMNode(),
+            });
+        }
+        else {
+            var tooltip = this.getDOMNode();
+            tooltip.style.top = tooltip.parentElement.getBoundingClientRect().top + "px"; 
+            tooltip.style.display = "block";
+        }
     },
 
     componentDidUnmount: function() {
-        dis.dispatch({
-            action: 'view_tooltip',
-            tooltip: null,
-        });
+        if (!this.props.bottom) {
+            dis.dispatch({
+                action: 'view_tooltip',
+                tooltip: null,
+            });
+        }
     },
 
     render: function() {
+        var label = this.props.room ? this.props.room.name : this.props.label;
         return (
             <div className="mx_RoomTooltip">
                  <img className="mx_RoomTooltip_chevron" src="img/chevron-left.png" width="9" height="16"/>
-                 { this.props.room.name }
+                 { label }
             </div>
         );
     }

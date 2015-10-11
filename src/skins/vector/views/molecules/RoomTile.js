@@ -77,7 +77,7 @@ module.exports = React.createClass({
         }
         else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("molecules.RoomTooltip");
-            label = <RoomTooltip room={this.props.room} ref="roomTooltip"/>;
+            label = <RoomTooltip room={this.props.room}/>;
         }
 
         var RoomAvatar = sdk.getComponent('atoms.RoomAvatar');
