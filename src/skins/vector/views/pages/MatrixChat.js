@@ -79,7 +79,7 @@ module.exports = React.createClass({
                         <div className="mx_MatrixChat_wrapper">
                             <MatrixToolbar />
                             <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
-                                <LeftPanel selectedRoom={this.state.currentRoom} />
+                                <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
                                 <main className="mx_MatrixChat_middlePanel">
                                     {page_element}
                                 </main>
@@ -91,7 +91,7 @@ module.exports = React.createClass({
             else {
                 return (
                         <div className="mx_MatrixChat">
-                            <LeftPanel selectedRoom={this.state.currentRoom} />
+                            <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
                             <main className="mx_MatrixChat_middlePanel">
                                 {page_element}
                             </main>

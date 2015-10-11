@@ -71,15 +71,13 @@ module.exports = React.createClass({
         }
         */
 
-        var nameElement;
+        var label;
         if (!this.props.collapsed) {
-            nameElement = <div className="mx_RoomTile_name">{name}</div>;
+            label = <div className="mx_RoomTile_name">{name}</div>;
         }
         else if (this.state.hover) {
-            nameElement = <div className="mx_RoomTile_tooltip">
-                            <img className="mx_RoomTile_chevron" src="img/chevron-left.png" width="9" height="16"/>
-                            { name }
-                          </div>;
+            var RoomTooltip = sdk.getComponent("molecules.RoomTooltip");
+            label = <RoomTooltip room={this.props.room} ref="roomTooltip"/>;
         }
 
         var RoomAvatar = sdk.getComponent('atoms.RoomAvatar');
@@ -89,7 +87,7 @@ module.exports = React.createClass({
                     <RoomAvatar room={this.props.room} />
                     { badge }
                 </div>
-                { nameElement }
+                { label }
             </div>
         );
     }

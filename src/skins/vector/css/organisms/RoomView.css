@@ -109,7 +109,7 @@ limitations under the License.
     margin-top: 18px;
     margin-bottom: 18px;
 
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .mx_RoomView_messageListWrapper {

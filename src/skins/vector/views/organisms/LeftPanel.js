@@ -18,22 +18,15 @@ limitations under the License.
 
 var React = require('react');
 var sdk = require('matrix-react-sdk')
+var dis = require('matrix-react-sdk/lib/dispatcher');
 
 module.exports = React.createClass({
     displayName: 'LeftPanel',
 
-    getInitialState: function() {
-        return {
-            collapsed: false,
-        };
-    },
-
-    onShowClick: function() {
-        this.setState({ collapsed : false });
-    },
-
     onHideClick: function() {
-        this.setState({ collapsed : true });
+        dis.dispatch({
+            action: 'hide_left_panel',
+        });
     },
 
     render: function() {
@@ -43,9 +36,8 @@ module.exports = React.createClass({
 
         var collapseButton;
         var classes = "mx_LeftPanel";
-        if (this.state.collapsed) {
+        if (this.props.collapsed) {
             classes += " collapsed";
-            collapseButton = <img className="mx_LeftPanel_showButton" onClick={ this.onShowClick } src="img/menu.png" width="27" height="20" alt=">"/>
         }
         else {
             collapseButton = <img className="mx_LeftPanel_hideButton" onClick={ this.onHideClick } src="img/hide.png" width="12" height="20" alt="<"/>   
@@ -55,7 +47,7 @@ module.exports = React.createClass({
             <aside className={classes}>
                 { collapseButton }
                 <IncomingCallBox />
-                <RoomList selectedRoom={this.props.selectedRoom} collapsed={this.state.collapsed}/>
+                <RoomList selectedRoom={this.props.selectedRoom} collapsed={this.props.collapsed}/>
                 <BottomLeftMenu />
             </aside>
         );

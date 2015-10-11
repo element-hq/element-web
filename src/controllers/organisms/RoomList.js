@@ -52,6 +52,11 @@ module.exports = {
             case 'call_state':
                 this._recheckCallElement(this.props.selectedRoom);
                 break;
+            case 'view_tooltip':
+                this.tooltip = payload.tooltip;
+                this._repositionTooltip();
+                if (this.tooltip) this.tooltip.style.display = 'block';
+                break
         }
     },
 
@@ -148,6 +153,13 @@ module.exports = {
         this.setState({
             show_call_element: showCall
         });
+    },
+
+    _repositionTooltip: function(e) {
+        if (this.tooltip && this.tooltip.parentElement) {
+            var scroll = this.getDOMNode();
+            this.tooltip.style.top = (scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - scroll.scrollTop) + "px"; 
+        }
     },
 
     makeRoomTiles: function() {

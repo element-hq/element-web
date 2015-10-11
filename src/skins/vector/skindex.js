@@ -57,6 +57,7 @@ skin['molecules.RoomDropTarget'] = require('./views/molecules/RoomDropTarget');
 skin['molecules.RoomHeader'] = require('./views/molecules/RoomHeader');
 skin['molecules.RoomSettings'] = require('./views/molecules/RoomSettings');
 skin['molecules.RoomTile'] = require('./views/molecules/RoomTile');
+skin['molecules.RoomTooltip'] = require('./views/molecules/RoomTooltip');
 skin['molecules.SenderProfile'] = require('./views/molecules/SenderProfile');
 skin['molecules.ServerConfig'] = require('./views/molecules/ServerConfig');
 skin['molecules.UnknownMessageTile'] = require('./views/molecules/UnknownMessageTile');

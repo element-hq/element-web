@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_RoomTile {
     cursor: pointer;
-    display: table-row;
+    /* display: table-row; */
     color: #818794;
 }
 
@@ -43,27 +43,6 @@ limitations under the License.
     overflow: hidden;
     text-overflow: ellipsis;
     padding-right: 16px;    
-}
-
-.mx_RoomTile_tooltip {
-    border: 1px solid #a9dbf4;
-    border-radius: 8px;
-    background-color: #fff;
-    position: absolute;
-    z-index: 1000;
-    margin-top: 6px;
-    left: 64px;
-    padding: 6px;
-}
-
-.mx_RoomTile_chevron {
-    position: absolute;
-    left: -9px;
-    top: 8px;
-}
-
-.mx_RoomTile_tooltip {
-    position: absolute;
 }
 
 .collapsed .mx_RoomTile_name {

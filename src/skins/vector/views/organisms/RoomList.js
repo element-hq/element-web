@@ -18,12 +18,19 @@ limitations under the License.
 
 var React = require('react');
 var sdk = require('matrix-react-sdk')
+var dis = require('matrix-react-sdk/lib/dispatcher');
 
 var RoomListController = require('../../../../controllers/organisms/RoomList')
 
 module.exports = React.createClass({
     displayName: 'RoomList',
     mixins: [RoomListController],
+
+    onShowClick: function() {
+        dis.dispatch({
+            action: 'show_left_panel',
+        });
+    },
 
     render: function() {
         var CallView = sdk.getComponent('molecules.voip.CallView');
@@ -34,15 +41,17 @@ module.exports = React.createClass({
             callElement = <CallView className="mx_MatrixChat_callView"/>
         }
 
-        var recentsLabel = this.props.collapsed ? "" : "Recents";
+        var recentsLabel = this.props.collapsed ? 
+                           <img onClick={ this.onShowClick } src="img/menu.png" width="27" height="20" alt=">"/> :
+                           "Recents";
 
         return (
-            <div className="mx_RoomList">
+            <div className="mx_RoomList" onScroll={this._repositionTooltip}>
                 {callElement}
                 <h2 className="mx_RoomList_favourites_label">Favourites</h2>
                 <RoomDropTarget text="Drop here to favourite"/>
 
-                <h2 className="mx_RoomList_recents_label">{ recentsLabel }&nbsp;</h2>
+                <h2 className="mx_RoomList_recents_label">{ recentsLabel }</h2>
                 <div className="mx_RoomList_recents">
                     {this.makeRoomTiles()}
                 </div>
