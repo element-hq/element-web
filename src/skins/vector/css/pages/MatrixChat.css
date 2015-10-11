@@ -88,7 +88,9 @@ limitations under the License.
     padding-left: 12px;
     padding-right: 12px;
     background-color: #f3f8fa;
-    width: 100%;
+
+    -webkit-flex: 1;
+    flex: 1;
 
     /* XXX: Hack: apparently if you try to nest a flex-box
      * within a non-flex-box within a flex-box, the height

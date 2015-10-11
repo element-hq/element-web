@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 html {
+    /* hack to stop overscroll bounce on OSX and iOS.
+       N.B. Breaks things when we have legitimate horizontal overscroll */
     height: 100%;
     overflow: hidden;
 }
