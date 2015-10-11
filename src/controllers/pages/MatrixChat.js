@@ -39,6 +39,7 @@ module.exports = {
         var s = {
             logged_in: !!(MatrixClientPeg.get() && MatrixClientPeg.get().credentials),
             collapse_lhs: false,
+            collapse_rhs: false,
             ready: false,
         };
         if (s.logged_in) {
@@ -219,6 +220,16 @@ module.exports = {
             case 'show_left_panel':
                 this.setState({
                     collapse_lhs: false,
+                });
+                break;
+            case 'hide_right_panel':
+                this.setState({
+                    collapse_rhs: true,
+                });
+                break;
+            case 'show_right_panel':
+                this.setState({
+                    collapse_rhs: false,
                 });
                 break;
         }
