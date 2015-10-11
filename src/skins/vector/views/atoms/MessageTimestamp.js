@@ -24,11 +24,20 @@ module.exports = React.createClass({
     displayName: 'MessageTimestamp',
     mixins: [MessageTimestampController],
 
+    formatDate: function(date) {
+        // date.toLocaleTimeString is completely system dependent.
+        // just go 24h for now
+        function pad(n) {
+            return (n < 10 ? '0' : '') + n;
+        }
+        return pad(date.getHours()) + ':' + pad(date.getMinutes());
+    },
+
     render: function() {
         var date = new Date(this.props.ts);
         return (
             <span className="mx_MessageTimestamp">
-                {date.toLocaleTimeString()}
+                { this.formatDate(date) }
             </span>
         );
     },
