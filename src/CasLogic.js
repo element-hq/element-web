@@ -16,10 +16,10 @@ limitations under the License.
 
 'use strict';
 
-var Url = require ('url');
+var url = require ('url');
 
 function getServiceUrl() {
-    var parsedUrl = Url.parse(window.location.href);
+    var parsedUrl = url.parse(window.location.href);
     return parsedUrl.protocol + "//" + parsedUrl.host + parsedUrl.pathname;
 }
 
