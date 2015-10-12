@@ -23,6 +23,8 @@ var q = require("q");
 var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
 
+var Cas = require("../../CasLogic");
+
 module.exports = {
     PageTypes: {
         RoomView: "room_view",
@@ -132,12 +134,11 @@ module.exports = {
 
                 var self = this;
                 var client = MatrixClientPeg.get();
-                var splitLocation = window.location.href.split('/');
-                var serviceUrl = splitLocation[0] + "//" + splitLocation[2];
+                var serviceUrl = Cas.getServiceUrl();
 
                 client.loginWithCas(payload.params.ticket, serviceUrl).done(function(data) {
                     MatrixClientPeg.replaceUsingAccessToken(
-                        client.getHsUrl(), client.getIsUrl(),
+                        client.getHomeserverUrl(), client.getIdentityServerUrl(),
                         data.user_id, data.access_token
                     );
                     self.setState({
