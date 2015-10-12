@@ -32,6 +32,7 @@ module.exports = React.createClass({
                 <button onClick={this.onCasClicked}>Sign in with CAS</button>
             </div>
         );
-    }
+    },
     
 });
+
