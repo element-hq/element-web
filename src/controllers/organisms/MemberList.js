@@ -22,10 +22,10 @@ var INITIAL_LOAD_NUM_MEMBERS = 50;
 
 module.exports = {
     getInitialState: function() {
-        if (!this.props.roomId) return {};
+        if (!this.props.roomId) return { members: [] };
         var cli = MatrixClientPeg.get();
         var room = cli.getRoom(this.props.roomId);
-        if (!room) return {};
+        if (!room) return { members: [] };
         var all_members = room.currentState.members;
 
         this.memberDict = this.getMemberDict();
