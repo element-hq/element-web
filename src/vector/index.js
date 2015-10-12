@@ -27,11 +27,10 @@ var lastLocationHashSet = null;
 
 
 // We want to support some name / value pairs in the fragment
-// so we're re-using query string ike format
+// so we're re-using query string like format
 function parseQsFromFragment(location) {
     var hashparts = location.hash.split('?');
     if (hashparts.length > 1) {
-        console.log(qs.parse(hashparts[1]));
         return qs.parse(hashparts[1]);
     }
     return {};
