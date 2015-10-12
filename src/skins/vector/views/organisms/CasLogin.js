@@ -20,25 +20,11 @@ var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
+var CasLoginController = require('matrix-react-sdk/lib/controllers/organisms/CasLogin');
+
 module.exports = React.createClass({
     displayName: 'CasLogin',
-
-    getInitialState: function() {
-        var splitLocation = window.location.href.split('/');
-        return {serviceUrl: splitLocation[0] + "//" + splitLocation[2]};
-    },
-
-    onCasClicked: function(ev) {
-        var serviceRedirectUrl = this.state.serviceUrl + "/#/login/cas";
-        var self = this;
-        MatrixClientPeg.get().getCasServer().done(function(data) {
-            var serverUrl = data.serverUrl + "/login?service=" + encodeURIComponent(serviceRedirectUrl);
-            window.location.href=serverUrl
-        }, function(error) {
-            self.setStep("stage_m.login.cas");
-            self.setState({errorText: 'Login failed.'});
-        });
-    },
+    mixins: [CasLoginController],
 
     render: function() {
         return (
@@ -47,4 +33,5 @@ module.exports = React.createClass({
             </div>
         );
     }
+    
 });
