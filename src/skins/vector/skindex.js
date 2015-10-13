@@ -66,6 +66,7 @@ skin['molecules.UserSelector'] = require('./views/molecules/UserSelector');
 skin['molecules.voip.CallView'] = require('./views/molecules/voip/CallView');
 skin['molecules.voip.IncomingCallBox'] = require('./views/molecules/voip/IncomingCallBox');
 skin['molecules.voip.VideoView'] = require('./views/molecules/voip/VideoView');
+skin['organisms.CasLogin'] = require('./views/organisms/CasLogin');
 skin['organisms.CreateRoom'] = require('./views/organisms/CreateRoom');
 skin['organisms.ErrorDialog'] = require('./views/organisms/ErrorDialog');
 skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');

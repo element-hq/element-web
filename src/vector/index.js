@@ -21,24 +21,29 @@ var sdk = require("matrix-react-sdk");
 sdk.loadSkin(require('../skins/vector/skindex'));
 sdk.loadModule(require('../modules/VectorConferenceHandler'));
 
+var qs = require("querystring");
+
 var lastLocationHashSet = null;
+
+
+// We want to support some name / value pairs in the fragment
+// so we're re-using query string like format
+function parseQsFromFragment(location) {
+    var hashparts = location.hash.split('?');
+    if (hashparts.length > 1) {
+        return qs.parse(hashparts[1]);
+    }
+    return {};
+}
 
 // Here, we do some crude URL analysis to allow
 // deep-linking. We only support registration
 // deep-links in this example.
 function routeUrl(location) {
     if (location.hash.indexOf('#/register') == 0) {
-        var hashparts = location.hash.split('?');
-        var params = {};
-        if (hashparts.length == 2) {
-            var pairs = hashparts[1].split('&');
-            for (var i = 0; i < pairs.length; ++i) {
-                var parts = pairs[i].split('=');
-                if (parts.length != 2) continue;
-                params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
-            }
-        }
-        window.matrixChat.showScreen('register', params);
+        window.matrixChat.showScreen('register', parseQsFromFragment(location));
+    } else if (location.hash.indexOf('#/login/cas') == 0) {
+        window.matrixChat.showScreen('cas_login', parseQsFromFragment(location));
     } else {
         window.matrixChat.showScreen(location.hash.substring(2));
     }
