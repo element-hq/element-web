@@ -26,7 +26,6 @@ module.exports = {
         var cli = MatrixClientPeg.get();
         var room = cli.getRoom(this.props.roomId);
         if (!room) return { members: [] };
-        var all_members = room.currentState.members;
 
         this.memberDict = this.getMemberDict();
 

@@ -16,7 +16,6 @@ limitations under the License.
 
 'use strict';
 
-var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var Cas = require("../../CasLogic");
 

@@ -16,7 +16,6 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
 module.exports = {
@@ -51,8 +50,6 @@ module.exports = {
     },
 
     changeDisplayname: function(new_displayname) {
-        var cli = MatrixClientPeg.get();
-
         this.setState({
             busy: true,
             errorString: null,

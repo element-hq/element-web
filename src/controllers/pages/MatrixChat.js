@@ -18,7 +18,6 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 var RoomListSorter = require("../../RoomListSorter");
 var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
-var q = require("q");
 
 var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
