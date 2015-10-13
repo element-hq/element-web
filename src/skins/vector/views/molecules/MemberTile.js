@@ -31,6 +31,23 @@ module.exports = React.createClass({
     displayName: 'MemberTile',
     mixins: [MemberTileController],
 
+    shouldComponentUpdate: function(nextProps, nextState) {
+        if (
+            this.member_last_modified_time === undefined ||
+            this.member_last_modified_time < nextProps.member.getLastModifiedTime()
+        ) {
+            return true
+        }
+        if (
+            nextProps.member.user &&
+            (this.user_last_modified_time === undefined ||
+            this.user_last_modified_time < nextProps.member.user.getLastModifiedTime())
+        ) {
+            return true
+        }
+        return false;
+    },
+
     mouseEnter: function(e) {
         this.setState({ 'hover': true });
     },
@@ -93,6 +110,11 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        this.member_last_modified_time = this.props.member.getLastModifiedTime();
+        if (this.props.member.user) {
+            this.user_last_modified_time = this.props.member.user.getLastModifiedTime();
+        }
+
         var isMyUser = MatrixClientPeg.get().credentials.userId == this.props.member.userId;
 
         var power;
