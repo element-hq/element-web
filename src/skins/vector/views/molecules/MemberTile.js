@@ -32,6 +32,7 @@ module.exports = React.createClass({
     mixins: [MemberTileController],
 
     shouldComponentUpdate: function(nextProps, nextState) {
+        if (this.state.hover !== nextState.hover) return true;
         if (
             this.member_last_modified_time === undefined ||
             this.member_last_modified_time < nextProps.member.getLastModifiedTime()
