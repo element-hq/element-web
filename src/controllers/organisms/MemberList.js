@@ -71,8 +71,6 @@ module.exports = {
 
             var tile = self.refs[user.userId];
 
-            console.log("presence event " + JSON.stringify(event) + " user = " + user + " tile = " + tile);
-
             if (tile) {
                 self._updateList(); // reorder the membership list
             }
