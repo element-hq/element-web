@@ -18,8 +18,6 @@ limitations under the License.
 
 var React = require('react');
 
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-
 var CasLoginController = require('matrix-react-sdk/lib/controllers/organisms/CasLogin');
 
 module.exports = React.createClass({
