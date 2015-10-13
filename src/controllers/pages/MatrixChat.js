@@ -23,6 +23,8 @@ var q = require("q");
 var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
 
+var Cas = require("../../CasLogic");
+
 module.exports = {
     PageTypes: {
         RoomView: "room_view",
@@ -128,6 +130,30 @@ module.exports = {
                     screen: 'login'
                 });
                 this.notifyNewScreen('login');
+                break;
+            case 'cas_login':
+                if (this.state.logged_in) return;
+
+                var self = this;
+                var client = MatrixClientPeg.get();
+                var serviceUrl = Cas.getServiceUrl();
+
+                client.loginWithCas(payload.params.ticket, serviceUrl).done(function(data) {
+                    MatrixClientPeg.replaceUsingAccessToken(
+                        client.getHomeserverUrl(), client.getIdentityServerUrl(),
+                        data.user_id, data.access_token
+                    );
+                    self.setState({
+                        screen: undefined,
+                        logged_in: true
+                    });
+                    self.startMatrixClient();
+                    self.notifyNewScreen('');
+                }, function(error) {
+                    self.notifyNewScreen('login');
+                    self.setState({errorText: 'Login failed.'});
+                });
+
                 break;
             case 'view_room':
                 this.focusComposer = true;
@@ -334,6 +360,11 @@ module.exports = {
         } else if (screen == 'login') {
             dis.dispatch({
                 action: 'start_login',
+                params: params
+            });
+        } else if (screen == 'cas_login') {
+            dis.dispatch({
+                action: 'cas_login',
                 params: params
             });
         } else if (screen.indexOf('room/') == 0) {
