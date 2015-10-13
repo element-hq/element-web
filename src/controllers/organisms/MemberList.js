@@ -75,9 +75,6 @@ module.exports = {
 
             if (tile) {
                 self._updateList(); // reorder the membership list
-                self.forceUpdate(); // FIXME: is the a more efficient way of reordering with react?
-                // XXX: do we even need to do this, or is it done by the main list?
-                tile.forceUpdate();
             }
         }
         // FIXME: we should probably also reset 'lastActiveAgo' to zero whenever
