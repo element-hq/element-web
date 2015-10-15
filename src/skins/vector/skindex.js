@@ -46,6 +46,7 @@ skin['molecules.MemberInfo'] = require('./views/molecules/MemberInfo');
 skin['molecules.MemberTile'] = require('./views/molecules/MemberTile');
 skin['molecules.MEmoteTile'] = require('./views/molecules/MEmoteTile');
 skin['molecules.MessageComposer'] = require('./views/molecules/MessageComposer');
+skin['molecules.MessageContextMenu'] = require('./views/molecules/MessageContextMenu');
 skin['molecules.MessageTile'] = require('./views/molecules/MessageTile');
 skin['molecules.MFileTile'] = require('./views/molecules/MFileTile');
 skin['molecules.MImageTile'] = require('./views/molecules/MImageTile');

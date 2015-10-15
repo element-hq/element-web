@@ -70,6 +70,7 @@ module.exports = {
         switch (payload.action) {
             case 'message_send_failed':
             case 'message_sent':
+            case 'message_resend_started':
                 this.setState({
                     room: MatrixClientPeg.get().getRoom(this.props.roomId)
                 });

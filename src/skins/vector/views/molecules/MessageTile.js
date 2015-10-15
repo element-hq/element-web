@@ -17,16 +17,25 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-
 var classNames = require("classnames");
 
 var sdk = require('matrix-react-sdk')
 
 var MessageTileController = require('matrix-react-sdk/lib/controllers/molecules/MessageTile')
+var ContextualMenu = require('../../../../ContextualMenu');
 
 module.exports = React.createClass({
     displayName: 'MessageTile',
     mixins: [MessageTileController],
+
+    onClick: function(e) {
+        var MessageContextMenu = sdk.getComponent('molecules.MessageContextMenu');
+        ContextualMenu.createMenu(MessageContextMenu, {
+            mxEvent: this.props.mxEvent,
+            right: window.innerWidth - e.pageX,
+            top: e.pageY
+        });
+    },
 
     render: function() {
         var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
@@ -83,10 +92,9 @@ module.exports = React.createClass({
             </button>;
         }
         return (
-            <div className={classes}>
+            <div className={classes} onClick={this.onClick}>
                 { avatar }
                 { timestamp }
-                { resend }
                 { sender }
                 <TileType mxEvent={this.props.mxEvent} />
             </div>
