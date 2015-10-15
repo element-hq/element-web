@@ -29,22 +29,6 @@ module.exports = {
         return {
             resending: false
         };
-    },
-
-    onResend: function() {
-        var self = this;
-        self.setState({
-            resending: true
-        });
-        MatrixClientPeg.get().resendEvent(
-            this.props.mxEvent, MatrixClientPeg.get().getRoom(
-                this.props.mxEvent.getRoomId()
-            )
-        ).finally(function() {
-            self.setState({
-                resending: false
-            });
-        })
     }
 };
 
