@@ -20,6 +20,8 @@ var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
+var sdk = require('matrix-react-sdk')
+var Modal = require('matrix-react-sdk/lib/Modal');
 
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
@@ -43,6 +45,11 @@ module.exports = React.createClass({
     },
 
     onViewSourceClick: function() {
+        var ViewSource = sdk.getComponent('organisms.ViewSource');
+        Modal.createDialog(ViewSource, {
+            mxEvent: this.props.mxEvent
+        });
+        if (this.props.onFinished) this.props.onFinished();
     },
 
     render: function() {

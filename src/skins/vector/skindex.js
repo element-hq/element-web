@@ -80,6 +80,7 @@ skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');
 skin['organisms.RoomList'] = require('./views/organisms/RoomList');
 skin['organisms.RoomView'] = require('./views/organisms/RoomView');
 skin['organisms.UserSettings'] = require('./views/organisms/UserSettings');
+skin['organisms.ViewSource'] = require('./views/organisms/ViewSource');
 skin['pages.MatrixChat'] = require('./views/pages/MatrixChat');
 skin['templates.Login'] = require('./views/templates/Login');
 skin['templates.Register'] = require('./views/templates/Register');
