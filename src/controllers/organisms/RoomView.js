@@ -398,6 +398,13 @@ module.exports = {
                     continuation = false;
                 }
             }
+
+            if (i === 1) { // n.b. 1, not 0, as the 0th event is an m.room.create and so doesn't show on the timeline
+                var ts1 = this.state.room.timeline[i].getTs();
+                dateSeparator = <DateSeparator key={ts1} ts={ts1}/>;
+                continuation = false;
+            }
+
             if (!TileType) continue;
             ret.unshift(
                 <li key={mxEv.getId()}><TileType mxEvent={mxEv} continuation={continuation} last={last}/></li>
