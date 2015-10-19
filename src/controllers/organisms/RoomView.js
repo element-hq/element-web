@@ -365,6 +365,8 @@ module.exports = {
             'm.room.topic'  : sdk.getComponent('molecules.EventAsTextTile'),
         };
 
+        var DateSeparator = sdk.getComponent('molecules.DateSeparator');
+
         var ret = [];
         var count = 0;
 
@@ -373,6 +375,7 @@ module.exports = {
             var TileType = tileTypes[mxEv.getType()];
             var continuation = false;
             var last = false;
+            var dateSeparator = null;
             if (i == this.state.room.timeline.length - 1) {
                 last = true;
             }
@@ -387,11 +390,21 @@ module.exports = {
                 {
                     continuation = true;
                 }
+
+                var ts0 = this.state.room.timeline[i - 1].getTs();
+                var ts1 = this.state.room.timeline[i].getTs();
+                if (new Date(ts0).toDateString() !== new Date(ts1).toDateString()) {
+                    dateSeparator = <DateSeparator key={ts1} ts={ts1}/>;
+                    continuation = false;
+                }
             }
             if (!TileType) continue;
             ret.unshift(
                 <li key={mxEv.getId()}><TileType mxEvent={mxEv} continuation={continuation} last={last}/></li>
             );
+            if (dateSeparator) {
+                ret.unshift(dateSeparator);
+            }
             ++count;
         }
         return ret;
