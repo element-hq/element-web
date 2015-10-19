@@ -90,3 +90,22 @@ limitations under the License.
 .mx_MessageTile:hover .mx_MessageTimestamp {
     display: block;
 }
+
+.mx_MessageTile_editButton {
+    float: right;
+    display: none;
+    border: 0px;
+    outline: none;
+}
+
+.mx_MessageTile:hover .mx_MessageTile_editButton {
+    display: inline-block;
+}
+
+.mx_MessageTile.menu .mx_MessageTile_editButton {
+    display: inline-block;
+}
+
+.mx_MessageTile.menu .mx_MessageTimestamp {
+    display: inline-block;
+}

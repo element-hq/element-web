@@ -28,13 +28,21 @@ module.exports = React.createClass({
     displayName: 'MessageTile',
     mixins: [MessageTileController],
 
-    onClick: function(e) {
+    onEditClicked: function(e) {
         var MessageContextMenu = sdk.getComponent('molecules.MessageContextMenu');
+        var buttonRect = e.target.getBoundingClientRect()
+        var x = window.innerWidth - buttonRect.left;
+        var y = buttonRect.top + (e.target.height / 2);
+        var self = this;
         ContextualMenu.createMenu(MessageContextMenu, {
             mxEvent: this.props.mxEvent,
-            right: window.innerWidth - e.pageX,
-            top: e.pageY
+            right: x,
+            top: y,
+            onFinished: function() {
+                self.setState({menu: false});
+            }
         });
+        this.setState({menu: true});
     },
 
     render: function() {
@@ -67,8 +75,15 @@ module.exports = React.createClass({
             mx_MessageTile_highlight: this.shouldHighlight(),
             mx_MessageTile_continuation: this.props.continuation,
             mx_MessageTile_last: this.props.last,
+            menu: this.state.menu
         });
         var timestamp = <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+        var editButton = (
+            <input
+                type="image" src="img/edit.png" alt="Edit"
+                className="mx_MessageTile_editButton" onClick={this.onEditClicked}
+            />
+        );
 
         var aux = null;
         if (msgtype === 'm.image') aux = "sent an image";
@@ -94,9 +109,12 @@ module.exports = React.createClass({
         return (
             <div className={classes} onClick={this.onClick}>
                 { avatar }
-                { timestamp }
                 { sender }
-                <TileType mxEvent={this.props.mxEvent} />
+                <div>
+                    { timestamp }
+                    { editButton }
+                    <TileType mxEvent={this.props.mxEvent} />
+                </div>
             </div>
         );
     },
