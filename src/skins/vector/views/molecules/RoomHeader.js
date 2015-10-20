@@ -72,7 +72,7 @@ module.exports = React.createClass({
                 }
 
                 callButtons = (
-                    <div>
+                    <div className="mx_RoomHeader_voipButtons">
                         <div className="mx_RoomHeader_textButton mx_RoomHeader_voipButton"
                                 onClick={this.onHangupClick}>
                             End call

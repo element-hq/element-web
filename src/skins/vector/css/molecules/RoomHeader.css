@@ -167,3 +167,7 @@ limitations under the License.
 .mx_RoomHeader_voipButton {
     display: table-cell;
 }
+
+.mx_RoomHeader_voipButtons {
+    margin-top: 18px;
+}
