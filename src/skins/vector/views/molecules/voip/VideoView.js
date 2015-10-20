@@ -27,7 +27,7 @@ module.exports = React.createClass({
     mixins: [VideoViewController],
 
     componentWillMount: function() {
-        dis.register(this.onAction);
+        dis.register(this.onAction.bind(this));
     },
 
     getRemoteVideoElement: function() {
