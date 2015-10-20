@@ -85,6 +85,9 @@ module.exports = React.createClass({
                                     "Unmute" : "Mute") + " audio"
                             }
                         </div>
+                        <div className="mx_RoomHeader_textButton" onClick={this.onFullscreenClick}>
+                            Fullscreen
+                        </div>
                     </div>
                 );
             }
