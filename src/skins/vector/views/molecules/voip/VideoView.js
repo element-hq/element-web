@@ -38,13 +38,17 @@ module.exports = React.createClass({
         return this.refs.local.getDOMNode();
     },
 
+    setContainer: function(c) {
+        this.container = c;
+    },
+
     onAction: function(payload) {
         switch (payload.action) {
             case 'video_fullscreen':
-                if (!this.refs.container) {
+                if (!this.container) {
                     return;
                 }
-                var element = this.refs.container.getDOMNode();
+                var element = this.container.getDOMNode();
                 var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
                 requestMethod.call(element);
                 break;
@@ -54,7 +58,7 @@ module.exports = React.createClass({
     render: function() {
         var VideoFeed = sdk.getComponent('atoms.voip.VideoFeed');
         return (
-            <div className="mx_VideoView" ref="container">
+            <div className="mx_VideoView" ref={this.setContainer}>
                 <div className="mx_VideoView_remoteVideoFeed">
                     <VideoFeed ref="remote"/>
                 </div>
