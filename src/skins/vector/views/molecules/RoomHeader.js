@@ -96,7 +96,7 @@ module.exports = React.createClass({
 
                 zoom_button = (
                     <div className="mx_RoomHeader_button" onClick={this.onFullscreenClick}>
-                        <img src="img/zoom.png" title="Fullscreen" alt="Fullscreen" width="32" height="32"/>
+                        <img src="img/zoom.png" title="Fullscreen" alt="Fullscreen" width="32" height="32" style={{ 'marginTop': '3px' }}/>
                     </div>
                 );
             }
