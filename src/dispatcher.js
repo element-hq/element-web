@@ -19,12 +19,25 @@ limitations under the License.
 var flux = require("flux");
 
 class MatrixDispatcher extends flux.Dispatcher {
-    dispatch(payload) {
-        // We always set a timeout to do this: The flux dispatcher complains
-        // if you dispatch from within a dispatch, so rather than action
-        // handlers having to worry about not calling anything that might
-        // then dispatch, we just do dispatches asynchronously.
-        setTimeout(super.dispatch.bind(this, payload), 0);
+    /**
+     * @param {Object} payload Required. The payload to dispatch.
+     *        Must contain at least an 'action' key.
+     * @param {boolean} sync Optional. Pass true to dispatch
+     *        synchronously. This is useful for anything triggering
+     *        an operation that the browser requires user interaction
+     *        for.
+     */
+    dispatch(payload, sync) {
+        if (sync) {
+            super.dispatch(payload);
+        } else {
+            // Unless the caller explicitly asked for us to dispatch synchronously,
+            // we always set a timeout to do this: The flux dispatcher complains
+            // if you dispatch from within a dispatch, so rather than action
+            // handlers having to worry about not calling anything that might
+            // then dispatch, we just do dispatches asynchronously.
+            setTimeout(super.dispatch.bind(this, payload), 0);
+        }
     }
 };
 
