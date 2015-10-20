@@ -35,10 +35,6 @@ module.exports = React.createClass({
     makeMemberTiles: function() {
         var MemberTile = sdk.getComponent("molecules.MemberTile");
 
-        if (!self.memberDict) {
-            return null;
-        }
-
         var self = this;
         return Object.keys(self.memberDict).map(function(userId) {
             var m = self.memberDict[userId];
