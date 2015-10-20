@@ -19,11 +19,16 @@ limitations under the License.
 var React = require('react');
 
 var sdk = require('matrix-react-sdk')
+var dis = require('matrix-react-sdk/lib/dispatcher')
 var VideoViewController = require('matrix-react-sdk/lib/controllers/molecules/voip/VideoView')
 
 module.exports = React.createClass({
     displayName: 'VideoView',
     mixins: [VideoViewController],
+
+    componentWillMount: function() {
+        dis.register(this.onAction);
+    },
 
     getRemoteVideoElement: function() {
         return this.refs.remote.getDOMNode();
@@ -33,10 +38,20 @@ module.exports = React.createClass({
         return this.refs.local.getDOMNode();
     },
 
+    onAction: function(payload) {
+        switch (payload.action) {
+            case 'video_fullscreen':
+                var element = this.refs.container.getDOMNode();
+                var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+                requestMethod.call(element);
+                break;
+        }
+    },
+
     render: function() {
         var VideoFeed = sdk.getComponent('atoms.voip.VideoFeed');
         return (
-            <div className="mx_VideoView">
+            <div className="mx_VideoView" ref="container">
                 <div className="mx_VideoView_remoteVideoFeed">
                     <VideoFeed ref="remote"/>
                 </div>

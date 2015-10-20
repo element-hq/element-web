@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var sdk = require('matrix-react-sdk')
+var dis = require('matrix-react-sdk/lib/dispatcher')
 
 var CallHandler = require('matrix-react-sdk/lib/CallHandler');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
@@ -35,6 +36,10 @@ module.exports = React.createClass({
 
     getRoomName: function() {
         return this.refs.name_edit.getDOMNode().value;
+    },
+
+    onFullscreenClick: function() {
+        dis.dispatch({action: 'video_fullscreen'}, true);
     },
 
     render: function() {
