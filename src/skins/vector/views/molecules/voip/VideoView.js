@@ -27,7 +27,7 @@ module.exports = React.createClass({
     mixins: [VideoViewController],
 
     componentWillMount: function() {
-        dis.register(this.onAction.bind(this));
+        dis.register(this.onAction);
     },
 
     getRemoteVideoElement: function() {
@@ -41,6 +41,9 @@ module.exports = React.createClass({
     onAction: function(payload) {
         switch (payload.action) {
             case 'video_fullscreen':
+                if (!this.refs.container) {
+                    return;
+                }
                 var element = this.refs.container.getDOMNode();
                 var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
                 requestMethod.call(element);
