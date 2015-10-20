@@ -53,8 +53,8 @@ module.exports = {
     },
 
     getInitialState: function() {
-        var url = MatrixClientPeg.get().getAvatarUrlForMember(
-            this.props.member,
+        var url = this.props.member.getAvatarUrl(
+            MatrixClientPeg.get().getHomeserverUrl(),
             this.props.width,
             this.props.height,
             this.props.resizeMethod,

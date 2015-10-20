@@ -28,8 +28,8 @@ module.exports = {
     },
 
     avatarUrlForRoom: function(room) {
-        var url = MatrixClientPeg.get().getAvatarUrlForRoom(
-            room,
+        var url = room.getAvatarUrl(
+            MatrixClientPeg.get().getHomeserverUrl(),
             this.props.width, this.props.height, this.props.resizeMethod,
             false
         );
