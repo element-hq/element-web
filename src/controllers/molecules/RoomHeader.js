@@ -92,5 +92,27 @@ module.exports = {
             // (e.g. conferences which will hangup the 1:1 room instead)
             room_id: call.roomId
         });
+    },
+    onMuteAudioClick: function() {
+        var call = CallHandler.getCallForRoom(this.props.room.roomId);
+        if (!call) {
+            return;
+        }
+        var newState = !call.isMicrophoneMuted();
+        call.setMicrophoneMuted(newState);
+        this.setState({
+            audioMuted: newState
+        });
+    },
+    onMuteVideoClick: function() {
+        var call = CallHandler.getCallForRoom(this.props.room.roomId);
+        if (!call) {
+            return;
+        }
+        var newState = !call.isLocalVideoMuted();
+        call.setLocalVideoMuted(newState);
+        this.setState({
+            videoMuted: newState
+        });
     }
 };
