@@ -158,7 +158,7 @@ function _onAction(payload) {
             newCall.placeVoiceCall();
         }
         else if (payload.type === 'video') {
-            newCall.placeVideoCall(
+            newCall.placeScreenSharingCall(
                 payload.remote_element,
                 payload.local_element
             );
