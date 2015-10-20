@@ -58,12 +58,14 @@ module.exports = React.createClass({
         else {
             var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
 
-            var callButtons;
+            var call_buttons;
+            var zoom_button;
             if (this.state && this.state.call_state != 'ended') {
                 var muteVideoButton;
                 var activeCall = (
                     CallHandler.getCallForRoom(this.props.room.roomId)
                 );
+/*                
                 if (activeCall && activeCall.type === "video") {
                     muteVideoButton = (
                         <div className="mx_RoomHeader_textButton mx_RoomHeader_voipButton"
@@ -75,13 +77,6 @@ module.exports = React.createClass({
                         </div>
                     );
                 }
-
-                callButtons = (
-                    <div className="mx_RoomHeader_voipButtons">
-                        <div className="mx_RoomHeader_textButton mx_RoomHeader_voipButton"
-                                onClick={this.onHangupClick}>
-                            End call
-                        </div>
                         {muteVideoButton}
                         <div className="mx_RoomHeader_textButton mx_RoomHeader_voipButton"
                                 onClick={this.onMuteAudioClick}>
@@ -90,9 +85,18 @@ module.exports = React.createClass({
                                     "Unmute" : "Mute") + " audio"
                             }
                         </div>
-                        <div className="mx_RoomHeader_textButton" onClick={this.onFullscreenClick}>
-                            Fullscreen
-                        </div>
+*/                
+
+                call_buttons = (
+                    <div className="mx_RoomHeader_textButton"
+                            onClick={this.onHangupClick}>
+                        End call
+                    </div>
+                );
+
+                zoom_button = (
+                    <div className="mx_RoomHeader_button" onClick={this.onFullscreenClick}>
+                        <img src="img/zoom.png" title="Fullscreen" alt="Fullscreen" width="32" height="32"/>
                     </div>
                 );
             }
@@ -143,18 +147,19 @@ module.exports = React.createClass({
                             { topic_el }
                         </div>
                     </div>
-                    {callButtons}
+                    {call_buttons}
                     {cancel_button}
                     {save_button}
                     <div className="mx_RoomHeader_rightRow">
                         { settings_button }
+                        { zoom_button }
                         <div className="mx_RoomHeader_button mx_RoomHeader_search">
                             <img src="img/search.png" title="Search" alt="Search" width="32" height="32"/>
                         </div>
-                        <div className="mx_RoomHeader_button mx_RoomHeader_video" onClick={this.onVideoClick}>
+                        <div className="mx_RoomHeader_button mx_RoomHeader_video" onClick={activeCall && activeCall.type === "video" ? this.onMuteVideoClick : this.onVideoClick}>
                             <img src="img/video.png" title="Video call" alt="Video call" width="32" height="32"/>
                         </div>
-                        <div className="mx_RoomHeader_button mx_RoomHeader_voice" onClick={this.onVoiceClick}>
+                        <div className="mx_RoomHeader_button mx_RoomHeader_voice" onClick={activeCall ? this.onMuteAudioClick : this.onVoiceClick}>
                             <img src="img/voip.png" title="VoIP call" alt="VoIP call" width="32" height="32"/>
                         </div>
                     </div>
