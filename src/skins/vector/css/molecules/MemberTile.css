@@ -128,3 +128,7 @@ limitations under the License.
 .mx_MemberTile_zalgo {
     font-family: Helvetica, Arial, Sans-Serif;
 }
+
+.mx_MemberTile:hover .mx_MessageTimestamp {
+    display: block;
+}

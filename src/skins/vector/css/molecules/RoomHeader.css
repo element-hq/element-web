@@ -163,3 +163,7 @@ limitations under the License.
 .mx_RoomHeader_button img {
     cursor: pointer;
 }
+
+.mx_RoomHeader_voipButton {
+    display: table-cell;
+}

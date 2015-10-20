@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var sdk = require('matrix-react-sdk')
 
+var CallHandler = require('matrix-react-sdk/lib/CallHandler');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var RoomHeaderController = require('matrix-react-sdk/lib/controllers/molecules/RoomHeader')
 
@@ -54,9 +55,36 @@ module.exports = React.createClass({
 
             var callButtons;
             if (this.state && this.state.call_state != 'ended') {
+                var muteVideoButton;
+                var activeCall = (
+                    CallHandler.getCallForRoom(this.props.room.roomId)
+                );
+                if (activeCall && activeCall.type === "video") {
+                    muteVideoButton = (
+                        <div className="mx_RoomHeader_textButton mx_RoomHeader_voipButton"
+                                onClick={this.onMuteVideoClick}>
+                            {
+                                (activeCall.isLocalVideoMuted() ?
+                                    "Unmute" : "Mute") + " video"
+                            }
+                        </div>
+                    );
+                }
+
                 callButtons = (
-                    <div className="mx_RoomHeader_textButton" onClick={this.onHangupClick}>
-                        End call
+                    <div>
+                        <div className="mx_RoomHeader_textButton mx_RoomHeader_voipButton"
+                                onClick={this.onHangupClick}>
+                            End call
+                        </div>
+                        {muteVideoButton}
+                        <div className="mx_RoomHeader_textButton mx_RoomHeader_voipButton"
+                                onClick={this.onMuteAudioClick}>
+                            {
+                                (activeCall && activeCall.isMicrophoneMuted() ?
+                                    "Unmute" : "Mute") + " audio"
+                            }
+                        </div>
                     </div>
                 );
             }
