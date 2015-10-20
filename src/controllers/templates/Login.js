@@ -94,8 +94,14 @@ module.exports = {
             self.setStep("stage_m.login.password");
             if (error.httpStatus == 400 && loginParams.medium) {
                 self.setState({errorText: 'This Home Server does not support login using email address.'});
-            } else {
-                self.setState({errorText: 'Login failed.'});
+            }
+            else if (error.httpStatus === 403) {
+                self.setState({errorText: 'The provided credentials are incorrect.'});
+            }
+            else {
+                self.setState({
+                    errorText: 'There was a problem logging in. (HTTP ' + error.httpStatus + ")"
+                });
             }
         });
     },
