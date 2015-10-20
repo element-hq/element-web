@@ -20,8 +20,8 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 module.exports = {
     avatarUrlForMember: function(member, width, height, resizeMethod) {
-        var url = MatrixClientPeg.get().getAvatarUrlForMember(
-            member,
+        var url = member.getAvatarUrl(
+            MatrixClientPeg.get().getHomeserverUrl(),
             width,
             height,
             resizeMethod
