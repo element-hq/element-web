@@ -18,13 +18,11 @@ limitations under the License.
 
 var React = require('react');
 
-var EventAsTextTileController = require('matrix-react-sdk/lib/controllers/molecules/EventAsTextTile')
 var sdk = require('matrix-react-sdk')
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
 
 module.exports = React.createClass({
     displayName: 'EventAsTextTile',
-    mixins: [EventAsTextTileController],
 
     render: function() {
         var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');

@@ -18,14 +18,11 @@ limitations under the License.
 
 var React = require('react');
 
-var MRoomMemberTileController = require('matrix-react-sdk/lib/controllers/molecules/MRoomMemberTile')
-
 var sdk = require('matrix-react-sdk')
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
 
 module.exports = React.createClass({
     displayName: 'MRoomMemberTile',
-    mixins: [MRoomMemberTileController],
 
     getMemberEventText: function() {
         return TextForEvent.textForEvent(this.props.mxEvent);

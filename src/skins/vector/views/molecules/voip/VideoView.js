@@ -20,11 +20,9 @@ var React = require('react');
 
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher')
-var VideoViewController = require('matrix-react-sdk/lib/controllers/molecules/voip/VideoView')
 
 module.exports = React.createClass({
     displayName: 'VideoView',
-    mixins: [VideoViewController],
 
     componentWillMount: function() {
         dis.register(this.onAction);

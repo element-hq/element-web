@@ -19,15 +19,12 @@ limitations under the License.
 var React = require('react');
 var filesize = require('filesize');
 
-var MImageTileController = require('matrix-react-sdk/lib/controllers/molecules/MImageTile')
-
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk')
 
 module.exports = React.createClass({
     displayName: 'MImageTile',
-    mixins: [MImageTileController],
 
     thumbHeight: function(fullWidth, fullHeight, thumbWidth, thumbHeight) {
         if (!fullWidth || !fullHeight) {

@@ -20,11 +20,8 @@ var React = require('react');
 
 var sdk = require('matrix-react-sdk')
 
-var MatrixToolbarController = require('matrix-react-sdk/lib/controllers/molecules/MatrixToolbar')
-
 module.exports = React.createClass({
     displayName: 'MatrixToolbar',
-    mixins: [MatrixToolbarController],
 
     hideToolbar: function() {
         var Notifier = sdk.getComponent('organisms.Notifier');
