@@ -163,6 +163,12 @@ function _onAction(payload) {
                 payload.local_element
             );
         }
+        else if (payload.type === 'screensharing') {
+            newCall.placeScreenSharingCall(
+                payload.remote_element,
+                payload.local_element
+            );
+        }
         else {
             console.error("Unknown conf call type: %s", payload.type);
         }

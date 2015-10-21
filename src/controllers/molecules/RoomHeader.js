@@ -69,10 +69,10 @@ module.exports = {
         });
     },
 
-    onVideoClick: function() {
+    onVideoClick: function(e) {
         dis.dispatch({
             action: 'place_call',
-            type: "video",
+            type: e.shiftKey ? "screensharing" : "video",
             room_id: this.props.room.roomId
         });
     },

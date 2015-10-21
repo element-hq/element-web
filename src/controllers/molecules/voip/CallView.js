@@ -54,8 +54,10 @@ module.exports = {
         var call = CallHandler.getCall(roomId);
         if (call) {
             call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
-            // N.B. the remote video element is used for playback for audio for voice calls
             call.setRemoteVideoElement(this.getVideoView().getRemoteVideoElement());
+            // give a separate element for audio stream playback - both for voice calls
+            // and for the voice stream of screen captures
+            call.setRemoteAudioElement(this.getVideoView().getRemoteAudioElement());
         }
         if (call && call.type === "video" && call.state !== 'ended') {
             this.getVideoView().getLocalVideoElement().style.display = "initial";
