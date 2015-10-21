@@ -160,7 +160,7 @@ module.exports = {
     },
 
     roomMembers: function(limit) {
-        var all_members = this.memberDict;
+        var all_members = this.memberDict || {};
         var all_user_ids = Object.keys(all_members);
 
         if (this.memberSort) all_user_ids.sort(this.memberSort);
