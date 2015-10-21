@@ -58,9 +58,9 @@ var NotifierView = {
             if (ev.getContent().body) msg = ev.getContent().body;
         }
 
-        var avatarUrl = Avatar.avatarUrlForMember(
+        var avatarUrl = ev.sender ? Avatar.avatarUrlForMember(
             ev.sender, 40, 40, 'crop'
-        );
+        ) : null;
 
         var notification = new global.Notification(
             title,
