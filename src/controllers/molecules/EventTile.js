@@ -19,5 +19,10 @@ limitations under the License.
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
 module.exports = {
+    shouldHighlight: function() {
+        var actions = MatrixClientPeg.get().getPushActionsForEvent(this.props.mxEvent);
+        if (!actions || !actions.tweaks) { return false; }
+        return actions.tweaks.highlight;
+    }
 };
 

@@ -316,21 +316,18 @@ module.exports = {
     },
 
     getEventTiles: function() {
-        var tileTypes = {
-            'm.room.message': sdk.getComponent('molecules.MessageTile'),
-            'm.room.member' : sdk.getComponent('molecules.EventAsTextTile'),
-            'm.call.invite' : sdk.getComponent('molecules.EventAsTextTile'),
-            'm.call.answer' : sdk.getComponent('molecules.EventAsTextTile'),
-            'm.call.hangup' : sdk.getComponent('molecules.EventAsTextTile'),
-            'm.room.topic'  : sdk.getComponent('molecules.EventAsTextTile'),
-        };
-
         var ret = [];
         var count = 0;
 
+        var EventTile = sdk.getComponent('molecules.EventTile');
+
         for (var i = this.state.room.timeline.length-1; i >= 0 && count < this.state.messageCap; --i) {
             var mxEv = this.state.room.timeline[i];
-            var TileType = tileTypes[mxEv.getType()];
+
+            if (!EventTile.supportsEventType(mxEv.getType())) {
+                continue;
+            }
+
             var continuation = false;
             var last = false;
             if (i == this.state.room.timeline.length - 1) {
@@ -348,9 +345,8 @@ module.exports = {
                     continuation = true;
                 }
             }
-            if (!TileType) continue;
             ret.unshift(
-                <li key={mxEv.getId()}><TileType mxEvent={mxEv} continuation={continuation} last={last}/></li>
+                <li key={mxEv.getId()}><EventTile mxEvent={mxEv} continuation={continuation} last={last}/></li>
             );
             ++count;
         }
