@@ -67,10 +67,17 @@ a:visited {
     padding: 6px;
 }
 
-.mx_ContextualMenu_chevron {
+.mx_ContextualMenu_chevron_right {
     padding: 12px;
     position: absolute;
     right: -21px;
+    top: 0px;
+}
+
+.mx_ContextualMenu_chevron_left {
+    padding: 12px;
+    position: absolute;
+    left: -21px;
     top: 0px;
 }
 

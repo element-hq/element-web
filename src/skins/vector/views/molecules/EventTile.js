@@ -50,12 +50,12 @@ module.exports = React.createClass({
     onEditClicked: function(e) {
         var MessageContextMenu = sdk.getComponent('molecules.MessageContextMenu');
         var buttonRect = e.target.getBoundingClientRect()
-        var x = window.innerWidth - buttonRect.left;
+        var x = buttonRect.right;
         var y = buttonRect.top + (e.target.height / 2);
         var self = this;
         ContextualMenu.createMenu(MessageContextMenu, {
             mxEvent: this.props.mxEvent,
-            right: x,
+            left: x,
             top: y,
             onFinished: function() {
                 self.setState({menu: false});
