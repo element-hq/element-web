@@ -33,10 +33,14 @@ module.exports = React.createClass({
         var text = TextForEvent.textForEvent(this.props.mxEvent);
         if (text == null || text.length == 0) return null;
 
-        var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
+        var timestamp = <MessageTimestamp ts={this.props.mxEvent.getTs()} />;
         var avatar = this.props.mxEvent.sender ? <MemberAvatar member={this.props.mxEvent.sender} /> : null;
+        var cssStyles = "mx_MessageTile mx_MessageTile_notice";
+        if (this.props.last) {
+            cssStyles += " mx_MessageTile_last";
+        }
         return (
-            <div className="mx_MessageTile mx_MessageTile_notice">
+            <div className={cssStyles}>
                 <div className="mx_MessageTile_avatar">
                     { avatar }
                 </div>            
