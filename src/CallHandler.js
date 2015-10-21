@@ -158,6 +158,12 @@ function _onAction(payload) {
             newCall.placeVoiceCall();
         }
         else if (payload.type === 'video') {
+            newCall.placeVideoCall(
+                payload.remote_element,
+                payload.local_element
+            );
+        }
+        else if (payload.type === 'screensharing') {
             newCall.placeScreenSharingCall(
                 payload.remote_element,
                 payload.local_element
