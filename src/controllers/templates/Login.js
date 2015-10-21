@@ -96,7 +96,7 @@ module.exports = {
                 self.setState({errorText: 'This Home Server does not support login using email address.'});
             }
             else if (error.httpStatus === 403) {
-                self.setState({errorText: 'The provided credentials are incorrect.'});
+                self.setState({errorText: 'Incorrect username and/or password.'});
             }
             else {
                 self.setState({
