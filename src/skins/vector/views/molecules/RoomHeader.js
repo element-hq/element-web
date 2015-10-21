@@ -93,12 +93,6 @@ module.exports = React.createClass({
                         End call
                     </div>
                 );
-
-                zoom_button = (
-                    <div className="mx_RoomHeader_button" onClick={this.onFullscreenClick}>
-                        <img src="img/zoom.png" title="Fullscreen" alt="Fullscreen" width="32" height="32" style={{ 'marginTop': '3px' }}/>
-                    </div>
-                );
             }
 
             var name = null;
@@ -133,6 +127,14 @@ module.exports = React.createClass({
             if (this.props.room) {
                 roomAvatar = (
                     <RoomAvatar room={this.props.room} width="48" height="48" />
+                );
+            }
+
+            if (activeCall && activeCall.type == "video") {
+                zoom_button = (
+                    <div className="mx_RoomHeader_button" onClick={this.onFullscreenClick}>
+                        <img src="img/zoom.png" title="Fullscreen" alt="Fullscreen" width="32" height="32" style={{ 'marginTop': '3px' }}/>
+                    </div>
                 );
             }
 
