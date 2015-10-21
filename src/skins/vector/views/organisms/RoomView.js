@@ -149,6 +149,11 @@ module.exports = React.createClass({
                 var innerProgressStyle = {
                     width: ((this.state.upload.uploadedBytes / this.state.upload.totalBytes) * 100) + '%'
                 };
+                var uploadedSize = filesize(this.state.upload.uploadedBytes);
+                var totalSize = filesize(this.state.upload.totalBytes);
+                if (uploadedSize.replace(/^.* /,'') === totalSize.replace(/^.* /,'')) {
+                    uploadedSize = uploadedSize.replace(/ .*/, '');
+                }
                 statusBar = (
                     <div className="mx_RoomView_uploadBar">
                         <div className="mx_RoomView_uploadProgressOuter">
@@ -157,7 +162,7 @@ module.exports = React.createClass({
                         <img className="mx_RoomView_uploadIcon" src="img/fileicon.png" width="40" height="40"/>
                         <img className="mx_RoomView_uploadCancel" src="img/cancel.png" width="40" height="40"/>
                         <div className="mx_RoomView_uploadBytes">
-                            {filesize(this.state.upload.uploadedBytes).replace(/ .*/, '')} / {filesize(this.state.upload.totalBytes)}
+                            { uploadedSize } / { totalSize }
                         </div>
                         <div className="mx_RoomView_uploadFilename">Uploading {this.state.upload.fileName}</div>
                     </div>
