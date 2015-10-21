@@ -107,7 +107,7 @@ module.exports = React.createClass({
             </button>;
         }
         return (
-            <div className={classes} onClick={this.onClick}>
+            <div className={classes}>
                 { avatar }
                 { sender }
                 <div>
