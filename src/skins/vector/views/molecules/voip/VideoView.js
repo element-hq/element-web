@@ -34,6 +34,10 @@ module.exports = React.createClass({
         return this.refs.remote.getDOMNode();
     },
 
+    getRemoteAudioElement: function() {
+        return this.refs.remoteAudio.getDOMNode();
+    },
+
     getLocalVideoElement: function() {
         return this.refs.local.getDOMNode();
     },
@@ -61,6 +65,7 @@ module.exports = React.createClass({
             <div className="mx_VideoView" ref={this.setContainer}>
                 <div className="mx_VideoView_remoteVideoFeed">
                     <VideoFeed ref="remote"/>
+                    <audio ref="remoteAudio"/>
                 </div>
                 <div className="mx_VideoView_localVideoFeed">                
                     <VideoFeed ref="local"/>
