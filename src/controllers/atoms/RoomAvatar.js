@@ -18,6 +18,12 @@ limitations under the License.
 
 var MatrixClientPeg = require('../../MatrixClientPeg');
 
+/*
+ * View class should provide:
+ * - getUrlList() returning an array of URLs to try for the room avatar
+     in order of preference from the most preferred at index 0. null entries
+     in the array will be skipped over.
+ */
 module.exports = {
     getDefaultProps: function() {
         return {
@@ -27,35 +33,69 @@ module.exports = {
         }
     },
 
-    avatarUrlForRoom: function(room) {
-        var url = room.getAvatarUrl(
+    getInitialState: function() {
+        this.urlList = this.getUrlList();
+        this.urlListIndex = -1;
+        return {
+            imageUrl: this._nextUrl()
+        };
+    },
+
+    _nextUrl: function() {
+        do {
+            ++this.urlListIndex;
+        } while (
+            this.urlList[this.urlListIndex] === null &&
+            this.urlListIndex < this.urlList.length
+        );
+        if (this.urlListIndex < this.urlList.length) {
+            return this.urlList[this.urlListIndex];
+        } else {
+            return null;
+        }
+    },
+
+    // provided to the view class for convenience
+    roomAvatarUrl: function() {
+        var url = this.props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
             this.props.width, this.props.height, this.props.resizeMethod,
             false
         );
-        if (url === null) {
-            url = this.defaultAvatarUrl(room);
-        }
         return url;
     },
 
-    defaultAvatarUrl: function(member) {
-        return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADRJREFUeNrszQENADAIACB9QjNbxSKP4eagAFnTseHFErFYLBaLxWKxWCwWi8Vi8cX4CzAABSwCRWJw31gAAAAASUVORK5CYII=";
+    // provided to the view class for convenience
+    getOneToOneAvatar: function() {
+        var userIds = Object.keys(this.props.room.currentState.members);
+
+        if (userIds.length == 2) {
+            var theOtherGuy = null;
+            if (this.props.room.currentState.members[userIds[0]].userId == MatrixClientPeg.get().credentials.userId) {
+                theOtherGuy = this.props.room.currentState.members[userIds[1]];
+            } else {
+                theOtherGuy = this.props.room.currentState.members[userIds[0]];
+            }
+            return theOtherGuy.getAvatarUrl(
+                MatrixClientPeg.get().getHomeserverUrl(),
+                this.props.width, this.props.height, this.props.resizeMethod,
+                false
+            );
+        } else if (userIds.length == 1) {
+            return this.props.room.currentState.members[userIds[0]].getAvatarUrl(
+                MatrixClientPeg.get().getHomeserverUrl(),
+                this.props.width, this.props.height, this.props.resizeMethod,
+                    false
+            );
+        } else {
+           return null;
+        }
     },
+
 
     onError: function(ev) {
-        // don't tightloop if the browser can't load a data url
-        if (ev.target.src == this.defaultAvatarUrl(this.props.room)) {
-            return;
-        }
         this.setState({
-            imageUrl: this.defaultAvatarUrl(this.props.room)
+            imageUrl: this._nextUrl()
         });
-    },
-
-    getInitialState: function() {
-        return {
-            imageUrl: this.avatarUrlForRoom(this.props.room)
-        };
     }
 };
