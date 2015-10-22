@@ -27,9 +27,9 @@ module.exports = {
 
         var additionals = [];
         if (content.info) {
-            if (content.info.mimetype && content.info.mimetype.length > 0) {
-                additionals.push(content.info.mimetype);
-            }
+            // if (content.info.mimetype && content.info.mimetype.length > 0) {
+            //    additionals.push(content.info.mimetype);
+            // }
             if (content.info.size) {
                 additionals.push(filesize(content.info.size));
             }
