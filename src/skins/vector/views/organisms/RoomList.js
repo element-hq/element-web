@@ -42,21 +42,21 @@ module.exports = React.createClass({
         }
 
         var recentsLabel = this.props.collapsed ? 
-                           <img style={{cursor: 'pointer'}} onClick={ this.onShowClick } src="img/menu.png" width="27" height="20" alt=">"/> :
-                           "Recents";
+                           <img style={{cursor: 'pointer'}} onClick={ this.onShowClick } src="img/menu.png" width="20" alt=">"/> :
+                           "Recent";
 
         return (
             <div className="mx_RoomList" onScroll={this._repositionTooltip}>
                 {callElement}
-                <h2 className="mx_RoomList_favourites_label">Favourites</h2>
+                <h2 className="mx_RoomList_favouritesLabel">Favourites</h2>
                 <RoomDropTarget text="Drop here to favourite"/>
 
-                <h2 className="mx_RoomList_recents_label">{ recentsLabel }</h2>
+                <h2 className="mx_RoomList_recentsLabel">{ recentsLabel }</h2>
                 <div className="mx_RoomList_recents">
                     {this.makeRoomTiles()}
                 </div>
 
-                <h2 className="mx_RoomList_archive_label">Archive</h2>
+                <h2 className="mx_RoomList_archiveLabel">Archive</h2>
                 <RoomDropTarget text="Drop here to archive"/>
             </div>
         );

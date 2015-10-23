@@ -27,8 +27,8 @@ limitations under the License.
     padding-top: 3px;
     padding-bottom: 3px;
     vertical-align: middle;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     position: relative;
 }
 
@@ -60,8 +60,8 @@ limitations under the License.
 
 .mx_MemberTile_power {
     position: absolute;
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     left: 10px;
     top: -1px;
 }
