@@ -190,17 +190,17 @@ limitations under the License.
 }
 
 .mx_RoomView_typingBar {
-    margin-top: 17px;
-    margin-left: 56px;
-    color: #818794;
+    margin-top: 10px;
+    margin-left: 54px;
+    color: #4a4a4a;
+    opacity: 0.5;
 }
 
-.mx_RoomView_typingBar img {
-    padding-left: 12px;
-    padding-right: 12px;
-    margin-left: -64px;
-    margin-top: -7px;
-    float: left;    
+.mx_RoomView_typingImage {
+    display: inline;
+    margin-left: -38px;
+    margin-top: -4px;
+    float: left;
 }
 
 .mx_RoomView .mx_MessageComposer {
