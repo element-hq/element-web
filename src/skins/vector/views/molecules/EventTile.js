@@ -110,7 +110,7 @@ module.exports = React.createClass({
             if (this.props.mxEvent.sender) {
                 avatar = (
                     <div className="mx_EventTile_avatar">
-                        <MemberAvatar member={this.props.mxEvent.sender} />
+                        <MemberAvatar member={this.props.mxEvent.sender} width="24" height="24" />
                     </div>
                 );
             }

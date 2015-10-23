@@ -238,6 +238,7 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_RoomView_statusArea">
                         <div className="mx_RoomView_statusAreaBox">
+                            <div className="mx_RoomView_statusAreaBox_line"></div>
                             {statusBar}
                         </div>
                     </div>

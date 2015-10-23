@@ -22,7 +22,7 @@ html {
 }
 
 body {
-    font-family: 'Lato', Helvetica, Arial, Sans-Serif;
+    font-family: 'Myriad Pro', Helvetica, Arial, Sans-Serif;
     font-size: 16px;
     color: #454545;
     border: 0px;
@@ -34,7 +34,7 @@ div.error {
 }
 
 h2 {
-    color: #80cef4;
+    color: #454545;
     font-weight: 400;
     font-size: 20px;
     margin-top: 16px;
@@ -44,7 +44,7 @@ h2 {
 a:hover,
 a:link,
 a:visited {
-    color: #80CEF4;
+    color: #76cfa6;
 }
 
 .mx_ContextualMenu_background {
@@ -149,7 +149,7 @@ a:visited {
     font-weight: 400;
     font-size: 16px;
     color: #fff;
-    background-color: #80cef4;
+    background-color: #76cfa6;
     margin-left: 8px;
     margin-right: 8px;
     padding-left: 1em;
