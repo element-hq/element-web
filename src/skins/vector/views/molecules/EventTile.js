@@ -114,7 +114,9 @@ module.exports = React.createClass({
                     </div>
                 );
             }
-            sender = <SenderProfile mxEvent={this.props.mxEvent} aux={aux} />;
+            if (EventTileType.needsSenderProfile()) {
+                sender = <SenderProfile mxEvent={this.props.mxEvent} aux={aux} />;
+            }
         }
         return (
             <div className={classes}>
