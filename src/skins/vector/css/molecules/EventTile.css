@@ -79,27 +79,29 @@ limitations under the License.
 }
 
 .mx_MessageTimestamp {
-    display: none;
+    visibility: hidden;
 }
 
 .mx_EventTile_last .mx_MessageTimestamp {
-    display: block;
+    visibility: visible;
 }
 
 .mx_EventTile:hover .mx_MessageTimestamp {
-    display: block;
+    visibility: visible;
 }
 
 .mx_EventTile_editButton {
+    clear: both;
     float: right;
-    display: none;
+    display: inline-block;
+    visibility: hidden;
     border: 0px;
     outline: none;
-    margin-right: 3px;
+    margin-top: 3px;
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton {
-    display: inline-block;
+    visibility: visible;
 }
 
 .mx_EventTile.menu .mx_EventTile_editButton {
