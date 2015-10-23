@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var sdk = require('matrix-react-sdk');
 
 var RoomSettingsController = require('matrix-react-sdk/lib/controllers/molecules/RoomSettings')
 
@@ -65,6 +66,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
+
         var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
         if (topic) topic = topic.getContent().topic;
 
@@ -75,6 +78,8 @@ module.exports = React.createClass({
         if (history_visibility) history_visibility = history_visibility.getContent().history_visibility;
 
         var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
+
+        var events_levels = power_levels.events || {};
 
         if (power_levels) {
             power_levels = power_levels.getContent();
@@ -91,8 +96,7 @@ module.exports = React.createClass({
             if (power_levels.kick == undefined) kick_level = 50;
             if (power_levels.redact == undefined) redact_level = 50;
 
-            var user_levels = power_levels.users || [];
-            var events_levels = power_levels.events || [];
+            var user_levels = power_levels.users || {};
 
             var user_id = MatrixClientPeg.get().credentials.userId;
 
@@ -122,6 +126,20 @@ module.exports = React.createClass({
             var power_level_level = 0;
 
             var can_change_levels = false;
+        }
+
+        var room_avatar_level = parseInt(power_levels.state_default || 0);
+        if (events_levels['m.room.avatar'] !== undefined) {
+            room_avatar_level = events_levels['m.room.avatar'];
+        }
+        var can_set_room_avatar = current_user_level >= room_avatar_level;
+
+        var change_avatar;
+        if (can_set_room_avatar) {
+            change_avatar = <div>
+                <h3>Room Icon</h3>
+                <ChangeAvatar room={this.props.room} />
+            </div>;
         }
 
         var banned = this.props.room.getMembersWithMemership("ban");
@@ -207,6 +225,7 @@ module.exports = React.createClass({
                         );
                     })}
                 </div>
+                {change_avatar}
             </div>
         );
     }
