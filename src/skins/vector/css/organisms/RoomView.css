@@ -218,8 +218,9 @@ limitations under the License.
 
 .mx_RoomView_uploadProgressOuter {
     width: 100%;
-    background-color: rgba(169, 219, 244, 0.5);
     height: 4px;
+    margin-left: 54px;
+    margin-top: -1px;
 }
 
 .mx_RoomView_uploadProgressInner {
@@ -228,27 +229,29 @@ limitations under the License.
 }
 
 .mx_RoomView_uploadFilename {
-    margin-top: 15px;
+    margin-top: 5px;
     margin-left: 56px;
+    opacity: 0.5;
+    color: #4a4a4a;
 }
 
 .mx_RoomView_uploadIcon {
     float: left;
-    margin-top: 6px;
-    margin-left: 5px;
+    margin-top: 1px;
+    margin-left: 14px;
 }
 
 .mx_RoomView_uploadCancel {
     float: right;
-    margin-top: 6px;
+    margin-top: 5px;
     margin-right: 10px;
 }
 
 .mx_RoomView_uploadBytes {
     float: right;    
-    opacity: 0.5;
-    margin-top: 15px;
-    margin-right: 10px;
+    margin-top: 5px;
+    margin-right: 30px;
+    color: #76cfa6;
 }
 
 .mx_RoomView_ongoingConfCallNotification {
