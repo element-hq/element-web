@@ -34,11 +34,22 @@ module.exports = {
     },
 
     getInitialState: function() {
-        this.urlList = this.getUrlList();
-        this.urlListIndex = -1;
+        this._update();
         return {
             imageUrl: this._nextUrl()
         };
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this._update();
+        this.setState({
+            imageUrl: this._nextUrl()
+        });
+    },
+
+    _update: function() {
+        this.urlList = this.getUrlList();
+        this.urlListIndex = -1;
     },
 
     _nextUrl: function() {

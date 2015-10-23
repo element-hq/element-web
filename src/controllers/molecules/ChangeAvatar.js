@@ -19,7 +19,8 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 
 module.exports = {
     propTypes: {
-        initialAvatarUrl: React.PropTypes.string.isRequired,
+        initialAvatarUrl: React.PropTypes.string,
+        room: React.PropTypes.object,
     },
 
     Phases: {
@@ -44,7 +45,16 @@ module.exports = {
         var self = this;
         MatrixClientPeg.get().uploadContent(file).then(function(url) {
             newUrl = url;
-            return MatrixClientPeg.get().setAvatarUrl(url);
+            if (self.props.room) {
+                return MatrixClientPeg.get().sendStateEvent(
+                    self.props.room.roomId,
+                    'm.room.avatar',
+                    {url: url},
+                    ''
+                );
+            } else {
+                return MatrixClientPeg.get().setAvatarUrl(url);
+            }
         }).done(function() {
             self.setState({
                 phase: self.Phases.Display,
@@ -52,7 +62,7 @@ module.exports = {
             });
         }, function(error) {
             self.setState({
-                phase: this.Phases.Error
+                phase: self.Phases.Error
             });
             self.onError(error);
         });
