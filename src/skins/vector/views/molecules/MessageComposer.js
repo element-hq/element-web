@@ -55,7 +55,7 @@ module.exports = React.createClass({
                             <textarea ref="textarea" onKeyDown={this.onKeyDown} placeholder="Type a message..." />
                         </div>
                         <div className="mx_MessageComposer_upload" onClick={this.onUploadClick}>
-                            <img src="img/upload.png" width="32" height="32"/>
+                            <img src="img/upload.png" width="17" height="22"/>
                             <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
                         </div>
                     </div>
