@@ -33,6 +33,7 @@ module.exports = {
         cli.on("Room", this.onRoom);
         cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
+        cli.on("RoomState.events", this.onRoomStateEvents);
 
         var rooms = this.getRoomList();
         this.setState({
@@ -66,6 +67,7 @@ module.exports = {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
     },
 
@@ -109,6 +111,11 @@ module.exports = {
     onRoomName: function(room) {
         this.refreshRoomList();
     },
+
+    onRoomStateEvents: function(ev, state) {
+        setTimeout(this.refreshRoomList, 0);
+    },
+
 
     refreshRoomList: function() {
         var rooms = this.getRoomList();

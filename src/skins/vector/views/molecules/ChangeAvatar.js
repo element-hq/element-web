@@ -47,7 +47,11 @@ module.exports = React.createClass({
         if (this.props.room && !this.avatarSet) {
             avatarImg = <RoomAvatar room={this.props.room} width='320' height='240' resizeMethod='scale' />;
         } else {
-            avatarImg = <img src={this.state.avatarUrl}/>;
+            var style = {
+                maxWidth: 320,
+                maxHeight: 240,
+            };
+            avatarImg = <img src={this.state.avatarUrl} style={style} />;
         }
 
         switch (this.state.phase) {
