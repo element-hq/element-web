@@ -105,9 +105,9 @@ limitations under the License.
 }
 
 .mx_EventTile.menu .mx_EventTile_editButton {
-    display: inline-block;
+    visibility: visible;
 }
 
 .mx_EventTile.menu .mx_MessageTimestamp {
-    display: inline-block;
+    visibility: visible;
 }
