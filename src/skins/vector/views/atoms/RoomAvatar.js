@@ -43,9 +43,13 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var style = {
+            'max-width': this.props.width,
+            'max-height': this.props.height,
+        };
         return (
             <img className="mx_RoomAvatar" src={this.state.imageUrl} onError={this.onError}
-                width={this.props.width} height={this.props.height}
+                style={style}
             />
         );
     }

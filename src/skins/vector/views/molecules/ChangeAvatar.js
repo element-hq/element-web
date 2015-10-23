@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
+var sdk = require('matrix-react-sdk')
 var ChangeAvatarController = require('matrix-react-sdk/lib/controllers/molecules/ChangeAvatar')
 
 var Loader = require("react-loader");
@@ -28,6 +29,7 @@ module.exports = React.createClass({
     mixins: [ChangeAvatarController],
 
     onFileSelected: function(ev) {
+        this.avatarSet = true;
         this.setAvatarFromFile(ev.target.files[0]);
     },
 
@@ -38,13 +40,23 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var RoomAvatar = sdk.getComponent('atoms.RoomAvatar');
+        var avatarImg;
+        // Having just set an avatar we just display that since it will take a little
+        // time to propagate through to the RoomAvatar.
+        if (this.props.room && !this.avatarSet) {
+            avatarImg = <RoomAvatar room={this.props.room} width='320' height='240' resizeMethod='scale' />;
+        } else {
+            avatarImg = <img src={this.state.avatarUrl}/>;
+        }
+
         switch (this.state.phase) {
             case this.Phases.Display:
             case this.Phases.Error:
                 return (
                     <div>
                         <div className="mx_Dialog_content">
-                            <img src={this.state.avatarUrl}/>
+                            {avatarImg}
                         </div>
                         <div className="mx_Dialog_content">
                             Upload new:
