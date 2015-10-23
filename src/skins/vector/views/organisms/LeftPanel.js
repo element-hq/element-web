@@ -40,7 +40,7 @@ module.exports = React.createClass({
             classes += " collapsed";
         }
         else {
-            //collapseButton = <img className="mx_LeftPanel_hideButton" onClick={ this.onHideClick } src="img/hide.png" width="12" height="20" alt="<"/>   
+            collapseButton = <img className="mx_LeftPanel_hideButton" onClick={ this.onHideClick } src="img/hide.png" width="12" height="20" alt="<"/>   
         }
 
         return (

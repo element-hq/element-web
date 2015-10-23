@@ -103,7 +103,7 @@ module.exports = React.createClass({
         } else {
             return (
                 <div className={ classes } onClick={ this.onClickInvite } >
-                    <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="36" height="36" alt=""/></div>
+                    <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="40" height="40" alt=""/></div>
                     <div className="mx_MemberTile_name">
                         <EditableText ref="invite" label="Invite" placeHolder="@user:domain.com" initialValue="" onValueChanged={this.onPopulateInvite}/>
                     </div>
@@ -127,8 +127,12 @@ module.exports = React.createClass({
         }
         return (
             <div className="mx_MemberList">
+                <div className="mx_MemberList_chevron">
+                    <img src="img/chevron.png" width="24" height="13"/>
+                </div>
                 <div className="mx_MemberList_border">
                     <div>
+                        <h2>Members</h2>
                         <div className="mx_MemberList_wrapper">
                             {this.makeMemberTiles('join')}
                         </div>

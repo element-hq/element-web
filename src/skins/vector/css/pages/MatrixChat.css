@@ -69,8 +69,6 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    background-color: #eaf5f0;
-
     -webkit-flex: 0 0 230px;
     flex: 0 0 230px;
 }
@@ -89,7 +87,7 @@ limitations under the License.
 
     padding-left: 12px;
     padding-right: 12px;
-    background-color: #fff;
+    background-color: #f3f8fa;
 
     -webkit-flex: 1;
     flex: 1;
@@ -116,6 +114,7 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
+    background-color: #f3f8fa;
     -webkit-flex: 0 0 230px;
     flex: 0 0 230px;
 }

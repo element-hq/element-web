@@ -121,7 +121,7 @@ module.exports = React.createClass({
         var power;
         if (this.props.member && this.props.member.powerLevelNorm > 0) {
             var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
-            power = <img src={ img } className="mx_MemberTile_power" width="44" height="44" alt=""/>;
+            power = <img src={ img } className="mx_MemberTile_power" width="48" height="48" alt=""/>;
         }
         var presenceClass = "mx_MemberTile_offline";
         var mainClassName = "mx_MemberTile ";
@@ -177,7 +177,7 @@ module.exports = React.createClass({
         return (
             <div className={mainClassName} title={ this.getPowerLabel() } onClick={ this.onClick } onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">
-                    <MemberAvatar member={this.props.member} width="36" height="36" />
+                    <MemberAvatar member={this.props.member} />
                      { power }
                 </div>
                 { nameEl }

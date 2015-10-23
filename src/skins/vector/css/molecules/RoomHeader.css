@@ -18,10 +18,10 @@ limitations under the License.
 }
 
 .mx_RoomHeader_wrapper {
-    max-width: 960px;
+    max-width: 720px;
     margin: auto;
     height: 88px;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid #a8dbf3;
 
     display: -webkit-box;
     display: -moz-box;
@@ -47,7 +47,7 @@ limitations under the License.
 .mx_RoomHeader_textButton {
     height: 48px;
     margin-top: 18px;
-    background-color: #76cfa6;
+    background-color: #80cef4;
     border-radius: 48px;
     margin-right: 8px;
     color: #fff;
@@ -92,7 +92,7 @@ limitations under the License.
 
 .mx_RoomHeader_simpleHeader {
     line-height: 88px;
-    color: #76cfa6;
+    color: #80cef4;
     font-weight: 400;
     font-size: 20px;
     overflow: hidden;
@@ -102,8 +102,8 @@ limitations under the License.
 .mx_RoomHeader_name {
     vertical-align: middle;
     height: 28px;
-    color: #454545;
-    font-weight: 800;
+    color: #80cef4;
+    font-weight: 400;
     font-size: 20px;
     padding-left: 16px;
     padding-right: 16px;
@@ -133,7 +133,7 @@ limitations under the License.
     vertical-align: bottom;
     float: left;
     max-height: 38px;
-    color: #454545;
+    color: #70b5d7;  
     font-weight: 300;  
     padding-left: 16px;
     padding-right: 16px;

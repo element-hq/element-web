@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 .mx_RoomList {
-    padding-top: 24px;
 }
 
 .mx_RoomList_recents {
@@ -25,15 +24,8 @@ limitations under the License.
     width: 100%;
 }
 
-.mx_RoomList_recentsLabel img {
-    margin-left: 8px;
-}
-
 .mx_RoomList h2 {
-    text-transform: uppercase;
-    color: #3d3b39;
-    font-weight: 600;
-    font-size: 14px;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 10px;
 }

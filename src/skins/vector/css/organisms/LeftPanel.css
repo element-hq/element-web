@@ -53,20 +53,17 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
-    -webkit-flex: 0 0 126px;
-    flex: 0 0 126px;
+    -webkit-flex: 0 0 170px;
+    flex: 0 0 170px;
+
+    border-top: 1px solid #f3f8fa;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu .mx_RoomTile {
-    color: #454545;
+    color: #378bb4;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu .mx_BottomLeftMenu_options {
     margin-top: 12px;
     width: 100%;
-}
-
-.mx_LeftPanel .mx_BottomLeftMenu img {
-    border-radius: 0px;
-    background-color: transparent;
 }

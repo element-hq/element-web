@@ -16,6 +16,8 @@ limitations under the License.
 
 .mx_MemberList {
     height: 100%;
+    margin-bottom: 100px;
+    padding: 8px;
 
     -webkit-flex: 1;
     flex: 1;
@@ -37,7 +39,10 @@ limitations under the License.
 }
 
 .mx_MemberList_border {
+    border: 1px solid #a9dbf4;
     overflow-y: auto;
+    border-radius: 8px;
+    background-color: #fff;
 
     order: 1;
     -webkit-flex: 1 1 0;

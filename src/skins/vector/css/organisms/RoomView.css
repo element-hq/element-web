@@ -42,7 +42,7 @@ limitations under the License.
 
 .mx_RoomView_fileDropTarget {
     min-width: 0px;
-    max-width: 960px;
+    max-width: 720px;
     width: 100%;
     font-size: 20px;
     text-align: center;
@@ -61,7 +61,7 @@ limitations under the License.
     border-top-right-radius: 10px;
 
     background-color: rgba(255, 255, 255, 0.9);
-    border: 2px dashed #76cfa6;
+    border: 2px dashed #80cef4;
     border-bottom: none;
     position: absolute;
     top: 88px;
@@ -84,12 +84,12 @@ limitations under the License.
     order: 2;
 
     min-width: 0px;
-    max-width: 960px;
+    max-width: 720px;
     width: 100%;
     margin: auto;
 
     overflow: auto;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #a8dbf3;
 
     -webkit-flex: 0 0 auto;
     flex: 0 0 auto;
@@ -111,7 +111,7 @@ limitations under the License.
 }
 
 .mx_RoomView_messageListWrapper {
-    max-width: 960px;
+    max-width: 720px;
     margin: auto;
 }
 
@@ -129,9 +129,8 @@ limitations under the License.
     clear: both;
     margin-top: 32px;
     margin-bottom: 8px;
-    margin-left: 54px;
     padding-bottom: 6px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #a8dbf3;
 }
 
 .mx_RoomView_invitePrompt {
@@ -142,7 +141,7 @@ limitations under the License.
     order: 2;
 
     min-width: 0px;
-    max-width: 960px;
+    max-width: 720px;
     width: 100%;
     margin: auto;
 
@@ -158,19 +157,14 @@ limitations under the License.
     order: 4;
 
     width: 100%;
-    -webkit-flex: 0 0 36px;
-    flex: 0 0 36px;
+    -webkit-flex: 0 0 58px;
+    flex: 0 0 58px;
 }
 
 .mx_RoomView_statusAreaBox {
-    max-width: 960px;
+    max-width: 720px;
     margin: auto;
-}
-
-.mx_RoomView_statusAreaBox_line {
-    border-top: 1px solid #eee;
-    margin-left: 54px;
-    height: 1px;
+    border-top: 1px solid #a8dbf3;
 }
 
 .mx_RoomView_unreadMessagesBar {
@@ -211,8 +205,8 @@ limitations under the License.
     order: 5;
 
     width: 100%;
-    -webkit-flex: 0 0 70px;
-    flex: 0 0 70px;
+    -webkit-flex: 0 0 63px;
+    flex: 0 0 63px;
     margin-right: 2px;
 }
 
@@ -223,7 +217,7 @@ limitations under the License.
 }
 
 .mx_RoomView_uploadProgressInner {
-    background-color: #76cfa6;
+    background-color: #80cef4;
     height: 4px;
 }
 

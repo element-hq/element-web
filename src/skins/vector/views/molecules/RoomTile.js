@@ -84,7 +84,7 @@ module.exports = React.createClass({
         return (
             <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className="mx_RoomTile_avatar">
-                    <RoomAvatar room={this.props.room} width="24" height="24" />
+                    <RoomAvatar room={this.props.room} />
                     { badge }
                 </div>
                 { label }
