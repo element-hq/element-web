@@ -19,22 +19,22 @@ limitations under the License.
 var React = require('react');
 
 var EventAsTextTileController = require('matrix-react-sdk/lib/controllers/molecules/EventAsTextTile')
-var sdk = require('matrix-react-sdk')
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
 
 module.exports = React.createClass({
     displayName: 'EventAsTextTile',
     mixins: [EventAsTextTileController],
 
-    render: function() {
-        var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
-        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+    statics: {
+        needsSenderProfile: function() {
+            return false;
+        }
+    },
 
+    render: function() {
         var text = TextForEvent.textForEvent(this.props.mxEvent);
         if (text == null || text.length == 0) return null;
 
-        var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
-        var avatar = this.props.mxEvent.sender ? <MemberAvatar member={this.props.mxEvent.sender} /> : null;
         return (
             <div className="mx_EventAsTextTile">
                 {TextForEvent.textForEvent(this.props.mxEvent)}

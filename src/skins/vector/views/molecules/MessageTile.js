@@ -28,6 +28,12 @@ module.exports = React.createClass({
     displayName: 'MessageTile',
     mixins: [MessageTileController],
 
+    statics: {
+        needsSenderProfile: function() {
+            return true;
+        }
+    },
+
     render: function() {
         var UnknownMessageTile = sdk.getComponent('molecules.UnknownMessageTile');
 
