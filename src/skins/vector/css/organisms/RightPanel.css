@@ -42,10 +42,8 @@ limitations under the License.
 .mx_RightPanel_headerButtonGroup {
     margin-top: 18px;
     height: 48px;
-    float: right;
+    float: left;
     background-color: #fff;
-    border-radius: 48px;
-    border: 1px solid #a9dbf4;
     margin-right: 22px;
 }
 
