@@ -24,8 +24,8 @@ limitations under the License.
     display: table-cell;
     background: #eaf5f0;
     padding-right: 8px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding-top: 4px;
+    padding-bottom: 2px;
     padding-left: 18px;
     vertical-align: middle;
     width: 24px;
@@ -91,12 +91,13 @@ limitations under the License.
 }
 */
 
-.mx_RoomTile_highlight .mx_RoomTile_sidebadge,
-.mx_RoomTile_unread    .mx_RoomTile_sidebadge  {
+.mx_RoomTile_badge {
     background-color: #76cfa6;
     width: 4px;
     position: absolute;
     left: 0px;
+    top: 5px;
+    height: 24px;
 }
 
 .mx_RoomTile_unread,
