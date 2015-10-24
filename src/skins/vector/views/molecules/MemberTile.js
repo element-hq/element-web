@@ -119,10 +119,10 @@ module.exports = React.createClass({
         var isMyUser = MatrixClientPeg.get().credentials.userId == this.props.member.userId;
 
         var power;
-        if (this.props.member && this.props.member.powerLevelNorm > 0) {
-            var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
-            power = <img src={ img } className="mx_MemberTile_power" width="44" height="44" alt=""/>;
-        }
+        // if (this.props.member && this.props.member.powerLevelNorm > 0) {
+        //     var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
+        //     power = <img src={ img } className="mx_MemberTile_power" width="44" height="44" alt=""/>;
+        // }
         var presenceClass = "mx_MemberTile_offline";
         var mainClassName = "mx_MemberTile ";
         if (this.props.member.user) {
@@ -140,7 +140,7 @@ module.exports = React.createClass({
 
         var name = this.props.member.name;
         // if (isMyUser) name += " (me)"; // this does nothing other than introduce line wrapping and pain
-        var leave = isMyUser ? <img className="mx_MemberTile_leave" src="img/delete.png" width="10" height="10" onClick={this.onLeaveClick}/> : null;
+        //var leave = isMyUser ? <img className="mx_MemberTile_leave" src="img/delete.png" width="10" height="10" onClick={this.onLeaveClick}/> : null;
 
         var nameClass = "mx_MemberTile_name";
         if (zalgo.test(name)) {
@@ -161,8 +161,8 @@ module.exports = React.createClass({
 
             nameEl =
                 <div className="mx_MemberTile_details">
-                    { leave }
-                    <div className="mx_MemberTile_userId">{ this.props.member.userId }</div>
+                    <img className="mx_MemberTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
+                    <div className="mx_MemberTile_userId">{ name }</div>
                     { presence }
                 </div>
         }

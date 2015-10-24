@@ -53,14 +53,27 @@ module.exports = React.createClass({
         var buttonGroup;
         var panel;
 
+        var filesHighlight;
+        var membersHighlight;
+        if (!this.props.collapsed) {
+            if (this.state.phase == this.Phase.MemberList) {
+                membersHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
+            }
+            else if (this.state.phase == this.Phase.FileList) {
+                filesHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
+            }
+        }
+
         if (this.props.roomId) {
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
                         <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton">
                             <img src="img/file.png" width="17" height="22" title="Files" alt="Files"/>
+                            { filesHighlight }
                         </div>
                         <div className="mx_RightPanel_headerButton" onClick={ this.onMemberListButtonClick }>
                             <img src="img/members.png" width="17" height="22" title="Members" alt="Members"/>
+                            { membersHighlight }
                         </div>
                     </div>;
 

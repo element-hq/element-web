@@ -91,7 +91,7 @@ limitations under the License.
 }
 
 .mx_EventTile_editButton {
-    clear: both;
+    clear: right;
     float: right;
     display: inline-block;
     visibility: hidden;

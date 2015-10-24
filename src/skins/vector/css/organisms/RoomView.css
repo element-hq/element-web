@@ -36,8 +36,8 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    -webkit-flex: 0 0 88px;
-    flex: 0 0 88px;
+    -webkit-flex: 0 0 83px;
+    flex: 0 0 83px;
 }
 
 .mx_RoomView_fileDropTarget {

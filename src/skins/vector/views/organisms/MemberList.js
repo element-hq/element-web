@@ -89,25 +89,13 @@ module.exports = React.createClass({
     },
 
     inviteTile: function() {
-        var classes = classNames({
-            mx_MemberTile: true,
-            mx_MemberTile_inviteTile: true,
-            mx_MemberTile_inviteEditing: this.state.editing,
-        });
-
-        var EditableText = sdk.getComponent("atoms.EditableText");
         if (this.state.inviting) {
             return (
                 <Loader />
             );
         } else {
             return (
-                <div className={ classes } onClick={ this.onClickInvite } >
-                    <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="36" height="36" alt=""/></div>
-                    <div className="mx_MemberTile_name">
-                        <EditableText ref="invite" label="Invite" placeHolder="@user:domain.com" initialValue="" onValueChanged={this.onPopulateInvite}/>
-                    </div>
-                </div>
+                <input className="mx_MemberList_invite" ref="invite" placeholder="Invite another user" onSubmit={this.onPopulateInvite}/>
             );
         }
     },
@@ -117,7 +105,7 @@ module.exports = React.createClass({
         var invitedMemberTiles = this.makeMemberTiles('invite');
         if (invitedMemberTiles.length > 0) {
             invitedSection = (
-                <div>
+                <div className="mx_MemberList_invited">
                     <h2>Invited</h2>
                     <div className="mx_MemberList_wrapper">
                         {invitedMemberTiles}
@@ -128,13 +116,13 @@ module.exports = React.createClass({
         return (
             <div className="mx_MemberList">
                 <div className="mx_MemberList_border">
+                    {this.inviteTile()}
                     <div>
                         <div className="mx_MemberList_wrapper">
                             {this.makeMemberTiles('join')}
                         </div>
                     </div>
                     {invitedSection}
-                    {this.inviteTile()}
                 </div>
             </div>
         );
