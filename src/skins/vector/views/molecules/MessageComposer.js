@@ -49,7 +49,7 @@ module.exports = React.createClass({
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         <div className="mx_MessageComposer_avatar">
-                            <MemberAvatar member={me} width="24" height="24" />
+                            <MemberAvatar member={me} width={24} height={24} />
                         </div>
                         <div className="mx_MessageComposer_input">
                             <textarea ref="textarea" onKeyDown={this.onKeyDown} placeholder="Type a message..." />

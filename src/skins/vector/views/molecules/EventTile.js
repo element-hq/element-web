@@ -95,7 +95,7 @@ module.exports = React.createClass({
         var timestamp = <MessageTimestamp ts={this.props.mxEvent.getTs()} />
         var editButton = (
             <input
-                type="image" src="img/edit.png" alt="Edit"
+                type="image" src="img/edit.png" alt="Edit" width="14" height="14"
                 className="mx_EventTile_editButton" onClick={this.onEditClicked}
             />
         );
@@ -110,7 +110,7 @@ module.exports = React.createClass({
             if (this.props.mxEvent.sender) {
                 avatar = (
                     <div className="mx_EventTile_avatar">
-                        <MemberAvatar member={this.props.mxEvent.sender} width="24" height="24" />
+                        <MemberAvatar member={this.props.mxEvent.sender} width={24} height={24} />
                     </div>
                 );
             }

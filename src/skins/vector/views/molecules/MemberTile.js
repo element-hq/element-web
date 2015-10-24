@@ -177,7 +177,7 @@ module.exports = React.createClass({
         return (
             <div className={mainClassName} title={ this.getPowerLabel() } onClick={ this.onClick } onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">
-                    <MemberAvatar member={this.props.member} width="36" height="36" />
+                    <MemberAvatar member={this.props.member} width={36} height={36} />
                      { power }
                 </div>
                 { nameEl }
