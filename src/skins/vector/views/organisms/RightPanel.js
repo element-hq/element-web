@@ -66,7 +66,7 @@ module.exports = React.createClass({
         }
 
         var membersBadge;
-        if (this.state.phase == this.Phase.MemberList) {
+        if (this.state.phase == this.Phase.MemberList && this.props.roomId) {
             var cli = MatrixClientPeg.get();
             var room = cli.getRoom(this.props.roomId);
             // FIXME: presumably we need to subscribe to some event to refresh this count when it changes?
@@ -82,7 +82,7 @@ module.exports = React.createClass({
                             { membersHighlight }
                         </div>
                         <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton">
-                            <img src="img/file.png" width="17" height="22" title="Files" alt="Files"/>
+                            <img src="img/files.png" width="17" height="22" title="Files" alt="Files"/>
                             { filesHighlight }
                         </div>
                     </div>;
