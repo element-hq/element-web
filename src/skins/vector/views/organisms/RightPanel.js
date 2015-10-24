@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
+var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
 
 module.exports = React.createClass({
     displayName: 'RightPanel',
@@ -64,16 +65,25 @@ module.exports = React.createClass({
             }
         }
 
+        var membersBadge;
+        if (this.state.phase == this.Phase.MemberList) {
+            var cli = MatrixClientPeg.get();
+            var room = cli.getRoom(this.props.roomId);
+            // FIXME: presumably we need to subscribe to some event to refresh this count when it changes?
+            membersBadge = <div className="mx_RightPanel_headerButton_badge">{ room.getJoinedMembers().length }</div>;
+        }
+
         if (this.props.roomId) {
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
+                        <div className="mx_RightPanel_headerButton" onClick={ this.onMemberListButtonClick }>
+                            <img src="img/members.png" width="17" height="22" title="Members" alt="Members"/>
+                            { membersBadge }
+                            { membersHighlight }
+                        </div>
                         <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton">
                             <img src="img/file.png" width="17" height="22" title="Files" alt="Files"/>
                             { filesHighlight }
-                        </div>
-                        <div className="mx_RightPanel_headerButton" onClick={ this.onMemberListButtonClick }>
-                            <img src="img/members.png" width="17" height="22" title="Members" alt="Members"/>
-                            { membersHighlight }
                         </div>
                     </div>;
 

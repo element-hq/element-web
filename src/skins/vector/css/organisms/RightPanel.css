@@ -52,6 +52,7 @@ limitations under the License.
     vertical-align: middle;    
     padding-left: 8px;
     padding-right: 8px;
+    position: relative;
 }
 
 .mx_RightPanel_headerButton_highlight {
@@ -61,6 +62,20 @@ limitations under the License.
     width: 25px;
     height: 4px;
     background-color: #76cfa6;
+}
+
+.mx_RightPanel_headerButton_badge {
+    position: absolute;
+    top: 5px;
+    left: 21px;
+    font-size: 12px;    
+    background-color: #76cfa6;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 20px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 2px;
 }
 
 .mx_RightPanel .mx_MemberList {
