@@ -41,19 +41,35 @@ module.exports = React.createClass({
             callElement = <CallView className="mx_MatrixChat_callView"/>
         }
 
-        var recentsLabel = this.props.collapsed ? 
-                           <img style={{cursor: 'pointer'}} onClick={ this.onShowClick } src="img/menu.png" width="20" alt=">"/> :
-                           "Recent";
+        var expandButton = this.props.collapsed ? 
+                           <img className="mx_RoomList_expandButton" onClick={ this.onShowClick } src="img/menu.png" width="20" alt=">"/> :
+                           null;
+
+        var invitesLabel = this.props.collapsed ? null : "Invites";
+        var recentsLabel = this.props.collapsed ? null : "Recent";
+
+        var invites;
+        if (this.state.inviteList.length) {
+            invites = <div>
+                        <h2 className="mx_RoomList_invitesLabel">{ invitesLabel }</h2>
+                        <div className="mx_RoomList_invites">
+                            {this.makeRoomTiles(this.state.inviteList, true)}
+                        </div>
+                      </div>
+        }
 
         return (
             <div className="mx_RoomList" onScroll={this._repositionTooltip}>
-                {callElement}
+                { expandButton }
+                { callElement }
                 <h2 className="mx_RoomList_favouritesLabel">Favourites</h2>
                 <RoomDropTarget text="Drop here to favourite"/>
 
+                { invites }
+
                 <h2 className="mx_RoomList_recentsLabel">{ recentsLabel }</h2>
                 <div className="mx_RoomList_recents">
-                    {this.makeRoomTiles()}
+                    {this.makeRoomTiles(this.state.roomList, false)}
                 </div>
 
                 <h2 className="mx_RoomList_archiveLabel">Archive</h2>

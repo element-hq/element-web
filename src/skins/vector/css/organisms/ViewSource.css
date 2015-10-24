@@ -18,4 +18,5 @@ limitations under the License.
     text-align: left;
     font-size: 12px;
     padding: 0.5em 1em 0.5em 1em;
+    word-wrap: break-word;
 }

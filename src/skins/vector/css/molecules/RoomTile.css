@@ -48,6 +48,11 @@ limitations under the License.
     opacity: 0.8;
 }
 
+.mx_RoomTile_invite {
+    opacity: 0.5;
+    font-weight: normal;
+}
+
 .collapsed .mx_RoomTile_name {
     display: none;
 }
