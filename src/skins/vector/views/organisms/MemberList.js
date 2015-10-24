@@ -30,7 +30,6 @@ module.exports = React.createClass({
     mixins: [MemberListController],
 
     getInitialState: function() {
-        return { editing: false };
     },
 
     memberSort: function(userIdA, userIdB) {
@@ -71,21 +70,9 @@ module.exports = React.createClass({
         });
     },
 
-    onPopulateInvite: function(inputText, shouldSubmit) {
-        // reset back to placeholder
-        this.refs.invite.setValue("Invite", false, true);
-        this.setState({ editing: false });
-        if (!shouldSubmit) {
-            return; // enter key wasn't pressed
-        }
-        this.onInvite(inputText);
-    },
-
-    onClickInvite: function(ev) {
-        this.setState({ editing: true });
-        this.refs.invite.onClickDiv();
-        ev.stopPropagation();
-        ev.preventDefault();
+    onPopulateInvite: function(e) {
+        this.onInvite(this.refs.invite.getDOMNode().value);
+        e.preventDefault();
     },
 
     inviteTile: function() {
@@ -95,7 +82,9 @@ module.exports = React.createClass({
             );
         } else {
             return (
-                <input className="mx_MemberList_invite" ref="invite" placeholder="Invite another user" onSubmit={this.onPopulateInvite}/>
+                <form onSubmit={this.onPopulateInvite}>
+                    <input className="mx_MemberList_invite" ref="invite" placeholder="Invite another user"/>
+                </form>
             );
         }
     },
