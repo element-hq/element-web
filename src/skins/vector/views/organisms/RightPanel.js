@@ -70,7 +70,9 @@ module.exports = React.createClass({
             var cli = MatrixClientPeg.get();
             var room = cli.getRoom(this.props.roomId);
             // FIXME: presumably we need to subscribe to some event to refresh this count when it changes?
-            membersBadge = <div className="mx_RightPanel_headerButton_badge">{ room.getJoinedMembers().length }</div>;
+            if (room) {
+                membersBadge = <div className="mx_RightPanel_headerButton_badge">{ room.getJoinedMembers().length }</div>;
+            }
         }
 
         if (this.props.roomId) {
