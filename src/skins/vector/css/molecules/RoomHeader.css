@@ -172,7 +172,7 @@ limitations under the License.
 
 .mx_RoomHeader_button {
     display: table-cell;
-    vertical-align: middle;
+    vertical-align: top;
     padding-left: 8px;
     padding-right: 8px;
 }

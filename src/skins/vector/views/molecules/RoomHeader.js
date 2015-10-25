@@ -133,17 +133,17 @@ module.exports = React.createClass({
                 if (activeCall.type == "video") {
                     zoom_button = (
                         <div className="mx_RoomHeader_button" onClick={this.onFullscreenClick}>
-                            <img src="img/zoom.png" title="Fullscreen" alt="Fullscreen" width="32" height="32" style={{ 'marginTop': '3px' }}/>
+                            <img src="img/zoom.png" title="Fullscreen" alt="Fullscreen" width="32" height="32" style={{ 'marginTop': '-5px' }}/>
                         </div>
                     );
                 }
                 video_button = 
                         <div className="mx_RoomHeader_button mx_RoomHeader_video" onClick={activeCall && activeCall.type === "video" ? this.onMuteVideoClick : this.onVideoClick}>
-                            <img src="img/video.png" title="Video call" alt="Video call" width="32" height="32"/>
+                            <img src="img/video.png" title="Video call" alt="Video call" width="32" height="32" style={{ 'marginTop': '-8px' }}/>
                         </div>;
                 voice_button =
                         <div className="mx_RoomHeader_button mx_RoomHeader_voice" onClick={activeCall ? this.onMuteAudioClick : this.onVoiceClick}>
-                            <img src="img/voip.png" title="VoIP call" alt="VoIP call" width="32" height="32"/>
+                            <img src="img/voip.png" title="VoIP call" alt="VoIP call" width="32" height="32" style={{ 'marginTop': '-8px' }}/>
                         </div>;
             }
 
