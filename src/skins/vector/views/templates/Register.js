@@ -173,6 +173,12 @@ module.exports = React.createClass({
                 case this.FieldErrors.InUse:
                     strings.push(keys[i]+" is already taken");
                     break;
+                case this.FieldErrors.Length:
+                    strings.push(keys[i] + " is not long enough.");
+                    break;
+                default:
+                    console.error("Unhandled FieldError: %s", bad[keys[i]]);
+                    break;
             }
         }
         var errtxt = strings.join(', ');
