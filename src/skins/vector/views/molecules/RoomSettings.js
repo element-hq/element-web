@@ -142,7 +142,7 @@ module.exports = React.createClass({
             </div>;
         }
 
-        var banned = this.props.room.getMembersWithMemership("ban");
+        var banned = this.props.room.getMembersWithMembership("ban");
 
         return (
             <div className="mx_RoomSettings">
