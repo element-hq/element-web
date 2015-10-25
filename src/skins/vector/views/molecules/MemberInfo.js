@@ -71,7 +71,7 @@ module.exports = React.createClass({
         var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
         return (
             <div className="mx_MemberInfo">
-                <img className="mx_MemberInfo_cancel" src="img/cancel.png" width="18" height="18" onClick={this.onCancel}/>
+                <img className="mx_MemberInfo_cancel" src="img/cancel-black.png" width="18" height="18" onClick={this.onCancel}/>
                 <div className="mx_MemberInfo_avatar">
                     <MemberAvatar member={this.props.member} width={48} height={48} />
                 </div>
@@ -79,11 +79,13 @@ module.exports = React.createClass({
                 <div className="mx_MemberInfo_profileField">
                     { this.props.member.userId }
                 </div>
-                {interactButton}
-                {muteButton}
-                {kickButton}
-                {banButton}
-                {giveModButton}
+                <div className="mx_MemberInfo_buttons">
+                    {interactButton}
+                    {muteButton}
+                    {kickButton}
+                    {banButton}
+                    {giveModButton}
+                </div>
             </div>
         );
     }

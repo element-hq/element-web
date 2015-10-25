@@ -18,6 +18,7 @@ limitations under the License.
     display: table-row;
     position: relative;
     color: #454545;
+    cursor: pointer;
 }
 
 .mx_MemberTile_avatar {
