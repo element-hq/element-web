@@ -71,8 +71,7 @@ limitations under the License.
     }
 
 .mx_RoomHeader_rightRow {
-    height: 48px;
-    margin-top: 18px;
+    margin-top: 32px;
     background-color: #fff;
 
     -webkit-box-ordinal-group: 3;
@@ -98,6 +97,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_name {
+    cursor: pointer;
     vertical-align: middle;
     height: 28px;
     color: #454545;
@@ -106,6 +106,26 @@ limitations under the License.
     padding-left: 16px;
     padding-right: 16px;
     text-overflow: ellipsis;
+}
+
+.mx_RoomHeader_nametext {
+    display: inline-block;
+}
+
+.mx_RoomHeader_settingsButton {
+    display: inline-block;
+    visibility: hidden;
+    position: relative;
+    bottom: 10px;
+    left: 4px;
+}
+
+.mx_RoomHeader_name:hover {
+    color: #76cfa6;
+}
+
+.mx_RoomHeader_name:hover .mx_RoomHeader_settingsButton {
+    visibility: visible;
 }
 
 .mx_RoomHeader_nameEditing {
@@ -151,7 +171,6 @@ limitations under the License.
 }
 
 .mx_RoomHeader_button {
-    height: 48px;
     display: table-cell;
     vertical-align: middle;
     padding-left: 8px;

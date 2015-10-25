@@ -59,7 +59,6 @@ module.exports = React.createClass({
             var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
 
             var call_buttons;
-            var zoom_button;
             if (this.state && this.state.call_state != 'ended') {
                 var muteVideoButton;
                 var activeCall = (
@@ -111,16 +110,15 @@ module.exports = React.createClass({
                 cancel_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onCancelClick}>Cancel</div>
                 save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save Changes</div>
             } else {
+                // <EditableText label={this.props.room.name} initialValue={actual_name} placeHolder="Name" onValueChanged={this.onNameChange} />
                 name =
-                    <div className="mx_RoomHeader_name">
-                        <EditableText label={this.props.room.name} initialValue={actual_name} placeHolder="Name" onValueChanged={this.onNameChange} />
+                    <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
+                        <div className="mx_RoomHeader_nametext">{ this.props.room.name }</div>
+                        <div className="mx_RoomHeader_settingsButton">
+                            <img src="img/settings.png" width="12" height="12"/>
+                        </div>
                     </div>
                 if (topic) topic_el = <div className="mx_RoomHeader_topic" title={topic.getContent().topic}>{ topic.getContent().topic }</div>;
-                settings_button = (
-                    <div className="mx_RoomHeader_button" onClick={this.props.onSettingsClick}>
-                        <img src="img/settings.png" width="32" height="32"/>
-                    </div>
-                );
             }
 
             var roomAvatar = null;
@@ -130,12 +128,23 @@ module.exports = React.createClass({
                 );
             }
 
-            if (activeCall && activeCall.type == "video") {
-                zoom_button = (
-                    <div className="mx_RoomHeader_button" onClick={this.onFullscreenClick}>
-                        <img src="img/zoom.png" title="Fullscreen" alt="Fullscreen" width="32" height="32" style={{ 'marginTop': '3px' }}/>
-                    </div>
-                );
+            var zoom_button, video_button, voice_button;
+            if (activeCall) {
+                if (activeCall.type == "video") {
+                    zoom_button = (
+                        <div className="mx_RoomHeader_button" onClick={this.onFullscreenClick}>
+                            <img src="img/zoom.png" title="Fullscreen" alt="Fullscreen" width="32" height="32" style={{ 'marginTop': '3px' }}/>
+                        </div>
+                    );
+                }
+                video_button = 
+                        <div className="mx_RoomHeader_button mx_RoomHeader_video" onClick={activeCall && activeCall.type === "video" ? this.onMuteVideoClick : this.onVideoClick}>
+                            <img src="img/video.png" title="Video call" alt="Video call" width="32" height="32"/>
+                        </div>;
+                voice_button =
+                        <div className="mx_RoomHeader_button mx_RoomHeader_voice" onClick={activeCall ? this.onMuteAudioClick : this.onVoiceClick}>
+                            <img src="img/voip.png" title="VoIP call" alt="VoIP call" width="32" height="32"/>
+                        </div>;
             }
 
             header =
@@ -153,16 +162,11 @@ module.exports = React.createClass({
                     {cancel_button}
                     {save_button}
                     <div className="mx_RoomHeader_rightRow">
-                        { settings_button }
+                        { video_button }
+                        { voice_button }
                         { zoom_button }
-                        <div className="mx_RoomHeader_button mx_RoomHeader_search">
-                            <img src="img/search.png" title="Search" alt="Search" width="32" height="32"/>
-                        </div>
-                        <div className="mx_RoomHeader_button mx_RoomHeader_video" onClick={activeCall && activeCall.type === "video" ? this.onMuteVideoClick : this.onVideoClick}>
-                            <img src="img/video.png" title="Video call" alt="Video call" width="32" height="32"/>
-                        </div>
-                        <div className="mx_RoomHeader_button mx_RoomHeader_voice" onClick={activeCall ? this.onMuteAudioClick : this.onVoiceClick}>
-                            <img src="img/voip.png" title="VoIP call" alt="VoIP call" width="32" height="32"/>
+                        <div className="mx_RoomHeader_button">
+                            <img src="img/search.png" title="Search" alt="Search" width="21" height="19"/>
                         </div>
                     </div>
                 </div>
