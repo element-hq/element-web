@@ -32,10 +32,14 @@ too, which isn't expressed in Vector's `package.json`.  To do this, check out
 the `develop` branches of these libraries and then use `npm link` to tell Vector
 about them:
 
-1. Link the react sdk package into the example:
+1. `git clone git@github.com:matrix-org/matrix-react-sdk.git`
+2. `cd matrix-react-sdk`
+3. `git checkout develop`
+4. `npm install`
+5. `npm start` (to start the dev rebuilder)
+6. `cd ../vector-web`
+7. Link the react sdk package into the example:
    `npm link path/to/your/react/sdk`
-2. Start the development rebuilder in your react SDK directory:
-   `npm start`
 
 Similarly, you may need to `npm link path/to/your/js/sdk` in your `matrix-react-sdk`
 directory.
