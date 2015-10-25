@@ -122,7 +122,7 @@ module.exports = React.createClass({
             <div className={classes}>
                 { avatar }
                 { sender }
-                <div>
+                <div className="mx_EventTile_line">
                     { timestamp }
                     { editButton }
                     <EventTileType mxEvent={this.props.mxEvent} />

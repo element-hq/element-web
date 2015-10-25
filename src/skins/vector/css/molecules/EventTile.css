@@ -17,7 +17,7 @@ limitations under the License.
 .mx_EventTile {
     max-width: 100%;
     clear: both;
-    margin-top: 32px;
+    margin-top: 24px;
     margin-left: 56px;
 }
 
@@ -51,6 +51,10 @@ limitations under the License.
     color: #acacac;
     font-size: 12px;
     float: right;
+}
+
+.mx_EventTile_line {
+    position: relative;
 }
 
 .mx_EventTile_content {
@@ -91,9 +95,9 @@ limitations under the License.
 }
 
 .mx_EventTile_editButton {
-    clear: right;
-    float: right;
-    display: inline-block;
+    position: absolute;
+    right: 0px;
+    top: 15px;
     visibility: hidden;
     border: 0px;
     outline: none;
