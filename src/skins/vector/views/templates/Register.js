@@ -25,10 +25,9 @@ var Loader = require("react-loader");
 
 var RegisterController = require('../../../../controllers/templates/Register')
 
-module.exports = React.createClass({
-    DEFAULT_HS_URL: 'https://matrix.org',
-    DEFAULT_IS_URL: 'https://vector.im',
+var config = require('../../../../../config.json');
 
+module.exports = React.createClass({
     displayName: 'Register',
     mixins: [RegisterController],
 
@@ -39,8 +38,8 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this.customHsUrl = this.DEFAULT_HS_URL;
-        this.customIsUrl = this.DEFAULT_IS_URL;
+        this.customHsUrl = config.default_hs_url;
+        this.customIsUrl = config.default_is_url;
     },
 
     getRegFormVals: function() {
@@ -56,7 +55,7 @@ module.exports = React.createClass({
         if (this.state.serverConfigVisible) {
             return this.customHsUrl;
         } else {
-            return this.DEFAULT_HS_URL;
+            return config.default_hs_url;
         }
     },
 
@@ -64,7 +63,7 @@ module.exports = React.createClass({
         if (this.state.serverConfigVisible) {
             return this.customIsUrl;
         } else {
-            return this.DEFAULT_IS_URL;
+            return config.default_is_url;
         }
     },
 
