@@ -20,7 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk')
-var ContextualMenu = require('../../../../ContextualMenu');
+var dis = require('matrix-react-sdk/lib/dispatcher');
 var MemberTileController = require('matrix-react-sdk/lib/controllers/molecules/MemberTile')
 
 // The Lato WOFF doesn't include sensible combining diacritics, so Chrome chokes on rendering them.
@@ -58,16 +58,9 @@ module.exports = React.createClass({
     },
 
     onClick: function(e) {
-        var self = this;
-        self.setState({ 'menu': true });
-        var MemberInfo = sdk.getComponent('molecules.MemberInfo');
-        ContextualMenu.createMenu(MemberInfo, {
-            member: self.props.member,
-            right: window.innerWidth - e.pageX,
-            top: e.pageY,
-            onFinished: function() {
-                self.setState({ 'menu': false });
-            }
+        dis.dispatch({
+            action: 'view_user',
+            member: this.props.member,
         });
     },
 
@@ -134,7 +127,7 @@ module.exports = React.createClass({
             }
         }
         mainClassName += presenceClass;
-        if (this.state.hover || this.state.menu) {
+        if (this.state.hover) {
             mainClassName += " mx_MemberTile_hover";
         }
 
@@ -148,7 +141,7 @@ module.exports = React.createClass({
         }
 
         var nameEl;
-        if (this.state.hover || this.state.menu) {
+        if (this.state.hover) {
             var presence;
             // FIXME: make presence data update whenever User.presence changes...
             var active = this.props.member.user ? ((Date.now() - (this.props.member.user.lastPresenceTs - this.props.member.user.lastActiveAgo)) || -1) : -1;

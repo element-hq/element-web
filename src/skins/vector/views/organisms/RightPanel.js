@@ -27,14 +27,17 @@ module.exports = React.createClass({
     Phase : {
         MemberList: 'MemberList',
         FileList: 'FileList',
+        MemberInfo: 'MemberInfo',
     },
 
     componentWillMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
         var cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
     },
 
     componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);        
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
@@ -67,6 +70,22 @@ module.exports = React.createClass({
         }
     },
 
+    onAction: function(payload) {
+        if (payload.action === "view_user") {
+            if (payload.member) {
+                this.setState({
+                    phase: this.Phase.MemberInfo,
+                    member: payload.member,
+                });
+            }
+            else {
+                this.setState({
+                    phase: this.Phase.MemberList
+                });
+            }
+        }
+    },
+
     render: function() {
         var MemberList = sdk.getComponent('organisms.MemberList');
         var buttonGroup;
@@ -75,7 +94,7 @@ module.exports = React.createClass({
         var filesHighlight;
         var membersHighlight;
         if (!this.props.collapsed) {
-            if (this.state.phase == this.Phase.MemberList) {
+            if (this.state.phase == this.Phase.MemberList || this.state.phase === this.Phase.MemberInfo) {
                 membersHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
             }
             else if (this.state.phase == this.Phase.FileList) {
@@ -84,7 +103,7 @@ module.exports = React.createClass({
         }
 
         var membersBadge;
-        if (this.state.phase == this.Phase.MemberList && this.props.roomId) {
+        if ((this.state.phase == this.Phase.MemberList || this.state.phase === this.Phase.MemberInfo) && this.props.roomId) {
             var cli = MatrixClientPeg.get();
             var room = cli.getRoom(this.props.roomId);
             if (room) {
@@ -106,9 +125,16 @@ module.exports = React.createClass({
                         </div>
                     </div>;
 
-            if (!this.props.collapsed && this.state.phase == this.Phase.MemberList) {
-                panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
+            if (!this.props.collapsed) {
+                if(this.state.phase == this.Phase.MemberList) {
+                    panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
+                }
+                else if(this.state.phase == this.Phase.MemberInfo) {
+                    var MemberInfo = sdk.getComponent('molecules.MemberInfo');
+                    panel = <MemberInfo roomId={this.props.roomId} member={this.state.member} key={this.props.roomId} />
+                }
             }
+
         }
 
         var classes = "mx_RightPanel";

@@ -14,3 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_MemberInfo {
+    height: 100%;
+}
+
+.mx_MemberInfo_cancel {
+    float: right;
+}

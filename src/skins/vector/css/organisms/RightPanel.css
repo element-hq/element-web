@@ -78,7 +78,8 @@ limitations under the License.
     padding-top: 2px;
 }
 
-.mx_RightPanel .mx_MemberList {
+.mx_RightPanel .mx_MemberList,
+.mx_RightPanel .mx_MemberInfo {
     -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
