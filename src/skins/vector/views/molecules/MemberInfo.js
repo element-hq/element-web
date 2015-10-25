@@ -79,6 +79,9 @@ module.exports = React.createClass({
                 <div className="mx_MemberInfo_profileField">
                     { this.props.member.userId }
                 </div>
+                <div className="mx_MemberInfo_profileField">
+                    power: { this.props.member.powerLevelNorm }%
+                </div>
                 <div className="mx_MemberInfo_buttons">
                     {interactButton}
                     {muteButton}
