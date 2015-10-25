@@ -211,7 +211,7 @@ module.exports = React.createClass({
             if (this.state.draggingFile) {
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
                                     <div className="mx_RoomView_fileDropTargetLabel">
-                                        <img src="img/upload-big.png" width="46" height="61" alt="Drop File Here"/><br/>
+                                        <img src="img/upload-big.png" width="43" height="57" alt="Drop File Here"/><br/>
                                         Drop File Here
                                     </div>
                                  </div>;

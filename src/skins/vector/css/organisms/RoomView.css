@@ -61,10 +61,10 @@ limitations under the License.
     border-top-right-radius: 10px;
 
     background-color: rgba(255, 255, 255, 0.9);
-    border: 2px dashed #76cfa6;
+    border: 2px #e1dddd solid;
     border-bottom: none;
     position: absolute;
-    top: 88px;
+    top: 83px;
     bottom: 0px;
     z-index: 3000;
 }
