@@ -29,6 +29,17 @@ module.exports = React.createClass({
         FileList: 'FileList',
     },
 
+    componentWillMount: function() {
+        var cli = MatrixClientPeg.get();
+        cli.on("RoomState.members", this.onRoomStateMember);
+    },
+
+    componentWillUnmount: function() {
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
+        }
+    },
+
     getInitialState: function() {
         return {
             phase : this.Phase.MemberList
@@ -46,6 +57,13 @@ module.exports = React.createClass({
             dis.dispatch({
                 action: 'hide_right_panel',
             });
+        }
+    },
+
+    onRoomStateMember: function(ev, state, member) {
+        // redraw the badge on the membership list
+        if (this.state.phase == this.Phase.MemberList && member.roomId === this.props.roomId) {
+            this.forceUpdate();
         }
     },
 
@@ -69,7 +87,6 @@ module.exports = React.createClass({
         if (this.state.phase == this.Phase.MemberList && this.props.roomId) {
             var cli = MatrixClientPeg.get();
             var room = cli.getRoom(this.props.roomId);
-            // FIXME: presumably we need to subscribe to some event to refresh this count when it changes?
             if (room) {
                 membersBadge = <div className="mx_RightPanel_headerButton_badge">{ room.getJoinedMembers().length }</div>;
             }
