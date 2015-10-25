@@ -128,10 +128,13 @@ a:visited {
     max-width: 75%;
 }
 
-.mx_ImageView {
-    margin: 6px;
-    /* hack: flexbox bug? */
-    margin-bottom: 4px;
+.mx_Dialog_lightbox .mx_Dialog_background {
+    opacity: 0.85;
+}
+
+.mx_Dialog_lightbox .mx_Dialog {
+    border-radius: 0px;
+    background-color: #000;
 }
 
 .mx_Dialog_content {
