@@ -175,7 +175,7 @@ module.exports = React.createClass({
                 if (unreadMsgs) {
                     statusBar = (
                         <div className="mx_RoomView_unreadMessagesBar" onClick={ this.scrollToBottom }>
-                            <img src="img/newmessages.png" width="10" height="12" alt=""/>
+                            <img src="img/newmessages.png" width="24" height="24" alt=""/>
                             {unreadMsgs}
                         </div>
                     );
