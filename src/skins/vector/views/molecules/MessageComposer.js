@@ -22,6 +22,7 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var MessageComposerController = require('matrix-react-sdk/lib/controllers/molecules/MessageComposer')
 
 var sdk = require('matrix-react-sdk')
+var dis = require('matrix-react-sdk/lib/dispatcher')
 
 module.exports = React.createClass({
     displayName: 'MessageComposer',
@@ -38,6 +39,14 @@ module.exports = React.createClass({
             this.props.uploadFile(files[0]);
         }
         this.refs.uploadInput.getDOMNode().value = null;
+    },
+
+    onCallClick: function(ev) {
+        dis.dispatch({
+            action: 'place_call',
+            type: ev.shiftKey ? "screensharing" : "video",
+            room_id: this.props.room.roomId
+        });
     },
 
     render: function() {
@@ -57,6 +66,9 @@ module.exports = React.createClass({
                         <div className="mx_MessageComposer_upload" onClick={this.onUploadClick}>
                             <img src="img/upload.png" width="17" height="22"/>
                             <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
+                        </div>
+                        <div className="mx_MessageComposer_call" onClick={this.onCallClick}>
+                            <img src="img/call.png" width="28" height="20"/>
                         </div>
                     </div>
                 </div>

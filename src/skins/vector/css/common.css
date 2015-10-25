@@ -58,7 +58,7 @@ a:visited {
 }
 
 .mx_ContextualMenu {
-    border: 1px solid #a9dbf4;
+    border: 1px solid #a4a4a4;
     border-radius: 8px;
     background-color: #fff;
     color: #747474;
@@ -160,7 +160,7 @@ a:visited {
 .mx_QuestionDialogTitle {
     min-height: 16px;
     padding: 12px;
-    border-bottom: 1px solid #a9dbf4;
+    border-bottom: 1px solid #a4a4a4;
     font-weight: bold;
     font-size: 20px;
     line-height: 1.4;

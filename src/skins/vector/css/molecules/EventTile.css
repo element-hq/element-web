@@ -97,7 +97,7 @@ limitations under the License.
     visibility: hidden;
     border: 0px;
     outline: none;
-    margin-top: 3px;
+    margin-bottom: 3px;
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton {
