@@ -52,14 +52,39 @@ module.exports = React.createClass({
         if (this.props.onFinished) this.props.onFinished();
     },
 
+    onRedactClick: function() {
+        MatrixClientPeg.get().redactEvent(
+            this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()
+        ).done(function() {
+            // message should disappear by itself
+        }, function(e) {
+            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            // display error message stating you couldn't delete this.
+            var code = e.errcode || e.statusCode;
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: "You cannot delete this message. (" + code + ")"
+            });
+        });
+        if (this.props.onFinished) this.props.onFinished();
+    },
+
     render: function() {
         var resendButton;
         var viewSourceButton;
+        var redactButton;
 
         if (this.props.mxEvent.status == 'not_sent') {
             resendButton = (
                 <div className="mx_ContextualMenu_field" onClick={this.onResendClick}>
                     Resend
+                </div>
+            );
+        }
+        else {
+            redactButton = (
+                <div className="mx_ContextualMenu_field" onClick={this.onRedactClick}>
+                    Delete
                 </div>
             );
         }
@@ -72,6 +97,7 @@ module.exports = React.createClass({
         return (
             <div>
                 {resendButton}
+                {redactButton}
                 {viewSourceButton}
             </div>
         );
