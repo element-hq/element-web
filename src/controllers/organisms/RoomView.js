@@ -63,6 +63,7 @@ module.exports = {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
+            MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
     },
 
