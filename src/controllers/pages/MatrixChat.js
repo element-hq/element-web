@@ -16,6 +16,7 @@ limitations under the License.
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var RoomListSorter = require("../../RoomListSorter");
+var UserActivity = require("../../UserActivity");
 var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
 
@@ -92,6 +93,7 @@ module.exports = {
                     window.localStorage.clear();
                 }
                 Notifier.stop();
+                UserActivity.stop();
                 Presence.stop();
                 MatrixClientPeg.get().stopClient();
                 MatrixClientPeg.get().removeAllListeners();
@@ -316,6 +318,7 @@ module.exports = {
             });
         });
         Notifier.start();
+        UserActivity.start();
         Presence.start();
         cli.startClient();
     },
