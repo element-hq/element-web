@@ -95,13 +95,14 @@ function matrixLinkify(linkify) {
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_USERID);
 }
 
+matrixLinkify.onUserClick = function(e, userId) {};
+
 matrixLinkify.options = {
     events: function (href, type) {
         if (type === "userid") {
             return {
                 click: function(e) {
-                    // sprout a MemberInfo context menu
-                    console.log("Context => %s", href);
+                    matrixLinkify.onUserClick(e, href);
                     e.preventDefault();
                 }
             };
@@ -116,6 +117,6 @@ matrixLinkify.options = {
                 return href;
         }
     }
-}
+};
 
 module.exports = matrixLinkify;
