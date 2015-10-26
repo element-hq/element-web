@@ -101,7 +101,8 @@ matrixLinkify.options = {
             return {
                 click: function(e) {
                     // sprout a MemberInfo context menu
-                    console.log("Context => %s", href)
+                    console.log("Context => %s", href);
+                    e.preventDefault();
                 }
             };
         }
@@ -111,8 +112,6 @@ matrixLinkify.options = {
         switch (type) {
             case 'roomalias':
                 return "#/room/" + href;
-            case 'userid':
-                return '#';
             default:
                 return href;
         }
