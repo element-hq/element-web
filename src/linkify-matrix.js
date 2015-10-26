@@ -96,10 +96,21 @@ function matrixLinkify(linkify) {
 }
 
 matrixLinkify.options = {
+    events: function (href, type) {
+        if (type === "userid") {
+            return {
+                click: function(e) {
+                    // sprout a MemberInfo context menu
+                    console.log("Context => %s", href)
+                }
+            };
+        }
+    },
+
     formatHref: function (href, type) {
         switch (type) {
             case 'roomalias':
-                return '#';
+                return "#/room/" + href;
             case 'userid':
                 return '#';
             default:
