@@ -49,15 +49,25 @@ module.exports = {
 
         var position = {
             top: props.top - 20,
-            right: props.right + 8,
         };
+
+        var chevron = null;
+        if (props.left) {
+            chevron = <img className="mx_ContextualMenu_chevron_left" src="img/chevron-left.png" width="9" height="16" />
+            position.left = props.left + 8;
+        } else {
+            chevron = <img className="mx_ContextualMenu_chevron_right" src="img/chevron-right.png" width="9" height="16" />
+            position.right = props.right + 8;
+        }
+
+        var className = 'mx_ContextualMenu_wrapper';
 
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
         var menu = (
-            <div className="mx_ContextualMenu_wrapper">
+            <div className={className}>
                 <div className="mx_ContextualMenu" style={position}>
-                    <img className="mx_ContextualMenu_chevron" src="img/chevron-right.png" width="9" height="16" />
+                    {chevron}
                     <Element {...props} onFinished={closeMenu}/>
                 </div>
                 <div className="mx_ContextualMenu_background" onClick={closeMenu}></div>

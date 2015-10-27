@@ -22,14 +22,27 @@ into the `vector` directory and run your own server.
 
 Development
 ===========
-You can work on any of the source files within Vector with the setup above,
-and your changes will cause an instant rebuild. If you also need to make
-changes to the react sdk, you can:
 
-1. Link the react sdk package into the example:
+For simple tweaks, you can work on any of the source files within Vector with the
+setup above, and your changes will cause an instant rebuild.
+
+However, all serious development on Vector happens on the `develop` branch.  This typically
+depends on the `develop` snapshot versions of `matrix-react-sdk` and `matrix-js-sdk`
+too, which isn't expressed in Vector's `package.json`.  To do this, check out
+the `develop` branches of these libraries and then use `npm link` to tell Vector
+about them:
+
+1. `git clone git@github.com:matrix-org/matrix-react-sdk.git`
+2. `cd matrix-react-sdk`
+3. `git checkout develop`
+4. `npm install`
+5. `npm start` (to start the dev rebuilder)
+6. `cd ../vector-web`
+7. Link the react sdk package into the example:
    `npm link path/to/your/react/sdk`
-2. Start the development rebuilder in your react SDK directory:
-   `npm start`
+
+Similarly, you may need to `npm link path/to/your/js/sdk` in your `matrix-react-sdk`
+directory.
 
 If you add or remove any components from the Vector skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.

@@ -20,7 +20,8 @@ module.exports = {
             // removed which gives a tree with matrix-react-sdk and vector
             // trees smashed together, but this fixes everything being under
             // various levels of '.' and '..'
-            return info.resourcePath.replace(/^[\/\.]*/, '');
+            // Also, sometimes the resource path is absolute.
+            return path.relative(process.cwd(), info.resourcePath).replace(/^[\/\.]*/, '');
         }
     },
     resolve: {

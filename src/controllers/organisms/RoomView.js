@@ -63,6 +63,7 @@ module.exports = {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
+            MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
     },
 
@@ -356,23 +357,20 @@ module.exports = {
     },
 
     getEventTiles: function() {
-        var tileTypes = {
-            'm.room.message': sdk.getComponent('molecules.MessageTile'),
-            'm.room.member' : sdk.getComponent('molecules.EventAsTextTile'),
-            'm.call.invite' : sdk.getComponent('molecules.EventAsTextTile'),
-            'm.call.answer' : sdk.getComponent('molecules.EventAsTextTile'),
-            'm.call.hangup' : sdk.getComponent('molecules.EventAsTextTile'),
-            'm.room.topic'  : sdk.getComponent('molecules.EventAsTextTile'),
-        };
-
         var DateSeparator = sdk.getComponent('molecules.DateSeparator');
 
         var ret = [];
         var count = 0;
 
+        var EventTile = sdk.getComponent('molecules.EventTile');
+
         for (var i = this.state.room.timeline.length-1; i >= 0 && count < this.state.messageCap; --i) {
             var mxEv = this.state.room.timeline[i];
-            var TileType = tileTypes[mxEv.getType()];
+
+            if (!EventTile.supportsEventType(mxEv.getType())) {
+                continue;
+            }
+
             var continuation = false;
             var last = false;
             var dateSeparator = null;
@@ -401,13 +399,12 @@ module.exports = {
 
             if (i === 1) { // n.b. 1, not 0, as the 0th event is an m.room.create and so doesn't show on the timeline
                 var ts1 = this.state.room.timeline[i].getTs();
-                dateSeparator = <DateSeparator key={ts1} ts={ts1}/>;
+                dateSeparator = <li key={ts1}><DateSeparator ts={ts1}/></li>;
                 continuation = false;
             }
 
-            if (!TileType) continue;
             ret.unshift(
-                <li key={mxEv.getId()}><TileType mxEvent={mxEv} continuation={continuation} last={last}/></li>
+                <li key={mxEv.getId()}><EventTile mxEvent={mxEv} continuation={continuation} last={last}/></li>
             );
             if (dateSeparator) {
                 ret.unshift(dateSeparator);

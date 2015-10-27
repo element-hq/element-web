@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MessageTile {
+.mx_EventTile {
     max-width: 100%;
     clear: both;
     margin-top: 32px;
     margin-left: 56px;
 }
 
-.mx_MessageTile_avatar {
+.mx_EventTile_avatar {
     padding-left: 12px;
     padding-right: 12px;
     margin-left: -64px;
@@ -29,17 +29,17 @@ limitations under the License.
     float: left;
 }
 
-.mx_MessageTile_avatar img {
+.mx_EventTile_avatar img {
     background-color: #dbdbdb;
     border-radius: 20px;
     border: 0px;
 }
 
-.mx_MessageTile_continuation {
+.mx_EventTile_continuation {
     margin-top: 8px ! important;
 }
 
-.mx_MessageTile .mx_SenderProfile {
+.mx_EventTile .mx_SenderProfile {
     color: #454545;
     opacity: 0.5;
     font-size: 14px;
@@ -47,35 +47,35 @@ limitations under the License.
     display: block;
 }
 
-.mx_MessageTile .mx_MessageTimestamp {
+.mx_EventTile .mx_MessageTimestamp {
     color: #454545;
     opacity: 0.5;
     font-size: 14px;
     float: right;
 }
 
-.mx_MessageTile_content {
+.mx_EventTile_content {
     padding-right: 100px;
     display: block;
 }
 
-.mx_MessageTile_notice .mx_MessageTile_content {
+.mx_EventTile_notice .mx_MessageTile_content {
     opacity: 0.5;
 }
 
-.mx_MessageTile_sending {
+.mx_EventTile_sending {
     color: #ddd;
 }
 
-.mx_MessageTile_notSent {
+.mx_EventTile_notSent {
     color: #f11;
 }
 
-.mx_MessageTile_highlight {
+.mx_EventTile_highlight {
     color: #FF0064;
 }
 
-.mx_MessageTile_msgOption {
+.mx_EventTile_msgOption {
     float: right;
 }
 
@@ -83,29 +83,30 @@ limitations under the License.
     display: none;
 }
 
-.mx_MessageTile_last .mx_MessageTimestamp {
+.mx_EventTile_last .mx_MessageTimestamp {
     display: block;
 }
 
-.mx_MessageTile:hover .mx_MessageTimestamp {
+.mx_EventTile:hover .mx_MessageTimestamp {
     display: block;
 }
 
-.mx_MessageTile_editButton {
+.mx_EventTile_editButton {
     float: right;
     display: none;
     border: 0px;
     outline: none;
+    margin-right: 3px;
 }
 
-.mx_MessageTile:hover .mx_MessageTile_editButton {
+.mx_EventTile:hover .mx_EventTile_editButton {
     display: inline-block;
 }
 
-.mx_MessageTile.menu .mx_MessageTile_editButton {
+.mx_EventTile.menu .mx_EventTile_editButton {
     display: inline-block;
 }
 
-.mx_MessageTile.menu .mx_MessageTimestamp {
+.mx_EventTile.menu .mx_MessageTimestamp {
     display: inline-block;
 }

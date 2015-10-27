@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 var RoomAvatarController = require('matrix-react-sdk/lib/controllers/atoms/RoomAvatar')
 
@@ -24,10 +25,31 @@ module.exports = React.createClass({
     displayName: 'RoomAvatar',
     mixins: [RoomAvatarController],
 
+    getUrlList: function() {
+        return [
+            this.roomAvatarUrl(),
+            this.getOneToOneAvatar(),
+            this.getFallbackAvatar()
+        ];
+    },
+
+    getFallbackAvatar: function() {
+        var images = [ '80cef4', '50e2c2', 'f4c371' ];
+        var total = 0;
+        for (var i = 0; i < this.props.room.roomId.length; ++i) {
+            total += this.props.room.roomId.charCodeAt(i);
+        }
+        return 'img/' + images[total % images.length] + '.png';
+    },
+
     render: function() {
+        var style = {
+            maxWidth: this.props.width,
+            maxHeight: this.props.height,
+        };
         return (
             <img className="mx_RoomAvatar" src={this.state.imageUrl} onError={this.onError}
-                width={this.props.width} height={this.props.height}
+                style={style}
             />
         );
     }

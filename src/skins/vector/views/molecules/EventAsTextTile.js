@@ -24,25 +24,19 @@ var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
 module.exports = React.createClass({
     displayName: 'EventAsTextTile',
 
-    render: function() {
-        var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
-        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+    statics: {
+        needsSenderProfile: function() {
+            return false;
+        }
+    },
 
+    render: function() {
         var text = TextForEvent.textForEvent(this.props.mxEvent);
         if (text == null || text.length == 0) return null;
 
-        var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
-        var avatar = this.props.mxEvent.sender ? <MemberAvatar member={this.props.mxEvent.sender} /> : null;
         return (
-            <div className="mx_MessageTile mx_MessageTile_notice">
-                <div className="mx_MessageTile_avatar">
-                    { avatar }
-                </div>            
-                { timestamp }
-                <span className="mx_SenderProfile"></span>
-                <span className="mx_MessageTile_content">
-                    {TextForEvent.textForEvent(this.props.mxEvent)}
-                </span>
+            <div className="mx_EventAsTextTile">
+                {TextForEvent.textForEvent(this.props.mxEvent)}
             </div>
         );
     },

@@ -28,28 +28,13 @@ module.exports = React.createClass({
     displayName: 'MessageTile',
     mixins: [MessageTileController],
 
-    onEditClicked: function(e) {
-        var MessageContextMenu = sdk.getComponent('molecules.MessageContextMenu');
-        var buttonRect = e.target.getBoundingClientRect()
-        var x = window.innerWidth - buttonRect.left;
-        var y = buttonRect.top + (e.target.height / 2);
-        var self = this;
-        ContextualMenu.createMenu(MessageContextMenu, {
-            mxEvent: this.props.mxEvent,
-            right: x,
-            top: y,
-            onFinished: function() {
-                self.setState({menu: false});
-            }
-        });
-        this.setState({menu: true});
+    statics: {
+        needsSenderProfile: function() {
+            return true;
+        }
     },
 
     render: function() {
-        var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
-        var SenderProfile = sdk.getComponent('molecules.SenderProfile');
-        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
-
         var UnknownMessageTile = sdk.getComponent('molecules.UnknownMessageTile');
 
         var tileTypes = {
@@ -66,56 +51,7 @@ module.exports = React.createClass({
         if (msgtype && tileTypes[msgtype]) {
             TileType = tileTypes[msgtype];
         }
-        var classes = classNames({
-            mx_MessageTile: true,
-            mx_MessageTile_sending: ['sending', 'queued'].indexOf(
-                this.props.mxEvent.status
-            ) !== -1,
-            mx_MessageTile_notSent: this.props.mxEvent.status == 'not_sent',
-            mx_MessageTile_highlight: this.shouldHighlight(),
-            mx_MessageTile_continuation: this.props.continuation,
-            mx_MessageTile_last: this.props.last,
-            menu: this.state.menu
-        });
-        var timestamp = <MessageTimestamp ts={this.props.mxEvent.getTs()} />
-        var editButton = (
-            <input
-                type="image" src="img/edit.png" alt="Edit"
-                className="mx_MessageTile_editButton" onClick={this.onEditClicked}
-            />
-        );
 
-        var aux = null;
-        if (msgtype === 'm.image') aux = "sent an image";
-        else if (msgtype === 'm.video') aux = "sent a video";
-        else if (msgtype === 'm.file') aux = "uploaded a file";
-
-        var avatar, sender, resend;
-        if (!this.props.continuation) {
-            if (this.props.mxEvent.sender) {
-                avatar = (
-                    <div className="mx_MessageTile_avatar">
-                        <MemberAvatar member={this.props.mxEvent.sender} />
-                    </div>
-                );
-            }
-            sender = <SenderProfile mxEvent={this.props.mxEvent} aux={aux} />;
-        }
-        if (this.props.mxEvent.status === "not_sent" && !this.state.resending) {
-            resend = <button className="mx_MessageTile_msgOption" onClick={this.onResend}>
-                Resend
-            </button>;
-        }
-        return (
-            <div className={classes}>
-                { avatar }
-                { sender }
-                <div>
-                    { timestamp }
-                    { editButton }
-                    <TileType mxEvent={this.props.mxEvent} />
-                </div>
-            </div>
-        );
+        return <TileType mxEvent={this.props.mxEvent} />;
     },
 });

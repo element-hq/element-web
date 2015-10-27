@@ -42,7 +42,7 @@ module.exports = React.createClass({
             return days[date.getDay()] + ", " + months[date.getMonth()] + " " + (date.getDay()+1) + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
         }
         else {
-            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + (date.getDay()+1) + " " + date().getFullYear() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + (date.getDay()+1) + " " + date.getFullYear() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
         }
     },
 
