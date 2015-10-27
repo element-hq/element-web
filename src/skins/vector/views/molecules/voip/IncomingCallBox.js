@@ -31,24 +31,29 @@ module.exports = React.createClass({
     },
 
     render: function() {
+
+        // NB: This block MUST be the first thing inside the <div> else react won't
+        // know that they refer to the same thing and so will clobber them between
+        // in-call / not-in-call resulting in no inbound audio.
+        var audioBlock = (
+            <audio ref="ringAudio" loop>
+                <source src="media/ring.ogg" type="audio/ogg" />
+                <source src="media/ring.mp3" type="audio/mpeg" />
+            </audio>
+        );
+
         if (!this.state.incomingCall || !this.state.incomingCall.roomId) {
             return (
                 <div>
-                    <audio ref="ringAudio" loop>
-                        <source src="media/ring.ogg" type="audio/ogg" />
-                        <source src="media/ring.mp3" type="audio/mpeg" />
-                    </audio>
+                    {audioBlock}
                 </div>
             );
         }
         var caller = MatrixClientPeg.get().getRoom(this.state.incomingCall.roomId).name;
         return (
             <div className="mx_IncomingCallBox">
+                {audioBlock}
                 <img className="mx_IncomingCallBox_chevron" src="img/chevron-left.png" width="9" height="16" />
-                <audio ref="ringAudio" loop>
-                    <source src="media/ring.ogg" type="audio/ogg" />
-                    <source src="media/ring.mp3" type="audio/mpeg" />
-                </audio>
                 <div className="mx_IncomingCallBox_title">
                     Incoming { this.state.incomingCall ? this.state.incomingCall.type : '' } call from { caller }
                 </div>
