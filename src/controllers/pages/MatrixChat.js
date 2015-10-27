@@ -70,10 +70,12 @@ module.exports = {
 
         // this can technically be done anywhere but doing this here keeps all
         // the routing url path logic together.
-        linkifyMatrix.onAliasClick = function(event, alias) {
-            dis.dispatch({action: 'view_room_alias', room_alias: alias});
-            event.preventDefault();
-        };
+        if (this.onAliasClick) {
+            linkifyMatrix.onAliasClick = this.onAliasClick;
+        }
+        if (this.onUserClick) {
+            linkifyMatrix.onUserClick = this.onUserClick;
+        }
     },
 
     componentWillUnmount: function() {
