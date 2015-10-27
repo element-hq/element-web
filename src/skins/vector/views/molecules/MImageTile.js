@@ -60,7 +60,8 @@ module.exports = React.createClass({
             Modal.createDialog(ImageView, {
                 src: httpUrl,
                 width: content.info.w,
-                height: content.info.h
+                height: content.info.h,
+                mxEvent: this.props.mxEvent,
             }, "mx_Dialog_lightbox");
         }
     },

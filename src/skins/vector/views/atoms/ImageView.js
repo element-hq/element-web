@@ -19,6 +19,8 @@ limitations under the License.
 var React = require('react');
 
 var ImageViewController = require('../../../../controllers/atoms/ImageView')
+var DateUtils = require('../../../../DateUtils');
+var filesize = require('filesize');
 
 module.exports = React.createClass({
     displayName: 'ImageView',
@@ -43,8 +45,10 @@ module.exports = React.createClass({
 
     render: function() {
 
-        // XXX: can't we just do max-width: 80%, max-height: 80% on the CSS?
-        
+/*
+        // In theory max-width: 80%, max-height: 80% on the CSS should work
+        // but in practice, it doesn't, so do it manually:
+
         var width = this.props.width || 500;
         var height = this.props.height || 500;
 
@@ -68,9 +72,36 @@ module.exports = React.createClass({
             width: displayWidth,
             height: displayHeight
         };
+*/
+        var style;
 
         return (
-            <img className="mx_ImageView" src={this.props.src} style={style} />
+            <div className="mx_ImageView">
+                <div className="mx_ImageView_lhs">
+                </div>
+                <div className="mx_ImageView_content">
+                    <img src={this.props.src} style={style}/>
+                    <div className="mx_ImageView_label">
+                        <div className="mx_ImageView_name">
+                            { this.props.mxEvent.getContent().body }
+                        </div>
+                        <div className="mx_ImageView_metadata">
+                            Uploaded on { DateUtils.formatDate(new Date(this.props.mxEvent.getTs())) } by { this.props.mxEvent.getSender() }
+                        </div>
+                        <div className="mx_ImageView_download">
+                            Download this file ({ filesize(this.props.mxEvent.getContent().info.size) })
+                        </div>
+                        <div className="mx_ImageView_button">
+                            View full screen
+                        </div>
+                        <div className="mx_ImageView_button">
+                            Redact
+                        </div>
+                    </div>
+                </div>
+                <div className="mx_ImageView_rhs">
+                </div>
+            </div>
         );
     }
 });

@@ -66,6 +66,11 @@ limitations under the License.
     opacity: 0.5;
 }
 
+.mx_MessageTile_content {
+    display: block;
+    margin-right: 100px;
+}
+
 .mx_EventTile_sending {
     color: #ddd;
 }
