@@ -66,7 +66,8 @@ var NotifierView = {
             title,
             {
                 "body": msg,
-                "icon": avatarUrl
+                "icon": avatarUrl,
+                "tag": "vector"
             }
         );
 
