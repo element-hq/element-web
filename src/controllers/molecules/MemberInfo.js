@@ -161,6 +161,7 @@ module.exports = {
     onChatClick: function() {
         // check if there are any existing rooms with just us and them (1:1)
         // If so, just view that room. If not, create a private room with them.
+        var self = this;
         var rooms = MatrixClientPeg.get().getRooms();
         var userIds = [
             this.props.member.userId,
@@ -189,23 +190,28 @@ module.exports = {
                 action: 'view_room',
                 room_id: existingRoomId
             });
+            this.props.onFinished();
         }
         else {
+            self.setState({ creatingRoom: true });
             MatrixClientPeg.get().createRoom({
                 invite: [this.props.member.userId],
                 preset: "private_chat"
             }).done(function(res) {
+                self.setState({ creatingRoom: false });
                 dis.dispatch({
                     action: 'view_room',
                     room_id: res.room_id
                 });
+                self.props.onFinished();
             }, function(err) {
+                self.setState({ creatingRoom: false });
                 console.error(
                     "Failed to create room: %s", JSON.stringify(err)
                 );
+                self.props.onFinished();
             });
         }
-        this.props.onFinished();                
     },
 
     // FIXME: this is horribly duplicated with MemberTile's onLeaveClick.
@@ -249,7 +255,8 @@ module.exports = {
                 modifyLevel: false
             },
             muted: false,
-            isTargetMod: false
+            isTargetMod: false,
+            creatingRoom: false
         }
     },
 
