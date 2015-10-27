@@ -39,23 +39,6 @@ module.exports = React.createClass({
     componentDidMount: function() {
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
-
-        matrixLinkify.onUserClick = function(e, userId) {
-            // this can really go anywhere..
-            // sprout a MemberInfo context menu.
-            console.log("Context => %s => %s", userId, e.target);
-
-            var MemberInfo = sdk.getComponent('molecules.MemberInfo');
-            var member = new RoomMember(null, href);
-            ContextualMenu.createMenu(MemberInfo, {
-                member: member,
-                right: window.innerWidth - e.pageX,
-                top: e.pageY,
-                onFinished: function() {
-                    console.log("^_^ All done!");
-                }
-            });
-        };
     },
 
     componentWillUnmount: function() {
