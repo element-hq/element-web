@@ -39,7 +39,7 @@ module.exports = React.createClass({
     },
 
     onFullscreenClick: function() {
-        dis.dispatch({action: 'video_fullscreen'}, true);
+        dis.dispatch({action: 'video_fullscreen', fullscreen: true}, true);
     },
 
     render: function() {
