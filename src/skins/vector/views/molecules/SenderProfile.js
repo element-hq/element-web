@@ -19,15 +19,12 @@ limitations under the License.
 var React = require('react');
 var classNames = require("classnames");
 
-var SenderProfileController = require('matrix-react-sdk/lib/controllers/molecules/SenderProfile')
-
 // The Lato WOFF doesn't include sensible combining diacritics, so Chrome chokes on rendering them.
 // Revert to Arial when this happens, which on OSX works at least.
 var zalgo = /[\u0300-\u036f\u1ab0-\u1aff\u1dc0-\u1dff\u20d0-\u20ff\ufe20-\ufe2f]/;
 
 module.exports = React.createClass({
     displayName: 'SenderProfile',
-    mixins: [SenderProfileController],
 
     render: function() {
         var mxEvent = this.props.mxEvent;

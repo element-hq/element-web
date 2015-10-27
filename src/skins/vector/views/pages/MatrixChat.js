@@ -25,7 +25,8 @@ var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/Matri
 var Loader = require("react-loader");
 
 var dis = require('matrix-react-sdk/lib/dispatcher');
-
+var Matrix = require("matrix-js-sdk");
+var ContextualMenu = require("../../../../ContextualMenu");
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
@@ -44,6 +45,22 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         window.removeEventListener('resize', this.handleResize);
+    },
+
+    onAliasClick: function(event, alias) {
+        event.preventDefault();
+        dis.dispatch({action: 'view_room_alias', room_alias: alias});
+    },
+
+    onUserClick: function(event, userId) {
+        event.preventDefault();
+        var MemberInfo = sdk.getComponent('molecules.MemberInfo');
+        var member = new Matrix.RoomMember(null, userId);
+        ContextualMenu.createMenu(MemberInfo, {
+            member: member,
+            right: window.innerWidth - event.pageX,
+            top: event.pageY
+        });
     },
 
     handleResize: function(e) {

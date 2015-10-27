@@ -62,10 +62,6 @@ limitations under the License.
     display: block;
 }
 
-.mx_EventTile_notice .mx_MessageTile_content {
-    opacity: 0.5;
-}
-
 .mx_MessageTile_content {
     display: block;
     margin-right: 100px;

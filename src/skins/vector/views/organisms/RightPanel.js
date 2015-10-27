@@ -84,6 +84,13 @@ module.exports = React.createClass({
                 });
             }
         }
+        if (payload.action === "view_room") {
+            if (this.state.phase === this.Phase.MemberInfo) {
+                this.setState({
+                    phase: this.Phase.MemberList
+                });
+            }
+        }
     },
 
     render: function() {

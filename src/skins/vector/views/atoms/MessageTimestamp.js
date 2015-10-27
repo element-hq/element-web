@@ -19,11 +19,8 @@ limitations under the License.
 var React = require('react');
 var DateUtils = require('../../../../DateUtils');
 
-var MessageTimestampController = require('matrix-react-sdk/lib/controllers/atoms/MessageTimestamp')
-
 module.exports = React.createClass({
     displayName: 'MessageTimestamp',
-    mixins: [MessageTimestampController],
 
     render: function() {
         var date = new Date(this.props.ts);
