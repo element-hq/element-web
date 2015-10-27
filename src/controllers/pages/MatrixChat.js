@@ -21,6 +21,7 @@ var dis = require("../../dispatcher");
 
 var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
+var linkifyMatrix = require("../../linkify-matrix");
 
 var Cas = require("../../CasLogic");
 
@@ -66,6 +67,13 @@ module.exports = {
         } else {
             this.notifyNewScreen('login');
         }
+
+        // this can technically be done anywhere but doing this here keeps all
+        // the routing url path logic together.
+        linkifyMatrix.onAliasClick = function(event, alias) {
+            dis.dispatch({action: 'view_room_alias', room_alias: alias});
+            event.preventDefault();
+        };
     },
 
     componentWillUnmount: function() {
@@ -212,7 +220,19 @@ module.exports = {
                 }
                 break;
             case 'view_room_alias':
-                MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(function(result) {
+                var foundRoom = MatrixTools.getRoomForAlias(
+                    MatrixClientPeg.get().getRooms(), payload.room_alias
+                );
+                if (foundRoom) {
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: foundRoom.roomId
+                    });
+                    return;
+                }
+                // resolve the alias and *then* view it
+                MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(
+                function(result) {
                     dis.dispatch({
                         action: 'view_room',
                         room_id: result.room_id

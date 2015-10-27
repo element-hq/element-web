@@ -95,26 +95,24 @@ function matrixLinkify(linkify) {
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_USERID);
 }
 
-matrixLinkify.onUserClick = function(e, userId) {};
+matrixLinkify.onUserClick = function(e, userId) { e.preventDefault(); };
+matrixLinkify.onAliasClick = function(e, roomAlias) { e.preventDefault(); };
 
 matrixLinkify.options = {
     events: function (href, type) {
-        if (type === "userid") {
-            return {
-                click: function(e) {
-                    matrixLinkify.onUserClick(e, href);
-                    e.preventDefault();
-                }
-            };
-        }
-    },
-
-    formatHref: function (href, type) {
         switch (type) {
-            case 'roomalias':
-                return "#/room/" + href;
-            default:
-                return href;
+            case "userid":
+                return {
+                    click: function(e) {
+                        matrixLinkify.onUserClick(e, href);
+                    }
+                };
+            case "roomalias":
+                return {
+                    click: function(e) {
+                        matrixLinkify.onAliasClick(e, href);
+                    }
+                };
         }
     }
 };

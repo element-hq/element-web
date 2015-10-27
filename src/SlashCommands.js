@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 var MatrixClientPeg = require("./MatrixClientPeg");
+var MatrixTools = require("./MatrixTools");
 var dis = require("./dispatcher");
 var encryption = require("./encryption");
 
@@ -98,28 +99,14 @@ var commands = {
                 }
 
                 // Try to find a room with this alias
-                var rooms = MatrixClientPeg.get().getRooms();
-                var roomId;
-                for (var i = 0; i < rooms.length; i++) {
-                    var aliasEvents = rooms[i].currentState.getStateEvents(
-                        "m.room.aliases"
-                    );
-                    for (var j = 0; j < aliasEvents.length; j++) {
-                        var aliases = aliasEvents[j].getContent().aliases || [];
-                        for (var k = 0; k < aliases.length; k++) {
-                            if (aliases[k] === room_alias) {
-                                roomId = rooms[i].roomId;
-                                break;
-                            }
-                        }
-                        if (roomId) { break; }
-                    }
-                    if (roomId) { break; }
-                }
-                if (roomId) { // we've already joined this room, view it.
+                var foundRoom = MatrixTools.getRoomForAlias(
+                    MatrixClientPeg.get().getRooms(),
+                    room_alias
+                );
+                if (foundRoom) { // we've already joined this room, view it.
                     dis.dispatch({
                         action: 'view_room',
-                        room_id: roomId
+                        room_id: foundRoom.roomId
                     });
                     return success();
                 }
