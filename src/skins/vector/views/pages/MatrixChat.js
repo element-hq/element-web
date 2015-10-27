@@ -26,7 +26,6 @@ var Loader = require("react-loader");
 
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
-
 module.exports = React.createClass({
     displayName: 'MatrixChat',
     mixins: [MatrixChatController],

@@ -18,11 +18,8 @@ limitations under the License.
 
 var React = require('react');
 
-var UnknownMessageTileController = require('matrix-react-sdk/lib/controllers/molecules/UnknownMessageTile')
-
 module.exports = React.createClass({
     displayName: 'UnknownMessageTile',
-    mixins: [UnknownMessageTileController],
 
     render: function() {
         var content = this.props.mxEvent.getContent();

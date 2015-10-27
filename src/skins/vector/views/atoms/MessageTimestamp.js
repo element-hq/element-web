@@ -18,14 +18,11 @@ limitations under the License.
 
 var React = require('react');
 
-var MessageTimestampController = require('matrix-react-sdk/lib/controllers/atoms/MessageTimestamp')
-
 var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 module.exports = React.createClass({
     displayName: 'MessageTimestamp',
-    mixins: [MessageTimestampController],
 
     formatDate: function(date) {
         // date.toLocaleTimeString is completely system dependent.

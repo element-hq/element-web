@@ -18,11 +18,8 @@ limitations under the License.
 
 var React = require('react');
 
-var ImageViewController = require('../../../../controllers/atoms/ImageView')
-
 module.exports = React.createClass({
     displayName: 'ImageView',
-    mixins: [ImageViewController],
 
     // XXX: keyboard shortcuts for managing dialogs should be done by the modal dialog base class omehow, surely...
     componentDidMount: function() {
