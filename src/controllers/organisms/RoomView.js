@@ -96,6 +96,9 @@ module.exports = {
                 // the conf
                 this._updateConfCallNotification();
                 break;
+            case 'user_activity':
+                this.sendReadReceipt();
+                break;
         }
     },
 
@@ -202,6 +205,8 @@ module.exports = {
             messageWrapper.addEventListener('dragend', this.onDragLeaveOrEnd);
 
             messageWrapper.scrollTop = messageWrapper.scrollHeight;
+
+            this.sendReadReceipt();
 
             this.fillSpace();
         }
@@ -404,7 +409,7 @@ module.exports = {
             }
 
             ret.unshift(
-                <li key={mxEv.getId()}><EventTile mxEvent={mxEv} continuation={continuation} last={last}/></li>
+                <li key={mxEv.getId()} ref={this._collectEventNode.bind(this, mxEv.getId())}><EventTile mxEvent={mxEv} continuation={continuation} last={last}/></li>
             );
             if (dateSeparator) {
                 ret.unshift(dateSeparator);
@@ -499,5 +504,53 @@ module.exports = {
                 uploadingRoomSettings: false,
             });
         }
+    },
+
+    _collectEventNode: function(eventId, node) {
+        if (this.eventNodes == undefined) this.eventNodes = {};
+        this.eventNodes[eventId] = node;
+    },
+
+    _indexForEventId(evId) {
+        for (var i = 0; i < this.state.room.timeline.length; ++i) {
+            if (evId == this.state.room.timeline[i].getId()) {
+                return i;
+            }
+        }
+        return null;
+    },
+
+    sendReadReceipt: function() {
+        var currentReadUpToEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+        var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
+
+        var lastReadEventIndex = this._getLastDisplayedEventIndex();
+        if (lastReadEventIndex === null) return;
+
+        if (lastReadEventIndex > currentReadUpToEventIndex) {
+            MatrixClientPeg.get().sendReadReceipt(this.state.room.timeline[lastReadEventIndex]);
+        }
+    },
+
+    _getLastDisplayedEventIndex: function() {
+        if (this.eventNodes === undefined) return null;
+
+        var messageWrapper = this.refs.messageWrapper;
+        if (messageWrapper === undefined) return null;
+        var wrapperRect = messageWrapper.getDOMNode().getBoundingClientRect();
+
+        for (var i = this.state.room.timeline.length-1; i >= 0; --i) {
+            var ev = this.state.room.timeline[i];
+            var node = this.eventNodes[ev.getId()];
+            if (node === undefined) continue;
+
+            var domNode = node.getDOMNode();
+            var boundingRect = domNode.getBoundingClientRect();
+
+            if (boundingRect.bottom < wrapperRect.bottom) {
+                return i;
+            }
+        }
+        return null;
     }
 };
