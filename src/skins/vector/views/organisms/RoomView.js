@@ -63,6 +63,10 @@ module.exports = React.createClass({
         this.setState(this.getInitialState());
     },
 
+    onSearchClick: function() {
+        this.setState({searching: true});
+    },
+
     onConferenceNotificationClick: function() {
         dis.dispatch({
             action: 'place_call',
@@ -89,6 +93,7 @@ module.exports = React.createClass({
         var MessageComposer = sdk.getComponent('molecules.MessageComposer');
         var CallView = sdk.getComponent("molecules.voip.CallView");
         var RoomSettings = sdk.getComponent("molecules.RoomSettings");
+        var SearchBar = sdk.getComponent("molecules.SearchBar");
 
         if (!this.state.room) {
             if (this.props.roomId) {
@@ -190,12 +195,15 @@ module.exports = React.createClass({
                 }
             }
 
-            var roomEdit = null;
+            var aux = null;
             if (this.state.editingRoomSettings) {
-                roomEdit = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
+                aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
             }
-            if (this.state.uploadingRoomSettings) {
-                roomEdit = <Loader/>;
+            else if (this.state.uploadingRoomSettings) {
+                aux = <Loader/>;
+            }
+            else if (this.state.searching) {
+                aux = <SearchBar onCancelClick={this.onCancelClick}/>;
             }
 
             var conferenceCallNotification = null;
@@ -219,12 +227,12 @@ module.exports = React.createClass({
 
             return (
                 <div className="mx_RoomView">
-                    <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings}
+                    <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
                         onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} />
                     <div className="mx_RoomView_auxPanel">
                         <CallView room={this.state.room}/>
                         { conferenceCallNotification }
-                        { roomEdit }
+                        { aux }
                     </div>
                     <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
                         <div className="mx_RoomView_messageListWrapper">

@@ -41,7 +41,7 @@ module.exports = React.createClass({
     onFullscreenClick: function() {
         dis.dispatch({action: 'video_fullscreen'}, true);
     },
-
+    
     render: function() {
         var EditableText = sdk.getComponent("atoms.EditableText");
         var RoomAvatar = sdk.getComponent('atoms.RoomAvatar');
@@ -166,7 +166,7 @@ module.exports = React.createClass({
                         { voice_button }
                         { zoom_button }
                         <div className="mx_RoomHeader_button">
-                            <img src="img/search.png" title="Search" alt="Search" width="21" height="19"/>
+                            <img src="img/search.png" title="Search" alt="Search" width="21" height="19" onClick={this.props.onSearchClick}/>
                         </div>
                     </div>
                 </div>

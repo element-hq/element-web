@@ -38,6 +38,7 @@ module.exports = {
             uploadingRoomSettings: false,
             numUnreadMessages: 0,
             draggingFile: false,
+            searching: false,
         }
     },
 
