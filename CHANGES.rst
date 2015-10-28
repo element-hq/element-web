@@ -1,3 +1,14 @@
+Changes in vector v0.1.2 (2015-10-28)
+======================================
+ * Support Room Avatars
+ * Fullscreen video calls
+ * Mute mic in VoIP calls
+ * Fix bug with multiple desktop notifications
+ * Context menu on messages
+ * Better hover-over on member list
+ * Support CAS auth
+ * Many other bug fixes
+ 
 Changes in vector v0.1.1 (2015-08-10)
 ======================================
 
