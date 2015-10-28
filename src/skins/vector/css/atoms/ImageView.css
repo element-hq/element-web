@@ -95,7 +95,8 @@ limitations under the License.
 
 .mx_ImageView_download {
     display: table;
-    margin-top: 28px;
+    margin-top: 24px;
+    margin-bottom: 6px;
     border-radius: 5px;
     background-color: #454545;
     font-size: 16px;
@@ -107,7 +108,7 @@ limitations under the License.
 .mx_ImageView_button {
     font-size: 16px;
     opacity: 0.5;
-    margin-top: 24px;
+    margin-top: 18px;
     cursor: pointer;
 }
 

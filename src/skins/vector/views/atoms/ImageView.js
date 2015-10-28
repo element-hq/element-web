@@ -78,7 +78,7 @@ module.exports = React.createClass({
                 <div className="mx_ImageView_lhs">
                 </div>
                 <div className="mx_ImageView_content">
-                    <img src={this.props.src} style={style}/>
+                    <img src={this.props.src}/>
                     <div className="mx_ImageView_labelWrapper">
                         <div className="mx_ImageView_label">
                             <div className="mx_ImageView_shim">
