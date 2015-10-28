@@ -18,11 +18,8 @@ limitations under the License.
 
 var React = require('react');
 
-var VideoFeedController = require('matrix-react-sdk/lib/controllers/atoms/voip/VideoFeed')
-
 module.exports = React.createClass({
     displayName: 'VideoFeed',
-    mixins: [VideoFeedController],
 
     render: function() {
         return (

@@ -106,10 +106,8 @@ limitations under the License.
     flex: 1 1 0;
 
     width: 100%;
-    margin-top: 18px;
-    margin-bottom: 18px;
 
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .mx_RoomView_messageListWrapper {
@@ -121,6 +119,10 @@ limitations under the License.
     width: 100%;
     list-style-type: none;
     padding: 0px;
+}
+
+.mx_RoomView_MessageList li {
+    clear: both;
 }
 
 .mx_RoomView_MessageList h2 {
@@ -210,13 +212,37 @@ limitations under the License.
 
 .mx_RoomView_uploadProgressOuter {
     width: 100%;
-    background-color: black;
-    height: 5px;
+    background-color: rgba(169, 219, 244, 0.5);
+    height: 4px;
 }
 
 .mx_RoomView_uploadProgressInner {
-    background-color: blue;
-    height: 5px;
+    background-color: #80cef4;
+    height: 4px;
+}
+
+.mx_RoomView_uploadFilename {
+    margin-top: 15px;
+    margin-left: 56px;
+}
+
+.mx_RoomView_uploadIcon {
+    float: left;
+    margin-top: 6px;
+    margin-left: 5px;
+}
+
+.mx_RoomView_uploadCancel {
+    float: right;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
+.mx_RoomView_uploadBytes {
+    float: right;    
+    opacity: 0.5;
+    margin-top: 15px;
+    margin-right: 10px;
 }
 
 .mx_RoomView_ongoingConfCallNotification {

@@ -57,7 +57,7 @@ limitations under the License.
 }
 
 .mx_RoomDirectory_tableWrapper {
-    overflow-y: scroll;
+    overflow-y: auto;
     -webkit-flex: 1 1 0;    
     flex: 1 1 0;
 }

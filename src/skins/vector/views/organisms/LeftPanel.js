@@ -18,21 +18,37 @@ limitations under the License.
 
 var React = require('react');
 var sdk = require('matrix-react-sdk')
+var dis = require('matrix-react-sdk/lib/dispatcher');
 
 module.exports = React.createClass({
     displayName: 'LeftPanel',
+
+    onHideClick: function() {
+        dis.dispatch({
+            action: 'hide_left_panel',
+        });
+    },
 
     render: function() {
         var RoomList = sdk.getComponent('organisms.RoomList');
         var BottomLeftMenu = sdk.getComponent('molecules.BottomLeftMenu');
         var IncomingCallBox = sdk.getComponent('molecules.voip.IncomingCallBox');
 
+        var collapseButton;
+        var classes = "mx_LeftPanel";
+        if (this.props.collapsed) {
+            classes += " collapsed";
+        }
+        else {
+            collapseButton = <img className="mx_LeftPanel_hideButton" onClick={ this.onHideClick } src="img/hide.png" width="12" height="20" alt="<"/>   
+        }
+
         return (
-            <aside className="mx_LeftPanel">
-                <img className="mx_LeftPanel_hideButton" src="img/hide.png" width="32" height="32" alt="<"/>
+            <aside className={classes}>
+                { collapseButton }
                 <IncomingCallBox />
-                <RoomList selectedRoom={this.props.selectedRoom} />
-                <BottomLeftMenu />
+                <RoomList selectedRoom={this.props.selectedRoom} collapsed={this.props.collapsed}/>
+                <BottomLeftMenu collapsed={this.props.collapsed}/>
             </aside>
         );
     }

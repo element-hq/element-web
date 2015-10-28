@@ -141,6 +141,11 @@ module.exports = React.createClass({
                         </form>
                     </div>
                 );
+            case 'stage_m.login.cas':
+                var CasLogin = sdk.getComponent('organisms.CasLogin');
+                return (
+                    <CasLogin />
+                );
         }
     },
 

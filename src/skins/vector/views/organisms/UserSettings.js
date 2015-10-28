@@ -30,7 +30,15 @@ module.exports = React.createClass({
     editAvatar: function() {
         var url = MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl);
         var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
-        Modal.createDialog(ChangeAvatar, {initialAvatarUrl: url});
+        var avatarDialog = (
+            <div>
+                <ChangeAvatar initialAvatarUrl={url} />
+                <div className="mx_Dialog_buttons">
+                    <button onClick={this.onAvatarDialogCancel}>Cancel</button>
+                </div>
+            </div>
+        );
+        this.avatarDialog = Modal.createDialogWithElement(avatarDialog);
     },
 
     addEmail: function() {
@@ -55,12 +63,16 @@ module.exports = React.createClass({
         this.logoutModal.closeDialog();
     },
 
+    onAvatarDialogCancel: function() {
+        this.avatarDialog.close();
+    },
+
     render: function() {
         switch (this.state.phase) {
             case this.Phases.Loading:
                 return <Loader />
             case this.Phases.Display:
-                var EditableText = sdk.getComponent('atoms.EditableText');
+                var ChangeDisplayName = sdk.getComponent('molecules.ChangeDisplayName');
                 var EnableNotificationsButton = sdk.getComponent('atoms.EnableNotificationsButton');
                 return (
                     <div className="mx_UserSettings">
@@ -74,13 +86,13 @@ module.exports = React.createClass({
                                 </div>
 
                                 <div className="mx_UserSettings_DisplayName">
-                                    <EditableText ref="displayname" initialValue={this.state.displayName} label="Click to set display name." onValueChanged={this.changeDisplayname}/>
+                                    <ChangeDisplayName ref="displayname" />
                                     <div className="mx_UserSettings_DisplayName_Edit" onClick={this.editDisplayName}>Edit</div>
                                 </div>
 
                                 <div className="mx_UserSettings_3pids">
                                     {this.state.threepids.map(function(val) {
-                                        return <div>{val.address}</div>;
+                                        return <div key={val.address}>{val.address}</div>;
                                     })}
                                 </div>
 

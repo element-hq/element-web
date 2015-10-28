@@ -22,13 +22,13 @@ limitations under the License.
 
 .mx_RoomTile_avatar {
     display: table-cell;
-    padding-right: 12px;
+    padding-right: 10px;
     padding-top: 3px;
     padding-bottom: 3px;
-    padding-left: 16px;
+    padding-left: 10px;
     vertical-align: middle;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     position: relative;
 }
 
@@ -43,6 +43,10 @@ limitations under the License.
     overflow: hidden;
     text-overflow: ellipsis;
     padding-right: 16px;    
+}
+
+.collapsed .mx_RoomTile_name {
+    display: none;
 }
 
 /*

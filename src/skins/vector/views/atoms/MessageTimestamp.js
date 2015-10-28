@@ -18,17 +18,39 @@ limitations under the License.
 
 var React = require('react');
 
-var MessageTimestampController = require('matrix-react-sdk/lib/controllers/atoms/MessageTimestamp')
+var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 module.exports = React.createClass({
     displayName: 'MessageTimestamp',
-    mixins: [MessageTimestampController],
+
+    formatDate: function(date) {
+        // date.toLocaleTimeString is completely system dependent.
+        // just go 24h for now
+        function pad(n) {
+            return (n < 10 ? '0' : '') + n;
+        }
+
+        var now = new Date();
+        if (date.toDateString() === now.toDateString()) {
+            return pad(date.getHours()) + ':' + pad(date.getMinutes());
+        }
+        else if (now.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
+            return days[date.getDay()] + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+        }
+        else if (now.getFullYear() === date.getFullYear()) {
+            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + (date.getDay()+1) + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+        }
+        else {
+            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + (date.getDay()+1) + " " + date.getFullYear() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+        }
+    },
 
     render: function() {
         var date = new Date(this.props.ts);
         return (
             <span className="mx_MessageTimestamp">
-                {date.toLocaleTimeString()}
+                { this.formatDate(date) }
             </span>
         );
     },

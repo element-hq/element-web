@@ -116,13 +116,16 @@ limitations under the License.
     margin-top: -5px;
 }
 
-.mx_RoomHeader_nameInput {
+.mx_RoomHeader_name input, .mx_RoomHeader_nameInput {
     border-radius: 3px;
     width: 260px;
     border: 1px solid #c7c7c7;
     font-weight: 300;
     font-size: 14px;
     padding: 9px;
+}
+
+.mx_RoomHeader_nameInput {
     margin-top: 6px;
 }
 
@@ -159,4 +162,12 @@ limitations under the License.
 
 .mx_RoomHeader_button img {
     cursor: pointer;
+}
+
+.mx_RoomHeader_voipButton {
+    display: table-cell;
+}
+
+.mx_RoomHeader_voipButtons {
+    margin-top: 18px;
 }

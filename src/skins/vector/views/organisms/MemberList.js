@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var classNames = require('classnames');
+var Loader = require('react-loader');
 
 var MemberListController = require('matrix-react-sdk/lib/controllers/organisms/MemberList')
 
@@ -32,12 +33,38 @@ module.exports = React.createClass({
         return { editing: false };
     },
 
-    makeMemberTiles: function() {
+    memberSort: function(userIdA, userIdB) {
+        var userA = this.memberDict[userIdA].user;
+        var userB = this.memberDict[userIdB].user;
+
+        var presenceMap = {
+            online: 3,
+            unavailable: 2,
+            offline: 1
+        };
+
+        var presenceOrdA = userA ? presenceMap[userA.presence] : 0;
+        var presenceOrdB = userB ? presenceMap[userB.presence] : 0;
+
+        if (presenceOrdA != presenceOrdB) {
+            return presenceOrdB - presenceOrdA;
+        }
+
+        var latA = userA ? (userA.lastPresenceTs - (userA.lastActiveAgo || userA.lastPresenceTs)) : 0;
+        var latB = userB ? (userB.lastPresenceTs - (userB.lastActiveAgo || userB.lastPresenceTs)) : 0;
+
+        return latB - latA;
+    },
+
+    makeMemberTiles: function(membership) {
         var MemberTile = sdk.getComponent("molecules.MemberTile");
 
         var self = this;
-        return Object.keys(self.state.memberDict).map(function(userId) {
-            var m = self.state.memberDict[userId];
+        return self.state.members.filter(function(userId) {
+            var m = self.memberDict[userId];
+            return m.membership == membership;
+        }).map(function(userId) {
+            var m = self.memberDict[userId];
             return (
                 <MemberTile key={userId} member={m} ref={userId} />
             );
@@ -69,28 +96,49 @@ module.exports = React.createClass({
         });
 
         var EditableText = sdk.getComponent("atoms.EditableText");
-        return (
-            <div className={ classes } onClick={ this.onClickInvite } >
-                <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="40" height="40" alt=""/></div>            
-                <div className="mx_MemberTile_name">
-                    <EditableText ref="invite" label="Invite" placeHolder="@user:domain.com" initialValue="" onValueChanged={this.onPopulateInvite}/>
+        if (this.state.inviting) {
+            return (
+                <Loader />
+            );
+        } else {
+            return (
+                <div className={ classes } onClick={ this.onClickInvite } >
+                    <div className="mx_MemberTile_avatar"><img src="img/create-big.png" width="40" height="40" alt=""/></div>
+                    <div className="mx_MemberTile_name">
+                        <EditableText ref="invite" label="Invite" placeHolder="@user:domain.com" initialValue="" onValueChanged={this.onPopulateInvite}/>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
     },
 
     render: function() {
+        var invitedSection = null;
+        var invitedMemberTiles = this.makeMemberTiles('invite');
+        if (invitedMemberTiles.length > 0) {
+            invitedSection = (
+                <div>
+                    <h2>Invited</h2>
+                    <div className="mx_MemberList_wrapper">
+                        {invitedMemberTiles}
+                    </div>
+                </div>
+            );
+        }
         return (
             <div className="mx_MemberList">
                 <div className="mx_MemberList_chevron">
                     <img src="img/chevron.png" width="24" height="13"/>
                 </div>
                 <div className="mx_MemberList_border">
-                    <h2>Members</h2>
-                    <div className="mx_MemberList_wrapper">
-                        {this.makeMemberTiles()}
-                        {this.inviteTile()}
+                    <div>
+                        <h2>Members</h2>
+                        <div className="mx_MemberList_wrapper">
+                            {this.makeMemberTiles('join')}
+                        </div>
                     </div>
+                    {invitedSection}
+                    {this.inviteTile()}
                 </div>
             </div>
         );

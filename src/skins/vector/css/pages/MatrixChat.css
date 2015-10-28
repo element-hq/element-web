@@ -73,6 +73,11 @@ limitations under the License.
     flex: 0 0 230px;
 }
 
+.mx_MatrixChat .mx_LeftPanel.collapsed {
+    -webkit-flex: 0 0 60px;
+    flex: 0 0 60px;
+}
+
 .mx_MatrixChat .mx_MatrixChat_middlePanel {
     -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
@@ -83,7 +88,9 @@ limitations under the License.
     padding-left: 12px;
     padding-right: 12px;
     background-color: #f3f8fa;
-    width: 100%;
+
+    -webkit-flex: 1;
+    flex: 1;
 
     /* XXX: Hack: apparently if you try to nest a flex-box
      * within a non-flex-box within a flex-box, the height
@@ -110,4 +117,9 @@ limitations under the License.
     background-color: #f3f8fa;
     -webkit-flex: 0 0 230px;
     flex: 0 0 230px;
+}
+
+.mx_MatrixChat .mx_RightPanel.collapsed {
+    -webkit-flex: 0 0 72px;
+    flex: 0 0 72px;
 }

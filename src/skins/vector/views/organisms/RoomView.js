@@ -19,12 +19,13 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var dis = require('matrix-react-sdk/lib/dispatcher');
 
 var sdk = require('matrix-react-sdk')
 var classNames = require("classnames");
 var filesize = require('filesize');
 
-var RoomViewController = require('matrix-react-sdk/lib/controllers/organisms/RoomView')
+var RoomViewController = require('../../../../controllers/organisms/RoomView')
 
 var Loader = require("react-loader");
 
@@ -60,6 +61,14 @@ module.exports = React.createClass({
 
     onCancelClick: function() {
         this.setState(this.getInitialState());
+    },
+
+    onConferenceNotificationClick: function() {
+        dis.dispatch({
+            action: 'place_call',
+            type: "video",
+            room_id: this.props.roomId
+        });
     },
 
     getUnreadMessagesString: function() {
@@ -129,19 +138,33 @@ module.exports = React.createClass({
                 <div />
             );
 
+            // for testing UI...
+            // this.state.upload = {
+            //     uploadedBytes: 123493,
+            //     totalBytes: 347534,
+            //     fileName: "testing_fooble.jpg",
+            // }
+
             if (this.state.upload) {
                 var innerProgressStyle = {
                     width: ((this.state.upload.uploadedBytes / this.state.upload.totalBytes) * 100) + '%'
                 };
+                var uploadedSize = filesize(this.state.upload.uploadedBytes);
+                var totalSize = filesize(this.state.upload.totalBytes);
+                if (uploadedSize.replace(/^.* /,'') === totalSize.replace(/^.* /,'')) {
+                    uploadedSize = uploadedSize.replace(/ .*/, '');
+                }
                 statusBar = (
                     <div className="mx_RoomView_uploadBar">
-                        <span className="mx_RoomView_uploadFilename">Uploading {this.state.upload.fileName}</span>
-                        <span className="mx_RoomView_uploadBytes">
-                        {filesize(this.state.upload.uploadedBytes)} / {filesize(this.state.upload.totalBytes)}
-                        </span>
                         <div className="mx_RoomView_uploadProgressOuter">
                             <div className="mx_RoomView_uploadProgressInner" style={innerProgressStyle}></div>
                         </div>
+                        <img className="mx_RoomView_uploadIcon" src="img/fileicon.png" width="40" height="40"/>
+                        <img className="mx_RoomView_uploadCancel" src="img/cancel.png" width="40" height="40"/>
+                        <div className="mx_RoomView_uploadBytes">
+                            { uploadedSize } / { totalSize }
+                        </div>
+                        <div className="mx_RoomView_uploadFilename">Uploading {this.state.upload.fileName}</div>
                     </div>
                 );
             } else {

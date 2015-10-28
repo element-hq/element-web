@@ -14,6 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+html {
+    /* hack to stop overscroll bounce on OSX and iOS.
+       N.B. Breaks things when we have legitimate horizontal overscroll */
+    height: 100%;
+    overflow: hidden;
+}
+
 body {
     font-family: 'Lato', Helvetica, Arial, Sans-Serif;
     font-size: 16px;
@@ -32,6 +39,12 @@ h2 {
     font-size: 20px;
     margin-top: 16px;
     margin-bottom: 16px;
+}
+
+a:hover,
+a:link,
+a:visited {
+    color: #80CEF4;
 }
 
 .mx_ContextualMenu_background {
@@ -54,10 +67,17 @@ h2 {
     padding: 6px;
 }
 
-.mx_ContextualMenu_chevron {
+.mx_ContextualMenu_chevron_right {
     padding: 12px;
     position: absolute;
     right: -21px;
+    top: 0px;
+}
+
+.mx_ContextualMenu_chevron_left {
+    padding: 12px;
+    position: absolute;
+    left: -21px;
     top: 0px;
 }
 
@@ -66,6 +86,10 @@ h2 {
     cursor: pointer;
 }
 
+.mx_ContextualMenu_spinner {
+    display: block;
+    margin: 0 auto;
+}
 
 .mx_Dialog_background {
     position: fixed;

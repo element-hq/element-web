@@ -19,26 +19,69 @@ limitations under the License.
 var React = require('react');
 
 var sdk = require('matrix-react-sdk')
-var VideoViewController = require('matrix-react-sdk/lib/controllers/molecules/voip/VideoView')
+var dis = require('matrix-react-sdk/lib/dispatcher')
 
 module.exports = React.createClass({
     displayName: 'VideoView',
-    mixins: [VideoViewController],
+
+    componentWillMount: function() {
+        dis.register(this.onAction);
+    },
 
     getRemoteVideoElement: function() {
         return this.refs.remote.getDOMNode();
+    },
+
+    getRemoteAudioElement: function() {
+        return this.refs.remoteAudio.getDOMNode();
     },
 
     getLocalVideoElement: function() {
         return this.refs.local.getDOMNode();
     },
 
+    setContainer: function(c) {
+        this.container = c;
+    },
+
+    onAction: function(payload) {
+        switch (payload.action) {
+            case 'video_fullscreen':
+                if (!this.container) {
+                    return;
+                }
+                var element = this.container.getDOMNode();
+                if (payload.fullscreen) {
+                    var requestMethod = (
+                        element.requestFullScreen ||
+                        element.webkitRequestFullScreen ||
+                        element.mozRequestFullScreen ||
+                        element.msRequestFullscreen
+                    );
+                    requestMethod.call(element);
+                }
+                else {
+                    var exitMethod = (
+                        document.exitFullscreen ||
+                        document.mozCancelFullScreen ||
+                        document.webkitExitFullscreen ||
+                        document.msExitFullscreen
+                    );
+                    if (exitMethod) {
+                        exitMethod.call(document);
+                    }
+                }
+                break;
+        }
+    },
+
     render: function() {
         var VideoFeed = sdk.getComponent('atoms.voip.VideoFeed');
         return (
-            <div className="mx_VideoView">
+            <div className="mx_VideoView" ref={this.setContainer}>
                 <div className="mx_VideoView_remoteVideoFeed">
                     <VideoFeed ref="remote"/>
+                    <audio ref="remoteAudio"/>
                 </div>
                 <div className="mx_VideoView_localVideoFeed">                
                     <VideoFeed ref="local"/>

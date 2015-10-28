@@ -18,7 +18,9 @@ limitations under the License.
 
 var React = require('react');
 var sdk = require('matrix-react-sdk')
+var dis = require('matrix-react-sdk/lib/dispatcher')
 
+var CallHandler = require('matrix-react-sdk/lib/CallHandler');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var RoomHeaderController = require('matrix-react-sdk/lib/controllers/molecules/RoomHeader')
 
@@ -34,6 +36,10 @@ module.exports = React.createClass({
 
     getRoomName: function() {
         return this.refs.name_edit.getDOMNode().value;
+    },
+
+    onFullscreenClick: function() {
+        dis.dispatch({action: 'video_fullscreen', fullscreen: true}, true);
     },
 
     render: function() {
@@ -52,18 +58,41 @@ module.exports = React.createClass({
         else {
             var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
 
-            var callButtons;
-            if (this.state) {
-                switch (this.state.call_state) {
-                    case "ringback":
-                    case "connected":
-                        callButtons = (
-                            <div className="mx_RoomHeader_textButton" onClick={this.onHangupClick}>
-                                End call
-                            </div>
-                        );
-                        break;
+            var call_buttons;
+            var zoom_button;
+            if (this.state && this.state.call_state != 'ended') {
+                //var muteVideoButton;
+                var activeCall = (
+                    CallHandler.getCallForRoom(this.props.room.roomId)
+                );
+/*                
+                if (activeCall && activeCall.type === "video") {
+                    muteVideoButton = (
+                        <div className="mx_RoomHeader_textButton mx_RoomHeader_voipButton"
+                                onClick={this.onMuteVideoClick}>
+                            {
+                                (activeCall.isLocalVideoMuted() ?
+                                    "Unmute" : "Mute") + " video"
+                            }
+                        </div>
+                    );
                 }
+                        {muteVideoButton}
+                        <div className="mx_RoomHeader_textButton mx_RoomHeader_voipButton"
+                                onClick={this.onMuteAudioClick}>
+                            {
+                                (activeCall && activeCall.isMicrophoneMuted() ?
+                                    "Unmute" : "Mute") + " audio"
+                            }
+                        </div>
+*/                
+
+                call_buttons = (
+                    <div className="mx_RoomHeader_textButton"
+                            onClick={this.onHangupClick}>
+                        End call
+                    </div>
+                );
             }
 
             var name = null;
@@ -97,7 +126,15 @@ module.exports = React.createClass({
             var roomAvatar = null;
             if (this.props.room) {
                 roomAvatar = (
-                    <RoomAvatar room={this.props.room} />
+                    <RoomAvatar room={this.props.room} width="48" height="48" />
+                );
+            }
+
+            if (activeCall && activeCall.type == "video") {
+                zoom_button = (
+                    <div className="mx_RoomHeader_button" onClick={this.onFullscreenClick}>
+                        <img src="img/zoom.png" title="Fullscreen" alt="Fullscreen" width="32" height="32" style={{ 'marginTop': '3px' }}/>
+                    </div>
                 );
             }
 
@@ -112,18 +149,19 @@ module.exports = React.createClass({
                             { topic_el }
                         </div>
                     </div>
-                    {callButtons}
+                    {call_buttons}
                     {cancel_button}
                     {save_button}
                     <div className="mx_RoomHeader_rightRow">
                         { settings_button }
+                        { zoom_button }
                         <div className="mx_RoomHeader_button mx_RoomHeader_search">
                             <img src="img/search.png" title="Search" alt="Search" width="32" height="32"/>
                         </div>
-                        <div className="mx_RoomHeader_button mx_RoomHeader_video" onClick={this.onVideoClick}>
+                        <div className="mx_RoomHeader_button mx_RoomHeader_video" onClick={activeCall && activeCall.type === "video" ? this.onMuteVideoClick : this.onVideoClick}>
                             <img src="img/video.png" title="Video call" alt="Video call" width="32" height="32"/>
                         </div>
-                        <div className="mx_RoomHeader_button mx_RoomHeader_voice" onClick={this.onVoiceClick}>
+                        <div className="mx_RoomHeader_button mx_RoomHeader_voice" onClick={activeCall ? this.onMuteAudioClick : this.onVoiceClick}>
                             <img src="img/voip.png" title="VoIP call" alt="VoIP call" width="32" height="32"/>
                         </div>
                     </div>

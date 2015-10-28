@@ -33,6 +33,8 @@ module.exports = {
         cli.on("Room", this.onRoom);
         cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
+        cli.on("RoomState.events", this.onRoomStateEvents);
+        cli.on("RoomMember.name", this.onRoomMemberName);
 
         var rooms = this.getRoomList();
         this.setState({
@@ -52,6 +54,11 @@ module.exports = {
             case 'call_state':
                 this._recheckCallElement(this.props.selectedRoom);
                 break;
+            case 'view_tooltip':
+                this.tooltip = payload.tooltip;
+                this._repositionTooltip();
+                if (this.tooltip) this.tooltip.style.display = 'block';
+                break
         }
     },
 
@@ -61,6 +68,7 @@ module.exports = {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
     },
 
@@ -104,6 +112,15 @@ module.exports = {
     onRoomName: function(room) {
         this.refreshRoomList();
     },
+
+    onRoomStateEvents: function(ev, state) {
+        setTimeout(this.refreshRoomList, 0);
+    },
+
+    onRoomMemberName: function(ev, member) {
+        setTimeout(this.refreshRoomList, 0);
+    },
+
 
     refreshRoomList: function() {
         var rooms = this.getRoomList();
@@ -150,6 +167,13 @@ module.exports = {
         });
     },
 
+    _repositionTooltip: function(e) {
+        if (this.tooltip && this.tooltip.parentElement) {
+            var scroll = this.getDOMNode();
+            this.tooltip.style.top = (scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - scroll.scrollTop) + "px"; 
+        }
+    },
+
     makeRoomTiles: function() {
         var self = this;
         var RoomTile = sdk.getComponent("molecules.RoomTile");
@@ -159,6 +183,7 @@ module.exports = {
                 <RoomTile
                     room={room}
                     key={room.roomId}
+                    collapsed={self.props.collapsed}
                     selected={selected}
                     unread={self.state.activityMap[room.roomId] === 1}
                     highlight={self.state.activityMap[room.roomId] === 2}

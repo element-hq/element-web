@@ -11,6 +11,19 @@ module.exports = {
             { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
         ]
     },
+    output: {
+        devtoolModuleFilenameTemplate: function(info) {
+            // Reading input source maps gives only relative paths here for
+            // everything. Until I figure out how to fix this, this is a
+            // workaround.
+            // We use the relative resource path with any '../'s on the front
+            // removed which gives a tree with matrix-react-sdk and vector
+            // trees smashed together, but this fixes everything being under
+            // various levels of '.' and '..'
+            // Also, sometimes the resource path is absolute.
+            return path.relative(process.cwd(), info.resourcePath).replace(/^[\/\.]*/, '');
+        }
+    },
     resolve: {
         alias: {
             // alias any requires to the react module to the one in our path, otherwise
@@ -19,7 +32,12 @@ module.exports = {
         },
     },
     plugins: [
-        new webpack.IgnorePlugin(/^olm/)
+        new webpack.IgnorePlugin(/^olm/),
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+            }
+        })
     ],
     devtool: 'source-map'
 };

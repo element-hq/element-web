@@ -20,14 +20,17 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 module.exports = {
     avatarUrlForMember: function(member, width, height, resizeMethod) {
-        var url = MatrixClientPeg.get().getAvatarUrlForMember(
-            member,
+        var url = member.getAvatarUrl(
+            MatrixClientPeg.get().getHomeserverUrl(),
             width,
             height,
             resizeMethod
         );
         if (!url) {
-            url = this.defaultAvatarUrlForString(member.userId);
+            // member can be null here currently since on invites, the JS SDK
+            // does not have enough info to build a RoomMember object for
+            // the inviter.
+            url = this.defaultAvatarUrlForString(member ? member.userId : '');
         }
         return url;
     },

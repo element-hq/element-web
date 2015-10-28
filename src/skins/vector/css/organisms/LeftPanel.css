@@ -29,7 +29,9 @@ limitations under the License.
 .mx_LeftPanel_hideButton {
     position: absolute;
     top: 10px;
-    right: 10px;
+    right: 0px;
+    padding: 8px;
+    cursor: pointer;
 }
 
 .mx_LeftPanel .mx_RoomList {
@@ -39,7 +41,7 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    overflow-y: scroll;
+    overflow-y: auto;
     -webkit-flex: 1 1 0;
     flex: 1 1 0;
 }
@@ -59,10 +61,6 @@ limitations under the License.
 
 .mx_LeftPanel .mx_BottomLeftMenu .mx_RoomTile {
     color: #378bb4;
-}
-
-.mx_LeftPanel .mx_BottomLeftMenu .mx_RoomTile_avatar {
-    padding-left: 14px;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu .mx_BottomLeftMenu_options {

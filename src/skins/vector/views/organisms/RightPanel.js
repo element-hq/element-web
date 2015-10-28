@@ -18,13 +18,12 @@ limitations under the License.
 
 var React = require('react');
 var sdk = require('matrix-react-sdk')
+var dis = require('matrix-react-sdk/lib/dispatcher');
 
 module.exports = React.createClass({
     displayName: 'RightPanel',
 
     Phase : {
-        Blank: 'Blank',
-        None: 'None',
         MemberList: 'MemberList',
         FileList: 'FileList',
     },
@@ -36,11 +35,16 @@ module.exports = React.createClass({
     },
 
     onMemberListButtonClick: function() {
-        if (this.state.phase == this.Phase.None) {
-            this.setState({ phase: this.Phase.MemberList });            
+        if (this.props.collapsed) {
+            this.setState({ phase: this.Phase.MemberList });
+            dis.dispatch({
+                action: 'show_right_panel',
+            });
         }
         else {
-            this.setState({ phase: this.Phase.None });
+            dis.dispatch({
+                action: 'hide_right_panel',
+            });
         }
     },
 
@@ -48,6 +52,7 @@ module.exports = React.createClass({
         var MemberList = sdk.getComponent('organisms.MemberList');
         var buttonGroup;
         var panel;
+
         if (this.props.roomId) {
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
@@ -59,13 +64,18 @@ module.exports = React.createClass({
                         </div>
                     </div>;
 
-            if (this.state.phase == this.Phase.MemberList) {
+            if (!this.props.collapsed && this.state.phase == this.Phase.MemberList) {
                 panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
             }
         }
 
+        var classes = "mx_RightPanel";
+        if (this.props.collapsed) {
+            classes += " collapsed";
+        }
+
         return (
-            <aside className="mx_RightPanel">
+            <aside className={classes}>
                 <div className="mx_RightPanel_header">
                     { buttonGroup }
                 </div>

@@ -19,15 +19,15 @@ limitations under the License.
 var React = require('react');
 
 var sdk = require('matrix-react-sdk')
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg')
 
 var Loader = require("react-loader");
 
-var RegisterController = require('matrix-react-sdk/lib/controllers/templates/Register')
+var RegisterController = require('../../../../controllers/templates/Register')
+
+var config = require('../../../../../config.json');
 
 module.exports = React.createClass({
-    DEFAULT_HS_URL: 'https://matrix.org',
-    DEFAULT_IS_URL: 'https://vector.im',
-
     displayName: 'Register',
     mixins: [RegisterController],
 
@@ -38,8 +38,8 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this.customHsUrl = this.DEFAULT_HS_URL;
-        this.customIsUrl = this.DEFAULT_IS_URL;
+        this.customHsUrl = config.default_hs_url;
+        this.customIsUrl = config.default_is_url;
     },
 
     getRegFormVals: function() {
@@ -55,7 +55,7 @@ module.exports = React.createClass({
         if (this.state.serverConfigVisible) {
             return this.customHsUrl;
         } else {
-            return this.DEFAULT_HS_URL;
+            return config.default_hs_url;
         }
     },
 
@@ -63,7 +63,7 @@ module.exports = React.createClass({
         if (this.state.serverConfigVisible) {
             return this.customIsUrl;
         } else {
-            return this.DEFAULT_IS_URL;
+            return config.default_is_url;
         }
     },
 
@@ -77,6 +77,10 @@ module.exports = React.createClass({
         this.customHsUrl = this.refs.serverConfig.getHsUrl();
         this.customIsUrl = this.refs.serverConfig.getIsUrl();
         this.forceUpdate();
+    },
+
+    onProfileContinueClicked: function() {
+        this.onAccountReady();
     },
 
     componentForStep: function(step) {
@@ -127,6 +131,18 @@ module.exports = React.createClass({
             return (
                 <Loader />
             );
+        } else if (this.state.step == 'profile') {
+            var ChangeDisplayName = sdk.getComponent('molecules.ChangeDisplayName');
+            var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
+            return (
+                <div className="mx_Login_profile">
+                    Set a display name:
+                    <ChangeDisplayName />
+                    Upload an avatar:
+                    <ChangeAvatar initialAvatarUrl={MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl)} />
+                    <button onClick={this.onProfileContinueClicked}>Continue</button>
+                </div>
+            );
         } else {
             return (
                 <div>
@@ -155,6 +171,12 @@ module.exports = React.createClass({
                     break;
                 case this.FieldErrors.InUse:
                     strings.push(keys[i]+" is already taken");
+                    break;
+                case this.FieldErrors.Length:
+                    strings.push(keys[i] + " is not long enough.");
+                    break;
+                default:
+                    console.error("Unhandled FieldError: %s", bad[keys[i]]);
                     break;
             }
         }

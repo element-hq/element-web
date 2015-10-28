@@ -21,24 +21,29 @@ var sdk = require("matrix-react-sdk");
 sdk.loadSkin(require('../skins/vector/skindex'));
 sdk.loadModule(require('../modules/VectorConferenceHandler'));
 
+var qs = require("querystring");
+
 var lastLocationHashSet = null;
+
+
+// We want to support some name / value pairs in the fragment
+// so we're re-using query string like format
+function parseQsFromFragment(location) {
+    var hashparts = location.hash.split('?');
+    if (hashparts.length > 1) {
+        return qs.parse(hashparts[1]);
+    }
+    return {};
+}
 
 // Here, we do some crude URL analysis to allow
 // deep-linking. We only support registration
 // deep-links in this example.
 function routeUrl(location) {
     if (location.hash.indexOf('#/register') == 0) {
-        var hashparts = location.hash.split('?');
-        var params = {};
-        if (hashparts.length == 2) {
-            var pairs = hashparts[1].split('&');
-            for (var i = 0; i < pairs.length; ++i) {
-                var parts = pairs[i].split('=');
-                if (parts.length != 2) continue;
-                params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
-            }
-        }
-        window.matrixChat.showScreen('register', params);
+        window.matrixChat.showScreen('register', parseQsFromFragment(location));
+    } else if (location.hash.indexOf('#/login/cas') == 0) {
+        window.matrixChat.showScreen('cas_login', parseQsFromFragment(location));
     } else {
         window.matrixChat.showScreen(location.hash.substring(2));
     }
@@ -53,14 +58,18 @@ function onHashChange(ev) {
 }
 
 var loaded = false;
+var lastLoadedScreen = null;
 
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
 var onNewScreen = function(screen) {
-    if (!loaded) return;
-    var hash = '#/' + screen;
-    lastLocationHashSet = hash;
-    window.location.hash = hash;
+    if (!loaded) {
+        lastLoadedScreen = screen;
+    } else {
+        var hash = '#/' + screen;
+        lastLocationHashSet = hash;
+        window.location.hash = hash;
+    }
 }
 
 // We use this to work out what URL the SDK should
@@ -85,5 +94,9 @@ window.addEventListener('hashchange', onHashChange);
 window.onload = function() {
     routeUrl(window.location);
     loaded = true;
+    if (lastLoadedScreen) {
+        onNewScreen(lastLoadedScreen);
+        lastLoadedScreen = null;
+    }
 }
 

@@ -25,11 +25,65 @@ var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/Matri
 var Loader = require("react-loader");
 
 var dis = require('matrix-react-sdk/lib/dispatcher');
-
+var Matrix = require("matrix-js-sdk");
+var ContextualMenu = require("../../../../ContextualMenu");
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
     mixins: [MatrixChatController],
+
+    getInitialState: function() {
+        return {
+            width: 10000,
+        }
+    },
+
+    componentDidMount: function() {
+        window.addEventListener('resize', this.handleResize);
+        this.handleResize();
+    },
+
+    componentWillUnmount: function() {
+        window.removeEventListener('resize', this.handleResize);
+    },
+
+    onAliasClick: function(event, alias) {
+        event.preventDefault();
+        dis.dispatch({action: 'view_room_alias', room_alias: alias});
+    },
+
+    onUserClick: function(event, userId) {
+        event.preventDefault();
+        var MemberInfo = sdk.getComponent('molecules.MemberInfo');
+        var member = new Matrix.RoomMember(null, userId);
+        ContextualMenu.createMenu(MemberInfo, {
+            member: member,
+            right: window.innerWidth - event.pageX,
+            top: event.pageY
+        });
+    },
+
+    handleResize: function(e) {
+        var hideLhsThreshold = 1000;
+        var showLhsThreshold = 1000;
+        var hideRhsThreshold = 820;
+        var showRhsThreshold = 820;
+
+        if (this.state.width > hideLhsThreshold && window.innerWidth <= hideLhsThreshold) {
+            dis.dispatch({ action: 'hide_left_panel' });
+        }
+        if (this.state.width <= showLhsThreshold && window.innerWidth > showLhsThreshold) {
+            dis.dispatch({ action: 'show_left_panel' });
+        }
+        if (this.state.width > hideRhsThreshold && window.innerWidth <= hideRhsThreshold) {
+            dis.dispatch({ action: 'hide_right_panel' });
+        }
+        if (this.state.width <= showRhsThreshold && window.innerWidth > showRhsThreshold) {
+            dis.dispatch({ action: 'show_right_panel' });
+        }
+
+        this.setState({width: window.innerWidth});
+    },
 
     onRoomCreated: function(room_id) {
         dis.dispatch({
@@ -57,19 +111,19 @@ module.exports = React.createClass({
             switch (this.state.page_type) {
                 case this.PageTypes.RoomView:
                     page_element = <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
-                    right_panel = <RightPanel roomId={this.state.currentRoom} />
+                    right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} />
                     break;
                 case this.PageTypes.UserSettings:
                     page_element = <UserSettings />
-                    right_panel = <RightPanel/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
                     break;
                 case this.PageTypes.CreateRoom:
                     page_element = <CreateRoom onRoomCreated={this.onRoomCreated}/>
-                    right_panel = <RightPanel/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
                     break;
                 case this.PageTypes.RoomDirectory:
                     page_element = <RoomDirectory />
-                    right_panel = <RightPanel/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
                     break;
             }
 
@@ -79,7 +133,7 @@ module.exports = React.createClass({
                         <div className="mx_MatrixChat_wrapper">
                             <MatrixToolbar />
                             <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
-                                <LeftPanel selectedRoom={this.state.currentRoom} />
+                                <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
                                 <main className="mx_MatrixChat_middlePanel">
                                     {page_element}
                                 </main>
@@ -91,7 +145,7 @@ module.exports = React.createClass({
             else {
                 return (
                         <div className="mx_MatrixChat">
-                            <LeftPanel selectedRoom={this.state.currentRoom} />
+                            <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
                             <main className="mx_MatrixChat_middlePanel">
                                 {page_element}
                             </main>
