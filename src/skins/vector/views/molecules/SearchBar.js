@@ -43,13 +43,15 @@ module.exports = React.createClass({
     },
 
     onSearchChange: function(e) {
-
+        if (e.keyCode === 13) {
+            this.props.onSearch(this.refs.search_term.getDOMNode().value);
+        }
     },
-
+    
     render: function() {
         return (
             <div className="mx_SearchBar">
-                <input className="mx_SearchBar_input" type="text" placeholder="Search..." onChange={this.onSearchChange}/>
+                <input ref="search_term" className="mx_SearchBar_input" type="text" placeholder="Search..." onChange={this.onSearchChange}/>
                 <div className={"mx_SearchBar_button" + (this.state.scope !== this.Scope.Room ? " mx_SearchBar_unselected" : "")} onClick={this.onThisRoomClick}>This Room</div>
                 <div className={"mx_SearchBar_button" + (this.state.scope !== this.Scope.All ? " mx_SearchBar_unselected" : "")} onClick={this.onAllRoomsClick}>All Rooms</div>
                 <img className="mx_SearchBar_cancel" src="img/cancel-black.png" width="18" height="18" onClick={this.props.onCancelClick} />
