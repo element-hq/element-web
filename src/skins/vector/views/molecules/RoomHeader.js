@@ -61,7 +61,7 @@ module.exports = React.createClass({
             var call_buttons;
             var zoom_button;
             if (this.state && this.state.call_state != 'ended') {
-                var muteVideoButton;
+                //var muteVideoButton;
                 var activeCall = (
                     CallHandler.getCallForRoom(this.props.room.roomId)
                 );

@@ -18,7 +18,6 @@ limitations under the License.
 
 var React = require('react');
 
-var sdk = require('matrix-react-sdk')
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
 
 module.exports = React.createClass({
