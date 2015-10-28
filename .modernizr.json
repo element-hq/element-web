@@ -1,0 +1,12 @@
+{
+  "minify": true,
+  "classPrefix": "modernizr_",
+  "options": [
+    "setClasses"
+  ],
+  "feature-detects": [
+    "test/css/displaytable",
+    "test/css/flexbox",
+    "test/es5/specification"
+  ]
+}
