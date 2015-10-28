@@ -31,8 +31,12 @@ limitations under the License.
     -webkit-box-ordinal-group: 1;
     order: 1;
     -webkit-flex: 1;
-    flex: 1 1 0;
+    flex: 1 1 10%;
     min-width: 60px;
+/*
+    background-color: #080;
+    height: 20px;
+*/
 }
 
 .mx_ImageView_content {
@@ -41,8 +45,8 @@ limitations under the License.
     /* min-width hack needed for FF */
     min-width: 0px;
     height: 90%;
-    -webkit-flex: 5;
-    flex: 5 5 0;
+    -webkit-flex: 100;
+    flex: 100 100 0;
 
     display: -webkit-flex;
     display: flex;
@@ -55,21 +59,28 @@ limitations under the License.
 .mx_ImageView_content img {
     max-width: 100%;
     /* can't use max-height as it interacts badly with flex on Chrome and doesn't relayout properly until you refresh */
-    height: 100%;
+    max-height: 100%;
     /* object-fit hack needed for Chrome */
     object-fit: contain;
+    background-image: url('img/trans.png');
+}
+
+.mx_ImageView_labelWrapper {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    overflow: auto;
 }
 
 .mx_ImageView_label {
     text-align: left;
-    display: inline-block;
-    width: 300px;
-    height: 300px;
-    top: 50%;
-    margin-top: -150px;
-    position: absolute;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 60px;
+    padding-right: 60px;
+    min-height: 100%;
     color: #fff;
-    padding: 60px;
 }
 
 .mx_ImageView_name {
@@ -83,7 +94,7 @@ limitations under the License.
 }
 
 .mx_ImageView_download {
-    display: inline-block;
+    display: table;
     margin-top: 28px;
     border-radius: 5px;
     background-color: #454545;
@@ -100,10 +111,18 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_ImageView_shim {
+    height: 30px;
+}
+
 .mx_ImageView_rhs {
     -webkit-box-ordinal-group: 3;
     order: 3;
     -webkit-flex: 1;
-    flex: 1 1 0;
+    flex: 1 1 10%;
     min-width: 300px;
+/*
+    background-color: #800;
+    height: 20px;
+*/
 }

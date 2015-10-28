@@ -79,21 +79,27 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_ImageView_content">
                     <img src={this.props.src} style={style}/>
-                    <div className="mx_ImageView_label">
-                        <div className="mx_ImageView_name">
-                            { this.props.mxEvent.getContent().body }
-                        </div>
-                        <div className="mx_ImageView_metadata">
-                            Uploaded on { DateUtils.formatDate(new Date(this.props.mxEvent.getTs())) } by { this.props.mxEvent.getSender() }
-                        </div>
-                        <div className="mx_ImageView_download">
-                            Download this file ({ filesize(this.props.mxEvent.getContent().info.size) })
-                        </div>
-                        <div className="mx_ImageView_button">
-                            View full screen
-                        </div>
-                        <div className="mx_ImageView_button">
-                            Redact
+                    <div className="mx_ImageView_labelWrapper">
+                        <div className="mx_ImageView_label">
+                            <div className="mx_ImageView_shim">
+                            </div>
+                            <div className="mx_ImageView_name">
+                                { this.props.mxEvent.getContent().body }
+                            </div>
+                            <div className="mx_ImageView_metadata">
+                                Uploaded on { DateUtils.formatDate(new Date(this.props.mxEvent.getTs())) } by { this.props.mxEvent.getSender() }
+                            </div>
+                            <div className="mx_ImageView_download">
+                                Download this file ({ filesize(this.props.mxEvent.getContent().info.size) })
+                            </div>
+                            <div className="mx_ImageView_button">
+                                View full screen
+                            </div>
+                            <div className="mx_ImageView_button">
+                                Redact
+                            </div>
+                            <div className="mx_ImageView_shim">
+                            </div>
                         </div>
                     </div>
                 </div>
