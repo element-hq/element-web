@@ -51,7 +51,7 @@ function checkBrowserFeatures(featureList) {
 }
 
 var validBrowser = checkBrowserFeatures([
-    "displaytable", "flexbox", "es5object", "es5function", "foo"
+    "displaytable", "flexbox", "es5object", "es5function"
 ]);
 
 // We want to support some name / value pairs in the fragment
