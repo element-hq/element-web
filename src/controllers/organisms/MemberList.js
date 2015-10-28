@@ -38,6 +38,7 @@ module.exports = {
     componentWillMount: function() {
         var cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
+        cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("Room", this.onRoom); // invites
     },
 
@@ -94,6 +95,10 @@ module.exports = {
     },
 
     onRoomStateMember: function(ev, state, member) {
+        this._updateList();
+    },
+
+    onRoomMemberName: function(ev, member) {
         this._updateList();
     },
 

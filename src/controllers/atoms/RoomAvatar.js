@@ -41,10 +41,29 @@ module.exports = {
     },
 
     componentWillReceiveProps: function(nextProps) {
-        this._update();
-        this.setState({
-            imageUrl: this._nextUrl()
-        });
+        this.refreshImageUrl();
+    },
+
+    refreshImageUrl: function(nextProps) {
+        // If the list has changed, we start from scratch and re-check, but
+        // don't do so unless the list has changed or we'd re-try fetching
+        // images each time we re-rendered
+        var newList = this.getUrlList();
+        var differs = false;
+        for (var i = 0; i < newList.length && i < this.urlList.length; ++i) {
+            if (this.urlList[i] != newList[i]) differs = true;
+        }
+        if (this.urlList.length != newList.length) differs = true;
+
+        if (differs) {
+            console.log("list differs");
+            this._update();
+            this.setState({
+                imageUrl: this._nextUrl()
+            });
+        } else {
+            console.log("list is the same");
+        }
     },
 
     _update: function() {
