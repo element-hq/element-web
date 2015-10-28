@@ -38,7 +38,7 @@ module.exports = {
             uploadingRoomSettings: false,
             numUnreadMessages: 0,
             draggingFile: false,
-            searching: false,
+            searchResults: [],
         }
     },
 
@@ -357,6 +357,16 @@ module.exports = {
         return WhoIsTyping.whoIsTypingString(this.state.room);
     },
 
+    onSearch: function(term) {
+        MatrixClientPeg.get().searchMessageText(term).then(function(data) {
+            self.setState({
+                searchResults: data,
+            });
+        }, function(error) {
+            // TODO: show dialog or something
+        });
+    },
+
     getEventTiles: function() {
         var DateSeparator = sdk.getComponent('molecules.DateSeparator');
 
@@ -364,6 +374,10 @@ module.exports = {
         var count = 0;
 
         var EventTile = sdk.getComponent('molecules.EventTile');
+
+        if (this.state.searchResults.length) {
+            return ret;
+        }
 
         for (var i = this.state.room.timeline.length-1; i >= 0 && count < this.state.messageCap; --i) {
             var mxEv = this.state.room.timeline[i];

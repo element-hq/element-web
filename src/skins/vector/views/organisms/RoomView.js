@@ -63,10 +63,6 @@ module.exports = React.createClass({
         this.setState(this.getInitialState());
     },
 
-    onSearchClick: function() {
-        this.setState({searching: true});
-    },
-
     onConferenceNotificationClick: function() {
         dis.dispatch({
             action: 'place_call',
@@ -203,7 +199,7 @@ module.exports = React.createClass({
                 aux = <Loader/>;
             }
             else if (this.state.searching) {
-                aux = <SearchBar onCancelClick={this.onCancelClick}/>;
+                aux = <SearchBar ref="search_bar" onCancelClick={this.onCancelClick} onSearch={this.onSearch}/>;
             }
 
             var conferenceCallNotification = null;
