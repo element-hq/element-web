@@ -86,6 +86,10 @@ a:visited {
     cursor: pointer;
 }
 
+.mx_ContextualMenu_spinner {
+    display: block;
+    margin: 0 auto;
+}
 
 .mx_Dialog_background {
     position: fixed;
