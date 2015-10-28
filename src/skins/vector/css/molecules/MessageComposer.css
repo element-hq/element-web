@@ -39,7 +39,6 @@ limitations under the License.
 .mx_MessageComposer .mx_MessageComposer_avatar img {
     margin-top: 18px;
     border-radius: 20px;
-    background-color: #dbdbdb;
 }
 
 .mx_MessageComposer_input {
