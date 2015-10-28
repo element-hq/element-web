@@ -32,11 +32,10 @@ module.exports = React.createClass({
 
     render: function() {
 
-        // NB: This block MUST be the first thing inside the <div> else react won't
-        // know that they refer to the same thing and so will clobber them between
-        // in-call / not-in-call resulting in no inbound audio.
+        // NB: This block MUST have a "key" so React doesn't clobber the elements
+        // between in-call / not-in-call.
         var audioBlock = (
-            <audio ref="ringAudio" loop>
+            <audio ref="ringAudio" key="voip_ring_audio" loop>
                 <source src="media/ring.ogg" type="audio/ogg" />
                 <source src="media/ring.mp3" type="audio/mpeg" />
             </audio>
