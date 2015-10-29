@@ -96,12 +96,9 @@ limitations under the License.
 
 .mx_EventTile_editButton {
     position: absolute;
-    right: 0px;
+    right: 1px;
     top: 15px;
     visibility: hidden;
-    border: 0px;
-    outline: none;
-    margin-bottom: 3px;
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton {
