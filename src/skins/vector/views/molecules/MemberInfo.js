@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var Loader = require("../atoms/Spinner");
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var MemberInfoController = require('matrix-react-sdk/lib/controllers/molecules/MemberInfo')
@@ -26,12 +27,16 @@ module.exports = React.createClass({
     mixins: [MemberInfoController],
 
     render: function() {
-        var interactButton, kickButton, banButton, muteButton, giveModButton;
+        var interactButton, kickButton, banButton, muteButton, giveModButton, spinner;
         if (this.props.member.userId === MatrixClientPeg.get().credentials.userId) {
             interactButton = <div className="mx_ContextualMenu_field" onClick={this.onLeaveClick}>Leave room</div>;
         }
         else {
             interactButton = <div className="mx_ContextualMenu_field" onClick={this.onChatClick}>Start chat</div>;
+        }
+
+        if (this.state.creatingRoom) {
+            spinner = <Loader imgClassName="mx_ContextualMenu_spinner"/>;
         }
 
         if (this.state.can.kick) {
@@ -64,6 +69,7 @@ module.exports = React.createClass({
                 {kickButton}
                 {banButton}
                 {giveModButton}
+                {spinner}
             </div>
         );
     }

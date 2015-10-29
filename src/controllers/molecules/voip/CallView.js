@@ -90,6 +90,7 @@ module.exports = {
         else {
             this.getVideoView().getLocalVideoElement().style.display = "none";
             this.getVideoView().getRemoteVideoElement().style.display = "none";
+            dis.dispatch({action: 'video_fullscreen', fullscreen: false});
         }
     }
 };

@@ -18,26 +18,17 @@ limitations under the License.
 
 var React = require('react');
 
-var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
-
 module.exports = React.createClass({
-    displayName: 'EventAsTextTile',
-
-    statics: {
-        needsSenderProfile: function() {
-            return false;
-        }
-    },
+    displayName: 'Spinner',
 
     render: function() {
-        var text = TextForEvent.textForEvent(this.props.mxEvent);
-        if (text == null || text.length == 0) return null;
-
+        var w = this.props.w || 32;
+        var h = this.props.h || 32;
+        var imgClass = this.props.imgClassName || "";
         return (
-            <div className="mx_EventAsTextTile">
-                {TextForEvent.textForEvent(this.props.mxEvent)}
+            <div>
+                <img src="img/spinner.gif" width={w} height={h} className={imgClass}/>
             </div>
         );
-    },
+    }
 });
-
