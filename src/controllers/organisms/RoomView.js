@@ -363,13 +363,10 @@ module.exports = {
         var filter;
         if (scope === "Room") { // FIXME: should be enum
             filter = {
-                room: {
-                    timeline: {
-                        rooms: [
-                            this.props.roomId
-                        ]
-                    }
-                }
+                // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
+                rooms: [
+                    this.props.roomId
+                ]
             };
         }
 
@@ -414,18 +411,24 @@ module.exports = {
             var resultList = eventIds.map(function(key) { return results[key]; }).sort(function(a, b) { b.rank - a.rank });
             for (var i = 0; i < resultList.length; i++) {
                 var ts1 = resultList[i].result.origin_server_ts;
-                ret.push(<li key={ts1}><DateSeparator ts={ts1}/></li>); //  Rank: {resultList[i].rank}
+                ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); //  Rank: {resultList[i].rank}
                 var mxEv = new Matrix.MatrixEvent(resultList[i].result);
                 if (resultList[i].context.events_before[0]) {
                     var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_before[0]);
-                    ret.push(<li key={mxEv.getId() + "-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                    if (EventTile.supportsEventType(mxEv2.getType())) {
+                        ret.push(<li key={mxEv.getId() + "-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                    }
                 }
-                ret.push(<li key={mxEv.getId() + "+0"}><EventTile mxEvent={mxEv} searchTerm={this.state.searchTerm}/></li>);
+                if (EventTile.supportsEventType(mxEv.getType())) {
+                    ret.push(<li key={mxEv.getId() + "+0"}><EventTile mxEvent={mxEv} searchTerm={this.state.searchTerm}/></li>);
+                }
                 if (resultList[i].context.events_after[0]) {
                     var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_after[0]);
-                    ret.push(<li key={mxEv.getId() + "+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                    if (EventTile.supportsEventType(mxEv2.getType())) {
+                        ret.push(<li key={mxEv.getId() + "+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                    }
                 }
-            }            
+            }
             return ret;
         }
 
