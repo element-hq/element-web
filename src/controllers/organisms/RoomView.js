@@ -360,12 +360,26 @@ module.exports = {
     },
 
     onSearch: function(term, scope) {
+        var filter;
+        if (scope === "Room") { // FIXME: should be enum
+            filter = {
+                room: {
+                    timeline: {
+                        rooms: [
+                            this.props.roomId
+                        ]
+                    }
+                }
+            };
+        }
+
         var self = this;
         MatrixClientPeg.get().search({
             body: {
                 search_categories: {
                     room_events: {
                         search_term: term,
+                        filter: filter,
                         event_context: {
                             before_limit: 1,
                             after_limit: 1,
@@ -411,7 +425,7 @@ module.exports = {
                     var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_after[0]);
                     ret.push(<li key={mxEv.getId() + "," + mxEv2.getId()}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
                 }
-            }
+            }            
             return ret;
         }
 
