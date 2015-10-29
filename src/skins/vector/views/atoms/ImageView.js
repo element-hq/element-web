@@ -18,13 +18,15 @@ limitations under the License.
 
 var React = require('react');
 
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+
 var DateUtils = require('../../../../DateUtils');
 var filesize = require('filesize');
 
 module.exports = React.createClass({
     displayName: 'ImageView',
 
-    // XXX: keyboard shortcuts for managing dialogs should be done by the modal dialog base class omehow, surely...
+    // XXX: keyboard shortcuts for managing dialogs should be done by the modal dialog base class somehow, surely...
     componentDidMount: function() {
         document.addEventListener("keydown", this.onKeyDown);
     },
@@ -39,6 +41,23 @@ module.exports = React.createClass({
             ev.preventDefault();
             this.props.onFinished();
         }
+    },
+
+    onRedactClick: function() {
+        var self = this;
+        MatrixClientPeg.get().redactEvent(
+            this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()
+        ).done(function() {
+            if (self.props.onFinished) self.props.onFinished();
+        }, function(e) {
+            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            // display error message stating you couldn't delete this.
+            var code = e.errcode || e.statusCode;
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: "You cannot delete this image. (" + code + ")"
+            });
+        });
     },
 
     render: function() {
@@ -89,13 +108,17 @@ module.exports = React.createClass({
                             <div className="mx_ImageView_metadata">
                                 Uploaded on { DateUtils.formatDate(new Date(this.props.mxEvent.getTs())) } by { this.props.mxEvent.getSender() }
                             </div>
-                            <div className="mx_ImageView_download">
-                                Download this file ({ filesize(this.props.mxEvent.getContent().info.size) })
-                            </div>
+                            <a className="mx_ImageView_link" href={ this.props.src } target="_blank">
+                                <div className="mx_ImageView_download">
+                                        Download this file ({ filesize(this.props.mxEvent.getContent().info.size) })
+                                </div>
+                            </a>
                             <div className="mx_ImageView_button">
-                                View full screen
+                                <a className="mx_ImageView_link" href={ this.props.src } target="_blank">
+                                    View full screen
+                                </a>
                             </div>
-                            <div className="mx_ImageView_button">
+                            <div className="mx_ImageView_button" onClick={this.onRedactClick}>
                                 Redact
                             </div>
                             <div className="mx_ImageView_shim">
