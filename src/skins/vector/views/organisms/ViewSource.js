@@ -21,6 +21,22 @@ var React = require('react');
 module.exports = React.createClass({
     displayName: 'ViewSource',
 
+    componentDidMount: function() {
+        document.addEventListener("keydown", this.onKeyDown);
+    },
+
+    componentWillUnmount: function() {
+        document.removeEventListener("keydown", this.onKeyDown);
+    },
+
+    onKeyDown: function(ev) {
+        if (ev.keyCode == 27) { // escape
+            ev.stopPropagation();
+            ev.preventDefault();
+            this.props.onFinished();
+        }
+    },
+    
     render: function() {
         return (
             <div className="mx_ViewSource">
