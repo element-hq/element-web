@@ -63,6 +63,10 @@ module.exports = React.createClass({
         this.setState(this.getInitialState());
     },
 
+    onSearchClick: function() {
+        this.setState({ searching: true });
+    },
+
     onConferenceNotificationClick: function() {
         dis.dispatch({
             action: 'place_call',
