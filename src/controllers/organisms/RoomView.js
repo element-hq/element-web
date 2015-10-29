@@ -418,12 +418,12 @@ module.exports = {
                 var mxEv = new Matrix.MatrixEvent(resultList[i].result);
                 if (resultList[i].context.events_before[0]) {
                     var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_before[0]);
-                    ret.push(<li key={mxEv.getId() + "," + mxEv2.getId()}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                    ret.push(<li key={mxEv.getId() + "-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
                 }
                 ret.push(<li key={mxEv.getId()}><EventTile mxEvent={mxEv} searchTerm={this.state.searchTerm}/></li>);
                 if (resultList[i].context.events_after[0]) {
                     var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_after[0]);
-                    ret.push(<li key={mxEv.getId() + "," + mxEv2.getId()}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                    ret.push(<li key={mxEv.getId() + "+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
                 }
             }            
             return ret;
