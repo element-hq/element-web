@@ -90,14 +90,22 @@ module.exports = React.createClass({
             height: displayHeight
         };
 */
-        var style;
+        var style, res;
+
+        if (this.props.width && this.props.height) {
+            style = {
+                width: this.props.width,
+                height: this.props.height,
+            };
+            res = ", " + style.width + "x" + style.height + "px";
+        }
 
         return (
             <div className="mx_ImageView">
                 <div className="mx_ImageView_lhs">
                 </div>
                 <div className="mx_ImageView_content">
-                    <img src={this.props.src} width={this.props.width} height={this.props.height}/>
+                    <img src={this.props.src} style={style}/>
                     <div className="mx_ImageView_labelWrapper">
                         <div className="mx_ImageView_label">
                             <div className="mx_ImageView_shim">
@@ -110,7 +118,8 @@ module.exports = React.createClass({
                             </div>
                             <a className="mx_ImageView_link" href={ this.props.src } target="_blank">
                                 <div className="mx_ImageView_download">
-                                        Download this file ({ filesize(this.props.mxEvent.getContent().info.size) })
+                                        Download this file<br/>
+                                        <span className="mx_ImageView_size">({ filesize(this.props.mxEvent.getContent().info.size) }{ res })</span>
                                 </div>
                             </a>
                             <div className="mx_ImageView_button">
