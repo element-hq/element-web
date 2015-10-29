@@ -45,8 +45,8 @@ limitations under the License.
     /* min-width hack needed for FF */
     min-width: 0px;
     height: 90%;
-    -webkit-flex: 100;
-    flex: 100 100 0;
+    -webkit-flex: 15;
+    flex: 15 15 0;
 
     display: -webkit-flex;
     display: flex;
@@ -58,9 +58,9 @@ limitations under the License.
 
 .mx_ImageView_content img {
     max-width: 100%;
-    /* can't use max-height as it interacts badly with flex on Chrome and doesn't relayout properly until you refresh */
+    /* XXX: max-height interacts badly with flex on Chrome and doesn't relayout properly until you refresh */
     max-height: 100%;
-    /* object-fit hack needed for Chrome */
+    /* object-fit hack needed for Chrome due to Chrome not relaying out until you refresh */
     object-fit: contain;
     background-image: url('img/trans.png');
 }
@@ -86,14 +86,17 @@ limitations under the License.
 .mx_ImageView_name {
     font-size: 20px;
     margin-bottom: 6px;
+    pointer-events: all;
 }
 
 .mx_ImageView_metadata {
     font-size: 16px;
     opacity: 0.5;
+    pointer-events: all;
 }
 
 .mx_ImageView_download {
+    pointer-events: all;
     display: table;
     margin-top: 24px;
     margin-bottom: 6px;
@@ -102,10 +105,15 @@ limitations under the License.
     font-size: 16px;
     padding: 9px;
     border: 1px solid #fff;
-    cursor: pointer;
+}
+
+.mx_ImageView_link {
+    color: #fff ! important;
+    text-decoration: none ! important;
 }
 
 .mx_ImageView_button {
+    pointer-events: all;
     font-size: 16px;
     opacity: 0.5;
     margin-top: 18px;
