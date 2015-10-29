@@ -69,8 +69,6 @@ module.exports = React.createClass({
         var SenderProfile = sdk.getComponent('molecules.SenderProfile');
         var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
 
-        var UnknownMessageTile = sdk.getComponent('molecules.UnknownMessageTile');
-
         var content = this.props.mxEvent.getContent();
         var msgtype = content.msgtype;
 
