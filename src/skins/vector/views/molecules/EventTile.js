@@ -76,7 +76,7 @@ module.exports = React.createClass({
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!EventTileType) {
-            return null;
+            throw new Error("Event type not supported");
         }
 
         var classes = classNames({
