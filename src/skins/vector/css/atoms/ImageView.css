@@ -33,10 +33,10 @@ limitations under the License.
     -webkit-flex: 1;
     flex: 1 1 10%;
     min-width: 60px;
-/*
+    /*
     background-color: #080;
     height: 20px;
-*/
+    */
 }
 
 .mx_ImageView_content {
@@ -45,8 +45,8 @@ limitations under the License.
     /* min-width hack needed for FF */
     min-width: 0px;
     height: 90%;
-    -webkit-flex: 15;
-    flex: 15 15 0;
+    -webkit-flex: 5;
+    flex: 5 5 0;
 
     display: -webkit-flex;
     display: flex;
@@ -62,7 +62,7 @@ limitations under the License.
     max-height: 100%;
     /* object-fit hack needed for Chrome due to Chrome not relaying out until you refresh */
     object-fit: contain;
-    background-image: url('img/trans.png');
+    /* background-image: url('img/trans.png'); */
 }
 
 .mx_ImageView_labelWrapper {
@@ -75,8 +75,11 @@ limitations under the License.
 .mx_ImageView_label {
     text-align: left;
     display: flex;
+    display: -webkit-flex;
     justify-content: center;
+    -webkit-justify-content: center;
     flex-direction: column;
+    -webkit-flex-direction: column;
     padding-left: 60px;
     padding-right: 60px;
     min-height: 100%;
@@ -130,8 +133,8 @@ limitations under the License.
     -webkit-flex: 1;
     flex: 1 1 10%;
     min-width: 300px;
-/*
+    /*
     background-color: #800;
     height: 20px;
-*/
+    */
 }
