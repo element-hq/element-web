@@ -59,7 +59,7 @@ module.exports = React.createClass({
             name = this.props.room.name;
         }
 
-        name = name.replace(":", ":\u200b");
+        name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
         var badge;
         if (this.props.highlight) {
             badge = <div className="mx_RoomTile_badge"/>;
