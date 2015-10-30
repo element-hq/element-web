@@ -36,6 +36,7 @@ module.exports = React.createClass({
     render: function() {
         var content = this.props.mxEvent.getContent();
         var originalBody = content.body;
+        var body;
 
         if (this.props.searchTerm) {
             var lastOffset = 0;
