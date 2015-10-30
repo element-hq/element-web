@@ -21,6 +21,10 @@ var React = require('react');
 module.exports = React.createClass({
     displayName: 'ViewSource',
 
+    propTypes: {
+        onFinished: React.PropTypes.func.isRequired
+    },
+
     componentDidMount: function() {
         document.addEventListener("keydown", this.onKeyDown);
     },

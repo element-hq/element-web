@@ -26,6 +26,10 @@ var filesize = require('filesize');
 module.exports = React.createClass({
     displayName: 'ImageView',
 
+    propTypes: {
+        onFinished: React.PropTypes.func.isRequired
+    },
+
     // XXX: keyboard shortcuts for managing dialogs should be done by the modal dialog base class somehow, surely...
     componentDidMount: function() {
         document.addEventListener("keydown", this.onKeyDown);
