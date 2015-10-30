@@ -23,23 +23,18 @@ var sdk = require('matrix-react-sdk');
 module.exports = React.createClass({
     displayName: 'SearchBar',
 
-    Scope : {
-        Room: 'Room',
-        All: 'All',
-    },
-
     getInitialState: function() {
         return ({
-            scope: this.Scope.Room
+            scope: 'Room'
         });
     },
 
     onThisRoomClick: function() {
-        this.setState({ scope: this.Scope.Room });
+        this.setState({ scope: 'Room' });
     },
 
     onAllRoomsClick: function() {
-        this.setState({ scope: this.Scope.All });
+        this.setState({ scope: 'All' });
     },
 
     onSearchChange: function(e) {
@@ -52,8 +47,8 @@ module.exports = React.createClass({
         return (
             <div className="mx_SearchBar">
                 <input ref="search_term" className="mx_SearchBar_input" type="text" autoFocus={true} placeholder="Search..." onKeyDown={this.onSearchChange}/>
-                <div className={"mx_SearchBar_button" + (this.state.scope !== this.Scope.Room ? " mx_SearchBar_unselected" : "")} onClick={this.onThisRoomClick}>This Room</div>
-                <div className={"mx_SearchBar_button" + (this.state.scope !== this.Scope.All ? " mx_SearchBar_unselected" : "")} onClick={this.onAllRoomsClick}>All Rooms</div>
+                <div className={"mx_SearchBar_button" + (this.state.scope !== 'Room' ? " mx_SearchBar_unselected" : "")} onClick={this.onThisRoomClick}>This Room</div>
+                <div className={"mx_SearchBar_button" + (this.state.scope !== 'All' ? " mx_SearchBar_unselected" : "")} onClick={this.onAllRoomsClick}>All Rooms</div>
                 <img className="mx_SearchBar_cancel" src="img/cancel-black.png" width="18" height="18" onClick={this.props.onCancelClick} />
             </div>
         );
