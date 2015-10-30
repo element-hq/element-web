@@ -1,6 +1,6 @@
 
 function textForMemberEvent(ev) {
-    // XXX: SYJS-16
+    // XXX: SYJS-16 "sender is sometimes null for join messages"
     var senderName = ev.sender ? ev.sender.name : ev.getSender();
     var targetName = ev.target ? ev.target.name : ev.getStateKey();
     var reason = ev.getContent().reason ? (
@@ -58,6 +58,12 @@ function textForTopicEvent(ev) {
     return senderDisplayName + ' changed the topic to, "' + ev.getContent().topic + '"';
 };
 
+function textForRoomNameEvent(ev) {
+    var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+
+    return senderDisplayName + ' changed the room name to "' + ev.getContent().name + '"';
+};
+
 function textForMessageEvent(ev) {
     var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
@@ -93,11 +99,12 @@ function textForCallInviteEvent(event) {
 
 var handlers = {
     'm.room.message': textForMessageEvent,
-    'm.room.topic': textForTopicEvent,
-    'm.room.member': textForMemberEvent,
-    'm.call.invite': textForCallInviteEvent,
-    'm.call.answer': textForCallAnswerEvent,
-    'm.call.hangup': textForCallHangupEvent,
+    'm.room.name':    textForRoomNameEvent,
+    'm.room.topic':   textForTopicEvent,
+    'm.room.member':  textForMemberEvent,
+    'm.call.invite':  textForCallInviteEvent,
+    'm.call.answer':  textForCallAnswerEvent,
+    'm.call.hangup':  textForCallHangupEvent,
 };
 
 module.exports = {
