@@ -30,6 +30,7 @@ var eventTileTypes = {
     'm.call.invite' : 'molecules.EventAsTextTile',
     'm.call.answer' : 'molecules.EventAsTextTile',
     'm.call.hangup' : 'molecules.EventAsTextTile',
+    'm.room.name'   : 'molecules.EventAsTextTile',
     'm.room.topic'  : 'molecules.EventAsTextTile',
 };
 
