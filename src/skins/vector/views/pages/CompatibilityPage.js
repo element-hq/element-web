@@ -45,6 +45,10 @@ module.exports = React.createClass({
                 not be possible and all manner of chaos may be unleashed.
                 </p>
                 <p>
+                Please install <a href={"https://www.google.com/chrome"}>Chrome</a> for
+                the best experience.
+                </p>
+                <p>
                 Though if you like taking risks with your life, you can still try it
                 out by clicking that you understand the risks involved.
                 </p>
