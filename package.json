@@ -31,7 +31,8 @@
     "matrix-react-sdk": "^0.0.1",
     "q": "^1.4.1",
     "react": "^0.13.3",
-    "react-loader": "^1.4.0"
+    "react-loader": "^1.4.0",
+    "sanitize-html": "^1.11.1"
   },
   "devDependencies": {
     "babel": "^5.8.23",

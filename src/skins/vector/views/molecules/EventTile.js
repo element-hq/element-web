@@ -91,7 +91,8 @@ module.exports = React.createClass({
             mx_EventTile_highlight: this.shouldHighlight(),
             mx_EventTile_continuation: this.props.continuation,
             mx_EventTile_last: this.props.last,
-            menu: this.state.menu
+            mx_EventTile_contextual: this.props.contextual,
+            menu: this.state.menu,
         });
         var timestamp = <MessageTimestamp ts={this.props.mxEvent.getTs()} />
         var editButton = (
@@ -126,7 +127,7 @@ module.exports = React.createClass({
                 <div className="mx_EventTile_line">
                     { timestamp }
                     { editButton }
-                    <EventTileType mxEvent={this.props.mxEvent} />
+                    <EventTileType mxEvent={this.props.mxEvent} searchTerm={this.props.searchTerm} />
                 </div>
             </div>
         );
