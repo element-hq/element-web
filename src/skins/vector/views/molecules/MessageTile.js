@@ -17,12 +17,10 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var classNames = require("classnames");
 
 var sdk = require('matrix-react-sdk')
 
 var MessageTileController = require('matrix-react-sdk/lib/controllers/molecules/MessageTile')
-var ContextualMenu = require('../../../../ContextualMenu');
 
 module.exports = React.createClass({
     displayName: 'MessageTile',

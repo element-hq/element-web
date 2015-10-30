@@ -17,7 +17,6 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 var RoomAvatarController = require('matrix-react-sdk/lib/controllers/atoms/RoomAvatar')
 

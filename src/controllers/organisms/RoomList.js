@@ -34,6 +34,7 @@ module.exports = {
         cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
         cli.on("RoomState.events", this.onRoomStateEvents);
+        cli.on("RoomMember.name", this.onRoomMemberName);
 
         var s = this.getRoomLists();
         s.activityMap = {};
@@ -109,6 +110,10 @@ module.exports = {
     },
 
     onRoomStateEvents: function(ev, state) {
+        setTimeout(this.refreshRoomList, 0);
+    },
+
+    onRoomMemberName: function(ev, member) {
         setTimeout(this.refreshRoomList, 0);
     },
 

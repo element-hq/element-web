@@ -39,7 +39,7 @@ module.exports = React.createClass({
     },
 
     onFullscreenClick: function() {
-        dis.dispatch({action: 'video_fullscreen'}, true);
+        dis.dispatch({action: 'video_fullscreen', fullscreen: true}, true);
     },
     
     render: function() {
@@ -60,7 +60,7 @@ module.exports = React.createClass({
 
             var call_buttons;
             if (this.state && this.state.call_state != 'ended') {
-                var muteVideoButton;
+                //var muteVideoButton;
                 var activeCall = (
                     CallHandler.getCallForRoom(this.props.room.roomId)
                 );

@@ -51,8 +51,26 @@ module.exports = React.createClass({
                     return;
                 }
                 var element = this.container.getDOMNode();
-                var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
-                requestMethod.call(element);
+                if (payload.fullscreen) {
+                    var requestMethod = (
+                        element.requestFullScreen ||
+                        element.webkitRequestFullScreen ||
+                        element.mozRequestFullScreen ||
+                        element.msRequestFullscreen
+                    );
+                    requestMethod.call(element);
+                }
+                else {
+                    var exitMethod = (
+                        document.exitFullscreen ||
+                        document.mozCancelFullScreen ||
+                        document.webkitExitFullscreen ||
+                        document.msExitFullscreen
+                    );
+                    if (exitMethod) {
+                        exitMethod.call(document);
+                    }
+                }
                 break;
         }
     },
