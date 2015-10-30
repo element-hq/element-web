@@ -38,7 +38,7 @@ module.exports = React.createClass({
     },
 
     onSearchChange: function(e) {
-        if (e.keyCode === 13) {
+        if (e.keyCode === 13) { // on enter...
             this.props.onSearch(this.refs.search_term.getDOMNode().value, this.state.scope);
         }
     },
