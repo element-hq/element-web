@@ -11,6 +11,7 @@
   "style": "bundle.css",
   "scripts": {
     "reskindex": "reskindex vector -h src/skins/vector/header",
+    "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
     "build:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/bundle.css -c uglifycss --no-watch",
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "NODE_ENV=production webpack -p lib/vector/index.js vector/bundle.js",
@@ -27,6 +28,7 @@
     "filesize": "^3.1.2",
     "flux": "~2.0.3",
     "linkifyjs": "^2.0.0-beta.4",
+    "modernizr": "^3.1.0",
     "matrix-js-sdk": "^0.3.0",
     "matrix-react-sdk": "^0.0.2",
     "q": "^1.4.1",
