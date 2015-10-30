@@ -1,7 +1,6 @@
 node_modules
 vector/bundle.*
 lib
-bundle.css
 .DS_Store
 key.pem
 cert.pem
