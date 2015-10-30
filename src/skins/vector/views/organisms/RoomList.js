@@ -41,22 +41,38 @@ module.exports = React.createClass({
             callElement = <CallView className="mx_MatrixChat_callView"/>
         }
 
-        var recentsLabel = this.props.collapsed ? 
-                           <img style={{cursor: 'pointer'}} onClick={ this.onShowClick } src="img/menu.png" width="27" height="20" alt=">"/> :
-                           "Recents";
+        var expandButton = this.props.collapsed ? 
+                           <img className="mx_RoomList_expandButton" onClick={ this.onShowClick } src="img/menu.png" width="20" alt=">"/> :
+                           null;
+
+        var invitesLabel = this.props.collapsed ? null : "Invites";
+        var recentsLabel = this.props.collapsed ? null : "Recent";
+
+        var invites;
+        if (this.state.inviteList.length) {
+            invites = <div>
+                        <h2 className="mx_RoomList_invitesLabel">{ invitesLabel }</h2>
+                        <div className="mx_RoomList_invites">
+                            {this.makeRoomTiles(this.state.inviteList, true)}
+                        </div>
+                      </div>
+        }
 
         return (
             <div className="mx_RoomList" onScroll={this._repositionTooltip}>
-                {callElement}
-                <h2 className="mx_RoomList_favourites_label">Favourites</h2>
+                { expandButton }
+                { callElement }
+                <h2 className="mx_RoomList_favouritesLabel">Favourites</h2>
                 <RoomDropTarget text="Drop here to favourite"/>
 
-                <h2 className="mx_RoomList_recents_label">{ recentsLabel }</h2>
+                { invites }
+
+                <h2 className="mx_RoomList_recentsLabel">{ recentsLabel }</h2>
                 <div className="mx_RoomList_recents">
-                    {this.makeRoomTiles()}
+                    {this.makeRoomTiles(this.state.roomList, false)}
                 </div>
 
-                <h2 className="mx_RoomList_archive_label">Archive</h2>
+                <h2 className="mx_RoomList_archiveLabel">Archive</h2>
                 <RoomDropTarget text="Drop here to archive"/>
             </div>
         );

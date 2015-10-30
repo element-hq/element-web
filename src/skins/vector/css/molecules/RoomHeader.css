@@ -18,10 +18,10 @@ limitations under the License.
 }
 
 .mx_RoomHeader_wrapper {
-    max-width: 720px;
+    max-width: 960px;
     margin: auto;
-    height: 88px;
-    border-bottom: 1px solid #a8dbf3;
+    height: 83px;
+    border-bottom: 1px solid #eeeeee;
 
     display: -webkit-box;
     display: -moz-box;
@@ -47,7 +47,7 @@ limitations under the License.
 .mx_RoomHeader_textButton {
     height: 48px;
     margin-top: 18px;
-    background-color: #80cef4;
+    background-color: #76cfa6;
     border-radius: 48px;
     margin-right: 8px;
     color: #fff;
@@ -71,11 +71,8 @@ limitations under the License.
     }
 
 .mx_RoomHeader_rightRow {
-    height: 48px;
-    margin-top: 18px;
+    margin-top: 32px;
     background-color: #fff;
-    border-radius: 48px;
-    border: 1px solid #a9dbf4;
 
     -webkit-box-ordinal-group: 3;
     -moz-box-ordinal-group: 3;
@@ -91,8 +88,8 @@ limitations under the License.
 }
 
 .mx_RoomHeader_simpleHeader {
-    line-height: 88px;
-    color: #80cef4;
+    line-height: 83px;
+    color: #76cfa6;
     font-weight: 400;
     font-size: 20px;
     overflow: hidden;
@@ -100,18 +97,39 @@ limitations under the License.
 }
 
 .mx_RoomHeader_name {
+    cursor: pointer;
     vertical-align: middle;
     height: 28px;
-    color: #80cef4;
-    font-weight: 400;
-    font-size: 20px;
-    padding-left: 16px;
+    color: #454545;
+    font-weight: 800;
+    font-size: 24px;
+    padding-left: 8px;
     padding-right: 16px;
     text-overflow: ellipsis;
 }
 
+.mx_RoomHeader_nametext {
+    display: inline-block;
+}
+
+.mx_RoomHeader_settingsButton {
+    display: inline-block;
+    visibility: hidden;
+    position: relative;
+    bottom: 10px;
+    left: 4px;
+}
+
+.mx_RoomHeader_name:hover {
+    color: #76cfa6;
+}
+
+.mx_RoomHeader_name:hover .mx_RoomHeader_settingsButton {
+    visibility: visible;
+}
+
 .mx_RoomHeader_nameEditing {
-    padding-left: 16px;
+    padding-left: 8px;
     padding-right: 16px;
     margin-top: -5px;
 }
@@ -133,9 +151,9 @@ limitations under the License.
     vertical-align: bottom;
     float: left;
     max-height: 38px;
-    color: #70b5d7;  
+    color: #454545;
     font-weight: 300;  
-    padding-left: 16px;
+    padding-left: 8px;
     padding-right: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -153,9 +171,8 @@ limitations under the License.
 }
 
 .mx_RoomHeader_button {
-    height: 48px;
     display: table-cell;
-    vertical-align: middle;
+    vertical-align: top;
     padding-left: 8px;
     padding-right: 8px;
 }

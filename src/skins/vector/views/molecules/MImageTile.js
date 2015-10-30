@@ -57,8 +57,9 @@ module.exports = React.createClass({
             Modal.createDialog(ImageView, {
                 src: httpUrl,
                 width: content.info.w,
-                height: content.info.h
-            });
+                height: content.info.h,
+                mxEvent: this.props.mxEvent,
+            }, "mx_Dialog_lightbox");
         }
     },
 
@@ -67,7 +68,7 @@ module.exports = React.createClass({
         var cli = MatrixClientPeg.get();
 
         var thumbHeight = null;
-        if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, 320, 240);
+        if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, 480, 360);
 
         var imgStyle = {};
         if (thumbHeight) imgStyle['height'] = thumbHeight;
@@ -75,7 +76,7 @@ module.exports = React.createClass({
         return (
             <span className="mx_MImageTile">
                 <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
-                    <img className="mx_MImageTile_thumbnail" src={cli.mxcUrlToHttp(content.url, 320, 240)} alt={content.body} style={imgStyle} />
+                    <img className="mx_MImageTile_thumbnail" src={cli.mxcUrlToHttp(content.url, 480, 360)} alt={content.body} style={imgStyle} />
                 </a>
                 <div className="mx_MImageTile_download">
                     <a href={cli.mxcUrlToHttp(content.url)} target="_blank">

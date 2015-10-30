@@ -17,40 +17,16 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-
-var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var DateUtils = require('../../../../DateUtils');
 
 module.exports = React.createClass({
     displayName: 'MessageTimestamp',
-
-    formatDate: function(date) {
-        // date.toLocaleTimeString is completely system dependent.
-        // just go 24h for now
-        function pad(n) {
-            return (n < 10 ? '0' : '') + n;
-        }
-
-        var now = new Date();
-        if (date.toDateString() === now.toDateString()) {
-            return pad(date.getHours()) + ':' + pad(date.getMinutes());
-        }
-        else if (now.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-            return days[date.getDay()] + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
-        }
-        else if (now.getFullYear() === date.getFullYear()) {
-            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + (date.getDay()+1) + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
-        }
-        else {
-            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + (date.getDay()+1) + " " + date.getFullYear() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
-        }
-    },
 
     render: function() {
         var date = new Date(this.props.ts);
         return (
             <span className="mx_MessageTimestamp">
-                { this.formatDate(date) }
+                { DateUtils.formatDate(date) }
             </span>
         );
     },

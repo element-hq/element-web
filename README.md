@@ -28,7 +28,7 @@ setup above, and your changes will cause an instant rebuild.
 
 However, all serious development on Vector happens on the `develop` branch.  This typically
 depends on the `develop` snapshot versions of `matrix-react-sdk` and `matrix-js-sdk`
-too, which isn't expressed in Vector's `package.json`.  To do this, check out
+too, which isn't handled by Vector's `package.json`.  To get the right dependencies, check out
 the `develop` branches of these libraries and then use `npm link` to tell Vector
 about them:
 

@@ -36,13 +36,13 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    -webkit-flex: 0 0 88px;
-    flex: 0 0 88px;
+    -webkit-flex: 0 0 83px;
+    flex: 0 0 83px;
 }
 
 .mx_RoomView_fileDropTarget {
     min-width: 0px;
-    max-width: 720px;
+    max-width: 960px;
     width: 100%;
     font-size: 20px;
     text-align: center;
@@ -61,10 +61,10 @@ limitations under the License.
     border-top-right-radius: 10px;
 
     background-color: rgba(255, 255, 255, 0.9);
-    border: 2px dashed #80cef4;
+    border: 2px #e1dddd solid;
     border-bottom: none;
     position: absolute;
-    top: 88px;
+    top: 83px;
     bottom: 0px;
     z-index: 3000;
 }
@@ -84,12 +84,12 @@ limitations under the License.
     order: 2;
 
     min-width: 0px;
-    max-width: 720px;
+    max-width: 960px;
     width: 100%;
     margin: auto;
 
     overflow: auto;
-    border-bottom: 1px solid #a8dbf3;
+    border-bottom: 1px solid #eee;
 
     -webkit-flex: 0 0 auto;
     flex: 0 0 auto;
@@ -111,7 +111,7 @@ limitations under the License.
 }
 
 .mx_RoomView_messageListWrapper {
-    max-width: 720px;
+    max-width: 960px;
     margin: auto;
 }
 
@@ -129,8 +129,9 @@ limitations under the License.
     clear: both;
     margin-top: 32px;
     margin-bottom: 8px;
+    margin-left: 54px;
     padding-bottom: 6px;
-    border-bottom: 1px solid #a8dbf3;
+    border-bottom: 1px solid #eee;
 }
 
 .mx_RoomView_invitePrompt {
@@ -141,7 +142,7 @@ limitations under the License.
     order: 2;
 
     min-width: 0px;
-    max-width: 720px;
+    max-width: 960px;
     width: 100%;
     margin: auto;
 
@@ -157,44 +158,45 @@ limitations under the License.
     order: 4;
 
     width: 100%;
-    -webkit-flex: 0 0 58px;
-    flex: 0 0 58px;
+    -webkit-flex: 0 0 36px;
+    flex: 0 0 36px;
 }
 
 .mx_RoomView_statusAreaBox {
-    max-width: 720px;
+    max-width: 960px;
     margin: auto;
-    border-top: 1px solid #a8dbf3;
+}
+
+.mx_RoomView_statusAreaBox_line {
+    border-top: 1px solid #eee;
+    margin-left: 54px;
+    height: 1px;
 }
 
 .mx_RoomView_unreadMessagesBar {
-    margin-top: 13px;
-    color: #fff;
-    font-weight: bold;
-    background-color: #ff0064;
-    border-radius: 30px;
-    height: 30px;
-    line-height: 30px;
+    color: #ff0064;
     cursor: pointer;
+    margin-top: 5px;
 }
 
 .mx_RoomView_unreadMessagesBar img {
-    padding-left: 22px;
+    padding-left: 10px;
     padding-right: 22px;
+    vertical-align: middle;
 }
 
 .mx_RoomView_typingBar {
-    margin-top: 17px;
-    margin-left: 56px;
-    color: #818794;
+    margin-top: 10px;
+    margin-left: 54px;
+    color: #4a4a4a;
+    opacity: 0.5;
 }
 
-.mx_RoomView_typingBar img {
-    padding-left: 12px;
-    padding-right: 12px;
-    margin-left: -64px;
-    margin-top: -7px;
-    float: left;    
+.mx_RoomView_typingImage {
+    display: inline;
+    margin-left: -38px;
+    margin-top: -4px;
+    float: left;
 }
 
 .mx_RoomView .mx_MessageComposer {
@@ -205,44 +207,46 @@ limitations under the License.
     order: 5;
 
     width: 100%;
-    -webkit-flex: 0 0 63px;
-    flex: 0 0 63px;
+    -webkit-flex: 0 0 70px;
+    flex: 0 0 70px;
     margin-right: 2px;
 }
 
 .mx_RoomView_uploadProgressOuter {
-    width: 100%;
-    background-color: rgba(169, 219, 244, 0.5);
     height: 4px;
+    margin-left: 54px;
+    margin-top: -1px;
 }
 
 .mx_RoomView_uploadProgressInner {
-    background-color: #80cef4;
+    background-color: #76cfa6;
     height: 4px;
 }
 
 .mx_RoomView_uploadFilename {
-    margin-top: 15px;
+    margin-top: 5px;
     margin-left: 56px;
+    opacity: 0.5;
+    color: #4a4a4a;
 }
 
 .mx_RoomView_uploadIcon {
     float: left;
-    margin-top: 6px;
-    margin-left: 5px;
+    margin-top: 1px;
+    margin-left: 14px;
 }
 
 .mx_RoomView_uploadCancel {
     float: right;
-    margin-top: 6px;
+    margin-top: 5px;
     margin-right: 10px;
 }
 
 .mx_RoomView_uploadBytes {
     float: right;    
-    opacity: 0.5;
-    margin-top: 15px;
-    margin-right: 10px;
+    margin-top: 5px;
+    margin-right: 30px;
+    color: #76cfa6;
 }
 
 .mx_RoomView_ongoingConfCallNotification {
@@ -251,5 +255,5 @@ limitations under the License.
     background-color: #ff0064;
     color: #fff;
     font-weight: bold;
-    padding: 6px;
+    padding: 6px 0;
 }

@@ -20,7 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk')
-var ContextualMenu = require('../../../../ContextualMenu');
+var dis = require('matrix-react-sdk/lib/dispatcher');
 var MemberTileController = require('matrix-react-sdk/lib/controllers/molecules/MemberTile')
 
 // The Lato WOFF doesn't include sensible combining diacritics, so Chrome chokes on rendering them.
@@ -58,16 +58,9 @@ module.exports = React.createClass({
     },
 
     onClick: function(e) {
-        var self = this;
-        self.setState({ 'menu': true });
-        var MemberInfo = sdk.getComponent('molecules.MemberInfo');
-        ContextualMenu.createMenu(MemberInfo, {
-            member: self.props.member,
-            right: window.innerWidth - e.pageX,
-            top: e.pageY,
-            onFinished: function() {
-                self.setState({ 'menu': false });
-            }
+        dis.dispatch({
+            action: 'view_user',
+            member: this.props.member,
         });
     },
 
@@ -119,10 +112,10 @@ module.exports = React.createClass({
         var isMyUser = MatrixClientPeg.get().credentials.userId == this.props.member.userId;
 
         var power;
-        if (this.props.member && this.props.member.powerLevelNorm > 0) {
-            var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
-            power = <img src={ img } className="mx_MemberTile_power" width="48" height="48" alt=""/>;
-        }
+        // if (this.props.member && this.props.member.powerLevelNorm > 0) {
+        //     var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
+        //     power = <img src={ img } className="mx_MemberTile_power" width="44" height="44" alt=""/>;
+        // }
         var presenceClass = "mx_MemberTile_offline";
         var mainClassName = "mx_MemberTile ";
         if (this.props.member.user) {
@@ -134,13 +127,13 @@ module.exports = React.createClass({
             }
         }
         mainClassName += presenceClass;
-        if (this.state.hover || this.state.menu) {
+        if (this.state.hover) {
             mainClassName += " mx_MemberTile_hover";
         }
 
         var name = this.props.member.name;
         // if (isMyUser) name += " (me)"; // this does nothing other than introduce line wrapping and pain
-        var leave = isMyUser ? <img className="mx_MemberTile_leave" src="img/delete.png" width="10" height="10" onClick={this.onLeaveClick}/> : null;
+        //var leave = isMyUser ? <img className="mx_MemberTile_leave" src="img/delete.png" width="10" height="10" onClick={this.onLeaveClick}/> : null;
 
         var nameClass = "mx_MemberTile_name";
         if (zalgo.test(name)) {
@@ -148,7 +141,7 @@ module.exports = React.createClass({
         }
 
         var nameEl;
-        if (this.state.hover || this.state.menu) {
+        if (this.state.hover) {
             var presence;
             // FIXME: make presence data update whenever User.presence changes...
             var active = this.props.member.user ? ((Date.now() - (this.props.member.user.lastPresenceTs - this.props.member.user.lastActiveAgo)) || -1) : -1;
@@ -161,8 +154,8 @@ module.exports = React.createClass({
 
             nameEl =
                 <div className="mx_MemberTile_details">
-                    { leave }
-                    <div className="mx_MemberTile_userId">{ this.props.member.userId }</div>
+                    <img className="mx_MemberTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
+                    <div className="mx_MemberTile_userId">{ name }</div>
                     { presence }
                 </div>
         }
@@ -177,7 +170,7 @@ module.exports = React.createClass({
         return (
             <div className={mainClassName} title={ this.getPowerLabel() } onClick={ this.onClick } onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">
-                    <MemberAvatar member={this.props.member} />
+                    <MemberAvatar member={this.props.member} width={36} height={36} />
                      { power }
                 </div>
                 { nameEl }

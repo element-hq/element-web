@@ -69,6 +69,7 @@ module.exports = React.createClass({
             });
         }, function(err) {
             console.error("Failed to join room: %s", JSON.stringify(err));
+            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to join room",
                 description: err.message

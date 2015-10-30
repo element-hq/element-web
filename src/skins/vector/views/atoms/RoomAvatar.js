@@ -33,7 +33,7 @@ module.exports = React.createClass({
     },
 
     getFallbackAvatar: function() {
-        var images = [ '80cef4', '50e2c2', 'f4c371' ];
+        var images = [ '76cfa6', '50e2c2', 'f4c371' ];
         var total = 0;
         for (var i = 0; i < this.props.room.roomId.length; ++i) {
             total += this.props.room.roomId.charCodeAt(i);
