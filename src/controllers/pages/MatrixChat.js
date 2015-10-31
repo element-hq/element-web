@@ -344,6 +344,9 @@ module.exports = {
 
     onKeyDown: function(ev) {
         if (ev.altKey) {
+            /*
+            // Remove this for now as ctrl+alt = alt-gr so this breaks keyboards which rely on alt-gr for numbers
+            // Will need to find a better meta key if anyone actually cares about using this.
             if (ev.ctrlKey && ev.keyCode > 48 && ev.keyCode < 58) {
                 dis.dispatch({
                     action: 'view_indexed_room',
@@ -353,6 +356,7 @@ module.exports = {
                 ev.preventDefault();
                 return;
             }
+            */
             switch (ev.keyCode) {
                 case 38:
                     dis.dispatch({action: 'view_prev_room'});
