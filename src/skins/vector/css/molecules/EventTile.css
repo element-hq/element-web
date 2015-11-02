@@ -17,20 +17,19 @@ limitations under the License.
 .mx_EventTile {
     max-width: 100%;
     clear: both;
-    margin-top: 32px;
+    margin-top: 24px;
     margin-left: 56px;
 }
 
 .mx_EventTile_avatar {
-    padding-left: 12px;
+    padding-left: 18px;
     padding-right: 12px;
     margin-left: -64px;
-    margin-top: -7px;
+    margin-top: -4px;
     float: left;
 }
 
 .mx_EventTile_avatar img {
-    background-color: #dbdbdb;
     border-radius: 20px;
     border: 0px;
 }
@@ -48,10 +47,13 @@ limitations under the License.
 }
 
 .mx_EventTile .mx_MessageTimestamp {
-    color: #454545;
-    opacity: 0.5;
-    font-size: 14px;
+    color: #acacac;
+    font-size: 12px;
     float: right;
+}
+
+.mx_EventTile_line {
+    position: relative;
 }
 
 .mx_EventTile_content {
@@ -59,8 +61,16 @@ limitations under the License.
     display: block;
 }
 
-.mx_EventTile_notice .mx_MessageTile_content {
-    opacity: 0.5;
+.mx_MessageTile_content {
+    display: block;
+    margin-right: 100px;
+}
+
+.mx_MessageTile_searchHighlight {
+    background-color: #76cfa6;
+    color: #fff;
+    border-radius: 5px;
+    padding: 4px;
 }
 
 .mx_EventTile_sending {
@@ -75,38 +85,41 @@ limitations under the License.
     color: #FF0064;
 }
 
+.mx_EventTile_contextual {
+    opacity: 0.4;
+}
+
 .mx_EventTile_msgOption {
     float: right;
 }
 
 .mx_MessageTimestamp {
-    display: none;
+    visibility: hidden;
 }
 
 .mx_EventTile_last .mx_MessageTimestamp {
-    display: block;
+    visibility: visible;
 }
 
 .mx_EventTile:hover .mx_MessageTimestamp {
-    display: block;
+    visibility: visible;
 }
 
 .mx_EventTile_editButton {
-    float: right;
-    display: none;
-    border: 0px;
-    outline: none;
-    margin-right: 3px;
+    position: absolute;
+    right: 1px;
+    top: 15px;
+    visibility: hidden;
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton {
-    display: inline-block;
+    visibility: visible;
 }
 
 .mx_EventTile.menu .mx_EventTile_editButton {
-    display: inline-block;
+    visibility: visible;
 }
 
 .mx_EventTile.menu .mx_MessageTimestamp {
-    display: inline-block;
+    visibility: visible;
 }

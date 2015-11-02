@@ -63,6 +63,29 @@ module.exports = React.createClass({
         this.setState(this.getInitialState());
     },
 
+    onRejectButtonClicked: function(ev) {
+        var self = this;
+        this.setState({
+            rejecting: true
+        });
+        MatrixClientPeg.get().leave(this.props.roomId).done(function() {
+            dis.dispatch({ action: 'view_next_room' });
+            self.setState({
+                rejecting: false
+            });
+        }, function(err) {
+            console.error("Failed to reject invite: %s", err);
+            self.setState({
+                rejecting: false,
+                rejectError: err
+            });
+        });
+    },
+
+    onSearchClick: function() {
+        this.setState({ searching: true });
+    },
+
     onConferenceNotificationClick: function() {
         dis.dispatch({
             action: 'place_call',
@@ -89,6 +112,7 @@ module.exports = React.createClass({
         var MessageComposer = sdk.getComponent('molecules.MessageComposer');
         var CallView = sdk.getComponent("molecules.voip.CallView");
         var RoomSettings = sdk.getComponent("molecules.RoomSettings");
+        var SearchBar = sdk.getComponent("molecules.SearchBar");
 
         if (!this.state.room) {
             if (this.props.roomId) {
@@ -106,7 +130,7 @@ module.exports = React.createClass({
 
         var myUserId = MatrixClientPeg.get().credentials.userId;
         if (this.state.room.currentState.members[myUserId].membership == 'invite') {
-            if (this.state.joining) {
+            if (this.state.joining || this.state.rejecting) {
                 return (
                     <div className="mx_RoomView">
                         <Loader />
@@ -116,6 +140,7 @@ module.exports = React.createClass({
                 var inviteEvent = this.state.room.currentState.members[myUserId].events.member.event;
                 // XXX: Leaving this intentionally basic for now because invites are about to change totally
                 var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
+                var rejectErrorText = this.state.rejectError ? "Failed to reject invite!" : "";
                 return (
                     <div className="mx_RoomView">
                         <RoomHeader ref="header" room={this.state.room} simpleHeader="Room invite"/>
@@ -123,7 +148,9 @@ module.exports = React.createClass({
                             <div>{inviteEvent.user_id} has invited you to a room</div>
                             <br/>
                             <button ref="joinButton" onClick={this.onJoinButtonClicked}>Join</button>
+                            <button onClick={this.onRejectButtonClicked}>Reject</button>
                             <div className="error">{joinErrorText}</div>
+                            <div className="error">{rejectErrorText}</div>
                         </div>
                     </div>
                 );
@@ -159,8 +186,8 @@ module.exports = React.createClass({
                         <div className="mx_RoomView_uploadProgressOuter">
                             <div className="mx_RoomView_uploadProgressInner" style={innerProgressStyle}></div>
                         </div>
-                        <img className="mx_RoomView_uploadIcon" src="img/fileicon.png" width="40" height="40"/>
-                        <img className="mx_RoomView_uploadCancel" src="img/cancel.png" width="40" height="40"/>
+                        <img className="mx_RoomView_uploadIcon" src="img/fileicon.png" width="17" height="22"/>
+                        <img className="mx_RoomView_uploadCancel" src="img/cancel.png" width="18" height="18"/>
                         <div className="mx_RoomView_uploadBytes">
                             { uploadedSize } / { totalSize }
                         </div>
@@ -175,7 +202,7 @@ module.exports = React.createClass({
                 if (unreadMsgs) {
                     statusBar = (
                         <div className="mx_RoomView_unreadMessagesBar" onClick={ this.scrollToBottom }>
-                            <img src="img/newmessages.png" width="10" height="12" alt=""/>
+                            <img src="img/newmessages.png" width="24" height="24" alt=""/>
                             {unreadMsgs}
                         </div>
                     );
@@ -183,19 +210,22 @@ module.exports = React.createClass({
                 else if (typingString) {
                     statusBar = (
                         <div className="mx_RoomView_typingBar">
-                            <img src="img/typing.png" width="40" height="40" alt=""/>
+                            <div className="mx_RoomView_typingImage">...</div>
                             {typingString}
                         </div>
                     );
                 }
             }
 
-            var roomEdit = null;
+            var aux = null;
             if (this.state.editingRoomSettings) {
-                roomEdit = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
+                aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
             }
-            if (this.state.uploadingRoomSettings) {
-                roomEdit = <Loader/>;
+            else if (this.state.uploadingRoomSettings) {
+                aux = <Loader/>;
+            }
+            else if (this.state.searching) {
+                aux = <SearchBar ref="search_bar" onCancelClick={this.onCancelClick} onSearch={this.onSearch}/>;
             }
 
             var conferenceCallNotification = null;
@@ -211,7 +241,7 @@ module.exports = React.createClass({
             if (this.state.draggingFile) {
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
                                     <div className="mx_RoomView_fileDropTargetLabel">
-                                        <img src="img/upload-big.png" width="46" height="61" alt="Drop File Here"/><br/>
+                                        <img src="img/upload-big.png" width="43" height="57" alt="Drop File Here"/><br/>
                                         Drop File Here
                                     </div>
                                  </div>;
@@ -219,12 +249,12 @@ module.exports = React.createClass({
 
             return (
                 <div className="mx_RoomView">
-                    <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings}
+                    <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
                         onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} />
                     <div className="mx_RoomView_auxPanel">
                         <CallView room={this.state.room}/>
                         { conferenceCallNotification }
-                        { roomEdit }
+                        { aux }
                     </div>
                     <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
                         <div className="mx_RoomView_messageListWrapper">
@@ -238,6 +268,7 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_RoomView_statusArea">
                         <div className="mx_RoomView_statusAreaBox">
+                            <div className="mx_RoomView_statusAreaBox_line"></div>
                             {statusBar}
                         </div>
                     </div>

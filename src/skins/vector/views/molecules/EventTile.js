@@ -24,12 +24,15 @@ var sdk = require('matrix-react-sdk')
 var EventTileController = require('matrix-react-sdk/lib/controllers/molecules/EventTile')
 var ContextualMenu = require('../../../../ContextualMenu');
 
+var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
+
 var eventTileTypes = {
     'm.room.message': 'molecules.MessageTile',
     'm.room.member' : 'molecules.EventAsTextTile',
     'm.call.invite' : 'molecules.EventAsTextTile',
     'm.call.answer' : 'molecules.EventAsTextTile',
     'm.call.hangup' : 'molecules.EventAsTextTile',
+    'm.room.name'   : 'molecules.EventAsTextTile',
     'm.room.topic'  : 'molecules.EventAsTextTile',
 };
 
@@ -38,8 +41,13 @@ module.exports = React.createClass({
     mixins: [EventTileController],
 
     statics: {
-        supportsEventType: function(et) {
-            return eventTileTypes[et] !== undefined;
+        haveTileForEvent: function(e) {
+            if (eventTileTypes[e.getType()] == undefined) return false;
+            if (eventTileTypes[e.getType()] == 'molecules.EventAsTextTile') {
+                return TextForEvent.textForEvent(e) !== '';
+            } else {
+                return true;
+            }
         }
     },
 
@@ -76,7 +84,7 @@ module.exports = React.createClass({
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!EventTileType) {
-            return null;
+            throw new Error("Event type not supported");
         }
 
         var classes = classNames({
@@ -88,12 +96,13 @@ module.exports = React.createClass({
             mx_EventTile_highlight: this.shouldHighlight(),
             mx_EventTile_continuation: this.props.continuation,
             mx_EventTile_last: this.props.last,
-            menu: this.state.menu
+            mx_EventTile_contextual: this.props.contextual,
+            menu: this.state.menu,
         });
         var timestamp = <MessageTimestamp ts={this.props.mxEvent.getTs()} />
         var editButton = (
             <input
-                type="image" src="img/edit.png" alt="Edit"
+                type="image" src="img/edit.png" alt="Edit" width="14" height="14"
                 className="mx_EventTile_editButton" onClick={this.onEditClicked}
             />
         );
@@ -108,7 +117,7 @@ module.exports = React.createClass({
             if (this.props.mxEvent.sender) {
                 avatar = (
                     <div className="mx_EventTile_avatar">
-                        <MemberAvatar member={this.props.mxEvent.sender} />
+                        <MemberAvatar member={this.props.mxEvent.sender} width={24} height={24} />
                     </div>
                 );
             }
@@ -120,10 +129,10 @@ module.exports = React.createClass({
             <div className={classes}>
                 { avatar }
                 { sender }
-                <div>
+                <div className="mx_EventTile_line">
                     { timestamp }
                     { editButton }
-                    <EventTileType mxEvent={this.props.mxEvent} />
+                    <EventTileType mxEvent={this.props.mxEvent} searchTerm={this.props.searchTerm} />
                 </div>
             </div>
         );
