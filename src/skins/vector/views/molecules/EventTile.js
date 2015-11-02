@@ -20,6 +20,7 @@ var React = require('react');
 var classNames = require("classnames");
 
 var sdk = require('matrix-react-sdk')
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg')
 
 var EventTileController = require('matrix-react-sdk/lib/controllers/molecules/EventTile')
 var ContextualMenu = require('../../../../ContextualMenu');
@@ -72,6 +73,25 @@ module.exports = React.createClass({
         this.setState({menu: true});
     },
 
+    getReadAvatars: function() {
+        var avatars = [];
+
+        var room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+
+        var userIds = room.getUsersReadUpTo(this.props.mxEvent);
+
+        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+
+        for (var i = 0; i < userIds.length; ++i) {
+            var member = room.getMember(userIds[i]);
+            avatars.push(
+                <MemberAvatar member={member} width={14} height={14} resizeMethod="crop" />
+            );
+        }
+
+        return <span>{ avatars }</span>;
+    },
+
     render: function() {
         var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
         var SenderProfile = sdk.getComponent('molecules.SenderProfile');
@@ -112,6 +132,8 @@ module.exports = React.createClass({
         else if (msgtype === 'm.video') aux = "sent a video";
         else if (msgtype === 'm.file') aux = "uploaded a file";
 
+        var readAvatars = this.getReadAvatars();
+
         var avatar, sender;
         if (!this.props.continuation) {
             if (this.props.mxEvent.sender) {
@@ -132,6 +154,7 @@ module.exports = React.createClass({
                 <div className="mx_EventTile_line">
                     { timestamp }
                     { editButton }
+                    { readAvatars }
                     <EventTileType mxEvent={this.props.mxEvent} searchTerm={this.props.searchTerm} />
                 </div>
             </div>
