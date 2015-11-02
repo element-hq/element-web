@@ -230,9 +230,13 @@ module.exports = React.createClass({
 
             var conferenceCallNotification = null;
             if (this.state.displayConfCallNotification) {
+                var supportedText;
+                if (!MatrixClientPeg.get().supportsVoip()) {
+                    supportedText = " (unsupported)";
+                }
                 conferenceCallNotification = (
                     <div className="mx_RoomView_ongoingConfCallNotification" onClick={this.onConferenceNotificationClick}>
-                        Ongoing conference call
+                        Ongoing conference call {supportedText}
                     </div>
                 );
             }
