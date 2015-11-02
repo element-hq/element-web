@@ -24,6 +24,8 @@ var sdk = require('matrix-react-sdk')
 var EventTileController = require('matrix-react-sdk/lib/controllers/molecules/EventTile')
 var ContextualMenu = require('../../../../ContextualMenu');
 
+var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
+
 var eventTileTypes = {
     'm.room.message': 'molecules.MessageTile',
     'm.room.member' : 'molecules.EventAsTextTile',
@@ -39,8 +41,13 @@ module.exports = React.createClass({
     mixins: [EventTileController],
 
     statics: {
-        supportsEventType: function(et) {
-            return eventTileTypes[et] !== undefined;
+        haveTileForEvent: function(e) {
+            if (eventTileTypes[e.getType()] == undefined) return false;
+            if (eventTileTypes[e.getType()] == 'molecules.EventAsTextTile') {
+                return TextForEvent.textForEvent(e) !== '';
+            } else {
+                return true;
+            }
         }
     },
 

@@ -415,16 +415,16 @@ module.exports = {
                 var mxEv = new Matrix.MatrixEvent(resultList[i].result);
                 if (resultList[i].context.events_before[0]) {
                     var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_before[0]);
-                    if (EventTile.supportsEventType(mxEv2.getType())) {
+                    if (EventTile.haveTileForEvent(mxEv2)) {
                         ret.push(<li key={mxEv.getId() + "-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
                     }
                 }
-                if (EventTile.supportsEventType(mxEv.getType())) {
+                if (EventTile.haveTileForEvent(mxEv)) {
                     ret.push(<li key={mxEv.getId() + "+0"}><EventTile mxEvent={mxEv} searchTerm={this.state.searchTerm}/></li>);
                 }
                 if (resultList[i].context.events_after[0]) {
                     var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_after[0]);
-                    if (EventTile.supportsEventType(mxEv2.getType())) {
+                    if (EventTile.haveTileForEvent(mxEv2)) {
                         ret.push(<li key={mxEv.getId() + "+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
                     }
                 }
@@ -435,7 +435,7 @@ module.exports = {
         for (var i = this.state.room.timeline.length-1; i >= 0 && count < this.state.messageCap; --i) {
             var mxEv = this.state.room.timeline[i];
 
-            if (!EventTile.supportsEventType(mxEv.getType())) {
+            if (!EventTile.haveTileForEvent(mxEv)) {
                 continue;
             }
 
