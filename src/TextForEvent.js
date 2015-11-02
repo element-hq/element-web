@@ -1,3 +1,4 @@
+var MatrixClientPeg = require("./MatrixClientPeg");
 
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
@@ -78,12 +79,14 @@ function textForMessageEvent(ev) {
 
 function textForCallAnswerEvent(event) {
     var senderName = event.sender ? event.sender.name : "Someone";
-    return senderName + " answered the call.";
+    var supported = MatrixClientPeg.get().supportsVoip() ? "" : " (not supported by this browser)";
+    return senderName + " answered the call." + supported;
 };
 
 function textForCallHangupEvent(event) {
     var senderName = event.sender ? event.sender.name : "Someone";
-    return senderName + " ended the call.";
+    var supported = MatrixClientPeg.get().supportsVoip() ? "" : " (not supported by this browser)";
+    return senderName + " ended the call." + supported;
 };
 
 function textForCallInviteEvent(event) {
@@ -94,7 +97,8 @@ function textForCallInviteEvent(event) {
             event.getContent().offer.sdp.indexOf('m=video') !== -1) {
         type = "video";
     }
-    return senderName + " placed a " + type + " call.";
+    var supported = MatrixClientPeg.get().supportsVoip() ? "" : " (not supported by this browser)";
+    return senderName + " placed a " + type + " call." + supported;
 };
 
 var handlers = {

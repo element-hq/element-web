@@ -173,17 +173,27 @@ function _onAction(payload) {
             console.error("Unknown conf call type: %s", payload.type);
         }
     }
+    var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
 
     switch (payload.action) {
         case 'place_call':
             if (module.exports.getAnyActiveCall()) {
-                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Existing Call",
                     description: "You are already in a call."
                 });
                 return; // don't allow >1 call to be placed.
             }
+
+            // if the runtime env doesn't do VoIP, whine.
+            if (!MatrixClientPeg.get().supportsVoip()) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "VoIP is unsupported",
+                    description: "You cannot place VoIP calls in this browser."
+                });
+                return;
+            }
+
             var room = MatrixClientPeg.get().getRoom(payload.room_id);
             if (!room) {
                 console.error("Room %s does not exist.", payload.room_id);
@@ -218,11 +228,17 @@ function _onAction(payload) {
         case 'place_conference_call':
             console.log("Place conference call in %s", payload.room_id);
             if (!Modulator.hasConferenceHandler()) {
-                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     description: "Conference calls are not supported in this client"
                 });
-            } else {
+            }
+            else if (!MatrixClientPeg.get().supportsVoip()) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "VoIP is unsupported",
+                    description: "You cannot place VoIP calls in this browser."
+                });
+            }
+            else {
                 var ConferenceHandler = Modulator.getConferenceHandler();
                 ConferenceHandler.createNewMatrixCall(
                     MatrixClientPeg.get(), payload.room_id
@@ -238,6 +254,12 @@ function _onAction(payload) {
                 payload.call.hangup("busy");
                 return; // don't allow >1 call to be received, hangup newer one.
             }
+
+            // if the runtime env doesn't do VoIP, stop here.
+            if (!MatrixClientPeg.get().supportsVoip()) {
+                return;
+            }
+
             var call = payload.call;
             _setCallListeners(call);
             _setCallState(call, call.roomId, "ringing");
