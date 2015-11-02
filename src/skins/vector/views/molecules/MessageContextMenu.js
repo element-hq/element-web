@@ -84,7 +84,7 @@ module.exports = React.createClass({
         else {
             redactButton = (
                 <div className="mx_ContextualMenu_field" onClick={this.onRedactClick}>
-                    Delete
+                    Redact
                 </div>
             );
         }

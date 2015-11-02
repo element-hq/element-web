@@ -36,11 +36,9 @@ module.exports = {
         cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
 
-        var rooms = this.getRoomList();
-        this.setState({
-            roomList: rooms,
-            activityMap: {}
-        });
+        var s = this.getRoomLists();
+        s.activityMap = {};
+        this.setState(s);
     },
 
     componentDidMount: function() {
@@ -87,9 +85,7 @@ module.exports = {
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (toStartOfTimeline) return;
 
-        var newState = {
-            roomList: this.getRoomList()
-        };
+        var newState = this.getRoomLists();
         if (
             room.roomId != this.props.selectedRoom &&
             ev.getSender() != MatrixClientPeg.get().credentials.userId)
@@ -123,18 +119,23 @@ module.exports = {
 
 
     refreshRoomList: function() {
-        var rooms = this.getRoomList();
-        this.setState({
-            roomList: rooms
-        });
+        this.setState(this.getRoomLists());
     },
 
-    getRoomList: function() {
-        return RoomListSorter.mostRecentActivityFirst(
+    getRoomLists: function() {
+        var s = {};
+        var inviteList = [];
+        s.roomList = RoomListSorter.mostRecentActivityFirst(
             MatrixClientPeg.get().getRooms().filter(function(room) {
                 var me = room.getMember(MatrixClientPeg.get().credentials.userId);
+
+                if (me && me.membership == "invite") {
+                    inviteList.push(room);
+                    return false;
+                }
+
                 var shouldShowRoom =  (
-                    me && (me.membership == "join" || me.membership == "invite")
+                    me && (me.membership == "join")
                 );
                 // hiding conf rooms only ever toggles shouldShowRoom to false
                 if (shouldShowRoom && HIDE_CONFERENCE_CHANS) {
@@ -153,6 +154,8 @@ module.exports = {
                 return shouldShowRoom;
             })
         );
+        s.inviteList = RoomListSorter.mostRecentActivityFirst(inviteList);
+        return s;
     },
 
     _recheckCallElement: function(selectedRoomId) {
@@ -174,10 +177,10 @@ module.exports = {
         }
     },
 
-    makeRoomTiles: function() {
+    makeRoomTiles: function(list, isInvite) {
         var self = this;
         var RoomTile = sdk.getComponent("molecules.RoomTile");
-        return this.state.roomList.map(function(room) {
+        return list.map(function(room) {
             var selected = room.roomId == self.props.selectedRoom;
             return (
                 <RoomTile
@@ -187,6 +190,7 @@ module.exports = {
                     selected={selected}
                     unread={self.state.activityMap[room.roomId] === 1}
                     highlight={self.state.activityMap[room.roomId] === 2}
+                    isInvite={isInvite}
                 />
             );
         });

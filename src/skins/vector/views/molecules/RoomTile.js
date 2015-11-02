@@ -50,7 +50,16 @@ module.exports = React.createClass({
             'mx_RoomTile_highlight': this.props.highlight,
             'mx_RoomTile_invited': this.props.room.currentState.members[myUserId].membership == 'invite'
         });
-        var name = this.props.room.name.replace(":", ":\u200b");
+
+        var name;
+        if (this.props.isInvite) {
+            name = this.props.room.getMember(MatrixClientPeg.get().credentials.userId).events.member.getSender();
+        }
+        else {
+            name = this.props.room.name;
+        }
+
+        name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
         var badge;
         if (this.props.highlight) {
             badge = <div className="mx_RoomTile_badge"/>;
@@ -73,7 +82,8 @@ module.exports = React.createClass({
 
         var label;
         if (!this.props.collapsed) {
-            label = <div className="mx_RoomTile_name">{name}</div>;
+            var className = 'mx_RoomTile_name' + (this.props.isInvite ? ' mx_RoomTile_invite' : '');
+            label = <div className={ className }>{name}</div>;
         }
         else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("molecules.RoomTooltip");
@@ -84,7 +94,7 @@ module.exports = React.createClass({
         return (
             <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className="mx_RoomTile_avatar">
-                    <RoomAvatar room={this.props.room} />
+                    <RoomAvatar room={this.props.room} width="24" height="24" />
                     { badge }
                 </div>
                 { label }

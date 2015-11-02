@@ -15,17 +15,30 @@ limitations under the License.
 */
 
 .mx_RoomList {
+    padding-top: 24px;
 }
 
+.mx_RoomList_invites,
 .mx_RoomList_recents {
-    margin-top: -12px;
     display: table;
     table-layout: fixed;
     width: 100%;
 }
 
+.mx_RoomList_expandButton {
+    margin-left: 8px;
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
 .mx_RoomList h2 {
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-bottom: 10px;
+    text-transform: uppercase;
+    color: #3d3b39;
+    font-weight: 600;
+    font-size: 14px;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-top: 8px;
+    margin-bottom: 4px;
 }

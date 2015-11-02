@@ -16,8 +16,6 @@ limitations under the License.
 
 .mx_MemberList {
     height: 100%;
-    margin-bottom: 100px;
-    padding: 8px;
 
     -webkit-flex: 1;
     flex: 1;
@@ -39,22 +37,47 @@ limitations under the License.
 }
 
 .mx_MemberList_border {
-    border: 1px solid #a9dbf4;
     overflow-y: auto;
-    border-radius: 8px;
-    background-color: #fff;
 
     order: 1;
     -webkit-flex: 1 1 0;
     flex: 1 1 0px;
 }
 
+.mx_MemberList_invite {
+    font-family: 'Myriad Pro', Helvetica, Arial, Sans-Serif;
+    border-radius: 3px;
+    border: 1px solid #f0f0f0;
+    padding: 9px;
+    color: #454545;
+    margin-left: 3px;
+    font-size: 16px;
+    margin-bottom: 8px;
+    width: 180px;
+}
+
+.mx_MemberList_invite::-moz-placeholder {
+    color: #454545;
+    opacity: 0.5;
+}
+.mx_MessageList_invite::-webkit-input-placeholder {
+    color: #454545;
+    opacity: 0.5;
+}
+
+.mx_MemberList_invited h2 {
+    text-transform: uppercase;
+    color: #3d3b39;
+    font-weight: 600;
+    font-size: 14px;
+    padding-left: 3px;
+    padding-right: 12px;
+    margin-top: 8px;
+    margin-bottom: 4px;    
+}
+
 .mx_MemberList_wrapper {
     display: table;
     table-layout: fixed;
     width: 100%;
-}
-
-.mx_MemberList h2 {
-    margin: 14px;
 }

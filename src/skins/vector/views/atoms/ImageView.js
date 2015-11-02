@@ -18,10 +18,19 @@ limitations under the License.
 
 var React = require('react');
 
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+
+var DateUtils = require('../../../../DateUtils');
+var filesize = require('filesize');
+
 module.exports = React.createClass({
     displayName: 'ImageView',
 
-    // XXX: keyboard shortcuts for managing dialogs should be done by the modal dialog base class omehow, surely...
+    propTypes: {
+        onFinished: React.PropTypes.func.isRequired
+    },
+
+    // XXX: keyboard shortcuts for managing dialogs should be done by the modal dialog base class somehow, surely...
     componentDidMount: function() {
         document.addEventListener("keydown", this.onKeyDown);
     },
@@ -38,10 +47,29 @@ module.exports = React.createClass({
         }
     },
 
+    onRedactClick: function() {
+        var self = this;
+        MatrixClientPeg.get().redactEvent(
+            this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()
+        ).done(function() {
+            if (self.props.onFinished) self.props.onFinished();
+        }, function(e) {
+            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            // display error message stating you couldn't delete this.
+            var code = e.errcode || e.statusCode;
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: "You cannot delete this image. (" + code + ")"
+            });
+        });
+    },
+
     render: function() {
 
-        // XXX: can't we just do max-width: 80%, max-height: 80% on the CSS?
-        
+/*
+        // In theory max-width: 80%, max-height: 80% on the CSS should work
+        // but in practice, it doesn't, so do it manually:
+
         var width = this.props.width || 500;
         var height = this.props.height || 500;
 
@@ -65,9 +93,55 @@ module.exports = React.createClass({
             width: displayWidth,
             height: displayHeight
         };
+*/
+        var style, res;
+
+        if (this.props.width && this.props.height) {
+            style = {
+                width: this.props.width,
+                height: this.props.height,
+            };
+            res = ", " + style.width + "x" + style.height + "px";
+        }
 
         return (
-            <img className="mx_ImageView" src={this.props.src} style={style} />
+            <div className="mx_ImageView">
+                <div className="mx_ImageView_lhs">
+                </div>
+                <div className="mx_ImageView_content">
+                    <img src={this.props.src} style={style}/>
+                    <div className="mx_ImageView_labelWrapper">
+                        <div className="mx_ImageView_label">
+                            <div className="mx_ImageView_shim">
+                            </div>
+                            <div className="mx_ImageView_name">
+                                { this.props.mxEvent.getContent().body }
+                            </div>
+                            <div className="mx_ImageView_metadata">
+                                Uploaded on { DateUtils.formatDate(new Date(this.props.mxEvent.getTs())) } by { this.props.mxEvent.getSender() }
+                            </div>
+                            <a className="mx_ImageView_link" href={ this.props.src } target="_blank">
+                                <div className="mx_ImageView_download">
+                                        Download this file<br/>
+                                        <span className="mx_ImageView_size">({ filesize(this.props.mxEvent.getContent().info.size) }{ res })</span>
+                                </div>
+                            </a>
+                            <div className="mx_ImageView_button">
+                                <a className="mx_ImageView_link" href={ this.props.src } target="_blank">
+                                    View full screen
+                                </a>
+                            </div>
+                            <div className="mx_ImageView_button" onClick={this.onRedactClick}>
+                                Redact
+                            </div>
+                            <div className="mx_ImageView_shim">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="mx_ImageView_rhs">
+                </div>
+            </div>
         );
     }
 });

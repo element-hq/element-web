@@ -20,19 +20,30 @@ var React = require('react');
 var Loader = require("../atoms/Spinner");
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var sdk = require('matrix-react-sdk')
+var dis = require('matrix-react-sdk/lib/dispatcher');
 var MemberInfoController = require('matrix-react-sdk/lib/controllers/molecules/MemberInfo')
+
+// FIXME: this should probably be an organism, to match with MemberList, not a molecule
 
 module.exports = React.createClass({
     displayName: 'MemberInfo',
     mixins: [MemberInfoController],
 
+    onCancel: function(e) {
+        dis.dispatch({
+            action: "view_user",
+            member: null
+        });
+    },
+
     render: function() {
         var interactButton, kickButton, banButton, muteButton, giveModButton, spinner;
         if (this.props.member.userId === MatrixClientPeg.get().credentials.userId) {
-            interactButton = <div className="mx_ContextualMenu_field" onClick={this.onLeaveClick}>Leave room</div>;
+            interactButton = <div className="mx_MemberInfo_field" onClick={this.onLeaveClick}>Leave room</div>;
         }
         else {
-            interactButton = <div className="mx_ContextualMenu_field" onClick={this.onChatClick}>Start chat</div>;
+            interactButton = <div className="mx_MemberInfo_field" onClick={this.onChatClick}>Start chat</div>;
         }
 
         if (this.state.creatingRoom) {
@@ -40,36 +51,50 @@ module.exports = React.createClass({
         }
 
         if (this.state.can.kick) {
-            kickButton = <div className="mx_ContextualMenu_field" onClick={this.onKick}>
+            kickButton = <div className="mx_MemberInfo_field" onClick={this.onKick}>
                 Kick
             </div>;
         }
         if (this.state.can.ban) {
-            banButton = <div className="mx_ContextualMenu_field" onClick={this.onBan}>
+            banButton = <div className="mx_MemberInfo_field" onClick={this.onBan}>
                 Ban
             </div>;
         }
         if (this.state.can.mute) {
             var muteLabel = this.state.muted ? "Unmute" : "Mute";
-            muteButton = <div className="mx_ContextualMenu_field" onClick={this.onMuteToggle}>
+            muteButton = <div className="mx_MemberInfo_field" onClick={this.onMuteToggle}>
                 {muteLabel}
             </div>;
         }
         if (this.state.can.modifyLevel) {
             var giveOpLabel = this.state.isTargetMod ? "Revoke Mod" : "Make Mod";
-            giveModButton = <div className="mx_ContextualMenu_field" onClick={this.onModToggle}>
+            giveModButton = <div className="mx_MemberInfo_field" onClick={this.onModToggle}>
                 {giveOpLabel}
             </div>
         }
 
+        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
         return (
-            <div>
-                {interactButton}
-                {muteButton}
-                {kickButton}
-                {banButton}
-                {giveModButton}
-                {spinner}
+            <div className="mx_MemberInfo">
+                <img className="mx_MemberInfo_cancel" src="img/cancel-black.png" width="18" height="18" onClick={this.onCancel}/>
+                <div className="mx_MemberInfo_avatar">
+                    <MemberAvatar member={this.props.member} width={48} height={48} />
+                </div>
+                <h2>{ this.props.member.name }</h2>
+                <div className="mx_MemberInfo_profileField">
+                    { this.props.member.userId }
+                </div>
+                <div className="mx_MemberInfo_profileField">
+                    power: { this.props.member.powerLevelNorm }%
+                </div>
+                <div className="mx_MemberInfo_buttons">
+                    {interactButton}
+                    {muteButton}
+                    {kickButton}
+                    {banButton}
+                    {giveModButton}
+                    {spinner}
+                </div>
             </div>
         );
     }
