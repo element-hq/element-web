@@ -62,10 +62,9 @@ module.exports = React.createClass({
             <div className="mx_RoomList" onScroll={this._repositionTooltip}>
                 { expandButton }
                 { callElement }
+                { invites }
                 <h2 className="mx_RoomList_favouritesLabel">Favourites</h2>
                 <RoomDropTarget text="Drop here to favourite"/>
-
-                { invites }
 
                 <h2 className="mx_RoomList_recentsLabel">{ recentsLabel }</h2>
                 <div className="mx_RoomList_recents">
