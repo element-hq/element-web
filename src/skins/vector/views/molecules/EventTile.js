@@ -85,11 +85,11 @@ module.exports = React.createClass({
         for (var i = 0; i < userIds.length; ++i) {
             var member = room.getMember(userIds[i]);
             avatars.push(
-                <MemberAvatar member={member} width={14} height={14} resizeMethod="crop" />
+                <MemberAvatar key={member.userId} member={member} width={14} height={14} resizeMethod="crop" />
             );
         }
 
-        return <span>{ avatars }</span>;
+        return <span className="mx_EventTile_readAvatars">{ avatars }</span>;
     },
 
     render: function() {

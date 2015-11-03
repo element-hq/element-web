@@ -123,3 +123,12 @@ limitations under the License.
 .mx_EventTile.menu .mx_MessageTimestamp {
     visibility: visible;
 }
+
+.mx_EventTile_readAvatars {
+    float: right;
+}
+
+.mx_EventTile_readAvatars .mx_MemberAvatar {
+    margin-left: 1px;
+    margin-right: 1px;
+}

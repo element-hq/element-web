@@ -48,6 +48,7 @@ module.exports = {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
+        MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         this.atBottom = true;
@@ -65,6 +66,7 @@ module.exports = {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
@@ -161,6 +163,12 @@ module.exports = {
             this.setState({
                 room: room
             });
+        }
+    },
+
+    onRoomReceipt: function(receiptEvent, room) {
+        if (room.roomId == this.props.roomId) {
+            this.forceUpdate();
         }
     },
 
