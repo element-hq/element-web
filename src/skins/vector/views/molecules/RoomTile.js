@@ -43,12 +43,13 @@ module.exports = React.createClass({
 
     render: function() {
         var myUserId = MatrixClientPeg.get().credentials.userId;
+        var me = this.props.room.currentState.members[myUserId];
         var classes = classNames({
             'mx_RoomTile': true,
             'mx_RoomTile_selected': this.props.selected,
             'mx_RoomTile_unread': this.props.unread,
             'mx_RoomTile_highlight': this.props.highlight,
-            'mx_RoomTile_invited': this.props.room.currentState.members[myUserId].membership == 'invite'
+            'mx_RoomTile_invited': (me && me.membership == 'invite'),
         });
 
         var name;
