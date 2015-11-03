@@ -56,13 +56,10 @@ module.exports = {
         if (this.urlList.length != newList.length) differs = true;
 
         if (differs) {
-            console.log("list differs");
             this._update();
             this.setState({
                 imageUrl: this._nextUrl()
             });
-        } else {
-            console.log("list is the same");
         }
     },
 
