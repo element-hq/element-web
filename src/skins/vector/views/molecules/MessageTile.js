@@ -40,7 +40,8 @@ module.exports = React.createClass({
             'm.notice': sdk.getComponent('molecules.MNoticeTile'),
             'm.emote': sdk.getComponent('molecules.MEmoteTile'),
             'm.image': sdk.getComponent('molecules.MImageTile'),
-            'm.file': sdk.getComponent('molecules.MFileTile')
+            'm.file': sdk.getComponent('molecules.MFileTile'),
+            'm.video': sdk.getComponent('molecules.MVideoTile')
         };
 
         var content = this.props.mxEvent.getContent();
