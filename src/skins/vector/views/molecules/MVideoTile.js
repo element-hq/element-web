@@ -52,11 +52,6 @@ module.exports = React.createClass({
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
 
-        var videoStyle = {
-            maxHeight: "500px",
-            maxWidth: "100%",
-        };
-
         var height = null;
         var width = null;
         var poster = null;
