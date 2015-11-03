@@ -28,6 +28,14 @@ var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 var HIDE_CONFERENCE_CHANS = true;
 
 module.exports = {
+    getInitialState: function() {
+        return {
+            activityMap: null,
+            inviteList: [],
+            roomList: [],
+        }
+    },
+
     componentWillMount: function() {
         var cli = MatrixClientPeg.get();
         cli.on("Room", this.onRoom);
