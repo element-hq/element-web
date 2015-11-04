@@ -17,6 +17,8 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var DragDropContext = require('react-dnd').DragDropContext;
+var HTML5Backend = require('react-dnd/modules/backends/HTML5');
 var sdk = require('matrix-react-sdk')
 
 var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/MatrixChat')
@@ -28,7 +30,7 @@ var dis = require('matrix-react-sdk/lib/dispatcher');
 var Matrix = require("matrix-js-sdk");
 var ContextualMenu = require("../../../../ContextualMenu");
 
-module.exports = React.createClass({
+var MatrixChat = React.createClass({
     displayName: 'MatrixChat',
     mixins: [MatrixChatController],
 
@@ -172,3 +174,5 @@ module.exports = React.createClass({
         }
     }
 });
+
+module.exports = DragDropContext(HTML5Backend)(MatrixChat);
