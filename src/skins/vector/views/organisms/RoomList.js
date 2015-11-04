@@ -33,46 +33,57 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var CallView = sdk.getComponent('molecules.voip.CallView');
-        var RoomDropTarget = sdk.getComponent('molecules.RoomDropTarget');
-
-        var callElement;
-        if (this.state.show_call_element) {
-            callElement = <CallView className="mx_MatrixChat_callView"/>
-        }
-
         var expandButton = this.props.collapsed ? 
                            <img className="mx_RoomList_expandButton" onClick={ this.onShowClick } src="img/menu.png" width="20" alt=">"/> :
                            null;
 
-        var invitesLabel = this.props.collapsed ? null : "Invites";
-        var recentsLabel = this.props.collapsed ? null : "Recent";
-
-        var invites;
-        if (this.state.inviteList.length) {
-            invites = <div>
-                        <h2 className="mx_RoomList_invitesLabel">{ invitesLabel }</h2>
-                        <div className="mx_RoomList_invites">
-                            {this.makeRoomTiles(this.state.inviteList, true)}
-                        </div>
-                      </div>
-        }
+        var RoomSubList = sdk.getComponent('organisms.RoomSubList');
 
         return (
             <div className="mx_RoomList" onScroll={this._repositionTooltip}>
                 { expandButton }
-                { callElement }
-                { invites }
-                <h2 className="mx_RoomList_favouritesLabel">Favourites</h2>
-                <RoomDropTarget text="Drop here to favourite"/>
 
-                <h2 className="mx_RoomList_recentsLabel">{ recentsLabel }</h2>
-                <div className="mx_RoomList_recents">
-                    {this.makeRoomTiles(this.state.roomList, false)}
-                </div>
+                <RoomSubList list={ this.state.lists['invites'] }
+                             label="Invites"
+                             editable={ false }
+                             order="recent"
+                             activityMap={ this.state.activityMap }
+                             selectedRoom={ this.props.selectedRoom }
+                             collapsed={ this.props.collapsed } />
 
-                <h2 className="mx_RoomList_archiveLabel">Archive</h2>
-                <RoomDropTarget text="Drop here to archive"/>
+                <RoomSubList list={ this.state.lists['favourites'] }
+                             label="Favourites"
+                             tagname="favourites"
+                             editable={ true }
+                             order="manual"
+                             activityMap={ this.state.activityMap }
+                             selectedRoom={ this.props.selectedRoom }
+                             collapsed={ this.props.collapsed } />
+
+                <RoomSubList list={ this.state.lists['recents'] }
+                             label="Recents"
+                             editable={ true }
+                             order="recent"
+                             activityMap={ this.state.activityMap }
+                             selectedRoom={ this.props.selectedRoom }
+                             collapsed={ this.props.collapsed } />
+
+                <RoomSubList list={ this.state.lists['lurking'] }
+                             label="Others"
+                             tagname="secondary"
+                             editable={ true }
+                             order="recent"
+                             activityMap={ this.state.activityMap }
+                             selectedRoom={ this.props.selectedRoom }
+                             collapsed={ this.props.collapsed } />
+
+                <RoomSubList list={ this.state.lists['archived'] }
+                             label="Historical"
+                             editable={ false }
+                             order="recent"
+                             activityMap={ this.state.activityMap }
+                             selectedRoom={ this.props.selectedRoom }
+                             collapsed={ this.props.collapsed } />
             </div>
         );
     }

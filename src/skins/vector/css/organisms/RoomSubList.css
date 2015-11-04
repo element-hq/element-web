@@ -14,13 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomList {
-    padding-top: 24px;
+.mx_RoomSubList {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
 }
 
-.mx_RoomList_expandButton {
-    margin-left: 8px;
-    cursor: pointer;
+.mx_RoomSubList_label {
+    text-transform: uppercase;
+    color: #3d3b39;
+    font-weight: 600;
+    font-size: 14px;
     padding-left: 12px;
     padding-right: 12px;
+    margin-top: 8px;
+    margin-bottom: 4px;
 }
