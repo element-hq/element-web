@@ -197,9 +197,26 @@ module.exports = React.createClass({
             } else {
                 var typingString = this.getWhoIsTypingString();
                 var unreadMsgs = this.getUnreadMessagesString();
+                // no conn bar trumps unread count since you can't get unread messages
+                // without a connection! (technically may already have some but meh)
+                if (this.state.syncState === "ERROR") {
+                    statusBar = (
+                        <div className="mx_RoomView_connectionLostBar">
+                            <img src="img/cancel.png" width="10" height="12" alt=""/>
+                            <div className="mx_RoomView_connectionLostBar_textArea">
+                                <span className="mx_RoomView_connectionLostBar_title">
+                                Internet connection has been lost.
+                                </span>
+                                <div className="mx_RoomView_connectionLostBar_desc">
+                                Sent messages will be stored until your connection has resumed.
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
                 // unread count trumps who is typing since the unread count is only
                 // set when you've scrolled up
-                if (unreadMsgs) {
+                else if (unreadMsgs) {
                     statusBar = (
                         <div className="mx_RoomView_unreadMessagesBar" onClick={ this.scrollToBottom }>
                             <img src="img/newmessages.png" width="24" height="24" alt=""/>

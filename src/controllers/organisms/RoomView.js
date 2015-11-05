@@ -41,6 +41,7 @@ module.exports = {
             draggingFile: false,
             searching: false,
             searchResults: null,
+            syncState: MatrixClientPeg.get().getSyncState()
         }
     },
 
@@ -50,6 +51,7 @@ module.exports = {
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
+        MatrixClientPeg.get().on("sync", this.onSyncStateChange);
         this.atBottom = true;
     },
 
@@ -67,6 +69,7 @@ module.exports = {
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
+            MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
         }
     },
 
@@ -100,6 +103,12 @@ module.exports = {
                 this._updateConfCallNotification();
                 break;
         }
+    },
+
+    onSyncStateChange: function(state) {
+        this.setState({
+            syncState: state
+        });
     },
 
     // MatrixRoom still showing the messages from the old room?

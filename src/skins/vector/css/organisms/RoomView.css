@@ -185,6 +185,30 @@ limitations under the License.
     vertical-align: middle;
 }
 
+.mx_RoomView_connectionLostBar {
+    margin-top: 5px;
+}
+
+.mx_RoomView_connectionLostBar img {
+    padding-left: 10px;
+    padding-right: 22px;
+    vertical-align: middle;
+    float: left;
+}
+
+.mx_RoomView_connectionLostBar_textArea {
+    float: left;
+}
+
+.mx_RoomView_connectionLostBar_title {
+    color: #f00;
+}
+
+.mx_RoomView_connectionLostBar_desc {
+    color: #ddd;
+    font-size: 12px;
+}
+
 .mx_RoomView_typingBar {
     margin-top: 10px;
     margin-left: 54px;
