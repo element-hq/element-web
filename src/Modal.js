@@ -34,7 +34,7 @@ module.exports = {
         return container;
     },
 
-    createDialogWithElement: function(element, props) {
+    createDialogWithElement: function(element, props, className) {
         var self = this;
 
         var closeDialog = function() {
@@ -44,7 +44,7 @@ module.exports = {
         };
 
         var dialog = (
-            <div className="mx_Dialog_wrapper">
+            <div className={"mx_Dialog_wrapper " + className}>
                 <div className="mx_Dialog">
                     {element}
                 </div>
@@ -57,7 +57,7 @@ module.exports = {
         return {close: closeDialog};
     },
 
-    createDialog: function (Element, props) {
+    createDialog: function (Element, props, className) {
         var self = this;
 
         var closeDialog = function() {
@@ -69,7 +69,7 @@ module.exports = {
         // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the dialog from a button click!
         var dialog = (
-            <div className="mx_Dialog_wrapper">
+            <div className={"mx_Dialog_wrapper " + className}>
                 <div className="mx_Dialog">
                     <Element {...props} onFinished={closeDialog}/>
                 </div>

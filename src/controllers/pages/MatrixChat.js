@@ -22,6 +22,7 @@ var dis = require("../../dispatcher");
 
 var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
+var linkifyMatrix = require("../../linkify-matrix");
 
 var Cas = require("../../CasLogic");
 
@@ -66,6 +67,15 @@ module.exports = {
             this.notifyNewScreen('');
         } else {
             this.notifyNewScreen('login');
+        }
+
+        // this can technically be done anywhere but doing this here keeps all
+        // the routing url path logic together.
+        if (this.onAliasClick) {
+            linkifyMatrix.onAliasClick = this.onAliasClick;
+        }
+        if (this.onUserClick) {
+            linkifyMatrix.onUserClick = this.onUserClick;
         }
     },
 
@@ -214,7 +224,19 @@ module.exports = {
                 }
                 break;
             case 'view_room_alias':
-                MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(function(result) {
+                var foundRoom = MatrixTools.getRoomForAlias(
+                    MatrixClientPeg.get().getRooms(), payload.room_alias
+                );
+                if (foundRoom) {
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: foundRoom.roomId
+                    });
+                    return;
+                }
+                // resolve the alias and *then* view it
+                MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(
+                function(result) {
                     dis.dispatch({
                         action: 'view_room',
                         room_id: result.room_id
@@ -325,6 +347,9 @@ module.exports = {
 
     onKeyDown: function(ev) {
         if (ev.altKey) {
+            /*
+            // Remove this for now as ctrl+alt = alt-gr so this breaks keyboards which rely on alt-gr for numbers
+            // Will need to find a better meta key if anyone actually cares about using this.
             if (ev.ctrlKey && ev.keyCode > 48 && ev.keyCode < 58) {
                 dis.dispatch({
                     action: 'view_indexed_room',
@@ -334,6 +359,7 @@ module.exports = {
                 ev.preventDefault();
                 return;
             }
+            */
             switch (ev.keyCode) {
                 case 38:
                     dis.dispatch({action: 'view_prev_room'});

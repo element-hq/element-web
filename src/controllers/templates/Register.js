@@ -22,7 +22,8 @@ module.exports = {
         PasswordMismatch: 'PasswordMismatch',
         TooShort: 'TooShort',
         Missing: 'Missing',
-        InUse: 'InUse'
+        InUse: 'InUse',
+        Length: 'Length'
     },
 
     getInitialState: function() {

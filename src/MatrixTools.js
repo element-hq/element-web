@@ -31,6 +31,31 @@ module.exports = {
             }
         }
         return null;
+    },
+
+    /**
+     * Given a list of room objects, return the room which has the given alias,
+     * else null.
+     */
+    getRoomForAlias: function(rooms, room_alias) {
+        var room;
+        for (var i = 0; i < rooms.length; i++) {
+            var aliasEvents = rooms[i].currentState.getStateEvents(
+                "m.room.aliases"
+            );
+            for (var j = 0; j < aliasEvents.length; j++) {
+                var aliases = aliasEvents[j].getContent().aliases || [];
+                for (var k = 0; k < aliases.length; k++) {
+                    if (aliases[k] === room_alias) {
+                        room = rooms[i];
+                        break;
+                    }
+                }
+                if (room) { break; }
+            }
+            if (room) { break; }
+        }
+        return room || null;
     }
 }
 

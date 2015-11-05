@@ -1,6 +1,7 @@
+var MatrixClientPeg = require("./MatrixClientPeg");
 
 function textForMemberEvent(ev) {
-    // XXX: SYJS-16
+    // XXX: SYJS-16 "sender is sometimes null for join messages"
     var senderName = ev.sender ? ev.sender.name : ev.getSender();
     var targetName = ev.target ? ev.target.name : ev.getStateKey();
     var reason = ev.getContent().reason ? (
@@ -58,6 +59,12 @@ function textForTopicEvent(ev) {
     return senderDisplayName + ' changed the topic to, "' + ev.getContent().topic + '"';
 };
 
+function textForRoomNameEvent(ev) {
+    var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+
+    return senderDisplayName + ' changed the room name to "' + ev.getContent().name + '"';
+};
+
 function textForMessageEvent(ev) {
     var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
@@ -72,12 +79,14 @@ function textForMessageEvent(ev) {
 
 function textForCallAnswerEvent(event) {
     var senderName = event.sender ? event.sender.name : "Someone";
-    return senderName + " answered the call.";
+    var supported = MatrixClientPeg.get().supportsVoip() ? "" : " (not supported by this browser)";
+    return senderName + " answered the call." + supported;
 };
 
 function textForCallHangupEvent(event) {
     var senderName = event.sender ? event.sender.name : "Someone";
-    return senderName + " ended the call.";
+    var supported = MatrixClientPeg.get().supportsVoip() ? "" : " (not supported by this browser)";
+    return senderName + " ended the call." + supported;
 };
 
 function textForCallInviteEvent(event) {
@@ -88,16 +97,18 @@ function textForCallInviteEvent(event) {
             event.getContent().offer.sdp.indexOf('m=video') !== -1) {
         type = "video";
     }
-    return senderName + " placed a " + type + " call.";
+    var supported = MatrixClientPeg.get().supportsVoip() ? "" : " (not supported by this browser)";
+    return senderName + " placed a " + type + " call." + supported;
 };
 
 var handlers = {
     'm.room.message': textForMessageEvent,
-    'm.room.topic': textForTopicEvent,
-    'm.room.member': textForMemberEvent,
-    'm.call.invite': textForCallInviteEvent,
-    'm.call.answer': textForCallAnswerEvent,
-    'm.call.hangup': textForCallHangupEvent,
+    'm.room.name':    textForRoomNameEvent,
+    'm.room.topic':   textForTopicEvent,
+    'm.room.member':  textForMemberEvent,
+    'm.call.invite':  textForCallInviteEvent,
+    'm.call.answer':  textForCallAnswerEvent,
+    'm.call.hangup':  textForCallHangupEvent,
 };
 
 module.exports = {

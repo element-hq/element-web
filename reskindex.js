@@ -18,7 +18,7 @@ var skin = args._[0];
 try {
     fs.accessSync(path.join('src', 'skins', skin), fs.F_OK);
 } catch (e) {
-    console.log("Skin "+skin+" not found");
+    console.log("Skin "+skin+" not found: "+e);
     process.exit(1);
 }
 
