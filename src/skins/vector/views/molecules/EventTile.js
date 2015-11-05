@@ -78,6 +78,8 @@ module.exports = React.createClass({
 
         var room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
 
+        if (!room) return [];
+
         var userIds = room.getUsersReadUpTo(this.props.mxEvent);
 
         var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');

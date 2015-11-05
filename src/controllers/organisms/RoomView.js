@@ -597,10 +597,11 @@ module.exports = {
     },
 
     sendReadReceipt: function() {
+        if (!this.state.room) return;
         var currentReadUpToEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
 
-        var lastReadEventIndex = this._getLastDisplayedEventIndex();
+        var lastReadEventIndex = this._getLastDisplayedEventIndexIgnoringOwn();
         if (lastReadEventIndex === null) return;
 
         if (lastReadEventIndex > currentReadUpToEventIndex) {
@@ -608,7 +609,7 @@ module.exports = {
         }
     },
 
-    _getLastDisplayedEventIndex: function() {
+    _getLastDisplayedEventIndexIgnoringOwn: function() {
         if (this.eventNodes === undefined) return null;
 
         var messageWrapper = this.refs.messageWrapper;
@@ -617,6 +618,11 @@ module.exports = {
 
         for (var i = this.state.room.timeline.length-1; i >= 0; --i) {
             var ev = this.state.room.timeline[i];
+
+            if (ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
+                continue;
+            }
+
             var node = this.eventNodes[ev.getId()];
             if (node === undefined) continue;
 
