@@ -468,6 +468,7 @@ module.exports = {
     },
 
     sendReadReceipt: function() {
+        if (!this.state.room) return;
         var currentReadUpToEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
 
