@@ -619,7 +619,7 @@ module.exports = {
         for (var i = this.state.room.timeline.length-1; i >= 0; --i) {
             var ev = this.state.room.timeline[i];
 
-            if (ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
+            if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
                 continue;
             }
 
