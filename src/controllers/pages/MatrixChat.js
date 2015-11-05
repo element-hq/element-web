@@ -297,7 +297,8 @@ module.exports = {
         var Notifier = sdk.getComponent('organisms.Notifier');
         var cli = MatrixClientPeg.get();
         var self = this;
-        cli.on('syncComplete', function() {
+        cli.on('sync', function(state) {
+            if (self.sdkReady || state !== "PREPARED") { return; }
             self.sdkReady = true;
 
             if (self.starting_room_alias) {
