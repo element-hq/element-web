@@ -24,6 +24,7 @@ var Modal = require("matrix-react-sdk/lib/Modal");
 var sdk = require('matrix-react-sdk/lib/index');
 var CallHandler = require('matrix-react-sdk/lib/CallHandler');
 var VectorConferenceHandler = require('../../modules/VectorConferenceHandler');
+var Resend = require("../../Resend");
 
 var dis = require("matrix-react-sdk/lib/dispatcher");
 
@@ -32,8 +33,9 @@ var INITIAL_SIZE = 20;
 
 module.exports = {
     getInitialState: function() {
+        var room = this.props.roomId ? MatrixClientPeg.get().getRoom(this.props.roomId) : null;
         return {
-            room: this.props.roomId ? MatrixClientPeg.get().getRoom(this.props.roomId) : null,
+            room: room,
             messageCap: INITIAL_SIZE,
             editingRoomSettings: false,
             uploadingRoomSettings: false,
@@ -41,7 +43,8 @@ module.exports = {
             draggingFile: false,
             searching: false,
             searchResults: null,
-            syncState: MatrixClientPeg.get().getSyncState()
+            syncState: MatrixClientPeg.get().getSyncState(),
+            hasUnsentMessages: this._hasUnsentMessages(room)
         }
     },
 
@@ -77,6 +80,9 @@ module.exports = {
         switch (payload.action) {
             case 'message_send_failed':
             case 'message_sent':
+                this.setState({
+                    hasUnsentMessages: this._hasUnsentMessages(this.state.room)
+                });
             case 'message_resend_started':
                 this.setState({
                     room: MatrixClientPeg.get().getRoom(this.props.roomId)
@@ -182,6 +188,19 @@ module.exports = {
         this._updateConfCallNotification();
     },
 
+    _hasUnsentMessages: function(room) {
+        return this._getUnsentMessages(room).length > 0;
+    },
+
+    _getUnsentMessages: function(room) {
+        if (!room) { return []; }
+        // TODO: It would be nice if the JS SDK provided nicer constant-time
+        // constructs rather than O(N) (N=num msgs) on this.
+        return room.timeline.filter(function(ev) {
+            return ev.status === Matrix.EventStatus.NOT_SENT;
+        });
+    },
+
     _updateConfCallNotification: function() {
         var room = MatrixClientPeg.get().getRoom(this.props.roomId);
         if (!room) return;
@@ -272,6 +291,13 @@ module.exports = {
             return true;
         }
         return false;
+    },
+
+    onResendAllClick: function() {
+        var eventsToResend = this._getUnsentMessages(this.state.room);
+        eventsToResend.forEach(function(event) {
+            Resend.resend(event);
+        });
     },
 
     onJoinButtonClicked: function(ev) {

@@ -199,6 +199,8 @@ module.exports = React.createClass({
                 var unreadMsgs = this.getUnreadMessagesString();
                 // no conn bar trumps unread count since you can't get unread messages
                 // without a connection! (technically may already have some but meh)
+                // It also trumps the "some not sent" msg since you can't resend without
+                // a connection!
                 if (this.state.syncState === "ERROR") {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
@@ -209,6 +211,24 @@ module.exports = React.createClass({
                                 </span>
                                 <div className="mx_RoomView_connectionLostBar_desc">
                                 Sent messages will be stored until your connection has resumed.
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+                else if (this.state.hasUnsentMessages) {
+                    statusBar = (
+                        <div className="mx_RoomView_connectionLostBar">
+                            <img src="img/cancel.png" width="10" height="12" alt=""/>
+                            <div className="mx_RoomView_connectionLostBar_textArea">
+                                <span className="mx_RoomView_connectionLostBar_title">
+                                Some of your messages have not been sent.
+                                </span>
+                                <div className="mx_RoomView_connectionLostBar_desc">
+                                    <span className="mx_RoomView_resend_link"
+                                        onClick={ this.onResendAllClick } >
+                                    Resend all now
+                                    </span> or select individual messages to re-send.
                                 </div>
                             </div>
                         </div>

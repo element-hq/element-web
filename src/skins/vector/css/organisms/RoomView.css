@@ -209,6 +209,10 @@ limitations under the License.
     font-size: 12px;
 }
 
+.mx_RoomView_resend_link {
+    cursor: pointer;
+}
+
 .mx_RoomView_typingBar {
     margin-top: 10px;
     margin-left: 54px;
