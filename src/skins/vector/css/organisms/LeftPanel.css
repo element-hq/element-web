@@ -57,8 +57,10 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
-    -webkit-flex: 0 0 126px;
-    flex: 0 0 126px;
+    -webkit-flex: 0 0 140px;
+    flex: 0 0 140px;
+
+    background-color: rgba(118,207,166,0.19);
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu .mx_RoomTile {
@@ -66,7 +68,7 @@ limitations under the License.
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu .mx_BottomLeftMenu_options {
-    margin-top: 12px;
+    margin-top: 17px;
     width: 100%;
 }
 

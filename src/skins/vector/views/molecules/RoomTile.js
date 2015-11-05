@@ -32,6 +32,10 @@ var sdk = require('matrix-react-sdk')
  * Only `beginDrag` function is required.
  */
 var roomTileSource = {
+    canDrag: function(props, monitor) {
+        return props.roomSubList.props.editable;
+    },
+
     beginDrag: function (props) {
         // Return the data describing the dragged item
         var item = {
@@ -60,8 +64,6 @@ var roomTileSource = {
             return;
         }
         else {
-            // if it's not manual ordering, we'll need to position the tile correctly here according to the right ordering
-
             // When dropped on a compatible target, actually set the right tags for the new ordering
             // persistNewOrder(item.room, dropResult.listId);
         }
@@ -86,9 +88,18 @@ var roomTileTarget = {
             item.targetList = props.roomSubList;
         }
 
-        if (item.targetList.props.order === 'manual' && item.room.roomId !== props.room.roomId) {
-            var roomTile = props.roomSubList.findRoomTile(props.room);
-            props.roomSubList.moveRoomTile(item.room, roomTile.index);
+        if (item.targetList.props.order === 'manual') {
+            if (item.room.roomId !== props.room.roomId) {
+                var roomTile = props.roomSubList.findRoomTile(props.room);
+                props.roomSubList.moveRoomTile(item.room, roomTile.index);
+            }
+        }
+        else {
+            if (!props.roomSubList.findRoomTile(item.room).room) {
+                // add to the list in the right place
+                props.roomSubList.moveRoomTile(item.room, 0);
+                props.roomSubList.sortList();
+            }
         }
     },
 };

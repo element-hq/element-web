@@ -63,7 +63,7 @@ var RoomSubList = React.createClass({
     },
 
     componentWillMount: function() {
-        this.sortList(this.props.list, this.props.order);
+        this.sortList();
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -94,6 +94,8 @@ var RoomSubList = React.createClass({
     },
 
     sortList: function(list, order) {
+        if (list === undefined) list = this.props.list;
+        if (order === undefined) order = this.props.order;
         var comparator;
         list = list || [];
         if (order === "manual") comparator = this.manualComparator;
@@ -178,11 +180,17 @@ var RoomSubList = React.createClass({
 
         //console.log("render: " + JSON.stringify(this.state.sortedList));
 
+        var target;
+        if (this.state.sortedList.length == 0 && this.props.editable) {
+            target = <RoomDropTarget label={ 'Drop here to ' + this.props.verb }/>;
+        }
+
         if (this.state.sortedList.length > 0 || this.props.editable) {
             return connectDropTarget(
                 <div>
                     <h2 className="mx_RoomSubList_label">{ this.props.collapsed ? '' : this.props.label }</h2>
                     <div className="mx_RoomSubList">
+                        { target }
                         { this.makeRoomTiles() }
                     </div>
                 </div>
