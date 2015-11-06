@@ -72,7 +72,7 @@ module.exports = {
                     {
                         type: "m.room.join_rules",
                         content: {
-                            "join_rules": this.state.is_private ? "invite" : "public"
+                            "join_rule": this.state.is_private ? "invite" : "public"
                         }
                     },
                     {
@@ -107,7 +107,7 @@ module.exports = {
             deferred = deferred.then(function(res) {
                 response = res;
                 return encryption.enableEncryption(
-                    cli, response.roomId, options.invite
+                    cli, response.room_id, options.invite
                 );
             }).then(function() {
                 return q(response) }
