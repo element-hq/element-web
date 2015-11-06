@@ -26,7 +26,8 @@ module.exports = {
         var parsedUrl = url.parse(window.location.href, true);
         parsedUrl.query["homeserver"] = cli.getHomeserverUrl();
         parsedUrl.query["identityServer"] = cli.getIdentityServerUrl();
-        MatrixClientPeg.get().loginWithCas(url.format(parsedUrl));
+        var casUrl = MatrixClientPeg.get().getCasLoginUrl(url.format(parsedUrl));
+        window.location.href = casUrl;
     },
 
 };
