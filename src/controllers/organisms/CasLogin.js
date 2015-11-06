@@ -17,20 +17,16 @@ limitations under the License.
 'use strict';
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
-var Cas = require("../../CasLogic");
+var url = require("url");
 
 module.exports = {
 
     onCasClicked: function(ev) {
-        var serviceRedirectUrl = Cas.getServiceUrl() + "#/login/cas";
-        var self = this;
-        MatrixClientPeg.get().getCasServer().done(function(data) {
-            var serverUrl = data.serverUrl + "/login?service=" + encodeURIComponent(serviceRedirectUrl);
-            window.location.href = serverUrl;
-        }, function(error) {
-            self.setStep("stage_m.login.cas");
-            self.setState({errorText: 'Login failed.'});
-        });
+        var cli = MatrixClientPeg.get();
+        var parsedUrl = url.parse(window.location.href, true);
+        parsedUrl.query["homeserver"] = cli.getHomeserverUrl();
+        parsedUrl.query["identityServer"] = cli.getIdentityServerUrl();
+        MatrixClientPeg.get().loginWithCas(url.format(parsedUrl));
     },
 
 };
