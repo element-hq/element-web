@@ -96,6 +96,7 @@ var roomTileSource = {
         }
         else {
             // cancel the drop and reset our original position
+            console.log("cancelling drop & drag");
             props.roomSubList.moveRoomTile(item.room, item.originalIndex);
             if (item.targetList && item.targetList !== item.originalList) {
                 item.targetList.removeRoomTile(item.room);
@@ -111,13 +112,16 @@ var roomTileTarget = {
 
     hover: function(props, monitor) {
         var item = monitor.getItem();
-        console.log("hovering on room " + props.room.roomId + ", isOver=" + monitor.isOver());
+        //console.log("hovering on room " + props.room.roomId + ", isOver=" + monitor.isOver());
 
         //console.log("item.targetList=" + item.targetList + ", roomSubList=" + props.roomSubList);
 
+        var switchedTarget = false;
         if (item.targetList !== props.roomSubList) {
             // we've switched target, so remove the tile from the previous target.
             // n.b. the previous target might actually be the source list.
+            console.log("switched target");
+            switchedTarget = true;
             item.targetList.removeRoomTile(item.room);
             item.targetList = props.roomSubList;
         }
@@ -130,12 +134,13 @@ var roomTileTarget = {
                 props.roomSubList.moveRoomTile(item.room, roomTile.index);
             }
         }
-        else {
+        else if (switchedTarget) {
             if (!props.roomSubList.findRoomTile(item.room).room) {
                 // add to the list in the right place
                 props.roomSubList.moveRoomTile(item.room, 0);
-                props.roomSubList.sortList();
             }
+            // we have to sort the list whatever to recalculate it
+            props.roomSubList.sortList();
         }
     },
 };

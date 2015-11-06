@@ -135,11 +135,16 @@ module.exports = {
     getRoomLists: function() {
         var s = { lists: {} };
 
+        s.lists["m.invite"] = [];
+        s.lists["m.favourite"] = [];
+        s.lists["m.recent"] = [];
+        s.lists["m.lowpriority"] = [];
+        s.lists["m.archived"] = [];
+
         MatrixClientPeg.get().getRooms().forEach(function(room) {
             var me = room.getMember(MatrixClientPeg.get().credentials.userId);
 
             if (me && me.membership == "invite") {
-                s.lists["m.invite"] = s.lists["m.invite"] || [];
                 s.lists["m.invite"].push(room);
             }
             else {
@@ -172,7 +177,6 @@ module.exports = {
                         }
                     }
                     else {
-                        s.lists["m.recent"] = s.lists["m.recent"] || [];
                         s.lists["m.recent"].push(room); 
                     }
                 }

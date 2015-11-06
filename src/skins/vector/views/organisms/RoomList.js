@@ -65,6 +65,7 @@ module.exports = React.createClass({
                 <RoomSubList list={ self.state.lists['m.recent'] }
                              label="Conversations"
                              editable={ true }
+                             verb="restore"
                              order="recent"
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }

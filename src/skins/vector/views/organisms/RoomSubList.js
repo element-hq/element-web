@@ -64,7 +64,7 @@ var RoomSubList = React.createClass({
     },
 
     componentWillMount: function() {
-        this.sortList();
+        this.sortList(this.props.list, this.props.order);
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -100,13 +100,14 @@ var RoomSubList = React.createClass({
     },
 
     sortList: function(list, order) {
-        if (list === undefined) list = this.props.list;
+        if (list === undefined) list = this.state.sortedList;
         if (order === undefined) order = this.props.order;
         var comparator;
         list = list || [];
         if (order === "manual") comparator = this.manualComparator;
         if (order === "recent") comparator = this.recentsComparator;
 
+        // console.log("sorting list for room " + this.props.label + " with length " + list.length + ", this.props.list = " + this.props.list);
         this.setState({ sortedList: list.sort(comparator) });
     },
 
@@ -146,7 +147,7 @@ var RoomSubList = React.createClass({
     findRoomTile: function(room) {        
         var index = this.state.sortedList.indexOf(room); 
         if (index >= 0) {
-            console.log("found: room: " + room + " with id " + room.roomId);
+            //console.log("found: room: " + room + " with id " + room.roomId);
         }
         else {
             console.log("didn't find room");
