@@ -77,7 +77,7 @@ var roomTileSource = {
 
             var newOrder= {};
             if (item.targetList.props.order === 'manual') {
-                newOrder['order' = item.targetList.calcManualOrderTagData(item.room);
+                newOrder['order'] = item.targetList.calcManualOrderTagData(item.room);
             }
 
             // if we moved lists or the ordering changed, add the new tag

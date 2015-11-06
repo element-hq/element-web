@@ -139,8 +139,8 @@ module.exports = {
             var me = room.getMember(MatrixClientPeg.get().credentials.userId);
 
             if (me && me.membership == "invite") {
-                s.lists["invites"] = s.lists["invites"] || [];
-                s.lists["invites"].push(room);
+                s.lists["m.invite"] = s.lists["m.invite"] || [];
+                s.lists["m.invite"].push(room);
             }
             else {
                 var shouldShowRoom =  (
@@ -172,8 +172,8 @@ module.exports = {
                         }
                     }
                     else {
-                        s.lists["recents"] = s.lists["recents"] || [];
-                        s.lists["recents"].push(room); 
+                        s.lists["m.recent"] = s.lists["m.recent"] || [];
+                        s.lists["m.recent"].push(room); 
                     }
                 }
             }

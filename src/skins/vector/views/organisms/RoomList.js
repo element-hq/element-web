@@ -44,7 +44,7 @@ module.exports = React.createClass({
             <div className="mx_RoomList" onScroll={self._repositionTooltip}>
                 { expandButton }
 
-                <RoomSubList list={ self.state.lists['invites'] }
+                <RoomSubList list={ self.state.lists['m.invite'] }
                              label="Invites"
                              editable={ false }
                              order="recent"
@@ -52,9 +52,9 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              collapsed={ self.props.collapsed } />
 
-                <RoomSubList list={ self.state.lists['favourite'] }
+                <RoomSubList list={ self.state.lists['m.favourite'] }
                              label="Favourites"
-                             tagName="favourite"
+                             tagName="m.favourite"
                              verb="favourite"
                              editable={ true }
                              order="manual"
@@ -62,7 +62,7 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              collapsed={ self.props.collapsed } />
 
-                <RoomSubList list={ self.state.lists['recents'] }
+                <RoomSubList list={ self.state.lists['m.recent'] }
                              label="Conversations"
                              editable={ true }
                              order="recent"
@@ -70,9 +70,9 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              collapsed={ self.props.collapsed } />
 
-                <RoomSubList list={ self.state.lists['lowpriority'] }
+                <RoomSubList list={ self.state.lists['m.lowpriority'] }
                              label="Low priority"
-                             tagName="lowpriority"
+                             tagName="m.lowpriority"
                              verb="deprioritize"
                              editable={ true }
                              order="recent"
@@ -81,7 +81,7 @@ module.exports = React.createClass({
                              collapsed={ self.props.collapsed } />
 
                 { Object.keys(self.state.lists).map(function(tagName) {
-                    if (!tagName.match(/^(invites|favourite|recents|lowpriority|archived)$/)) {
+                    if (!tagName.match(/^m\.(invite|favourite|recent|lowpriority|archived)$/)) {
                         return <RoomSubList list={ self.state.lists[tagName] }
                              key={ tagName }
                              label={ tagName }
@@ -96,7 +96,7 @@ module.exports = React.createClass({
                     }
                 }) }
 
-                <RoomSubList list={ self.state.lists['archived'] }
+                <RoomSubList list={ self.state.lists['m.archived'] }
                              label="Historical"
                              editable={ false }
                              order="recent"
