@@ -81,7 +81,7 @@ var roomTileSource = {
             }
 
             // if we moved lists or the ordering changed, add the new tag
-            if (item.targetList.props.tagName && item.targetList !== item.originalList || newOrder) {
+            if (item.targetList.props.tagName && (item.targetList !== item.originalList || newOrder)) {
                 //component.state.set({ spinner: component.state.spinner ? component.state.spinner++ : 1 });
                 MatrixClientPeg.get().setRoomTag(item.room.roomId, item.targetList.props.tagName, newOrder).finally(function() {
                     //component.state.set({ spinner: component.state.spinner-- });
