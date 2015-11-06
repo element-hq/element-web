@@ -23,6 +23,8 @@ var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
 
+var url = require('url');
+
 module.exports = {
     PageTypes: {
         RoomView: "room_view",
@@ -157,8 +159,13 @@ module.exports = {
                         screen: undefined,
                         logged_in: true
                     });
-                    self.startMatrixClient();
-                    self.notifyNewScreen('');
+
+                    // We're left with the login token, hs and is url as query params
+                    // in the url, a little nasty but let's redirect to clear them
+                    var parsedUrl = url.parse(window.location.href);
+                    parsedUrl.search = "";
+                    window.location.href = url.format(parsedUrl);
+
                 }, function(error) {
                     self.notifyNewScreen('login');
                     self.setState({errorText: 'Login failed.'});
