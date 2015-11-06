@@ -38,54 +38,71 @@ module.exports = React.createClass({
                            null;
 
         var RoomSubList = sdk.getComponent('organisms.RoomSubList');
+        var self = this;
 
         return (
-            <div className="mx_RoomList" onScroll={this._repositionTooltip}>
+            <div className="mx_RoomList" onScroll={self._repositionTooltip}>
                 { expandButton }
 
-                <RoomSubList list={ this.state.lists['invites'] }
+                <RoomSubList list={ self.state.lists['invites'] }
                              label="Invites"
                              editable={ false }
                              order="recent"
-                             activityMap={ this.state.activityMap }
-                             selectedRoom={ this.props.selectedRoom }
-                             collapsed={ this.props.collapsed } />
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
 
-                <RoomSubList list={ this.state.lists['favourites'] }
+                <RoomSubList list={ self.state.lists['favourite'] }
                              label="Favourites"
-                             tagname="favourites"
+                             tagName="favourite"
                              verb="favourite"
                              editable={ true }
                              order="manual"
-                             activityMap={ this.state.activityMap }
-                             selectedRoom={ this.props.selectedRoom }
-                             collapsed={ this.props.collapsed } />
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
 
-                <RoomSubList list={ this.state.lists['recents'] }
-                             label="Recents"
+                <RoomSubList list={ self.state.lists['recents'] }
+                             label="Conversations"
                              editable={ true }
                              order="recent"
-                             activityMap={ this.state.activityMap }
-                             selectedRoom={ this.props.selectedRoom }
-                             collapsed={ this.props.collapsed } />
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
 
-                <RoomSubList list={ this.state.lists['hidden'] }
-                             label="Hidden"
-                             tagname="hidden"
-                             verb="hide"
+                <RoomSubList list={ self.state.lists['lowpriority'] }
+                             label="Low priority"
+                             tagName="lowpriority"
+                             verb="deprioritize"
                              editable={ true }
                              order="recent"
-                             activityMap={ this.state.activityMap }
-                             selectedRoom={ this.props.selectedRoom }
-                             collapsed={ this.props.collapsed } />
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
 
-                <RoomSubList list={ this.state.lists['archived'] }
+                { Object.keys(self.state.lists).map(function(tagName) {
+                    if (!tagName.match(/^(invites|favourite|recents|lowpriority|archived)$/)) {
+                        return <RoomSubList list={ self.state.lists[tagName] }
+                             key={ tagName }
+                             label={ tagName }
+                             tagName={ tagName }
+                             verb={ "tag as " + tagName }
+                             editable={ true }
+                             order="manual"
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
+
+                    }
+                }) }
+
+                <RoomSubList list={ self.state.lists['archived'] }
                              label="Historical"
                              editable={ false }
                              order="recent"
-                             activityMap={ this.state.activityMap }
-                             selectedRoom={ this.props.selectedRoom }
-                             collapsed={ this.props.collapsed } />
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
             </div>
         );
     }

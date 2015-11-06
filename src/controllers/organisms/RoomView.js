@@ -351,7 +351,7 @@ module.exports = {
                 upload: undefined
             });
         }).done(undefined, function() {
-            // display error message
+            // TODO: display error message
         });
     },
 

@@ -56,16 +56,50 @@ var roomTileSource = {
 
         console.log("roomTile endDrag for " + item.room.roomId + " with didDrop=" + monitor.didDrop());
 
-        if (!monitor.didDrop() || !item.targetList.props.editable) {
+        if (monitor.didDrop() && item.targetList.props.editable) {
+            // if we moved lists, remove the old tag
+            if (item.targetList !== item.originalList) {
+                // commented out attempts to set a spinner on our target component as component is actually
+                // the original source component being dragged, not our target.  To fix we just need to
+                // move all of this to endDrop in the target instead.  FIXME later.
+
+                //component.state.set({ spinner: component.state.spinner ? component.state.spinner++ : 1 });
+                MatrixClientPeg.get().deleteRoomTag(item.room.roomId, item.originalList.props.tagName).finally(function() {
+                    //component.state.set({ spinner: component.state.spinner-- });
+                }).fail(function(err) {
+                    var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Failed to remove tag " + item.originalList.props.tagName + " from room",
+                        description: err.toString()
+                    });
+                });
+            }
+
+            var newOrder= {};
+            if (item.targetList.props.order === 'manual') {
+                newOrder['order' = item.targetList.calcManualOrderTagData(item.room);
+            }
+
+            // if we moved lists or the ordering changed, add the new tag
+            if (item.targetList.props.tagName && item.targetList !== item.originalList || newOrder) {
+                //component.state.set({ spinner: component.state.spinner ? component.state.spinner++ : 1 });
+                MatrixClientPeg.get().setRoomTag(item.room.roomId, item.targetList.props.tagName, newOrder).finally(function() {
+                    //component.state.set({ spinner: component.state.spinner-- });
+                }).fail(function(err) {
+                    var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Failed to add tag " + item.targetList.props.tagName + " to room",
+                        description: err.toString()
+                    });
+                });
+            }
+        }
+        else {
+            // cancel the drop and reset our original position
             props.roomSubList.moveRoomTile(item.room, item.originalIndex);
             if (item.targetList && item.targetList !== item.originalList) {
                 item.targetList.removeRoomTile(item.room);
             }
-            return;
-        }
-        else {
-            // When dropped on a compatible target, actually set the right tags for the new ordering
-            // persistNewOrder(item.room, dropResult.listId);
         }
     }
 };
@@ -87,6 +121,8 @@ var roomTileTarget = {
             item.targetList.removeRoomTile(item.room);
             item.targetList = props.roomSubList;
         }
+
+        if (!item.targetList.props.editable) return;
 
         if (item.targetList.props.order === 'manual') {
             if (item.room.roomId !== props.room.roomId) {
@@ -146,7 +182,7 @@ var RoomTile = React.createClass({
 
         var name;
         if (this.props.isInvite) {
-            name = this.props.room.getMember(MatrixClientPeg.get().credentials.userId).events.member.getSender();
+            name = this.props.room.getMember(myUserId).events.member.getSender();
         }
         else {
             name = this.props.room.name;

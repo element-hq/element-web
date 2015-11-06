@@ -48,7 +48,7 @@ var RoomSubList = React.createClass({
     propTypes: {
         list: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
         label: React.PropTypes.string.isRequired,
-        tagname: React.PropTypes.string,
+        tagName: React.PropTypes.string,
         editable: React.PropTypes.bool,
         order: React.PropTypes.string.isRequired,
         selectedRoom: React.PropTypes.string.isRequired,
@@ -88,8 +88,9 @@ var RoomSubList = React.createClass({
     },
 
     manualComparator: function(roomA, roomB) {
-        var a = roomA.tags[this.props.tagname].order;
-        var b = roomB.tags[this.props.tagname].order;
+        if (!roomA.tags[this.props.tagName] || !roomB.tags[this.props.tagName]) return 0;
+        var a = roomA.tags[this.props.tagName].order;
+        var b = roomB.tags[this.props.tagName].order;
         return a == b ? this.recentsComparator(roomA, roomB) : ( a > b  ? 1 : -1);
     },
 
@@ -150,7 +151,50 @@ var RoomSubList = React.createClass({
             room: room,
             index: index,
         });
-    },    
+    },
+
+    calcManualOrderTagData: function(room) {
+        var index = this.state.sortedList.indexOf(room); 
+
+        // we sort rooms by the lexicographic ordering of the 'order' metadata on their tags.
+        // for convenience, we calculate this for now a floating point number between 0.0 and 1.0.
+
+        var orderA = 0.0; // by default we're next to the beginning of the list
+        if (index > 0) {
+            var prevTag = this.state.sortedList[index - 1].tags[this.props.tagName];
+            if (!prevTag) {
+                console.error("Previous room in sublist is not tagged to be in this list. This should never happen.")
+            }
+            else if (prevTag.order === undefined) {
+                console.error("Previous room in sublist has no ordering metadata. This should never happen.");
+            }
+            else {
+                orderA = prevTag.order;
+            }
+        }
+
+        var orderB = 1.0; // by default we're next to the end of the list too
+        if (index < this.state.sortedList.length - 1) {
+            var nextTag = this.state.sortedList[index + 1].tags[this.props.tagName];
+            if (!nextTag) {
+                console.error("Next room in sublist is not tagged to be in this list. This should never happen.")
+            }
+            else if (nextTag.order === undefined) {
+                console.error("Next room in sublist has no ordering metadata. This should never happen.");
+            }
+            else {
+                orderB = nextTag.order;
+            }
+        }
+
+        var order = (orderA + orderB) / 2.0;
+        if (order === orderA || order === orderB) {
+            console.error("Cannot describe new list position.  This should be incredibly unlikely.");
+            // TODO: renumber the list
+        }
+
+        return order;
+    },
 
     makeRoomTiles: function() {
         var self = this;
