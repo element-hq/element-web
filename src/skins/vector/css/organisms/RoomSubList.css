@@ -30,3 +30,7 @@ limitations under the License.
     margin-top: 8px;
     margin-bottom: 4px;
 }
+
+.mx_RoomSubList_chevron {
+    padding-left: 5px;
+}

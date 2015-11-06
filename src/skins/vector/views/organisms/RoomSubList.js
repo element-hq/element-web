@@ -58,6 +58,7 @@ var RoomSubList = React.createClass({
 
     getInitialState: function() {
         return {
+            hidden: false,
             sortedList: [],
         };
     },
@@ -69,6 +70,10 @@ var RoomSubList = React.createClass({
     componentWillReceiveProps: function(newProps) {
         // order the room list appropriately before we re-render
         this.sortList(newProps.list, newProps.order);
+    },
+
+    onClick: function(ev) {
+        this.setState({ hidden : !this.state.hidden });
     },
 
     tsOfNewestEvent: function(room) {
@@ -229,14 +234,22 @@ var RoomSubList = React.createClass({
             target = <RoomDropTarget label={ 'Drop here to ' + this.props.verb }/>;
         }
 
+        var subList;
+        if (!this.state.hidden) {
+            subList = <div className="mx_RoomSubList">
+                            { target }
+                            { this.makeRoomTiles() }
+                        </div>;
+        }
+
+
         if (this.state.sortedList.length > 0 || this.props.editable) {
             return connectDropTarget(
                 <div>
-                    <h2 className="mx_RoomSubList_label">{ this.props.collapsed ? '' : this.props.label }</h2>
-                    <div className="mx_RoomSubList">
-                        { target }
-                        { this.makeRoomTiles() }
-                    </div>
+                    <h2 onClick={ this.onClick } className="mx_RoomSubList_label">{ this.props.collapsed ? '' : this.props.label }
+                        <img className="mx_RoomSubList_chevron" src={ this.state.hidden ? "/img/list-open.png" : "/img/list-close.png" } width="10" height="10"/>
+                    </h2>
+                    { subList }
                 </div>
             );
         }
