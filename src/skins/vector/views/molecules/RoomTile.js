@@ -43,9 +43,15 @@ var roomTileSource = {
             originalList: props.roomSubList,            
             originalIndex: props.roomSubList.findRoomTile(props.room).index,
             targetList: props.roomSubList, // at first target is same as original
+            lastTargetRoom: null,
+            lastYOffset: null,
+            lastYDelta: null,
         };
 
         console.log("roomTile beginDrag for " + item.room.roomId);
+
+        // doing this 'correctly' with state causes react-dnd to break seemingly due to the state transitions
+        props.room._dragging = true;
 
         return item;
     },
@@ -55,6 +61,11 @@ var roomTileSource = {
         var dropResult = monitor.getDropResult();
 
         console.log("roomTile endDrag for " + item.room.roomId + " with didDrop=" + monitor.didDrop());
+
+        props.room._dragging = false;
+        if (monitor.didDrop()) {
+            monitor.getDropResult().component.forceUpdate(); // as we're not using state
+        }
 
         if (monitor.didDrop() && item.targetList.props.editable) {
             // if we moved lists, remove the old tag
@@ -112,7 +123,8 @@ var roomTileTarget = {
 
     hover: function(props, monitor) {
         var item = monitor.getItem();
-        //console.log("hovering on room " + props.room.roomId + ", isOver=" + monitor.isOver());
+        var off = monitor.getClientOffset();
+        // console.log("hovering on room " + props.room.roomId + ", isOver=" + monitor.isOver());
 
         //console.log("item.targetList=" + item.targetList + ", roomSubList=" + props.roomSubList);
 
@@ -120,7 +132,7 @@ var roomTileTarget = {
         if (item.targetList !== props.roomSubList) {
             // we've switched target, so remove the tile from the previous target.
             // n.b. the previous target might actually be the source list.
-            console.log("switched target");
+            console.log("switched target sublist");
             switchedTarget = true;
             item.targetList.removeRoomTile(item.room);
             item.targetList = props.roomSubList;
@@ -129,10 +141,35 @@ var roomTileTarget = {
         if (!item.targetList.props.editable) return;
 
         if (item.targetList.props.order === 'manual') {
-            if (item.room.roomId !== props.room.roomId) {
+            if (item.room.roomId !== props.room.roomId && props.room !== item.lastTargetRoom) {
+                // find the offset of the target tile in the list.
                 var roomTile = props.roomSubList.findRoomTile(props.room);
+                // shuffle the list to add our tile to that position.
                 props.roomSubList.moveRoomTile(item.room, roomTile.index);
             }
+            
+            // stop us from flickering between our droptarget and the previous room.
+            // whenever the cursor changes direction we have to reset the flicker-damping.
+            
+            var yDelta = off.y - item.lastYOffset;
+
+            if ((yDelta > 0 && item.lastYDelta < 0) ||
+                (yDelta < 0 && item.lastYDelta > 0))
+            {
+                // the cursor changed direction - forget our previous room
+                item.lastTargetRoom = null;
+            }
+            else {
+                // track the last room we were hovering over so we can stop
+                // bouncing back and forth if the droptarget is narrower than
+                // the other list items.  The other way to do this would be
+                // to reduce the size of the hittarget on the list items, but
+                // can't see an easy way to do that.
+                item.lastTargetRoom = props.room;
+            }
+
+            if (yDelta) item.lastYDelta = yDelta;
+            item.lastYOffset = off.y;
         }
         else if (switchedTarget) {
             if (!props.roomSubList.findRoomTile(item.room).room) {
@@ -175,6 +212,15 @@ var RoomTile = React.createClass({
     },
 
     render: function() {
+        // if (this.props.clientOffset) {
+        //     //console.log("room " + this.props.room.roomId + " has dropTarget clientOffset " + this.props.clientOffset.x + "," + this.props.clientOffset.y);
+        // }
+
+        if (this.props.room._dragging) {
+            var RoomDropTarget = sdk.getComponent("molecules.RoomDropTarget");
+            return <RoomDropTarget placeholder={true}/>;
+        }
+
         var myUserId = MatrixClientPeg.get().credentials.userId;
         var me = this.props.room.currentState.members[myUserId];
         var classes = classNames({
@@ -247,11 +293,12 @@ var RoomTile = React.createClass({
 // Export the wrapped version, inlining the 'collect' functions
 // to more closely resemble the ES7
 module.exports = 
-DropTarget('RoomTile', roomTileTarget, function(connect) {
+DropTarget('RoomTile', roomTileTarget, function(connect, monitor) {
     return {
         // Call this function inside render()
         // to let React DnD handle the drag events:
         connectDropTarget: connect.dropTarget(),
+        isOver: monitor.isOver(),
     }
 })(
 DragSource('RoomTile', roomTileSource, function(connect, monitor) {

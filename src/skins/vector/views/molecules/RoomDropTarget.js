@@ -22,13 +22,21 @@ module.exports = React.createClass({
     displayName: 'RoomDropTarget',
 
     render: function() {
-        return (
-            <div className="mx_RoomDropTarget">
-                <div className="mx_RoomDropTarget_avatar"></div>
-                <div className="mx_RoomDropTarget_label">
-                    { this.props.label }
+        if (this.props.placeholder) {
+            return (
+                <div className="mx_RoomDropTarget mx_RoomDropTarget_placeholder">
                 </div>
-            </div>
-        );
+            );
+        }
+        else {
+            return (
+                <div className="mx_RoomDropTarget">
+                    <div className="mx_RoomDropTarget_avatar"></div>
+                    <div className="mx_RoomDropTarget_label">
+                        { this.props.label }
+                    </div>
+                </div>
+            );
+        }
     }
 });

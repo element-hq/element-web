@@ -16,7 +16,8 @@ limitations under the License.
 
 .mx_RoomTile {
     cursor: pointer;
-    display: table-row;
+    /* This fixes wrapping of long room names, but breaks drag & drop previews */
+    /* display: table-row; */
     font-size: 14px;
 }
 
@@ -38,6 +39,7 @@ limitations under the License.
 
 .mx_RoomTile_name {
     display: table-cell;
+    width: 100%;
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;

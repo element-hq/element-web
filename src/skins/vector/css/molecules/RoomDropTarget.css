@@ -26,6 +26,11 @@ limitations under the License.
     border-radius: 4px;
 }
 
+.mx_RoomDropTarget_placeholder {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
 .mx_RoomDropTarget_avatar {
     background-color: #fff;
     border-radius: 24px;

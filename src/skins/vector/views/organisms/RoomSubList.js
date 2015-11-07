@@ -26,6 +26,11 @@ var roomListTarget = {
         return true;
     },
 
+    drop: function(props, monitor, component) {
+        console.log("dropped on sublist")
+        return { component: component };
+    },
+
     hover: function(props, monitor, component) {
         var item = monitor.getItem();
 
@@ -147,7 +152,7 @@ var RoomSubList = React.createClass({
     findRoomTile: function(room) {        
         var index = this.state.sortedList.indexOf(room); 
         if (index >= 0) {
-            //console.log("found: room: " + room + " with id " + room.roomId);
+            // console.log("found: room: " + room.roomId + " with index " + index);
         }
         else {
             console.log("didn't find room");
@@ -210,14 +215,14 @@ var RoomSubList = React.createClass({
             // XXX: is it evil to pass in self as a prop to RoomTile?
             return (
                 <RoomTile
-                    room={room}
-                    roomSubList={self}
-                    key={room.roomId}
-                    collapsed={self.props.collapsed}
-                    selected={selected}
-                    unread={self.props.activityMap[room.roomId] === 1}
-                    highlight={self.props.activityMap[room.roomId] === 2}
-                    isInvite={self.props.label === 'Invites'} />
+                    room={ room }
+                    roomSubList={ self }
+                    key={ room.roomId }
+                    collapsed={ self.props.collapsed }
+                    selected={ selected }
+                    unread={ self.props.activityMap[room.roomId] === 1 }
+                    highlight={ self.props.activityMap[room.roomId] === 2 }
+                    isInvite={ self.props.label === 'Invites' } />
             );
         });
     },
