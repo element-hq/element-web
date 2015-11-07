@@ -110,7 +110,7 @@ module.exports = {
         this.refreshRoomList();
     },
 
-    onRoomTags: function(room) {
+    onRoomTags: function(event, room) {
         this.refreshRoomList();        
     },
 
