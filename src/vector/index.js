@@ -65,14 +65,21 @@ function parseQsFromFragment(location) {
     return {};
 }
 
+function parseQs(location) {
+    return qs.parse(location.search.substring(1));
+}
+
 // Here, we do some crude URL analysis to allow
 // deep-linking. We only support registration
 // deep-links in this example.
 function routeUrl(location) {
-    if (location.hash.indexOf('#/register') == 0) {
+    var params = parseQs(location);
+    var loginToken = params.loginToken;
+    if (loginToken) {
+        window.matrixChat.showScreen('token_login', parseQs(location));
+    }
+    else if (location.hash.indexOf('#/register') == 0) {
         window.matrixChat.showScreen('register', parseQsFromFragment(location));
-    } else if (location.hash.indexOf('#/login/cas') == 0) {
-        window.matrixChat.showScreen('cas_login', parseQsFromFragment(location));
     } else {
         window.matrixChat.showScreen(location.hash.substring(2));
     }

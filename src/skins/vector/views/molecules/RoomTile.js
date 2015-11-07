@@ -236,7 +236,8 @@ var RoomTile = React.createClass({
             name = this.props.room.getMember(myUserId).events.member.getSender();
         }
         else {
-            name = this.props.room.name;
+            // XXX: We should never display raw room IDs, but sometimes the room name js sdk gives is undefined
+            name = this.props.room.name || this.props.room.roomId;
         }
 
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
