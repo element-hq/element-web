@@ -71,6 +71,16 @@ module.exports = React.createClass({
         });
     },
 
+    onCallViewClick: function() {
+        var call = CallHandler.getAnyActiveCall();
+        if (call) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: call.roomId,
+            });
+        }
+    },
+
     render: function() {
         var RoomList = sdk.getComponent('organisms.RoomList');
         var BottomLeftMenu = sdk.getComponent('molecules.BottomLeftMenu');
@@ -89,7 +99,7 @@ module.exports = React.createClass({
         var callPreview;
         if (this.state.showCallElement) {
             var CallView = sdk.getComponent('molecules.voip.CallView');
-            callPreview = <CallView className="mx_LeftPanel_callView"/>
+            callPreview = <CallView className="mx_LeftPanel_callView" onClick={this.onCallViewClick} />
         }
 
         return (
