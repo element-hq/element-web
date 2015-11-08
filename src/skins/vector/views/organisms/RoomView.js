@@ -196,6 +196,7 @@ module.exports = React.createClass({
                 );
             } else {
                 var typingString = this.getWhoIsTypingString();
+                //typingString = "Testing typing...";
                 var unreadMsgs = this.getUnreadMessagesString();
                 // unread count trumps who is typing since the unread count is only
                 // set when you've scrolled up
