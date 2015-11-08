@@ -31,7 +31,6 @@ var roomListTarget = {
 
     drop: function(props, monitor, component) {
         if (debug) console.log("dropped on sublist")
-        return { component: component };
     },
 
     hover: function(props, monitor, component) {

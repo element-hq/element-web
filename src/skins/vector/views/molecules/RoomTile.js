@@ -58,13 +58,13 @@ var roomTileSource = {
 
     endDrag: function (props, monitor, component) {
         var item = monitor.getItem();
-        var dropResult = monitor.getDropResult();
 
         if (props.roomSubList.debug) console.log("roomTile endDrag for " + item.room.roomId + " with didDrop=" + monitor.didDrop());
 
         props.room._dragging = false;
         if (monitor.didDrop()) {
-            monitor.getDropResult().component.forceUpdate(); // as we're not using state
+            if (props.roomSubList.debug) console.log("force updating component " + item.targetList.props.label);
+            item.targetList.forceUpdate(); // as we're not using state
         }
 
         if (monitor.didDrop() && item.targetList.props.editable) {
