@@ -17,7 +17,7 @@ limitations under the License.
 .mx_RoomDropTarget {
     font-size: 14px;
     margin-left: 10px;
-    margin-right: 15px;
+    margin-right: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
     border: 1px dashed #76cfa6;
@@ -42,7 +42,7 @@ limitations under the License.
     height: 24px;
     float: left;
     margin-left: 7px;
-    margin-right: 8px;
+    margin-right: 7px;
 }
 
 .mx_RoomDropTarget_label {

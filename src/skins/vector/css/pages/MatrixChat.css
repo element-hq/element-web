@@ -71,8 +71,8 @@ limitations under the License.
 
     background-color: #eaf5f0;
 
-    -webkit-flex: 0 0 230px;
-    flex: 0 0 230px;
+    -webkit-flex: 0 0 210px;
+    flex: 0 0 210px;
 }
 
 .mx_MatrixChat .mx_LeftPanel.collapsed {
@@ -116,8 +116,8 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
-    -webkit-flex: 0 0 230px;
-    flex: 0 0 230px;
+    -webkit-flex: 0 0 235px;
+    flex: 0 0 235px;
 }
 
 .mx_MatrixChat .mx_RightPanel.collapsed {
