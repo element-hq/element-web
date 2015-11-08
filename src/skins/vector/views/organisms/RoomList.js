@@ -71,16 +71,6 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              collapsed={ self.props.collapsed } />
 
-                <RoomSubList list={ self.state.lists['m.lowpriority'] }
-                             label="Low priority"
-                             tagName="m.lowpriority"
-                             verb="demote"
-                             editable={ true }
-                             order="recent"
-                             activityMap={ self.state.activityMap }
-                             selectedRoom={ self.props.selectedRoom }
-                             collapsed={ self.props.collapsed } />
-
                 { Object.keys(self.state.lists).map(function(tagName) {
                     if (!tagName.match(/^m\.(invite|favourite|recent|lowpriority|archived)$/)) {
                         return <RoomSubList list={ self.state.lists[tagName] }
@@ -97,10 +87,22 @@ module.exports = React.createClass({
                     }
                 }) }
 
+                <RoomSubList list={ self.state.lists['m.lowpriority'] }
+                             label="Low priority"
+                             tagName="m.lowpriority"
+                             verb="demote"
+                             editable={ true }
+                             order="recent"
+                             bottommost={ self.state.lists['m.archived'].length === 0 }
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
+
                 <RoomSubList list={ self.state.lists['m.archived'] }
                              label="Historical"
                              editable={ false }
                              order="recent"
+                             bottommost={ true }
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
                              collapsed={ self.props.collapsed } />

@@ -60,6 +60,7 @@ var RoomSubList = React.createClass({
         tagName: React.PropTypes.string,
         editable: React.PropTypes.bool,
         order: React.PropTypes.string.isRequired,
+        bottommost: React.PropTypes.bool,
         selectedRoom: React.PropTypes.string.isRequired,
         activityMap: React.PropTypes.object.isRequired,
         collapsed: React.PropTypes.bool.isRequired
@@ -245,16 +246,22 @@ var RoomSubList = React.createClass({
             target = <RoomDropTarget label={ 'Drop here to ' + this.props.verb }/>;
         }
 
-        var subList;
-        if (!this.state.hidden) {
-            subList = <div className="mx_RoomSubList">
-                            { target }
-                            { this.makeRoomTiles() }
-                        </div>;
-        }
-
-
         if (this.state.sortedList.length > 0 || this.props.editable) {
+            var subList;
+            var classes = "mx_RoomSubList" +
+                          (this.props.bottommost ? " mx_RoomSubList_bottommost" : "");
+
+            if (!this.state.hidden) {
+                subList = <div className={ classes }>
+                                { target }
+                                { this.makeRoomTiles() }
+                          </div>;
+            }
+            else {
+                subList = <div className={ classes }>
+                          </div>;                
+            }
+
             return connectDropTarget(
                 <div>
                     <h2 onClick={ this.onClick } className="mx_RoomSubList_label">{ this.props.collapsed ? '' : this.props.label }
