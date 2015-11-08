@@ -26,6 +26,10 @@ limitations under the License.
     border-radius: 4px;
 }
 
+.collapsed .mx_RoomDropTarget {
+    margin-right: 10px;
+}
+
 .mx_RoomDropTarget_placeholder {
     padding-top: 1px;
     padding-bottom: 1px;
@@ -46,4 +50,12 @@ limitations under the License.
     margin-top: 3px;
     line-height: 21px;
     z-index: 1;
+}
+
+.collapsed .mx_RoomDropTarget_avatar {
+    float: none;
+}
+
+.collapsed .mx_RoomDropTarget_label {
+    display: none;
 }
