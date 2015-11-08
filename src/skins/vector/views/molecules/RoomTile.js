@@ -48,7 +48,7 @@ var roomTileSource = {
             lastYDelta: null,
         };
 
-        console.log("roomTile beginDrag for " + item.room.roomId);
+        if (props.roomSubList.debug) console.log("roomTile beginDrag for " + item.room.roomId);
 
         // doing this 'correctly' with state causes react-dnd to break seemingly due to the state transitions
         props.room._dragging = true;
@@ -60,7 +60,7 @@ var roomTileSource = {
         var item = monitor.getItem();
         var dropResult = monitor.getDropResult();
 
-        console.log("roomTile endDrag for " + item.room.roomId + " with didDrop=" + monitor.didDrop());
+        if (props.roomSubList.debug) console.log("roomTile endDrag for " + item.room.roomId + " with didDrop=" + monitor.didDrop());
 
         props.room._dragging = false;
         if (monitor.didDrop()) {
@@ -107,7 +107,7 @@ var roomTileSource = {
         }
         else {
             // cancel the drop and reset our original position
-            console.log("cancelling drop & drag");
+            if (props.roomSubList.debug) console.log("cancelling drop & drag");
             props.roomSubList.moveRoomTile(item.room, item.originalIndex);
             if (item.targetList && item.targetList !== item.originalList) {
                 item.targetList.removeRoomTile(item.room);
@@ -132,7 +132,7 @@ var roomTileTarget = {
         if (item.targetList !== props.roomSubList) {
             // we've switched target, so remove the tile from the previous target.
             // n.b. the previous target might actually be the source list.
-            console.log("switched target sublist");
+            if (props.roomSubList.debug) console.log("switched target sublist");
             switchedTarget = true;
             item.targetList.removeRoomTile(item.room);
             item.targetList = props.roomSubList;

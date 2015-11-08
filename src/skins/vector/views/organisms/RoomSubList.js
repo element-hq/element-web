@@ -21,13 +21,16 @@ var DropTarget = require('react-dnd').DropTarget;
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
+// turn this on for drop & drag console debugging galore
+var debug = false;
+
 var roomListTarget = {
     canDrop: function() {
         return true;
     },
 
     drop: function(props, monitor, component) {
-        console.log("dropped on sublist")
+        if (debug) console.log("dropped on sublist")
         return { component: component };
     },
 
@@ -35,7 +38,7 @@ var roomListTarget = {
         var item = monitor.getItem();
 
         if (component.state.sortedList.length == 0 && props.editable) {
-            console.log("hovering on sublist " + props.label + ", isOver=" + monitor.isOver());
+            if (debug) console.log("hovering on sublist " + props.label + ", isOver=" + monitor.isOver());
 
             if (item.targetList !== component) {
                  item.targetList.removeRoomTile(item.room);
@@ -49,6 +52,8 @@ var roomListTarget = {
 
 var RoomSubList = React.createClass({
     displayName: 'RoomSubList',
+
+    debug: debug,
 
     propTypes: {
         list: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
@@ -117,17 +122,17 @@ var RoomSubList = React.createClass({
     },
 
     moveRoomTile: function(room, atIndex) {
-        console.log("moveRoomTile: id " + room.roomId + ", atIndex " + atIndex);
+        if (debug) console.log("moveRoomTile: id " + room.roomId + ", atIndex " + atIndex);
         //console.log("moveRoomTile before: " + JSON.stringify(this.state.rooms));
         var found = this.findRoomTile(room);
         var rooms = this.state.sortedList;
         if (found.room) {
-            console.log("removing at index " + found.index + " and adding at index " + atIndex);
+            if (debug) console.log("removing at index " + found.index + " and adding at index " + atIndex);
             rooms.splice(found.index, 1);
             rooms.splice(atIndex, 0, found.room);
         }
         else {
-            console.log("Adding at index " + atIndex);
+            if (debug) console.log("Adding at index " + atIndex);
             rooms.splice(atIndex, 0, room);
         }
         this.setState({ sortedList: rooms });
@@ -137,14 +142,14 @@ var RoomSubList = React.createClass({
     // XXX: this isn't invoked via a property method but indirectly via
     // the roomList property method.  Unsure how evil this is.
     removeRoomTile: function(room) {
-        console.log("remove room " + room.roomId);
+        if (debug) console.log("remove room " + room.roomId);
         var found = this.findRoomTile(room);
         var rooms = this.state.sortedList;
         if (found.room) {
             rooms.splice(found.index, 1);
         }        
         else {
-            console.log*("Can't remove room " + room.roomId + " - can't find it");
+            console.warn("Can't remove room " + room.roomId + " - can't find it");
         }
         this.setState({ sortedList: rooms });
     },
@@ -155,7 +160,7 @@ var RoomSubList = React.createClass({
             // console.log("found: room: " + room.roomId + " with index " + index);
         }
         else {
-            console.log("didn't find room");
+            if (debug) console.log("didn't find room");
             room = null;
         }
         return ({
