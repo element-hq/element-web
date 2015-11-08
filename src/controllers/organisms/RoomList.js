@@ -183,6 +183,8 @@ module.exports = {
             }
         });
 
+        //console.log("calculated new roomLists; m.recent = " + s.lists["m.recent"]);
+
         // we actually apply the sorting to this when receiving the prop in RoomSubLists.
 
         return s;

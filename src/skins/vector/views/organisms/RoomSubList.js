@@ -78,6 +78,7 @@ var RoomSubList = React.createClass({
 
     componentWillReceiveProps: function(newProps) {
         // order the room list appropriately before we re-render
+        //if (debug) console.log("received new props, list = " + newProps.list);
         this.sortList(newProps.list, newProps.order);
     },
 
@@ -116,7 +117,7 @@ var RoomSubList = React.createClass({
         if (order === "manual") comparator = this.manualComparator;
         if (order === "recent") comparator = this.recentsComparator;
 
-        // console.log("sorting list for room " + this.props.label + " with length " + list.length + ", this.props.list = " + this.props.list);
+        //if (debug) console.log("sorting list for sublist " + this.props.label + " with length " + list.length + ", this.props.list = " + this.props.list);
         this.setState({ sortedList: list.sort(comparator) });
     },
 
