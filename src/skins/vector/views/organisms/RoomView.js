@@ -103,7 +103,7 @@ module.exports = React.createClass({
 
     scrollToBottom: function() {
         if (!this.refs.messageWrapper) return;
-        var messageWrapper = this.refs.messageWrapper.getDOMNode();
+        var messageWrapper = this.refs.messageWrapper;
         messageWrapper.scrollTop = messageWrapper.scrollHeight;
     },
 

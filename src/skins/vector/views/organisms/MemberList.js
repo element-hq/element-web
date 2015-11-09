@@ -71,7 +71,7 @@ module.exports = React.createClass({
     },
 
     onPopulateInvite: function(e) {
-        this.onInvite(this.refs.invite.getDOMNode().value);
+        this.onInvite(this.refs.invite.value);
         e.preventDefault();
     },
 

@@ -29,7 +29,7 @@ module.exports = React.createClass({
     mixins: [MessageComposerController],
 
     onUploadClick: function(ev) {
-        this.refs.uploadInput.getDOMNode().click();
+        this.refs.uploadInput.click();
     },
 
     onUploadFileSelected: function(ev) {
@@ -38,7 +38,7 @@ module.exports = React.createClass({
         if (files && files.length > 0) {
             this.props.uploadFile(files[0]);
         }
-        this.refs.uploadInput.getDOMNode().value = null;
+        this.refs.uploadInput.value = null;
     },
 
     onCallClick: function(ev) {

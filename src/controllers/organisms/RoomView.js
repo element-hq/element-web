@@ -60,7 +60,7 @@ module.exports = {
 
     componentWillUnmount: function() {
         if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper.getDOMNode();
+            var messageWrapper = this.refs.messageWrapper;
             messageWrapper.removeEventListener('drop', this.onDrop);
             messageWrapper.removeEventListener('dragover', this.onDragOver);
             messageWrapper.removeEventListener('dragleave', this.onDragLeaveOrEnd);
@@ -99,7 +99,6 @@ module.exports = {
                     // scroll to bottom
                     var messageWrapper = this.refs.messageWrapper;
                     if (messageWrapper) {
-                        messageWrapper = messageWrapper.getDOMNode();
                         messageWrapper.scrollTop = messageWrapper.scrollHeight;
                     }
                 }
@@ -138,7 +137,7 @@ module.exports = {
         if (room.roomId != this.props.roomId) return;
 
         if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper.getDOMNode();
+            var messageWrapper = this.refs.messageWrapper;
             this.atBottom = (
                 messageWrapper.scrollHeight - messageWrapper.scrollTop <=
                 (messageWrapper.clientHeight + 150)
@@ -225,7 +224,7 @@ module.exports = {
 
     componentDidMount: function() {
         if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper.getDOMNode();
+            var messageWrapper = this.refs.messageWrapper;
 
             messageWrapper.addEventListener('drop', this.onDrop);
             messageWrapper.addEventListener('dragover', this.onDragOver);
@@ -243,7 +242,7 @@ module.exports = {
     componentDidUpdate: function() {
         if (!this.refs.messageWrapper) return;
 
-        var messageWrapper = this.refs.messageWrapper.getDOMNode();
+        var messageWrapper = this.refs.messageWrapper;
 
         if (this.state.paginating && !this.waiting_for_paginate) {
             var heightGained = messageWrapper.scrollHeight - this.oldScrollHeight;
@@ -262,7 +261,7 @@ module.exports = {
 
     fillSpace: function() {
         if (!this.refs.messageWrapper) return;
-        var messageWrapper = this.refs.messageWrapper.getDOMNode();
+        var messageWrapper = this.refs.messageWrapper;
         if (messageWrapper.scrollTop < messageWrapper.clientHeight && this.state.room.oldState.paginationToken) {
             this.setState({paginating: true});
 
@@ -320,7 +319,7 @@ module.exports = {
 
     onMessageListScroll: function(ev) {
         if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper.getDOMNode();
+            var messageWrapper = this.refs.messageWrapper;
             var wasAtBottom = this.atBottom;
             this.atBottom = messageWrapper.scrollHeight - messageWrapper.scrollTop <= messageWrapper.clientHeight;
             if (this.atBottom && !wasAtBottom) {
