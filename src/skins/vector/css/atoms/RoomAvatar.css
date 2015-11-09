@@ -14,17 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MemberAvatar {
-    z-index: 20;
-    border-radius: 20px;
+.mx_RoomAvatar {
 }
 
-.mx_MemberAvatar_initial {
+.mx_RoomAvatar_initial {
     position: absolute;
     color: #fff;
     text-align: center;
-}
-
-.mx_MemberAvatar_wrapper {
-    position: relative;
+    font-weight: normal ! important;
 }

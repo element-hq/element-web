@@ -350,8 +350,12 @@ module.exports = {
             self.setState({
                 upload: undefined
             });
-        }).done(undefined, function() {
-            // TODO: display error message
+        }).done(undefined, function(error) {
+            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to upload file",
+                description: error.toString()
+            });
         });
     },
 
@@ -377,6 +381,7 @@ module.exports = {
                     room_events: {
                         search_term: term,
                         filter: filter,
+                        order_by: "recent",
                         event_context: {
                             before_limit: 1,
                             after_limit: 1,
@@ -390,7 +395,11 @@ module.exports = {
                 searchResults: data,
             });
         }, function(error) {
-            // TODO: show dialog or something
+            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Search failed",
+                description: error.toString()
+            });
         });
     },
 
@@ -408,7 +417,7 @@ module.exports = {
             var eventIds = Object.keys(results);
             // XXX: todo: merge overlapping results somehow?
             // XXX: why doesn't searching on name work?
-            var resultList = eventIds.map(function(key) { return results[key]; }).sort(function(a, b) { b.rank - a.rank });
+            var resultList = eventIds.map(function(key) { return results[key]; }); // .sort(function(a, b) { b.rank - a.rank });
             for (var i = 0; i < resultList.length; i++) {
                 var ts1 = resultList[i].result.origin_server_ts;
                 ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); //  Rank: {resultList[i].rank}

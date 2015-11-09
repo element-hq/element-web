@@ -15,20 +15,40 @@ limitations under the License.
 */
 
 .mx_MatrixToolbar {
-    text-align: center;
-    background-color: #ff0064;
+    background-color: #76cfa6;
     color: #fff;
-    font-weight: bold;
-    padding: 6px;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
 }
 
-.mx_MatrixToolbar button {
-    margin-left: 12px;
+.mx_MatrixToolbar_warning {
+    margin-left: 16px;
+    margin-right: 8px;
+    margin-top: -2px;
+}
+
+.mx_MatrixToolbar_link
+{
+    color: #fff ! important;
+    text-decoration: underline ! important;
+    cursor: pointer;
 }
 
 .mx_MatrixToolbar_close {
-    float: right;
-    margin-top: 3px;
-    margin-right: 12px;
+    -webkit-flex: 1;
+    flex: 1;
     cursor: pointer;
+    text-align: right;
+}
+
+.mx_MatrixToolbar_close img {
+    display: block;
+    float: right;
+    margin-right: 10px;
 }
