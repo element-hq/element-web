@@ -158,13 +158,14 @@ limitations under the License.
     order: 4;
 
     width: 100%;
-    -webkit-flex: 0 0 36px;
-    flex: 0 0 36px;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
 }
 
 .mx_RoomView_statusAreaBox {
     max-width: 960px;
     margin: auto;
+    min-height: 36px;
 }
 
 .mx_RoomView_statusAreaBox_line {
@@ -186,7 +187,8 @@ limitations under the License.
 }
 
 .mx_RoomView_connectionLostBar {
-    margin-top: 5px;
+    margin-top: 19px;
+    height: 58px;
 }
 
 .mx_RoomView_connectionLostBar img {
@@ -196,20 +198,19 @@ limitations under the License.
     float: left;
 }
 
-.mx_RoomView_connectionLostBar_textArea {
-    float: left;
-}
-
 .mx_RoomView_connectionLostBar_title {
-    color: #f00;
+    color: #ff0064;
 }
 
 .mx_RoomView_connectionLostBar_desc {
-    color: #ddd;
-    font-size: 12px;
+    color: #454545;
+    font-size: 14px;
+    opacity: 0.5;
 }
 
 .mx_RoomView_resend_link {
+    color: #454545 ! important;
+    text-decoration: underline ! important;
     cursor: pointer;
 }
 

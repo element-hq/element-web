@@ -204,13 +204,13 @@ module.exports = React.createClass({
                 if (this.state.syncState === "ERROR") {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/cancel.png" width="10" height="12" alt=""/>
+                            <img src="img/warning2.png" width="30" height="30" alt="/!\"/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
-                                <span className="mx_RoomView_connectionLostBar_title">
-                                Internet connection has been lost.
-                                </span>
+                                <div className="mx_RoomView_connectionLostBar_title">
+                                    Connectivity to the server has been lost.
+                                </div>
                                 <div className="mx_RoomView_connectionLostBar_desc">
-                                Sent messages will be stored until your connection has resumed.
+                                    Sent messages will be stored until your connection has returned.
                                 </div>
                             </div>
                         </div>
@@ -219,16 +219,16 @@ module.exports = React.createClass({
                 else if (this.state.hasUnsentMessages) {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/cancel.png" width="10" height="12" alt=""/>
+                            <img src="img/warning2.png" width="30" height="30" alt="/!\"/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
-                                <span className="mx_RoomView_connectionLostBar_title">
-                                Some of your messages have not been sent.
-                                </span>
+                                <div className="mx_RoomView_connectionLostBar_title">
+                                    Some of your messages have not been sent.
+                                </div>
                                 <div className="mx_RoomView_connectionLostBar_desc">
-                                    <span className="mx_RoomView_resend_link"
-                                        onClick={ this.onResendAllClick } >
+                                    <a className="mx_RoomView_resend_link"
+                                        onClick={ this.onResendAllClick }>
                                     Resend all now
-                                    </span> or select individual messages to re-send.
+                                    </a> or select individual messages to re-send.
                                 </div>
                             </div>
                         </div>
