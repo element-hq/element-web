@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 module.exports = {
     DialogContainerId: "mx_Dialog_Container",
@@ -52,7 +53,7 @@ module.exports = {
             </div>
         );
 
-        React.render(dialog, this.getOrCreateContainer());
+        ReactDOM.render(dialog, this.getOrCreateContainer());
 
         return {close: closeDialog};
     },
@@ -77,7 +78,7 @@ module.exports = {
             </div>
         );
 
-        React.render(dialog, this.getOrCreateContainer());
+        ReactDOM.render(dialog, this.getOrCreateContainer());
 
         return {close: closeDialog};
     },
