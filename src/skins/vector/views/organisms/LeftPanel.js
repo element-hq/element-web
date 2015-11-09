@@ -17,12 +17,14 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var DragDropContext = require('react-dnd').DragDropContext;
+var HTML5Backend = require('react-dnd/modules/backends/HTML5');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 
-module.exports = React.createClass({
+var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
 
     getInitialState: function() {
@@ -114,3 +116,4 @@ module.exports = React.createClass({
     }
 });
 
+module.exports = DragDropContext(HTML5Backend)(LeftPanel);
