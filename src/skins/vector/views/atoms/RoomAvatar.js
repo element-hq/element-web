@@ -52,7 +52,7 @@ module.exports = React.createClass({
             var initial;
             if (this.props.room.name[0])
                 initial = this.props.room.name[0].toUpperCase();
-            if (initial === '@' && this.props.room.name[1])
+            if ((initial === '@' || initial === '#') && this.props.room.name[1])
                 initial = this.props.room.name[1].toUpperCase();
          
             return (
