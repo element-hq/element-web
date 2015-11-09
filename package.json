@@ -34,7 +34,8 @@
     "q": "^1.4.1",
     "react": "^0.13.3",
     "react-loader": "^1.4.0",
-    "sanitize-html": "^1.11.1"
+    "react-dnd": "^1.1.8",
+    "sanitize-html": "^1.0.0"
   },
   "devDependencies": {
     "babel": "^5.8.23",

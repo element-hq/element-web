@@ -14,19 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomTooltip {
-    display: none;
-    position: fixed;
-    border: 1px solid #a4a4a4;
-    border-radius: 8px;
-    background-color: #fff;
-    z-index: 1000;
-    left: 64px;
-    padding: 6px;
+.mx_RoomSubList {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
 }
 
-.mx_RoomTooltip_chevron {
-    position: absolute;
-    left: -9px;
-    top: 8px;
+.mx_RoomSubList_bottommost {
+    /* XXX: this should really be 100% of the RoomList height, but can't seem to get at it */
+    min-height: 400px;
+}
+
+.mx_RoomSubList_label {
+    text-transform: uppercase;
+    color: #3d3b39;
+    font-weight: 600;
+    font-size: 14px;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+
+.mx_RoomSubList_chevron {
+    padding-left: 5px;
+}
+
+.collapsed .mx_RoomSubList_chevron  {
+    padding-left: 13px;
 }

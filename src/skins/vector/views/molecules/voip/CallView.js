@@ -34,7 +34,7 @@ module.exports = React.createClass({
     render: function(){
         var VideoView = sdk.getComponent('molecules.voip.VideoView');
         return (
-            <VideoView ref="video"/>
+            <VideoView ref="video" onClick={ this.props.onClick }/>
         );
     }
 });

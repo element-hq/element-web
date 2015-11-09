@@ -196,6 +196,7 @@ module.exports = React.createClass({
                 );
             } else {
                 var typingString = this.getWhoIsTypingString();
+                //typingString = "Testing typing...";
                 var unreadMsgs = this.getUnreadMessagesString();
                 // no conn bar trumps unread count since you can't get unread messages
                 // without a connection! (technically may already have some but meh)
