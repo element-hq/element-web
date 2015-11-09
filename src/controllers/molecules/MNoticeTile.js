@@ -23,6 +23,6 @@ linkifyMatrix(linkify);
 
 module.exports = {
     componentDidMount: function() {
-        linkifyElement(this.refs.content.getDOMNode(), linkifyMatrix.options);
+        linkifyElement(this.refs.content, linkifyMatrix.options);
     }
 };
