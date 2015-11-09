@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -74,7 +75,7 @@ module.exports = {
             </div>
         );
 
-        React.render(menu, this.getOrCreateContainer());
+        ReactDOM.render(menu, this.getOrCreateContainer());
 
         return {close: closeMenu};
     },

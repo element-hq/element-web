@@ -192,8 +192,8 @@ module.exports = {
 
     _repositionTooltip: function(e) {
         if (this.tooltip && this.tooltip.parentElement) {
-            var scroll = this.getDOMNode();
-            this.tooltip.style.top = (scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - scroll.scrollTop) + "px"; 
+            var scroll = this;
+            this.tooltip.style.top = (scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - this.scrollTop) + "px"; 
         }
     },
 };

@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var DragDropContext = require('react-dnd').DragDropContext;
-var HTML5Backend = require('react-dnd/modules/backends/HTML5');
+var HTML5Backend = require('react-dnd-html5-backend');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
