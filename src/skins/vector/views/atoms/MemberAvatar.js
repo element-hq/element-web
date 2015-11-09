@@ -49,7 +49,7 @@ module.exports = React.createClass({
                 initial = this.props.member.name[1].toUpperCase();
          
             return (
-                <span>
+                <span className="mx_MemberAvatar_wrapper">
                     <span className="mx_MemberAvatar_initial"
                           style={{ fontSize: (this.props.width * 0.75) + "px",
                                    width: this.props.width + "px",

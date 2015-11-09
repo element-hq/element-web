@@ -24,3 +24,7 @@ limitations under the License.
     color: #fff;
     text-align: center;
 }
+
+.mx_MemberAvatar_wrapper {
+    position: relative;
+}
