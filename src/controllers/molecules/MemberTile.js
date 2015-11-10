@@ -19,7 +19,6 @@ limitations under the License.
 var dis = require("../../dispatcher");
 var Modal = require("../../Modal");
 var sdk = require('../../index.js');
-var Loader = require("react-loader");
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
@@ -39,6 +38,8 @@ module.exports = {
                 if (should_leave) {
                     var d = MatrixClientPeg.get().leave(roomId);
 
+                    // FIXME: controller shouldn't be loading a view :(
+                    var Loader = sdk.getComponent("atoms.Spinner");
                     var modal = Modal.createDialog(Loader);
 
                     d.then(function() {

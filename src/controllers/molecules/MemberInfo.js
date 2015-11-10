@@ -30,7 +30,6 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
 var Modal = require("../../Modal");
 var sdk = require('../../index');
-var Loader = require("react-loader");
 
 module.exports = {
     componentDidMount: function() {
@@ -227,7 +226,9 @@ module.exports = {
             onFinished: function(should_leave) {
                 if (should_leave) {
                     var d = MatrixClientPeg.get().leave(roomId);
-
+                    
+                    // FIXME: controller shouldn't be loading a view :(
+                    var Loader = sdk.getComponent("atoms.Spinner");
                     var modal = Modal.createDialog(Loader);
 
                     d.then(function() {
