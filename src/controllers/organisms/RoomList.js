@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require("react");
 var ReactDOM = require("react-dom");
+
 var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
 var RoomListSorter = require("matrix-react-sdk/lib/RoomListSorter");
 var dis = require("matrix-react-sdk/lib/dispatcher");
@@ -194,7 +195,7 @@ module.exports = {
     _repositionTooltip: function(e) {
         if (this.tooltip && this.tooltip.parentElement) {
             var scroll = ReactDOM.findDOMNode(this);
-            this.tooltip.style.top = (scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - scroll.scrollTop) + "px"; 
+            this.tooltip.style.top = (scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - scroll.children[2].scrollTop) + "px"; 
         }
     },
 };

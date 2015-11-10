@@ -38,16 +38,17 @@ limitations under the License.
     
 }
 
-.mx_LeftPanel .mx_RoomList {
+.mx_LeftPanel .mx_RoomList_scrollbar {
     -webkit-box-ordinal-group: 1;
     -moz-box-ordinal-group: 1;
     -ms-flex-order: 1;
     -webkit-order: 1;
     order: 1;
 
-    overflow-y: auto;
     -webkit-flex: 1 1 0;
     flex: 1 1 0;
+
+    overflow-y: auto; 
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu {

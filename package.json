@@ -36,6 +36,7 @@
     "react-dnd": "^2.0.2",
     "react-dnd-html5-backend": "^2.0.0",
     "react-dom": "^0.14.2",
+    "react-gemini-scrollbar": "^2.0.1",
     "react-loader": "^1.4.0",
     "sanitize-html": "^1.0.0"
   },

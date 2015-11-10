@@ -20,6 +20,7 @@ var React = require('react');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
+var GeminiScrollbar = require('react-gemini-scrollbar');
 var RoomListController = require('../../../../controllers/organisms/RoomList')
 
 module.exports = React.createClass({
@@ -41,7 +42,8 @@ module.exports = React.createClass({
         var self = this;
 
         return (
-            <div className="mx_RoomList" onScroll={self._repositionTooltip}>
+            <GeminiScrollbar className="mx_RoomList_scrollbar" autoshow={true} onScroll={self._repositionTooltip}>
+            <div className="mx_RoomList">
                 { expandButton }
 
                 <RoomSubList list={ self.state.lists['m.invite'] }
@@ -107,6 +109,7 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              collapsed={ self.props.collapsed } />
             </div>
+            </GeminiScrollbar>
         );
     }
 });
