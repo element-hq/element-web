@@ -29,23 +29,22 @@ module.exports = React.createClass({
     displayName: 'Login',
     mixins: [LoginController],
 
-    componentWillMount: function() {
+    getInitialState: function() {
         // TODO: factor out all localstorage stuff into its own home.
         // This is common to Login, Register and MatrixClientPeg
         var localStorage = window.localStorage;
+        var hs_url, is_url;
         if (localStorage) {
-            var hs_url = localStorage.getItem("mx_hs_url");
-            var is_url = localStorage.getItem("mx_is_url");
+            hs_url = localStorage.getItem("mx_hs_url");
+            is_url = localStorage.getItem("mx_is_url");
         }
 
-        this.setState({
+        return {
             customHsUrl: hs_url || config.default_hs_url,
             customIsUrl: is_url || config.default_is_url,
-            serverConfigVisible: (hs_url !== config.default_hs_url ||
-                                  is_url !== config.default_is_url)
-        });
-
-        this.onHSChosen();
+            serverConfigVisible: (hs_url && hs_url !== config.default_hs_url ||
+                                  is_url && is_url !== config.default_is_url)
+        }
     },
 
     getHsUrl: function() {
@@ -147,7 +146,7 @@ module.exports = React.createClass({
                 return (
                     <div>
                         <form onSubmit={this.onUserPassEntered}>
-                        <input className="mx_Login_field" ref="user" type="text" value={this.state.username} onChange={this.onUsernameChanged} placeholder="Email or user name" /><br />
+                        <input className="mx_Login_field" autoFocus={true} ref="user" type="text" value={this.state.username} onChange={this.onUsernameChanged} placeholder="Email or user name" /><br />
                         <input className="mx_Login_field" ref="pass" type="password" value={this.state.password} onChange={this.onPasswordChanged} placeholder="Password" /><br />
                         { this.componentForStep('choose_hs') }
                         <input className="mx_Login_submit" type="submit" value="Log in" />

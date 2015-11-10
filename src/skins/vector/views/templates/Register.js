@@ -29,21 +29,29 @@ module.exports = React.createClass({
     displayName: 'Register',
     mixins: [RegisterController],
 
-    componentWillMount: function() {
+    getInitialState: function() {
         // TODO: factor out all localstorage stuff into its own home.
         // This is common to Login, Register and MatrixClientPeg
         var localStorage = window.localStorage;
+        var hs_url, is_url;
         if (localStorage) {
-            var hs_url = localStorage.getItem("mx_hs_url");
-            var is_url = localStorage.getItem("mx_is_url");
+            hs_url = localStorage.getItem("mx_hs_url");
+            is_url = localStorage.getItem("mx_is_url");
         }
 
-        this.setState({
+        // make sure we have our MatrixClient set up whatever
+        // Useful for debugging only.
+        // MatrixClientPeg.replaceUsingUrls(
+        //     hs_url || config.default_hs_url,
+        //     is_url || config.default_is_url
+        // );
+
+        return {
             customHsUrl: hs_url || config.default_hs_url,
             customIsUrl: is_url || config.default_is_url,
-            serverConfigVisible: (hs_url !== config.default_hs_url ||
-                                  is_url !== config.default_is_url)
-        });
+            serverConfigVisible: (hs_url && hs_url !== config.default_hs_url ||
+                                  is_url && is_url !== config.default_is_url)
+        }
     },
 
     getRegFormVals: function() {
@@ -98,12 +106,12 @@ module.exports = React.createClass({
                 return (
                     <div>
                         <form onSubmit={this.onInitialStageSubmit}>
-                        <input className="mx_Login_field" type="text" ref="email" placeholder="Email address" defaultValue={this.savedParams.email} /><br />
+                        <input className="mx_Login_field" type="text" ref="email" autoFocus={true} placeholder="Email address" defaultValue={this.savedParams.email} /><br />
                         <input className="mx_Login_field" type="text" ref="username" placeholder="User name" defaultValue={this.savedParams.username} /><br />
                         <input className="mx_Login_field" type="password" ref="password" placeholder="Password" defaultValue={this.savedParams.password} /><br />
                         <input className="mx_Login_field" type="password" ref="confirmPassword" placeholder="Confirm password" defaultValue={this.savedParams.confirmPassword} /><br />
 
-                        <input className="mx_Login_checkbox" id="advanced" type="checkbox" value={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
+                        <input className="mx_Login_checkbox" id="advanced" type="checkbox" checked={this.state.serverConfigVisible} onChange={this.onServerConfigVisibleChange} />
                         <label htmlFor="advanced">Use custom server options (advanced)</label>
                         <div style={serverConfigStyle}>
                         <ServerConfig ref="serverConfig"
