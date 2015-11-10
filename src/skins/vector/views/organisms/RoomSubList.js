@@ -224,7 +224,7 @@ var RoomSubList = React.createClass({
                     room={ room }
                     roomSubList={ self }
                     key={ room.roomId }
-                    collapsed={ self.props.collapsed }
+                    collapsed={ self.props.collapsed || false}
                     selected={ selected }
                     unread={ self.props.activityMap[room.roomId] === 1 }
                     highlight={ self.props.activityMap[room.roomId] === 2 }
