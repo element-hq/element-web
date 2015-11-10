@@ -21,6 +21,7 @@ var classNames = require('classnames');
 var Loader = require('react-loader');
 
 var MemberListController = require('matrix-react-sdk/lib/controllers/organisms/MemberList')
+var GeminiScrollbar = require('react-gemini-scrollbar');
 
 var sdk = require('matrix-react-sdk')
 
@@ -104,7 +105,7 @@ module.exports = React.createClass({
         }
         return (
             <div className="mx_MemberList">
-                <div className="mx_MemberList_border">
+                <GeminiScrollbar autoshow={true} className="mx_MemberList_border">
                     {this.inviteTile()}
                     <div>
                         <div className="mx_MemberList_wrapper">
@@ -112,7 +113,7 @@ module.exports = React.createClass({
                         </div>
                     </div>
                     {invitedSection}
-                </div>
+                </GeminiScrollbar>
             </div>
         );
     }
