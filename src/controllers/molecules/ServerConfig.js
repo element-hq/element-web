@@ -48,6 +48,7 @@ module.exports = {
         });
     },
 
+    // XXX: horrible naming due to potential confusion between the word 'is' and the acronym 'IS'
     isChanged: function(ev) {
         this.setState({is_url: ev.target.value}, function() {
             this.props.onIsUrlChanged(this.state.is_url);

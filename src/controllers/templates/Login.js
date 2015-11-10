@@ -35,6 +35,7 @@ module.exports = {
 
     onHSChosen: function() {
         MatrixClientPeg.replaceUsingUrls(
+            // XXX: why is the controller invoking methods from the view? :( -matthew
             this.getHsUrl(),
             this.getIsUrl()
         );

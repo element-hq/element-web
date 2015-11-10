@@ -68,11 +68,33 @@ class MatrixClient {
         matrixClient = null;
     }
 
+    // FIXME, XXX: this all seems very convoluted :(
+    //   
+    // if we replace the singleton using URLs we bypass our createClient()
+    // global helper function... but if we replace it using
+    // an access_token we don't?
+    //
+    // Why do we have this peg wrapper rather than just MatrixClient.get()?
+    // Why do we name MatrixClient as MatrixClientPeg when we export it?
+    //
+    // -matthew
+
     replaceUsingUrls(hs_url, is_url) {
         matrixClient = Matrix.createClient({
             baseUrl: hs_url,
             idBaseUrl: is_url
         });
+        // XXX: factor this out with the localStorage setting in replaceUsingAccessToken
+        if (localStorage) {
+            try {
+                localStorage.setItem("mx_hs_url", hs_url);
+                localStorage.setItem("mx_is_url", is_url);
+            } catch (e) {
+                console.warn("Error using local storage: can't persist HS/IS URLs!");
+            }
+        } else {
+            console.warn("No local storage available: can't persist HS/IS URLs!");
+        }
     }
 
     replaceUsingAccessToken(hs_url, is_url, user_id, access_token) {
