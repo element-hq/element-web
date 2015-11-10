@@ -22,8 +22,8 @@ module.exports = {
     propTypes: {
         onHsUrlChanged: React.PropTypes.func,
         onIsUrlChanged: React.PropTypes.func,
-        default_hs_url: React.PropTypes.string,
-        default_is_url: React.PropTypes.string
+        defaultHsUrl: React.PropTypes.string,
+        defaultIsUrl: React.PropTypes.string
     },
 
     getDefaultProps: function() {
@@ -39,6 +39,8 @@ module.exports = {
         return {
             hs_url: this.props.defaultHsUrl,
             is_url: this.props.defaultIsUrl,
+            original_hs_url: this.props.defaultHsUrl,
+            original_is_url: this.props.defaultIsUrl,
         }
     },
 
