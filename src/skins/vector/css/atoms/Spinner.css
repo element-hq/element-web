@@ -21,5 +21,10 @@ limitations under the License.
     -webkit-justify-content: center;
     align-items: center;
     justify-content: center;
+    width: 100%;
     height: 100%;
+}
+
+.mx_MatrixChat_middlePanel .mx_Spinner {
+    height: auto;
 }
