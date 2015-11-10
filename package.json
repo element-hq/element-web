@@ -27,7 +27,8 @@
     "matrix-js-sdk": "https://github.com/matrix-org/matrix-js-sdk.git#develop",
     "optimist": "^0.6.1",
     "q": "^1.4.1",
-    "react": "^0.13.3",
+    "react": "^0.14.2",
+    "react-dom": "^0.14.2",
     "react-loader": "^1.4.0"
   },
   "//deps": "The loader packages are here because webpack in a project that depends on us needs them in this package's node_modules folder",

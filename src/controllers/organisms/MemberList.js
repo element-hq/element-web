@@ -115,9 +115,11 @@ module.exports = {
     onInvite: function(inputText) {
         var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
         var self = this;
-        // sanity check the input
         inputText = inputText.trim(); // react requires es5-shim so we know trim() exists
-        if (inputText[0] !== '@' || inputText.indexOf(":") === -1) {
+        var isEmailAddress = /^\S+@\S+\.\S+$/.test(inputText);
+
+        // sanity check the input for user IDs
+        if (!isEmailAddress && (inputText[0] !== '@' || inputText.indexOf(":") === -1)) {
             console.error("Bad user ID to invite: %s", inputText);
             Modal.createDialog(ErrorDialog, {
                 title: "Invite Error",
@@ -125,12 +127,22 @@ module.exports = {
             });
             return;
         }
+
+        var promise;
+        if (isEmailAddress) {
+            promise = MatrixClientPeg.get().inviteByEmail(this.props.roomId, inputText);
+        }
+        else {
+            promise = MatrixClientPeg.get().invite(this.props.roomId, inputText);
+        }
+
         self.setState({
             inviting: true
         });
-        console.log("Invite %s to %s", inputText, this.props.roomId);
-        MatrixClientPeg.get().invite(this.props.roomId, inputText).done(
-        function(res) {
+        console.log(
+            "Invite %s to %s - isEmail=%s", inputText, this.props.roomId, isEmailAddress
+        );
+        promise.done(function(res) {
             console.log("Invited");
             self.setState({
                 inviting: false

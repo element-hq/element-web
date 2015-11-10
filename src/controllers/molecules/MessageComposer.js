@@ -130,7 +130,7 @@ module.exports = {
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         this.sentHistory.init(
-            this.refs.textarea.getDOMNode(),
+            this.refs.textarea,
             this.props.room.roomId
         );
     },
@@ -143,14 +143,14 @@ module.exports = {
     onAction: function(payload) {
         switch (payload.action) {
             case 'focus_composer':
-                this.refs.textarea.getDOMNode().focus();
+                this.refs.textarea.focus();
                 break;
         }
     },
 
     onKeyDown: function (ev) {
         if (ev.keyCode === KeyCode.ENTER) {
-            var input = this.refs.textarea.getDOMNode().value;
+            var input = this.refs.textarea.value;
             if (input.length === 0) {
                 ev.preventDefault();
                 return;
@@ -179,7 +179,7 @@ module.exports = {
 
         var self = this;
         setTimeout(function() {
-            if (self.refs.textarea && self.refs.textarea.getDOMNode().value != '') {
+            if (self.refs.textarea && self.refs.textarea.value != '') {
                 self.onTypingActivity();
             } else {
                 self.onFinishedTyping();
@@ -188,13 +188,13 @@ module.exports = {
     },
 
     onEnter: function(ev) {
-        var contentText = this.refs.textarea.getDOMNode().value;
+        var contentText = this.refs.textarea.value;
 
         var cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
         if (cmd) {
             ev.preventDefault();
             if (!cmd.error) {
-                this.refs.textarea.getDOMNode().value = '';
+                this.refs.textarea.value = '';
             }
             if (cmd.promise) {
                 cmd.promise.done(function() {
@@ -241,12 +241,12 @@ module.exports = {
                 action: 'message_send_failed'
             });
         });
-        this.refs.textarea.getDOMNode().value = '';
+        this.refs.textarea.value = '';
         ev.preventDefault();
     },
 
     onTab: function(ev, sortedMembers) {
-        var textArea = this.refs.textarea.getDOMNode();
+        var textArea = this.refs.textarea;
         if (!this.tabStruct.completing) {
             this.tabStruct.completing = true;
             this.tabStruct.index = 0;

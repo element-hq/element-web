@@ -24,7 +24,7 @@ var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
 
-var Cas = require("../../CasLogic");
+var url = require('url');
 
 module.exports = {
     PageTypes: {
@@ -142,14 +142,17 @@ module.exports = {
                 });
                 this.notifyNewScreen('login');
                 break;
-            case 'cas_login':
+            case 'token_login':
                 if (this.state.logged_in) return;
 
                 var self = this;
-                var client = MatrixClientPeg.get();
-                var serviceUrl = Cas.getServiceUrl();
+                MatrixClientPeg.replaceUsingUrls(
+                    payload.params.homeserver,
+                    payload.params.identityServer
+                );
 
-                client.loginWithCas(payload.params.ticket, serviceUrl).done(function(data) {
+                var client = MatrixClientPeg.get();
+                client.loginWithToken(payload.params.loginToken).done(function(data) {
                     MatrixClientPeg.replaceUsingAccessToken(
                         client.getHomeserverUrl(), client.getIdentityServerUrl(),
                         data.user_id, data.access_token
@@ -158,8 +161,13 @@ module.exports = {
                         screen: undefined,
                         logged_in: true
                     });
-                    self.startMatrixClient();
-                    self.notifyNewScreen('');
+
+                    // We're left with the login token, hs and is url as query params
+                    // in the url, a little nasty but let's redirect to clear them
+                    var parsedUrl = url.parse(window.location.href);
+                    parsedUrl.search = "";
+                    window.location.href = url.format(parsedUrl);
+
                 }, function(error) {
                     self.notifyNewScreen('login');
                     self.setState({errorText: 'Login failed.'});
@@ -391,9 +399,9 @@ module.exports = {
                 action: 'start_login',
                 params: params
             });
-        } else if (screen == 'cas_login') {
+        } else if (screen == 'token_login') {
             dis.dispatch({
-                action: 'cas_login',
+                action: 'token_login',
                 params: params
             });
         } else if (screen.indexOf('room/') == 0) {
