@@ -41,6 +41,8 @@ limitations under the License.
 .mx_Login_box {
     width: 300px;
     min-height: 450px;
+    padding-top: 50px;
+    padding-bottom: 50px;
     margin: auto;
 }
 
