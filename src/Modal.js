@@ -39,7 +39,7 @@ module.exports = {
         var self = this;
 
         var closeDialog = function() {
-            React.unmountComponentAtNode(self.getOrCreateContainer());
+            ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
 
             if (props && props.onFinished) props.onFinished.apply(null, arguments);
         };
@@ -62,7 +62,7 @@ module.exports = {
         var self = this;
 
         var closeDialog = function() {
-            React.unmountComponentAtNode(self.getOrCreateContainer());
+            ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
 
             if (props && props.onFinished) props.onFinished.apply(null, arguments);
         };
