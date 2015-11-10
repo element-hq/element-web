@@ -37,6 +37,8 @@ var eventTileTypes = {
     'm.room.topic'  : 'molecules.EventAsTextTile',
 };
 
+var MAX_READ_AVATARS = 5;
+
 module.exports = React.createClass({
     displayName: 'EventTile',
     mixins: [EventTileController],
@@ -80,14 +82,29 @@ module.exports = React.createClass({
 
         if (!room) return [];
 
-        var userIds = room.getUsersReadUpTo(this.props.mxEvent);
+        // get list of read receipts, sorted most recent first
+        var receipts = room.getReceiptsForEvent(this.props.mxEvent).filter(function(r) {
+            return r.type === "m.read";
+        }).sort(function(r1, r2) {
+            return r2.data.ts - r1.data.ts;
+        });
 
         var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
 
-        for (var i = 0; i < userIds.length; ++i) {
-            var member = room.getMember(userIds[i]);
-            avatars.push(
+        for (var i = 0; i < receipts.length; ++i) {
+            var member = room.getMember(receipts[i].userId);
+            // add to the start so the most recent is on the end (ie. ends up rightmost)
+            avatars.unshift(
                 <MemberAvatar key={member.userId} member={member} width={14} height={14} resizeMethod="crop" />
+            );
+            if (i + 1 >= MAX_READ_AVATARS) {
+                break;
+            }
+        }
+        var remainder = receipts.length - MAX_READ_AVATARS;
+        if (remainder > 0) {
+            avatars.unshift(
+                <span className="mx_EventTile_readAvatarRemainder">+{ remainder }</span>
             );
         }
 
@@ -151,12 +168,14 @@ module.exports = React.createClass({
         }
         return (
             <div className={classes}>
+                <div className="mx_EventTile_msgOption">
+                    { editButton }
+                    { timestamp }
+                    { readAvatars }
+                </div>
                 { avatar }
                 { sender }
                 <div className="mx_EventTile_line">
-                    { timestamp }
-                    { editButton }
-                    { readAvatars }
                     <EventTileType mxEvent={this.props.mxEvent} searchTerm={this.props.searchTerm} />
                 </div>
             </div>
