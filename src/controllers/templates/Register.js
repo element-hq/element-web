@@ -177,6 +177,9 @@ module.exports = {
         if (formVals.username == '') {
             badFields.username = this.FieldErrors.Missing;
         }
+        if (formVals.email == '') {
+            badFields.email = this.FieldErrors.Missing;
+        }
         if (Object.keys(badFields).length > 0) {
             this.onBadFields(badFields);
             return;
@@ -228,12 +231,13 @@ module.exports = {
                     });
                     self.setStep('stage_m.login.email.identity');
                 }, function(error) {
+                    console.error(error);
                     self.setStep('initial');
                     var newState = {busy: false};
                     if (error.errcode == 'THREEPID_IN_USE') {
                         self.onBadFields({email: self.FieldErrors.InUse});
                     } else {
-                        newState.errorText = 'Unable to contact the given Home Server';
+                        newState.errorText = 'Unable to contact the given identity server';
                     }
                     self.setState(newState);
                 });
@@ -292,18 +296,27 @@ module.exports = {
 
                 var flow = self.chooseFlow(error.data.flows);
 
-                var flowStage = self.firstUncompletedStageIndex(flow);
-                var numDone = self.numCompletedStages(flow);
+                if (flow) {
+                    var flowStage = self.firstUncompletedStageIndex(flow);
+                    var numDone = self.numCompletedStages(flow);
 
-                self.setState({
-                    busy: false,
-                    flows: flow,
-                    currentStep: 1+numDone,
-                    totalSteps: flow.stages.length+1,
-                    flowStage: flowStage
-                });
-                self.startStage(flow.stages[flowStage]);
+                    self.setState({
+                        busy: false,
+                        flows: flow,
+                        currentStep: 1+numDone,
+                        totalSteps: flow.stages.length+1,
+                        flowStage: flowStage
+                    });
+                    self.startStage(flow.stages[flowStage]);
+                }
+                else {
+                    self.setState({
+                        busy: false,
+                        errorText: "Unable to register - missing email address?"
+                    });
+                }
             } else {
+                console.log(error);
                 self.setStep("initial");
                 var newState = {
                     busy: false,
