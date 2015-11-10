@@ -17,6 +17,7 @@ limitations under the License.
 var Matrix = require("matrix-js-sdk");
 var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
 var React = require("react");
+var ReactDOM = require("react-dom");
 var q = require("q");
 var ContentMessages = require("matrix-react-sdk/lib//ContentMessages");
 var WhoIsTyping = require("matrix-react-sdk/lib/WhoIsTyping");
@@ -60,7 +61,7 @@ module.exports = {
 
     componentWillUnmount: function() {
         if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper;
+            var messageWrapper = ReactDOM.findDOMNode(this.refs.messageWrapper);
             messageWrapper.removeEventListener('drop', this.onDrop);
             messageWrapper.removeEventListener('dragover', this.onDragOver);
             messageWrapper.removeEventListener('dragleave', this.onDragLeaveOrEnd);
@@ -99,7 +100,8 @@ module.exports = {
                     // scroll to bottom
                     var messageWrapper = this.refs.messageWrapper;
                     if (messageWrapper) {
-                        messageWrapper.scrollTop = messageWrapper.scrollHeight;
+                        var messageWrapperScroll = ReactDOM.findDOMNode(messageWrapper).children[2];
+                        messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
                     }
                 }
 
@@ -125,7 +127,7 @@ module.exports = {
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (!this.isMounted()) return;
 
-        // ignore anything that comes in whilst pagingating: we get one
+        // ignore anything that comes in whilst paginating: we get one
         // event for each new matrix event so this would cause a huge
         // number of UI updates. Just update the UI when the paginate
         // call returns.
@@ -137,10 +139,10 @@ module.exports = {
         if (room.roomId != this.props.roomId) return;
 
         if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper;
+            var messageWrapperScroll = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
             this.atBottom = (
-                messageWrapper.scrollHeight - messageWrapper.scrollTop <=
-                (messageWrapper.clientHeight + 150)
+                messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <=
+                (messageWrapperScroll.clientHeight + 150)
             );
         }
 
@@ -224,14 +226,16 @@ module.exports = {
 
     componentDidMount: function() {
         if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper;
+            var messageWrapper = ReactDOM.findDOMNode(this.refs.messageWrapper);
 
             messageWrapper.addEventListener('drop', this.onDrop);
             messageWrapper.addEventListener('dragover', this.onDragOver);
             messageWrapper.addEventListener('dragleave', this.onDragLeaveOrEnd);
             messageWrapper.addEventListener('dragend', this.onDragLeaveOrEnd);
 
-            messageWrapper.scrollTop = messageWrapper.scrollHeight;
+            var messageWrapperScroll = messageWrapper.children[2];
+
+            messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
 
             this.fillSpace();
         }
@@ -242,17 +246,17 @@ module.exports = {
     componentDidUpdate: function() {
         if (!this.refs.messageWrapper) return;
 
-        var messageWrapper = this.refs.messageWrapper;
+        var messageWrapperScroll = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
 
         if (this.state.paginating && !this.waiting_for_paginate) {
-            var heightGained = messageWrapper.scrollHeight - this.oldScrollHeight;
-            messageWrapper.scrollTop += heightGained;
+            var heightGained = messageWrapperScroll.scrollHeight - this.oldScrollHeight;
+            messageWrapperScroll.scrollTop += heightGained;
             this.oldScrollHeight = undefined;
             if (!this.fillSpace()) {
                 this.setState({paginating: false});
             }
         } else if (this.atBottom) {
-            messageWrapper.scrollTop = messageWrapper.scrollHeight;
+            messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
             if (this.state.numUnreadMessages !== 0) {
                 this.setState({numUnreadMessages: 0});
             }
@@ -261,11 +265,11 @@ module.exports = {
 
     fillSpace: function() {
         if (!this.refs.messageWrapper) return;
-        var messageWrapper = this.refs.messageWrapper;
-        if (messageWrapper.scrollTop < messageWrapper.clientHeight && this.state.room.oldState.paginationToken) {
+        var messageWrapperScroll = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
+        if (messageWrapperScroll.scrollTop < messageWrapperScroll.clientHeight && this.state.room.oldState.paginationToken) {
             this.setState({paginating: true});
 
-            this.oldScrollHeight = messageWrapper.scrollHeight;
+            this.oldScrollHeight = messageWrapperScroll.scrollHeight;
 
             if (this.state.messageCap < this.state.room.timeline.length) {
                 this.waiting_for_paginate = false;
@@ -319,9 +323,9 @@ module.exports = {
 
     onMessageListScroll: function(ev) {
         if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper;
+            var messageWrapperScroll = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
             var wasAtBottom = this.atBottom;
-            this.atBottom = messageWrapper.scrollHeight - messageWrapper.scrollTop <= messageWrapper.clientHeight;
+            this.atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight;
             if (this.atBottom && !wasAtBottom) {
                 this.forceUpdate(); // remove unread msg count
             }

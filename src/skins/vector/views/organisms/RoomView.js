@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
@@ -25,6 +26,7 @@ var sdk = require('matrix-react-sdk')
 var classNames = require("classnames");
 var filesize = require('filesize');
 
+var GeminiScrollbar = require('react-gemini-scrollbar');
 var RoomViewController = require('../../../../controllers/organisms/RoomView')
 
 var Loader = require("react-loader");
@@ -103,7 +105,7 @@ module.exports = React.createClass({
 
     scrollToBottom: function() {
         if (!this.refs.messageWrapper) return;
-        var messageWrapper = this.refs.messageWrapper;
+        var messageWrapper = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
         messageWrapper.scrollTop = messageWrapper.scrollHeight;
     },
 
@@ -298,7 +300,7 @@ module.exports = React.createClass({
                         { conferenceCallNotification }
                         { aux }
                     </div>
-                    <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
+                    <GeminiScrollbar autoshow={true} ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
                         <div className="mx_RoomView_messageListWrapper">
                             { fileDropTarget }    
                             <ol className="mx_RoomView_MessageList" aria-live="polite">
@@ -307,7 +309,7 @@ module.exports = React.createClass({
                                 {this.getEventTiles()}
                             </ol>
                         </div>
-                    </div>
+                    </GeminiScrollbar>
                     <div className="mx_RoomView_statusArea">
                         <div className="mx_RoomView_statusAreaBox">
                             <div className="mx_RoomView_statusAreaBox_line"></div>
