@@ -29,15 +29,21 @@ module.exports = React.createClass({
     displayName: 'Register',
     mixins: [RegisterController],
 
-    getInitialState: function() {
-        return {
-            serverConfigVisible: false
-        };
-    },
-
     componentWillMount: function() {
-        this.customHsUrl = config.default_hs_url;
-        this.customIsUrl = config.default_is_url;
+        // TODO: factor out all localstorage stuff into its own home.
+        // This is common to Login, Register and MatrixClientPeg
+        var localStorage = window.localStorage;
+        if (localStorage) {
+            var hs_url = localStorage.getItem("mx_hs_url");
+            var is_url = localStorage.getItem("mx_is_url");
+        }
+
+        this.setState({
+            customHsUrl: hs_url || config.default_hs_url,
+            customIsUrl: is_url || config.default_is_url,
+            serverConfigVisible: (hs_url !== config.default_hs_url ||
+                                  is_url !== config.default_is_url)
+        });
     },
 
     getRegFormVals: function() {
@@ -51,7 +57,7 @@ module.exports = React.createClass({
 
     getHsUrl: function() {
         if (this.state.serverConfigVisible) {
-            return this.customHsUrl;
+            return this.state.customHsUrl;
         } else {
             return config.default_hs_url;
         }
@@ -59,7 +65,7 @@ module.exports = React.createClass({
 
     getIsUrl: function() {
         if (this.state.serverConfigVisible) {
-            return this.customIsUrl;
+            return this.state.customIsUrl;
         } else {
             return config.default_is_url;
         }
@@ -72,8 +78,10 @@ module.exports = React.createClass({
     },
 
     onServerUrlChanged: function(newUrl) {
-        this.customHsUrl = this.refs.serverConfig.getHsUrl();
-        this.customIsUrl = this.refs.serverConfig.getIsUrl();
+        this.setState({
+            customHsUrl: this.refs.serverConfig.getHsUrl(),
+            customIsUrl: this.refs.serverConfig.getIsUrl(),
+        });
         this.forceUpdate();
     },
 
@@ -99,7 +107,7 @@ module.exports = React.createClass({
                         <label htmlFor="advanced">Use custom server options (advanced)</label>
                         <div style={serverConfigStyle}>
                         <ServerConfig ref="serverConfig"
-                            defaultHsUrl={this.customHsUrl} defaultIsUrl={this.customIsUrl}
+                            defaultHsUrl={this.state.customHsUrl} defaultIsUrl={this.state.customIsUrl}
                             onHsUrlChanged={this.onServerUrlChanged} onIsUrlChanged={this.onServerUrlChanged} />
                         </div>
                         <br />
