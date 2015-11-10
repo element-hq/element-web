@@ -59,7 +59,7 @@ module.exports = {
             self.setStep('stage_'+result.flows[0].type);
         }, function(error) {
             self.setStep("choose_hs");
-            self.setState({errorText: 'Unable to contact the given Home Server'});
+            self.setState({errorText: 'Unable to contact the given home server'});
         });
     },
 
