@@ -30,7 +30,10 @@ module.exports = React.createClass({
         var ErrorDialog = sdk.getComponent('organisms.ErrorDialog');
         Modal.createDialog(ErrorDialog, {
           title: 'Custom Server Options',
-          description: "You can use the custom server options to log into other Matrix servers by specifying a different Home server URL. This allows you to use Vector with an existing Matrix account on a different Home server. You can also set a cutom Identity server but this will affect people ability to find you if you use a server in a group other than tha main Matrix.org group.",
+          description: "You can use the custom server options to log into other Matrix servers by specifying a different Home server URL. " +
+                       "This allows you to use Vector with an existing Matrix account on a different Home server. " +
+                       "You can also set a custom Identity server but this will affect people's ability to find you " +
+                       "if you use a server in a group other than the main Matrix.org group.",
           button: "Dismiss",
           focus: true
         });
