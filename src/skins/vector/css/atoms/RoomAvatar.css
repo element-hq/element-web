@@ -14,19 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomTooltip {
-    display: none;
-    position: fixed;
-    border: 1px solid #a4a4a4;
-    border-radius: 8px;
-    background-color: #fff;
-    z-index: 1000;
-    left: 64px;
-    padding: 6px;
+.mx_RoomAvatar {
 }
 
-.mx_RoomTooltip_chevron {
+.mx_RoomAvatar_initial {
     position: absolute;
-    left: -9px;
-    top: 8px;
+    color: #fff;
+    text-align: center;
+    font-weight: normal ! important;
 }

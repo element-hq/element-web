@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
@@ -25,6 +26,7 @@ var sdk = require('matrix-react-sdk')
 var classNames = require("classnames");
 var filesize = require('filesize');
 
+var GeminiScrollbar = require('react-gemini-scrollbar');
 var RoomViewController = require('../../../../controllers/organisms/RoomView')
 
 var Loader = require("react-loader");
@@ -103,7 +105,7 @@ module.exports = React.createClass({
 
     scrollToBottom: function() {
         if (!this.refs.messageWrapper) return;
-        var messageWrapper = this.refs.messageWrapper.getDOMNode();
+        var messageWrapper = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
         messageWrapper.scrollTop = messageWrapper.scrollHeight;
     },
 
@@ -196,10 +198,48 @@ module.exports = React.createClass({
                 );
             } else {
                 var typingString = this.getWhoIsTypingString();
+                //typingString = "Testing typing...";
                 var unreadMsgs = this.getUnreadMessagesString();
+                // no conn bar trumps unread count since you can't get unread messages
+                // without a connection! (technically may already have some but meh)
+                // It also trumps the "some not sent" msg since you can't resend without
+                // a connection!
+                if (this.state.syncState === "ERROR") {
+                    statusBar = (
+                        <div className="mx_RoomView_connectionLostBar">
+                            <img src="img/warning2.png" width="30" height="30" alt="/!\"/>
+                            <div className="mx_RoomView_connectionLostBar_textArea">
+                                <div className="mx_RoomView_connectionLostBar_title">
+                                    Connectivity to the server has been lost.
+                                </div>
+                                <div className="mx_RoomView_connectionLostBar_desc">
+                                    Sent messages will be stored until your connection has returned.
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+                else if (this.state.hasUnsentMessages) {
+                    statusBar = (
+                        <div className="mx_RoomView_connectionLostBar">
+                            <img src="img/warning2.png" width="30" height="30" alt="/!\"/>
+                            <div className="mx_RoomView_connectionLostBar_textArea">
+                                <div className="mx_RoomView_connectionLostBar_title">
+                                    Some of your messages have not been sent.
+                                </div>
+                                <div className="mx_RoomView_connectionLostBar_desc">
+                                    <a className="mx_RoomView_resend_link"
+                                        onClick={ this.onResendAllClick }>
+                                    Resend all now
+                                    </a> or select individual messages to re-send.
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
                 // unread count trumps who is typing since the unread count is only
                 // set when you've scrolled up
-                if (unreadMsgs) {
+                else if (unreadMsgs) {
                     statusBar = (
                         <div className="mx_RoomView_unreadMessagesBar" onClick={ this.scrollToBottom }>
                             <img src="img/newmessages.png" width="24" height="24" alt=""/>
@@ -230,9 +270,13 @@ module.exports = React.createClass({
 
             var conferenceCallNotification = null;
             if (this.state.displayConfCallNotification) {
+                var supportedText;
+                if (!MatrixClientPeg.get().supportsVoip()) {
+                    supportedText = " (unsupported)";
+                }
                 conferenceCallNotification = (
                     <div className="mx_RoomView_ongoingConfCallNotification" onClick={this.onConferenceNotificationClick}>
-                        Ongoing conference call
+                        Ongoing conference call {supportedText}
                     </div>
                 );
             }
@@ -256,7 +300,7 @@ module.exports = React.createClass({
                         { conferenceCallNotification }
                         { aux }
                     </div>
-                    <div ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
+                    <GeminiScrollbar autoshow={true} ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
                         <div className="mx_RoomView_messageListWrapper">
                             { fileDropTarget }    
                             <ol className="mx_RoomView_MessageList" aria-live="polite">
@@ -265,7 +309,7 @@ module.exports = React.createClass({
                                 {this.getEventTiles()}
                             </ol>
                         </div>
-                    </div>
+                    </GeminiScrollbar>
                     <div className="mx_RoomView_statusArea">
                         <div className="mx_RoomView_statusAreaBox">
                             <div className="mx_RoomView_statusAreaBox_line"></div>

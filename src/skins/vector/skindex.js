@@ -81,6 +81,7 @@ skin['organisms.QuestionDialog'] = require('./views/organisms/QuestionDialog');
 skin['organisms.RightPanel'] = require('./views/organisms/RightPanel');
 skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');
 skin['organisms.RoomList'] = require('./views/organisms/RoomList');
+skin['organisms.RoomSubList'] = require('./views/organisms/RoomSubList');
 skin['organisms.RoomView'] = require('./views/organisms/RoomView');
 skin['organisms.UserSettings'] = require('./views/organisms/UserSettings');
 skin['organisms.ViewSource'] = require('./views/organisms/ViewSource');

@@ -26,7 +26,7 @@ module.exports = React.createClass({
         var h = this.props.h || 32;
         var imgClass = this.props.imgClassName || "";
         return (
-            <div>
+            <div className="mx_Spinner">
                 <img src="img/spinner.gif" width={w} height={h} className={imgClass}/>
             </div>
         );

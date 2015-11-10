@@ -44,10 +44,10 @@ module.exports = React.createClass({
 
     getRegFormVals: function() {
         return {
-            email: this.refs.email.getDOMNode().value.trim(),
-            username: this.refs.username.getDOMNode().value.trim(),
-            password: this.refs.password.getDOMNode().value.trim(),
-            confirmPassword: this.refs.confirmPassword.getDOMNode().value.trim()
+            email: this.refs.email.value.trim(),
+            username: this.refs.username.value.trim(),
+            password: this.refs.password.value.trim(),
+            confirmPassword: this.refs.confirmPassword.value.trim()
         };
     },
 

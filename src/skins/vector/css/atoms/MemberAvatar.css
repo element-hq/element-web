@@ -19,3 +19,12 @@ limitations under the License.
     border-radius: 20px;
 }
 
+.mx_MemberAvatar_initial {
+    position: absolute;
+    color: #fff;
+    text-align: center;
+}
+
+.mx_MemberAvatar_wrapper {
+    position: relative;
+}

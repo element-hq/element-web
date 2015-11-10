@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
@@ -24,21 +25,21 @@ module.exports = React.createClass({
     displayName: 'RoomTooltip',
 
     componentDidMount: function() {
+        var tooltip = ReactDOM.findDOMNode(this);
         if (!this.props.bottom) {
             // tell the roomlist about us so it can position us
             dis.dispatch({
                 action: 'view_tooltip',
-                tooltip: this.getDOMNode(),
+                tooltip: tooltip,
             });
         }
         else {
-            var tooltip = this.getDOMNode();
             tooltip.style.top = tooltip.parentElement.getBoundingClientRect().top + "px"; 
             tooltip.style.display = "block";
         }
     },
 
-    componentDidUnmount: function() {
+    componentWillUnmount: function() {
         if (!this.props.bottom) {
             dis.dispatch({
                 action: 'view_tooltip',

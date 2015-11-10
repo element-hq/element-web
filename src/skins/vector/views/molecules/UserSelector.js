@@ -25,8 +25,8 @@ module.exports = React.createClass({
     mixins: [UserSelectorController],
 
     onAddUserId: function() {
-        this.addUser(this.refs.user_id_input.getDOMNode().value);
-        this.refs.user_id_input.getDOMNode().value = "";
+        this.addUser(this.refs.user_id_input.value);
+        this.refs.user_id_input.value = "";
     },
 
     render: function() {

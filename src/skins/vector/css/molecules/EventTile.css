@@ -18,13 +18,13 @@ limitations under the License.
     max-width: 100%;
     clear: both;
     margin-top: 24px;
-    margin-left: 56px;
+    margin-left: 65px;
 }
 
 .mx_EventTile_avatar {
     padding-left: 18px;
     padding-right: 12px;
-    margin-left: -64px;
+    margin-left: -73px;
     margin-top: -4px;
     float: left;
 }
@@ -78,7 +78,7 @@ limitations under the License.
 }
 
 .mx_EventTile_notSent {
-    color: #f11;
+    color: #ddd;
 }
 
 .mx_EventTile_highlight {

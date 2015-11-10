@@ -43,13 +43,33 @@ module.exports = React.createClass({
 
     render: function() {
         var style = {
-            maxWidth: this.props.width,
-            maxHeight: this.props.height,
+            width: this.props.width,
+            height: this.props.height,
         };
-        return (
-            <img className="mx_RoomAvatar" src={this.state.imageUrl} onError={this.onError}
-                style={style}
-            />
-        );
+
+        // XXX: recalculates fallback avatar constantly
+        if (this.state.imageUrl === this.getFallbackAvatar()) {
+            var initial;
+            if (this.props.room.name[0])
+                initial = this.props.room.name[0].toUpperCase();
+            if ((initial === '@' || initial === '#') && this.props.room.name[1])
+                initial = this.props.room.name[1].toUpperCase();
+         
+            return (
+                <span>
+                    <span className="mx_RoomAvatar_initial"
+                          style={{ fontSize: (this.props.width * 0.75) + "px",
+                                   width: this.props.width + "px",
+                                   lineHeight: this.props.height*1.2 + "px" }}>{ initial }</span>
+                    <img className="mx_RoomAvatar" src={this.state.imageUrl}
+                            onError={this.onError} style={style} />
+                </span>
+            );
+        }
+        else {
+            return <img className="mx_RoomAvatar" src={this.state.imageUrl}
+                        onError={this.onError} style={style} />
+        }
+
     }
 });

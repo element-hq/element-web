@@ -27,9 +27,9 @@ module.exports = React.createClass({
     mixins: [ChangePasswordController],
 
     onClickChange: function() {
-        var old_password = this.refs.old_input.getDOMNode().value;
-        var new_password = this.refs.new_input.getDOMNode().value;
-        var confirm_password = this.refs.confirm_input.getDOMNode().value;
+        var old_password = this.refs.old_input.value;
+        var new_password = this.refs.new_input.value;
+        var confirm_password = this.refs.confirm_input.value;
         if (new_password != confirm_password) {
             this.setState({
                 state: this.Phases.Error,

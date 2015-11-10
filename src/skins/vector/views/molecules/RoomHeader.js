@@ -35,7 +35,7 @@ module.exports = React.createClass({
     },
 
     getRoomName: function() {
-        return this.refs.name_edit.getDOMNode().value;
+        return this.refs.name_edit.value;
     },
 
     onFullscreenClick: function() {

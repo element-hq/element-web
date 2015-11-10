@@ -110,9 +110,9 @@ module.exports = React.createClass({
 
     onKeyUp: function(ev) {
         this.forceUpdate();
-        this.setState({ roomAlias : this.refs.roomAlias.getDOMNode().value })
+        this.setState({ roomAlias : this.refs.roomAlias.value })
         if (ev.key == "Enter") {
-            this.joinRoom(this.refs.roomAlias.getDOMNode().value);
+            this.joinRoom(this.refs.roomAlias.value);
         }
         if (ev.key == "Down") {
 

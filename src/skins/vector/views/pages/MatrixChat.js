@@ -21,9 +21,6 @@ var sdk = require('matrix-react-sdk')
 
 var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/MatrixChat')
 
-// should be atomised
-var Loader = require("react-loader");
-
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Matrix = require("matrix-js-sdk");
 var ContextualMenu = require("../../../../ContextualMenu");
@@ -154,8 +151,9 @@ module.exports = React.createClass({
                 );
             }
         } else if (this.state.logged_in) {
+            var Spinner = sdk.getComponent('atoms.Spinner');
             return (
-                <Loader />
+                <Spinner />
             );
         } else if (this.state.screen == 'register') {
             return (

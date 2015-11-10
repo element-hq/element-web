@@ -70,8 +70,8 @@ module.exports = React.createClass({
      */
     getFormVals: function() {
         return {
-            'username': this.refs.user.getDOMNode().value.trim(),
-            'password': this.refs.pass.getDOMNode().value.trim()
+            'username': this.refs.user.value.trim(),
+            'password': this.refs.pass.value.trim()
         };
     },
 
