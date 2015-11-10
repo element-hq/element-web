@@ -19,7 +19,6 @@ var React = require("react");
 module.exports = {
     propTypes: {
         title: React.PropTypes.string,
-        description: React.PropTypes.string,
         button: React.PropTypes.string,
         focus: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired,
