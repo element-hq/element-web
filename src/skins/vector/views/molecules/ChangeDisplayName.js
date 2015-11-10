@@ -20,8 +20,6 @@ var React = require('react');
 var sdk = require('matrix-react-sdk');
 
 var ChangeDisplayNameController = require("matrix-react-sdk/lib/controllers/molecules/ChangeDisplayName");
-var Loader = require("react-loader");
-
 
 module.exports = React.createClass({
     displayName: 'ChangeDisplayName',
@@ -39,6 +37,7 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.state.busy) {
+            var Loader = sdk.getComponent("atoms.Spinner");
             return (
                 <Loader />
             );

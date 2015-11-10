@@ -24,9 +24,6 @@ var sdk = require('matrix-react-sdk')
 
 var PresetValues = require('matrix-react-sdk/lib/controllers/atoms/create_room/Presets').Presets;
 
-var Loader = require("react-loader");
-
-
 module.exports = React.createClass({
     displayName: 'CreateRoom',
     mixins: [CreateRoomController],
@@ -122,6 +119,7 @@ module.exports = React.createClass({
     render: function() {
         var curr_phase = this.state.phase;
         if (curr_phase == this.phases.CREATING) {
+            var Loader = sdk.getComponent("atoms.Spinner");
             return (
                 <Loader/>
             );

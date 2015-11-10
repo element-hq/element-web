@@ -21,8 +21,6 @@ var React = require('react');
 var sdk = require('matrix-react-sdk')
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
-var Loader = require("react-loader");
-
 var LoginController = require('matrix-react-sdk/lib/controllers/templates/Login')
 
 var config = require('../../../../../config.json');
@@ -158,6 +156,7 @@ module.exports = React.createClass({
     },
 
     loginContent: function() {
+        var Loader = sdk.getComponent("atoms.Spinner");
         var loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
         return (
             <div>

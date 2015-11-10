@@ -23,8 +23,6 @@ var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
-var Loader = require("react-loader");
-
 module.exports = React.createClass({
     displayName: 'RoomDirectory',
 
@@ -121,6 +119,7 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.state.loading) {
+            var Loader = sdk.getComponent("atoms.Spinner");            
             return (
                 <div className="mx_RoomDirectory">
                     <Loader />

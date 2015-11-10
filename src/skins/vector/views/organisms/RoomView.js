@@ -29,9 +29,6 @@ var filesize = require('filesize');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var RoomViewController = require('../../../../controllers/organisms/RoomView')
 
-var Loader = require("react-loader");
-
-
 module.exports = React.createClass({
     displayName: 'RoomView',
     mixins: [RoomViewController],
@@ -133,6 +130,7 @@ module.exports = React.createClass({
         var myUserId = MatrixClientPeg.get().credentials.userId;
         if (this.state.room.currentState.members[myUserId].membership == 'invite') {
             if (this.state.joining || this.state.rejecting) {
+                var Loader = sdk.getComponent("atoms.Spinner");
                 return (
                     <div className="mx_RoomView">
                         <Loader />
@@ -262,6 +260,7 @@ module.exports = React.createClass({
                 aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
             }
             else if (this.state.uploadingRoomSettings) {
+                var Loader = sdk.getComponent("atoms.Spinner");                
                 aux = <Loader/>;
             }
             else if (this.state.searching) {

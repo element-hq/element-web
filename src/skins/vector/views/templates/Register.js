@@ -21,8 +21,6 @@ var React = require('react');
 var sdk = require('matrix-react-sdk')
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg')
 
-var Loader = require("react-loader");
-
 var RegisterController = require('../../../../controllers/templates/Register')
 
 var config = require('../../../../../config.json');
@@ -128,6 +126,7 @@ module.exports = React.createClass({
 
     registerContent: function() {
         if (this.state.busy) {
+            var Loader = sdk.getComponent("atoms.Spinner");            
             return (
                 <Loader />
             );

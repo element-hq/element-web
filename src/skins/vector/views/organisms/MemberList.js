@@ -18,7 +18,6 @@ limitations under the License.
 
 var React = require('react');
 var classNames = require('classnames');
-var Loader = require('react-loader');
 
 var MemberListController = require('matrix-react-sdk/lib/controllers/organisms/MemberList')
 var GeminiScrollbar = require('react-gemini-scrollbar');
@@ -78,6 +77,7 @@ module.exports = React.createClass({
 
     inviteTile: function() {
         if (this.state.inviting) {
+            var Loader = sdk.getComponent("atoms.Spinner");
             return (
                 <Loader />
             );
