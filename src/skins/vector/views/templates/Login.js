@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var sdk = require('matrix-react-sdk')
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
@@ -44,6 +45,17 @@ module.exports = React.createClass({
             customIsUrl: is_url || config.default_is_url,
             serverConfigVisible: (hs_url && hs_url !== config.default_hs_url ||
                                   is_url && is_url !== config.default_is_url)
+        };
+    },
+
+    componentDidMount: function() {
+        this.onHSChosen();
+    },
+
+    componentDidUpdate: function() {
+        if (!this.state.focusFired && this.refs.user) {
+            this.refs.user.focus();
+            this.setState({ focusFired: true });
         }
     },
 
@@ -146,7 +158,7 @@ module.exports = React.createClass({
                 return (
                     <div>
                         <form onSubmit={this.onUserPassEntered}>
-                        <input className="mx_Login_field" autoFocus={true} ref="user" type="text" value={this.state.username} onChange={this.onUsernameChanged} placeholder="Email or user name" /><br />
+                        <input className="mx_Login_field" ref="user" type="text" value={this.state.username} onChange={this.onUsernameChanged} placeholder="Email or user name" /><br />
                         <input className="mx_Login_field" ref="pass" type="password" value={this.state.password} onChange={this.onPasswordChanged} placeholder="Password" /><br />
                         { this.componentForStep('choose_hs') }
                         <input className="mx_Login_submit" type="submit" value="Log in" />
