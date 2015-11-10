@@ -130,15 +130,19 @@ limitations under the License.
 }
 
 .mx_EventTile_readAvatars {
+    position: relative;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
 }
 
 .mx_EventTile_readAvatars .mx_MemberAvatar {
-    margin-left: 1px;
-    margin-right: 1px;
-    vertical-align: middle;
+    position: absolute;
+    display: inline-block;
 }
 
 .mx_EventTile_readAvatarRemainder {
     color: #acacac;
     font-size: 12px;
+    position: absolute;
 }

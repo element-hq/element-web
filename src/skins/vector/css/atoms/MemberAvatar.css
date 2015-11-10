@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MemberAvatar {
+.mx_MemberAvatar_image {
     z-index: 20;
     border-radius: 20px;
 }
@@ -25,6 +25,6 @@ limitations under the License.
     text-align: center;
 }
 
-.mx_MemberAvatar_wrapper {
+.mx_MemberAvatar {
     position: relative;
 }

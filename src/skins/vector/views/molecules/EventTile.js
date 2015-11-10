@@ -91,24 +91,32 @@ module.exports = React.createClass({
 
         var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
 
+        var left = 0;
+
         for (var i = 0; i < receipts.length; ++i) {
             var member = room.getMember(receipts[i].userId);
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
-                <MemberAvatar key={member.userId} member={member} width={14} height={14} resizeMethod="crop" />
+                <MemberAvatar key={member.userId} member={member}
+                    width={14} height={14} resizeMethod="crop"
+                    style={ {left: left} }
+                />
             );
+            left -= 15;
             if (i + 1 >= MAX_READ_AVATARS) {
                 break;
             }
         }
         var remainder = receipts.length - MAX_READ_AVATARS;
+        var remText;
         if (remainder > 0) {
-            avatars.unshift(
-                <span className="mx_EventTile_readAvatarRemainder">+{ remainder }</span>
-            );
+            remText = <span className="mx_EventTile_readAvatarRemainder" style={ {left: left} }>+{ remainder }</span>;
         }
 
-        return <span className="mx_EventTile_readAvatars">{ avatars }</span>;
+        return <span className="mx_EventTile_readAvatars">
+            {remText}
+            {avatars}
+        </span>;
     },
 
     render: function() {
