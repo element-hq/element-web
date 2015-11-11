@@ -99,13 +99,15 @@ var lastLoadedScreen = null;
 
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
-var onNewScreen = function(screen) {
+var onNewScreen = function(screen, onlyIfBlank) {
     if (!loaded) {
         lastLoadedScreen = screen;
     } else {
-        var hash = '#/' + screen;
-        lastLocationHashSet = hash;
-        window.location.hash = hash;
+        if (!onlyIfBlank || !window.location.hash) {
+            var hash = '#/' + screen;
+            lastLocationHashSet = hash;
+            window.location.hash = hash;
+        }
     }
 }
 
