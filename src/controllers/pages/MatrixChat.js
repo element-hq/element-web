@@ -253,16 +253,19 @@ module.exports = {
                 this.setState({
                     page_type: this.PageTypes.UserSettings,
                 });
+                this.notifyNewScreen('settings');
                 break;
             case 'view_create_room':
                 this.setState({
                     page_type: this.PageTypes.CreateRoom,
                 });
+                this.notifyNewScreen('new');
                 break;
             case 'view_room_directory':
                 this.setState({
                     page_type: this.PageTypes.RoomDirectory,
                 });
+                this.notifyNewScreen('directory');
                 break;
             case 'notifier_enabled':
                 this.forceUpdate();
@@ -336,7 +339,7 @@ module.exports = {
                     var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
                     if (theAlias) presentedId = theAlias;
                 }
-                self.notifyNewScreen('room/'+presentedId);
+                self.notifyNewScreen('room/'+presentedId, true);
                 dis.dispatch({action: 'focus_composer'});
             }
         });
@@ -401,6 +404,18 @@ module.exports = {
                 action: 'token_login',
                 params: params
             });
+        } else if (screen == 'new') {
+            dis.dispatch({
+                action: 'view_create_room',
+            });
+        } else if (screen == 'settings') {
+            dis.dispatch({
+                action: 'view_user_settings',
+            });
+        } else if (screen == 'directory') {
+            dis.dispatch({
+                action: 'view_room_directory',
+            });
         } else if (screen.indexOf('room/') == 0) {
             var roomString = screen.split('/')[1];
             if (roomString[0] == '#') {
@@ -424,9 +439,9 @@ module.exports = {
         }
     },
 
-    notifyNewScreen: function(screen) {
+    notifyNewScreen: function(screen, onlyIfBlank) {
         if (this.props.onNewScreen) {
-            this.props.onNewScreen(screen);
+            this.props.onNewScreen(screen, onlyIfBlank);
         }
     }
 };
