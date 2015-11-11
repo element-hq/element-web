@@ -316,7 +316,7 @@ module.exports = {
                     room_alias: self.starting_room_alias
                 });
                 delete self.starting_room_alias;
-            } else {
+            } else if (!self.state.page_type) {
                 if (!self.state.currentRoom) {
                     var firstRoom = null;
                     if (cli.getRooms() && cli.getRooms().length) {
@@ -339,8 +339,10 @@ module.exports = {
                     var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
                     if (theAlias) presentedId = theAlias;
                 }
-                self.notifyNewScreen('room/'+presentedId, true);
+                self.notifyNewScreen('room/'+presentedId);
                 dis.dispatch({action: 'focus_composer'});
+            } else {
+                self.setState({ready: true});
             }
         });
         cli.on('Call.incoming', function(call) {
@@ -439,9 +441,9 @@ module.exports = {
         }
     },
 
-    notifyNewScreen: function(screen, onlyIfBlank) {
+    notifyNewScreen: function(screen) {
         if (this.props.onNewScreen) {
-            this.props.onNewScreen(screen, onlyIfBlank);
+            this.props.onNewScreen(screen);
         }
     }
 };
