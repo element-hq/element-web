@@ -90,10 +90,20 @@ module.exports = React.createClass({
         for (var i = 0; i < rooms.length; i++) {
             var name = rooms[i].name || rooms[i].aliases[0];
             // <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(rooms[i].room_id, 40, 40, "crop") } width="40" height="40" alt=""/>
+            var readLock, joinLock;
+            if (MatrixClientPeg.get().isGuest()) {
+                if (!rooms[i].world_readable) {
+                    readLock = <img src="img/warning.png" />;
+                }
+                if (!rooms[i].guest_can_join) {
+                    joinLock = <img src="img/warning.png" />;
+                }
+            }
+
             rows.unshift(
                 <tbody key={ rooms[i].room_id }>
                     <tr onClick={self.joinRoom.bind(null, rooms[i].room_id)}>
-                        <td className="mx_RoomDirectory_name">{ name }</td>
+                        <td className="mx_RoomDirectory_name">{readLock}{joinLock} { name }</td>
                         <td>{ rooms[i].aliases[0] }</td>
                         <td>{ rooms[i].num_joined_members }</td>
                     </tr>
