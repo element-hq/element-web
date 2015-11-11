@@ -23,6 +23,8 @@ limitations under the License.
     justify-content: center;
     width: 100%;
     height: 100%;
+    flex: 1;
+    -webkit-flex: 1;
 }
 
 .mx_MatrixChat_middlePanel .mx_Spinner {
