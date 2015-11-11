@@ -135,7 +135,9 @@ module.exports = React.createClass({
                     <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
                     <div className="mx_RoomDirectory_tableWrapper">
                         <table className="mx_RoomDirectory_table">
-                            <tr><th width="45%">Room</th><th width="45%">Alias</th><th width="10%">Members</th></tr>
+                            <thead>
+                                <tr><th width="45%">Room</th><th width="45%">Alias</th><th width="10%">Members</th></tr>
+                            </thead>
                             { this.getRows(this.state.roomAlias) }
                         </table>
                     </div>
