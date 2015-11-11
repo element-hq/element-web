@@ -325,7 +325,7 @@ module.exports = {
         if (this.refs.messageWrapper) {
             var messageWrapperScroll = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
             var wasAtBottom = this.atBottom;
-            this.atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight;
+            this.atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight - 1;
             if (this.atBottom && !wasAtBottom) {
                 this.forceUpdate(); // remove unread msg count
             }
