@@ -27,7 +27,7 @@ var CallHandler = require("../../CallHandler");
 
 module.exports = {
     propTypes: {
-        room: React.PropTypes.object.isRequired,
+        room: React.PropTypes.object,
         editing: React.PropTypes.bool,
         onSettingsClick: React.PropTypes.func,
         onSaveClick: React.PropTypes.func,
