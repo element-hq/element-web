@@ -265,7 +265,7 @@ var RoomSubList = React.createClass({
             return connectDropTarget(
                 <div>
                     <h2 onClick={ this.onClick } className="mx_RoomSubList_label">{ this.props.collapsed ? '' : this.props.label }
-                        <img className="mx_RoomSubList_chevron" src={ this.state.hidden ? "/img/list-open.png" : "/img/list-close.png" } width="10" height="10"/>
+                        <img className="mx_RoomSubList_chevron" src={ this.state.hidden ? "img/list-open.png" : "img/list-close.png" } width="10" height="10"/>
                     </h2>
                     { subList }
                 </div>
