@@ -32,7 +32,8 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
         };
     },
 
-    onSubmitForm: function() {
+    onSubmitForm: function(ev) {
+        ev.preventDefault();
         this.props.onSubmit(this.state.username, this.state.password);
     },
 

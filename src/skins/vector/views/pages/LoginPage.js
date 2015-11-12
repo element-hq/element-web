@@ -54,13 +54,28 @@ module.exports = React.createClass({displayName: 'LoginPage',
     },
 
     onPasswordLogin: function(username, password) {
-        // TODO
-        console.log("onPasswordLogin %s %s", username, password);
+        var self = this;
+        self.setState({
+            busy: true
+        });
+
+        this._loginLogic.loginViaPassword(username, password).then(function(data) {
+            self.props.onLoggedIn(data);
+        }, function(error) {
+            self._setErrorTextFromError(error);
+        }).finally(function() {
+            self.setState({
+                busy: false
+            });
+        });
     },
 
     onHsUrlChanged: function(newHsUrl) {
-        console.log("onHsUrlChanged %s", newHsUrl);
         this._initLoginLogic(newHsUrl);
+    },
+
+    onIsUrlChanged: function(newIsUrl) {
+        this._initLoginLogic(null, newIsUrl);
     },
 
     _initLoginLogic: function(hsUrl, isUrl) {
@@ -97,6 +112,13 @@ module.exports = React.createClass({displayName: 'LoginPage',
     },
 
     _setErrorTextFromError: function(err) {
+        if (err.friendlyText) {
+            this.setState({
+                errorText: err.friendlyText
+            });
+            return;
+        }
+
         var errCode = err.errcode;
         if (!errCode && err.httpStatus) {
             errCode = "HTTP " + err.httpStatus;
@@ -153,6 +175,7 @@ module.exports = React.createClass({displayName: 'LoginPage',
                             defaultHsUrl={this.props.homeserverUrl}
                             defaultIsUrl={this.props.identityServerUrl}
                             onHsUrlChanged={this.onHsUrlChanged}
+                            onIsUrlChanged={this.onIsUrlChanged}
                             delayTimeMs={1000}/>
                         <div className="mx_Login_error">
                                 { loader }
