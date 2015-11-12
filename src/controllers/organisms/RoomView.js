@@ -60,12 +60,12 @@ module.exports = {
     },
 
     componentWillUnmount: function() {
-        if (this.refs.messageWrapper) {
-            var messageWrapper = ReactDOM.findDOMNode(this.refs.messageWrapper);
-            messageWrapper.removeEventListener('drop', this.onDrop);
-            messageWrapper.removeEventListener('dragover', this.onDragOver);
-            messageWrapper.removeEventListener('dragleave', this.onDragLeaveOrEnd);
-            messageWrapper.removeEventListener('dragend', this.onDragLeaveOrEnd);
+        if (this.refs.messagePanel) {
+            var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
+            messagePanel.removeEventListener('drop', this.onDrop);
+            messagePanel.removeEventListener('dragover', this.onDragOver);
+            messagePanel.removeEventListener('dragleave', this.onDragLeaveOrEnd);
+            messagePanel.removeEventListener('dragend', this.onDragLeaveOrEnd);
         }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
@@ -98,10 +98,9 @@ module.exports = {
                     // Call state has changed so we may be loading video elements
                     // which will obscure the message log.
                     // scroll to bottom
-                    var messageWrapper = this.refs.messageWrapper;
-                    if (messageWrapper) {
-                        var messageWrapperScroll = ReactDOM.findDOMNode(messageWrapper).children[2];
-                        messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
+                    var scrollNode = this._getScrollNode();
+                    if (scrollNode) {
+                        scrollNode.scrollTop = scrollNode.scrollHeight;
                     }
                 }
 
@@ -109,6 +108,17 @@ module.exports = {
                 // the conf
                 this._updateConfCallNotification();
                 break;
+        }
+    },
+
+    _getScrollNode: function() {
+        var panel = ReactDOM.findDOMNode(this.refs.messagePanel);
+        if (!panel) return null;
+
+        if (panel.classList.contains('gm-prevented')) {
+            return panel;
+        } else {
+            return panel.children[2]; // XXX: Fragile!
         }
     },
 
@@ -138,11 +148,11 @@ module.exports = {
         if (this.state.joining) return;
         if (room.roomId != this.props.roomId) return;
 
-        if (this.refs.messageWrapper) {
-            var messageWrapperScroll = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
+        var scrollNode = this._getScrollNode();
+        if (scrollNode) {
             this.atBottom = (
-                messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <=
-                (messageWrapperScroll.clientHeight + 150)
+                scrollNode.scrollHeight - scrollNode.scrollTop <=
+                (scrollNode.clientHeight + 150) // 150?
             );
         }
 
@@ -225,15 +235,15 @@ module.exports = {
     },
 
     componentDidMount: function() {
-        if (this.refs.messageWrapper) {
-            var messageWrapper = ReactDOM.findDOMNode(this.refs.messageWrapper);
+        if (this.refs.messagePanel) {
+            var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
 
-            messageWrapper.addEventListener('drop', this.onDrop);
-            messageWrapper.addEventListener('dragover', this.onDragOver);
-            messageWrapper.addEventListener('dragleave', this.onDragLeaveOrEnd);
-            messageWrapper.addEventListener('dragend', this.onDragLeaveOrEnd);
+            messagePanel.addEventListener('drop', this.onDrop);
+            messagePanel.addEventListener('dragover', this.onDragOver);
+            messagePanel.addEventListener('dragleave', this.onDragLeaveOrEnd);
+            messagePanel.addEventListener('dragend', this.onDragLeaveOrEnd);
 
-            var messageWrapperScroll = messageWrapper.children[2];
+            var messageWrapperScroll = this._getScrollNode();
 
             messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
 
@@ -244,9 +254,9 @@ module.exports = {
     },
 
     componentDidUpdate: function() {
-        if (!this.refs.messageWrapper) return;
+        if (!this.refs.messagePanel) return;
 
-        var messageWrapperScroll = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
+        var messageWrapperScroll = this._getScrollNode();
 
         if (this.state.paginating && !this.waiting_for_paginate) {
             var heightGained = messageWrapperScroll.scrollHeight - this.oldScrollHeight;
@@ -264,8 +274,8 @@ module.exports = {
     },
 
     fillSpace: function() {
-        if (!this.refs.messageWrapper) return;
-        var messageWrapperScroll = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
+        if (!this.refs.messagePanel) return;
+        var messageWrapperScroll = this._getScrollNode();
         if (messageWrapperScroll.scrollTop < messageWrapperScroll.clientHeight && this.state.room.oldState.paginationToken) {
             this.setState({paginating: true});
 
@@ -322,8 +332,8 @@ module.exports = {
     },
 
     onMessageListScroll: function(ev) {
-        if (this.refs.messageWrapper) {
-            var messageWrapperScroll = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
+        if (this.refs.messagePanel) {
+            var messageWrapperScroll = this._getScrollNode();
             var wasAtBottom = this.atBottom;
             this.atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight - 1;
             if (this.atBottom && !wasAtBottom) {

@@ -101,9 +101,9 @@ module.exports = React.createClass({
     },
 
     scrollToBottom: function() {
-        if (!this.refs.messageWrapper) return;
-        var messageWrapper = ReactDOM.findDOMNode(this.refs.messageWrapper).children[2];
-        messageWrapper.scrollTop = messageWrapper.scrollHeight;
+        var scrollNode = this._getScrollNode();
+        if (!scrollNode) return;
+        scrollNode.scrollTop = scrollNode.scrollHeight;
     },
 
     render: function() {
@@ -299,7 +299,7 @@ module.exports = React.createClass({
                         { conferenceCallNotification }
                         { aux }
                     </div>
-                    <GeminiScrollbar autoshow={true} ref="messageWrapper" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
+                    <GeminiScrollbar autoshow={true} ref="messagePanel" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
                         <div className="mx_RoomView_messageListWrapper">
                             { fileDropTarget }    
                             <ol className="mx_RoomView_MessageList" aria-live="polite">
