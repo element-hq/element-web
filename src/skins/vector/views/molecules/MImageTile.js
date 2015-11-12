@@ -73,18 +73,33 @@ module.exports = React.createClass({
         var imgStyle = {};
         if (thumbHeight) imgStyle['height'] = thumbHeight;
 
-        return (
-            <span className="mx_MImageTile">
-                <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
-                    <img className="mx_MImageTile_thumbnail" src={cli.mxcUrlToHttp(content.url, 480, 360)} alt={content.body} style={imgStyle} />
-                </a>
-                <div className="mx_MImageTile_download">
-                    <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
-                        <img src="img/download.png" width="10" height="12"/>
-                        Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
+        var thumbUrl = cli.mxcUrlToHttp(content.url, 480, 360);
+        if (thumbUrl) {
+            return (
+                <span className="mx_MImageTile">
+                    <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
+                        <img className="mx_MImageTile_thumbnail" src={thumbUrl} alt={content.body} style={imgStyle} />
                     </a>
-                </div>
-            </span>
-        );
+                    <div className="mx_MImageTile_download">
+                        <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
+                            <img src="img/download.png" width="10" height="12"/>
+                            Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
+                        </a>
+                    </div>
+                </span>
+            );
+        } else if (content.body) {
+            return (
+                <span className="mx_MImageTile">
+                    Image '{content.body}' cannot be displayed.
+                </span>
+            );
+        } else {
+            return (
+                <span className="mx_MImageTile">
+                    This image cannot be displayed.
+                </span>
+            );
+        }
     },
 });
