@@ -38,7 +38,7 @@ module.exports = React.createClass({displayName: 'Login',
     getDefaultProps: function() {
         return {
             homeserverUrl: 'https://matrix.org/',
-            identityServerUrl: 'https://matrix.org/'
+            identityServerUrl: 'https://vector.im'
         };
     },
 
