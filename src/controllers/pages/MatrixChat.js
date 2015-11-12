@@ -294,11 +294,13 @@ module.exports = {
     },
 
     onLoggedIn: function(credentials) {
-        console.log("onLoggedIn => %s", credentials.userId);
-        MatrixClientPeg.replaceUsingAccessToken(
-            credentials.homeserverUrl, credentials.identityServerUrl,
-            credentials.userId, credentials.accessToken
-        );
+        if (credentials) { // registration doesn't do this yet
+            console.log("onLoggedIn => %s", credentials.userId);
+            MatrixClientPeg.replaceUsingAccessToken(
+                credentials.homeserverUrl, credentials.identityServerUrl,
+                credentials.userId, credentials.accessToken
+            );
+        }
         this.setState({
             screen: undefined,
             logged_in: true
