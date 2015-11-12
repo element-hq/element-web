@@ -293,7 +293,12 @@ module.exports = {
         }
     },
 
-    onLoggedIn: function() {
+    onLoggedIn: function(credentials) {
+        console.log("onLoggedIn => %s", credentials.userId);
+        MatrixClientPeg.replaceUsingAccessToken(
+            credentials.homeserverUrl, credentials.identityServerUrl,
+            credentials.userId, credentials.accessToken
+        );
         this.setState({
             screen: undefined,
             logged_in: true
@@ -307,7 +312,8 @@ module.exports = {
         var cli = MatrixClientPeg.get();
         var self = this;
         cli.on('sync', function(state) {
-            if (self.sdkReady || state !== "PREPARED") { return; }
+            console.log("MatrixClient sync state => %s", state);
+            if (state !== "PREPARED") { return; }
             self.sdkReady = true;
 
             if (self.starting_room_alias) {
