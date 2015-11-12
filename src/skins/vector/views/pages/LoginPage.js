@@ -20,6 +20,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var sdk = require('matrix-react-sdk');
 var Signup = require("matrix-react-sdk/lib/Signup");
+var PasswordLogin = require("matrix-react-sdk/lib/components/PasswordLogin");
+var CasLogin = require("matrix-react-sdk/lib/components/CasLogin");
 
 /**
  * A wire component which glues together login UI components and Signup logic
@@ -134,12 +136,10 @@ module.exports = React.createClass({displayName: 'LoginPage',
     componentForStep: function(step) {
         switch (step) {
             case 'm.login.password':
-                var PasswordLogin = sdk.getComponent('organisms.PasswordLogin');
                 return (
                     <PasswordLogin onSubmit={this.onPasswordLogin} />
                 );
             case 'm.login.cas':
-                var CasLogin = sdk.getComponent('organisms.CasLogin');
                 return (
                     <CasLogin />
                 );
