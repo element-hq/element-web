@@ -26,7 +26,7 @@ var CasLogin = require("matrix-react-sdk/lib/components/CasLogin");
 /**
  * A wire component which glues together login UI components and Signup logic
  */
-module.exports = React.createClass({displayName: 'LoginPage',
+module.exports = React.createClass({displayName: 'Login',
     propTypes: {
         onLoggedIn: React.PropTypes.func.isRequired,
         homeserverUrl: React.PropTypes.string,

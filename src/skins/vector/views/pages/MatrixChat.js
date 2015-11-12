@@ -97,7 +97,6 @@ module.exports = React.createClass({
         var LeftPanel = sdk.getComponent('organisms.LeftPanel');
         var RoomView = sdk.getComponent('organisms.RoomView');
         var RightPanel = sdk.getComponent('organisms.RightPanel');
-        var Login = sdk.getComponent('templates.Login');
         var UserSettings = sdk.getComponent('organisms.UserSettings');
         var Register = sdk.getComponent('templates.Register');
         var CreateRoom = sdk.getComponent('organisms.CreateRoom');
@@ -168,9 +167,9 @@ module.exports = React.createClass({
                 />
             );
         } else {
-            var LoginPage = sdk.getComponent("pages.LoginPage");
+            var Login = sdk.getComponent("pages.Login");
             return (
-                <LoginPage onLoggedIn={this.onLoggedIn} onRegisterClick={this.onRegisterClick} />
+                <Login onLoggedIn={this.onLoggedIn} onRegisterClick={this.onRegisterClick} />
             );
         }
     }
