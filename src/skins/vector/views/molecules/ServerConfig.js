@@ -105,7 +105,7 @@ module.exports = React.createClass({
                 <br/>
                 <br/>
                 You can also set a custom Identity server but this will affect
-                people's ability to find you if you use a server in a group other
+                people&#39;s ability to find you if you use a server in a group other
                 than the main Matrix.org group.
             </span>,
             button: "Dismiss",
