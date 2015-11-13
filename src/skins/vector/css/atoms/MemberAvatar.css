@@ -23,6 +23,7 @@ limitations under the License.
     position: absolute;
     color: #fff;
     text-align: center;
+    speak: none;
 }
 
 .mx_MemberAvatar_image {
