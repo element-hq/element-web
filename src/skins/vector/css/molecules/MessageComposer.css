@@ -36,9 +36,9 @@ limitations under the License.
     height: 70px;
 }
 
-.mx_MessageComposer .mx_MessageComposer_avatar img {
+.mx_MessageComposer .mx_MessageComposer_avatar .mx_MemberAvatar {
+    display: block;
     margin-top: 18px;
-    border-radius: 20px;
 }
 
 .mx_MessageComposer_input {

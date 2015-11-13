@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 .mx_MemberAvatar {
+    position: relative;
     z-index: 20;
-    border-radius: 20px;
 }
 
 .mx_MemberAvatar_initial {
@@ -25,6 +25,6 @@ limitations under the License.
     text-align: center;
 }
 
-.mx_MemberAvatar_wrapper {
-    position: relative;
+.mx_MemberAvatar_image {
+    border-radius: 20px;    
 }
