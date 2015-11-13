@@ -335,7 +335,7 @@ module.exports = {
         if (this.refs.messagePanel) {
             var messageWrapperScroll = this._getScrollNode();
             var wasAtBottom = this.atBottom;
-            this.atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight - 1;
+            this.atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight + 1;
             if (this.atBottom && !wasAtBottom) {
                 this.forceUpdate(); // remove unread msg count
             }
