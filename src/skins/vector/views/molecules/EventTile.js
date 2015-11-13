@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDom = require('react-dom');
 var classNames = require("classnames");
 
 var sdk = require('matrix-react-sdk')
@@ -26,6 +27,8 @@ var EventTileController = require('matrix-react-sdk/lib/controllers/molecules/Ev
 var ContextualMenu = require('../../../../ContextualMenu');
 
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
+
+var Velociraptor = require('../../../../Velociraptor');
 
 var eventTileTypes = {
     'm.room.message': 'molecules.MessageTile',
@@ -56,6 +59,10 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {menu: false};
+    },
+
+    componentDidUpdate: function() {
+        this.readAvatarRect = ReactDom.findDOMNode(this.readAvatarNode).getBoundingClientRect();
     },
 
     onEditClicked: function(e) {
@@ -93,13 +100,42 @@ module.exports = React.createClass({
 
         var left = 0;
 
+        var transitionOpts = {
+            duration: 1000,
+            easing: 'linear'
+        };
+
         for (var i = 0; i < receipts.length; ++i) {
             var member = room.getMember(receipts[i].userId);
+
+            // Using react refs here would mean both getting Velociraptor to expose
+            // them and making them scoped to the whole RoomView. Not impossible, but
+            // getElementById seems simpler at least for a first cut.
+            var oldAvatarDomNode = document.getElementById('mx_readAvatar'+member.userId);
+            var startStyle = { left: left+'px' };
+            var enterTransitions = [];
+            var enterTransitionOpts = [];
+            if (oldAvatarDomNode && this.readAvatarRect) {
+                var oldRect = oldAvatarDomNode.getBoundingClientRect();
+                startStyle.top = oldRect.top - this.readAvatarRect.top;
+
+                if (oldAvatarDomNode.style.left !== '0px') {
+                    startStyle.left = oldAvatarDomNode.style.left;
+                    enterTransitions.push({ left: left+'px' });
+                    enterTransitionOpts.push(transitionOpts);
+                }
+                enterTransitions.push({ top: '0px' });
+                enterTransitionOpts.push(transitionOpts);
+            }
+
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
                 <MemberAvatar key={member.userId} member={member}
                     width={14} height={14} resizeMethod="crop"
-                    style={ {left: left} }
+                    style={startStyle}
+                    enterTransition={enterTransitions}
+                    enterTransitionOpts={enterTransitionOpts}
+                    id={'mx_readAvatar'+member.userId}
                 />
             );
             left -= 15;
@@ -113,10 +149,16 @@ module.exports = React.createClass({
             remText = <span className="mx_EventTile_readAvatarRemainder" style={ {left: left} }>+{ remainder }</span>;
         }
 
-        return <span className="mx_EventTile_readAvatars">
+        return <span className="mx_EventTile_readAvatars" ref={this.collectReadAvatarNode}>
             {remText}
-            {avatars}
+            <Velociraptor transition={transitionOpts}>
+                {avatars}
+            </Velociraptor>
         </span>;
+    },
+
+    collectReadAvatarNode: function(node) {
+        this.readAvatarNode = node;
     },
 
     render: function() {

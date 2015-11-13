@@ -49,7 +49,7 @@ module.exports = React.createClass({
                 initial = this.props.member.name[1].toUpperCase();
          
             return (
-                <span className="mx_MemberAvatar" style={this.props.style}>
+                <span className="mx_MemberAvatar" {...this.props}>
                     <span className="mx_MemberAvatar_initial"
                           style={{ fontSize: (this.props.width * 0.75) + "px",
                                    width: this.props.width + "px",
@@ -63,7 +63,7 @@ module.exports = React.createClass({
             <img className="mx_MemberAvatar mx_MemberAvatar_image" src={this.state.imageUrl}
                 onError={this.onError}
                 width={this.props.width} height={this.props.height}
-                style={this.props.style}
+                {...this.props}
             />
         );
     }
