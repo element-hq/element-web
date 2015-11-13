@@ -43,9 +43,9 @@ var roomTileSource = {
             originalList: props.roomSubList,            
             originalIndex: props.roomSubList.findRoomTile(props.room).index,
             targetList: props.roomSubList, // at first target is same as original
-            lastTargetRoom: null,
-            lastYOffset: null,
-            lastYDelta: null,
+            // lastTargetRoom: null,
+            // lastYOffset: null,
+            // lastYDelta: null,
         };
 
         if (props.roomSubList.debug) console.log("roomTile beginDrag for " + item.room.roomId);
@@ -123,7 +123,7 @@ var roomTileTarget = {
 
     hover: function(props, monitor) {
         var item = monitor.getItem();
-        var off = monitor.getClientOffset();
+        //var off = monitor.getClientOffset();
         // console.log("hovering on room " + props.room.roomId + ", isOver=" + monitor.isOver());
 
         //console.log("item.targetList=" + item.targetList + ", roomSubList=" + props.roomSubList);
@@ -150,7 +150,7 @@ var roomTileTarget = {
             
             // stop us from flickering between our droptarget and the previous room.
             // whenever the cursor changes direction we have to reset the flicker-damping.
-            
+/*            
             var yDelta = off.y - item.lastYOffset;
 
             if ((yDelta > 0 && item.lastYDelta < 0) ||
@@ -170,6 +170,7 @@ var roomTileTarget = {
 
             if (yDelta) item.lastYDelta = yDelta;
             item.lastYOffset = off.y;
+*/            
         }
         else if (switchedTarget) {
             if (!props.roomSubList.findRoomTile(item.room).room) {
@@ -216,10 +217,12 @@ var RoomTile = React.createClass({
         //     //console.log("room " + this.props.room.roomId + " has dropTarget clientOffset " + this.props.clientOffset.x + "," + this.props.clientOffset.y);
         // }
 
+/*
         if (this.props.room._dragging) {
             var RoomDropTarget = sdk.getComponent("molecules.RoomDropTarget");
             return <RoomDropTarget placeholder={true}/>;
         }
+*/        
 
         var myUserId = MatrixClientPeg.get().credentials.userId;
         var me = this.props.room.currentState.members[myUserId];
