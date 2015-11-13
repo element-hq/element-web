@@ -671,7 +671,7 @@ module.exports = {
             }
 
             var node = this.eventNodes[ev.getId()];
-            if (node === undefined) continue;
+            if (!node) continue;
 
             var domNode = node.getDOMNode();
             var boundingRect = domNode.getBoundingClientRect();

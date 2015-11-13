@@ -112,19 +112,22 @@ module.exports = React.createClass({
             // them and making them scoped to the whole RoomView. Not impossible, but
             // getElementById seems simpler at least for a first cut.
             var oldAvatarDomNode = document.getElementById('mx_readAvatar'+member.userId);
-            var startStyle = { left: left+'px' };
-            var enterTransitions = [];
+            var startStyles = [];
             var enterTransitionOpts = [];
             if (oldAvatarDomNode && this.readAvatarRect) {
                 var oldRect = oldAvatarDomNode.getBoundingClientRect();
-                startStyle.top = oldRect.top - this.readAvatarRect.top;
+                var topOffset = oldRect.top - this.readAvatarRect.top;
 
                 if (oldAvatarDomNode.style.left !== '0px') {
-                    startStyle.left = oldAvatarDomNode.style.left;
-                    enterTransitions.push({ left: left+'px' });
+                    var leftOffset = oldAvatarDomNode.style.left;
+                    // start at the old height and in the old h pos
+                    startStyles.push({ top: topOffset, left: leftOffset });
                     enterTransitionOpts.push(transitionOpts);
                 }
-                enterTransitions.push({ top: '0px' });
+
+                // then shift to the rightmost column,
+                // and then it will drop down to its resting position
+                startStyles.push({ top: topOffset, left: '0px' });
                 enterTransitionOpts.push(transitionOpts);
             }
 
@@ -132,8 +135,8 @@ module.exports = React.createClass({
             avatars.unshift(
                 <MemberAvatar key={member.userId} member={member}
                     width={14} height={14} resizeMethod="crop"
-                    style={startStyle}
-                    enterTransition={enterTransitions}
+                    style={ { left: left+'px', top: '0px' } }
+                    startStyle={startStyles}
                     enterTransitionOpts={enterTransitionOpts}
                     id={'mx_readAvatar'+member.userId}
                 />

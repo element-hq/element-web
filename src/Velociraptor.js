@@ -38,10 +38,26 @@ module.exports = React.createClass({
 
                 if (oldNode.style.left != c.props.style.left) {
                     Velocity(oldNode, { left: c.props.style.left }, self.props.transition);
+                    console.log("translation: "+oldNode.style.left+" -> "+c.props.style.left);
                 }
                 self.children[c.key] = old;
             } else {
-                self.children[c.key] = c;
+                // new element. If it has a startStyle, use that as the style and go through
+                // the enter animations
+                var newProps = {
+                    ref: self.collectNode.bind(self, c.key)
+                };
+                if (c.props.startStyle && Object.keys(c.props.startStyle).length) {
+                    var startStyle = c.props.startStyle;
+                    if (Array.isArray(startStyle)) {
+                        startStyle = startStyle[0];
+                    }
+                    newProps._restingStyle = c.props.style;
+                    newProps.style = startStyle;
+                    console.log("mounted@startstyle0: "+JSON.stringify(startStyle));
+                    // apply the enter animations once it's mounted
+                }
+                self.children[c.key] = React.cloneElement(c, newProps);
             }
         });
     },
@@ -49,20 +65,25 @@ module.exports = React.createClass({
     collectNode: function(k, node) {
         if (
             this.nodes[k] === undefined &&
-            node.props.enterTransition &&
-            Object.keys(node.props.enterTransition).length
+            node.props.startStyle &&
+            Object.keys(node.props.startStyle).length
         ) {
             var domNode = ReactDom.findDOMNode(node);
-            var transitions = node.props.enterTransition;
+            var startStyles = node.props.startStyle;
             var transitionOpts = node.props.enterTransitionOpts;
-            if (!Array.isArray(transitions)) {
-                transitions = [ transitions ];
+            if (!Array.isArray(startStyles)) {
+                startStyles = [ startStyles ];
                 transitionOpts = [ transitionOpts ];
             }
-            for (var i = 0; i < transitions.length; ++i) {
-                Velocity(domNode, transitions[i], transitionOpts[i]);
-                console.log("enter: "+JSON.stringify(transitions[i]));
+            // start from startStyle 1: 0 is the one we gave it
+            // to start with, so now we animate 1 etc.
+            for (var i = 1; i < startStyles.length; ++i) {
+                Velocity(domNode, startStyles[i], transitionOpts[i-1]);
+                console.log("start: "+JSON.stringify(startStyles[i]));
             }
+            // and then we animate to the resting state
+            Velocity(domNode, node.props._restingStyle, transitionOpts[i-1]);
+            console.log("enter: "+JSON.stringify(node.props._restingStyle));
         }
         this.nodes[k] = node;
     },
