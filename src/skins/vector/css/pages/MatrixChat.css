@@ -71,22 +71,13 @@ limitations under the License.
 
     background-color: #eaf5f0;
 
-/*
-    We can't use flex here as gemini-scrollbars chokes on the width calculation (on FF 42 and Chrome 48)
-    and you end up with double-scrollbars and an ever-increasing width.
-
     -webkit-flex: 0 0 210px;
     flex: 0 0 210px;
-*/
-    width: 210px;
 }
 
 .mx_MatrixChat .mx_LeftPanel.collapsed {
-/*
     -webkit-flex: 0 0 60px;
     flex: 0 0 60px;
-*/
-    width: 60px;
 }
 
 .mx_MatrixChat .mx_MatrixChat_middlePanel {
@@ -126,18 +117,11 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
-/*  Similarly, specify width explicitly otherwise gemini-scrollbars gets confused
-
     -webkit-flex: 0 0 235px;
     flex: 0 0 235px;
-*/
-    width: 235px;
 }
 
 .mx_MatrixChat .mx_RightPanel.collapsed {
-/*    
     -webkit-flex: 0 0 72px;
     flex: 0 0 72px;
-*/
-    width: 72px;
 }

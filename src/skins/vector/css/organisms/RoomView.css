@@ -105,16 +105,14 @@ limitations under the License.
     -webkit-flex: 1 1 0;
     flex: 1 1 0;
 
-    /* specify width and margin in here rather than the wrapper otherwise gemini-scrollbars gets confused */
-    min-width: 0px;
-    max-width: 960px;
     width: 100%;
-    margin: auto;
 
     overflow-y: auto;
 }
 
 .mx_RoomView_messageListWrapper {
+    max-width: 960px;
+    margin: auto;
 }
 
 .mx_RoomView_MessageList {
