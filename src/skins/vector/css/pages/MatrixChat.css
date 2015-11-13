@@ -82,8 +82,11 @@ limitations under the License.
 }
 
 .mx_MatrixChat .mx_LeftPanel.collapsed {
+/*
     -webkit-flex: 0 0 60px;
     flex: 0 0 60px;
+*/
+    width: 60px;
 }
 
 .mx_MatrixChat .mx_MatrixChat_middlePanel {
@@ -132,6 +135,9 @@ limitations under the License.
 }
 
 .mx_MatrixChat .mx_RightPanel.collapsed {
+/*    
     -webkit-flex: 0 0 72px;
     flex: 0 0 72px;
+*/
+    width: 72px;
 }
