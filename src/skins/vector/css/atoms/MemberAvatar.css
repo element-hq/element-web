@@ -16,7 +16,6 @@ limitations under the License.
 
 .mx_MemberAvatar {
     position: relative;
-    z-index: 20;
 }
 
 .mx_MemberAvatar_initial {
