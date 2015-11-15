@@ -22,6 +22,8 @@ var sdk = require('../../index');
 var dis = require("../../dispatcher");
 var KeyCode = {
     ENTER: 13,
+    BACKSPACE: 8,
+    DELETE: 46,
     TAB: 9,
     SHIFT: 16,
     UP: 38,
@@ -149,7 +151,7 @@ module.exports = {
     },
 
     onKeyDown: function (ev) {
-        if (ev.keyCode === KeyCode.ENTER) {
+        if (ev.keyCode === KeyCode.ENTER && !ev.shiftKey) {
             var input = this.refs.textarea.value;
             if (input.length === 0) {
                 ev.preventDefault();
@@ -165,11 +167,23 @@ module.exports = {
             }
             this.onTab(ev, members);
         }
-        else if (ev.keyCode === KeyCode.UP || ev.keyCode === KeyCode.DOWN) {
-            this.sentHistory.next(
-                ev.keyCode === KeyCode.UP ? 1 : -1
-            );
-            ev.preventDefault();
+        else if (ev.keyCode === KeyCode.UP) {
+            var input = this.refs.textarea.value;
+            var offset = this.refs.textarea.selectionStart || 0;
+            if (ev.ctrlKey || !input.substr(0, offset).match(/\n/)) {
+                this.sentHistory.next(1);
+                ev.preventDefault();
+                this.resizeInput();
+            }
+        }
+        else if (ev.keyCode === KeyCode.DOWN) {
+            var input = this.refs.textarea.value;
+            var offset = this.refs.textarea.selectionStart || 0;
+            if (ev.ctrlKey || !input.substr(offset).match(/\n/)) {
+                this.sentHistory.next(-1);
+                ev.preventDefault();
+                this.resizeInput();
+            }
         }
         else if (ev.keyCode !== KeyCode.SHIFT && this.tabStruct.completing) {
             // they're resuming typing; reset tab complete state vars.
@@ -185,6 +199,30 @@ module.exports = {
                 self.onFinishedTyping();
             }
         }, 10); // XXX: what is this 10ms setTimeout doing?  Looks hacky :(
+    },
+
+    resizeInput: function() {
+        // scrollHeight is at least equal to clientHeight, so we have to
+        // temporarily crimp clientHeight to 0 to get an accurate scrollHeight value
+        this.refs.textarea.style.height = "0px";
+        var newHeight = this.refs.textarea.scrollHeight < 100 ? this.refs.textarea.scrollHeight : 100;
+        this.refs.textarea.style.height = newHeight + "px";
+        if (this.props.roomView) {
+            // kick gemini-scrollbar to re-layout
+            this.props.roomView.forceUpdate();
+        }
+    },
+
+    onKeyUp: function(ev) {
+        if (ev.keyCode === KeyCode.ENTER ||
+            ev.keyCode === KeyCode.DELETE ||
+            ev.keyCode === KeyCode.BACKSPACE)
+        {
+            // resize to fit.
+            // XXX: ideally we should fire this onChange, but as it's fairly heavy we 
+            // optimise and only resie on enter or delete/backspace.
+            this.resizeInput();
+        }
     },
 
     onEnter: function(ev) {
