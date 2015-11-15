@@ -34,6 +34,8 @@ var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
 
 module.exports = {
+    oldScrollHeight: 0,
+
     componentWillMount: function() {
         this.tabStruct = {
             completing: false,
@@ -211,16 +213,14 @@ module.exports = {
             // kick gemini-scrollbar to re-layout
             this.props.roomView.forceUpdate();
         }
+        this.oldScrollHeight = this.refs.textarea.scrollHeight;
     },
 
     onKeyUp: function(ev) {
-        if (ev.keyCode === KeyCode.ENTER ||
+        if (this.refs.textarea.scrollHeight !== this.oldScrollHeight ||
             ev.keyCode === KeyCode.DELETE ||
             ev.keyCode === KeyCode.BACKSPACE)
         {
-            // resize to fit.
-            // XXX: ideally we should fire this onChange, but as it's fairly heavy we 
-            // optimise and only resie on enter or delete/backspace.
             this.resizeInput();
         }
     },
