@@ -315,7 +315,7 @@ module.exports = React.createClass({
                             {statusBar}
                         </div>
                     </div>
-                    <MessageComposer room={this.state.room} uploadFile={this.uploadFile} />
+                    <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} />
                 </div>
             );
         }
