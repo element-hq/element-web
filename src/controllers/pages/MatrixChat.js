@@ -48,7 +48,9 @@ module.exports = {
             if (MatrixClientPeg.get().getRooms().length) {
                 s.page_type = this.PageTypes.RoomView;
             } else {
-                s.page_type = this.PageTypes.RoomDirectory;
+                // we don't need to default to the directoy here
+                // as we'll go there anyway after syncing
+                // s.page_type = this.PageTypes.RoomDirectory;
             }
         }
         return s;
