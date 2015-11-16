@@ -129,7 +129,6 @@ module.exports = React.createClass({
                 // then shift to the rightmost column,
                 // and then it will drop down to its resting position
                 startStyles.push({ top: topOffset, left: '0px' });
-                console.log(topOffset+': '+Math.min(Math.log(Math.abs(topOffset)) * 200, 3000));
                 enterTransitionOpts.push({
                     // Sort of make it take a bit longer to fall in a way
                     // that would make my A level physics teacher cry.
