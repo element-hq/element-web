@@ -669,7 +669,7 @@ module.exports = {
     _getLastDisplayedEventIndexIgnoringOwn: function() {
         if (this.eventNodes === undefined) return null;
 
-        var messageWrapper = this.refs.messageWrapper;
+        var messageWrapper = this.refs.messagePanel;
         if (messageWrapper === undefined) return null;
         var wrapperRect = messageWrapper.getDOMNode().getBoundingClientRect();
 
