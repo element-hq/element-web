@@ -19,8 +19,6 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 var UserSettingsController = require('matrix-react-sdk/lib/controllers/organisms/UserSettings')
 
-var Loader = require("react-loader");
-
 var Modal = require('matrix-react-sdk/lib/Modal');
 
 module.exports = React.createClass({
@@ -68,6 +66,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var Loader = sdk.getComponent("atoms.Spinner");        
         switch (this.state.phase) {
             case this.Phases.Loading:
                 return <Loader />

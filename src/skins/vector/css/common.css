@@ -47,6 +47,14 @@ a:visited {
     color: #76cfa6;
 }
 
+/* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.
+   Stop the scrollbar view from pushing out the container's overall sizing, which causes
+   flexbox to adapt to the new size and cause the view to keep growing.
+ */
+.gm-scrollbar-container .gm-scroll-view {
+  position: absolute;
+}
+
 .mx_ContextualMenu_background {
     position: fixed;
     top: 0;
@@ -99,7 +107,7 @@ a:visited {
     height: 100%;
     background-color: #000;
     opacity: 0.2;
-    z-index: 2000;
+    z-index: 4000;
 }
 
 .mx_Dialog_wrapper {
@@ -124,7 +132,7 @@ a:visited {
     background-color: #fff;
     color: #747474;
     text-align: center;
-    z-index: 2010;
+    z-index: 4010;
     font-weight: 300;
     font-size: 16px;
     position: relative;

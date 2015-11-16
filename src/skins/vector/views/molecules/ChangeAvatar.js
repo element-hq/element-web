@@ -21,9 +21,6 @@ var React = require('react');
 var sdk = require('matrix-react-sdk')
 var ChangeAvatarController = require('matrix-react-sdk/lib/controllers/molecules/ChangeAvatar')
 
-var Loader = require("react-loader");
-
-
 module.exports = React.createClass({
     displayName: 'ChangeAvatar',
     mixins: [ChangeAvatarController],
@@ -70,6 +67,7 @@ module.exports = React.createClass({
                     </div>
                 );
             case this.Phases.Uploading:
+                var Loader = sdk.getComponent("atoms.Spinner");
                 return (
                     <Loader />
                 );

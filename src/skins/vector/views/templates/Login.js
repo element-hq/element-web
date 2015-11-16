@@ -17,11 +17,10 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var sdk = require('matrix-react-sdk')
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-
-var Loader = require("react-loader");
 
 var LoginController = require('matrix-react-sdk/lib/controllers/templates/Login')
 
@@ -32,20 +31,37 @@ module.exports = React.createClass({
     mixins: [LoginController],
 
     getInitialState: function() {
+        // TODO: factor out all localstorage stuff into its own home.
+        // This is common to Login, Register and MatrixClientPeg
+        var localStorage = window.localStorage;
+        var hs_url, is_url;
+        if (localStorage) {
+            hs_url = localStorage.getItem("mx_hs_url");
+            is_url = localStorage.getItem("mx_is_url");
+        }
+
         return {
-            serverConfigVisible: false
+            customHsUrl: hs_url || config.default_hs_url,
+            customIsUrl: is_url || config.default_is_url,
+            serverConfigVisible: (hs_url && hs_url !== config.default_hs_url ||
+                                  is_url && is_url !== config.default_is_url)
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this.onHSChosen();
-        this.customHsUrl = config.default_hs_url;
-        this.customIsUrl = config.default_is_url;
+    },
+
+    componentDidUpdate: function() {
+        if (!this.state.focusFired && this.refs.user) {
+            this.refs.user.focus();
+            this.setState({ focusFired: true });
+        }
     },
 
     getHsUrl: function() {
         if (this.state.serverConfigVisible) {
-            return this.customHsUrl;
+            return this.state.customHsUrl;
         } else {
             return config.default_hs_url;
         }
@@ -53,7 +69,7 @@ module.exports = React.createClass({
 
     getIsUrl: function() {
         if (this.state.serverConfigVisible) {
-            return this.customIsUrl;
+            return this.state.customIsUrl;
         } else {
             return config.default_is_url;
         }
@@ -62,7 +78,7 @@ module.exports = React.createClass({
     onServerConfigVisibleChange: function(ev) {
         this.setState({
             serverConfigVisible: ev.target.checked
-        }, this.onHsUrlChanged);
+        }, this.onHSChosen);
     },
 
     /**
@@ -79,16 +95,22 @@ module.exports = React.createClass({
         var newHsUrl = this.refs.serverConfig.getHsUrl().trim();
         var newIsUrl = this.refs.serverConfig.getIsUrl().trim();
 
-        if (newHsUrl == this.customHsUrl &&
-            newIsUrl == this.customIsUrl)
+        if (newHsUrl == this.state.customHsUrl &&
+            newIsUrl == this.state.customIsUrl)
         {
             return;
         }
         else {
-            this.customHsUrl = newHsUrl;
-            this.customIsUrl = newIsUrl;
+            this.setState({
+                customHsUrl: newHsUrl,
+                customIsUrl: newIsUrl,
+            });
         }
 
+        // XXX: why are we replacing the MatrixClientPeg here when we're about
+        // to do it again 1s later in the setTimeout to onHSChosen? -- matthew
+        // Commenting it out for now to see what breaks.
+        /*
         MatrixClientPeg.replaceUsingUrls(
             this.getHsUrl(),
             this.getIsUrl()
@@ -97,6 +119,8 @@ module.exports = React.createClass({
             hs_url: this.getHsUrl(),
             is_url: this.getIsUrl()
         });
+        */
+
         // XXX: HSes do not have to offer password auth, so we
         // need to update and maybe show a different component
         // when a new HS is entered.
@@ -123,7 +147,7 @@ module.exports = React.createClass({
                         <label className="mx_Login_label" htmlFor="advanced">Use custom server options (advanced)</label>
                         <div style={serverConfigStyle}>
                             <ServerConfig ref="serverConfig"
-                                defaultHsUrl={this.customHsUrl} defaultIsUrl={this.customIsUrl}
+                                defaultHsUrl={this.state.customHsUrl} defaultIsUrl={this.state.customIsUrl}
                                 onHsUrlChanged={this.onHsUrlChanged}
                             />
                         </div>
@@ -158,6 +182,7 @@ module.exports = React.createClass({
     },
 
     loginContent: function() {
+        var Loader = sdk.getComponent("atoms.Spinner");
         var loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
         return (
             <div>

@@ -236,8 +236,8 @@ limitations under the License.
     order: 5;
 
     width: 100%;
-    -webkit-flex: 0 0 70px;
-    flex: 0 0 70px;
+    -webkit-flex: 0;
+    flex: 0;
     margin-right: 2px;
 }
 

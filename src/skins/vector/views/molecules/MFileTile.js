@@ -30,15 +30,25 @@ module.exports = React.createClass({
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
 
-        return (
-            <span className="mx_MFileTile">
-                <div className="mx_MImageTile_download">
-                    <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
-                        <img src="img/download.png" width="10" height="12"/>
-                        Download {this.presentableTextForFile(content)}
-                    </a>
-                </div>                
+        var httpUrl = cli.mxcUrlToHttp(content.url);
+        var text = this.presentableTextForFile(content);
+
+        if (httpUrl) {
+            return (
+                <span className="mx_MFileTile">
+                    <div className="mx_MImageTile_download">
+                        <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
+                            <img src="img/download.png" width="10" height="12"/>
+                            Download {text}
+                        </a>
+                    </div>
+                </span>
+            );
+        } else {
+            var extra = text ? ': '+text : '';
+            return <span className="mx_MFileTile">
+                Invalid file{extra}
             </span>
-        );
+        }
     },
 });

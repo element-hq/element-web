@@ -34,7 +34,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var EnableNotificationsButton = sdk.getComponent("atoms.EnableNotificationsButton");
         return (
             <div className="mx_MatrixToolbar">
                 <img className="mx_MatrixToolbar_warning" src="img/warning.png" width="28" height="28" alt="/!\"/>

@@ -23,8 +23,6 @@ var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
-var Loader = require("react-loader");
-
 module.exports = React.createClass({
     displayName: 'RoomDirectory',
 
@@ -121,6 +119,7 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.state.loading) {
+            var Loader = sdk.getComponent("atoms.Spinner");            
             return (
                 <div className="mx_RoomDirectory">
                     <Loader />
@@ -136,7 +135,9 @@ module.exports = React.createClass({
                     <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
                     <div className="mx_RoomDirectory_tableWrapper">
                         <table className="mx_RoomDirectory_table">
-                            <tr><th width="45%">Room</th><th width="45%">Alias</th><th width="10%">Members</th></tr>
+                            <thead>
+                                <tr><th width="45%">Room</th><th width="45%">Alias</th><th width="10%">Members</th></tr>
+                            </thead>
                             { this.getRows(this.state.roomAlias) }
                         </table>
                     </div>

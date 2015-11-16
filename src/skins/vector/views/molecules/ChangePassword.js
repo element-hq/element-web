@@ -19,8 +19,6 @@ limitations under the License.
 var React = require('react');
 
 var ChangePasswordController = require('matrix-react-sdk/lib/controllers/molecules/ChangePassword')
-var Loader = require("react-loader");
-
 
 module.exports = React.createClass({
     displayName: 'ChangePassword',
@@ -64,6 +62,7 @@ module.exports = React.createClass({
                     </div>
                 );
             case this.Phases.Uploading:
+                var Loader = sdk.getComponent("atoms.Spinner");
                 return (
                     <div className="mx_Dialog_content">
                         <Loader />

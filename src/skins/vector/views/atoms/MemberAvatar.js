@@ -50,7 +50,7 @@ module.exports = React.createClass({
          
             return (
                 <span className="mx_MemberAvatar" {...this.props}>
-                    <span className="mx_MemberAvatar_initial"
+                    <span className="mx_MemberAvatar_initial" aria-hidden="true"
                           style={{ fontSize: (this.props.width * 0.75) + "px",
                                    width: this.props.width + "px",
                                    lineHeight: this.props.height*1.2 + "px" }}>{ initial }</span>

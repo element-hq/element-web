@@ -17,7 +17,6 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var Loader = require("../atoms/Spinner");
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk')
@@ -47,6 +46,7 @@ module.exports = React.createClass({
         }
 
         if (this.state.creatingRoom) {
+            var Loader = sdk.getComponent("atoms.Spinner");
             spinner = <Loader imgClassName="mx_ContextualMenu_spinner"/>;
         }
 

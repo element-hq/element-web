@@ -104,9 +104,7 @@ limitations under the License.
 }
 
 .mx_RoomTile_unread,
-.mx_RoomTile_highlight,
-.mx_RoomTile_selected
-{
+.mx_RoomTile_highlight {
     font-weight: bold;
 }
 

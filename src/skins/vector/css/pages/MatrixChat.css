@@ -97,7 +97,8 @@ limitations under the License.
     /* XXX: Hack: apparently if you try to nest a flex-box
      * within a non-flex-box within a flex-box, the height
      * of the innermost element gets miscalculated if the
-     * parents are both auto.
+     * parents are both auto.  Height has to be auto here
+     * for RoomView to correctly fit when the Toolbar is shown.
      * Ideally we'd launch straight into the RoomView at this
      * point, but instead we fudge it and make the middlePanel
      * flex itself.
