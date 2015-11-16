@@ -38,7 +38,7 @@ module.exports = React.createClass({
 
                 if (oldNode.style.left != c.props.style.left) {
                     Velocity(oldNode, { left: c.props.style.left }, self.props.transition);
-                    console.log("translation: "+oldNode.style.left+" -> "+c.props.style.left);
+                    //console.log("translation: "+oldNode.style.left+" -> "+c.props.style.left);
                 }
                 self.children[c.key] = old;
             } else {
@@ -54,7 +54,7 @@ module.exports = React.createClass({
                     }
                     newProps._restingStyle = c.props.style;
                     newProps.style = startStyle;
-                    console.log("mounted@startstyle0: "+JSON.stringify(startStyle));
+                    //console.log("mounted@startstyle0: "+JSON.stringify(startStyle));
                     // apply the enter animations once it's mounted
                 }
                 self.children[c.key] = React.cloneElement(c, newProps);
@@ -79,11 +79,11 @@ module.exports = React.createClass({
             // to start with, so now we animate 1 etc.
             for (var i = 1; i < startStyles.length; ++i) {
                 Velocity(domNode, startStyles[i], transitionOpts[i-1]);
-                console.log("start: "+JSON.stringify(startStyles[i]));
+                //console.log("start: "+JSON.stringify(startStyles[i]));
             }
             // and then we animate to the resting state
             Velocity(domNode, node.props._restingStyle, transitionOpts[i-1]);
-            console.log("enter: "+JSON.stringify(node.props._restingStyle));
+            //console.log("enter: "+JSON.stringify(node.props._restingStyle));
         }
         this.nodes[k] = node;
     },

@@ -29,6 +29,7 @@ var ContextualMenu = require('../../../../ContextualMenu');
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
 
 var Velociraptor = require('../../../../Velociraptor');
+require('../../../../VelocityBounce');
 
 var eventTileTypes = {
     'm.room.message': 'molecules.MessageTile',
@@ -100,9 +101,9 @@ module.exports = React.createClass({
 
         var left = 0;
 
-        var transitionOpts = {
-            duration: 1000,
-            easing: 'linear'
+        var reorderTransitionOpts = {
+            duration: 100,
+            easing: 'easeOut'
         };
 
         for (var i = 0; i < receipts.length; ++i) {
@@ -122,13 +123,19 @@ module.exports = React.createClass({
                     var leftOffset = oldAvatarDomNode.style.left;
                     // start at the old height and in the old h pos
                     startStyles.push({ top: topOffset, left: leftOffset });
-                    enterTransitionOpts.push(transitionOpts);
+                    enterTransitionOpts.push(reorderTransitionOpts);
                 }
 
                 // then shift to the rightmost column,
                 // and then it will drop down to its resting position
                 startStyles.push({ top: topOffset, left: '0px' });
-                enterTransitionOpts.push(transitionOpts);
+                console.log(topOffset+': '+Math.min(Math.log(Math.abs(topOffset)) * 200, 3000));
+                enterTransitionOpts.push({
+                    // Sort of make it take a bit longer to fall in a way
+                    // that would make my A level physics teacher cry.
+                    duration: Math.min(Math.log(Math.abs(topOffset)) * 200, 3000),
+                    easing: 'easeOutBounce'
+                });
             }
 
             // add to the start so the most recent is on the end (ie. ends up rightmost)
@@ -154,7 +161,7 @@ module.exports = React.createClass({
 
         return <span className="mx_EventTile_readAvatars" ref={this.collectReadAvatarNode}>
             {remText}
-            <Velociraptor transition={transitionOpts}>
+            <Velociraptor transition={reorderTransitionOpts}>
                 {avatars}
             </Velociraptor>
         </span>;
