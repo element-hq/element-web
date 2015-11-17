@@ -16,10 +16,12 @@ limitations under the License.
 
 'use strict';
 
-var MatrixClientPeg = require("../../MatrixClientPeg");
+var MatrixClientPeg = require("../MatrixClientPeg");
+var React = require('react');
 var url = require("url");
 
-module.exports = {
+module.exports = React.createClass({
+    displayName: 'CasLogin',
 
     onCasClicked: function(ev) {
         var cli = MatrixClientPeg.get();
@@ -30,4 +32,12 @@ module.exports = {
         window.location.href = casUrl;
     },
 
-};
+    render: function() {
+        return (
+            <div>
+                <button onClick={this.onCasClicked}>Sign in with CAS</button>
+            </div>
+        );
+    }
+
+});
