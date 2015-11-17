@@ -19,3 +19,101 @@ limitations under the License.
     margin-left: auto;
     margin-right: auto;
 }
+
+.mx_UserSettings_spinner {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 12px;
+    width: 32px;
+    height: 32px;
+}
+
+.mx_UserSettings_button {
+    display: inline;
+    vertical-align: middle;
+    border: 0px;
+    height: 36px;
+    border-radius: 36px;
+    font-weight: 400;
+    font-size: 16px;
+    color: #fff;
+    background-color: #76cfa6;
+    width: auto;
+    margin: auto;
+    padding: 7px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+}
+
+.mx_UserSettings h2 {
+    clear: both;
+    margin-top: 32px;
+    margin-bottom: 8px;
+    margin-left: 63px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #eee;
+}
+
+.mx_UserSettings_section {
+    margin-left: 63px;
+    margin-top: 28px;
+    margin-bottom: 28px;
+}
+
+.mx_UserSettings_profileTable,
+.mx_UserSettings_notifTable
+{
+    display: table;
+}
+
+.mx_UserSettings_profileTableRow,
+.mx_UserSettings_notifTableRow
+{
+    display: table-row;
+}
+
+.mx_UserSettings_profileLabelCell
+{
+    padding-bottom: 21px;
+    display: table-cell;
+    font-weight: bold;
+    padding-right: 24px;
+}
+
+.mx_UserSettings_profileInputCell {
+    display: table-cell;
+    padding-bottom: 21px;
+    width: 240px;
+}
+
+.mx_UserSettings_profileInputCell input {
+    border: 0px;
+    border-bottom: 1px solid rgba(151, 151, 151, 0.5);
+    padding: 0px;
+    width: 240px;
+    color: rgba(74, 74, 74, 0.9);
+    font-family: 'Myriad Pro', Helvetica, Arial, Sans-Serif;
+    font-size: 16px;
+}
+
+.mx_UserSettings_notifInputCell {
+    display: table-cell;
+    padding-bottom: 21px;
+    padding-right: 8px;
+    width: 16px;
+}
+
+.mx_UserSettings_notifLabelCell
+{
+    padding-bottom: 21px;
+    width: 270px;
+    display: table-cell;
+}
+
+.mx_UserSettings_logout,
+.mx_UserSettings_save {
+    float: right;
+    margin-right: 24px;
+    margin-bottom: 24px;
+}

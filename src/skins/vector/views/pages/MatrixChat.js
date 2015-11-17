@@ -111,7 +111,7 @@ module.exports = React.createClass({
                     right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} />
                     break;
                 case this.PageTypes.UserSettings:
-                    page_element = <UserSettings />
+                    page_element = <UserSettings roomId={this.state.currentRoom} />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
                     break;
                 case this.PageTypes.CreateRoom:

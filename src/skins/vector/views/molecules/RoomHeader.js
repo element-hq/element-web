@@ -48,10 +48,15 @@ module.exports = React.createClass({
 
         var header;
         if (this.props.simpleHeader) {
+            var cancel;
+            if (this.props.onCancelClick) {
+                cancel = <img className="mx_RoomHeader_simpleHeaderCancel" src="img/cancel-black.png" onClick={ this.props.onCancelClick } alt="Close" width="18" height="18"/>
+            }
             header =
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_simpleHeader">
                         { this.props.simpleHeader }
+                        { cancel }
                     </div>
                 </div>
         }
