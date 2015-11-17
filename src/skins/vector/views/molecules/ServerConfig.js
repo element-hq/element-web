@@ -20,37 +20,142 @@ var React = require('react');
 var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk')
 
-var ServerConfigController = require('matrix-react-sdk/lib/controllers/molecules/ServerConfig')
-
+/**
+ * A pure UI component which displays the HS and IS to use.
+ */
 module.exports = React.createClass({
     displayName: 'ServerConfig',
-    mixins: [ServerConfigController],
+
+    propTypes: {
+        onHsUrlChanged: React.PropTypes.func,
+        onIsUrlChanged: React.PropTypes.func,
+        defaultHsUrl: React.PropTypes.string,
+        defaultIsUrl: React.PropTypes.string,
+        withToggleButton: React.PropTypes.bool,
+        delayTimeMs: React.PropTypes.number // time to wait before invoking onChanged
+    },
+
+    getDefaultProps: function() {
+        return {
+            onHsUrlChanged: function() {},
+            onIsUrlChanged: function() {},
+            withToggleButton: false,
+            delayTimeMs: 0
+        };
+    },
+
+    getInitialState: function() {
+        return {
+            hs_url: this.props.defaultHsUrl,
+            is_url: this.props.defaultIsUrl,
+            original_hs_url: this.props.defaultHsUrl,
+            original_is_url: this.props.defaultIsUrl,
+            // no toggle button = show, toggle button = hide
+            configVisible: !this.props.withToggleButton
+        }
+    },
+
+    onHomeserverChanged: function(ev) {
+        this.setState({hs_url: ev.target.value}, function() {
+            this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, function() {
+                this.props.onHsUrlChanged(this.state.hs_url);
+            });
+        });
+    },
+
+    onIdentityServerChanged: function(ev) {
+        this.setState({is_url: ev.target.value}, function() {
+            this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, function() {
+                this.props.onIsUrlChanged(this.state.is_url);
+            });
+        });
+    },
+
+    _waitThenInvoke: function(existingTimeoutId, fn) {
+        if (existingTimeoutId) {
+            clearTimeout(existingTimeoutId);
+        }
+        return setTimeout(fn.bind(this), this.props.delayTimeMs);
+    },
+
+    getHsUrl: function() {
+        return this.state.hs_url;
+    },
+
+    getIsUrl: function() {
+        return this.state.is_url;
+    },
+
+    onServerConfigVisibleChange: function(ev) {
+        this.setState({
+            configVisible: ev.target.checked
+        });
+    },
 
     showHelpPopup: function() {
         var ErrorDialog = sdk.getComponent('organisms.ErrorDialog');
         Modal.createDialog(ErrorDialog, {
             title: 'Custom Server Options',
             description: <span>
-                You can use the custom server options to log into other Matrix servers by specifying a different Home server URL.<br/>
-                This allows you to use Vector with an existing Matrix account on a different Home server.<br/>
+                You can use the custom server options to log into other Matrix
+                servers by specifying a different Home server URL.
                 <br/>
-                You can also set a custom Identity server but this will affect people's ability to find you
-                if you use a server in a group other than the main Matrix.org group.
+                This allows you to use Vector with an existing Matrix account on
+                a different Home server.
+                <br/>
+                <br/>
+                You can also set a custom Identity server but this will affect
+                people&#39;s ability to find you if you use a server in a group other
+                than the main Matrix.org group.
             </span>,
             button: "Dismiss",
-            focus: true,
+            focus: true
         });
     },
 
     render: function() {
+        var serverConfigStyle = {};
+        serverConfigStyle.display = this.state.configVisible ? 'block' : 'none';
+
+        var toggleButton;
+        if (this.props.withToggleButton) {
+            toggleButton = (
+                <div>
+                    <input className="mx_Login_checkbox" id="advanced" type="checkbox"
+                        checked={this.state.configVisible}
+                        onChange={this.onServerConfigVisibleChange} />
+                    <label className="mx_Login_label" htmlFor="advanced">
+                        Use custom server options (advanced)
+                    </label>
+                </div>
+            );
+        }
+
         return (
-            <div className="mx_ServerConfig">
-                <label className="mx_Login_label mx_ServerConfig_hslabel" htmlFor="hsurl">Home server URL</label>
-                <input className="mx_Login_field" id="hsurl" type="text" placeholder={this.state.original_hs_url} value={this.state.hs_url} onChange={this.hsChanged} />
-                <label className="mx_Login_label mx_ServerConfig_islabel" htmlFor="isurl">Identity server URL</label>
-                <input className="mx_Login_field" id="isurl" type="text" placeholder={this.state.original_is_url} value={this.state.is_url} onChange={this.isChanged} />
-                <a className="mx_ServerConfig_help" href="#" onClick={this.showHelpPopup}>What does this mean?</a>
+        <div>
+            {toggleButton}
+            <div style={serverConfigStyle}>
+                <div className="mx_ServerConfig">
+                    <label className="mx_Login_label mx_ServerConfig_hslabel" htmlFor="hsurl">
+                        Home server URL
+                    </label>
+                    <input className="mx_Login_field" id="hsurl" type="text"
+                        placeholder={this.state.original_hs_url}
+                        value={this.state.hs_url}
+                        onChange={this.onHomeserverChanged} />
+                    <label className="mx_Login_label mx_ServerConfig_islabel" htmlFor="isurl">
+                        Identity server URL
+                    </label>
+                    <input className="mx_Login_field" id="isurl" type="text"
+                        placeholder={this.state.original_is_url}
+                        value={this.state.is_url}
+                        onChange={this.onIdentityServerChanged} />
+                    <a className="mx_ServerConfig_help" href="#" onClick={this.showHelpPopup}>
+                        What does this mean?
+                    </a>
+                </div>
             </div>
+        </div>
         );
     }
 });

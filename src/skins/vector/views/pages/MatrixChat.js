@@ -89,11 +89,14 @@ module.exports = React.createClass({
         });
     },
 
+    onRegisterClick: function() {
+        this.showScreen("register");
+    },
+
     render: function() {
         var LeftPanel = sdk.getComponent('organisms.LeftPanel');
         var RoomView = sdk.getComponent('organisms.RoomView');
         var RightPanel = sdk.getComponent('organisms.RightPanel');
-        var Login = sdk.getComponent('templates.Login');
         var UserSettings = sdk.getComponent('organisms.UserSettings');
         var Register = sdk.getComponent('templates.Register');
         var CreateRoom = sdk.getComponent('organisms.CreateRoom');
@@ -164,8 +167,9 @@ module.exports = React.createClass({
                 />
             );
         } else {
+            var Login = sdk.getComponent("pages.Login");
             return (
-                <Login onLoggedIn={this.onLoggedIn} />
+                <Login onLoggedIn={this.onLoggedIn} onRegisterClick={this.onRegisterClick} />
             );
         }
     }
