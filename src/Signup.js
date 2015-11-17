@@ -3,14 +3,43 @@ var MatrixClientPeg = require("./MatrixClientPeg");
 var dis = require("./dispatcher");
 var q = require("q");
 
-class Register {
-
-}
-
-class Login {
+class Signup {
     constructor(hsUrl, isUrl) {
         this._hsUrl = hsUrl;
         this._isUrl = isUrl;
+    }
+
+    getHomeserverUrl() {
+        return this._hsUrl;
+    }
+
+    getIdentityServerUrl() {
+        return this._isUrl;
+    }
+
+    setHomeserverUrl(hsUrl) {
+        this._hsUrl = hsUrl;
+    }
+
+    setIdentityServerUrl(isUrl) {
+        this._isUrl = isUrl;
+    }
+}
+
+class Register extends Signup {
+    constructor(hsUrl, isUrl) {
+        super(hsUrl, isUrl);
+        this._state = "start";
+    }
+
+    getState() {
+        return this._state;
+    }
+}
+
+class Login extends Signup {
+    constructor(hsUrl, isUrl) {
+        super(hsUrl, isUrl);
         this._currentFlowIndex = 0;
         this._flows = [];
     }
