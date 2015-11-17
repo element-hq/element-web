@@ -23,10 +23,12 @@ var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/Matri
 
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Matrix = require("matrix-js-sdk");
+
 var ContextualMenu = require("../../../../ContextualMenu")
 var Login = require("../../../../components/login/Login");
 var Registration = require("../../../../components/login/Registration");
 var Signup = require("matrix-react-sdk/lib/Signup");
+var config = require("../../../../../config.json");
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
@@ -178,12 +180,16 @@ module.exports = React.createClass({
                     onLoggedIn={this.onLoggedIn}
                     onLoginClick={this.onLoginClick}
                     registerLogic={new Signup.Register(
-                        "foo", "bar"
+                        config.default_hs_url, config.default_is_url
                     )} />
             );
         } else {
             return (
-                <Login onLoggedIn={this.onLoggedIn} onRegisterClick={this.onRegisterClick} />
+                <Login
+                    onLoggedIn={this.onLoggedIn}
+                    onRegisterClick={this.onRegisterClick}
+                    homeserverUrl={config.default_hs_url}
+                    identityServerUrl={config.default_is_url} />
             );
         }
     }
