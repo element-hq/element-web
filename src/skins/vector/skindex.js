@@ -64,7 +64,6 @@ skin['molecules.RoomTile'] = require('./views/molecules/RoomTile');
 skin['molecules.RoomTooltip'] = require('./views/molecules/RoomTooltip');
 skin['molecules.SearchBar'] = require('./views/molecules/SearchBar');
 skin['molecules.SenderProfile'] = require('./views/molecules/SenderProfile');
-skin['molecules.ServerConfig'] = require('./views/molecules/ServerConfig');
 skin['molecules.UnknownMessageTile'] = require('./views/molecules/UnknownMessageTile');
 skin['molecules.UserSelector'] = require('./views/molecules/UserSelector');
 skin['molecules.voip.CallView'] = require('./views/molecules/voip/CallView');
@@ -86,7 +85,6 @@ skin['organisms.UserSettings'] = require('./views/organisms/UserSettings');
 skin['organisms.ViewSource'] = require('./views/organisms/ViewSource');
 skin['pages.CompatibilityPage'] = require('./views/pages/CompatibilityPage');
 skin['pages.MatrixChat'] = require('./views/pages/MatrixChat');
-skin['pages.Login'] = require('./views/pages/Login');
 skin['templates.Register'] = require('./views/templates/Register');
 
 module.exports = skin;

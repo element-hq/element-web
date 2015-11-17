@@ -167,7 +167,7 @@ module.exports = React.createClass({
                 />
             );
         } else {
-            var Login = sdk.getComponent("pages.Login");
+            var Login = require("../../../../components/login/Login");
             return (
                 <Login onLoggedIn={this.onLoggedIn} onRegisterClick={this.onRegisterClick} />
             );

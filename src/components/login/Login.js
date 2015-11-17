@@ -22,6 +22,7 @@ var sdk = require('matrix-react-sdk');
 var Signup = require("matrix-react-sdk/lib/Signup");
 var PasswordLogin = require("matrix-react-sdk/lib/components/PasswordLogin");
 var CasLogin = require("matrix-react-sdk/lib/components/CasLogin");
+var ServerConfig = require("./ServerConfig");
 
 /**
  * A wire component which glues together login UI components and Signup logic
@@ -159,7 +160,6 @@ module.exports = React.createClass({displayName: 'Login',
     render: function() {
         var Loader = sdk.getComponent("atoms.Spinner");
         var loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
-        var ServerConfig = sdk.getComponent("molecules.ServerConfig");
 
         return (
             <div className="mx_Login">

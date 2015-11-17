@@ -22,6 +22,7 @@ var sdk = require('matrix-react-sdk')
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg')
 
 var RegisterController = require('../../../../controllers/templates/Register')
+var ServerConfig = require("../../../../components/login/ServerConfig");
 
 var config = require('../../../../../config.json');
 
@@ -102,7 +103,6 @@ module.exports = React.createClass({
             case 'initial':
                 var serverConfigStyle = {};
                 serverConfigStyle.display = this.state.serverConfigVisible ? 'block' : 'none';
-                var ServerConfig = sdk.getComponent("molecules.ServerConfig");
                 return (
                     <div>
                         <form onSubmit={this.onInitialStageSubmit}>
