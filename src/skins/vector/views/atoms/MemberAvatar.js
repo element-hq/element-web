@@ -54,7 +54,7 @@ module.exports = React.createClass({
                           style={{ fontSize: (this.props.width * 0.75) + "px",
                                    width: this.props.width + "px",
                                    lineHeight: this.props.height*1.2 + "px" }}>{ initial }</span>
-                    <img className="mx_MemberAvatar_image" src={this.state.imageUrl}
+                    <img className="mx_MemberAvatar_image" src={this.state.imageUrl} title={this.props.member.name}
                          onError={this.onError} width={this.props.width} height={this.props.height} />
                 </span>
             );            
@@ -63,6 +63,7 @@ module.exports = React.createClass({
             <img className="mx_MemberAvatar mx_MemberAvatar_image" src={this.state.imageUrl}
                 onError={this.onError}
                 width={this.props.width} height={this.props.height}
+                title={this.props.member.name}
                 {...this.props}
             />
         );
