@@ -29,7 +29,7 @@ class Signup {
 class Register extends Signup {
     constructor(hsUrl, isUrl) {
         super(hsUrl, isUrl);
-        this._state = "start";
+        this._state = "Register.START";
     }
 
     getState() {
