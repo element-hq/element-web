@@ -29,7 +29,6 @@ var ContextualMenu = require('../../../../ContextualMenu');
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
 
 var Velociraptor = require('../../../../Velociraptor');
-require('../../../../VelocityBounce');
 
 var eventTileTypes = {
     'm.room.message': 'molecules.MessageTile',
@@ -90,9 +89,11 @@ module.exports = React.createClass({
 
         if (!room) return [];
 
+        var myUserId = MatrixClientPeg.get().credentials.userId;
+
         // get list of read receipts, sorted most recent first
         var receipts = room.getReceiptsForEvent(this.props.mxEvent).filter(function(r) {
-            return r.type === "m.read";
+            return r.type === "m.read" && r.userId != myUserId;
         }).sort(function(r1, r2) {
             return r2.data.ts - r1.data.ts;
         });
@@ -130,10 +131,8 @@ module.exports = React.createClass({
                 // and then it will drop down to its resting position
                 startStyles.push({ top: topOffset, left: '0px' });
                 enterTransitionOpts.push({
-                    // Sort of make it take a bit longer to fall in a way
-                    // that would make my A level physics teacher cry.
-                    duration: Math.min(Math.log(Math.abs(topOffset)) * 200, 3000),
-                    easing: 'easeOutBounce'
+                    duration: 300,
+                    easing: 'easeOutCubic',
                 });
             }
 
