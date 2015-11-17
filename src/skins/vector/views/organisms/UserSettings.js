@@ -104,6 +104,8 @@ module.exports = React.createClass({
             savePromises.push( UserSettingsStore.saveThreePids(this.state.threepids) );
         }
 
+        // TODO: do the password check
+
         self.setState({
             phase: self.Phases.Saving,
         });
