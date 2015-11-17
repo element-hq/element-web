@@ -351,7 +351,7 @@ module.exports = {
         Notifier.start();
         UserActivity.start();
         Presence.start();
-        cli.startClient({resolveInvitesToProfiles: true});
+        cli.startClient();
     },
 
     onKeyDown: function(ev) {
