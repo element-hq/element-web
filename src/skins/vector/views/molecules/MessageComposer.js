@@ -53,6 +53,14 @@ module.exports = React.createClass({
         });
     },
 
+    onVoiceCallClick: function(ev) {
+        dis.dispatch({
+            action: 'place_call',
+            type: 'voice',
+            room_id: this.props.room.roomId
+        });
+    },
+
     render: function() {
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
@@ -71,7 +79,10 @@ module.exports = React.createClass({
                             <img src="img/upload.png" width="17" height="22"/>
                             <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
                         </div>
-                        <div className="mx_MessageComposer_call" onClick={this.onCallClick}>
+                        <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick}>
+                            <img src="img/voice.png" width="16" height="26"/>
+                        </div>
+                        <div className="mx_MessageComposer_videocall" onClick={this.onCallClick}>
                             <img src="img/call.png" width="28" height="20"/>
                         </div>
                     </div>
