@@ -43,7 +43,7 @@ module.exports = {
         var self = this;
 
         var closeMenu = function() {
-            React.unmountComponentAtNode(self.getOrCreateContainer());
+            ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
 
             if (props && props.onFinished) props.onFinished.apply(null, arguments);
         };
