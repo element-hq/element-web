@@ -145,8 +145,10 @@ module.exports = React.createClass({
             var style = {
                 left: left+'px',
                 top: '0px',
-                visibility: i < MAX_READ_AVATARS || this.state.allReadAvatars ? 'visible' : 'hidden'
+                visibility: ((i < MAX_READ_AVATARS) || this.state.allReadAvatars) ? 'visible' : 'hidden'
             };
+
+            //console.log("i = " + i + ", MAX_READ_AVATARS = " + MAX_READ_AVATARS + ", allReadAvatars = " + this.state.allReadAvatars + " visibility = " + style.visibility);
 
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
@@ -161,27 +163,28 @@ module.exports = React.createClass({
             );
             // TODO: we keep the extra read avatars in the dom to make animation simpler
             // we could optimise this to reduce the dom size.
-            if (i < MAX_READ_AVATARS - 1 || this.state.allReadAvatars) {
+            if (i < MAX_READ_AVATARS - 1 || this.state.allReadAvatars) { // XXX: where does this -1 come from? is it to make the max'th avatar animate properly?
                 left -= 15;
             }
         }
+        var editButton;
         if (!this.state.allReadAvatars) {
             var remainder = receipts.length - MAX_READ_AVATARS;
             var remText;
-            left -= 15;
+            if (i >= MAX_READ_AVATARS - 1) left -= 15;
             if (remainder > 0) {
                 remText = <span className="mx_EventTile_readAvatarRemainder"
                     onClick={this.toggleAllReadAvatars}
                     style={{ left: left }}>{ remainder }+
                 </span>;
+                left -= 15;
             }
+            editButton = (
+                <input style={{ left: left }}
+                    type="image" src="img/edit.png" alt="Edit" width="14" height="14"
+                    className="mx_EventTile_editButton" onClick={this.onEditClicked} />
+            );
         }
-
-        var editButton = (
-            <input style={{ left: left+15 }}
-                type="image" src="img/edit.png" alt="Edit" width="14" height="14"
-                className="mx_EventTile_editButton" onClick={this.onEditClicked} />
-        );
 
         return <span className="mx_EventTile_readAvatars" ref={this.collectReadAvatarNode}>
             { editButton }
