@@ -95,6 +95,7 @@ limitations under the License.
     position: relative;
     width: 90px;
     margin-right: 10px;
+    margin-top: -6px;
 }
 
 .mx_MessageTimestamp {
