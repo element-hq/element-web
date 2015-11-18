@@ -91,9 +91,9 @@ limitations under the License.
 .mx_EventTile_msgOption {
     float: right;
     text-align: right;
-    margin-right: 10px;
     z-index: 1;
     position: relative;
+    width: 100px;
 }
 
 .mx_MessageTimestamp {
@@ -111,10 +111,9 @@ limitations under the License.
 }
 
 .mx_EventTile_editButton {
-    display: block;
-    visibility: hidden;
-    margin-left: auto;
-    margin-right: 0px;
+    position: absolute;
+    display: inline-block;
+    visibility: hidden; 
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton {

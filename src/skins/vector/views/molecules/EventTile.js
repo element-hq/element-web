@@ -172,15 +172,22 @@ module.exports = React.createClass({
             if (remainder > 0) {
                 remText = <span className="mx_EventTile_readAvatarRemainder"
                     onClick={this.toggleAllReadAvatars}
-                    style={ {left: left} }>+{ remainder }
+                    style={{ left: left }}>{ remainder }+
                 </span>;
             }
         }
 
+        var editButton = (
+            <input style={{ left: left+15 }}
+                type="image" src="img/edit.png" alt="Edit" width="14" height="14"
+                className="mx_EventTile_editButton" onClick={this.onEditClicked} />
+        );
+
         return <span className="mx_EventTile_readAvatars" ref={this.collectReadAvatarNode}>
-            {remText}
-            <Velociraptor transition={reorderTransitionOpts}>
-                {avatars}
+            { editButton }
+            { remText }
+            <Velociraptor transition={ reorderTransitionOpts }>
+                { avatars }
             </Velociraptor>
         </span>;
     },
@@ -217,12 +224,6 @@ module.exports = React.createClass({
             menu: this.state.menu,
         });
         var timestamp = <MessageTimestamp ts={this.props.mxEvent.getTs()} />
-        var editButton = (
-            <input
-                type="image" src="img/edit.png" alt="Edit" width="14" height="14"
-                className="mx_EventTile_editButton" onClick={this.onEditClicked}
-            />
-        );
 
         var aux = null;
         if (msgtype === 'm.image') aux = "sent an image";
@@ -247,7 +248,6 @@ module.exports = React.createClass({
         return (
             <div className={classes}>
                 <div className="mx_EventTile_msgOption">
-                    { editButton }
                     { timestamp }
                     { readAvatars }
                 </div>
