@@ -38,8 +38,9 @@ class Register extends Signup {
         this.username = null; // desired
         this.email = null; // desired
         this.password = null; // desired
-        this.params = {}; // random other stuff (e.g. query params)
+        this.params = {}; // random other stuff (e.g. query params, NOT params from the server)
         this.credentials = null;
+        this.activeStage = null;
     }
 
     setClientSecret(secret) {
@@ -64,6 +65,10 @@ class Register extends Signup {
 
     getCredentials() {
         return this.credentials;
+    }
+
+    getServerData() {
+        return this.data || {};
     }
 
     setStep(step) {
@@ -112,6 +117,7 @@ class Register extends Signup {
                 var flow = self.chooseFlow(error.data.flows);
 
                 if (flow) {
+                    console.log("Active flow => %s", JSON.stringify(flow));
                     var flowStage = self.firstUncompletedStageIndex(flow);
                     return self.startStage(flow.stages[flowStage]);
                 }
@@ -174,6 +180,7 @@ class Register extends Signup {
         }
 
         var stage = new StageClass(MatrixClientPeg.get(), this);
+        this.activeStage = stage;
         return stage.complete().then(function(request) {
             if (request.auth) {
                 return self._tryRegister(request.auth);
@@ -218,6 +225,13 @@ class Register extends Signup {
             return emailFlow;
         } else {
             return otherFlow;
+        }
+    }
+
+    tellStage(stageName, data) {
+        if (this.activeStage && this.activeStage.type === stageName) {
+            console.log("Telling stage %s about something..", stageName);
+            this.activeStage.onReceiveData(data);
         }
     }
 }

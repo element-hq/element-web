@@ -16,6 +16,10 @@ class Stage {
         //             Has a "message" string and an "isFatal" flag.
         return q.reject("NOT IMPLEMENTED");
     }
+
+    onReceiveData() {
+        // NOP
+    }
 }
 Stage.TYPE = "NOT IMPLEMENTED";
 
@@ -39,12 +43,22 @@ DummyStage.TYPE = "m.login.dummy";
 class RecaptchaStage extends Stage {
     constructor(matrixClient, signupInstance) {
         super(RecaptchaStage.TYPE, matrixClient, signupInstance);
+        this.defer = q.defer();
+        this.publicKey = null;
+    }
+
+    onReceiveData(data) {
+        if (data !== "loaded") {
+            return;
+        }
+        this._attemptRender();
     }
 
     complete() {
         var publicKey;
-        if (this.signupInstance.params['m.login.recaptcha']) {
-            publicKey = this.signupInstance.params['m.login.recaptcha'].public_key;
+        var serverParams = this.signupInstance.getServerData().params;
+        if (serverParams && serverParams["m.login.recaptcha"]) {
+            publicKey = serverParams["m.login.recaptcha"].public_key;
         }
         if (!publicKey) {
             return q.reject({
@@ -53,12 +67,26 @@ class RecaptchaStage extends Stage {
                 isFatal: true
             });
         }
+        this.publicKey = publicKey;
+        this._attemptRender();
 
-        var defer = q.defer();
+        return this.defer.promise;
+    }
+
+    _attemptRender() {
+        if (!global.grecaptcha) {
+            console.error("grecaptcha not loaded!");
+            return;
+        }
+        if (!this.publicKey) {
+            console.error("No public key for recaptcha!");
+            return;
+        }
+        var self = this;
         global.grecaptcha.render('mx_recaptcha', {
-            sitekey: publicKey,
+            sitekey: this.publicKey,
             callback: function(response) {
-                return defer.resolve({
+                return self.defer.resolve({
                     auth: {
                         type: 'm.login.recaptcha',
                         response: response
@@ -66,8 +94,6 @@ class RecaptchaStage extends Stage {
                 });
             }
         });
-
-        return defer.promise;
     }
 }
 RecaptchaStage.TYPE = "m.login.recaptcha";
