@@ -15,58 +15,54 @@ limitations under the License.
 */
 
 var MatrixClientPeg = require("./MatrixClientPeg");
+var dis = require("./dispatcher");
 
  // Time in ms after that a user is considered as unavailable/away
 var UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
 var PRESENCE_STATES = ["online", "offline", "unavailable"];
 
-// The current presence state
-var state, timer;
-
-module.exports = {
+class Presence {
 
     /**
      * Start listening the user activity to evaluate his presence state.
      * Any state change will be sent to the Home Server.
      */
-    start: function() {
-        var self = this;
+    start() {
         this.running = true;
-        if (undefined === state) {
-            // The user is online if they move the mouse or press a key
-            document.onmousemove = function() { self._resetTimer(); };
-            document.onkeypress = function() { self._resetTimer(); };
+        if (undefined === this.state) {
             this._resetTimer();
+            this.dispatcherRef = dis.register(this._onUserActivity.bind(this));
         }
-    },
+    }
 
     /**
      * Stop tracking user activity
      */
-    stop: function() {
+    stop() {
         this.running = false;
-        if (timer) {
-            clearTimeout(timer);
-            timer = undefined;
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = undefined;
+            dis.unregister(this.dispatcherRef);
         }
-        state = undefined;
-    },
+        this.state = undefined;
+    }
 
     /**
      * Get the current presence state.
      * @returns {string} the presence state (see PRESENCE enum)
      */
-    getState: function() {
-        return state;
-    },
+    getState() {
+        return this.state;
+    }
 
     /**
      * Set the presence state.
      * If the state has changed, the Home Server will be notified.
      * @param {string} newState the new presence state (see PRESENCE enum)
      */
-    setState: function(newState) {
-        if (newState === state) {
+    setState(newState) {
+        if (newState === this.state) {
             return;
         }
         if (PRESENCE_STATES.indexOf(newState) === -1) {
@@ -75,33 +71,42 @@ module.exports = {
         if (!this.running) {
             return;
         }
-        state = newState;
-        MatrixClientPeg.get().setPresence(state).done(function() {
+        var old_state = this.state;
+        this.state = newState;
+        var self = this;
+        MatrixClientPeg.get().setPresence(this.state).done(function() {
             console.log("Presence: %s", newState);
         }, function(err) {
             console.error("Failed to set presence: %s", err);
+            self.state = old_state;
         });
-    },
+    }
 
     /**
      * Callback called when the user made no action on the page for UNAVAILABLE_TIME ms.
      * @private
      */
-    _onUnavailableTimerFire: function() {
+    _onUnavailableTimerFire() {
         this.setState("unavailable");
-    },
+    }
+
+    _onUserActivity() {
+        this._resetTimer();
+    }
 
     /**
      * Callback called when the user made an action on the page
      * @private
      */
-    _resetTimer: function() {
+    _resetTimer() {
         var self = this;
         this.setState("online");
         // Re-arm the timer
-        clearTimeout(timer);
-        timer = setTimeout(function() {
+        clearTimeout(this.timer);
+        this.timer = setTimeout(function() {
             self._onUnavailableTimerFire();
         }, UNAVAILABLE_TIME_MS);
     } 
-};
+}
+
+module.exports = new Presence();
