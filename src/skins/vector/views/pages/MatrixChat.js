@@ -176,12 +176,17 @@ module.exports = React.createClass({
                 />
             ); */
             return (
+                var registerLogic = new Signup.Register(
+                    config.default_hs_url, config.default_is_url
+                );
+                registerLogic.setClientSecret(this.state.register_client_secret);
+                registerLogic.setSessionId(this.state.register_session_id);
+                registerLogic.setRegistrationUrl(this.props.registrationUrl);
+                registerLogic.setIdSid(this.state.register_id_sid);
                 <Registration
                     onLoggedIn={this.onLoggedIn}
                     onLoginClick={this.onLoginClick}
-                    registerLogic={new Signup.Register(
-                        config.default_hs_url, config.default_is_url
-                    )} />
+                    registerLogic={registerLogic} />
             );
         } else {
             return (

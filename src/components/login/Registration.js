@@ -22,6 +22,7 @@ var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var ServerConfig = require("./ServerConfig");
 var RegistrationForm = require("./RegistrationForm");
+var MIN_PASSWORD_LENGTH = 6;
 
 module.exports = React.createClass({
     displayName: 'Registration',
@@ -61,7 +62,40 @@ module.exports = React.createClass({
     },
 
     onFormValidationFailed: function(errCode) {
-        console.error("Ruh roh: %s", errCode);
+        var errMsg;
+        switch (errCode) {
+            case "RegistrationForm.ERR_PASSWORD_MISSING":
+                errMsg = "Missing password.";
+                break;
+            case "RegistrationForm.ERR_PASSWORD_MISMATCH":
+                errMsg = "Passwords don't match.";
+                break;
+            case "RegistrationForm.ERR_PASSWORD_LENGTH":
+                errMsg = `Password too short (min ${MIN_PASSWORD_LENGTH}).`;
+                break;
+            default:
+                console.error("Unknown error code: %s", errCode);
+                errMsg = "An unknown error occurred.";
+                break;
+        }
+        this.setState({
+            errorText: errMsg
+        });
+    },
+
+    _getPostRegisterJsx: function() {
+        var ChangeDisplayName = sdk.getComponent('molecules.ChangeDisplayName');
+        var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
+        return (
+            <div className="mx_Login_profile">
+                Set a display name:
+                <ChangeDisplayName />
+                Upload an avatar:
+                <ChangeAvatar
+                    initialAvatarUrl={MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl)} />
+                <button onClick={this.onProfileContinueClicked}>Continue</button>
+            </div>
+        );
     },
 
     _getRegisterContentJsx: function() {
@@ -74,7 +108,7 @@ module.exports = React.createClass({
                 registerStep = (
                     <RegistrationForm
                         showEmail={true}
-                        minPasswordLength={8}
+                        minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit} />
                 );
@@ -113,21 +147,6 @@ module.exports = React.createClass({
                 <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
                     I already have an account
                 </a>
-            </div>
-        );
-    },
-
-    _getPostRegisterJsx: function() {
-        var ChangeDisplayName = sdk.getComponent('molecules.ChangeDisplayName');
-        var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
-        return (
-            <div className="mx_Login_profile">
-                Set a display name:
-                <ChangeDisplayName />
-                Upload an avatar:
-                <ChangeAvatar
-                    initialAvatarUrl={MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl)} />
-                <button onClick={this.onProfileContinueClicked}>Continue</button>
             </div>
         );
     },
