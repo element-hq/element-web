@@ -58,7 +58,7 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return {menu: false};
+        return {menu: false, allReadAvatars: false};
     },
 
     componentDidUpdate: function() {
@@ -80,6 +80,12 @@ module.exports = React.createClass({
             }
         });
         this.setState({menu: true});
+    },
+
+    toggleAllReadAvatars: function() {
+        this.setState({
+            allReadAvatars: !this.state.allReadAvatars
+        });
     },
 
     getReadAvatars: function() {
@@ -136,25 +142,39 @@ module.exports = React.createClass({
                 });
             }
 
+            var style = {
+                left: left+'px',
+                top: '0px',
+                visibility: i < MAX_READ_AVATARS || this.state.allReadAvatars ? 'visible' : 'hidden'
+            };
+
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
                 <MemberAvatar key={member.userId} member={member}
                     width={14} height={14} resizeMethod="crop"
-                    style={ { left: left+'px', top: '0px' } }
+                    style={style}
                     startStyle={startStyles}
                     enterTransitionOpts={enterTransitionOpts}
                     id={'mx_readAvatar'+member.userId}
+                    onClick={this.toggleAllReadAvatars}
                 />
             );
-            left -= 15;
-            if (i + 1 >= MAX_READ_AVATARS) {
-                break;
+            // TODO: we keep the extra read avatars in the dom to make animation simpler
+            // we could optimise this to reduce the dom size.
+            if (i < MAX_READ_AVATARS - 1 || this.state.allReadAvatars) {
+                left -= 15;
             }
         }
-        var remainder = receipts.length - MAX_READ_AVATARS;
-        var remText;
-        if (remainder > 0) {
-            remText = <span className="mx_EventTile_readAvatarRemainder" style={ {left: left} }>+{ remainder }</span>;
+        if (!this.state.allReadAvatars) {
+            var remainder = receipts.length - MAX_READ_AVATARS;
+            var remText;
+            left -= 15;
+            if (remainder > 0) {
+                remText = <span className="mx_EventTile_readAvatarRemainder"
+                    onClick={this.toggleAllReadAvatars}
+                    style={ {left: left} }>+{ remainder }
+                </span>;
+            }
         }
 
         return <span className="mx_EventTile_readAvatars" ref={this.collectReadAvatarNode}>
