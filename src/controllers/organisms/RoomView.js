@@ -683,8 +683,7 @@ module.exports = {
             var node = this.eventNodes[ev.getId()];
             if (!node) continue;
 
-            var domNode = node.getDOMNode();
-            var boundingRect = domNode.getBoundingClientRect();
+            var boundingRect = node.getBoundingClientRect();
 
             if (boundingRect.bottom < wrapperRect.bottom) {
                 return i;
