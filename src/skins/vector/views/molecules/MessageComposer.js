@@ -28,6 +28,10 @@ module.exports = React.createClass({
     displayName: 'MessageComposer',
     mixins: [MessageComposerController],
 
+    onInputClick: function(ev) {
+        this.refs.textarea.focus();
+    },
+
     onUploadClick: function(ev) {
         this.refs.uploadInput.click();
     },
@@ -60,7 +64,7 @@ module.exports = React.createClass({
                         <div className="mx_MessageComposer_avatar">
                             <MemberAvatar member={me} width={24} height={24} />
                         </div>
-                        <div className="mx_MessageComposer_input">
+                        <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
                             <textarea ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
                         </div>
                         <div className="mx_MessageComposer_upload" onClick={this.onUploadClick}>
