@@ -73,11 +73,12 @@ class Presence {
         }
         var old_state = this.state;
         this.state = newState;
+        var self = this;
         MatrixClientPeg.get().setPresence(this.state).done(function() {
             console.log("Presence: %s", newState);
         }, function(err) {
             console.error("Failed to set presence: %s", err);
-            this.state = old_state;
+            self.state = old_state;
         });
     }
 
