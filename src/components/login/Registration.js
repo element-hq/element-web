@@ -48,25 +48,41 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
     },
 
+    componentDidUpdate: function() {
+        // Just putting a script tag into the returned jsx doesn't work, annoyingly,
+        // so we do this instead.
+        var self = this;
+        if (this.refs.recaptchaContainer) {
+            console.log("Loading recaptcha script...");
+            var scriptTag = document.createElement('script');
+            window.mx_on_recaptcha_loaded = function() {
+                console.log("Loaded recaptcha script.");
+                self.props.registerLogic.tellStage("m.login.recaptcha", "loaded");
+            };
+            scriptTag.setAttribute(
+                'src', global.location.protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit"
+            );
+            this.refs.recaptchaContainer.appendChild(scriptTag);
+        }
+    },
+
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
     },
 
     onHsUrlChanged: function(newHsUrl) {
         this.props.registerLogic.setHomeserverUrl(newHsUrl);
-        this.forceUpdate(); // registration state may have changed.
     },
 
     onIsUrlChanged: function(newIsUrl) {
         this.props.registerLogic.setIdentityServerUrl(newIsUrl);
-        this.forceUpdate(); // registration state may have changed.
     },
 
     onAction: function(payload) {
         if (payload.action !== "registration_step_update") {
             return;
         }
-        this.forceUpdate();
+        this.forceUpdate(); // registration state has changed.
     },
 
     onFormSubmit: function(formVals) {
