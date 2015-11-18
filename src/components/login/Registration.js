@@ -20,6 +20,7 @@ var React = require('react');
 
 var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var dis = require('matrix-react-sdk/lib/dispatcher');
 var ServerConfig = require("./ServerConfig");
 var RegistrationForm = require("./RegistrationForm");
 var MIN_PASSWORD_LENGTH = 6;
@@ -44,7 +45,11 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+    },
 
+    componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
     },
 
     onHsUrlChanged: function(newHsUrl) {
@@ -57,8 +62,38 @@ module.exports = React.createClass({
         this.forceUpdate(); // registration state may have changed.
     },
 
+    onAction: function(payload) {
+        if (payload.action !== "registration_step_update") {
+            return;
+        }
+        this.forceUpdate();
+    },
+
     onFormSubmit: function(formVals) {
-        console.log("Form vals: %s", formVals);
+        var self = this;
+        this.props.registerLogic.register(formVals).done(function(response) {
+            if (!response || !response.access_token) {
+                console.warn(
+                    "FIXME: Register fulfilled without a final response, " +
+                    "did you break the promise chain?"
+                );
+                // no matter, we'll grab it direct
+                response = self.props.registerLogic.getCredentials();
+            }
+            self.props.onLoggedIn({
+                userId: response.user_id,
+                homeserverUrl: self.props.registerLogic.getHomeserverUrl(),
+                identityServerUrl: self.props.registerLogic.getIdentityServerUrl(),
+                accessToken: response.access_token
+            });
+        }, function(err) {
+            if (err.message) {
+                self.setState({
+                    errorText: err.message
+                });
+            }
+            console.log(err);
+        });
     },
 
     onFormValidationFailed: function(errCode) {
@@ -99,12 +134,13 @@ module.exports = React.createClass({
     },
 
     _getRegisterContentJsx: function() {
-        var currState = this.props.registerLogic.getState();
+        var currStep = this.props.registerLogic.getStep();
         var registerStep;
-        switch (currState) {
+        switch (currStep) {
             case "Register.COMPLETE":
                 return this._getPostRegisterJsx();
             case "Register.START":
+            case "Register.STEP_m.login.dummy":
                 registerStep = (
                     <RegistrationForm
                         showEmail={true}
@@ -129,13 +165,14 @@ module.exports = React.createClass({
                 );
                 break;
             default:
-                console.error("Unknown register state: %s", currState);
+                console.error("Unknown register state: %s", currStep);
                 break;
         }
         return (
             <div>
                 <h2>Create an account</h2>
                 {registerStep}
+                <div className="mx_Login_error">{this.state.errorText}</div>
                 <ServerConfig ref="serverConfig"
                     withToggleButton={true}
                     defaultHsUrl={this.state.enteredHomeserverUrl}
@@ -143,7 +180,6 @@ module.exports = React.createClass({
                     onHsUrlChanged={this.onHsUrlChanged}
                     onIsUrlChanged={this.onIsUrlChanged}
                     delayTimeMs={1000} />
-                <div className="mx_Login_error">{this.state.errorText}</div>
                 <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
                     I already have an account
                 </a>

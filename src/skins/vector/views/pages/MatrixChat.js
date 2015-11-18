@@ -175,14 +175,14 @@ module.exports = React.createClass({
                     registrationUrl={this.props.registrationUrl}
                 />
             ); */
-            return (
-                var registerLogic = new Signup.Register(
+            var registerLogic = new Signup.Register(
                     config.default_hs_url, config.default_is_url
                 );
-                registerLogic.setClientSecret(this.state.register_client_secret);
-                registerLogic.setSessionId(this.state.register_session_id);
-                registerLogic.setRegistrationUrl(this.props.registrationUrl);
-                registerLogic.setIdSid(this.state.register_id_sid);
+            registerLogic.setClientSecret(this.state.register_client_secret);
+            registerLogic.setSessionId(this.state.register_session_id);
+            registerLogic.setRegistrationUrl(this.props.registrationUrl);
+            registerLogic.setIdSid(this.state.register_id_sid);
+            return (
                 <Registration
                     onLoggedIn={this.onLoggedIn}
                     onLoginClick={this.onLoginClick}
