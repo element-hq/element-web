@@ -31,8 +31,8 @@ class UserActivity {
     start() {
         document.onmousemove = this._onUserActivity.bind(this);
         document.onkeypress = this._onUserActivity.bind(this);
-        this.lastActivityAt = (new Date).getTime();
-        this.lastDispatchAt = 0;
+        this.lastActivityAtTs = new Date().getTime();
+        this.lastDispatchAtTs = 0;
     }
 
     /**
@@ -44,9 +44,9 @@ class UserActivity {
     }
 
     _onUserActivity() {
-        this.lastActivityAt = (new Date).getTime();
-        if (this.lastDispatchAt < this.lastActivityAt - MIN_DISPATCH_INTERVAL) {
-            this.lastDispatchAt = this.lastActivityAt;
+        this.lastActivityAtTs = (new Date).getTime();
+        if (this.lastDispatchAtTs < this.lastActivityAtTs - MIN_DISPATCH_INTERVAL) {
+            this.lastDispatchAtTs = this.lastActivityAtTs;
             dis.dispatch({
                 action: 'user_activity'
             });
