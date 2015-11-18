@@ -28,7 +28,7 @@
     "filesize": "^3.1.2",
     "flux": "~2.0.3",
     "linkifyjs": "^2.0.0-beta.4",
-    "matrix-js-sdk": "^0.3.0",
+    "matrix-js-sdk": "https://github.com/matrix-org/matrix-js-sdk.git#develop",
     "matrix-react-sdk": "^0.0.2",
     "modernizr": "^3.1.0",
     "q": "^1.4.1",
@@ -37,6 +37,7 @@
     "react-dnd-html5-backend": "^2.0.0",
     "react-dom": "^0.14.2",
     "react-gemini-scrollbar": "^2.0.1",
+    "velocity-animate": "^1.2.3",
     "sanitize-html": "^1.0.0"
   },
   "devDependencies": {
