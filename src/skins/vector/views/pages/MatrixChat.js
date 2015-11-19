@@ -27,7 +27,6 @@ var Matrix = require("matrix-js-sdk");
 var ContextualMenu = require("../../../../ContextualMenu")
 var Login = require("../../../../components/login/Login");
 var Registration = require("../../../../components/login/Registration");
-var Signup = require("matrix-react-sdk/lib/Signup");
 var config = require("../../../../../config.json");
 
 module.exports = React.createClass({
@@ -178,27 +177,16 @@ module.exports = React.createClass({
                 </div>
             );
         } else if (this.state.screen == 'register') {
-            /*
-            return (
-                <Register onLoggedIn={this.onLoggedIn} clientSecret={this.state.register_client_secret}
-                    sessionId={this.state.register_session_id} idSid={this.state.register_id_sid}
-                    hsUrl={this.state.register_hs_url} isUrl={this.state.register_is_url}
-                    registrationUrl={this.props.registrationUrl}
-                />
-            ); */
-            var registerLogic = new Signup.Register(
-                config.default_hs_url, config.default_is_url
-            );
-            registerLogic.setClientSecret(this.state.register_client_secret);
-            registerLogic.setSessionId(this.state.register_session_id);
-            registerLogic.setRegistrationUrl(this.props.registrationUrl);
-            registerLogic.setIdSid(this.state.register_id_sid);
-            registerLogic.recheckState();
             return (
                 <Registration
+                    clientSecret={this.state.register_client_secret}
+                    sessionId={this.state.register_session_id}
+                    idSid={this.state.register_id_sid}
+                    hsUrl={config.default_hs_url}
+                    isUrl={config.default_is_url}
+                    registrationUrl={this.props.registrationUrl}
                     onLoggedIn={this.onLoggedIn}
-                    onLoginClick={this.onLoginClick}
-                    registerLogic={registerLogic} />
+                    onLoginClick={this.onLoginClick} />
             );
         } else {
             return (

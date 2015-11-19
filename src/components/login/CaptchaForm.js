@@ -40,7 +40,6 @@ module.exports = React.createClass({
     componentDidMount: function() {
         // Just putting a script tag into the returned jsx doesn't work, annoyingly,
         // so we do this instead.
-        console.log("CDM");
         var self = this;
         if (this.refs.recaptchaContainer) {
             console.log("Loading recaptcha script...");

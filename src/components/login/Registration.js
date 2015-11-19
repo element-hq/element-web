@@ -24,6 +24,7 @@ var dis = require('matrix-react-sdk/lib/dispatcher');
 var ServerConfig = require("./ServerConfig");
 var RegistrationForm = require("./RegistrationForm");
 var CaptchaForm = require("./CaptchaForm");
+var Signup = require("matrix-react-sdk/lib/Signup");
 var MIN_PASSWORD_LENGTH = 6;
 
 module.exports = React.createClass({
@@ -31,7 +32,12 @@ module.exports = React.createClass({
 
     propTypes: {
         onLoggedIn: React.PropTypes.func.isRequired,
-        registerLogic: React.PropTypes.any.isRequired,
+        clientSecret: React.PropTypes.string,
+        sessionId: React.PropTypes.string,
+        registrationUrl: React.PropTypes.string,
+        idSid: React.PropTypes.string,
+        hsUrl: React.PropTypes.string,
+        isUrl: React.PropTypes.string,
         // registration shouldn't know or care how login is done.
         onLoginClick: React.PropTypes.func.isRequired
     },
@@ -40,25 +46,43 @@ module.exports = React.createClass({
         return {
             busy: false,
             errorText: null,
-            enteredHomeserverUrl: this.props.registerLogic.getHomeserverUrl(),
-            enteredIdentityServerUrl: this.props.registerLogic.getIdentityServerUrl()
+            enteredHomeserverUrl: this.props.hsUrl,
+            enteredIdentityServerUrl: this.props.isUrl
         };
     },
 
     componentWillMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        // attach this to the instance rather than this.state since it isn't UI
+        this.registerLogic = new Signup.Register(
+            this.props.hsUrl, this.props.isUrl
+        );
+        this.registerLogic.setClientSecret(this.props.clientSecret);
+        this.registerLogic.setSessionId(this.props.sessionId);
+        this.registerLogic.setRegistrationUrl(this.props.registrationUrl);
+        this.registerLogic.setIdSid(this.props.idSid);
+        this.registerLogic.recheckState();
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
     },
 
+    componentDidMount: function() {
+        // may have already done an HTTP hit (e.g. redirect from an email) so
+        // check for any pending response
+        var promise = this.registerLogic.getPromise();
+        if (promise) {
+            this.onProcessingRegistration(promise);
+        }
+    },
+
     onHsUrlChanged: function(newHsUrl) {
-        this.props.registerLogic.setHomeserverUrl(newHsUrl);
+        this.registerLogic.setHomeserverUrl(newHsUrl);
     },
 
     onIsUrlChanged: function(newIsUrl) {
-        this.props.registerLogic.setIdentityServerUrl(newIsUrl);
+        this.registerLogic.setIdentityServerUrl(newIsUrl);
     },
 
     onAction: function(payload) {
@@ -70,14 +94,20 @@ module.exports = React.createClass({
 
     onFormSubmit: function(formVals) {
         var self = this;
-        this.props.registerLogic.register(formVals).done(function(response) {
+        this.onProcessingRegistration(this.registerLogic.register(formVals));
+    },
+
+    // Promise is resolved when the registration process is FULLY COMPLETE
+    onProcessingRegistration: function(promise) {
+        var self = this;
+        promise.done(function(response) {
             if (!response || !response.access_token) {
                 console.warn(
                     "FIXME: Register fulfilled without a final response, " +
                     "did you break the promise chain?"
                 );
                 // no matter, we'll grab it direct
-                response = self.props.registerLogic.getCredentials();
+                response = self.registerLogic.getCredentials();
             }
             if (!response || !response.user_id || !response.access_token) {
                 console.error("Final response is missing keys.");
@@ -88,8 +118,8 @@ module.exports = React.createClass({
             }
             self.props.onLoggedIn({
                 userId: response.user_id,
-                homeserverUrl: self.props.registerLogic.getHomeserverUrl(),
-                identityServerUrl: self.props.registerLogic.getIdentityServerUrl(),
+                homeserverUrl: self.registerLogic.getHomeserverUrl(),
+                identityServerUrl: self.registerLogic.getIdentityServerUrl(),
                 accessToken: response.access_token
             });
         }, function(err) {
@@ -125,7 +155,7 @@ module.exports = React.createClass({
     },
 
     onCaptchaLoaded: function() {
-        this.props.registerLogic.tellStage("m.login.recaptcha", "loaded");
+        this.registerLogic.tellStage("m.login.recaptcha", "loaded");
     },
 
     // TODO:
@@ -148,7 +178,7 @@ module.exports = React.createClass({
     },
 
     _getRegisterContentJsx: function() {
-        var currStep = this.props.registerLogic.getStep();
+        var currStep = this.registerLogic.getStep();
         var registerStep;
         switch (currStep) {
             case "Register.COMPLETE":
