@@ -88,24 +88,33 @@ module.exports = {
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (toStartOfTimeline) return;
 
-        var newState = this.getRoomLists();
+        var hl = 0;
         if (
             room.roomId != this.props.selectedRoom &&
             ev.getSender() != MatrixClientPeg.get().credentials.userId)
         {
-            var hl = 1;
+            // don't mark rooms as unread for just member changes
+            if (ev.getType() != "m.room.member") {
+                hl = 1;
+            }
 
             var actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
             if (actions && actions.tweaks && actions.tweaks.highlight) {
                 hl = 2;
             }
+        }
+
+        if (hl > 0) {
+            var newState = this.getRoomLists();
+
             // obviously this won't deep copy but this shouldn't be necessary
             var amap = this.state.activityMap;
             amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
 
             newState.activityMap = amap;
+
+            this.setState(newState);
         }
-        this.setState(newState);
     },
 
     onRoomName: function(room) {

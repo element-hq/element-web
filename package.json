@@ -50,6 +50,7 @@
     "parallelshell": "^1.2.0",
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.1.5",
-    "uglifycss": "0.0.15"
+    "uglifycss": "0.0.15",
+    "webpack": "^1.12.6"
   }
 }
