@@ -86,7 +86,6 @@ module.exports = React.createClass({
                 });
                 return;
             }
-            // TODO: do post-register stuff
             self.props.onLoggedIn({
                 userId: response.user_id,
                 homeserverUrl: self.props.registerLogic.getHomeserverUrl(),
@@ -129,7 +128,10 @@ module.exports = React.createClass({
         this.props.registerLogic.tellStage("m.login.recaptcha", "loaded");
     },
 
-    // TODO: I wonder if this should actually be a different component...
+    // TODO:
+    // This should really be a different component which MatrixChat then
+    // instantiates rather than having it pollute registration logic. There is
+    // no reason to wedge them together here. This function is currently NOT CALLED.
     _getPostRegisterJsx: function() {
         var ChangeDisplayName = sdk.getComponent('molecules.ChangeDisplayName');
         var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
