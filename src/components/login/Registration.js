@@ -184,7 +184,7 @@ module.exports = React.createClass({
         var registerStep;
         switch (currStep) {
             case "Register.COMPLETE":
-                return this._getPostRegisterJsx();
+                return; // this._getPostRegisterJsx();
             case "Register.START":
             case "Register.STEP_m.login.dummy":
                 registerStep = (

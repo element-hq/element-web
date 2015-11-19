@@ -24,7 +24,7 @@ var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/Matri
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Matrix = require("matrix-js-sdk");
 
-var ContextualMenu = require("../../../../ContextualMenu")
+var ContextualMenu = require("../../../../ContextualMenu");
 var Login = require("../../../../components/login/Login");
 var Registration = require("../../../../components/login/Registration");
 var config = require("../../../../../config.json");
