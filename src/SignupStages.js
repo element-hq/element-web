@@ -105,7 +105,36 @@ class EmailIdentityStage extends Stage {
         super(EmailIdentityStage.TYPE, matrixClient, signupInstance);
     }
 
+    _completeVerify() {
+        console.log("_completeVerify");
+        var isLocation = document.createElement('a');
+        isLocation.href = this.signupInstance.getIdentityServerUrl();
+
+        return q({
+            auth: {
+                type: 'm.login.email.identity',
+                threepid_creds: {
+                    sid: this.signupInstance.params.idSid,
+                    client_secret: this.signupInstance.params.clientSecret,
+                    id_server: isLocation.host
+                }
+            }
+        });
+    }
+
+    /**
+     * Complete the email stage.
+     *
+     * This is called twice under different circumstances:
+     *   1) When requesting an email token from the IS
+     *   2) When validating query parameters received from the link in the email
+     */
     complete() {
+        console.log("Email complete()");
+        if (this.signupInstance.params.hasEmailInfo) {
+            return this._completeVerify();
+        }
+
         var config = {
             clientSecret: this.client.generateClientSecret(),
             sendAttempt: 1

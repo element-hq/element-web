@@ -234,6 +234,29 @@ class Register extends Signup {
         }
     }
 
+    recheckState() {
+        // feels a bit wrong to be clobbering the global client for something we
+        // don't even know if it'll work, but we'll leave this here for now to
+        // not complicate matters further. It would be nicer to isolate this
+        // logic entirely from the rest of the app though.
+        MatrixClientPeg.replaceUsingUrls(
+            this._hsUrl,
+            this._isUrl
+        );
+        // We've been given a bunch of data from a previous register step,
+        // this only happens for email auth currently. It's kinda ming we need
+        // to know this though. A better solution would be to ask the stages if
+        // they are ready to do something rather than accepting that we know about
+        // email auth and its internals.
+        this.params.hasEmailInfo = (
+            this.params.clientSecret && this.params.sessionId && this.params.idSid
+        );
+
+        if (this.params.hasEmailInfo) {
+            this.startStage(EMAIL_STAGE_TYPE);
+        }
+    }
+
     tellStage(stageName, data) {
         if (this.activeStage && this.activeStage.type === stageName) {
             console.log("Telling stage %s about something..", stageName);
