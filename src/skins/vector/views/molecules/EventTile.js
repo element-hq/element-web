@@ -131,11 +131,15 @@ module.exports = React.createClass({
             var oldAvatarDomNode = document.getElementById('mx_readAvatar'+member.userId);
             var startStyles = [];
             var enterTransitionOpts = [];
-            if (oldAvatarDomNode && this.readAvatarRect) {
-                var oldRect = oldAvatarDomNode.getBoundingClientRect();
-                var topOffset = oldRect.top - this.readAvatarRect.top;
+            var oldNodeTop = -15; // For avatars that weren't on screen, act as if they were just off the top
+            if (oldAvatarDomNode) {
+                oldNodeTop = oldAvatarDomNode.getBoundingClientRect().top;
+            }
 
-                if (oldAvatarDomNode.style.left !== '0px') {
+            if (this.readAvatarRect) {
+                var topOffset = oldNodeTop - this.readAvatarRect.top;
+
+                if (oldAvatarDomNode && oldAvatarDomNode.style.left !== '0px') {
                     var leftOffset = oldAvatarDomNode.style.left;
                     // start at the old height and in the old h pos
                     startStyles.push({ top: topOffset, left: leftOffset });
