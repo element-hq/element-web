@@ -193,6 +193,7 @@ module.exports = React.createClass({
             registerLogic.setSessionId(this.state.register_session_id);
             registerLogic.setRegistrationUrl(this.props.registrationUrl);
             registerLogic.setIdSid(this.state.register_id_sid);
+            registerLogic.recheckState();
             return (
                 <Registration
                     onLoggedIn={this.onLoggedIn}
