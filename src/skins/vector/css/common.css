@@ -107,11 +107,11 @@ a:visited {
     height: 100%;
     background-color: #000;
     opacity: 0.2;
-    z-index: 4000;
 }
 
 .mx_Dialog_wrapper {
     position: fixed;
+    z-index: 4000;
     top: 0;
     left: 0;
     width: 100%;
