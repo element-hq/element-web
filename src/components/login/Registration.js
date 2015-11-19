@@ -154,8 +154,10 @@ module.exports = React.createClass({
         });
     },
 
-    onCaptchaLoaded: function() {
-        this.registerLogic.tellStage("m.login.recaptcha", "loaded");
+    onCaptchaLoaded: function(divIdName) {
+        this.registerLogic.tellStage("m.login.recaptcha", {
+            divId: divIdName
+        });
     },
 
     // TODO:

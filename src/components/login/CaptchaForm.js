@@ -19,6 +19,8 @@ limitations under the License.
 var React = require('react');
 var sdk = require('matrix-react-sdk')
 
+var DIV_ID = 'mx_recaptcha';
+
 /**
  * A pure UI component which displays a captcha form.
  */
@@ -26,7 +28,7 @@ module.exports = React.createClass({
     displayName: 'CaptchaForm',
 
     propTypes: {
-        onCaptchaLoaded: React.PropTypes.func.isRequired
+        onCaptchaLoaded: React.PropTypes.func.isRequired // called with div id name
     },
 
     getDefaultProps: function() {
@@ -46,7 +48,7 @@ module.exports = React.createClass({
             var scriptTag = document.createElement('script');
             window.mx_on_recaptcha_loaded = function() {
                 console.log("Loaded recaptcha script.");
-                self.props.onCaptchaLoaded();
+                self.props.onCaptchaLoaded(DIV_ID);
             };
             scriptTag.setAttribute(
                 'src', global.location.protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit"
@@ -60,7 +62,7 @@ module.exports = React.createClass({
         return (
             <div ref="recaptchaContainer">
                 This Home Server would like to make sure you are not a robot
-                <div id="mx_recaptcha"></div>
+                <div id={DIV_ID}></div>
             </div>
         );
     }
