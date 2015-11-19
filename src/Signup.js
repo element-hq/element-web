@@ -129,7 +129,6 @@ class Register extends Signup {
             console.error(error);
             if (error.httpStatus === 401 && error.data && error.data.flows) {
                 self.data = error.data || {};
-                console.log("RAW: %s", JSON.stringify(error.data));
                 var flow = self.chooseFlow(error.data.flows);
 
                 if (flow) {
