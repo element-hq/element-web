@@ -29,6 +29,15 @@ var ContextualMenu = require('../../../../ContextualMenu');
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
 
 var Velociraptor = require('../../../../Velociraptor');
+require('../../../../VelocityBounce');
+
+var bounce = false;
+try {
+    if (global.localStorage) {
+        bounce = global.localStorage.getItem('avatar_bounce') == 'true';
+    }
+} catch (e) {
+}
 
 var eventTileTypes = {
     'm.room.message': 'molecules.MessageTile',
@@ -137,8 +146,8 @@ module.exports = React.createClass({
                 // and then it will drop down to its resting position
                 startStyles.push({ top: topOffset, left: '0px' });
                 enterTransitionOpts.push({
-                    duration: 300,
-                    easing: 'easeOutCubic',
+                    duration: bounce ? Math.min(Math.log(Math.abs(topOffset)) * 200, 3000) : 300,
+                    easing: bounce ? 'easeOutBounce' : 'easeOutCubic',
                 });
             }
 
