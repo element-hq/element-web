@@ -23,6 +23,7 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var ServerConfig = require("./ServerConfig");
 var RegistrationForm = require("./RegistrationForm");
+var CaptchaForm = require("./CaptchaForm");
 var MIN_PASSWORD_LENGTH = 6;
 
 module.exports = React.createClass({
@@ -46,24 +47,6 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-    },
-
-    componentDidUpdate: function() {
-        // Just putting a script tag into the returned jsx doesn't work, annoyingly,
-        // so we do this instead.
-        var self = this;
-        if (this.refs.recaptchaContainer) {
-            console.log("Loading recaptcha script...");
-            var scriptTag = document.createElement('script');
-            window.mx_on_recaptcha_loaded = function() {
-                console.log("Loaded recaptcha script.");
-                self.props.registerLogic.tellStage("m.login.recaptcha", "loaded");
-            };
-            scriptTag.setAttribute(
-                'src', global.location.protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit"
-            );
-            this.refs.recaptchaContainer.appendChild(scriptTag);
-        }
     },
 
     componentWillUnmount: function() {
@@ -96,6 +79,14 @@ module.exports = React.createClass({
                 // no matter, we'll grab it direct
                 response = self.props.registerLogic.getCredentials();
             }
+            if (!response || !response.user_id || !response.access_token) {
+                console.error("Final response is missing keys.");
+                self.setState({
+                    errorText: "There was a problem processing the response."
+                });
+                return;
+            }
+            // TODO: do post-register stuff
             self.props.onLoggedIn({
                 userId: response.user_id,
                 homeserverUrl: self.props.registerLogic.getHomeserverUrl(),
@@ -134,6 +125,11 @@ module.exports = React.createClass({
         });
     },
 
+    onCaptchaLoaded: function() {
+        this.props.registerLogic.tellStage("m.login.recaptcha", "loaded");
+    },
+
+    // TODO: I wonder if this should actually be a different component...
     _getPostRegisterJsx: function() {
         var ChangeDisplayName = sdk.getComponent('molecules.ChangeDisplayName');
         var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
@@ -174,10 +170,7 @@ module.exports = React.createClass({
                 break;
             case "Register.STEP_m.login.recaptcha":
                 registerStep = (
-                    <div ref="recaptchaContainer">
-                        This Home Server would like to make sure you are not a robot
-                        <div id="mx_recaptcha"></div>
-                    </div>
+                    <CaptchaForm onCaptchaLoaded={this.onCaptchaLoaded} />
                 );
                 break;
             default:
