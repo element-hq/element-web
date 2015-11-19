@@ -38,6 +38,7 @@ module.exports = {
     componentWillMount: function() {
         var cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
+        cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("Room", this.onRoom); // invites
     },
 
@@ -45,6 +46,7 @@ module.exports = {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
+            MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
             MatrixClientPeg.get().removeListener("User.presence", this.userPresenceFn);
         }
     },
@@ -94,6 +96,10 @@ module.exports = {
     },
 
     onRoomStateMember: function(ev, state, member) {
+        this._updateList();
+    },
+
+    onRoomMemberName: function(ev, member) {
         this._updateList();
     },
 

@@ -35,6 +35,10 @@ module.exports = {
         }
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.refreshUrl();
+    },
+
     defaultAvatarUrl: function(member, width, height, resizeMethod) {
         if (this.skinnedDefaultAvatarUrl) {
             return this.skinnedDefaultAvatarUrl(member, width, height, resizeMethod);
@@ -52,7 +56,7 @@ module.exports = {
         });
     },
 
-    getInitialState: function() {
+    _computeUrl: function() {
         var url = this.props.member.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
             this.props.width,
@@ -68,8 +72,20 @@ module.exports = {
                 this.props.resizeMethod
             );
         }
+        return url;
+    },
+
+    refreshUrl: function() {
+        var newUrl = this._computeUrl();
+        if (newUrl != this.currentUrl) {
+            this.currentUrl = newUrl;
+            this.setState({imageUrl: newUrl});
+        }
+    },
+
+    getInitialState: function() {
         return {
-            imageUrl: url
+            imageUrl: this._computeUrl()
         };
     }
 };
