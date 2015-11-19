@@ -184,7 +184,13 @@ class Register extends Signup {
         return stage.complete().then(function(request) {
             if (request.auth) {
                 return self._tryRegister(request.auth);
-            }  
+            }
+            else {
+                // never resolve the promise chain. This is for things like email auth
+                // which display a "check your email" message and relies on the
+                // link in the email to actually register you.
+                return q.defer().promise;
+            }
         });
     }
 

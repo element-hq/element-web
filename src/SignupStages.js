@@ -119,7 +119,7 @@ class EmailIdentityStage extends Stage {
                        "&is_url=" +
                        encodeURIComponent(this.signupInstance.getIdentityServerUrl()) +
                        "&session_id=" +
-                       encodeURIComponent(this.signupInstance.getSessionId());
+                       encodeURIComponent(this.signupInstance.params.sessionId);
 
         return this.client.requestEmailToken(
             this.signupInstance.email,
