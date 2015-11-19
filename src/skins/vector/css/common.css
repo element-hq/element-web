@@ -99,19 +99,9 @@ a:visited {
     margin: 0 auto;
 }
 
-.mx_Dialog_background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000;
-    opacity: 0.2;
-    z-index: 4000;
-}
-
 .mx_Dialog_wrapper {
     position: fixed;
+    z-index: 4000;
     top: 0;
     left: 0;
     width: 100%;
@@ -138,6 +128,16 @@ a:visited {
     position: relative;
     border-radius: 8px;
     max-width: 80%;
+}
+
+.mx_Dialog_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.2;
 }
 
 .mx_Dialog_lightbox .mx_Dialog_background {
