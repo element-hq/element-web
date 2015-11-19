@@ -69,7 +69,6 @@ class RecaptchaStage extends Stage {
         }
         this.publicKey = publicKey;
         this._attemptRender();
-
         return this.defer.promise;
     }
 
@@ -87,7 +86,8 @@ class RecaptchaStage extends Stage {
         global.grecaptcha.render('mx_recaptcha', {
             sitekey: this.publicKey,
             callback: function(response) {
-                return self.defer.resolve({
+                console.log("Received captcha response");
+                self.defer.resolve({
                     auth: {
                         type: 'm.login.recaptcha',
                         response: response

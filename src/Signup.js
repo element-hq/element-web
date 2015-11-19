@@ -35,12 +35,15 @@ class Register extends Signup {
         super(hsUrl, isUrl);
         this.setStep("START");
         this.data = null; // from the server
-        this.username = null; // desired
-        this.email = null; // desired
-        this.password = null; // desired
         this.params = {}; // random other stuff (e.g. query params, NOT params from the server)
         this.credentials = null;
         this.activeStage = null;
+        this.registrationPromise = null;
+        // These values MUST be undefined else we'll send "username: null" which
+        // will error on Synapse rather than having the key absent.
+        this.username = undefined; // desired
+        this.email = undefined; // desired
+        this.password = undefined; // desired
     }
 
     setClientSecret(secret) {
@@ -71,6 +74,10 @@ class Register extends Signup {
         return this.data || {};
     }
 
+    getPromise() {
+        return this.registrationPromise;
+    }
+
     setStep(step) {
         this._step = 'Register.' + step;
         // TODO:
@@ -97,6 +104,7 @@ class Register extends Signup {
             this._hsUrl,
             this._isUrl
         );
+        console.log("register(formVals)");
         return this._tryRegister();
     }
 
@@ -104,7 +112,7 @@ class Register extends Signup {
         console.log("_tryRegister %s", JSON.stringify(authDict));
         var self = this;
         return MatrixClientPeg.get().register(
-            this.username, this.password, this._sessionId, authDict
+            this.username, this.password, this.params.sessionId, authDict
         ).then(function(result) {
             console.log("Got a final response");
             self.credentials = result;
@@ -114,12 +122,13 @@ class Register extends Signup {
             console.error(error);
             if (error.httpStatus === 401 && error.data && error.data.flows) {
                 self.data = error.data || {};
+                console.log("RAW: %s", JSON.stringify(error.data));
                 var flow = self.chooseFlow(error.data.flows);
 
                 if (flow) {
                     console.log("Active flow => %s", JSON.stringify(flow));
-                    var flowStage = self.firstUncompletedStageIndex(flow);
-                    return self.startStage(flow.stages[flowStage]);
+                    var flowStage = self.firstUncompletedStage(flow);
+                    return self.startStage(flowStage);
                 }
                 else {
                     throw new Error("Unable to register - missing email address?");
@@ -146,28 +155,12 @@ class Register extends Signup {
         });
     }
 
-    firstUncompletedStageIndex(flow) {
-        if (!this.completedStages) {
-            return 0;
-        }
+    firstUncompletedStage(flow) {
         for (var i = 0; i < flow.stages.length; ++i) {
-            if (this.completedStages.indexOf(flow.stages[i]) == -1) {
-                return i;
+            if (!this.hasCompletedStage(flow.stages[i])) {
+                return flow.stages[i];
             }
         }
-    }
-
-    numCompletedStages(flow) {
-        if (!this.completedStages) {
-            return 0;
-        }
-        var nCompleted = 0;
-        for (var i = 0; i < flow.stages.length; ++i) {
-            if (this.completedStages.indexOf(flow.stages[i]) > -1) {
-                ++nCompleted;
-            }
-        }
-        return nCompleted;
     }
 
     startStage(stageName) {
@@ -182,6 +175,7 @@ class Register extends Signup {
         var stage = new StageClass(MatrixClientPeg.get(), this);
         this.activeStage = stage;
         return stage.complete().then(function(request) {
+            console.log("Stage %s completed with %s", stageName, JSON.stringify(request));
             if (request.auth) {
                 return self._tryRegister(request.auth);
             }
@@ -189,6 +183,7 @@ class Register extends Signup {
                 // never resolve the promise chain. This is for things like email auth
                 // which display a "check your email" message and relies on the
                 // link in the email to actually register you.
+                console.log("Waiting for external action.");
                 return q.defer().promise;
             }
         });
@@ -253,8 +248,10 @@ class Register extends Signup {
         );
 
         if (this.params.hasEmailInfo) {
-            this.startStage(EMAIL_STAGE_TYPE);
+            console.log("recheckState has email info.. starting email info..");
+            this.registrationPromise = this.startStage(EMAIL_STAGE_TYPE);
         }
+        return this.registrationPromise;
     }
 
     tellStage(stageName, data) {
