@@ -671,7 +671,7 @@ module.exports = {
 
         var messageWrapper = this.refs.messagePanel;
         if (messageWrapper === undefined) return null;
-        var wrapperRect = messageWrapper.getDOMNode().getBoundingClientRect();
+        var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
 
         for (var i = this.state.room.timeline.length-1; i >= 0; --i) {
             var ev = this.state.room.timeline[i];
