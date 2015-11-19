@@ -65,6 +65,14 @@ module.exports = React.createClass({
         });
     },
 
+    onLogoutClick: function(event) {
+        dis.dispatch({
+            action: 'logout'
+        });
+        event.stopPropagation();
+        event.preventDefault();
+    },
+
     handleResize: function(e) {
         var hideLhsThreshold = 1000;
         var showLhsThreshold = 1000;
@@ -164,7 +172,10 @@ module.exports = React.createClass({
         } else if (this.state.logged_in) {
             var Spinner = sdk.getComponent('atoms.Spinner');
             return (
-                <Spinner />
+                <div className="mx_MatrixChat_splash">
+                    <Spinner />
+                    <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>Logout</a>
+                </div>
             );
         } else if (this.state.screen == 'register') {
             /*

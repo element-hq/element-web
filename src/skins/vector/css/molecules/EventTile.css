@@ -49,7 +49,6 @@ limitations under the License.
 .mx_EventTile .mx_MessageTimestamp {
     color: #acacac;
     font-size: 12px;
-    float: right;
 }
 
 .mx_EventTile_line {
@@ -91,10 +90,18 @@ limitations under the License.
 
 .mx_EventTile_msgOption {
     float: right;
+    text-align: right;
+    z-index: 1;
+    position: relative;
+    width: 90px;
+    margin-right: 10px;
+    margin-top: -6px;
 }
 
 .mx_MessageTimestamp {
+    display: block;
     visibility: hidden;
+    text-align: right;
 }
 
 .mx_EventTile_last .mx_MessageTimestamp {
@@ -107,9 +114,8 @@ limitations under the License.
 
 .mx_EventTile_editButton {
     position: absolute;
-    right: 1px;
-    top: 15px;
-    visibility: hidden;
+    display: inline-block;
+    visibility: hidden; 
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton {
@@ -122,4 +128,22 @@ limitations under the License.
 
 .mx_EventTile.menu .mx_MessageTimestamp {
     visibility: visible;
+}
+
+.mx_EventTile_readAvatars {
+    position: relative;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+}
+
+.mx_EventTile_readAvatars .mx_MemberAvatar {
+    position: absolute;
+    display: inline-block;
+}
+
+.mx_EventTile_readAvatarRemainder {
+    color: #acacac;
+    font-size: 12px;
+    position: absolute;
 }

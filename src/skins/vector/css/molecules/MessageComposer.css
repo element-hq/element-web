@@ -72,7 +72,8 @@ limitations under the License.
 }
 
 .mx_MessageComposer_upload,
-.mx_MessageComposer_call {
+.mx_MessageComposer_voicecall,
+.mx_MessageComposer_videocall {
     display: table-cell;
     vertical-align: middle;
     padding-left: 10px;
@@ -80,7 +81,12 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_MessageComposer_call {
+.mx_MessageComposer_videocall {
+    padding-right: 10px;
+    padding-top: 4px;
+}
+
+.mx_MessageComposer_voicecall {
     padding-right: 10px;
     padding-top: 4px;
 }

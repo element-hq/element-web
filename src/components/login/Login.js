@@ -165,11 +165,11 @@ module.exports = React.createClass({displayName: 'Login',
             <div className="mx_Login">
                 <div className="mx_Login_box">
                     <div className="mx_Login_logo">
-                        <img  src="img/logo.png" width="249" height="78" alt="vector"/>
+                        <img src="img/logo.png" width="249" height="78" alt="vector"/>
                     </div>
                     <div>
                         <h2>Sign in</h2>
-                        {this.componentForStep(this._getCurrentFlowStep())}
+                        { this.componentForStep(this._getCurrentFlowStep()) }
                         <ServerConfig ref="serverConfig"
                             withToggleButton={true}
                             defaultHsUrl={this.props.homeserverUrl}
@@ -179,7 +179,7 @@ module.exports = React.createClass({displayName: 'Login',
                             delayTimeMs={1000}/>
                         <div className="mx_Login_error">
                                 { loader }
-                                {this.state.errorText}
+                                { this.state.errorText }
                         </div>
                         <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
                             Create a new account

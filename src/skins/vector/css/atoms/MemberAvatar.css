@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 .mx_MemberAvatar {
-    position: relative;
+    /* commenting this out as it breaks on FF seemingly */
+/*    position: relative; */
 }
 
 .mx_MemberAvatar_initial {
@@ -23,8 +24,9 @@ limitations under the License.
     color: #fff;
     text-align: center;
     speak: none;
+    pointer-events: none;
 }
 
 .mx_MemberAvatar_image {
-    border-radius: 20px;    
+    border-radius: 20px;
 }

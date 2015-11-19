@@ -53,6 +53,7 @@ module.exports = {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
+        MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
@@ -71,6 +72,7 @@ module.exports = {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
             MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
@@ -107,6 +109,9 @@ module.exports = {
                 // possibly remove the conf call notification if we're now in
                 // the conf
                 this._updateConfCallNotification();
+                break;
+            case 'user_activity':
+                this.sendReadReceipt();
                 break;
         }
     },
@@ -187,6 +192,12 @@ module.exports = {
         }
     },
 
+    onRoomReceipt: function(receiptEvent, room) {
+        if (room.roomId == this.props.roomId) {
+            this.forceUpdate();
+        }
+    },
+
     onRoomMemberTyping: function(ev, member) {
         this.forceUpdate();
     },
@@ -246,6 +257,8 @@ module.exports = {
             var messageWrapperScroll = this._getScrollNode();
 
             messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
+
+            this.sendReadReceipt();
 
             this.fillSpace();
         }
@@ -529,7 +542,7 @@ module.exports = {
             }
 
             ret.unshift(
-                <li key={mxEv.getId()}><EventTile mxEvent={mxEv} continuation={continuation} last={last}/></li>
+                <li key={mxEv.getId()} ref={this._collectEventNode.bind(this, mxEv.getId())}><EventTile mxEvent={mxEv} continuation={continuation} last={last}/></li>
             );
             if (dateSeparator) {
                 ret.unshift(dateSeparator);
@@ -624,5 +637,58 @@ module.exports = {
                 uploadingRoomSettings: false,
             });
         }
+    },
+
+    _collectEventNode: function(eventId, node) {
+        if (this.eventNodes == undefined) this.eventNodes = {};
+        this.eventNodes[eventId] = node;
+    },
+
+    _indexForEventId(evId) {
+        for (var i = 0; i < this.state.room.timeline.length; ++i) {
+            if (evId == this.state.room.timeline[i].getId()) {
+                return i;
+            }
+        }
+        return null;
+    },
+
+    sendReadReceipt: function() {
+        if (!this.state.room) return;
+        var currentReadUpToEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+        var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
+
+        var lastReadEventIndex = this._getLastDisplayedEventIndexIgnoringOwn();
+        if (lastReadEventIndex === null) return;
+
+        if (lastReadEventIndex > currentReadUpToEventIndex) {
+            MatrixClientPeg.get().sendReadReceipt(this.state.room.timeline[lastReadEventIndex]);
+        }
+    },
+
+    _getLastDisplayedEventIndexIgnoringOwn: function() {
+        if (this.eventNodes === undefined) return null;
+
+        var messageWrapper = this.refs.messagePanel;
+        if (messageWrapper === undefined) return null;
+        var wrapperRect = messageWrapper.getDOMNode().getBoundingClientRect();
+
+        for (var i = this.state.room.timeline.length-1; i >= 0; --i) {
+            var ev = this.state.room.timeline[i];
+
+            if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
+                continue;
+            }
+
+            var node = this.eventNodes[ev.getId()];
+            if (!node) continue;
+
+            var boundingRect = node.getBoundingClientRect();
+
+            if (boundingRect.bottom < wrapperRect.bottom) {
+                return i;
+            }
+        }
+        return null;
     }
 };

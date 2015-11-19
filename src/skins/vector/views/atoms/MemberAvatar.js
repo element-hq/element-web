@@ -49,12 +49,12 @@ module.exports = React.createClass({
                 initial = this.props.member.name[1].toUpperCase();
          
             return (
-                <span className="mx_MemberAvatar">
+                <span className="mx_MemberAvatar" {...this.props}>
                     <span className="mx_MemberAvatar_initial" aria-hidden="true"
                           style={{ fontSize: (this.props.width * 0.75) + "px",
                                    width: this.props.width + "px",
                                    lineHeight: this.props.height*1.2 + "px" }}>{ initial }</span>
-                    <img className="mx_MemberAvatar_image" src={this.state.imageUrl}
+                    <img className="mx_MemberAvatar_image" src={this.state.imageUrl} title={this.props.member.name}
                          onError={this.onError} width={this.props.width} height={this.props.height} />
                 </span>
             );            
@@ -62,7 +62,10 @@ module.exports = React.createClass({
         return (
             <img className="mx_MemberAvatar mx_MemberAvatar_image" src={this.state.imageUrl}
                 onError={this.onError}
-                width={this.props.width} height={this.props.height} />
+                width={this.props.width} height={this.props.height}
+                title={this.props.member.name}
+                {...this.props}
+            />
         );
     }
 });

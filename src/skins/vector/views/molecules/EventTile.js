@@ -17,14 +17,27 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDom = require('react-dom');
 var classNames = require("classnames");
 
 var sdk = require('matrix-react-sdk')
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg')
 
 var EventTileController = require('matrix-react-sdk/lib/controllers/molecules/EventTile')
 var ContextualMenu = require('../../../../ContextualMenu');
 
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
+
+var Velociraptor = require('../../../../Velociraptor');
+require('../../../../VelocityBounce');
+
+var bounce = false;
+try {
+    if (global.localStorage) {
+        bounce = global.localStorage.getItem('avatar_bounce') == 'true';
+    }
+} catch (e) {
+}
 
 var eventTileTypes = {
     'm.room.message': 'molecules.MessageTile',
@@ -35,6 +48,8 @@ var eventTileTypes = {
     'm.room.name'   : 'molecules.EventAsTextTile',
     'm.room.topic'  : 'molecules.EventAsTextTile',
 };
+
+var MAX_READ_AVATARS = 5;
 
 module.exports = React.createClass({
     displayName: 'EventTile',
@@ -52,7 +67,11 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return {menu: false};
+        return {menu: false, allReadAvatars: false};
+    },
+
+    componentDidUpdate: function() {
+        this.readAvatarRect = ReactDom.findDOMNode(this.readAvatarNode).getBoundingClientRect();
     },
 
     onEditClicked: function(e) {
@@ -70,6 +89,123 @@ module.exports = React.createClass({
             }
         });
         this.setState({menu: true});
+    },
+
+    toggleAllReadAvatars: function() {
+        this.setState({
+            allReadAvatars: !this.state.allReadAvatars
+        });
+    },
+
+    getReadAvatars: function() {
+        var avatars = [];
+
+        var room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+
+        if (!room) return [];
+
+        var myUserId = MatrixClientPeg.get().credentials.userId;
+
+        // get list of read receipts, sorted most recent first
+        var receipts = room.getReceiptsForEvent(this.props.mxEvent).filter(function(r) {
+            return r.type === "m.read" && r.userId != myUserId;
+        }).sort(function(r1, r2) {
+            return r2.data.ts - r1.data.ts;
+        });
+
+        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+
+        var left = 0;
+
+        var reorderTransitionOpts = {
+            duration: 100,
+            easing: 'easeOut'
+        };
+
+        for (var i = 0; i < receipts.length; ++i) {
+            var member = room.getMember(receipts[i].userId);
+
+            // Using react refs here would mean both getting Velociraptor to expose
+            // them and making them scoped to the whole RoomView. Not impossible, but
+            // getElementById seems simpler at least for a first cut.
+            var oldAvatarDomNode = document.getElementById('mx_readAvatar'+member.userId);
+            var startStyles = [];
+            var enterTransitionOpts = [];
+            if (oldAvatarDomNode && this.readAvatarRect) {
+                var oldRect = oldAvatarDomNode.getBoundingClientRect();
+                var topOffset = oldRect.top - this.readAvatarRect.top;
+
+                if (oldAvatarDomNode.style.left !== '0px') {
+                    var leftOffset = oldAvatarDomNode.style.left;
+                    // start at the old height and in the old h pos
+                    startStyles.push({ top: topOffset, left: leftOffset });
+                    enterTransitionOpts.push(reorderTransitionOpts);
+                }
+
+                // then shift to the rightmost column,
+                // and then it will drop down to its resting position
+                startStyles.push({ top: topOffset, left: '0px' });
+                enterTransitionOpts.push({
+                    duration: bounce ? Math.min(Math.log(Math.abs(topOffset)) * 200, 3000) : 300,
+                    easing: bounce ? 'easeOutBounce' : 'easeOutCubic',
+                });
+            }
+
+            var style = {
+                left: left+'px',
+                top: '0px',
+                visibility: ((i < MAX_READ_AVATARS) || this.state.allReadAvatars) ? 'visible' : 'hidden'
+            };
+
+            //console.log("i = " + i + ", MAX_READ_AVATARS = " + MAX_READ_AVATARS + ", allReadAvatars = " + this.state.allReadAvatars + " visibility = " + style.visibility);
+
+            // add to the start so the most recent is on the end (ie. ends up rightmost)
+            avatars.unshift(
+                <MemberAvatar key={member.userId} member={member}
+                    width={14} height={14} resizeMethod="crop"
+                    style={style}
+                    startStyle={startStyles}
+                    enterTransitionOpts={enterTransitionOpts}
+                    id={'mx_readAvatar'+member.userId}
+                    onClick={this.toggleAllReadAvatars}
+                />
+            );
+            // TODO: we keep the extra read avatars in the dom to make animation simpler
+            // we could optimise this to reduce the dom size.
+            if (i < MAX_READ_AVATARS - 1 || this.state.allReadAvatars) { // XXX: where does this -1 come from? is it to make the max'th avatar animate properly?
+                left -= 15;
+            }
+        }
+        var editButton;
+        if (!this.state.allReadAvatars) {
+            var remainder = receipts.length - MAX_READ_AVATARS;
+            var remText;
+            if (i >= MAX_READ_AVATARS - 1) left -= 15;
+            if (remainder > 0) {
+                remText = <span className="mx_EventTile_readAvatarRemainder"
+                    onClick={this.toggleAllReadAvatars}
+                    style={{ left: left }}>{ remainder }+
+                </span>;
+                left -= 15;
+            }
+            editButton = (
+                <input style={{ left: left }}
+                    type="image" src="img/edit.png" alt="Edit" width="14" height="14"
+                    className="mx_EventTile_editButton" onClick={this.onEditClicked} />
+            );
+        }
+
+        return <span className="mx_EventTile_readAvatars" ref={this.collectReadAvatarNode}>
+            { editButton }
+            { remText }
+            <Velociraptor transition={ reorderTransitionOpts }>
+                { avatars }
+            </Velociraptor>
+        </span>;
+    },
+
+    collectReadAvatarNode: function(node) {
+        this.readAvatarNode = node;
     },
 
     render: function() {
@@ -100,17 +236,13 @@ module.exports = React.createClass({
             menu: this.state.menu,
         });
         var timestamp = <MessageTimestamp ts={this.props.mxEvent.getTs()} />
-        var editButton = (
-            <input
-                type="image" src="img/edit.png" alt="Edit" width="14" height="14"
-                className="mx_EventTile_editButton" onClick={this.onEditClicked}
-            />
-        );
 
         var aux = null;
         if (msgtype === 'm.image') aux = "sent an image";
         else if (msgtype === 'm.video') aux = "sent a video";
         else if (msgtype === 'm.file') aux = "uploaded a file";
+
+        var readAvatars = this.getReadAvatars();
 
         var avatar, sender;
         if (!this.props.continuation) {
@@ -127,11 +259,13 @@ module.exports = React.createClass({
         }
         return (
             <div className={classes}>
+                <div className="mx_EventTile_msgOption">
+                    { timestamp }
+                    { readAvatars }
+                </div>
                 { avatar }
                 { sender }
                 <div className="mx_EventTile_line">
-                    { timestamp }
-                    { editButton }
                     <EventTileType mxEvent={this.props.mxEvent} searchTerm={this.props.searchTerm} />
                 </div>
             </div>
