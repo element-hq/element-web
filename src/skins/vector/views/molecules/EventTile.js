@@ -194,7 +194,7 @@ module.exports = React.createClass({
             }
             editButton = (
                 <input style={{ left: left }}
-                    type="image" src="img/edit.png" alt="Edit" width="14" height="14"
+                    type="image" src="img/edit.png" alt="Options" title="Options" width="14" height="14"
                     className="mx_EventTile_editButton" onClick={this.onEditClicked} />
             );
         }
