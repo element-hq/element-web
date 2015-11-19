@@ -1,6 +1,9 @@
 "use strict";
 var q = require("q");
 
+/**
+ * An interface class which login types should abide by.
+ */
 class Stage {
     constructor(type, matrixClient, signupInstance) {
         this.type = type;
@@ -24,6 +27,9 @@ class Stage {
 Stage.TYPE = "NOT IMPLEMENTED";
 
 
+/**
+ * This stage requires no auth.
+ */
 class DummyStage extends Stage {
     constructor(matrixClient, signupInstance) {
         super(DummyStage.TYPE, matrixClient, signupInstance);
@@ -40,17 +46,24 @@ class DummyStage extends Stage {
 DummyStage.TYPE = "m.login.dummy";
 
 
+/**
+ * This stage uses Google's Recaptcha to do auth.
+ */
 class RecaptchaStage extends Stage {
     constructor(matrixClient, signupInstance) {
         super(RecaptchaStage.TYPE, matrixClient, signupInstance);
-        this.defer = q.defer();
-        this.publicKey = null;
+        this.defer = q.defer(); // resolved with the captcha response
+        this.publicKey = null; // from the HS
+        this.divId = null; // from the UI component
     }
 
+    // called when the UI component has loaded the recaptcha <div> so we can
+    // render to it.
     onReceiveData(data) {
-        if (data !== "loaded") {
+        if (!data || !data.divId) {
             return;
         }
+        this.divId = data.divId;
         this._attemptRender();
     }
 
@@ -81,9 +94,13 @@ class RecaptchaStage extends Stage {
             console.error("No public key for recaptcha!");
             return;
         }
+        if (!this.divId) {
+            console.error("No div ID specified!");
+            return;
+        }
+        console.log("Rendering to %s", this.divId);
         var self = this;
-        // FIXME: Tight coupling here and in CaptchaForm.js
-        global.grecaptcha.render('mx_recaptcha', {
+        global.grecaptcha.render(this.divId, {
             sitekey: this.publicKey,
             callback: function(response) {
                 console.log("Received captcha response");
@@ -100,13 +117,16 @@ class RecaptchaStage extends Stage {
 RecaptchaStage.TYPE = "m.login.recaptcha";
 
 
+/**
+ * This state uses the IS to verify email addresses.
+ */
 class EmailIdentityStage extends Stage {
     constructor(matrixClient, signupInstance) {
         super(EmailIdentityStage.TYPE, matrixClient, signupInstance);
     }
 
     _completeVerify() {
-        console.log("_completeVerify");
+        // pull out the host of the IS URL by creating an anchor element
         var isLocation = document.createElement('a');
         isLocation.href = this.signupInstance.getIdentityServerUrl();
 
@@ -130,20 +150,15 @@ class EmailIdentityStage extends Stage {
      *   2) When validating query parameters received from the link in the email
      */
     complete() {
-        console.log("Email complete()");
+        // TODO: The Registration class shouldn't really know this info.
         if (this.signupInstance.params.hasEmailInfo) {
             return this._completeVerify();
         }
 
-        var config = {
-            clientSecret: this.client.generateClientSecret(),
-            sendAttempt: 1
-        };
-        this.signupInstance.params[EmailIdentityStage.TYPE] = config;
-
+        var clientSecret = this.client.generateClientSecret();
         var nextLink = this.signupInstance.params.registrationUrl +
                        '?client_secret=' +
-                       encodeURIComponent(config.clientSecret) +
+                       encodeURIComponent(clientSecret) +
                        "&hs_url=" +
                        encodeURIComponent(this.signupInstance.getHomeserverUrl()) +
                        "&is_url=" +
@@ -153,8 +168,8 @@ class EmailIdentityStage extends Stage {
 
         return this.client.requestEmailToken(
             this.signupInstance.email,
-            config.clientSecret,
-            config.sendAttempt,
+            clientSecret,
+            1, // TODO: Multiple send attempts?
             nextLink
         ).then(function(response) {
             return {}; // don't want to make a request

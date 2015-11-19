@@ -6,6 +6,10 @@ var q = require("q");
 
 const EMAIL_STAGE_TYPE = "m.login.email.identity";
 
+/**
+ * A base class for common functionality between Registration and Login e.g.
+ * storage of HS/IS URLs.
+ */
 class Signup {
     constructor(hsUrl, isUrl) {
         this._hsUrl = hsUrl;
@@ -29,13 +33,16 @@ class Signup {
     }
 }
 
-
+/**
+ * Registration logic class
+ */
 class Register extends Signup {
     constructor(hsUrl, isUrl) {
         super(hsUrl, isUrl);
         this.setStep("START");
         this.data = null; // from the server
-        this.params = {}; // random other stuff (e.g. query params, NOT params from the server)
+        // random other stuff (e.g. query params, NOT params from the server)
+        this.params = {};
         this.credentials = null;
         this.activeStage = null;
         this.registrationPromise = null;
@@ -104,12 +111,12 @@ class Register extends Signup {
             this._hsUrl,
             this._isUrl
         );
-        console.log("register(formVals)");
+        console.log("Starting registration process (form submission)");
         return this._tryRegister();
     }
 
     _tryRegister(authDict) {
-        console.log("_tryRegister %s", JSON.stringify(authDict));
+        console.log("Trying to register with auth dict: %s", JSON.stringify(authDict));
         var self = this;
         return MatrixClientPeg.get().register(
             this.username, this.password, this.params.sessionId, authDict
@@ -163,6 +170,11 @@ class Register extends Signup {
         }
     }
 
+    hasCompletedStage(stageType) {
+        var completed = (this.data || {}).completed || [];
+        return completed.indexOf(stageType) !== -1;
+    }
+
     startStage(stageName) {
         var self = this;
         this.setStep(`STEP_${stageName}`);
@@ -175,8 +187,8 @@ class Register extends Signup {
         var stage = new StageClass(MatrixClientPeg.get(), this);
         this.activeStage = stage;
         return stage.complete().then(function(request) {
-            console.log("Stage %s completed with %s", stageName, JSON.stringify(request));
             if (request.auth) {
+                console.log("Stage %s is returning an auth dict", stageName);
                 return self._tryRegister(request.auth);
             }
             else {
@@ -187,11 +199,6 @@ class Register extends Signup {
                 return q.defer().promise;
             }
         });
-    }
-
-    hasCompletedStage(stageType) {
-        var completed = (this.data || {}).completed || [];
-        return completed.indexOf(stageType) !== -1;
     }
 
     chooseFlow(flows) {
@@ -248,7 +255,6 @@ class Register extends Signup {
         );
 
         if (this.params.hasEmailInfo) {
-            console.log("recheckState has email info.. starting email info..");
             this.registrationPromise = this.startStage(EMAIL_STAGE_TYPE);
         }
         return this.registrationPromise;
