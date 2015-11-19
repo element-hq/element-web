@@ -83,6 +83,7 @@ class RecaptchaStage extends Stage {
             return;
         }
         var self = this;
+        // FIXME: Tight coupling here and in CaptchaForm.js
         global.grecaptcha.render('mx_recaptcha', {
             sitekey: this.publicKey,
             callback: function(response) {
@@ -119,7 +120,7 @@ class EmailIdentityStage extends Stage {
                        "&is_url=" +
                        encodeURIComponent(this.signupInstance.getIdentityServerUrl()) +
                        "&session_id=" +
-                       encodeURIComponent(this.signupInstance.params.sessionId);
+                       encodeURIComponent(this.signupInstance.getServerData().session);
 
         return this.client.requestEmailToken(
             this.signupInstance.email,
