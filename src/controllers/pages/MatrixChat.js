@@ -31,7 +31,7 @@ module.exports = {
         RoomView: "room_view",
         UserSettings: "user_settings",
         CreateRoom: "create_room",
-        RoomDirectory: "room_directory"
+        RoomDirectory: "room_directory",
     },
 
     AuxPanel: {
