@@ -111,22 +111,18 @@ class Register extends Signup {
             this._hsUrl,
             this._isUrl
         );
-        console.log("Starting registration process (form submission)");
         return this._tryRegister();
     }
 
     _tryRegister(authDict) {
-        console.log("Trying to register with auth dict: %s", JSON.stringify(authDict));
         var self = this;
         return MatrixClientPeg.get().register(
             this.username, this.password, this.params.sessionId, authDict
         ).then(function(result) {
-            console.log("Got a final response");
             self.credentials = result;
             self.setStep("COMPLETE");
             return result; // contains the credentials
         }, function(error) {
-            console.error(error);
             if (error.httpStatus === 401 && error.data && error.data.flows) {
                 self.data = error.data || {};
                 var flow = self.chooseFlow(error.data.flows);
