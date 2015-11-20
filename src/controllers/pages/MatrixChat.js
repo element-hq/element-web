@@ -31,7 +31,7 @@ module.exports = {
         RoomView: "room_view",
         UserSettings: "user_settings",
         CreateRoom: "create_room",
-        RoomDirectory: "room_directory",
+        RoomDirectory: "room_directory"
     },
 
     AuxPanel: {
@@ -143,6 +143,11 @@ module.exports = {
                     screen: 'login'
                 });
                 this.notifyNewScreen('login');
+                break;
+            case 'start_post_registration':
+                this.setState({ // don't clobber logged_in status
+                    screen: 'post_registration'
+                });
                 break;
             case 'token_login':
                 if (this.state.logged_in) return;
@@ -298,13 +303,11 @@ module.exports = {
     },
 
     onLoggedIn: function(credentials) {
-        if (credentials) { // registration doesn't do this yet
-            console.log("onLoggedIn => %s", credentials.userId);
-            MatrixClientPeg.replaceUsingAccessToken(
-                credentials.homeserverUrl, credentials.identityServerUrl,
-                credentials.userId, credentials.accessToken
-            );
-        }
+        console.log("onLoggedIn => %s", credentials.userId);
+        MatrixClientPeg.replaceUsingAccessToken(
+            credentials.homeserverUrl, credentials.identityServerUrl,
+            credentials.userId, credentials.accessToken
+        );
         this.setState({
             screen: undefined,
             logged_in: true
@@ -430,6 +433,10 @@ module.exports = {
         } else if (screen == 'directory') {
             dis.dispatch({
                 action: 'view_room_directory',
+            });
+        } else if (screen == 'post_registration') {
+            dis.dispatch({
+                action: 'start_post_registration',
             });
         } else if (screen.indexOf('room/') == 0) {
             var roomString = screen.split('/')[1];

@@ -15,10 +15,14 @@ limitations under the License.
 */
 
 'use strict';
-
+var React = require('react');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 
 module.exports = {
+    propTypes: {
+        onFinished: React.PropTypes.func
+    },
+
     getDefaultProps: function() {
         return {
             onFinished: function() {},
