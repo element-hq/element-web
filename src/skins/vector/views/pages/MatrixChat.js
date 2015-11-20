@@ -23,7 +23,10 @@ var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/Matri
 
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Matrix = require("matrix-js-sdk");
+
 var ContextualMenu = require("../../../../ContextualMenu");
+var Login = require("../../../../components/login/Login");
+var Registration = require("../../../../components/login/Registration");
 var config = require("../../../../../config.json");
 
 module.exports = React.createClass({
@@ -102,12 +105,15 @@ module.exports = React.createClass({
         this.showScreen("register");
     },
 
+    onLoginClick: function() {
+        this.showScreen("login");
+    },
+
     render: function() {
         var LeftPanel = sdk.getComponent('organisms.LeftPanel');
         var RoomView = sdk.getComponent('organisms.RoomView');
         var RightPanel = sdk.getComponent('organisms.RightPanel');
         var UserSettings = sdk.getComponent('organisms.UserSettings');
-        var Register = sdk.getComponent('templates.Register');
         var CreateRoom = sdk.getComponent('organisms.CreateRoom');
         var RoomDirectory = sdk.getComponent('organisms.RoomDirectory');
         var MatrixToolbar = sdk.getComponent('molecules.MatrixToolbar');
@@ -172,14 +178,17 @@ module.exports = React.createClass({
             );
         } else if (this.state.screen == 'register') {
             return (
-                <Register onLoggedIn={this.onLoggedIn} clientSecret={this.state.register_client_secret}
-                    sessionId={this.state.register_session_id} idSid={this.state.register_id_sid}
-                    hsUrl={this.state.register_hs_url} isUrl={this.state.register_is_url}
+                <Registration
+                    clientSecret={this.state.register_client_secret}
+                    sessionId={this.state.register_session_id}
+                    idSid={this.state.register_id_sid}
+                    hsUrl={config.default_hs_url}
+                    isUrl={config.default_is_url}
                     registrationUrl={this.props.registrationUrl}
-                />
+                    onLoggedIn={this.onLoggedIn}
+                    onLoginClick={this.onLoginClick} />
             );
         } else {
-            var Login = require("../../../../components/login/Login");
             return (
                 <Login
                     onLoggedIn={this.onLoggedIn}
