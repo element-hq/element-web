@@ -183,7 +183,7 @@ class EmailIdentityStage extends Stage {
             } else {
                 e.message = 'Unable to contact the given identity server';
             }
-            return e;
+            throw e;
         });
     }
 }
