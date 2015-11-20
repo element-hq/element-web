@@ -94,6 +94,10 @@ module.exports = React.createClass({
 
     onFormSubmit: function(formVals) {
         var self = this;
+        this.setState({
+            errorText: "",
+            busy: true
+        });
         this.onProcessingRegistration(this.registerLogic.register(formVals));
     },
 
@@ -122,12 +126,18 @@ module.exports = React.createClass({
                 identityServerUrl: self.registerLogic.getIdentityServerUrl(),
                 accessToken: response.access_token
             });
+            self.setState({
+                busy: false
+            });
         }, function(err) {
             if (err.message) {
                 self.setState({
                     errorText: err.message
                 });
             }
+            self.setState({
+                busy: false
+            });
             console.log(err);
         });
     },
@@ -157,6 +167,9 @@ module.exports = React.createClass({
     onCaptchaLoaded: function(divIdName) {
         this.registerLogic.tellStage("m.login.recaptcha", {
             divId: divIdName
+        });
+        this.setState({
+            busy: false // requires user input
         });
     },
 
@@ -211,11 +224,19 @@ module.exports = React.createClass({
                 console.error("Unknown register state: %s", currStep);
                 break;
         }
+        var busySpinner;
+        if (this.state.busy) {
+            var Spinner = sdk.getComponent("atoms.Spinner");
+            busySpinner = (
+                <Spinner />
+            );
+        }
         return (
             <div>
                 <h2>Create an account</h2>
                 {registerStep}
                 <div className="mx_Login_error">{this.state.errorText}</div>
+                {busySpinner}
                 <ServerConfig ref="serverConfig"
                     withToggleButton={true}
                     defaultHsUrl={this.state.enteredHomeserverUrl}
