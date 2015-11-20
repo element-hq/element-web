@@ -85,6 +85,5 @@ skin['organisms.UserSettings'] = require('./views/organisms/UserSettings');
 skin['organisms.ViewSource'] = require('./views/organisms/ViewSource');
 skin['pages.CompatibilityPage'] = require('./views/pages/CompatibilityPage');
 skin['pages.MatrixChat'] = require('./views/pages/MatrixChat');
-skin['templates.Register'] = require('./views/templates/Register');
 
 module.exports = skin;
