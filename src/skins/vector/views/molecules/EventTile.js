@@ -70,10 +70,6 @@ module.exports = React.createClass({
         return {menu: false, allReadAvatars: false};
     },
 
-    componentDidUpdate: function() {
-        this.readAvatarNode = ReactDom.findDOMNode(this.readAvatarNode);
-    },
-
     onEditClicked: function(e) {
         var MessageContextMenu = sdk.getComponent('molecules.MessageContextMenu');
         var buttonRect = e.target.getBoundingClientRect()
@@ -209,7 +205,7 @@ module.exports = React.createClass({
     },
 
     collectReadAvatarNode: function(node) {
-        this.readAvatarNode = node;
+        this.readAvatarNode = ReactDom.findDOMNode(node);
     },
 
     render: function() {

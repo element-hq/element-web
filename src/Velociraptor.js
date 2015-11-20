@@ -23,7 +23,7 @@ module.exports = React.createClass({
         this.nodes = {};
         var self = this;
         React.Children.map(this.props.children, function(c) {
-            self.children[c.props.key] = c;
+            self.children[c.key] = c;
         });
     },
 
