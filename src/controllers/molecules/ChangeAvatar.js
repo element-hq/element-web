@@ -36,6 +36,16 @@ module.exports = {
         }
     },
 
+    componentWillReceiveProps: function(newProps) {
+        if (this.avatarSet) {
+            // don't clobber what the user has just set
+            return;
+        }
+        this.setState({
+            avatarUrl: newProps.initialAvatarUrl
+        });
+    },
+
     setAvatarFromFile: function(file) {
         var newUrl = null;
 
