@@ -173,31 +173,12 @@ module.exports = React.createClass({
         });
     },
 
-    // TODO:
-    // This should really be a different component which MatrixChat then
-    // instantiates rather than having it pollute registration logic. There is
-    // no reason to wedge them together here. This function is currently NOT CALLED.
-    _getPostRegisterJsx: function() {
-        var ChangeDisplayName = sdk.getComponent('molecules.ChangeDisplayName');
-        var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
-        return (
-            <div className="mx_Login_profile">
-                Set a display name:
-                <ChangeDisplayName />
-                Upload an avatar:
-                <ChangeAvatar
-                    initialAvatarUrl={MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl)} />
-                <button onClick={this.onProfileContinueClicked}>Continue</button>
-            </div>
-        );
-    },
-
     _getRegisterContentJsx: function() {
         var currStep = this.registerLogic.getStep();
         var registerStep;
         switch (currStep) {
             case "Register.COMPLETE":
-                return; // this._getPostRegisterJsx();
+                break; // NOP
             case "Register.START":
             case "Register.STEP_m.login.dummy":
                 registerStep = (
