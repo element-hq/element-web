@@ -71,7 +71,7 @@ module.exports = React.createClass({
     },
 
     componentDidUpdate: function() {
-        this.readAvatarRect = ReactDom.findDOMNode(this.readAvatarNode).getBoundingClientRect();
+        this.readAvatarNode = ReactDom.findDOMNode(this.readAvatarNode);
     },
 
     onEditClicked: function(e) {
@@ -136,8 +136,8 @@ module.exports = React.createClass({
                 oldNodeTop = oldAvatarDomNode.getBoundingClientRect().top;
             }
 
-            if (this.readAvatarRect) {
-                var topOffset = oldNodeTop - this.readAvatarRect.top;
+            if (this.readAvatarNode) {
+                var topOffset = oldNodeTop - this.readAvatarNode.getBoundingClientRect().top;
 
                 if (oldAvatarDomNode && oldAvatarDomNode.style.left !== '0px') {
                     var leftOffset = oldAvatarDomNode.style.left;
