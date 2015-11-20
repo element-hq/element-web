@@ -14,6 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+var marked = require("marked");
+marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: true,
+    pedantic: false,
+    sanitize: true,
+    smartLists: true,
+    smartypants: false
+});
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var SlashCommands = require("../../SlashCommands");
 var Modal = require("../../Modal");
@@ -32,11 +43,26 @@ var KeyCode = {
 
 var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
+var MARKDOWN_ENABLED = true;
+
+function mdownToHtml(mdown) {
+    var html = marked(mdown) || "";
+    html = html.trim();
+    // strip start and end <p> tags else you get 'orrible spacing
+    if (html.indexOf("<p>") === 0) {
+        html = html.substring("<p>".length);
+    }
+    if (html.lastIndexOf("</p>") === (html.length - "</p>".length)) {
+        html = html.substring(0, html.length - "</p>".length);
+    }
+    return html;
+}
 
 module.exports = {
     oldScrollHeight: 0,
 
     componentWillMount: function() {
+        this.markdownEnabled = MARKDOWN_ENABLED;
         this.tabStruct = {
             completing: false,
             original: null,
@@ -228,6 +254,27 @@ module.exports = {
     onEnter: function(ev) {
         var contentText = this.refs.textarea.value;
 
+        // bodge for now to set markdown state on/off. We probably want a separate
+        // area for "local" commands which don't hit out to the server.
+        if (contentText.indexOf("/markdown") === 0) {
+            ev.preventDefault();
+            this.refs.textarea.value = '';
+            if (contentText.indexOf("/markdown on") === 0) {
+                this.markdownEnabled = true;
+            }
+            else if (contentText.indexOf("/markdown off") === 0) {
+                this.markdownEnabled = false;
+            }
+            else {
+                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Unknown command",
+                    description: "Usage: /markdown on|off"
+                });
+            }
+            return;
+        }
+
         var cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
         if (cmd) {
             ev.preventDefault();
@@ -257,20 +304,25 @@ module.exports = {
             return;
         }
 
-        var content = null;
-        if (/^\/me /i.test(contentText)) {
-            content = {
-                msgtype: 'm.emote',
-                body: contentText.substring(4)
-            };
-        } else {
-            content = {
-                msgtype: 'm.text',
-                body: contentText
-            };
+        var isEmote = /^\/me /i.test(contentText);
+        var sendMessagePromise;
+        if (isEmote) {
+            sendMessagePromise = MatrixClientPeg.get().sendEmoteMessage(
+                this.props.room.roomId, contentText.substring(4)
+            );
+        }
+        else if (this.markdownEnabled) {
+            sendMessagePromise = MatrixClientPeg.get().sendHtmlMessage(
+                this.props.room.roomId, contentText, mdownToHtml(contentText)
+            );
+        }
+        else {
+            sendMessagePromise = MatrixClientPeg.get().sendTextMessage(
+                this.props.room.roomId, contentText
+            );
         }
 
-        MatrixClientPeg.get().sendMessage(this.props.room.roomId, content).then(function() {
+        sendMessagePromise.then(function() {
             dis.dispatch({
                 action: 'message_sent'
             });
