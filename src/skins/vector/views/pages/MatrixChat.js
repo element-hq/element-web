@@ -118,6 +118,10 @@ module.exports = React.createClass({
 
     onFinishPostRegistration: function() {
         console.log("onFinishPostRegistration");
+        // Don't confuse this with "PageType" which is the middle window to show
+        this.setState({
+            screen: undefined
+        });
         this.showScreen("settings");
     },
 

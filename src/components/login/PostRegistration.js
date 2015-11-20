@@ -44,7 +44,6 @@ module.exports = React.createClass({
         this.setState({busy: true});
         var self = this;
         cli.getProfileInfo(cli.credentials.userId).done(function(result) {
-            console.log("Avatar: %s", MatrixClientPeg.get().mxcUrlToHttp(result.avatar_url));
             self.setState({
                 avatarUrl: MatrixClientPeg.get().mxcUrlToHttp(result.avatar_url),
                 busy: false
@@ -55,10 +54,6 @@ module.exports = React.createClass({
                 busy: false
             });
         });
-    },
-
-    onProfileContinueClicked: function() {
-        console.log("onProfileContinueClicked");
     },
 
     render: function() {
@@ -76,7 +71,8 @@ module.exports = React.createClass({
                         Upload an avatar:
                         <ChangeAvatar
                             initialAvatarUrl={this.state.avatarUrl} />
-                        <button onClick={this.onProfileContinueClicked}>Continue</button>
+                        <button onClick={this.props.onComplete}>Continue</button>
+                        {this.state.errorString}
                     </div>
                 </div>
             </div>
