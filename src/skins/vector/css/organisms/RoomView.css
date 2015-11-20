@@ -125,7 +125,7 @@ limitations under the License.
     clear: both;
 }
 
-.mx_RoomView_MessageList h2 {
+.mx_RoomView_MessageList > h2 {
     clear: both;
     margin-top: 32px;
     margin-bottom: 8px;
