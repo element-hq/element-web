@@ -27,6 +27,7 @@ var Matrix = require("matrix-js-sdk");
 var ContextualMenu = require("../../../../ContextualMenu");
 var Login = require("../../../../components/login/Login");
 var Registration = require("../../../../components/login/Registration");
+var PostRegistration = require("../../../../components/login/PostRegistration");
 var config = require("../../../../../config.json");
 
 module.exports = React.createClass({
@@ -109,6 +110,17 @@ module.exports = React.createClass({
         this.showScreen("login");
     },
 
+    onRegistered: function(credentials) {
+        this.onLoggedIn(credentials);
+        // do post-registration stuff
+        this.showScreen("post_registration");
+    },
+
+    onFinishPostRegistration: function() {
+        console.log("onFinishPostRegistration");
+        this.showScreen("settings");
+    },
+
     render: function() {
         var LeftPanel = sdk.getComponent('organisms.LeftPanel');
         var RoomView = sdk.getComponent('organisms.RoomView');
@@ -119,7 +131,14 @@ module.exports = React.createClass({
         var MatrixToolbar = sdk.getComponent('molecules.MatrixToolbar');
         var Notifier = sdk.getComponent('organisms.Notifier');
 
-        if (this.state.logged_in && this.state.ready) {
+        // needs to be before normal PageTypes as you are logged in technically
+        if (this.state.screen == 'post_registration') {
+            return (
+                <PostRegistration
+                    onComplete={this.onFinishPostRegistration} />
+            );
+        }
+        else if (this.state.logged_in && this.state.ready) {
             var page_element;
             var right_panel = "";
 
@@ -185,7 +204,7 @@ module.exports = React.createClass({
                     hsUrl={config.default_hs_url}
                     isUrl={config.default_is_url}
                     registrationUrl={this.props.registrationUrl}
-                    onLoggedIn={this.onLoggedIn}
+                    onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick} />
             );
         } else {
