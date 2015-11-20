@@ -19,11 +19,31 @@ limitations under the License.
 var React = require('react');
 var sanitizeHtml = require('sanitize-html');
 
-var allowedAttributes = sanitizeHtml.defaults.allowedAttributes;
-allowedAttributes['font'] = ['color'];
 var sanitizeHtmlParams = {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'font', 'h1', 'h2' ]),
-    allowedAttributes: allowedAttributes,
+    allowedTags: [
+        'h1', 'h2', 'font', // custom to matrix
+        'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+        'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
+        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre'
+    ],
+    allowedAttributes: {
+        // custom ones first:
+        font: [ 'color' ], // custom to matrix
+        a: [ 'href', 'name', 'target' ], // remote target: custom to matrix
+        // We don't currently allow img itself by default, but this
+        // would make sense if we did
+        img: [ 'src' ],
+    },
+    // Lots of these won't come up by default because we don't allow them
+    selfClosing: [ 'img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta' ],
+    // URL schemes we permit
+    allowedSchemes: [ 'http', 'https', 'ftp', 'mailto' ],
+    allowedSchemesByTag: {},
+    
+    transformTags: { // custom to matrix
+        // add blank targets to all hyperlinks
+        'a': sanitizeHtml.simpleTransform('a', { target: '_blank'} )
+    },
 };
 
 module.exports = {
@@ -51,7 +71,7 @@ module.exports = {
                     bodyList.push(<span key={ k++ } dangerouslySetInnerHTML={{ __html: safeSearchTerm }} className="mx_MessageTile_searchHighlight" />);
                     lastOffset = offset + safeSearchTerm.length;
                 }
-                bodyList.push(<span key={ k++ } dangerouslySetInnerHTML={{ __html: safeBody.substring(lastOffset) }} />);
+                bodyList.push(<span className="markdown-body" key={ k++ } dangerouslySetInnerHTML={{ __html: safeBody.substring(lastOffset) }} />);
             }
             else {
                 while ((offset = originalBody.indexOf(searchTerm, lastOffset)) >= 0) {
@@ -66,7 +86,7 @@ module.exports = {
         else {
             if (content.format === "org.matrix.custom.html") {
                 var safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
-                body = <span dangerouslySetInnerHTML={{ __html: safeBody }} />;
+                body = <span className="markdown-body" dangerouslySetInnerHTML={{ __html: safeBody }} />;
             }
             else {
                 body = originalBody;

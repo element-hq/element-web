@@ -65,6 +65,27 @@ limitations under the License.
     margin-right: 100px;
 }
 
+/* Various markdown overrides */
+
+.mx_MessageTile_content .markdown-body {
+    font-family: inherit ! important;
+    white-space: normal ! important;
+}
+
+.mx_MessageTile_content .markdown-body h1,
+.mx_MessageTile_content .markdown-body h2,
+.mx_MessageTile_content .markdown-body h3,
+.mx_MessageTile_content .markdown-body h4,
+.mx_MessageTile_content .markdown-body h5,
+.mx_MessageTile_content .markdown-body h6
+{
+    font-family: inherit ! important;
+}
+
+.mx_MessageTile_content .markdown-body a {
+    color: #76cfa6;
+}
+
 .mx_MessageTile_searchHighlight {
     background-color: #76cfa6;
     color: #fff;
