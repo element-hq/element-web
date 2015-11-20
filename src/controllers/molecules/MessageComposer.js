@@ -332,6 +332,7 @@ module.exports = {
             });
         });
         this.refs.textarea.value = '';
+        this.resizeInput();
         ev.preventDefault();
     },
 
