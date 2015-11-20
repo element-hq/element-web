@@ -459,6 +459,9 @@ module.exports = {
                 });
             }
         }
+        else {
+            console.error("Unknown screen : %s", screen);
+        }
     },
 
     notifyNewScreen: function(screen) {
