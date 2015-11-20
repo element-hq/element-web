@@ -311,15 +311,18 @@ module.exports = {
                 this.props.room.roomId, contentText.substring(4)
             );
         }
-        else if (this.markdownEnabled) {
-            sendMessagePromise = MatrixClientPeg.get().sendHtmlMessage(
-                this.props.room.roomId, contentText, mdownToHtml(contentText)
-            );
-        }
         else {
-            sendMessagePromise = MatrixClientPeg.get().sendTextMessage(
-                this.props.room.roomId, contentText
-            );
+            var htmlText = mdownToHtml(contentText);
+            if (this.markdownEnabled && htmlText !== contentText) {
+                sendMessagePromise = MatrixClientPeg.get().sendHtmlMessage(
+                    this.props.room.roomId, contentText, htmlText
+                );
+            }
+            else {
+                sendMessagePromise = MatrixClientPeg.get().sendTextMessage(
+                    this.props.room.roomId, contentText
+                );
+            }
         }
 
         sendMessagePromise.then(function() {
