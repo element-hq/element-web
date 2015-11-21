@@ -26,11 +26,13 @@ module.exports = React.createClass({
     mixins: [MTextTileController],
 
     componentDidMount: function() {
-        HtmlUtils.highlightDom(this.getDOMNode());
+        if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
+            HtmlUtils.highlightDom(this.getDOMNode());
     },
 
     componentDidUpdate: function() {
-        HtmlUtils.highlightDom(this.getDOMNode());
+        if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
+            HtmlUtils.highlightDom(this.getDOMNode());
     },
 
     shouldComponentUpdate: function(nextProps) {
