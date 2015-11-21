@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var sanitizeHtml = require('sanitize-html');
+var highlight = require('highlight.js');
 
 var sanitizeHtmlParams = {
     allowedTags: [
@@ -94,6 +95,14 @@ module.exports = {
         }
 
         return body;
-    }
+    },
+
+    highlightDom: function(element) {
+        var blocks = element.getElementsByTagName("code");
+        for (var i = 0; i < blocks.length; i++) {
+            highlight.highlightBlock(blocks[i]);
+        }
+    },
+
 }
 

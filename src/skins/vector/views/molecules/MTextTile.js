@@ -25,6 +25,20 @@ module.exports = React.createClass({
     displayName: 'MTextTile',
     mixins: [MTextTileController],
 
+    componentDidMount: function() {
+        HtmlUtils.highlightDom(this.getDOMNode());
+    },
+
+    componentDidUpdate: function() {
+        HtmlUtils.highlightDom(this.getDOMNode());
+    },
+
+    shouldComponentUpdate: function(nextProps) {
+        // exploit that events are immutable :)
+        return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
+                nextProps.searchTerm !== this.props.searchTerm);
+    },
+
     render: function() {
         var content = this.props.mxEvent.getContent();
         var body = HtmlUtils.bodyToHtml(content, this.props.searchTerm);
