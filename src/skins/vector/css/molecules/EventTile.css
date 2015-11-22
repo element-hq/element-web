@@ -70,6 +70,7 @@ limitations under the License.
 .mx_MessageTile_content .markdown-body {
     font-family: inherit ! important;
     white-space: normal ! important;
+    line-height: inherit ! important;
 }
 
 .mx_MessageTile_content .markdown-body h1,
