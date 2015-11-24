@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher')
@@ -29,15 +30,15 @@ module.exports = React.createClass({
     },
 
     getRemoteVideoElement: function() {
-        return this.refs.remote.getDOMNode();
+        return ReactDOM.findDOMNode(this.refs.remote);
     },
 
     getRemoteAudioElement: function() {
-        return this.refs.remoteAudio.getDOMNode();
+        return this.refs.remoteAudio;
     },
 
     getLocalVideoElement: function() {
-        return this.refs.local.getDOMNode();
+        return ReactDOM.findDOMNode(this.refs.local);
     },
 
     setContainer: function(c) {
@@ -50,7 +51,7 @@ module.exports = React.createClass({
                 if (!this.container) {
                     return;
                 }
-                var element = this.container.getDOMNode();
+                var element = this.container;
                 if (payload.fullscreen) {
                     var requestMethod = (
                         element.requestFullScreen ||
@@ -78,7 +79,7 @@ module.exports = React.createClass({
     render: function() {
         var VideoFeed = sdk.getComponent('atoms.voip.VideoFeed');
         return (
-            <div className="mx_VideoView" ref={this.setContainer}>
+            <div className="mx_VideoView" ref={this.setContainer} onClick={ this.props.onClick }>
                 <div className="mx_VideoView_remoteVideoFeed">
                     <VideoFeed ref="remote"/>
                     <audio ref="remoteAudio"/>

@@ -27,15 +27,15 @@ module.exports = React.createClass({
     mixins: [RoomSettingsController],
 
     getTopic: function() {
-        return this.refs.topic.getDOMNode().value;
+        return this.refs.topic.value;
     },
 
     getJoinRules: function() {
-        return this.refs.is_private.getDOMNode().checked ? "invite" : "public";
+        return this.refs.is_private.checked ? "invite" : "public";
     },
 
     getHistoryVisibility: function() {
-        return this.refs.share_history.getDOMNode().checked ? "shared" : "invited";
+        return this.refs.share_history.checked ? "shared" : "invited";
     },
 
     getPowerLevels: function() {
@@ -45,13 +45,13 @@ module.exports = React.createClass({
         power_levels = power_levels.getContent();
 
         var new_power_levels = {
-            ban: parseInt(this.refs.ban.getDOMNode().value),
-            kick: parseInt(this.refs.kick.getDOMNode().value),
-            redact: parseInt(this.refs.redact.getDOMNode().value),
-            invite: parseInt(this.refs.invite.getDOMNode().value),
-            events_default: parseInt(this.refs.events_default.getDOMNode().value),
-            state_default: parseInt(this.refs.state_default.getDOMNode().value),
-            users_default: parseInt(this.refs.users_default.getDOMNode().value),
+            ban: parseInt(this.refs.ban.value),
+            kick: parseInt(this.refs.kick.value),
+            redact: parseInt(this.refs.redact.value),
+            invite: parseInt(this.refs.invite.value),
+            events_default: parseInt(this.refs.events_default.value),
+            state_default: parseInt(this.refs.state_default.value),
+            users_default: parseInt(this.refs.users_default.value),
             users: power_levels.users,
             events: power_levels.events,
         };

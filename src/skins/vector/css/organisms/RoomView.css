@@ -125,11 +125,11 @@ limitations under the License.
     clear: both;
 }
 
-.mx_RoomView_MessageList h2 {
+.mx_RoomView_MessageList > h2 {
     clear: both;
     margin-top: 32px;
     margin-bottom: 8px;
-    margin-left: 54px;
+    margin-left: 63px;
     padding-bottom: 6px;
     border-bottom: 1px solid #eee;
 }
@@ -158,18 +158,19 @@ limitations under the License.
     order: 4;
 
     width: 100%;
-    -webkit-flex: 0 0 36px;
-    flex: 0 0 36px;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
 }
 
 .mx_RoomView_statusAreaBox {
     max-width: 960px;
     margin: auto;
+    min-height: 36px;
 }
 
 .mx_RoomView_statusAreaBox_line {
     border-top: 1px solid #eee;
-    margin-left: 54px;
+    margin-left: 63px;
     height: 1px;
 }
 
@@ -185,16 +186,44 @@ limitations under the License.
     vertical-align: middle;
 }
 
+.mx_RoomView_connectionLostBar {
+    margin-top: 19px;
+    height: 58px;
+}
+
+.mx_RoomView_connectionLostBar img {
+    padding-left: 10px;
+    padding-right: 22px;
+    vertical-align: middle;
+    float: left;
+}
+
+.mx_RoomView_connectionLostBar_title {
+    color: #ff0064;
+}
+
+.mx_RoomView_connectionLostBar_desc {
+    color: #454545;
+    font-size: 14px;
+    opacity: 0.5;
+}
+
+.mx_RoomView_resend_link {
+    color: #454545 ! important;
+    text-decoration: underline ! important;
+    cursor: pointer;
+}
+
 .mx_RoomView_typingBar {
     margin-top: 10px;
-    margin-left: 54px;
+    margin-left: 63px;
     color: #4a4a4a;
     opacity: 0.5;
 }
 
 .mx_RoomView_typingImage {
     display: inline;
-    margin-left: -38px;
+    margin-left: -47px;
     margin-top: -4px;
     float: left;
 }
@@ -207,14 +236,14 @@ limitations under the License.
     order: 5;
 
     width: 100%;
-    -webkit-flex: 0 0 70px;
-    flex: 0 0 70px;
+    -webkit-flex: 0;
+    flex: 0;
     margin-right: 2px;
 }
 
 .mx_RoomView_uploadProgressOuter {
     height: 4px;
-    margin-left: 54px;
+    margin-left: 63px;
     margin-top: -1px;
 }
 
@@ -225,7 +254,7 @@ limitations under the License.
 
 .mx_RoomView_uploadFilename {
     margin-top: 5px;
-    margin-left: 56px;
+    margin-left: 65px;
     opacity: 0.5;
     color: #4a4a4a;
 }

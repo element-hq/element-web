@@ -17,6 +17,7 @@ limitations under the License.
 var Matrix = require("matrix-js-sdk");
 var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
 var React = require("react");
+var ReactDOM = require("react-dom");
 var q = require("q");
 var ContentMessages = require("matrix-react-sdk/lib//ContentMessages");
 var WhoIsTyping = require("matrix-react-sdk/lib/WhoIsTyping");
@@ -24,6 +25,7 @@ var Modal = require("matrix-react-sdk/lib/Modal");
 var sdk = require('matrix-react-sdk/lib/index');
 var CallHandler = require('matrix-react-sdk/lib/CallHandler');
 var VectorConferenceHandler = require('../../modules/VectorConferenceHandler');
+var Resend = require("../../Resend");
 
 var dis = require("matrix-react-sdk/lib/dispatcher");
 
@@ -32,8 +34,9 @@ var INITIAL_SIZE = 20;
 
 module.exports = {
     getInitialState: function() {
+        var room = this.props.roomId ? MatrixClientPeg.get().getRoom(this.props.roomId) : null;
         return {
-            room: this.props.roomId ? MatrixClientPeg.get().getRoom(this.props.roomId) : null,
+            room: room,
             messageCap: INITIAL_SIZE,
             editingRoomSettings: false,
             uploadingRoomSettings: false,
@@ -41,6 +44,8 @@ module.exports = {
             draggingFile: false,
             searching: false,
             searchResults: null,
+            syncState: MatrixClientPeg.get().getSyncState(),
+            hasUnsentMessages: this._hasUnsentMessages(room)
         }
     },
 
@@ -48,25 +53,29 @@ module.exports = {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
+        MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
+        MatrixClientPeg.get().on("sync", this.onSyncStateChange);
         this.atBottom = true;
     },
 
     componentWillUnmount: function() {
-        if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper.getDOMNode();
-            messageWrapper.removeEventListener('drop', this.onDrop);
-            messageWrapper.removeEventListener('dragover', this.onDragOver);
-            messageWrapper.removeEventListener('dragleave', this.onDragLeaveOrEnd);
-            messageWrapper.removeEventListener('dragend', this.onDragLeaveOrEnd);
+        if (this.refs.messagePanel) {
+            var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
+            messagePanel.removeEventListener('drop', this.onDrop);
+            messagePanel.removeEventListener('dragover', this.onDragOver);
+            messagePanel.removeEventListener('dragleave', this.onDragLeaveOrEnd);
+            messagePanel.removeEventListener('dragend', this.onDragLeaveOrEnd);
         }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
+            MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
         }
     },
 
@@ -74,6 +83,9 @@ module.exports = {
         switch (payload.action) {
             case 'message_send_failed':
             case 'message_sent':
+                this.setState({
+                    hasUnsentMessages: this._hasUnsentMessages(this.state.room)
+                });
             case 'message_resend_started':
                 this.setState({
                     room: MatrixClientPeg.get().getRoom(this.props.roomId)
@@ -88,10 +100,9 @@ module.exports = {
                     // Call state has changed so we may be loading video elements
                     // which will obscure the message log.
                     // scroll to bottom
-                    var messageWrapper = this.refs.messageWrapper;
-                    if (messageWrapper) {
-                        messageWrapper = messageWrapper.getDOMNode();
-                        messageWrapper.scrollTop = messageWrapper.scrollHeight;
+                    var scrollNode = this._getScrollNode();
+                    if (scrollNode) {
+                        scrollNode.scrollTop = scrollNode.scrollHeight;
                     }
                 }
 
@@ -99,7 +110,27 @@ module.exports = {
                 // the conf
                 this._updateConfCallNotification();
                 break;
+            case 'user_activity':
+                this.sendReadReceipt();
+                break;
         }
+    },
+
+    _getScrollNode: function() {
+        var panel = ReactDOM.findDOMNode(this.refs.messagePanel);
+        if (!panel) return null;
+
+        if (panel.classList.contains('gm-prevented')) {
+            return panel;
+        } else {
+            return panel.children[2]; // XXX: Fragile!
+        }
+    },
+
+    onSyncStateChange: function(state) {
+        this.setState({
+            syncState: state
+        });
     },
 
     // MatrixRoom still showing the messages from the old room?
@@ -111,7 +142,7 @@ module.exports = {
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (!this.isMounted()) return;
 
-        // ignore anything that comes in whilst pagingating: we get one
+        // ignore anything that comes in whilst paginating: we get one
         // event for each new matrix event so this would cause a huge
         // number of UI updates. Just update the UI when the paginate
         // call returns.
@@ -122,11 +153,11 @@ module.exports = {
         if (this.state.joining) return;
         if (room.roomId != this.props.roomId) return;
 
-        if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper.getDOMNode();
+        var scrollNode = this._getScrollNode();
+        if (scrollNode) {
             this.atBottom = (
-                messageWrapper.scrollHeight - messageWrapper.scrollTop <=
-                (messageWrapper.clientHeight + 150)
+                scrollNode.scrollHeight - scrollNode.scrollTop <=
+                (scrollNode.clientHeight + 150) // 150?
             );
         }
 
@@ -161,6 +192,12 @@ module.exports = {
         }
     },
 
+    onRoomReceipt: function(receiptEvent, room) {
+        if (room.roomId == this.props.roomId) {
+            this.forceUpdate();
+        }
+    },
+
     onRoomMemberTyping: function(ev, member) {
         this.forceUpdate();
     },
@@ -171,6 +208,19 @@ module.exports = {
             return;
         }
         this._updateConfCallNotification();
+    },
+
+    _hasUnsentMessages: function(room) {
+        return this._getUnsentMessages(room).length > 0;
+    },
+
+    _getUnsentMessages: function(room) {
+        if (!room) { return []; }
+        // TODO: It would be nice if the JS SDK provided nicer constant-time
+        // constructs rather than O(N) (N=num msgs) on this.
+        return room.timeline.filter(function(ev) {
+            return ev.status === Matrix.EventStatus.NOT_SENT;
+        });
     },
 
     _updateConfCallNotification: function() {
@@ -196,15 +246,19 @@ module.exports = {
     },
 
     componentDidMount: function() {
-        if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper.getDOMNode();
+        if (this.refs.messagePanel) {
+            var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
 
-            messageWrapper.addEventListener('drop', this.onDrop);
-            messageWrapper.addEventListener('dragover', this.onDragOver);
-            messageWrapper.addEventListener('dragleave', this.onDragLeaveOrEnd);
-            messageWrapper.addEventListener('dragend', this.onDragLeaveOrEnd);
+            messagePanel.addEventListener('drop', this.onDrop);
+            messagePanel.addEventListener('dragover', this.onDragOver);
+            messagePanel.addEventListener('dragleave', this.onDragLeaveOrEnd);
+            messagePanel.addEventListener('dragend', this.onDragLeaveOrEnd);
 
-            messageWrapper.scrollTop = messageWrapper.scrollHeight;
+            var messageWrapperScroll = this._getScrollNode();
+
+            messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
+
+            this.sendReadReceipt();
 
             this.fillSpace();
         }
@@ -213,19 +267,19 @@ module.exports = {
     },
 
     componentDidUpdate: function() {
-        if (!this.refs.messageWrapper) return;
+        if (!this.refs.messagePanel) return;
 
-        var messageWrapper = this.refs.messageWrapper.getDOMNode();
+        var messageWrapperScroll = this._getScrollNode();
 
         if (this.state.paginating && !this.waiting_for_paginate) {
-            var heightGained = messageWrapper.scrollHeight - this.oldScrollHeight;
-            messageWrapper.scrollTop += heightGained;
+            var heightGained = messageWrapperScroll.scrollHeight - this.oldScrollHeight;
+            messageWrapperScroll.scrollTop += heightGained;
             this.oldScrollHeight = undefined;
             if (!this.fillSpace()) {
                 this.setState({paginating: false});
             }
         } else if (this.atBottom) {
-            messageWrapper.scrollTop = messageWrapper.scrollHeight;
+            messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
             if (this.state.numUnreadMessages !== 0) {
                 this.setState({numUnreadMessages: 0});
             }
@@ -233,12 +287,12 @@ module.exports = {
     },
 
     fillSpace: function() {
-        if (!this.refs.messageWrapper) return;
-        var messageWrapper = this.refs.messageWrapper.getDOMNode();
-        if (messageWrapper.scrollTop < messageWrapper.clientHeight && this.state.room.oldState.paginationToken) {
+        if (!this.refs.messagePanel) return;
+        var messageWrapperScroll = this._getScrollNode();
+        if (messageWrapperScroll.scrollTop < messageWrapperScroll.clientHeight && this.state.room.oldState.paginationToken) {
             this.setState({paginating: true});
 
-            this.oldScrollHeight = messageWrapper.scrollHeight;
+            this.oldScrollHeight = messageWrapperScroll.scrollHeight;
 
             if (this.state.messageCap < this.state.room.timeline.length) {
                 this.waiting_for_paginate = false;
@@ -265,6 +319,13 @@ module.exports = {
         return false;
     },
 
+    onResendAllClick: function() {
+        var eventsToResend = this._getUnsentMessages(this.state.room);
+        eventsToResend.forEach(function(event) {
+            Resend.resend(event);
+        });
+    },
+
     onJoinButtonClicked: function(ev) {
         var self = this;
         MatrixClientPeg.get().joinRoom(this.props.roomId).then(function() {
@@ -284,10 +345,10 @@ module.exports = {
     },
 
     onMessageListScroll: function(ev) {
-        if (this.refs.messageWrapper) {
-            var messageWrapper = this.refs.messageWrapper.getDOMNode();
+        if (this.refs.messagePanel) {
+            var messageWrapperScroll = this._getScrollNode();
             var wasAtBottom = this.atBottom;
-            this.atBottom = messageWrapper.scrollHeight - messageWrapper.scrollTop <= messageWrapper.clientHeight;
+            this.atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight + 1;
             if (this.atBottom && !wasAtBottom) {
                 this.forceUpdate(); // remove unread msg count
             }
@@ -350,8 +411,12 @@ module.exports = {
             self.setState({
                 upload: undefined
             });
-        }).done(undefined, function() {
-            // display error message
+        }).done(undefined, function(error) {
+            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to upload file",
+                description: error.toString()
+            });
         });
     },
 
@@ -377,6 +442,7 @@ module.exports = {
                     room_events: {
                         search_term: term,
                         filter: filter,
+                        order_by: "recent",
                         event_context: {
                             before_limit: 1,
                             after_limit: 1,
@@ -390,7 +456,11 @@ module.exports = {
                 searchResults: data,
             });
         }, function(error) {
-            // TODO: show dialog or something
+            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Search failed",
+                description: error.toString()
+            });
         });
     },
 
@@ -408,7 +478,7 @@ module.exports = {
             var eventIds = Object.keys(results);
             // XXX: todo: merge overlapping results somehow?
             // XXX: why doesn't searching on name work?
-            var resultList = eventIds.map(function(key) { return results[key]; }).sort(function(a, b) { b.rank - a.rank });
+            var resultList = eventIds.map(function(key) { return results[key]; }); // .sort(function(a, b) { b.rank - a.rank });
             for (var i = 0; i < resultList.length; i++) {
                 var ts1 = resultList[i].result.origin_server_ts;
                 ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); //  Rank: {resultList[i].rank}
@@ -472,7 +542,7 @@ module.exports = {
             }
 
             ret.unshift(
-                <li key={mxEv.getId()}><EventTile mxEvent={mxEv} continuation={continuation} last={last}/></li>
+                <li key={mxEv.getId()} ref={this._collectEventNode.bind(this, mxEv.getId())}><EventTile mxEvent={mxEv} continuation={continuation} last={last}/></li>
             );
             if (dateSeparator) {
                 ret.unshift(dateSeparator);
@@ -567,5 +637,58 @@ module.exports = {
                 uploadingRoomSettings: false,
             });
         }
+    },
+
+    _collectEventNode: function(eventId, node) {
+        if (this.eventNodes == undefined) this.eventNodes = {};
+        this.eventNodes[eventId] = node;
+    },
+
+    _indexForEventId(evId) {
+        for (var i = 0; i < this.state.room.timeline.length; ++i) {
+            if (evId == this.state.room.timeline[i].getId()) {
+                return i;
+            }
+        }
+        return null;
+    },
+
+    sendReadReceipt: function() {
+        if (!this.state.room) return;
+        var currentReadUpToEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+        var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
+
+        var lastReadEventIndex = this._getLastDisplayedEventIndexIgnoringOwn();
+        if (lastReadEventIndex === null) return;
+
+        if (lastReadEventIndex > currentReadUpToEventIndex) {
+            MatrixClientPeg.get().sendReadReceipt(this.state.room.timeline[lastReadEventIndex]);
+        }
+    },
+
+    _getLastDisplayedEventIndexIgnoringOwn: function() {
+        if (this.eventNodes === undefined) return null;
+
+        var messageWrapper = this.refs.messagePanel;
+        if (messageWrapper === undefined) return null;
+        var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
+
+        for (var i = this.state.room.timeline.length-1; i >= 0; --i) {
+            var ev = this.state.room.timeline[i];
+
+            if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
+                continue;
+            }
+
+            var node = this.eventNodes[ev.getId()];
+            if (!node) continue;
+
+            var boundingRect = node.getBoundingClientRect();
+
+            if (boundingRect.bottom < wrapperRect.bottom) {
+                return i;
+            }
+        }
+        return null;
     }
 };

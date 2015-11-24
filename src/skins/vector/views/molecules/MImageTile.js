@@ -63,6 +63,34 @@ module.exports = React.createClass({
         }
     },
 
+    _isGif: function() {
+        var content = this.props.mxEvent.getContent();
+        return (content && content.info && content.info.mimetype === "image/gif");
+    },
+
+    onImageEnter: function(e) {
+        if (!this._isGif()) {
+            return;
+        }
+        var imgElement = e.target;
+        imgElement.src = MatrixClientPeg.get().mxcUrlToHttp(
+            this.props.mxEvent.getContent().url
+        );
+    },
+
+    onImageLeave: function(e) {
+        if (!this._isGif()) {
+            return;
+        }
+        var imgElement = e.target;
+        imgElement.src = this._getThumbUrl();
+    },
+
+    _getThumbUrl: function() {
+        var content = this.props.mxEvent.getContent();
+        return MatrixClientPeg.get().mxcUrlToHttp(content.url, 480, 360);
+    },
+
     render: function() {
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
@@ -73,18 +101,36 @@ module.exports = React.createClass({
         var imgStyle = {};
         if (thumbHeight) imgStyle['height'] = thumbHeight;
 
-        return (
-            <span className="mx_MImageTile">
-                <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
-                    <img className="mx_MImageTile_thumbnail" src={cli.mxcUrlToHttp(content.url, 480, 360)} alt={content.body} style={imgStyle} />
-                </a>
-                <div className="mx_MImageTile_download">
-                    <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
-                        <img src="img/download.png" width="10" height="12"/>
-                        Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
+        var thumbUrl = this._getThumbUrl();
+        if (thumbUrl) {
+            return (
+                <span className="mx_MImageTile">
+                    <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
+                        <img className="mx_MImageTile_thumbnail" src={thumbUrl}
+                            alt={content.body} style={imgStyle}
+                            onMouseEnter={this.onImageEnter}
+                            onMouseLeave={this.onImageLeave} />
                     </a>
-                </div>
-            </span>
-        );
+                    <div className="mx_MImageTile_download">
+                        <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
+                            <img src="img/download.png" width="10" height="12"/>
+                            Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
+                        </a>
+                    </div>
+                </span>
+            );
+        } else if (content.body) {
+            return (
+                <span className="mx_MImageTile">
+                    Image '{content.body}' cannot be displayed.
+                </span>
+            );
+        } else {
+            return (
+                <span className="mx_MImageTile">
+                    This image cannot be displayed.
+                </span>
+            );
+        }
     },
 });

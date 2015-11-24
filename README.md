@@ -36,9 +36,10 @@ about them:
 2. `cd matrix-react-sdk`
 3. `git checkout develop`
 4. `npm install`
-5. `npm start` (to start the dev rebuilder)
-6. `cd ../vector-web`
-7. Link the react sdk package into the example:
+5. `npm run build`
+6. `npm start` (to start the dev rebuilder)
+7. `cd ../vector-web`
+8. Link the react sdk package into the example:
    `npm link path/to/your/react/sdk`
 
 Similarly, you may need to `npm link path/to/your/js/sdk` in your `matrix-react-sdk`
@@ -53,6 +54,6 @@ about "Cannot resolve module 'source-map-loader'" due to shortcomings in webpack
 Deployment
 ==========
 
-Just run `npm build` and then mount the `vector` directory on your webserver to
+Just run `npm run build` and then mount the `vector` directory on your webserver to
 actually serve up the app, which is entirely static content.
 

@@ -20,6 +20,7 @@ var React = require('react');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
+var GeminiScrollbar = require('react-gemini-scrollbar');
 var RoomListController = require('../../../../controllers/organisms/RoomList')
 
 module.exports = React.createClass({
@@ -33,48 +34,82 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var CallView = sdk.getComponent('molecules.voip.CallView');
-        var RoomDropTarget = sdk.getComponent('molecules.RoomDropTarget');
-
-        var callElement;
-        if (this.state.show_call_element) {
-            callElement = <CallView className="mx_MatrixChat_callView"/>
-        }
-
         var expandButton = this.props.collapsed ? 
                            <img className="mx_RoomList_expandButton" onClick={ this.onShowClick } src="img/menu.png" width="20" alt=">"/> :
                            null;
 
-        var invitesLabel = this.props.collapsed ? null : "Invites";
-        var recentsLabel = this.props.collapsed ? null : "Recent";
-
-        var invites;
-        if (this.state.inviteList.length) {
-            invites = <div>
-                        <h2 className="mx_RoomList_invitesLabel">{ invitesLabel }</h2>
-                        <div className="mx_RoomList_invites">
-                            {this.makeRoomTiles(this.state.inviteList, true)}
-                        </div>
-                      </div>
-        }
+        var RoomSubList = sdk.getComponent('organisms.RoomSubList');
+        var self = this;
 
         return (
-            <div className="mx_RoomList" onScroll={this._repositionTooltip}>
+            <GeminiScrollbar className="mx_RoomList_scrollbar" autoshow={true} onScroll={self._repositionTooltip}>
+            <div className="mx_RoomList">
                 { expandButton }
-                { callElement }
-                <h2 className="mx_RoomList_favouritesLabel">Favourites</h2>
-                <RoomDropTarget text="Drop here to favourite"/>
 
-                { invites }
+                <RoomSubList list={ self.state.lists['m.invite'] }
+                             label="Invites"
+                             editable={ false }
+                             order="recent"
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
 
-                <h2 className="mx_RoomList_recentsLabel">{ recentsLabel }</h2>
-                <div className="mx_RoomList_recents">
-                    {this.makeRoomTiles(this.state.roomList, false)}
-                </div>
+                <RoomSubList list={ self.state.lists['m.favourite'] }
+                             label="Favourites"
+                             tagName="m.favourite"
+                             verb="favourite"
+                             editable={ true }
+                             order="manual"
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
 
-                <h2 className="mx_RoomList_archiveLabel">Archive</h2>
-                <RoomDropTarget text="Drop here to archive"/>
+                <RoomSubList list={ self.state.lists['m.recent'] }
+                             label="Conversations"
+                             editable={ true }
+                             verb="restore"
+                             order="recent"
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
+
+                { Object.keys(self.state.lists).map(function(tagName) {
+                    if (!tagName.match(/^m\.(invite|favourite|recent|lowpriority|archived)$/)) {
+                        return <RoomSubList list={ self.state.lists[tagName] }
+                             key={ tagName }
+                             label={ tagName }
+                             tagName={ tagName }
+                             verb={ "tag as " + tagName }
+                             editable={ true }
+                             order="manual"
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
+
+                    }
+                }) }
+
+                <RoomSubList list={ self.state.lists['m.lowpriority'] }
+                             label="Low priority"
+                             tagName="m.lowpriority"
+                             verb="demote"
+                             editable={ true }
+                             order="recent"
+                             bottommost={ self.state.lists['m.archived'].length === 0 }
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
+
+                <RoomSubList list={ self.state.lists['m.archived'] }
+                             label="Historical"
+                             editable={ false }
+                             order="recent"
+                             bottommost={ true }
+                             activityMap={ self.state.activityMap }
+                             selectedRoom={ self.props.selectedRoom }
+                             collapsed={ self.props.collapsed } />
             </div>
+            </GeminiScrollbar>
         );
     }
 });

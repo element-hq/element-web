@@ -18,6 +18,7 @@ limitations under the License.
 
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var React = require("react");
+var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
 sdk.loadSkin(require('../skins/vector/skindex'));
 sdk.loadModule(require('../modules/VectorConferenceHandler'));
@@ -65,14 +66,21 @@ function parseQsFromFragment(location) {
     return {};
 }
 
+function parseQs(location) {
+    return qs.parse(location.search.substring(1));
+}
+
 // Here, we do some crude URL analysis to allow
 // deep-linking. We only support registration
 // deep-links in this example.
 function routeUrl(location) {
-    if (location.hash.indexOf('#/register') == 0) {
+    var params = parseQs(location);
+    var loginToken = params.loginToken;
+    if (loginToken) {
+        window.matrixChat.showScreen('token_login', parseQs(location));
+    }
+    else if (location.hash.indexOf('#/register') == 0) {
         window.matrixChat.showScreen('register', parseQsFromFragment(location));
-    } else if (location.hash.indexOf('#/login/cas') == 0) {
-        window.matrixChat.showScreen('cas_login', parseQsFromFragment(location));
     } else {
         window.matrixChat.showScreen(location.hash.substring(2));
     }
@@ -129,7 +137,7 @@ window.onload = function() {
 function loadApp() {
     if (validBrowser) {
         var MatrixChat = sdk.getComponent('pages.MatrixChat');
-        window.matrixChat = React.render(
+        window.matrixChat = ReactDOM.render(
             <MatrixChat onNewScreen={onNewScreen} registrationUrl={makeRegistrationUrl()} />,
             document.getElementById('matrixchat')
         );
@@ -138,7 +146,7 @@ function loadApp() {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
         var CompatibilityPage = require("../skins/vector/views/pages/CompatibilityPage");
-        window.matrixChat = React.render(
+        window.matrixChat = ReactDOM.render(
             <CompatibilityPage onAccept={function() {
                 validBrowser = true;
                 console.log("User accepts the compatibility risks.");

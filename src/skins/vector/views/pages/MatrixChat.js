@@ -21,12 +21,14 @@ var sdk = require('matrix-react-sdk')
 
 var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/MatrixChat')
 
-// should be atomised
-var Loader = require("react-loader");
-
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Matrix = require("matrix-js-sdk");
+
 var ContextualMenu = require("../../../../ContextualMenu");
+var Login = require("../../../../components/login/Login");
+var Registration = require("../../../../components/login/Registration");
+var PostRegistration = require("../../../../components/login/PostRegistration");
+var config = require("../../../../../config.json");
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
@@ -63,6 +65,14 @@ module.exports = React.createClass({
         });
     },
 
+    onLogoutClick: function(event) {
+        dis.dispatch({
+            action: 'logout'
+        });
+        event.stopPropagation();
+        event.preventDefault();
+    },
+
     handleResize: function(e) {
         var hideLhsThreshold = 1000;
         var showLhsThreshold = 1000;
@@ -92,19 +102,46 @@ module.exports = React.createClass({
         });
     },
 
+    onRegisterClick: function() {
+        this.showScreen("register");
+    },
+
+    onLoginClick: function() {
+        this.showScreen("login");
+    },
+
+    onRegistered: function(credentials) {
+        this.onLoggedIn(credentials);
+        // do post-registration stuff
+        this.showScreen("post_registration");
+    },
+
+    onFinishPostRegistration: function() {
+        // Don't confuse this with "PageType" which is the middle window to show
+        this.setState({
+            screen: undefined
+        });
+        this.showScreen("settings");
+    },
+
     render: function() {
         var LeftPanel = sdk.getComponent('organisms.LeftPanel');
         var RoomView = sdk.getComponent('organisms.RoomView');
         var RightPanel = sdk.getComponent('organisms.RightPanel');
-        var Login = sdk.getComponent('templates.Login');
         var UserSettings = sdk.getComponent('organisms.UserSettings');
-        var Register = sdk.getComponent('templates.Register');
         var CreateRoom = sdk.getComponent('organisms.CreateRoom');
         var RoomDirectory = sdk.getComponent('organisms.RoomDirectory');
         var MatrixToolbar = sdk.getComponent('molecules.MatrixToolbar');
         var Notifier = sdk.getComponent('organisms.Notifier');
 
-        if (this.state.logged_in && this.state.ready) {
+        // needs to be before normal PageTypes as you are logged in technically
+        if (this.state.screen == 'post_registration') {
+            return (
+                <PostRegistration
+                    onComplete={this.onFinishPostRegistration} />
+            );
+        }
+        else if (this.state.logged_in && this.state.ready) {
             var page_element;
             var right_panel = "";
 
@@ -154,20 +191,32 @@ module.exports = React.createClass({
                 );
             }
         } else if (this.state.logged_in) {
+            var Spinner = sdk.getComponent('atoms.Spinner');
             return (
-                <Loader />
+                <div className="mx_MatrixChat_splash">
+                    <Spinner />
+                    <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>Logout</a>
+                </div>
             );
         } else if (this.state.screen == 'register') {
             return (
-                <Register onLoggedIn={this.onLoggedIn} clientSecret={this.state.register_client_secret}
-                    sessionId={this.state.register_session_id} idSid={this.state.register_id_sid}
-                    hsUrl={this.state.register_hs_url} isUrl={this.state.register_is_url}
+                <Registration
+                    clientSecret={this.state.register_client_secret}
+                    sessionId={this.state.register_session_id}
+                    idSid={this.state.register_id_sid}
+                    hsUrl={config.default_hs_url}
+                    isUrl={config.default_is_url}
                     registrationUrl={this.props.registrationUrl}
-                />
+                    onLoggedIn={this.onRegistered}
+                    onLoginClick={this.onLoginClick} />
             );
         } else {
             return (
-                <Login onLoggedIn={this.onLoggedIn} />
+                <Login
+                    onLoggedIn={this.onLoggedIn}
+                    onRegisterClick={this.onRegisterClick}
+                    homeserverUrl={config.default_hs_url}
+                    identityServerUrl={config.default_is_url} />
             );
         }
     }

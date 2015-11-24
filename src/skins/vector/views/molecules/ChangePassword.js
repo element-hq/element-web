@@ -19,17 +19,15 @@ limitations under the License.
 var React = require('react');
 
 var ChangePasswordController = require('matrix-react-sdk/lib/controllers/molecules/ChangePassword')
-var Loader = require("react-loader");
-
 
 module.exports = React.createClass({
     displayName: 'ChangePassword',
     mixins: [ChangePasswordController],
 
     onClickChange: function() {
-        var old_password = this.refs.old_input.getDOMNode().value;
-        var new_password = this.refs.new_input.getDOMNode().value;
-        var confirm_password = this.refs.confirm_input.getDOMNode().value;
+        var old_password = this.refs.old_input.value;
+        var new_password = this.refs.new_input.value;
+        var confirm_password = this.refs.confirm_input.value;
         if (new_password != confirm_password) {
             this.setState({
                 state: this.Phases.Error,
@@ -64,6 +62,7 @@ module.exports = React.createClass({
                     </div>
                 );
             case this.Phases.Uploading:
+                var Loader = sdk.getComponent("atoms.Spinner");
                 return (
                     <div className="mx_Dialog_content">
                         <Loader />

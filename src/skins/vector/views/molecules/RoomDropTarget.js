@@ -18,16 +18,25 @@ limitations under the License.
 
 var React = require('react');
 
-//var RoomDropTargetController = require('matrix-react-sdk/lib/controllers/molecules/RoomDropTargetController')
-
 module.exports = React.createClass({
     displayName: 'RoomDropTarget',
-    // mixins: [RoomDropTargetController],
+
     render: function() {
-        return (
-            <div className="mx_RoomDropTarget">
-                {this.props.text}
-            </div>
-        );
+        if (this.props.placeholder) {
+            return (
+                <div className="mx_RoomDropTarget mx_RoomDropTarget_placeholder">
+                </div>
+            );
+        }
+        else {
+            return (
+                <div className="mx_RoomDropTarget">
+                    <div className="mx_RoomDropTarget_avatar"></div>
+                    <div className="mx_RoomDropTarget_label">
+                        { this.props.label }
+                    </div>
+                </div>
+            );
+        }
     }
 });

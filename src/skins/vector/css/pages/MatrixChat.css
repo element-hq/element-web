@@ -14,6 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_MatrixChat_splash {
+    position: relative;
+    height: 100%;
+}
+
+.mx_MatrixChat_splashButtons {
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    bottom: 30px;
+}
+
 .mx_MatrixChat_wrapper {
     display: -webkit-box;
     display: -moz-box;
@@ -35,7 +47,7 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    height: 21px;
+    height: 40px;
 }
 
 .mx_MatrixChat_toolbarShowing {
@@ -71,8 +83,8 @@ limitations under the License.
 
     background-color: #eaf5f0;
 
-    -webkit-flex: 0 0 230px;
-    flex: 0 0 230px;
+    -webkit-flex: 0 0 210px;
+    flex: 0 0 210px;
 }
 
 .mx_MatrixChat .mx_LeftPanel.collapsed {
@@ -87,8 +99,8 @@ limitations under the License.
     -webkit-order: 2;
     order: 2;
 
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 25px;
+    padding-right: 22px;
     background-color: #fff;
 
     -webkit-flex: 1;
@@ -97,7 +109,8 @@ limitations under the License.
     /* XXX: Hack: apparently if you try to nest a flex-box
      * within a non-flex-box within a flex-box, the height
      * of the innermost element gets miscalculated if the
-     * parents are both auto.
+     * parents are both auto.  Height has to be auto here
+     * for RoomView to correctly fit when the Toolbar is shown.
      * Ideally we'd launch straight into the RoomView at this
      * point, but instead we fudge it and make the middlePanel
      * flex itself.
@@ -116,8 +129,8 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
-    -webkit-flex: 0 0 230px;
-    flex: 0 0 230px;
+    -webkit-flex: 0 0 235px;
+    flex: 0 0 235px;
 }
 
 .mx_MatrixChat .mx_RightPanel.collapsed {

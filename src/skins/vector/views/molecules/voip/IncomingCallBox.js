@@ -27,7 +27,7 @@ module.exports = React.createClass({
     mixins: [IncomingCallBoxController],
 
     getRingAudio: function() {
-        return this.refs.ringAudio.getDOMNode();
+        return this.refs.ringAudio;
     },
 
     render: function() {

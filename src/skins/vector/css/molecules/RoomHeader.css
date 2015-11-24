@@ -33,6 +33,7 @@ limitations under the License.
 .mx_RoomHeader_leftRow {
     height: 48px;
     margin-top: 18px;
+    margin-left: -2px;
 
     -webkit-box-ordinal-group: 1;
     -moz-box-ordinal-group: 1;
@@ -89,9 +90,9 @@ limitations under the License.
 
 .mx_RoomHeader_simpleHeader {
     line-height: 83px;
-    color: #76cfa6;
-    font-weight: 400;
-    font-size: 20px;
+    color: #454545;
+    font-size: 24px;
+    font-weight: bold;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -101,9 +102,9 @@ limitations under the License.
     vertical-align: middle;
     height: 28px;
     color: #454545;
-    font-weight: 800;
+    font-weight: bold;
     font-size: 24px;
-    padding-left: 8px;
+    padding-left: 19px;
     padding-right: 16px;
     text-overflow: ellipsis;
 }
@@ -153,7 +154,7 @@ limitations under the License.
     max-height: 38px;
     color: #454545;
     font-weight: 300;  
-    padding-left: 8px;
+    padding-left: 19px;
     padding-right: 16px;
     overflow: hidden;
     text-overflow: ellipsis;

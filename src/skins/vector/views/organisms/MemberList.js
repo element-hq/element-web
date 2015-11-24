@@ -18,9 +18,9 @@ limitations under the License.
 
 var React = require('react');
 var classNames = require('classnames');
-var Loader = require('react-loader');
 
 var MemberListController = require('matrix-react-sdk/lib/controllers/organisms/MemberList')
+var GeminiScrollbar = require('react-gemini-scrollbar');
 
 var sdk = require('matrix-react-sdk')
 
@@ -71,12 +71,13 @@ module.exports = React.createClass({
     },
 
     onPopulateInvite: function(e) {
-        this.onInvite(this.refs.invite.getDOMNode().value);
+        this.onInvite(this.refs.invite.value);
         e.preventDefault();
     },
 
     inviteTile: function() {
         if (this.state.inviting) {
+            var Loader = sdk.getComponent("atoms.Spinner");
             return (
                 <Loader />
             );
@@ -104,7 +105,7 @@ module.exports = React.createClass({
         }
         return (
             <div className="mx_MemberList">
-                <div className="mx_MemberList_border">
+                <GeminiScrollbar autoshow={true} className="mx_MemberList_border">
                     {this.inviteTile()}
                     <div>
                         <div className="mx_MemberList_wrapper">
@@ -112,7 +113,7 @@ module.exports = React.createClass({
                         </div>
                     </div>
                     {invitedSection}
-                </div>
+                </GeminiScrollbar>
             </div>
         );
     }

@@ -14,22 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+.mx_RoomAvatar {
+}
 
-var React = require('react');
-
-var CasLoginController = require('matrix-react-sdk/lib/controllers/organisms/CasLogin');
-
-module.exports = React.createClass({
-    displayName: 'CasLogin',
-    mixins: [CasLoginController],
-
-    render: function() {
-        return (
-            <div>
-                <button onClick={this.onCasClicked}>Sign in with CAS</button>
-            </div>
-        );
-    },
-
-});
+.mx_RoomAvatar_initial {
+    position: absolute;
+    color: #fff;
+    text-align: center;
+    font-weight: normal ! important;
+    speak: none;
+    pointer-events: none;
+}
