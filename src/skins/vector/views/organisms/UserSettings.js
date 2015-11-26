@@ -72,7 +72,7 @@ module.exports = React.createClass({
                 return <Loader />
             case this.Phases.Display:
                 var ChangeDisplayName = sdk.getComponent('molecules.ChangeDisplayName');
-                var EnableNotificationsButton = sdk.getComponent('atoms.EnableNotificationsButton');
+                var EnableNotificationsButton = sdk.getComponent('settings.EnableNotificationsButton');
                 return (
                     <div className="mx_UserSettings">
                         <div className="mx_UserSettings_User">

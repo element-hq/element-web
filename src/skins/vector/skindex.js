@@ -31,10 +31,10 @@ skin['messages.MessageTimestamp'] = require('../../components/views/messages/Mes
 // TODO: Fix this so matrix-react-sdk stuff is in react SDK skindex?
 skin['avatars.RoomAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/RoomAvatar');
 skin['avatars.MemberAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/MemberAvatar');
+skin['settings.EnableNotificationsButton'] = require('matrix-react-sdk/lib/components/views/settings/EnableNotificationsButton');
 
 // Old style stuff
 skin['atoms.EditableText'] = require('./views/atoms/EditableText');
-skin['atoms.EnableNotificationsButton'] = require('./views/atoms/EnableNotificationsButton');
 skin['atoms.create_room.CreateRoomButton'] = require('./views/atoms/create_room/CreateRoomButton');
 skin['atoms.create_room.Presets'] = require('./views/atoms/create_room/Presets');
 skin['atoms.create_room.RoomAlias'] = require('./views/atoms/create_room/RoomAlias');
