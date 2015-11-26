@@ -53,7 +53,7 @@ module.exports = React.createClass({
             ev.preventDefault();
             var content = this.props.mxEvent.getContent();
             var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(content.url);
-            var ImageView = sdk.getComponent("atoms.ImageView");
+            var ImageView = sdk.getComponent("elements.ImageView");
             Modal.createDialog(ImageView, {
                 src: httpUrl,
                 width: content.info.w,
