@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require('react');
-var MatrixClientPeg = require('../../MatrixClientPeg');
+var MatrixClientPeg = require('../../../MatrixClientPeg');
 
 module.exports = React.createClass({
     displayName: 'RoomAvatar',
