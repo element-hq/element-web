@@ -34,7 +34,7 @@ module.exports = React.createClass({
         var text = this.getMemberEventText();
         if (!text) return <div/>;
         var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
-        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         return (
             <div className="mx_MessageTile mx_MessageTile_notice">
                 <div className="mx_MessageTile_avatar">

@@ -20,8 +20,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var sdk = require('matrix-react-sdk');
 var Signup = require("matrix-react-sdk/lib/Signup");
-var PasswordLogin = require("matrix-react-sdk/lib/components/login/PasswordLogin");
-var CasLogin = require("matrix-react-sdk/lib/components/login/CasLogin");
+var PasswordLogin = require("matrix-react-sdk/lib/components/views/login/PasswordLogin");
+var CasLogin = require("matrix-react-sdk/lib/components/views/login/CasLogin");
 var ServerConfig = require("./ServerConfig");
 
 /**

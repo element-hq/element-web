@@ -23,7 +23,7 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var ServerConfig = require("./ServerConfig");
 var RegistrationForm = require("./RegistrationForm");
-var CaptchaForm = require("matrix-react-sdk/lib/components/login/CaptchaForm");
+var CaptchaForm = require("matrix-react-sdk/lib/components/views/login/CaptchaForm");
 var Signup = require("matrix-react-sdk/lib/Signup");
 var MIN_PASSWORD_LENGTH = 6;
 

@@ -166,7 +166,7 @@ module.exports = React.createClass({
                 </div>
         }
 
-        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         return (
             <div className={mainClassName} title={ this.getPowerLabel() } onClick={ this.onClick } onMouseEnter={ this.mouseEnter } onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">

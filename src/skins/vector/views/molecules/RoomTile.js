@@ -274,7 +274,7 @@ var RoomTile = React.createClass({
             label = <RoomTooltip room={this.props.room}/>;
         }
 
-        var RoomAvatar = sdk.getComponent('atoms.RoomAvatar');
+        var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
         // These props are injected by React DnD,
         // as defined by your `collect` function above:
