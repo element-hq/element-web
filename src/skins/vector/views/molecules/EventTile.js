@@ -209,7 +209,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
+        var MessageTimestamp = sdk.getComponent('messages.MessageTimestamp');
         var SenderProfile = sdk.getComponent('molecules.SenderProfile');
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 

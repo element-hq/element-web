@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var DateUtils = require('../../../../DateUtils');
+var DateUtils = require('../../../DateUtils');
 
 module.exports = React.createClass({
     displayName: 'MessageTimestamp',
