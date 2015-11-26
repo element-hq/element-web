@@ -28,6 +28,7 @@ var filesize = require('filesize');
 
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var RoomViewController = require('../../../../controllers/organisms/RoomView')
+var VectorConferenceHandler = require('../../../../modules/VectorConferenceHandler');
 
 module.exports = React.createClass({
     displayName: 'RoomView',
@@ -109,7 +110,7 @@ module.exports = React.createClass({
     render: function() {
         var RoomHeader = sdk.getComponent('molecules.RoomHeader');
         var MessageComposer = sdk.getComponent('molecules.MessageComposer');
-        var CallView = sdk.getComponent("molecules.voip.CallView");
+        var CallView = sdk.getComponent("voip.CallView");
         var RoomSettings = sdk.getComponent("molecules.RoomSettings");
         var SearchBar = sdk.getComponent("molecules.SearchBar");
 
@@ -295,7 +296,7 @@ module.exports = React.createClass({
                     <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
                         onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} />
                     <div className="mx_RoomView_auxPanel">
-                        <CallView room={this.state.room}/>
+                        <CallView room={this.state.room} ConferenceHandler={VectorConferenceHandler}/>
                         { conferenceCallNotification }
                         { aux }
                     </div>

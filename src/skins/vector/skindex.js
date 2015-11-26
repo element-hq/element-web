@@ -37,7 +37,9 @@ skin['voip.VideoFeed'] = require('matrix-react-sdk/lib/components/views/voip/Vid
 skin['create_room.CreateRoomButton'] = require('matrix-react-sdk/lib/components/views/create_room/CreateRoomButton');
 skin['create_room.Presets'] = require('matrix-react-sdk/lib/components/views/create_room/Presets');
 skin['create_room.RoomAlias'] = require('matrix-react-sdk/lib/components/views/create_room/RoomAlias');
-
+skin['voip.CallView'] = require('matrix-react-sdk/lib/components/views/voip/CallView');
+skin['voip.IncomingCallBox'] = require('matrix-react-sdk/lib/components/views/voip/IncomingCallBox');
+skin['voip.VideoView'] = require('matrix-react-sdk/lib/components/views/voip/VideoView');
 
 // Old style stuff
 skin['molecules.BottomLeftMenu'] = require('./views/molecules/BottomLeftMenu');
@@ -72,9 +74,6 @@ skin['molecules.SearchBar'] = require('./views/molecules/SearchBar');
 skin['molecules.SenderProfile'] = require('./views/molecules/SenderProfile');
 skin['molecules.UnknownMessageTile'] = require('./views/molecules/UnknownMessageTile');
 skin['molecules.UserSelector'] = require('./views/molecules/UserSelector');
-skin['molecules.voip.CallView'] = require('./views/molecules/voip/CallView');
-skin['molecules.voip.IncomingCallBox'] = require('./views/molecules/voip/IncomingCallBox');
-skin['molecules.voip.VideoView'] = require('./views/molecules/voip/VideoView');
 skin['organisms.CreateRoom'] = require('./views/organisms/CreateRoom');
 skin['organisms.ErrorDialog'] = require('./views/organisms/ErrorDialog');
 skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');

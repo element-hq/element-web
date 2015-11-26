@@ -22,6 +22,7 @@ var HTML5Backend = require('react-dnd-html5-backend');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
+var VectorConferenceHandler = require('../../../../modules/VectorConferenceHandler');
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 
 var LeftPanel = React.createClass({
@@ -86,7 +87,7 @@ var LeftPanel = React.createClass({
     render: function() {
         var RoomList = sdk.getComponent('organisms.RoomList');
         var BottomLeftMenu = sdk.getComponent('molecules.BottomLeftMenu');
-        var IncomingCallBox = sdk.getComponent('molecules.voip.IncomingCallBox');
+        var IncomingCallBox = sdk.getComponent('voip.IncomingCallBox');
 
         var collapseButton;
         var classes = "mx_LeftPanel";
@@ -100,8 +101,12 @@ var LeftPanel = React.createClass({
 
         var callPreview;
         if (this.state.showCallElement) {
-            var CallView = sdk.getComponent('molecules.voip.CallView');
-            callPreview = <CallView className="mx_LeftPanel_callView" onClick={this.onCallViewClick} />
+            var CallView = sdk.getComponent('voip.CallView');
+            callPreview = (
+                <CallView
+                    className="mx_LeftPanel_callView" onClick={this.onCallViewClick}
+                    ConferenceHandler={VectorConferenceHandler} />
+            );
         }
 
         return (
