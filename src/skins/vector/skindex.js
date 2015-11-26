@@ -35,8 +35,6 @@ skin['avatars.MemberAvatar'] = require('matrix-react-sdk/lib/components/views/av
 skin['atoms.EditableText'] = require('./views/atoms/EditableText');
 skin['atoms.EnableNotificationsButton'] = require('./views/atoms/EnableNotificationsButton');
 skin['atoms.ImageView'] = require('./views/atoms/ImageView');
-skin['atoms.LogoutButton'] = require('./views/atoms/LogoutButton');
-
 skin['atoms.create_room.CreateRoomButton'] = require('./views/atoms/create_room/CreateRoomButton');
 skin['atoms.create_room.Presets'] = require('./views/atoms/create_room/Presets');
 skin['atoms.create_room.RoomAlias'] = require('./views/atoms/create_room/RoomAlias');
