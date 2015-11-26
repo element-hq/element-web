@@ -37,13 +37,14 @@ skin['settings.ChangeDisplayName'] = require('matrix-react-sdk/lib/components/vi
 skin['settings.ChangePassword'] = require('matrix-react-sdk/lib/components/views/settings/ChangePassword');
 skin['elements.EditableText'] = require('matrix-react-sdk/lib/components/views/elements/EditableText');
 skin['elements.ProgressBar'] = require('matrix-react-sdk/lib/components/views/elements/ProgressBar');
-skin['voip.VideoFeed'] = require('matrix-react-sdk/lib/components/views/voip/VideoFeed');
+skin['messages.MessageComposer'] = require('matrix-react-sdk/lib/components/views/messages/MessageComposer');
 skin['create_room.CreateRoomButton'] = require('matrix-react-sdk/lib/components/views/create_room/CreateRoomButton');
 skin['create_room.Presets'] = require('matrix-react-sdk/lib/components/views/create_room/Presets');
 skin['create_room.RoomAlias'] = require('matrix-react-sdk/lib/components/views/create_room/RoomAlias');
 skin['voip.CallView'] = require('matrix-react-sdk/lib/components/views/voip/CallView');
 skin['voip.IncomingCallBox'] = require('matrix-react-sdk/lib/components/views/voip/IncomingCallBox');
 skin['voip.VideoView'] = require('matrix-react-sdk/lib/components/views/voip/VideoView');
+skin['voip.VideoFeed'] = require('matrix-react-sdk/lib/components/views/voip/VideoFeed');
 
 // Old style stuff
 skin['molecules.BottomLeftMenu'] = require('./views/molecules/BottomLeftMenu');
@@ -61,7 +62,6 @@ skin['molecules.MVideoTile'] = require('./views/molecules/MVideoTile');
 skin['molecules.MatrixToolbar'] = require('./views/molecules/MatrixToolbar');
 skin['molecules.MemberInfo'] = require('./views/molecules/MemberInfo');
 skin['molecules.MemberTile'] = require('./views/molecules/MemberTile');
-skin['molecules.MessageComposer'] = require('./views/molecules/MessageComposer');
 skin['molecules.MessageContextMenu'] = require('./views/molecules/MessageContextMenu');
 skin['molecules.MessageTile'] = require('./views/molecules/MessageTile');
 skin['molecules.RoomCreate'] = require('./views/molecules/RoomCreate');
