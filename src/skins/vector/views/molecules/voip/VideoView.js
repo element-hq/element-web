@@ -77,7 +77,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var VideoFeed = sdk.getComponent('atoms.voip.VideoFeed');
+        var VideoFeed = sdk.getComponent('voip.VideoFeed');
         return (
             <div className="mx_VideoView" ref={this.setContainer} onClick={ this.props.onClick }>
                 <div className="mx_VideoView_remoteVideoFeed">

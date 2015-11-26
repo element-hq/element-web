@@ -33,12 +33,12 @@ skin['avatars.RoomAvatar'] = require('matrix-react-sdk/lib/components/views/avat
 skin['avatars.MemberAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/MemberAvatar');
 skin['settings.EnableNotificationsButton'] = require('matrix-react-sdk/lib/components/views/settings/EnableNotificationsButton');
 skin['elements.EditableText'] = require('matrix-react-sdk/lib/components/views/elements/EditableText');
+skin['voip.VideoFeed'] = require('matrix-react-sdk/lib/components/views/voip/VideoFeed');
 
 // Old style stuff
 skin['atoms.create_room.CreateRoomButton'] = require('./views/atoms/create_room/CreateRoomButton');
 skin['atoms.create_room.Presets'] = require('./views/atoms/create_room/Presets');
 skin['atoms.create_room.RoomAlias'] = require('./views/atoms/create_room/RoomAlias');
-skin['atoms.voip.VideoFeed'] = require('./views/atoms/voip/VideoFeed');
 skin['molecules.BottomLeftMenu'] = require('./views/molecules/BottomLeftMenu');
 skin['molecules.BottomLeftMenuTile'] = require('./views/molecules/BottomLeftMenuTile');
 skin['molecules.ChangeAvatar'] = require('./views/molecules/ChangeAvatar');
