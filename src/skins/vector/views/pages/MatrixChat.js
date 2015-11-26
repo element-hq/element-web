@@ -56,7 +56,7 @@ module.exports = React.createClass({
 
     onUserClick: function(event, userId) {
         event.preventDefault();
-        var MemberInfo = sdk.getComponent('molecules.MemberInfo');
+        var MemberInfo = sdk.getComponent('rooms.MemberInfo');
         var member = new Matrix.RoomMember(null, userId);
         ContextualMenu.createMenu(MemberInfo, {
             member: member,
