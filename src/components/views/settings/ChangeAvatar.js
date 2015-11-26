@@ -15,9 +15,11 @@ limitations under the License.
 */
 
 var React = require('react');
-var MatrixClientPeg = require("../../MatrixClientPeg");
+var MatrixClientPeg = require("../../../MatrixClientPeg");
+var sdk = require('../../../index');
 
-module.exports = {
+module.exports = React.createClass({
+    displayName: 'ChangeAvatar',
     propTypes: {
         initialAvatarUrl: React.PropTypes.string,
         room: React.PropTypes.object,
@@ -77,4 +79,53 @@ module.exports = {
             self.onError(error);
         });
     },
-}
+
+    onFileSelected: function(ev) {
+        this.avatarSet = true;
+        this.setAvatarFromFile(ev.target.files[0]);
+    },
+
+    onError: function(error) {
+        this.setState({
+            errorText: "Failed to upload profile picture!"
+        });
+    },
+
+    render: function() {
+        var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
+        var avatarImg;
+        // Having just set an avatar we just display that since it will take a little
+        // time to propagate through to the RoomAvatar.
+        if (this.props.room && !this.avatarSet) {
+            avatarImg = <RoomAvatar room={this.props.room} width='320' height='240' resizeMethod='scale' />;
+        } else {
+            var style = {
+                maxWidth: 320,
+                maxHeight: 240,
+            };
+            avatarImg = <img src={this.state.avatarUrl} style={style} />;
+        }
+
+        switch (this.state.phase) {
+            case this.Phases.Display:
+            case this.Phases.Error:
+                return (
+                    <div>
+                        <div className="mx_Dialog_content">
+                            {avatarImg}
+                        </div>
+                        <div className="mx_Dialog_content">
+                            Upload new:
+                            <input type="file" onChange={this.onFileSelected}/>
+                            {this.state.errorText}
+                        </div>    
+                    </div>
+                );
+            case this.Phases.Uploading:
+                var Loader = sdk.getComponent("elements.Spinner");
+                return (
+                    <Loader />
+                );
+        }
+    }
+});
