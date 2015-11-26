@@ -18,23 +18,25 @@ limitations under the License.
 
 var React = require('react');
 
-var Presets = {
-    PrivateChat: "private_chat",
-    PublicChat: "public_chat",
-    Custom: "custom",
-};
-
-module.exports = {
+module.exports = React.createClass({
+    displayName: 'CreateRoomButton',
     propTypes: {
-        onChange: React.PropTypes.func,
-        preset: React.PropTypes.string
+        onCreateRoom: React.PropTypes.func,
     },
-
-    Presets: Presets,
 
     getDefaultProps: function() {
         return {
-            onChange: function() {},
+            onCreateRoom: function() {},
         };
     },
-};
+
+    onClick: function() {
+        this.props.onCreateRoom();
+    },
+
+    render: function() {
+        return (
+            <button className="mx_CreateRoomButton" onClick={this.onClick}>Create Room</button>
+        );
+    }
+});
