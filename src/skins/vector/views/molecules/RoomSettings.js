@@ -66,7 +66,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
+        var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
 
         var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
         if (topic) topic = topic.getContent().topic;
