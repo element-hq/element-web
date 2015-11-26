@@ -34,11 +34,12 @@ skin['avatars.MemberAvatar'] = require('matrix-react-sdk/lib/components/views/av
 skin['settings.EnableNotificationsButton'] = require('matrix-react-sdk/lib/components/views/settings/EnableNotificationsButton');
 skin['elements.EditableText'] = require('matrix-react-sdk/lib/components/views/elements/EditableText');
 skin['voip.VideoFeed'] = require('matrix-react-sdk/lib/components/views/voip/VideoFeed');
+skin['create_room.CreateRoomButton'] = require('matrix-react-sdk/lib/components/views/create_room/CreateRoomButton');
+skin['create_room.Presets'] = require('matrix-react-sdk/lib/components/views/create_room/Presets');
+skin['create_room.RoomAlias'] = require('matrix-react-sdk/lib/components/views/create_room/RoomAlias');
+
 
 // Old style stuff
-skin['atoms.create_room.CreateRoomButton'] = require('./views/atoms/create_room/CreateRoomButton');
-skin['atoms.create_room.Presets'] = require('./views/atoms/create_room/Presets');
-skin['atoms.create_room.RoomAlias'] = require('./views/atoms/create_room/RoomAlias');
 skin['molecules.BottomLeftMenu'] = require('./views/molecules/BottomLeftMenu');
 skin['molecules.BottomLeftMenuTile'] = require('./views/molecules/BottomLeftMenuTile');
 skin['molecules.ChangeAvatar'] = require('./views/molecules/ChangeAvatar');
