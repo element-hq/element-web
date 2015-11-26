@@ -140,7 +140,7 @@ module.exports = React.createClass({
             var CreateRoomButton = sdk.getComponent("create_room.CreateRoomButton");
             var RoomAlias = sdk.getComponent("create_room.RoomAlias");
             var Presets = sdk.getComponent("create_room.Presets");
-            var UserSelector = sdk.getComponent("molecules.UserSelector");
+            var UserSelector = sdk.getComponent("elements.UserSelector");
             var RoomHeader = sdk.getComponent("molecules.RoomHeader");
 
             return (
