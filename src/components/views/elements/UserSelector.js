@@ -18,7 +18,9 @@ limitations under the License.
 
 var React = require('react');
 
-module.exports = {
+module.exports = React.createClass({
+    displayName: 'UserSelector',
+
     propTypes: {
         onChange: React.PropTypes.func,
         selected_users: React.PropTypes.arrayOf(React.PropTypes.string),
@@ -42,4 +44,26 @@ module.exports = {
             return e != user_id;
         }));
     },
-};
+
+    onAddUserId: function() {
+        this.addUser(this.refs.user_id_input.value);
+        this.refs.user_id_input.value = "";
+    },
+
+    render: function() {
+        var self = this;
+        return (
+            <div>
+                <ul className="mx_UserSelector_UserIdList" ref="list">
+                    {this.props.selected_users.map(function(user_id, i) {
+                        return <li key={user_id}>{user_id} - <span onClick={function() {self.removeUser(user_id);}}>X</span></li>
+                    })}
+                </ul>
+                <input type="text" ref="user_id_input" defaultValue="" className="mx_UserSelector_userIdInput" placeholder="ex. @bob:example.com"/>
+                <button onClick={this.onAddUserId} className="mx_UserSelector_AddUserId">
+                    Add User
+                </button>
+            </div>
+        );
+    }
+});
