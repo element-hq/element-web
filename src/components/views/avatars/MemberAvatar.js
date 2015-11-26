@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var Avatar = require('../../../../Avatar');
+var Avatar = require('../../Avatar');
 var MatrixClientPeg = require('../../MatrixClientPeg');
 
 module.exports = React.createClass({
