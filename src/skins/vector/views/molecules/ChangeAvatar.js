@@ -37,7 +37,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var RoomAvatar = sdk.getComponent('atoms.RoomAvatar');
+        var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
         var avatarImg;
         // Having just set an avatar we just display that since it will take a little
         // time to propagate through to the RoomAvatar.
