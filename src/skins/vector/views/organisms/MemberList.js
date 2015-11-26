@@ -77,7 +77,7 @@ module.exports = React.createClass({
 
     inviteTile: function() {
         if (this.state.inviting) {
-            var Loader = sdk.getComponent("atoms.Spinner");
+            var Loader = sdk.getComponent("elements.Spinner");
             return (
                 <Loader />
             );

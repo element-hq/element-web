@@ -158,7 +158,7 @@ module.exports = React.createClass({displayName: 'Login',
     },
 
     render: function() {
-        var Loader = sdk.getComponent("atoms.Spinner");
+        var Loader = sdk.getComponent("elements.Spinner");
         var loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
         return (

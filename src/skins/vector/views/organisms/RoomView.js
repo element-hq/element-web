@@ -130,7 +130,7 @@ module.exports = React.createClass({
         var myUserId = MatrixClientPeg.get().credentials.userId;
         if (this.state.room.currentState.members[myUserId].membership == 'invite') {
             if (this.state.joining || this.state.rejecting) {
-                var Loader = sdk.getComponent("atoms.Spinner");
+                var Loader = sdk.getComponent("elements.Spinner");
                 return (
                     <div className="mx_RoomView">
                         <Loader />
@@ -260,7 +260,7 @@ module.exports = React.createClass({
                 aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
             }
             else if (this.state.uploadingRoomSettings) {
-                var Loader = sdk.getComponent("atoms.Spinner");                
+                var Loader = sdk.getComponent("elements.Spinner");                
                 aux = <Loader/>;
             }
             else if (this.state.searching) {

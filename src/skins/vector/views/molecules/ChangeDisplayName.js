@@ -37,7 +37,7 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.state.busy) {
-            var Loader = sdk.getComponent("atoms.Spinner");
+            var Loader = sdk.getComponent("elements.Spinner");
             return (
                 <Loader />
             );

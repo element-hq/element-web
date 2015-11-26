@@ -66,7 +66,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var Loader = sdk.getComponent("atoms.Spinner");        
+        var Loader = sdk.getComponent("elements.Spinner");        
         switch (this.state.phase) {
             case this.Phases.Loading:
                 return <Loader />

@@ -191,7 +191,7 @@ module.exports = React.createClass({
                 );
             }
         } else if (this.state.logged_in) {
-            var Spinner = sdk.getComponent('atoms.Spinner');
+            var Spinner = sdk.getComponent('elements.Spinner');
             return (
                 <div className="mx_MatrixChat_splash">
                     <Spinner />

@@ -119,7 +119,7 @@ module.exports = React.createClass({
     render: function() {
         var curr_phase = this.state.phase;
         if (curr_phase == this.phases.CREATING) {
-            var Loader = sdk.getComponent("atoms.Spinner");
+            var Loader = sdk.getComponent("elements.Spinner");
             return (
                 <Loader/>
             );

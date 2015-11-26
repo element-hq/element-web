@@ -67,7 +67,7 @@ module.exports = React.createClass({
                     </div>
                 );
             case this.Phases.Uploading:
-                var Loader = sdk.getComponent("atoms.Spinner");
+                var Loader = sdk.getComponent("elements.Spinner");
                 return (
                     <Loader />
                 );
