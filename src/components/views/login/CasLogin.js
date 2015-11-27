@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 
-var MatrixClientPeg = require("../../MatrixClientPeg");
+var MatrixClientPeg = require("../../../MatrixClientPeg");
 var React = require('react');
 var url = require("url");
 

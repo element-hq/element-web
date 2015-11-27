@@ -17,9 +17,12 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var MatrixClientPeg = require('../../MatrixClientPeg');
+var Avatar = require('../../../Avatar');
+var MatrixClientPeg = require('../../../MatrixClientPeg');
 
-module.exports = {
+module.exports = React.createClass({
+    displayName: 'MemberAvatar',
+
     propTypes: {
         member: React.PropTypes.object.isRequired,
         width: React.PropTypes.number,
@@ -87,5 +90,53 @@ module.exports = {
         return {
             imageUrl: this._computeUrl()
         };
+    },
+
+
+    ///////////////
+
+
+    avatarUrlForMember: function(member) {
+        return Avatar.avatarUrlForMember(
+            member,
+            this.props.member,
+            this.props.width,
+            this.props.height,
+            this.props.resizeMethod
+        );
+    },
+
+    skinnedDefaultAvatarUrl: function(member, width, height, resizeMethod) {
+        return Avatar.defaultAvatarUrlForString(member.userId);
+    },
+
+    render: function() {
+        // XXX: recalculates default avatar url constantly
+        if (this.state.imageUrl === this.defaultAvatarUrl(this.props.member)) {
+            var initial;
+            if (this.props.member.name[0])
+                initial = this.props.member.name[0].toUpperCase();
+            if (initial === '@' && this.props.member.name[1])
+                initial = this.props.member.name[1].toUpperCase();
+         
+            return (
+                <span className="mx_MemberAvatar" {...this.props}>
+                    <span className="mx_MemberAvatar_initial" aria-hidden="true"
+                          style={{ fontSize: (this.props.width * 0.75) + "px",
+                                   width: this.props.width + "px",
+                                   lineHeight: this.props.height*1.2 + "px" }}>{ initial }</span>
+                    <img className="mx_MemberAvatar_image" src={this.state.imageUrl} title={this.props.member.name}
+                         onError={this.onError} width={this.props.width} height={this.props.height} />
+                </span>
+            );            
+        }
+        return (
+            <img className="mx_MemberAvatar mx_MemberAvatar_image" src={this.state.imageUrl}
+                onError={this.onError}
+                width={this.props.width} height={this.props.height}
+                title={this.props.member.name}
+                {...this.props}
+            />
+        );
     }
-};
+});
