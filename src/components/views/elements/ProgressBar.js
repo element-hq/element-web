@@ -18,28 +18,21 @@ limitations under the License.
 
 var React = require('react');
 
-module.exports = {
+module.exports = React.createClass({
+    displayName: 'ProgressBar',
     propTypes: {
-        onChange: React.PropTypes.func,
-        selected_users: React.PropTypes.arrayOf(React.PropTypes.string),
+        value: React.PropTypes.number,
+        max: React.PropTypes.number
     },
 
-    getDefaultProps: function() {
-        return {
-            onChange: function() {},
-            selected: [],
+    render: function() {
+        // Would use an HTML5 progress tag but if that doesn't animate if you
+        // use the HTML attributes rather than styles
+        var progressStyle = {
+            width: ((this.props.value / this.props.max) * 100)+"%"
         };
-    },
-
-    addUser: function(user_id) {
-        if (this.props.selected_users.indexOf(user_id == -1)) {
-            this.props.onChange(this.props.selected_users.concat([user_id]));
-        }
-    },
-
-    removeUser: function(user_id) {
-        this.props.onChange(this.props.selected_users.filter(function(e) {
-            return e != user_id;
-        }));
-    },
-};
+        return (
+            <div className="mx_ProgressBar"><div className="mx_ProgressBar_fill" style={progressStyle}></div></div>
+        );
+    }
+});

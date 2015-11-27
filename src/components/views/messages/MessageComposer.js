@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
+var React = require("react");
 var marked = require("marked");
 marked.setOptions({
     renderer: new marked.Renderer(),
@@ -25,12 +25,12 @@ marked.setOptions({
     smartLists: true,
     smartypants: false
 });
-var MatrixClientPeg = require("../../MatrixClientPeg");
-var SlashCommands = require("../../SlashCommands");
-var Modal = require("../../Modal");
-var sdk = require('../../index');
+var MatrixClientPeg = require("../../../MatrixClientPeg");
+var SlashCommands = require("../../../SlashCommands");
+var Modal = require("../../../Modal");
+var sdk = require('../../../index');
 
-var dis = require("../../dispatcher");
+var dis = require("../../../dispatcher");
 var KeyCode = {
     ENTER: 13,
     BACKSPACE: 8,
@@ -58,10 +58,11 @@ function mdownToHtml(mdown) {
     return html;
 }
 
-module.exports = {
-    oldScrollHeight: 0,
+module.exports = React.createClass({
+    displayName: 'MessageComposer',
 
     componentWillMount: function() {
+        this.oldScrollHeight = 0;
         this.markdownEnabled = MARKDOWN_ENABLED;
         this.tabStruct = {
             completing: false,
@@ -501,7 +502,69 @@ module.exports = {
             clearTimeout(this.typingTimeout);
             this.typingTimeout = null;
         }
+    },
 
+    onInputClick: function(ev) {
+        this.refs.textarea.focus();
+    },
+
+    onUploadClick: function(ev) {
+        this.refs.uploadInput.click();
+    },
+
+    onUploadFileSelected: function(ev) {
+        var files = ev.target.files;
+        // MessageComposer shouldn't have to rely on it's parent passing in a callback to upload a file
+        if (files && files.length > 0) {
+            this.props.uploadFile(files[0]);
+        }
+        this.refs.uploadInput.value = null;
+    },
+
+    onCallClick: function(ev) {
+        dis.dispatch({
+            action: 'place_call',
+            type: ev.shiftKey ? "screensharing" : "video",
+            room_id: this.props.room.roomId
+        });
+    },
+
+    onVoiceCallClick: function(ev) {
+        dis.dispatch({
+            action: 'place_call',
+            type: 'voice',
+            room_id: this.props.room.roomId
+        });
+    },
+
+    render: function() {
+        var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
+        var uploadInputStyle = {display: 'none'};
+        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        return (
+        <div className="mx_MessageComposer">
+            <div className="mx_MessageComposer_wrapper">
+                <div className="mx_MessageComposer_row">
+                    <div className="mx_MessageComposer_avatar">
+                        <MemberAvatar member={me} width={24} height={24} />
+                    </div>
+                    <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
+                        <textarea ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
+                    </div>
+                    <div className="mx_MessageComposer_upload" onClick={this.onUploadClick}>
+                        <img src="img/upload.png" alt="Upload file" title="Upload file" width="17" height="22"/>
+                        <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
+                    </div>
+                    <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick}>
+                        <img src="img/voice.png" alt="Voice call" title="Voice call" width="16" height="26"/>
+                    </div>
+                    <div className="mx_MessageComposer_videocall" onClick={this.onCallClick}>
+                        <img src="img/call.png" alt="Video call" title="Video call" width="28" height="20"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        );
     }
-};
+});
 

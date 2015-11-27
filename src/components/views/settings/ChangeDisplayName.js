@@ -16,9 +16,11 @@ limitations under the License.
 
 'use strict';
 var React = require('react');
-var MatrixClientPeg = require("../../MatrixClientPeg");
+var sdk = require('../../../index');
+var MatrixClientPeg = require("../../../MatrixClientPeg");
 
-module.exports = {
+module.exports = React.createClass({
+    displayName: 'ChangeDisplayName',
     propTypes: {
         onFinished: React.PropTypes.func
     },
@@ -72,4 +74,32 @@ module.exports = {
             });
         });
     },
-}
+
+    edit: function() {
+        this.refs.displayname_edit.edit()
+    },
+
+    onValueChanged: function(new_value, shouldSubmit) {
+        if (shouldSubmit) {
+            this.changeDisplayname(new_value);
+        }
+    },
+
+    render: function() {
+        if (this.state.busy) {
+            var Loader = sdk.getComponent("elements.Spinner");
+            return (
+                <Loader />
+            );
+        } else if (this.state.errorString) {
+            return (
+                <div className="error">{this.state.errorString}</div>
+            );
+        } else {
+            var EditableText = sdk.getComponent('elements.EditableText');
+            return (
+                <EditableText ref="displayname_edit" initialValue={this.state.displayName} label="Click to set display name." onValueChanged={this.onValueChanged}/>
+            );
+        }
+    }
+});

@@ -14,16 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+'use strict';
+
 var React = require('react');
 
-module.exports = {
-    propTypes: {
-        room: React.PropTypes.object.isRequired,
+var TextForEvent = require('../../../TextForEvent');
+
+module.exports = React.createClass({
+    displayName: 'TextualEvent',
+
+    statics: {
+        needsSenderProfile: function() {
+            return false;
+        }
     },
 
-    getInitialState: function() {
-        return {
-            power_levels_changed: false
-        };
-    }
-};
+    render: function() {
+        var text = TextForEvent.textForEvent(this.props.mxEvent);
+        if (text == null || text.length == 0) return null;
+
+        return (
+            <div className="mx_EventAsTextTile">
+                {TextForEvent.textForEvent(this.props.mxEvent)}
+            </div>
+        );
+    },
+});
+

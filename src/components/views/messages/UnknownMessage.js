@@ -16,13 +16,17 @@ limitations under the License.
 
 'use strict';
 
-var dis = require("../../dispatcher");
+var React = require('react');
 
-module.exports = {
-    onClick: function() {
-        dis.dispatch({
-            action: 'view_room',
-            room_id: this.props.room.roomId
-        });
+module.exports = React.createClass({
+    displayName: 'UnknownMessage',
+
+    render: function() {
+        var content = this.props.mxEvent.getContent();
+        return (
+            <span className="mx_UnknownMessageTile">
+                {content.body}
+            </span>
+        );
     },
-};
+});
