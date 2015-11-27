@@ -23,13 +23,15 @@ limitations under the License.
 
 var skin = {};
 
+// TODO: Fix this so matrix-react-sdk stuff is in react SDK.
+skin['avatars.RoomAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/RoomAvatar');
+skin['avatars.MemberAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/MemberAvatar');
+
 skin['atoms.EditableText'] = require('./views/atoms/EditableText');
 skin['atoms.EnableNotificationsButton'] = require('./views/atoms/EnableNotificationsButton');
 skin['atoms.ImageView'] = require('./views/atoms/ImageView');
 skin['atoms.LogoutButton'] = require('./views/atoms/LogoutButton');
-skin['atoms.MemberAvatar'] = require('./views/atoms/MemberAvatar');
 skin['atoms.MessageTimestamp'] = require('./views/atoms/MessageTimestamp');
-skin['atoms.RoomAvatar'] = require('./views/atoms/RoomAvatar');
 skin['atoms.Spinner'] = require('./views/atoms/Spinner');
 skin['atoms.create_room.CreateRoomButton'] = require('./views/atoms/create_room/CreateRoomButton');
 skin['atoms.create_room.Presets'] = require('./views/atoms/create_room/Presets');

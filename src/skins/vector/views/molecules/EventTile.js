@@ -109,7 +109,7 @@ module.exports = React.createClass({
             return r2.data.ts - r1.data.ts;
         });
 
-        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 
         var left = 0;
 
@@ -211,7 +211,7 @@ module.exports = React.createClass({
     render: function() {
         var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
         var SenderProfile = sdk.getComponent('molecules.SenderProfile');
-        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 
         var content = this.props.mxEvent.getContent();
         var msgtype = content.msgtype;

@@ -64,7 +64,7 @@ module.exports = React.createClass({
     render: function() {
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
-        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         return (
             <div className="mx_MessageComposer">
                 <div className="mx_MessageComposer_wrapper">

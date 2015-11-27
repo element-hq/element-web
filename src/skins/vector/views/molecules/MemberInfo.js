@@ -73,7 +73,7 @@ module.exports = React.createClass({
             </div>
         }
 
-        var MemberAvatar = sdk.getComponent('atoms.MemberAvatar');
+        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         return (
             <div className="mx_MemberInfo">
                 <img className="mx_MemberInfo_cancel" src="img/cancel-black.png" width="18" height="18" onClick={this.onCancel}/>

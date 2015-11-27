@@ -25,9 +25,9 @@ var dis = require('matrix-react-sdk/lib/dispatcher');
 var Matrix = require("matrix-js-sdk");
 
 var ContextualMenu = require("../../../../ContextualMenu");
-var Login = require("../../../../components/login/Login");
-var Registration = require("../../../../components/login/Registration");
-var PostRegistration = require("../../../../components/login/PostRegistration");
+var Login = require("../../../../components/structures/login/Login");
+var Registration = require("../../../../components/structures/login/Registration");
+var PostRegistration = require("../../../../components/structures/login/PostRegistration");
 var config = require("../../../../../config.json");
 
 module.exports = React.createClass({

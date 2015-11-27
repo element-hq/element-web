@@ -44,7 +44,7 @@ module.exports = React.createClass({
     
     render: function() {
         var EditableText = sdk.getComponent("atoms.EditableText");
-        var RoomAvatar = sdk.getComponent('atoms.RoomAvatar');
+        var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
         var header;
         if (this.props.simpleHeader) {
