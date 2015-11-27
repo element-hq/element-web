@@ -37,7 +37,7 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.state.busy) {
-            var Loader = sdk.getComponent("atoms.Spinner");
+            var Loader = sdk.getComponent("elements.Spinner");
             return (
                 <Loader />
             );
@@ -46,7 +46,7 @@ module.exports = React.createClass({
                 <div className="error">{this.state.errorString}</div>
             );
         } else {
-            var EditableText = sdk.getComponent('atoms.EditableText');
+            var EditableText = sdk.getComponent('elements.EditableText');
             return (
                 <EditableText ref="displayname_edit" initialValue={this.state.displayName} label="Click to set display name." onValueChanged={this.onValueChanged}/>
             );

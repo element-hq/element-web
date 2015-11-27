@@ -20,7 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
-var DateUtils = require('../../../../DateUtils');
+var DateUtils = require('../../../DateUtils');
 var filesize = require('filesize');
 
 module.exports = React.createClass({
@@ -30,7 +30,8 @@ module.exports = React.createClass({
         onFinished: React.PropTypes.func.isRequired
     },
 
-    // XXX: keyboard shortcuts for managing dialogs should be done by the modal dialog base class somehow, surely...
+    // XXX: keyboard shortcuts for managing dialogs should be done by the modal
+    // dialog base class somehow, surely...
     componentDidMount: function() {
         document.addEventListener("keydown", this.onKeyDown);
     },

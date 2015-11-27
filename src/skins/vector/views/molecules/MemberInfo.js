@@ -46,7 +46,7 @@ module.exports = React.createClass({
         }
 
         if (this.state.creatingRoom) {
-            var Loader = sdk.getComponent("atoms.Spinner");
+            var Loader = sdk.getComponent("elements.Spinner");
             spinner = <Loader imgClassName="mx_ContextualMenu_spinner"/>;
         }
 

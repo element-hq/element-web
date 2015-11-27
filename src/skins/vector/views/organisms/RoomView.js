@@ -28,6 +28,7 @@ var filesize = require('filesize');
 
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var RoomViewController = require('../../../../controllers/organisms/RoomView')
+var VectorConferenceHandler = require('../../../../modules/VectorConferenceHandler');
 
 module.exports = React.createClass({
     displayName: 'RoomView',
@@ -109,7 +110,7 @@ module.exports = React.createClass({
     render: function() {
         var RoomHeader = sdk.getComponent('molecules.RoomHeader');
         var MessageComposer = sdk.getComponent('molecules.MessageComposer');
-        var CallView = sdk.getComponent("molecules.voip.CallView");
+        var CallView = sdk.getComponent("voip.CallView");
         var RoomSettings = sdk.getComponent("molecules.RoomSettings");
         var SearchBar = sdk.getComponent("molecules.SearchBar");
 
@@ -130,7 +131,7 @@ module.exports = React.createClass({
         var myUserId = MatrixClientPeg.get().credentials.userId;
         if (this.state.room.currentState.members[myUserId].membership == 'invite') {
             if (this.state.joining || this.state.rejecting) {
-                var Loader = sdk.getComponent("atoms.Spinner");
+                var Loader = sdk.getComponent("elements.Spinner");
                 return (
                     <div className="mx_RoomView">
                         <Loader />
@@ -260,7 +261,7 @@ module.exports = React.createClass({
                 aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
             }
             else if (this.state.uploadingRoomSettings) {
-                var Loader = sdk.getComponent("atoms.Spinner");                
+                var Loader = sdk.getComponent("elements.Spinner");                
                 aux = <Loader/>;
             }
             else if (this.state.searching) {
@@ -295,7 +296,7 @@ module.exports = React.createClass({
                     <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
                         onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} />
                     <div className="mx_RoomView_auxPanel">
-                        <CallView room={this.state.room}/>
+                        <CallView room={this.state.room} ConferenceHandler={VectorConferenceHandler}/>
                         { conferenceCallNotification }
                         { aux }
                     </div>

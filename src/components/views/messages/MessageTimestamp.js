@@ -17,16 +17,18 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-
-var CreateRoomButtonController = require('matrix-react-sdk/lib/controllers/atoms/create_room/CreateRoomButton')
+var DateUtils = require('../../../DateUtils');
 
 module.exports = React.createClass({
-    displayName: 'CreateRoomButton',
-    mixins: [CreateRoomButtonController],
+    displayName: 'MessageTimestamp',
 
     render: function() {
+        var date = new Date(this.props.ts);
         return (
-            <button className="mx_CreateRoomButton" onClick={this.onClick}>Create Room</button>
+            <span className="mx_MessageTimestamp">
+                { DateUtils.formatDate(date) }
+            </span>
         );
-    }
+    },
 });
+

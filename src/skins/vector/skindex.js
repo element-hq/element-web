@@ -23,20 +23,25 @@ limitations under the License.
 
 var skin = {};
 
-// TODO: Fix this so matrix-react-sdk stuff is in react SDK.
+// Vector-specific stuff
+skin['elements.Spinner'] = require('../../components/views/elements/Spinner');
+skin['elements.ImageView'] = require('../../components/views/elements/ImageView');
+skin['messages.MessageTimestamp'] = require('../../components/views/messages/MessageTimestamp');
+
+// TODO: Fix this so matrix-react-sdk stuff is in react SDK skindex?
 skin['avatars.RoomAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/RoomAvatar');
 skin['avatars.MemberAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/MemberAvatar');
+skin['settings.EnableNotificationsButton'] = require('matrix-react-sdk/lib/components/views/settings/EnableNotificationsButton');
+skin['elements.EditableText'] = require('matrix-react-sdk/lib/components/views/elements/EditableText');
+skin['voip.VideoFeed'] = require('matrix-react-sdk/lib/components/views/voip/VideoFeed');
+skin['create_room.CreateRoomButton'] = require('matrix-react-sdk/lib/components/views/create_room/CreateRoomButton');
+skin['create_room.Presets'] = require('matrix-react-sdk/lib/components/views/create_room/Presets');
+skin['create_room.RoomAlias'] = require('matrix-react-sdk/lib/components/views/create_room/RoomAlias');
+skin['voip.CallView'] = require('matrix-react-sdk/lib/components/views/voip/CallView');
+skin['voip.IncomingCallBox'] = require('matrix-react-sdk/lib/components/views/voip/IncomingCallBox');
+skin['voip.VideoView'] = require('matrix-react-sdk/lib/components/views/voip/VideoView');
 
-skin['atoms.EditableText'] = require('./views/atoms/EditableText');
-skin['atoms.EnableNotificationsButton'] = require('./views/atoms/EnableNotificationsButton');
-skin['atoms.ImageView'] = require('./views/atoms/ImageView');
-skin['atoms.LogoutButton'] = require('./views/atoms/LogoutButton');
-skin['atoms.MessageTimestamp'] = require('./views/atoms/MessageTimestamp');
-skin['atoms.Spinner'] = require('./views/atoms/Spinner');
-skin['atoms.create_room.CreateRoomButton'] = require('./views/atoms/create_room/CreateRoomButton');
-skin['atoms.create_room.Presets'] = require('./views/atoms/create_room/Presets');
-skin['atoms.create_room.RoomAlias'] = require('./views/atoms/create_room/RoomAlias');
-skin['atoms.voip.VideoFeed'] = require('./views/atoms/voip/VideoFeed');
+// Old style stuff
 skin['molecules.BottomLeftMenu'] = require('./views/molecules/BottomLeftMenu');
 skin['molecules.BottomLeftMenuTile'] = require('./views/molecules/BottomLeftMenuTile');
 skin['molecules.ChangeAvatar'] = require('./views/molecules/ChangeAvatar');
@@ -69,9 +74,6 @@ skin['molecules.SearchBar'] = require('./views/molecules/SearchBar');
 skin['molecules.SenderProfile'] = require('./views/molecules/SenderProfile');
 skin['molecules.UnknownMessageTile'] = require('./views/molecules/UnknownMessageTile');
 skin['molecules.UserSelector'] = require('./views/molecules/UserSelector');
-skin['molecules.voip.CallView'] = require('./views/molecules/voip/CallView');
-skin['molecules.voip.IncomingCallBox'] = require('./views/molecules/voip/IncomingCallBox');
-skin['molecules.voip.VideoView'] = require('./views/molecules/voip/VideoView');
 skin['organisms.CreateRoom'] = require('./views/organisms/CreateRoom');
 skin['organisms.ErrorDialog'] = require('./views/organisms/ErrorDialog');
 skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');

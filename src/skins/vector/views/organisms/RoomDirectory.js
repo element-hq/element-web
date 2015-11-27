@@ -119,7 +119,7 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.state.loading) {
-            var Loader = sdk.getComponent("atoms.Spinner");            
+            var Loader = sdk.getComponent("elements.Spinner");            
             return (
                 <div className="mx_RoomDirectory">
                     <Loader />

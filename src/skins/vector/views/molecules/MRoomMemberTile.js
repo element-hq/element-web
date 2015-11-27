@@ -33,7 +33,7 @@ module.exports = React.createClass({
         var timestamp = this.props.last ? <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
         var text = this.getMemberEventText();
         if (!text) return <div/>;
-        var MessageTimestamp = sdk.getComponent('atoms.MessageTimestamp');
+        var MessageTimestamp = sdk.getComponent('messages.MessageTimestamp');
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         return (
             <div className="mx_MessageTile mx_MessageTile_notice">
