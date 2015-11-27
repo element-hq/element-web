@@ -29,7 +29,8 @@
     "optimist": "^0.6.1",
     "q": "^1.4.1",
     "react": "^0.14.2",
-    "react-dom": "^0.14.2"
+    "react-dom": "^0.14.2",
+    "velocity-animate": "^1.2.3"
   },
   "//deps": "The loader packages are here because webpack in a project that depends on us needs them in this package's node_modules folder",
   "//depsbuglink": "https://github.com/webpack/webpack/issues/1472",

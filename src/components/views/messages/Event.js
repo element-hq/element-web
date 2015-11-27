@@ -24,10 +24,9 @@ var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg')
 var TextForEvent = require('../../../TextForEvent');
 
-// FIXME BROKEN IMPORTS
-var ContextualMenu = require('../../../../ContextualMenu');
-var Velociraptor = require('../../../../Velociraptor');
-require('../../../../VelocityBounce');
+var ContextualMenu = require('../../../ContextualMenu');
+var Velociraptor = require('../../../Velociraptor');
+require('../../../VelocityBounce');
 
 var bounce = false;
 try {
