@@ -56,7 +56,7 @@ module.exports = React.createClass({
     },
 
     makeMemberTiles: function(membership) {
-        var MemberTile = sdk.getComponent("molecules.MemberTile");
+        var MemberTile = sdk.getComponent("rooms.MemberTile");
 
         var self = this;
         return self.state.members.filter(function(userId) {
