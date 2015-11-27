@@ -18,7 +18,11 @@ limitations under the License.
 
 var React = require("react");
 var MatrixClientPeg = require("../../MatrixClientPeg");
-var PresetValues = require('../atoms/create_room/Presets').Presets;
+var PresetValues = {
+    PrivateChat: "private_chat",
+    PublicChat: "public_chat",
+    Custom: "custom",
+};
 var q = require('q');
 var encryption = require("../../encryption");
 

@@ -16,12 +16,27 @@ limitations under the License.
 
 'use strict';
 
-var dis = require("../../dispatcher");
+var React = require('react');
 
-module.exports = {
-    onClick: function() {
-        dis.dispatch({
-            action: 'logout'
-        });
+module.exports = React.createClass({
+    displayName: 'CreateRoomButton',
+    propTypes: {
+        onCreateRoom: React.PropTypes.func,
     },
-};
+
+    getDefaultProps: function() {
+        return {
+            onCreateRoom: function() {},
+        };
+    },
+
+    onClick: function() {
+        this.props.onCreateRoom();
+    },
+
+    render: function() {
+        return (
+            <button className="mx_CreateRoomButton" onClick={this.onClick}>Create Room</button>
+        );
+    }
+});

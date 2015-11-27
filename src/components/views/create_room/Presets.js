@@ -14,34 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+'use strict';
+
 var React = require('react');
 
-module.exports = {
+var Presets = {
+    PrivateChat: "private_chat",
+    PublicChat: "public_chat",
+    Custom: "custom",
+};
+
+module.exports = React.createClass({
+    displayName: 'CreateRoomPresets',
     propTypes: {
-        // Specifying a homeserver will make magical things happen when you,
-        // e.g. start typing in the room alias box.
-        homeserver: React.PropTypes.string,
-        alias: React.PropTypes.string,
         onChange: React.PropTypes.func,
+        preset: React.PropTypes.string
     },
+
+    Presets: Presets,
 
     getDefaultProps: function() {
         return {
             onChange: function() {},
-            alias: '',
         };
     },
 
-    getAliasLocalpart: function() {
-        var room_alias = this.props.alias;
-
-        if (room_alias && this.props.homeserver) {
-            var suffix = ":" + this.props.homeserver;
-            if (room_alias.startsWith("#") && room_alias.endsWith(suffix)) {
-                room_alias = room_alias.slice(1, -suffix.length);
-            }
-        }
-
-        return room_alias;
+    onValueChanged: function(ev) {
+        this.props.onChange(ev.target.value)
     },
-};
+
+    render: function() {
+        return (
+            <select className="mx_Presets" onChange={this.onValueChanged} value={this.props.preset}>
+                <option value={this.Presets.PrivateChat}>Private Chat</option>
+                <option value={this.Presets.PublicChat}>Public Chat</option>
+                <option value={this.Presets.Custom}>Custom</option>
+            </select>
+        );
+    }
+});

@@ -39,7 +39,7 @@ module.exports = {
                     var d = MatrixClientPeg.get().leave(roomId);
 
                     // FIXME: controller shouldn't be loading a view :(
-                    var Loader = sdk.getComponent("atoms.Spinner");
+                    var Loader = sdk.getComponent("elements.Spinner");
                     var modal = Modal.createDialog(Loader);
 
                     d.then(function() {

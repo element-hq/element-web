@@ -15,10 +15,12 @@ limitations under the License.
 */
 
 'use strict';
-var sdk = require('../../index');
-var dis = require("../../dispatcher");
+var React = require("react");
+var sdk = require('../../../index');
+var dis = require("../../../dispatcher");
 
-module.exports = {
+module.exports = React.createClass({
+    displayName: 'EnableNotificationsButton',
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
@@ -55,4 +57,20 @@ module.exports = {
         }
         this.forceUpdate();
     },
-};
+
+    render: function() {
+        if (this.enabled()) {
+            return (
+                <button className="mx_EnableNotificationsButton" onClick={this.onClick}>
+                    Disable Notifications
+                </button>
+            );
+        } else {
+            return (
+                <button className="mx_EnableNotificationsButton" onClick={this.onClick}>
+                    Enable Notifications
+                </button>
+            );
+        }
+    }
+});

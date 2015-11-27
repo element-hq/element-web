@@ -18,23 +18,14 @@ limitations under the License.
 
 var React = require('react');
 
-var Presets = {
-    PrivateChat: "private_chat",
-    PublicChat: "public_chat",
-    Custom: "custom",
-};
+module.exports = React.createClass({
+    displayName: 'VideoFeed',
 
-module.exports = {
-    propTypes: {
-        onChange: React.PropTypes.func,
-        preset: React.PropTypes.string
+    render: function() {
+        return (
+            <video>
+            </video>
+        );
     },
+});
 
-    Presets: Presets,
-
-    getDefaultProps: function() {
-        return {
-            onChange: function() {},
-        };
-    },
-};
