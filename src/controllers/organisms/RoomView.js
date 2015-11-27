@@ -470,7 +470,7 @@ module.exports = {
         var ret = [];
         var count = 0;
 
-        var EventTile = sdk.getComponent('messages.EventTile');
+        var EventTile = sdk.getComponent('messages.Event');
 
         if (this.state.searchResults) {
             // XXX: this dance is foul, due to the results API not returning sorted results
