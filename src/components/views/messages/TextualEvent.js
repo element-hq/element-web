@@ -16,8 +16,28 @@ limitations under the License.
 
 'use strict';
 
-var MatrixClientPeg = require("../../MatrixClientPeg");
+var React = require('react');
 
-module.exports = {
-};
+var TextForEvent = require('../../../TextForEvent');
+
+module.exports = React.createClass({
+    displayName: 'TextualEvent',
+
+    statics: {
+        needsSenderProfile: function() {
+            return false;
+        }
+    },
+
+    render: function() {
+        var text = TextForEvent.textForEvent(this.props.mxEvent);
+        if (text == null || text.length == 0) return null;
+
+        return (
+            <div className="mx_EventAsTextTile">
+                {TextForEvent.textForEvent(this.props.mxEvent)}
+            </div>
+        );
+    },
+});
 

@@ -16,13 +16,29 @@ limitations under the License.
 
 'use strict';
 
+var React = require('react');
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
-var linkifyMatrix = require('../../linkify-matrix.js');
+var linkifyMatrix = require('../../../linkify-matrix');
+
 linkifyMatrix(linkify);
 
-module.exports = {
+module.exports = React.createClass({
+    displayName: 'MEmoteMessage',
+
     componentDidMount: function() {
         linkifyElement(this.refs.content, linkifyMatrix.options);
-    }
-};
+    },
+
+    render: function() {
+        var mxEvent = this.props.mxEvent;
+        var content = mxEvent.getContent();
+        var name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+        return (
+            <span ref="content" className="mx_MEmoteTile mx_MessageTile_content">
+                * {name} {content.body}
+            </span>
+        );
+    },
+});
+

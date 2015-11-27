@@ -16,13 +16,17 @@ limitations under the License.
 
 'use strict';
 
-var MatrixClientPeg = require("../../MatrixClientPeg");
+var React = require('react');
 
-module.exports = {
-    shouldHighlight: function() {
-        var actions = MatrixClientPeg.get().getPushActionsForEvent(this.props.mxEvent);
-        if (!actions || !actions.tweaks) { return false; }
-        return actions.tweaks.highlight;
-    }
-};
+module.exports = React.createClass({
+    displayName: 'UnknownMessage',
 
+    render: function() {
+        var content = this.props.mxEvent.getContent();
+        return (
+            <span className="mx_UnknownMessageTile">
+                {content.body}
+            </span>
+        );
+    },
+});
