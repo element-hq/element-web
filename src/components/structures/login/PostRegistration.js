@@ -57,8 +57,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var ChangeDisplayName = sdk.getComponent('molecules.ChangeDisplayName');
-        var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
+        var ChangeDisplayName = sdk.getComponent('settings.ChangeDisplayName');
+        var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">

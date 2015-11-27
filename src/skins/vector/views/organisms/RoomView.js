@@ -108,10 +108,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var RoomHeader = sdk.getComponent('molecules.RoomHeader');
-        var MessageComposer = sdk.getComponent('molecules.MessageComposer');
+        var RoomHeader = sdk.getComponent('rooms.RoomHeader');
+        var MessageComposer = sdk.getComponent('messages.MessageComposer');
         var CallView = sdk.getComponent("voip.CallView");
-        var RoomSettings = sdk.getComponent("molecules.RoomSettings");
+        var RoomSettings = sdk.getComponent("rooms.RoomSettings");
         var SearchBar = sdk.getComponent("molecules.SearchBar");
 
         if (!this.state.room) {

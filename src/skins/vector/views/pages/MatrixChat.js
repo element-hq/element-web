@@ -24,7 +24,7 @@ var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/Matri
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Matrix = require("matrix-js-sdk");
 
-var ContextualMenu = require("../../../../ContextualMenu");
+var ContextualMenu = require("matrix-react-sdk/lib/ContextualMenu");
 var Login = require("../../../../components/structures/login/Login");
 var Registration = require("../../../../components/structures/login/Registration");
 var PostRegistration = require("../../../../components/structures/login/PostRegistration");
@@ -56,7 +56,7 @@ module.exports = React.createClass({
 
     onUserClick: function(event, userId) {
         event.preventDefault();
-        var MemberInfo = sdk.getComponent('molecules.MemberInfo');
+        var MemberInfo = sdk.getComponent('rooms.MemberInfo');
         var member = new Matrix.RoomMember(null, userId);
         ContextualMenu.createMenu(MemberInfo, {
             member: member,

@@ -127,7 +127,7 @@ module.exports = React.createClass({
             );
         }
 
-        var RoomHeader = sdk.getComponent('molecules.RoomHeader');
+        var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         return (
             <div className="mx_RoomDirectory">
                 <RoomHeader simpleHeader="Public Rooms" />

@@ -137,7 +137,7 @@ module.exports = React.createClass({
                     panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
                 }
                 else if(this.state.phase == this.Phase.MemberInfo) {
-                    var MemberInfo = sdk.getComponent('molecules.MemberInfo');
+                    var MemberInfo = sdk.getComponent('rooms.MemberInfo');
                     panel = <MemberInfo roomId={this.props.roomId} member={this.state.member} key={this.props.roomId} />
                 }
             }

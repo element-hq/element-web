@@ -21,11 +21,10 @@ var DragSource = require('react-dnd').DragSource;
 var DropTarget = require('react-dnd').DropTarget;
 var classNames = require('classnames');
 
-var RoomTileController = require('matrix-react-sdk/lib/controllers/molecules/RoomTile')
-
+var dis = require("matrix-react-sdk/lib/dispatcher");
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
+var RoomTile = require('matrix-react-sdk/lib/components/views/rooms/RoomTile');
 
 /**
  * Specifies the drag source contract.
@@ -182,117 +181,6 @@ var roomTileTarget = {
         }
     },
 };
-
-var RoomTile = React.createClass({
-    displayName: 'RoomTile',
-    mixins: [RoomTileController],
-
-    propTypes: {
-        connectDragSource: React.PropTypes.func.isRequired,
-        connectDropTarget: React.PropTypes.func.isRequired,
-        isDragging: React.PropTypes.bool.isRequired,
-        room: React.PropTypes.object.isRequired,
-        collapsed: React.PropTypes.bool.isRequired,
-        selected: React.PropTypes.bool.isRequired,
-        unread: React.PropTypes.bool.isRequired,
-        highlight: React.PropTypes.bool.isRequired,
-        isInvite: React.PropTypes.bool.isRequired,
-        roomSubList: React.PropTypes.object.isRequired,
-    },
-
-    getInitialState: function() {
-        return( { hover : false });
-    },
-
-    onMouseEnter: function() {
-        this.setState( { hover : true });
-    },
-
-    onMouseLeave: function() {
-        this.setState( { hover : false });
-    },
-
-    render: function() {
-        // if (this.props.clientOffset) {
-        //     //console.log("room " + this.props.room.roomId + " has dropTarget clientOffset " + this.props.clientOffset.x + "," + this.props.clientOffset.y);
-        // }
-
-/*
-        if (this.props.room._dragging) {
-            var RoomDropTarget = sdk.getComponent("molecules.RoomDropTarget");
-            return <RoomDropTarget placeholder={true}/>;
-        }
-*/        
-
-        var myUserId = MatrixClientPeg.get().credentials.userId;
-        var me = this.props.room.currentState.members[myUserId];
-        var classes = classNames({
-            'mx_RoomTile': true,
-            'mx_RoomTile_selected': this.props.selected,
-            'mx_RoomTile_unread': this.props.unread,
-            'mx_RoomTile_highlight': this.props.highlight,
-            'mx_RoomTile_invited': (me && me.membership == 'invite'),
-        });
-
-        var name;
-        if (this.props.isInvite) {
-            name = this.props.room.getMember(myUserId).events.member.getSender();
-        }
-        else {
-            // XXX: We should never display raw room IDs, but sometimes the room name js sdk gives is undefined
-            name = this.props.room.name || this.props.room.roomId;
-        }
-
-        name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
-        var badge;
-        if (this.props.highlight) {
-            badge = <div className="mx_RoomTile_badge"/>;
-        }
-        /*
-        if (this.props.highlight) {
-            badge = <div className="mx_RoomTile_badge">!</div>;
-        }
-        else if (this.props.unread) {
-            badge = <div className="mx_RoomTile_badge">1</div>;
-        }
-        var nameCell;
-        if (badge) {
-            nameCell = <div className="mx_RoomTile_nameBadge"><div className="mx_RoomTile_name">{name}</div><div className="mx_RoomTile_badgeCell">{badge}</div></div>;
-        }
-        else {
-            nameCell = <div className="mx_RoomTile_name">{name}</div>;
-        }
-        */
-
-        var label;
-        if (!this.props.collapsed) {
-            var className = 'mx_RoomTile_name' + (this.props.isInvite ? ' mx_RoomTile_invite' : '');
-            label = <div className={ className }>{name}</div>;
-        }
-        else if (this.state.hover) {
-            var RoomTooltip = sdk.getComponent("molecules.RoomTooltip");
-            label = <RoomTooltip room={this.props.room}/>;
-        }
-
-        var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
-
-        // These props are injected by React DnD,
-        // as defined by your `collect` function above:
-        var isDragging = this.props.isDragging;
-        var connectDragSource = this.props.connectDragSource;
-        var connectDropTarget = this.props.connectDropTarget;
-
-        return connectDragSource(connectDropTarget(
-            <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-                <div className="mx_RoomTile_avatar">
-                    <RoomAvatar room={this.props.room} width="24" height="24" />
-                    { badge }
-                </div>
-                { label }
-            </div>
-        ));
-    }
-});
 
 // Export the wrapped version, inlining the 'collect' functions
 // to more closely resemble the ES7

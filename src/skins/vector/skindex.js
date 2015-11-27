@@ -27,53 +27,61 @@ var skin = {};
 skin['elements.Spinner'] = require('../../components/views/elements/Spinner');
 skin['elements.ImageView'] = require('../../components/views/elements/ImageView');
 skin['messages.MessageTimestamp'] = require('../../components/views/messages/MessageTimestamp');
+skin['rooms.RoomTile'] = require('../../components/views/rooms/RoomDNDView');
 
 // TODO: Fix this so matrix-react-sdk stuff is in react SDK skindex?
 skin['avatars.RoomAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/RoomAvatar');
 skin['avatars.MemberAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/MemberAvatar');
+
 skin['settings.EnableNotificationsButton'] = require('matrix-react-sdk/lib/components/views/settings/EnableNotificationsButton');
+skin['settings.ChangeAvatar'] = require('matrix-react-sdk/lib/components/views/settings/ChangeAvatar');
+skin['settings.ChangeDisplayName'] = require('matrix-react-sdk/lib/components/views/settings/ChangeDisplayName');
+skin['settings.ChangePassword'] = require('matrix-react-sdk/lib/components/views/settings/ChangePassword');
+
 skin['elements.EditableText'] = require('matrix-react-sdk/lib/components/views/elements/EditableText');
-skin['voip.VideoFeed'] = require('matrix-react-sdk/lib/components/views/voip/VideoFeed');
+skin['elements.ProgressBar'] = require('matrix-react-sdk/lib/components/views/elements/ProgressBar');
+skin['elements.UserSelector'] = require('matrix-react-sdk/lib/components/views/elements/UserSelector');
+
+skin['messages.MessageComposer'] = require('matrix-react-sdk/lib/components/views/messages/MessageComposer');
+skin['messages.TextualEvent'] = require('matrix-react-sdk/lib/components/views/messages/TextualEvent');
+skin['messages.MRoomMemberEvent'] = require('matrix-react-sdk/lib/components/views/messages/MRoomMemberEvent');
+skin['messages.Event'] = require('matrix-react-sdk/lib/components/views/messages/Event');
+skin['messages.Message'] = require('matrix-react-sdk/lib/components/views/messages/Message');
+skin['messages.MEmoteMessage'] = require('matrix-react-sdk/lib/components/views/messages/MEmoteMessage');
+skin['messages.MFileMessage'] = require('matrix-react-sdk/lib/components/views/messages/MFileMessage');
+skin['messages.MImageMessage'] = require('matrix-react-sdk/lib/components/views/messages/MImageMessage');
+skin['messages.MNoticeMessage'] = require('matrix-react-sdk/lib/components/views/messages/MNoticeMessage');
+skin['messages.MTextMessage'] = require('matrix-react-sdk/lib/components/views/messages/MTextMessage');
+skin['messages.MVideoMessage'] = require('matrix-react-sdk/lib/components/views/messages/MVideoMessage');
+skin['messages.UnknownMessage'] = require('matrix-react-sdk/lib/components/views/messages/UnknownMessage');
+
+skin['rooms.MemberInfo'] = require('matrix-react-sdk/lib/components/views/rooms/MemberInfo');
+skin['rooms.RoomHeader'] = require('matrix-react-sdk/lib/components/views/rooms/RoomHeader');
+skin['rooms.RoomSettings'] = require('matrix-react-sdk/lib/components/views/rooms/RoomSettings');
+skin['rooms.MemberTile'] = require('matrix-react-sdk/lib/components/views/rooms/MemberTile');
+
 skin['create_room.CreateRoomButton'] = require('matrix-react-sdk/lib/components/views/create_room/CreateRoomButton');
 skin['create_room.Presets'] = require('matrix-react-sdk/lib/components/views/create_room/Presets');
 skin['create_room.RoomAlias'] = require('matrix-react-sdk/lib/components/views/create_room/RoomAlias');
+
 skin['voip.CallView'] = require('matrix-react-sdk/lib/components/views/voip/CallView');
 skin['voip.IncomingCallBox'] = require('matrix-react-sdk/lib/components/views/voip/IncomingCallBox');
 skin['voip.VideoView'] = require('matrix-react-sdk/lib/components/views/voip/VideoView');
+skin['voip.VideoFeed'] = require('matrix-react-sdk/lib/components/views/voip/VideoFeed');
+
+
 
 // Old style stuff
 skin['molecules.BottomLeftMenu'] = require('./views/molecules/BottomLeftMenu');
 skin['molecules.BottomLeftMenuTile'] = require('./views/molecules/BottomLeftMenuTile');
-skin['molecules.ChangeAvatar'] = require('./views/molecules/ChangeAvatar');
-skin['molecules.ChangeDisplayName'] = require('./views/molecules/ChangeDisplayName');
-skin['molecules.ChangePassword'] = require('./views/molecules/ChangePassword');
 skin['molecules.DateSeparator'] = require('./views/molecules/DateSeparator');
-skin['molecules.EventAsTextTile'] = require('./views/molecules/EventAsTextTile');
-skin['molecules.EventTile'] = require('./views/molecules/EventTile');
-skin['molecules.MEmoteTile'] = require('./views/molecules/MEmoteTile');
-skin['molecules.MFileTile'] = require('./views/molecules/MFileTile');
-skin['molecules.MImageTile'] = require('./views/molecules/MImageTile');
-skin['molecules.MNoticeTile'] = require('./views/molecules/MNoticeTile');
-skin['molecules.MRoomMemberTile'] = require('./views/molecules/MRoomMemberTile');
-skin['molecules.MTextTile'] = require('./views/molecules/MTextTile');
-skin['molecules.MVideoTile'] = require('./views/molecules/MVideoTile');
 skin['molecules.MatrixToolbar'] = require('./views/molecules/MatrixToolbar');
-skin['molecules.MemberInfo'] = require('./views/molecules/MemberInfo');
-skin['molecules.MemberTile'] = require('./views/molecules/MemberTile');
-skin['molecules.MessageComposer'] = require('./views/molecules/MessageComposer');
 skin['molecules.MessageContextMenu'] = require('./views/molecules/MessageContextMenu');
-skin['molecules.MessageTile'] = require('./views/molecules/MessageTile');
-skin['molecules.ProgressBar'] = require('./views/molecules/ProgressBar');
 skin['molecules.RoomCreate'] = require('./views/molecules/RoomCreate');
 skin['molecules.RoomDropTarget'] = require('./views/molecules/RoomDropTarget');
-skin['molecules.RoomHeader'] = require('./views/molecules/RoomHeader');
-skin['molecules.RoomSettings'] = require('./views/molecules/RoomSettings');
-skin['molecules.RoomTile'] = require('./views/molecules/RoomTile');
 skin['molecules.RoomTooltip'] = require('./views/molecules/RoomTooltip');
 skin['molecules.SearchBar'] = require('./views/molecules/SearchBar');
 skin['molecules.SenderProfile'] = require('./views/molecules/SenderProfile');
-skin['molecules.UnknownMessageTile'] = require('./views/molecules/UnknownMessageTile');
-skin['molecules.UserSelector'] = require('./views/molecules/UserSelector');
 skin['organisms.CreateRoom'] = require('./views/organisms/CreateRoom');
 skin['organisms.ErrorDialog'] = require('./views/organisms/ErrorDialog');
 skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');
