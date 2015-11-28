@@ -47,12 +47,10 @@ skin['messages.TextualEvent'] = require('matrix-react-sdk/lib/components/views/m
 skin['messages.MRoomMemberEvent'] = require('matrix-react-sdk/lib/components/views/messages/MRoomMemberEvent');
 skin['messages.Event'] = require('matrix-react-sdk/lib/components/views/messages/Event');
 skin['messages.Message'] = require('matrix-react-sdk/lib/components/views/messages/Message');
-skin['messages.MEmoteMessage'] = require('matrix-react-sdk/lib/components/views/messages/MEmoteMessage');
 skin['messages.MFileMessage'] = require('matrix-react-sdk/lib/components/views/messages/MFileMessage');
 skin['messages.MImageMessage'] = require('matrix-react-sdk/lib/components/views/messages/MImageMessage');
-skin['messages.MNoticeMessage'] = require('matrix-react-sdk/lib/components/views/messages/MNoticeMessage');
-skin['messages.MTextMessage'] = require('matrix-react-sdk/lib/components/views/messages/MTextMessage');
 skin['messages.MVideoMessage'] = require('matrix-react-sdk/lib/components/views/messages/MVideoMessage');
+skin['messages.TextualMessage'] = require('matrix-react-sdk/lib/components/views/messages/TextualMessage');
 skin['messages.UnknownMessage'] = require('matrix-react-sdk/lib/components/views/messages/UnknownMessage');
 
 skin['rooms.MemberInfo'] = require('matrix-react-sdk/lib/components/views/rooms/MemberInfo');
