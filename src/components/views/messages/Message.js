@@ -32,9 +32,9 @@ module.exports = React.createClass({
         var UnknownMessageTile = sdk.getComponent('messages.UnknownMessage');
 
         var tileTypes = {
-            'm.text': sdk.getComponent('messages.MTextMessage'),
-            'm.notice': sdk.getComponent('messages.MNoticeMessage'),
-            'm.emote': sdk.getComponent('messages.MEmoteMessage'),
+            'm.text': sdk.getComponent('messages.TextualMessage'),
+            'm.notice': sdk.getComponent('messages.TextualMessage'),
+            'm.emote': sdk.getComponent('messages.TextualMessage'),
             'm.image': sdk.getComponent('messages.MImageMessage'),
             'm.file': sdk.getComponent('messages.MFileMessage'),
             'm.video': sdk.getComponent('messages.MVideoMessage')
