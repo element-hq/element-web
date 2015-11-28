@@ -311,23 +311,21 @@ module.exports = React.createClass({
 
         var isEmote = /^\/me /i.test(contentText);
         var sendMessagePromise;
+
         if (isEmote) {
-            sendMessagePromise = MatrixClientPeg.get().sendEmoteMessage(
-                this.props.room.roomId, contentText.substring(4)
-            );
+            contentText = contentText.substring(4);
+        }
+
+        var htmlText;
+        if (this.markdownEnabled) && (htmlText = mdownToHtml(contentText)) !== contentText) {
+            sendMessagePromise = isEmote ? 
+                MatrixClientPeg.get().sendHtmlEmote(this.props.room.roomId, contentText, htmlText) :
+                MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, htmlText);
         }
         else {
-            var htmlText = mdownToHtml(contentText);
-            if (this.markdownEnabled && htmlText !== contentText) {
-                sendMessagePromise = MatrixClientPeg.get().sendHtmlMessage(
-                    this.props.room.roomId, contentText, htmlText
-                );
-            }
-            else {
-                sendMessagePromise = MatrixClientPeg.get().sendTextMessage(
-                    this.props.room.roomId, contentText
-                );
-            }
+            sendMessagePromise = isEmote ? 
+                MatrixClientPeg.get().sendEmoteMessage(this.props.room.roomId, contentText) :
+                MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);
         }
 
         sendMessagePromise.then(function() {
