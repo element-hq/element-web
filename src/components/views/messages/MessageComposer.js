@@ -69,6 +69,7 @@ module.exports = React.createClass({
             original: null,
             index: 0
         };
+        var self = this;
         this.sentHistory = {
             // The list of typed messages. Index 0 is more recent
             data: [],
@@ -138,6 +139,8 @@ module.exports = React.createClass({
                     // restore the original text the user was typing.
                     this.element.value = this.originalText;
                 }
+
+                self.resizeInput();
                 return true;
             },
 
@@ -153,6 +156,7 @@ module.exports = React.createClass({
                 var text = window.sessionStorage.getItem("input_" + this.roomId);
                 if (text) {
                     this.element.value = text;
+                    self.resizeInput();
                 }
             }
         };
