@@ -43,7 +43,18 @@ class UserActivity {
         document.onkeypress = undefined;
     }
 
-    _onUserActivity() {
+    _onUserActivity(event) {
+        if (event.screenX) {
+            if (event.screenX === this.lastScreenX &&
+                event.screenY === this.lastScreenY)
+            {
+                // mouse hasn't actually moved
+                return;
+            }
+            this.lastScreenX = event.screenX;
+            this.lastScreenY = event.screenY;
+        }
+
         this.lastActivityAtTs = (new Date).getTime();
         if (this.lastDispatchAtTs < this.lastActivityAtTs - MIN_DISPATCH_INTERVAL) {
             this.lastDispatchAtTs = this.lastActivityAtTs;
