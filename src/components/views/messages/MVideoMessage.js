@@ -74,7 +74,7 @@ module.exports = React.createClass({
         return (
             <span className="mx_MVideoTile">
                 <video className="mx_MVideoTile" src={cli.mxcUrlToHttp(content.url)} alt={content.body}
-                    controls preload={preload} autoplay="false" loop
+                    controls preload={preload} autoPlay="false" loop
                     height={height} width={width} poster={poster}>
                 </video>
             </span>
