@@ -27,6 +27,7 @@ limitations under the License.
     margin-left: -73px;
     margin-top: -4px;
     float: left;
+    position: relative;
 }
 
 .mx_EventTile_avatar img {

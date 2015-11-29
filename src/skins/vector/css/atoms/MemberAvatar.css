@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 .mx_MemberAvatar {
-    /* commenting this out as it breaks on FF seemingly */
-/*    position: relative; */
+    position: relative; 
 }
 
 .mx_MemberAvatar_initial {
