@@ -451,8 +451,26 @@ module.exports = {
                 }
             }            
         }).then(function(data) {
+            // for debugging:
+            // data.search_categories.room_events.highlights = ["hello", "everybody"];
+
+            var highlights;
+            if (data.search_categories.room_events.highlights &&
+                data.search_categories.room_events.highlights.length > 0)
+            {
+                // postgres on synapse returns us precise details of the
+                // strings which actually got matched for highlighting.
+                // for overlapping highlights, favour longer (more specific) terms first
+                highlights = data.search_categories.room_events.highlights
+                             .sort(function(a, b) { b.length - a.length });
+            }
+            else {
+                // sqlite doesn't, so just highlight the literal search term
+                highlights = [ term ];
+            }
+
             self.setState({
-                searchTerm: term,
+                highlights: highlights,
                 searchResults: data,
             });
         }, function(error) {
@@ -490,7 +508,7 @@ module.exports = {
                     }
                 }
                 if (EventTile.haveTileForEvent(mxEv)) {
-                    ret.push(<li key={mxEv.getId() + "+0"}><EventTile mxEvent={mxEv} searchTerm={this.state.searchTerm}/></li>);
+                    ret.push(<li key={mxEv.getId() + "+0"}><EventTile mxEvent={mxEv} highlights={this.state.highlights}/></li>);
                 }
                 if (resultList[i].context.events_after[0]) {
                     var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_after[0]);
@@ -530,7 +548,7 @@ module.exports = {
                 var ts0 = this.state.room.timeline[i - 1].getTs();
                 var ts1 = this.state.room.timeline[i].getTs();
                 if (new Date(ts0).toDateString() !== new Date(ts1).toDateString()) {
-                    dateSeparator = <DateSeparator key={ts1} ts={ts1}/>;
+                    dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
                     continuation = false;
                 }
             }
