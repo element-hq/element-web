@@ -239,7 +239,7 @@ module.exports = React.createClass({
         // temporarily crimp clientHeight to 0 to get an accurate scrollHeight value
         this.refs.textarea.style.height = "0px";
         var newHeight = this.refs.textarea.scrollHeight < 100 ? this.refs.textarea.scrollHeight : 100;
-        this.refs.textarea.style.height = newHeight + "px";
+        this.refs.textarea.style.height = Math.ceil(newHeight) + "px";
         if (this.props.roomView) {
             // kick gemini-scrollbar to re-layout
             this.props.roomView.forceUpdate();
@@ -317,7 +317,7 @@ module.exports = React.createClass({
         }
 
         var htmlText;
-        if (this.markdownEnabled) && (htmlText = mdownToHtml(contentText)) !== contentText) {
+        if (this.markdownEnabled && (htmlText = mdownToHtml(contentText)) !== contentText) {
             sendMessagePromise = isEmote ? 
                 MatrixClientPeg.get().sendHtmlEmote(this.props.room.roomId, contentText, htmlText) :
                 MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, htmlText);
