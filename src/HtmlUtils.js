@@ -65,20 +65,8 @@ module.exports = {
         while ((offset = safeSnippet.indexOf(safeHighlight, lastOffset)) >= 0) {
             // handle preamble
             if (offset > lastOffset) {
-                if (highlights[1]) {
-                    // recurse into the preamble to check for the next highlights
-                    var subnodes = this._applyHighlights( safeSnippet.substring(lastOffset, offset), highlights.slice(1), html, k );
-                    nodes = nodes.concat(subnodes);
-                    k += subnodes.length;
-                }
-                else {
-                    if (html) {
-                        nodes.push(<span key={ k++ } dangerouslySetInnerHTML={{ __html: safeSnippet.substring(lastOffset, offset) }} />);
-                    }
-                    else {
-                        nodes.push(<span key={ k++ }>{ safeSnippet.substring(lastOffset, offset) }</span>);
-                    }
-                }
+                nodes = nodes.concat(this._applySubHighlightsInRange(safeSnippet, lastOffset, offset, highlights, html, k));
+                k += nodes.length;
             }
 
             // do highlight
@@ -94,22 +82,31 @@ module.exports = {
 
         // handle postamble
         if (lastOffset != safeSnippet.length) {
-            if (highlights[1]) {
-                var subnodes = this._applyHighlights( safeSnippet.substring(lastOffset), highlights.slice(1), html, k ) 
-                nodes = nodes.concat( subnodes );
-                k += subnodes.length;
-            }
-            else {
-                if (html) {
-                    nodes.push(<span className="markdown-body" key={ k++ } dangerouslySetInnerHTML={{ __html: safeSnippet.substring(lastOffset) }} />);
-                }
-                else {
-                    nodes.push(<span className="markdown-body" key={ k++ }>{ safeSnippet.substring(lastOffset) }</span>);
-                }
-            }
+            nodes = nodes.concat(this._applySubHighlightsInRange(safeSnippet, lastOffset, undefined, highlights, html, k));
+            k += nodes.length;
         }
         return nodes;
     },
+
+    _applySubHighlightsInRange: function(safeSnippet, lastOffset, offset, highlights, html, k) {
+        var nodes = [];
+        if (highlights[1]) {
+            // recurse into this range to check for the next set of highlight matches
+            var subnodes = this._applyHighlights( safeSnippet.substring(lastOffset, offset), highlights.slice(1), html, k );
+            nodes = nodes.concat(subnodes);
+            k += subnodes.length;
+        }
+        else {
+            // no more highlights to be found, just return the unhighlighted string
+            if (html) {
+                nodes.push(<span key={ k++ } dangerouslySetInnerHTML={{ __html: safeSnippet.substring(lastOffset, offset) }} />);
+            }
+            else {
+                nodes.push(<span key={ k++ }>{ safeSnippet.substring(lastOffset, offset) }</span>);
+            }
+        }
+        return nodes;
+    },    
 
     bodyToHtml: function(content, highlights) {
         var originalBody = content.body;
