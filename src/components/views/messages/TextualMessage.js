@@ -43,13 +43,13 @@ module.exports = React.createClass({
     shouldComponentUpdate: function(nextProps) {
         // exploit that events are immutable :)
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
-                nextProps.searchTerm !== this.props.searchTerm);
+                nextProps.highlights !== this.props.highlights);
     },
 
     render: function() {
         var mxEvent = this.props.mxEvent;
         var content = mxEvent.getContent();
-        var body = HtmlUtils.bodyToHtml(content, this.props.searchTerm);
+        var body = HtmlUtils.bodyToHtml(content, this.props.highlights);
 
         switch (content.msgtype) {
             case "m.emote":

@@ -268,7 +268,7 @@ module.exports = React.createClass({
                 { avatar }
                 { sender }
                 <div className="mx_EventTile_line">
-                    <EventTileType mxEvent={this.props.mxEvent} searchTerm={this.props.searchTerm} />
+                    <EventTileType mxEvent={this.props.mxEvent} highlights={this.props.highlights} />
                 </div>
             </div>
         );

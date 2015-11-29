@@ -47,6 +47,6 @@ module.exports = React.createClass({
             TileType = tileTypes[msgtype];
         }
 
-        return <TileType mxEvent={this.props.mxEvent} searchTerm={this.props.searchTerm} />;
+        return <TileType mxEvent={this.props.mxEvent} highlights={this.props.highlights} />;
     },
 });

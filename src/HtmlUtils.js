@@ -49,39 +49,82 @@ var sanitizeHtmlParams = {
 };
 
 module.exports = {
-    bodyToHtml: function(content, searchTerm) {
-        var originalBody = content.body;
-        var body;
+    _applyHighlights: function(safeSnippet, highlights, html, k) {
+        var lastOffset = 0;
+        var offset;
+        var nodes = [];
 
-        if (searchTerm) {
-            var lastOffset = 0;
-            var bodyList = [];
-            var k = 0;
-            var offset;
+        // XXX: when highlighting HTML, synapse performs the search on the plaintext body,
+        // but we're attempting to apply the highlights here to the HTML body.  This is
+        // never going to end well - we really should be hooking into the sanitzer HTML
+        // parser to only attempt to highlight text nodes to avoid corrupting tags.  
+        // If and when this happens, we'll probably have to split his method in two between
+        // HTML and plain-text highlighting.
 
-            // XXX: rather than searching for the search term in the body,
-            // we should be looking at the match delimiters returned by the FTS engine
-            if (content.format === "org.matrix.custom.html") {
-
-                var safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
-                var safeSearchTerm = sanitizeHtml(searchTerm, sanitizeHtmlParams);
-                while ((offset = safeBody.indexOf(safeSearchTerm, lastOffset)) >= 0) {
-                    // FIXME: we need to apply the search highlighting to only the text elements of HTML, which means
-                    // hooking into the sanitizer parser rather than treating it as a string.  Otherwise
-                    // the act of highlighting a <b/> or whatever will break the HTML badly.
-                    bodyList.push(<span key={ k++ } dangerouslySetInnerHTML={{ __html: safeBody.substring(lastOffset, offset) }} />);
-                    bodyList.push(<span key={ k++ } dangerouslySetInnerHTML={{ __html: safeSearchTerm }} className="mx_MessageTile_searchHighlight" />);
-                    lastOffset = offset + safeSearchTerm.length;
+        var safeHighlight = html ? sanitizeHtml(highlights[0], sanitizeHtmlParams) : highlights[0];
+        while ((offset = safeSnippet.indexOf(safeHighlight, lastOffset)) >= 0) {
+            // handle preamble
+            if (offset > lastOffset) {
+                if (highlights[1]) {
+                    // recurse into the preamble to check for the next highlights
+                    var subnodes = this._applyHighlights( safeSnippet.substring(lastOffset, offset), highlights.slice(1), html, k );
+                    nodes = nodes.concat(subnodes);
+                    k += subnodes.length;
                 }
-                bodyList.push(<span className="markdown-body" key={ k++ } dangerouslySetInnerHTML={{ __html: safeBody.substring(lastOffset) }} />);
+                else {
+                    if (html) {
+                        nodes.push(<span key={ k++ } dangerouslySetInnerHTML={{ __html: safeSnippet.substring(lastOffset, offset) }} />);
+                    }
+                    else {
+                        nodes.push(<span key={ k++ }>{ safeSnippet.substring(lastOffset, offset) }</span>);
+                    }
+                }
+            }
+
+            // do highlight
+            if (html) {
+                nodes.push(<span key={ k++ } dangerouslySetInnerHTML={{ __html: safeHighlight }} className="mx_MessageTile_searchHighlight" />);
             }
             else {
-                while ((offset = originalBody.indexOf(searchTerm, lastOffset)) >= 0) {
-                    bodyList.push(<span key={ k++ } >{ originalBody.substring(lastOffset, offset) }</span>);
-                    bodyList.push(<span key={ k++ } className="mx_MessageTile_searchHighlight">{ searchTerm }</span>);
-                    lastOffset = offset + searchTerm.length;
+                nodes.push(<span key={ k++ } className="mx_MessageTile_searchHighlight">{ safeHighlight }</span>);
+            }
+
+            lastOffset = offset + safeHighlight.length;
+        }
+
+        // handle postamble
+        if (lastOffset != safeSnippet.length) {
+            if (highlights[1]) {
+                var subnodes = this._applyHighlights( safeSnippet.substring(lastOffset), highlights.slice(1), html, k ) 
+                nodes = nodes.concat( subnodes );
+                k += subnodes.length;
+            }
+            else {
+                if (html) {
+                    nodes.push(<span className="markdown-body" key={ k++ } dangerouslySetInnerHTML={{ __html: safeSnippet.substring(lastOffset) }} />);
                 }
-                bodyList.push(<span key={ k++ }>{ originalBody.substring(lastOffset) }</span>);
+                else {
+                    nodes.push(<span className="markdown-body" key={ k++ }>{ safeSnippet.substring(lastOffset) }</span>);
+                }
+            }
+        }
+        return nodes;
+    },
+
+    bodyToHtml: function(content, highlights) {
+        var originalBody = content.body;
+        var body;
+        var k = 0;
+
+        if (highlights && highlights.length > 0) {
+            var bodyList = [];
+
+            if (content.format === "org.matrix.custom.html") {
+                var safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
+                bodyList = this._applyHighlights(safeBody, highlights, true, k);
+            }
+            else {
+                bodyList = this._applyHighlights(originalBody, highlights, true, k);
             }
             body = bodyList;
         }
