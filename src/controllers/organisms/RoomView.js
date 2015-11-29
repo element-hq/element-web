@@ -502,7 +502,10 @@ module.exports = {
         var EventTile = sdk.getComponent('messages.Event');
         var self = this;
 
-        if (this.state.searchResults) {
+        if (this.state.searchResults &&
+            this.state.searchResults.search_categories.room_events.results &&
+            this.state.searchResults.search_categories.room_events.groups)
+        {
             // XXX: this dance is foul, due to the results API not directly returning sorted results
             var results = this.state.searchResults.search_categories.room_events.results;
             var roomIdGroups = this.state.searchResults.search_categories.room_events.groups.room_id;

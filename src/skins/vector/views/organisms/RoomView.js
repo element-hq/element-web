@@ -206,7 +206,7 @@ module.exports = React.createClass({
                 if (this.state.syncState === "ERROR") {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning2.png" width="30" height="30" alt="/!\"/>
+                            <img src="img/warning2.png" width="30" height="30" alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Connectivity to the server has been lost.
@@ -221,7 +221,7 @@ module.exports = React.createClass({
                 else if (this.state.hasUnsentMessages) {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning2.png" width="30" height="30" alt="/!\"/>
+                            <img src="img/warning2.png" width="30" height="30" alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Some of your messages have not been sent.
@@ -291,16 +291,8 @@ module.exports = React.createClass({
                                  </div>;
             }
 
-            var statusArea, messageComposer;
+            var messageComposer;
             if (!this.state.searchResults) {
-                statusArea =
-                    <div className="mx_RoomView_statusArea">
-                        <div className="mx_RoomView_statusAreaBox">
-                            <div className="mx_RoomView_statusAreaBox_line"></div>
-                            {statusBar}
-                        </div>
-                    </div>
-
                 messageComposer =
                     <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} />
             }
@@ -324,7 +316,12 @@ module.exports = React.createClass({
                             </ol>
                         </div>
                     </GeminiScrollbar>
-                    { statusArea }
+                    <div className="mx_RoomView_statusArea">
+                        <div className="mx_RoomView_statusAreaBox">
+                            <div className="mx_RoomView_statusAreaBox_line"></div>
+                            { this.state.searchResults ? null : statusBar }
+                        </div>
+                    </div>
                     { messageComposer }
                 </div>
             );
