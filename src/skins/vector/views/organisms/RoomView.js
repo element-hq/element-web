@@ -291,6 +291,20 @@ module.exports = React.createClass({
                                  </div>;
             }
 
+            var statusArea, messageComposer;
+            if (!this.state.searchResults) {
+                statusArea =
+                    <div className="mx_RoomView_statusArea">
+                        <div className="mx_RoomView_statusAreaBox">
+                            <div className="mx_RoomView_statusAreaBox_line"></div>
+                            {statusBar}
+                        </div>
+                    </div>
+
+                messageComposer =
+                    <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} />
+            }
+
             return (
                 <div className="mx_RoomView">
                     <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
@@ -310,13 +324,8 @@ module.exports = React.createClass({
                             </ol>
                         </div>
                     </GeminiScrollbar>
-                    <div className="mx_RoomView_statusArea">
-                        <div className="mx_RoomView_statusAreaBox">
-                            <div className="mx_RoomView_statusAreaBox_line"></div>
-                            {statusBar}
-                        </div>
-                    </div>
-                    <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} />
+                    { statusArea }
+                    { messageComposer }
                 </div>
             );
         }

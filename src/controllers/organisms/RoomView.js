@@ -288,6 +288,7 @@ module.exports = {
 
     fillSpace: function() {
         if (!this.refs.messagePanel) return;
+        if (this.state.searchResults) return; // TODO: paginate search results
         var messageWrapperScroll = this._getScrollNode();
         if (messageWrapperScroll.scrollTop < messageWrapperScroll.clientHeight && this.state.room.oldState.paginationToken) {
             this.setState({paginating: true});
@@ -426,7 +427,7 @@ module.exports = {
 
     onSearch: function(term, scope) {
         var filter;
-        if (scope === "Room") { // FIXME: should be enum
+        if (scope === "Room") {
             filter = {
                 // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
                 rooms: [
@@ -443,6 +444,14 @@ module.exports = {
                         search_term: term,
                         filter: filter,
                         order_by: "recent",
+                        include_state: true,
+                        groupings: {
+                            group_by: [
+                                {
+                                    key: "room_id"
+                                }
+                            ]
+                        },
                         event_context: {
                             before_limit: 1,
                             after_limit: 1,
@@ -465,13 +474,14 @@ module.exports = {
                              .sort(function(a, b) { b.length - a.length });
             }
             else {
-                // sqlite doesn't, so just highlight the literal search term
+                // sqlite doesn't, so just try to highlight the literal search term
                 highlights = [ term ];
             }
 
             self.setState({
                 highlights: highlights,
                 searchResults: data,
+                searchScope: scope,
             });
         }, function(error) {
             var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
@@ -484,39 +494,51 @@ module.exports = {
 
     getEventTiles: function() {
         var DateSeparator = sdk.getComponent('molecules.DateSeparator');
+        var cli = MatrixClientPeg.get();
 
         var ret = [];
         var count = 0;
 
         var EventTile = sdk.getComponent('messages.Event');
+        var self = this;
 
         if (this.state.searchResults) {
-            // XXX: this dance is foul, due to the results API not returning sorted results
+            // XXX: this dance is foul, due to the results API not directly returning sorted results
             var results = this.state.searchResults.search_categories.room_events.results;
-            var eventIds = Object.keys(results);
-            // XXX: todo: merge overlapping results somehow?
-            // XXX: why doesn't searching on name work?
-            var resultList = eventIds.map(function(key) { return results[key]; }); // .sort(function(a, b) { b.rank - a.rank });
-            for (var i = 0; i < resultList.length; i++) {
-                var ts1 = resultList[i].result.origin_server_ts;
-                ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); //  Rank: {resultList[i].rank}
-                var mxEv = new Matrix.MatrixEvent(resultList[i].result);
-                if (resultList[i].context.events_before[0]) {
-                    var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_before[0]);
-                    if (EventTile.haveTileForEvent(mxEv2)) {
-                        ret.push(<li key={mxEv.getId() + "-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+            var roomIdGroups = this.state.searchResults.search_categories.room_events.groups.room_id;
+
+            Object.keys(roomIdGroups)
+                  .sort(function(a, b) { roomIdGroups[a].order - roomIdGroups[b].order }) // WHY NOT RETURN AN ORDERED ARRAY?!?!?!
+                  .forEach(function(roomId)
+            {
+                // XXX: todo: merge overlapping results somehow?
+                // XXX: why doesn't searching on name work?
+                if (self.state.searchScope === 'All') {
+                    ret.push(<li key={ roomId }><h1>Room: { cli.getRoom(roomId).name }</h1></li>);
+                }
+
+                var resultList = roomIdGroups[roomId].results.map(function(eventId) { return results[eventId]; });
+                for (var i = resultList.length - 1; i >= 0; i--) {
+                    var ts1 = resultList[i].result.origin_server_ts;
+                    ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); // Rank: {resultList[i].rank}
+                    var mxEv = new Matrix.MatrixEvent(resultList[i].result);
+                    if (resultList[i].context.events_before[0]) {
+                        var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_before[0]);
+                        if (EventTile.haveTileForEvent(mxEv2)) {
+                            ret.push(<li key={mxEv.getId() + "-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                        }
+                    }
+                    if (EventTile.haveTileForEvent(mxEv)) {
+                        ret.push(<li key={mxEv.getId() + "+0"}><EventTile mxEvent={mxEv} highlights={self.state.highlights}/></li>);
+                    }
+                    if (resultList[i].context.events_after[0]) {
+                        var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_after[0]);
+                        if (EventTile.haveTileForEvent(mxEv2)) {
+                            ret.push(<li key={mxEv.getId() + "+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                        }
                     }
                 }
-                if (EventTile.haveTileForEvent(mxEv)) {
-                    ret.push(<li key={mxEv.getId() + "+0"}><EventTile mxEvent={mxEv} highlights={this.state.highlights}/></li>);
-                }
-                if (resultList[i].context.events_after[0]) {
-                    var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_after[0]);
-                    if (EventTile.haveTileForEvent(mxEv2)) {
-                        ret.push(<li key={mxEv.getId() + "+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
-                    }
-                }
-            }
+            });
             return ret;
         }
 
