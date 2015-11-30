@@ -202,3 +202,5 @@ DragSource('RoomTile', roomTileSource, function(connect, monitor) {
         isDragging: monitor.isDragging()
     };
 })(RoomTile));
+
+module.exports.replaces = 'RoomTile';
