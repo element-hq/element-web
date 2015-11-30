@@ -168,6 +168,7 @@ module.exports = React.createClass({
             this.refs.textarea,
             this.props.room.roomId
         );
+        this.resizeInput();
     },
 
     componentWillUnmount: function() {
