@@ -206,7 +206,7 @@ module.exports = React.createClass({
                 if (this.state.syncState === "ERROR") {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning2.png" width="30" height="30" alt="/!\"/>
+                            <img src="img/warning2.png" width="30" height="30" alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Connectivity to the server has been lost.
@@ -221,7 +221,7 @@ module.exports = React.createClass({
                 else if (this.state.hasUnsentMessages) {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning2.png" width="30" height="30" alt="/!\"/>
+                            <img src="img/warning2.png" width="30" height="30" alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Some of your messages have not been sent.
@@ -291,6 +291,12 @@ module.exports = React.createClass({
                                  </div>;
             }
 
+            var messageComposer;
+            if (!this.state.searchResults) {
+                messageComposer =
+                    <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} />
+            }
+
             return (
                 <div className="mx_RoomView">
                     <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
@@ -313,10 +319,10 @@ module.exports = React.createClass({
                     <div className="mx_RoomView_statusArea">
                         <div className="mx_RoomView_statusAreaBox">
                             <div className="mx_RoomView_statusAreaBox_line"></div>
-                            {statusBar}
+                            { this.state.searchResults ? null : statusBar }
                         </div>
                     </div>
-                    <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} />
+                    { messageComposer }
                 </div>
             );
         }

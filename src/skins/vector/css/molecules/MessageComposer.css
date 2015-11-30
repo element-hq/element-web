@@ -59,7 +59,7 @@ limitations under the License.
     box-shadow: none;
 
     /* needed for FF */
-    font-family: 'Myriad Pro', Helvetica, Arial, Sans-Serif;
+    font-family: 'Myriad Pro', Arial, Helvetica, Sans-Serif;
 }
 
 /* hack for FF as vertical alignment of custom placeholder text is broken */

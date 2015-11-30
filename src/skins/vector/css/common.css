@@ -22,7 +22,12 @@ html {
 }
 
 body {
-    font-family: 'Myriad Pro', Helvetica, Arial, Sans-Serif;
+    /* Myriad Pro lacks combining diacritics, so these will fall through
+       to the next font.  Helevetica's diacritics however do not combine
+       nicely with Myriad Pro (on OSX, at least) and result in a huge
+       horizontal mess.  Arial empirically gets it right, hence prioritising
+       Arial here. */
+    font-family: 'Myriad Pro', Arial, Helvetica, Sans-Serif;
     font-size: 16px;
     color: #454545;
     border: 0px;
