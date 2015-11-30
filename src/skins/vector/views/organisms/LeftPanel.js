@@ -85,7 +85,7 @@ var LeftPanel = React.createClass({
     },
 
     render: function() {
-        var RoomList = sdk.getComponent('organisms.RoomList');
+        var RoomList = sdk.getComponent('rooms.RoomList');
         var BottomLeftMenu = sdk.getComponent('molecules.BottomLeftMenu');
         var IncomingCallBox = sdk.getComponent('voip.IncomingCallBox');
 
@@ -114,7 +114,10 @@ var LeftPanel = React.createClass({
                 { collapseButton }
                 <IncomingCallBox />
                 { callPreview }
-                <RoomList selectedRoom={this.props.selectedRoom} collapsed={this.props.collapsed}/>
+                <RoomList
+                    selectedRoom={this.props.selectedRoom}
+                    collapsed={this.props.collapsed}
+                    ConferenceHandler={VectorConferenceHandler} />
                 <BottomLeftMenu collapsed={this.props.collapsed}/>
             </aside>
         );

@@ -61,6 +61,7 @@ skin['rooms.MemberTile'] = require('matrix-react-sdk/lib/components/views/rooms/
 skin['rooms.MemberList'] = require('matrix-react-sdk/lib/components/views/rooms/MemberList');
 skin['rooms.MessageComposer'] = require('matrix-react-sdk/lib/components/views/rooms/MessageComposer');
 skin['rooms.EventTile'] = require('matrix-react-sdk/lib/components/views/rooms/EventTile');
+skin['rooms.RoomList'] = require('matrix-react-sdk/lib/components/views/rooms/RoomList');
 
 skin['create_room.CreateRoomButton'] = require('matrix-react-sdk/lib/components/views/create_room/CreateRoomButton');
 skin['create_room.Presets'] = require('matrix-react-sdk/lib/components/views/create_room/Presets');
@@ -90,7 +91,6 @@ skin['molecules.SenderProfile'] = require('./views/molecules/SenderProfile');
 skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');
 skin['organisms.RightPanel'] = require('./views/organisms/RightPanel');
 skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');
-skin['organisms.RoomList'] = require('./views/organisms/RoomList');
 skin['organisms.RoomSubList'] = require('./views/organisms/RoomSubList');
 skin['organisms.RoomView'] = require('./views/organisms/RoomView');
 skin['organisms.ViewSource'] = require('./views/organisms/ViewSource');
