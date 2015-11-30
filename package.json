@@ -11,7 +11,7 @@
   "style": "bundle.css",
   "matrix-react-parent": "matrix-react-sdk",
   "scripts": {
-    "reskindex": "reskindex vector -h src/skins/vector/header",
+    "reskindex": "reskindex -h src/header",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
     "build:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/bundle.css -c uglifycss --no-watch",
     "build:compile": "babel --source-maps -d lib src",
