@@ -31,6 +31,7 @@ skin['rooms.RoomTile'] = require('../../components/views/rooms/RoomDNDView');
 
 
 skin['structures.CreateRoom'] = require('matrix-react-sdk/lib/components/structures/CreateRoom');
+skin['structures.UserSettings'] = require('matrix-react-sdk/lib/components/structures/UserSettings');
 
 // TODO: Fix this so matrix-react-sdk stuff is in react SDK skindex?
 skin['avatars.RoomAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/RoomAvatar');
@@ -92,7 +93,6 @@ skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');
 skin['organisms.RoomList'] = require('./views/organisms/RoomList');
 skin['organisms.RoomSubList'] = require('./views/organisms/RoomSubList');
 skin['organisms.RoomView'] = require('./views/organisms/RoomView');
-skin['organisms.UserSettings'] = require('./views/organisms/UserSettings');
 skin['organisms.ViewSource'] = require('./views/organisms/ViewSource');
 skin['pages.CompatibilityPage'] = require('./views/pages/CompatibilityPage');
 skin['pages.MatrixChat'] = require('./views/pages/MatrixChat');
