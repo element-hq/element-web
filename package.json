@@ -9,6 +9,7 @@
   },
   "license": "Apache-2.0",
   "style": "bundle.css",
+  "matrix-react-parent": "matrix-react-sdk",
   "scripts": {
     "reskindex": "reskindex vector -h src/skins/vector/header",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
