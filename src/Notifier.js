@@ -72,7 +72,7 @@ module.exports = {
             {
                 "body": msg,
                 "icon": avatarUrl,
-                "tag": "vector"
+                "tag": "matrixreactsdk"
             }
         );
 
