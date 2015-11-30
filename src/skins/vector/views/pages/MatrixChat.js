@@ -24,6 +24,7 @@ var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/Matri
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Matrix = require("matrix-js-sdk");
 
+var Notifier = require("matrix-react-sdk/lib/Notifier");
 var ContextualMenu = require("matrix-react-sdk/lib/ContextualMenu");
 var Login = require("../../../../components/structures/login/Login");
 var Registration = require("../../../../components/structures/login/Registration");
@@ -132,7 +133,6 @@ module.exports = React.createClass({
         var CreateRoom = sdk.getComponent('structures.CreateRoom');
         var RoomDirectory = sdk.getComponent('organisms.RoomDirectory');
         var MatrixToolbar = sdk.getComponent('molecules.MatrixToolbar');
-        var Notifier = sdk.getComponent('organisms.Notifier');
 
         // needs to be before normal PageTypes as you are logged in technically
         if (this.state.screen == 'post_registration') {

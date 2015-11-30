@@ -88,7 +88,6 @@ skin['molecules.SenderProfile'] = require('./views/molecules/SenderProfile');
 skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');
 skin['organisms.LogoutPrompt'] = require('./views/organisms/LogoutPrompt');
 skin['organisms.MemberList'] = require('./views/organisms/MemberList');
-skin['organisms.Notifier'] = require('./views/organisms/Notifier');
 skin['organisms.RightPanel'] = require('./views/organisms/RightPanel');
 skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');
 skin['organisms.RoomList'] = require('./views/organisms/RoomList');
