@@ -13,10 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+var React = require('react');
+var dis = require("../../../dispatcher");
 
-var dis = require("../../dispatcher");
-
-module.exports = {
+module.exports = React.createClass({
+    displayName: 'LogoutPrompt',
     logOut: function() {
         dis.dispatch({action: 'logout'});
         if (this.props.onFinished) {
@@ -28,6 +29,20 @@ module.exports = {
         if (this.props.onFinished) {
             this.props.onFinished();
         }
+    },
+
+    render: function() {
+        return (
+            <div>
+                <div className="mx_Dialog_content">
+                    Sign out?
+                </div>
+                <div className="mx_Dialog_buttons">
+                    <button onClick={this.logOut}>Sign Out</button>
+                    <button onClick={this.cancelPrompt}>Cancel</button>
+                </div>
+            </div>
+        );
     }
-};
+});
 
