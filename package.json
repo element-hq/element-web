@@ -13,6 +13,7 @@
     "reskindex": "./reskindex.js"
   },
   "scripts": {
+    "reskindex": "reskindex -h header",
     "build": "babel src -d lib --source-maps",
     "start": "babel src -w -d lib --source-maps",
     "clean": "rimraf lib",
