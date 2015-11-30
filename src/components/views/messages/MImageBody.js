@@ -24,7 +24,7 @@ var Modal = require('../../../Modal');
 var sdk = require('../../../index');
 
 module.exports = React.createClass({
-    displayName: 'MImageMessage',
+    displayName: 'MImageBody',
 
     thumbHeight: function(fullWidth, fullHeight, thumbWidth, thumbHeight) {
         if (!fullWidth || !fullHeight) {

@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 
 module.exports = React.createClass({
-    displayName: 'UnknownMessage',
+    displayName: 'UnknownBody',
 
     render: function() {
         var content = this.props.mxEvent.getContent();

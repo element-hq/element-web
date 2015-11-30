@@ -21,7 +21,7 @@ var filesize = require('filesize');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 
 module.exports = React.createClass({
-    displayName: 'MFileMessage',
+    displayName: 'MFileBody',
 
     presentableTextForFile: function(content) {
         var linkText = 'Attachment';
