@@ -28,12 +28,19 @@ module.exports = React.createClass({
         Notifier.setToolbarHidden(true);
     },
 
+    onClick: function() {
+        var Notifier = sdk.getComponent('organisms.Notifier');
+        Notifier.setEnabled(true);
+    },
+
     render: function() {
-        var EnableNotificationsButton = sdk.getComponent("atoms.EnableNotificationsButton");
         return (
             <div className="mx_MatrixToolbar">
-                You are not receiving desktop notifications. <EnableNotificationsButton />
-                <div className="mx_MatrixToolbar_close"><img src="img/close-white.png" width="16" height="16" onClick={ this.hideToolbar } /></div>
+                <img className="mx_MatrixToolbar_warning" src="img/warning.png" width="28" height="28" alt="/!\"/>
+                <div>
+                    You are not receiving desktop notifications. <a className="mx_MatrixToolbar_link" onClick={ this.onClick }>Enable them now</a>
+                </div>
+                <div className="mx_MatrixToolbar_close"><img src="img/cancel-black2.png" width="23" height="23" onClick={ this.hideToolbar } /></div>
             </div>
         );
     }

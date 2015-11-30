@@ -28,7 +28,7 @@ setup above, and your changes will cause an instant rebuild.
 
 However, all serious development on Vector happens on the `develop` branch.  This typically
 depends on the `develop` snapshot versions of `matrix-react-sdk` and `matrix-js-sdk`
-too, which isn't expressed in Vector's `package.json`.  To do this, check out
+too, which isn't handled by Vector's `package.json`.  To get the right dependencies, check out
 the `develop` branches of these libraries and then use `npm link` to tell Vector
 about them:
 
@@ -36,9 +36,10 @@ about them:
 2. `cd matrix-react-sdk`
 3. `git checkout develop`
 4. `npm install`
-5. `npm start` (to start the dev rebuilder)
-6. `cd ../vector-web`
-7. Link the react sdk package into the example:
+5. `npm run build`
+6. `npm start` (to start the dev rebuilder)
+7. `cd ../vector-web`
+8. Link the react sdk package into the example:
    `npm link path/to/your/react/sdk`
 
 Similarly, you may need to `npm link path/to/your/js/sdk` in your `matrix-react-sdk`
@@ -53,6 +54,6 @@ about "Cannot resolve module 'source-map-loader'" due to shortcomings in webpack
 Deployment
 ==========
 
-Just run `npm build` and then mount the `vector` directory on your webserver to
+Just run `npm run build` and then mount the `vector` directory on your webserver to
 actually serve up the app, which is entirely static content.
 

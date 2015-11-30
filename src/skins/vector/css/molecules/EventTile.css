@@ -17,20 +17,20 @@ limitations under the License.
 .mx_EventTile {
     max-width: 100%;
     clear: both;
-    margin-top: 32px;
-    margin-left: 56px;
+    margin-top: 24px;
+    margin-left: 65px;
 }
 
 .mx_EventTile_avatar {
-    padding-left: 12px;
+    padding-left: 18px;
     padding-right: 12px;
-    margin-left: -64px;
-    margin-top: -7px;
+    margin-left: -73px;
+    margin-top: -4px;
     float: left;
+    position: relative;
 }
 
 .mx_EventTile_avatar img {
-    background-color: #dbdbdb;
     border-radius: 20px;
     border: 0px;
 }
@@ -45,13 +45,16 @@ limitations under the License.
     font-size: 14px;
     margin-bottom: 4px;
     display: block;
+    overflow-y: hidden;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
-    color: #454545;
-    opacity: 0.5;
-    font-size: 14px;
-    float: right;
+    color: #acacac;
+    font-size: 12px;
+}
+
+.mx_EventTile_line {
+    position: relative;
 }
 
 .mx_EventTile_content {
@@ -59,8 +62,45 @@ limitations under the License.
     display: block;
 }
 
-.mx_EventTile_notice .mx_MessageTile_content {
-    opacity: 0.5;
+.mx_MessageTile_content {
+    display: block;
+    margin-right: 100px;
+    overflow-y: hidden;
+}
+
+/* Various markdown overrides */
+
+.mx_MessageTile_content .markdown-body {
+    font-family: inherit ! important;
+    white-space: normal ! important;
+    line-height: inherit ! important;
+}
+
+.mx_MessageTile_content .markdown-body h1,
+.mx_MessageTile_content .markdown-body h2,
+.mx_MessageTile_content .markdown-body h3,
+.mx_MessageTile_content .markdown-body h4,
+.mx_MessageTile_content .markdown-body h5,
+.mx_MessageTile_content .markdown-body h6
+{
+    font-family: inherit ! important;
+}
+
+.mx_MessageTile_content .markdown-body a {
+    color: #76cfa6;
+}
+
+.mx_MessageTile_content .markdown-body .hljs {
+    display: inherit ! important;
+}
+
+/* end of overrides */
+
+.mx_MessageTile_searchHighlight {
+    background-color: #76cfa6;
+    color: #fff;
+    border-radius: 5px;
+    padding: 4px;
 }
 
 .mx_EventTile_sending {
@@ -68,45 +108,73 @@ limitations under the License.
 }
 
 .mx_EventTile_notSent {
-    color: #f11;
+    color: #ddd;
 }
 
 .mx_EventTile_highlight {
     color: #FF0064;
 }
 
+.mx_EventTile_contextual {
+    opacity: 0.4;
+}
+
 .mx_EventTile_msgOption {
     float: right;
+    text-align: right;
+    z-index: 1;
+    position: relative;
+    width: 90px;
+    margin-right: 10px;
+    margin-top: -6px;
 }
 
 .mx_MessageTimestamp {
-    display: none;
+    display: block;
+    visibility: hidden;
+    text-align: right;
 }
 
 .mx_EventTile_last .mx_MessageTimestamp {
-    display: block;
+    visibility: visible;
 }
 
 .mx_EventTile:hover .mx_MessageTimestamp {
-    display: block;
+    visibility: visible;
 }
 
 .mx_EventTile_editButton {
-    float: right;
-    display: none;
-    border: 0px;
-    outline: none;
-    margin-right: 3px;
+    position: absolute;
+    display: inline-block;
+    visibility: hidden; 
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton {
-    display: inline-block;
+    visibility: visible;
 }
 
 .mx_EventTile.menu .mx_EventTile_editButton {
-    display: inline-block;
+    visibility: visible;
 }
 
 .mx_EventTile.menu .mx_MessageTimestamp {
+    visibility: visible;
+}
+
+.mx_EventTile_readAvatars {
+    position: relative;
     display: inline-block;
+    width: 14px;
+    height: 14px;
+}
+
+.mx_EventTile_readAvatars .mx_MemberAvatar {
+    position: absolute;
+    display: inline-block;
+}
+
+.mx_EventTile_readAvatarRemainder {
+    color: #acacac;
+    font-size: 12px;
+    position: absolute;
 }

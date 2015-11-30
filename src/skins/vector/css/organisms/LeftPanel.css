@@ -34,16 +34,21 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_LeftPanel .mx_RoomList {
+.mx_LeftPanel_callView {
+    
+}
+
+.mx_LeftPanel .mx_RoomList_scrollbar {
     -webkit-box-ordinal-group: 1;
     -moz-box-ordinal-group: 1;
     -ms-flex-order: 1;
     -webkit-order: 1;
     order: 1;
 
-    overflow-y: auto;
     -webkit-flex: 1 1 0;
     flex: 1 1 0;
+
+    overflow-y: auto; 
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu {
@@ -53,17 +58,22 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
-    -webkit-flex: 0 0 170px;
-    flex: 0 0 170px;
+    -webkit-flex: 0 0 140px;
+    flex: 0 0 140px;
 
-    border-top: 1px solid #f3f8fa;
+    background-color: rgba(118,207,166,0.19);
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu .mx_RoomTile {
-    color: #378bb4;
+    color: #454545;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu .mx_BottomLeftMenu_options {
-    margin-top: 12px;
+    margin-top: 17px;
     width: 100%;
+}
+
+.mx_LeftPanel .mx_BottomLeftMenu img {
+    border-radius: 0px;
+    background-color: transparent;
 }

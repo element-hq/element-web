@@ -16,15 +16,45 @@ limitations under the License.
 
 'use strict';
 
+var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var React = require("react");
+var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
-sdk.loadSkin(require('../skins/vector/skindex'));
+sdk.loadSkin(require('../component-index'));
 sdk.loadModule(require('../modules/VectorConferenceHandler'));
 
 var qs = require("querystring");
 
 var lastLocationHashSet = null;
 
+function checkBrowserFeatures(featureList) {
+    if (!window.Modernizr) {
+        console.error("Cannot check features - Modernizr global is missing.");
+        return false;
+    }
+    var featureComplete = true;
+    for (var i = 0; i < featureList.length; i++) {
+        if (window.Modernizr[featureList[i]] === undefined) {
+            console.error(
+                "Looked for feature '%s' but Modernizr has no results for this. " +
+                "Has it been configured correctly?", featureList[i]
+            );
+            return false;
+        }
+        if (window.Modernizr[featureList[i]] === false) {
+            console.error("Browser missing feature: '%s'", featureList[i]);
+            // toggle flag rather than return early so we log all missing features
+            // rather than just the first.
+            featureComplete = false;
+        }
+    }
+    return featureComplete;
+}
+
+var validBrowser = checkBrowserFeatures([
+    "displaytable", "flexbox", "es5object", "es5function", "localstorage",
+    "objectfit"
+]);
 
 // We want to support some name / value pairs in the fragment
 // so we're re-using query string like format
@@ -36,14 +66,21 @@ function parseQsFromFragment(location) {
     return {};
 }
 
+function parseQs(location) {
+    return qs.parse(location.search.substring(1));
+}
+
 // Here, we do some crude URL analysis to allow
 // deep-linking. We only support registration
 // deep-links in this example.
 function routeUrl(location) {
-    if (location.hash.indexOf('#/register') == 0) {
+    var params = parseQs(location);
+    var loginToken = params.loginToken;
+    if (loginToken) {
+        window.matrixChat.showScreen('token_login', parseQs(location));
+    }
+    else if (location.hash.indexOf('#/register') == 0) {
         window.matrixChat.showScreen('register', parseQsFromFragment(location));
-    } else if (location.hash.indexOf('#/login/cas') == 0) {
-        window.matrixChat.showScreen('cas_login', parseQsFromFragment(location));
     } else {
         window.matrixChat.showScreen(location.hash.substring(2));
     }
@@ -84,14 +121,11 @@ var makeRegistrationUrl = function() {
            '#/register';
 }
 
-var MatrixChat = sdk.getComponent('pages.MatrixChat');
-window.matrixChat = React.render(
-    <MatrixChat onNewScreen={onNewScreen} registrationUrl={makeRegistrationUrl()} />,
-    document.getElementById('matrixchat')
-);
-
 window.addEventListener('hashchange', onHashChange);
 window.onload = function() {
+    if (!validBrowser) {
+        return;
+    }
     routeUrl(window.location);
     loaded = true;
     if (lastLoadedScreen) {
@@ -100,3 +134,28 @@ window.onload = function() {
     }
 }
 
+function loadApp() {
+    if (validBrowser) {
+        var MatrixChat = sdk.getComponent('pages.MatrixChat');
+        window.matrixChat = ReactDOM.render(
+            <MatrixChat onNewScreen={onNewScreen} registrationUrl={makeRegistrationUrl()} />,
+            document.getElementById('matrixchat')
+        );
+    }
+    else {
+        console.error("Browser is missing required features.");
+        // take to a different landing page to AWOOOOOGA at the user
+        var CompatibilityPage = require("../skins/vector/views/pages/CompatibilityPage");
+        window.matrixChat = ReactDOM.render(
+            <CompatibilityPage onAccept={function() {
+                validBrowser = true;
+                console.log("User accepts the compatibility risks.");
+                loadApp();
+                window.onload(); // still do the same code paths for compatible clients
+            }} />,
+            document.getElementById('matrixchat')
+        );
+    }  
+}
+
+loadApp();

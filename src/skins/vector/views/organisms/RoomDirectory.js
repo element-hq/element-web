@@ -23,8 +23,6 @@ var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
-var Loader = require("react-loader");
-
 module.exports = React.createClass({
     displayName: 'RoomDirectory',
 
@@ -69,6 +67,7 @@ module.exports = React.createClass({
             });
         }, function(err) {
             console.error("Failed to join room: %s", JSON.stringify(err));
+            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to join room",
                 description: err.message
@@ -109,9 +108,9 @@ module.exports = React.createClass({
 
     onKeyUp: function(ev) {
         this.forceUpdate();
-        this.setState({ roomAlias : this.refs.roomAlias.getDOMNode().value })
+        this.setState({ roomAlias : this.refs.roomAlias.value })
         if (ev.key == "Enter") {
-            this.joinRoom(this.refs.roomAlias.getDOMNode().value);
+            this.joinRoom(this.refs.roomAlias.value);
         }
         if (ev.key == "Down") {
 
@@ -120,6 +119,7 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.state.loading) {
+            var Loader = sdk.getComponent("elements.Spinner");            
             return (
                 <div className="mx_RoomDirectory">
                     <Loader />
@@ -127,7 +127,7 @@ module.exports = React.createClass({
             );
         }
 
-        var RoomHeader = sdk.getComponent('molecules.RoomHeader');
+        var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         return (
             <div className="mx_RoomDirectory">
                 <RoomHeader simpleHeader="Public Rooms" />
@@ -135,7 +135,9 @@ module.exports = React.createClass({
                     <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
                     <div className="mx_RoomDirectory_tableWrapper">
                         <table className="mx_RoomDirectory_table">
-                            <tr><th width="45%">Room</th><th width="45%">Alias</th><th width="10%">Members</th></tr>
+                            <thead>
+                                <tr><th width="45%">Room</th><th width="45%">Alias</th><th width="10%">Members</th></tr>
+                            </thead>
                             { this.getRows(this.state.roomAlias) }
                         </table>
                     </div>

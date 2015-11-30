@@ -19,8 +19,6 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 var UserSettingsController = require('matrix-react-sdk/lib/controllers/organisms/UserSettings')
 
-var Loader = require("react-loader");
-
 var Modal = require('matrix-react-sdk/lib/Modal');
 
 module.exports = React.createClass({
@@ -29,7 +27,7 @@ module.exports = React.createClass({
 
     editAvatar: function() {
         var url = MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl);
-        var ChangeAvatar = sdk.getComponent('molecules.ChangeAvatar');
+        var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
         var avatarDialog = (
             <div>
                 <ChangeAvatar initialAvatarUrl={url} />
@@ -50,7 +48,7 @@ module.exports = React.createClass({
     },
 
     changePassword: function() {
-        var ChangePassword = sdk.getComponent('molecules.ChangePassword');
+        var ChangePassword = sdk.getComponent('settings.ChangePassword');
         Modal.createDialog(ChangePassword);
     },
 
@@ -68,12 +66,13 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var Loader = sdk.getComponent("elements.Spinner");        
         switch (this.state.phase) {
             case this.Phases.Loading:
                 return <Loader />
             case this.Phases.Display:
-                var ChangeDisplayName = sdk.getComponent('molecules.ChangeDisplayName');
-                var EnableNotificationsButton = sdk.getComponent('atoms.EnableNotificationsButton');
+                var ChangeDisplayName = sdk.getComponent('settings.ChangeDisplayName');
+                var EnableNotificationsButton = sdk.getComponent('settings.EnableNotificationsButton');
                 return (
                     <div className="mx_UserSettings">
                         <div className="mx_UserSettings_User">
