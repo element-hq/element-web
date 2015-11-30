@@ -435,7 +435,7 @@ module.exports = {
         if (deferreds.length) {
             var self = this;
             q.all(deferreds).fail(function(err) {
-                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Failed to set state",
                     description: err.toString()

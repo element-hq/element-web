@@ -16,7 +16,8 @@ limitations under the License.
 
 var React = require("react");
 
-module.exports = {
+module.exports = React.createClass({
+    displayName: 'QuestionDialog',
     propTypes: {
         title: React.PropTypes.string,
         description: React.PropTypes.string,
@@ -33,4 +34,34 @@ module.exports = {
             focus: true,
         };
     },
-};
+
+    onOk: function() {
+        this.props.onFinished(true);
+    },
+
+    onCancel: function() {
+        this.props.onFinished(false);
+    },
+
+    render: function() {
+        return (
+            <div className="mx_QuestionDialog">
+                <div className="mx_QuestionDialogTitle">
+                    {this.props.title}
+                </div>
+                <div className="mx_Dialog_content">
+                    {this.props.description}
+                </div>
+                <div className="mx_Dialog_buttons">
+                    <button onClick={this.onOk} autoFocus={this.props.focus}>
+                        {this.props.button}
+                    </button>
+
+                    <button onClick={this.onCancel}>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        );
+    }
+});

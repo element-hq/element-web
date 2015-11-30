@@ -115,7 +115,7 @@ function _setCallListeners(call) {
             _setCallState(call, call.roomId, "busy");
             pause("ringbackAudio");
             play("busyAudio");
-            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Call Timeout",
                 description: "The remote side failed to pick up."
@@ -173,7 +173,7 @@ function _onAction(payload) {
             console.error("Unknown conf call type: %s", payload.type);
         }
     }
-    var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
     switch (payload.action) {
         case 'place_call':
@@ -202,7 +202,7 @@ function _onAction(payload) {
 
             var members = room.getJoinedMembers();
             if (members.length <= 1) {
-                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     description: "You cannot place a call with yourself."
                 });

@@ -113,7 +113,7 @@ module.exports = {
     },
 
     onInvite: function(inputText) {
-        var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var self = this;
         inputText = inputText.trim(); // react requires es5-shim so we know trim() exists
         var isEmailAddress = /^\S+@\S+\.\S+$/.test(inputText);

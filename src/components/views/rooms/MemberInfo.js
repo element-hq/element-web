@@ -43,7 +43,7 @@ module.exports = React.createClass({
     },
 
     onKick: function() {
-        var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
         MatrixClientPeg.get().kick(roomId, target).done(function() {
@@ -60,7 +60,7 @@ module.exports = React.createClass({
     },
 
     onBan: function() {
-        var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
         MatrixClientPeg.get().ban(roomId, target).done(function() {
@@ -77,7 +77,7 @@ module.exports = React.createClass({
     },
 
     onMuteToggle: function() {
-        var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
         var room = MatrixClientPeg.get().getRoom(roomId);
@@ -121,7 +121,7 @@ module.exports = React.createClass({
     },
 
     onModToggle: function() {
-        var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
         var room = MatrixClientPeg.get().getRoom(roomId);
@@ -218,8 +218,8 @@ module.exports = React.createClass({
     // FIXME: this is horribly duplicated with MemberTile's onLeaveClick.
     // Not sure what the right solution to this is.
     onLeaveClick: function() {
-        var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
-        var QuestionDialog = sdk.getComponent("organisms.QuestionDialog");
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
         var roomId = this.props.member.roomId;
         Modal.createDialog(QuestionDialog, {
