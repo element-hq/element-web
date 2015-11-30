@@ -455,6 +455,7 @@ module.exports = {
                         event_context: {
                             before_limit: 1,
                             after_limit: 1,
+                            include_profile: true,
                         }
                     }
                 }
@@ -499,7 +500,7 @@ module.exports = {
         var ret = [];
         var count = 0;
 
-        var EventTile = sdk.getComponent('messages.Event');
+        var EventTile = sdk.getComponent('rooms.EventTile');
         var self = this;
 
         if (this.state.searchResults &&

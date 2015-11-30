@@ -45,22 +45,21 @@ skin['elements.EditableText'] = require('matrix-react-sdk/lib/components/views/e
 skin['elements.ProgressBar'] = require('matrix-react-sdk/lib/components/views/elements/ProgressBar');
 skin['elements.UserSelector'] = require('matrix-react-sdk/lib/components/views/elements/UserSelector');
 
-skin['messages.MessageComposer'] = require('matrix-react-sdk/lib/components/views/messages/MessageComposer');
 skin['messages.TextualEvent'] = require('matrix-react-sdk/lib/components/views/messages/TextualEvent');
-skin['messages.MRoomMemberEvent'] = require('matrix-react-sdk/lib/components/views/messages/MRoomMemberEvent');
-skin['messages.Event'] = require('matrix-react-sdk/lib/components/views/messages/Event');
-skin['messages.Message'] = require('matrix-react-sdk/lib/components/views/messages/Message');
-skin['messages.MFileMessage'] = require('matrix-react-sdk/lib/components/views/messages/MFileMessage');
-skin['messages.MImageMessage'] = require('matrix-react-sdk/lib/components/views/messages/MImageMessage');
-skin['messages.MVideoMessage'] = require('matrix-react-sdk/lib/components/views/messages/MVideoMessage');
-skin['messages.TextualMessage'] = require('matrix-react-sdk/lib/components/views/messages/TextualMessage');
-skin['messages.UnknownMessage'] = require('matrix-react-sdk/lib/components/views/messages/UnknownMessage');
+skin['messages.MessageEvent'] = require('matrix-react-sdk/lib/components/views/messages/MessageEvent');
+skin['messages.MFileBody'] = require('matrix-react-sdk/lib/components/views/messages/MFileBody');
+skin['messages.MImageBody'] = require('matrix-react-sdk/lib/components/views/messages/MImageBody');
+skin['messages.MVideoBody'] = require('matrix-react-sdk/lib/components/views/messages/MVideoBody');
+skin['messages.TextualBody'] = require('matrix-react-sdk/lib/components/views/messages/TextualBody');
+skin['messages.UnknownBody'] = require('matrix-react-sdk/lib/components/views/messages/UnknownBody');
 
 skin['rooms.MemberInfo'] = require('matrix-react-sdk/lib/components/views/rooms/MemberInfo');
 skin['rooms.RoomHeader'] = require('matrix-react-sdk/lib/components/views/rooms/RoomHeader');
 skin['rooms.RoomSettings'] = require('matrix-react-sdk/lib/components/views/rooms/RoomSettings');
 skin['rooms.MemberTile'] = require('matrix-react-sdk/lib/components/views/rooms/MemberTile');
 skin['rooms.MemberList'] = require('matrix-react-sdk/lib/components/views/rooms/MemberList');
+skin['rooms.MessageComposer'] = require('matrix-react-sdk/lib/components/views/rooms/MessageComposer');
+skin['rooms.EventTile'] = require('matrix-react-sdk/lib/components/views/rooms/EventTile');
 
 skin['create_room.CreateRoomButton'] = require('matrix-react-sdk/lib/components/views/create_room/CreateRoomButton');
 skin['create_room.Presets'] = require('matrix-react-sdk/lib/components/views/create_room/Presets');
