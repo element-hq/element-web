@@ -32,6 +32,11 @@ class Skinner {
         if (comp) {
             return comp;
         }
+        // XXX
+        var comp = this.components['views.'+name];
+        if (comp) {
+            return comp;
+        }
         throw new Error("No such component: "+name);
     }
 
@@ -42,7 +47,25 @@ class Skinner {
                 "If you want to change the active skin, call resetSkin first"
             );
         }
-        this.components = skinObject;
+        this.components = {};
+        var compKeys = Object.keys(skinObject.components);
+        for (var i = 0; i < compKeys.length; ++i) {
+            var comp = skinObject.components[compKeys[i]];
+            this.addComponent(compKeys[i], comp);
+        }
+    }
+
+    addComponent(name, comp) {
+        var slot = name;
+        if (comp.replaces !== undefined) {
+            if (comp.replaces.indexOf('.') > -1) {
+                slot = comp.replaces;
+            } else {
+                slot = name.substr(0, name.lastIndexOf('.') + 1) + comp.replaces.split('.').pop();
+            }
+        }
+        console.log(slot+" = "+name);
+        this.components[slot] = comp;
     }
 
     reset() {
