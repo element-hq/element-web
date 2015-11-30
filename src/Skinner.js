@@ -32,7 +32,8 @@ class Skinner {
         if (comp) {
             return comp;
         }
-        // XXX
+        // XXX: Temporarily also try 'views.' as we're currently
+        // leaving the 'views.' off views.
         var comp = this.components['views.'+name];
         if (comp) {
             return comp;
