@@ -43,10 +43,7 @@ module.exports = React.createClass({
     },
 
     defaultAvatarUrl: function(member, width, height, resizeMethod) {
-        if (this.skinnedDefaultAvatarUrl) {
-            return this.skinnedDefaultAvatarUrl(member, width, height, resizeMethod);
-        }
-        return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADRJREFUeNrszQENADAIACB9QjNbxSKP4eagAFnTseHFErFYLBaLxWKxWCwWi8Vi8cX4CzAABSwCRWJw31gAAAAASUVORK5CYII=";
+        return Avatar.defaultAvatarUrlForString(member.userId);
     },
 
     onError: function(ev) {
@@ -60,22 +57,10 @@ module.exports = React.createClass({
     },
 
     _computeUrl: function() {
-        var url = this.props.member.getAvatarUrl(
-            MatrixClientPeg.get().getHomeserverUrl(),
-            this.props.width,
-            this.props.height,
-            this.props.resizeMethod,
-            false
-        );
-        if (!url) {
-            url = this.defaultAvatarUrl(
-                this.props.member,
-                this.props.width,
-                this.props.height,
-                this.props.resizeMethod
-            );
-        }
-        return url;
+        return Avatar.avatarUrlForMember(this.props.member,
+                                         this.props.width,
+                                         this.props.height,
+                                         this.props.resizeMethod);
     },
 
     refreshUrl: function() {
@@ -94,21 +79,6 @@ module.exports = React.createClass({
 
 
     ///////////////
-
-
-    avatarUrlForMember: function(member) {
-        return Avatar.avatarUrlForMember(
-            member,
-            this.props.member,
-            this.props.width,
-            this.props.height,
-            this.props.resizeMethod
-        );
-    },
-
-    skinnedDefaultAvatarUrl: function(member, width, height, resizeMethod) {
-        return Avatar.defaultAvatarUrlForString(member.userId);
-    },
 
     render: function() {
         // XXX: recalculates default avatar url constantly

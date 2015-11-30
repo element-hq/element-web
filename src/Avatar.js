@@ -24,7 +24,9 @@ module.exports = {
             MatrixClientPeg.get().getHomeserverUrl(),
             width,
             height,
-            resizeMethod
+            resizeMethod,
+            false,
+            false
         );
         if (!url) {
             // member can be null here currently since on invites, the JS SDK
@@ -36,18 +38,12 @@ module.exports = {
     },
 
     defaultAvatarUrlForString: function(s) {
+        var images = [ '76cfa6', '50e2c2', 'f4c371' ];
         var total = 0;
         for (var i = 0; i < s.length; ++i) {
             total += s.charCodeAt(i);
         }
-        switch (total % 3) {
-            case 0:
-                return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADRJREFUeNrszQENADAIACB9QjNbxSKP4eagAFnTseHFErFYLBaLxWKxWCwWi8Vi8cX4CzAABSwCRWJw31gAAAAASUVORK5CYII=";
-            case 1:
-                return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADRJREFUeNrszQENADAIACB9chOaxgCP4eagAFk9seHFErFYLBaLxWKxWCwWi8Vi8cX4CzAAtKMCks/JG8MAAAAASUVORK5CYII=";
-            case 2:
-                return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADRJREFUeNrszQENADAIACB9YzNayQCP4eagADldseHFErFYLBaLxWKxWCwWi8Vi8cX4CzAAyiACeHwPiu4AAAAASUVORK5CYII=";
-        }
+        return 'img/' + images[total % images.length] + '.png';
     }
 }
 

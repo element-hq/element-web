@@ -37,7 +37,7 @@ try {
 }
 
 var eventTileTypes = {
-    'm.room.message': 'messages.Message',
+    'm.room.message': 'messages.MessageEvent',
     'm.room.member' : 'messages.TextualEvent',
     'm.call.invite' : 'messages.TextualEvent',
     'm.call.answer' : 'messages.TextualEvent',
@@ -47,6 +47,17 @@ var eventTileTypes = {
 };
 
 var MAX_READ_AVATARS = 5;
+
+// Our component structure for EventTiles on the timeline is:
+//
+// .-EventTile------------------------------------------------.
+// | MemberAvatar (SenderProfile)                   TimeStamp |
+// |    .-{Message,Textual}Event---------------. Read Avatars |
+// |    |   .-MFooBody-------------------.     |              |
+// |    |   |  (only if MessageEvent)    |     |              |
+// |    |   '----------------------------'     |              |
+// |    '--------------------------------------'              |
+// '----------------------------------------------------------'
 
 module.exports = React.createClass({
     displayName: 'Event',

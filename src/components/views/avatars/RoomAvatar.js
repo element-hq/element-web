@@ -15,6 +15,7 @@ limitations under the License.
 */
 var React = require('react');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var Avatar = require('../../../Avatar');
 
 module.exports = React.createClass({
     displayName: 'RoomAvatar',
@@ -134,12 +135,7 @@ module.exports = React.createClass({
     },
 
     getFallbackAvatar: function() {
-        var images = [ '76cfa6', '50e2c2', 'f4c371' ];
-        var total = 0;
-        for (var i = 0; i < this.props.room.roomId.length; ++i) {
-            total += this.props.room.roomId.charCodeAt(i);
-        }
-        return 'img/' + images[total % images.length] + '.png';
+        return Avatar.defaultAvatarUrlForString(this.props.room.roomId);
     },
 
     render: function() {
