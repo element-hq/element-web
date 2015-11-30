@@ -68,7 +68,7 @@ var roomTileSource = {
 
         if (monitor.didDrop() && item.targetList.props.editable) {
             // if we moved lists, remove the old tag
-            if (item.targetList !== item.originalList) {
+            if (item.targetList !== item.originalList && item.originalList.props.tagName) {
                 // commented out attempts to set a spinner on our target component as component is actually
                 // the original source component being dragged, not our target.  To fix we just need to
                 // move all of this to endDrop in the target instead.  FIXME later.
