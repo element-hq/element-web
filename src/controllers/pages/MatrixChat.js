@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var Notifier = require("../../Notifier");
 var RoomListSorter = require("../../RoomListSorter");
 var UserActivity = require("../../UserActivity");
 var Presence = require("../../Presence");
@@ -96,7 +97,6 @@ module.exports = {
 
     onAction: function(payload) {
         var roomIndexDelta = 1;
-        var Notifier = sdk.getComponent('organisms.Notifier');
 
         var self = this;
         switch (payload.action) {
@@ -317,7 +317,6 @@ module.exports = {
     },
 
     startMatrixClient: function() {
-        var Notifier = sdk.getComponent('organisms.Notifier');
         var cli = MatrixClientPeg.get();
         var self = this;
         cli.on('sync', function(state) {

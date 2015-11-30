@@ -16,6 +16,7 @@ limitations under the License.
 
 'use strict';
 var React = require("react");
+var Notifier = require("../../../Notifier");
 var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
 
@@ -38,12 +39,10 @@ module.exports = React.createClass({
     },
 
     enabled: function() {
-        var Notifier = sdk.getComponent('organisms.Notifier');
         return Notifier.isEnabled();
     },
 
     onClick: function() {
-        var Notifier = sdk.getComponent('organisms.Notifier');
         var self = this;
         if (!Notifier.supportsDesktopNotifications()) {
             return;
