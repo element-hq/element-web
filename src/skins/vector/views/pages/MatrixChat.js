@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var sdk = require('matrix-react-sdk')
 
+var VectorConferenceHandler = require('../../../../modules/VectorConferenceHandler');
 var MatrixChatController = require('matrix-react-sdk/lib/controllers/pages/MatrixChat')
 
 var dis = require('matrix-react-sdk/lib/dispatcher');
@@ -127,7 +128,7 @@ module.exports = React.createClass({
 
     render: function() {
         var LeftPanel = sdk.getComponent('organisms.LeftPanel');
-        var RoomView = sdk.getComponent('organisms.RoomView');
+        var RoomView = sdk.getComponent('structures.RoomView');
         var RightPanel = sdk.getComponent('organisms.RightPanel');
         var UserSettings = sdk.getComponent('structures.UserSettings');
         var CreateRoom = sdk.getComponent('structures.CreateRoom');
@@ -147,7 +148,12 @@ module.exports = React.createClass({
 
             switch (this.state.page_type) {
                 case this.PageTypes.RoomView:
-                    page_element = <RoomView roomId={this.state.currentRoom} key={this.state.currentRoom} />
+                    page_element = (
+                        <RoomView
+                            roomId={this.state.currentRoom}
+                            key={this.state.currentRoom}
+                            ConferenceHandler={VectorConferenceHandler} />
+                    );
                     right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} />
                     break;
                 case this.PageTypes.UserSettings:

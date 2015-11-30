@@ -22,7 +22,7 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var sdk = require('matrix-react-sdk')
 var Modal = require('matrix-react-sdk/lib/Modal');
-var Resend = require("../../../../Resend");
+var Resend = require("matrix-react-sdk/lib/Resend");
 
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',

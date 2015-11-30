@@ -30,9 +30,6 @@ skin['messages.MessageTimestamp'] = require('../../components/views/messages/Mes
 skin['rooms.RoomTile'] = require('../../components/views/rooms/RoomDNDView');
 
 
-skin['structures.CreateRoom'] = require('matrix-react-sdk/lib/components/structures/CreateRoom');
-skin['structures.UserSettings'] = require('matrix-react-sdk/lib/components/structures/UserSettings');
-
 // TODO: Fix this so matrix-react-sdk stuff is in react SDK skindex?
 skin['avatars.RoomAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/RoomAvatar');
 skin['avatars.MemberAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/MemberAvatar');
@@ -76,6 +73,9 @@ skin['dialogs.QuestionDialog'] = require('matrix-react-sdk/lib/components/views/
 skin['dialogs.ErrorDialog'] = require('matrix-react-sdk/lib/components/views/dialogs/ErrorDialog');
 skin['dialogs.LogoutPrompt'] = require('matrix-react-sdk/lib/components/views/dialogs/LogoutPrompt');
 
+skin['structures.CreateRoom'] = require('matrix-react-sdk/lib/components/structures/CreateRoom');
+skin['structures.UserSettings'] = require('matrix-react-sdk/lib/components/structures/UserSettings');
+skin['structures.RoomView'] = require('matrix-react-sdk/lib/components/structures/RoomView');
 
 // Old style stuff
 skin['molecules.BottomLeftMenu'] = require('./views/molecules/BottomLeftMenu');
@@ -92,7 +92,6 @@ skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');
 skin['organisms.RightPanel'] = require('./views/organisms/RightPanel');
 skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');
 skin['organisms.RoomSubList'] = require('./views/organisms/RoomSubList');
-skin['organisms.RoomView'] = require('./views/organisms/RoomView');
 skin['organisms.ViewSource'] = require('./views/organisms/ViewSource');
 skin['pages.CompatibilityPage'] = require('./views/pages/CompatibilityPage');
 skin['pages.MatrixChat'] = require('./views/pages/MatrixChat');
