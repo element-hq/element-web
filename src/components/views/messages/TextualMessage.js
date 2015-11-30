@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var HtmlUtils = require('../../../HtmlUtils');
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
@@ -25,35 +26,52 @@ var linkifyMatrix = require('../../../linkify-matrix');
 linkifyMatrix(linkify);
 
 module.exports = React.createClass({
-    displayName: 'MTextMessage',
+    displayName: 'TextualMessage',
 
     componentDidMount: function() {
         linkifyElement(this.refs.content, linkifyMatrix.options);
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
-            HtmlUtils.highlightDom(this.getDOMNode());
+            HtmlUtils.highlightDom(ReactDOM.findDOMNode(this));
     },
 
     componentDidUpdate: function() {
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
-            HtmlUtils.highlightDom(this.getDOMNode());
+            HtmlUtils.highlightDom(ReactDOM.findDOMNode(this));
     },
 
     shouldComponentUpdate: function(nextProps) {
         // exploit that events are immutable :)
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
-                nextProps.searchTerm !== this.props.searchTerm);
+                nextProps.highlights !== this.props.highlights);
     },
 
     render: function() {
-        var content = this.props.mxEvent.getContent();
-        var body = HtmlUtils.bodyToHtml(content, this.props.searchTerm);
+        var mxEvent = this.props.mxEvent;
+        var content = mxEvent.getContent();
+        var body = HtmlUtils.bodyToHtml(content, this.props.highlights);
 
-        return (
-            <span ref="content" className="mx_MTextTile mx_MessageTile_content">
-                { body }
-            </span>
-        );
+        switch (content.msgtype) {
+            case "m.emote":
+                var name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+                return (
+                    <span ref="content" className="mx_MEmoteTile mx_MessageTile_content">
+                        * { name } { body }
+                    </span>
+                );
+            case "m.notice":
+                return (
+                    <span ref="content" className="mx_MNoticeTile mx_MessageTile_content">
+                        { body }
+                    </span>
+                );
+            default: // including "m.text"
+                return (
+                    <span ref="content" className="mx_MTextTile mx_MessageTile_content">
+                        { body }
+                    </span>
+                );
+        }
     },
 });
 

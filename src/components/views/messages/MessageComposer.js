@@ -69,6 +69,7 @@ module.exports = React.createClass({
             original: null,
             index: 0
         };
+        var self = this;
         this.sentHistory = {
             // The list of typed messages. Index 0 is more recent
             data: [],
@@ -138,6 +139,8 @@ module.exports = React.createClass({
                     // restore the original text the user was typing.
                     this.element.value = this.originalText;
                 }
+
+                self.resizeInput();
                 return true;
             },
 
@@ -153,6 +156,7 @@ module.exports = React.createClass({
                 var text = window.sessionStorage.getItem("input_" + this.roomId);
                 if (text) {
                     this.element.value = text;
+                    self.resizeInput();
                 }
             }
         };
@@ -164,6 +168,7 @@ module.exports = React.createClass({
             this.refs.textarea,
             this.props.room.roomId
         );
+        this.resizeInput();
     },
 
     componentWillUnmount: function() {
@@ -235,7 +240,7 @@ module.exports = React.createClass({
         // temporarily crimp clientHeight to 0 to get an accurate scrollHeight value
         this.refs.textarea.style.height = "0px";
         var newHeight = this.refs.textarea.scrollHeight < 100 ? this.refs.textarea.scrollHeight : 100;
-        this.refs.textarea.style.height = newHeight + "px";
+        this.refs.textarea.style.height = Math.ceil(newHeight) + "px";
         if (this.props.roomView) {
             // kick gemini-scrollbar to re-layout
             this.props.roomView.forceUpdate();
@@ -307,23 +312,21 @@ module.exports = React.createClass({
 
         var isEmote = /^\/me /i.test(contentText);
         var sendMessagePromise;
+
         if (isEmote) {
-            sendMessagePromise = MatrixClientPeg.get().sendEmoteMessage(
-                this.props.room.roomId, contentText.substring(4)
-            );
+            contentText = contentText.substring(4);
+        }
+
+        var htmlText;
+        if (this.markdownEnabled && (htmlText = mdownToHtml(contentText)) !== contentText) {
+            sendMessagePromise = isEmote ? 
+                MatrixClientPeg.get().sendHtmlEmote(this.props.room.roomId, contentText, htmlText) :
+                MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, htmlText);
         }
         else {
-            var htmlText = mdownToHtml(contentText);
-            if (this.markdownEnabled && htmlText !== contentText) {
-                sendMessagePromise = MatrixClientPeg.get().sendHtmlMessage(
-                    this.props.room.roomId, contentText, htmlText
-                );
-            }
-            else {
-                sendMessagePromise = MatrixClientPeg.get().sendTextMessage(
-                    this.props.room.roomId, contentText
-                );
-            }
+            sendMessagePromise = isEmote ? 
+                MatrixClientPeg.get().sendEmoteMessage(this.props.room.roomId, contentText) :
+                MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);
         }
 
         sendMessagePromise.then(function() {

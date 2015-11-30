@@ -23,10 +23,6 @@ var sdk = require('../../../index');
 var dis = require('../../../dispatcher');
 var Modal = require("../../../Modal");
 
-// The Lato WOFF doesn't include sensible combining diacritics, so Chrome chokes
-// on rendering them. Revert to Arial when this happens, which on OSX works at least.
-var zalgo = /[\u0300-\u036f\u1ab0-\u1aff\u1dc0-\u1dff\u20d0-\u20ff\ufe20-\ufe2f]/;
-
 module.exports = React.createClass({
     displayName: 'MemberTile',
 
@@ -168,11 +164,6 @@ module.exports = React.createClass({
         // if (isMyUser) name += " (me)"; // this does nothing other than introduce line wrapping and pain
         //var leave = isMyUser ? <img className="mx_MemberTile_leave" src="img/delete.png" width="10" height="10" onClick={this.onLeaveClick}/> : null;
 
-        var nameClass = "mx_MemberTile_name";
-        if (zalgo.test(name)) {
-            nameClass += " mx_MemberTile_zalgo";
-        }
-
         var nameEl;
         if (this.state.hover) {
             var presence;
@@ -194,7 +185,7 @@ module.exports = React.createClass({
         }
         else {
             nameEl =
-                <div className={nameClass}>
+                <div className="mx_MemberTile_name">
                     { name }
                 </div>
         }
