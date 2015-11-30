@@ -77,7 +77,7 @@ var roomTileSource = {
                 MatrixClientPeg.get().deleteRoomTag(item.room.roomId, item.originalList.props.tagName).finally(function() {
                     //component.state.set({ spinner: component.state.spinner-- });
                 }).fail(function(err) {
-                    var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
                         title: "Failed to remove tag " + item.originalList.props.tagName + " from room",
                         description: err.toString()
@@ -96,7 +96,7 @@ var roomTileSource = {
                 MatrixClientPeg.get().setRoomTag(item.room.roomId, item.targetList.props.tagName, newOrder).finally(function() {
                     //component.state.set({ spinner: component.state.spinner-- });
                 }).fail(function(err) {
-                    var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
                         title: "Failed to add tag " + item.targetList.props.tagName + " to room",
                         description: err.toString()

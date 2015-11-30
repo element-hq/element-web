@@ -93,7 +93,7 @@ module.exports = React.createClass({
     },
 
     showHelpPopup: function() {
-        var ErrorDialog = sdk.getComponent('organisms.ErrorDialog');
+        var ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         Modal.createDialog(ErrorDialog, {
             title: 'Custom Server Options',
             description: <span>

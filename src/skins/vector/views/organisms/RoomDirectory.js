@@ -40,7 +40,7 @@ module.exports = React.createClass({
             if (err) {
                 self.setState({ loading: false });                
                 console.error("Failed to get publicRooms: %s", JSON.stringify(err));
-                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Failed to get public room list",
                     description: err.message
@@ -67,7 +67,7 @@ module.exports = React.createClass({
             });
         }, function(err) {
             console.error("Failed to join room: %s", JSON.stringify(err));
-            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to join room",
                 description: err.message

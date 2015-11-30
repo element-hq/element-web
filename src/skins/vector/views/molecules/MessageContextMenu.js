@@ -46,7 +46,7 @@ module.exports = React.createClass({
         ).done(function() {
             // message should disappear by itself
         }, function(e) {
-            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             // display error message stating you couldn't delete this.
             var code = e.errcode || e.statusCode;
             Modal.createDialog(ErrorDialog, {

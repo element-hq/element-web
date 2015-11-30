@@ -70,6 +70,8 @@ skin['voip.IncomingCallBox'] = require('matrix-react-sdk/lib/components/views/vo
 skin['voip.VideoView'] = require('matrix-react-sdk/lib/components/views/voip/VideoView');
 skin['voip.VideoFeed'] = require('matrix-react-sdk/lib/components/views/voip/VideoFeed');
 
+skin['dialogs.QuestionDialog'] = require('matrix-react-sdk/lib/components/views/dialogs/QuestionDialog');
+skin['dialogs.ErrorDialog'] = require('matrix-react-sdk/lib/components/views/dialogs/ErrorDialog');
 
 
 // Old style stuff
@@ -83,12 +85,10 @@ skin['molecules.RoomDropTarget'] = require('./views/molecules/RoomDropTarget');
 skin['molecules.RoomTooltip'] = require('./views/molecules/RoomTooltip');
 skin['molecules.SearchBar'] = require('./views/molecules/SearchBar');
 skin['molecules.SenderProfile'] = require('./views/molecules/SenderProfile');
-skin['organisms.ErrorDialog'] = require('./views/organisms/ErrorDialog');
 skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');
 skin['organisms.LogoutPrompt'] = require('./views/organisms/LogoutPrompt');
 skin['organisms.MemberList'] = require('./views/organisms/MemberList');
 skin['organisms.Notifier'] = require('./views/organisms/Notifier');
-skin['organisms.QuestionDialog'] = require('./views/organisms/QuestionDialog');
 skin['organisms.RightPanel'] = require('./views/organisms/RightPanel');
 skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');
 skin['organisms.RoomList'] = require('./views/organisms/RoomList');
