@@ -15,6 +15,7 @@ limitations under the License.
 */
 var React = require('react');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var Avatar = require('../../../Avatar');
 
 module.exports = React.createClass({
     displayName: 'RoomAvatar',
@@ -134,12 +135,7 @@ module.exports = React.createClass({
     },
 
     getFallbackAvatar: function() {
-        var images = [ '76cfa6', '50e2c2', 'f4c371' ];
-        var total = 0;
-        for (var i = 0; i < this.props.room.roomId.length; ++i) {
-            total += this.props.room.roomId.charCodeAt(i);
-        }
-        return 'img/' + images[total % images.length] + '.png';
+        return Avatar.defaultAvatarUrlForString(this.props.room.roomId);
     },
 
     render: function() {
@@ -159,9 +155,9 @@ module.exports = React.createClass({
             return (
                 <span>
                     <span className="mx_RoomAvatar_initial" aria-hidden="true"
-                          style={{ fontSize: (this.props.width * 0.75) + "px",
+                          style={{ fontSize: (this.props.width * 0.65) + "px",
                                    width: this.props.width + "px",
-                                   lineHeight: this.props.height*1.2 + "px" }}>{ initial }</span>
+                                   lineHeight: this.props.height + "px" }}>{ initial }</span>
                     <img className="mx_RoomAvatar" src={this.state.imageUrl}
                             onError={this.onError} style={style} />
                 </span>

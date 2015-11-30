@@ -26,7 +26,7 @@ var linkifyMatrix = require('../../../linkify-matrix');
 linkifyMatrix(linkify);
 
 module.exports = React.createClass({
-    displayName: 'TextualMessage',
+    displayName: 'TextualBody',
 
     componentDidMount: function() {
         linkifyElement(this.refs.content, linkifyMatrix.options);

@@ -24,7 +24,7 @@ var Modal = require('../../../Modal');
 var sdk = require('../../../index');
 
 module.exports = React.createClass({
-    displayName: 'MVideoMessage',
+    displayName: 'MVideoBody',
 
     thumbScale: function(fullWidth, fullHeight, thumbWidth, thumbHeight) {
         if (!fullWidth || !fullHeight) {

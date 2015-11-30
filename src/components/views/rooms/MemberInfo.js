@@ -34,6 +34,12 @@ var sdk = require('../../../index');
 module.exports = React.createClass({
     displayName: 'MemberInfo',
 
+    getDefaultProps: function() {
+        return {
+            onFinished: function() {}
+        };
+    },
+
     componentDidMount: function() {
         // work out the current state
         if (this.props.member) {

@@ -43,10 +43,7 @@ module.exports = React.createClass({
     },
 
     defaultAvatarUrl: function(member, width, height, resizeMethod) {
-        if (this.skinnedDefaultAvatarUrl) {
-            return this.skinnedDefaultAvatarUrl(member, width, height, resizeMethod);
-        }
-        return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADRJREFUeNrszQENADAIACB9QjNbxSKP4eagAFnTseHFErFYLBaLxWKxWCwWi8Vi8cX4CzAABSwCRWJw31gAAAAASUVORK5CYII=";
+        return Avatar.defaultAvatarUrlForString(member.userId);
     },
 
     onError: function(ev) {
@@ -60,22 +57,10 @@ module.exports = React.createClass({
     },
 
     _computeUrl: function() {
-        var url = this.props.member.getAvatarUrl(
-            MatrixClientPeg.get().getHomeserverUrl(),
-            this.props.width,
-            this.props.height,
-            this.props.resizeMethod,
-            false
-        );
-        if (!url) {
-            url = this.defaultAvatarUrl(
-                this.props.member,
-                this.props.width,
-                this.props.height,
-                this.props.resizeMethod
-            );
-        }
-        return url;
+        return Avatar.avatarUrlForMember(this.props.member,
+                                         this.props.width,
+                                         this.props.height,
+                                         this.props.resizeMethod);
     },
 
     refreshUrl: function() {
@@ -95,21 +80,6 @@ module.exports = React.createClass({
 
     ///////////////
 
-
-    avatarUrlForMember: function(member) {
-        return Avatar.avatarUrlForMember(
-            member,
-            this.props.member,
-            this.props.width,
-            this.props.height,
-            this.props.resizeMethod
-        );
-    },
-
-    skinnedDefaultAvatarUrl: function(member, width, height, resizeMethod) {
-        return Avatar.defaultAvatarUrlForString(member.userId);
-    },
-
     render: function() {
         // XXX: recalculates default avatar url constantly
         if (this.state.imageUrl === this.defaultAvatarUrl(this.props.member)) {
@@ -122,9 +92,9 @@ module.exports = React.createClass({
             return (
                 <span className="mx_MemberAvatar" {...this.props}>
                     <span className="mx_MemberAvatar_initial" aria-hidden="true"
-                          style={{ fontSize: (this.props.width * 0.75) + "px",
+                          style={{ fontSize: (this.props.width * 0.65) + "px",
                                    width: this.props.width + "px",
-                                   lineHeight: this.props.height*1.2 + "px" }}>{ initial }</span>
+                                   lineHeight: this.props.height + "px" }}>{ initial }</span>
                     <img className="mx_MemberAvatar_image" src={this.state.imageUrl} title={this.props.member.name}
                          onError={this.onError} width={this.props.width} height={this.props.height} />
                 </span>
