@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(u-WUoqrET9fUeobQW7jkRaCWcynf_cDxXwCLxiixG1c.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(k3k702ZOKiLJc3WVjuplzNqQynqKV_9Plp7mupa0S4g.ttf) format('truetype');
+}
