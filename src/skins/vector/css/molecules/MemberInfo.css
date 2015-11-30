@@ -37,8 +37,10 @@ limitations under the License.
 }
 
 .mx_MemberInfo_profileField {
-    opacity: 0.6;
+    font-color: #999999;    
     font-size: 14px;
+    position: relative;
+    background-color: #fff;
 }
 
 .mx_MemberInfo_buttons {

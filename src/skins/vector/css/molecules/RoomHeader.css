@@ -111,6 +111,7 @@ limitations under the License.
 
 .mx_RoomHeader_nametext {
     display: inline-block;
+    overflow-y: hidden;
 }
 
 .mx_RoomHeader_settingsButton {

@@ -45,6 +45,7 @@ limitations under the License.
     font-size: 14px;
     margin-bottom: 4px;
     display: block;
+    overflow-y: hidden;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
@@ -64,6 +65,7 @@ limitations under the License.
 .mx_MessageTile_content {
     display: block;
     margin-right: 100px;
+    overflow-y: hidden;
 }
 
 /* Various markdown overrides */
