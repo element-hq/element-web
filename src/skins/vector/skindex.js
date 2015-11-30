@@ -73,6 +73,7 @@ skin['voip.VideoFeed'] = require('matrix-react-sdk/lib/components/views/voip/Vid
 
 skin['dialogs.QuestionDialog'] = require('matrix-react-sdk/lib/components/views/dialogs/QuestionDialog');
 skin['dialogs.ErrorDialog'] = require('matrix-react-sdk/lib/components/views/dialogs/ErrorDialog');
+skin['dialogs.LogoutPrompt'] = require('matrix-react-sdk/lib/components/views/dialogs/LogoutPrompt');
 
 
 // Old style stuff
@@ -87,7 +88,6 @@ skin['molecules.RoomTooltip'] = require('./views/molecules/RoomTooltip');
 skin['molecules.SearchBar'] = require('./views/molecules/SearchBar');
 skin['molecules.SenderProfile'] = require('./views/molecules/SenderProfile');
 skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');
-skin['organisms.LogoutPrompt'] = require('./views/organisms/LogoutPrompt');
 skin['organisms.RightPanel'] = require('./views/organisms/RightPanel');
 skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');
 skin['organisms.RoomList'] = require('./views/organisms/RoomList');

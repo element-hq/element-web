@@ -53,7 +53,7 @@ module.exports = React.createClass({
     },
 
     onLogoutClicked: function(ev) {
-        var LogoutPrompt = sdk.getComponent('organisms.LogoutPrompt');
+        var LogoutPrompt = sdk.getComponent('dialogs.LogoutPrompt');
         this.logoutModal = Modal.createDialog(LogoutPrompt, {onCancel: this.onLogoutPromptCancel});
     },
 
