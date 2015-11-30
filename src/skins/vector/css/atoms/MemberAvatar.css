@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_MemberAvatar {
-    /* remove position: relative as it breaks on FF - we have to ensure the parent element to the memberavatar has a position: relative instead. */;
+    position: relative;
 }
 
 .mx_MemberAvatar_initial {
