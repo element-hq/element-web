@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 .mx_MemberAvatar {
-    position: relative; 
+    /* remove position: relative as it breaks on FF - we have to ensure the parent element to the memberavatar has a position: relative instead. */;
 }
 
 .mx_MemberAvatar_initial {
     position: absolute;
+    z-index: 1;
     color: #fff;
     text-align: center;
     speak: none;
@@ -28,4 +29,5 @@ limitations under the License.
 
 .mx_MemberAvatar_image {
     border-radius: 20px;
+    vertical-align: top;
 }
