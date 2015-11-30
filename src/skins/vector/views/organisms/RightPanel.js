@@ -94,7 +94,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var MemberList = sdk.getComponent('organisms.MemberList');
+        var MemberList = sdk.getComponent('rooms.MemberList');
         var buttonGroup;
         var panel;
 
