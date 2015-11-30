@@ -20,7 +20,7 @@ var React = require('react');
 var sdk = require('../../../index');
 
 module.exports = React.createClass({
-    displayName: 'Message',
+    displayName: 'MessageEvent',
 
     statics: {
         needsSenderProfile: function() {
@@ -29,15 +29,15 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var UnknownMessageTile = sdk.getComponent('messages.UnknownMessage');
+        var UnknownMessageTile = sdk.getComponent('messages.UnknownBody');
 
         var tileTypes = {
-            'm.text': sdk.getComponent('messages.TextualMessage'),
-            'm.notice': sdk.getComponent('messages.TextualMessage'),
-            'm.emote': sdk.getComponent('messages.TextualMessage'),
-            'm.image': sdk.getComponent('messages.MImageMessage'),
-            'm.file': sdk.getComponent('messages.MFileMessage'),
-            'm.video': sdk.getComponent('messages.MVideoMessage')
+            'm.text': sdk.getComponent('messages.TextualBody'),
+            'm.notice': sdk.getComponent('messages.TextualBody'),
+            'm.emote': sdk.getComponent('messages.TextualBody'),
+            'm.image': sdk.getComponent('messages.MImageBody'),
+            'm.file': sdk.getComponent('messages.MFileBody'),
+            'm.video': sdk.getComponent('messages.MVideoBody')
         };
 
         var content = this.props.mxEvent.getContent();
