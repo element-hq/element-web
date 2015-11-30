@@ -20,7 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
-var DateUtils = require('../../../DateUtils');
+var DateUtils = require('matrix-react-sdk/lib/DateUtils');
 var filesize = require('filesize');
 
 module.exports = React.createClass({

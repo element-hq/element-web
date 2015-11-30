@@ -76,8 +76,9 @@ skin['dialogs.LogoutPrompt'] = require('matrix-react-sdk/lib/components/views/di
 skin['structures.CreateRoom'] = require('matrix-react-sdk/lib/components/structures/CreateRoom');
 skin['structures.UserSettings'] = require('matrix-react-sdk/lib/components/structures/UserSettings');
 skin['structures.RoomView'] = require('matrix-react-sdk/lib/components/structures/RoomView');
+skin['structures.MatrixChat'] = require('matrix-react-sdk/lib/components/structures/MatrixChat');
 
-// Old style stuff
+// Old style stuff - this stuff only exists in VECTOR
 skin['molecules.BottomLeftMenu'] = require('./views/molecules/BottomLeftMenu');
 skin['molecules.BottomLeftMenuTile'] = require('./views/molecules/BottomLeftMenuTile');
 skin['molecules.DateSeparator'] = require('./views/molecules/DateSeparator');
@@ -94,6 +95,5 @@ skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');
 skin['organisms.RoomSubList'] = require('./views/organisms/RoomSubList');
 skin['organisms.ViewSource'] = require('./views/organisms/ViewSource');
 skin['pages.CompatibilityPage'] = require('./views/pages/CompatibilityPage');
-skin['pages.MatrixChat'] = require('./views/pages/MatrixChat');
 
 module.exports = skin;

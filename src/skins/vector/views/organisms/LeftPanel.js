@@ -22,7 +22,7 @@ var HTML5Backend = require('react-dnd-html5-backend');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
-var VectorConferenceHandler = require('../../../../modules/VectorConferenceHandler');
+var VectorConferenceHandler = require('../../../../VectorConferenceHandler');
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 
 var LeftPanel = React.createClass({
