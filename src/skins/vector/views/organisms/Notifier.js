@@ -21,9 +21,7 @@ var NotifierController = require('matrix-react-sdk/lib/controllers/organisms/Not
 var TextForEvent = require('matrix-react-sdk/lib/TextForEvent');
 var extend = require('matrix-react-sdk/lib/extend');
 var dis = require('matrix-react-sdk/lib/dispatcher');
-
-var Avatar = require('../../../../Avatar');
-
+var Avatar = require('matrix-react-sdk/lib/Avatar');
 
 var NotifierView = {
     notificationMessageForEvent: function(ev) {
