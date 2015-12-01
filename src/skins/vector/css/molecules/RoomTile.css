@@ -24,8 +24,8 @@ limitations under the License.
 .mx_RoomTile_avatar {
     display: table-cell;
     padding-right: 8px;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: 6px;
+    padding-bottom: 6px;
     padding-left: 18px;
     width: 24px;
     height: 24px;
