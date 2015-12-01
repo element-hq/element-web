@@ -44,7 +44,7 @@ var INITIAL_SIZE = 20;
 module.exports = React.createClass({
     displayName: 'RoomView',
     propTypes: {
-        ConferenceHandler: React.PropTypes.any // VectorConferenceHandler
+        ConferenceHandler: React.PropTypes.any
     },
 
     getInitialState: function() {

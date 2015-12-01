@@ -234,12 +234,11 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var LoginHeader = sdk.getComponent('login.LoginHeader');
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
-                    <div className="mx_Login_logo">
-                        <img src="img/logo.png" width="249" height="78" alt="vector"/>
-                    </div>
+                    <LoginHeader />
                     {this._getRegisterContentJsx()}
                 </div>
             </div>
