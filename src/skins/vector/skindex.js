@@ -24,6 +24,10 @@ limitations under the License.
 var skin = {};
 
 // Vector-specific stuff
+skin['login.LoginFooter'] = require('../../components/views/login/VectorLoginFooter');
+skin['login.LoginHeader'] = require('../../components/views/login/VectorLoginHeader');
+skin['login.CustomServerDialog'] = require("../../components/views/login/VectorCustomServerDialog");
+
 skin['elements.Spinner'] = require('../../components/views/elements/Spinner');
 skin['elements.ImageView'] = require('../../components/views/elements/ImageView');
 skin['messages.MessageTimestamp'] = require('../../components/views/messages/MessageTimestamp');
@@ -36,8 +40,6 @@ skin['rooms.RoomDropTarget'] = require('../../components/views/rooms/RoomDropTar
 skin['rooms.RoomTooltip'] = require('../../components/views/rooms/RoomTooltip');
 skin['rooms.SearchBar'] = require('../../components/views/rooms/SearchBar');
 skin['globals.MatrixToolbar'] = require('../../components/views/globals/MatrixToolbar');
-skin['login.LoginFooter'] = require('../../components/views/login/VectorLoginFooter');
-skin['login.LoginHeader'] = require('../../components/views/login/VectorLoginHeader');
 skin['structures.BottomLeftMenu'] = require('../../components/structures/BottomLeftMenu');
 skin['structures.LeftPanel'] = require('../../components/structures/LeftPanel');
 skin['structures.RightPanel'] = require('../../components/structures/RightPanel');
