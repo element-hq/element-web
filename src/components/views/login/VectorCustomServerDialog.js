@@ -20,8 +20,6 @@ module.exports = React.createClass({
     displayName: 'VectorCustomServerDialog',
 
     render: function() {
-        console.log("State: %s", JSON.stringify(this.state));
-        console.log("Props: %s", JSON.stringify(this.props));
         return (
             <div className="mx_ErrorDialog">
                 <div className="mx_ErrorDialogTitle">
