@@ -84,7 +84,7 @@ module.exports = React.createClass({
     },
 
     onEditClicked: function(e) {
-        var MessageContextMenu = sdk.getComponent('molecules.MessageContextMenu');
+        var MessageContextMenu = sdk.getComponent('rooms.MessageContextMenu');
         var buttonRect = e.target.getBoundingClientRect()
         var x = buttonRect.right;
         var y = buttonRect.top + (e.target.height / 2);
@@ -223,7 +223,7 @@ module.exports = React.createClass({
 
     render: function() {
         var MessageTimestamp = sdk.getComponent('messages.MessageTimestamp');
-        var SenderProfile = sdk.getComponent('molecules.SenderProfile');
+        var SenderProfile = sdk.getComponent('messages.SenderProfile');
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 
         var content = this.props.mxEvent.getContent();
