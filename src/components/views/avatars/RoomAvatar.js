@@ -155,9 +155,9 @@ module.exports = React.createClass({
             return (
                 <span>
                     <span className="mx_RoomAvatar_initial" aria-hidden="true"
-                          style={{ fontSize: (this.props.width * 0.75) + "px",
+                          style={{ fontSize: (this.props.width * 0.65) + "px",
                                    width: this.props.width + "px",
-                                   lineHeight: this.props.height*1.2 + "px" }}>{ initial }</span>
+                                   lineHeight: this.props.height + "px" }}>{ initial }</span>
                     <img className="mx_RoomAvatar" src={this.state.imageUrl}
                             onError={this.onError} style={style} />
                 </span>
