@@ -565,12 +565,12 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var LeftPanel = sdk.getComponent('organisms.LeftPanel');
+        var LeftPanel = sdk.getComponent('structures.LeftPanel');
         var RoomView = sdk.getComponent('structures.RoomView');
-        var RightPanel = sdk.getComponent('organisms.RightPanel');
+        var RightPanel = sdk.getComponent('structures.RightPanel');
         var UserSettings = sdk.getComponent('structures.UserSettings');
         var CreateRoom = sdk.getComponent('structures.CreateRoom');
-        var RoomDirectory = sdk.getComponent('organisms.RoomDirectory');
+        var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
 
         // needs to be before normal PageTypes as you are logged in technically

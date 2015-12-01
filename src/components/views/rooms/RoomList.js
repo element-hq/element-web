@@ -226,7 +226,7 @@ module.exports = React.createClass({
                            <img className="mx_RoomList_expandButton" onClick={ this.onShowClick } src="img/menu.png" width="20" alt=">"/> :
                            null;
 
-        var RoomSubList = sdk.getComponent('organisms.RoomSubList');
+        var RoomSubList = sdk.getComponent('structures.RoomSubList');
         var self = this;
 
         return (
