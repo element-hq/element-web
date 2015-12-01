@@ -91,7 +91,7 @@ limitations under the License.
 .mx_RoomHeader_simpleHeader {
     line-height: 83px;
     color: #454545;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -103,7 +103,7 @@ limitations under the License.
     height: 28px;
     color: #454545;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 22px;
     padding-left: 19px;
     padding-right: 16px;
     text-overflow: ellipsis;
@@ -141,7 +141,7 @@ limitations under the License.
     width: 260px;
     border: 1px solid #c7c7c7;
     font-weight: 300;
-    font-size: 14px;
+    font-size: 13px;
     padding: 9px;
 }
 

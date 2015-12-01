@@ -25,9 +25,10 @@ limitations under the License.
     padding-left: 18px;
     padding-right: 12px;
     margin-left: -73px;
-    margin-top: -4px;
+    margin-top: -2px;
     float: left;
     position: relative;
+    top: 0px;
 }
 
 .mx_EventTile_avatar img {
@@ -42,7 +43,7 @@ limitations under the License.
 .mx_EventTile .mx_SenderProfile {
     color: #454545;
     opacity: 0.5;
-    font-size: 14px;
+    font-size: 13px;
     margin-bottom: 4px;
     display: block;
     overflow-y: hidden;
@@ -50,7 +51,7 @@ limitations under the License.
 
 .mx_EventTile .mx_MessageTimestamp {
     color: #acacac;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .mx_EventTile_line {
@@ -74,6 +75,7 @@ limitations under the License.
     font-family: inherit ! important;
     white-space: normal ! important;
     line-height: inherit ! important;
+    font-size: 15px;
 }
 
 .mx_MessageTile_content .markdown-body h1,
@@ -111,7 +113,9 @@ limitations under the License.
     color: #ddd;
 }
 
-.mx_EventTile_highlight {
+.mx_EventTile_highlight,
+.mx_EventTile_highlight .markdown-body
+ {
     color: #FF0064;
 }
 
@@ -175,6 +179,6 @@ limitations under the License.
 
 .mx_EventTile_readAvatarRemainder {
     color: #acacac;
-    font-size: 12px;
+    font-size: 11px;
     position: absolute;
 }
