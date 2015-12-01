@@ -8,40 +8,13 @@ var args = require('optimist').argv;
 
 var header = args.h || args.header;
 
-if (args._.length == 0) {
-    console.log("No skin given");
-    process.exit(1);
-}
+var componentsDir = path.join('src', 'components');
 
-var skin = args._[0];
+var componentIndex = path.join('src', 'component-index.js');
 
-try {
-    fs.accessSync(path.join('src', 'skins', skin), fs.F_OK);
-} catch (e) {
-    console.log("Skin "+skin+" not found: "+e);
-    process.exit(1);
-}
+var packageJson = JSON.parse(fs.readFileSync('./package.json'));
 
-var skinfoFile = path.join('src', 'skins', skin, 'skinfo.json');
-
-try {
-    fs.accessSync(skinfoFile, fs.F_OK);
-} catch (e) {
-    console.log("Skin "+skin+" has no skinfo.json");
-    process.exit(1);
-}
-
-try {
-    fs.accessSync(path.join('src', 'skins', skin, 'views'), fs.F_OK);
-} catch (e) {
-    console.log("Skin "+skin+" has no views directory");
-    process.exit(1);
-}
-
-var skindex = path.join('src', 'skins', skin, 'skindex.js');
-var viewsDir = path.join('src', 'skins', skin, 'views');
-
-var strm = fs.createWriteStream(skindex);
+var strm = fs.createWriteStream(componentIndex);
 
 if (header) {
    strm.write(fs.readFileSync(header));
@@ -55,28 +28,38 @@ strm.write(" * so you'd just be trying to swim upstream like a salmon.\n");
 strm.write(" * You are not a salmon.\n");
 strm.write(" */\n\n");
 
-var mySkinfo = JSON.parse(fs.readFileSync(skinfoFile, "utf8"));
+if (packageJson['matrix-react-parent']) {
+    strm.write("module.exports.components = require('"+packageJson['matrix-react-parent']+"/lib/component-index').components;\n\n");
+} else {
+    strm.write("module.exports.components = {};\n");
+}
 
-strm.write("var skin = {};\n");
-strm.write('\n');
-
-var files = glob.sync('**/*.js', {cwd: viewsDir});
+var files = glob.sync('**/*.js', {cwd: componentsDir});
 for (var i = 0; i < files.length; ++i) {
     var file = files[i].replace('.js', '');
-    var module = (file.replace(/\//g, '.'));
 
-    strm.write("skin['"+module+"'] = require('./views/"+file+"');\n");
+    var moduleName = (file.replace(/\//g, '.'));
+
+    strm.write("module.exports.components['"+moduleName+"'] = require('./components/"+file+"');");
+    strm.write('\n');
     strm.uncork();
 }
 
-strm.write("\n");
+// Temporary Vector transition
+var vectorViewsPath = path.join('src', 'skins', 'vector', 'views');
+if (fs.existsSync(vectorViewsPath)) {
+    strm.write('\n');
+    strm.write('// Old, unported Vector views:\n');
+    var files = glob.sync('**/*.js', {cwd: vectorViewsPath});
+    for (var i = 0; i < files.length; ++i) {
+        var file = files[i].replace('.js', '');
 
-if (mySkinfo.baseSkin) {
-    strm.write("module.exports = require('"+mySkinfo.baseSkin+"');");
-    strm.write("var extend = require('matrix-react-sdk/lib/extend');\n");
-    strm.write("extend(module.exports, skin);\n");
-} else {
-    strm.write("module.exports = skin;");
+        var moduleName = (file.replace(/\//g, '.'));
+
+        strm.write("module.exports.components['"+moduleName+"'] = require('./skins/vector/views/"+file+"');");
+        strm.write('\n');
+        strm.uncork();
+    }
 }
 
 strm.end();
