@@ -87,13 +87,13 @@ limitations under the License.
 }
 
 .mx_ImageView_name {
-    font-size: 20px;
+    font-size: 18px;
     margin-bottom: 6px;
     pointer-events: all;
 }
 
 .mx_ImageView_metadata {
-    font-size: 16px;
+    font-size: 15px;
     opacity: 0.5;
     pointer-events: all;
 }
@@ -105,13 +105,13 @@ limitations under the License.
     margin-bottom: 6px;
     border-radius: 5px;
     background-color: #454545;
-    font-size: 16px;
+    font-size: 14px;
     padding: 9px;
     border: 1px solid #fff;
 }
 
 .mx_ImageView_size {
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .mx_ImageView_link {
@@ -121,7 +121,7 @@ limitations under the License.
 
 .mx_ImageView_button {
     pointer-events: all;
-    font-size: 16px;
+    font-size: 15px;
     opacity: 0.5;
     margin-top: 18px;
     cursor: pointer;
