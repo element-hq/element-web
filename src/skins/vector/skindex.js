@@ -37,7 +37,12 @@ skin['rooms.RoomTooltip'] = require('../../components/views/rooms/RoomTooltip');
 skin['rooms.SearchBar'] = require('../../components/views/rooms/SearchBar');
 skin['globals.MatrixToolbar'] = require('../../components/views/globals/MatrixToolbar');
 skin['structures.BottomLeftMenu'] = require('../../components/structures/BottomLeftMenu');
-
+skin['structures.LeftPanel'] = require('../../components/structures/LeftPanel');
+skin['structures.RightPanel'] = require('../../components/structures/RightPanel');
+skin['structures.RoomDirectory'] = require('../../components/structures/RoomDirectory');
+skin['structures.RoomSubList'] = require('../../components/structures/RoomSubList');
+skin['structures.ViewSource'] = require('../../components/structures/ViewSource');
+skin['structures.CompatibilityPage'] = require('../../components/structures/CompatibilityPage');
 
 // TODO: Fix this so matrix-react-sdk stuff is in react SDK skindex?
 skin['avatars.RoomAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/RoomAvatar');
@@ -86,14 +91,5 @@ skin['structures.CreateRoom'] = require('matrix-react-sdk/lib/components/structu
 skin['structures.UserSettings'] = require('matrix-react-sdk/lib/components/structures/UserSettings');
 skin['structures.RoomView'] = require('matrix-react-sdk/lib/components/structures/RoomView');
 skin['structures.MatrixChat'] = require('matrix-react-sdk/lib/components/structures/MatrixChat');
-
-
-// Old style stuff - this stuff only exists in VECTOR
-skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');
-skin['organisms.RightPanel'] = require('./views/organisms/RightPanel');
-skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');
-skin['organisms.RoomSubList'] = require('./views/organisms/RoomSubList');
-skin['organisms.ViewSource'] = require('./views/organisms/ViewSource');
-skin['pages.CompatibilityPage'] = require('./views/pages/CompatibilityPage');
 
 module.exports = skin;
