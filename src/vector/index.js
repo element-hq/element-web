@@ -153,7 +153,7 @@ function loadApp() {
     else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
-        var CompatibilityPage = require("../skins/vector/views/pages/CompatibilityPage");
+        var CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
         window.matrixChat = ReactDOM.render(
             <CompatibilityPage onAccept={function() {
                 validBrowser = true;

@@ -33,7 +33,7 @@ module.exports = React.createClass({
     },
 
     onViewSourceClick: function() {
-        var ViewSource = sdk.getComponent('organisms.ViewSource');
+        var ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createDialog(ViewSource, {
             mxEvent: this.props.mxEvent
         });

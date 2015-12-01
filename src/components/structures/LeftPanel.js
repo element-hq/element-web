@@ -22,7 +22,7 @@ var HTML5Backend = require('react-dnd-html5-backend');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
-var VectorConferenceHandler = require('../../../../VectorConferenceHandler');
+var VectorConferenceHandler = require('../../VectorConferenceHandler');
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 
 var LeftPanel = React.createClass({
@@ -86,7 +86,7 @@ var LeftPanel = React.createClass({
 
     render: function() {
         var RoomList = sdk.getComponent('rooms.RoomList');
-        var BottomLeftMenu = sdk.getComponent('molecules.BottomLeftMenu');
+        var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         var IncomingCallBox = sdk.getComponent('voip.IncomingCallBox');
 
         var collapseButton;
