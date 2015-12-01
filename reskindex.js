@@ -8,7 +8,7 @@ var args = require('optimist').argv;
 
 var header = args.h || args.header;
 
-var componenetsDir = path.join('src', 'components');
+var componentsDir = path.join('src', 'components');
 
 var componentIndex = path.join('src', 'component-index.js');
 
@@ -34,13 +34,13 @@ if (packageJson['matrix-react-parent']) {
     strm.write("module.exports.components = {};\n");
 }
 
-var files = glob.sync('**/*.js', {cwd: componenetsDir});
+var files = glob.sync('**/*.js', {cwd: componentsDir});
 for (var i = 0; i < files.length; ++i) {
     var file = files[i].replace('.js', '');
 
-    var module = (file.replace(/\//g, '.'));
+    var moduleName = (file.replace(/\//g, '.'));
 
-    strm.write("module.exports.components['"+module+"'] = require('./components/"+file+"');");
+    strm.write("module.exports.components['"+moduleName+"'] = require('./components/"+file+"');");
     strm.write('\n');
     strm.uncork();
 }
@@ -54,9 +54,9 @@ if (fs.existsSync(vectorViewsPath)) {
     for (var i = 0; i < files.length; ++i) {
         var file = files[i].replace('.js', '');
 
-        var module = (file.replace(/\//g, '.'));
+        var moduleName = (file.replace(/\//g, '.'));
 
-        strm.write("module.exports.components['"+module+"'] = require('./skins/vector/views/"+file+"');");
+        strm.write("module.exports.components['"+moduleName+"'] = require('./skins/vector/views/"+file+"');");
         strm.write('\n');
         strm.uncork();
     }
