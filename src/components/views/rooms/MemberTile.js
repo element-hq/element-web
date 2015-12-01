@@ -31,7 +31,7 @@ module.exports = React.createClass({
     },
 
     onLeaveClick: function() {
-        var QuestionDialog = sdk.getComponent("organisms.QuestionDialog");
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
         var roomId = this.props.member.roomId;
         Modal.createDialog(QuestionDialog, {

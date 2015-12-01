@@ -272,7 +272,7 @@ module.exports = React.createClass({
                 this.markdownEnabled = false;
             }
             else {
-                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Unknown command",
                     description: "Usage: /markdown on|off"
@@ -292,7 +292,7 @@ module.exports = React.createClass({
                     console.log("Command success.");
                 }, function(err) {
                     console.error("Command failure: %s", err);
-                    var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
                         title: "Server error",
                         description: err.message
@@ -301,7 +301,7 @@ module.exports = React.createClass({
             }
             else if (cmd.error) {
                 console.error(cmd.error);
-                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Command error",
                     description: cmd.error
