@@ -45,13 +45,13 @@ limitations under the License.
 }
 
 .mx_MemberList_invite {
-    font-family: 'Myriad Pro', Arial, Helvetica, Sans-Serif;
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
     border-radius: 3px;
     border: 1px solid #f0f0f0;
     padding: 9px;
     color: #454545;
     margin-left: 3px;
-    font-size: 16px;
+    font-size: 15px;
     margin-bottom: 8px;
     width: 180px;
 }
@@ -69,7 +69,7 @@ limitations under the License.
     text-transform: uppercase;
     color: #3d3b39;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
     padding-left: 3px;
     padding-right: 12px;
     margin-top: 8px;
