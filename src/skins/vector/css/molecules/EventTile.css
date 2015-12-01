@@ -113,7 +113,9 @@ limitations under the License.
     color: #ddd;
 }
 
-.mx_EventTile_highlight {
+.mx_EventTile_highlight,
+.mx_EventTile_highlight .markdown-body
+ {
     color: #FF0064;
 }
 
