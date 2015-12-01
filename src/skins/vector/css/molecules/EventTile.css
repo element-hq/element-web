@@ -75,6 +75,7 @@ limitations under the License.
     font-family: inherit ! important;
     white-space: normal ! important;
     line-height: inherit ! important;
+    color: inherit;
     font-size: 15px;
 }
 
