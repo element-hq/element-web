@@ -37,6 +37,7 @@ skin['rooms.RoomTooltip'] = require('../../components/views/rooms/RoomTooltip');
 skin['rooms.SearchBar'] = require('../../components/views/rooms/SearchBar');
 skin['globals.MatrixToolbar'] = require('../../components/views/globals/MatrixToolbar');
 skin['login.LoginFooter'] = require('../../components/views/login/VectorLoginFooter');
+skin['login.LoginHeader'] = require('../../components/views/login/VectorLoginHeader');
 skin['structures.BottomLeftMenu'] = require('../../components/structures/BottomLeftMenu');
 skin['structures.LeftPanel'] = require('../../components/structures/LeftPanel');
 skin['structures.RightPanel'] = require('../../components/structures/RightPanel');
