@@ -648,8 +648,8 @@ module.exports = React.createClass({
                     clientSecret={this.state.register_client_secret}
                     sessionId={this.state.register_session_id}
                     idSid={this.state.register_id_sid}
-                    hsUrl={config.default_hs_url}
-                    isUrl={config.default_is_url}
+                    hsUrl={this.props.config.default_hs_url}
+                    isUrl={this.props.config.default_is_url}
                     registrationUrl={this.props.registrationUrl}
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick} />
@@ -659,8 +659,8 @@ module.exports = React.createClass({
                 <Login
                     onLoggedIn={this.onLoggedIn}
                     onRegisterClick={this.onRegisterClick}
-                    homeserverUrl={config.default_hs_url}
-                    identityServerUrl={config.default_is_url} />
+                    homeserverUrl={this.props.config.default_hs_url}
+                    identityServerUrl={this.props.config.default_is_url} />
             );
         }
     }
