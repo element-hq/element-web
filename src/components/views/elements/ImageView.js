@@ -20,7 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
-var DateUtils = require('../../../DateUtils');
+var DateUtils = require('matrix-react-sdk/lib/DateUtils');
 var filesize = require('filesize');
 
 module.exports = React.createClass({
@@ -55,7 +55,7 @@ module.exports = React.createClass({
         ).done(function() {
             if (self.props.onFinished) self.props.onFinished();
         }, function(e) {
-            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             // display error message stating you couldn't delete this.
             var code = e.errcode || e.statusCode;
             Modal.createDialog(ErrorDialog, {

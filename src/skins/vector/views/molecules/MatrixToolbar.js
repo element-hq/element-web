@@ -17,19 +17,17 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-
+var Notifier = require("matrix-react-sdk/lib/Notifier");
 var sdk = require('matrix-react-sdk')
 
 module.exports = React.createClass({
     displayName: 'MatrixToolbar',
 
     hideToolbar: function() {
-        var Notifier = sdk.getComponent('organisms.Notifier');
         Notifier.setToolbarHidden(true);
     },
 
     onClick: function() {
-        var Notifier = sdk.getComponent('organisms.Notifier');
         Notifier.setEnabled(true);
     },
 
