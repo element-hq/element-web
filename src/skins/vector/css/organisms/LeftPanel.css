@@ -69,11 +69,12 @@ limitations under the License.
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu .mx_BottomLeftMenu_options {
-    margin-top: 17px;
+    margin-top: 15px;
     width: 100%;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu img {
     border-radius: 0px;
     background-color: transparent;
+    vertical-align: middle;
 }
