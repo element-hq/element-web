@@ -27,7 +27,16 @@ var skin = {};
 skin['elements.Spinner'] = require('../../components/views/elements/Spinner');
 skin['elements.ImageView'] = require('../../components/views/elements/ImageView');
 skin['messages.MessageTimestamp'] = require('../../components/views/messages/MessageTimestamp');
+skin['messages.DateSeparator'] = require('../../components/views/messages/DateSeparator');
+skin['messages.SenderProfile'] = require('../../components/views//messages/SenderProfile');
 skin['rooms.RoomTile'] = require('../../components/views/rooms/RoomDNDView');
+skin['rooms.BottomLeftMenuTile'] = require('../../components/views/rooms/BottomLeftMenuTile');
+skin['rooms.MessageContextMenu'] = require('../../components/views/rooms/MessageContextMenu');
+skin['rooms.RoomDropTarget'] = require('../../components/views/rooms/RoomDropTarget');
+skin['rooms.RoomTooltip'] = require('../../components/views/rooms/RoomTooltip');
+skin['rooms.SearchBar'] = require('../../components/views/rooms/SearchBar');
+skin['globals.MatrixToolbar'] = require('../../components/views/globals/MatrixToolbar');
+skin['structures.BottomLeftMenu'] = require('../../components/structures/BottomLeftMenu');
 
 
 // TODO: Fix this so matrix-react-sdk stuff is in react SDK skindex?
@@ -78,17 +87,8 @@ skin['structures.UserSettings'] = require('matrix-react-sdk/lib/components/struc
 skin['structures.RoomView'] = require('matrix-react-sdk/lib/components/structures/RoomView');
 skin['structures.MatrixChat'] = require('matrix-react-sdk/lib/components/structures/MatrixChat');
 
+
 // Old style stuff - this stuff only exists in VECTOR
-skin['molecules.BottomLeftMenu'] = require('./views/molecules/BottomLeftMenu');
-skin['molecules.BottomLeftMenuTile'] = require('./views/molecules/BottomLeftMenuTile');
-skin['molecules.DateSeparator'] = require('./views/molecules/DateSeparator');
-skin['molecules.MatrixToolbar'] = require('./views/molecules/MatrixToolbar');
-skin['molecules.MessageContextMenu'] = require('./views/molecules/MessageContextMenu');
-skin['molecules.RoomCreate'] = require('./views/molecules/RoomCreate');
-skin['molecules.RoomDropTarget'] = require('./views/molecules/RoomDropTarget');
-skin['molecules.RoomTooltip'] = require('./views/molecules/RoomTooltip');
-skin['molecules.SearchBar'] = require('./views/molecules/SearchBar');
-skin['molecules.SenderProfile'] = require('./views/molecules/SenderProfile');
 skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');
 skin['organisms.RightPanel'] = require('./views/organisms/RightPanel');
 skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');

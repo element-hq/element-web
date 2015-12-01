@@ -235,7 +235,7 @@ var RoomSubList = React.createClass({
 
     render: function() {
         var connectDropTarget = this.props.connectDropTarget;
-        var RoomDropTarget = sdk.getComponent('molecules.RoomDropTarget');
+        var RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
 
         var label = this.props.collapsed ? null : this.props.label;
 

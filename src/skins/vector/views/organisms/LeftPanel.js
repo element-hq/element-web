@@ -86,7 +86,7 @@ var LeftPanel = React.createClass({
 
     render: function() {
         var RoomList = sdk.getComponent('rooms.RoomList');
-        var BottomLeftMenu = sdk.getComponent('molecules.BottomLeftMenu');
+        var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         var IncomingCallBox = sdk.getComponent('voip.IncomingCallBox');
 
         var collapseButton;

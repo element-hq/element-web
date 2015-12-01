@@ -41,7 +41,7 @@ module.exports = React.createClass({
             label = <div className="mx_RoomTile_name">{ this.props.label }</div>;
         }
         else if (this.state.hover) {
-            var RoomTooltip = sdk.getComponent("molecules.RoomTooltip");
+            var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
             label = <RoomTooltip bottom={ true } label={ this.props.label }/>;
         }
 
