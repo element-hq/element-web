@@ -45,22 +45,4 @@ for (var i = 0; i < files.length; ++i) {
     strm.uncork();
 }
 
-// Temporary Vector transition
-var vectorViewsPath = path.join('src', 'skins', 'vector', 'views');
-if (fs.existsSync(vectorViewsPath)) {
-    strm.write('\n');
-    strm.write('// Old, unported Vector views:\n');
-    var files = glob.sync('**/*.js', {cwd: vectorViewsPath});
-    for (var i = 0; i < files.length; ++i) {
-        var file = files[i].replace('.js', '');
-
-        var moduleName = (file.replace(/\//g, '.'));
-
-        strm.write("module.exports.components['"+moduleName+"'] = require('./skins/vector/views/"+file+"');");
-        strm.write('\n');
-        strm.uncork();
-    }
-}
-
 strm.end();
-
