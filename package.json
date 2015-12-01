@@ -13,6 +13,7 @@
     "reskindex": "./reskindex.js"
   },
   "scripts": {
+    "reskindex": "reskindex -h header",
     "build": "babel src -d lib --source-maps",
     "start": "babel src -w -d lib --source-maps",
     "clean": "rimraf lib",
@@ -39,8 +40,9 @@
   "//depsbuglink": "https://github.com/webpack/webpack/issues/1472",
   "devDependencies": {
     "babel": "^5.8.23",
-    "rimraf": "^2.4.3",
     "json-loader": "^0.5.3",
+    "require-json": "0.0.1",
+    "rimraf": "^2.4.3",
     "source-map-loader": "^0.1.5"
   }
 }
