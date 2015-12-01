@@ -21,11 +21,15 @@ var React = require("react");
 var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
 sdk.loadSkin(require('../skins/vector/skindex'));
-sdk.loadModule(require('../modules/VectorConferenceHandler'));
+var VectorConferenceHandler = require('../VectorConferenceHandler');
+var configJson = require("../../config.json");
 
 var qs = require("querystring");
 
 var lastLocationHashSet = null;
+
+var CallHandler = require("matrix-react-sdk/lib/CallHandler");
+CallHandler.setConferenceHandler(VectorConferenceHandler);
 
 function checkBrowserFeatures(featureList) {
     if (!window.Modernizr) {
@@ -136,9 +140,13 @@ window.onload = function() {
 
 function loadApp() {
     if (validBrowser) {
-        var MatrixChat = sdk.getComponent('pages.MatrixChat');
+        var MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
-            <MatrixChat onNewScreen={onNewScreen} registrationUrl={makeRegistrationUrl()} />,
+            <MatrixChat
+                onNewScreen={onNewScreen}
+                registrationUrl={makeRegistrationUrl()}
+                ConferenceHandler={VectorConferenceHandler}
+                config={configJson} />,
             document.getElementById('matrixchat')
         );
     }

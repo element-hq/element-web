@@ -29,6 +29,7 @@ skin['elements.ImageView'] = require('../../components/views/elements/ImageView'
 skin['messages.MessageTimestamp'] = require('../../components/views/messages/MessageTimestamp');
 skin['rooms.RoomTile'] = require('../../components/views/rooms/RoomDNDView');
 
+
 // TODO: Fix this so matrix-react-sdk stuff is in react SDK skindex?
 skin['avatars.RoomAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/RoomAvatar');
 skin['avatars.MemberAvatar'] = require('matrix-react-sdk/lib/components/views/avatars/MemberAvatar');
@@ -54,8 +55,10 @@ skin['rooms.MemberInfo'] = require('matrix-react-sdk/lib/components/views/rooms/
 skin['rooms.RoomHeader'] = require('matrix-react-sdk/lib/components/views/rooms/RoomHeader');
 skin['rooms.RoomSettings'] = require('matrix-react-sdk/lib/components/views/rooms/RoomSettings');
 skin['rooms.MemberTile'] = require('matrix-react-sdk/lib/components/views/rooms/MemberTile');
+skin['rooms.MemberList'] = require('matrix-react-sdk/lib/components/views/rooms/MemberList');
 skin['rooms.MessageComposer'] = require('matrix-react-sdk/lib/components/views/rooms/MessageComposer');
 skin['rooms.EventTile'] = require('matrix-react-sdk/lib/components/views/rooms/EventTile');
+skin['rooms.RoomList'] = require('matrix-react-sdk/lib/components/views/rooms/RoomList');
 
 skin['create_room.CreateRoomButton'] = require('matrix-react-sdk/lib/components/views/create_room/CreateRoomButton');
 skin['create_room.Presets'] = require('matrix-react-sdk/lib/components/views/create_room/Presets');
@@ -66,9 +69,16 @@ skin['voip.IncomingCallBox'] = require('matrix-react-sdk/lib/components/views/vo
 skin['voip.VideoView'] = require('matrix-react-sdk/lib/components/views/voip/VideoView');
 skin['voip.VideoFeed'] = require('matrix-react-sdk/lib/components/views/voip/VideoFeed');
 
+skin['dialogs.QuestionDialog'] = require('matrix-react-sdk/lib/components/views/dialogs/QuestionDialog');
+skin['dialogs.ErrorDialog'] = require('matrix-react-sdk/lib/components/views/dialogs/ErrorDialog');
+skin['dialogs.LogoutPrompt'] = require('matrix-react-sdk/lib/components/views/dialogs/LogoutPrompt');
 
+skin['structures.CreateRoom'] = require('matrix-react-sdk/lib/components/structures/CreateRoom');
+skin['structures.UserSettings'] = require('matrix-react-sdk/lib/components/structures/UserSettings');
+skin['structures.RoomView'] = require('matrix-react-sdk/lib/components/structures/RoomView');
+skin['structures.MatrixChat'] = require('matrix-react-sdk/lib/components/structures/MatrixChat');
 
-// Old style stuff
+// Old style stuff - this stuff only exists in VECTOR
 skin['molecules.BottomLeftMenu'] = require('./views/molecules/BottomLeftMenu');
 skin['molecules.BottomLeftMenuTile'] = require('./views/molecules/BottomLeftMenuTile');
 skin['molecules.DateSeparator'] = require('./views/molecules/DateSeparator');
@@ -79,21 +89,11 @@ skin['molecules.RoomDropTarget'] = require('./views/molecules/RoomDropTarget');
 skin['molecules.RoomTooltip'] = require('./views/molecules/RoomTooltip');
 skin['molecules.SearchBar'] = require('./views/molecules/SearchBar');
 skin['molecules.SenderProfile'] = require('./views/molecules/SenderProfile');
-skin['organisms.CreateRoom'] = require('./views/organisms/CreateRoom');
-skin['organisms.ErrorDialog'] = require('./views/organisms/ErrorDialog');
 skin['organisms.LeftPanel'] = require('./views/organisms/LeftPanel');
-skin['organisms.LogoutPrompt'] = require('./views/organisms/LogoutPrompt');
-skin['organisms.MemberList'] = require('./views/organisms/MemberList');
-skin['organisms.Notifier'] = require('./views/organisms/Notifier');
-skin['organisms.QuestionDialog'] = require('./views/organisms/QuestionDialog');
 skin['organisms.RightPanel'] = require('./views/organisms/RightPanel');
 skin['organisms.RoomDirectory'] = require('./views/organisms/RoomDirectory');
-skin['organisms.RoomList'] = require('./views/organisms/RoomList');
 skin['organisms.RoomSubList'] = require('./views/organisms/RoomSubList');
-skin['organisms.RoomView'] = require('./views/organisms/RoomView');
-skin['organisms.UserSettings'] = require('./views/organisms/UserSettings');
 skin['organisms.ViewSource'] = require('./views/organisms/ViewSource');
 skin['pages.CompatibilityPage'] = require('./views/pages/CompatibilityPage');
-skin['pages.MatrixChat'] = require('./views/pages/MatrixChat');
 
 module.exports = skin;

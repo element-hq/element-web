@@ -22,7 +22,7 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var sdk = require('matrix-react-sdk')
 var Modal = require('matrix-react-sdk/lib/Modal');
-var Resend = require("../../../../Resend");
+var Resend = require("matrix-react-sdk/lib/Resend");
 
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
@@ -46,7 +46,7 @@ module.exports = React.createClass({
         ).done(function() {
             // message should disappear by itself
         }, function(e) {
-            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             // display error message stating you couldn't delete this.
             var code = e.errcode || e.statusCode;
             Modal.createDialog(ErrorDialog, {
