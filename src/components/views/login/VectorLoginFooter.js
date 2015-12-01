@@ -20,6 +20,9 @@ var React = require('react');
 
 module.exports = React.createClass({
     displayName: 'VectorLoginFooter',
+    statics: {
+        replaces: 'LoginFooter',
+    },
 
     render: function() {
         return (

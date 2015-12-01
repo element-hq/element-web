@@ -20,6 +20,9 @@ var React = require('react');
 
 module.exports = React.createClass({
     displayName: 'VectorLoginHeader',
+    statics: {
+        replaces: 'LoginHeader',
+    },
 
     render: function() {
         return (

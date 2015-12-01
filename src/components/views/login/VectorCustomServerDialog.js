@@ -18,6 +18,9 @@ var React = require("react");
 
 module.exports = React.createClass({
     displayName: 'VectorCustomServerDialog',
+    statics: {
+        replaces: 'CustomServerDialog',
+    },
 
     render: function() {
         return (
