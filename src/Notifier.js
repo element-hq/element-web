@@ -16,8 +16,10 @@ limitations under the License.
 
 'use strict';
 
-var MatrixClientPeg = require("../../MatrixClientPeg");
-var dis = require("../../dispatcher");
+var MatrixClientPeg = require("./MatrixClientPeg");
+var TextForEvent = require('./TextForEvent');
+var Avatar = require('./Avatar');
+var dis = require("./dispatcher");
 
 /*
  * Dispatches:
@@ -28,10 +30,76 @@ var dis = require("../../dispatcher");
  */
 
 module.exports = {
+
+    notificationMessageForEvent: function(ev) {
+        return TextForEvent.textForEvent(ev);
+    },
+
+    displayNotification: function(ev, room) {
+        if (!global.Notification || global.Notification.permission != 'granted') {
+            return;
+        }
+        if (global.document.hasFocus()) {
+            return;
+        }
+
+        var msg = this.notificationMessageForEvent(ev);
+        if (!msg) return;
+
+        var title;
+        if (!ev.sender ||  room.name == ev.sender.name) {
+            title = room.name;
+            // notificationMessageForEvent includes sender,
+            // but we already have the sender here
+            if (ev.getContent().body) msg = ev.getContent().body;
+        } else if (ev.getType() == 'm.room.member') {
+            // context is all in the message here, we don't need
+            // to display sender info
+            title = room.name;
+        } else if (ev.sender) {
+            title = ev.sender.name + " (" + room.name + ")";
+            // notificationMessageForEvent includes sender,
+            // but we've just out sender in the title
+            if (ev.getContent().body) msg = ev.getContent().body;
+        }
+
+        var avatarUrl = ev.sender ? Avatar.avatarUrlForMember(
+            ev.sender, 40, 40, 'crop'
+        ) : null;
+
+        var notification = new global.Notification(
+            title,
+            {
+                "body": msg,
+                "icon": avatarUrl,
+                "tag": "matrixreactsdk"
+            }
+        );
+
+        notification.onclick = function() {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: room.roomId
+            });
+            global.focus();
+        };
+        
+        /*var audioClip;
+        
+        if (audioNotification) {
+            audioClip = playAudio(audioNotification);
+        }*/
+
+        global.setTimeout(function() {
+            notification.close();
+        }, 5 * 1000);
+        
+    },
+
     start: function() {
         this.boundOnRoomTimeline = this.onRoomTimeline.bind(this);
         MatrixClientPeg.get().on('Room.timeline', this.boundOnRoomTimeline);
-        this.state = { 'toolbarHidden' : false };
+        this.toolbarHidden = false;
     },
 
     stop: function() {
@@ -96,7 +164,7 @@ module.exports = {
     },
 
     setToolbarHidden: function(hidden) {
-        this.state.toolbarHidden = hidden;
+        this.toolbarHidden = hidden;
         dis.dispatch({
             action: "notifier_enabled",
             value: this.isEnabled()
@@ -104,7 +172,7 @@ module.exports = {
     },
 
     isToolbarHidden: function() {
-        return this.state.toolbarHidden;
+        return this.toolbarHidden;
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {

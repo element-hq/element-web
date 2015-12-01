@@ -56,12 +56,12 @@ var Modal = require('./Modal');
 var sdk = require('./index');
 var Matrix = require("matrix-js-sdk");
 var dis = require("./dispatcher");
-var Modulator = require("./Modulator");
 
 global.mxCalls = {
     //room_id: MatrixCall
 };
 var calls = global.mxCalls;
+var ConferenceHandler = null;
 
 function play(audioId) {
     // TODO: Attach an invisible element for this instead
@@ -115,7 +115,7 @@ function _setCallListeners(call) {
             _setCallState(call, call.roomId, "busy");
             pause("ringbackAudio");
             play("busyAudio");
-            var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Call Timeout",
                 description: "The remote side failed to pick up."
@@ -173,7 +173,7 @@ function _onAction(payload) {
             console.error("Unknown conf call type: %s", payload.type);
         }
     }
-    var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
     switch (payload.action) {
         case 'place_call':
@@ -202,7 +202,7 @@ function _onAction(payload) {
 
             var members = room.getJoinedMembers();
             if (members.length <= 1) {
-                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     description: "You cannot place a call with yourself."
                 });
@@ -227,7 +227,7 @@ function _onAction(payload) {
             break;
         case 'place_conference_call':
             console.log("Place conference call in %s", payload.room_id);
-            if (!Modulator.hasConferenceHandler()) {
+            if (!ConferenceHandler) {
                 Modal.createDialog(ErrorDialog, {
                     description: "Conference calls are not supported in this client"
                 });
@@ -239,7 +239,6 @@ function _onAction(payload) {
                 });
             }
             else {
-                var ConferenceHandler = Modulator.getConferenceHandler();
                 ConferenceHandler.createNewMatrixCall(
                     MatrixClientPeg.get(), payload.room_id
                 ).done(function(call) {
@@ -295,8 +294,7 @@ var callHandler = {
         var call = module.exports.getCall(roomId);
         if (call) return call;
 
-        if (Modulator.hasConferenceHandler()) {
-            var ConferenceHandler = Modulator.getConferenceHandler();
+        if (ConferenceHandler) {
             call = ConferenceHandler.getConferenceCallForRoom(roomId);
         }
         if (call) return call;
@@ -317,6 +315,10 @@ var callHandler = {
             }
         }
         return null;
+    },
+
+    setConferenceHandler: function(confHandler) {
+        ConferenceHandler = confHandler;
     }
 };
 // Only things in here which actually need to be global are the

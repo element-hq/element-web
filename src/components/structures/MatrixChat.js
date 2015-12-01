@@ -13,20 +13,36 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+var React = require('react');
+var Matrix = require("matrix-js-sdk");
+var url = require('url');
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var Notifier = require("../../Notifier");
+var ContextualMenu = require("../../ContextualMenu");
 var RoomListSorter = require("../../RoomListSorter");
 var UserActivity = require("../../UserActivity");
 var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
 
+var Login = require("./login/Login");
+var Registration = require("./login/Registration");
+var PostRegistration = require("./login/PostRegistration");
+
 var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
 
-var url = require('url');
+module.exports = React.createClass({
+    displayName: 'MatrixChat',
 
-module.exports = {
+    propTypes: {
+        config: React.PropTypes.object.isRequired,
+        ConferenceHandler: React.PropTypes.any,
+        onNewScreen: React.PropTypes.func,
+        registrationUrl: React.PropTypes.string
+    },
+
     PageTypes: {
         RoomView: "room_view",
         UserSettings: "user_settings",
@@ -44,6 +60,7 @@ module.exports = {
             collapse_lhs: false,
             collapse_rhs: false,
             ready: false,
+            width: 10000
         };
         if (s.logged_in) {
             if (MatrixClientPeg.get().getRooms().length) {
@@ -79,12 +96,16 @@ module.exports = {
         if (this.onUserClick) {
             linkifyMatrix.onUserClick = this.onUserClick;
         }
+
+        window.addEventListener('resize', this.handleResize);
+        this.handleResize();
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
         window.removeEventListener("focus", this.onFocus);
+        window.removeEventListener('resize', this.handleResize);
     },
 
     componentDidUpdate: function() {
@@ -96,7 +117,6 @@ module.exports = {
 
     onAction: function(payload) {
         var roomIndexDelta = 1;
-        var Notifier = sdk.getComponent('organisms.Notifier');
 
         var self = this;
         switch (payload.action) {
@@ -317,7 +337,6 @@ module.exports = {
     },
 
     startMatrixClient: function() {
-        var Notifier = sdk.getComponent('organisms.Notifier');
         var cli = MatrixClientPeg.get();
         var self = this;
         cli.on('sync', function(state) {
@@ -468,5 +487,181 @@ module.exports = {
         if (this.props.onNewScreen) {
             this.props.onNewScreen(screen);
         }
+    },
+
+    onAliasClick: function(event, alias) {
+        event.preventDefault();
+        dis.dispatch({action: 'view_room_alias', room_alias: alias});
+    },
+
+    onUserClick: function(event, userId) {
+        event.preventDefault();
+        var MemberInfo = sdk.getComponent('rooms.MemberInfo');
+        var member = new Matrix.RoomMember(null, userId);
+        ContextualMenu.createMenu(MemberInfo, {
+            member: member,
+            right: window.innerWidth - event.pageX,
+            top: event.pageY
+        });
+    },
+
+    onLogoutClick: function(event) {
+        dis.dispatch({
+            action: 'logout'
+        });
+        event.stopPropagation();
+        event.preventDefault();
+    },
+
+    handleResize: function(e) {
+        var hideLhsThreshold = 1000;
+        var showLhsThreshold = 1000;
+        var hideRhsThreshold = 820;
+        var showRhsThreshold = 820;
+
+        if (this.state.width > hideLhsThreshold && window.innerWidth <= hideLhsThreshold) {
+            dis.dispatch({ action: 'hide_left_panel' });
+        }
+        if (this.state.width <= showLhsThreshold && window.innerWidth > showLhsThreshold) {
+            dis.dispatch({ action: 'show_left_panel' });
+        }
+        if (this.state.width > hideRhsThreshold && window.innerWidth <= hideRhsThreshold) {
+            dis.dispatch({ action: 'hide_right_panel' });
+        }
+        if (this.state.width <= showRhsThreshold && window.innerWidth > showRhsThreshold) {
+            dis.dispatch({ action: 'show_right_panel' });
+        }
+
+        this.setState({width: window.innerWidth});
+    },
+
+    onRoomCreated: function(room_id) {
+        dis.dispatch({
+            action: "view_room",
+            room_id: room_id,
+        });
+    },
+
+    onRegisterClick: function() {
+        this.showScreen("register");
+    },
+
+    onLoginClick: function() {
+        this.showScreen("login");
+    },
+
+    onRegistered: function(credentials) {
+        this.onLoggedIn(credentials);
+        // do post-registration stuff
+        this.showScreen("post_registration");
+    },
+
+    onFinishPostRegistration: function() {
+        // Don't confuse this with "PageType" which is the middle window to show
+        this.setState({
+            screen: undefined
+        });
+        this.showScreen("settings");
+    },
+
+    render: function() {
+        var LeftPanel = sdk.getComponent('organisms.LeftPanel');
+        var RoomView = sdk.getComponent('structures.RoomView');
+        var RightPanel = sdk.getComponent('organisms.RightPanel');
+        var UserSettings = sdk.getComponent('structures.UserSettings');
+        var CreateRoom = sdk.getComponent('structures.CreateRoom');
+        var RoomDirectory = sdk.getComponent('organisms.RoomDirectory');
+        var MatrixToolbar = sdk.getComponent('molecules.MatrixToolbar');
+
+        // needs to be before normal PageTypes as you are logged in technically
+        if (this.state.screen == 'post_registration') {
+            return (
+                <PostRegistration
+                    onComplete={this.onFinishPostRegistration} />
+            );
+        }
+        else if (this.state.logged_in && this.state.ready) {
+            var page_element;
+            var right_panel = "";
+
+            switch (this.state.page_type) {
+                case this.PageTypes.RoomView:
+                    page_element = (
+                        <RoomView
+                            roomId={this.state.currentRoom}
+                            key={this.state.currentRoom}
+                            ConferenceHandler={this.props.ConferenceHandler} />
+                    );
+                    right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} />
+                    break;
+                case this.PageTypes.UserSettings:
+                    page_element = <UserSettings />
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
+                    break;
+                case this.PageTypes.CreateRoom:
+                    page_element = <CreateRoom onRoomCreated={this.onRoomCreated}/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
+                    break;
+                case this.PageTypes.RoomDirectory:
+                    page_element = <RoomDirectory />
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
+                    break;
+            }
+
+            // TODO: Fix duplication here and do conditionals like we do above
+            if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
+                return (
+                        <div className="mx_MatrixChat_wrapper">
+                            <MatrixToolbar />
+                            <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
+                                <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
+                                <main className="mx_MatrixChat_middlePanel">
+                                    {page_element}
+                                </main>
+                                {right_panel}
+                            </div>
+                        </div>
+                );
+            }
+            else {
+                return (
+                        <div className="mx_MatrixChat">
+                            <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
+                            <main className="mx_MatrixChat_middlePanel">
+                                {page_element}
+                            </main>
+                            {right_panel}
+                        </div>
+                );
+            }
+        } else if (this.state.logged_in) {
+            var Spinner = sdk.getComponent('elements.Spinner');
+            return (
+                <div className="mx_MatrixChat_splash">
+                    <Spinner />
+                    <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>Logout</a>
+                </div>
+            );
+        } else if (this.state.screen == 'register') {
+            return (
+                <Registration
+                    clientSecret={this.state.register_client_secret}
+                    sessionId={this.state.register_session_id}
+                    idSid={this.state.register_id_sid}
+                    hsUrl={config.default_hs_url}
+                    isUrl={config.default_is_url}
+                    registrationUrl={this.props.registrationUrl}
+                    onLoggedIn={this.onRegistered}
+                    onLoginClick={this.onLoginClick} />
+            );
+        } else {
+            return (
+                <Login
+                    onLoggedIn={this.onLoggedIn}
+                    onRegisterClick={this.onRegisterClick}
+                    homeserverUrl={config.default_hs_url}
+                    identityServerUrl={config.default_is_url} />
+            );
+        }
     }
-};
+});
