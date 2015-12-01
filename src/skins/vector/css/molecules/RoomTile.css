@@ -25,12 +25,12 @@ limitations under the License.
     display: table-cell;
     padding-right: 8px;
     padding-top: 4px;
-    padding-bottom: 2px;
+    padding-bottom: 4px;
     padding-left: 18px;
-    vertical-align: middle;
     width: 24px;
     height: 24px;
     position: relative;
+    vertical-align: middle;
 }
 
 .mx_RoomTile_avatar img {
