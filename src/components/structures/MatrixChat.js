@@ -571,7 +571,7 @@ module.exports = React.createClass({
         var UserSettings = sdk.getComponent('structures.UserSettings');
         var CreateRoom = sdk.getComponent('structures.CreateRoom');
         var RoomDirectory = sdk.getComponent('organisms.RoomDirectory');
-        var MatrixToolbar = sdk.getComponent('molecules.MatrixToolbar');
+        var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
 
         // needs to be before normal PageTypes as you are logged in technically
         if (this.state.screen == 'post_registration') {

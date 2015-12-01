@@ -513,7 +513,7 @@ module.exports = React.createClass({
     },
 
     getEventTiles: function() {
-        var DateSeparator = sdk.getComponent('molecules.DateSeparator');
+        var DateSeparator = sdk.getComponent('messages.DateSeparator');
         var cli = MatrixClientPeg.get();
 
         var ret = [];
@@ -833,7 +833,7 @@ module.exports = React.createClass({
         var MessageComposer = sdk.getComponent('rooms.MessageComposer');
         var CallView = sdk.getComponent("voip.CallView");
         var RoomSettings = sdk.getComponent("rooms.RoomSettings");
-        var SearchBar = sdk.getComponent("molecules.SearchBar");
+        var SearchBar = sdk.getComponent("rooms.SearchBar");
 
         if (!this.state.room) {
             if (this.props.roomId) {

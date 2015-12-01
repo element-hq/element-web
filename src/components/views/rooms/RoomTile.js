@@ -60,17 +60,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        // if (this.props.clientOffset) {
-        //     //console.log("room " + this.props.room.roomId + " has dropTarget clientOffset " + this.props.clientOffset.x + "," + this.props.clientOffset.y);
-        // }
-
-/*
-        if (this.props.room._dragging) {
-            var RoomDropTarget = sdk.getComponent("molecules.RoomDropTarget");
-            return <RoomDropTarget placeholder={true}/>;
-        }
-*/        
-
         var myUserId = MatrixClientPeg.get().credentials.userId;
         var me = this.props.room.currentState.members[myUserId];
         var classes = classNames({
@@ -117,7 +106,7 @@ module.exports = React.createClass({
             label = <div className={ className }>{name}</div>;
         }
         else if (this.state.hover) {
-            var RoomTooltip = sdk.getComponent("molecules.RoomTooltip");
+            var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
             label = <RoomTooltip room={this.props.room}/>;
         }
 
