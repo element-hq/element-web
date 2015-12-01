@@ -65,7 +65,6 @@ class Skinner {
                 slot = name.substr(0, name.lastIndexOf('.') + 1) + comp.replaces.split('.').pop();
             }
         }
-        console.log(slot+" = "+name);
         this.components[slot] = comp;
     }
 
