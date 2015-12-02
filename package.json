@@ -29,6 +29,7 @@
     "filesize": "^3.1.2",
     "flux": "~2.0.3",
     "gfm.css": "^1.1.1",
+    "highlight.js": "^9.0.0",
     "linkifyjs": "^2.0.0-beta.4",
     "matrix-js-sdk": "https://github.com/matrix-org/matrix-js-sdk.git#develop",
     "matrix-react-sdk": "https://github.com/matrix-org/matrix-react-sdk.git#develop",
