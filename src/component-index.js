@@ -23,26 +23,24 @@ limitations under the License.
 
 module.exports.components = require('matrix-react-sdk/lib/component-index').components;
 
+module.exports.components['structures.BottomLeftMenu'] = require('./components/structures/BottomLeftMenu');
+module.exports.components['structures.CompatibilityPage'] = require('./components/structures/CompatibilityPage');
+module.exports.components['structures.LeftPanel'] = require('./components/structures/LeftPanel');
+module.exports.components['structures.RightPanel'] = require('./components/structures/RightPanel');
+module.exports.components['structures.RoomDirectory'] = require('./components/structures/RoomDirectory');
+module.exports.components['structures.RoomSubList'] = require('./components/structures/RoomSubList');
+module.exports.components['structures.ViewSource'] = require('./components/structures/ViewSource');
 module.exports.components['views.elements.ImageView'] = require('./components/views/elements/ImageView');
 module.exports.components['views.elements.Spinner'] = require('./components/views/elements/Spinner');
+module.exports.components['views.globals.MatrixToolbar'] = require('./components/views/globals/MatrixToolbar');
+module.exports.components['views.messages.DateSeparator'] = require('./components/views/messages/DateSeparator');
 module.exports.components['views.messages.MessageTimestamp'] = require('./components/views/messages/MessageTimestamp');
+module.exports.components['views.messages.SenderProfile'] = require('./components/views/messages/SenderProfile');
+module.exports.components['views.rooms.BottomLeftMenuTile'] = require('./components/views/rooms/BottomLeftMenuTile');
+module.exports.components['views.rooms.MessageContextMenu'] = require('./components/views/rooms/MessageContextMenu');
 module.exports.components['views.rooms.RoomDNDView'] = require('./components/views/rooms/RoomDNDView');
+module.exports.components['views.rooms.RoomDropTarget'] = require('./components/views/rooms/RoomDropTarget');
+module.exports.components['views.rooms.RoomTooltip'] = require('./components/views/rooms/RoomTooltip');
+module.exports.components['views.rooms.SearchBar'] = require('./components/views/rooms/SearchBar');
 
 // Old, unported Vector views:
-module.exports.components['molecules.BottomLeftMenu'] = require('./skins/vector/views/molecules/BottomLeftMenu');
-module.exports.components['molecules.BottomLeftMenuTile'] = require('./skins/vector/views/molecules/BottomLeftMenuTile');
-module.exports.components['molecules.DateSeparator'] = require('./skins/vector/views/molecules/DateSeparator');
-module.exports.components['molecules.MatrixToolbar'] = require('./skins/vector/views/molecules/MatrixToolbar');
-module.exports.components['molecules.MessageContextMenu'] = require('./skins/vector/views/molecules/MessageContextMenu');
-module.exports.components['molecules.RoomCreate'] = require('./skins/vector/views/molecules/RoomCreate');
-module.exports.components['molecules.RoomDropTarget'] = require('./skins/vector/views/molecules/RoomDropTarget');
-module.exports.components['molecules.RoomTooltip'] = require('./skins/vector/views/molecules/RoomTooltip');
-module.exports.components['molecules.SearchBar'] = require('./skins/vector/views/molecules/SearchBar');
-module.exports.components['molecules.SenderProfile'] = require('./skins/vector/views/molecules/SenderProfile');
-module.exports.components['organisms.LeftPanel'] = require('./skins/vector/views/organisms/LeftPanel');
-module.exports.components['organisms.Notifier'] = require('./skins/vector/views/organisms/Notifier');
-module.exports.components['organisms.RightPanel'] = require('./skins/vector/views/organisms/RightPanel');
-module.exports.components['organisms.RoomDirectory'] = require('./skins/vector/views/organisms/RoomDirectory');
-module.exports.components['organisms.RoomSubList'] = require('./skins/vector/views/organisms/RoomSubList');
-module.exports.components['organisms.ViewSource'] = require('./skins/vector/views/organisms/ViewSource');
-module.exports.components['pages.CompatibilityPage'] = require('./skins/vector/views/pages/CompatibilityPage');
