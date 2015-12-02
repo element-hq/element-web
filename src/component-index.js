@@ -33,6 +33,9 @@ module.exports.components['structures.ViewSource'] = require('./components/struc
 module.exports.components['views.elements.ImageView'] = require('./components/views/elements/ImageView');
 module.exports.components['views.elements.Spinner'] = require('./components/views/elements/Spinner');
 module.exports.components['views.globals.MatrixToolbar'] = require('./components/views/globals/MatrixToolbar');
+module.exports.components['views.login.CustomServerDialog'] = require('./components/views/login/VectorCustomServerDialog');
+module.exports.components['views.login.LoginFooter'] = require('./components/views/login/VectorLoginFooter');
+module.exports.components['views.login.LoginHeader'] = require('./components/views/login/VectorLoginHeader');
 module.exports.components['views.messages.DateSeparator'] = require('./components/views/messages/DateSeparator');
 module.exports.components['views.messages.MessageTimestamp'] = require('./components/views/messages/MessageTimestamp');
 module.exports.components['views.messages.SenderProfile'] = require('./components/views/messages/SenderProfile');
@@ -42,5 +45,3 @@ module.exports.components['views.rooms.RoomDNDView'] = require('./components/vie
 module.exports.components['views.rooms.RoomDropTarget'] = require('./components/views/rooms/RoomDropTarget');
 module.exports.components['views.rooms.RoomTooltip'] = require('./components/views/rooms/RoomTooltip');
 module.exports.components['views.rooms.SearchBar'] = require('./components/views/rooms/SearchBar');
-
-// Old, unported Vector views:
