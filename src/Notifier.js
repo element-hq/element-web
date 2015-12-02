@@ -29,7 +29,7 @@ var dis = require("./dispatcher");
  * }
  */
 
-module.exports = {
+var Notifier = {
 
     notificationMessageForEvent: function(ev) {
         return TextForEvent.textForEvent(ev);
@@ -190,3 +190,8 @@ module.exports = {
     }
 };
 
+if (!global.mxNotifier) {
+    global.mxNotifier = Notifier;
+}
+
+module.exports = global.mxNotifier;
