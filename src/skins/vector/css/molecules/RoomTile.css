@@ -112,6 +112,10 @@ limitations under the License.
     color: #76cfa6 ! important;
 }
 
+.mx_RoomTile_highlight .mx_RoomTile_name {
+    color: #ff0064 ! important;
+}
+
 .mx_RoomTile.mx_RoomTile_selected .mx_RoomTile_name {
     background: url('img/selected.png');
     background-repeat: no-repeat;
