@@ -18,6 +18,10 @@ limitations under the License.
 
 var q = require('q');
 var extend = require('./extend');
+var dis = require('./dispatcher');
+var MatrixClientPeg = require('./MatrixClientPeg');
+var sdk = require('./index');
+var Modal = require('./Modal');
 
 function infoForImageFile(imageFile) {
     var deferred = q.defer();
@@ -48,39 +52,102 @@ function infoForImageFile(imageFile) {
     return deferred.promise;
 }
 
-function sendContentToRoom(file, roomId, matrixClient) {
-    var content = {
-        body: file.name,
-        info: {
-            size: file.size,
+class ContentMessages {
+    constructor() {
+        this.inprogress = [];
+        this.nextId = 0;
+    }
+
+    sendContentToRoom(file, roomId, matrixClient) {
+        var content = {
+            body: file.name,
+            info: {
+                size: file.size,
+            }
+        };
+
+        // if we have a mime type for the file, add it to the message metadata
+        if (file.type) {
+            content.info.mimetype = file.type;
         }
-    };
 
-    // if we have a mime type for the file, add it to the message metadata
-    if (file.type) {
-        content.info.mimetype = file.type;
-    }
-
-    var def = q.defer();
-    if (file.type.indexOf('image/') == 0) {
-        content.msgtype = 'm.image';
-        infoForImageFile(file).then(function(imageInfo) {
-            extend(content.info, imageInfo);
+        var def = q.defer();
+        if (file.type.indexOf('image/') == 0) {
+            content.msgtype = 'm.image';
+            infoForImageFile(file).then(function(imageInfo) {
+                extend(content.info, imageInfo);
+                def.resolve();
+            });
+        } else {
+            content.msgtype = 'm.file';
             def.resolve();
+        }
+
+        var upload = {
+            fileName: file.name,
+            roomId: roomId,
+            total: 0,
+            loaded: 0
+        };
+        this.inprogress.push(upload);
+        dis.dispatch({action: 'upload_started'});
+
+        var self = this;
+        return def.promise.then(function() {
+            upload.promise = matrixClient.uploadContent(file);
+            return upload.promise;
+        }).progress(function(ev) {
+            if (ev) {
+                upload.total = ev.total;
+                upload.loaded = ev.loaded;
+                dis.dispatch({action: 'upload_progress', upload: upload});
+            }
+        }).then(function(url) {
+            dis.dispatch({action: 'upload_finished', upload: upload});
+            content.url = url;
+            return matrixClient.sendMessage(roomId, content);
+        }, function(err) {
+            dis.dispatch({action: 'upload_failed', upload: upload});
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Upload Failed",
+                description: "The file '"+upload.fileName+"' failed to upload."
+            });
+        }).finally(function() {
+            var inprogressKeys = Object.keys(self.inprogress);
+            for (var i = 0; i < self.inprogress.length; ++i) {
+                var k = inprogressKeys[i];
+                if (self.inprogress[k].promise === upload.promise) {
+                    self.inprogress.splice(k, 1);
+                    break;
+                }
+            }
         });
-    } else {
-        content.msgtype = 'm.file';
-        def.resolve();
     }
 
-    return def.promise.then(function() {
-        return matrixClient.uploadContent(file);
-    }).then(function(url) {
-        content.url = url;
-        return matrixClient.sendMessage(roomId, content);
-    });
+    getCurrentUploads() {
+        return this.inprogress;
+    }
+
+    cancelUpload(promise) {
+        var inprogressKeys = Object.keys(this.inprogress);
+        var upload;
+        for (var i = 0; i < this.inprogress.length; ++i) {
+            var k = inprogressKeys[i];
+            if (this.inprogress[k].promise === promise) {
+                upload = this.inprogress[k];
+                break;
+            }
+        }
+        if (upload) {
+            upload.canceled = true;
+            MatrixClientPeg.get().cancelUpload(upload.promise);
+        }
+    }
 }
 
-module.exports = {
-    sendContentToRoom: sendContentToRoom
-};
+if (global.mx_ContentMessage === undefined) {
+    global.mx_ContentMessage = new ContentMessages();
+}
+
+module.exports = global.mx_ContentMessage;

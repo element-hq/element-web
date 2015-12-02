@@ -26,7 +26,6 @@ var ReactDOM = require("react-dom");
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var q = require("q");
 var classNames = require("classnames");
-var filesize = require('filesize');
 var Matrix = require("matrix-js-sdk");
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
@@ -107,6 +106,9 @@ module.exports = React.createClass({
                 this.forceUpdate();
                 break;
             case 'notifier_enabled':
+            case 'upload_failed':
+            case 'upload_started':
+            case 'upload_finished':
                 this.forceUpdate();
                 break;
             case 'call_state':
@@ -408,30 +410,10 @@ module.exports = React.createClass({
     },
 
     uploadFile: function(file) {
-        this.setState({
-            upload: {
-                fileName: file.name,
-                uploadedBytes: 0,
-                totalBytes: file.size
-            }
-        });
         var self = this;
         ContentMessages.sendContentToRoom(
             file, this.props.roomId, MatrixClientPeg.get()
-        ).progress(function(ev) {
-            //console.log("Upload: "+ev.loaded+" / "+ev.total);
-            self.setState({
-                upload: {
-                    fileName: file.name,
-                    uploadedBytes: ev.loaded,
-                    totalBytes: ev.total
-                }
-            });
-        }).finally(function() {
-            self.setState({
-                upload: undefined
-            });
-        }).done(undefined, function(error) {
+        ).done(undefined, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to upload file",
@@ -894,28 +876,9 @@ module.exports = React.createClass({
             //     fileName: "testing_fooble.jpg",
             // }
 
-            if (this.state.upload) {
-                var innerProgressStyle = {
-                    width: ((this.state.upload.uploadedBytes / this.state.upload.totalBytes) * 100) + '%'
-                };
-                var uploadedSize = filesize(this.state.upload.uploadedBytes);
-                var totalSize = filesize(this.state.upload.totalBytes);
-                if (uploadedSize.replace(/^.* /,'') === totalSize.replace(/^.* /,'')) {
-                    uploadedSize = uploadedSize.replace(/ .*/, '');
-                }
-                statusBar = (
-                    <div className="mx_RoomView_uploadBar">
-                        <div className="mx_RoomView_uploadProgressOuter">
-                            <div className="mx_RoomView_uploadProgressInner" style={innerProgressStyle}></div>
-                        </div>
-                        <img className="mx_RoomView_uploadIcon" src="img/fileicon.png" width="17" height="22"/>
-                        <img className="mx_RoomView_uploadCancel" src="img/cancel.png" width="18" height="18"/>
-                        <div className="mx_RoomView_uploadBytes">
-                            { uploadedSize } / { totalSize }
-                        </div>
-                        <div className="mx_RoomView_uploadFilename">Uploading {this.state.upload.fileName}</div>
-                    </div>
-                );
+            if (ContentMessages.getCurrentUploads().length > 0) {
+                var UploadBar = sdk.getComponent('structures.UploadBar');
+                statusBar = <UploadBar room={this.state.room} />
             } else {
                 var typingString = this.getWhoIsTypingString();
                 //typingString = "Testing typing...";
