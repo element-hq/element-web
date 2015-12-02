@@ -33,7 +33,7 @@ function deviceId() {
     return id;
 }
 
-function createClient(hs_url, is_url, user_id, access_token) {
+function createClient(hs_url, is_url, user_id, access_token, isGuest) {
     var opts = {
         baseUrl: hs_url,
         idBaseUrl: is_url,
@@ -47,6 +47,9 @@ function createClient(hs_url, is_url, user_id, access_token) {
     }
 
     matrixClient = Matrix.createClient(opts);
+    if (isGuest) {
+        matrixClient.setGuest(true);
+    }
 }
 
 if (localStorage) {
@@ -54,8 +57,16 @@ if (localStorage) {
     var is_url = localStorage.getItem("mx_is_url") || 'https://matrix.org';
     var access_token = localStorage.getItem("mx_access_token");
     var user_id = localStorage.getItem("mx_user_id");
+    var isGuest = localStorage.getItem("mx_is_guest") || false;
+    if (isGuest) {
+        try {
+            isGuest = JSON.parse(isGuest);
+        }
+        catch (e) {} // ignore
+        isGuest = Boolean(isGuest); // in case of null, make it false.
+    }
     if (access_token && user_id && hs_url) {
-        createClient(hs_url, is_url, user_id, access_token);
+        createClient(hs_url, is_url, user_id, access_token, isGuest);
     }
 }
 
@@ -97,7 +108,7 @@ class MatrixClient {
         }
     }
 
-    replaceUsingAccessToken(hs_url, is_url, user_id, access_token) {
+    replaceUsingAccessToken(hs_url, is_url, user_id, access_token, isGuest) {
         if (localStorage) {
             try {
                 localStorage.clear();
@@ -105,13 +116,14 @@ class MatrixClient {
                 console.warn("Error using local storage");
             }
         }
-        createClient(hs_url, is_url, user_id, access_token);
+        createClient(hs_url, is_url, user_id, access_token, isGuest);
         if (localStorage) {
             try {
                 localStorage.setItem("mx_hs_url", hs_url);
                 localStorage.setItem("mx_is_url", is_url);
                 localStorage.setItem("mx_user_id", user_id);
                 localStorage.setItem("mx_access_token", access_token);
+                localStorage.setItem("mx_is_guest", isGuest);
             } catch (e) {
                 console.warn("Error using local storage: can't persist session!");
             }
