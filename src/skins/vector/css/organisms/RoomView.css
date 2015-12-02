@@ -166,6 +166,7 @@ limitations under the License.
     max-width: 960px;
     margin: auto;
     min-height: 36px;
+    overflow-y: hidden;
 }
 
 .mx_RoomView_statusAreaBox_line {
