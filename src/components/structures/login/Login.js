@@ -151,7 +151,7 @@ module.exports = React.createClass({displayName: 'Login',
                 return (
                     <div>
                     Sorry, this homeserver is using a login which is not
-                    recognised by Vector ({step})
+                    recognised ({step})
                     </div>
                 );
         }
@@ -159,14 +159,14 @@ module.exports = React.createClass({displayName: 'Login',
 
     render: function() {
         var Loader = sdk.getComponent("elements.Spinner");
+        var LoginHeader = sdk.getComponent("login.LoginHeader");
+        var LoginFooter = sdk.getComponent("login.LoginFooter");
         var loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
-                    <div className="mx_Login_logo">
-                        <img src="img/logo.png" width="249" height="78" alt="vector"/>
-                    </div>
+                    <LoginHeader />
                     <div>
                         <h2>Sign in</h2>
                         { this.componentForStep(this._getCurrentFlowStep()) }
@@ -185,12 +185,7 @@ module.exports = React.createClass({displayName: 'Login',
                             Create a new account
                         </a>
                         <br/>
-                        <div className="mx_Login_links">
-                            <a href="https://medium.com/@Vector">blog</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                            <a href="https://twitter.com/@VectorCo">twitter</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                            <a href="https://github.com/vector-im/vector-web">github</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                            <a href="https://matrix.org">powered by Matrix</a>
-                        </div>
+                        <LoginFooter />
                     </div>
                 </div>
             </div>

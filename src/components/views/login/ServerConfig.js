@@ -93,24 +93,8 @@ module.exports = React.createClass({
     },
 
     showHelpPopup: function() {
-        var ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
-        Modal.createDialog(ErrorDialog, {
-            title: 'Custom Server Options',
-            description: <span>
-                You can use the custom server options to log into other Matrix
-                servers by specifying a different Home server URL.
-                <br/>
-                This allows you to use Vector with an existing Matrix account on
-                a different Home server.
-                <br/>
-                <br/>
-                You can also set a custom Identity server but this will affect
-                people&#39;s ability to find you if you use a server in a group other
-                than the main Matrix.org group.
-            </span>,
-            button: "Dismiss",
-            focus: true
-        });
+        var CustomServerDialog = sdk.getComponent('login.CustomServerDialog');
+        Modal.createDialog(CustomServerDialog);
     },
 
     render: function() {

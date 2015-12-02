@@ -29,7 +29,7 @@ module.exports = React.createClass({
     displayName: 'RoomList',
 
     propTypes: {
-        ConferenceHandler: React.PropTypes.any, // e.g. VectorConferenceHandler
+        ConferenceHandler: React.PropTypes.any,
         collapsed: React.PropTypes.bool,
         currentRoom: React.PropTypes.string
     },

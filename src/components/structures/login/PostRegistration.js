@@ -58,12 +58,11 @@ module.exports = React.createClass({
     render: function() {
         var ChangeDisplayName = sdk.getComponent('settings.ChangeDisplayName');
         var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
+        var LoginHeader = sdk.getComponent('login.LoginHeader');
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
-                    <div className="mx_Login_logo">
-                        <img src="img/logo.png" width="249" height="78" alt="vector"/>
-                    </div>
+                    <LoginHeader />
                     <div className="mx_Login_profile">
                         Set a display name:
                         <ChangeDisplayName />
