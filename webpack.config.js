@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     module: {
@@ -9,6 +10,8 @@ module.exports = {
         loaders: [
             { test: /\.json$/, loader: "json" },
             { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
+            // css-raw-loader loads CSS but doesn't try to treat url()s as require()s
+            { test: /\.css$/, loader: ExtractTextPlugin.extract("css-raw-loader") },
         ]
     },
     output: {
@@ -37,6 +40,9 @@ module.exports = {
             'process.env': {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV)
             }
+        }),
+        new ExtractTextPlugin("bundle.css", {
+            allChunks: true
         })
     ],
     devtool: 'source-map'
