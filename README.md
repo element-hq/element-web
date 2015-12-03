@@ -57,3 +57,10 @@ Deployment
 Just run `npm run build` and then mount the `vector` directory on your webserver to
 actually serve up the app, which is entirely static content.
 
+Enabling encryption
+===================
+
+To build a version of vector with the (experimental) support for end-to-end
+encryption, install the olm module with `npm i
+https://matrix.org/packages/npm/olm/olm-0.1.0.tgz` before running `npm
+start`. The olm library will be detected and used if available.
