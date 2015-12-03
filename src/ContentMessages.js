@@ -108,11 +108,17 @@ class ContentMessages {
             return matrixClient.sendMessage(roomId, content);
         }, function(err) {
             dis.dispatch({action: 'upload_failed', upload: upload});
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Upload Failed",
-                description: "The file '"+upload.fileName+"' failed to upload."
-            });
+            if (!upload.canceled) {
+                var desc = "The file '"+upload.fileName+"' failed to upload.";
+                if (err.http_status == 413) {
+                    desc = "The file '"+upload.fileName+"' exceeds this home server's size limit for uploads";
+                }
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Upload Failed",
+                    description: desc
+                });
+            }
         }).finally(function() {
             var inprogressKeys = Object.keys(self.inprogress);
             for (var i = 0; i < self.inprogress.length; ++i) {
