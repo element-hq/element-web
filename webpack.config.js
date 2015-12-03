@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var olm_path = path.resolve('./node_modules/olm');
 
@@ -11,6 +12,8 @@ module.exports = {
         loaders: [
             { test: /\.json$/, loader: "json" },
             { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
+            // css-raw-loader loads CSS but doesn't try to treat url()s as require()s
+            { test: /\.css$/, loader: ExtractTextPlugin.extract("css-raw-loader") },
         ]
     },
     output: {
@@ -45,6 +48,10 @@ module.exports = {
             }
         }),
 
+        new ExtractTextPlugin("bundle.css", {
+            allChunks: true
+        }),
+
         // olm.js includes "require 'fs'", which is never
         // executed in the browser. Ignore it.
         new webpack.IgnorePlugin(/^fs$/, /node_modules\/olm$/)
@@ -57,7 +64,7 @@ module.exports = {
     var fs = require('fs');
     try {
         fs.lstatSync(olm_path);
-        console.log("Olm is installed; including it in bundle");
+        console.log("Olm is installed; including it in webpack bundle");
     } catch (e) {
         module.exports.plugins.push(
             new webpack.IgnorePlugin(/^olm$/)

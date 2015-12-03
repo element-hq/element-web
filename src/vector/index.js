@@ -16,11 +16,18 @@ limitations under the License.
 
 'use strict';
 
+// CSS requires: just putting them here for now as CSS is going to be
+// refactored soon anyway
+require('../../vector/components.css');
+require('gemini-scrollbar/gemini-scrollbar.css');
+require('gfm.css/gfm.css');
+require('highlight.js/styles/github.css');
+
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var React = require("react");
 var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
-sdk.loadSkin(require('../skins/vector/skindex'));
+sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
 var configJson = require("../../config.json");
 
