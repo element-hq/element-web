@@ -20,6 +20,7 @@ var React = require('react');
 var DropTarget = require('react-dnd').DropTarget;
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
+var UnreadStatus = require('matrix-react-sdk/lib/UnreadStatus');
 
 // turn this on for drop & drag console debugging galore
 var debug = false;
@@ -88,10 +89,20 @@ var RoomSubList = React.createClass({
     },
 
     tsOfNewestEvent: function(room) {
-        if (room.timeline.length) {
-            return room.timeline[room.timeline.length - 1].getTs();
+        for (var i = room.timeline.length - 1; i >= 0; --i) {
+            var ev = room.timeline[i];
+            // logic copied from RoomList.js for when we do/don't highlight
+            if (UnreadStatus.eventTriggersUnreadCount(ev)) {
+                return ev.getTs();
+            }
         }
-        else {
+
+        // we might only have events that don't trigger the unread indicator,
+        // in which case use the oldest event even if normally it wouldn't count.
+        // This is better than just assuming the last event was forever ago.
+        if (room.timeline.length) {
+            return room.timeline[0].getTs();
+        } else {
             return Number.MAX_SAFE_INTEGER;
         }
     },
