@@ -40,7 +40,8 @@ module.exports = React.createClass({
         config: React.PropTypes.object.isRequired,
         ConferenceHandler: React.PropTypes.any,
         onNewScreen: React.PropTypes.func,
-        registrationUrl: React.PropTypes.string
+        registrationUrl: React.PropTypes.string,
+        enableGuest: React.PropTypes.bool
     },
 
     PageTypes: {
@@ -75,15 +76,31 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
+        this._autoRegisterAsGuest = false;
+        if (this.props.enableGuest) {
+            if (!this.props.config || !this.props.config.default_hs_url) {
+                console.error("Cannot enable guest access: No supplied config prop for HS/IS URLs");
+            }
+            else {
+                this._autoRegisterAsGuest = true;
+            }
+        }
+
         this.dispatcherRef = dis.register(this.onAction);
         if (this.state.logged_in) {
+            // Don't auto-register as a guest. This applies if you refresh the page on a
+            // logged in client THEN hit the Sign Out button.
+            this._autoRegisterAsGuest = false;
             this.startMatrixClient();
         }
         this.focusComposer = false;
         document.addEventListener("keydown", this.onKeyDown);
         window.addEventListener("focus", this.onFocus);
+
         if (this.state.logged_in) {
             this.notifyNewScreen('');
+        } else if (this._autoRegisterAsGuest) {
+            this._registerAsGuest();
         } else {
             this.notifyNewScreen('login');
         }
@@ -115,6 +132,26 @@ module.exports = React.createClass({
         }
     },
 
+    _registerAsGuest: function() {
+        var self = this;
+        var config = this.props.config;
+        console.log("Doing guest login on %s", config.default_hs_url);
+        MatrixClientPeg.replaceUsingUrls(
+            config.default_hs_url, config.default_is_url
+        );
+        MatrixClientPeg.get().registerGuest().done(function(creds) {
+            console.log("Registered as guest: %s", JSON.stringify(creds));
+        }, function(err) {
+            console.error(err.data);
+            self._setAutoRegisterAsGuest(false);
+        });
+    },
+
+    _setAutoRegisterAsGuest: function(shouldAutoRegister) {
+        this._autoRegisterAsGuest = shouldAutoRegister;
+        this.forceUpdate();
+    },
+
     onAction: function(payload) {
         var roomIndexDelta = 1;
 
@@ -130,6 +167,7 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().stopClient();
                 MatrixClientPeg.get().removeAllListeners();
                 MatrixClientPeg.unset();
+
                 this.notifyNewScreen('login');
                 this.replaceState({
                     logged_in: false,
@@ -634,12 +672,20 @@ module.exports = React.createClass({
                         </div>
                 );
             }
-        } else if (this.state.logged_in) {
+        } else if (this.state.logged_in || (!this.state.logged_in && this._autoRegisterAsGuest)) {
             var Spinner = sdk.getComponent('elements.Spinner');
+            var logoutLink;
+            if (this.state.logged_in) {
+                logoutLink = (
+                    <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>
+                    Logout
+                    </a>
+                );
+            }
             return (
                 <div className="mx_MatrixChat_splash">
                     <Spinner />
-                    <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>Logout</a>
+                    {logoutLink}
                 </div>
             );
         } else if (this.state.screen == 'register') {

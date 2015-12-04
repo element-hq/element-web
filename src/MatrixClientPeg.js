@@ -117,7 +117,7 @@ class MatrixClient {
                 console.warn("Error using local storage");
             }
         }
-        this.guestAccess.markAsGuest(isGuest);
+        this.guestAccess.markAsGuest(Boolean(isGuest));
         createClient(hs_url, is_url, user_id, access_token, this.guestAccess);
         if (localStorage) {
             try {
