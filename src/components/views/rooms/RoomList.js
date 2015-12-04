@@ -109,17 +109,18 @@ module.exports = React.createClass({
             }
         }
 
+        var newState = this.getRoomLists();
         if (hl > 0) {
-            var newState = this.getRoomLists();
-
             // obviously this won't deep copy but this shouldn't be necessary
             var amap = this.state.activityMap;
             amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
 
             newState.activityMap = amap;
 
-            this.setState(newState);
         }
+        // still want to update the list even if the highlight status
+        // hasn't changed because the ordering may have
+        this.setState(newState);
     },
 
     onRoomName: function(room) {
