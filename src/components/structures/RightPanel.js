@@ -68,6 +68,11 @@ module.exports = React.createClass({
         if (this.state.phase == this.Phase.MemberList && member.roomId === this.props.roomId) {
             this.forceUpdate();
         }
+        else if (this.state.phase === this.Phase.MemberInfo && member.roomId === this.props.roomId &&
+                member.userId === this.state.member.userId) {
+            // refresh the member info (e.g. new power level)
+            this.forceUpdate();
+        }
     },
 
     onAction: function(payload) {
