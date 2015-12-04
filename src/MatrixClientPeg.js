@@ -18,6 +18,7 @@ limitations under the License.
 
 // A thing that holds your Matrix Client
 var Matrix = require("matrix-js-sdk");
+var GuestAccess = require("./GuestAccess");
 
 var matrixClient = null;
 
@@ -33,7 +34,7 @@ function deviceId() {
     return id;
 }
 
-function createClient(hs_url, is_url, user_id, access_token, isGuest) {
+function createClient(hs_url, is_url, user_id, access_token, guestAccess) {
     var opts = {
         baseUrl: hs_url,
         idBaseUrl: is_url,
@@ -47,8 +48,10 @@ function createClient(hs_url, is_url, user_id, access_token, isGuest) {
     }
 
     matrixClient = Matrix.createClient(opts);
-    if (isGuest) {
-        matrixClient.setGuest(true);
+    if (guestAccess) {
+        console.log("Guest: %s", guestAccess.isGuest());
+        matrixClient.setGuest(guestAccess.isGuest());
+        matrixClient.setGuestRooms(guestAccess.getRooms());
     }
 }
 
@@ -57,20 +60,18 @@ if (localStorage) {
     var is_url = localStorage.getItem("mx_is_url") || 'https://matrix.org';
     var access_token = localStorage.getItem("mx_access_token");
     var user_id = localStorage.getItem("mx_user_id");
-    var isGuest = localStorage.getItem("mx_is_guest") || false;
-    if (isGuest) {
-        try {
-            isGuest = JSON.parse(isGuest);
-        }
-        catch (e) {} // ignore
-        isGuest = Boolean(isGuest); // in case of null, make it false.
-    }
+    var guestAccess = new GuestAccess(localStorage);
     if (access_token && user_id && hs_url) {
-        createClient(hs_url, is_url, user_id, access_token, isGuest);
+        createClient(hs_url, is_url, user_id, access_token, guestAccess);
     }
 }
 
 class MatrixClient {
+
+    constructor(guestAccess) {
+        this.guestAccess = guestAccess;
+    }
+
     get() {
         return matrixClient;
     }
@@ -116,14 +117,14 @@ class MatrixClient {
                 console.warn("Error using local storage");
             }
         }
-        createClient(hs_url, is_url, user_id, access_token, isGuest);
+        this.guestAccess.markAsGuest(isGuest);
+        createClient(hs_url, is_url, user_id, access_token, this.guestAccess);
         if (localStorage) {
             try {
                 localStorage.setItem("mx_hs_url", hs_url);
                 localStorage.setItem("mx_is_url", is_url);
                 localStorage.setItem("mx_user_id", user_id);
                 localStorage.setItem("mx_access_token", access_token);
-                localStorage.setItem("mx_is_guest", isGuest);
             } catch (e) {
                 console.warn("Error using local storage: can't persist session!");
             }
@@ -134,6 +135,6 @@ class MatrixClient {
 }
 
 if (!global.mxMatrixClient) {
-    global.mxMatrixClient = new MatrixClient();
+    global.mxMatrixClient = new MatrixClient(new GuestAccess(localStorage));
 }
 module.exports = global.mxMatrixClient;

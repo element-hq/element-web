@@ -15,12 +15,14 @@ limitations under the License.
 */
 import {MatrixClientPeg} from "./MatrixClientPeg";
 const ROOM_ID_KEY = "matrix-guest-room-ids";
+const IS_GUEST_KEY = "matrix-is-guest";
 
 class GuestAccess {
 
     constructor(localStorage) {
         var existingRoomIds;
         try {
+            this._isGuest = localStorage.getItem(IS_GUEST_KEY) === "true";
             existingRoomIds = JSON.parse(
                 localStorage.getItem(ROOM_ID_KEY) // an array
             );
@@ -32,20 +34,38 @@ class GuestAccess {
 
     addRoom(roomId) {
         this.rooms.add(roomId);
+        this._saveAndSetRooms();
     }
 
     removeRoom(roomId) {
         this.rooms.delete(roomId);
+        this._saveAndSetRooms();
     }
 
     getRooms() {
         return this.rooms.entries();
     }
 
-    register() {
-        // nuke the rooms being watched from previous guest accesses if any.
-        localStorage.setItem(ROOM_ID_KEY, "[]");
-        return MatrixClientPeg.get().registerGuest();
+    isGuest() {
+        return this._isGuest;
+    }
+
+    markAsGuest(isGuest) {
+        try {
+            this.localStorage.setItem(IS_GUEST_KEY, JSON.stringify(isGuest));
+            // nuke the rooms being watched from previous guest accesses if any.
+            this.localStorage.setItem(ROOM_ID_KEY, "[]");
+        } catch (e) {} // ignore. If they don't do LS, they'll just get a new account.
+        this._isGuest = isGuest;
+        this.rooms = new Set();
+    }
+
+    _saveAndSetRooms() {
+        let rooms = this.getRooms();
+        MatrixClientPeg.get().setGuestRooms(rooms);
+        try {
+            this.localStorage.setItem(ROOM_ID_KEY, rooms);
+        } catch (e) {}
     }
 }
 
