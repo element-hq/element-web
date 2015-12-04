@@ -169,14 +169,6 @@ module.exports = React.createClass({
         if (this.state.joining) return;
         if (room.roomId != this.props.roomId) return;
 
-        var scrollNode = this._getScrollNode();
-        if (scrollNode) {
-            this.atBottom = (
-                scrollNode.scrollHeight - scrollNode.scrollTop <=
-                (scrollNode.clientHeight + 150) // 150?
-            );
-        }
-
         var currentUnread = this.state.numUnreadMessages;
         if (!toStartOfTimeline &&
                 (ev.getSender() !== MatrixClientPeg.get().credentials.userId)) {
