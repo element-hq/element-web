@@ -140,7 +140,14 @@ module.exports = React.createClass({
             config.default_hs_url, config.default_is_url
         );
         MatrixClientPeg.get().registerGuest().done(function(creds) {
-            console.log("Registered as guest: %s", JSON.stringify(creds));
+            console.log("Registered as guest: %s", creds.user_id);
+            self.onLoggedIn({
+                userId: creds.user_id,
+                accessToken: creds.access_token,
+                homeserverUrl: config.default_hs_url,
+                identityServerUrl: config.default_is_url,
+                guest: true
+            });
         }, function(err) {
             console.error(err.data);
             self._setAutoRegisterAsGuest(false);
@@ -361,10 +368,11 @@ module.exports = React.createClass({
     },
 
     onLoggedIn: function(credentials) {
-        console.log("onLoggedIn => %s", credentials.userId);
+        credentials.guest = Boolean(credentials.guest);
+        console.log("onLoggedIn => %s (guest=%s)", credentials.userId, credentials.guest);
         MatrixClientPeg.replaceUsingAccessToken(
             credentials.homeserverUrl, credentials.identityServerUrl,
-            credentials.userId, credentials.accessToken
+            credentials.userId, credentials.accessToken, credentials.guest
         );
         this.setState({
             screen: undefined,

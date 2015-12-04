@@ -43,7 +43,7 @@ class GuestAccess {
     }
 
     getRooms() {
-        return this.rooms.entries();
+        return Array.from(this.rooms.entries());
     }
 
     isGuest() {
