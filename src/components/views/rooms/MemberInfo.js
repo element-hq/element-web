@@ -43,9 +43,14 @@ module.exports = React.createClass({
     componentDidMount: function() {
         // work out the current state
         if (this.props.member) {
-            var memberState = this._calculateOpsPermissions();
+            var memberState = this._calculateOpsPermissions(this.props.member);
             this.setState(memberState);
         }
+    },
+
+    componentWillReceiveProps: function(newProps) {
+        var memberState = this._calculateOpsPermissions(newProps.member);
+        this.setState(memberState);
     },
 
     onKick: function() {
@@ -269,13 +274,13 @@ module.exports = React.createClass({
         }
     },
 
-    _calculateOpsPermissions: function() {
+    _calculateOpsPermissions: function(member) {
         var defaultPerms = {
             can: {},
             muted: false,
             modifyLevel: false
         };
-        var room = MatrixClientPeg.get().getRoom(this.props.member.roomId);
+        var room = MatrixClientPeg.get().getRoom(member.roomId);
         if (!room) {
             return defaultPerms;
         }
@@ -286,7 +291,7 @@ module.exports = React.createClass({
             return defaultPerms;
         }
         var me = room.getMember(MatrixClientPeg.get().credentials.userId);
-        var them = this.props.member;
+        var them = member;
         return {
             can: this._calculateCanPermissions(
                 me, them, powerLevels.getContent()
