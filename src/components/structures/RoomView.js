@@ -362,6 +362,7 @@ module.exports = React.createClass({
         if (this.refs.messagePanel) {
             var messageWrapperScroll = this._getScrollNode();
             var wasAtBottom = this.atBottom;
+            // + 1 here to avoid fractional pixel rounding errors
             this.atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight + 1;
             if (this.atBottom && !wasAtBottom) {
                 this.forceUpdate(); // remove unread msg count
