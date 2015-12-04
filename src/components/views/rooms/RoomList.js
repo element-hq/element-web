@@ -98,8 +98,7 @@ module.exports = React.createClass({
             room.roomId != this.props.selectedRoom &&
             ev.getSender() != MatrixClientPeg.get().credentials.userId)
         {
-            // don't mark rooms as unread for just member changes
-            if (ev.getType() != "m.room.member") {
+            if (UnreadStatus.eventTriggersUnreadCount(ev)) {
                 hl = 1;
             }
 
