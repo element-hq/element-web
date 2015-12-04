@@ -20,6 +20,7 @@ var ReactDOM = require("react-dom");
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var RoomListSorter = require("../../../RoomListSorter");
+var UnreadStatus = require('../../../UnreadStatus');
 var dis = require("../../../dispatcher");
 var sdk = require('../../../index');
 
