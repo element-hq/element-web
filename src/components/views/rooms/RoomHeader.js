@@ -207,7 +207,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
                         <div className="mx_RoomHeader_nametext">{ this.props.room.name }</div>
                         <div className="mx_RoomHeader_settingsButton">
-                            <img src="img/settings.png" width="12" height="12"/>
+                            <img src="img/settings.svg" width="12" height="12"/>
                         </div>
                     </div>
                 if (topic) topic_el = <div className="mx_RoomHeader_topic" title={topic.getContent().topic}>{ topic.getContent().topic }</div>;
@@ -258,7 +258,7 @@ module.exports = React.createClass({
                         { voice_button }
                         { zoom_button }
                         <div className="mx_RoomHeader_button">
-                            <img src="img/search.png" title="Search" alt="Search" width="21" height="19" onClick={this.props.onSearchClick}/>
+                            <img src="img/search.svg" title="Search" alt="Search" width="21" height="19" onClick={this.props.onSearchClick}/>
                         </div>
                     </div>
                 </div>

@@ -883,7 +883,7 @@ module.exports = React.createClass({
                 if (this.state.syncState === "ERROR") {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning2.png" width="30" height="30" alt="/!\ "/>
+                            <img src="img/warning.svg" width="24" height="23" alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Connectivity to the server has been lost.
@@ -898,7 +898,7 @@ module.exports = React.createClass({
                 else if (this.state.hasUnsentMessages) {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning2.png" width="30" height="30" alt="/!\ "/>
+                            <img src="img/warning.svg" width="24" height="23" alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Some of your messages have not been sent.
@@ -962,7 +962,7 @@ module.exports = React.createClass({
             if (this.state.draggingFile) {
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
                                     <div className="mx_RoomView_fileDropTargetLabel">
-                                        <img src="img/upload-big.png" width="43" height="57" alt="Drop File Here"/><br/>
+                                        <img src="img/upload.svg" width="43" height="57" alt="Drop File Here"/><br/>
                                         Drop File Here
                                     </div>
                                  </div>;
