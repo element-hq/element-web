@@ -59,6 +59,7 @@ module.exports = React.createClass({
 
     onCancelSendClick: function() {
         Resend.removeFromQueue(this.props.mxEvent);
+        if (this.props.onFinished) this.props.onFinished();
     },
 
     render: function() {
