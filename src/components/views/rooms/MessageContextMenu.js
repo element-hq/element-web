@@ -57,25 +57,41 @@ module.exports = React.createClass({
         if (this.props.onFinished) this.props.onFinished();
     },
 
+    onCancelSendClick: function() {
+        Resend.removeFromQueue(this.props.mxEvent);
+    },
+
     render: function() {
+        var eventStatus = this.props.mxEvent.status;
         var resendButton;
         var viewSourceButton;
         var redactButton;
+        var cancelButton;
 
-        if (this.props.mxEvent.status == 'not_sent') {
+        if (eventStatus === 'not_sent') {
             resendButton = (
                 <div className="mx_ContextualMenu_field" onClick={this.onResendClick}>
                     Resend
                 </div>
             );
         }
-        else {
+
+        if (!eventStatus) { // sent
             redactButton = (
                 <div className="mx_ContextualMenu_field" onClick={this.onRedactClick}>
                     Redact
                 </div>
             );
         }
+
+        if (eventStatus === "queued") {
+            cancelButton = (
+                <div className="mx_ContextualMenu_field" onClick={this.onCancelSendClick}>
+                    Cancel Sending
+                </div>
+            );
+        }
+
         viewSourceButton = (
             <div className="mx_ContextualMenu_field" onClick={this.onViewSourceClick}>
                 View Source
@@ -86,6 +102,7 @@ module.exports = React.createClass({
             <div>
                 {resendButton}
                 {redactButton}
+                {cancelButton}
                 {viewSourceButton}
             </div>
         );
