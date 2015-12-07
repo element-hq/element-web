@@ -21,4 +21,13 @@ module.exports = {
             event: event
         });
     },
+
+    removeFromQueue: function(event) {
+        MatrixClientPeg.get().getScheduler().removeEventFromQueue(event);
+        var room = MatrixClientPeg.get().getRoom(event.getRoomId());
+        if (!room) {
+            return;
+        }
+        room.removeEvents([event.getId()]);
+    }
 };

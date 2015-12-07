@@ -388,7 +388,9 @@ module.exports = React.createClass({
         Notifier.start();
         UserActivity.start();
         Presence.start();
-        cli.startClient();
+        cli.startClient({
+            pendingEventOrdering: "end"
+        });
     },
 
     onKeyDown: function(ev) {
