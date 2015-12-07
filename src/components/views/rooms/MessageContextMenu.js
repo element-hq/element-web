@@ -84,7 +84,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (eventStatus === "queued") {
+        if (eventStatus === "queued" || eventStatus === "not_sent") {
             cancelButton = (
                 <div className="mx_ContextualMenu_field" onClick={this.onCancelSendClick}>
                     Cancel Sending
