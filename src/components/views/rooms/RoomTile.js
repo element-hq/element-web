@@ -70,14 +70,9 @@ module.exports = React.createClass({
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
         });
 
-        var name;
-        if (this.props.isInvite) {
-            name = this.props.room.getMember(myUserId).events.member.getSender();
-        }
-        else {
-            // XXX: We should never display raw room IDs, but sometimes the room name js sdk gives is undefined
-            name = this.props.room.name || this.props.room.roomId;
-        }
+        // XXX: We should never display raw room IDs, but sometimes the
+        // room name js sdk gives is undefined (cannot repro this -- k)
+        var name = this.props.room.name || this.props.room.roomId;
 
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
         var badge;
