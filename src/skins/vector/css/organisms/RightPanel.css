@@ -75,7 +75,7 @@ limitations under the License.
     border-radius: 20px;
     padding-left: 4px;
     padding-right: 4px;
-    padding-top: 2px;
+    padding-top: 0px;
 }
 
 .mx_RightPanel .mx_MemberList,

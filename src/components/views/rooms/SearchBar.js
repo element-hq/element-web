@@ -49,7 +49,7 @@ module.exports = React.createClass({
                 <input ref="search_term" className="mx_SearchBar_input" type="text" autoFocus={true} placeholder="Search..." onKeyDown={this.onSearchChange}/>
                 <div className={"mx_SearchBar_button" + (this.state.scope !== 'Room' ? " mx_SearchBar_unselected" : "")} onClick={this.onThisRoomClick}>This Room</div>
                 <div className={"mx_SearchBar_button" + (this.state.scope !== 'All' ? " mx_SearchBar_unselected" : "")} onClick={this.onAllRoomsClick}>All Rooms</div>
-                <img className="mx_SearchBar_cancel" src="img/cancel-black.png" width="18" height="18" onClick={this.props.onCancelClick} />
+                <img className="mx_SearchBar_cancel" src="img/cancel.svg" width="18" height="18" onClick={this.props.onCancelClick} />
             </div>
         );
     }

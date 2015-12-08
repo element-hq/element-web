@@ -34,11 +34,11 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_MatrixToolbar">
-                <img className="mx_MatrixToolbar_warning" src="img/warning.png" width="28" height="28" alt="/!\"/>
+                <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
                 <div>
                     You are not receiving desktop notifications. <a className="mx_MatrixToolbar_link" onClick={ this.onClick }>Enable them now</a>
                 </div>
-                <div className="mx_MatrixToolbar_close"><img src="img/cancel-black2.png" width="23" height="23" onClick={ this.hideToolbar } /></div>
+                <div className="mx_MatrixToolbar_close"><img src="img/cancel.svg" width="18" height="18" onClick={ this.hideToolbar } /></div>
             </div>
         );
     }

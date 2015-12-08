@@ -127,12 +127,12 @@ module.exports = React.createClass({
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
                         <div className="mx_RightPanel_headerButton" onClick={ this.onMemberListButtonClick }>
-                            <img src="img/members.png" width="17" height="22" title="Members" alt="Members"/>
+                            <img src="img/members.svg" width="17" height="22" title="Members" alt="Members"/>
                             { membersBadge }
                             { membersHighlight }
                         </div>
                         <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton">
-                            <img src="img/files.png" width="17" height="22" title="Files" alt="Files"/>
+                            <img src="img/files.svg" width="17" height="22" title="Files" alt="Files"/>
                             { filesHighlight }
                         </div>
                     </div>;
