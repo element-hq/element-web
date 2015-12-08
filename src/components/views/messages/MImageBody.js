@@ -48,18 +48,23 @@ module.exports = React.createClass({
         }
     },
 
-    onClick: function(ev) {
+    onClick: function onClick(ev) {
         if (ev.button == 0 && !ev.metaKey) {
             ev.preventDefault();
             var content = this.props.mxEvent.getContent();
             var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(content.url);
             var ImageView = sdk.getComponent("elements.ImageView");
-            Modal.createDialog(ImageView, {
+            var params = {
                 src: httpUrl,
-                width: content.info.w,
-                height: content.info.h,
-                mxEvent: this.props.mxEvent,
-            }, "mx_Dialog_lightbox");
+                mxEvent: this.props.mxEvent
+            };
+
+            if (content.info) {
+                params.width = content.info.w;
+                params.height = content.info.h;
+            }
+
+            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
         }
     },
 
