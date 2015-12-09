@@ -105,6 +105,11 @@ module.exports = React.createClass({
             res = ", " + style.width + "x" + style.height + "px";
         }
 
+        var size;
+        if (this.props.mxEvent.getContent().info && this.props.mxEvent.getContent().info.size) {
+            size = filesize(this.props.mxEvent.getContent().info.size);
+        }
+
         return (
             <div className="mx_ImageView">
                 <div className="mx_ImageView_lhs">
@@ -124,7 +129,7 @@ module.exports = React.createClass({
                             <a className="mx_ImageView_link" href={ this.props.src } target="_blank">
                                 <div className="mx_ImageView_download">
                                         Download this file<br/>
-                                        <span className="mx_ImageView_size">({ filesize(this.props.mxEvent.getContent().info.size) }{ res })</span>
+                                         <span className="mx_ImageView_size">{ size } { res }</span>
                                 </div>
                             </a>
                             <div className="mx_ImageView_button">
