@@ -254,21 +254,15 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_user_settings':
-                this.setState({
-                    page_type: this.PageTypes.UserSettings,
-                });
+                this._setPage(this.PageTypes.UserSettings);
                 this.notifyNewScreen('settings');
                 break;
             case 'view_create_room':
-                this.setState({
-                    page_type: this.PageTypes.CreateRoom,
-                });
+                this._setPage(this.PageTypes.CreateRoom);
                 this.notifyNewScreen('new');
                 break;
             case 'view_room_directory':
-                this.setState({
-                    page_type: this.PageTypes.RoomDirectory,
-                });
+                this._setPage(this.PageTypes.RoomDirectory);
                 this.notifyNewScreen('directory');
                 break;
             case 'notifier_enabled':
@@ -295,6 +289,15 @@ module.exports = React.createClass({
                 });
                 break;
         }
+    },
+
+    _setPage: function(pageType) {
+        // record the scroll state if we're in a room view.
+        this._updateScrollMap();
+
+        this.setState({
+            page_type: this.PageTypes.RoomDirectory,
+        });
     },
 
     _viewRoom: function(roomId) {
