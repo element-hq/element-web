@@ -505,6 +505,15 @@ module.exports = React.createClass({
             var results = this.state.searchResults.search_categories.room_events.results;
             var roomIdGroups = this.state.searchResults.search_categories.room_events.groups.room_id;
 
+            if (Array.isArray(results)) {
+                // Old search API used to return results as a event_id -> result dict, but now
+                // returns a straightforward list.
+                results = results.reduce(function(prev, curr) {
+                    prev[curr.result.event_id] = curr;
+                    return prev;
+                }, {});
+            }
+
             Object.keys(roomIdGroups)
                   .sort(function(a, b) { roomIdGroups[a].order - roomIdGroups[b].order }) // WHY NOT RETURN AN ORDERED ARRAY?!?!?!
                   .forEach(function(roomId)
