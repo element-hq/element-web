@@ -802,14 +802,14 @@ module.exports = React.createClass({
     //
     // pixel_offset gives the number of pixels between the bottom of the event
     // and the bottom of the container.
-    scrollToEvent: function(event_id, pixel_offset) {
+    scrollToEvent: function(eventId, pixelOffset) {
         var scrollNode = this._getScrollNode();
         if (!scrollNode) return;
 
         var messageWrapper = this.refs.messagePanel;
         if (messageWrapper === undefined) return;
 
-        var idx = this._indexForEventId(event_id);
+        var idx = this._indexForEventId(eventId);
         if (idx === null) {
             // we don't seem to have this event in our timeline. Presumably
             // it's fallen out of scrollback. We ought to backfill until we
@@ -817,19 +817,26 @@ module.exports = React.createClass({
             // looking for a non-existent event.
             //
             // for now, just scroll to the top of the buffer.
-            console.log("Refusing to scroll to unknown event "+event_id);
+            console.log("Refusing to scroll to unknown event "+eventId);
             scrollNode.scrollTop = 0;
             return;
         }
 
         // we might need to roll back the messagecap (to generate tiles for
-        // older messages). Don't roll it back past the timeline we have, though.
+        // older messages). This just means telling getEventTiles to create
+        // tiles for events we already have in our timeline (we already know
+        // the event in question is in our timeline, so we shouldn't need to
+        // backfill).
+        //
+        // we actually wind back slightly further than the event in question,
+        // because we want the event to be at the *bottom* of the container.
+        // Don't roll it back past the timeline we have, though.
         var minCap = this.state.room.timeline.length - Math.min(idx - INITIAL_SIZE, 0);
         if (minCap > this.state.messageCap) {
             this.setState({messageCap: minCap});
         }
 
-        var node = this.eventNodes[event_id];
+        var node = this.eventNodes[eventId];
         if (node === null) {
             // getEventTiles should have sorted this out when we set the
             // messageCap, so this is weird.
@@ -839,7 +846,7 @@ module.exports = React.createClass({
 
         var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
         var boundingRect = node.getBoundingClientRect();
-        scrollNode.scrollTop += boundingRect.bottom + pixel_offset - wrapperRect.bottom;
+        scrollNode.scrollTop += boundingRect.bottom + pixelOffset - wrapperRect.bottom;
     },
 
     _calculateScrollState: function() {

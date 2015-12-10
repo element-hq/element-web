@@ -324,18 +324,18 @@ module.exports = React.createClass({
         this.setState(newState);
         if (this.scrollStateMap[roomId]) {
             var scrollState = this.scrollStateMap[roomId];
-            this.refs.roomview.restoreScrollState(scrollState);
+            this.refs.roomView.restoreScrollState(scrollState);
         }
     },
 
     // update scrollStateMap according to the current scroll state of the
     // room view.
     _updateScrollMap: function() {
-        if (!this.refs.roomview) {
+        if (!this.refs.roomView) {
             return;
         }
 
-        var roomview = this.refs.roomview;
+        var roomview = this.refs.roomView;
         var state = roomview.getScrollState();
         this.scrollStateMap[roomview.props.roomId] = state;
     },
@@ -608,7 +608,7 @@ module.exports = React.createClass({
                 case this.PageTypes.RoomView:
                     page_element = (
                         <RoomView
-                            ref="roomview"
+                            ref="roomView"
                             roomId={this.state.currentRoom}
                             key={this.state.currentRoom}
                             ConferenceHandler={this.props.ConferenceHandler} />
