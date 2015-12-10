@@ -288,9 +288,6 @@ module.exports = React.createClass({
             var heightGained = messageWrapperScroll.scrollHeight - this.oldScrollHeight;
             messageWrapperScroll.scrollTop += heightGained;
             this.oldScrollHeight = undefined;
-            if (!this.fillSpace()) {
-                this.setState({paginating: false});
-            }
         } else if (this.atBottom) {
             messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
             if (this.state.numUnreadMessages !== 0) {
@@ -299,36 +296,44 @@ module.exports = React.createClass({
         }
     },
 
+    _paginateCompleted: function() {
+        this.waiting_for_paginate = false;
+        this.setState({
+            room: MatrixClientPeg.get().getRoom(this.props.roomId)
+        });
+
+        // we might not have got enough results from the pagination
+        // request, so give fillSpace() a chance to set off another.
+        if (!this.fillSpace()) {
+            this.setState({paginating: false});
+        }
+    },
+
+    // check the scroll position, and if we need to, set off a pagination
+    // request.
+    //
+    // returns true if a pagination request was started (or is still in progress)
     fillSpace: function() {
         if (!this.refs.messagePanel) return;
         if (this.state.searchResults) return; // TODO: paginate search results
         var messageWrapperScroll = this._getScrollNode();
         if (messageWrapperScroll.scrollTop < messageWrapperScroll.clientHeight && this.state.room.oldState.paginationToken) {
-            this.setState({paginating: true});
+            // there's less than a screenful of messages left. Either wind back
+            // the message cap (if there are enough events in the timeline to
+            // do so), or fire off a pagination request.
 
             this.oldScrollHeight = messageWrapperScroll.scrollHeight;
 
             if (this.state.messageCap < this.state.room.timeline.length) {
-                this.waiting_for_paginate = false;
                 var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
-                this.setState({messageCap: cap, paginating: true});
+                this.setState({messageCap: cap});
             } else {
                 this.waiting_for_paginate = true;
                 var cap = this.state.messageCap + PAGINATE_SIZE;
                 this.setState({messageCap: cap, paginating: true});
-                var self = this;
-                MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(function() {
-                    self.waiting_for_paginate = false;
-                    if (self.isMounted()) {
-                        self.setState({
-                            room: MatrixClientPeg.get().getRoom(self.props.roomId)
-                        });
-                    }
-                    // wait and set paginating to false when the component updates
-                });
+                MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(this._paginateCompleted).done();
+                return true;
             }
-
-            return true;
         }
         return false;
     },
