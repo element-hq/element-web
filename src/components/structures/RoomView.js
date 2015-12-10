@@ -295,7 +295,6 @@ module.exports = React.createClass({
     },
 
     _paginateCompleted: function() {
-        this.waiting_for_paginate = false;
         this.setState({
             room: MatrixClientPeg.get().getRoom(this.props.roomId)
         });
@@ -326,7 +325,6 @@ module.exports = React.createClass({
                 var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
                 this.setState({messageCap: cap});
             } else {
-                this.waiting_for_paginate = true;
                 var cap = this.state.messageCap + PAGINATE_SIZE;
                 this.setState({messageCap: cap, paginating: true});
                 MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(this._paginateCompleted).done();
