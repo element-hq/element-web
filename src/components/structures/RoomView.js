@@ -803,6 +803,96 @@ module.exports = React.createClass({
         scrollNode.scrollTop = scrollNode.scrollHeight;
     },
 
+    // scroll the event view to put the given event at the bottom.
+    //
+    // pixel_offset gives the number of pixels between the bottom of the event
+    // and the bottom of the container.
+    scrollToEvent: function(event_id, pixel_offset) {
+        var scrollNode = this._getScrollNode();
+        if (!scrollNode) return;
+
+        var messageWrapper = this.refs.messagePanel;
+        if (messageWrapper === undefined) return;
+
+        var idx = this._indexForEventId(event_id);
+        if (idx === null) {
+            // we don't seem to have this event in our timeline. Presumably
+            // it's fallen out of scrollback. We ought to backfill until we
+            // find it, but we'd have to be careful we didn't backfill forever
+            // looking for a non-existent event.
+            //
+            // for now, just scroll to the top of the buffer.
+            console.log("Refusing to scroll to unknown event "+event_id);
+            scrollNode.scrollTop = 0;
+            return;
+        }
+
+        // we might need to roll back the messagecap (to generate tiles for
+        // older messages). Don't roll it back past the timeline we have, though.
+        var minCap = this.state.room.timeline.length - Math.min(idx - INITIAL_SIZE, 0);
+        if (minCap > this.state.messageCap) {
+            this.setState({messageCap: minCap});
+        }
+
+        var node = this.eventNodes[event_id];
+        if (node === null) {
+            // getEventTiles should have sorted this out when we set the
+            // messageCap, so this is weird.
+            console.error("No node for event, even after rolling back messageCap");
+            return;
+        }
+
+        var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
+        var boundingRect = node.getBoundingClientRect();
+        scrollNode.scrollTop += boundingRect.bottom + pixel_offset - wrapperRect.bottom;
+    },
+
+    // get the current scroll position of the room, so that it can be
+    // restored when we switch back to it
+    getScrollState: function() {
+        // we don't save the absolute scroll offset, because that
+        // would be affected by window width, zoom level, amount of scrollback,
+        // etc.
+        //
+        // instead we save the id of the last fully-visible event, and the
+        // number of pixels the window was scrolled below it - which will
+        // hopefully be near enough.
+        //
+        if (this.eventNodes === undefined) return null;
+
+        var messageWrapper = this.refs.messagePanel;
+        if (messageWrapper === undefined) return null;
+        var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
+
+        for (var i = this.state.room.timeline.length-1; i >= 0; --i) {
+            var ev = this.state.room.timeline[i];
+            var node = this.eventNodes[ev.getId()];
+            if (!node) continue;
+
+            var boundingRect = node.getBoundingClientRect();
+            if (boundingRect.bottom < wrapperRect.bottom) {
+                return {
+                    atBottom: this.atBottom,
+                    lastDisplayedEvent: ev.getId(),
+                    pixelOffset: wrapperRect.bottom - boundingRect.bottom,
+                }
+            }
+        }
+
+        // apparently the entire timeline is below the viewport. Give up.
+        return null;
+    },
+
+    restoreScrollState: function(scrollState) {
+        if(scrollState.atBottom) {
+            // we were at the bottom before. Ideally we'd scroll to the
+            // 'read-up-to' mark here.
+        } else if (scrollState.lastDisplayed) {
+            this.scrollToEvent(scrollState.lastDisplayedEvent,
+                               scrollState.pixelOffset);
+        }
+    },
+
     render: function() {
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         var MessageComposer = sdk.getComponent('rooms.MessageComposer');

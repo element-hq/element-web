@@ -80,6 +80,9 @@ module.exports = React.createClass({
             this.startMatrixClient();
         }
         this.focusComposer = false;
+        // scrollStateMap is a map from room id to the scroll state returned by
+        // RoomView.getScrollState()
+        this.scrollStateMap = {};
         document.addEventListener("keydown", this.onKeyDown);
         window.addEventListener("focus", this.onFocus);
         if (this.state.logged_in) {
@@ -202,27 +205,7 @@ module.exports = React.createClass({
 
                 break;
             case 'view_room':
-                this.focusComposer = true;
-                var newState = {
-                    currentRoom: payload.room_id,
-                    page_type: this.PageTypes.RoomView,
-                };
-                if (this.sdkReady) {
-                    // if the SDK is not ready yet, remember what room
-                    // we're supposed to be on but don't notify about
-                    // the new screen yet (we won't be showing it yet)
-                    // The normal case where this happens is navigating
-                    // to the room in the URL bar on page load.
-                    var presentedId = payload.room_id;
-                    var room = MatrixClientPeg.get().getRoom(payload.room_id);
-                    if (room) {
-                        var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
-                        if (theAlias) presentedId = theAlias;
-                    }
-                    this.notifyNewScreen('room/'+presentedId);
-                    newState.ready = true;
-                }
-                this.setState(newState);
+                this._viewRoom(payload.room_id);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -239,11 +222,7 @@ module.exports = React.createClass({
                 }
                 roomIndex = (roomIndex + roomIndexDelta) % allRooms.length;
                 if (roomIndex < 0) roomIndex = allRooms.length - 1;
-                this.focusComposer = true;
-                this.setState({
-                    currentRoom: allRooms[roomIndex].roomId
-                });
-                this.notifyNewScreen('room/'+allRooms[roomIndex].roomId);
+                this._viewRoom(allRooms[roomIndex].roomId);
                 break;
             case 'view_indexed_room':
                 var allRooms = RoomListSorter.mostRecentActivityFirst(
@@ -251,11 +230,7 @@ module.exports = React.createClass({
                 );
                 var roomIndex = payload.roomIndex;
                 if (allRooms[roomIndex]) {
-                    this.focusComposer = true;
-                    this.setState({
-                        currentRoom: allRooms[roomIndex].roomId
-                    });
-                    this.notifyNewScreen('room/'+allRooms[roomIndex].roomId);
+                    this._viewRoom(allRooms[roomIndex].roomId);
                 }
                 break;
             case 'view_room_alias':
@@ -320,6 +295,49 @@ module.exports = React.createClass({
                 });
                 break;
         }
+    },
+
+    _viewRoom: function(roomId) {
+        // before we switch room, record the scroll state of the current room
+        this._updateScrollMap();
+
+        this.focusComposer = true;
+        var newState = {
+            currentRoom: roomId,
+            page_type: this.PageTypes.RoomView,
+        };
+        if (this.sdkReady) {
+            // if the SDK is not ready yet, remember what room
+            // we're supposed to be on but don't notify about
+            // the new screen yet (we won't be showing it yet)
+            // The normal case where this happens is navigating
+            // to the room in the URL bar on page load.
+            var presentedId = roomId;
+            var room = MatrixClientPeg.get().getRoom(roomId);
+            if (room) {
+                var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
+                if (theAlias) presentedId = theAlias;
+            }
+            this.notifyNewScreen('room/'+presentedId);
+            newState.ready = true;
+        }
+        this.setState(newState);
+        if (this.scrollStateMap[roomId]) {
+            var scrollState = this.scrollStateMap[roomId];
+            this.refs.roomview.restoreScrollState(scrollState);
+        }
+    },
+
+    // update scrollStateMap according to the current scroll state of the
+    // room view.
+    _updateScrollMap: function() {
+        if (!this.refs.roomview) {
+            return;
+        }
+
+        var roomview = this.refs.roomview;
+        var state = roomview.getScrollState();
+        this.scrollStateMap[roomview.props.roomId] = state;
     },
 
     onLoggedIn: function(credentials) {
@@ -590,6 +608,7 @@ module.exports = React.createClass({
                 case this.PageTypes.RoomView:
                     page_element = (
                         <RoomView
+                            ref="roomview"
                             roomId={this.state.currentRoom}
                             key={this.state.currentRoom}
                             ConferenceHandler={this.props.ConferenceHandler} />
