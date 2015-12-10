@@ -275,8 +275,13 @@ module.exports = React.createClass({
     },
 
     componentDidUpdate: function() {
+        // after adding event tiles, we may need to tweak the scroll (either to
+        // keep at the bottom of the timeline, or to maintain the view after
+        // adding events to the top).
+
         if (!this.refs.messagePanel) return;
 
+        if (this.state.searchResults) return;
         var scrollState = this.savedScrollState;
         if (scrollState.atBottom) {
             this.scrollToBottom();
@@ -357,7 +362,7 @@ module.exports = React.createClass({
     },
 
     onMessageListScroll: function(ev) {
-        if (this.refs.messagePanel) {
+        if (this.refs.messagePanel && !this.state.searchResults) {
             this.savedScrollState = this._calculateScrollState();
             if (this.savedScrollState.atBottom && this.state.numUnreadMessages != 0) {
                 this.setState({numUnreadMessages: 0});
