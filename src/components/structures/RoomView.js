@@ -70,7 +70,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
-        this.atBottom = true;
+        this.savedScrollState = {atBottom: true};
     },
 
     componentWillUnmount: function() {
@@ -173,7 +173,7 @@ module.exports = React.createClass({
         if (!toStartOfTimeline &&
                 (ev.getSender() !== MatrixClientPeg.get().credentials.userId)) {
             // update unread count when scrolled up
-            if (this.atBottom) {
+            if (this.savedScrollState.atBottom) {
                 currentUnread = 0;
             }
             else {
@@ -181,15 +181,10 @@ module.exports = React.createClass({
             }
         }
 
-
         this.setState({
             room: MatrixClientPeg.get().getRoom(this.props.roomId),
             numUnreadMessages: currentUnread
         });
-
-        if (toStartOfTimeline && !this.state.paginating) {
-            this.fillSpace();
-        }
     },
 
     onRoomName: function(room) {
@@ -282,17 +277,15 @@ module.exports = React.createClass({
     componentDidUpdate: function() {
         if (!this.refs.messagePanel) return;
 
-        var messageWrapperScroll = this._getScrollNode();
-
-        if (this.state.paginating && !this.waiting_for_paginate) {
-            var heightGained = messageWrapperScroll.scrollHeight - this.oldScrollHeight;
-            messageWrapperScroll.scrollTop += heightGained;
-            this.oldScrollHeight = undefined;
-        } else if (this.atBottom) {
-            messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
+        var scrollState = this.savedScrollState;
+        if (scrollState.atBottom) {
+            this.scrollToBottom();
             if (this.state.numUnreadMessages !== 0) {
                 this.setState({numUnreadMessages: 0});
             }
+        } else if (scrollState.lastDisplayedEvent) {
+            this.scrollToEvent(scrollState.lastDisplayedEvent,
+                               scrollState.pixelOffset);
         }
     },
 
@@ -365,12 +358,9 @@ module.exports = React.createClass({
 
     onMessageListScroll: function(ev) {
         if (this.refs.messagePanel) {
-            var messageWrapperScroll = this._getScrollNode();
-            var wasAtBottom = this.atBottom;
-            // + 1 here to avoid fractional pixel rounding errors
-            this.atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight + 1;
-            if (this.atBottom && !wasAtBottom) {
-                this.forceUpdate(); // remove unread msg count
+            this.savedScrollState = this._calculateScrollState();
+            if (this.savedScrollState.atBottom && this.state.numUnreadMessages != 0) {
+                this.setState({numUnreadMessages: 0});
             }
         }
         if (!this.state.paginating) this.fillSpace();
@@ -852,9 +842,7 @@ module.exports = React.createClass({
         scrollNode.scrollTop += boundingRect.bottom + pixel_offset - wrapperRect.bottom;
     },
 
-    // get the current scroll position of the room, so that it can be
-    // restored when we switch back to it
-    getScrollState: function() {
+    _calculateScrollState: function() {
         // we don't save the absolute scroll offset, because that
         // would be affected by window width, zoom level, amount of scrollback,
         // etc.
@@ -869,6 +857,10 @@ module.exports = React.createClass({
         if (messageWrapper === undefined) return null;
         var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
 
+        var messageWrapperScroll = this._getScrollNode();
+        // + 1 here to avoid fractional pixel rounding errors
+        var atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight + 1;
+
         for (var i = this.state.room.timeline.length-1; i >= 0; --i) {
             var ev = this.state.room.timeline[i];
             var node = this.eventNodes[ev.getId()];
@@ -877,7 +869,7 @@ module.exports = React.createClass({
             var boundingRect = node.getBoundingClientRect();
             if (boundingRect.bottom < wrapperRect.bottom) {
                 return {
-                    atBottom: this.atBottom,
+                    atBottom: atBottom,
                     lastDisplayedEvent: ev.getId(),
                     pixelOffset: wrapperRect.bottom - boundingRect.bottom,
                 }
@@ -885,14 +877,20 @@ module.exports = React.createClass({
         }
 
         // apparently the entire timeline is below the viewport. Give up.
-        return null;
+        return { atBottom: true };
+    },
+
+    // get the current scroll position of the room, so that it can be
+    // restored when we switch back to it
+    getScrollState: function() {
+        return this.savedScrollState;
     },
 
     restoreScrollState: function(scrollState) {
         if(scrollState.atBottom) {
             // we were at the bottom before. Ideally we'd scroll to the
             // 'read-up-to' mark here.
-        } else if (scrollState.lastDisplayed) {
+        } else if (scrollState.lastDisplayedEvent) {
             this.scrollToEvent(scrollState.lastDisplayedEvent,
                                scrollState.pixelOffset);
         }
