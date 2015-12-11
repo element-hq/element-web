@@ -241,9 +241,13 @@ module.exports = React.createClass({
                         <div className="mx_RoomHeader_button mx_RoomHeader_video" onClick={activeCall && activeCall.type === "video" ? this.onMuteVideoClick : this.onVideoClick}>
                             <img src="img/video.png" title="Video call" alt="Video call" width="32" height="32" style={{ 'marginTop': '-8px' }}/>
                         </div>;
+                var img = "img/voip.png";
+                if (activeCall.isMicrophoneMuted()) {
+                        img = "img/voip-mute.png";
+                }
                 voice_button =
                         <div className="mx_RoomHeader_button mx_RoomHeader_voice" onClick={activeCall ? this.onMuteAudioClick : this.onVoiceClick}>
-                            <img src="img/voip.png" title="VoIP call" alt="VoIP call" width="32" height="32" style={{ 'marginTop': '-8px' }}/>
+                            <img src={img} title="VoIP call" alt="VoIP call" width="32" height="32" style={{ 'marginTop': '-8px' }}/>
                         </div>;
             }
 
