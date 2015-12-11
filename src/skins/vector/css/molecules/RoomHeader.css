@@ -23,6 +23,9 @@ limitations under the License.
     height: 83px;
     border-bottom: 1px solid #eeeeee;
 
+    -webkit-align-items: center;
+    align-items: center;
+    
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -31,8 +34,6 @@ limitations under the License.
 }
 
 .mx_RoomHeader_leftRow {
-    height: 48px;
-    margin-top: 18px;
     margin-left: -2px;
 
     -webkit-box-ordinal-group: 1;
@@ -72,7 +73,7 @@ limitations under the License.
     }
 
 .mx_RoomHeader_rightRow {
-    margin-top: 32px;
+    margin-top: 4px;
     background-color: #fff;
 
     -webkit-box-ordinal-group: 3;
@@ -159,7 +160,7 @@ limitations under the License.
 .mx_RoomHeader_topic {
     vertical-align: bottom;
     float: left;
-    max-height: 38px;
+    max-height: 42px;
     color: #454545;
     font-weight: 300;  
     padding-left: 19px;
