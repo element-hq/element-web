@@ -479,8 +479,10 @@ module.exports = React.createClass({
 
             self.setState({
                 highlights: highlights,
+                searchTerm: term,
                 searchResults: data,
                 searchScope: scope,
+                searchCount: data.search_categories.room_events.count,
             });
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -505,10 +507,14 @@ module.exports = React.createClass({
         var EventTile = sdk.getComponent('rooms.EventTile');
         var self = this;
 
-        if (this.state.searchResults &&
-            this.state.searchResults.search_categories.room_events.results &&
-            this.state.searchResults.search_categories.room_events.groups)
+        if (this.state.searchResults)
         {
+            if (!this.state.searchResults.search_categories.room_events.results ||
+                !this.state.searchResults.search_categories.room_events.groups)
+            {
+                return ret;
+            }
+
             // XXX: this dance is foul, due to the results API not directly returning sorted results
             var results = this.state.searchResults.search_categories.room_events.results;
             var roomIdGroups = this.state.searchResults.search_categories.room_events.groups.room_id;
@@ -985,15 +991,22 @@ module.exports = React.createClass({
                                  </div>;
             }
 
-            var messageComposer;
+            var messageComposer, searchInfo;
             if (!this.state.searchResults) {
                 messageComposer =
                     <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} />
             }
+            else {
+                searchInfo = {
+                    searchTerm : this.state.searchTerm,
+                    searchScope : this.state.searchScope,
+                    searchCount : this.state.searchCount,
+                }
+            }
 
             return (
                 <div className="mx_RoomView">
-                    <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
+                    <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
                         onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} />
                     <div className="mx_RoomView_auxPanel">
                         <CallView room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>

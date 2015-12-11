@@ -187,6 +187,7 @@ module.exports = React.createClass({
             }
 
             var name = null;
+            var searchStatus = null;
             var topic_el = null;
             var cancel_button = null;
             var save_button = null;
@@ -203,9 +204,16 @@ module.exports = React.createClass({
                 save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save Changes</div>
             } else {
                 // <EditableText label={this.props.room.name} initialValue={actual_name} placeHolder="Name" onValueChanged={this.onNameChange} />
+
+                var searchStatus;
+                if (this.props.searchInfo && this.props.searchInfo.searchTerm) {
+                    searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;({ this.props.searchInfo.searchCount } results)</div>;
+                }
+
                 name =
                     <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
                         <div className="mx_RoomHeader_nametext">{ this.props.room.name }</div>
+                        { searchStatus }
                         <div className="mx_RoomHeader_settingsButton">
                             <img src="img/settings.svg" width="12" height="12"/>
                         </div>
