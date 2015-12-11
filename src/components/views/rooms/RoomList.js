@@ -103,8 +103,11 @@ module.exports = React.createClass({
                 hl = 1;
             }
 
+            var me = room.getMember(MatrixClientPeg.get().credentials.userId);
             var actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
-            if (actions && actions.tweaks && actions.tweaks.highlight) {
+            if ((actions && actions.tweaks && actions.tweaks.highlight) ||
+                (me && me.membership == "invite"))
+            {
                 hl = 2;
             }
         }
@@ -153,17 +156,17 @@ module.exports = React.createClass({
         var self = this;
         var s = { lists: {} };
 
-        s.lists["m.invite"] = [];
+        s.lists["im.vector.fake.invite"] = [];
         s.lists["m.favourite"] = [];
-        s.lists["m.recent"] = [];
+        s.lists["im.vector.fake.recent"] = [];
         s.lists["m.lowpriority"] = [];
-        s.lists["m.archived"] = [];
+        s.lists["im.vector.fake.archived"] = [];
 
         MatrixClientPeg.get().getRooms().forEach(function(room) {
             var me = room.getMember(MatrixClientPeg.get().credentials.userId);
 
             if (me && me.membership == "invite") {
-                s.lists["m.invite"].push(room);
+                s.lists["im.vector.fake.invite"].push(room);
             }
             else {
                 var shouldShowRoom =  (
@@ -196,13 +199,13 @@ module.exports = React.createClass({
                         }
                     }
                     else {
-                        s.lists["m.recent"].push(room); 
+                        s.lists["im.vector.fake.recent"].push(room); 
                     }
                 }
             }
         });
 
-        //console.log("calculated new roomLists; m.recent = " + s.lists["m.recent"]);
+        //console.log("calculated new roomLists; im.vector.fake.recent = " + s.lists["im.vector.fake.recent"]);
 
         // we actually apply the sorting to this when receiving the prop in RoomSubLists.
 
@@ -235,7 +238,7 @@ module.exports = React.createClass({
             <div className="mx_RoomList">
                 { expandButton }
 
-                <RoomSubList list={ self.state.lists['m.invite'] }
+                <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
                              label="Invites"
                              editable={ false }
                              order="recent"
@@ -253,7 +256,7 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              collapsed={ self.props.collapsed } />
 
-                <RoomSubList list={ self.state.lists['m.recent'] }
+                <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
                              label="Conversations"
                              editable={ true }
                              verb="restore"
@@ -263,7 +266,7 @@ module.exports = React.createClass({
                              collapsed={ self.props.collapsed } />
 
                 { Object.keys(self.state.lists).map(function(tagName) {
-                    if (!tagName.match(/^m\.(invite|favourite|recent|lowpriority|archived)$/)) {
+                    if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|archived))$/)) {
                         return <RoomSubList list={ self.state.lists[tagName] }
                              key={ tagName }
                              label={ tagName }
@@ -284,12 +287,12 @@ module.exports = React.createClass({
                              verb="demote"
                              editable={ true }
                              order="recent"
-                             bottommost={ self.state.lists['m.archived'].length === 0 }
+                             bottommost={ self.state.lists['im.vector.fake.archived'].length === 0 }
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
                              collapsed={ self.props.collapsed } />
 
-                <RoomSubList list={ self.state.lists['m.archived'] }
+                <RoomSubList list={ self.state.lists['im.vector.fake.archived'] }
                              label="Historical"
                              editable={ false }
                              order="recent"
