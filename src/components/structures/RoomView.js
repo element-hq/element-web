@@ -459,6 +459,12 @@ module.exports = React.createClass({
                 }
             }            
         }).then(function(data) {
+
+            if (!self.state.searching || term !== self.refs.search_bar.refs.search_term.value) {
+                console.error("Discarding stale search results");
+                return;
+            }
+
             // for debugging:
             // data.search_categories.room_events.highlights = ["hello", "everybody"];
 
