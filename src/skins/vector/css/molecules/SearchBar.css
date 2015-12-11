@@ -21,16 +21,20 @@ limitations under the License.
     align-items: center;
 }
 
-.mx_SearchBar input {
+.mx_SearchBar_input {
     display: inline block;
     border-radius: 3px;
     border: 1px solid #f0f0f0;
     font-size: 15px;
     padding: 9px;
     padding-left: 11px;
-    margin-right: 17px;
     width: auto;
     flex: 1 1 0;
+}
+
+.mx_SearchBar_searchButton {
+    cursor: pointer;
+    margin-right: 10px;
 }
 
 .mx_SearchBar_button {

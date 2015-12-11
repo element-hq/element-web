@@ -39,14 +39,19 @@ module.exports = React.createClass({
 
     onSearchChange: function(e) {
         if (e.keyCode === 13) { // on enter...
-            this.props.onSearch(this.refs.search_term.value, this.state.scope);
+            this.onSearch();
         }
+    },
+
+    onSearch: function() {
+        this.props.onSearch(this.refs.search_term.value, this.state.scope);
     },
     
     render: function() {
         return (
             <div className="mx_SearchBar">
                 <input ref="search_term" className="mx_SearchBar_input" type="text" autoFocus={true} placeholder="Search..." onKeyDown={this.onSearchChange}/>
+                <img className="mx_SearchBar_searchButton" src="img/search-button.svg" width="37" height="37" onClick={this.onSearch}/>
                 <div className={"mx_SearchBar_button" + (this.state.scope !== 'Room' ? " mx_SearchBar_unselected" : "")} onClick={this.onThisRoomClick}>This Room</div>
                 <div className={"mx_SearchBar_button" + (this.state.scope !== 'All' ? " mx_SearchBar_unselected" : "")} onClick={this.onAllRoomsClick}>All Rooms</div>
                 <img className="mx_SearchBar_cancel" src="img/cancel.svg" width="18" height="18" onClick={this.props.onCancelClick} />
