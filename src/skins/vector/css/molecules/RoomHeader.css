@@ -114,6 +114,13 @@ limitations under the License.
     overflow-y: hidden;
 }
 
+.mx_RoomHeader_searchStatus {
+    display: inline-block;
+    font-weight: normal;
+    overflow-y: hidden;
+    opacity: 0.6;
+}
+
 .mx_RoomHeader_settingsButton {
     display: inline-block;
     visibility: hidden;
