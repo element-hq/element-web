@@ -35,7 +35,21 @@ limitations under the License.
 .mx_SearchBar_searchButton {
     cursor: pointer;
     margin-right: 10px;
+    width: 37px;
+    height: 37px;
     border-radius: 0px 3px 3px 0px;
+    background-color: #76CFA6;
+}
+
+@keyframes pulsate {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.25; }
+    100% { opacity: 1.0; }
+}
+
+.mx_SearchBar_searching img {
+    animation: pulsate 0.75s ease-out;
+    animation-iteration-count: infinite; 
 }
 
 .mx_SearchBar_button {

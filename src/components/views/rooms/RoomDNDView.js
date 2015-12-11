@@ -19,7 +19,6 @@ limitations under the License.
 var React = require('react');
 var DragSource = require('react-dnd').DragSource;
 var DropTarget = require('react-dnd').DropTarget;
-var classNames = require('classnames');
 
 var dis = require("matrix-react-sdk/lib/dispatcher");
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');

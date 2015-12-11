@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk');
+var classNames = require('classnames');
 
 module.exports = React.createClass({
     displayName: 'SearchBar',
@@ -48,12 +49,16 @@ module.exports = React.createClass({
     },
     
     render: function() {
+        var searchButtonClasses = classNames({ mx_SearchBar_searchButton : true, mx_SearchBar_searching: this.props.searchInProgress || true });
+        var thisRoomClasses = classNames({ mx_SearchBar_button : true, mx_SearchBar_unselected : this.state.scope !== 'Room' });
+        var allRoomsClasses = classNames({ mx_SearchBar_button : true, mx_SearchBar_unselected : this.state.scope !== 'All' });
+
         return (
             <div className="mx_SearchBar">
                 <input ref="search_term" className="mx_SearchBar_input" type="text" autoFocus={true} placeholder="Search..." onKeyDown={this.onSearchChange}/>
-                <img className="mx_SearchBar_searchButton" src="img/search-button.svg" width="37" height="37" onClick={this.onSearch}/>
-                <div className={"mx_SearchBar_button" + (this.state.scope !== 'Room' ? " mx_SearchBar_unselected" : "")} onClick={this.onThisRoomClick}>This Room</div>
-                <div className={"mx_SearchBar_button" + (this.state.scope !== 'All' ? " mx_SearchBar_unselected" : "")} onClick={this.onAllRoomsClick}>All Rooms</div>
+                <div className={ searchButtonClasses } onClick={this.onSearch}><img src="img/search-button.svg" width="37" height="37" alt="Search"/></div>
+                <div className={ thisRoomClasses } onClick={this.onThisRoomClick}>This Room</div>
+                <div className={ allRoomsClasses } onClick={this.onAllRoomsClick}>All Rooms</div>
                 <img className="mx_SearchBar_cancel" src="img/cancel.svg" width="18" height="18" onClick={this.props.onCancelClick} />
             </div>
         );
