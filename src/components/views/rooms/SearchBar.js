@@ -42,6 +42,9 @@ module.exports = React.createClass({
         if (e.keyCode === 13) { // on enter...
             this.onSearch();
         }
+        if (e.keyCode === 27) { // escape...
+            this.props.onCancelClick();
+        }
     },
 
     onSearch: function() {
