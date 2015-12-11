@@ -48,7 +48,8 @@ limitations under the License.
 }
 
 .mx_RoomTile_invite {
-    color: rgba(69, 69, 69, 0.5);
+/*    color: rgba(69, 69, 69, 0.5);
+*/
 }
 
 .collapsed .mx_RoomTile_name {
