@@ -52,6 +52,12 @@ a:visited {
     color: #76cfa6;
 }
 
+input[type=text]:focus, textarea:focus, .mx_RoomSettings textarea:focus {
+    border: 1px solid #76CFA6;
+    outline: none;
+    box-shadow: none;
+}
+
 /* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.
    Stop the scrollbar view from pushing out the container's overall sizing, which causes
    flexbox to adapt to the new size and cause the view to keep growing.

@@ -23,7 +23,7 @@ limitations under the License.
 
 .mx_SearchBar_input {
     display: inline block;
-    border-radius: 3px;
+    border-radius: 3px 0px 0px 3px;
     border: 1px solid #f0f0f0;
     font-size: 15px;
     padding: 9px;
@@ -35,6 +35,7 @@ limitations under the License.
 .mx_SearchBar_searchButton {
     cursor: pointer;
     margin-right: 10px;
+    border-radius: 0px 3px 3px 0px;
 }
 
 .mx_SearchBar_button {
