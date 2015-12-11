@@ -431,6 +431,10 @@ module.exports = React.createClass({
         }
 
         var self = this;
+        self.setState({
+            searchInProgress: true
+        });
+
         MatrixClientPeg.get().search({
             body: {
                 search_categories: {
@@ -483,6 +487,10 @@ module.exports = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: "Search failed",
                 description: error.toString()
+            });
+        }).finally(function() {
+            self.setState({
+                searchInProgress: false
             });
         });
     },
@@ -951,7 +959,7 @@ module.exports = React.createClass({
                 aux = <Loader/>;
             }
             else if (this.state.searching) {
-                aux = <SearchBar ref="search_bar" onCancelClick={this.onCancelClick} onSearch={this.onSearch}/>;
+                aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelClick} onSearch={this.onSearch}/>;
             }
 
             var conferenceCallNotification = null;
