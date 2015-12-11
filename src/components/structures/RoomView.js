@@ -285,9 +285,6 @@ module.exports = React.createClass({
         var scrollState = this.savedScrollState;
         if (scrollState.atBottom) {
             this.scrollToBottom();
-            if (this.state.numUnreadMessages !== 0) {
-                this.setState({numUnreadMessages: 0});
-            }
         } else if (scrollState.lastDisplayedEvent) {
             this.scrollToEvent(scrollState.lastDisplayedEvent,
                                scrollState.pixelOffset);
