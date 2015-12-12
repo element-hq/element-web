@@ -85,7 +85,7 @@ limitations under the License.
 
 .mx_RoomHeader_info {
     display: table-cell;
-    height: 48px;
+    /* height: 48px; */
     vertical-align: middle;
 }
 
@@ -102,17 +102,18 @@ limitations under the License.
     cursor: pointer;
     vertical-align: middle;
     height: 28px;
+    overflow: hidden;
     color: #454545;
     font-weight: bold;
     font-size: 22px;
     padding-left: 19px;
     padding-right: 16px;
+    /* why isn't text-overflow working? */
     text-overflow: ellipsis;
 }
 
 .mx_RoomHeader_nametext {
     display: inline-block;
-    overflow-y: hidden;
 }
 
 .mx_RoomHeader_searchStatus {
