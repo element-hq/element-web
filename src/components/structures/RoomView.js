@@ -991,7 +991,7 @@ module.exports = React.createClass({
             if (this.state.draggingFile) {
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
                                     <div className="mx_RoomView_fileDropTargetLabel">
-                                        <img src="img/upload.svg" width="43" height="57" alt="Drop File Here"/><br/>
+                                        <img src="img/upload-big.svg" width="45" height="59" alt="Drop File Here"/><br/>
                                         Drop File Here
                                     </div>
                                  </div>;
@@ -1014,6 +1014,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomView">
                     <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
                         onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} />
+                    { fileDropTarget }    
                     <div className="mx_RoomView_auxPanel">
                         <CallView room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>
                         { conferenceCallNotification }
@@ -1021,7 +1022,6 @@ module.exports = React.createClass({
                     </div>
                     <GeminiScrollbar autoshow={true} ref="messagePanel" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
                         <div className="mx_RoomView_messageListWrapper">
-                            { fileDropTarget }    
                             <ol className="mx_RoomView_MessageList" aria-live="polite">
                                 <li className={scrollheader_classes}>
                                 </li>
