@@ -31,6 +31,8 @@
     margin-top: 5px;
     margin-right: 10px;
     position: relative;
+    opacity: 0.6;
+    cursor: pointer;    
     z-index: 1;
 }
 
