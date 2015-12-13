@@ -294,6 +294,9 @@ module.exports = React.createClass({
             this.scrollToEvent(scrollState.lastDisplayedEvent,
                                scrollState.pixelOffset);
         }
+
+        // have to fill space in case we're accepting an invite
+        if (!this.state.paginating) this.fillSpace();
     },
 
     _paginateCompleted: function() {
