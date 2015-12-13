@@ -29,6 +29,7 @@ var Login = require("./login/Login");
 var Registration = require("./login/Registration");
 var PostRegistration = require("./login/PostRegistration");
 
+var Modal = require("../../Modal");
 var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
@@ -203,6 +204,36 @@ module.exports = React.createClass({
                     self.setState({errorText: 'Login failed.'});
                 });
 
+                break;
+            case 'leave_room':
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+                var roomId = payload.room_id;
+                Modal.createDialog(QuestionDialog, {
+                    title: "Leave room",
+                    description: "Are you sure you want to leave the room?",
+                    onFinished: function(should_leave) {
+                        if (should_leave) {
+                            var d = MatrixClientPeg.get().leave(roomId);
+                            
+                            // FIXME: controller shouldn't be loading a view :(
+                            var Loader = sdk.getComponent("elements.Spinner");
+                            var modal = Modal.createDialog(Loader);
+
+                            d.then(function() {
+                                modal.close();
+                                dis.dispatch({action: 'view_next_room'});
+                            }, function(err) {
+                                modal.close();
+                                Modal.createDialog(ErrorDialog, {
+                                    title: "Failed to leave room",
+                                    description: err.toString()
+                                });
+                            });
+                        }
+                    }
+                });
                 break;
             case 'view_room':
                 this._viewRoom(payload.room_id);

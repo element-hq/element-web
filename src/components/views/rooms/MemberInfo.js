@@ -226,36 +226,10 @@ module.exports = React.createClass({
         }
     },
 
-    // FIXME: this is horribly duplicated with MemberTile's onLeaveClick.
-    // Not sure what the right solution to this is.
     onLeaveClick: function() {
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
-        var roomId = this.props.member.roomId;
-        Modal.createDialog(QuestionDialog, {
-            title: "Leave room",
-            description: "Are you sure you want to leave the room?",
-            onFinished: function(should_leave) {
-                if (should_leave) {
-                    var d = MatrixClientPeg.get().leave(roomId);
-                    
-                    // FIXME: controller shouldn't be loading a view :(
-                    var Loader = sdk.getComponent("elements.Spinner");
-                    var modal = Modal.createDialog(Loader);
-
-                    d.then(function() {
-                        modal.close();
-                        dis.dispatch({action: 'view_next_room'});
-                    }, function(err) {
-                        modal.close();
-                        Modal.createDialog(ErrorDialog, {
-                            title: "Failed to leave room",
-                            description: err.toString()
-                        });
-                    });
-                }
-            }
+        dis.dispatch({
+            action: 'leave_room',
+            room_id: this.props.member.roomId,
         });
         this.props.onFinished();        
     },

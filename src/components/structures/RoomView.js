@@ -58,7 +58,7 @@ module.exports = React.createClass({
             searching: false,
             searchResults: null,
             syncState: MatrixClientPeg.get().getSyncState(),
-            hasUnsentMessages: this._hasUnsentMessages(room)
+            hasUnsentMessages: this._hasUnsentMessages(room),
         }
     },
 
@@ -90,6 +90,8 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
             MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
         }
+
+        window.removeEventListener('resize', this.onResize);        
     },
 
     onAction: function(payload) {
@@ -272,6 +274,9 @@ module.exports = React.createClass({
         }
 
         this._updateConfCallNotification();
+
+        window.addEventListener('resize', this.onResize);
+        this.onResize();
     },
 
     componentDidUpdate: function() {
@@ -426,6 +431,10 @@ module.exports = React.createClass({
         }
 
         var self = this;
+        self.setState({
+            searchInProgress: true
+        });
+
         MatrixClientPeg.get().search({
             body: {
                 search_categories: {
@@ -450,6 +459,12 @@ module.exports = React.createClass({
                 }
             }            
         }).then(function(data) {
+
+            if (!self.state.searching || term !== self.refs.search_bar.refs.search_term.value) {
+                console.error("Discarding stale search results");
+                return;
+            }
+
             // for debugging:
             // data.search_categories.room_events.highlights = ["hello", "everybody"];
 
@@ -470,14 +485,20 @@ module.exports = React.createClass({
 
             self.setState({
                 highlights: highlights,
+                searchTerm: term,
                 searchResults: data,
                 searchScope: scope,
+                searchCount: data.search_categories.room_events.count,
             });
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Search failed",
                 description: error.toString()
+            });
+        }).finally(function() {
+            self.setState({
+                searchInProgress: false
             });
         });
     },
@@ -492,10 +513,14 @@ module.exports = React.createClass({
         var EventTile = sdk.getComponent('rooms.EventTile');
         var self = this;
 
-        if (this.state.searchResults &&
-            this.state.searchResults.search_categories.room_events.results &&
-            this.state.searchResults.search_categories.room_events.groups)
+        if (this.state.searchResults)
         {
+            if (!this.state.searchResults.search_categories.room_events.results ||
+                !this.state.searchResults.search_categories.room_events.groups)
+            {
+                return ret;
+            }
+
             // XXX: this dance is foul, due to the results API not directly returning sorted results
             var results = this.state.searchResults.search_categories.room_events.results;
             var roomIdGroups = this.state.searchResults.search_categories.room_events.groups.room_id;
@@ -763,6 +788,14 @@ module.exports = React.createClass({
         this.setState(this.getInitialState());
     },
 
+    onLeaveClick: function() {
+        dis.dispatch({
+            action: 'leave_room',
+            room_id: this.props.roomId,
+        });
+        this.props.onFinished();        
+    },
+
     onRejectButtonClicked: function(ev) {
         var self = this;
         this.setState({
@@ -912,6 +945,27 @@ module.exports = React.createClass({
         }
     },
 
+    onResize: function(e) {
+        // It seems flexbox doesn't give us a way to constrain the auxPanel height to have
+        // a minimum of the height of the video element, whilst also capping it from pushing out the page
+        // so we have to do it via JS instead.  In this implementation we cap the height by putting
+        // a maxHeight on the underlying remote video tag.
+        var auxPanelMaxHeight;
+        if (this.refs.callView) {
+            // XXX: don't understand why we have to call findDOMNode here in react 0.14 - it should already be a DOM node.
+            var video = ReactDOM.findDOMNode(this.refs.callView.refs.video.refs.remote);
+
+            // header + footer + status + give us at least 100px of scrollback at all times.
+            auxPanelMaxHeight = window.innerHeight - (83 + 72 + 36 + 100);
+
+            // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
+            // but it's better than the video going missing entirely
+            if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
+
+            video.style.maxHeight = auxPanelMaxHeight + "px";
+        }
+    },
+
     render: function() {
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         var MessageComposer = sdk.getComponent('rooms.MessageComposer');
@@ -1051,7 +1105,7 @@ module.exports = React.createClass({
                 aux = <Loader/>;
             }
             else if (this.state.searching) {
-                aux = <SearchBar ref="search_bar" onCancelClick={this.onCancelClick} onSearch={this.onSearch}/>;
+                aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelClick} onSearch={this.onSearch}/>;
             }
 
             var conferenceCallNotification = null;
@@ -1071,30 +1125,37 @@ module.exports = React.createClass({
             if (this.state.draggingFile) {
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
                                     <div className="mx_RoomView_fileDropTargetLabel">
-                                        <img src="img/upload.svg" width="43" height="57" alt="Drop File Here"/><br/>
+                                        <img src="img/upload-big.svg" width="45" height="59" alt="Drop File Here"/><br/>
                                         Drop File Here
                                     </div>
                                  </div>;
             }
 
-            var messageComposer;
+            var messageComposer, searchInfo;
             if (!this.state.searchResults) {
                 messageComposer =
                     <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} />
             }
+            else {
+                searchInfo = {
+                    searchTerm : this.state.searchTerm,
+                    searchScope : this.state.searchScope,
+                    searchCount : this.state.searchCount,
+                }
+            }
 
             return (
                 <div className="mx_RoomView">
-                    <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
-                        onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} />
+                    <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
+                        onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} onLeaveClick={this.onLeaveClick} />
+                    { fileDropTarget }    
                     <div className="mx_RoomView_auxPanel">
-                        <CallView room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>
+                        <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>
                         { conferenceCallNotification }
                         { aux }
                     </div>
                     <GeminiScrollbar autoshow={true} ref="messagePanel" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
                         <div className="mx_RoomView_messageListWrapper">
-                            { fileDropTarget }    
                             <ol className="mx_RoomView_MessageList" aria-live="polite">
                                 <li className={scrollheader_classes}>
                                 </li>

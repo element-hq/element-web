@@ -35,6 +35,8 @@ module.exports = React.createClass({
         editing: React.PropTypes.bool,
         onSettingsClick: React.PropTypes.func,
         onSaveClick: React.PropTypes.func,
+        onSearchClick: React.PropTypes.func,
+        onLeaveClick: React.PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -187,6 +189,7 @@ module.exports = React.createClass({
             }
 
             var name = null;
+            var searchStatus = null;
             var topic_el = null;
             var cancel_button = null;
             var save_button = null;
@@ -203,9 +206,16 @@ module.exports = React.createClass({
                 save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save Changes</div>
             } else {
                 // <EditableText label={this.props.room.name} initialValue={actual_name} placeHolder="Name" onValueChanged={this.onNameChange} />
+
+                var searchStatus;
+                if (this.props.searchInfo && this.props.searchInfo.searchTerm) {
+                    searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;({ this.props.searchInfo.searchCount } results)</div>;
+                }
+
                 name =
                     <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                        <div className="mx_RoomHeader_nametext">{ this.props.room.name }</div>
+                        <div className="mx_RoomHeader_nametext" title={ this.props.room.name }>{ this.props.room.name }</div>
+                        { searchStatus }
                         <div className="mx_RoomHeader_settingsButton">
                             <img src="img/settings.svg" width="12" height="12"/>
                         </div>
@@ -233,10 +243,22 @@ module.exports = React.createClass({
                         <div className="mx_RoomHeader_button mx_RoomHeader_video" onClick={activeCall && activeCall.type === "video" ? this.onMuteVideoClick : this.onVideoClick}>
                             <img src="img/video.png" title="Video call" alt="Video call" width="32" height="32" style={{ 'marginTop': '-8px' }}/>
                         </div>;
+                var img = "img/voip.png";
+                if (activeCall.isMicrophoneMuted()) {
+                        img = "img/voip-mute.png";
+                }
                 voice_button =
                         <div className="mx_RoomHeader_button mx_RoomHeader_voice" onClick={activeCall ? this.onMuteAudioClick : this.onVoiceClick}>
-                            <img src="img/voip.png" title="VoIP call" alt="VoIP call" width="32" height="32" style={{ 'marginTop': '-8px' }}/>
+                            <img src={img} title="VoIP call" alt="VoIP call" width="32" height="32" style={{ 'marginTop': '-8px' }}/>
                         </div>;
+            }
+
+            var exit_button;
+            if (this.props.onLeaveClick) {
+                exit_button =
+                    <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton">
+                        <img src="img/leave.svg" title="Leave room" alt="Leave room" width="26" height="20" onClick={this.props.onLeaveClick}/>
+                    </div>;
             }
 
             header =
@@ -257,6 +279,7 @@ module.exports = React.createClass({
                         { video_button }
                         { voice_button }
                         { zoom_button }
+                        { exit_button }
                         <div className="mx_RoomHeader_button">
                             <img src="img/search.svg" title="Search" alt="Search" width="21" height="19" onClick={this.props.onSearchClick}/>
                         </div>
