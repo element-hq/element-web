@@ -138,6 +138,16 @@ limitations under the License.
     visibility: visible;
 }
 
+.mx_RoomHeader_leaveButton {
+    visibility: hidden;
+    margin-top: -1px;
+}
+
+.mx_RoomHeader_wrapper:hover .mx_RoomHeader_leaveButton {
+    visibility: visible;
+}
+
+
 .mx_RoomHeader_nameEditing {
     padding-left: 8px;
     padding-right: 16px;
