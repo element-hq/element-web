@@ -58,7 +58,7 @@ module.exports = React.createClass({
             searching: false,
             searchResults: null,
             syncState: MatrixClientPeg.get().getSyncState(),
-            hasUnsentMessages: this._hasUnsentMessages(room)
+            hasUnsentMessages: this._hasUnsentMessages(room),
         }
     },
 
@@ -90,6 +90,8 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
             MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
         }
+
+        window.removeEventListener('resize', this.onResize);        
     },
 
     onAction: function(payload) {
@@ -277,6 +279,9 @@ module.exports = React.createClass({
         }
 
         this._updateConfCallNotification();
+
+        window.addEventListener('resize', this.onResize);
+        this.onResize();
     },
 
     componentDidUpdate: function() {
@@ -832,6 +837,27 @@ module.exports = React.createClass({
         scrollNode.scrollTop = scrollNode.scrollHeight;
     },
 
+    onResize: function(e) {
+        // It seems flexbox doesn't give us a way to constrain the auxPanel height to have
+        // a minimum of the height of the video element, whilst also capping it from pushing out the page
+        // so we have to do it via JS instead.  In this implementation we cap the height by putting
+        // a maxHeight on the underlying remote video tag.
+        var auxPanelMaxHeight;
+        if (this.refs.callView) {
+            // XXX: don't understand why we have to call findDOMNode here in react 0.14 - it should already be a DOM node.
+            var video = ReactDOM.findDOMNode(this.refs.callView.refs.video.refs.remote);
+
+            // header + footer + status + give us at least 100px of scrollback at all times.
+            auxPanelMaxHeight = window.innerHeight - (83 + 72 + 36 + 100);
+
+            // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
+            // but it's better than the video going missing entirely
+            if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
+            
+            video.style.maxHeight = auxPanelMaxHeight + "px";
+        }
+    },
+
     render: function() {
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         var MessageComposer = sdk.getComponent('rooms.MessageComposer');
@@ -1016,7 +1042,7 @@ module.exports = React.createClass({
                         onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} />
                     { fileDropTarget }    
                     <div className="mx_RoomView_auxPanel">
-                        <CallView room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>
+                        <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>
                         { conferenceCallNotification }
                         { aux }
                     </div>
