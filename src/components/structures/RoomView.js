@@ -70,7 +70,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
-        this.atBottom = true;
+        this.savedScrollState = {atBottom: true};
     },
 
     componentWillUnmount: function() {
@@ -175,7 +175,7 @@ module.exports = React.createClass({
         if (!toStartOfTimeline &&
                 (ev.getSender() !== MatrixClientPeg.get().credentials.userId)) {
             // update unread count when scrolled up
-            if (this.atBottom) {
+            if (this.savedScrollState.atBottom) {
                 currentUnread = 0;
             }
             else {
@@ -183,15 +183,10 @@ module.exports = React.createClass({
             }
         }
 
-
         this.setState({
             room: MatrixClientPeg.get().getRoom(this.props.roomId),
             numUnreadMessages: currentUnread
         });
-
-        if (toStartOfTimeline && !this.state.paginating) {
-            this.fillSpace();
-        }
     },
 
     onRoomName: function(room) {
@@ -285,55 +280,58 @@ module.exports = React.createClass({
     },
 
     componentDidUpdate: function() {
+        // after adding event tiles, we may need to tweak the scroll (either to
+        // keep at the bottom of the timeline, or to maintain the view after
+        // adding events to the top).
+
         if (!this.refs.messagePanel) return;
 
-        var messageWrapperScroll = this._getScrollNode();
-
-        if (this.state.paginating && !this.waiting_for_paginate) {
-            var heightGained = messageWrapperScroll.scrollHeight - this.oldScrollHeight;
-            messageWrapperScroll.scrollTop += heightGained;
-            this.oldScrollHeight = undefined;
-            if (!this.fillSpace()) {
-                this.setState({paginating: false});
-            }
-        } else if (this.atBottom) {
-            messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
-            if (this.state.numUnreadMessages !== 0) {
-                this.setState({numUnreadMessages: 0});
-            }
+        if (this.state.searchResults) return;
+        var scrollState = this.savedScrollState;
+        if (scrollState.atBottom) {
+            this.scrollToBottom();
+        } else if (scrollState.lastDisplayedEvent) {
+            this.scrollToEvent(scrollState.lastDisplayedEvent,
+                               scrollState.pixelOffset);
         }
     },
 
+    _paginateCompleted: function() {
+        this.setState({
+            room: MatrixClientPeg.get().getRoom(this.props.roomId)
+        });
+
+        // we might not have got enough results from the pagination
+        // request, so give fillSpace() a chance to set off another.
+        if (!this.fillSpace()) {
+            this.setState({paginating: false});
+        }
+    },
+
+    // check the scroll position, and if we need to, set off a pagination
+    // request.
+    //
+    // returns true if a pagination request was started (or is still in progress)
     fillSpace: function() {
         if (!this.refs.messagePanel) return;
         if (this.state.searchResults) return; // TODO: paginate search results
         var messageWrapperScroll = this._getScrollNode();
         if (messageWrapperScroll.scrollTop < messageWrapperScroll.clientHeight && this.state.room.oldState.paginationToken) {
-            this.setState({paginating: true});
+            // there's less than a screenful of messages left. Either wind back
+            // the message cap (if there are enough events in the timeline to
+            // do so), or fire off a pagination request.
 
             this.oldScrollHeight = messageWrapperScroll.scrollHeight;
 
             if (this.state.messageCap < this.state.room.timeline.length) {
-                this.waiting_for_paginate = false;
                 var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
-                this.setState({messageCap: cap, paginating: true});
+                this.setState({messageCap: cap});
             } else {
-                this.waiting_for_paginate = true;
                 var cap = this.state.messageCap + PAGINATE_SIZE;
                 this.setState({messageCap: cap, paginating: true});
-                var self = this;
-                MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(function() {
-                    self.waiting_for_paginate = false;
-                    if (self.isMounted()) {
-                        self.setState({
-                            room: MatrixClientPeg.get().getRoom(self.props.roomId)
-                        });
-                    }
-                    // wait and set paginating to false when the component updates
-                });
+                MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(this._paginateCompleted).done();
+                return true;
             }
-
-            return true;
         }
         return false;
     },
@@ -364,13 +362,10 @@ module.exports = React.createClass({
     },
 
     onMessageListScroll: function(ev) {
-        if (this.refs.messagePanel) {
-            var messageWrapperScroll = this._getScrollNode();
-            var wasAtBottom = this.atBottom;
-            // + 1 here to avoid fractional pixel rounding errors
-            this.atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight + 1;
-            if (this.atBottom && !wasAtBottom) {
-                this.forceUpdate(); // remove unread msg count
+        if (this.refs.messagePanel && !this.state.searchResults) {
+            this.savedScrollState = this._calculateScrollState();
+            if (this.savedScrollState.atBottom && this.state.numUnreadMessages != 0) {
+                this.setState({numUnreadMessages: 0});
             }
         }
         if (!this.state.paginating) this.fillSpace();
@@ -843,6 +838,111 @@ module.exports = React.createClass({
         var scrollNode = this._getScrollNode();
         if (!scrollNode) return;
         scrollNode.scrollTop = scrollNode.scrollHeight;
+    },
+
+    // scroll the event view to put the given event at the bottom.
+    //
+    // pixel_offset gives the number of pixels between the bottom of the event
+    // and the bottom of the container.
+    scrollToEvent: function(eventId, pixelOffset) {
+        var scrollNode = this._getScrollNode();
+        if (!scrollNode) return;
+
+        var messageWrapper = this.refs.messagePanel;
+        if (messageWrapper === undefined) return;
+
+        var idx = this._indexForEventId(eventId);
+        if (idx === null) {
+            // we don't seem to have this event in our timeline. Presumably
+            // it's fallen out of scrollback. We ought to backfill until we
+            // find it, but we'd have to be careful we didn't backfill forever
+            // looking for a non-existent event.
+            //
+            // for now, just scroll to the top of the buffer.
+            console.log("Refusing to scroll to unknown event "+eventId);
+            scrollNode.scrollTop = 0;
+            return;
+        }
+
+        // we might need to roll back the messagecap (to generate tiles for
+        // older messages). This just means telling getEventTiles to create
+        // tiles for events we already have in our timeline (we already know
+        // the event in question is in our timeline, so we shouldn't need to
+        // backfill).
+        //
+        // we actually wind back slightly further than the event in question,
+        // because we want the event to be at the *bottom* of the container.
+        // Don't roll it back past the timeline we have, though.
+        var minCap = this.state.room.timeline.length - Math.min(idx - INITIAL_SIZE, 0);
+        if (minCap > this.state.messageCap) {
+            this.setState({messageCap: minCap});
+        }
+
+        var node = this.eventNodes[eventId];
+        if (node === null) {
+            // getEventTiles should have sorted this out when we set the
+            // messageCap, so this is weird.
+            console.error("No node for event, even after rolling back messageCap");
+            return;
+        }
+
+        var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
+        var boundingRect = node.getBoundingClientRect();
+        scrollNode.scrollTop += boundingRect.bottom + pixelOffset - wrapperRect.bottom;
+    },
+
+    _calculateScrollState: function() {
+        // we don't save the absolute scroll offset, because that
+        // would be affected by window width, zoom level, amount of scrollback,
+        // etc.
+        //
+        // instead we save the id of the last fully-visible event, and the
+        // number of pixels the window was scrolled below it - which will
+        // hopefully be near enough.
+        //
+        if (this.eventNodes === undefined) return null;
+
+        var messageWrapper = this.refs.messagePanel;
+        if (messageWrapper === undefined) return null;
+        var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
+
+        var messageWrapperScroll = this._getScrollNode();
+        // + 1 here to avoid fractional pixel rounding errors
+        var atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight + 1;
+
+        for (var i = this.state.room.timeline.length-1; i >= 0; --i) {
+            var ev = this.state.room.timeline[i];
+            var node = this.eventNodes[ev.getId()];
+            if (!node) continue;
+
+            var boundingRect = node.getBoundingClientRect();
+            if (boundingRect.bottom < wrapperRect.bottom) {
+                return {
+                    atBottom: atBottom,
+                    lastDisplayedEvent: ev.getId(),
+                    pixelOffset: wrapperRect.bottom - boundingRect.bottom,
+                }
+            }
+        }
+
+        // apparently the entire timeline is below the viewport. Give up.
+        return { atBottom: true };
+    },
+
+    // get the current scroll position of the room, so that it can be
+    // restored when we switch back to it
+    getScrollState: function() {
+        return this.savedScrollState;
+    },
+
+    restoreScrollState: function(scrollState) {
+        if(scrollState.atBottom) {
+            // we were at the bottom before. Ideally we'd scroll to the
+            // 'read-up-to' mark here.
+        } else if (scrollState.lastDisplayedEvent) {
+            this.scrollToEvent(scrollState.lastDisplayedEvent,
+                               scrollState.pixelOffset);
+        }
     },
 
     onResize: function(e) {
