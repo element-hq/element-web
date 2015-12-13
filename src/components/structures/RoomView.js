@@ -793,6 +793,14 @@ module.exports = React.createClass({
         this.setState(this.getInitialState());
     },
 
+    onLeaveClick: function() {
+        dis.dispatch({
+            action: 'leave_room',
+            room_id: this.props.roomId,
+        });
+        this.props.onFinished();        
+    },
+
     onRejectButtonClicked: function(ev) {
         var self = this;
         this.setState({
@@ -853,7 +861,7 @@ module.exports = React.createClass({
             // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
             // but it's better than the video going missing entirely
             if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
-            
+
             video.style.maxHeight = auxPanelMaxHeight + "px";
         }
     },
@@ -1039,7 +1047,7 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomView">
                     <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
-                        onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} />
+                        onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} onLeaveClick={this.onLeaveClick} />
                     { fileDropTarget }    
                     <div className="mx_RoomView_auxPanel">
                         <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>

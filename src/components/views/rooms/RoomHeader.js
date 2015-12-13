@@ -35,6 +35,8 @@ module.exports = React.createClass({
         editing: React.PropTypes.bool,
         onSettingsClick: React.PropTypes.func,
         onSaveClick: React.PropTypes.func,
+        onSearchClick: React.PropTypes.func,
+        onLeaveClick: React.PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -251,6 +253,14 @@ module.exports = React.createClass({
                         </div>;
             }
 
+            var exit_button;
+            if (this.props.onLeaveClick) {
+                exit_button =
+                    <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton">
+                        <img src="img/leave.svg" title="Leave room" alt="Leave room" width="26" height="20" onClick={this.props.onLeaveClick}/>
+                    </div>;
+            }
+
             header =
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_leftRow">
@@ -269,6 +279,7 @@ module.exports = React.createClass({
                         { video_button }
                         { voice_button }
                         { zoom_button }
+                        { exit_button }
                         <div className="mx_RoomHeader_button">
                             <img src="img/search.svg" title="Search" alt="Search" width="21" height="19" onClick={this.props.onSearchClick}/>
                         </div>
