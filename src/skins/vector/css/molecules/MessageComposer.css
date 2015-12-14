@@ -72,6 +72,7 @@ limitations under the License.
 }
 
 .mx_MessageComposer_upload,
+.mx_MessageComposer_hangup,
 .mx_MessageComposer_voicecall,
 .mx_MessageComposer_videocall {
     display: table-cell;

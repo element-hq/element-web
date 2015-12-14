@@ -166,13 +166,37 @@ limitations under the License.
     max-width: 960px;
     margin: auto;
     min-height: 36px;
-    overflow-y: hidden;
 }
 
 .mx_RoomView_statusAreaBox_line {
     border-top: 1px solid #eee;
-/*  margin-left: 63px; */
     height: 1px;
+}
+
+.mx_RoomView_inCall .mx_RoomView_statusAreaBox_line {
+    border-top: 1px hidden;
+}
+
+.mx_RoomView_inCall .mx_MessageComposer_wrapper {
+    border-top: 2px hidden;
+}
+
+.mx_RoomView_inCall .mx_RoomView_statusAreaBox {
+    background-color: #76CFA6;    
+    color: #fff;
+    position: relative;
+}
+
+.mx_RoomView_voipChevron {
+    position: absolute;
+    bottom: -10px;
+    right: 11px;
+}
+
+.mx_RoomView_muteButton {
+    float: right;
+    margin-right: 13px;
+    cursor: pointer;
 }
 
 .mx_RoomView_unreadMessagesBar {
@@ -184,6 +208,16 @@ limitations under the License.
 .mx_RoomView_unreadMessagesBar img {
     padding-left: 10px;
     padding-right: 22px;
+    vertical-align: middle;
+}
+
+.mx_RoomView_callBar {
+    margin-top: 5px;
+}
+
+.mx_RoomView_callBar img {
+    padding-left: 13px;
+    padding-right: 30px;
     vertical-align: middle;
 }
 
@@ -220,6 +254,7 @@ limitations under the License.
     margin-left: 63px;
     color: #4a4a4a;
     opacity: 0.5;
+    overflow-y: hidden;
 }
 
 .mx_RoomView_typingImage {
