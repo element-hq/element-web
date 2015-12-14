@@ -59,6 +59,7 @@ module.exports = React.createClass({
             searchResults: null,
             syncState: MatrixClientPeg.get().getSyncState(),
             hasUnsentMessages: this._hasUnsentMessages(room),
+            callState: null,
         }
     },
 
@@ -114,7 +115,17 @@ module.exports = React.createClass({
                 this.forceUpdate();
                 break;
             case 'call_state':
-                if (CallHandler.getCallForRoom(this.props.roomId)) {
+                // don't filter out payloads for room IDs other than props.room because
+                // we may be interested in the conf 1:1 room
+
+                if (!payload.room_id) {
+                    return;
+                }
+
+                var call = CallHandler.getCallForRoom(payload.room_id);
+                var callState;
+
+                if (call) {
                     // Call state has changed so we may be loading video elements
                     // which will obscure the message log.
                     // scroll to bottom
@@ -122,11 +133,20 @@ module.exports = React.createClass({
                     if (scrollNode) {
                         scrollNode.scrollTop = scrollNode.scrollHeight;
                     }
+                    callState = call.call_state;
+                }
+                else {
+                    callState = "ended";
                 }
 
                 // possibly remove the conf call notification if we're now in
                 // the conf
                 this._updateConfCallNotification();
+
+                this.setState({
+                    callState: callState
+                });
+
                 break;
             case 'user_activity':
                 this.sendReadReceipt();
@@ -275,6 +295,12 @@ module.exports = React.createClass({
 
             this.fillSpace();
         }
+
+        var call = CallHandler.getCallForRoom(this.props.roomId);
+        var callState = call ? call.call_state : "ended";
+        this.setState({
+            callState: callState
+        });
 
         this._updateConfCallNotification();
 
@@ -972,6 +998,30 @@ module.exports = React.createClass({
         }
     },
 
+    onMuteAudioClick: function() {
+        var call = CallHandler.getCallForRoom(this.props.roomId);
+        if (!call) {
+            return;
+        }
+        var newState = !call.isMicrophoneMuted();
+        call.setMicrophoneMuted(newState);
+        this.setState({
+            audioMuted: newState
+        });
+    },
+
+    onMuteVideoClick: function() {
+        var call = CallHandler.getCallForRoom(this.props.roomId);
+        if (!call) {
+            return;
+        }
+        var newState = !call.isLocalVideoMuted();
+        call.setLocalVideoMuted(newState);
+        this.setState({
+            videoMuted: newState
+        });
+    },
+
     render: function() {
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         var MessageComposer = sdk.getComponent('rooms.MessageComposer');
@@ -1029,9 +1079,7 @@ module.exports = React.createClass({
                 loading: this.state.paginating
             });
 
-            var statusBar = (
-                <div />
-            );
+            var statusBar;
 
             // for testing UI...
             // this.state.upload = {
@@ -1043,7 +1091,7 @@ module.exports = React.createClass({
             if (ContentMessages.getCurrentUploads().length > 0) {
                 var UploadBar = sdk.getComponent('structures.UploadBar');
                 statusBar = <UploadBar room={this.state.room} />
-            } else {
+            } else if (!this.state.searchResults) {
                 var typingString = this.getWhoIsTypingString();
                 // typingString = "S͚͍̭̪̤͙̱͙̖̥͙̥̤̻̙͕͓͂̌ͬ͐̂k̜̝͎̰̥̻̼̂̌͛͗͊̅̒͂̊̍̍͌̈̈́͌̋̊ͬa͉̯͚̺̗̳̩ͪ̋̑͌̓̆̍̂̉̏̅̆ͧ̌̑v̲̲̪̝ͥ̌ͨͮͭ̊͆̾ͮ̍ͮ͑̚e̮̙͈̱̘͕̼̮͒ͩͨͫ̃͗̇ͩ͒ͣͦ͒̄̍͐ͣ̿ͥṘ̗̺͇̺̺͔̄́̊̓͊̍̃ͨ̚ā̼͎̘̟̼͎̜̪̪͚̋ͨͨͧ̓ͦͯͤ̄͆̋͂ͩ͌ͧͅt̙̙̹̗̦͖̞ͫͪ͑̑̅ͪ̃̚ͅ is typing...";
                 var unreadMsgs = this.getUnreadMessagesString();
@@ -1142,7 +1190,7 @@ module.exports = React.createClass({
             var messageComposer, searchInfo;
             if (!this.state.searchResults) {
                 messageComposer =
-                    <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} />
+                    <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} callState={this.state.callState} />
             }
             else {
                 searchInfo = {
@@ -1152,8 +1200,43 @@ module.exports = React.createClass({
                 }
             }
 
+            var call = CallHandler.getCallForRoom(this.props.roomId);
+            var inCall = false;
+            if (call && this.state.callState != 'ended') {
+                inCall = true;
+                //var muteVideoButton;
+                var voiceMuteButton, videoMuteButton;
+
+                if (call.type === "video") {
+                    videoMuteButton =
+                        <div className="mx_RoomView_muteButton" onClick={this.onMuteVideoClick}>
+                            <img src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"} width="31" height="27"/>
+                        </div>
+                }
+                voiceMuteButton =
+                    <div className="mx_RoomView_muteButton" onClick={this.onMuteAudioClick}>
+                        <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"} width="21" height="26"/>
+                    </div>
+
+                if (!statusBar) {
+                    statusBar =
+                        <div className="mx_RoomView_callBar">
+                            <img src="img/sound-indicator.svg" width="23" height="20" alt=""/>
+                            <b>Active call</b>
+                        </div>;
+                }
+
+                statusBar =
+                    <div className="mx_RoomView_callStatusBar">
+                        { voiceMuteButton }
+                        { videoMuteButton }
+                        { statusBar }
+                        <img className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17"/>
+                    </div>
+            }
+
             return (
-                <div className="mx_RoomView">
+                <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") }>
                     <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
                         onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} onLeaveClick={this.onLeaveClick} />
                     { fileDropTarget }    
@@ -1174,7 +1257,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomView_statusArea">
                         <div className="mx_RoomView_statusAreaBox">
                             <div className="mx_RoomView_statusAreaBox_line"></div>
-                            { this.state.searchResults ? null : statusBar }
+                            { statusBar }
                         </div>
                     </div>
                     { messageComposer }

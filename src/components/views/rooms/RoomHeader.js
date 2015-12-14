@@ -16,15 +16,9 @@ limitations under the License.
 
 'use strict';
 
-/*
- * State vars:
- * this.state.call_state = the UI state of the call (see CallHandler)
- */
-
 var React = require('react');
 var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
-var CallHandler = require("../../../CallHandler");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 
 module.exports = React.createClass({
@@ -47,34 +41,6 @@ module.exports = React.createClass({
         };
     },
 
-    componentDidMount: function() {
-        this.dispatcherRef = dis.register(this.onAction);
-        if (this.props.room) {
-            var call = CallHandler.getCallForRoom(this.props.room.roomId);
-            var callState = call ? call.call_state : "ended";
-            this.setState({
-                call_state: callState
-            });
-        }
-    },
-
-    componentWillUnmount: function() {
-        dis.unregister(this.dispatcherRef);
-    },
-
-    onAction: function(payload) {
-        // don't filter out payloads for room IDs other than props.room because
-        // we may be interested in the conf 1:1 room
-        if (payload.action !== 'call_state' || !payload.room_id) {
-            return;
-        }
-        var call = CallHandler.getCallForRoom(payload.room_id);
-        var callState = call ? call.call_state : "ended";
-        this.setState({
-            call_state: callState
-        });
-    },
-
     onVideoClick: function(e) {
         dis.dispatch({
             action: 'place_call',
@@ -82,43 +48,12 @@ module.exports = React.createClass({
             room_id: this.props.room.roomId
         });
     },
+
     onVoiceClick: function() {
         dis.dispatch({
             action: 'place_call',
             type: "voice",
             room_id: this.props.room.roomId
-        });
-    },
-    onHangupClick: function() {
-        var call = CallHandler.getCallForRoom(this.props.room.roomId);
-        if (!call) { return; }
-        dis.dispatch({
-            action: 'hangup',
-            // hangup the call for this room, which may not be the room in props
-            // (e.g. conferences which will hangup the 1:1 room instead)
-            room_id: call.roomId
-        });
-    },
-    onMuteAudioClick: function() {
-        var call = CallHandler.getCallForRoom(this.props.room.roomId);
-        if (!call) {
-            return;
-        }
-        var newState = !call.isMicrophoneMuted();
-        call.setMicrophoneMuted(newState);
-        this.setState({
-            audioMuted: newState
-        });
-    },
-    onMuteVideoClick: function() {
-        var call = CallHandler.getCallForRoom(this.props.room.roomId);
-        if (!call) {
-            return;
-        }
-        var newState = !call.isLocalVideoMuted();
-        call.setLocalVideoMuted(newState);
-        this.setState({
-            videoMuted: newState
         });
     },
 
@@ -151,42 +86,6 @@ module.exports = React.createClass({
         }
         else {
             var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
-
-            var call_buttons;
-            if (this.state && this.state.call_state != 'ended') {
-                //var muteVideoButton;
-                var activeCall = (
-                    CallHandler.getCallForRoom(this.props.room.roomId)
-                );
-/*                
-                if (activeCall && activeCall.type === "video") {
-                    muteVideoButton = (
-                        <div className="mx_RoomHeader_textButton mx_RoomHeader_voipButton"
-                                onClick={this.onMuteVideoClick}>
-                            {
-                                (activeCall.isLocalVideoMuted() ?
-                                    "Unmute" : "Mute") + " video"
-                            }
-                        </div>
-                    );
-                }
-                        {muteVideoButton}
-                        <div className="mx_RoomHeader_textButton mx_RoomHeader_voipButton"
-                                onClick={this.onMuteAudioClick}>
-                            {
-                                (activeCall && activeCall.isMicrophoneMuted() ?
-                                    "Unmute" : "Mute") + " audio"
-                            }
-                        </div>
-*/                
-
-                call_buttons = (
-                    <div className="mx_RoomHeader_textButton"
-                            onClick={this.onHangupClick}>
-                        End call
-                    </div>
-                );
-            }
 
             var name = null;
             var searchStatus = null;
@@ -230,32 +129,9 @@ module.exports = React.createClass({
                 );
             }
 
-            var zoom_button, video_button, voice_button;
-            if (activeCall) {
-                if (activeCall.type == "video") {
-                    zoom_button = (
-                        <div className="mx_RoomHeader_button" onClick={this.onFullscreenClick}>
-                            <img src="img/zoom.png" title="Fullscreen" alt="Fullscreen" width="32" height="32" style={{ 'marginTop': '-5px' }}/>
-                        </div>
-                    );
-                }
-                video_button = 
-                        <div className="mx_RoomHeader_button mx_RoomHeader_video" onClick={activeCall && activeCall.type === "video" ? this.onMuteVideoClick : this.onVideoClick}>
-                            <img src="img/video.png" title="Video call" alt="Video call" width="32" height="32" style={{ 'marginTop': '-8px' }}/>
-                        </div>;
-                var img = "img/voip.png";
-                if (activeCall.isMicrophoneMuted()) {
-                        img = "img/voip-mute.png";
-                }
-                voice_button =
-                        <div className="mx_RoomHeader_button mx_RoomHeader_voice" onClick={activeCall ? this.onMuteAudioClick : this.onVoiceClick}>
-                            <img src={img} title="VoIP call" alt="VoIP call" width="32" height="32" style={{ 'marginTop': '-8px' }}/>
-                        </div>;
-            }
-
-            var exit_button;
+            var leave_button;
             if (this.props.onLeaveClick) {
-                exit_button =
+                leave_button =
                     <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton">
                         <img src="img/leave.svg" title="Leave room" alt="Leave room" width="26" height="20" onClick={this.props.onLeaveClick}/>
                     </div>;
@@ -272,14 +148,10 @@ module.exports = React.createClass({
                             { topic_el }
                         </div>
                     </div>
-                    {call_buttons}
                     {cancel_button}
                     {save_button}
                     <div className="mx_RoomHeader_rightRow">
-                        { video_button }
-                        { voice_button }
-                        { zoom_button }
-                        { exit_button }
+                        { leave_button }
                         <div className="mx_RoomHeader_button">
                             <img src="img/search.svg" title="Search" alt="Search" width="21" height="19" onClick={this.props.onSearchClick}/>
                         </div>

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require("react");
+
 var marked = require("marked");
 marked.setOptions({
     renderer: new marked.Renderer(),
@@ -25,9 +26,11 @@ marked.setOptions({
     smartLists: true,
     smartypants: false
 });
+
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
+var CallHandler = require('../../../CallHandler');
 var sdk = require('../../../index');
 
 var dis = require("../../../dispatcher");
@@ -524,6 +527,19 @@ module.exports = React.createClass({
         this.refs.uploadInput.value = null;
     },
 
+    onHangupClick: function() {
+        var call = CallHandler.getCallForRoom(this.props.room.roomId);
+        if (!call) {
+            return;
+        }
+        dis.dispatch({
+            action: 'hangup',
+            // hangup the call for this room, which may not be the room in props
+            // (e.g. conferences which will hangup the 1:1 room instead)
+            room_id: call.roomId
+        });
+    },
+
     onCallClick: function(ev) {
         dis.dispatch({
             action: 'place_call',
@@ -544,6 +560,26 @@ module.exports = React.createClass({
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+
+        var callButton, videoCallButton, hangupButton;
+        var call = CallHandler.getCallForRoom(this.props.room.roomId);
+        if (this.props.callState && this.props.callState !== 'ended') {
+            hangupButton =
+                <div className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
+                    <img src="img/hangup.svg" alt="Hangup" title="Hangup" width="25" height="26"/>
+                </div>;
+        }
+        else {
+            callButton =
+                <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick}>
+                    <img src="img/voice.svg" alt="Voice call" title="Voice call" width="16" height="26"/>
+                </div>
+            videoCallButton =
+                <div className="mx_MessageComposer_videocall" onClick={this.onCallClick}>
+                    <img src="img/call.svg" alt="Video call" title="Video call" width="30" height="22"/>
+                </div>
+        }
+
         return (
         <div className="mx_MessageComposer">
             <div className="mx_MessageComposer_wrapper">
@@ -558,12 +594,9 @@ module.exports = React.createClass({
                         <img src="img/upload.svg" alt="Upload file" title="Upload file" width="19" height="24"/>
                         <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
                     </div>
-                    <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick}>
-                        <img src="img/voice.svg" alt="Voice call" title="Voice call" width="16" height="26"/>
-                    </div>
-                    <div className="mx_MessageComposer_videocall" onClick={this.onCallClick}>
-                        <img src="img/call.svg" alt="Video call" title="Video call" width="30" height="22"/>
-                    </div>
+                    { hangupButton }
+                    { callButton }
+                    { videoCallButton }
                 </div>
             </div>
         </div>
