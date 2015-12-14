@@ -145,7 +145,10 @@ module.exports = React.createClass({
         }
     },
 
-    onSyncStateChange: function(state) {
+    onSyncStateChange: function(state, prevState) {
+        if (state === "SYNCING" && prevState === "SYNCING") {
+            return;
+        }
         this.setState({
             syncState: state
         });
