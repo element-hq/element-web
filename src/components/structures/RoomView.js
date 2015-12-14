@@ -994,7 +994,8 @@ module.exports = React.createClass({
         }
 
         var myUserId = MatrixClientPeg.get().credentials.userId;
-        if (this.state.room.currentState.members[myUserId].membership == 'invite') {
+        var myMember = this.state.room.getMember(myUserId);
+        if (myMember && myMember.membership == 'invite') {
             if (this.state.joining || this.state.rejecting) {
                 var Loader = sdk.getComponent("elements.Spinner");
                 return (
@@ -1003,7 +1004,8 @@ module.exports = React.createClass({
                     </div>
                 );
             } else {
-                var inviteEvent = this.state.room.currentState.members[myUserId].events.member.event;
+                var inviteEvent = myMember.events.member;
+                var inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
                 // XXX: Leaving this intentionally basic for now because invites are about to change totally
                 var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
                 var rejectErrorText = this.state.rejectError ? "Failed to reject invite!" : "";
@@ -1011,7 +1013,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomView">
                         <RoomHeader ref="header" room={this.state.room} simpleHeader="Room invite"/>
                         <div className="mx_RoomView_invitePrompt">
-                            <div>{inviteEvent.user_id} has invited you to a room</div>
+                            <div>{inviterName} has invited you to a room</div>
                             <br/>
                             <button ref="joinButton" onClick={this.onJoinButtonClicked}>Join</button>
                             <button onClick={this.onRejectButtonClicked}>Reject</button>
