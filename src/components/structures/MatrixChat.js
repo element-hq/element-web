@@ -327,7 +327,7 @@ module.exports = React.createClass({
         this._updateScrollMap();
 
         this.setState({
-            page_type: this.PageTypes.RoomDirectory,
+            page_type: pageType,
         });
     },
 
