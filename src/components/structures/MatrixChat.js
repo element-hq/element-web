@@ -391,7 +391,10 @@ module.exports = React.createClass({
     startMatrixClient: function() {
         var cli = MatrixClientPeg.get();
         var self = this;
-        cli.on('sync', function(state) {
+        cli.on('sync', function(state, prevState) {
+            if (state === "SYNCING" && prevState === "SYNCING") {
+                return;
+            }
             console.log("MatrixClient sync state => %s", state);
             if (state !== "PREPARED") { return; }
             self.sdkReady = true;
