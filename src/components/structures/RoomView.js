@@ -998,6 +998,13 @@ module.exports = React.createClass({
         }
     },
 
+    onFullscreenClick: function() {
+        dis.dispatch({
+            action: 'video_fullscreen',
+            fullscreen: true
+        }, true);
+    },
+
     onMuteAudioClick: function() {
         var call = CallHandler.getCallForRoom(this.props.roomId);
         if (!call) {
@@ -1204,17 +1211,22 @@ module.exports = React.createClass({
             var inCall = false;
             if (call && this.state.callState != 'ended') {
                 inCall = true;
-                //var muteVideoButton;
-                var voiceMuteButton, videoMuteButton;
+                var zoomButton, voiceMuteButton, videoMuteButton;
 
                 if (call.type === "video") {
+                    zoomButton = (
+                        <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick}>
+                            <img src="img/fullscreen.svg" title="Fill screen" alt="Fill screen" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
+                        </div>
+                    );
+
                     videoMuteButton =
-                        <div className="mx_RoomView_muteButton" onClick={this.onMuteVideoClick}>
+                        <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
                             <img src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"} width="31" height="27"/>
                         </div>
                 }
                 voiceMuteButton =
-                    <div className="mx_RoomView_muteButton" onClick={this.onMuteAudioClick}>
+                    <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
                         <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"} width="21" height="26"/>
                     </div>
 
@@ -1230,6 +1242,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomView_callStatusBar">
                         { voiceMuteButton }
                         { videoMuteButton }
+                        { zoomButton }
                         { statusBar }
                         <img className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17"/>
                     </div>

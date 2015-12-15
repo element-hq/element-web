@@ -66,10 +66,6 @@ module.exports = React.createClass({
     getRoomName: function() {
         return this.refs.name_edit.value;
     },
-
-    onFullscreenClick: function() {
-        dis.dispatch({action: 'video_fullscreen', fullscreen: true}, true);
-    },
     
     render: function() {
         var EditableText = sdk.getComponent("elements.EditableText");
