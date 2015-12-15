@@ -250,11 +250,10 @@ limitations under the License.
 }
 
 .mx_RoomView_typingBar {
-    margin-top: 10px;
-    margin-left: 63px;
+    margin-top: 6px;
+    margin-left: 65px;
     color: #4a4a4a;
     opacity: 0.5;
-    overflow-y: hidden;
 }
 
 .mx_RoomView_typingImage {
@@ -262,6 +261,11 @@ limitations under the License.
     margin-left: -47px;
     margin-top: -4px;
     float: left;
+}
+
+.mx_RoomView_typingText {
+    overflow-y: hidden;
+    display: block;
 }
 
 .mx_RoomView .mx_MessageComposer {
