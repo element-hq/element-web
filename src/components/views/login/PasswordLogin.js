@@ -51,7 +51,7 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
                 <form onSubmit={this.onSubmitForm}>
                 <input className="mx_Login_field" ref="user" type="text"
                     value={this.state.username} onChange={this.onUsernameChanged}
-                    placeholder="Email or user name" />
+                    placeholder="Email or user name" autoFocus />
                 <br />
                 <input className="mx_Login_field" ref="pass" type="password"
                     value={this.state.password} onChange={this.onPasswordChanged}
