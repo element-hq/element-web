@@ -193,7 +193,7 @@ limitations under the License.
     right: 11px;
 }
 
-.mx_RoomView_muteButton {
+.mx_RoomView_voipButton {
     float: right;
     margin-right: 13px;
     cursor: pointer;
