@@ -1153,7 +1153,7 @@ module.exports = React.createClass({
                     statusBar = (
                         <div className="mx_RoomView_typingBar">
                             <div className="mx_RoomView_typingImage">...</div>
-                            {typingString}
+                            <span className="mx_RoomView_typingText">{typingString}</span>
                         </div>
                     );
                 }
