@@ -129,10 +129,7 @@ module.exports = React.createClass({
                     // Call state has changed so we may be loading video elements
                     // which will obscure the message log.
                     // scroll to bottom
-                    var scrollNode = this._getScrollNode();
-                    if (scrollNode) {
-                        scrollNode.scrollTop = scrollNode.scrollHeight;
-                    }
+                    this.scrollToBottom();
                     callState = call.call_state;
                 }
                 else {
@@ -287,12 +284,8 @@ module.exports = React.createClass({
             messagePanel.addEventListener('dragleave', this.onDragLeaveOrEnd);
             messagePanel.addEventListener('dragend', this.onDragLeaveOrEnd);
 
-            var messageWrapperScroll = this._getScrollNode();
-
-            messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
-
+            this.scrollToBottom();
             this.sendReadReceipt();
-
             this.fillSpace();
         }
 
