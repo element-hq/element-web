@@ -45,6 +45,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         var cli = MatrixClientPeg.get();
         cli.on("Room", this.onRoom);
+        cli.on("deleteRoom", this.onDeleteRoom);
         cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
         cli.on("Room.tags", this.onRoomTags);
@@ -88,6 +89,10 @@ module.exports = React.createClass({
     },
 
     onRoom: function(room) {
+        this.refreshRoomList();
+    },
+
+    onDeleteRoom: function(roomId) {
         this.refreshRoomList();
     },
 
