@@ -824,7 +824,14 @@ module.exports = React.createClass({
             action: 'leave_room',
             room_id: this.props.roomId,
         });
-        this.props.onFinished();        
+    },
+
+    onForgetClick: function() {
+        MatrixClientPeg.get().forget(this.props.roomId).done(function() {
+            dis.dispatch({ action: 'view_next_room' });
+        }, function(err) {
+            console.error("Failed to forget room: %s", err);
+        });
     },
 
     onRejectButtonClicked: function(ev) {
@@ -1249,8 +1256,18 @@ module.exports = React.createClass({
 
             return (
                 <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") }>
-                    <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
-                        onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} onLeaveClick={this.onLeaveClick} />
+                    <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
+                        editing={this.state.editingRoomSettings}
+                        onSearchClick={this.onSearchClick}
+                        onSettingsClick={this.onSettingsClick}
+                        onSaveClick={this.onSaveClick}
+                        onCancelClick={this.onCancelClick}
+                        onForgetClick={
+                            (myMember && myMember.membership === "leave") ? this.onForgetClick : null
+                        }
+                        onLeaveClick={
+                            (myMember && myMember.membership === "join") ? this.onLeaveClick : null
+                        } />
                     { fileDropTarget }    
                     <div className="mx_RoomView_auxPanel">
                         <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>

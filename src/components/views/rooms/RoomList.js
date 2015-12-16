@@ -168,6 +168,9 @@ module.exports = React.createClass({
             if (me && me.membership == "invite") {
                 s.lists["im.vector.fake.invite"].push(room);
             }
+            else if (me && (me.membership === "leave" || me.membership === "ban")) {
+                s.lists["im.vector.fake.archived"].push(room);
+            }
             else {
                 var shouldShowRoom =  (
                     me && (me.membership == "join")
