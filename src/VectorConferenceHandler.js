@@ -85,15 +85,15 @@ ConferenceCall.prototype._getConferenceUserRoom = function() {
 };
 
 /**
- * Check if this room member is in fact a conference bot.
- * @param {RoomMember} The room member to check
+ * Check if this user ID is in fact a conference bot.
+ * @param {string} userId The user ID to check.
  * @return {boolean} True if it is a conference bot.
  */
-module.exports.isConferenceUser = function(roomMember) {
-    if (roomMember.userId.indexOf("@" + USER_PREFIX) !== 0) {
+module.exports.isConferenceUser = function(userId) {
+    if (userId.indexOf("@" + USER_PREFIX) !== 0) {
         return false;
     }
-    var base64part = roomMember.userId.split(":")[0].substring(1 + USER_PREFIX.length);
+    var base64part = userId.split(":")[0].substring(1 + USER_PREFIX.length);
     if (base64part) {
         var decoded = new Buffer(base64part, "base64").toString();
         // ! $STUFF : $STUFF
