@@ -405,10 +405,10 @@ module.exports = React.createClass({
         // ignored. (Or rather, it is successfully written, but on the next
         // scroll event, it's been reset again).
         //
-        // This was observed on Chrome, when scrolling using the trackpad in OS
-        // X. Our theory is that this is due to Chrome not being able to cope
-        // with the scroll offset being reset while a two-finger drag is in
-        // progress.
+        // This was observed on Chrome 47, when scrolling using the trackpad in OS
+        // X Yosemite.  Can't reproduce on El Capitan. Our theory is that this is
+        // due to Chrome not being able to cope with the scroll offset being reset
+        // while a two-finger drag is in progress.
         //
         // By way of a workaround, we detect this situation and just keep
         // resetting scrollTop until we see the scroll node have the right
