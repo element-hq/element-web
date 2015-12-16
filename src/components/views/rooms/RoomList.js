@@ -182,7 +182,7 @@ module.exports = React.createClass({
                             return m.userId !== me.userId
                         })[0];
                         var ConfHandler = self.props.ConferenceHandler;
-                        if (ConfHandler && ConfHandler.isConferenceUser(otherMember)) {
+                        if (ConfHandler && ConfHandler.isConferenceUser(otherMember.userId)) {
                             // console.log("Hiding conference 1:1 room %s", room.roomId);
                             shouldShowRoom = false;
                         }
