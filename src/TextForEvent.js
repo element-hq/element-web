@@ -9,7 +9,16 @@ function textForMemberEvent(ev) {
     ) : "";
     switch (ev.getContent().membership) {
         case 'invite':
-            return senderName + " invited " + targetName + ".";
+            var threePidContent = ev.getContent().third_party_invite;
+            if (threePidContent) {
+                // TODO: When we have third_party_invite.display_name we should
+                // do this as "$displayname received the invitation from $sender"
+                // or equiv
+                return targetName + " received an invitation from " + senderName;
+            }
+            else {
+                return senderName + " invited " + targetName + ".";
+            }
         case 'ban':
             return senderName + " banned " + targetName + "." + reason;
         case 'join':
@@ -101,6 +110,12 @@ function textForCallInviteEvent(event) {
     return senderName + " placed a " + type + " call." + supported;
 };
 
+function textForThreePidInviteEvent(event) {
+    var senderName = event.sender ? event.sender.name : event.getSender();
+    return senderName + " sent an invitation to " + event.getContent().display_name +
+     " to join the room.";
+};
+
 var handlers = {
     'm.room.message': textForMessageEvent,
     'm.room.name':    textForRoomNameEvent,
@@ -109,6 +124,7 @@ var handlers = {
     'm.call.invite':  textForCallInviteEvent,
     'm.call.answer':  textForCallAnswerEvent,
     'm.call.hangup':  textForCallHangupEvent,
+    'm.room.third_party_invite': textForThreePidInviteEvent
 };
 
 module.exports = {
