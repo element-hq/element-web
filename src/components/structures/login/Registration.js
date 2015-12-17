@@ -39,6 +39,7 @@ module.exports = React.createClass({
         idSid: React.PropTypes.string,
         hsUrl: React.PropTypes.string,
         isUrl: React.PropTypes.string,
+        email: React.PropTypes.string,
         // registration shouldn't know or care how login is done.
         onLoginClick: React.PropTypes.func.isRequired
     },
@@ -185,6 +186,7 @@ module.exports = React.createClass({
                 registerStep = (
                     <RegistrationForm
                         showEmail={true}
+                        defaultEmail={this.props.email}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit} />
