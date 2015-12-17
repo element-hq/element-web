@@ -547,9 +547,9 @@ module.exports = React.createClass({
         }
     },
 
-    notifyNewScreen: function(screen, queryParamString) {
+    notifyNewScreen: function(screen) {
         if (this.props.onNewScreen) {
-            this.props.onNewScreen(screen, queryParamString);
+            this.props.onNewScreen(screen);
         }
     },
 
