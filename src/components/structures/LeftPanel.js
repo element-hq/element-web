@@ -62,7 +62,7 @@ var LeftPanel = React.createClass({
         // audio/video not crap out
         var activeCall = CallHandler.getAnyActiveCall();
         var callForRoom = CallHandler.getCallForRoom(selectedRoomId);
-        var showCall = (activeCall && !callForRoom);
+        var showCall = (activeCall && activeCall.call_state === 'connected' && !callForRoom);
         this.setState({
             showCallElement: showCall
         });
@@ -87,7 +87,6 @@ var LeftPanel = React.createClass({
     render: function() {
         var RoomList = sdk.getComponent('rooms.RoomList');
         var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
-        var IncomingCallBox = sdk.getComponent('voip.IncomingCallBox');
 
         var collapseButton;
         var classes = "mx_LeftPanel";
@@ -100,7 +99,7 @@ var LeftPanel = React.createClass({
         }
 
         var callPreview;
-        if (this.state.showCallElement) {
+        if (this.state.showCallElement && !this.props.collapsed) {
             var CallView = sdk.getComponent('voip.CallView');
             callPreview = (
                 <CallView
@@ -112,7 +111,6 @@ var LeftPanel = React.createClass({
         return (
             <aside className={classes}>
                 { collapseButton }
-                <IncomingCallBox />
                 { callPreview }
                 <RoomList
                     selectedRoom={this.props.selectedRoom}

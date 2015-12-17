@@ -27,6 +27,14 @@
     <meta name="theme-color" content="#ffffff">
   </head>
   <body style="height: 100%;">
+    <section id="matrixchat" style="height: 100%;"></section>
+    <script src="bundle.js"></script>
+    <link rel="stylesheet" href="bundle.css">
+    <img src="img/warning.svg" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <audio id="ringAudio" loop>
+        <source src="media/ring.ogg" type="audio/ogg" />
+        <source src="media/ring.mp3" type="audio/mpeg" />
+    </audio>
     <audio id="ringbackAudio" loop>
         <source src="media/ringback.ogg" type="audio/ogg" />
         <source src="media/ringback.mp3" type="audio/mpeg" />
@@ -39,9 +47,5 @@
         <source src="media/busy.ogg" type="audio/ogg" />
         <source src="media/busy.mp3" type="audio/mpeg" />
     </audio>
-    <section id="matrixchat" style="height: 100%;"></section>
-    <script src="bundle.js"></script>
-    <link rel="stylesheet" href="bundle.css">
-    <img src="img/warning.svg" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
   </body>
 </html>
