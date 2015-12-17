@@ -153,7 +153,8 @@ function loadApp() {
                 onNewScreen={onNewScreen}
                 registrationUrl={makeRegistrationUrl()}
                 ConferenceHandler={VectorConferenceHandler}
-                config={configJson} />,
+                config={configJson}
+                startingQueryParams={parseQsFromFragment(window.location)} />,
             document.getElementById('matrixchat')
         );
     }
