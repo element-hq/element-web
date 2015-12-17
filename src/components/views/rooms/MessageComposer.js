@@ -529,6 +529,7 @@ module.exports = React.createClass({
 
     onHangupClick: function() {
         var call = CallHandler.getCallForRoom(this.props.room.roomId);
+        //var call = CallHandler.getAnyActiveCall();
         if (!call) {
             return;
         }
@@ -563,6 +564,7 @@ module.exports = React.createClass({
 
         var callButton, videoCallButton, hangupButton;
         var call = CallHandler.getCallForRoom(this.props.room.roomId);
+        //var call = CallHandler.getAnyActiveCall();
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
                 <div className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>

@@ -1207,8 +1207,9 @@ module.exports = React.createClass({
             }
 
             var call = CallHandler.getCallForRoom(this.props.roomId);
+            //var call = CallHandler.getAnyActiveCall();
             var inCall = false;
-            if (call && this.state.callState != 'ended') {
+            if (call && (this.state.callState !== 'ended' && this.state.callState !== 'ringing')) {
                 inCall = true;
                 var zoomButton, voiceMuteButton, videoMuteButton;
 
