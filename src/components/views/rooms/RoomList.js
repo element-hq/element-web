@@ -257,7 +257,7 @@ module.exports = React.createClass({
                              collapsed={ self.props.collapsed } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
-                             label="Conversations"
+                             label="Rooms"
                              editable={ true }
                              verb="restore"
                              order="recent"
