@@ -116,8 +116,17 @@ class Register extends Signup {
 
     _tryRegister(authDict) {
         var self = this;
+
+        var bindEmail;
+
+        if (this.username && this.password) {
+            // only need to bind_email when sending u/p - sending it at other
+            // times clobbers the u/p resulting in M_MISSING_PARAM (password)
+            bindEmail = true;
+        }
+
         return MatrixClientPeg.get().register(
-            this.username, this.password, this.params.sessionId, authDict
+            this.username, this.password, this.params.sessionId, authDict, bindEmail
         ).then(function(result) {
             self.credentials = result;
             self.setStep("COMPLETE");

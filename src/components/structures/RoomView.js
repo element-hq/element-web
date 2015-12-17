@@ -40,6 +40,8 @@ var dis = require("../../dispatcher");
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
 
+var DEBUG_SCROLL = false;
+
 module.exports = React.createClass({
     displayName: 'RoomView',
     propTypes: {
@@ -151,6 +153,12 @@ module.exports = React.createClass({
         }
     },
 
+    // get the DOM node which has the scrollTop property we care about for our
+    // message panel.
+    //
+    // If the gemini scrollbar is doing its thing, this will be a div within
+    // the message panel (ie, the gemini container); otherwise it will be the
+    // message panel itself.
     _getScrollNode: function() {
         var panel = ReactDOM.findDOMNode(this.refs.messagePanel);
         if (!panel) return null;
@@ -309,12 +317,11 @@ module.exports = React.createClass({
         if (!this.refs.messagePanel) return;
 
         if (this.state.searchResults) return;
-        var scrollState = this.savedScrollState;
-        if (scrollState.atBottom) {
-            this.scrollToBottom();
-        } else if (scrollState.lastDisplayedEvent) {
-            this.scrollToEvent(scrollState.lastDisplayedEvent,
-                               scrollState.pixelOffset);
+
+        if (this.needsScrollReset) {
+            if (DEBUG_SCROLL) console.log("Resetting scroll position after tile count change");
+            this._restoreSavedScrollState();
+            this.needsScrollReset = false;
         }
 
         // have to fill space in case we're accepting an invite
@@ -322,6 +329,8 @@ module.exports = React.createClass({
     },
 
     _paginateCompleted: function() {
+        if (DEBUG_SCROLL) console.log("paginate complete");
+
         this.setState({
             room: MatrixClientPeg.get().getRoom(this.props.roomId)
         });
@@ -350,9 +359,11 @@ module.exports = React.createClass({
 
             if (this.state.messageCap < this.state.room.timeline.length) {
                 var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
+                if (DEBUG_SCROLL) console.log("winding back message cap to", cap);
                 this.setState({messageCap: cap});
             } else {
                 var cap = this.state.messageCap + PAGINATE_SIZE;
+                if (DEBUG_SCROLL) console.log("starting paginate to cap", cap);
                 this.setState({messageCap: cap, paginating: true});
                 MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(this._paginateCompleted).done();
                 return true;
@@ -387,8 +398,33 @@ module.exports = React.createClass({
     },
 
     onMessageListScroll: function(ev) {
+        var sn = this._getScrollNode();
+        if (DEBUG_SCROLL) console.log("Scroll event: offset now:", sn.scrollTop, "recentEventScroll:", this.recentEventScroll);
+
+        // Sometimes we see attempts to write to scrollTop essentially being
+        // ignored. (Or rather, it is successfully written, but on the next
+        // scroll event, it's been reset again).
+        //
+        // This was observed on Chrome 47, when scrolling using the trackpad in OS
+        // X Yosemite.  Can't reproduce on El Capitan. Our theory is that this is
+        // due to Chrome not being able to cope with the scroll offset being reset
+        // while a two-finger drag is in progress.
+        //
+        // By way of a workaround, we detect this situation and just keep
+        // resetting scrollTop until we see the scroll node have the right
+        // value.
+        if (this.recentEventScroll !== undefined) {
+            if(sn.scrollTop < this.recentEventScroll-200) {
+                console.log("Working around vector-im/vector-web#528");
+                this._restoreSavedScrollState();
+                return;
+            }
+            this.recentEventScroll = undefined;
+        }
+
         if (this.refs.messagePanel && !this.state.searchResults) {
             this.savedScrollState = this._calculateScrollState();
+            if (DEBUG_SCROLL) console.log("Saved scroll state", this.savedScrollState);
             if (this.savedScrollState.atBottom && this.state.numUnreadMessages != 0) {
                 this.setState({numUnreadMessages: 0});
             }
@@ -647,6 +683,11 @@ module.exports = React.createClass({
             }
             ++count;
         }
+        if (count != this.lastEventTileCount) {
+            if (DEBUG_SCROLL) console.log("Queuing scroll reset (event count changed; now "+count+"; was "+this.lastEventTileCount+")");
+            this.needsScrollReset = true;
+        }
+        this.lastEventTileCount = count;
         return ret;
     },
 
@@ -876,6 +917,7 @@ module.exports = React.createClass({
         var scrollNode = this._getScrollNode();
         if (!scrollNode) return;
         scrollNode.scrollTop = scrollNode.scrollHeight;
+        if (DEBUG_SCROLL) console.log("Scrolled to bottom; offset now", scrollNode.scrollTop);
     },
 
     // scroll the event view to put the given event at the bottom.
@@ -926,7 +968,28 @@ module.exports = React.createClass({
 
         var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
         var boundingRect = node.getBoundingClientRect();
-        scrollNode.scrollTop += boundingRect.bottom + pixelOffset - wrapperRect.bottom;
+        var scrollDelta = boundingRect.bottom + pixelOffset - wrapperRect.bottom;
+        if(scrollDelta != 0) {
+            scrollNode.scrollTop += scrollDelta;
+
+            // see the comments in onMessageListScroll regarding recentEventScroll
+            this.recentEventScroll = scrollNode.scrollTop;
+        }
+
+        if (DEBUG_SCROLL) {
+            console.log("Scrolled to event", eventId, "+", pixelOffset+":", scrollNode.scrollTop, "(delta: "+scrollDelta+")");
+            console.log("recentEventScroll now "+this.recentEventScroll);
+        }
+    },
+
+    _restoreSavedScrollState: function() {
+        var scrollState = this.savedScrollState;
+        if (scrollState.atBottom) {
+            this.scrollToBottom();
+        } else if (scrollState.lastDisplayedEvent) {
+            this.scrollToEvent(scrollState.lastDisplayedEvent,
+                               scrollState.pixelOffset);
+        }
     },
 
     _calculateScrollState: function() {
