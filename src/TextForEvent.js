@@ -14,7 +14,8 @@ function textForMemberEvent(ev) {
                 // TODO: When we have third_party_invite.display_name we should
                 // do this as "$displayname received the invitation from $sender"
                 // or equiv
-                return targetName + " received an invitation from " + senderName;
+                return targetName + " received an invitation from " + senderName +
+                    ".";
             }
             else {
                 return senderName + " invited " + targetName + ".";
