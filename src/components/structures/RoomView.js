@@ -346,39 +346,49 @@ module.exports = React.createClass({
 
         // we might not have got enough results from the pagination
         // request, so give fillSpace() a chance to set off another.
-        if (!this.fillSpace()) {
-            this.setState({paginating: false});
+        this.setState({paginating: false});
+
+        if (!this.state.searchResults) {
+            this.fillSpace();
         }
     },
 
     // check the scroll position, and if we need to, set off a pagination
     // request.
-    //
-    // returns true if a pagination request was started (or is still in progress)
     fillSpace: function() {
         if (!this.refs.messagePanel) return;
-        if (this.state.searchResults) return; // TODO: paginate search results
         var messageWrapperScroll = this._getScrollNode();
-        if (messageWrapperScroll.scrollTop < messageWrapperScroll.clientHeight && this.state.room.oldState.paginationToken) {
-            // there's less than a screenful of messages left. Either wind back
-            // the message cap (if there are enough events in the timeline to
-            // do so), or fire off a pagination request.
-
-            this.oldScrollHeight = messageWrapperScroll.scrollHeight;
-
-            if (this.state.messageCap < this.state.room.timeline.length) {
-                var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
-                if (DEBUG_SCROLL) console.log("winding back message cap to", cap);
-                this.setState({messageCap: cap});
-            } else {
-                var cap = this.state.messageCap + PAGINATE_SIZE;
-                if (DEBUG_SCROLL) console.log("starting paginate to cap", cap);
-                this.setState({messageCap: cap, paginating: true});
-                MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(this._paginateCompleted).done();
-                return true;
-            }
+        if (messageWrapperScroll.scrollTop > messageWrapperScroll.clientHeight) {
+            return;
         }
-        return false;
+
+        // there's less than a screenful of messages left - try to get some
+        // more messages.
+
+        if (this.state.searchResults) {
+            if (this.nextSearchBatch) {
+                if (DEBUG_SCROLL) console.log("requesting more search results");
+                this._getSearchBatch(this.state.searchTerm,
+                                     this.state.searchScope);
+            } else {
+                if (DEBUG_SCROLL) console.log("no more search results");
+            }
+            return;
+        }
+
+        // Either wind back the message cap (if there are enough events in the
+        // timeline to do so), or fire off a pagination request.
+
+        if (this.state.messageCap < this.state.room.timeline.length) {
+            var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
+            if (DEBUG_SCROLL) console.log("winding back message cap to", cap);
+            this.setState({messageCap: cap});
+        } else if(this.state.room.oldState.paginationToken) {
+            var cap = this.state.messageCap + PAGINATE_SIZE;
+            if (DEBUG_SCROLL) console.log("starting paginate to cap", cap);
+            this.setState({messageCap: cap, paginating: true});
+            MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(this._paginateCompleted).done();
+        }
     },
 
     onResendAllClick: function() {
@@ -438,7 +448,9 @@ module.exports = React.createClass({
                 this.setState({numUnreadMessages: 0});
             }
         }
-        if (!this.state.paginating) this.fillSpace();
+        if (!this.state.paginating && !this.state.searchInProgress) {
+            this.fillSpace();
+        }
     },
 
     onDragOver: function(ev) {
@@ -498,6 +510,7 @@ module.exports = React.createClass({
             searchCount: null,
         });
 
+        this.nextSearchBatch = null;
         this._getSearchBatch(term, scope);
     },
 
@@ -515,8 +528,11 @@ module.exports = React.createClass({
 
         var self = this;
 
-        MatrixClientPeg.get().search({ body: this._getSearchCondition(term, scope) })
+        if (DEBUG_SCROLL) console.log("sending search request");
+        MatrixClientPeg.get().search({ body: this._getSearchCondition(term, scope),
+                                       next_batch: this.nextSearchBatch })
         .then(function(data) {
+            if (DEBUG_SCROLL) console.log("search complete");
             if (!self.state.searching || self.searchId != searchId) {
                 console.error("Discarding stale search results");
                 return;
@@ -550,6 +566,7 @@ module.exports = React.createClass({
                 searchResults: events,
                 searchCount: results.count,
             });
+            self.nextSearchBatch = results.next_batch;
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
