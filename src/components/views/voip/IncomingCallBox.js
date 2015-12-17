@@ -37,7 +37,7 @@ module.exports = React.createClass({
 
     render: function() {
 
-        var room = MatrixClientPeg.get().getRoom(this.props.incomingCall.roomId);
+        var room = this.props.incomingCall ? MatrixClientPeg.get().getRoom(this.props.incomingCall.roomId) : null;
         var caller = room ? room.name : "unknown";
         return (
             <div className="mx_IncomingCallBox" id="incomingCallBox">
