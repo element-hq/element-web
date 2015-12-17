@@ -259,14 +259,23 @@ module.exports = React.createClass({
 
             if (firstTime) {
                 // scroll to make sure the callbox is on the screen...
-                if (top < 10) {
+                if (top < 10) { // 10px of vertical margin at top of screen
                     scroll.scrollTop = incomingCallBox.parentElement.offsetTop - 10;
                 }
-                else if (top > scroll.clientHeight - incomingCallBox.offsetHeight) {
-                    scroll.scrollTop = incomingCallBox.parentElement.offsetTop - scroll.offsetHeight + incomingCallBox.offsetHeight;
+                else if (top > scroll.clientHeight - incomingCallBox.offsetHeight + 50) {
+                    scroll.scrollTop = incomingCallBox.parentElement.offsetTop - scroll.offsetHeight + incomingCallBox.offsetHeight - 50;
                 }
                 // recalculate top in case we clipped it.
                 top = (scroll.offsetTop + incomingCallBox.parentElement.offsetTop - scroll.scrollTop);
+            }
+            else {
+                // stop the box from scrolling off the screen
+                if (top < 10) {
+                    top = 10;
+                }
+                else if (top > scroll.clientHeight - incomingCallBox.offsetHeight + 50) {
+                    top = scroll.clientHeight - incomingCallBox.offsetHeight + 50;
+                }
             }
 
             incomingCallBox.style.top = top + "px";
