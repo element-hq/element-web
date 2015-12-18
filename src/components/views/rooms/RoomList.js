@@ -96,6 +96,17 @@ module.exports = React.createClass({
         this.refreshRoomList();
     },
 
+    onArchivedHeaderClick: function(isHidden) {
+        if (!isHidden) {
+            // we don't care about the response since it comes down via "Room"
+            // events.
+            MatrixClientPeg.get().syncLeftRooms().catch(function(err) {
+                console.error("Failed to sync left rooms: %s", err);
+                console.error(err);
+            });
+        }
+    },
+
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (toStartOfTimeline) return;
 
@@ -295,7 +306,7 @@ module.exports = React.createClass({
                              verb="demote"
                              editable={ true }
                              order="recent"
-                             bottommost={ self.state.lists['im.vector.fake.archived'].length === 0 }
+                             bottommost={ false }
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
                              collapsed={ self.props.collapsed } />
@@ -307,7 +318,9 @@ module.exports = React.createClass({
                              bottommost={ true }
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
-                             collapsed={ self.props.collapsed } />
+                             collapsed={ self.props.collapsed }
+                             alwaysShowHeader={ true }
+                             onHeaderClick= { self.onArchivedHeaderClick } />
             </div>
             </GeminiScrollbar>
         );
