@@ -78,6 +78,10 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         if (this.refs.messagePanel) {
+            // disconnect the D&D event listeners from the message panel. This
+            // is really just for hygiene - the messagePanel is going to be
+            // deleted anyway, so it doesn't matter if the event listeners
+            // don't get cleaned up.
             var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
             messagePanel.removeEventListener('drop', this.onDrop);
             messagePanel.removeEventListener('dragover', this.onDragOver);
@@ -285,16 +289,7 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         if (this.refs.messagePanel) {
-            var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
-
-            messagePanel.addEventListener('drop', this.onDrop);
-            messagePanel.addEventListener('dragover', this.onDragOver);
-            messagePanel.addEventListener('dragleave', this.onDragLeaveOrEnd);
-            messagePanel.addEventListener('dragend', this.onDragLeaveOrEnd);
-
-            this.scrollToBottom();
-            this.sendReadReceipt();
-            this.fillSpace();
+            this._initialiseMessagePanel();
         }
 
         var call = CallHandler.getCallForRoom(this.props.roomId);
@@ -309,19 +304,37 @@ module.exports = React.createClass({
         this.onResize();
     },
 
+    _initialiseMessagePanel: function() {
+        var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
+        this.refs.messagePanel.initialised = true;
+
+        messagePanel.addEventListener('drop', this.onDrop);
+        messagePanel.addEventListener('dragover', this.onDragOver);
+        messagePanel.addEventListener('dragleave', this.onDragLeaveOrEnd);
+        messagePanel.addEventListener('dragend', this.onDragLeaveOrEnd);
+
+        this.scrollToBottom();
+        this.sendReadReceipt();
+        this.fillSpace();
+    },
+
     componentDidUpdate: function() {
+        // we need to initialise the messagepanel if we've just joined the
+        // room. TODO: we really really ought to factor out messagepanel to a
+        // separate component to avoid this ridiculous dance.
+        if (!this.refs.messagePanel) return;
+
+        if (!this.refs.messagePanel.initialised) {
+            this._initialiseMessagePanel();
+        }
+
         // after adding event tiles, we may need to tweak the scroll (either to
         // keep at the bottom of the timeline, or to maintain the view after
         // adding events to the top).
 
-        if (!this.refs.messagePanel) return;
-
         if (this.state.searchResults) return;
 
         this._restoreSavedScrollState();
-
-        // have to fill space in case we're accepting an invite
-        if (!this.state.paginating) this.fillSpace();
     },
 
     _paginateCompleted: function() {
