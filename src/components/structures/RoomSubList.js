@@ -61,7 +61,6 @@ var RoomSubList = React.createClass({
         tagName: React.PropTypes.string,
         editable: React.PropTypes.bool,
         order: React.PropTypes.string.isRequired,
-        bottommost: React.PropTypes.bool,
         selectedRoom: React.PropTypes.string.isRequired,
         activityMap: React.PropTypes.object.isRequired,
         startAsHidden: React.PropTypes.bool,
@@ -290,8 +289,7 @@ var RoomSubList = React.createClass({
 
         if (this.state.sortedList.length > 0 || this.props.editable) {
             var subList;
-            var classes = "mx_RoomSubList" +
-                          (this.props.bottommost ? " mx_RoomSubList_bottommost" : "");
+            var classes = "mx_RoomSubList";
 
             if (!this.state.hidden) {
                 subList = <div className={ classes }>
