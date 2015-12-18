@@ -61,17 +61,31 @@ var RoomSubList = React.createClass({
         tagName: React.PropTypes.string,
         editable: React.PropTypes.bool,
         order: React.PropTypes.string.isRequired,
-        bottommost: React.PropTypes.bool,
         selectedRoom: React.PropTypes.string.isRequired,
         activityMap: React.PropTypes.object.isRequired,
+        startAsHidden: React.PropTypes.bool,
+        showSpinner: React.PropTypes.bool, // true to show a spinner if 0 elements when expanded
+
+        // TODO: Fix the name of this. This is too easily confused with the
+        // "hidden" state which is the expanded (or not) view of the list of rooms.
+        // What this prop *really* does is control whether the room name is displayed
+        // so it should be named as such.
         collapsed: React.PropTypes.bool.isRequired,
-        incomingCall: React.PropTypes.object,
+        onHeaderClick: React.PropTypes.func,
+        alwaysShowHeader: React.PropTypes.bool,
+        incomingCall: React.PropTypes.object
     },
 
     getInitialState: function() {
         return {
-            hidden: false,
+            hidden: this.props.startAsHidden || false,
             sortedList: [],
+        };
+    },
+
+    getDefaultProps: function() {
+        return {
+            onHeaderClick: function() {} // NOP
         };
     },
 
@@ -86,7 +100,9 @@ var RoomSubList = React.createClass({
     },
 
     onClick: function(ev) {
-        this.setState({ hidden : !this.state.hidden });
+        var isHidden = !this.state.hidden;
+        this.setState({ hidden : isHidden });
+        this.props.onHeaderClick(isHidden);
     },
 
     tsOfNewestEvent: function(room) {
@@ -247,6 +263,17 @@ var RoomSubList = React.createClass({
         });
     },
 
+    _getHeaderJsx: function() {
+        return (
+            <h2 onClick={ this.onClick } className="mx_RoomSubList_label">
+                { this.props.collapsed ? '' : this.props.label }
+                <img className="mx_RoomSubList_chevron"
+                    src={ this.state.hidden ? "img/list-open.svg" : "img/list-close.svg" }
+                    width="10" height="10" />
+            </h2>
+        );
+    },
+
     render: function() {
         var connectDropTarget = this.props.connectDropTarget;
         var RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
@@ -262,8 +289,7 @@ var RoomSubList = React.createClass({
 
         if (this.state.sortedList.length > 0 || this.props.editable) {
             var subList;
-            var classes = "mx_RoomSubList" +
-                          (this.props.bottommost ? " mx_RoomSubList_bottommost" : "");
+            var classes = "mx_RoomSubList";
 
             if (!this.state.hidden) {
                 subList = <div className={ classes }>
@@ -278,16 +304,17 @@ var RoomSubList = React.createClass({
 
             return connectDropTarget(
                 <div>
-                    <h2 onClick={ this.onClick } className="mx_RoomSubList_label">{ this.props.collapsed ? '' : this.props.label }
-                        <img className="mx_RoomSubList_chevron" src={ this.state.hidden ? "img/list-open.svg" : "img/list-close.svg" } width="10" height="10"/>
-                    </h2>
+                    { this._getHeaderJsx() }
                     { subList }
                 </div>
             );
         }
         else {
+            var Loader = sdk.getComponent("elements.Spinner");
             return (
                 <div className="mx_RoomSubList">
+                    { this.props.alwaysShowHeader ? this._getHeaderJsx() : undefined }
+                    { (this.props.showSpinner && !this.state.hidden) ? <Loader /> : undefined }
                 </div>
             );
         }
