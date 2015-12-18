@@ -871,7 +871,12 @@ module.exports = React.createClass({
         MatrixClientPeg.get().forget(this.props.roomId).done(function() {
             dis.dispatch({ action: 'view_next_room' });
         }, function(err) {
-            console.error("Failed to forget room: %s", err);
+            var errCode = err.errcode || "unknown error code";
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: `Failed to forget room (${errCode})`
+            });
         });
     },
 
