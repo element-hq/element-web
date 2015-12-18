@@ -77,6 +77,17 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        if (this.refs.messagePanel) {
+            // disconnect the D&D event listeners from the message panel. This
+            // is really just for hygiene - the messagePanel is going to be
+            // deleted anyway, so it doesn't matter if the event listeners
+            // don't get cleaned up.
+            var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
+            messagePanel.removeEventListener('drop', this.onDrop);
+            messagePanel.removeEventListener('dragover', this.onDragOver);
+            messagePanel.removeEventListener('dragleave', this.onDragLeaveOrEnd);
+            messagePanel.removeEventListener('dragend', this.onDragLeaveOrEnd);
+        }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
