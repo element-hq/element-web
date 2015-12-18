@@ -39,6 +39,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             activityMap: null,
+            isLoadingLeftRooms: false,
             lists: {},
             incomingCall: null,
         }
@@ -47,6 +48,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         var cli = MatrixClientPeg.get();
         cli.on("Room", this.onRoom);
+        cli.on("deleteRoom", this.onDeleteRoom);
         cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
         cli.on("Room.tags", this.onRoomTags);
@@ -104,7 +106,26 @@ module.exports = React.createClass({
     },
 
     onRoom: function(room) {
-        this.refreshRoomList();
+        this._delayedRefreshRoomList();
+    },
+
+    onDeleteRoom: function(roomId) {
+        this._delayedRefreshRoomList();
+    },
+
+    onArchivedHeaderClick: function(isHidden) {
+        if (!isHidden) {
+            var self = this;
+            this.setState({ isLoadingLeftRooms: true });
+            // we don't care about the response since it comes down via "Room"
+            // events.
+            MatrixClientPeg.get().syncLeftRooms().catch(function(err) {
+                console.error("Failed to sync left rooms: %s", err);
+                console.error(err);
+            }).finally(function() {
+                self.setState({ isLoadingLeftRooms: false });
+            });
+        }
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
@@ -143,22 +164,57 @@ module.exports = React.createClass({
     },
 
     onRoomName: function(room) {
-        this.refreshRoomList();
+        this._delayedRefreshRoomList();
     },
 
     onRoomTags: function(event, room) {
-        this.refreshRoomList();        
+        this._delayedRefreshRoomList();
     },
 
     onRoomStateEvents: function(ev, state) {
-        setTimeout(this.refreshRoomList, 0);
+        this._delayedRefreshRoomList();
     },
 
     onRoomMemberName: function(ev, member) {
-        setTimeout(this.refreshRoomList, 0);
+        this._delayedRefreshRoomList();
+    },
+
+    _delayedRefreshRoomList: function() {
+        // There can be 1000s of JS SDK events when rooms are initially synced;
+        // we don't want to do lots of work rendering until things have settled.
+        // Therefore, keep a 1s refresh buffer which will refresh the room list
+        // at MOST once every 1s to prevent thrashing.
+        var MAX_REFRESH_INTERVAL_MS = 1000;
+        var self = this;
+
+        if (!self._lastRefreshRoomListTs) {
+            self.refreshRoomList(); // first refresh evar
+        }
+        else {
+            var timeWaitedMs = Date.now() - self._lastRefreshRoomListTs;
+            if (timeWaitedMs > MAX_REFRESH_INTERVAL_MS) {
+                clearTimeout(self._refreshRoomListTimerId);
+                self._refreshRoomListTimerId = null;
+                self.refreshRoomList(); // refreshed more than MAX_REFRESH_INTERVAL_MS ago
+            }
+            else {
+                // refreshed less than MAX_REFRESH_INTERVAL_MS ago, wait the difference
+                // if we aren't already waiting. If we are waiting then NOP, it will
+                // fire soon, promise!
+                if (!self._refreshRoomListTimerId) {
+                    self._refreshRoomListTimerId = setTimeout(function() {
+                        self.refreshRoomList();
+                    }, 10 + MAX_REFRESH_INTERVAL_MS - timeWaitedMs); // 10 is a buffer amount
+                }
+            }
+        }
     },
 
     refreshRoomList: function() {
+        // console.log("DEBUG: Refresh room list delta=%s ms",
+        //     (!this._lastRefreshRoomListTs ? "-" : (Date.now() - this._lastRefreshRoomListTs))
+        // );
+
         // TODO: rather than bluntly regenerating and re-sorting everything
         // every time we see any kind of room change from the JS SDK
         // we could do incremental updates on our copy of the state
@@ -166,6 +222,7 @@ module.exports = React.createClass({
         // us re-rendering all the sublists every time anything changes anywhere
         // in the state of the client.
         this.setState(this.getRoomLists());
+        this._lastRefreshRoomListTs = Date.now();
     },
 
     getRoomLists: function() {
@@ -184,9 +241,12 @@ module.exports = React.createClass({
             if (me && me.membership == "invite") {
                 s.lists["im.vector.fake.invite"].push(room);
             }
+            else if (me && me.membership === "leave") {
+                s.lists["im.vector.fake.archived"].push(room);
+            }
             else {
                 var shouldShowRoom =  (
-                    me && (me.membership == "join")
+                    me && (me.membership == "join" || me.membership === "ban")
                 );
 
                 // hiding conf rooms only ever toggles shouldShowRoom to false
@@ -355,7 +415,6 @@ module.exports = React.createClass({
                              verb="demote"
                              editable={ true }
                              order="recent"
-                             bottommost={ self.state.lists['im.vector.fake.archived'].length === 0 }
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
@@ -365,11 +424,14 @@ module.exports = React.createClass({
                              label="Historical"
                              editable={ false }
                              order="recent"
-                             bottommost={ true }
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
-                             incomingCall={ self.state.incomingCall }
-                             collapsed={ self.props.collapsed } />
+                             collapsed={ self.props.collapsed }
+                             alwaysShowHeader={ true }
+                             startAsHidden={ true }
+                             showSpinner={ self.state.isLoadingLeftRooms }
+                             onHeaderClick= { self.onArchivedHeaderClick }
+                             incomingCall={ self.state.incomingCall } />
             </div>
             </GeminiScrollbar>
         );

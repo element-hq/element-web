@@ -875,7 +875,19 @@ module.exports = React.createClass({
             action: 'leave_room',
             room_id: this.props.roomId,
         });
-        this.props.onFinished();        
+    },
+
+    onForgetClick: function() {
+        MatrixClientPeg.get().forget(this.props.roomId).done(function() {
+            dis.dispatch({ action: 'view_next_room' });
+        }, function(err) {
+            var errCode = err.errcode || "unknown error code";
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: `Failed to forget room (${errCode})`
+            });
+        });
     },
 
     onRejectButtonClicked: function(ev) {
@@ -1267,16 +1279,23 @@ module.exports = React.createClass({
             }
 
             var messageComposer, searchInfo;
-            if (!this.state.searchResults) {
+            var canSpeak = (
+                // joined and not showing search results
+                myMember && (myMember.membership == 'join') && !this.state.searchResults
+            );
+            if (canSpeak) {
                 messageComposer =
                     <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} callState={this.state.callState} />
             }
-            else {
+
+            // TODO: Why aren't we storing the term/scope/count in this format
+            // in this.state if this is what RoomHeader desires?
+            if (this.state.searchResults) {
                 searchInfo = {
                     searchTerm : this.state.searchTerm,
                     searchScope : this.state.searchScope,
                     searchCount : this.state.searchCount,
-                }
+                };
             }
 
             var call = CallHandler.getCallForRoom(this.props.roomId);
@@ -1323,8 +1342,18 @@ module.exports = React.createClass({
 
             return (
                 <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") }>
-                    <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
-                        onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} onLeaveClick={this.onLeaveClick} />
+                    <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
+                        editing={this.state.editingRoomSettings}
+                        onSearchClick={this.onSearchClick}
+                        onSettingsClick={this.onSettingsClick}
+                        onSaveClick={this.onSaveClick}
+                        onCancelClick={this.onCancelClick}
+                        onForgetClick={
+                            (myMember && myMember.membership === "leave") ? this.onForgetClick : null
+                        }
+                        onLeaveClick={
+                            (myMember && myMember.membership === "join") ? this.onLeaveClick : null
+                        } />
                     { fileDropTarget }    
                     <div className="mx_RoomView_auxPanel">
                         <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>
