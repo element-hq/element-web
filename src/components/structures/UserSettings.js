@@ -17,10 +17,10 @@ var React = require('react');
 var sdk = require('../../index');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var Modal = require('../../Modal');
-var dis = require('matrix-react-sdk/lib/dispatcher')
+var dis = require("../../dispatcher");
 var q = require('q');
 var version = require('../../../package.json').version;
-var UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
+var UserSettingsStore = require('../../UserSettingsStore');
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
