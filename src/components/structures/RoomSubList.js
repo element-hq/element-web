@@ -64,6 +64,11 @@ var RoomSubList = React.createClass({
         bottommost: React.PropTypes.bool,
         selectedRoom: React.PropTypes.string.isRequired,
         activityMap: React.PropTypes.object.isRequired,
+
+        // TODO: Fix the name of this. This is too easily confused with the
+        // "hidden" state which is the expanded (or not) view of the list of rooms.
+        // What this prop *really* does is control whether the room name is displayed
+        // so it should be named as such.
         collapsed: React.PropTypes.bool.isRequired,
         onHeaderClick: React.PropTypes.func,
         alwaysShowHeader: React.PropTypes.bool
