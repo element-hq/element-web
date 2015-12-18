@@ -19,11 +19,12 @@ limitations under the License.
     border: 1px solid #a4a4a4;
     border-radius: 8px;
     background-color: #fff;
-    position: absolute;
+    position: fixed;
     z-index: 1000;
-    left: 235px;
-    top: 155px;
     padding: 6px;
+    margin-top: -3px;
+    margin-left: -20px;
+    width: 200px;
 }
 
 .mx_IncomingCallBox_chevron {
@@ -39,14 +40,13 @@ limitations under the License.
 }
 
 .mx_IncomingCallBox_buttons {
-    display: table-row;
+    display: flex;
 }
 
 .mx_IncomingCallBox_buttons_cell {
     vertical-align: middle;
-    display: table-cell;
     padding: 6px;
-    width: 50%;
+    flex: 1;
 }
 
 .mx_IncomingCallBox_buttons_decline,
@@ -57,6 +57,7 @@ limitations under the License.
     line-height: 36px;
     border-radius: 36px;
     color: #fff;
+    margin: auto;
 }
 
 .mx_IncomingCallBox_buttons_decline {
