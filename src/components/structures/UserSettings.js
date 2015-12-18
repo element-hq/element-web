@@ -62,7 +62,7 @@ module.exports = React.createClass({
                 });
             },
             function(error) {
-                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Can't load user settings",
                     description: error.toString()
@@ -117,7 +117,7 @@ module.exports = React.createClass({
                 self.setState({
                     phase: self.Phases.Display,
                 });
-                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Can't save user settings",
                     description: error.toString()
@@ -190,7 +190,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var Loader = sdk.getComponent("atoms.Spinner");
+        var Loader = sdk.getComponent("elements.Spinner");
         var saving;
         switch (this.state.phase) {
             case this.Phases.Loading:
@@ -198,7 +198,7 @@ module.exports = React.createClass({
             case this.Phases.Saving:
                 saving = <Loader />
             case this.Phases.Display:
-                var RoomHeader = sdk.getComponent('molecules.RoomHeader');
+                var RoomHeader = sdk.getComponent('rooms.RoomHeader');
                 return (
                     <div className="mx_UserSettings">
                         <RoomHeader simpleHeader="Settings" onCancelClick={ this.onClose } />
