@@ -21,87 +21,29 @@ var CallHandler = require("../../../CallHandler");
 module.exports = React.createClass({
     displayName: 'IncomingCallBox',
 
-    componentDidMount: function() {
-        this.dispatcherRef = dis.register(this.onAction);
-    },
-
-    componentWillUnmount: function() {
-        dis.unregister(this.dispatcherRef);
-    },
-
-    getInitialState: function() {
-        return {
-            incomingCall: null
-        }
-    },
-
-    onAction: function(payload) {
-        if (payload.action !== 'call_state') {
-            return;
-        }
-        var call = CallHandler.getCall(payload.room_id);
-        if (!call || call.call_state !== 'ringing') {
-            this.setState({
-                incomingCall: null,
-            });
-            this.getRingAudio().pause();
-            return;
-        }
-        if (call.call_state === "ringing") {
-            this.getRingAudio().load();
-            this.getRingAudio().play();
-        }
-        else {
-            this.getRingAudio().pause();
-        }
-
-        this.setState({
-            incomingCall: call
-        });
-    },
-
     onAnswerClick: function() {
         dis.dispatch({
             action: 'answer',
-            room_id: this.state.incomingCall.roomId
+            room_id: this.props.incomingCall.roomId
         });
     },
 
     onRejectClick: function() {
         dis.dispatch({
             action: 'hangup',
-            room_id: this.state.incomingCall.roomId
+            room_id: this.props.incomingCall.roomId
         });
     },
 
-    getRingAudio: function() {
-        return this.refs.ringAudio;
-    },
-
     render: function() {
-        // NB: This block MUST have a "key" so React doesn't clobber the elements
-        // between in-call / not-in-call.
-        var audioBlock = (
-            <audio ref="ringAudio" key="voip_ring_audio" loop>
-                <source src="media/ring.ogg" type="audio/ogg" />
-                <source src="media/ring.mp3" type="audio/mpeg" />
-            </audio>
-        );
 
-        if (!this.state.incomingCall || !this.state.incomingCall.roomId) {
-            return (
-                <div>
-                    {audioBlock}
-                </div>
-            );
-        }
-        var caller = MatrixClientPeg.get().getRoom(this.state.incomingCall.roomId).name;
+        var room = this.props.incomingCall ? MatrixClientPeg.get().getRoom(this.props.incomingCall.roomId) : null;
+        var caller = room ? room.name : "unknown";
         return (
-            <div className="mx_IncomingCallBox">
-                {audioBlock}
+            <div className="mx_IncomingCallBox" id="incomingCallBox">
                 <img className="mx_IncomingCallBox_chevron" src="img/chevron-left.png" width="9" height="16" />
                 <div className="mx_IncomingCallBox_title">
-                    Incoming { this.state.incomingCall ? this.state.incomingCall.type : '' } call from { caller }
+                    Incoming { this.props.incomingCall ? this.props.incomingCall.type : '' } call from { caller }
                 </div>
                 <div className="mx_IncomingCallBox_buttons">
                     <div className="mx_IncomingCallBox_buttons_cell">
