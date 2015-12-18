@@ -38,6 +38,7 @@ module.exports = React.createClass({
         highlight: React.PropTypes.bool.isRequired,
         isInvite: React.PropTypes.bool.isRequired,
         roomSubList: React.PropTypes.object.isRequired,
+        incomingCall: React.PropTypes.object,
     },
 
     getInitialState: function() {
@@ -105,6 +106,12 @@ module.exports = React.createClass({
             label = <RoomTooltip room={this.props.room}/>;
         }
 
+        var incomingCallBox;
+        if (this.props.incomingCall) {
+            var IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
+            incomingCallBox = <IncomingCallBox incomingCall={ this.props.incomingCall }/>;
+        }
+
         var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
         // These props are injected by React DnD,
@@ -120,6 +127,7 @@ module.exports = React.createClass({
                     { badge }
                 </div>
                 { label }
+                { incomingCallBox }
             </div>
         ));
     }

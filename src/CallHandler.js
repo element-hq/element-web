@@ -138,9 +138,17 @@ function _setCallListeners(call) {
 
 function _setCallState(call, roomId, status) {
     console.log(
-        "Call state in %s changed to %s (%s)", roomId, status, (call ? call.state : "-")
+        "Call state in %s changed to %s (%s)", roomId, status, (call ? call.call_state : "-")
     );
     calls[roomId] = call;
+
+    if (status === "ringing") {
+        play("ringAudio")
+    }
+    else if (call && call.call_state === "ringing") {
+        pause("ringAudio")
+    }
+
     if (call) {
         call.call_state = status;
     }

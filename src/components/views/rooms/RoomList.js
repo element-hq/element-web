@@ -19,6 +19,7 @@ var React = require("react");
 var ReactDOM = require("react-dom");
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
+var CallHandler = require('../../../CallHandler');
 var RoomListSorter = require("../../../RoomListSorter");
 var UnreadStatus = require('../../../UnreadStatus');
 var dis = require("../../../dispatcher");
@@ -39,6 +40,7 @@ module.exports = React.createClass({
         return {
             activityMap: null,
             lists: {},
+            incomingCall: null,
         }
     },
 
@@ -66,7 +68,21 @@ module.exports = React.createClass({
                 this.tooltip = payload.tooltip;
                 this._repositionTooltip();
                 if (this.tooltip) this.tooltip.style.display = 'block';
-                break
+                break;
+            case 'call_state':
+                var call = CallHandler.getCall(payload.room_id);
+                if (call && call.call_state === 'ringing') {
+                    this.setState({
+                        incomingCall: call
+                    });
+                    this._repositionIncomingCallBox(undefined, true);
+                }
+                else {
+                    this.setState({
+                        incomingCall: null
+                    });            
+                }
+                break;
         }
     },
 
@@ -212,10 +228,58 @@ module.exports = React.createClass({
         return s;
     },
 
+    _getScrollNode: function() {
+        var panel = ReactDOM.findDOMNode(this);
+        if (!panel) return null;
+
+        if (panel.classList.contains('gm-prevented')) {
+            return panel;
+        } else {
+            return panel.children[2]; // XXX: Fragile!
+        }
+    },
+
+    _repositionTooltips: function(e) {
+        this._repositionTooltip(e);
+        this._repositionIncomingCallBox(e, false);
+    },
+
     _repositionTooltip: function(e) {
         if (this.tooltip && this.tooltip.parentElement) {
             var scroll = ReactDOM.findDOMNode(this);
-            this.tooltip.style.top = (scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - scroll.children[2].scrollTop) + "px"; 
+            this.tooltip.style.top = (scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - this._getScrollNode().scrollTop) + "px"; 
+        }
+    },
+
+    _repositionIncomingCallBox: function(e, firstTime) {
+        var incomingCallBox = document.getElementById("incomingCallBox");
+        if (incomingCallBox && incomingCallBox.parentElement) {
+            var scroll = this._getScrollNode();
+            var top = (scroll.offsetTop + incomingCallBox.parentElement.offsetTop - scroll.scrollTop);
+
+            if (firstTime) {
+                // scroll to make sure the callbox is on the screen...
+                if (top < 10) { // 10px of vertical margin at top of screen
+                    scroll.scrollTop = incomingCallBox.parentElement.offsetTop - 10;
+                }
+                else if (top > scroll.clientHeight - incomingCallBox.offsetHeight + 50) {
+                    scroll.scrollTop = incomingCallBox.parentElement.offsetTop - scroll.offsetHeight + incomingCallBox.offsetHeight - 50;
+                }
+                // recalculate top in case we clipped it.
+                top = (scroll.offsetTop + incomingCallBox.parentElement.offsetTop - scroll.scrollTop);
+            }
+            else {
+                // stop the box from scrolling off the screen
+                if (top < 10) {
+                    top = 10;
+                }
+                else if (top > scroll.clientHeight - incomingCallBox.offsetHeight + 50) {
+                    top = scroll.clientHeight - incomingCallBox.offsetHeight + 50;
+                }
+            }
+
+            incomingCallBox.style.top = top + "px";
+            incomingCallBox.style.left = scroll.offsetLeft + scroll.offsetWidth + "px";
         }
     },
 
@@ -234,7 +298,7 @@ module.exports = React.createClass({
         var self = this;
 
         return (
-            <GeminiScrollbar className="mx_RoomList_scrollbar" autoshow={true} onScroll={self._repositionTooltip}>
+            <GeminiScrollbar className="mx_RoomList_scrollbar" autoshow={true} onScroll={ self._repositionTooltips }>
             <div className="mx_RoomList">
                 { expandButton }
 
@@ -244,6 +308,7 @@ module.exports = React.createClass({
                              order="recent"
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
+                             incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed } />
 
                 <RoomSubList list={ self.state.lists['m.favourite'] }
@@ -254,6 +319,7 @@ module.exports = React.createClass({
                              order="manual"
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
+                             incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
@@ -263,6 +329,7 @@ module.exports = React.createClass({
                              order="recent"
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
+                             incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed } />
 
                 { Object.keys(self.state.lists).map(function(tagName) {
@@ -276,6 +343,7 @@ module.exports = React.createClass({
                              order="manual"
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
+                             incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed } />
 
                     }
@@ -290,6 +358,7 @@ module.exports = React.createClass({
                              bottommost={ self.state.lists['im.vector.fake.archived'].length === 0 }
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
+                             incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.archived'] }
@@ -299,6 +368,7 @@ module.exports = React.createClass({
                              bottommost={ true }
                              activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
+                             incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed } />
             </div>
             </GeminiScrollbar>
