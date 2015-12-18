@@ -490,75 +490,65 @@ module.exports = React.createClass({
     },
 
     onSearch: function(term, scope) {
-        var filter;
-        if (scope === "Room") {
-            filter = {
-                // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
-                rooms: [
-                    this.props.roomId
-                ]
-            };
-        }
-
-        var self = this;
-        self.setState({
-            searchInProgress: true
+        this.setState({
+            searchTerm: term,
+            searchScope: scope,
+            searchResults: [],
+            searchHighlights: [],
+            searchCount: null,
         });
 
-        MatrixClientPeg.get().search({
-            body: {
-                search_categories: {
-                    room_events: {
-                        search_term: term,
-                        filter: filter,
-                        order_by: "recent",
-                        include_state: true,
-                        groupings: {
-                            group_by: [
-                                {
-                                    key: "room_id"
-                                }
-                            ]
-                        },
-                        event_context: {
-                            before_limit: 1,
-                            after_limit: 1,
-                            include_profile: true,
-                        }
-                    }
-                }
-            }            
-        }).then(function(data) {
+        this._getSearchBatch(term, scope);
+    },
 
-            if (!self.state.searching || term !== self.refs.search_bar.refs.search_term.value) {
+    // fire off a request for a batch of search results
+    _getSearchBatch: function(term, scope) {
+        this.setState({
+            searchInProgress: true,
+        });
+
+        // make sure that we don't end up merging results from
+        // different searches by keeping a unique id.
+        //
+        // todo: should cancel any previous search requests.
+        var searchId = this.searchId = new Date().getTime();
+
+        var self = this;
+
+        MatrixClientPeg.get().search({ body: this._getSearchCondition(term, scope) })
+        .then(function(data) {
+            if (!self.state.searching || self.searchId != searchId) {
                 console.error("Discarding stale search results");
                 return;
             }
 
-            // for debugging:
-            // data.search_categories.room_events.highlights = ["hello", "everybody"];
+            var results = data.search_categories.room_events;
 
-            var highlights;
-            if (data.search_categories.room_events.highlights &&
-                data.search_categories.room_events.highlights.length > 0)
-            {
-                // postgres on synapse returns us precise details of the
-                // strings which actually got matched for highlighting.
-                // for overlapping highlights, favour longer (more specific) terms first
-                highlights = data.search_categories.room_events.highlights
-                             .sort(function(a, b) { b.length - a.length });
-            }
-            else {
-                // sqlite doesn't, so just try to highlight the literal search term
+            // postgres on synapse returns us precise details of the
+            // strings which actually got matched for highlighting.
+
+            // combine the highlight list with our existing list; build an object
+            // to avoid O(N^2) fail
+            var highlights = {};
+            results.highlights.forEach(function(hl) { highlights[hl] = 1; });
+            self.state.searchHighlights.forEach(function(hl) { highlights[hl] = 1; });
+
+            // turn it back into an ordered list. For overlapping highlights,
+            // favour longer (more specific) terms first
+            highlights = Object.keys(highlights).sort(function(a, b) { b.length - a.length });
+
+            // sqlite doesn't give us any highlights, so just try to highlight the literal search term
+            if (highlights.length == 0) {
                 highlights = [ term ];
             }
 
+            // append the new results to our existing results
+            var events = self.state.searchResults.concat(results.results);
+
             self.setState({
-                highlights: highlights,
-                searchTerm: term,
-                searchResults: data,
-                searchScope: scope,
-                searchCount: data.search_categories.room_events.count,
+                searchHighlights: highlights,
+                searchResults: events,
+                searchCount: results.count,
             });
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -570,7 +560,35 @@ module.exports = React.createClass({
             self.setState({
                 searchInProgress: false
             });
-        });
+        }).done();
+    },
+
+    _getSearchCondition: function(term, scope) {
+        var filter;
+
+        if (scope === "Room") {
+            filter = {
+                // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
+                rooms: [
+                    this.props.roomId
+                ]
+            };
+        }
+
+        return {
+            search_categories: {
+                room_events: {
+                    search_term: term,
+                    filter: filter,
+                    order_by: "recent",
+                    event_context: {
+                        before_limit: 1,
+                        after_limit: 1,
+                        include_profile: true,
+                    }
+                }
+            }
+        }
     },
 
     getEventTiles: function() {
@@ -585,57 +603,44 @@ module.exports = React.createClass({
 
         if (this.state.searchResults)
         {
-            if (!this.state.searchResults.search_categories.room_events.results ||
-                !this.state.searchResults.search_categories.room_events.groups)
-            {
-                return ret;
-            }
+            // XXX: todo: merge overlapping results somehow?
+            // XXX: why doesn't searching on name work?
 
-            // XXX: this dance is foul, due to the results API not directly returning sorted results
-            var results = this.state.searchResults.search_categories.room_events.results;
-            var roomIdGroups = this.state.searchResults.search_categories.room_events.groups.room_id;
+            var lastRoomId;
 
-            if (Array.isArray(results)) {
-                // Old search API used to return results as a event_id -> result dict, but now
-                // returns a straightforward list.
-                results = results.reduce(function(prev, curr) {
-                    prev[curr.result.event_id] = curr;
-                    return prev;
-                }, {});
-            }
+            for (var i = this.state.searchResults.length - 1; i >= 0; i--) {
+                var result = this.state.searchResults[i];
+                var mxEv = new Matrix.MatrixEvent(result.result);
 
-            Object.keys(roomIdGroups)
-                  .sort(function(a, b) { roomIdGroups[a].order - roomIdGroups[b].order }) // WHY NOT RETURN AN ORDERED ARRAY?!?!?!
-                  .forEach(function(roomId)
-            {
-                // XXX: todo: merge overlapping results somehow?
-                // XXX: why doesn't searching on name work?
                 if (self.state.searchScope === 'All') {
-                    ret.push(<li key={ roomId }><h1>Room: { cli.getRoom(roomId).name }</h1></li>);
+                    var roomId = result.result.room_id;
+                    if(roomId != lastRoomId) {
+                        ret.push(<li key={mxEv.getId() + "-room"}><h1>Room: { cli.getRoom(roomId).name }</h1></li>);
+                        lastRoomId = roomId;
+                    }
                 }
 
-                var resultList = roomIdGroups[roomId].results.map(function(eventId) { return results[eventId]; });
-                for (var i = resultList.length - 1; i >= 0; i--) {
-                    var ts1 = resultList[i].result.origin_server_ts;
-                    ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); // Rank: {resultList[i].rank}
-                    var mxEv = new Matrix.MatrixEvent(resultList[i].result);
-                    if (resultList[i].context.events_before[0]) {
-                        var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_before[0]);
-                        if (EventTile.haveTileForEvent(mxEv2)) {
-                            ret.push(<li key={mxEv.getId() + "-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
-                        }
-                    }
-                    if (EventTile.haveTileForEvent(mxEv)) {
-                        ret.push(<li key={mxEv.getId() + "+0"}><EventTile mxEvent={mxEv} highlights={self.state.highlights}/></li>);
-                    }
-                    if (resultList[i].context.events_after[0]) {
-                        var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_after[0]);
-                        if (EventTile.haveTileForEvent(mxEv2)) {
-                            ret.push(<li key={mxEv.getId() + "+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
-                        }
+                var ts1 = result.result.origin_server_ts;
+                ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); // Rank: {resultList[i].rank}
+
+                if (result.context.events_before[0]) {
+                    var mxEv2 = new Matrix.MatrixEvent(result.context.events_before[0]);
+                    if (EventTile.haveTileForEvent(mxEv2)) {
+                        ret.push(<li key={mxEv.getId() + "-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
                     }
                 }
-            });
+
+                if (EventTile.haveTileForEvent(mxEv)) {
+                    ret.push(<li key={mxEv.getId() + "+0"}><EventTile mxEvent={mxEv} highlights={self.state.searchHighlights}/></li>);
+                }
+
+                if (result.context.events_after[0]) {
+                    var mxEv2 = new Matrix.MatrixEvent(result.context.events_after[0]);
+                    if (EventTile.haveTileForEvent(mxEv2)) {
+                        ret.push(<li key={mxEv.getId() + "+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                    }
+                }
+            }
             return ret;
         }
 

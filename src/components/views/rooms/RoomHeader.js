@@ -103,7 +103,9 @@ module.exports = React.createClass({
                 // <EditableText label={this.props.room.name} initialValue={actual_name} placeHolder="Name" onValueChanged={this.onNameChange} />
 
                 var searchStatus;
-                if (this.props.searchInfo && this.props.searchInfo.searchTerm) {
+                // don't display the search count until the search completes and
+                // gives us a non-null searchCount.
+                if (this.props.searchInfo && this.props.searchInfo.searchCount !== null) {
                     searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;({ this.props.searchInfo.searchCount } results)</div>;
                 }
 
