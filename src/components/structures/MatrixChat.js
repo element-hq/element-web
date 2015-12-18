@@ -41,7 +41,8 @@ module.exports = React.createClass({
         config: React.PropTypes.object.isRequired,
         ConferenceHandler: React.PropTypes.any,
         onNewScreen: React.PropTypes.func,
-        registrationUrl: React.PropTypes.string
+        registrationUrl: React.PropTypes.string,
+        startingQueryParams: React.PropTypes.object
     },
 
     PageTypes: {
@@ -73,6 +74,12 @@ module.exports = React.createClass({
             }
         }
         return s;
+    },
+
+    getDefaultProps: function() {
+        return {
+            startingQueryParams: {}
+        };
     },
 
     componentDidMount: function() {
@@ -706,6 +713,7 @@ module.exports = React.createClass({
                     clientSecret={this.state.register_client_secret}
                     sessionId={this.state.register_session_id}
                     idSid={this.state.register_id_sid}
+                    email={this.props.startingQueryParams.email}
                     hsUrl={this.props.config.default_hs_url}
                     isUrl={this.props.config.default_is_url}
                     registrationUrl={this.props.registrationUrl}

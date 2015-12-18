@@ -318,11 +318,7 @@ module.exports = React.createClass({
 
         if (this.state.searchResults) return;
 
-        if (this.needsScrollReset) {
-            if (DEBUG_SCROLL) console.log("Resetting scroll position after tile count change");
-            this._restoreSavedScrollState();
-            this.needsScrollReset = false;
-        }
+        this._restoreSavedScrollState();
 
         // have to fill space in case we're accepting an invite
         if (!this.state.paginating) this.fillSpace();
@@ -682,10 +678,6 @@ module.exports = React.createClass({
                 ret.unshift(dateSeparator);
             }
             ++count;
-        }
-        if (count != this.lastEventTileCount) {
-            if (DEBUG_SCROLL) console.log("Queuing scroll reset (event count changed; now "+count+"; was "+this.lastEventTileCount+")");
-            this.needsScrollReset = true;
         }
         this.lastEventTileCount = count;
         return ret;
