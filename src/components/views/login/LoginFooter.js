@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var Skinner = require('./Skinner');
+'use strict';
 
-module.exports.loadSkin = function(skinObject) {
-    Skinner.load(skinObject);
-};
+var React = require('react');
 
-module.exports.resetSkin = function() {
-    Skinner.reset();
-};
+module.exports = React.createClass({
+    displayName: 'LoginFooter',
 
-module.exports.getComponent = function(componentName) {
-    return Skinner.getComponent(componentName);
-};
-
+    render: function() {
+        return (
+            <div className="mx_Login_links">
+                <a href="https://matrix.org">powered by Matrix</a>
+            </div>
+        );
+    }
+});

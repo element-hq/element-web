@@ -14,17 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var Skinner = require('./Skinner');
+'use strict';
 
-module.exports.loadSkin = function(skinObject) {
-    Skinner.load(skinObject);
-};
+var React = require('react');
 
-module.exports.resetSkin = function() {
-    Skinner.reset();
-};
+module.exports = React.createClass({
+    displayName: 'UnknownBody',
 
-module.exports.getComponent = function(componentName) {
-    return Skinner.getComponent(componentName);
-};
-
+    render: function() {
+        var content = this.props.mxEvent.getContent();
+        return (
+            <span className="mx_UnknownMessageTile">
+                {content.body}
+            </span>
+        );
+    },
+});

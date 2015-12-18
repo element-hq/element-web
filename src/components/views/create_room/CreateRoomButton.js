@@ -14,17 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var Skinner = require('./Skinner');
+'use strict';
 
-module.exports.loadSkin = function(skinObject) {
-    Skinner.load(skinObject);
-};
+var React = require('react');
 
-module.exports.resetSkin = function() {
-    Skinner.reset();
-};
+module.exports = React.createClass({
+    displayName: 'CreateRoomButton',
+    propTypes: {
+        onCreateRoom: React.PropTypes.func,
+    },
 
-module.exports.getComponent = function(componentName) {
-    return Skinner.getComponent(componentName);
-};
+    getDefaultProps: function() {
+        return {
+            onCreateRoom: function() {},
+        };
+    },
 
+    onClick: function() {
+        this.props.onCreateRoom();
+    },
+
+    render: function() {
+        return (
+            <button className="mx_CreateRoomButton" onClick={this.onClick}>Create Room</button>
+        );
+    }
+});

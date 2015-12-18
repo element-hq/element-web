@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var Skinner = require('./Skinner');
-
-module.exports.loadSkin = function(skinObject) {
-    Skinner.load(skinObject);
+module.exports = {
+    /**
+     * Returns true iff this event arriving in a room should affect the room's
+     * count of unread messages
+     */
+    eventTriggersUnreadCount: function(ev) {
+        if (ev.getType() == "m.room.member") {
+            return false;
+        } else if (ev.getType == 'm.room.message' && ev.getContent().msgtype == 'm.notify') {
+            return false;
+        }
+        return true;
+    }
 };
-
-module.exports.resetSkin = function() {
-    Skinner.reset();
-};
-
-module.exports.getComponent = function(componentName) {
-    return Skinner.getComponent(componentName);
-};
-
