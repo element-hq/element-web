@@ -64,13 +64,21 @@ var RoomSubList = React.createClass({
         bottommost: React.PropTypes.bool,
         selectedRoom: React.PropTypes.string.isRequired,
         activityMap: React.PropTypes.object.isRequired,
-        collapsed: React.PropTypes.bool.isRequired
+        collapsed: React.PropTypes.bool.isRequired,
+        onHeaderClick: React.PropTypes.func,
+        alwaysShowHeader: React.PropTypes.bool
     },
 
     getInitialState: function() {
         return {
             hidden: false,
             sortedList: [],
+        };
+    },
+
+    getDefaultProps: function() {
+        return {
+            onHeaderClick: function() {} // NOP
         };
     },
 
@@ -85,7 +93,9 @@ var RoomSubList = React.createClass({
     },
 
     onClick: function(ev) {
-        this.setState({ hidden : !this.state.hidden });
+        var isHidden = !this.state.hidden;
+        this.setState({ hidden : isHidden });
+        this.props.onHeaderClick(isHidden);
     },
 
     tsOfNewestEvent: function(room) {
@@ -244,6 +254,17 @@ var RoomSubList = React.createClass({
         });
     },
 
+    _getHeaderJsx: function() {
+        return (
+            <h2 onClick={ this.onClick } className="mx_RoomSubList_label">
+                { this.props.collapsed ? '' : this.props.label }
+                <img className="mx_RoomSubList_chevron"
+                    src={ this.state.hidden ? "img/list-open.svg" : "img/list-close.svg" }
+                    width="10" height="10" />
+            </h2>
+        );
+    },
+
     render: function() {
         var connectDropTarget = this.props.connectDropTarget;
         var RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
@@ -275,9 +296,7 @@ var RoomSubList = React.createClass({
 
             return connectDropTarget(
                 <div>
-                    <h2 onClick={ this.onClick } className="mx_RoomSubList_label">{ this.props.collapsed ? '' : this.props.label }
-                        <img className="mx_RoomSubList_chevron" src={ this.state.hidden ? "img/list-open.svg" : "img/list-close.svg" } width="10" height="10"/>
-                    </h2>
+                    { this._getHeaderJsx() }
                     { subList }
                 </div>
             );
@@ -285,6 +304,7 @@ var RoomSubList = React.createClass({
         else {
             return (
                 <div className="mx_RoomSubList">
+                    { this.props.alwaysShowHeader ? this._getHeaderJsx() : undefined }
                 </div>
             );
         }
