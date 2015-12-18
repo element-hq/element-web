@@ -64,6 +64,8 @@ var RoomSubList = React.createClass({
         bottommost: React.PropTypes.bool,
         selectedRoom: React.PropTypes.string.isRequired,
         activityMap: React.PropTypes.object.isRequired,
+        startAsHidden: React.PropTypes.bool,
+        showSpinner: React.PropTypes.bool, // true to show a spinner if 0 elements when expanded
 
         // TODO: Fix the name of this. This is too easily confused with the
         // "hidden" state which is the expanded (or not) view of the list of rooms.
@@ -76,7 +78,7 @@ var RoomSubList = React.createClass({
 
     getInitialState: function() {
         return {
-            hidden: false,
+            hidden: this.props.startAsHidden || false,
             sortedList: [],
         };
     },
@@ -307,9 +309,11 @@ var RoomSubList = React.createClass({
             );
         }
         else {
+            var Loader = sdk.getComponent("elements.Spinner");
             return (
                 <div className="mx_RoomSubList">
                     { this.props.alwaysShowHeader ? this._getHeaderJsx() : undefined }
+                    { (this.props.showSpinner && !this.state.hidden) ? <Loader /> : undefined }
                 </div>
             );
         }
