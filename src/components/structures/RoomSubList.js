@@ -64,7 +64,8 @@ var RoomSubList = React.createClass({
         bottommost: React.PropTypes.bool,
         selectedRoom: React.PropTypes.string.isRequired,
         activityMap: React.PropTypes.object.isRequired,
-        collapsed: React.PropTypes.bool.isRequired
+        collapsed: React.PropTypes.bool.isRequired,
+        incomingCall: React.PropTypes.object,
     },
 
     getInitialState: function() {
@@ -239,7 +240,9 @@ var RoomSubList = React.createClass({
                     selected={ selected }
                     unread={ self.props.activityMap[room.roomId] === 1 }
                     highlight={ self.props.activityMap[room.roomId] === 2 }
-                    isInvite={ self.props.label === 'Invites' } />
+                    isInvite={ self.props.label === 'Invites' }
+                    incomingCall={ self.props.incomingCall && (self.props.incomingCall.roomId === room.roomId) ? self.props.incomingCall : null }
+                     />
             );
         });
     },
