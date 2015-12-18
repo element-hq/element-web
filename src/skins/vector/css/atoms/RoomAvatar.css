@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 .mx_RoomAvatar {
+    vertical-align: middle;
 }
 
 .mx_RoomAvatar_initial {
@@ -23,4 +24,5 @@ limitations under the License.
     text-align: center;
     font-weight: normal ! important;
     speak: none;
+    pointer-events: none;
 }

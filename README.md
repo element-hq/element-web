@@ -36,9 +36,10 @@ about them:
 2. `cd matrix-react-sdk`
 3. `git checkout develop`
 4. `npm install`
-5. `npm start` (to start the dev rebuilder)
-6. `cd ../vector-web`
-7. Link the react sdk package into the example:
+5. `npm run build`
+6. `npm start` (to start the dev rebuilder)
+7. `cd ../vector-web`
+8. Link the react sdk package into the example:
    `npm link path/to/your/react/sdk`
 
 Similarly, you may need to `npm link path/to/your/js/sdk` in your `matrix-react-sdk`
@@ -53,6 +54,34 @@ about "Cannot resolve module 'source-map-loader'" due to shortcomings in webpack
 Deployment
 ==========
 
-Just run `npm build` and then mount the `vector` directory on your webserver to
+Just run `npm run build` and then mount the `vector` directory on your webserver to
 actually serve up the app, which is entirely static content.
 
+Enabling encryption
+===================
+
+End-to-end encryption in Vector and Matrix is not yet considered ready for
+day-to-day use; it is experimental and should be considered only as a
+proof-of-concept. See https://matrix.org/jira/browse/SPEC-162 for an overview
+of the current progress.
+
+To build a version of vector with support for end-to-end encryption, install
+the olm module with `npm i https://matrix.org/packages/npm/olm/olm-0.1.0.tgz`
+before running `npm start`. The olm library will be detected and used if
+available.
+
+To enable encryption for a room, type
+
+```
+/encrypt on
+```
+
+in the message bar in that room. Vector will then generate a set of keys, and
+encrypt all outgoing messages in that room. (Note that other people in that
+room will send messages in the clear unless they also `/encrypt on`.)
+
+Note that historical encrypted messages cannot currently be decoded - history
+is therefore lost when the page is reloaded.
+
+There is currently no visual indication of whether encryption is enabled for a
+room, or whether a particular message was encrypted.

@@ -23,6 +23,9 @@ limitations under the License.
     height: 83px;
     border-bottom: 1px solid #eeeeee;
 
+    -webkit-align-items: center;
+    align-items: center;
+    
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -31,8 +34,6 @@ limitations under the License.
 }
 
 .mx_RoomHeader_leftRow {
-    height: 48px;
-    margin-top: 18px;
     margin-left: -2px;
 
     -webkit-box-ordinal-group: 1;
@@ -47,7 +48,6 @@ limitations under the License.
 
 .mx_RoomHeader_textButton {
     height: 48px;
-    margin-top: 18px;
     background-color: #76cfa6;
     border-radius: 48px;
     margin-right: 8px;
@@ -72,7 +72,7 @@ limitations under the License.
     }
 
 .mx_RoomHeader_rightRow {
-    margin-top: 32px;
+    margin-top: 4px;
     background-color: #fff;
 
     -webkit-box-ordinal-group: 3;
@@ -84,14 +84,14 @@ limitations under the License.
 
 .mx_RoomHeader_info {
     display: table-cell;
-    height: 48px;
+    /* height: 48px; */
     vertical-align: middle;
 }
 
 .mx_RoomHeader_simpleHeader {
     line-height: 83px;
     color: #454545;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
     overflow: hidden;
     margin-left: 63px;
@@ -110,16 +110,25 @@ limitations under the License.
     cursor: pointer;
     vertical-align: middle;
     height: 28px;
+    overflow: hidden;
     color: #454545;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 22px;
     padding-left: 19px;
     padding-right: 16px;
+    /* why isn't text-overflow working? */
     text-overflow: ellipsis;
 }
 
 .mx_RoomHeader_nametext {
     display: inline-block;
+}
+
+.mx_RoomHeader_searchStatus {
+    display: inline-block;
+    font-weight: normal;
+    overflow-y: hidden;
+    opacity: 0.6;
 }
 
 .mx_RoomHeader_settingsButton {
@@ -130,13 +139,23 @@ limitations under the License.
     left: 4px;
 }
 
-.mx_RoomHeader_name:hover {
+.mx_RoomHeader_leftRow:hover .mx_RoomHeader_name {
     color: #76cfa6;
 }
 
-.mx_RoomHeader_name:hover .mx_RoomHeader_settingsButton {
+.mx_RoomHeader_leftRow:hover .mx_RoomHeader_settingsButton {
     visibility: visible;
 }
+
+.mx_RoomHeader_leaveButton {
+    visibility: hidden;
+    margin-top: -1px;
+}
+
+.mx_RoomHeader_wrapper:hover .mx_RoomHeader_leaveButton {
+    visibility: visible;
+}
+
 
 .mx_RoomHeader_nameEditing {
     padding-left: 8px;
@@ -149,7 +168,7 @@ limitations under the License.
     width: 260px;
     border: 1px solid #c7c7c7;
     font-weight: 300;
-    font-size: 14px;
+    font-size: 13px;
     padding: 9px;
 }
 
@@ -160,7 +179,7 @@ limitations under the License.
 .mx_RoomHeader_topic {
     vertical-align: bottom;
     float: left;
-    max-height: 38px;
+    max-height: 42px;
     color: #454545;
     font-weight: 300;  
     padding-left: 19px;

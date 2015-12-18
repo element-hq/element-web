@@ -18,19 +18,19 @@ limitations under the License.
     cursor: pointer;
     /* This fixes wrapping of long room names, but breaks drag & drop previews */
     /* display: table-row; */
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .mx_RoomTile_avatar {
     display: table-cell;
     padding-right: 8px;
-    padding-top: 4px;
-    padding-bottom: 2px;
+    padding-top: 6px;
+    padding-bottom: 6px;
     padding-left: 18px;
-    vertical-align: middle;
     width: 24px;
     height: 24px;
     position: relative;
+    vertical-align: middle;
 }
 
 .mx_RoomTile_avatar img {
@@ -48,7 +48,8 @@ limitations under the License.
 }
 
 .mx_RoomTile_invite {
-    color: rgba(69, 69, 69, 0.5);
+/*    color: rgba(69, 69, 69, 0.5);
+*/
 }
 
 .collapsed .mx_RoomTile_name {
@@ -110,6 +111,10 @@ limitations under the License.
 
 .mx_RoomTile_selected .mx_RoomTile_name {
     color: #76cfa6 ! important;
+}
+
+.mx_RoomTile_highlight .mx_RoomTile_name {
+    color: #ff0064 ! important;
 }
 
 .mx_RoomTile.mx_RoomTile_selected .mx_RoomTile_name {

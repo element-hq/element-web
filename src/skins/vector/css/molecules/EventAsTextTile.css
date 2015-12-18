@@ -16,4 +16,5 @@ limitations under the License.
 
 .mx_EventAsTextTile {
     opacity: 0.5;
+    overflow-y: hidden;
 }

@@ -25,8 +25,10 @@ limitations under the License.
     padding-left: 18px;
     padding-right: 12px;
     margin-left: -73px;
-    margin-top: -4px;
+    margin-top: -2px;
     float: left;
+    position: relative;
+    top: 0px;
 }
 
 .mx_EventTile_avatar img {
@@ -41,15 +43,15 @@ limitations under the License.
 .mx_EventTile .mx_SenderProfile {
     color: #454545;
     opacity: 0.5;
-    font-size: 14px;
+    font-size: 13px;
     margin-bottom: 4px;
     display: block;
+    overflow-y: hidden;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
     color: #acacac;
-    font-size: 12px;
-    float: right;
+    font-size: 11px;
 }
 
 .mx_EventTile_line {
@@ -64,7 +66,38 @@ limitations under the License.
 .mx_MessageTile_content {
     display: block;
     margin-right: 100px;
+    overflow-y: hidden;
 }
+
+/* Various markdown overrides */
+
+.mx_MessageTile_content .markdown-body {
+    font-family: inherit ! important;
+    white-space: normal ! important;
+    line-height: inherit ! important;
+    color: inherit;
+    font-size: 15px;
+}
+
+.mx_MessageTile_content .markdown-body h1,
+.mx_MessageTile_content .markdown-body h2,
+.mx_MessageTile_content .markdown-body h3,
+.mx_MessageTile_content .markdown-body h4,
+.mx_MessageTile_content .markdown-body h5,
+.mx_MessageTile_content .markdown-body h6
+{
+    font-family: inherit ! important;
+}
+
+.mx_MessageTile_content .markdown-body a {
+    color: #76cfa6;
+}
+
+.mx_MessageTile_content .markdown-body .hljs {
+    display: inherit ! important;
+}
+
+/* end of overrides */
 
 .mx_MessageTile_searchHighlight {
     background-color: #76cfa6;
@@ -78,10 +111,12 @@ limitations under the License.
 }
 
 .mx_EventTile_notSent {
-    color: #ddd;
+    color: #f44;
 }
 
-.mx_EventTile_highlight {
+.mx_EventTile_highlight,
+.mx_EventTile_highlight .markdown-body
+ {
     color: #FF0064;
 }
 
@@ -91,10 +126,18 @@ limitations under the License.
 
 .mx_EventTile_msgOption {
     float: right;
+    text-align: right;
+    z-index: 1;
+    position: relative;
+    width: 90px;
+    margin-right: 10px;
+    margin-top: -6px;
 }
 
 .mx_MessageTimestamp {
+    display: block;
     visibility: hidden;
+    text-align: right;
 }
 
 .mx_EventTile_last .mx_MessageTimestamp {
@@ -107,9 +150,8 @@ limitations under the License.
 
 .mx_EventTile_editButton {
     position: absolute;
-    right: 1px;
-    top: 15px;
-    visibility: hidden;
+    display: inline-block;
+    visibility: hidden; 
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton {
@@ -122,4 +164,22 @@ limitations under the License.
 
 .mx_EventTile.menu .mx_MessageTimestamp {
     visibility: visible;
+}
+
+.mx_EventTile_readAvatars {
+    position: relative;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+}
+
+.mx_EventTile_readAvatars .mx_MemberAvatar {
+    position: absolute;
+    display: inline-block;
+}
+
+.mx_EventTile_readAvatarRemainder {
+    color: #acacac;
+    font-size: 11px;
+    position: absolute;
 }

@@ -25,3 +25,10 @@ limitations under the License.
     padding-left: 12px;
     padding-right: 12px;
 }
+
+/* Evil hacky override until Chrome fixes drop and drag table cells
+   and we can correctly fix horizontal wrapping in the sidebar again */
+.mx_RoomList_scrollbar .gm-scroll-view {
+    overflow-x: hidden ! important;
+    overflow-y: scroll ! important;
+}

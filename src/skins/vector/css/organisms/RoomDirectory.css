@@ -50,7 +50,7 @@ limitations under the License.
     border-radius: 3px;
     border: 1px solid #c7c7c7;
     font-weight: 300;
-    font-size: 14px;
+    font-size: 13px;
     padding: 9px;
     margin-top: 12px;
     margin-bottom: 12px;
@@ -70,7 +70,7 @@ limitations under the License.
 
 .mx_RoomDirectory_table th {
     font-weight: 400;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .mx_RoomDirectory_table tbody {
@@ -79,7 +79,6 @@ limitations under the License.
 
 .mx_RoomDirectory_table td {
     font-weight: 300;
-    font-size: 16px;
     overflow-x: hidden;
     text-overflow: ellipsis;
 }
@@ -90,7 +89,7 @@ limitations under the License.
 
 .mx_RoomDirectory_table .mx_RoomDirectory_topic {
     font-weight: 400;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .mx_RoomDirectory_table td,

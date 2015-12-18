@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="19px" height="24px" viewBox="-1 -1 19 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: bin/sketchtool 1.4 (305) - http://www.bohemiancoding.com/sketch -->
+    <title>icons_upload</title>
+    <desc>Created with bin/sketchtool.</desc>
+    <defs></defs>
+    <g id="02-Chat" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="02_13-Chat-member-profile" sketch:type="MSArtboardGroup" transform="translate(-873.000000, -722.000000)">
+            <g id="icons_upload" sketch:type="MSLayerGroup" transform="translate(873.000000, 722.000000)">
+                <g id="Rectangle-5-+-Rectangle-6" sketch:type="MSShapeGroup">
+                    <path d="M0,4.00955791 C0,1.79514022 1.78163126,0 3.99825563,0 L9.59161955,0 C9.59161955,0 16.3225806,6.49234232 16.3225806,6.49234232 L16.3225806,18.0063928 C16.3225806,20.2120012 14.5290874,22 12.3296282,22 L3.99295243,22 C1.7877057,22 0,20.1996477 0,17.9904421 L0,4.00955791 Z" id="Rectangle-5" stroke="#76CFA6"></path>
+                    <path d="M15.6804916,7.49527496 L11.5273266,7.49527496 C10.3308881,7.49527496 9.3609831,6.52527676 9.3609831,5.3289315 L9.3609831,1.88544393 L15.6804916,7.49527496 Z" id="Rectangle-6-Copy" fill="#FFFFFF"></path>
+                    <path d="M16.3225806,7.09677419 L11.4129801,7.09677419 C10.2050375,7.09677419 9.22580645,6.11744908 9.22580645,4.90960051 L9.22580645,0" id="Rectangle-6" stroke="#76CFA6"></path>
+                </g>
+                <path d="M12.3736951,12.709235 C12.5125582,12.709235 12.6514212,12.6596674 12.7577382,12.5598531 C12.9689258,12.3609035 12.9689258,12.0390533 12.7577382,11.8401037 L8.61860697,7.95549406 C8.40741942,7.75654446 8.06387804,7.75722347 7.85196724,7.95481505 L3.70777326,11.8339926 C3.49586247,12.0329422 3.49513923,12.3554714 3.70632677,12.554421 C3.91751432,12.7540496 4.2610557,12.7540496 4.4729665,12.555779 L7.69791605,9.53690567 L7.69936254,17.9423563 C7.69936254,18.2234659 7.94309612,18.4516129 8.24179631,18.4516129 C8.541943,18.4516129 8.78423008,18.2234659 8.78423008,17.9423563 L8.78278359,9.54980684 L11.9903753,12.5598531 C12.095969,12.6596674 12.2348321,12.709235 12.3736951,12.709235 L12.3736951,12.709235 Z" id="Fill-75" fill="#76CFA6" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>

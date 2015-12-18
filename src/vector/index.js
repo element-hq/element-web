@@ -16,16 +16,27 @@ limitations under the License.
 
 'use strict';
 
+// CSS requires: just putting them here for now as CSS is going to be
+// refactored soon anyway
+require('../../vector/components.css');
+require('gemini-scrollbar/gemini-scrollbar.css');
+require('gfm.css/gfm.css');
+require('highlight.js/styles/github.css');
+
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var React = require("react");
 var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
-sdk.loadSkin(require('../skins/vector/skindex'));
-sdk.loadModule(require('../modules/VectorConferenceHandler'));
+sdk.loadSkin(require('../component-index'));
+var VectorConferenceHandler = require('../VectorConferenceHandler');
+var configJson = require("../../config.json");
 
 var qs = require("querystring");
 
 var lastLocationHashSet = null;
+
+var CallHandler = require("matrix-react-sdk/lib/CallHandler");
+CallHandler.setConferenceHandler(VectorConferenceHandler);
 
 function checkBrowserFeatures(featureList) {
     if (!window.Modernizr) {
@@ -136,16 +147,20 @@ window.onload = function() {
 
 function loadApp() {
     if (validBrowser) {
-        var MatrixChat = sdk.getComponent('pages.MatrixChat');
+        var MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
-            <MatrixChat onNewScreen={onNewScreen} registrationUrl={makeRegistrationUrl()} />,
+            <MatrixChat
+                onNewScreen={onNewScreen}
+                registrationUrl={makeRegistrationUrl()}
+                ConferenceHandler={VectorConferenceHandler}
+                config={configJson} />,
             document.getElementById('matrixchat')
         );
     }
     else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
-        var CompatibilityPage = require("../skins/vector/views/pages/CompatibilityPage");
+        var CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
         window.matrixChat = ReactDOM.render(
             <CompatibilityPage onAccept={function() {
                 validBrowser = true;

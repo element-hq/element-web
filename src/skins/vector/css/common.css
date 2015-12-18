@@ -22,8 +22,13 @@ html {
 }
 
 body {
-    font-family: 'Myriad Pro', Helvetica, Arial, Sans-Serif;
-    font-size: 16px;
+    /* Open Sans lacks combining diacritics, so these will fall through
+       to the next font.  Helevetica's diacritics however do not combine
+       nicely with Open Sans (on OSX, at least) and result in a huge
+       horizontal mess.  Arial empirically gets it right, hence prioritising
+       Arial here. */
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-size: 15px;
     color: #454545;
     border: 0px;
     margin: 0px;
@@ -36,7 +41,7 @@ div.error {
 h2 {
     color: #454545;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 18px;
     margin-top: 16px;
     margin-bottom: 16px;
 }
@@ -45,6 +50,12 @@ a:hover,
 a:link,
 a:visited {
     color: #76cfa6;
+}
+
+input[type=text]:focus, textarea:focus, .mx_RoomSettings textarea:focus {
+    border: 1px solid #76CFA6;
+    outline: none;
+    box-shadow: none;
 }
 
 /* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.
@@ -99,19 +110,9 @@ a:visited {
     margin: 0 auto;
 }
 
-.mx_Dialog_background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000;
-    opacity: 0.2;
-    z-index: 4000;
-}
-
 .mx_Dialog_wrapper {
     position: fixed;
+    z-index: 4000;
     top: 0;
     left: 0;
     width: 100%;
@@ -134,10 +135,20 @@ a:visited {
     text-align: center;
     z-index: 4010;
     font-weight: 300;
-    font-size: 16px;
+    font-size: 15px;
     position: relative;
     border-radius: 8px;
     max-width: 80%;
+}
+
+.mx_Dialog_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.2;
 }
 
 .mx_Dialog_lightbox .mx_Dialog_background {
@@ -167,7 +178,7 @@ a:visited {
     height: 36px;
     border-radius: 36px;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 15px;
     color: #fff;
     background-color: #76cfa6;
     margin-left: 8px;
@@ -182,6 +193,6 @@ a:visited {
     padding: 12px;
     border-bottom: 1px solid #a4a4a4;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1.4;
 }

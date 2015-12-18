@@ -170,8 +170,33 @@ limitations under the License.
 
 .mx_RoomView_statusAreaBox_line {
     border-top: 1px solid #eee;
-    margin-left: 63px;
     height: 1px;
+}
+
+.mx_RoomView_inCall .mx_RoomView_statusAreaBox_line {
+    border-top: 1px hidden;
+}
+
+.mx_RoomView_inCall .mx_MessageComposer_wrapper {
+    border-top: 2px hidden;
+}
+
+.mx_RoomView_inCall .mx_RoomView_statusAreaBox {
+    background-color: #76CFA6;    
+    color: #fff;
+    position: relative;
+}
+
+.mx_RoomView_voipChevron {
+    position: absolute;
+    bottom: -10px;
+    right: 11px;
+}
+
+.mx_RoomView_voipButton {
+    float: right;
+    margin-right: 13px;
+    cursor: pointer;
 }
 
 .mx_RoomView_unreadMessagesBar {
@@ -183,6 +208,16 @@ limitations under the License.
 .mx_RoomView_unreadMessagesBar img {
     padding-left: 10px;
     padding-right: 22px;
+    vertical-align: middle;
+}
+
+.mx_RoomView_callBar {
+    margin-top: 5px;
+}
+
+.mx_RoomView_callBar img {
+    padding-left: 13px;
+    padding-right: 30px;
     vertical-align: middle;
 }
 
@@ -204,7 +239,7 @@ limitations under the License.
 
 .mx_RoomView_connectionLostBar_desc {
     color: #454545;
-    font-size: 14px;
+    font-size: 13px;
     opacity: 0.5;
 }
 
@@ -215,8 +250,8 @@ limitations under the License.
 }
 
 .mx_RoomView_typingBar {
-    margin-top: 10px;
-    margin-left: 63px;
+    margin-top: 6px;
+    margin-left: 65px;
     color: #4a4a4a;
     opacity: 0.5;
 }
@@ -226,6 +261,11 @@ limitations under the License.
     margin-left: -47px;
     margin-top: -4px;
     float: left;
+}
+
+.mx_RoomView_typingText {
+    overflow-y: hidden;
+    display: block;
 }
 
 .mx_RoomView .mx_MessageComposer {
@@ -239,43 +279,6 @@ limitations under the License.
     -webkit-flex: 0;
     flex: 0;
     margin-right: 2px;
-}
-
-.mx_RoomView_uploadProgressOuter {
-    height: 4px;
-    margin-left: 63px;
-    margin-top: -1px;
-}
-
-.mx_RoomView_uploadProgressInner {
-    background-color: #76cfa6;
-    height: 4px;
-}
-
-.mx_RoomView_uploadFilename {
-    margin-top: 5px;
-    margin-left: 65px;
-    opacity: 0.5;
-    color: #4a4a4a;
-}
-
-.mx_RoomView_uploadIcon {
-    float: left;
-    margin-top: 1px;
-    margin-left: 14px;
-}
-
-.mx_RoomView_uploadCancel {
-    float: right;
-    margin-top: 5px;
-    margin-right: 10px;
-}
-
-.mx_RoomView_uploadBytes {
-    float: right;    
-    margin-top: 5px;
-    margin-right: 30px;
-    color: #76cfa6;
 }
 
 .mx_RoomView_ongoingConfCallNotification {
