@@ -1279,16 +1279,23 @@ module.exports = React.createClass({
             }
 
             var messageComposer, searchInfo;
-            if (!this.state.searchResults) {
+            var canSpeak = (
+                // joined and not showing search results
+                myMember && (myMember.membership == 'join') && !this.state.searchResults
+            );
+            if (canSpeak) {
                 messageComposer =
                     <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} callState={this.state.callState} />
             }
-            else {
+
+            // TODO: Why aren't we storing the term/scope/count in this format
+            // in this.state if this is what RoomHeader desires?
+            if (this.state.searchResults) {
                 searchInfo = {
                     searchTerm : this.state.searchTerm,
                     searchScope : this.state.searchScope,
                     searchCount : this.state.searchCount,
-                }
+                };
             }
 
             var call = CallHandler.getCallForRoom(this.props.roomId);
