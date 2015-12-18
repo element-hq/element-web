@@ -17,19 +17,24 @@ var React = require('react');
 var sdk = require('../../index');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var Modal = require('../../Modal');
+var dis = require('matrix-react-sdk/lib/dispatcher')
 var q = require('q');
 var version = require('../../../package.json').version;
+var UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
+
     Phases: {
         Loading: "loading",
+        Saving: "saving",
         Display: "display",
     },
 
     getInitialState: function() {
         return {
             avatarUrl: null,
+            displayName: null,
             threePids: [],
             clientVersion: version,
             phase: this.Phases.Loading,
@@ -38,22 +43,112 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         var self = this;
-        var cli = MatrixClientPeg.get();
 
-        var profile_d = cli.getProfileInfo(cli.credentials.userId);
-        var threepid_d = cli.getThreePids();
+        var profilePromise = UserSettingsStore.loadProfileInfo();
+        var threepidPromise = UserSettingsStore.loadThreePids();
 
-        q.all([profile_d, threepid_d]).then(
+        q.all([profilePromise, threepidPromise]).then(
             function(resps) {
                 self.setState({
                     avatarUrl: resps[0].avatar_url,
+                    displayName: resps[0].displayname,
                     threepids: resps[1].threepids,
                     phase: self.Phases.Display,
                 });
+
+                // keep a copy of the original state in order to track changes
+                self.setState({
+                    originalState: self.state
+                });
             },
-            function(err) { console.err(err); }
+            function(error) {
+                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Can't load user settings",
+                    description: error.toString()
+                });
+            }
         );
     },
+
+    componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+    },
+
+    componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
+    },
+
+    onSaveClicked: function(ev) {
+        var self = this;
+        var savePromises = [];
+
+        // XXX: this is managed in ChangeAvatar.js, although could be moved out here in order
+        // to allow for the change to be staged alongside the rest of the form.
+        //
+        // if (this.state.originalState.avatarUrl !== this.state.avatarUrl) {
+        //     savePromises.push( UserSettingsStore.saveAvatarUrl(this.state.avatarUrl) );
+        // }
+
+        if (this.state.originalState.displayName !== this.state.displayName) {
+            savePromises.push( UserSettingsStore.saveDisplayName(this.state.displayName) );
+        }
+
+        if (this.state.originalState.threepids.length !== this.state.threepids.length ||
+            this.state.originalState.threepids.every(function(element, index) {
+                    return element === this.state.threepids[index];
+            }))
+        {
+            savePromises.push( UserSettingsStore.saveThreePids(this.state.threepids) );
+        }
+
+        self.setState({
+            phase: self.Phases.Saving,
+        });
+
+        q.all(savePromises).then(
+            function(resps) {
+                self.setState({
+                    phase: self.Phases.Display,
+                });
+                self.onClose();
+            },
+            function(error) {
+                self.setState({
+                    phase: self.Phases.Display,
+                });
+                var ErrorDialog = sdk.getComponent("organisms.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Can't save user settings",
+                    description: error.toString()
+                });
+            }
+        );        
+    },
+
+    onClose: function(ev) {
+        // XXX: use browser history instead to find the previous room?
+        if (this.props.roomId) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.props.roomId,
+            });
+        }
+        else {
+            dis.dispatch({
+                action: 'view_indexed_room',
+                roomIndex: 0,
+            });
+        }
+    },
+
+    onAction: function(payload) {
+        if (payload.action === "notifier_enabled") {
+            this.setState({
+                enableNotifications : UserSettingsStore.getEnableNotifications()
+            });
+        }
+    }, 
 
     editAvatar: function() {
         var url = MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl);
@@ -69,17 +164,8 @@ module.exports = React.createClass({
         this.avatarDialog = Modal.createDialogWithElement(avatarDialog);
     },
 
-    addEmail: function() {
-
-    },
-
-    editDisplayName: function() {
-        this.refs.displayname.edit();
-    },
-
-    changePassword: function() {
-        var ChangePassword = sdk.getComponent('settings.ChangePassword');
-        Modal.createDialog(ChangePassword);
+    onAvatarDialogCancel: function() {
+        this.avatarDialog.close();
     },
 
     onLogoutClicked: function(ev) {
@@ -91,72 +177,116 @@ module.exports = React.createClass({
         this.logoutModal.closeDialog();
     },
 
-    onAvatarDialogCancel: function() {
-        this.avatarDialog.close();
+    onDisplayNameChange: function(event) {
+        this.setState({ displayName: event.target.value });
+    },
+
+    onEnableNotificationsChange: function(event) {
+        // don't bother waiting for Save to be clicked, as that'd be silly
+        UserSettingsStore.setEnableNotifications( this.refs.enableNotifications.value );
+        this.setState({
+            enableNotifications : UserSettingsStore.getEnableNotifications()
+        });
     },
 
     render: function() {
-        var Loader = sdk.getComponent("elements.Spinner");
-        if (this.state.phase === this.Phases.Loading) {
-            return <Loader />
-        }
-        else if (this.state.phase === this.Phases.Display) {
-            var ChangeDisplayName = sdk.getComponent('settings.ChangeDisplayName');
-            var EnableNotificationsButton = sdk.getComponent('settings.EnableNotificationsButton');
-            return (
-            <div className="mx_UserSettings">
-                <div className="mx_UserSettings_User">
-                    <h1>User Settings</h1>
-                    <hr/>
-                    <div className="mx_UserSettings_User_Inner">
-                        <div className="mx_UserSettings_Avatar">
-                            <div className="mx_UserSettings_Avatar_Text">
-                                Profile Photo
-                            </div>
-                            <div className="mx_UserSettings_Avatar_Edit" onClick={this.editAvatar}>
-                                Edit
+        var Loader = sdk.getComponent("atoms.Spinner");
+        var saving;
+        switch (this.state.phase) {
+            case this.Phases.Loading:
+                return <Loader />
+            case this.Phases.Saving:
+                saving = <Loader />
+            case this.Phases.Display:
+                var RoomHeader = sdk.getComponent('molecules.RoomHeader');
+                return (
+                    <div className="mx_UserSettings">
+                        <RoomHeader simpleHeader="Settings" onCancelClick={ this.onClose } />
+
+                        <h2>Profile</h2>
+
+                        <div className="mx_UserSettings_section">
+                            <div className="mx_UserSettings_profileTable">
+                                <div className="mx_UserSettings_profileTableRow">
+                                    <div className="mx_UserSettings_profileLabelCell">
+                                        <label htmlFor="displayName">Display name</label>
+                                    </div>
+                                    <div className="mx_UserSettings_profileInputCell">
+                                        <input id="displayName" ref="displayName" value={ this.state.displayName } onChange={ this.onDisplayNameChange } />
+                                    </div>
+                                </div>
+
+                                {this.state.threepids.map(function(val) {
+                                    var id = "email-" + val.address;
+                                    return (
+                                        <div className="mx_UserSettings_profileTableRow">
+                                            <div className="mx_UserSettings_profileLabelCell">
+                                                <label htmlFor={ id }>Email</label>
+                                            </div>
+                                            <div className="mx_UserSettings_profileInputCell">
+                                                <input key={val.address} id={ id } value={ val.address } disabled />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+
+                                <div className="mx_UserSettings_profileTableRow">
+                                    <div className="mx_UserSettings_profileLabelCell">
+                                        <label htmlFor="password1">New password</label>
+                                    </div>
+                                    <div className="mx_UserSettings_profileInputCell">
+                                        <input id="password1" ref="password1" value={ this.state.password1 } />
+                                    </div>
+                                </div>
+                                <div className="mx_UserSettings_profileTableRow">
+                                    <div className="mx_UserSettings_profileLabelCell">
+                                        <label htmlFor="password2">Confirm new password</label>
+                                    </div>
+                                    <div className="mx_UserSettings_profileInputCell">
+                                        <input id="password2" ref="password2" value={ this.state.password2 } />
+                                    </div>
+                                </div>
+
+                            </div>                        
+
+                            <div className="mx_UserSettings_avatarPicker">
+                                <div className="mx_UserSettings_avatarPicker_edit" onClick={this.editAvatar}></div>
                             </div>
                         </div>
 
-                        <div className="mx_UserSettings_DisplayName">
-                            <ChangeDisplayName ref="displayname" />
-                            <div className="mx_UserSettings_DisplayName_Edit" onClick={this.editDisplayName}>
-                                Edit
+                        <div className="mx_UserSettings_logout">
+                            <div className="mx_UserSettings_button" onClick={this.onLogoutClicked}>Log out</div>
+                        </div>
+
+                        <h2>Notifications</h2>
+
+                        <div className="mx_UserSettings_section">
+                            <div className="mx_UserSettings_notifTable">
+                                <div className="mx_UserSettings_notifTableRow">
+                                    <div className="mx_UserSettings_notifInputCell">
+                                        <input id="enableNotifications" ref="enableNotifications" type="checkbox" checked={ this.state.enableNotifications } onChange={ this.onEnableNotificationsChange } />
+                                    </div>
+                                    <div className="mx_UserSettings_notifLabelCell">
+                                        <label htmlFor="enableNotifications">Enable desktop notifications</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="mx_UserSettings_3pids">
-                            {this.state.threepids.map(function(val) {
-                                return <div key={val.address}>{val.address}</div>;
-                            })}
+                        <h2>Advanced</h2>
+
+                        <div className="mx_UserSettings_section">
+                            <div className="mx_UserSettings_advanced">
+                                Version {this.state.clientVersion}
+                            </div>
                         </div>
 
-                        <div className="mx_UserSettings_Add3pid" onClick={this.addEmail}>
-                            Add email
+                        <div className="mx_UserSettings_save">
+                            <div className="mx_UserSettings_spinner">{ saving }</div>
+                            <div className="mx_UserSettings_button" onClick={this.onSaveClicked}>Save and close</div>
                         </div>
                     </div>
-                </div>
-
-                <div className="mx_UserSettings_Global">
-                    <h1>Global Settings</h1>
-                    <hr/>
-                    <div className="mx_UserSettings_Global_Inner">
-                        <div className="mx_UserSettings_ChangePassword" onClick={this.changePassword}>
-                            Change Password
-                        </div>
-                        <div className="mx_UserSettings_ClientVersion">
-                            Version {this.state.clientVersion}
-                        </div>
-                        <div className="mx_UserSettings_EnableNotifications">
-                            <EnableNotificationsButton />
-                        </div>
-                        <div className="mx_UserSettings_Logout">
-                            <button onClick={this.onLogoutClicked}>Sign Out</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            );
+                );
         }
     }
 });
