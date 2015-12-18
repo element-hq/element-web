@@ -225,12 +225,12 @@ module.exports = React.createClass({
             if (me && me.membership == "invite") {
                 s.lists["im.vector.fake.invite"].push(room);
             }
-            else if (me && (me.membership === "leave" || me.membership === "ban")) {
+            else if (me && me.membership === "leave") {
                 s.lists["im.vector.fake.archived"].push(room);
             }
             else {
                 var shouldShowRoom =  (
-                    me && (me.membership == "join")
+                    me && (me.membership == "join" || me.membership === "ban")
                 );
 
                 // hiding conf rooms only ever toggles shouldShowRoom to false
