@@ -642,10 +642,17 @@ module.exports = React.createClass({
             var lastRoomId;
 
             if (this.state.searchCanPaginate === false) {
-                ret.push(<li key="search-top-marker">
-                         <h2 className="mx_RoomView_topMarker">End of search results</h2>
-                         </li>
-                        );
+                if (this.state.searchResults.length == 0) {
+                    ret.push(<li key="search-top-marker">
+                             <h2 className="mx_RoomView_topMarker">No results</h2>
+                             </li>
+                            );
+                } else {
+                    ret.push(<li key="search-top-marker">
+                             <h2 className="mx_RoomView_topMarker">No more results</h2>
+                             </li>
+                            );
+                }
             }
 
             for (var i = this.state.searchResults.length - 1; i >= 0; i--) {
