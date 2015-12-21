@@ -22,9 +22,19 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 module.exports = React.createClass({
     displayName: 'TabCompleteBar',
 
+    propTypes: {
+        entries: React.PropTypes.array.isRequired
+    },
+
     render: function() {
         return (
-            <div> Tab Complete </div>
+            <div>
+            {this.props.entries.map(function(entry, i) {
+                return (
+                    <div key={i + ""}>{entry.text}</div>
+                );
+            })}
+            </div>
         );
     }
 });

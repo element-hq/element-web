@@ -1290,7 +1290,7 @@ module.exports = React.createClass({
                 else if (this.tabComplete.isTabCompleting()) {
                     var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
                     statusBar = (
-                        <TabCompleteBar />
+                        <TabCompleteBar entries={this.tabComplete.peek(3)} />
                     );
                 }
                 else if (this.state.hasUnsentMessages) {

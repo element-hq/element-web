@@ -31,6 +31,7 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
 var CallHandler = require('../../../CallHandler');
+var TabComplete = require("../../../TabComplete");
 var sdk = require('../../../index');
 
 var dis = require("../../../dispatcher");
@@ -228,7 +229,7 @@ module.exports = React.createClass({
                         }
                     }
                 }).map(function(m) {
-                    return m.name || m.userId;
+                    return new TabComplete.Entry(m.name || m.userId);
                 });
             }
             if (this.props.tabComplete) {

@@ -26,16 +26,16 @@ class TabComplete {
         this.opts = opts;
 
         this.tabStruct = {
-            completing: false,
             original: null,
             index: 0
         };
+        this.completing = false;
         this.list = [];
         this.textArea = opts.textArea;
     }
 
     /**
-     * @param {String[]} completeList
+     * @param {TabComplete.Entry[]} completeList
      */
     setCompletionList(completeList) {
         this.list = completeList;
@@ -46,12 +46,21 @@ class TabComplete {
     }
 
     isTabCompleting() {
-        return this.tabStruct.completing;
+        return this.completing;
     }
 
     next() {
         this.tabStruct.index++;
         this.setCompletionOption();
+    }
+
+    /**
+     * @param {Number} numAheadToPeek
+     * @return {TabComplete.Entry[]}
+     */
+    peek(numAheadToPeek) {
+        var current = this.list[this.tabStruct.index];
+        return [current];
     }
 
     prev() {
@@ -81,8 +90,8 @@ class TabComplete {
             // FIXME: could do better than linear search here
             for (var i=0; i < this.list.length; i++) {
                 if (searchIndex < targetIndex) {
-                    if (this.list[i].toLowerCase().indexOf(search[1].toLowerCase()) === 0) {
-                        expansion = this.list[i];
+                    if (this.list[i].text.toLowerCase().indexOf(search[1].toLowerCase()) === 0) {
+                        expansion = this.list[i].text;
                         searchIndex++;
                     }
                 }
@@ -121,6 +130,12 @@ class TabComplete {
         }
     }
 
+    notifyStateChange() {
+        if (this.opts.onStateChange) {
+            this.opts.onStateChange(this.completing);
+        }
+    }
+
     /**
      * @param {DOMEvent} e
      * @return {Boolean} True if the tab complete state changed as a result of
@@ -128,13 +143,11 @@ class TabComplete {
      */
     onKeyDown(ev) {
         if (ev.keyCode !== KEY_TAB) {
-            if (ev.keyCode !== KEY_SHIFT && this.tabStruct.completing) {
+            if (ev.keyCode !== KEY_SHIFT && this.completing) {
                 // they're resuming typing; reset tab complete state vars.
-                this.tabStruct.completing = false;
+                this.completing = false;
                 this.tabStruct.index = 0;
-                if (this.opts.onStateChange) {
-                    this.opts.onStateChange(this.tabStruct.completing);
-                }
+                this.notifyStateChange();
                 return true;
             }
             return false;
@@ -146,14 +159,11 @@ class TabComplete {
         }
 
         // init struct if necessary
-        if (!this.tabStruct.completing) {
-            this.tabStruct.completing = true;
+        if (!this.completing) {
+            this.completing = true;
             this.tabStruct.index = 0;
             // cache starting text
             this.tabStruct.original = this.textArea.value;
-            if (this.opts.onStateChange) {
-                this.opts.onStateChange(this.tabStruct.completing);
-            }
         }
 
         if (ev.shiftKey) {
@@ -164,9 +174,15 @@ class TabComplete {
         }
         // prevent the default TAB operation (typically focus shifting)
         ev.preventDefault();
+        this.notifyStateChange();
         return true;
     }
 
+};
+
+TabComplete.Entry = function(text, image) {
+    this.text = text;
+    this.image = image;
 };
 
 
