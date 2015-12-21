@@ -27,6 +27,7 @@ class TabComplete {
         opts.startingWordSuffix = opts.startingWordSuffix || "";
         opts.wordSuffix = opts.wordSuffix || "";
         opts.allowLooping = opts.allowLooping || false;
+        opts.autoEnterTabComplete = opts.autoEnterTabComplete || false;
         this.opts = opts;
         this.completing = false;
         this.list = []; // full set of tab-completable things
@@ -35,6 +36,7 @@ class TabComplete {
         this.originalText = null; // original input text when tab was first hit
         this.textArea = opts.textArea; // DOMElement
         this.isFirstWord = false; // true if you tab-complete on the first word
+        this.enterTabCompleteTimerId = null;
     }
 
     /**
@@ -62,6 +64,12 @@ class TabComplete {
         this.completing = false;
         this.currentIndex = 0;
         this._notifyStateChange();
+    }
+
+    startTabCompleting() {
+        this.completing = true;
+        this.currentIndex = 0;
+        this._calculateCompletions();
     }
 
     /**
@@ -106,6 +114,31 @@ class TabComplete {
                 this.stopTabCompleting();
                 return true;
             }
+
+            if (this.opts.autoEnterTabComplete) {
+                /*
+                TODO:
+                 - This is passive so we shouldn't clobber the partial word that
+                   the user may have entered. This requires more logic to handle
+                   that vs a normal TAB which does clobber.
+                 - The first invocation of this timer will give no results because
+                   we horribly set the enumeration onKeyDown in MessageComposer, which
+                   was never actually hit. We should hook into RoomView's RoomState.members
+                   event and set the list there.
+                
+
+                clearTimeout(this.enterTabCompleteTimerId);
+                this.enterTabCompleteTimerId = setTimeout(() => {
+                    if (!this.completing) {
+                        // inject a fake tab event so we use the same code paths
+                        this.onKeyDown({
+                            keyCode: KEY_TAB,
+                            preventDefault: function(){} // NOP
+                        })
+                    }
+                }, DELAY_TIME_MS); */
+            }
+
             return false;
         }
 
@@ -116,9 +149,7 @@ class TabComplete {
 
         // init struct if necessary
         if (!this.completing) {
-            this.completing = true;
-            this.currentIndex = 0;
-            this._calculateCompletions();
+            this.startTabCompleting();
         }
 
         if (ev.shiftKey) {
