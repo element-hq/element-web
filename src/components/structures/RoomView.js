@@ -90,7 +90,10 @@ module.exports = React.createClass({
         // completing at the start of the text
         this.tabComplete = new TabComplete({
             startingWordSuffix: ": ",
-            wordSuffix: " "
+            wordSuffix: " ",
+            onStateChange: (isCompleting) => {
+                this.forceUpdate();
+            }
         });
     },
 
@@ -1282,6 +1285,12 @@ module.exports = React.createClass({
                                 </div>
                             </div>
                         </div>
+                    );
+                }
+                else if (this.tabComplete.isTabCompleting()) {
+                    var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
+                    statusBar = (
+                        <TabCompleteBar />
                     );
                 }
                 else if (this.state.hasUnsentMessages) {

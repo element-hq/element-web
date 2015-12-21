@@ -132,6 +132,9 @@ class TabComplete {
                 // they're resuming typing; reset tab complete state vars.
                 this.tabStruct.completing = false;
                 this.tabStruct.index = 0;
+                if (this.opts.onStateChange) {
+                    this.opts.onStateChange(this.tabStruct.completing);
+                }
                 return true;
             }
             return false;
@@ -148,6 +151,9 @@ class TabComplete {
             this.tabStruct.index = 0;
             // cache starting text
             this.tabStruct.original = this.textArea.value;
+            if (this.opts.onStateChange) {
+                this.opts.onStateChange(this.tabStruct.completing);
+            }
         }
 
         if (ev.shiftKey) {
