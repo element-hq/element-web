@@ -46,12 +46,12 @@ limitations under the License.
 
 @keyframes pulsate {
     0% { opacity: 1.0; }
-    50% { opacity: 0.25; }
+    50% { opacity: 0.1; }
     100% { opacity: 1.0; }
 }
 
 .mx_SearchBar_searching img {
-    animation: pulsate 0.75s ease-out;
+    animation: pulsate 0.5s ease-out;
     animation-iteration-count: infinite; 
 }
 
