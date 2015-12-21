@@ -31,6 +31,7 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
 var CallHandler = require('../../../CallHandler');
+var TabComplete = require("../../../TabComplete");
 var sdk = require('../../../index');
 
 var dis = require("../../../dispatcher");
@@ -67,11 +68,6 @@ module.exports = React.createClass({
     componentWillMount: function() {
         this.oldScrollHeight = 0;
         this.markdownEnabled = MARKDOWN_ENABLED;
-        this.tabStruct = {
-            completing: false,
-            original: null,
-            index: 0
-        };
         var self = this;
         this.sentHistory = {
             // The list of typed messages. Index 0 is more recent
@@ -172,6 +168,14 @@ module.exports = React.createClass({
             this.props.room.roomId
         );
         this.resizeInput();
+
+        // xchat-style tab complete, add a colon if tab
+        // completing at the start of the text
+        this._tabComplete = new TabComplete({
+            textArea: this.refs.textarea,
+            startingWordSuffix: ": ",
+            wordSuffix: " "
+        });
     },
 
     componentWillUnmount: function() {
@@ -198,11 +202,38 @@ module.exports = React.createClass({
             this.onEnter(ev);
         }
         else if (ev.keyCode === KeyCode.TAB) {
-            var members = [];
+            var memberList = [];
             if (this.props.room) {
-                members = this.props.room.getJoinedMembers();
+                // TODO: We should cache this list and only update it when the
+                // member list changes
+                memberList = this.props.room.getJoinedMembers().sort(function(a, b) {
+                    var userA = a.user;
+                    var userB = b.user;
+                    if (userA && !userB) {
+                        return -1; // a comes first
+                    }
+                    else if (!userA && userB) {
+                        return 1; // b comes first
+                    }
+                    else if (!userA && !userB) {
+                        return 0; // don't care
+                    }
+                    else { // both User objects exist
+                        if (userA.lastActiveAgo < userB.lastActiveAgo) {
+                            return -1; // a comes first
+                        }
+                        else if (userA.lastActiveAgo > userB.lastActiveAgo) {
+                            return 1; // b comes first
+                        }
+                        else {
+                            return 0; // same last active ago
+                        }
+                    }
+                }).map(function(m) {
+                    return m.name || m.userId;
+                });
             }
-            this.onTab(ev, members);
+            this._tabComplete.setCompletionList(memberList);
         }
         else if (ev.keyCode === KeyCode.UP) {
             var input = this.refs.textarea.value;
@@ -222,11 +253,7 @@ module.exports = React.createClass({
                 this.resizeInput();
             }
         }
-        else if (ev.keyCode !== KeyCode.SHIFT && this.tabStruct.completing) {
-            // they're resuming typing; reset tab complete state vars.
-            this.tabStruct.completing = false;
-            this.tabStruct.index = 0;
-        }
+        this._tabComplete.onKeyDown(ev);
 
         var self = this;
         setTimeout(function() {
@@ -343,104 +370,6 @@ module.exports = React.createClass({
         });
         this.refs.textarea.value = '';
         this.resizeInput();
-        ev.preventDefault();
-    },
-
-    onTab: function(ev, sortedMembers) {
-        var textArea = this.refs.textarea;
-        if (!this.tabStruct.completing) {
-            this.tabStruct.completing = true;
-            this.tabStruct.index = 0;
-            // cache starting text
-            this.tabStruct.original = textArea.value;
-        }
-
-        // loop in the right direction
-        if (ev.shiftKey) {
-            this.tabStruct.index --;
-            if (this.tabStruct.index < 0) {
-                // wrap to the last search match, and fix up to a real index
-                // value after we've matched.
-                this.tabStruct.index = Number.MAX_VALUE;
-            }
-        }
-        else {
-            this.tabStruct.index++;
-        }
-
-        var searchIndex = 0;
-        var targetIndex = this.tabStruct.index;
-        var text = this.tabStruct.original;
-
-        var search = /@?([a-zA-Z0-9_\-:\.]+)$/.exec(text);
-        // console.log("Searched in '%s' - got %s", text, search);
-        if (targetIndex === 0) { // 0 is always the original text
-            textArea.value = text;
-        }
-        else if (search && search[1]) {
-            // console.log("search found: " + search+" from "+text);
-            var expansion;
-
-            // FIXME: could do better than linear search here
-            for (var i=0; i<sortedMembers.length; i++) {
-                var member = sortedMembers[i];
-                if (member.name && searchIndex < targetIndex) {
-                    if (member.name.toLowerCase().indexOf(search[1].toLowerCase()) === 0) {
-                        expansion = member.name;
-                        searchIndex++;
-                    }
-                }
-            }
-
-            if (searchIndex < targetIndex) { // then search raw mxids
-                for (var i=0; i<sortedMembers.length; i++) {
-                    if (searchIndex >= targetIndex) {
-                        break;
-                    }
-                    var userId = sortedMembers[i].userId;
-                    // === 1 because mxids are @username
-                    if (userId.toLowerCase().indexOf(search[1].toLowerCase()) === 1) {
-                        expansion = userId;
-                        searchIndex++;
-                    }
-                }
-            }
-
-            if (searchIndex === targetIndex ||
-                    targetIndex === Number.MAX_VALUE) {
-                // xchat-style tab complete, add a colon if tab
-                // completing at the start of the text
-                if (search[0].length === text.length) {
-                    expansion += ": ";
-                }
-                else {
-                    expansion += " ";
-                }
-                textArea.value = text.replace(
-                    /@?([a-zA-Z0-9_\-:\.]+)$/, expansion
-                );
-                // cancel blink
-                textArea.style["background-color"] = "";
-                if (targetIndex === Number.MAX_VALUE) {
-                    // wrap the index around to the last index found
-                    this.tabStruct.index = searchIndex;
-                    targetIndex = searchIndex;
-                }
-            }
-            else {
-                // console.log("wrapped!");
-                textArea.style["background-color"] = "#faa";
-                setTimeout(function() {
-                     textArea.style["background-color"] = "";
-                }, 150);
-                textArea.value = text;
-                this.tabStruct.index = 0;
-            }
-        }
-        else {
-            this.tabStruct.index = 0;
-        }
-        // prevent the default TAB operation (typically focus shifting)
         ev.preventDefault();
     },
 
