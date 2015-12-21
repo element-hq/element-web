@@ -26,6 +26,7 @@ class TabComplete {
     constructor(opts) {
         opts.startingWordSuffix = opts.startingWordSuffix || "";
         opts.wordSuffix = opts.wordSuffix || "";
+        opts.allowLooping = opts.allowLooping || false;
         this.opts = opts;
         this.completing = false;
         this.list = []; // full set of tab-completable things
@@ -57,6 +58,12 @@ class TabComplete {
         return this.completing;
     }
 
+    stopTabCompleting() {
+        this.completing = false;
+        this.currentIndex = 0;
+        this._notifyStateChange();
+    }
+
     /**
      * @param {Number} numAheadToPeek Return *up to* this many elements.
      * @return {TabComplete.Entry[]}
@@ -65,25 +72,25 @@ class TabComplete {
         if (this.matchedList.length === 0) {
             return [];
         }
+        var peekList = [];
 
-        var peekList = [
-            this.matchedList[this.currentIndex]
-        ];
         // return the current match item and then one with an index higher, and
-        // so on until we've reached the requested limit OR we've looped back
-        // around to our starting index.
-        for (var i = 1; i < numAheadToPeek; i++) {
-            var nextIndex = this.currentIndex + i;
-            if (nextIndex >= this.matchedList.length) {
-                // wrap around and take account of how far we've wrapped
-                nextIndex -= this.matchedList.length;
+        // so on until we've reached the requested limit. If we hit the end of
+        // the list of options we're done.
+        for (var i = 0; i < numAheadToPeek; i++) {
+            var nextIndex;
+            if (this.opts.allowLooping) {
+                nextIndex = (this.currentIndex + i) % this.matchedList.length;
             }
-            // check for looping back to start
-            if (nextIndex === this.currentIndex) {
-                break; // no more items to return without looping
+            else {
+                nextIndex = this.currentIndex + i;
+                if (nextIndex === this.matchedList.length) {
+                    break;
+                }
             }
             peekList.push(this.matchedList[nextIndex]);
         }
+        // console.log("Peek list(%s): %s", numAheadToPeek, JSON.stringify(peekList));
         return peekList;
     }
 
@@ -96,9 +103,7 @@ class TabComplete {
         if (ev.keyCode !== KEY_TAB) {
             if (ev.keyCode !== KEY_SHIFT && this.completing) {
                 // they're resuming typing; reset tab complete state vars.
-                this.completing = false;
-                this.currentIndex = 0;
-                this._notifyStateChange();
+                this.stopTabCompleting();
                 return true;
             }
             return false;
@@ -137,16 +142,15 @@ class TabComplete {
             return;
         }
 
-        var looped = false;
         // work out the new index, wrapping if necessary.
         this.currentIndex += offset;
         if (this.currentIndex >= this.matchedList.length) {
             this.currentIndex = 0;
-            looped = true;
         }
         else if (this.currentIndex < 0) {
             this.currentIndex = this.matchedList.length - 1;
         }
+        var looped = this.currentIndex === 0; // catch forward and backward looping
 
         var suffix = "";
 
@@ -165,6 +169,10 @@ class TabComplete {
             setTimeout(() => { // yay for lexical 'this'!
                  this.textArea.style["background-color"] = "";
             }, 150);
+
+            if (!this.opts.allowLooping) {
+                this.stopTabCompleting();
+            }
         }
         else {
             this.textArea.style["background-color"] = ""; // cancel blinks TODO: required?

@@ -91,6 +91,7 @@ module.exports = React.createClass({
         this.tabComplete = new TabComplete({
             startingWordSuffix: ": ",
             wordSuffix: " ",
+            allowLooping: false,
             onStateChange: (isCompleting) => {
                 this.forceUpdate();
             }
