@@ -31,7 +31,6 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
 var CallHandler = require('../../../CallHandler');
-var TabComplete = require("../../../TabComplete");
 var sdk = require('../../../index');
 
 var dis = require("../../../dispatcher");
@@ -64,6 +63,10 @@ function mdownToHtml(mdown) {
 
 module.exports = React.createClass({
     displayName: 'MessageComposer',
+
+    propTypes: {
+        tabComplete: React.PropTypes.any
+    },
 
     componentWillMount: function() {
         this.oldScrollHeight = 0;
@@ -168,14 +171,9 @@ module.exports = React.createClass({
             this.props.room.roomId
         );
         this.resizeInput();
-
-        // xchat-style tab complete, add a colon if tab
-        // completing at the start of the text
-        this._tabComplete = new TabComplete({
-            textArea: this.refs.textarea,
-            startingWordSuffix: ": ",
-            wordSuffix: " "
-        });
+        if (this.props.tabComplete) {
+            this.props.tabComplete.setTextArea(this.refs.textarea);
+        }
     },
 
     componentWillUnmount: function() {
@@ -233,7 +231,9 @@ module.exports = React.createClass({
                     return m.name || m.userId;
                 });
             }
-            this._tabComplete.setCompletionList(memberList);
+            if (this.props.tabComplete) {
+                this.props.tabComplete.setCompletionList(memberList);
+            }
         }
         else if (ev.keyCode === KeyCode.UP) {
             var input = this.refs.textarea.value;
@@ -253,7 +253,10 @@ module.exports = React.createClass({
                 this.resizeInput();
             }
         }
-        this._tabComplete.onKeyDown(ev);
+
+        if (this.props.tabComplete) {
+            this.props.tabComplete.onKeyDown(ev);
+        }
 
         var self = this;
         setTimeout(function() {

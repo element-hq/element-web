@@ -45,6 +45,10 @@ class TabComplete {
         this.textArea = textArea;
     }
 
+    isTabCompleting() {
+        return this.tabStruct.completing;
+    }
+
     next() {
         this.tabStruct.index++;
         this.setCompletionOption();
@@ -117,15 +121,27 @@ class TabComplete {
         }
     }
 
+    /**
+     * @param {DOMEvent} e
+     * @return {Boolean} True if the tab complete state changed as a result of
+     * this event.
+     */
     onKeyDown(ev) {
         if (ev.keyCode !== KEY_TAB) {
             if (ev.keyCode !== KEY_SHIFT && this.tabStruct.completing) {
                 // they're resuming typing; reset tab complete state vars.
                 this.tabStruct.completing = false;
                 this.tabStruct.index = 0;
+                return true;
             }
             return false;
         }
+
+        if (!this.textArea) {
+            console.error("onKeyDown called before a <textarea> was set!");
+            return false;
+        }
+
         // init struct if necessary
         if (!this.tabStruct.completing) {
             this.tabStruct.completing = true;

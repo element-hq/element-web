@@ -34,6 +34,7 @@ var WhoIsTyping = require("../../WhoIsTyping");
 var Modal = require("../../Modal");
 var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
+var TabComplete = require("../../TabComplete");
 var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
 
@@ -85,6 +86,12 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
         this.savedScrollState = {atBottom: true};
+        // xchat-style tab complete, add a colon if tab
+        // completing at the start of the text
+        this.tabComplete = new TabComplete({
+            startingWordSuffix: ": ",
+            wordSuffix: " "
+        });
     },
 
     componentWillUnmount: function() {
@@ -1357,7 +1364,9 @@ module.exports = React.createClass({
             );
             if (canSpeak) {
                 messageComposer =
-                    <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} callState={this.state.callState} />
+                    <MessageComposer
+                        room={this.state.room} roomView={this} uploadFile={this.uploadFile}
+                        callState={this.state.callState} tabComplete={this.tabComplete} />
             }
 
             // TODO: Why aren't we storing the term/scope/count in this format
