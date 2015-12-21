@@ -18,20 +18,22 @@ const DELAY_TIME_MS = 500;
 const KEY_TAB = 9;
 const KEY_SHIFT = 16;
 
+// word boundary -> 1 or more non-whitespace chars (group) -> end of line
+const MATCH_REGEX = /\b(\S+)$/;
+
 class TabComplete {
 
     constructor(opts) {
         opts.startingWordSuffix = opts.startingWordSuffix || "";
         opts.wordSuffix = opts.wordSuffix || "";
         this.opts = opts;
-
-        this.tabStruct = {
-            original: null,
-            index: 0
-        };
         this.completing = false;
-        this.list = [];
-        this.textArea = opts.textArea;
+        this.list = []; // full set of tab-completable things
+        this.matchedList = []; // subset of completable things to loop over
+        this.currentIndex = 0; // index in matchedList currently
+        this.originalText = null; // original input text when tab was first hit
+        this.textArea = opts.textArea; // DOMElement
+        this.isFirstWord = false; // true if you tab-complete on the first word
     }
 
     /**
@@ -41,99 +43,48 @@ class TabComplete {
         this.list = completeList;
     }
 
+    /**
+     * @param {DOMElement}
+     */
     setTextArea(textArea) {
         this.textArea = textArea;
     }
 
+    /**
+     * @return {Boolean}
+     */
     isTabCompleting() {
         return this.completing;
     }
 
-    next() {
-        this.tabStruct.index++;
-        this.setCompletionOption();
-    }
-
     /**
-     * @param {Number} numAheadToPeek
+     * @param {Number} numAheadToPeek Return *up to* this many elements.
      * @return {TabComplete.Entry[]}
      */
     peek(numAheadToPeek) {
-        var current = this.list[this.tabStruct.index];
-        return [current];
-    }
-
-    prev() {
-        this.tabStruct.index --;
-        if (this.tabStruct.index < 0) {
-            // wrap to the last search match, and fix up to a real index
-            // value after we've matched.
-            this.tabStruct.index = Number.MAX_VALUE;
+        if (this.matchedList.length === 0) {
+            return [];
         }
-        this.setCompletionOption();
-    }
 
-    setCompletionOption() {
-        var searchIndex = 0;
-        var targetIndex = this.tabStruct.index;
-        var text = this.tabStruct.original;
-
-        var search = /@?([a-zA-Z0-9_\-:\.]+)$/.exec(text);
-        // console.log("Searched in '%s' - got %s", text, search);
-        if (targetIndex === 0) { // 0 is always the original text
-            this.textArea.value = text;
-        }
-        else if (search && search[1]) {
-            // console.log("search found: " + search+" from "+text);
-            var expansion;
-
-            // FIXME: could do better than linear search here
-            for (var i=0; i < this.list.length; i++) {
-                if (searchIndex < targetIndex) {
-                    if (this.list[i].text.toLowerCase().indexOf(search[1].toLowerCase()) === 0) {
-                        expansion = this.list[i].text;
-                        searchIndex++;
-                    }
-                }
+        var peekList = [
+            this.matchedList[this.currentIndex]
+        ];
+        // return the current match item and then one with an index higher, and
+        // so on until we've reached the requested limit OR we've looped back
+        // around to our starting index.
+        for (var i = 1; i < numAheadToPeek; i++) {
+            var nextIndex = this.currentIndex + i;
+            if (nextIndex >= this.matchedList.length) {
+                // wrap around and take account of how far we've wrapped
+                nextIndex -= this.matchedList.length;
             }
-
-            if (searchIndex === targetIndex || targetIndex === Number.MAX_VALUE) {
-                if (search[0].length === text.length) {
-                    expansion += this.opts.startingWordSuffix;
-                }
-                else {
-                    expansion += this.opts.wordSuffix;
-                }
-                this.textArea.value = text.replace(
-                    /@?([a-zA-Z0-9_\-:\.]+)$/, expansion
-                );
-                // cancel blink
-                this.textArea.style["background-color"] = "";
-                if (targetIndex === Number.MAX_VALUE) {
-                    // wrap the index around to the last index found
-                    this.tabStruct.index = searchIndex;
-                    targetIndex = searchIndex;
-                }
+            // check for looping back to start
+            if (nextIndex === this.currentIndex) {
+                break; // no more items to return without looping
             }
-            else {
-                // console.log("wrapped!");
-                this.textArea.style["background-color"] = "#faa";
-                setTimeout(() => { // yay for lexical 'this'!
-                     this.textArea.style["background-color"] = "";
-                }, 150);
-                this.textArea.value = text;
-                this.tabStruct.index = 0;
-            }
+            peekList.push(this.matchedList[nextIndex]);
         }
-        else {
-            this.tabStruct.index = 0;
-        }
-    }
-
-    notifyStateChange() {
-        if (this.opts.onStateChange) {
-            this.opts.onStateChange(this.completing);
-        }
+        return peekList;
     }
 
     /**
@@ -146,8 +97,8 @@ class TabComplete {
             if (ev.keyCode !== KEY_SHIFT && this.completing) {
                 // they're resuming typing; reset tab complete state vars.
                 this.completing = false;
-                this.tabStruct.index = 0;
-                this.notifyStateChange();
+                this.currentIndex = 0;
+                this._notifyStateChange();
                 return true;
             }
             return false;
@@ -161,23 +112,100 @@ class TabComplete {
         // init struct if necessary
         if (!this.completing) {
             this.completing = true;
-            this.tabStruct.index = 0;
-            // cache starting text
-            this.tabStruct.original = this.textArea.value;
+            this.currentIndex = 0;
+            this._calculateCompletions();
         }
 
         if (ev.shiftKey) {
-            this.prev();
+            this.nextMatchedEntry(-1);
         }
         else {
-            this.next();
+            this.nextMatchedEntry(1);
         }
         // prevent the default TAB operation (typically focus shifting)
         ev.preventDefault();
-        this.notifyStateChange();
+        this._notifyStateChange();
         return true;
     }
 
+    /**
+     * Set the textarea to the next value in the matched list.
+     * @param {Number} offset Offset to apply *before* setting the next value.
+     */
+    nextMatchedEntry(offset) {
+        if (this.matchedList.length === 0) {
+            return;
+        }
+
+        var looped = false;
+        // work out the new index, wrapping if necessary.
+        this.currentIndex += offset;
+        if (this.currentIndex >= this.matchedList.length) {
+            this.currentIndex = 0;
+            looped = true;
+        }
+        else if (this.currentIndex < 0) {
+            this.currentIndex = this.matchedList.length - 1;
+        }
+
+        var suffix = "";
+
+        if (this.currentIndex !== 0) { // don't suffix the original text!
+            suffix = this.isFirstWord ? this.opts.startingWordSuffix : this.opts.wordSuffix;
+        }
+
+        // set textarea to this new value
+        this.textArea.value = this._replaceWith(
+            this.matchedList[this.currentIndex].text + suffix
+        );
+
+        // visual display to the user that we looped - TODO: This should be configurable
+        if (looped) {
+            this.textArea.style["background-color"] = "#faa";
+            setTimeout(() => { // yay for lexical 'this'!
+                 this.textArea.style["background-color"] = "";
+            }, 150);
+        }
+        else {
+            this.textArea.style["background-color"] = ""; // cancel blinks TODO: required?
+        }
+    }
+
+    _replaceWith(newVal) {
+        return this.originalText.replace(MATCH_REGEX, newVal);
+    }
+
+    _calculateCompletions() {
+        this.originalText = this.textArea.value; // cache starting text
+
+        // grab the partial word from the text which we'll be tab-completing
+        var res = MATCH_REGEX.exec(this.originalText);
+        if (!res) {
+            this.matchedList = [];
+            return;
+        }
+        var [ ,group] = res; // ES6 destructuring; ignore first element
+        this.isFirstWord = group.length === this.originalText.length;
+
+        this.matchedList = [
+            new TabComplete.Entry(group) // first entry is always the original partial
+        ];
+
+        // find matching entries in the set of entries given to us
+        this.list.forEach((entry) => {
+            if (entry.text.toLowerCase().indexOf(group.toLowerCase()) === 0) {
+                this.matchedList.push(entry);
+            }
+        });
+
+        // console.log("_calculateCompletions => %s", JSON.stringify(this.matchedList));
+    }
+
+    _notifyStateChange() {
+        if (this.opts.onStateChange) {
+            this.opts.onStateChange(this.completing);
+        }
+    }
 };
 
 TabComplete.Entry = function(text, image) {
