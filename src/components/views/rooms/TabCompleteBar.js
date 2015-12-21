@@ -30,8 +30,14 @@ module.exports = React.createClass({
         return (
             <div>
             {this.props.entries.map(function(entry, i) {
+                var image = (
+                    entry.imgUrl ? <img src={entry.imgUrl} /> : null
+                );
                 return (
-                    <div key={i + ""}>{entry.text}</div>
+                    <div key={i + ""}>
+                        {image}
+                        {entry.text}
+                    </div>
                 );
             })}
             </div>

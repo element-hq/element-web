@@ -216,9 +216,9 @@ class TabComplete {
     }
 };
 
-TabComplete.Entry = function(text, image) {
+TabComplete.Entry = function(text, imgUrl) {
     this.text = text;
-    this.image = image;
+    this.imgUrl = imgUrl;
 };
 
 

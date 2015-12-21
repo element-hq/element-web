@@ -204,7 +204,7 @@ module.exports = React.createClass({
             var memberList = [];
             if (this.props.room) {
                 // TODO: We should cache this list and only update it when the
-                // member list changes
+                // member list changes. It's also horrendous that this is done here.
                 memberList = this.props.room.getJoinedMembers().sort(function(a, b) {
                     var userA = a.user;
                     var userB = b.user;
@@ -229,7 +229,15 @@ module.exports = React.createClass({
                         }
                     }
                 }).map(function(m) {
-                    return new TabComplete.Entry(m.name || m.userId);
+                    var url = m.getAvatarUrl(
+                        MatrixClientPeg.get().getHomeserverUrl(), 32, 32, "crop"
+                    );
+                    return new TabComplete.Entry(
+                        m.name || m.userId,
+                        // TODO: annoying that the JS SDK can return 0-len strings when
+                        // it should be returning null.. can't use truthy constructs!
+                        url && url.length > 0 ? url : null
+                    );
                 });
             }
             if (this.props.tabComplete) {
