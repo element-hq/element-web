@@ -20,8 +20,14 @@ const KEY_TAB = 9;
 const KEY_SHIFT = 16;
 const KEY_WINDOWS = 91;
 
-// word boundary -> 1 or more non-whitespace chars (group) -> end of line
-const MATCH_REGEX = /\b(\S+)$/;
+// NB: DO NOT USE \b its "words" are roman alphabet only!
+//
+// Capturing group containing the start
+// of line or a whitespace char
+//     \_______________       __________Capturing group of 1 or more non-whitespace chars
+//                    _|__  _|_         followed by the end of line
+//                   /    \/   \
+const MATCH_REGEX = /(^|\s)(\S+)$/;
 
 class TabComplete {
 
@@ -239,8 +245,22 @@ class TabComplete {
     }
 
     _replaceWith(newVal, includeSuffix) {
+        // The regex to replace the input matches a character of whitespace AND
+        // the partial word. If we just use string.replace() with the regex it will
+        // replace the partial word AND the character of whitespace. We want to
+        // preserve whatever that character is (\n, \t, etc) so find out what it is now.
+        var boundaryChar;
+        var res = MATCH_REGEX.exec(this.originalText);
+        if (res) {
+            boundaryChar = res[1]; // the first captured group
+        }
+        if (boundaryChar === undefined) {
+            console.warn("Failed to find boundary char on text: '%s'", this.originalText);
+            boundaryChar = "";
+        }
+
         var replacementText = (
-            newVal + (
+            boundaryChar + newVal + (
                 includeSuffix ?
                     (this.isFirstWord ? this.opts.startingWordSuffix : this.opts.wordSuffix) :
                     ""
@@ -258,16 +278,17 @@ class TabComplete {
             this.matchedList = [];
             return;
         }
-        var [ ,group] = res; // ES6 destructuring; ignore first element
-        this.isFirstWord = group.length === this.originalText.length;
+        // ES6 destructuring; ignore first element (the complete match)
+        var [ , boundaryGroup, partialGroup] = res;
+        this.isFirstWord = partialGroup.length === this.originalText.length;
 
         this.matchedList = [
-            new Entry(group) // first entry is always the original partial
+            new Entry(partialGroup) // first entry is always the original partial
         ];
 
         // find matching entries in the set of entries given to us
         this.list.forEach((entry) => {
-            if (entry.text.toLowerCase().indexOf(group.toLowerCase()) === 0) {
+            if (entry.text.toLowerCase().indexOf(partialGroup.toLowerCase()) === 0) {
                 this.matchedList.push(entry);
             }
         });
