@@ -28,6 +28,7 @@ module.exports.components['structures.login.PostRegistration'] = require('./comp
 module.exports.components['structures.login.Registration'] = require('./components/structures/login/Registration');
 module.exports.components['structures.MatrixChat'] = require('./components/structures/MatrixChat');
 module.exports.components['structures.RoomView'] = require('./components/structures/RoomView');
+module.exports.components['structures.ScrollPanel'] = require('./components/structures/ScrollPanel');
 module.exports.components['structures.UploadBar'] = require('./components/structures/UploadBar');
 module.exports.components['structures.UserSettings'] = require('./components/structures/UserSettings');
 module.exports.components['views.avatars.MemberAvatar'] = require('./components/views/avatars/MemberAvatar');
