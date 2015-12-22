@@ -365,10 +365,9 @@ module.exports = React.createClass({
         if (!backwards || this.state.searchInProgress)
             return;
 
-        if (this.nextSearchBatch) {
+        if (this.state.searchResults.next_batch) {
             if (DEBUG_SCROLL) console.log("requesting more search results");
-            this._getSearchBatch(this.state.searchTerm,
-                                 this.state.searchScope);
+            this._backPaginateSearch();
         } else {
             if (DEBUG_SCROLL) console.log("no more search results");
         }
@@ -484,10 +483,8 @@ module.exports = React.createClass({
         this.setState({
             searchTerm: term,
             searchScope: scope,
-            searchResults: [],
+            searchResults: {},
             searchHighlights: [],
-            searchCount: null,
-            searchCanPaginate: null,
         });
 
         // if we already have a search panel, we need to tell it to forget
@@ -496,64 +493,72 @@ module.exports = React.createClass({
             this.refs.searchResultsPanel.resetScrollState();
         }
 
-        this.nextSearchBatch = null;
-        this._getSearchBatch(term, scope);
+        // make sure that we don't end up showing results from
+        // an aborted search by keeping a unique id.
+        //
+        // todo: should cancel any previous search requests.
+        this.searchId = new Date().getTime();
+
+        var filter;
+        if (scope === "Room") {
+            filter = {
+                // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
+                rooms: [
+                    this.props.roomId
+                ]
+            };
+        }
+
+        if (DEBUG_SCROLL) console.log("sending search request");
+
+        var searchPromise = MatrixClientPeg.get().searchRoomEvents(
+            { filter: filter,
+              term: term,
+            });
+        this._handleSearchResult(searchPromise)
+            .done();
     },
 
-    // fire off a request for a batch of search results
-    _getSearchBatch: function(term, scope) {
+    _backPaginateSearch: function() {
+        if (DEBUG_SCROLL) console.log("sending search back-paginate request");
+
+        var searchPromise = MatrixClientPeg.get().backPaginateRoomEventsSearch(
+            this.state.searchResults);
+        this._handleSearchResult(searchPromise)
+            .done();
+    },
+
+    _handleSearchResult: function(searchPromise) {
+        var self = this;
+        var searchId = this.searchId;
+
         this.setState({
             searchInProgress: true,
         });
 
-        // make sure that we don't end up merging results from
-        // different searches by keeping a unique id.
-        //
-        // todo: should cancel any previous search requests.
-        var searchId = this.searchId = new Date().getTime();
-
-        var self = this;
-
-        if (DEBUG_SCROLL) console.log("sending search request");
-        MatrixClientPeg.get().search({ body: this._getSearchCondition(term, scope),
-                                       next_batch: this.nextSearchBatch })
-        .then(function(data) {
+        return searchPromise.then(function(results) {
             if (DEBUG_SCROLL) console.log("search complete");
             if (!self.state.searching || self.searchId != searchId) {
                 console.error("Discarding stale search results");
                 return;
             }
 
-            var results = data.search_categories.room_events;
-
             // postgres on synapse returns us precise details of the
             // strings which actually got matched for highlighting.
 
-            // combine the highlight list with our existing list; build an object
-            // to avoid O(N^2) fail
-            var highlights = {};
-            results.highlights.forEach(function(hl) { highlights[hl] = 1; });
-            self.state.searchHighlights.forEach(function(hl) { highlights[hl] = 1; });
-
-            // turn it back into an ordered list. For overlapping highlights,
+            // For overlapping highlights,
             // favour longer (more specific) terms first
-            highlights = Object.keys(highlights).sort(function(a, b) { b.length - a.length });
+            var highlights = results.highlights.sort(function(a, b) { b.length - a.length });
 
             // sqlite doesn't give us any highlights, so just try to highlight the literal search term
             if (highlights.length == 0) {
-                highlights = [ term ];
+                highlights = [ self.state.searchTerm ];
             }
-
-            // append the new results to our existing results
-            var events = self.state.searchResults.concat(results.results);
 
             self.setState({
                 searchHighlights: highlights,
-                searchResults: events,
-                searchCount: results.count,
-                searchCanPaginate: !!(results.next_batch),
+                searchResults: results,
             });
-            self.nextSearchBatch = results.next_batch;
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
@@ -564,51 +569,27 @@ module.exports = React.createClass({
             self.setState({
                 searchInProgress: false
             });
-        }).done();
+        });
     },
 
-    _getSearchCondition: function(term, scope) {
-        var filter;
-
-        if (scope === "Room") {
-            filter = {
-                // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
-                rooms: [
-                    this.props.roomId
-                ]
-            };
-        }
-
-        return {
-            search_categories: {
-                room_events: {
-                    search_term: term,
-                    filter: filter,
-                    order_by: "recent",
-                    event_context: {
-                        before_limit: 1,
-                        after_limit: 1,
-                        include_profile: true,
-                    }
-                }
-            }
-        }
-    },
 
     getSearchResultTiles: function() {
         var DateSeparator = sdk.getComponent('messages.DateSeparator');
-        var cli = MatrixClientPeg.get();
-
-        var ret = [];
-
         var EventTile = sdk.getComponent('rooms.EventTile');
+        var cli = MatrixClientPeg.get();
 
         // XXX: todo: merge overlapping results somehow?
         // XXX: why doesn't searching on name work?
 
+        if (this.state.searchResults.results === undefined) {
+            // awaiting results
+            return [];
+        }
 
-        if (this.state.searchCanPaginate === false) {
-            if (this.state.searchResults.length == 0) {
+        var ret = [];
+
+        if (!this.state.searchResults.next_batch) {
+            if (this.state.searchResults.results.length == 0) {
                 ret.push(<li key="search-top-marker">
                          <h2 className="mx_RoomView_topMarker">No results</h2>
                          </li>
@@ -623,9 +604,10 @@ module.exports = React.createClass({
 
         var lastRoomId;
 
-        for (var i = this.state.searchResults.length - 1; i >= 0; i--) {
-            var result = this.state.searchResults[i];
-            var mxEv = new Matrix.MatrixEvent(result.result);
+        for (var i = this.state.searchResults.results.length - 1; i >= 0; i--) {
+            var result = this.state.searchResults.results[i];
+
+            var mxEv = result.context.getEvent();
 
             if (!EventTile.haveTileForEvent(mxEv)) {
                 // XXX: can this ever happen? It will make the result count
@@ -636,29 +618,28 @@ module.exports = React.createClass({
             var eventId = mxEv.getId();
 
             if (this.state.searchScope === 'All') {
-                var roomId = result.result.room_id;
+                var roomId = mxEv.getRoomId();
                 if(roomId != lastRoomId) {
                     ret.push(<li key={eventId + "-room"}><h1>Room: { cli.getRoom(roomId).name }</h1></li>);
                     lastRoomId = roomId;
                 }
             }
 
-            var ts1 = result.result.origin_server_ts;
+            var ts1 = mxEv.getTs();
             ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); // Rank: {resultList[i].rank}
 
-            if (result.context.events_before[0]) {
-                var mxEv2 = new Matrix.MatrixEvent(result.context.events_before[0]);
-                if (EventTile.haveTileForEvent(mxEv2)) {
-                    ret.push(<li key={eventId+"-1"} data-scroll-token={eventId+"-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+            var timeline = result.context.getTimeline();
+            for (var j = 0; j < timeline.length; j++) {
+                var ev = timeline[j];
+                var highlights;
+                var contextual = (j != result.context.getOurEventIndex());
+                if (!contextual) {
+                    highlights = this.state.searchHighlights;
                 }
-            }
-
-            ret.push(<li key={eventId+"+0"} data-scroll-token={eventId+"+0"}><EventTile mxEvent={mxEv} highlights={this.state.searchHighlights}/></li>);
-
-            if (result.context.events_after[0]) {
-                var mxEv2 = new Matrix.MatrixEvent(result.context.events_after[0]);
-                if (EventTile.haveTileForEvent(mxEv2)) {
-                    ret.push(<li key={eventId+"+1"} data-scroll-token={eventId+"+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                if (EventTile.haveTileForEvent(ev)) {
+                    ret.push(<li key={eventId+"+"+j} data-scroll-token={eventId+"+"+j}>
+                             <EventTile mxEvent={ev} contextual={contextual} highlights={highlights} />
+                             </li>);
                 }
             }
         }
@@ -1290,7 +1271,7 @@ module.exports = React.createClass({
                 searchInfo = {
                     searchTerm : this.state.searchTerm,
                     searchScope : this.state.searchScope,
-                    searchCount : this.state.searchCount,
+                    searchCount : this.state.searchResults.count,
                 };
             }
 
