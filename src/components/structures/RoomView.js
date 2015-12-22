@@ -399,6 +399,12 @@ module.exports = React.createClass({
         }
     },
 
+    // return true if there's more messages in the backlog which we aren't displaying
+    _canPaginate: function() {
+        return (this.state.messageCap < this.state.room.timeline.length) ||
+            this.state.room.oldState.paginationToken;
+    },
+
     onResendAllClick: function() {
         var eventsToResend = this._getUnsentMessages(this.state.room);
         eventsToResend.forEach(function(event) {
@@ -697,7 +703,10 @@ module.exports = React.createClass({
             return ret;
         }
 
-        for (var i = this.state.room.timeline.length-1; i >= 0 && count < this.state.messageCap; --i) {
+
+        var prevEvent = null; // the last event we showed
+        var startIdx = Math.max(0, this.state.room.timeline.length - this.state.messageCap);
+        for (var i = startIdx; i < this.state.room.timeline.length; i++) {
             var mxEv = this.state.room.timeline[i];
 
             if (!EventTile.haveTileForEvent(mxEv)) {
@@ -710,49 +719,45 @@ module.exports = React.createClass({
                 }
             }
 
+            // is this a continuation of the previous message?
             var continuation = false;
-            var last = false;
-            var dateSeparator = null;
-            if (i == this.state.room.timeline.length - 1) {
-                last = true;
-            }
-            if (i > 0 && count < this.state.messageCap - 1) {
-                if (this.state.room.timeline[i].sender &&
-                    this.state.room.timeline[i - 1].sender &&
-                    (this.state.room.timeline[i].sender.userId ===
-                        this.state.room.timeline[i - 1].sender.userId) &&
-                    (this.state.room.timeline[i].getType() ==
-                        this.state.room.timeline[i - 1].getType())
+            if (prevEvent !== null) {
+                if (mxEv.sender &&
+                    prevEvent.sender &&
+                    (mxEv.sender.userId === prevEvent.sender.userId) &&
+                    (mxEv.getType() == prevEvent.getType())
                     )
                 {
                     continuation = true;
                 }
-
-                var ts0 = this.state.room.timeline[i - 1].getTs();
-                var ts1 = this.state.room.timeline[i].getTs();
-                if (new Date(ts0).toDateString() !== new Date(ts1).toDateString()) {
-                    dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
-                    continuation = false;
-                }
             }
 
-            if (i === 1) { // n.b. 1, not 0, as the 0th event is an m.room.create and so doesn't show on the timeline
-                var ts1 = this.state.room.timeline[i].getTs();
-                dateSeparator = <li key={ts1}><DateSeparator ts={ts1}/></li>;
+            // do we need a date separator since the last event?
+            var ts1 = mxEv.getTs();
+            if ((prevEvent == null && !this._canPaginate()) ||
+                (prevEvent != null &&
+                 new Date(prevEvent.getTs()).toDateString() !== new Date(ts1).toDateString())) {
+                var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
+                ret.push(dateSeparator);
                 continuation = false;
             }
 
+            var last = false;
+            if (i == this.state.room.timeline.length - 1) {
+                // XXX: we might not show a tile for the last event.
+                last = true;
+            }
+
             var eventId = mxEv.getId();
-            ret.unshift(
+            ret.push(
                 <li key={eventId} ref={this._collectEventNode.bind(this, eventId)} data-scroll-token={eventId}>
                     <EventTile mxEvent={mxEv} continuation={continuation} last={last}/>
                 </li>
             );
-            if (dateSeparator) {
-                ret.unshift(dateSeparator);
-            }
-            ++count;
+
+            prevEvent = mxEv;
         }
+
         return ret;
     },
 
