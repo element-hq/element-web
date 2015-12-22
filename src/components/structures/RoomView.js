@@ -35,6 +35,7 @@ var Modal = require("../../Modal");
 var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
 var TabComplete = require("../../TabComplete");
+var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
 var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
 
@@ -264,6 +265,11 @@ module.exports = React.createClass({
     },
 
     onRoomStateMember: function(ev, state, member) {
+        if (member.roomId === this.props.roomId) {
+            // a member state changed in this room, refresh the tab complete list
+            this._updateTabCompleteList(this.state.room);
+        }
+
         if (!this.props.ConferenceHandler) {
             return;
         }
@@ -326,6 +332,18 @@ module.exports = React.createClass({
 
         window.addEventListener('resize', this.onResize);
         this.onResize();
+
+        this._updateTabCompleteList(this.state.room);
+    },
+
+    _updateTabCompleteList: function(room) {
+        if (!room || !this.tabComplete) {
+            return;
+        }
+        console.log("_updateTabCompleteList");
+        this.tabComplete.setCompletionList(
+            MemberEntry.fromMemberList(room.getJoinedMembers())
+        );
     },
 
     _initialiseMessagePanel: function() {

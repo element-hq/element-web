@@ -200,40 +200,6 @@ module.exports = React.createClass({
             this.sentHistory.push(input);
             this.onEnter(ev);
         }
-        else if (ev.keyCode === KeyCode.TAB) {
-            if (this.props.tabComplete && this.props.room) {
-                var memberList = [];
-                // TODO: We should cache this list and only update it when the
-                // member list changes. It's also horrendous that this is done here.
-                memberList = this.props.room.getJoinedMembers().sort(function(a, b) {
-                    var userA = a.user;
-                    var userB = b.user;
-                    if (userA && !userB) {
-                        return -1; // a comes first
-                    }
-                    else if (!userA && userB) {
-                        return 1; // b comes first
-                    }
-                    else if (!userA && !userB) {
-                        return 0; // don't care
-                    }
-                    else { // both User objects exist
-                        if (userA.lastActiveAgo < userB.lastActiveAgo) {
-                            return -1; // a comes first
-                        }
-                        else if (userA.lastActiveAgo > userB.lastActiveAgo) {
-                            return 1; // b comes first
-                        }
-                        else {
-                            return 0; // same last active ago
-                        }
-                    }
-                }).map(function(m) {
-                    return new MemberEntry(m);
-                });
-                this.props.tabComplete.setCompletionList(memberList);
-            }
-        }
         else if (ev.keyCode === KeyCode.UP) {
             var input = this.refs.textarea.value;
             var offset = this.refs.textarea.selectionStart || 0;
