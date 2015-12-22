@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+var Entry = require("./TabCompleteEntries").Entry;
 
 const DELAY_TIME_MS = 500;
 const KEY_TAB = 9;
@@ -40,7 +41,7 @@ class TabComplete {
     }
 
     /**
-     * @param {TabComplete.Entry[]} completeList
+     * @param {Entry[]} completeList
      */
     setCompletionList(completeList) {
         this.list = completeList;
@@ -74,7 +75,7 @@ class TabComplete {
 
     /**
      * @param {Number} numAheadToPeek Return *up to* this many elements.
-     * @return {TabComplete.Entry[]}
+     * @return {Entry[]}
      */
     peek(numAheadToPeek) {
         if (this.matchedList.length === 0) {
@@ -227,7 +228,7 @@ class TabComplete {
         this.isFirstWord = group.length === this.originalText.length;
 
         this.matchedList = [
-            new TabComplete.Entry(group) // first entry is always the original partial
+            new Entry(group) // first entry is always the original partial
         ];
 
         // find matching entries in the set of entries given to us
@@ -246,11 +247,5 @@ class TabComplete {
         }
     }
 };
-
-TabComplete.Entry = function(text, imgUrl) {
-    this.text = text;
-    this.imgUrl = imgUrl;
-};
-
 
 module.exports = TabComplete;

@@ -31,7 +31,7 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
 var CallHandler = require('../../../CallHandler');
-var TabComplete = require("../../../TabComplete");
+var MemberEntry = require("../../../TabCompleteEntries").MemberEntry;
 var sdk = require('../../../index');
 
 var dis = require("../../../dispatcher");
@@ -229,15 +229,7 @@ module.exports = React.createClass({
                         }
                     }
                 }).map(function(m) {
-                    var url = m.getAvatarUrl(
-                        MatrixClientPeg.get().getHomeserverUrl(), 32, 32, "crop"
-                    );
-                    return new TabComplete.Entry(
-                        m.name || m.userId,
-                        // TODO: annoying that the JS SDK can return 0-len strings when
-                        // it should be returning null.. can't use truthy constructs!
-                        url && url.length > 0 ? url : null
-                    );
+                    return new MemberEntry(m);
                 });
             }
             if (this.props.tabComplete) {

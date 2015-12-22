@@ -30,12 +30,9 @@ module.exports = React.createClass({
         return (
             <div className="mx_TabCompleteBar">
             {this.props.entries.map(function(entry, i) {
-                var image = (
-                    entry.imgUrl ? <img src={entry.imgUrl} width="24" height="24"/> : null
-                );
                 return (
-                    <div key={i + ""} className="mx_TabCompleteBar_item">
-                        {image}
+                    <div key={entry.getKey() || i + ""} className="mx_TabCompleteBar_item">
+                        {entry.getImageJsx()}
                         <span className="mx_TabCompleteBar_text">
                             {entry.text}
                         </span>
