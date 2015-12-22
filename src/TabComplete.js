@@ -29,6 +29,7 @@ class TabComplete {
         opts.wordSuffix = opts.wordSuffix || "";
         opts.allowLooping = opts.allowLooping || false;
         opts.autoEnterTabComplete = opts.autoEnterTabComplete || false;
+        opts.onClickCompletes = opts.onClickCompletes || false;
         this.opts = opts;
         this.completing = false;
         this.list = []; // full set of tab-completable things
@@ -45,6 +46,14 @@ class TabComplete {
      */
     setCompletionList(completeList) {
         this.list = completeList;
+        if (this.opts.onClickCompletes) {
+            // assign onClick listeners for each entry to complete the text
+            this.list.forEach((l) => {
+                l.onClick = () => {
+                    this.completeTo(l.getText());
+                }
+            });
+        }
     }
 
     /**
@@ -71,6 +80,17 @@ class TabComplete {
         this.completing = true;
         this.currentIndex = 0;
         this._calculateCompletions();
+    }
+
+    /**
+     * Do an auto-complete with the given word. This terminates the tab-complete.
+     * @param {string} someVal
+     */
+    completeTo(someVal) {
+        this.textArea.value = this._replaceWith(someVal, true);
+        this.stopTabCompleting();
+        // keep focus on the text area
+        this.textArea.focus();
     }
 
     /**
@@ -184,15 +204,10 @@ class TabComplete {
         }
         var looped = this.currentIndex === 0; // catch forward and backward looping
 
-        var suffix = "";
-
-        if (this.currentIndex !== 0) { // don't suffix the original text!
-            suffix = this.isFirstWord ? this.opts.startingWordSuffix : this.opts.wordSuffix;
-        }
-
         // set textarea to this new value
         this.textArea.value = this._replaceWith(
-            this.matchedList[this.currentIndex].text + suffix
+            this.matchedList[this.currentIndex].text,
+            this.currentIndex !== 0 // don't suffix the original text!
         );
 
         // visual display to the user that we looped - TODO: This should be configurable
@@ -211,8 +226,15 @@ class TabComplete {
         }
     }
 
-    _replaceWith(newVal) {
-        return this.originalText.replace(MATCH_REGEX, newVal);
+    _replaceWith(newVal, includeSuffix) {
+        var replacementText = (
+            newVal + (
+                includeSuffix ?
+                    (this.isFirstWord ? this.opts.startingWordSuffix : this.opts.wordSuffix) :
+                    ""
+            )
+        );
+        return this.originalText.replace(MATCH_REGEX, replacementText);
     }
 
     _calculateCompletions() {

@@ -31,10 +31,11 @@ module.exports = React.createClass({
             <div className="mx_TabCompleteBar">
             {this.props.entries.map(function(entry, i) {
                 return (
-                    <div key={entry.getKey() || i + ""} className="mx_TabCompleteBar_item">
+                    <div key={entry.getKey() || i + ""} className="mx_TabCompleteBar_item"
+                            onClick={entry.onClick.bind(entry)} >
                         {entry.getImageJsx()}
                         <span className="mx_TabCompleteBar_text">
-                            {entry.text}
+                            {entry.getText()}
                         </span>
                     </div>
                 );

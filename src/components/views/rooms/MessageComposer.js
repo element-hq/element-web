@@ -201,8 +201,8 @@ module.exports = React.createClass({
             this.onEnter(ev);
         }
         else if (ev.keyCode === KeyCode.TAB) {
-            var memberList = [];
-            if (this.props.room) {
+            if (this.props.tabComplete && this.props.room) {
+                var memberList = [];
                 // TODO: We should cache this list and only update it when the
                 // member list changes. It's also horrendous that this is done here.
                 memberList = this.props.room.getJoinedMembers().sort(function(a, b) {
@@ -231,8 +231,6 @@ module.exports = React.createClass({
                 }).map(function(m) {
                     return new MemberEntry(m);
                 });
-            }
-            if (this.props.tabComplete) {
                 this.props.tabComplete.setCompletionList(memberList);
             }
         }

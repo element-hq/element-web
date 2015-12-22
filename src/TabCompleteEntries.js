@@ -41,6 +41,13 @@ class Entry {
     getKey() {
         return null;
     }
+
+    /**
+     * Called when this entry is clicked.
+     */
+    onClick() {
+        // NOP
+    }
 }
 
 class MemberEntry extends Entry {

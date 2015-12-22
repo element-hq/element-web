@@ -93,6 +93,7 @@ module.exports = React.createClass({
             wordSuffix: " ",
             allowLooping: false,
             autoEnterTabComplete: true,
+            onClickCompletes: true,
             onStateChange: (isCompleting) => {
                 this.forceUpdate();
             }
