@@ -1292,7 +1292,16 @@ module.exports = React.createClass({
                 else if (this.tabComplete.isTabCompleting()) {
                     var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
                     statusBar = (
-                        <TabCompleteBar entries={this.tabComplete.peek(3)} />
+                        <div className="mx_RoomView_tabCompleteBar">
+                            <div className="mx_RoomView_tabCompleteImage">...</div>
+                            <div className="mx_RoomView_tabCompleteWrapper">
+                                <TabCompleteBar entries={this.tabComplete.peek(6)} />
+                                <div className="mx_RoomView_tabCompleteEol">
+                                    <img src="img/eol.svg" width="22" height="16" alt="->|"/>
+                                    Auto-complete
+                                </div>
+                            </div>
+                        </div>
                     );
                 }
                 else if (this.state.hasUnsentMessages) {

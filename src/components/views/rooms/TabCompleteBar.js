@@ -28,15 +28,17 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div>
+            <div className="mx_TabCompleteBar">
             {this.props.entries.map(function(entry, i) {
                 var image = (
-                    entry.imgUrl ? <img src={entry.imgUrl} /> : null
+                    entry.imgUrl ? <img src={entry.imgUrl} width="24" height="24"/> : null
                 );
                 return (
-                    <div key={i + ""}>
+                    <div key={i + ""} className="mx_TabCompleteBar_item">
                         {image}
-                        {entry.text}
+                        <span className="mx_TabCompleteBar_text">
+                            {entry.text}
+                        </span>
                     </div>
                 );
             })}
