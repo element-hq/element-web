@@ -15,7 +15,7 @@ limitations under the License.
 */
 var Entry = require("./TabCompleteEntries").Entry;
 
-const DELAY_TIME_MS = 500;
+const DELAY_TIME_MS = 1000;
 const KEY_TAB = 9;
 const KEY_SHIFT = 16;
 const KEY_WINDOWS = 91;
@@ -40,6 +40,7 @@ class TabComplete {
         this.textArea = opts.textArea; // DOMElement
         this.isFirstWord = false; // true if you tab-complete on the first word
         this.enterTabCompleteTimerId = null;
+        this.inPassiveMode = false;
     }
 
     /**
@@ -68,7 +69,8 @@ class TabComplete {
      * @return {Boolean}
      */
     isTabCompleting() {
-        return this.completing;
+        // actually have things to tab over
+        return this.completing && this.matchedList.length > 1;
     }
 
     stopTabCompleting() {
@@ -130,36 +132,35 @@ class TabComplete {
      * this event.
      */
     onKeyDown(ev) {
+        var wasInPassiveMode = this.inPassiveMode && !ev.passive;
+        this.inPassiveMode = ev.passive;
+
         if (ev.keyCode !== KEY_TAB) {
             if (this.completing && ev.keyCode !== KEY_SHIFT &&
                     !ev.metaKey && !ev.ctrlKey && !ev.altKey && ev.keyCode !== KEY_WINDOWS) {
                 // they're resuming typing; reset tab complete state vars.
                 this.stopTabCompleting();
-                return true;
+
+                // fall through to auto-enter-tab-completing if set
+                if (!this.opts.autoEnterTabComplete) {
+                    return true;
+                }
             }
 
             if (this.opts.autoEnterTabComplete) {
-                /*
-                TODO:
-                 - This is passive so we shouldn't clobber the partial word that
-                   the user may have entered. This requires more logic to handle
-                   that vs a normal TAB which does clobber.
-                 - The first invocation of this timer will give no results because
-                   we horribly set the enumeration onKeyDown in MessageComposer, which
-                   was never actually hit. We should hook into RoomView's RoomState.members
-                   event and set the list there.
-                
-
                 clearTimeout(this.enterTabCompleteTimerId);
                 this.enterTabCompleteTimerId = setTimeout(() => {
                     if (!this.completing) {
                         // inject a fake tab event so we use the same code paths
+                        // as much as possible. Add a 'passive' flag to indicate
+                        // that they didn't really hit this key.
                         this.onKeyDown({
                             keyCode: KEY_TAB,
+                            passive: true,
                             preventDefault: function(){} // NOP
                         })
                     }
-                }, DELAY_TIME_MS); */
+                }, DELAY_TIME_MS);
             }
 
             return false;
@@ -179,8 +180,12 @@ class TabComplete {
             this.nextMatchedEntry(-1);
         }
         else {
-            this.nextMatchedEntry(1);
+            // if we were in passive mode we got out of sync by incrementing the
+            // index to show the peek view but not set the text area. Therefore,
+            // we want to set the *current* index rather than the *next* index.
+            this.nextMatchedEntry(wasInPassiveMode ? 0 : 1);
         }
+
         // prevent the default TAB operation (typically focus shifting)
         ev.preventDefault();
         this._notifyStateChange();
@@ -204,13 +209,18 @@ class TabComplete {
         else if (this.currentIndex < 0) {
             this.currentIndex = this.matchedList.length - 1;
         }
-        var looped = this.currentIndex === 0; // catch forward and backward looping
-
-        // set textarea to this new value
-        this.textArea.value = this._replaceWith(
-            this.matchedList[this.currentIndex].text,
-            this.currentIndex !== 0 // don't suffix the original text!
+        var looped = (
+            // impossible to loop if they've never hit tab; catch forward and backward looping
+            !this.inPassiveMode && this.currentIndex === 0
         );
+
+        if (!this.inPassiveMode) {
+            // set textarea to this new value
+            this.textArea.value = this._replaceWith(
+                this.matchedList[this.currentIndex].text,
+                this.currentIndex !== 0 // don't suffix the original text!
+            );
+        }
 
         // visual display to the user that we looped - TODO: This should be configurable
         if (looped) {

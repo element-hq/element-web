@@ -340,7 +340,6 @@ module.exports = React.createClass({
         if (!room || !this.tabComplete) {
             return;
         }
-        console.log("_updateTabCompleteList");
         this.tabComplete.setCompletionList(
             MemberEntry.fromMemberList(room.getJoinedMembers())
         );
