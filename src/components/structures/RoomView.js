@@ -521,6 +521,7 @@ module.exports = React.createClass({
             searchResults: [],
             searchHighlights: [],
             searchCount: null,
+            searchCanPaginate: null,
         });
 
         this.savedSearchScrollState = {atBottom: true};
@@ -579,6 +580,7 @@ module.exports = React.createClass({
                 searchHighlights: highlights,
                 searchResults: events,
                 searchCount: results.count,
+                searchCanPaginate: !!(results.next_batch),
             });
             self.nextSearchBatch = results.next_batch;
         }, function(error) {
@@ -638,6 +640,20 @@ module.exports = React.createClass({
             // XXX: why doesn't searching on name work?
 
             var lastRoomId;
+
+            if (this.state.searchCanPaginate === false) {
+                if (this.state.searchResults.length == 0) {
+                    ret.push(<li key="search-top-marker">
+                             <h2 className="mx_RoomView_topMarker">No results</h2>
+                             </li>
+                            );
+                } else {
+                    ret.push(<li key="search-top-marker">
+                             <h2 className="mx_RoomView_topMarker">No more results</h2>
+                             </li>
+                            );
+                }
+            }
 
             for (var i = this.state.searchResults.length - 1; i >= 0; i--) {
                 var result = this.state.searchResults[i];
