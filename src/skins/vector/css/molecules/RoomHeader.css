@@ -118,7 +118,6 @@ limitations under the License.
 .mx_RoomHeader_searchStatus {
     display: inline-block;
     font-weight: normal;
-    overflow-y: hidden;
     opacity: 0.6;
 }
 

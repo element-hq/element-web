@@ -182,7 +182,7 @@ limitations under the License.
 }
 
 .mx_RoomView_inCall .mx_RoomView_statusAreaBox {
-    background-color: #76CFA6;    
+    background-color: #76CFA6;
     color: #fff;
     position: relative;
 }
@@ -249,6 +249,12 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_RoomView_tabCompleteBar {
+    margin-top: 5px;
+    margin-left: 65px;
+    color: #4a4a4a;
+}
+
 .mx_RoomView_typingBar {
     margin-top: 6px;
     margin-left: 65px;
@@ -256,16 +262,44 @@ limitations under the License.
     opacity: 0.5;
 }
 
+.mx_RoomView_tabCompleteImage,
 .mx_RoomView_typingImage {
     display: inline;
-    margin-left: -47px;
+    margin-left: -50px;
     margin-top: -4px;
     float: left;
+}
+
+.mx_RoomView_tabCompleteImage {
+    opacity: 0.5;    
 }
 
 .mx_RoomView_typingText {
     overflow-y: hidden;
     display: block;
+}
+
+.mx_RoomView_tabCompleteWrapper {
+    display: flex;
+    display: -webkit-flex;
+    height: 24px;
+}
+
+.mx_RoomView_tabCompleteWrapper .mx_TabCompleteBar {
+    flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+}
+
+.mx_RoomView_tabCompleteEol {
+    flex: 0 0 auto;
+    -webkit-flex: 0 0 auto;
+    color: #76CFA6;
+}
+
+.mx_RoomView_tabCompleteEol img {
+    vertical-align: middle;
+    margin-right: 8px;
+    margin-top: -2px;
 }
 
 .mx_RoomView .mx_MessageComposer {
@@ -276,8 +310,8 @@ limitations under the License.
     order: 5;
 
     width: 100%;
-    -webkit-flex: 0;
-    flex: 0;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
     margin-right: 2px;
 }
 
