@@ -18,6 +18,7 @@ var Entry = require("./TabCompleteEntries").Entry;
 const DELAY_TIME_MS = 500;
 const KEY_TAB = 9;
 const KEY_SHIFT = 16;
+const KEY_WINDOWS = 91;
 
 // word boundary -> 1 or more non-whitespace chars (group) -> end of line
 const MATCH_REGEX = /\b(\S+)$/;
@@ -130,7 +131,8 @@ class TabComplete {
      */
     onKeyDown(ev) {
         if (ev.keyCode !== KEY_TAB) {
-            if (ev.keyCode !== KEY_SHIFT && this.completing) {
+            if (this.completing && ev.keyCode !== KEY_SHIFT &&
+                    !ev.metaKey && !ev.ctrlKey && !ev.altKey && ev.keyCode !== KEY_WINDOWS) {
                 // they're resuming typing; reset tab complete state vars.
                 this.stopTabCompleting();
                 return true;
