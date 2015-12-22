@@ -348,6 +348,9 @@ module.exports = React.createClass({
         if (isEmote) {
             contentText = contentText.substring(4);
         }
+        else if (contentText[0] === '/') {
+            contentText = contentText.substring(1);   
+        }
 
         var htmlText;
         if (this.markdownEnabled && (htmlText = mdownToHtml(contentText)) !== contentText) {
