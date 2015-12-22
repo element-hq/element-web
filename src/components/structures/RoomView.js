@@ -689,7 +689,7 @@ module.exports = React.createClass({
 
 
         var prevEvent = null; // the last event we showed
-        var startIdx = Math.max(0, this.state.room.timeline.length-this.state.messageCap);
+        var startIdx = Math.max(0, this.state.room.timeline.length - this.state.messageCap);
         for (var i = startIdx; i < this.state.room.timeline.length; i++) {
             var mxEv = this.state.room.timeline[i];
 
