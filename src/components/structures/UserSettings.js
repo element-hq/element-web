@@ -90,17 +90,17 @@ module.exports = React.createClass({
             console.error("No ChangeAvatar found to upload image to!");
             return;
         }
-        changeAvatar.onFileSelected(ev).catch(function(err) {
-            var errMsg = err.error || "";
+        changeAvatar.onFileSelected(ev).done(function() {
+            // dunno if the avatar changed, re-check it.
+            self._refreshFromServer();
+        }, function(err) {
+            var errMsg = (typeof err === "string") ? err : (err.error || "");
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Error",
                 description: "Failed to set avatar. " + errMsg
             });
-        }).finally(function() {
-            // dunno if the avatar changed, re-check it.
-            self._refreshFromServer();
-        }).done();
+        });
     },
 
     onLogoutClicked: function(ev) {
