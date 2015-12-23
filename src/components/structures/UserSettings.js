@@ -47,26 +47,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         var self = this;
 
-        q.all([
-            UserSettingsStore.loadProfileInfo(), UserSettingsStore.loadThreePids()
-        ]).done(function(resps) {
-            self.setState({
-                avatarUrl: resps[0].avatar_url,
-                threepids: resps[1].threepids,
-                phase: "UserSettings.DISPLAY",
-            });
-
-            // keep a copy of the original state in order to track changes
-            self.setState({
-                originalState: self.state
-            });
-        }, function(error) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Can't load user settings",
-                description: error.toString()
-            });
-        });
+        this._refreshFromServer();
     },
 
     componentDidMount: function() {
@@ -78,47 +59,24 @@ module.exports = React.createClass({
         dis.unregister(this.dispatcherRef);
     },
 
-/*
-    onSaveClicked: function(ev) { // XXX unused
+    _refreshFromServer: function() {
         var self = this;
-        var savePromises = [];
-
-        // XXX: this is managed in ChangeAvatar.js, although could be moved out here in order
-        // to allow for the change to be staged alongside the rest of the form.
-        //
-        // if (this.state.originalState.avatarUrl !== this.state.avatarUrl) {
-        //     savePromises.push( UserSettingsStore.saveAvatarUrl(this.state.avatarUrl) );
-        // }
-
-        if (this.state.originalState.threepids.length !== this.state.threepids.length ||
-                this.state.originalState.threepids.every((element, index) => {
-                    return element === this.state.threepids[index];
-                })) {
-            savePromises.push(
-                UserSettingsStore.saveThreePids(this.state.threepids)
-            );
-        }
-
-        self.setState({
-            phase: "UserSettings.SAVING",
-        });
-
-        q.all(savePromises).done(function(resps) {
+        q.all([
+            UserSettingsStore.loadProfileInfo(), UserSettingsStore.loadThreePids()
+        ]).done(function(resps) {
             self.setState({
+                avatarUrl: resps[0].avatar_url,
+                threepids: resps[1].threepids,
                 phase: "UserSettings.DISPLAY",
             });
-            self.props.onClose();
         }, function(error) {
-            self.setState({
-                phase: "UserSettings.DISPLAY",
-            });
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Can't save user settings",
+                title: "Can't load user settings",
                 description: error.toString()
             });
-        });        
-    }, */
+        });
+    },
 
     onAction: function(payload) {
         if (payload.action === "notifier_enabled") {
@@ -126,24 +84,26 @@ module.exports = React.createClass({
                 enableNotifications : UserSettingsStore.getEnableNotifications()
             });
         }
-    }, 
-
-    editAvatar: function() {
-        var url = MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl);
-        var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
-        var avatarDialog = (
-            <div>
-                <ChangeAvatar initialAvatarUrl={url} />
-                <div className="mx_Dialog_buttons">
-                    <button onClick={this.onAvatarDialogCancel}>Cancel</button>
-                </div>
-            </div>
-        );
-        this.avatarDialog = Modal.createDialogWithElement(avatarDialog);
     },
 
-    onAvatarDialogCancel: function() {
-        this.avatarDialog.close();
+    onAvatarSelected: function(ev) {
+        var self = this;
+        var changeAvatar = this.refs.changeAvatar;
+        if (!changeAvatar) {
+            console.error("No ChangeAvatar found to upload image to!");
+            return;
+        }
+        changeAvatar.onFileSelected(ev).catch(function(err) {
+            var errMsg = err.error || "";
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: "Failed to set avatar. " + errMsg
+            });
+        }).finally(function() {
+            // dunno if the avatar changed, re-check it.
+            self._refreshFromServer();
+        }).done();
     },
 
     onLogoutClicked: function(ev) {
@@ -206,6 +166,10 @@ module.exports = React.createClass({
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         var ChangeDisplayName = sdk.getComponent("views.settings.ChangeDisplayName");
         var ChangePassword = sdk.getComponent("views.settings.ChangePassword");
+        var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
+        var avatarUrl = (
+            this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
+        );
 
         return (
             <div className="mx_UserSettings">
@@ -240,8 +204,15 @@ module.exports = React.createClass({
                     </div>
 
                     <div className="mx_UserSettings_avatarPicker">
-                        <div className="mx_UserSettings_avatarPicker_edit"
-                            onClick={this.editAvatar}>
+                        <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
+                            showUploadSection={false} />
+                        <div className="mx_UserSettings_avatarPicker_edit">
+                            <label htmlFor="avatarInput">
+                                <img src="img/upload.svg"
+                                    alt="Upload avatar" title="Upload avatar"
+                                    width="19" height="24" />
+                            </label>
+                            <input id="avatarInput" type="file" onChange={this.onAvatarSelected}/>
                         </div>
                     </div>
                 </div>
