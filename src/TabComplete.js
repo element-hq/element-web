@@ -134,8 +134,6 @@ class TabComplete {
 
     /**
      * @param {DOMEvent} e
-     * @return {Boolean} True if the tab complete state changed as a result of
-     * this event.
      */
     onKeyDown(ev) {
         var wasInPassiveMode = this.inPassiveMode && !ev.passive;
@@ -215,8 +213,8 @@ class TabComplete {
         else if (this.currentIndex < 0) {
             this.currentIndex = this.matchedList.length - 1;
         }
-        var looped = (
-            // impossible to loop if they've never hit tab; catch forward and backward looping
+        var isTransitioningToOriginalText = (
+            // impossible to transition if they've never hit tab
             !this.inPassiveMode && this.currentIndex === 0
         );
 
@@ -229,7 +227,7 @@ class TabComplete {
         }
 
         // visual display to the user that we looped - TODO: This should be configurable
-        if (looped) {
+        if (isTransitioningToOriginalText) {
             this.textArea.style["background-color"] = "#faa";
             setTimeout(() => { // yay for lexical 'this'!
                  this.textArea.style["background-color"] = "";
@@ -266,7 +264,9 @@ class TabComplete {
                     ""
             )
         );
-        return this.originalText.replace(MATCH_REGEX, replacementText);
+        return this.originalText.replace(MATCH_REGEX, function() {
+            return replacementText; // function form to avoid `$` special-casing
+        });
     }
 
     _calculateCompletions() {
