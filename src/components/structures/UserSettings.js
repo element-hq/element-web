@@ -21,7 +21,6 @@ var dis = require("../../dispatcher");
 var q = require('q');
 var version = require('../../../package.json').version;
 var UserSettingsStore = require('../../UserSettingsStore');
-var ChangeDisplayName = require("../views/settings/ChangeDisplayName");
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
@@ -152,6 +151,31 @@ module.exports = React.createClass({
         );
     },
 
+    onPasswordChangeError: function(err) {
+        var errMsg = err.error || "";
+        if (err.httpStatus === 403) {
+            errMsg = "Failed to change password. Is your password correct?";
+        }
+        else if (err.httpStatus) {
+            errMsg += ` (HTTP status ${err.httpStatus})`;
+        }
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createDialog(ErrorDialog, {
+            title: "Error",
+            description: errMsg
+        });
+    },
+
+    onPasswordChanged: function() {
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createDialog(ErrorDialog, {
+            title: "Success",
+            description: `Your password was successfully changed. You will not
+                          receive push notifications on other devices until you
+                          log back in to them.`
+        });
+    },
+
     onLogoutPromptCancel: function() {
         this.logoutModal.closeDialog();
     },
@@ -180,6 +204,9 @@ module.exports = React.createClass({
         }
         // can only get here if phase is UserSettings.DISPLAY
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
+        var ChangeDisplayName = sdk.getComponent("views.settings.ChangeDisplayName");
+        var ChangePassword = sdk.getComponent("views.settings.ChangePassword");
+
         return (
             <div className="mx_UserSettings">
                 <RoomHeader simpleHeader="Settings" onCancelClick={ this.props.onClose } />
@@ -210,33 +237,26 @@ module.exports = React.createClass({
                                 </div>
                             );
                         })}
-
-                        <div className="mx_UserSettings_profileTableRow">
-                            <div className="mx_UserSettings_profileLabelCell">
-                                <label htmlFor="password1">New password</label>
-                            </div>
-                            <div className="mx_UserSettings_profileInputCell">
-                                <input id="password1" ref="password1"
-                                    value={ this.state.password1 } />
-                            </div>
-                        </div>
-                        <div className="mx_UserSettings_profileTableRow">
-                            <div className="mx_UserSettings_profileLabelCell">
-                                <label htmlFor="password2">Confirm new password</label>
-                            </div>
-                            <div className="mx_UserSettings_profileInputCell">
-                                <input id="password2" ref="password2"
-                                    value={ this.state.password2 } />
-                            </div>
-                        </div>
-
-                    </div>                        
+                    </div>
 
                     <div className="mx_UserSettings_avatarPicker">
                         <div className="mx_UserSettings_avatarPicker_edit"
                             onClick={this.editAvatar}>
                         </div>
                     </div>
+                </div>
+
+                <h2>Account</h2>
+
+                <div className="mx_UserSettings_section">
+                    <ChangePassword
+                        className="mx_UserSettings_profileTable"
+                        rowClassName="mx_UserSettings_profileTableRow"
+                        rowLabelClassName="mx_UserSettings_profileLabelCell"
+                        rowInputClassName="mx_UserSettings_profileInputCell"
+                        buttonClassName="mx_UserSettings_button"
+                        onError={this.onPasswordChangeError}
+                        onFinished={this.onPasswordChanged} />                   
                 </div>
 
                 <div className="mx_UserSettings_logout">
