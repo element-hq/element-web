@@ -18,6 +18,7 @@ limitations under the License.
     width: 960px;
     margin-left: auto;
     margin-right: auto;
+    overflow-y: auto;
 }
 
 .mx_UserSettings_spinner {
@@ -121,9 +122,21 @@ limitations under the License.
     display: table-cell;
 }
 
-.mx_UserSettings_logout,
-.mx_UserSettings_save {
-    float: right;
+.mx_UserSettings_logout {
     margin-right: 24px;
     margin-bottom: 24px;
+    margin-left: 63px;
+}
+
+.mx_UserSettings_avatarPicker {
+    width: 320px;
+}
+
+.mx_UserSettings_avatarPicker_edit {
+    margin: auto;
+    width: 60%;
+}
+
+.mx_UserSettings_avatarPicker_edit > input{
+    display: none;
 }
