@@ -132,12 +132,38 @@ class TabComplete {
         return peekList;
     }
 
+    handleTabPress(passive, shiftKey) {
+        var wasInPassiveMode = this.inPassiveMode && !passive;
+        console.log(
+            "handleTabPress passive=%s, shift=%s wasPassive=%s",
+            passive, shiftKey, wasInPassiveMode
+        );
+        this.inPassiveMode = passive;
+
+        if (!this.completing) {
+            this.startTabCompleting();
+        }
+
+        if (shiftKey) {
+            this.nextMatchedEntry(-1);
+        }
+        else {
+            // if we were in passive mode we got out of sync by incrementing the
+            // index to show the peek view but not set the text area. Therefore,
+            // we want to set the *current* index rather than the *next* index.
+            this.nextMatchedEntry(wasInPassiveMode ? 0 : 1);
+        }
+        this._notifyStateChange();
+    }
+
     /**
      * @param {DOMEvent} e
      */
     onKeyDown(ev) {
-        var wasInPassiveMode = this.inPassiveMode && !ev.passive;
-        this.inPassiveMode = ev.passive;
+        if (!this.textArea) {
+            console.error("onKeyDown called before a <textarea> was set!");
+            return;
+        }
 
         if (ev.keyCode !== KEY_TAB) {
             // pressing any key (except shift, windows, cmd (OSX) and ctrl/alt combinations)
@@ -153,14 +179,7 @@ class TabComplete {
                 clearTimeout(this.enterTabCompleteTimerId);
                 this.enterTabCompleteTimerId = setTimeout(() => {
                     if (!this.completing) {
-                        // inject a fake tab event so we use the same code paths
-                        // as much as possible. Add a 'passive' flag to indicate
-                        // that they didn't really hit this key.
-                        this.onKeyDown({
-                            keyCode: KEY_TAB,
-                            passive: true,
-                            preventDefault: function(){} // NOP
-                        })
+                        this.handleTabPress(true, false);
                     }
                 }, DELAY_TIME_MS);
             }
@@ -169,30 +188,10 @@ class TabComplete {
         }
 
         // tab key has been pressed at this point
-
-        if (!this.textArea) {
-            console.error("onKeyDown called before a <textarea> was set!");
-            return;
-        }
-
-        // init struct if necessary
-        if (!this.completing) {
-            this.startTabCompleting();
-        }
-
-        if (ev.shiftKey) {
-            this.nextMatchedEntry(-1);
-        }
-        else {
-            // if we were in passive mode we got out of sync by incrementing the
-            // index to show the peek view but not set the text area. Therefore,
-            // we want to set the *current* index rather than the *next* index.
-            this.nextMatchedEntry(wasInPassiveMode ? 0 : 1);
-        }
+        this.handleTabPress(false, ev.shiftKey)
 
         // prevent the default TAB operation (typically focus shifting)
         ev.preventDefault();
-        this._notifyStateChange();
     }
 
     /**
