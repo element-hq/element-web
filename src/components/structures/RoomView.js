@@ -33,6 +33,8 @@ var WhoIsTyping = require("../../WhoIsTyping");
 var Modal = require("../../Modal");
 var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
+var TabComplete = require("../../TabComplete");
+var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
 var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
 
@@ -76,6 +78,18 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
+        // xchat-style tab complete, add a colon if tab
+        // completing at the start of the text
+        this.tabComplete = new TabComplete({
+            startingWordSuffix: ": ",
+            wordSuffix: " ",
+            allowLooping: false,
+            autoEnterTabComplete: true,
+            onClickCompletes: true,
+            onStateChange: (isCompleting) => {
+                this.forceUpdate();
+            }
+        });
     },
 
     componentWillUnmount: function() {
@@ -225,6 +239,11 @@ module.exports = React.createClass({
     },
 
     onRoomStateMember: function(ev, state, member) {
+        if (member.roomId === this.props.roomId) {
+            // a member state changed in this room, refresh the tab complete list
+            this._updateTabCompleteList(this.state.room);
+        }
+
         if (!this.props.ConferenceHandler) {
             return;
         }
@@ -287,6 +306,17 @@ module.exports = React.createClass({
 
         window.addEventListener('resize', this.onResize);
         this.onResize();
+
+        this._updateTabCompleteList(this.state.room);
+    },
+
+    _updateTabCompleteList: function(room) {
+        if (!room || !this.tabComplete) {
+            return;
+        }
+        this.tabComplete.setCompletionList(
+            MemberEntry.fromMemberList(room.getJoinedMembers())
+        );
     },
 
     _initialiseMessagePanel: function() {
@@ -1154,6 +1184,21 @@ module.exports = React.createClass({
                         </div>
                     );
                 }
+                else if (this.tabComplete.isTabCompleting()) {
+                    var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
+                    statusBar = (
+                        <div className="mx_RoomView_tabCompleteBar">
+                            <div className="mx_RoomView_tabCompleteImage">...</div>
+                            <div className="mx_RoomView_tabCompleteWrapper">
+                                <TabCompleteBar entries={this.tabComplete.peek(6)} />
+                                <div className="mx_RoomView_tabCompleteEol">
+                                    <img src="img/eol.svg" width="22" height="16" alt="->|"/>
+                                    Auto-complete
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
                 else if (this.state.hasUnsentMessages) {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
@@ -1234,7 +1279,9 @@ module.exports = React.createClass({
             );
             if (canSpeak) {
                 messageComposer =
-                    <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} callState={this.state.callState} />
+                    <MessageComposer
+                        room={this.state.room} roomView={this} uploadFile={this.uploadFile}
+                        callState={this.state.callState} tabComplete={this.tabComplete} />
             }
 
             // TODO: Why aren't we storing the term/scope/count in this format
