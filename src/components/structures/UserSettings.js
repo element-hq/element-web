@@ -21,6 +21,7 @@ var dis = require("../../dispatcher");
 var q = require('q');
 var version = require('../../../package.json').version;
 var UserSettingsStore = require('../../UserSettingsStore');
+var ChangeDisplayName = require("../views/settings/ChangeDisplayName");
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
@@ -38,7 +39,6 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             avatarUrl: null,
-            displayName: null,
             threePids: [],
             clientVersion: version,
             phase: "UserSettings.LOADING", // LOADING, DISPLAY, SAVING
@@ -53,7 +53,6 @@ module.exports = React.createClass({
         ]).done(function(resps) {
             self.setState({
                 avatarUrl: resps[0].avatar_url,
-                displayName: resps[0].displayname,
                 threepids: resps[1].threepids,
                 phase: "UserSettings.DISPLAY",
             });
@@ -89,10 +88,6 @@ module.exports = React.createClass({
         // if (this.state.originalState.avatarUrl !== this.state.avatarUrl) {
         //     savePromises.push( UserSettingsStore.saveAvatarUrl(this.state.avatarUrl) );
         // }
-
-        if (this.state.originalState.displayName !== this.state.displayName) {
-            savePromises.push( UserSettingsStore.saveDisplayName(this.state.displayName) );
-        }
 
         if (this.state.originalState.threepids.length !== this.state.threepids.length ||
                 this.state.originalState.threepids.every((element, index) => {
@@ -161,10 +156,6 @@ module.exports = React.createClass({
         this.logoutModal.closeDialog();
     },
 
-    onDisplayNameChange: function(event) {
-        this.setState({ displayName: event.target.value });
-    },
-
     onEnableNotificationsChange: function(event) {
         // don't bother waiting for Save to be clicked, as that'd be silly
         UserSettingsStore.setEnableNotifications( this.refs.enableNotifications.value );
@@ -202,9 +193,7 @@ module.exports = React.createClass({
                                 <label htmlFor="displayName">Display name</label>
                             </div>
                             <div className="mx_UserSettings_profileInputCell">
-                                <input id="displayName" ref="displayName"
-                                    value={ this.state.displayName }
-                                    onChange={ this.onDisplayNameChange } />
+                                <ChangeDisplayName />
                             </div>
                         </div>
 

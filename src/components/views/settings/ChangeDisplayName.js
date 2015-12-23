@@ -98,7 +98,9 @@ module.exports = React.createClass({
         } else {
             var EditableText = sdk.getComponent('elements.EditableText');
             return (
-                <EditableText ref="displayname_edit" initialValue={this.state.displayName} label="Click to set display name." onValueChanged={this.onValueChanged}/>
+                <EditableText ref="displayname_edit" initialValue={this.state.displayName}
+                    label="Click to set display name."
+                    onValueChanged={this.onValueChanged} />
             );
         }
     }
