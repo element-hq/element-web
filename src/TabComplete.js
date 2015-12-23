@@ -147,7 +147,7 @@ class TabComplete {
 
                 // fall through to auto-enter-tab-completing if set
                 if (!this.opts.autoEnterTabComplete) {
-                    return true;
+                    return;
                 }
             }
 
@@ -167,12 +167,12 @@ class TabComplete {
                 }, DELAY_TIME_MS);
             }
 
-            return false;
+            return;
         }
 
         if (!this.textArea) {
             console.error("onKeyDown called before a <textarea> was set!");
-            return false;
+            return;
         }
 
         // init struct if necessary
@@ -193,7 +193,6 @@ class TabComplete {
         // prevent the default TAB operation (typically focus shifting)
         ev.preventDefault();
         this._notifyStateChange();
-        return true;
     }
 
     /**
