@@ -134,10 +134,6 @@ class TabComplete {
 
     handleTabPress(passive, shiftKey) {
         var wasInPassiveMode = this.inPassiveMode && !passive;
-        console.log(
-            "handleTabPress passive=%s, shift=%s wasPassive=%s",
-            passive, shiftKey, wasInPassiveMode
-        );
         this.inPassiveMode = passive;
 
         if (!this.completing) {
