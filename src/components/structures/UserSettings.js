@@ -46,7 +46,6 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         var self = this;
-
         this._refreshFromServer();
     },
 
@@ -80,9 +79,7 @@ module.exports = React.createClass({
 
     onAction: function(payload) {
         if (payload.action === "notifier_enabled") {
-            this.setState({
-                enableNotifications : UserSettingsStore.getEnableNotifications()
-            });
+            this.forceUpdate();
         }
     },
 
@@ -143,11 +140,7 @@ module.exports = React.createClass({
     },
 
     onEnableNotificationsChange: function(event) {
-        // don't bother waiting for Save to be clicked, as that'd be silly
-        UserSettingsStore.setEnableNotifications( this.refs.enableNotifications.value );
-        this.setState({
-            enableNotifications : UserSettingsStore.getEnableNotifications()
-        });
+        UserSettingsStore.setEnableNotifications(event.target.checked);
     },
 
     render: function() {
@@ -245,7 +238,7 @@ module.exports = React.createClass({
                                 <input id="enableNotifications"
                                     ref="enableNotifications"
                                     type="checkbox"
-                                    checked={ this.state.enableNotifications }
+                                    checked={ UserSettingsStore.getEnableNotifications() }
                                     onChange={ this.onEnableNotificationsChange } />
                             </div>
                             <div className="mx_UserSettings_notifLabelCell">
