@@ -17,18 +17,9 @@ limitations under the License.
 'use strict';
 
 var MatrixClientPeg = require("./MatrixClientPeg");
-var sdk = require('./index');
-
-// XXX: should we be doing something here to use this as a singleton rather than
-// class methods?
+var Notifier = require("./Notifier");
 
 module.exports = {
-
-    // we add these wrappers to the js-sdk here in case we want to do react-specific
-    // dispatches or similar in future, and to give us a place to clearly separate
-    // business logic specific from the 'thin' react component and parent wiring component
-    //  which actually handles the UI.
-    // XXX: I'm not convinced this abstraction is worth it though.
 
     loadProfileInfo: function() {
         var cli = MatrixClientPeg.get();
@@ -48,13 +39,10 @@ module.exports = {
     },
 
     getEnableNotifications: function() {
-        var Notifier = sdk.getComponent('organisms.Notifier');
         return Notifier.isEnabled();
     },
 
     setEnableNotifications: function(enable) {
-        var Notifier = sdk.getComponent('organisms.Notifier');
-        var self = this;
         if (!Notifier.supportsDesktopNotifications()) {
             return;
         }
@@ -70,11 +58,6 @@ module.exports = {
             password: old_password
         };
 
-        this.setState({
-            phase: this.Phases.Uploading,
-            errorString: '',
-        })
-
         return cli.setPassword(authDict, new_password);
     },
-}
+};
