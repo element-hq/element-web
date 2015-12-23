@@ -40,7 +40,7 @@ module.exports = React.createClass({
             avatarUrl: null,
             threePids: [],
             clientVersion: version,
-            phase: "UserSettings.LOADING", // LOADING, DISPLAY, SAVING
+            phase: "UserSettings.LOADING", // LOADING, DISPLAY
         };
     },
 
@@ -71,13 +71,15 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        this._me = MatrixClientPeg.get().credentials.userId;
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
     },
 
-    onSaveClicked: function(ev) {
+/*
+    onSaveClicked: function(ev) { // XXX unused
         var self = this;
         var savePromises = [];
 
@@ -116,7 +118,7 @@ module.exports = React.createClass({
                 description: error.toString()
             });
         });        
-    },
+    }, */
 
     onAction: function(payload) {
         if (payload.action === "notifier_enabled") {
@@ -189,14 +191,12 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var Loader = sdk.getComponent("elements.Spinner");
-        var saving;
         switch (this.state.phase) {
             case "UserSettings.LOADING":
-                return <Loader />
-            case "UserSettings.SAVING":
-                saving = <Loader />
-                // intentional fall through
+                var Loader = sdk.getComponent("elements.Spinner");
+                return (
+                    <Loader />
+                );
             case "UserSettings.DISPLAY":
                 break; // quit the switch to return the common state
             default:
@@ -209,7 +209,7 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_UserSettings">
-                <RoomHeader simpleHeader="Settings" onCancelClick={ this.props.onClose } />
+                <RoomHeader simpleHeader="Settings" />
 
                 <h2>Profile</h2>
 
@@ -290,14 +290,10 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_section">
                     <div className="mx_UserSettings_advanced">
-                        Version {this.state.clientVersion}
+                        Logged in as {this._me}
                     </div>
-                </div>
-
-                <div className="mx_UserSettings_save">
-                    <div className="mx_UserSettings_spinner">{ saving }</div>
-                    <div className="mx_UserSettings_button" onClick={this.onSaveClicked}>
-                        Save and close
+                    <div className="mx_UserSettings_advanced">
+                        Version {this.state.clientVersion}
                     </div>
                 </div>
             </div>

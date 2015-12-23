@@ -117,7 +117,7 @@ module.exports = React.createClass({
                     <div className={this.props.className}>
                         <div className={rowClassName}>
                             <div className={rowLabelClassName}>
-                                <label htmlFor="passwordold">Old password</label>
+                                <label htmlFor="passwordold">Current password</label>
                             </div>
                             <div className={rowInputClassName}>
                                 <input id="passwordold" type="password" ref="old_input" />
