@@ -94,7 +94,16 @@ limitations under the License.
     font-size: 22px;
     font-weight: bold;
     overflow: hidden;
+    margin-left: 63px;
     text-overflow: ellipsis;
+    width: 100%;
+}
+
+.mx_RoomHeader_simpleHeaderCancel {
+    float: right;
+    margin-top: 8px;
+    padding: 24px;
+    cursor: pointer;
 }
 
 .mx_RoomHeader_name {
