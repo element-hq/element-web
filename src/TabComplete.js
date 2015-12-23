@@ -140,17 +140,15 @@ class TabComplete {
         this.inPassiveMode = ev.passive;
 
         if (ev.keyCode !== KEY_TAB) {
+            // pressing any key (except shift, windows, cmd (OSX) and ctrl/alt combinations)
+            // aborts the current tab completion
             if (this.completing && ev.keyCode !== KEY_SHIFT &&
                     !ev.metaKey && !ev.ctrlKey && !ev.altKey && ev.keyCode !== KEY_WINDOWS) {
                 // they're resuming typing; reset tab complete state vars.
                 this.stopTabCompleting();
-
-                // fall through to auto-enter-tab-completing if set
-                if (!this.opts.autoEnterTabComplete) {
-                    return;
-                }
             }
 
+            // pressing any key at all (except tab) restarts the automatic tab-complete timer
             if (this.opts.autoEnterTabComplete) {
                 clearTimeout(this.enterTabCompleteTimerId);
                 this.enterTabCompleteTimerId = setTimeout(() => {
@@ -169,6 +167,8 @@ class TabComplete {
 
             return;
         }
+
+        // tab key has been pressed at this point
 
         if (!this.textArea) {
             console.error("onKeyDown called before a <textarea> was set!");
