@@ -574,8 +574,8 @@ module.exports = React.createClass({
 
 
     getSearchResultTiles: function() {
-        var DateSeparator = sdk.getComponent('messages.DateSeparator');
         var EventTile = sdk.getComponent('rooms.EventTile');
+        var SearchResultTile = sdk.getComponent('rooms.SearchResultTile');
         var cli = MatrixClientPeg.get();
 
         // XXX: todo: merge overlapping results somehow?
@@ -615,33 +615,17 @@ module.exports = React.createClass({
                 continue;
             }
 
-            var eventId = mxEv.getId();
-
             if (this.state.searchScope === 'All') {
                 var roomId = mxEv.getRoomId();
                 if(roomId != lastRoomId) {
-                    ret.push(<li key={eventId + "-room"}><h1>Room: { cli.getRoom(roomId).name }</h1></li>);
+                    ret.push(<li key={mxEv.getId() + "-room"}><h1>Room: { cli.getRoom(roomId).name }</h1></li>);
                     lastRoomId = roomId;
                 }
             }
 
-            var ts1 = mxEv.getTs();
-            ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); // Rank: {resultList[i].rank}
-
-            var timeline = result.context.getTimeline();
-            for (var j = 0; j < timeline.length; j++) {
-                var ev = timeline[j];
-                var highlights;
-                var contextual = (j != result.context.getOurEventIndex());
-                if (!contextual) {
-                    highlights = this.state.searchHighlights;
-                }
-                if (EventTile.haveTileForEvent(ev)) {
-                    ret.push(<li key={eventId+"+"+j} data-scroll-token={eventId+"+"+j}>
-                             <EventTile mxEvent={ev} contextual={contextual} highlights={highlights} />
-                             </li>);
-                }
-            }
+            ret.push(<SearchResultTile key={mxEv.getId()}
+                     searchResult={result}
+                     searchHighlights={this.state.searchHighlights}/>);
         }
         return ret;
     },
