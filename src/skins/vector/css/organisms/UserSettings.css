@@ -62,10 +62,16 @@ limitations under the License.
     margin-bottom: 28px;
 }
 
-.mx_UserSettings_profileTable,
+.mx_UserSettings_accountTable
 .mx_UserSettings_notifTable
 {
     display: table;
+}
+
+.mx_UserSettings_profileTable
+{
+    display: table;
+    float: left;
 }
 
 .mx_UserSettings_profileTableRow,
@@ -130,13 +136,30 @@ limitations under the License.
 
 .mx_UserSettings_avatarPicker {
     width: 320px;
+    float: right;
 }
 
 .mx_UserSettings_avatarPicker_edit {
-    margin: auto;
-    width: 60%;
+    position: relative;
+    left: 50%;
+    display: inline-block;
+    margin-top: 10px;
 }
 
 .mx_UserSettings_avatarPicker_edit > input{
     display: none;
+}
+
+.mx_UserSettings_avatarPicker_edit > label {
+    cursor: pointer;
+}
+
+.mx_UserSettings_avatarPicker_img {
+    margin: 0 auto;
+    width: 75%;
+}
+
+.mx_UserSettings_avatarPicker_img > img {
+    display: block;
+    margin: 0 auto;
 }
