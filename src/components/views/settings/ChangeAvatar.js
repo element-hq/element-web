@@ -24,7 +24,8 @@ module.exports = React.createClass({
         initialAvatarUrl: React.PropTypes.string,
         room: React.PropTypes.object,
         // if false, you need to call changeAvatar.onFileSelected yourself.
-        showUploadSection: React.PropTypes.bool
+        showUploadSection: React.PropTypes.bool,
+        className: React.PropTypes.string
     },
 
     Phases: {
@@ -35,7 +36,8 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            showUploadSection: true
+            showUploadSection: true,
+            className: "mx_Dialog_content" // FIXME - shouldn't be this by default
         };
     },
 
@@ -121,7 +123,7 @@ module.exports = React.createClass({
         var uploadSection;
         if (this.props.showUploadSection) {
             uploadSection = (
-                <div className="mx_Dialog_content">
+                <div className={this.props.className}>
                     Upload new:
                     <input type="file" onChange={this.onFileSelected}/>
                     {this.state.errorText}
@@ -134,7 +136,7 @@ module.exports = React.createClass({
             case this.Phases.Error:
                 return (
                     <div>
-                        <div className="mx_Dialog_content">
+                        <div className={this.props.className}>
                             {avatarImg}
                         </div>
                         {uploadSection}

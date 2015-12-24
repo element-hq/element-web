@@ -198,7 +198,7 @@ module.exports = React.createClass({
 
                     <div className="mx_UserSettings_avatarPicker">
                         <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
-                            showUploadSection={false} />
+                            showUploadSection={false} className="mx_UserSettings_avatarPicker_img"/>
                         <div className="mx_UserSettings_avatarPicker_edit">
                             <label htmlFor="avatarInput">
                                 <img src="img/upload.svg"
@@ -214,7 +214,7 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_section">
                     <ChangePassword
-                        className="mx_UserSettings_profileTable"
+                        className="mx_UserSettings_accountTable"
                         rowClassName="mx_UserSettings_profileTableRow"
                         rowLabelClassName="mx_UserSettings_profileLabelCell"
                         rowInputClassName="mx_UserSettings_profileInputCell"
