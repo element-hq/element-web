@@ -18,30 +18,47 @@ limitations under the License.
 
 var React = require('react');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
+var sdk = require("../../../index");
 
 module.exports = React.createClass({
     displayName: 'ChangePassword',
     propTypes: {
         onFinished: React.PropTypes.func,
+        onError: React.PropTypes.func,
+        onCheckPassword: React.PropTypes.func,
+        rowClassName: React.PropTypes.string,
+        rowLabelClassName: React.PropTypes.string,
+        rowInputClassName: React.PropTypes.string,
+        buttonClassName: React.PropTypes.string
     },
 
     Phases: {
         Edit: "edit",
         Uploading: "uploading",
-        Error: "error",
-        Success: "Success"
+        Error: "error"
     },
 
     getDefaultProps: function() {
         return {
             onFinished: function() {},
+            onError: function() {},
+            onCheckPassword: function(oldPass, newPass, confirmPass) {
+                if (newPass !== confirmPass) {
+                    return {
+                        error: "New passwords don't match."
+                    };
+                } else if (!newPass || newPass.length === 0) {
+                    return {
+                        error: "Passwords can't be empty"
+                    };
+                }
+            }
         };
     },
 
     getInitialState: function() {
         return {
-            phase: this.Phases.Edit,
-            errorString: ''
+            phase: this.Phases.Edit
         }
     },
 
@@ -55,60 +72,72 @@ module.exports = React.createClass({
         };
 
         this.setState({
-            phase: this.Phases.Uploading,
-            errorString: '',
-        })
-
-        var d = cli.setPassword(authDict, new_password);
+            phase: this.Phases.Uploading
+        });
 
         var self = this;
-        d.then(function() {
-            self.setState({
-                phase: self.Phases.Success,
-                errorString: '',
-            })
+        cli.setPassword(authDict, new_password).then(function() {
+            self.props.onFinished();
         }, function(err) {
+            self.props.onError(err);
+        }).finally(function() {
             self.setState({
-                phase: self.Phases.Error,
-                errorString: err.toString()
-            })
-        });
+                phase: self.Phases.Edit
+            });
+        }).done();
     },
 
     onClickChange: function() {
         var old_password = this.refs.old_input.value;
         var new_password = this.refs.new_input.value;
         var confirm_password = this.refs.confirm_input.value;
-        if (new_password != confirm_password) {
-            this.setState({
-                state: this.Phases.Error,
-                errorString: "Passwords don't match"
-            });
-        } else if (new_password == '' || old_password == '') {
-            this.setState({
-                state: this.Phases.Error,
-                errorString: "Passwords can't be empty"
-            });
-        } else {
+        var err = this.props.onCheckPassword(
+            old_password, new_password, confirm_password
+        );
+        if (err) {
+            this.props.onError(err);
+        }
+        else {
             this.changePassword(old_password, new_password);
         }
     },
 
     render: function() {
+        var rowClassName = this.props.rowClassName;
+        var rowLabelClassName = this.props.rowLabelClassName;
+        var rowInputClassName = this.props.rowInputClassName
+        var buttonClassName = this.props.buttonClassName;
+
         switch (this.state.phase) {
             case this.Phases.Edit:
-            case this.Phases.Error:
                 return (
-                    <div>
-                        <div className="mx_Dialog_content">
-                            <div>{this.state.errorString}</div>
-                            <div><label>Old password <input type="password" ref="old_input"/></label></div>
-                            <div><label>New password <input type="password" ref="new_input"/></label></div>
-                            <div><label>Confirm password <input type="password" ref="confirm_input"/></label></div>
+                    <div className={this.props.className}>
+                        <div className={rowClassName}>
+                            <div className={rowLabelClassName}>
+                                <label htmlFor="passwordold">Current password</label>
+                            </div>
+                            <div className={rowInputClassName}>
+                                <input id="passwordold" type="password" ref="old_input" />
+                            </div>
                         </div>
-                        <div className="mx_Dialog_buttons">
-                            <button onClick={this.onClickChange}>Change Password</button>
-                            <button onClick={this.props.onFinished}>Cancel</button>
+                        <div className={rowClassName}>
+                            <div className={rowLabelClassName}>
+                                <label htmlFor="password1">New password</label>
+                            </div>
+                            <div className={rowInputClassName}>
+                                <input id="password1" type="password" ref="new_input" />
+                            </div>
+                        </div>
+                        <div className={rowClassName}>
+                            <div className={rowLabelClassName}>
+                                <label htmlFor="password2">Confirm password</label>
+                            </div>
+                            <div className={rowInputClassName}>
+                                <input id="password2" type="password" ref="confirm_input" />
+                            </div>
+                        </div>
+                        <div className={buttonClassName} onClick={this.onClickChange}>
+                            Change Password
                         </div>
                     </div>
                 );
@@ -119,17 +148,6 @@ module.exports = React.createClass({
                         <Loader />
                     </div>
                 );
-            case this.Phases.Success:
-                return (
-                    <div>
-                        <div className="mx_Dialog_content">
-                            Success!
-                        </div>
-                        <div className="mx_Dialog_buttons">
-                            <button onClick={this.props.onFinished}>Ok</button>
-                        </div>
-                    </div>
-                )
         }
     }
 });

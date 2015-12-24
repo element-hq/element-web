@@ -113,6 +113,10 @@ module.exports = React.createClass({
         }
     },
 
+    onBlur: function() {
+        this.cancelEdit();
+    },
+
     render: function() {
         var editable_el;
 
@@ -125,7 +129,8 @@ module.exports = React.createClass({
         } else if (this.state.phase == this.Phases.Edit) {
             editable_el = (
                 <div>
-                    <input type="text" defaultValue={this.state.value} onKeyUp={this.onKeyUp} onFocus={this.onFocus} onBlur={this.onFinish} placeholder={this.props.placeHolder} autoFocus/>
+                    <input type="text" defaultValue={this.state.value}
+                        onKeyUp={this.onKeyUp} onFocus={this.onFocus} onBlur={this.onBlur} placeholder={this.props.placeHolder} autoFocus/>
                 </div>
             );
         }

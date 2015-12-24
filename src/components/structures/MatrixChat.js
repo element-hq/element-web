@@ -628,6 +628,22 @@ module.exports = React.createClass({
         this.showScreen("settings");
     },
 
+    onUserSettingsClose: function() {
+        // XXX: use browser history instead to find the previous room?
+        if (this.state.currentRoom) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.state.currentRoom,
+            });
+        }
+        else {
+            dis.dispatch({
+                action: 'view_indexed_room',
+                roomIndex: 0,
+            });
+        }
+    },
+
     render: function() {
         var LeftPanel = sdk.getComponent('structures.LeftPanel');
         var RoomView = sdk.getComponent('structures.RoomView');
@@ -660,7 +676,7 @@ module.exports = React.createClass({
                     right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} />
                     break;
                 case this.PageTypes.UserSettings:
-                    page_element = <UserSettings />
+                    page_element = <UserSettings onClose={this.onUserSettingsClose} />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
                     break;
                 case this.PageTypes.CreateRoom:
