@@ -17,6 +17,7 @@ limitations under the License.
 var React = require("react");
 var ReactDOM = require("react-dom");
 var GeminiScrollbar = require('react-gemini-scrollbar');
+var q = require("q");
 
 var DEBUG_SCROLL = false;
 
@@ -51,7 +52,15 @@ module.exports = React.createClass({
 
         /* onFillRequest(backwards): a callback which is called on scroll when
          * the user nears the start (backwards = true) or end (backwards =
-         * false) of the list
+         * false) of the list.
+         *
+         * This should return true if the pagination was successful, or false if
+         * there is no more data in this directon (at this time) - which will
+         * stop the pagination cycle until the user scrolls again.
+         *
+         * This can return a promise; if it does, no more calls will be made
+         * until the promise completes. The promise should resolve to true or
+         * false as above.
          */
         onFillRequest: React.PropTypes.func,
 
@@ -77,7 +86,12 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._pendingFillRequests = {b: null, f: null};
         this.resetScrollState();
+    },
+
+    componentDidMount: function() {
+        this.checkFillState();
     },
 
     componentDidUpdate: function() {
@@ -85,6 +99,9 @@ module.exports = React.createClass({
         // keep at the bottom of the timeline, or to maintain the view after
         // adding events to the top).
         this._restoreSavedScrollState();
+
+        // we also re-check the fill state, in case the paginate was inadequate
+        this.checkFillState();
     },
 
     onScroll: function(ev) {
@@ -131,8 +148,50 @@ module.exports = React.createClass({
         if (sn.scrollTop < sn.clientHeight) {
             // there's less than a screenful of messages left - try to get some
             // more messages.
-            this.props.onFillRequest(true);
+            this._maybeFill(true);
         }
+    },
+
+    // check if there is already a pending fill request. If not, set one off.
+    _maybeFill: function(backwards) {
+        var dir = backwards ? 'b' : 'f';
+        if (this._pendingFillRequests[dir]) {
+            if (DEBUG_SCROLL) {
+                console.log("ScrollPanel: Already a "+dir+" fill in progress - not starting another");
+            }
+            return;
+        }
+
+        if (DEBUG_SCROLL) {
+            console.log("ScrollPanel: starting "+dir+" fill");
+        }
+
+        // onFillRequest can end up calling us recursively (via onScroll
+        // events) so make sure we set this before firing off the call. That
+        // does present the risk that we might not ever actually fire off the
+        // fill request, so wrap it in a try/catch.
+        this._pendingFillRequests[dir] = true;
+        var r;
+        try {
+             r = this.props.onFillRequest(backwards);
+        } catch (e) {
+            this._pendingFillRequests[dir] = false;
+            throw e;
+        }
+
+        q.finally(r, () => {
+            if (DEBUG_SCROLL) {
+                console.log("ScrollPanel: "+dir+" fill complete");
+            }
+            this._pendingFillRequests[dir] = false;
+        }).then((res) => {
+            if (res) {
+                // further pagination requests have been disabled until now, so
+                // it's time to check the fill state again in case the pagination
+                // was insufficient.
+                this.checkFillState();
+            }
+        }).done();
     },
 
     // get the current scroll position of the room, so that it can be

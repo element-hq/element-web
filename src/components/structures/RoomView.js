@@ -330,8 +330,6 @@ module.exports = React.createClass({
 
         this.scrollToBottom();
         this.sendReadReceipt();
-
-        this.refs.messagePanel.checkFillState();
     },
 
     componentDidUpdate: function() {
@@ -353,30 +351,25 @@ module.exports = React.createClass({
         });
 
         this.setState({paginating: false});
-
-        // we might not have got enough (or, indeed, any) results from the
-        // pagination request, so give the messagePanel a chance to set off
-        // another.
-
-        this.refs.messagePanel.checkFillState();
     },
 
     onSearchResultsFillRequest: function(backwards) {
-        if (!backwards || this.state.searchInProgress)
-            return;
+        if (!backwards)
+            return false;
 
         if (this.nextSearchBatch) {
             if (DEBUG_SCROLL) console.log("requesting more search results");
-            this._getSearchBatch(this.state.searchTerm,
-                                 this.state.searchScope);
+            return this._getSearchBatch(this.state.searchTerm,
+                                 this.state.searchScope).then(true);
         } else {
             if (DEBUG_SCROLL) console.log("no more search results");
+            return false;
         }
     },
 
     // set off a pagination request.
     onMessageListFillRequest: function(backwards) {
-        if (!backwards || this.state.paginating)
+        if (!backwards)
             return;
 
         // Either wind back the message cap (if there are enough events in the
@@ -386,11 +379,13 @@ module.exports = React.createClass({
             var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
             if (DEBUG_SCROLL) console.log("winding back message cap to", cap);
             this.setState({messageCap: cap});
+            return true;
         } else if(this.state.room.oldState.paginationToken) {
             var cap = this.state.messageCap + PAGINATE_SIZE;
             if (DEBUG_SCROLL) console.log("starting paginate to cap", cap);
             this.setState({messageCap: cap, paginating: true});
-            MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(this._paginateCompleted).done();
+            return MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).
+                finally(this._paginateCompleted).then(true);
         }
     },
 
@@ -515,8 +510,8 @@ module.exports = React.createClass({
         var self = this;
 
         if (DEBUG_SCROLL) console.log("sending search request");
-        MatrixClientPeg.get().search({ body: this._getSearchCondition(term, scope),
-                                       next_batch: this.nextSearchBatch })
+        return MatrixClientPeg.get().search({ body: this._getSearchCondition(term, scope),
+                                              next_batch: this.nextSearchBatch })
         .then(function(data) {
             if (DEBUG_SCROLL) console.log("search complete");
             if (!self.state.searching || self.searchId != searchId) {
