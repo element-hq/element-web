@@ -150,6 +150,9 @@ module.exports = React.createClass({
             // more messages.
             this._maybeFill(true);
         }
+        if (sn.scrollTop > sn.scrollHeight - sn.clientHeight * 2) {
+            this._maybeFill(false);
+        }
     },
 
     // check if there is already a pending fill request. If not, set one off.
