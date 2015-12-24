@@ -58,8 +58,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            phase: this.Phases.Edit,
-            errorString: ''
+            phase: this.Phases.Edit
         }
     },
 
@@ -73,8 +72,7 @@ module.exports = React.createClass({
         };
 
         this.setState({
-            phase: this.Phases.Uploading,
-            errorString: '',
+            phase: this.Phases.Uploading
         });
 
         var self = this;
@@ -84,8 +82,7 @@ module.exports = React.createClass({
             self.props.onError(err);
         }).finally(function() {
             self.setState({
-                phase: self.Phases.Edit,
-                errorString: ""
+                phase: self.Phases.Edit
             });
         }).done();
     },

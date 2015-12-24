@@ -19,6 +19,10 @@ limitations under the License.
 var MatrixClientPeg = require("./MatrixClientPeg");
 var Notifier = require("./Notifier");
 
+/*
+ * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
+ */
+
 module.exports = {
 
     loadProfileInfo: function() {
@@ -35,7 +39,7 @@ module.exports = {
     },
 
     saveThreePids: function(threePids) {
-
+        // TODO
     },
 
     getEnableNotifications: function() {
