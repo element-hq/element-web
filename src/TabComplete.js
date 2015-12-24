@@ -170,6 +170,13 @@ class TabComplete {
                 this.stopTabCompleting();
             }
 
+
+            // explicitly pressing any key except tab removes passive mode. Tab doesn't remove
+            // passive mode because handleTabPress needs to know when passive mode is toggling
+            // off so it can resync the textarea/peek list. If tab did remove passive mode then
+            // handleTabPress would never be able to tell when passive mode toggled off.
+            this.inPassiveMode = false;
+
             // pressing any key at all (except tab) restarts the automatic tab-complete timer
             if (this.opts.autoEnterTabComplete) {
                 clearTimeout(this.enterTabCompleteTimerId);
