@@ -358,7 +358,9 @@ module.exports = React.createClass({
         // pagination request, so give the messagePanel a chance to set off
         // another.
 
-        this.refs.messagePanel.checkFillState();
+        if (this.refs.messagePanel) {
+            this.refs.messagePanel.checkFillState();
+        }
     },
 
     onSearchResultsFillRequest: function(backwards) {
