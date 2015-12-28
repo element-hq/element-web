@@ -95,7 +95,7 @@ limitations under the License.
 }
 
 .mx_UserSettings_profileInputCell input,
-.mx_UserSettings_profileInputCell .mx_EditableText {
+.mx_UserSettings_profileInputCell .mx_EditableText
 {
     border: 0px;
     border-bottom: 1px solid rgba(151, 151, 151, 0.5);
