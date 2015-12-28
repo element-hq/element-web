@@ -69,7 +69,7 @@ class Highlighter {
         // HTML and plain-text highlighting.
 
         var safeHighlight = this.html ? sanitizeHtml(highlights[0], sanitizeHtmlParams) : highlights[0];
-        while ((offset = safeSnippet.indexOf(safeHighlight, lastOffset)) >= 0) {
+        while ((offset = safeSnippet.toLowerCase().indexOf(safeHighlight.toLowerCase(), lastOffset)) >= 0) {
             // handle preamble
             if (offset > lastOffset) {
                 var subSnippet = safeSnippet.substring(lastOffset, offset);
