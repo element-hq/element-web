@@ -99,29 +99,33 @@ var commands = {
                 }
 
                 // Try to find a room with this alias
+                // XXX: do we need to do this? Doesn't the JS SDK suppress duplicate attempts to join the same room?
                 var foundRoom = MatrixTools.getRoomForAlias(
                     MatrixClientPeg.get().getRooms(),
                     room_alias
                 );
-                if (foundRoom) { // we've already joined this room, view it.
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: foundRoom.roomId
-                    });
-                    return success();
+
+                if (foundRoom) { // we've already joined this room, view it if it's not archived.
+                    var me = foundRoom.getMember(MatrixClientPeg.get().credentials.userId);
+                    if (me && me.membership !== "leave") {
+                        dis.dispatch({
+                            action: 'view_room',
+                            room_id: foundRoom.roomId
+                        });
+                        return success();                        
+                    }
                 }
-                else {
-                    // attempt to join this alias.
-                    return success(
-                        MatrixClientPeg.get().joinRoom(room_alias).then(
-                        function(room) {
-                            dis.dispatch({
-                                action: 'view_room',
-                                room_id: room.roomId
-                            });
-                        })
-                    );
-                }
+
+                // otherwise attempt to join this alias.
+                return success(
+                    MatrixClientPeg.get().joinRoom(room_alias).then(
+                    function(room) {
+                        dis.dispatch({
+                            action: 'view_room',
+                            room_id: room.roomId
+                        });
+                    })
+                );
             }
         }
         return reject("Usage: /join <room_alias>");
