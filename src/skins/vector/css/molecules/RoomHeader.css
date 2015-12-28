@@ -109,7 +109,7 @@ limitations under the License.
 .mx_RoomHeader_name {
     cursor: pointer;
     vertical-align: middle;
-    height: 28px;
+    height: 30px;
     overflow: hidden;
     color: #454545;
     font-weight: bold;
