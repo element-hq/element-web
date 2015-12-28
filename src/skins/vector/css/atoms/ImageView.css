@@ -60,9 +60,10 @@ limitations under the License.
     max-width: 100%;
     /* XXX: max-height interacts badly with flex on Chrome and doesn't relayout properly until you refresh */
     max-height: 100%;
-    /* object-fit hack needed for Chrome due to Chrome not relaying out until you refresh */
+    /* object-fit hack needed for Chrome due to Chrome not re-laying-out until you refresh */
     object-fit: contain;
     /* background-image: url('img/trans.png'); */
+    pointer-events: all;
 }
 
 .mx_ImageView_labelWrapper {
@@ -70,6 +71,7 @@ limitations under the License.
     top: 0px;
     height: 100%;
     overflow: auto;
+    pointer-events: all;
 }
 
 .mx_ImageView_label {
@@ -86,20 +88,25 @@ limitations under the License.
     color: #fff;
 }
 
+.mx_ImageView_cancel {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 35px;
+    cursor: pointer;
+}
+
 .mx_ImageView_name {
     font-size: 18px;
     margin-bottom: 6px;
-    pointer-events: all;
 }
 
 .mx_ImageView_metadata {
     font-size: 15px;
     opacity: 0.5;
-    pointer-events: all;
 }
 
 .mx_ImageView_download {
-    pointer-events: all;
     display: table;
     margin-top: 24px;
     margin-bottom: 6px;
@@ -120,7 +127,6 @@ limitations under the License.
 }
 
 .mx_ImageView_button {
-    pointer-events: all;
     font-size: 15px;
     opacity: 0.5;
     margin-top: 18px;

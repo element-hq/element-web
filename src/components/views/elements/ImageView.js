@@ -118,6 +118,7 @@ module.exports = React.createClass({
                     <img src={this.props.src} style={style}/>
                     <div className="mx_ImageView_labelWrapper">
                         <div className="mx_ImageView_label">
+                            <img className="mx_ImageView_cancel" src="img/cancel-white.svg" width="18" height="18" alt="Close" onClick={ this.props.onFinished }/>
                             <div className="mx_ImageView_shim">
                             </div>
                             <div className="mx_ImageView_name">
