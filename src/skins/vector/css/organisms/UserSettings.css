@@ -94,23 +94,15 @@ limitations under the License.
     width: 240px;
 }
 
-.mx_UserSettings_profileInputCell input {
-    border: 0px;
-    border-bottom: 1px solid rgba(151, 151, 151, 0.5);
-    padding: 0px;
-    width: 240px;
-    color: rgba(74, 74, 74, 0.9);
-    font-family: 'Myriad Pro', Helvetica, Arial, Sans-Serif;
-    font-size: 16px;
-}
-
+.mx_UserSettings_profileInputCell input,
 .mx_UserSettings_profileInputCell .mx_EditableText {
+{
     border: 0px;
     border-bottom: 1px solid rgba(151, 151, 151, 0.5);
     padding: 0px;
     width: 240px;
     color: rgba(74, 74, 74, 0.9);
-    font-family: 'Myriad Pro', Helvetica, Arial, Sans-Serif;
+    font-family: 'Open Sans', Helvetica, Arial, Sans-Serif;
     font-size: 16px;
 }
 
