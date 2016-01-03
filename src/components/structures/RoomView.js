@@ -1193,8 +1193,8 @@ module.exports = React.createClass({
                             <div className="mx_RoomView_tabCompleteImage">...</div>
                             <div className="mx_RoomView_tabCompleteWrapper">
                                 <TabCompleteBar entries={this.tabComplete.peek(6)} />
-                                <div className="mx_RoomView_tabCompleteEol">
-                                    <object type="image/svg+xml" data="img/eol.svg" width="22" height="16" title="->|"/>
+                                <div className="mx_RoomView_tabCompleteEol" title="->|">
+                                    <object type="image/svg+xml" data="img/eol.svg" width="22" height="16"/>
                                     Auto-complete
                                 </div>
                             </div>
@@ -1267,8 +1267,8 @@ module.exports = React.createClass({
             var fileDropTarget = null;
             if (this.state.draggingFile) {
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
-                                    <div className="mx_RoomView_fileDropTargetLabel">
-                                        <object type="image/svg+xml" data="img/upload-big.svg" width="45" height="59" title="Drop File Here"/><br/>
+                                    <div className="mx_RoomView_fileDropTargetLabel" title="Drop File Here">
+                                        <object type="image/svg+xml" data="img/upload-big.svg" width="45" height="59"/><br/>
                                         Drop File Here
                                     </div>
                                  </div>;
@@ -1305,8 +1305,8 @@ module.exports = React.createClass({
 
                 if (call.type === "video") {
                     zoomButton = (
-                        <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick}>
-                            <object type="image/svg+xml" data="img/fullscreen.svg" title="Fill screen" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
+                        <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title="Fill screen">
+                            <object type="image/svg+xml" data="img/fullscreen.svg" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
                         </div>
                     );
 
