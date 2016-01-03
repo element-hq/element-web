@@ -119,7 +119,7 @@ module.exports = React.createClass({
                         <div className="mx_RoomHeader_nametext" title={ this.props.room.name }>{ this.props.room.name }</div>
                         { searchStatus }
                         <div className="mx_RoomHeader_settingsButton">
-                            <img src="img/settings.svg" width="12" height="12"/>
+                            <object type="image/svg+xml" data="img/settings.svg" width="12" height="12"/>
                         </div>
                     </div>
                 if (topic) topic_el = <div className="mx_RoomHeader_topic" title={topic.getContent().topic}>{ topic.getContent().topic }</div>;
@@ -135,18 +135,18 @@ module.exports = React.createClass({
             var leave_button;
             if (this.props.onLeaveClick) {
                 leave_button =
-                    <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton">
-                        <img src="img/leave.svg" title="Leave room" alt="Leave room"
-                            width="26" height="20" onClick={this.props.onLeaveClick}/>
+                    <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton" onClick={this.props.onLeaveClick}>
+                        <object type="image/svg+xml" data="img/leave.svg" title="Leave room"
+                            width="26" height="20"/>
                     </div>;
             }
 
             var forget_button;
             if (this.props.onForgetClick) {
                 forget_button =
-                    <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton">
-                        <img src="img/leave.svg" title="Forget room" alt="Forget room"
-                            width="26" height="20" onClick={this.props.onForgetClick}/>
+                    <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton" onClick={this.props.onForgetClick}>
+                        <object type="image/svg+xml" data="img/leave.svg" title="Forget room"
+                            width="26" height="20"/>
                     </div>;
             }
 
@@ -166,8 +166,8 @@ module.exports = React.createClass({
                     <div className="mx_RoomHeader_rightRow">
                         { forget_button }
                         { leave_button }
-                        <div className="mx_RoomHeader_button">
-                            <img src="img/search.svg" title="Search" alt="Search" width="21" height="19" onClick={this.props.onSearchClick}/>
+                        <div className="mx_RoomHeader_button" onClick={this.props.onSearchClick}>
+                            <object type="image/svg+xml" data="img/search.svg" title="Search" width="21" height="19"/>
                         </div>
                     </div>
                 </div>

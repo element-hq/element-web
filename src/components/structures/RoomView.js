@@ -1174,7 +1174,7 @@ module.exports = React.createClass({
                 if (this.state.syncState === "ERROR") {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning.svg" width="24" height="23" alt="/!\ "/>
+                            <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Connectivity to the server has been lost.
@@ -1194,7 +1194,7 @@ module.exports = React.createClass({
                             <div className="mx_RoomView_tabCompleteWrapper">
                                 <TabCompleteBar entries={this.tabComplete.peek(6)} />
                                 <div className="mx_RoomView_tabCompleteEol">
-                                    <img src="img/eol.svg" width="22" height="16" alt="->|"/>
+                                    <object type="image/svg+xml" data="img/eol.svg" width="22" height="16" title="->|"/>
                                     Auto-complete
                                 </div>
                             </div>
@@ -1204,7 +1204,7 @@ module.exports = React.createClass({
                 else if (this.state.hasUnsentMessages) {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning.svg" width="24" height="23" alt="/!\ "/>
+                            <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Some of your messages have not been sent.
@@ -1268,7 +1268,7 @@ module.exports = React.createClass({
             if (this.state.draggingFile) {
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
                                     <div className="mx_RoomView_fileDropTargetLabel">
-                                        <img src="img/upload-big.svg" width="45" height="59" alt="Drop File Here"/><br/>
+                                        <object type="image/svg+xml" data="img/upload-big.svg" width="45" height="59" title="Drop File Here"/><br/>
                                         Drop File Here
                                     </div>
                                  </div>;
@@ -1306,24 +1306,28 @@ module.exports = React.createClass({
                 if (call.type === "video") {
                     zoomButton = (
                         <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick}>
-                            <img src="img/fullscreen.svg" title="Fill screen" alt="Fill screen" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
+                            <object type="image/svg+xml" data="img/fullscreen.svg" title="Fill screen" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
                         </div>
                     );
 
                     videoMuteButton =
                         <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
-                            <img src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"} width="31" height="27"/>
+                            <img src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"}
+                                 alt={call.isLocalVideoMuted() ? "Click to unmute video" : "Click to mute video"}
+                                 width="31" height="27"/>
                         </div>
                 }
                 voiceMuteButton =
                     <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
-                        <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"} width="21" height="26"/>
+                        <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"} 
+                             alt={call.isMicrophoneMuted() ? "Click to unmute audio" : "Click to mute audio"} 
+                             width="21" height="26"/>
                     </div>
 
                 if (!statusBar) {
                     statusBar =
                         <div className="mx_RoomView_callBar">
-                            <img src="img/sound-indicator.svg" width="23" height="20" alt=""/>
+                            <img src="img/sound-indicator.svg" width="23" height="20"/>
                             <b>Active call</b>
                         </div>;
                 }
@@ -1334,7 +1338,7 @@ module.exports = React.createClass({
                         { videoMuteButton }
                         { zoomButton }
                         { statusBar }
-                        <img className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17"/>
+                        <object type="image/svg+xml" className="mx_RoomView_voipChevron" data="img/voip-chevron.svg" width="22" height="17"/>
                     </div>
             }
 
