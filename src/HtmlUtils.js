@@ -150,7 +150,7 @@ module.exports = {
 
         var body;
         if (highlights && highlights.length > 0) {
-            var highlighter = new Highlighter(isHtml, "mx_MessageTile_searchHighlight", opts.onHighlightClick);
+            var highlighter = new Highlighter(isHtml, "mx_EventTile_searchHighlight", opts.onHighlightClick);
             body = highlighter.applyHighlights(safeBody, highlights);
         }
         else {
