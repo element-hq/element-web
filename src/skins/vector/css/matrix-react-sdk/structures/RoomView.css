@@ -199,6 +199,10 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_RoomView_voipButton object {
+    pointer-events: none;
+}
+
 .mx_RoomView_unreadMessagesBar {
     color: #ff0064;
     cursor: pointer;

@@ -82,6 +82,13 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_MessageComposer_upload object,
+.mx_MessageComposer_hangup object,
+.mx_MessageComposer_voicecall object,
+.mx_MessageComposer_videocall object {
+    pointer-events: none;
+}
+
 .mx_MessageComposer_videocall {
     padding-right: 10px;
     padding-top: 4px;
@@ -92,6 +99,6 @@ limitations under the License.
     padding-top: 4px;
 }
 
-.mx_MessageComposer_upload img {
+.mx_MessageComposer_upload object {
     margin-top: 5px;
 }
