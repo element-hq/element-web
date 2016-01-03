@@ -126,13 +126,13 @@ module.exports = React.createClass({
         if (this.props.roomId) {
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
-                        <div className="mx_RightPanel_headerButton" onClick={ this.onMemberListButtonClick }>
-                            <object type="image/svg+xml" data="img/members.svg" width="17" height="22" title="Members"/>
+                        <div className="mx_RightPanel_headerButton" title="Members" onClick={ this.onMemberListButtonClick }>
+                            <object type="image/svg+xml" data="img/members.svg" width="17" height="22"/>
                             { membersBadge }
                             { membersHighlight }
                         </div>
-                        <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton">
-                            <object type="image/svg+xml" data="img/files.svg" width="17" height="22" title="Files"/>
+                        <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton" title="Files">
+                            <object type="image/svg+xml" data="img/files.svg" width="17" height="22"/>
                             { filesHighlight }
                         </div>
                     </div>;
