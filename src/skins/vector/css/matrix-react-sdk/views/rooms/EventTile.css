@@ -63,7 +63,7 @@ limitations under the License.
     display: block;
 }
 
-.mx_MessageTile_content {
+.mx_EventTile_content {
     display: block;
     margin-right: 100px;
     overflow-y: hidden;
@@ -71,7 +71,7 @@ limitations under the License.
 
 /* Various markdown overrides */
 
-.mx_MessageTile_content .markdown-body {
+.mx_EventTile_content .markdown-body {
     font-family: inherit ! important;
     white-space: normal ! important;
     line-height: inherit ! important;
@@ -79,34 +79,34 @@ limitations under the License.
     font-size: 15px;
 }
 
-.mx_MessageTile_content .markdown-body h1,
-.mx_MessageTile_content .markdown-body h2,
-.mx_MessageTile_content .markdown-body h3,
-.mx_MessageTile_content .markdown-body h4,
-.mx_MessageTile_content .markdown-body h5,
-.mx_MessageTile_content .markdown-body h6
+.mx_EventTile_content .markdown-body h1,
+.mx_EventTile_content .markdown-body h2,
+.mx_EventTile_content .markdown-body h3,
+.mx_EventTile_content .markdown-body h4,
+.mx_EventTile_content .markdown-body h5,
+.mx_EventTile_content .markdown-body h6
 {
     font-family: inherit ! important;
 }
 
-.mx_MessageTile_content .markdown-body a {
+.mx_EventTile_content .markdown-body a {
     color: #76cfa6;
 }
 
-.mx_MessageTile_content .markdown-body .hljs {
+.mx_EventTile_content .markdown-body .hljs {
     display: inherit ! important;
 }
 
 /* end of overrides */
 
-.mx_MessageTile_searchHighlight {
+.mx_EventTile_searchHighlight {
     background-color: #76cfa6;
     color: #fff;
     border-radius: 5px;
     padding: 4px;
 }
 
-.mx_MessageTile_searchHighlight a {
+.mx_EventTile_searchHighlight a {
     background-color: #76cfa6;
     color: #fff;    
 }
@@ -139,7 +139,7 @@ limitations under the License.
     margin-top: -6px;
 }
 
-.mx_MessageTimestamp {
+.mx_EventTile .mx_MessageTimestamp {
     display: block;
     visibility: hidden;
     text-align: right;

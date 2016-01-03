@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MImageTile_thumbnail {
+.mx_MImageBody_thumbnail {
 /*
     background-color: #fff;
     border: 2px solid #fff;
@@ -22,16 +22,16 @@ limitations under the License.
 */
 }
 
-.mx_MImageTile_download {
+.mx_MImageBody_download {
     color: #76cfa6;
     cursor: pointer;
 }
 
-.mx_MImageTile_download a {
+.mx_MImageBody_download a {
     color: #76cfa6;
     text-decoration: none;
 }
 
-.mx_MImageTile_download img {
+.mx_MImageBody_download img {
     padding-right: 8px;
 }
