@@ -511,12 +511,11 @@ module.exports = React.createClass({
 
         if (DEBUG_SCROLL) console.log("sending search request");
 
-        var searchPromise = MatrixClientPeg.get().searchRoomEvents(
-            { filter: filter,
-              term: term,
-            });
-        this._handleSearchResult(searchPromise)
-            .done();
+        var searchPromise = MatrixClientPeg.get().searchRoomEvents({
+            filter: filter,
+            term: term,
+        });
+        this._handleSearchResult(searchPromise).done();
     },
 
     _backPaginateSearch: function() {
@@ -524,13 +523,15 @@ module.exports = React.createClass({
 
         var searchPromise = MatrixClientPeg.get().backPaginateRoomEventsSearch(
             this.state.searchResults);
-        this._handleSearchResult(searchPromise)
-            .done();
+        this._handleSearchResult(searchPromise).done();
     },
 
     _handleSearchResult: function(searchPromise) {
         var self = this;
-        var searchId = this.searchId;
+
+        // keep a record of the current search id, so that if the search terms
+        // change before we get a response, we can ignore the results.
+        var localSearchId = this.searchId;
 
         this.setState({
             searchInProgress: true,
@@ -538,7 +539,7 @@ module.exports = React.createClass({
 
         return searchPromise.then(function(results) {
             if (DEBUG_SCROLL) console.log("search complete");
-            if (!self.state.searching || self.searchId != searchId) {
+            if (!self.state.searching || self.searchId != localSearchId) {
                 console.error("Discarding stale search results");
                 return;
             }

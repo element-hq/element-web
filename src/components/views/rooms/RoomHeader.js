@@ -109,7 +109,7 @@ module.exports = React.createClass({
 
                 var searchStatus;
                 // don't display the search count until the search completes and
-                // gives us a non-null searchCount.
+                // gives us a valid (possibly zero) searchCount.
                 if (this.props.searchInfo && this.props.searchInfo.searchCount != null) {
                     searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;(~{ this.props.searchInfo.searchCount } results)</div>;
                 }
