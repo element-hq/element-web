@@ -134,6 +134,9 @@ module.exports = React.createClass({
 
         for (var i = 0; i < receipts.length; ++i) {
             var member = room.getMember(receipts[i].userId);
+            if (!member) {
+                continue;
+            }
 
             // Using react refs here would mean both getting Velociraptor to expose
             // them and making them scoped to the whole RoomView. Not impossible, but
