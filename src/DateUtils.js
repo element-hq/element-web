@@ -35,10 +35,10 @@ module.exports = {
             return days[date.getDay()] + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
         }
         else if (now.getFullYear() === date.getFullYear()) {
-            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + (date.getDay()+1) + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
         }
         else {
-            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + (date.getDay()+1) + " " + date.getFullYear() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
         }
     }
 }
