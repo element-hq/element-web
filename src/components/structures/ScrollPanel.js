@@ -21,6 +21,13 @@ var q = require("q");
 
 var DEBUG_SCROLL = false;
 
+if (DEBUG_SCROLL) {
+    // using bind means that we get to keep useful line numbers in the console
+    var debuglog = console.log.bind(console);
+} else {
+    var debuglog = function () {};
+}
+
 /* This component implements an intelligent scrolling list.
  *
  * It wraps a list of <li> children; when items are added to the start or end
@@ -54,13 +61,14 @@ module.exports = React.createClass({
          * the user nears the start (backwards = true) or end (backwards =
          * false) of the list.
          *
-         * This should return true if the pagination was successful, or false if
-         * there is no more data in this directon (at this time) - which will
-         * stop the pagination cycle until the user scrolls again.
+         * This should return a promise; no more calls will be made until the
+         * promise completes.
          *
-         * This can return a promise; if it does, no more calls will be made
-         * until the promise completes. The promise should resolve to true or
-         * false as above.
+         * The promise should resolve to true if there is more data to be
+         * retrieved in this direction (in which case onFillRequest may be
+         * called again immediately), or false if there is no more data in this
+         * directon (at this time) - which will stop the pagination cycle until
+         * the user scrolls again.
          */
         onFillRequest: React.PropTypes.func,
 
@@ -80,7 +88,7 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             stickyBottom: true,
-            onFillRequest: function(backwards) {},
+            onFillRequest: function(backwards) { return q(false); },
             onScroll: function() {},
         };
     },
@@ -106,7 +114,7 @@ module.exports = React.createClass({
 
     onScroll: function(ev) {
         var sn = this._getScrollNode();
-        if (DEBUG_SCROLL) console.log("Scroll event: offset now:", sn.scrollTop, "recentEventScroll:", this.recentEventScroll);
+        debuglog("Scroll event: offset now:", sn.scrollTop, "recentEventScroll:", this.recentEventScroll);
 
         // Sometimes we see attempts to write to scrollTop essentially being
         // ignored. (Or rather, it is successfully written, but on the next
@@ -130,7 +138,7 @@ module.exports = React.createClass({
         }
 
         this.scrollState = this._calculateScrollState();
-        if (DEBUG_SCROLL) console.log("Saved scroll state", this.scrollState);
+        debuglog("Saved scroll state", this.scrollState);
 
         this.props.onScroll(ev);
 
@@ -145,12 +153,36 @@ module.exports = React.createClass({
     checkFillState: function() {
         var sn = this._getScrollNode();
 
+        // if there is less than a screenful of messages above or below the
+        // viewport, try to get some more messages.
+        //
+        // scrollTop is the number of pixels between the top of the content and
+        //     the top of the viewport.
+        //
+        // scrollHeight is the total height of the content.
+        //
+        // clientHeight is the height of the viewport (excluding borders,
+        // margins, and scrollbars).
+        //
+        //
+        //   .---------.          -                 -
+        //   |         |          |  scrollTop      |
+        // .-+---------+-.    -   -                 |
+        // | |         | |    |                     |
+        // | |         | |    |  clientHeight       | scrollHeight
+        // | |         | |    |                     |
+        // `-+---------+-'    -                     |
+        //   |         |                            |
+        //   |         |                            |
+        //   `---------'                            -
+        //
+
         if (sn.scrollTop < sn.clientHeight) {
-            // there's less than a screenful of messages left - try to get some
-            // more messages.
+            // need to back-fill
             this._maybeFill(true);
         }
         if (sn.scrollTop > sn.scrollHeight - sn.clientHeight * 2) {
+            // need to forward-fill
             this._maybeFill(false);
         }
     },
@@ -159,36 +191,30 @@ module.exports = React.createClass({
     _maybeFill: function(backwards) {
         var dir = backwards ? 'b' : 'f';
         if (this._pendingFillRequests[dir]) {
-            if (DEBUG_SCROLL) {
-                console.log("ScrollPanel: Already a "+dir+" fill in progress - not starting another");
-            }
+            debuglog("ScrollPanel: Already a "+dir+" fill in progress - not starting another");
             return;
         }
 
-        if (DEBUG_SCROLL) {
-            console.log("ScrollPanel: starting "+dir+" fill");
-        }
+        debuglog("ScrollPanel: starting "+dir+" fill");
 
         // onFillRequest can end up calling us recursively (via onScroll
         // events) so make sure we set this before firing off the call. That
         // does present the risk that we might not ever actually fire off the
         // fill request, so wrap it in a try/catch.
         this._pendingFillRequests[dir] = true;
-        var r;
+        var fillPromise;
         try {
-             r = this.props.onFillRequest(backwards);
+             fillPromise = this.props.onFillRequest(backwards);
         } catch (e) {
             this._pendingFillRequests[dir] = false;
             throw e;
         }
 
-        q.finally(r, () => {
-            if (DEBUG_SCROLL) {
-                console.log("ScrollPanel: "+dir+" fill complete");
-            }
+        q.finally(fillPromise, () => {
+            debuglog("ScrollPanel: "+dir+" fill complete");
             this._pendingFillRequests[dir] = false;
-        }).then((res) => {
-            if (res) {
+        }).then((hasMoreResults) => {
+            if (hasMoreResults) {
                 // further pagination requests have been disabled until now, so
                 // it's time to check the fill state again in case the pagination
                 // was insufficient.
@@ -218,13 +244,13 @@ module.exports = React.createClass({
 
     scrollToTop: function() {
         this._getScrollNode().scrollTop = 0;
-        if (DEBUG_SCROLL) console.log("Scrolled to top");
+        debuglog("Scrolled to top");
     },
 
     scrollToBottom: function() {
         var scrollNode = this._getScrollNode();
         scrollNode.scrollTop = scrollNode.scrollHeight;
-        if (DEBUG_SCROLL) console.log("Scrolled to bottom; offset now", scrollNode.scrollTop);
+        debuglog("Scrolled to bottom; offset now", scrollNode.scrollTop);
     },
 
     // scroll the message list to the node with the given scrollToken. See
@@ -261,10 +287,10 @@ module.exports = React.createClass({
             this.recentEventScroll = scrollNode.scrollTop;
         }
 
-        if (DEBUG_SCROLL) {
-            console.log("Scrolled to token", node.dataset.scrollToken, "+", pixelOffset+":", scrollNode.scrollTop, "(delta: "+scrollDelta+")");
-            console.log("recentEventScroll now "+this.recentEventScroll);
-        }
+        debuglog("Scrolled to token", node.dataset.scrollToken, "+",
+                 pixelOffset+":", scrollNode.scrollTop, 
+                 "(delta: "+scrollDelta+")");
+        debuglog("recentEventScroll now "+this.recentEventScroll);
     },
 
     _calculateScrollState: function() {
