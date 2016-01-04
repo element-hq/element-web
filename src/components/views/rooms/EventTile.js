@@ -74,6 +74,32 @@ module.exports = React.createClass({
         }
     },
 
+    propTypes: {
+        /* the MatrixEvent to show */
+        mxEvent: React.PropTypes.object.isRequired,
+
+        /* true if this is a continuation of the previous event (which has the
+         * effect of not showing another avatar/displayname
+         */
+        continuation: React.PropTypes.bool,
+
+        /* true if this is the last event in the timeline (which has the effect
+         * of always showing the timestamp)
+         */
+        last: React.PropTypes.bool,
+
+        /* true if this is search context (which has the effect of greying out
+         * the text
+         */
+        contextual: React.PropTypes.bool,
+
+        /* a list of words to highlight */
+        highlights: React.PropTypes.array,
+
+        /* a function to be called when the highlight is clicked */
+        onHighlightClick: React.PropTypes.func,
+    },
+
     getInitialState: function() {
         return {menu: false, allReadAvatars: false};
     },
@@ -280,7 +306,8 @@ module.exports = React.createClass({
                 { avatar }
                 { sender }
                 <div className="mx_EventTile_line">
-                    <EventTileType mxEvent={this.props.mxEvent} highlights={this.props.highlights} />
+                    <EventTileType mxEvent={this.props.mxEvent} highlights={this.props.highlights} 
+                          onHighlightClick={this.props.onHighlightClick} />
                 </div>
             </div>
         );

@@ -49,7 +49,8 @@ module.exports = React.createClass({
     render: function() {
         var mxEvent = this.props.mxEvent;
         var content = mxEvent.getContent();
-        var body = HtmlUtils.bodyToHtml(content, this.props.highlights);
+        var body = HtmlUtils.bodyToHtml(content, this.props.highlights,
+                                       {onHighlightClick: this.props.onHighlightClick});
 
         switch (content.msgtype) {
             case "m.emote":
