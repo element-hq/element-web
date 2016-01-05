@@ -96,6 +96,10 @@ module.exports = React.createClass({
         return MatrixClientPeg.get().mxcUrlToHttp(content.url, 480, 360);
     },
 
+    onSvgLoad: function(event) {
+        dis.dispatch({ action: "svg_onload", svg: event.target });
+    },
+
     render: function() {
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
