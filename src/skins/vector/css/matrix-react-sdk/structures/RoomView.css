@@ -113,6 +113,20 @@ limitations under the License.
 .mx_RoomView_messageListWrapper {
     max-width: 960px;
     margin: auto;
+    
+    min-height: 100%;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    flex-direction: column;
+    -webkit-flex-direction: column;
+
+    justify-content: flex-end;
+    -webkit-justify-content: flex-end;
 }
 
 .mx_RoomView_MessageList {
