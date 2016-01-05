@@ -733,7 +733,7 @@ module.exports = React.createClass({
         return ret;
     },
 
-    uploadNewState: function(new_name, new_topic, new_join_rule, new_history_visibility, new_power_levels) {
+    uploadNewState: function(newVals) {
         var old_name = this.state.room.name;
 
         var old_topic = this.state.room.currentState.getStateEvents('m.room.topic', '');
@@ -759,45 +759,53 @@ module.exports = React.createClass({
 
         var deferreds = [];
 
-        if (old_name != new_name && new_name != undefined && new_name) {
+        if (old_name != newVals.name && newVals.name != undefined && newVals.name) {
             deferreds.push(
-                MatrixClientPeg.get().setRoomName(this.state.room.roomId, new_name)
+                MatrixClientPeg.get().setRoomName(this.state.room.roomId, newVals.name)
             );
         }
 
-        if (old_topic != new_topic && new_topic != undefined) {
+        if (old_topic != newVals.topic && newVals.topic != undefined) {
             deferreds.push(
-                MatrixClientPeg.get().setRoomTopic(this.state.room.roomId, new_topic)
+                MatrixClientPeg.get().setRoomTopic(this.state.room.roomId, newVals.topic)
             );
         }
 
-        if (old_join_rule != new_join_rule && new_join_rule != undefined) {
+        if (old_join_rule != newVals.join_rule && newVals.join_rule != undefined) {
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
                     this.state.room.roomId, "m.room.join_rules", {
-                        join_rule: new_join_rule,
+                        join_rule: newVals.join_rule,
                     }, ""
                 )
             );
         }
 
-        if (old_history_visibility != new_history_visibility && new_history_visibility != undefined) {
+        if (old_history_visibility != newVals.history_visibility &&
+                newVals.history_visibility != undefined) {
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
                     this.state.room.roomId, "m.room.history_visibility", {
-                        history_visibility: new_history_visibility,
+                        history_visibility: newVals.history_visibility,
                     }, ""
                 )
             );
         }
 
-        if (new_power_levels) {
+        if (newVals.power_levels) {
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
-                    this.state.room.roomId, "m.room.power_levels", new_power_levels, ""
+                    this.state.room.roomId, "m.room.power_levels", newVals.power_levels, ""
                 )
             );
         }
+
+        deferreds.push(
+            MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
+                allowRead: newVals.guest_read,
+                allowJoin: newVals.guest_join
+            })
+        );
 
         if (deferreds.length) {
             var self = this;
@@ -883,19 +891,15 @@ module.exports = React.createClass({
             uploadingRoomSettings: true,
         });
 
-        var new_name = this.refs.header.getRoomName();
-        var new_topic = this.refs.room_settings.getTopic();
-        var new_join_rule = this.refs.room_settings.getJoinRules();
-        var new_history_visibility = this.refs.room_settings.getHistoryVisibility();
-        var new_power_levels = this.refs.room_settings.getPowerLevels();
-
-        this.uploadNewState(
-            new_name,
-            new_topic,
-            new_join_rule,
-            new_history_visibility,
-            new_power_levels
-        );
+        this.uploadNewState({
+            name: this.refs.header.getRoomName(),
+            topic: this.refs.room_settings.getTopic(),
+            join_rule: this.refs.room_settings.getJoinRules(),
+            history_visibility: this.refs.room_settings.getHistoryVisibility(),
+            power_levels: this.refs.room_settings.getPowerLevels(),
+            guest_join: this.refs.room_settings.canGuestsJoin(),
+            guest_read: this.refs.room_settings.canGuestsRead()
+        });
     },
 
     onCancelClick: function() {
