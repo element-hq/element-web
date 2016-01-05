@@ -22,6 +22,7 @@ var filesize = require('filesize');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require('../../../Modal');
 var sdk = require('../../../index');
+var dis = require("../../../dispatcher");
 
 module.exports = React.createClass({
     displayName: 'MImageBody',
