@@ -43,6 +43,13 @@ var INITIAL_SIZE = 20;
 
 var DEBUG_SCROLL = false;
 
+if (DEBUG_SCROLL) {
+    // using bind means that we get to keep useful line numbers in the console
+    var debuglog = console.log.bind(console);
+} else {
+    var debuglog = function () {};
+}
+
 module.exports = React.createClass({
     displayName: 'RoomView',
     propTypes: {
@@ -330,8 +337,6 @@ module.exports = React.createClass({
 
         this.scrollToBottom();
         this.sendReadReceipt();
-
-        this.refs.messagePanel.checkFillState();
     },
 
     componentDidUpdate: function() {
@@ -346,53 +351,48 @@ module.exports = React.createClass({
     },
 
     _paginateCompleted: function() {
-        if (DEBUG_SCROLL) console.log("paginate complete");
+        debuglog("paginate complete");
 
         this.setState({
             room: MatrixClientPeg.get().getRoom(this.props.roomId)
         });
 
         this.setState({paginating: false});
-
-        // we might not have got enough (or, indeed, any) results from the
-        // pagination request, so give the messagePanel a chance to set off
-        // another.
-
-        if (this.refs.messagePanel) {
-            this.refs.messagePanel.checkFillState();
-        }
     },
 
     onSearchResultsFillRequest: function(backwards) {
-        if (!backwards || this.state.searchInProgress)
-            return;
+        if (!backwards)
+            return q(false);
 
         if (this.nextSearchBatch) {
-            if (DEBUG_SCROLL) console.log("requesting more search results");
-            this._getSearchBatch(this.state.searchTerm,
-                                 this.state.searchScope);
+            debuglog("requesting more search results");
+            return this._getSearchBatch(this.state.searchTerm,
+                                 this.state.searchScope).then(true);
         } else {
-            if (DEBUG_SCROLL) console.log("no more search results");
+            debuglog("no more search results");
+            return q(false);
         }
     },
 
     // set off a pagination request.
     onMessageListFillRequest: function(backwards) {
-        if (!backwards || this.state.paginating)
-            return;
+        if (!backwards)
+            return q(false);
 
         // Either wind back the message cap (if there are enough events in the
         // timeline to do so), or fire off a pagination request.
 
         if (this.state.messageCap < this.state.room.timeline.length) {
             var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
-            if (DEBUG_SCROLL) console.log("winding back message cap to", cap);
+            debuglog("winding back message cap to", cap);
             this.setState({messageCap: cap});
+            return q(true);
         } else if(this.state.room.oldState.paginationToken) {
             var cap = this.state.messageCap + PAGINATE_SIZE;
-            if (DEBUG_SCROLL) console.log("starting paginate to cap", cap);
+            debuglog("starting paginate to cap", cap);
             this.setState({messageCap: cap, paginating: true});
-            MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(this._paginateCompleted).done();
+            return MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).
+                finally(this._paginateCompleted).then(true);
         }
     },
 
@@ -499,7 +499,7 @@ module.exports = React.createClass({
         }
 
         this.nextSearchBatch = null;
-        this._getSearchBatch(term, scope);
+        this._getSearchBatch(term, scope).done();
     },
 
     // fire off a request for a batch of search results
@@ -516,11 +516,11 @@ module.exports = React.createClass({
 
         var self = this;
 
-        if (DEBUG_SCROLL) console.log("sending search request");
-        MatrixClientPeg.get().search({ body: this._getSearchCondition(term, scope),
-                                       next_batch: this.nextSearchBatch })
+        debuglog("sending search request");
+        return MatrixClientPeg.get().search({ body: this._getSearchCondition(term, scope),
+                                              next_batch: this.nextSearchBatch })
         .then(function(data) {
-            if (DEBUG_SCROLL) console.log("search complete");
+            debuglog("search complete");
             if (!self.state.searching || self.searchId != searchId) {
                 console.error("Discarding stale search results");
                 return;
@@ -566,7 +566,7 @@ module.exports = React.createClass({
             self.setState({
                 searchInProgress: false
             });
-        }).done();
+        });
     },
 
     _getSearchCondition: function(term, scope) {
