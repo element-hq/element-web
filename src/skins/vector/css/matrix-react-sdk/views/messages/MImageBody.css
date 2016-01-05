@@ -25,6 +25,7 @@ limitations under the License.
 .mx_MImageBody_download {
     color: #76cfa6;
     cursor: pointer;
+    margin-left: -16px;
 }
 
 .mx_MImageBody_download a {
@@ -34,7 +35,6 @@ limitations under the License.
 
 .mx_MImageBody_download object {
     padding-right: 4px;
-    margin-left: -16px;
     margin-top: -4px;
     vertical-align: middle;
     pointer-events: none;
