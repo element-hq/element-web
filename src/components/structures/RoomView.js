@@ -544,17 +544,20 @@ module.exports = React.createClass({
                 return;
             }
 
-            // postgres on synapse returns us precise details of the
-            // strings which actually got matched for highlighting.
+            // postgres on synapse returns us precise details of the strings
+            // which actually got matched for highlighting.
+            //
+            // In either case, we want to highlight the literal search term
+            // whether it was used by the search engine or not.
+
+            var highlights = results.highlights;
+            if (highlights.indexOf(self.state.searchTerm) < 0) {
+                highlights = highlights.concat(self.state.searchTerm);
+            }
 
             // For overlapping highlights,
             // favour longer (more specific) terms first
-            var highlights = results.highlights.sort(function(a, b) { b.length - a.length });
-
-            // sqlite doesn't give us any highlights, so just try to highlight the literal search term
-            if (highlights.length == 0) {
-                highlights = [ self.state.searchTerm ];
-            }
+            highlights = highlights.sort(function(a, b) { b.length - a.length });
 
             self.setState({
                 searchHighlights: highlights,
