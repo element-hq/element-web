@@ -474,11 +474,11 @@ module.exports = React.createClass({
         else {
             callButton =
                 <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
-                    <object type="image/svg+xml" data="img/voice.svg" width="16" height="26"/>
+                    <object className="mx_Svg" type="image/svg+xml" data="img/voice.svg" width="16" height="26"/>
                 </div>
             videoCallButton =
                 <div className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
-                    <object type="image/svg+xml" data="img/call.svg" width="30" height="22"/>
+                    <object className="mx_Svg" type="image/svg+xml" data="img/call.svg" width="30" height="22"/>
                 </div>
         }
 
@@ -493,7 +493,7 @@ module.exports = React.createClass({
                         <textarea ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
                     </div>
                     <div className="mx_MessageComposer_upload" onClick={this.onUploadClick} title="Upload file">
-                        <object type="image/svg+xml" data="img/upload.svg" width="19" height="24"/>
+                        <object className="mx_Svg" type="image/svg+xml" data="img/upload.svg" width="19" height="24"/>
                         <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
                     </div>
                     { hangupButton }

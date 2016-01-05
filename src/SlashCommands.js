@@ -18,6 +18,7 @@ var MatrixClientPeg = require("./MatrixClientPeg");
 var MatrixTools = require("./MatrixTools");
 var dis = require("./dispatcher");
 var encryption = require("./encryption");
+var Tinter = require("./Tinter");
 
 var reject = function(msg) {
     return {
@@ -40,6 +41,10 @@ var commands = {
             );
         }
         return reject("Usage: /nick <display_name>");
+    },
+
+    tint: function(room_id, args) {
+        Tinter.tint(args);
     },
 
     encrypt: function(room_id, args) {
