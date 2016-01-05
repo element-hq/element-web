@@ -1342,7 +1342,7 @@ module.exports = React.createClass({
                         { videoMuteButton }
                         { zoomButton }
                         { statusBar }
-                        <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" className="mx_RoomView_voipChevron" data="img/voip-chevron.svg" width="22" height="17"/>
+                        <object onLoad={ this.onSvgLoad } type="image/svg+xml" className="mx_RoomView_voipChevron mx_Svg" data="img/voip-chevron.svg" width="22" height="17"/>
                     </div>
             }
 
