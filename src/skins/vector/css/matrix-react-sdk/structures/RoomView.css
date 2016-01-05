@@ -189,7 +189,7 @@ limitations under the License.
 
 .mx_RoomView_voipChevron {
     position: absolute;
-    bottom: -10px;
+    bottom: -11px;
     right: 11px;
 }
 
@@ -300,7 +300,7 @@ limitations under the License.
     color: #76CFA6;
 }
 
-.mx_RoomView_tabCompleteEol img {
+.mx_RoomView_tabCompleteEol object {
     vertical-align: middle;
     margin-right: 8px;
     margin-top: -2px;
