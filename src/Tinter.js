@@ -14,6 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+var dis = require('./dispatcher');
+
+var registered = false;
+if (!registered) {
+    dis.register(_onAction);
+}
+
 var keyRgb = [
     "rgb(118, 207, 166)",
     "rgb(234, 245, 240)",
@@ -30,6 +37,15 @@ var keyRgb = [
 var keyHex = [
     "#76CFA6",
     "#EAF5F0",
+    "#D3EFE1",
+];
+
+// cache of our replacement colours
+// defaults to our keys.
+var colors = [
+    keyHex[0],
+    keyHex[1],
+    keyHex[2],
 ];
 
 var cssFixups = [
@@ -60,6 +76,8 @@ var svgAttrs = [
     "stroke",
 ];
 
+var svgNodes = {};
+
 var cached = false;
 
 function calcCssFixups() {
@@ -83,9 +101,11 @@ function calcCssFixups() {
     }
 }
 
-function calcSvgFixups() {
-    var svgs = document.getElementsByClassName("mx_Svg");
+function calcSvgFixups(nodes) {
+    var svgs = nodes || document.getElementsByClassName("mx_Svg");
+    var fixups = [];
     for (var i = 0; i < svgs.length; i++) {
+
         var svgDoc = svgs[i].contentDocument;
         if (!svgDoc) continue;
         var tags = svgDoc.getElementsByTagName("*");
@@ -95,7 +115,7 @@ function calcSvgFixups() {
                 var attr = svgAttrs[k];
                 for (var l = 0; l < keyHex.length; l++) {
                     if (tag.getAttribute(attr) && tag.getAttribute(attr).toUpperCase() === keyHex[l]) {
-                        svgFixups.push({
+                        fixups.push({
                             node: tag,
                             attr: attr,
                             index: l,
@@ -105,23 +125,32 @@ function calcSvgFixups() {
             }
         }
     }
+
+    return fixups;
 }
 
-function applyCssFixups(primaryColor, secondaryColor, tertiaryColor) {
-    var colors = [primaryColor, secondaryColor, tertiaryColor];
-
+function applyCssFixups() {
     for (var i = 0; i < cssFixups.length; i++) {
         var cssFixup = cssFixups[i];
         cssFixup.style[cssFixup.attr] = colors[cssFixup.index];
     }
 }
 
-function applySvgFixups(primaryColor, secondaryColor, tertiaryColor) {
-    var colors = [primaryColor, secondaryColor, tertiaryColor];
-
-    for (var i = 0; i < svgFixups.length; i++) {
-        var svgFixup = svgFixups[i];
+function applySvgFixups(fixups) {
+    for (var i = 0; i < fixups.length; i++) {
+        var svgFixup = fixups[i];
         svgFixup.node.setAttribute(svgFixup.attr, colors[svgFixup.index]);
+    }
+}
+
+function _onAction(payload) {
+    if (payload.action !== "svg_onload") return;
+    // XXX: we should probably faff around with toggling the visibility of the node to avoid flashing the wrong colour.
+    // (although this would result in an even worse flicker as the element redraws)
+    var fixups = calcSvgFixups([ payload.svg ]);
+    if (fixups.length) {
+        svgFixups = svgFixups.concat(fixups); // XXX: this leaks fixups
+        applySvgFixups(fixups);
     }
 }
 
@@ -148,7 +177,7 @@ module.exports = {
     tint: function(primaryColor, secondaryColor, tertiaryColor) {
         if (!cached) {
             calcCssFixups();
-            calcSvgFixups();
+            svgFixups = calcSvgFixups();
             cached = true;
         }
 
@@ -171,13 +200,15 @@ module.exports = {
             tertiaryColor = rgbToHex(rgb1);
         }
 
+        colors = [primaryColor, secondaryColor, tertiaryColor];
+
         // go through manually fixing up the stylesheets.
-        applyCssFixups(primaryColor, secondaryColor, tertiaryColor);
+        applyCssFixups();
 
         // go through manually fixing up SVG colours.
         // we could do this by stylesheets, but keeping the stylesheets
         // updated would be a PITA, so just brute-force search for the
         // key colour; cache the element and apply.
-        applySvgFixups(primaryColor, secondaryColor, tertiaryColor);
+        applySvgFixups(svgFixups);
     }
 };

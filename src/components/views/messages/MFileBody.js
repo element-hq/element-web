@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var filesize = require('filesize');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var dis = require("../../../dispatcher");
 
 module.exports = React.createClass({
     displayName: 'MFileBody',
@@ -45,6 +46,10 @@ module.exports = React.createClass({
         return linkText;
     },
 
+    onSvgLoad: function(event) {
+        dis.dispatch({ action: "svg_onload", svg: event.target });
+    },
+
     render: function() {
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
@@ -57,7 +62,7 @@ module.exports = React.createClass({
                 <span className="mx_MFileBody">
                     <div className="mx_MImageBody_download">
                         <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
-                            <img src="img/download.png" width="10" height="12"/>
+                            <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/download.svg" width="12" height="14"/>
                             Download {text}
                         </a>
                     </div>

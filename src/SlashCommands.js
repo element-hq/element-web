@@ -45,6 +45,7 @@ var commands = {
 
     tint: function(room_id, args) {
         Tinter.tint(args);
+        return success();
     },
 
     encrypt: function(room_id, args) {

@@ -66,6 +66,10 @@ module.exports = React.createClass({
     getRoomName: function() {
         return this.refs.name_edit.value;
     },
+
+    onSvgLoad: function(event) {
+        dis.dispatch({ action: "svg_onload", svg: event.target });
+    },
     
     render: function() {
         var EditableText = sdk.getComponent("elements.EditableText");
@@ -136,7 +140,7 @@ module.exports = React.createClass({
             if (this.props.onLeaveClick) {
                 leave_button =
                     <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton" onClick={this.props.onLeaveClick} title="Leave room">
-                        <object className="mx_Svg" type="image/svg+xml" data="img/leave.svg"
+                        <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/leave.svg"
                             width="26" height="20"/>
                     </div>;
             }
@@ -145,7 +149,7 @@ module.exports = React.createClass({
             if (this.props.onForgetClick) {
                 forget_button =
                     <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton" onClick={this.props.onForgetClick} title="Forget room">
-                        <object className="mx_Svg" type="image/svg+xml" data="img/leave.svg"
+                        <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/leave.svg"
                             width="26" height="20"/>
                     </div>;
             }
