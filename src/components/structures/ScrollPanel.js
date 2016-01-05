@@ -120,8 +120,15 @@ module.exports = React.createClass({
         this.checkFillState();
     },
 
+    // return true if the content is fully scrolled down right now; else false.
+    //
+    // Note that if the content hasn't yet been fully populated, this may
+    // spuriously return true even if the user wanted to be looking at earlier
+    // content. So don't call it in render() cycles.
     isAtBottom: function() {
-        return this.scrollState && this.scrollState.atBottom;
+        var sn = this._getScrollNode();
+        // + 1 here to avoid fractional pixel rounding errors
+        return sn.scrollHeight - sn.scrollTop <= sn.clientHeight + 1;
     },
 
     // check the scroll state and send out backfill requests if necessary.
@@ -213,9 +220,7 @@ module.exports = React.createClass({
         // attribute. It is this token which is stored as the
         // 'lastDisplayedScrollToken'.
 
-        var sn = this._getScrollNode();
-        // + 1 here to avoid fractional pixel rounding errors
-        var atBottom = sn.scrollHeight - sn.scrollTop <= sn.clientHeight + 1;
+        var atBottom = this.isAtBottom();
 
         var itemlist = this.refs.itemlist;
         var wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
