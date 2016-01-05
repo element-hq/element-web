@@ -38,6 +38,7 @@ module.exports = React.createClass({
         highlight: React.PropTypes.bool.isRequired,
         isInvite: React.PropTypes.bool.isRequired,
         roomSubList: React.PropTypes.object.isRequired,
+        incomingCall: React.PropTypes.object,
     },
 
     getInitialState: function() {
@@ -70,14 +71,9 @@ module.exports = React.createClass({
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
         });
 
-        var name;
-        if (this.props.isInvite) {
-            name = this.props.room.getMember(myUserId).events.member.getSender();
-        }
-        else {
-            // XXX: We should never display raw room IDs, but sometimes the room name js sdk gives is undefined
-            name = this.props.room.name || this.props.room.roomId;
-        }
+        // XXX: We should never display raw room IDs, but sometimes the
+        // room name js sdk gives is undefined (cannot repro this -- k)
+        var name = this.props.room.name || this.props.room.roomId;
 
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
         var badge;
@@ -110,6 +106,12 @@ module.exports = React.createClass({
             label = <RoomTooltip room={this.props.room}/>;
         }
 
+        var incomingCallBox;
+        if (this.props.incomingCall) {
+            var IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
+            incomingCallBox = <IncomingCallBox incomingCall={ this.props.incomingCall }/>;
+        }
+
         var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
         // These props are injected by React DnD,
@@ -125,6 +127,7 @@ module.exports = React.createClass({
                     { badge }
                 </div>
                 { label }
+                { incomingCallBox }
             </div>
         ));
     }

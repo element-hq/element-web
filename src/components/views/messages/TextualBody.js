@@ -49,25 +49,26 @@ module.exports = React.createClass({
     render: function() {
         var mxEvent = this.props.mxEvent;
         var content = mxEvent.getContent();
-        var body = HtmlUtils.bodyToHtml(content, this.props.highlights);
+        var body = HtmlUtils.bodyToHtml(content, this.props.highlights,
+                                       {onHighlightClick: this.props.onHighlightClick});
 
         switch (content.msgtype) {
             case "m.emote":
                 var name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 return (
-                    <span ref="content" className="mx_MEmoteTile mx_MessageTile_content">
+                    <span ref="content" className="mx_MEmoteBody mx_EventTile_content">
                         * { name } { body }
                     </span>
                 );
             case "m.notice":
                 return (
-                    <span ref="content" className="mx_MNoticeTile mx_MessageTile_content">
+                    <span ref="content" className="mx_MNoticeBody mx_EventTile_content">
                         { body }
                     </span>
                 );
             default: // including "m.text"
                 return (
-                    <span ref="content" className="mx_MTextTile mx_MessageTile_content">
+                    <span ref="content" className="mx_MTextBody mx_EventTile_content">
                         { body }
                     </span>
                 );

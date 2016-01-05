@@ -14,30 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-var React = require('react');
-
-var TextForEvent = require('../../../TextForEvent');
-
-module.exports = React.createClass({
-    displayName: 'TextualEvent',
-
-    statics: {
-        needsSenderProfile: function() {
+module.exports = {
+    /**
+     * Returns true iff this event arriving in a room should affect the room's
+     * count of unread messages
+     */
+    eventTriggersUnreadCount: function(ev) {
+        if (ev.getType() == "m.room.member") {
+            return false;
+        } else if (ev.getType == 'm.room.message' && ev.getContent().msgtype == 'm.notify') {
             return false;
         }
-    },
-
-    render: function() {
-        var text = TextForEvent.textForEvent(this.props.mxEvent);
-        if (text == null || text.length == 0) return null;
-
-        return (
-            <div className="mx_TextualEvent">
-                {TextForEvent.textForEvent(this.props.mxEvent)}
-            </div>
-        );
-    },
-});
-
+        return true;
+    }
+};

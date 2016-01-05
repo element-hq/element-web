@@ -23,10 +23,8 @@ limitations under the License.
 
 var React = require("react");
 var ReactDOM = require("react-dom");
-var GeminiScrollbar = require('react-gemini-scrollbar');
 var q = require("q");
 var classNames = require("classnames");
-var filesize = require('filesize');
 var Matrix = require("matrix-js-sdk");
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
@@ -35,11 +33,15 @@ var WhoIsTyping = require("../../WhoIsTyping");
 var Modal = require("../../Modal");
 var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
+var TabComplete = require("../../TabComplete");
+var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
 var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
+
+var DEBUG_SCROLL = false;
 
 module.exports = React.createClass({
     displayName: 'RoomView',
@@ -47,6 +49,10 @@ module.exports = React.createClass({
         ConferenceHandler: React.PropTypes.any
     },
 
+    /* properties in RoomView objects include:
+     *
+     * eventNodes: a map from event id to DOM node representing that event
+     */
     getInitialState: function() {
         var room = this.props.roomId ? MatrixClientPeg.get().getRoom(this.props.roomId) : null;
         return {
@@ -59,7 +65,8 @@ module.exports = React.createClass({
             searching: false,
             searchResults: null,
             syncState: MatrixClientPeg.get().getSyncState(),
-            hasUnsentMessages: this._hasUnsentMessages(room)
+            hasUnsentMessages: this._hasUnsentMessages(room),
+            callState: null,
         }
     },
 
@@ -71,11 +78,26 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
-        this.atBottom = true;
+        // xchat-style tab complete, add a colon if tab
+        // completing at the start of the text
+        this.tabComplete = new TabComplete({
+            startingWordSuffix: ": ",
+            wordSuffix: " ",
+            allowLooping: false,
+            autoEnterTabComplete: true,
+            onClickCompletes: true,
+            onStateChange: (isCompleting) => {
+                this.forceUpdate();
+            }
+        });
     },
 
     componentWillUnmount: function() {
         if (this.refs.messagePanel) {
+            // disconnect the D&D event listeners from the message panel. This
+            // is really just for hygiene - the messagePanel is going to be
+            // deleted anyway, so it doesn't matter if the event listeners
+            // don't get cleaned up.
             var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
             messagePanel.removeEventListener('drop', this.onDrop);
             messagePanel.removeEventListener('dragover', this.onDragOver);
@@ -91,6 +113,8 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
             MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
         }
+
+        window.removeEventListener('resize', this.onResize);        
     },
 
     onAction: function(payload) {
@@ -107,22 +131,41 @@ module.exports = React.createClass({
                 this.forceUpdate();
                 break;
             case 'notifier_enabled':
+            case 'upload_failed':
+            case 'upload_started':
+            case 'upload_finished':
                 this.forceUpdate();
                 break;
             case 'call_state':
-                if (CallHandler.getCallForRoom(this.props.roomId)) {
+                // don't filter out payloads for room IDs other than props.room because
+                // we may be interested in the conf 1:1 room
+
+                if (!payload.room_id) {
+                    return;
+                }
+
+                var call = CallHandler.getCallForRoom(payload.room_id);
+                var callState;
+
+                if (call) {
                     // Call state has changed so we may be loading video elements
                     // which will obscure the message log.
                     // scroll to bottom
-                    var scrollNode = this._getScrollNode();
-                    if (scrollNode) {
-                        scrollNode.scrollTop = scrollNode.scrollHeight;
-                    }
+                    this.scrollToBottom();
+                    callState = call.call_state;
+                }
+                else {
+                    callState = "ended";
                 }
 
                 // possibly remove the conf call notification if we're now in
                 // the conf
                 this._updateConfCallNotification();
+
+                this.setState({
+                    callState: callState
+                });
+
                 break;
             case 'user_activity':
                 this.sendReadReceipt();
@@ -130,18 +173,10 @@ module.exports = React.createClass({
         }
     },
 
-    _getScrollNode: function() {
-        var panel = ReactDOM.findDOMNode(this.refs.messagePanel);
-        if (!panel) return null;
-
-        if (panel.classList.contains('gm-prevented')) {
-            return panel;
-        } else {
-            return panel.children[2]; // XXX: Fragile!
+    onSyncStateChange: function(state, prevState) {
+        if (state === "SYNCING" && prevState === "SYNCING") {
+            return;
         }
-    },
-
-    onSyncStateChange: function(state) {
         this.setState({
             syncState: state
         });
@@ -167,19 +202,11 @@ module.exports = React.createClass({
         if (this.state.joining) return;
         if (room.roomId != this.props.roomId) return;
 
-        var scrollNode = this._getScrollNode();
-        if (scrollNode) {
-            this.atBottom = (
-                scrollNode.scrollHeight - scrollNode.scrollTop <=
-                (scrollNode.clientHeight + 150) // 150?
-            );
-        }
-
         var currentUnread = this.state.numUnreadMessages;
         if (!toStartOfTimeline &&
                 (ev.getSender() !== MatrixClientPeg.get().credentials.userId)) {
             // update unread count when scrolled up
-            if (this.atBottom) {
+            if (!this.state.searchResults && this.refs.messagePanel && this.refs.messagePanel.isAtBottom()) {
                 currentUnread = 0;
             }
             else {
@@ -187,15 +214,10 @@ module.exports = React.createClass({
             }
         }
 
-
         this.setState({
             room: MatrixClientPeg.get().getRoom(this.props.roomId),
             numUnreadMessages: currentUnread
         });
-
-        if (toStartOfTimeline && !this.state.paginating) {
-            this.fillSpace();
-        }
     },
 
     onRoomName: function(room) {
@@ -217,6 +239,11 @@ module.exports = React.createClass({
     },
 
     onRoomStateMember: function(ev, state, member) {
+        if (member.roomId === this.props.roomId) {
+            // a member state changed in this room, refresh the tab complete list
+            this._updateTabCompleteList(this.state.room);
+        }
+
         if (!this.props.ConferenceHandler) {
             return;
         }
@@ -266,77 +293,113 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         if (this.refs.messagePanel) {
-            var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
-
-            messagePanel.addEventListener('drop', this.onDrop);
-            messagePanel.addEventListener('dragover', this.onDragOver);
-            messagePanel.addEventListener('dragleave', this.onDragLeaveOrEnd);
-            messagePanel.addEventListener('dragend', this.onDragLeaveOrEnd);
-
-            var messageWrapperScroll = this._getScrollNode();
-
-            messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
-
-            this.sendReadReceipt();
-
-            this.fillSpace();
+            this._initialiseMessagePanel();
         }
 
+        var call = CallHandler.getCallForRoom(this.props.roomId);
+        var callState = call ? call.call_state : "ended";
+        this.setState({
+            callState: callState
+        });
+
         this._updateConfCallNotification();
+
+        window.addEventListener('resize', this.onResize);
+        this.onResize();
+
+        this._updateTabCompleteList(this.state.room);
+    },
+
+    _updateTabCompleteList: function(room) {
+        if (!room || !this.tabComplete) {
+            return;
+        }
+        this.tabComplete.setCompletionList(
+            MemberEntry.fromMemberList(room.getJoinedMembers())
+        );
+    },
+
+    _initialiseMessagePanel: function() {
+        var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
+        this.refs.messagePanel.initialised = true;
+
+        messagePanel.addEventListener('drop', this.onDrop);
+        messagePanel.addEventListener('dragover', this.onDragOver);
+        messagePanel.addEventListener('dragleave', this.onDragLeaveOrEnd);
+        messagePanel.addEventListener('dragend', this.onDragLeaveOrEnd);
+
+        this.scrollToBottom();
+        this.sendReadReceipt();
+
+        this.refs.messagePanel.checkFillState();
     },
 
     componentDidUpdate: function() {
+        // we need to initialise the messagepanel if we've just joined the
+        // room. TODO: we really really ought to factor out messagepanel to a
+        // separate component to avoid this ridiculous dance.
         if (!this.refs.messagePanel) return;
 
-        var messageWrapperScroll = this._getScrollNode();
-
-        if (this.state.paginating && !this.waiting_for_paginate) {
-            var heightGained = messageWrapperScroll.scrollHeight - this.oldScrollHeight;
-            messageWrapperScroll.scrollTop += heightGained;
-            this.oldScrollHeight = undefined;
-            if (!this.fillSpace()) {
-                this.setState({paginating: false});
-            }
-        } else if (this.atBottom) {
-            messageWrapperScroll.scrollTop = messageWrapperScroll.scrollHeight;
-            if (this.state.numUnreadMessages !== 0) {
-                this.setState({numUnreadMessages: 0});
-            }
+        if (!this.refs.messagePanel.initialised) {
+            this._initialiseMessagePanel();
         }
     },
 
-    fillSpace: function() {
-        if (!this.refs.messagePanel) return;
-        if (this.state.searchResults) return; // TODO: paginate search results
-        var messageWrapperScroll = this._getScrollNode();
-        if (messageWrapperScroll.scrollTop < messageWrapperScroll.clientHeight && this.state.room.oldState.paginationToken) {
-            this.setState({paginating: true});
+    _paginateCompleted: function() {
+        if (DEBUG_SCROLL) console.log("paginate complete");
 
-            this.oldScrollHeight = messageWrapperScroll.scrollHeight;
+        this.setState({
+            room: MatrixClientPeg.get().getRoom(this.props.roomId)
+        });
 
-            if (this.state.messageCap < this.state.room.timeline.length) {
-                this.waiting_for_paginate = false;
-                var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
-                this.setState({messageCap: cap, paginating: true});
-            } else {
-                this.waiting_for_paginate = true;
-                var cap = this.state.messageCap + PAGINATE_SIZE;
-                this.setState({messageCap: cap, paginating: true});
-                var self = this;
-                MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(function() {
-                    self.waiting_for_paginate = false;
-                    if (self.isMounted()) {
-                        self.setState({
-                            room: MatrixClientPeg.get().getRoom(self.props.roomId)
-                        });
-                    }
-                    // wait and set paginating to false when the component updates
-                });
-            }
+        this.setState({paginating: false});
 
-            return true;
+        // we might not have got enough (or, indeed, any) results from the
+        // pagination request, so give the messagePanel a chance to set off
+        // another.
+
+        if (this.refs.messagePanel) {
+            this.refs.messagePanel.checkFillState();
         }
-        return false;
+    },
+
+    onSearchResultsFillRequest: function(backwards) {
+        if (!backwards || this.state.searchInProgress)
+            return;
+
+        if (this.nextSearchBatch) {
+            if (DEBUG_SCROLL) console.log("requesting more search results");
+            this._getSearchBatch(this.state.searchTerm,
+                                 this.state.searchScope);
+        } else {
+            if (DEBUG_SCROLL) console.log("no more search results");
+        }
+    },
+
+    // set off a pagination request.
+    onMessageListFillRequest: function(backwards) {
+        if (!backwards || this.state.paginating)
+            return;
+
+        // Either wind back the message cap (if there are enough events in the
+        // timeline to do so), or fire off a pagination request.
+
+        if (this.state.messageCap < this.state.room.timeline.length) {
+            var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
+            if (DEBUG_SCROLL) console.log("winding back message cap to", cap);
+            this.setState({messageCap: cap});
+        } else if(this.state.room.oldState.paginationToken) {
+            var cap = this.state.messageCap + PAGINATE_SIZE;
+            if (DEBUG_SCROLL) console.log("starting paginate to cap", cap);
+            this.setState({messageCap: cap, paginating: true});
+            MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(this._paginateCompleted).done();
+        }
+    },
+
+    // return true if there's more messages in the backlog which we aren't displaying
+    _canPaginate: function() {
+        return (this.state.messageCap < this.state.room.timeline.length) ||
+            this.state.room.oldState.paginationToken;
     },
 
     onResendAllClick: function() {
@@ -365,15 +428,10 @@ module.exports = React.createClass({
     },
 
     onMessageListScroll: function(ev) {
-        if (this.refs.messagePanel) {
-            var messageWrapperScroll = this._getScrollNode();
-            var wasAtBottom = this.atBottom;
-            this.atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight + 1;
-            if (this.atBottom && !wasAtBottom) {
-                this.forceUpdate(); // remove unread msg count
-            }
+        if (this.state.numUnreadMessages != 0 &&
+                this.refs.messagePanel.isAtBottom()) {
+            this.setState({numUnreadMessages: 0});
         }
-        if (!this.state.paginating) this.fillSpace();
     },
 
     onDragOver: function(ev) {
@@ -408,30 +466,10 @@ module.exports = React.createClass({
     },
 
     uploadFile: function(file) {
-        this.setState({
-            upload: {
-                fileName: file.name,
-                uploadedBytes: 0,
-                totalBytes: file.size
-            }
-        });
         var self = this;
         ContentMessages.sendContentToRoom(
             file, this.props.roomId, MatrixClientPeg.get()
-        ).progress(function(ev) {
-            //console.log("Upload: "+ev.loaded+" / "+ev.total);
-            self.setState({
-                upload: {
-                    fileName: file.name,
-                    uploadedBytes: ev.loaded,
-                    totalBytes: ev.total
-                }
-            });
-        }).finally(function() {
-            self.setState({
-                upload: undefined
-            });
-        }).done(undefined, function(error) {
+        ).done(undefined, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to upload file",
@@ -445,7 +483,95 @@ module.exports = React.createClass({
     },
 
     onSearch: function(term, scope) {
+        this.setState({
+            searchTerm: term,
+            searchScope: scope,
+            searchResults: [],
+            searchHighlights: [],
+            searchCount: null,
+            searchCanPaginate: null,
+        });
+
+        // if we already have a search panel, we need to tell it to forget
+        // about its scroll state.
+        if (this.refs.searchResultsPanel) {
+            this.refs.searchResultsPanel.resetScrollState();
+        }
+
+        this.nextSearchBatch = null;
+        this._getSearchBatch(term, scope);
+    },
+
+    // fire off a request for a batch of search results
+    _getSearchBatch: function(term, scope) {
+        this.setState({
+            searchInProgress: true,
+        });
+
+        // make sure that we don't end up merging results from
+        // different searches by keeping a unique id.
+        //
+        // todo: should cancel any previous search requests.
+        var searchId = this.searchId = new Date().getTime();
+
+        var self = this;
+
+        if (DEBUG_SCROLL) console.log("sending search request");
+        MatrixClientPeg.get().search({ body: this._getSearchCondition(term, scope),
+                                       next_batch: this.nextSearchBatch })
+        .then(function(data) {
+            if (DEBUG_SCROLL) console.log("search complete");
+            if (!self.state.searching || self.searchId != searchId) {
+                console.error("Discarding stale search results");
+                return;
+            }
+
+            var results = data.search_categories.room_events;
+
+            // postgres on synapse returns us precise details of the
+            // strings which actually got matched for highlighting.
+
+            // combine the highlight list with our existing list; build an object
+            // to avoid O(N^2) fail
+            var highlights = {};
+            results.highlights.forEach(function(hl) { highlights[hl] = 1; });
+            self.state.searchHighlights.forEach(function(hl) { highlights[hl] = 1; });
+
+            // turn it back into an ordered list. For overlapping highlights,
+            // favour longer (more specific) terms first
+            highlights = Object.keys(highlights).sort(function(a, b) { b.length - a.length });
+
+            // sqlite doesn't give us any highlights, so just try to highlight the literal search term
+            if (highlights.length == 0) {
+                highlights = [ term ];
+            }
+
+            // append the new results to our existing results
+            var events = self.state.searchResults.concat(results.results);
+
+            self.setState({
+                searchHighlights: highlights,
+                searchResults: events,
+                searchCount: results.count,
+                searchCanPaginate: !!(results.next_batch),
+            });
+            self.nextSearchBatch = results.next_batch;
+        }, function(error) {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Search failed",
+                description: error.toString()
+            });
+        }).finally(function() {
+            self.setState({
+                searchInProgress: false
+            });
+        }).done();
+    },
+
+    _getSearchCondition: function(term, scope) {
         var filter;
+
         if (scope === "Room") {
             filter = {
                 // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
@@ -455,163 +581,155 @@ module.exports = React.createClass({
             };
         }
 
-        var self = this;
-        MatrixClientPeg.get().search({
-            body: {
-                search_categories: {
-                    room_events: {
-                        search_term: term,
-                        filter: filter,
-                        order_by: "recent",
-                        include_state: true,
-                        groupings: {
-                            group_by: [
-                                {
-                                    key: "room_id"
-                                }
-                            ]
-                        },
-                        event_context: {
-                            before_limit: 1,
-                            after_limit: 1,
-                            include_profile: true,
-                        }
+        return {
+            search_categories: {
+                room_events: {
+                    search_term: term,
+                    filter: filter,
+                    order_by: "recent",
+                    event_context: {
+                        before_limit: 1,
+                        after_limit: 1,
+                        include_profile: true,
                     }
                 }
-            }            
-        }).then(function(data) {
-            // for debugging:
-            // data.search_categories.room_events.highlights = ["hello", "everybody"];
-
-            var highlights;
-            if (data.search_categories.room_events.highlights &&
-                data.search_categories.room_events.highlights.length > 0)
-            {
-                // postgres on synapse returns us precise details of the
-                // strings which actually got matched for highlighting.
-                // for overlapping highlights, favour longer (more specific) terms first
-                highlights = data.search_categories.room_events.highlights
-                             .sort(function(a, b) { b.length - a.length });
             }
-            else {
-                // sqlite doesn't, so just try to highlight the literal search term
-                highlights = [ term ];
+        }
+    },
+
+    getSearchResultTiles: function() {
+        var DateSeparator = sdk.getComponent('messages.DateSeparator');
+        var cli = MatrixClientPeg.get();
+
+        var ret = [];
+
+        var EventTile = sdk.getComponent('rooms.EventTile');
+
+        // XXX: todo: merge overlapping results somehow?
+        // XXX: why doesn't searching on name work?
+
+
+        if (this.state.searchCanPaginate === false) {
+            if (this.state.searchResults.length == 0) {
+                ret.push(<li key="search-top-marker">
+                         <h2 className="mx_RoomView_topMarker">No results</h2>
+                         </li>
+                        );
+            } else {
+                ret.push(<li key="search-top-marker">
+                         <h2 className="mx_RoomView_topMarker">No more results</h2>
+                         </li>
+                        );
+            }
+        }
+
+        var lastRoomId;
+
+        for (var i = this.state.searchResults.length - 1; i >= 0; i--) {
+            var result = this.state.searchResults[i];
+            var mxEv = new Matrix.MatrixEvent(result.result);
+
+            if (!EventTile.haveTileForEvent(mxEv)) {
+                // XXX: can this ever happen? It will make the result count
+                // not match the displayed count.
+                continue;
             }
 
-            self.setState({
-                highlights: highlights,
-                searchResults: data,
-                searchScope: scope,
-            });
-        }, function(error) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Search failed",
-                description: error.toString()
-            });
-        });
+            var eventId = mxEv.getId();
+
+            if (this.state.searchScope === 'All') {
+                var roomId = result.result.room_id;
+                if(roomId != lastRoomId) {
+                    ret.push(<li key={eventId + "-room"}><h1>Room: { cli.getRoom(roomId).name }</h1></li>);
+                    lastRoomId = roomId;
+                }
+            }
+
+            var ts1 = result.result.origin_server_ts;
+            ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); // Rank: {resultList[i].rank}
+
+            if (result.context.events_before[0]) {
+                var mxEv2 = new Matrix.MatrixEvent(result.context.events_before[0]);
+                if (EventTile.haveTileForEvent(mxEv2)) {
+                    ret.push(<li key={eventId+"-1"} data-scroll-token={eventId+"-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                }
+            }
+
+            ret.push(<li key={eventId+"+0"} data-scroll-token={eventId+"+0"}><EventTile mxEvent={mxEv} highlights={this.state.searchHighlights}/></li>);
+
+            if (result.context.events_after[0]) {
+                var mxEv2 = new Matrix.MatrixEvent(result.context.events_after[0]);
+                if (EventTile.haveTileForEvent(mxEv2)) {
+                    ret.push(<li key={eventId+"+1"} data-scroll-token={eventId+"+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
+                }
+            }
+        }
+        return ret;
     },
 
     getEventTiles: function() {
         var DateSeparator = sdk.getComponent('messages.DateSeparator');
-        var cli = MatrixClientPeg.get();
 
         var ret = [];
         var count = 0;
 
         var EventTile = sdk.getComponent('rooms.EventTile');
-        var self = this;
 
-        if (this.state.searchResults &&
-            this.state.searchResults.search_categories.room_events.results &&
-            this.state.searchResults.search_categories.room_events.groups)
-        {
-            // XXX: this dance is foul, due to the results API not directly returning sorted results
-            var results = this.state.searchResults.search_categories.room_events.results;
-            var roomIdGroups = this.state.searchResults.search_categories.room_events.groups.room_id;
 
-            Object.keys(roomIdGroups)
-                  .sort(function(a, b) { roomIdGroups[a].order - roomIdGroups[b].order }) // WHY NOT RETURN AN ORDERED ARRAY?!?!?!
-                  .forEach(function(roomId)
-            {
-                // XXX: todo: merge overlapping results somehow?
-                // XXX: why doesn't searching on name work?
-                if (self.state.searchScope === 'All') {
-                    ret.push(<li key={ roomId }><h1>Room: { cli.getRoom(roomId).name }</h1></li>);
-                }
-
-                var resultList = roomIdGroups[roomId].results.map(function(eventId) { return results[eventId]; });
-                for (var i = resultList.length - 1; i >= 0; i--) {
-                    var ts1 = resultList[i].result.origin_server_ts;
-                    ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); // Rank: {resultList[i].rank}
-                    var mxEv = new Matrix.MatrixEvent(resultList[i].result);
-                    if (resultList[i].context.events_before[0]) {
-                        var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_before[0]);
-                        if (EventTile.haveTileForEvent(mxEv2)) {
-                            ret.push(<li key={mxEv.getId() + "-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
-                        }
-                    }
-                    if (EventTile.haveTileForEvent(mxEv)) {
-                        ret.push(<li key={mxEv.getId() + "+0"}><EventTile mxEvent={mxEv} highlights={self.state.highlights}/></li>);
-                    }
-                    if (resultList[i].context.events_after[0]) {
-                        var mxEv2 = new Matrix.MatrixEvent(resultList[i].context.events_after[0]);
-                        if (EventTile.haveTileForEvent(mxEv2)) {
-                            ret.push(<li key={mxEv.getId() + "+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
-                        }
-                    }
-                }
-            });
-            return ret;
-        }
-
-        for (var i = this.state.room.timeline.length-1; i >= 0 && count < this.state.messageCap; --i) {
+        var prevEvent = null; // the last event we showed
+        var startIdx = Math.max(0, this.state.room.timeline.length - this.state.messageCap);
+        for (var i = startIdx; i < this.state.room.timeline.length; i++) {
             var mxEv = this.state.room.timeline[i];
 
             if (!EventTile.haveTileForEvent(mxEv)) {
                 continue;
             }
-
-            var continuation = false;
-            var last = false;
-            var dateSeparator = null;
-            if (i == this.state.room.timeline.length - 1) {
-                last = true;
+            if (this.props.ConferenceHandler && mxEv.getType() === "m.room.member") {
+                if (this.props.ConferenceHandler.isConferenceUser(mxEv.getSender()) ||
+                        this.props.ConferenceHandler.isConferenceUser(mxEv.getStateKey())) {
+                    continue; // suppress conf user join/parts
+                }
             }
-            if (i > 0 && count < this.state.messageCap - 1) {
-                if (this.state.room.timeline[i].sender &&
-                    this.state.room.timeline[i - 1].sender &&
-                    (this.state.room.timeline[i].sender.userId ===
-                        this.state.room.timeline[i - 1].sender.userId) &&
-                    (this.state.room.timeline[i].getType() ==
-                        this.state.room.timeline[i - 1].getType())
+
+            // is this a continuation of the previous message?
+            var continuation = false;
+            if (prevEvent !== null) {
+                if (mxEv.sender &&
+                    prevEvent.sender &&
+                    (mxEv.sender.userId === prevEvent.sender.userId) &&
+                    (mxEv.getType() == prevEvent.getType())
                     )
                 {
                     continuation = true;
                 }
-
-                var ts0 = this.state.room.timeline[i - 1].getTs();
-                var ts1 = this.state.room.timeline[i].getTs();
-                if (new Date(ts0).toDateString() !== new Date(ts1).toDateString()) {
-                    dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
-                    continuation = false;
-                }
             }
 
-            if (i === 1) { // n.b. 1, not 0, as the 0th event is an m.room.create and so doesn't show on the timeline
-                var ts1 = this.state.room.timeline[i].getTs();
-                dateSeparator = <li key={ts1}><DateSeparator ts={ts1}/></li>;
+            // do we need a date separator since the last event?
+            var ts1 = mxEv.getTs();
+            if ((prevEvent == null && !this._canPaginate()) ||
+                (prevEvent != null &&
+                 new Date(prevEvent.getTs()).toDateString() !== new Date(ts1).toDateString())) {
+                var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
+                ret.push(dateSeparator);
                 continuation = false;
             }
 
-            ret.unshift(
-                <li key={mxEv.getId()} ref={this._collectEventNode.bind(this, mxEv.getId())}><EventTile mxEvent={mxEv} continuation={continuation} last={last}/></li>
-            );
-            if (dateSeparator) {
-                ret.unshift(dateSeparator);
+            var last = false;
+            if (i == this.state.room.timeline.length - 1) {
+                // XXX: we might not show a tile for the last event.
+                last = true;
             }
-            ++count;
+
+            var eventId = mxEv.getId();
+            ret.push(
+                <li key={eventId} ref={this._collectEventNode.bind(this, eventId)} data-scroll-token={eventId}>
+                    <EventTile mxEvent={mxEv} continuation={continuation} last={last}/>
+                </li>
+            );
+
+            prevEvent = mxEv;
         }
+
         return ret;
     },
 
@@ -781,7 +899,27 @@ module.exports = React.createClass({
     },
 
     onCancelClick: function() {
-        this.setState(this.getInitialState());
+        this.setState({editingRoomSettings: false});
+    },
+
+    onLeaveClick: function() {
+        dis.dispatch({
+            action: 'leave_room',
+            room_id: this.props.roomId,
+        });
+    },
+
+    onForgetClick: function() {
+        MatrixClientPeg.get().forget(this.props.roomId).done(function() {
+            dis.dispatch({ action: 'view_next_room' });
+        }, function(err) {
+            var errCode = err.errcode || "unknown error code";
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: `Failed to forget room (${errCode})`
+            });
+        });
     },
 
     onRejectButtonClicked: function(ev) {
@@ -807,6 +945,13 @@ module.exports = React.createClass({
         this.setState({ searching: true });
     },
 
+    onCancelSearchClick: function () {
+        this.setState({
+            searching: false,
+            searchResults: null,
+        });
+    },
+
     onConferenceNotificationClick: function() {
         dis.dispatch({
             action: 'place_call',
@@ -823,9 +968,129 @@ module.exports = React.createClass({
     },
 
     scrollToBottom: function() {
-        var scrollNode = this._getScrollNode();
-        if (!scrollNode) return;
-        scrollNode.scrollTop = scrollNode.scrollHeight;
+        var messagePanel = this.refs.messagePanel;
+        if (!messagePanel) return;
+        messagePanel.scrollToBottom();
+    },
+
+    // scroll the event view to put the given event at the bottom.
+    //
+    // pixel_offset gives the number of pixels between the bottom of the event
+    // and the bottom of the container.
+    scrollToEvent: function(eventId, pixelOffset) {
+        var messagePanel = this.refs.messagePanel;
+        if (!messagePanel) return;
+
+        var idx = this._indexForEventId(eventId);
+        if (idx === null) {
+            // we don't seem to have this event in our timeline. Presumably
+            // it's fallen out of scrollback. We ought to backfill until we
+            // find it, but we'd have to be careful we didn't backfill forever
+            // looking for a non-existent event.
+            //
+            // for now, just scroll to the top of the buffer.
+            console.log("Refusing to scroll to unknown event "+eventId);
+            messagePanel.scrollToTop();
+            return;
+        }
+
+        // we might need to roll back the messagecap (to generate tiles for
+        // older messages). This just means telling getEventTiles to create
+        // tiles for events we already have in our timeline (we already know
+        // the event in question is in our timeline, so we shouldn't need to
+        // backfill).
+        //
+        // we actually wind back slightly further than the event in question,
+        // because we want the event to be at the *bottom* of the container.
+        // Don't roll it back past the timeline we have, though.
+        var minCap = this.state.room.timeline.length - Math.min(idx - INITIAL_SIZE, 0);
+        if (minCap > this.state.messageCap) {
+            this.setState({messageCap: minCap});
+        }
+
+        // the scrollTokens on our DOM nodes are the event IDs, so we can pass
+        // eventId directly into _scrollToToken.
+        messagePanel.scrollToToken(eventId, pixelOffset);
+    },
+
+    // get the current scroll position of the room, so that it can be
+    // restored when we switch back to it
+    getScrollState: function() {
+        var messagePanel = this.refs.messagePanel;
+        if (!messagePanel) return null;
+
+        return messagePanel.getScrollState();
+    },
+
+    restoreScrollState: function(scrollState) {
+        var messagePanel = this.refs.messagePanel;
+        if (!messagePanel) return null;
+
+        if(scrollState.atBottom) {
+            // we were at the bottom before. Ideally we'd scroll to the
+            // 'read-up-to' mark here.
+            messagePanel.scrollToBottom();
+
+        } else if (scrollState.lastDisplayedScrollToken) {
+            // we might need to backfill, so we call scrollToEvent rather than
+            // scrollToToken here. The scrollTokens on our DOM nodes are the
+            // event IDs, so lastDisplayedScrollToken will be the event ID we need,
+            // and we can pass it directly into scrollToEvent.
+            this.scrollToEvent(scrollState.lastDisplayedScrollToken,
+                               scrollState.pixelOffset);
+        }
+    },
+
+    onResize: function(e) {
+        // It seems flexbox doesn't give us a way to constrain the auxPanel height to have
+        // a minimum of the height of the video element, whilst also capping it from pushing out the page
+        // so we have to do it via JS instead.  In this implementation we cap the height by putting
+        // a maxHeight on the underlying remote video tag.
+        var auxPanelMaxHeight;
+        if (this.refs.callView) {
+            // XXX: don't understand why we have to call findDOMNode here in react 0.14 - it should already be a DOM node.
+            var video = ReactDOM.findDOMNode(this.refs.callView.refs.video.refs.remote);
+
+            // header + footer + status + give us at least 100px of scrollback at all times.
+            auxPanelMaxHeight = window.innerHeight - (83 + 72 + 36 + 100);
+
+            // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
+            // but it's better than the video going missing entirely
+            if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
+
+            video.style.maxHeight = auxPanelMaxHeight + "px";
+        }
+    },
+
+    onFullscreenClick: function() {
+        dis.dispatch({
+            action: 'video_fullscreen',
+            fullscreen: true
+        }, true);
+    },
+
+    onMuteAudioClick: function() {
+        var call = CallHandler.getCallForRoom(this.props.roomId);
+        if (!call) {
+            return;
+        }
+        var newState = !call.isMicrophoneMuted();
+        call.setMicrophoneMuted(newState);
+        this.setState({
+            audioMuted: newState
+        });
+    },
+
+    onMuteVideoClick: function() {
+        var call = CallHandler.getCallForRoom(this.props.roomId);
+        if (!call) {
+            return;
+        }
+        var newState = !call.isLocalVideoMuted();
+        call.setLocalVideoMuted(newState);
+        this.setState({
+            videoMuted: newState
+        });
     },
 
     render: function() {
@@ -834,6 +1099,7 @@ module.exports = React.createClass({
         var CallView = sdk.getComponent("voip.CallView");
         var RoomSettings = sdk.getComponent("rooms.RoomSettings");
         var SearchBar = sdk.getComponent("rooms.SearchBar");
+        var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
 
         if (!this.state.room) {
             if (this.props.roomId) {
@@ -850,7 +1116,8 @@ module.exports = React.createClass({
         }
 
         var myUserId = MatrixClientPeg.get().credentials.userId;
-        if (this.state.room.currentState.members[myUserId].membership == 'invite') {
+        var myMember = this.state.room.getMember(myUserId);
+        if (myMember && myMember.membership == 'invite') {
             if (this.state.joining || this.state.rejecting) {
                 var Loader = sdk.getComponent("elements.Spinner");
                 return (
@@ -859,7 +1126,8 @@ module.exports = React.createClass({
                     </div>
                 );
             } else {
-                var inviteEvent = this.state.room.currentState.members[myUserId].events.member.event;
+                var inviteEvent = myMember.events.member;
+                var inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
                 // XXX: Leaving this intentionally basic for now because invites are about to change totally
                 var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
                 var rejectErrorText = this.state.rejectError ? "Failed to reject invite!" : "";
@@ -867,7 +1135,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomView">
                         <RoomHeader ref="header" room={this.state.room} simpleHeader="Room invite"/>
                         <div className="mx_RoomView_invitePrompt">
-                            <div>{inviteEvent.user_id} has invited you to a room</div>
+                            <div>{inviterName} has invited you to a room</div>
                             <br/>
                             <button ref="joinButton" onClick={this.onJoinButtonClicked}>Join</button>
                             <button onClick={this.onRejectButtonClicked}>Reject</button>
@@ -883,9 +1151,7 @@ module.exports = React.createClass({
                 loading: this.state.paginating
             });
 
-            var statusBar = (
-                <div />
-            );
+            var statusBar;
 
             // for testing UI...
             // this.state.upload = {
@@ -894,31 +1160,12 @@ module.exports = React.createClass({
             //     fileName: "testing_fooble.jpg",
             // }
 
-            if (this.state.upload) {
-                var innerProgressStyle = {
-                    width: ((this.state.upload.uploadedBytes / this.state.upload.totalBytes) * 100) + '%'
-                };
-                var uploadedSize = filesize(this.state.upload.uploadedBytes);
-                var totalSize = filesize(this.state.upload.totalBytes);
-                if (uploadedSize.replace(/^.* /,'') === totalSize.replace(/^.* /,'')) {
-                    uploadedSize = uploadedSize.replace(/ .*/, '');
-                }
-                statusBar = (
-                    <div className="mx_RoomView_uploadBar">
-                        <div className="mx_RoomView_uploadProgressOuter">
-                            <div className="mx_RoomView_uploadProgressInner" style={innerProgressStyle}></div>
-                        </div>
-                        <img className="mx_RoomView_uploadIcon" src="img/fileicon.png" width="17" height="22"/>
-                        <img className="mx_RoomView_uploadCancel" src="img/cancel.png" width="18" height="18"/>
-                        <div className="mx_RoomView_uploadBytes">
-                            { uploadedSize } / { totalSize }
-                        </div>
-                        <div className="mx_RoomView_uploadFilename">Uploading {this.state.upload.fileName}</div>
-                    </div>
-                );
-            } else {
+            if (ContentMessages.getCurrentUploads().length > 0) {
+                var UploadBar = sdk.getComponent('structures.UploadBar');
+                statusBar = <UploadBar room={this.state.room} />
+            } else if (!this.state.searchResults) {
                 var typingString = this.getWhoIsTypingString();
-                //typingString = "Testing typing...";
+                // typingString = "S͚͍̭̪̤͙̱͙̖̥͙̥̤̻̙͕͓͂̌ͬ͐̂k̜̝͎̰̥̻̼̂̌͛͗͊̅̒͂̊̍̍͌̈̈́͌̋̊ͬa͉̯͚̺̗̳̩ͪ̋̑͌̓̆̍̂̉̏̅̆ͧ̌̑v̲̲̪̝ͥ̌ͨͮͭ̊͆̾ͮ̍ͮ͑̚e̮̙͈̱̘͕̼̮͒ͩͨͫ̃͗̇ͩ͒ͣͦ͒̄̍͐ͣ̿ͥṘ̗̺͇̺̺͔̄́̊̓͊̍̃ͨ̚ā̼͎̘̟̼͎̜̪̪͚̋ͨͨͧ̓ͦͯͤ̄͆̋͂ͩ͌ͧͅt̙̙̹̗̦͖̞ͫͪ͑̑̅ͪ̃̚ͅ is typing...";
                 var unreadMsgs = this.getUnreadMessagesString();
                 // no conn bar trumps unread count since you can't get unread messages
                 // without a connection! (technically may already have some but meh)
@@ -927,7 +1174,7 @@ module.exports = React.createClass({
                 if (this.state.syncState === "ERROR") {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning2.png" width="30" height="30" alt="/!\ "/>
+                            <img src="img/warning.svg" width="24" height="23" alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Connectivity to the server has been lost.
@@ -939,10 +1186,25 @@ module.exports = React.createClass({
                         </div>
                     );
                 }
+                else if (this.tabComplete.isTabCompleting()) {
+                    var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
+                    statusBar = (
+                        <div className="mx_RoomView_tabCompleteBar">
+                            <div className="mx_RoomView_tabCompleteImage">...</div>
+                            <div className="mx_RoomView_tabCompleteWrapper">
+                                <TabCompleteBar entries={this.tabComplete.peek(6)} />
+                                <div className="mx_RoomView_tabCompleteEol">
+                                    <img src="img/eol.svg" width="22" height="16" alt="->|"/>
+                                    Auto-complete
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
                 else if (this.state.hasUnsentMessages) {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning2.png" width="30" height="30" alt="/!\ "/>
+                            <img src="img/warning.svg" width="24" height="23" alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Some of your messages have not been sent.
@@ -971,7 +1233,7 @@ module.exports = React.createClass({
                     statusBar = (
                         <div className="mx_RoomView_typingBar">
                             <div className="mx_RoomView_typingImage">...</div>
-                            {typingString}
+                            <span className="mx_RoomView_typingText">{typingString}</span>
                         </div>
                     );
                 }
@@ -986,7 +1248,7 @@ module.exports = React.createClass({
                 aux = <Loader/>;
             }
             else if (this.state.searching) {
-                aux = <SearchBar ref="search_bar" onCancelClick={this.onCancelClick} onSearch={this.onSearch}/>;
+                aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
             }
 
             var conferenceCallNotification = null;
@@ -1006,41 +1268,129 @@ module.exports = React.createClass({
             if (this.state.draggingFile) {
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
                                     <div className="mx_RoomView_fileDropTargetLabel">
-                                        <img src="img/upload-big.png" width="43" height="57" alt="Drop File Here"/><br/>
+                                        <img src="img/upload-big.svg" width="45" height="59" alt="Drop File Here"/><br/>
                                         Drop File Here
                                     </div>
                                  </div>;
             }
 
-            var messageComposer;
-            if (!this.state.searchResults) {
+            var messageComposer, searchInfo;
+            var canSpeak = (
+                // joined and not showing search results
+                myMember && (myMember.membership == 'join') && !this.state.searchResults
+            );
+            if (canSpeak) {
                 messageComposer =
-                    <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} />
+                    <MessageComposer
+                        room={this.state.room} roomView={this} uploadFile={this.uploadFile}
+                        callState={this.state.callState} tabComplete={this.tabComplete} />
             }
 
+            // TODO: Why aren't we storing the term/scope/count in this format
+            // in this.state if this is what RoomHeader desires?
+            if (this.state.searchResults) {
+                searchInfo = {
+                    searchTerm : this.state.searchTerm,
+                    searchScope : this.state.searchScope,
+                    searchCount : this.state.searchCount,
+                };
+            }
+
+            var call = CallHandler.getCallForRoom(this.props.roomId);
+            //var call = CallHandler.getAnyActiveCall();
+            var inCall = false;
+            if (call && (this.state.callState !== 'ended' && this.state.callState !== 'ringing')) {
+                inCall = true;
+                var zoomButton, voiceMuteButton, videoMuteButton;
+
+                if (call.type === "video") {
+                    zoomButton = (
+                        <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick}>
+                            <img src="img/fullscreen.svg" title="Fill screen" alt="Fill screen" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
+                        </div>
+                    );
+
+                    videoMuteButton =
+                        <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
+                            <img src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"} width="31" height="27"/>
+                        </div>
+                }
+                voiceMuteButton =
+                    <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
+                        <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"} width="21" height="26"/>
+                    </div>
+
+                if (!statusBar) {
+                    statusBar =
+                        <div className="mx_RoomView_callBar">
+                            <img src="img/sound-indicator.svg" width="23" height="20" alt=""/>
+                            <b>Active call</b>
+                        </div>;
+                }
+
+                statusBar =
+                    <div className="mx_RoomView_callStatusBar">
+                        { voiceMuteButton }
+                        { videoMuteButton }
+                        { zoomButton }
+                        { statusBar }
+                        <img className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17"/>
+                    </div>
+            }
+
+
+            // if we have search results, we keep the messagepanel (so that it preserves its
+            // scroll state), but hide it.
+            var searchResultsPanel;
+            var hideMessagePanel = false;
+
+            if (this.state.searchResults) {
+                searchResultsPanel = (
+                    <ScrollPanel ref="searchResultsPanel" className="mx_RoomView_messagePanel"
+                            onFillRequest={ this.onSearchResultsFillRequest }>
+                        <li className={scrollheader_classes}></li>
+                        {this.getSearchResultTiles()}
+                    </ScrollPanel>
+                );
+                hideMessagePanel = true;
+            }
+
+            var messagePanel = (
+                    <ScrollPanel ref="messagePanel" className="mx_RoomView_messagePanel"
+                            onScroll={ this.onMessageListScroll } 
+                            onFillRequest={ this.onMessageListFillRequest }
+                            style={ hideMessagePanel ? { display: 'none' } : {} } >
+                        <li className={scrollheader_classes}></li>
+                        {this.getEventTiles()}
+                    </ScrollPanel>
+            );
+
             return (
-                <div className="mx_RoomView">
-                    <RoomHeader ref="header" room={this.state.room} editing={this.state.editingRoomSettings} onSearchClick={this.onSearchClick}
-                        onSettingsClick={this.onSettingsClick} onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} />
+                <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") }>
+                    <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
+                        editing={this.state.editingRoomSettings}
+                        onSearchClick={this.onSearchClick}
+                        onSettingsClick={this.onSettingsClick}
+                        onSaveClick={this.onSaveClick}
+                        onCancelClick={this.onCancelClick}
+                        onForgetClick={
+                            (myMember && myMember.membership === "leave") ? this.onForgetClick : null
+                        }
+                        onLeaveClick={
+                            (myMember && myMember.membership === "join") ? this.onLeaveClick : null
+                        } />
+                    { fileDropTarget }    
                     <div className="mx_RoomView_auxPanel">
-                        <CallView room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>
+                        <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>
                         { conferenceCallNotification }
                         { aux }
                     </div>
-                    <GeminiScrollbar autoshow={true} ref="messagePanel" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
-                        <div className="mx_RoomView_messageListWrapper">
-                            { fileDropTarget }    
-                            <ol className="mx_RoomView_MessageList" aria-live="polite">
-                                <li className={scrollheader_classes}>
-                                </li>
-                                {this.getEventTiles()}
-                            </ol>
-                        </div>
-                    </GeminiScrollbar>
+                    { messagePanel }
+                    { searchResultsPanel }
                     <div className="mx_RoomView_statusArea">
                         <div className="mx_RoomView_statusAreaBox">
                             <div className="mx_RoomView_statusAreaBox_line"></div>
-                            { this.state.searchResults ? null : statusBar }
+                            { statusBar }
                         </div>
                     </div>
                     { messageComposer }

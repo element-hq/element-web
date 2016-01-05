@@ -48,8 +48,15 @@ var sanitizeHtmlParams = {
     },
 };
 
-module.exports = {
-    _applyHighlights: function(safeSnippet, highlights, html, k) {
+class Highlighter {
+    constructor(html, highlightClass, onHighlightClick) {
+        this.html = html;
+        this.highlightClass = highlightClass;
+        this.onHighlightClick = onHighlightClick;
+        this._key = 0;
+    }
+
+    applyHighlights(safeSnippet, highlights) {
         var lastOffset = 0;
         var offset;
         var nodes = [];
@@ -61,77 +68,97 @@ module.exports = {
         // If and when this happens, we'll probably have to split his method in two between
         // HTML and plain-text highlighting.
 
-        var safeHighlight = html ? sanitizeHtml(highlights[0], sanitizeHtmlParams) : highlights[0];
-        while ((offset = safeSnippet.indexOf(safeHighlight, lastOffset)) >= 0) {
+        var safeHighlight = this.html ? sanitizeHtml(highlights[0], sanitizeHtmlParams) : highlights[0];
+        while ((offset = safeSnippet.toLowerCase().indexOf(safeHighlight.toLowerCase(), lastOffset)) >= 0) {
             // handle preamble
             if (offset > lastOffset) {
-                nodes = nodes.concat(this._applySubHighlightsInRange(safeSnippet, lastOffset, offset, highlights, html, k));
-                k += nodes.length;
+                var subSnippet = safeSnippet.substring(lastOffset, offset);
+                nodes = nodes.concat(this._applySubHighlights(subSnippet, highlights));
             }
 
             // do highlight
-            if (html) {
-                nodes.push(<span key={ k++ } dangerouslySetInnerHTML={{ __html: safeHighlight }} className="mx_MessageTile_searchHighlight" />);
-            }
-            else {
-                nodes.push(<span key={ k++ } className="mx_MessageTile_searchHighlight">{ safeHighlight }</span>);
-            }
+            nodes.push(this._createSpan(safeHighlight, true));
 
             lastOffset = offset + safeHighlight.length;
         }
 
         // handle postamble
         if (lastOffset != safeSnippet.length) {
-            nodes = nodes.concat(this._applySubHighlightsInRange(safeSnippet, lastOffset, undefined, highlights, html, k));
-            k += nodes.length;
+            var subSnippet = safeSnippet.substring(lastOffset, undefined);
+            nodes = nodes.concat(this._applySubHighlights(subSnippet, highlights));
         }
         return nodes;
-    },
+    }
 
-    _applySubHighlightsInRange: function(safeSnippet, lastOffset, offset, highlights, html, k) {
-        var nodes = [];
+    _applySubHighlights(safeSnippet, highlights) {
         if (highlights[1]) {
             // recurse into this range to check for the next set of highlight matches
-            var subnodes = this._applyHighlights( safeSnippet.substring(lastOffset, offset), highlights.slice(1), html, k );
-            nodes = nodes.concat(subnodes);
-            k += subnodes.length;
+            return this.applyHighlights(safeSnippet, highlights.slice(1));
         }
         else {
             // no more highlights to be found, just return the unhighlighted string
-            if (html) {
-                nodes.push(<span key={ k++ } dangerouslySetInnerHTML={{ __html: safeSnippet.substring(lastOffset, offset) }} />);
-            }
-            else {
-                nodes.push(<span key={ k++ }>{ safeSnippet.substring(lastOffset, offset) }</span>);
-            }
+            return [this._createSpan(safeSnippet, false)];
         }
-        return nodes;
-    },    
+    }
 
-    bodyToHtml: function(content, highlights) {
-        var originalBody = content.body;
-        var body;
-        var k = 0;
+    /* create a <span> node to hold the given content
+     *
+     * spanBody: content of the span. If html, must have been sanitised
+     * highlight: true to highlight as a search match
+     */
+    _createSpan(spanBody, highlight) {
+        var spanProps = {
+            key: this._key++,
+        };
 
-        if (highlights && highlights.length > 0) {
-            var bodyList = [];
+        if (highlight) {
+            spanProps.onClick = this.onHighlightClick;
+            spanProps.className = this.highlightClass;
+        }
 
-            if (content.format === "org.matrix.custom.html") {
-                var safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
-                bodyList = this._applyHighlights(safeBody, highlights, true, k);
-            }
-            else {
-                bodyList = this._applyHighlights(originalBody, highlights, true, k);
-            }
-            body = bodyList;
+        if (this.html) {
+            return (<span {...spanProps} dangerouslySetInnerHTML={{ __html: spanBody }} />);
         }
         else {
-            if (content.format === "org.matrix.custom.html") {
-                var safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
+            return (<span {...spanProps}>{ spanBody }</span>);
+        }
+    }
+}
+
+
+module.exports = {
+    /* turn a matrix event body into html
+     *
+     * content: 'content' of the MatrixEvent
+     *
+     * highlights: optional list of words to highlight
+     *
+     * opts.onHighlightClick: optional callback function to be called when a
+     *     highlighted word is clicked
+     */
+    bodyToHtml: function(content, highlights, opts) {
+        opts = opts || {};
+
+        var isHtml = (content.format === "org.matrix.custom.html");
+
+        var safeBody;
+        if (isHtml) {
+            safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
+        } else {
+            safeBody = content.body;
+        }
+
+        var body;
+        if (highlights && highlights.length > 0) {
+            var highlighter = new Highlighter(isHtml, "mx_EventTile_searchHighlight", opts.onHighlightClick);
+            body = highlighter.applyHighlights(safeBody, highlights);
+        }
+        else {
+            if (isHtml) {
                 body = <span className="markdown-body" dangerouslySetInnerHTML={{ __html: safeBody }} />;
             }
             else {
-                body = originalBody;
+                body = safeBody;
             }
         }
 

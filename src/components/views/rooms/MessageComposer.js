@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require("react");
+
 var marked = require("marked");
 marked.setOptions({
     renderer: new marked.Renderer(),
@@ -25,9 +26,12 @@ marked.setOptions({
     smartLists: true,
     smartypants: false
 });
+
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
+var CallHandler = require('../../../CallHandler');
+var MemberEntry = require("../../../TabCompleteEntries").MemberEntry;
 var sdk = require('../../../index');
 
 var dis = require("../../../dispatcher");
@@ -61,14 +65,13 @@ function mdownToHtml(mdown) {
 module.exports = React.createClass({
     displayName: 'MessageComposer',
 
+    propTypes: {
+        tabComplete: React.PropTypes.any
+    },
+
     componentWillMount: function() {
         this.oldScrollHeight = 0;
         this.markdownEnabled = MARKDOWN_ENABLED;
-        this.tabStruct = {
-            completing: false,
-            original: null,
-            index: 0
-        };
         var self = this;
         this.sentHistory = {
             // The list of typed messages. Index 0 is more recent
@@ -169,6 +172,9 @@ module.exports = React.createClass({
             this.props.room.roomId
         );
         this.resizeInput();
+        if (this.props.tabComplete) {
+            this.props.tabComplete.setTextArea(this.refs.textarea);
+        }
     },
 
     componentWillUnmount: function() {
@@ -194,13 +200,6 @@ module.exports = React.createClass({
             this.sentHistory.push(input);
             this.onEnter(ev);
         }
-        else if (ev.keyCode === KeyCode.TAB) {
-            var members = [];
-            if (this.props.room) {
-                members = this.props.room.getJoinedMembers();
-            }
-            this.onTab(ev, members);
-        }
         else if (ev.keyCode === KeyCode.UP) {
             var input = this.refs.textarea.value;
             var offset = this.refs.textarea.selectionStart || 0;
@@ -219,10 +218,9 @@ module.exports = React.createClass({
                 this.resizeInput();
             }
         }
-        else if (ev.keyCode !== KeyCode.SHIFT && this.tabStruct.completing) {
-            // they're resuming typing; reset tab complete state vars.
-            this.tabStruct.completing = false;
-            this.tabStruct.index = 0;
+
+        if (this.props.tabComplete) {
+            this.props.tabComplete.onKeyDown(ev);
         }
 
         var self = this;
@@ -316,6 +314,9 @@ module.exports = React.createClass({
         if (isEmote) {
             contentText = contentText.substring(4);
         }
+        else if (contentText[0] === '/') {
+            contentText = contentText.substring(1);   
+        }
 
         var htmlText;
         if (this.markdownEnabled && (htmlText = mdownToHtml(contentText)) !== contentText) {
@@ -340,104 +341,6 @@ module.exports = React.createClass({
         });
         this.refs.textarea.value = '';
         this.resizeInput();
-        ev.preventDefault();
-    },
-
-    onTab: function(ev, sortedMembers) {
-        var textArea = this.refs.textarea;
-        if (!this.tabStruct.completing) {
-            this.tabStruct.completing = true;
-            this.tabStruct.index = 0;
-            // cache starting text
-            this.tabStruct.original = textArea.value;
-        }
-
-        // loop in the right direction
-        if (ev.shiftKey) {
-            this.tabStruct.index --;
-            if (this.tabStruct.index < 0) {
-                // wrap to the last search match, and fix up to a real index
-                // value after we've matched.
-                this.tabStruct.index = Number.MAX_VALUE;
-            }
-        }
-        else {
-            this.tabStruct.index++;
-        }
-
-        var searchIndex = 0;
-        var targetIndex = this.tabStruct.index;
-        var text = this.tabStruct.original;
-
-        var search = /@?([a-zA-Z0-9_\-:\.]+)$/.exec(text);
-        // console.log("Searched in '%s' - got %s", text, search);
-        if (targetIndex === 0) { // 0 is always the original text
-            textArea.value = text;
-        }
-        else if (search && search[1]) {
-            // console.log("search found: " + search+" from "+text);
-            var expansion;
-
-            // FIXME: could do better than linear search here
-            for (var i=0; i<sortedMembers.length; i++) {
-                var member = sortedMembers[i];
-                if (member.name && searchIndex < targetIndex) {
-                    if (member.name.toLowerCase().indexOf(search[1].toLowerCase()) === 0) {
-                        expansion = member.name;
-                        searchIndex++;
-                    }
-                }
-            }
-
-            if (searchIndex < targetIndex) { // then search raw mxids
-                for (var i=0; i<sortedMembers.length; i++) {
-                    if (searchIndex >= targetIndex) {
-                        break;
-                    }
-                    var userId = sortedMembers[i].userId;
-                    // === 1 because mxids are @username
-                    if (userId.toLowerCase().indexOf(search[1].toLowerCase()) === 1) {
-                        expansion = userId;
-                        searchIndex++;
-                    }
-                }
-            }
-
-            if (searchIndex === targetIndex ||
-                    targetIndex === Number.MAX_VALUE) {
-                // xchat-style tab complete, add a colon if tab
-                // completing at the start of the text
-                if (search[0].length === text.length) {
-                    expansion += ": ";
-                }
-                else {
-                    expansion += " ";
-                }
-                textArea.value = text.replace(
-                    /@?([a-zA-Z0-9_\-:\.]+)$/, expansion
-                );
-                // cancel blink
-                textArea.style["background-color"] = "";
-                if (targetIndex === Number.MAX_VALUE) {
-                    // wrap the index around to the last index found
-                    this.tabStruct.index = searchIndex;
-                    targetIndex = searchIndex;
-                }
-            }
-            else {
-                // console.log("wrapped!");
-                textArea.style["background-color"] = "#faa";
-                setTimeout(function() {
-                     textArea.style["background-color"] = "";
-                }, 150);
-                textArea.value = text;
-                this.tabStruct.index = 0;
-            }
-        }
-        else {
-            this.tabStruct.index = 0;
-        }
-        // prevent the default TAB operation (typically focus shifting)
         ev.preventDefault();
     },
 
@@ -524,6 +427,20 @@ module.exports = React.createClass({
         this.refs.uploadInput.value = null;
     },
 
+    onHangupClick: function() {
+        var call = CallHandler.getCallForRoom(this.props.room.roomId);
+        //var call = CallHandler.getAnyActiveCall();
+        if (!call) {
+            return;
+        }
+        dis.dispatch({
+            action: 'hangup',
+            // hangup the call for this room, which may not be the room in props
+            // (e.g. conferences which will hangup the 1:1 room instead)
+            room_id: call.roomId
+        });
+    },
+
     onCallClick: function(ev) {
         dis.dispatch({
             action: 'place_call',
@@ -544,6 +461,27 @@ module.exports = React.createClass({
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+
+        var callButton, videoCallButton, hangupButton;
+        var call = CallHandler.getCallForRoom(this.props.room.roomId);
+        //var call = CallHandler.getAnyActiveCall();
+        if (this.props.callState && this.props.callState !== 'ended') {
+            hangupButton =
+                <div className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
+                    <img src="img/hangup.svg" alt="Hangup" title="Hangup" width="25" height="26"/>
+                </div>;
+        }
+        else {
+            callButton =
+                <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick}>
+                    <img src="img/voice.svg" alt="Voice call" title="Voice call" width="16" height="26"/>
+                </div>
+            videoCallButton =
+                <div className="mx_MessageComposer_videocall" onClick={this.onCallClick}>
+                    <img src="img/call.svg" alt="Video call" title="Video call" width="30" height="22"/>
+                </div>
+        }
+
         return (
         <div className="mx_MessageComposer">
             <div className="mx_MessageComposer_wrapper">
@@ -555,15 +493,12 @@ module.exports = React.createClass({
                         <textarea ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
                     </div>
                     <div className="mx_MessageComposer_upload" onClick={this.onUploadClick}>
-                        <img src="img/upload.png" alt="Upload file" title="Upload file" width="17" height="22"/>
+                        <img src="img/upload.svg" alt="Upload file" title="Upload file" width="19" height="24"/>
                         <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
                     </div>
-                    <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick}>
-                        <img src="img/voice.png" alt="Voice call" title="Voice call" width="16" height="26"/>
-                    </div>
-                    <div className="mx_MessageComposer_videocall" onClick={this.onCallClick}>
-                        <img src="img/call.png" alt="Video call" title="Video call" width="28" height="20"/>
-                    </div>
+                    { hangupButton }
+                    { callButton }
+                    { videoCallButton }
                 </div>
             </div>
         </div>

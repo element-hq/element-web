@@ -251,13 +251,15 @@ module.exports = React.createClass({
             var UserSelector = sdk.getComponent("elements.UserSelector");
             var RoomHeader = sdk.getComponent("rooms.RoomHeader");
 
+            var domain = MatrixClientPeg.get().credentials.userId.replace(/^.*:/, '');
+
             return (
             <div className="mx_CreateRoom">
                 <RoomHeader simpleHeader="Create room" />
                 <div className="mx_CreateRoom_body">
                     <input type="text" ref="room_name" value={this.state.room_name} onChange={this.onNameChange} placeholder="Name"/> <br />
                     <textarea className="mx_CreateRoom_description" ref="topic" value={this.state.topic} onChange={this.onTopicChange} placeholder="Topic"/> <br />
-                    <RoomAlias ref="alias" alias={this.state.alias} onChange={this.onAliasChanged}/> <br />
+                    <RoomAlias ref="alias" alias={this.state.alias} homeserver={ domain } onChange={this.onAliasChanged}/> <br />
                     <UserSelector ref="user_selector" selected_users={this.state.invited_users} onChange={this.onInviteChanged}/> <br />
                     <Presets ref="presets" onChange={this.onPresetChanged} preset={this.state.preset}/> <br />
                     <div>

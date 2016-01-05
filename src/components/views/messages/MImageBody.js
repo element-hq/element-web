@@ -48,18 +48,23 @@ module.exports = React.createClass({
         }
     },
 
-    onClick: function(ev) {
+    onClick: function onClick(ev) {
         if (ev.button == 0 && !ev.metaKey) {
             ev.preventDefault();
             var content = this.props.mxEvent.getContent();
             var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(content.url);
             var ImageView = sdk.getComponent("elements.ImageView");
-            Modal.createDialog(ImageView, {
+            var params = {
                 src: httpUrl,
-                width: content.info.w,
-                height: content.info.h,
-                mxEvent: this.props.mxEvent,
-            }, "mx_Dialog_lightbox");
+                mxEvent: this.props.mxEvent
+            };
+
+            if (content.info) {
+                params.width = content.info.w;
+                params.height = content.info.h;
+            }
+
+            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
         }
     },
 
@@ -104,14 +109,14 @@ module.exports = React.createClass({
         var thumbUrl = this._getThumbUrl();
         if (thumbUrl) {
             return (
-                <span className="mx_MImageTile">
+                <span className="mx_MImageBody">
                     <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
-                        <img className="mx_MImageTile_thumbnail" src={thumbUrl}
+                        <img className="mx_MImageBody_thumbnail" src={thumbUrl}
                             alt={content.body} style={imgStyle}
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave} />
                     </a>
-                    <div className="mx_MImageTile_download">
+                    <div className="mx_MImageBody_download">
                         <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
                             <img src="img/download.png" width="10" height="12"/>
                             Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
@@ -121,13 +126,13 @@ module.exports = React.createClass({
             );
         } else if (content.body) {
             return (
-                <span className="mx_MImageTile">
+                <span className="mx_MImageBody">
                     Image '{content.body}' cannot be displayed.
                 </span>
             );
         } else {
             return (
-                <span className="mx_MImageTile">
+                <span className="mx_MImageBody">
                     This image cannot be displayed.
                 </span>
             );

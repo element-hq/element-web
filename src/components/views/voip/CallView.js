@@ -35,19 +35,13 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        this._trackedRoom = null;
         if (this.props.room) {
-            this._trackedRoom = this.props.room;
-            this.showCall(this._trackedRoom.roomId);
+            this.showCall(this.props.room.roomId);
         }
         else {
+            // XXX: why would we ever not have a this.props.room?
             var call = CallHandler.getAnyActiveCall();
             if (call) {
-                console.log(
-                    "Global CallView is now tracking active call in room %s",
-                    call.roomId
-                );
-                this._trackedRoom = MatrixClientPeg.get().getRoom(call.roomId);
                 this.showCall(call.roomId);
             }
         }
@@ -81,7 +75,7 @@ module.exports = React.createClass({
             // and for the voice stream of screen captures
             call.setRemoteAudioElement(this.getVideoView().getRemoteAudioElement());
         }
-        if (call && call.type === "video" && call.state !== 'ended') {
+        if (call && call.type === "video" && call.call_state !== "ended" && call.call_state !== "ringing") {
             // if this call is a conf call, don't display local video as the
             // conference will have us in it
             this.getVideoView().getLocalVideoElement().style.display = (

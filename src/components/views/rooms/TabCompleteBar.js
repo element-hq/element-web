@@ -17,27 +17,30 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-
-var TextForEvent = require('../../../TextForEvent');
+var MatrixClientPeg = require("../../../MatrixClientPeg");
 
 module.exports = React.createClass({
-    displayName: 'TextualEvent',
+    displayName: 'TabCompleteBar',
 
-    statics: {
-        needsSenderProfile: function() {
-            return false;
-        }
+    propTypes: {
+        entries: React.PropTypes.array.isRequired
     },
 
     render: function() {
-        var text = TextForEvent.textForEvent(this.props.mxEvent);
-        if (text == null || text.length == 0) return null;
-
         return (
-            <div className="mx_TextualEvent">
-                {TextForEvent.textForEvent(this.props.mxEvent)}
+            <div className="mx_TabCompleteBar">
+            {this.props.entries.map(function(entry, i) {
+                return (
+                    <div key={entry.getKey() || i + ""} className="mx_TabCompleteBar_item"
+                            onClick={entry.onClick.bind(entry)} >
+                        {entry.getImageJsx()}
+                        <span className="mx_TabCompleteBar_text">
+                            {entry.getText()}
+                        </span>
+                    </div>
+                );
+            })}
             </div>
         );
-    },
+    }
 });
-

@@ -29,7 +29,7 @@ var dis = require("./dispatcher");
  * }
  */
 
-module.exports = {
+var Notifier = {
 
     notificationMessageForEvent: function(ev) {
         return TextForEvent.textForEvent(ev);
@@ -98,13 +98,16 @@ module.exports = {
 
     start: function() {
         this.boundOnRoomTimeline = this.onRoomTimeline.bind(this);
+        this.boundOnSyncStateChange = this.onSyncStateChange.bind(this);
         MatrixClientPeg.get().on('Room.timeline', this.boundOnRoomTimeline);
+        MatrixClientPeg.get().on("sync", this.boundOnSyncStateChange);
         this.toolbarHidden = false;
     },
 
     stop: function() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener('Room.timeline', this.boundOnRoomTimeline);
+            MatrixClientPeg.get().removeListener('sync', this.boundOnSyncStateChange);
         }
     },
 
@@ -175,8 +178,15 @@ module.exports = {
         return this.toolbarHidden;
     },
 
+    onSyncStateChange: function(state) {
+        if (state === "PREPARED" || state === "SYNCING") {
+            this.isPrepared = true;
+        }
+    },
+
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (toStartOfTimeline) return;
+        if (!this.isPrepared) return; // don't alert for any messages initially
         if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) return;
 
         if (!this.isEnabled()) {
@@ -190,3 +200,8 @@ module.exports = {
     }
 };
 
+if (!global.mxNotifier) {
+    global.mxNotifier = Notifier;
+}
+
+module.exports = global.mxNotifier;
