@@ -366,7 +366,9 @@ module.exports = React.createClass({
 
         if (this.state.searchResults.next_batch) {
             debuglog("requesting more search results");
-            return this._backPaginateSearch();
+            var searchPromise = MatrixClientPeg.get().backPaginateRoomEventsSearch(
+                this.state.searchResults);
+            return this._handleSearchResult(searchPromise);
         } else {
             debuglog("no more search results");
             return q(false);
@@ -511,21 +513,13 @@ module.exports = React.createClass({
             };
         }
 
-        if (DEBUG_SCROLL) console.log("sending search request");
+        debuglog("sending search request");
 
         var searchPromise = MatrixClientPeg.get().searchRoomEvents({
             filter: filter,
             term: term,
         });
         this._handleSearchResult(searchPromise).done();
-    },
-
-    _backPaginateSearch: function() {
-        if (DEBUG_SCROLL) console.log("sending search back-paginate request");
-
-        var searchPromise = MatrixClientPeg.get().backPaginateRoomEventsSearch(
-            this.state.searchResults);
-        return this._handleSearchResult(searchPromise);
     },
 
     _handleSearchResult: function(searchPromise) {
