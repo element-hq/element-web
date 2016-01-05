@@ -56,8 +56,9 @@ module.exports = React.createClass({
 
         if (this.props.homeserver) {
             if (curr_val == "") {
+                var self = this;
                 setTimeout(function() {
-                    target.value = "#:" + this.props.homeserver;
+                    target.value = "#:" + self.props.homeserver;
                     target.setSelectionRange(1, 1);
                 }, 0);
             } else {

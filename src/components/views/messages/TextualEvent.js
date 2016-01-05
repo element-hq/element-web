@@ -34,7 +34,7 @@ module.exports = React.createClass({
         if (text == null || text.length == 0) return null;
 
         return (
-            <div className="mx_EventAsTextTile">
+            <div className="mx_TextualEvent">
                 {TextForEvent.textForEvent(this.props.mxEvent)}
             </div>
         );
