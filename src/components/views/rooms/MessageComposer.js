@@ -465,6 +465,7 @@ module.exports = React.createClass({
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         var callButton, videoCallButton, hangupButton;
         var call = CallHandler.getCallForRoom(this.props.room.roomId);
@@ -478,11 +479,11 @@ module.exports = React.createClass({
         else {
             callButton =
                 <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
-                    <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/voice.svg" width="16" height="26"/>
+                    <TintableSvg src="img/voice.svg" width="16" height="26"/>
                 </div>
             videoCallButton =
                 <div className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
-                    <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/call.svg" width="30" height="22"/>
+                    <TintableSvg src="img/call.svg" width="30" height="22"/>
                 </div>
         }
 
@@ -497,7 +498,7 @@ module.exports = React.createClass({
                         <textarea ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
                     </div>
                     <div className="mx_MessageComposer_upload" onClick={this.onUploadClick} title="Upload file">
-                        <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/upload.svg" width="19" height="24"/>
+                        <TintableSvg src="img/upload.svg" width="19" height="24"/>
                         <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
                     </div>
                     { hangupButton }

@@ -102,7 +102,7 @@ function calcCssFixups() {
 }
 
 function calcSvgFixups(nodes) {
-    var svgs = nodes || document.getElementsByClassName("mx_Svg");
+    var svgs = nodes || document.getElementsByClassName("mx_TintableSvg");
     var fixups = [];
     for (var i = 0; i < svgs.length; i++) {
 

@@ -1104,6 +1104,7 @@ module.exports = React.createClass({
         var RoomSettings = sdk.getComponent("rooms.RoomSettings");
         var SearchBar = sdk.getComponent("rooms.SearchBar");
         var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         if (!this.state.room) {
             if (this.props.roomId) {
@@ -1198,7 +1199,7 @@ module.exports = React.createClass({
                             <div className="mx_RoomView_tabCompleteWrapper">
                                 <TabCompleteBar entries={this.tabComplete.peek(6)} />
                                 <div className="mx_RoomView_tabCompleteEol" title="->|">
-                                    <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/eol.svg" width="22" height="16"/>
+                                    <TintableSvg src="img/eol.svg" width="22" height="16"/>
                                     Auto-complete
                                 </div>
                             </div>
@@ -1272,7 +1273,7 @@ module.exports = React.createClass({
             if (this.state.draggingFile) {
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
                                     <div className="mx_RoomView_fileDropTargetLabel" title="Drop File Here">
-                                        <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/upload-big.svg" width="45" height="59"/><br/>
+                                        <TintableSvg src="img/upload-big.svg" width="45" height="59"/><br/>
                                         Drop File Here
                                     </div>
                                  </div>;
@@ -1310,7 +1311,7 @@ module.exports = React.createClass({
                 if (call.type === "video") {
                     zoomButton = (
                         <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title="Fill screen">
-                            <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/fullscreen.svg" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
+                            <TintableSvg src="img/fullscreen.svg" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
                         </div>
                     );
 
@@ -1342,7 +1343,7 @@ module.exports = React.createClass({
                         { videoMuteButton }
                         { zoomButton }
                         { statusBar }
-                        <object onLoad={ this.onSvgLoad } type="image/svg+xml" className="mx_RoomView_voipChevron mx_Svg" data="img/voip-chevron.svg" width="22" height="17"/>
+                        <TintableSvg className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17"/>
                     </div>
             }
 

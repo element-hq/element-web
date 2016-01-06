@@ -74,6 +74,7 @@ module.exports = React.createClass({
     render: function() {
         var EditableText = sdk.getComponent("elements.EditableText");
         var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         var header;
         if (this.props.simpleHeader) {
@@ -123,7 +124,7 @@ module.exports = React.createClass({
                         <div className="mx_RoomHeader_nametext" title={ this.props.room.name }>{ this.props.room.name }</div>
                         { searchStatus }
                         <div className="mx_RoomHeader_settingsButton" title="Settings">
-                            <object className="mx_Svg" type="image/svg+xml" data="img/settings.svg" width="12" height="12"/>
+                            <TintableSvg src="img/settings.svg" width="12" height="12"/>
                         </div>
                     </div>
                 if (topic) topic_el = <div className="mx_RoomHeader_topic" title={topic.getContent().topic}>{ topic.getContent().topic }</div>;
@@ -140,8 +141,7 @@ module.exports = React.createClass({
             if (this.props.onLeaveClick) {
                 leave_button =
                     <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton" onClick={this.props.onLeaveClick} title="Leave room">
-                        <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/leave.svg"
-                            width="26" height="20"/>
+                        <TintableSvg src="img/leave.svg" width="26" height="20"/>
                     </div>;
             }
 
@@ -149,8 +149,7 @@ module.exports = React.createClass({
             if (this.props.onForgetClick) {
                 forget_button =
                     <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton" onClick={this.props.onForgetClick} title="Forget room">
-                        <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/leave.svg"
-                            width="26" height="20"/>
+                        <TintableSvg src="img/leave.svg" width="26" height="20"/>
                     </div>;
             }
 
@@ -171,7 +170,7 @@ module.exports = React.createClass({
                         { forget_button }
                         { leave_button }
                         <div className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
-                            <object className="mx_Svg" type="image/svg+xml" data="img/search.svg" width="21" height="19"/>
+                            <TintableSvg src="img/search.svg" width="21" height="19"/>
                         </div>
                     </div>
                 </div>

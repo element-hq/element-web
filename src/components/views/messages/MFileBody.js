@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var filesize = require('filesize');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
 
 module.exports = React.createClass({
@@ -57,12 +58,14 @@ module.exports = React.createClass({
         var httpUrl = cli.mxcUrlToHttp(content.url);
         var text = this.presentableTextForFile(content);
 
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
+
         if (httpUrl) {
             return (
                 <span className="mx_MFileBody">
                     <div className="mx_MImageBody_download">
                         <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
-                            <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/download.svg" width="12" height="14"/>
+                            <TintableSvg src="img/download.svg" width="12" height="14"/>
                             Download {text}
                         </a>
                     </div>

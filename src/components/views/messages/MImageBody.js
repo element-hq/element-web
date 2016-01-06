@@ -102,6 +102,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
 
@@ -123,7 +124,7 @@ module.exports = React.createClass({
                     </a>
                     <div className="mx_MImageBody_download">
                         <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
-                            <object onLoad={ this.onSvgLoad } className="mx_Svg" type="image/svg+xml" data="img/download.svg" width="12" height="14"/>
+                            <TintableSvg src="img/download.svg" width="12" height="14"/>
                             Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
                         </a>
                     </div>
