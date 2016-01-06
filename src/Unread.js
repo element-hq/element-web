@@ -32,16 +32,23 @@ module.exports = {
 
     doesRoomHaveUnreadMessages: function(room) {
         var readUpToId = room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
-        var unread = false;
+        // this just looks at whatever history we have, which if we've only just started
+        // up probably won't be very much, so if the last couple of events are ones that
+        // don't count, we don't know if there are any events that do count between where
+        // we have and the read receipt. We could fetch more history to try & find out,
+        // but currently we just guess. This impl assumes there are unread messages
+        // on the theory that false positives are better than false negatives here.
+        var unread = true;
         for (var i = room.timeline.length - 1; i >= 0; --i) {
             var ev = room.timeline[i];
 
             if (ev.getId() == readUpToId) {
+                unread = false;
                 break;
             }
 
             if (this.eventTriggersUnreadCount(ev)) {
-                unread = true;
+                break;
             }
         }
         return unread;
