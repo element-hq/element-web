@@ -43,6 +43,7 @@ var commands = {
         return reject("Usage: /nick <display_name>");
     },
 
+    // Takes an #rrggbb colourcode and retints the UI (just for debugging)
     tint: function(room_id, args) {
         Tinter.tint(args);
         return success();
