@@ -262,10 +262,6 @@ var RoomSubList = React.createClass({
         });
     },
 
-    onSvgLoad: function(event) {
-        dis.dispatch({ action: "svg_onload", svg: event.target });
-    },
-
     _getHeaderJsx: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");        
         return (
