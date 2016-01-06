@@ -51,7 +51,11 @@ function createClient(hs_url, is_url, user_id, access_token, guestAccess) {
     if (guestAccess) {
         console.log("Guest: %s", guestAccess.isGuest());
         matrixClient.setGuest(guestAccess.isGuest());
-        matrixClient.setGuestRooms(guestAccess.getRooms());
+        var peekedRoomId = guestAccess.getPeekedRoom();
+        if (peekedRoomId) {
+            console.log("Peeking in room %s", peekedRoomId);
+            matrixClient.peekInRoom(peekedRoomId);
+        }
     }
 }
 
