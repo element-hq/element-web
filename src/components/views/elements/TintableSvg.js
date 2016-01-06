@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var ReactDOM = require("react-dom");
 var dis = require("../../../dispatcher");
+var Tinter = require("../../../Tinter");
 
 module.exports = React.createClass({
     displayName: 'TintableSvg',
@@ -41,7 +42,7 @@ module.exports = React.createClass({
     },
 
     onLoad: function(event) {
-        dis.dispatch({ action: "svg_onload", svg: event.target });
+        Tinter.tintSvg(event.target);
     },
 
     render: function() {

@@ -14,17 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var dis = require('./dispatcher');
-
-var registered = false;
-if (!registered) {
-    dis.register(_onAction);
-}
-
+// The colour keys to be replaced as referred to in SVGs
 var keyRgb = [
-    "rgb(118, 207, 166)",
-    "rgb(234, 245, 240)",
-    "rgba(118, 207, 166, 0.2)",
+    "rgb(118, 207, 166)", // Vector Green
+    "rgb(234, 245, 240)", // Vector Light Green
+    "rgba(118, 207, 166, 0.2)", // BottomLeftMenu overlay (20% Vector Green)
 ];
 
 // Some algebra workings for calculating the tint % of Vector Green & Light Green
@@ -34,10 +28,11 @@ var keyRgb = [
 // (255 - 118) x = 255 - 234
 // x = (255 - 234) / (255 - 118) = 0.16 
 
+// The colour keys to be replaced as referred to in SVGs
 var keyHex = [
-    "#76CFA6",
-    "#EAF5F0",
-    "#D3EFE1",
+    "#76CFA6", // Vector Green
+    "#EAF5F0", // Vector Light Green
+    "#D3EFE1", // BottomLeftMenu overlay (20% Vector Green overlaid on Vector Light Green)
 ];
 
 // cache of our replacement colours
@@ -85,10 +80,11 @@ function calcCssFixups() {
         var ss = document.styleSheets[i];
         for (var j = 0; j < ss.cssRules.length; j++) {
             var rule = ss.cssRules[j];
+            if (!rule.style) continue;
             for (var k = 0; k < cssAttrs.length; k++) {
                 var attr = cssAttrs[k];
                 for (var l = 0; l < keyRgb.length; l++) {
-                    if (rule.style && rule.style[attr] === keyRgb[l]) {
+                    if (rule.style[attr] === keyRgb[l]) {
                         cssFixups.push({
                             style: rule.style,
                             attr: attr,
@@ -140,17 +136,6 @@ function applySvgFixups(fixups) {
     for (var i = 0; i < fixups.length; i++) {
         var svgFixup = fixups[i];
         svgFixup.node.setAttribute(svgFixup.attr, colors[svgFixup.index]);
-    }
-}
-
-function _onAction(payload) {
-    if (payload.action !== "svg_onload") return;
-    // XXX: we should probably faff around with toggling the visibility of the node to avoid flashing the wrong colour.
-    // (although this would result in an even worse flicker as the element redraws)
-    var fixups = calcSvgFixups([ payload.svg ]);
-    if (fixups.length) {
-        svgFixups = svgFixups.concat(fixups); // XXX: this leaks fixups
-        applySvgFixups(fixups);
     }
 }
 
@@ -210,5 +195,15 @@ module.exports = {
         // updated would be a PITA, so just brute-force search for the
         // key colour; cache the element and apply.
         applySvgFixups(svgFixups);
-    }
+    },
+
+    tintSvg: function(svg) {
+        // XXX: we should probably faff around with toggling the visibility of the node to avoid flashing the wrong colour.
+        // (although this would result in an even worse flicker as the element redraws)
+        var fixups = calcSvgFixups([ svg ]);
+        if (fixups.length) {
+            svgFixups = svgFixups.concat(fixups); // XXX: this leaks fixups
+            applySvgFixups(fixups);
+        }
+    },
 };

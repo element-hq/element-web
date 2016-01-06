@@ -457,10 +457,6 @@ module.exports = React.createClass({
         });
     },
 
-    onSvgLoad: function(event) {
-        dis.dispatch({ action: "svg_onload", svg: event.target });
-    },
-
     render: function() {
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};

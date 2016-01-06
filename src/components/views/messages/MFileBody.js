@@ -47,10 +47,6 @@ module.exports = React.createClass({
         return linkText;
     },
 
-    onSvgLoad: function(event) {
-        dis.dispatch({ action: "svg_onload", svg: event.target });
-    },
-
     render: function() {
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();

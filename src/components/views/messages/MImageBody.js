@@ -97,10 +97,6 @@ module.exports = React.createClass({
         return MatrixClientPeg.get().mxcUrlToHttp(content.url, 480, 360);
     },
 
-    onSvgLoad: function(event) {
-        dis.dispatch({ action: "svg_onload", svg: event.target });
-    },
-
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var content = this.props.mxEvent.getContent();

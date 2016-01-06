@@ -67,10 +67,6 @@ module.exports = React.createClass({
         return this.refs.name_edit.value;
     },
 
-    onSvgLoad: function(event) {
-        dis.dispatch({ action: "svg_onload", svg: event.target });
-    },
-    
     render: function() {
         var EditableText = sdk.getComponent("elements.EditableText");
         var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');

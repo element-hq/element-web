@@ -1093,10 +1093,6 @@ module.exports = React.createClass({
         });
     },
 
-    onSvgLoad: function(event) {
-        dis.dispatch({ action: "svg_onload", svg: event.target });
-    },
-
     render: function() {
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         var MessageComposer = sdk.getComponent('rooms.MessageComposer');
