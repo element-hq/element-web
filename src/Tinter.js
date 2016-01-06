@@ -14,6 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+
+// FIXME: these vars should be bundled up and attached to 
+// module.exports otherwise this will break when included by both
+// react-sdk and apps layered on top.
+
 // The colour keys to be replaced as referred to in SVGs
 var keyRgb = [
     "rgb(118, 207, 166)", // Vector Green
