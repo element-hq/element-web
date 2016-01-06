@@ -20,7 +20,7 @@ var React = require('react');
 var DropTarget = require('react-dnd').DropTarget;
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
-var UnreadStatus = require('matrix-react-sdk/lib/UnreadStatus');
+var Unread = require('matrix-react-sdk/lib/Unread');
 
 // turn this on for drop & drag console debugging galore
 var debug = false;
@@ -62,7 +62,6 @@ var RoomSubList = React.createClass({
         editable: React.PropTypes.bool,
         order: React.PropTypes.string.isRequired,
         selectedRoom: React.PropTypes.string.isRequired,
-        activityMap: React.PropTypes.object.isRequired,
         startAsHidden: React.PropTypes.bool,
         showSpinner: React.PropTypes.bool, // true to show a spinner if 0 elements when expanded
 
@@ -108,8 +107,7 @@ var RoomSubList = React.createClass({
     tsOfNewestEvent: function(room) {
         for (var i = room.timeline.length - 1; i >= 0; --i) {
             var ev = room.timeline[i];
-            // logic copied from RoomList.js for when we do/don't highlight
-            if (UnreadStatus.eventTriggersUnreadCount(ev)) {
+            if (Unread.eventTriggersUnreadCount(ev)) {
                 return ev.getTs();
             }
         }
@@ -254,7 +252,7 @@ var RoomSubList = React.createClass({
                     key={ room.roomId }
                     collapsed={ self.props.collapsed || false}
                     selected={ selected }
-                    unread={ self.props.activityMap[room.roomId] === 1 }
+                    unread={ Unread.doesRoomHaveUnreadMessages(room) }
                     highlight={ room.unread_notification_count > 0 || self.props.label === 'Invites' }
                     isInvite={ self.props.label === 'Invites' }
                     incomingCall={ self.props.incomingCall && (self.props.incomingCall.roomId === room.roomId) ? self.props.incomingCall : null }
