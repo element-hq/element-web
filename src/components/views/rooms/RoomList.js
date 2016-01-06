@@ -21,7 +21,7 @@ var GeminiScrollbar = require('react-gemini-scrollbar');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var CallHandler = require('../../../CallHandler');
 var RoomListSorter = require("../../../RoomListSorter");
-var UnreadStatus = require('../../../UnreadStatus');
+var Unread = require('../../../Unread');
 var dis = require("../../../dispatcher");
 var sdk = require('../../../index');
 
@@ -38,7 +38,6 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            activityMap: null,
             isLoadingLeftRooms: false,
             lists: {},
             incomingCall: null,
@@ -57,7 +56,6 @@ module.exports = React.createClass({
         cli.on("RoomMember.name", this.onRoomMemberName);
 
         var s = this.getRoomLists();
-        s.activityMap = {};
         this.setState(s);
     },
 
@@ -100,13 +98,6 @@ module.exports = React.createClass({
         }
     },
 
-    componentWillReceiveProps: function(newProps) {
-        this.state.activityMap[newProps.selectedRoom] = undefined;
-        this.setState({
-            activityMap: this.state.activityMap
-        });
-    },
-
     onRoom: function(room) {
         this._delayedRefreshRoomList();
     },
@@ -132,33 +123,11 @@ module.exports = React.createClass({
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (toStartOfTimeline) return;
-
-        var hl = 0;
-        if (
-            room.roomId != this.props.selectedRoom &&
-            ev.getSender() != MatrixClientPeg.get().credentials.userId)
-        {
-            if (UnreadStatus.eventTriggersUnreadCount(ev)) {
-                hl = 1;
-            }
-        }
-
-        var newState = this.getRoomLists();
-        if (hl > 0) {
-            // obviously this won't deep copy but this shouldn't be necessary
-            var amap = this.state.activityMap;
-            amap[room.roomId] = Math.max(amap[room.roomId] || 0, hl);
-
-            newState.activityMap = amap;
-
-        }
-        // still want to update the list even if the highlight status
-        // hasn't changed because the ordering may have
-        this.setState(newState);
+        this.refreshRoomList();
     },
 
     onRoomReceipt: function(receiptEvent, room) {
-        // because if we read a notification, it will affect notification count
+        // because if we read a message it will affect notification / unread counts
         this.refreshRoomList();
     },
 
@@ -365,7 +334,6 @@ module.exports = React.createClass({
                              label="Invites"
                              editable={ false }
                              order="recent"
-                             activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed } />
@@ -376,7 +344,6 @@ module.exports = React.createClass({
                              verb="favourite"
                              editable={ true }
                              order="manual"
-                             activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed } />
@@ -386,7 +353,6 @@ module.exports = React.createClass({
                              editable={ true }
                              verb="restore"
                              order="recent"
-                             activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed } />
@@ -400,7 +366,6 @@ module.exports = React.createClass({
                              verb={ "tag as " + tagName }
                              editable={ true }
                              order="manual"
-                             activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed } />
@@ -414,7 +379,6 @@ module.exports = React.createClass({
                              verb="demote"
                              editable={ true }
                              order="recent"
-                             activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed } />
@@ -423,7 +387,6 @@ module.exports = React.createClass({
                              label="Historical"
                              editable={ false }
                              order="recent"
-                             activityMap={ self.state.activityMap }
                              selectedRoom={ self.props.selectedRoom }
                              collapsed={ self.props.collapsed }
                              alwaysShowHeader={ true }

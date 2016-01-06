@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+var MatrixClientPeg = require('./MatrixClientPeg');
+
 module.exports = {
     /**
      * Returns true iff this event arriving in a room should affect the room's
@@ -26,5 +28,22 @@ module.exports = {
             return false;
         }
         return true;
+    },
+
+    doesRoomHaveUnreadMessages: function(room) {
+        var readUpToId = room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+        var unread = false;
+        for (var i = room.timeline.length - 1; i >= 0; --i) {
+            var ev = room.timeline[i];
+
+            if (ev.getId() == readUpToId) {
+                break;
+            }
+
+            if (this.eventTriggersUnreadCount(ev)) {
+                unread = true;
+            }
+        }
+        return unread;
     }
 };
