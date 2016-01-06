@@ -618,7 +618,17 @@ module.exports = React.createClass({
             if (this.state.searchScope === 'All') {
                 var roomId = mxEv.getRoomId();
                 if(roomId != lastRoomId) {
-                    ret.push(<li key={mxEv.getId() + "-room"}><h1>Room: { cli.getRoom(roomId).name }</h1></li>);
+                    var room = cli.getRoom(roomId);
+
+                    // XXX: if we've left the room, we might not know about
+                    // it. We should tell the js sdk to go and find out about
+                    // it. But that's not an issue currently, as synapse only
+                    // returns results for rooms we're joined to.
+                    var roomName = room ? room.name : "Unknown room "+roomId;
+
+                    ret.push(<li key={mxEv.getId() + "-room"}>
+                                 <h1>Room: { roomName }</h1>
+                             </li>);
                     lastRoomId = roomId;
                 }
             }

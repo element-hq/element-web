@@ -23,9 +23,14 @@ module.exports = React.createClass({
     displayName: 'SearchResult',
 
     propTypes: {
+        // a matrix-js-sdk SearchResult containing the details of this result
         searchResult: React.PropTypes.object.isRequired,
+
+        // a list of strings to be highlighted in the results
         searchHighlights: React.PropTypes.array,
-        onClick: React.PropTypes.func,
+
+        // callback to be called when the user selects this result
+        onSelect: React.PropTypes.func,
     },
 
     render: function() {
@@ -48,7 +53,7 @@ module.exports = React.createClass({
             }
             if (EventTile.haveTileForEvent(ev)) {
                 ret.push(<EventTile key={eventId+"+"+j} mxEvent={ev} contextual={contextual} highlights={highlights}
-                         onHighlightClick={this.props.onClick}/>)
+                         onHighlightClick={this.props.onSelect}/>)
             }
         }
         return (
