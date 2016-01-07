@@ -50,9 +50,9 @@ module.exports = React.createClass({
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
-                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/create-big.png" label="Create new room" onClick={ this.onCreateRoomClick }/>
-                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/directory-big.png" label="Directory" onClick={ this.onRoomDirectoryClick }/>
-                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/settings-big.png" label="Settings" onClick={ this.onSettingsClick }/>
+                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/create-big.svg" label="Create new room" onClick={ this.onCreateRoomClick }/>
+                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/directory-big.svg" label="Directory" onClick={ this.onRoomDirectoryClick }/>
+                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/settings-big.svg" label="Settings" onClick={ this.onSettingsClick }/>
                 </div>
             </div>
         );

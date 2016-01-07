@@ -55,6 +55,10 @@ limitations under the License.
     position: relative;
 }
 
+.mx_RightPanel_headerButton object {
+    pointer-events: none;
+}
+
 .mx_RightPanel_headerButton_highlight {
     position: absolute;
     bottom: -2px;

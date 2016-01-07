@@ -208,7 +208,7 @@ hr.mx_RoomView_myReadMarker {
 
 .mx_RoomView_voipChevron {
     position: absolute;
-    bottom: -10px;
+    bottom: -11px;
     right: 11px;
 }
 
@@ -216,6 +216,10 @@ hr.mx_RoomView_myReadMarker {
     float: right;
     margin-right: 13px;
     cursor: pointer;
+}
+
+.mx_RoomView_voipButton object {
+    pointer-events: none;
 }
 
 .mx_RoomView_unreadMessagesBar {
@@ -315,7 +319,7 @@ hr.mx_RoomView_myReadMarker {
     color: #76CFA6;
 }
 
-.mx_RoomView_tabCompleteEol img {
+.mx_RoomView_tabCompleteEol object {
     vertical-align: middle;
     margin-right: 8px;
     margin-top: -2px;
