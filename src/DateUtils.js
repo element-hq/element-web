@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,10 +35,10 @@ module.exports = {
             return days[date.getDay()] + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
         }
         else if (now.getFullYear() === date.getFullYear()) {
-            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + (date.getDay()+1) + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
         }
         else {
-            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + (date.getDay()+1) + " " + date.getFullYear() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -254,7 +254,7 @@ module.exports = React.createClass({
         } else {
             return (
                 <form onSubmit={this.onPopulateInvite}>
-                    <input className="mx_MemberList_invite" ref="invite" placeholder="Invite another user"/>
+                    <input className="mx_MemberList_invite" ref="invite" placeholder="Invite user (email)"/>
                 </form>
             );
         }

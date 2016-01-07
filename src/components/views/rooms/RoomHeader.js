@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -73,10 +73,15 @@ module.exports = React.createClass({
 
         var header;
         if (this.props.simpleHeader) {
+            var cancel;
+            if (this.props.onCancelClick) {
+                cancel = <img className="mx_RoomHeader_simpleHeaderCancel" src="img/cancel-black.png" onClick={ this.props.onCancelClick } alt="Close" width="18" height="18"/>
+            }
             header =
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_simpleHeader">
                         { this.props.simpleHeader }
+                        { cancel }
                     </div>
                 </div>
         }
@@ -104,8 +109,8 @@ module.exports = React.createClass({
 
                 var searchStatus;
                 // don't display the search count until the search completes and
-                // gives us a non-null searchCount.
-                if (this.props.searchInfo && this.props.searchInfo.searchCount !== null) {
+                // gives us a valid (possibly zero) searchCount.
+                if (this.props.searchInfo && this.props.searchInfo.searchCount !== undefined && this.props.searchInfo.searchCount !== null) {
                     searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;(~{ this.props.searchInfo.searchCount } results)</div>;
                 }
 

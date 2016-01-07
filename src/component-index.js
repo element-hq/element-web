@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ module.exports.components['structures.login.PostRegistration'] = require('./comp
 module.exports.components['structures.login.Registration'] = require('./components/structures/login/Registration');
 module.exports.components['structures.MatrixChat'] = require('./components/structures/MatrixChat');
 module.exports.components['structures.RoomView'] = require('./components/structures/RoomView');
+module.exports.components['structures.ScrollPanel'] = require('./components/structures/ScrollPanel');
 module.exports.components['structures.UploadBar'] = require('./components/structures/UploadBar');
 module.exports.components['structures.UserSettings'] = require('./components/structures/UserSettings');
 module.exports.components['views.avatars.MemberAvatar'] = require('./components/views/avatars/MemberAvatar');
@@ -65,6 +66,8 @@ module.exports.components['views.rooms.RoomHeader'] = require('./components/view
 module.exports.components['views.rooms.RoomList'] = require('./components/views/rooms/RoomList');
 module.exports.components['views.rooms.RoomSettings'] = require('./components/views/rooms/RoomSettings');
 module.exports.components['views.rooms.RoomTile'] = require('./components/views/rooms/RoomTile');
+module.exports.components['views.rooms.SearchResultTile'] = require('./components/views/rooms/SearchResultTile');
+module.exports.components['views.rooms.TabCompleteBar'] = require('./components/views/rooms/TabCompleteBar');
 module.exports.components['views.settings.ChangeAvatar'] = require('./components/views/settings/ChangeAvatar');
 module.exports.components['views.settings.ChangeDisplayName'] = require('./components/views/settings/ChangeDisplayName');
 module.exports.components['views.settings.ChangePassword'] = require('./components/views/settings/ChangePassword');

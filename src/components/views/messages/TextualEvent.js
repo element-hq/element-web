@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ module.exports = React.createClass({
         if (text == null || text.length == 0) return null;
 
         return (
-            <div className="mx_EventAsTextTile">
+            <div className="mx_TextualEvent">
                 {TextForEvent.textForEvent(this.props.mxEvent)}
             </div>
         );

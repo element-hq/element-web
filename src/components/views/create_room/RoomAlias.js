@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -56,8 +56,9 @@ module.exports = React.createClass({
 
         if (this.props.homeserver) {
             if (curr_val == "") {
+                var self = this;
                 setTimeout(function() {
-                    target.value = "#:" + this.props.homeserver;
+                    target.value = "#:" + self.props.homeserver;
                     target.setSelectionRange(1, 1);
                 }, 0);
             } else {

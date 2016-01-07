@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ limitations under the License.
 
 var React = require("react");
 var ReactDOM = require("react-dom");
-var GeminiScrollbar = require('react-gemini-scrollbar');
 var q = require("q");
 var classNames = require("classnames");
 var Matrix = require("matrix-js-sdk");
@@ -34,6 +33,8 @@ var WhoIsTyping = require("../../WhoIsTyping");
 var Modal = require("../../Modal");
 var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
+var TabComplete = require("../../TabComplete");
+var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
 var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
 
@@ -42,6 +43,13 @@ var INITIAL_SIZE = 20;
 
 var DEBUG_SCROLL = false;
 
+if (DEBUG_SCROLL) {
+    // using bind means that we get to keep useful line numbers in the console
+    var debuglog = console.log.bind(console);
+} else {
+    var debuglog = function () {};
+}
+
 module.exports = React.createClass({
     displayName: 'RoomView',
     propTypes: {
@@ -49,13 +57,6 @@ module.exports = React.createClass({
     },
 
     /* properties in RoomView objects include:
-     *
-     * savedScrollState: the current scroll position in the backlog. Response
-     *     from _calculateScrollState. Updated on scroll events.
-     *
-     * savedSearchScrollState: similar to savedScrollState, but specific to the
-     *     search results (we need to preserve savedScrollState when search
-     *     results are visible)
      *
      * eventNodes: a map from event id to DOM node representing that event
      */
@@ -84,7 +85,18 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
-        this.savedScrollState = {atBottom: true};
+        // xchat-style tab complete, add a colon if tab
+        // completing at the start of the text
+        this.tabComplete = new TabComplete({
+            startingWordSuffix: ": ",
+            wordSuffix: " ",
+            allowLooping: false,
+            autoEnterTabComplete: true,
+            onClickCompletes: true,
+            onStateChange: (isCompleting) => {
+                this.forceUpdate();
+            }
+        });
     },
 
     componentWillUnmount: function() {
@@ -168,23 +180,6 @@ module.exports = React.createClass({
         }
     },
 
-    // get the DOM node which has the scrollTop property we care about for our
-    // message panel.
-    //
-    // If the gemini scrollbar is doing its thing, this will be a div within
-    // the message panel (ie, the gemini container); otherwise it will be the
-    // message panel itself.
-    _getScrollNode: function() {
-        var panel = ReactDOM.findDOMNode(this.refs.messagePanel);
-        if (!panel) return null;
-
-        if (panel.classList.contains('gm-prevented')) {
-            return panel;
-        } else {
-            return panel.children[2]; // XXX: Fragile!
-        }
-    },
-
     onSyncStateChange: function(state, prevState) {
         if (state === "SYNCING" && prevState === "SYNCING") {
             return;
@@ -218,7 +213,7 @@ module.exports = React.createClass({
         if (!toStartOfTimeline &&
                 (ev.getSender() !== MatrixClientPeg.get().credentials.userId)) {
             // update unread count when scrolled up
-            if (!this.state.searchResults && this.savedScrollState.atBottom) {
+            if (!this.state.searchResults && this.refs.messagePanel && this.refs.messagePanel.isAtBottom()) {
                 currentUnread = 0;
             }
             else {
@@ -251,6 +246,11 @@ module.exports = React.createClass({
     },
 
     onRoomStateMember: function(ev, state, member) {
+        if (member.roomId === this.props.roomId) {
+            // a member state changed in this room, refresh the tab complete list
+            this._updateTabCompleteList(this.state.room);
+        }
+
         if (!this.props.ConferenceHandler) {
             return;
         }
@@ -313,6 +313,17 @@ module.exports = React.createClass({
 
         window.addEventListener('resize', this.onResize);
         this.onResize();
+
+        this._updateTabCompleteList(this.state.room);
+    },
+
+    _updateTabCompleteList: function(room) {
+        if (!room || !this.tabComplete) {
+            return;
+        }
+        this.tabComplete.setCompletionList(
+            MemberEntry.fromMemberList(room.getJoinedMembers())
+        );
     },
 
     _initialiseMessagePanel: function() {
@@ -326,7 +337,6 @@ module.exports = React.createClass({
 
         this.scrollToBottom();
         this.sendReadReceipt();
-        this.fillSpace();
     },
 
     componentDidUpdate: function() {
@@ -338,64 +348,52 @@ module.exports = React.createClass({
         if (!this.refs.messagePanel.initialised) {
             this._initialiseMessagePanel();
         }
-
-        // after adding event tiles, we may need to tweak the scroll (either to
-        // keep at the bottom of the timeline, or to maintain the view after
-        // adding events to the top).
-        this._restoreSavedScrollState();
     },
 
     _paginateCompleted: function() {
-        if (DEBUG_SCROLL) console.log("paginate complete");
+        debuglog("paginate complete");
 
         this.setState({
             room: MatrixClientPeg.get().getRoom(this.props.roomId)
         });
 
-        // we might not have got enough results from the pagination
-        // request, so give fillSpace() a chance to set off another.
         this.setState({paginating: false});
+    },
 
-        if (!this.state.searchResults) {
-            this.fillSpace();
+    onSearchResultsFillRequest: function(backwards) {
+        if (!backwards)
+            return q(false);
+
+        if (this.state.searchResults.next_batch) {
+            debuglog("requesting more search results");
+            var searchPromise = MatrixClientPeg.get().backPaginateRoomEventsSearch(
+                this.state.searchResults);
+            return this._handleSearchResult(searchPromise);
+        } else {
+            debuglog("no more search results");
+            return q(false);
         }
     },
 
-    // check the scroll position, and if we need to, set off a pagination
-    // request.
-    fillSpace: function() {
-        if (!this.refs.messagePanel) return;
-        var messageWrapperScroll = this._getScrollNode();
-        if (messageWrapperScroll.scrollTop > messageWrapperScroll.clientHeight) {
-            return;
-        }
-
-        // there's less than a screenful of messages left - try to get some
-        // more messages.
-
-        if (this.state.searchResults) {
-            if (this.nextSearchBatch) {
-                if (DEBUG_SCROLL) console.log("requesting more search results");
-                this._getSearchBatch(this.state.searchTerm,
-                                     this.state.searchScope);
-            } else {
-                if (DEBUG_SCROLL) console.log("no more search results");
-            }
-            return;
-        }
+    // set off a pagination request.
+    onMessageListFillRequest: function(backwards) {
+        if (!backwards)
+            return q(false);
 
         // Either wind back the message cap (if there are enough events in the
         // timeline to do so), or fire off a pagination request.
 
         if (this.state.messageCap < this.state.room.timeline.length) {
             var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
-            if (DEBUG_SCROLL) console.log("winding back message cap to", cap);
+            debuglog("winding back message cap to", cap);
             this.setState({messageCap: cap});
+            return q(true);
         } else if(this.state.room.oldState.paginationToken) {
             var cap = this.state.messageCap + PAGINATE_SIZE;
-            if (DEBUG_SCROLL) console.log("starting paginate to cap", cap);
+            debuglog("starting paginate to cap", cap);
             this.setState({messageCap: cap, paginating: true});
-            MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).finally(this._paginateCompleted).done();
+            return MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).
+                finally(this._paginateCompleted).then(true);
         }
     },
 
@@ -431,44 +429,9 @@ module.exports = React.createClass({
     },
 
     onMessageListScroll: function(ev) {
-        var sn = this._getScrollNode();
-        if (DEBUG_SCROLL) console.log("Scroll event: offset now:", sn.scrollTop, "recentEventScroll:", this.recentEventScroll);
-
-        // Sometimes we see attempts to write to scrollTop essentially being
-        // ignored. (Or rather, it is successfully written, but on the next
-        // scroll event, it's been reset again).
-        //
-        // This was observed on Chrome 47, when scrolling using the trackpad in OS
-        // X Yosemite.  Can't reproduce on El Capitan. Our theory is that this is
-        // due to Chrome not being able to cope with the scroll offset being reset
-        // while a two-finger drag is in progress.
-        //
-        // By way of a workaround, we detect this situation and just keep
-        // resetting scrollTop until we see the scroll node have the right
-        // value.
-        if (this.recentEventScroll !== undefined) {
-            if(sn.scrollTop < this.recentEventScroll-200) {
-                console.log("Working around vector-im/vector-web#528");
-                this._restoreSavedScrollState();
-                return;
-            }
-            this.recentEventScroll = undefined;
-        }
-
-        if (this.refs.messagePanel) {
-            if (this.state.searchResults) {
-                this.savedSearchScrollState = this._calculateScrollState();
-                if (DEBUG_SCROLL) console.log("Saved search scroll state", this.savedSearchScrollState);
-            } else {
-                this.savedScrollState = this._calculateScrollState();
-                if (DEBUG_SCROLL) console.log("Saved scroll state", this.savedScrollState);
-                if (this.savedScrollState.atBottom && this.state.numUnreadMessages != 0) {
-                    this.setState({numUnreadMessages: 0});
-                }
-            }
-        }
-        if (!this.state.paginating && !this.state.searchInProgress) {
-            this.fillSpace();
+        if (this.state.numUnreadMessages != 0 &&
+                this.refs.messagePanel.isAtBottom()) {
+            this.setState({numUnreadMessages: 0});
         }
     },
 
@@ -524,71 +487,78 @@ module.exports = React.createClass({
         this.setState({
             searchTerm: term,
             searchScope: scope,
-            searchResults: [],
+            searchResults: {},
             searchHighlights: [],
-            searchCount: null,
-            searchCanPaginate: null,
         });
 
-        this.savedSearchScrollState = {atBottom: true};
-        this.nextSearchBatch = null;
-        this._getSearchBatch(term, scope);
+        // if we already have a search panel, we need to tell it to forget
+        // about its scroll state.
+        if (this.refs.searchResultsPanel) {
+            this.refs.searchResultsPanel.resetScrollState();
+        }
+
+        // make sure that we don't end up showing results from
+        // an aborted search by keeping a unique id.
+        //
+        // todo: should cancel any previous search requests.
+        this.searchId = new Date().getTime();
+
+        var filter;
+        if (scope === "Room") {
+            filter = {
+                // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
+                rooms: [
+                    this.props.roomId
+                ]
+            };
+        }
+
+        debuglog("sending search request");
+
+        var searchPromise = MatrixClientPeg.get().searchRoomEvents({
+            filter: filter,
+            term: term,
+        });
+        this._handleSearchResult(searchPromise).done();
     },
 
-    // fire off a request for a batch of search results
-    _getSearchBatch: function(term, scope) {
+    _handleSearchResult: function(searchPromise) {
+        var self = this;
+
+        // keep a record of the current search id, so that if the search terms
+        // change before we get a response, we can ignore the results.
+        var localSearchId = this.searchId;
+
         this.setState({
             searchInProgress: true,
         });
 
-        // make sure that we don't end up merging results from
-        // different searches by keeping a unique id.
-        //
-        // todo: should cancel any previous search requests.
-        var searchId = this.searchId = new Date().getTime();
-
-        var self = this;
-
-        if (DEBUG_SCROLL) console.log("sending search request");
-        MatrixClientPeg.get().search({ body: this._getSearchCondition(term, scope),
-                                       next_batch: this.nextSearchBatch })
-        .then(function(data) {
-            if (DEBUG_SCROLL) console.log("search complete");
-            if (!self.state.searching || self.searchId != searchId) {
+        return searchPromise.then(function(results) {
+            debuglog("search complete");
+            if (!self.state.searching || self.searchId != localSearchId) {
                 console.error("Discarding stale search results");
                 return;
             }
 
-            var results = data.search_categories.room_events;
+            // postgres on synapse returns us precise details of the strings
+            // which actually got matched for highlighting.
+            //
+            // In either case, we want to highlight the literal search term
+            // whether it was used by the search engine or not.
 
-            // postgres on synapse returns us precise details of the
-            // strings which actually got matched for highlighting.
-
-            // combine the highlight list with our existing list; build an object
-            // to avoid O(N^2) fail
-            var highlights = {};
-            results.highlights.forEach(function(hl) { highlights[hl] = 1; });
-            self.state.searchHighlights.forEach(function(hl) { highlights[hl] = 1; });
-
-            // turn it back into an ordered list. For overlapping highlights,
-            // favour longer (more specific) terms first
-            highlights = Object.keys(highlights).sort(function(a, b) { b.length - a.length });
-
-            // sqlite doesn't give us any highlights, so just try to highlight the literal search term
-            if (highlights.length == 0) {
-                highlights = [ term ];
+            var highlights = results.highlights;
+            if (highlights.indexOf(self.state.searchTerm) < 0) {
+                highlights = highlights.concat(self.state.searchTerm);
             }
 
-            // append the new results to our existing results
-            var events = self.state.searchResults.concat(results.results);
+            // For overlapping highlights,
+            // favour longer (more specific) terms first
+            highlights = highlights.sort(function(a, b) { b.length - a.length });
 
             self.setState({
                 searchHighlights: highlights,
-                searchResults: events,
-                searchCount: results.count,
-                searchCanPaginate: !!(results.next_batch),
+                searchResults: results,
             });
-            self.nextSearchBatch = results.next_batch;
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
@@ -599,109 +569,84 @@ module.exports = React.createClass({
             self.setState({
                 searchInProgress: false
             });
-        }).done();
+        });
     },
 
-    _getSearchCondition: function(term, scope) {
-        var filter;
 
-        if (scope === "Room") {
-            filter = {
-                // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
-                rooms: [
-                    this.props.roomId
-                ]
-            };
+    getSearchResultTiles: function() {
+        var EventTile = sdk.getComponent('rooms.EventTile');
+        var SearchResultTile = sdk.getComponent('rooms.SearchResultTile');
+        var cli = MatrixClientPeg.get();
+
+        // XXX: todo: merge overlapping results somehow?
+        // XXX: why doesn't searching on name work?
+
+        if (this.state.searchResults.results === undefined) {
+            // awaiting results
+            return [];
         }
 
-        return {
-            search_categories: {
-                room_events: {
-                    search_term: term,
-                    filter: filter,
-                    order_by: "recent",
-                    event_context: {
-                        before_limit: 1,
-                        after_limit: 1,
-                        include_profile: true,
-                    }
-                }
+        var ret = [];
+
+        if (!this.state.searchResults.next_batch) {
+            if (this.state.searchResults.results.length == 0) {
+                ret.push(<li key="search-top-marker">
+                         <h2 className="mx_RoomView_topMarker">No results</h2>
+                         </li>
+                        );
+            } else {
+                ret.push(<li key="search-top-marker">
+                         <h2 className="mx_RoomView_topMarker">No more results</h2>
+                         </li>
+                        );
             }
         }
+
+        var lastRoomId;
+
+        for (var i = this.state.searchResults.results.length - 1; i >= 0; i--) {
+            var result = this.state.searchResults.results[i];
+
+            var mxEv = result.context.getEvent();
+
+            if (!EventTile.haveTileForEvent(mxEv)) {
+                // XXX: can this ever happen? It will make the result count
+                // not match the displayed count.
+                continue;
+            }
+
+            if (this.state.searchScope === 'All') {
+                var roomId = mxEv.getRoomId();
+                if(roomId != lastRoomId) {
+                    var room = cli.getRoom(roomId);
+
+                    // XXX: if we've left the room, we might not know about
+                    // it. We should tell the js sdk to go and find out about
+                    // it. But that's not an issue currently, as synapse only
+                    // returns results for rooms we're joined to.
+                    var roomName = room ? room.name : "Unknown room "+roomId;
+
+                    ret.push(<li key={mxEv.getId() + "-room"}>
+                                 <h1>Room: { roomName }</h1>
+                             </li>);
+                    lastRoomId = roomId;
+                }
+            }
+
+            ret.push(<SearchResultTile key={mxEv.getId()}
+                     searchResult={result}
+                     searchHighlights={this.state.searchHighlights}/>);
+        }
+        return ret;
     },
 
     getEventTiles: function() {
         var DateSeparator = sdk.getComponent('messages.DateSeparator');
-        var cli = MatrixClientPeg.get();
 
         var ret = [];
         var count = 0;
 
         var EventTile = sdk.getComponent('rooms.EventTile');
-        var self = this;
-
-        if (this.state.searchResults)
-        {
-            // XXX: todo: merge overlapping results somehow?
-            // XXX: why doesn't searching on name work?
-
-            var lastRoomId;
-
-            if (this.state.searchCanPaginate === false) {
-                if (this.state.searchResults.length == 0) {
-                    ret.push(<li key="search-top-marker">
-                             <h2 className="mx_RoomView_topMarker">No results</h2>
-                             </li>
-                            );
-                } else {
-                    ret.push(<li key="search-top-marker">
-                             <h2 className="mx_RoomView_topMarker">No more results</h2>
-                             </li>
-                            );
-                }
-            }
-
-            for (var i = this.state.searchResults.length - 1; i >= 0; i--) {
-                var result = this.state.searchResults[i];
-                var mxEv = new Matrix.MatrixEvent(result.result);
-
-                if (!EventTile.haveTileForEvent(mxEv)) {
-                    // XXX: can this ever happen? It will make the result count
-                    // not match the displayed count.
-                    continue;
-                }
-
-                var eventId = mxEv.getId();
-
-                if (self.state.searchScope === 'All') {
-                    var roomId = result.result.room_id;
-                    if(roomId != lastRoomId) {
-                        ret.push(<li key={eventId + "-room"}><h1>Room: { cli.getRoom(roomId).name }</h1></li>);
-                        lastRoomId = roomId;
-                    }
-                }
-
-                var ts1 = result.result.origin_server_ts;
-                ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); // Rank: {resultList[i].rank}
-
-                if (result.context.events_before[0]) {
-                    var mxEv2 = new Matrix.MatrixEvent(result.context.events_before[0]);
-                    if (EventTile.haveTileForEvent(mxEv2)) {
-                        ret.push(<li key={eventId+"-1"} data-scroll-token={eventId+"-1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
-                    }
-                }
-
-                ret.push(<li key={eventId+"+0"} data-scroll-token={eventId+"+0"}><EventTile mxEvent={mxEv} highlights={self.state.searchHighlights}/></li>);
-
-                if (result.context.events_after[0]) {
-                    var mxEv2 = new Matrix.MatrixEvent(result.context.events_after[0]);
-                    if (EventTile.haveTileForEvent(mxEv2)) {
-                        ret.push(<li key={eventId+"+1"} data-scroll-token={eventId+"+1"}><EventTile mxEvent={mxEv2} contextual={true} /></li>);
-                    }
-                }
-            }
-            return ret;
-        }
 
 
         var prevEvent = null; // the last event we showed
@@ -996,10 +941,9 @@ module.exports = React.createClass({
     },
 
     scrollToBottom: function() {
-        var scrollNode = this._getScrollNode();
-        if (!scrollNode) return;
-        scrollNode.scrollTop = scrollNode.scrollHeight;
-        if (DEBUG_SCROLL) console.log("Scrolled to bottom; offset now", scrollNode.scrollTop);
+        var messagePanel = this.refs.messagePanel;
+        if (!messagePanel) return;
+        messagePanel.scrollToBottom();
     },
 
     // scroll the event view to put the given event at the bottom.
@@ -1007,6 +951,9 @@ module.exports = React.createClass({
     // pixel_offset gives the number of pixels between the bottom of the event
     // and the bottom of the container.
     scrollToEvent: function(eventId, pixelOffset) {
+        var messagePanel = this.refs.messagePanel;
+        if (!messagePanel) return;
+
         var idx = this._indexForEventId(eventId);
         if (idx === null) {
             // we don't seem to have this event in our timeline. Presumably
@@ -1016,7 +963,7 @@ module.exports = React.createClass({
             //
             // for now, just scroll to the top of the buffer.
             console.log("Refusing to scroll to unknown event "+eventId);
-            this._getScrollNode().scrollTop = 0;
+            messagePanel.scrollToTop();
             return;
         }
 
@@ -1036,117 +983,30 @@ module.exports = React.createClass({
 
         // the scrollTokens on our DOM nodes are the event IDs, so we can pass
         // eventId directly into _scrollToToken.
-        this._scrollToToken(eventId, pixelOffset);
-    },
-
-    _restoreSavedScrollState: function() {
-        var scrollState = this.state.searchResults ? this.savedSearchScrollState : this.savedScrollState;
-        if (!scrollState || scrollState.atBottom) {
-            this.scrollToBottom();
-        } else if (scrollState.lastDisplayedScrollToken) {
-            this._scrollToToken(scrollState.lastDisplayedScrollToken,
-                                scrollState.pixelOffset);
-        }
-    },
-
-    _calculateScrollState: function() {
-        // we don't save the absolute scroll offset, because that
-        // would be affected by window width, zoom level, amount of scrollback,
-        // etc.
-        //
-        // instead we save an identifier for the last fully-visible message,
-        // and the number of pixels the window was scrolled below it - which
-        // will hopefully be near enough.
-        //
-        // Our scroll implementation is agnostic of the precise contents of the
-        // message list (since it needs to work with both search results and
-        // timelines). 'refs.messageList' is expected to be a DOM node with a
-        // number of children, each of which may have a 'data-scroll-token'
-        // attribute. It is this token which is stored as the
-        // 'lastDisplayedScrollToken'.
-
-        var messageWrapperScroll = this._getScrollNode();
-        // + 1 here to avoid fractional pixel rounding errors
-        var atBottom = messageWrapperScroll.scrollHeight - messageWrapperScroll.scrollTop <= messageWrapperScroll.clientHeight + 1;
-
-        var messageWrapper = this.refs.messagePanel;
-        var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
-        var messages = this.refs.messageList.children;
-
-        for (var i = messages.length-1; i >= 0; --i) {
-            var node = messages[i];
-            if (!node.dataset.scrollToken) continue;
-
-            var boundingRect = node.getBoundingClientRect();
-            if (boundingRect.bottom < wrapperRect.bottom) {
-                return {
-                    atBottom: atBottom,
-                    lastDisplayedScrollToken: node.dataset.scrollToken,
-                    pixelOffset: wrapperRect.bottom - boundingRect.bottom,
-                }
-            }
-        }
-
-        // apparently the entire timeline is below the viewport. Give up.
-        return { atBottom: true };
-    },
-
-    // scroll the message list to the node with the given scrollToken. See
-    // notes in _calculateScrollState on how this works.
-    //
-    // pixel_offset gives the number of pixels between the bottom of the node
-    // and the bottom of the container.
-    _scrollToToken: function(scrollToken, pixelOffset) {
-        /* find the dom node with the right scrolltoken */
-        var node;
-        var messages = this.refs.messageList.children;
-        for (var i = messages.length-1; i >= 0; --i) {
-            var m = messages[i];
-            if (!m.dataset.scrollToken) continue;
-            if (m.dataset.scrollToken == scrollToken) {
-                node = m;
-                break;
-            }
-        }
-
-        if (!node) {
-            console.error("No node with scrollToken '"+scrollToken+"'");
-            return;
-        }
-
-        var scrollNode = this._getScrollNode();
-        var messageWrapper = this.refs.messagePanel;
-        var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
-        var boundingRect = node.getBoundingClientRect();
-        var scrollDelta = boundingRect.bottom + pixelOffset - wrapperRect.bottom;
-        if(scrollDelta != 0) {
-            scrollNode.scrollTop += scrollDelta;
-
-            // see the comments in onMessageListScroll regarding recentEventScroll
-            this.recentEventScroll = scrollNode.scrollTop;
-        }
-
-        if (DEBUG_SCROLL) {
-            console.log("Scrolled to token", node.dataset.scrollToken, "+", pixelOffset+":", scrollNode.scrollTop, "(delta: "+scrollDelta+")");
-            console.log("recentEventScroll now "+this.recentEventScroll);
-        }
+        messagePanel.scrollToToken(eventId, pixelOffset);
     },
 
     // get the current scroll position of the room, so that it can be
     // restored when we switch back to it
     getScrollState: function() {
-        return this.savedScrollState;
+        var messagePanel = this.refs.messagePanel;
+        if (!messagePanel) return null;
+
+        return messagePanel.getScrollState();
     },
 
     restoreScrollState: function(scrollState) {
-        if (!this.refs.messagePanel) return;
+        var messagePanel = this.refs.messagePanel;
+        if (!messagePanel) return null;
 
         if(scrollState.atBottom) {
             // we were at the bottom before. Ideally we'd scroll to the
             // 'read-up-to' mark here.
+            messagePanel.scrollToBottom();
+
         } else if (scrollState.lastDisplayedScrollToken) {
             // we might need to backfill, so we call scrollToEvent rather than
-            // _scrollToToken here. The scrollTokens on our DOM nodes are the
+            // scrollToToken here. The scrollTokens on our DOM nodes are the
             // event IDs, so lastDisplayedScrollToken will be the event ID we need,
             // and we can pass it directly into scrollToEvent.
             this.scrollToEvent(scrollState.lastDisplayedScrollToken,
@@ -1212,6 +1072,7 @@ module.exports = React.createClass({
         var CallView = sdk.getComponent("voip.CallView");
         var RoomSettings = sdk.getComponent("rooms.RoomSettings");
         var SearchBar = sdk.getComponent("rooms.SearchBar");
+        var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
 
         if (!this.state.room) {
             if (this.props.roomId) {
@@ -1298,6 +1159,21 @@ module.exports = React.createClass({
                         </div>
                     );
                 }
+                else if (this.tabComplete.isTabCompleting()) {
+                    var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
+                    statusBar = (
+                        <div className="mx_RoomView_tabCompleteBar">
+                            <div className="mx_RoomView_tabCompleteImage">...</div>
+                            <div className="mx_RoomView_tabCompleteWrapper">
+                                <TabCompleteBar entries={this.tabComplete.peek(6)} />
+                                <div className="mx_RoomView_tabCompleteEol">
+                                    <img src="img/eol.svg" width="22" height="16" alt="->|"/>
+                                    Auto-complete
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
                 else if (this.state.hasUnsentMessages) {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
@@ -1378,7 +1254,9 @@ module.exports = React.createClass({
             );
             if (canSpeak) {
                 messageComposer =
-                    <MessageComposer room={this.state.room} roomView={this} uploadFile={this.uploadFile} callState={this.state.callState} />
+                    <MessageComposer
+                        room={this.state.room} roomView={this} uploadFile={this.uploadFile}
+                        callState={this.state.callState} tabComplete={this.tabComplete} />
             }
 
             // TODO: Why aren't we storing the term/scope/count in this format
@@ -1387,7 +1265,7 @@ module.exports = React.createClass({
                 searchInfo = {
                     searchTerm : this.state.searchTerm,
                     searchScope : this.state.searchScope,
-                    searchCount : this.state.searchCount,
+                    searchCount : this.state.searchResults.count,
                 };
             }
 
@@ -1433,6 +1311,33 @@ module.exports = React.createClass({
                     </div>
             }
 
+
+            // if we have search results, we keep the messagepanel (so that it preserves its
+            // scroll state), but hide it.
+            var searchResultsPanel;
+            var hideMessagePanel = false;
+
+            if (this.state.searchResults) {
+                searchResultsPanel = (
+                    <ScrollPanel ref="searchResultsPanel" className="mx_RoomView_messagePanel"
+                            onFillRequest={ this.onSearchResultsFillRequest }>
+                        <li className={scrollheader_classes}></li>
+                        {this.getSearchResultTiles()}
+                    </ScrollPanel>
+                );
+                hideMessagePanel = true;
+            }
+
+            var messagePanel = (
+                    <ScrollPanel ref="messagePanel" className="mx_RoomView_messagePanel"
+                            onScroll={ this.onMessageListScroll } 
+                            onFillRequest={ this.onMessageListFillRequest }
+                            style={ hideMessagePanel ? { display: 'none' } : {} } >
+                        <li className={scrollheader_classes}></li>
+                        {this.getEventTiles()}
+                    </ScrollPanel>
+            );
+
             return (
                 <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") }>
                     <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
@@ -1453,15 +1358,8 @@ module.exports = React.createClass({
                         { conferenceCallNotification }
                         { aux }
                     </div>
-                    <GeminiScrollbar autoshow={true} ref="messagePanel" className="mx_RoomView_messagePanel" onScroll={ this.onMessageListScroll }>
-                        <div className="mx_RoomView_messageListWrapper">
-                            <ol ref="messageList" className="mx_RoomView_MessageList" aria-live="polite">
-                                <li className={scrollheader_classes}>
-                                </li>
-                                {this.getEventTiles()}
-                            </ol>
-                        </div>
-                    </GeminiScrollbar>
+                    { messagePanel }
+                    { searchResultsPanel }
                     <div className="mx_RoomView_statusArea">
                         <div className="mx_RoomView_statusAreaBox">
                             <div className="mx_RoomView_statusAreaBox_line"></div>
