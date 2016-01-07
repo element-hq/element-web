@@ -164,6 +164,11 @@ limitations under the License.
     margin-bottom: 12px;
 }
 
+hr.mx_RoomView_myReadMarker {
+    border-top: solid 1px #76cfa6;
+    border-bottom: none;
+}
+
 .mx_RoomView_statusArea {
     -webkit-box-ordinal-group: 4;
     -moz-box-ordinal-group: 4;
