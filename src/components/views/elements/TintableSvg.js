@@ -31,6 +31,10 @@ module.exports = React.createClass({
         className: React.PropTypes.string,
     },
 
+    componentWillMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+    },
+
     componentDidMount: function() {
         // we can't use onLoad on object due to https://github.com/facebook/react/pull/5781
         // so handle it with pure DOM instead
@@ -39,6 +43,12 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         ReactDOM.findDOMNode(this).removeEventListener('load', this.onLoad);
+        dis.unregister(this.dispatcherRef);
+    },
+
+    onAction: function(payload) {
+        if (payload.action !== 'tint_update') return;
+        Tinter.tintSvg(ReactDOM.findDOMNode(this));
     },
 
     onLoad: function(event) {

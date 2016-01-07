@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+var dis = require("./dispatcher");
 
 // FIXME: these vars should be bundled up and attached to 
 // module.exports otherwise this will break when included by both
@@ -63,20 +64,10 @@ var cssAttrs = [
     "borderColor",
 ];
 
-var svgFixups = [
-    // {
-    //     node: a SVG node that needs to be fixed up
-    //     attr: name of the attribute to be clobbered, e.g. 'fill'
-    //     index: ordinal of primary, secondary
-    // }
-];
-
 var svgAttrs = [
     "fill",
     "stroke",
 ];
-
-var svgNodes = {};
 
 var cached = false;
 
@@ -102,11 +93,14 @@ function calcCssFixups() {
     }
 }
 
-function calcSvgFixups(nodes) {
-    var svgs = nodes || document.getElementsByClassName("mx_TintableSvg");
+function calcSvgFixups(svgs) {
+    // go through manually fixing up SVG colours.
+    // we could do this by stylesheets, but keeping the stylesheets
+    // updated would be a PITA, so just brute-force search for the
+    // key colour; cache the element and apply.
+
     var fixups = [];
     for (var i = 0; i < svgs.length; i++) {
-
         var svgDoc = svgs[i].contentDocument;
         if (!svgDoc) continue;
         var tags = svgDoc.getElementsByTagName("*");
@@ -167,7 +161,6 @@ module.exports = {
     tint: function(primaryColor, secondaryColor, tertiaryColor) {
         if (!cached) {
             calcCssFixups();
-            svgFixups = calcSvgFixups();
             cached = true;
         }
 
@@ -195,11 +188,8 @@ module.exports = {
         // go through manually fixing up the stylesheets.
         applyCssFixups();
 
-        // go through manually fixing up SVG colours.
-        // we could do this by stylesheets, but keeping the stylesheets
-        // updated would be a PITA, so just brute-force search for the
-        // key colour; cache the element and apply.
-        applySvgFixups(svgFixups);
+        // tell all the SVGs to go fix themselves up
+        dis.dispatch({ action: 'tint_update' });        
     },
 
     tintSvg: function(svg) {
@@ -207,7 +197,6 @@ module.exports = {
         // (although this would result in an even worse flicker as the element redraws)
         var fixups = calcSvgFixups([ svg ]);
         if (fixups.length) {
-            svgFixups = svgFixups.concat(fixups); // XXX: this leaks fixups
             applySvgFixups(fixups);
         }
     },
