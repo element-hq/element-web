@@ -650,6 +650,7 @@ module.exports = React.createClass({
 
 
         var prevEvent = null; // the last event we showed
+        var readReceiptEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
         var startIdx = Math.max(0, this.state.room.timeline.length - this.state.messageCap);
         for (var i = startIdx; i < this.state.room.timeline.length; i++) {
             var mxEv = this.state.room.timeline[i];
@@ -699,6 +700,10 @@ module.exports = React.createClass({
                     <EventTile mxEvent={mxEv} continuation={continuation} last={last}/>
                 </li>
             );
+
+            if (eventId == readReceiptEventId) {
+                ret.push(<hr className="mx_RoomView_myReadMarker" />);
+            }
 
             prevEvent = mxEv;
         }
