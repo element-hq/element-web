@@ -93,48 +93,10 @@ function calcCssFixups() {
     }
 }
 
-function calcSvgFixups(svgs) {
-    // go through manually fixing up SVG colours.
-    // we could do this by stylesheets, but keeping the stylesheets
-    // updated would be a PITA, so just brute-force search for the
-    // key colour; cache the element and apply.
-
-    var fixups = [];
-    for (var i = 0; i < svgs.length; i++) {
-        var svgDoc = svgs[i].contentDocument;
-        if (!svgDoc) continue;
-        var tags = svgDoc.getElementsByTagName("*");
-        for (var j = 0; j < tags.length; j++) {
-            var tag = tags[j];
-            for (var k = 0; k < svgAttrs.length; k++) {
-                var attr = svgAttrs[k];
-                for (var l = 0; l < keyHex.length; l++) {
-                    if (tag.getAttribute(attr) && tag.getAttribute(attr).toUpperCase() === keyHex[l]) {
-                        fixups.push({
-                            node: tag,
-                            attr: attr,
-                            index: l,
-                        });
-                    }
-                }
-            }
-        }
-    }
-
-    return fixups;
-}
-
 function applyCssFixups() {
     for (var i = 0; i < cssFixups.length; i++) {
         var cssFixup = cssFixups[i];
         cssFixup.style[cssFixup.attr] = colors[cssFixup.index];
-    }
-}
-
-function applySvgFixups(fixups) {
-    for (var i = 0; i < fixups.length; i++) {
-        var svgFixup = fixups[i];
-        svgFixup.node.setAttribute(svgFixup.attr, colors[svgFixup.index]);
     }
 }
 
@@ -192,12 +154,44 @@ module.exports = {
         dis.dispatch({ action: 'tint_update' });        
     },
 
-    tintSvg: function(svg) {
-        // XXX: we should probably faff around with toggling the visibility of the node to avoid flashing the wrong colour.
-        // (although this would result in an even worse flicker as the element redraws)
-        var fixups = calcSvgFixups([ svg ]);
-        if (fixups.length) {
-            applySvgFixups(fixups);
+    // XXX: we could just move this all into TintableSvg, but as it's so similar
+    // to the CSS fixup stuff in Tinter (just that the fixups are stored in TintableSvg)
+    // keeping it here for now.
+    calcSvgFixups: function(svgs) {
+        // go through manually fixing up SVG colours.
+        // we could do this by stylesheets, but keeping the stylesheets
+        // updated would be a PITA, so just brute-force search for the
+        // key colour; cache the element and apply.
+
+        var fixups = [];
+        for (var i = 0; i < svgs.length; i++) {
+            var svgDoc = svgs[i].contentDocument;
+            if (!svgDoc) continue;
+            var tags = svgDoc.getElementsByTagName("*");
+            for (var j = 0; j < tags.length; j++) {
+                var tag = tags[j];
+                for (var k = 0; k < svgAttrs.length; k++) {
+                    var attr = svgAttrs[k];
+                    for (var l = 0; l < keyHex.length; l++) {
+                        if (tag.getAttribute(attr) && tag.getAttribute(attr).toUpperCase() === keyHex[l]) {
+                            fixups.push({
+                                node: tag,
+                                attr: attr,
+                                index: l,
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        return fixups;
+    },
+
+    applySvgFixups: function(fixups) {
+        for (var i = 0; i < fixups.length; i++) {
+            var svgFixup = fixups[i];
+            svgFixup.node.setAttribute(svgFixup.attr, colors[svgFixup.index]);
         }
     },
 };

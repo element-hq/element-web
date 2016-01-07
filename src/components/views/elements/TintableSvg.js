@@ -24,6 +24,8 @@ var Tinter = require("../../../Tinter");
 module.exports = React.createClass({
     displayName: 'TintableSvg',
 
+    fixups: [],
+
     propTypes: {
         src: React.PropTypes.string.isRequired,
         width: React.PropTypes.string.isRequired,
@@ -48,11 +50,12 @@ module.exports = React.createClass({
 
     onAction: function(payload) {
         if (payload.action !== 'tint_update') return;
-        Tinter.tintSvg(ReactDOM.findDOMNode(this));
+        Tinter.applySvgFixups(this.fixups);
     },
 
     onLoad: function(event) {
-        Tinter.tintSvg(event.target);
+        this.fixups = Tinter.calcSvgFixups([event.target]);
+        Tinter.applySvgFixups(this.fixups);
     },
 
     render: function() {
