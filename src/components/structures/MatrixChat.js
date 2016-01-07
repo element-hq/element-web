@@ -225,6 +225,14 @@ module.exports = React.createClass({
                     screen: 'post_registration'
                 });
                 break;
+            case 'start_upgrade_registration':
+                this.replaceState({
+                    screen: "register",
+                    upgradeUsername: MatrixClientPeg.get().getUserIdLocalpart(),
+                    guestAccessToken: MatrixClientPeg.get().getAccessToken()
+                });
+                this.notifyNewScreen('register');
+                break;
             case 'token_login':
                 if (this.state.logged_in) return;
 
@@ -784,6 +792,9 @@ module.exports = React.createClass({
                     sessionId={this.state.register_session_id}
                     idSid={this.state.register_id_sid}
                     email={this.props.startingQueryParams.email}
+                    username={this.state.upgradeUsername}
+                    disableUsernameChanges={Boolean(this.state.upgradeUsername)}
+                    guestAccessToken={this.state.guestAccessToken}
                     hsUrl={this.props.config.default_hs_url}
                     isUrl={this.props.config.default_is_url}
                     registrationUrl={this.props.registrationUrl}

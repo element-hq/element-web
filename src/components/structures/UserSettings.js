@@ -135,6 +135,12 @@ module.exports = React.createClass({
         });
     },
 
+    onUpgradeClicked: function() {
+        dis.dispatch({
+            action: "start_upgrade_registration"
+        });
+    },
+
     onLogoutPromptCancel: function() {
         this.logoutModal.closeDialog();
     },
@@ -163,6 +169,28 @@ module.exports = React.createClass({
         var avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
         );
+
+        var accountJsx;
+
+        if (MatrixClientPeg.get().isGuest()) {
+            accountJsx = (
+                <div className="mx_UserSettings_button" onClick={this.onUpgradeClicked}>
+                    Upgrade (It's free!)
+                </div>
+            );
+        }
+        else {
+            accountJsx = (
+                <ChangePassword
+                        className="mx_UserSettings_accountTable"
+                        rowClassName="mx_UserSettings_profileTableRow"
+                        rowLabelClassName="mx_UserSettings_profileLabelCell"
+                        rowInputClassName="mx_UserSettings_profileInputCell"
+                        buttonClassName="mx_UserSettings_button"
+                        onError={this.onPasswordChangeError}
+                        onFinished={this.onPasswordChanged} />
+            );
+        }
 
         return (
             <div className="mx_UserSettings">
@@ -213,14 +241,7 @@ module.exports = React.createClass({
                 <h2>Account</h2>
 
                 <div className="mx_UserSettings_section">
-                    <ChangePassword
-                        className="mx_UserSettings_accountTable"
-                        rowClassName="mx_UserSettings_profileTableRow"
-                        rowLabelClassName="mx_UserSettings_profileLabelCell"
-                        rowInputClassName="mx_UserSettings_profileInputCell"
-                        buttonClassName="mx_UserSettings_button"
-                        onError={this.onPasswordChangeError}
-                        onFinished={this.onPasswordChanged} />                   
+                    {accountJsx}
                 </div>
 
                 <div className="mx_UserSettings_logout">
