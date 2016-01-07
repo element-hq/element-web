@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -127,8 +127,16 @@ module.exports = React.createClass({
     },
 
     onRoomReceipt: function(receiptEvent, room) {
-        // because if we read a message it will affect notification / unread counts
-        this.refreshRoomList();
+        // because if we read a notification, it will affect notification count
+        // only bother updating if there's a receipt from us
+        var receiptKeys = Object.keys(receiptEvent.getContent());
+        for (var i = 0; i < receiptKeys.length; ++i) {
+            var rcpt = receiptEvent.getContent()[receiptKeys[i]];
+            if (rcpt['m.read'] && rcpt['m.read'][MatrixClientPeg.get().credentials.userId]) {
+                this.refreshRoomList();
+                break;
+            }
+        }
     },
 
     onRoomName: function(room) {

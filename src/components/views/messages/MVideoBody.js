@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -70,8 +70,8 @@ module.exports = React.createClass({
         }
 
         return (
-            <span className="mx_MVideoTile">
-                <video className="mx_MVideoTile" src={cli.mxcUrlToHttp(content.url)} alt={content.body}
+            <span className="mx_MVideoBody">
+                <video className="mx_MVideoBody" src={cli.mxcUrlToHttp(content.url)} alt={content.body}
                     controls preload={preload} autoPlay="0"
                     height={height} width={width} poster={poster}>
                 </video>

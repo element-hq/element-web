@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -109,14 +109,14 @@ module.exports = React.createClass({
         var thumbUrl = this._getThumbUrl();
         if (thumbUrl) {
             return (
-                <span className="mx_MImageTile">
+                <span className="mx_MImageBody">
                     <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
-                        <img className="mx_MImageTile_thumbnail" src={thumbUrl}
+                        <img className="mx_MImageBody_thumbnail" src={thumbUrl}
                             alt={content.body} style={imgStyle}
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave} />
                     </a>
-                    <div className="mx_MImageTile_download">
+                    <div className="mx_MImageBody_download">
                         <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
                             <img src="img/download.png" width="10" height="12"/>
                             Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
@@ -126,13 +126,13 @@ module.exports = React.createClass({
             );
         } else if (content.body) {
             return (
-                <span className="mx_MImageTile">
+                <span className="mx_MImageBody">
                     Image '{content.body}' cannot be displayed.
                 </span>
             );
         } else {
             return (
-                <span className="mx_MImageTile">
+                <span className="mx_MImageBody">
                     This image cannot be displayed.
                 </span>
             );

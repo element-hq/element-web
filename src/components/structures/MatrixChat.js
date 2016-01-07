@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -639,10 +639,28 @@ module.exports = React.createClass({
 
         var rooms = MatrixClientPeg.get().getRooms();
         for (var i = 0; i < rooms.length; ++i) {
-            notifCount += rooms[i].unread_notification_count;
+            if (rooms[i].unread_notification_count) {
+                notifCount += rooms[i].unread_notification_count;
+            }
         }
         this.favicon.badge(notifCount);
         document.title = (notifCount > 0 ? "["+notifCount+"] " : "")+"Vector";
+    },
+
+    onUserSettingsClose: function() {
+        // XXX: use browser history instead to find the previous room?
+        if (this.state.currentRoom) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.state.currentRoom,
+            });
+        }
+        else {
+            dis.dispatch({
+                action: 'view_indexed_room',
+                roomIndex: 0,
+            });
+        }
     },
 
     render: function() {
@@ -677,7 +695,7 @@ module.exports = React.createClass({
                     right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} />
                     break;
                 case this.PageTypes.UserSettings:
-                    page_element = <UserSettings />
+                    page_element = <UserSettings onClose={this.onUserSettingsClose} />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
                     break;
                 case this.PageTypes.CreateRoom:

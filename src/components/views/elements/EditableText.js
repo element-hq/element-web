@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -113,6 +113,10 @@ module.exports = React.createClass({
         }
     },
 
+    onBlur: function() {
+        this.cancelEdit();
+    },
+
     render: function() {
         var editable_el;
 
@@ -125,7 +129,8 @@ module.exports = React.createClass({
         } else if (this.state.phase == this.Phases.Edit) {
             editable_el = (
                 <div>
-                    <input type="text" defaultValue={this.state.value} onKeyUp={this.onKeyUp} onFocus={this.onFocus} onBlur={this.onFinish} placeholder={this.props.placeHolder} autoFocus/>
+                    <input type="text" defaultValue={this.state.value}
+                        onKeyUp={this.onKeyUp} onFocus={this.onFocus} onBlur={this.onBlur} placeholder={this.props.placeHolder} autoFocus/>
                 </div>
             );
         }

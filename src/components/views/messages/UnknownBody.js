@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ module.exports = React.createClass({
     render: function() {
         var content = this.props.mxEvent.getContent();
         return (
-            <span className="mx_UnknownMessageTile">
+            <span className="mx_UnknownBody">
                 {content.body}
             </span>
         );

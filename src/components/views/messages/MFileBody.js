@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -54,8 +54,8 @@ module.exports = React.createClass({
 
         if (httpUrl) {
             return (
-                <span className="mx_MFileTile">
-                    <div className="mx_MImageTile_download">
+                <span className="mx_MFileBody">
+                    <div className="mx_MImageBody_download">
                         <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
                             <img src="img/download.png" width="10" height="12"/>
                             Download {text}
@@ -65,7 +65,7 @@ module.exports = React.createClass({
             );
         } else {
             var extra = text ? ': '+text : '';
-            return <span className="mx_MFileTile">
+            return <span className="mx_MFileBody">
                 Invalid file{extra}
             </span>
         }

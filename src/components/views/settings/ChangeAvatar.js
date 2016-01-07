@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,12 +23,22 @@ module.exports = React.createClass({
     propTypes: {
         initialAvatarUrl: React.PropTypes.string,
         room: React.PropTypes.object,
+        // if false, you need to call changeAvatar.onFileSelected yourself.
+        showUploadSection: React.PropTypes.bool,
+        className: React.PropTypes.string
     },
 
     Phases: {
         Display: "display",
         Uploading: "uploading",
         Error: "error",
+    },
+
+    getDefaultProps: function() {
+        return {
+            showUploadSection: true,
+            className: "mx_Dialog_content" // FIXME - shouldn't be this by default
+        };
     },
 
     getInitialState: function() {
@@ -55,7 +65,7 @@ module.exports = React.createClass({
             phase: this.Phases.Uploading
         });
         var self = this;
-        MatrixClientPeg.get().uploadContent(file).then(function(url) {
+        var httpPromise = MatrixClientPeg.get().uploadContent(file).then(function(url) {
             newUrl = url;
             if (self.props.room) {
                 return MatrixClientPeg.get().sendStateEvent(
@@ -67,7 +77,9 @@ module.exports = React.createClass({
             } else {
                 return MatrixClientPeg.get().setAvatarUrl(url);
             }
-        }).done(function() {
+        });
+
+        httpPromise.done(function() {
             self.setState({
                 phase: self.Phases.Display,
                 avatarUrl: MatrixClientPeg.get().mxcUrlToHttp(newUrl)
@@ -78,11 +90,13 @@ module.exports = React.createClass({
             });
             self.onError(error);
         });
+
+        return httpPromise;
     },
 
     onFileSelected: function(ev) {
         this.avatarSet = true;
-        this.setAvatarFromFile(ev.target.files[0]);
+        return this.setAvatarFromFile(ev.target.files[0]);
     },
 
     onError: function(error) {
@@ -106,19 +120,26 @@ module.exports = React.createClass({
             avatarImg = <img src={this.state.avatarUrl} style={style} />;
         }
 
+        var uploadSection;
+        if (this.props.showUploadSection) {
+            uploadSection = (
+                <div className={this.props.className}>
+                    Upload new:
+                    <input type="file" onChange={this.onFileSelected}/>
+                    {this.state.errorText}
+                </div>  
+            );
+        }
+
         switch (this.state.phase) {
             case this.Phases.Display:
             case this.Phases.Error:
                 return (
                     <div>
-                        <div className="mx_Dialog_content">
+                        <div className={this.props.className}>
                             {avatarImg}
                         </div>
-                        <div className="mx_Dialog_content">
-                            Upload new:
-                            <input type="file" onChange={this.onFileSelected}/>
-                            {this.state.errorText}
-                        </div>    
+                        {uploadSection}
                     </div>
                 );
             case this.Phases.Uploading:
