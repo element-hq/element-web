@@ -159,7 +159,15 @@ module.exports = React.createClass({
 
     onRoomReceipt: function(receiptEvent, room) {
         // because if we read a notification, it will affect notification count
-        this.refreshRoomList();
+        // only bother updating if there's a receipt from us
+        var receiptKeys = Object.keys(receiptEvent.getContent());
+        for (var i = 0; i < receiptKeys.length; ++i) {
+            var rcpt = receiptEvent.getContent()[receiptKeys[i]];
+            if (rcpt['m.read'] && rcpt['m.read'][MatrixClientPeg.get().credentials.userId]) {
+                this.refreshRoomList();
+                break;
+            }
+        }
     },
 
     onRoomName: function(room) {

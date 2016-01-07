@@ -639,7 +639,9 @@ module.exports = React.createClass({
 
         var rooms = MatrixClientPeg.get().getRooms();
         for (var i = 0; i < rooms.length; ++i) {
-            notifCount += rooms[i].unread_notification_count;
+            if (rooms[i].unread_notification_count) {
+                notifCount += rooms[i].unread_notification_count;
+            }
         }
         this.favicon.badge(notifCount);
         document.title = (notifCount > 0 ? "["+notifCount+"] " : "")+"Vector";
