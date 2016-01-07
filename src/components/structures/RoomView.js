@@ -97,6 +97,24 @@ module.exports = React.createClass({
                 this.forceUpdate();
             }
         });
+        // if this is an unknown room then we're in one of three states:
+        // - This is a room we can peek into (search engine) (we can /peek)
+        // - This is a room we can publicly join or were invited to. (we can /join)
+        // - This is a room we cannot join at all. (no action can help us)
+        // We can't try to /join because this may implicitly accept invites (!)
+        // We can /peek though. If it fails then we present the join UI. If it
+        // succeeds then great, show the preview (but we still may be able to /join!).
+        if (!this.state.room) {
+            console.log("Attempting to peek into room %s", this.props.roomId);
+            MatrixClientPeg.get().peekInRoom(this.props.roomId).done(function() {
+                // we don't need to do anything - JS SDK will emit Room events
+                // which will update the UI.
+            }, function(err) {
+                console.error("Failed to peek into room: %s", err);
+            });
+        }
+
+
     },
 
     componentWillUnmount: function() {
@@ -421,6 +439,12 @@ module.exports = React.createClass({
             self.setState({
                 joining: false,
                 joinError: error
+            });
+            var msg = error.message ? error.message : JSON.stringify(error);
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to join room",
+                description: msg
             });
         });
         this.setState({
