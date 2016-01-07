@@ -24,8 +24,6 @@ var Tinter = require("../../../Tinter");
 module.exports = React.createClass({
     displayName: 'TintableSvg',
 
-    fixups: [],
-
     propTypes: {
         src: React.PropTypes.string.isRequired,
         width: React.PropTypes.string.isRequired,
@@ -34,6 +32,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this.fixups = [];
         this.dispatcherRef = dis.register(this.onAction);
     },
 
