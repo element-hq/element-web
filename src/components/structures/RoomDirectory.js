@@ -87,13 +87,30 @@ module.exports = React.createClass({
         });
         var rows = [];
         var self = this;
+        var guestRead, guestJoin;
         for (var i = 0; i < rooms.length; i++) {
             var name = rooms[i].name || rooms[i].aliases[0];
+            guestRead = null;
+            guestJoin = null;
+
+            if (rooms[i].world_readable) {
+                guestRead = (
+                    <img src="img/members.svg"
+                        alt="World Readable" title="World Readable" width="12" height="12" />
+                );
+            }
+            if (rooms[i].guest_can_join) {
+                guestJoin = (
+                    <img src="img/leave.svg"
+                        alt="Guests can join" title="Guests can join" width="12" height="12" />
+                );
+            }
+
             // <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(rooms[i].room_id, 40, 40, "crop") } width="40" height="40" alt=""/>
             rows.unshift(
                 <tbody key={ rooms[i].room_id }>
                     <tr onClick={self.joinRoom.bind(null, rooms[i].room_id)}>
-                        <td className="mx_RoomDirectory_name">{ name }</td>
+                        <td className="mx_RoomDirectory_name">{ name } {guestRead} {guestJoin}</td>
                         <td>{ rooms[i].aliases[0] }</td>
                         <td>{ rooms[i].num_joined_members }</td>
                     </tr>
