@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ limitations under the License.
 var React = require('react');
 var filesize = require('filesize');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var sdk = require('../../../index');
+var dis = require("../../../dispatcher");
 
 module.exports = React.createClass({
     displayName: 'MFileBody',
@@ -52,12 +54,14 @@ module.exports = React.createClass({
         var httpUrl = cli.mxcUrlToHttp(content.url);
         var text = this.presentableTextForFile(content);
 
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
+
         if (httpUrl) {
             return (
                 <span className="mx_MFileBody">
                     <div className="mx_MImageBody_download">
                         <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
-                            <img src="img/download.png" width="10" height="12"/>
+                            <TintableSvg src="img/download.svg" width="12" height="14"/>
                             Download {text}
                         </a>
                     </div>

@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -66,10 +66,11 @@ module.exports = React.createClass({
     getRoomName: function() {
         return this.refs.name_edit.value;
     },
-    
+
     render: function() {
         var EditableText = sdk.getComponent("elements.EditableText");
         var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         var header;
         if (this.props.simpleHeader) {
@@ -118,8 +119,8 @@ module.exports = React.createClass({
                     <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
                         <div className="mx_RoomHeader_nametext" title={ this.props.room.name }>{ this.props.room.name }</div>
                         { searchStatus }
-                        <div className="mx_RoomHeader_settingsButton">
-                            <img src="img/settings.svg" width="12" height="12"/>
+                        <div className="mx_RoomHeader_settingsButton" title="Settings">
+                            <TintableSvg src="img/settings.svg" width="12" height="12"/>
                         </div>
                     </div>
                 if (topic) topic_el = <div className="mx_RoomHeader_topic" title={topic.getContent().topic}>{ topic.getContent().topic }</div>;
@@ -135,18 +136,16 @@ module.exports = React.createClass({
             var leave_button;
             if (this.props.onLeaveClick) {
                 leave_button =
-                    <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton">
-                        <img src="img/leave.svg" title="Leave room" alt="Leave room"
-                            width="26" height="20" onClick={this.props.onLeaveClick}/>
+                    <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton" onClick={this.props.onLeaveClick} title="Leave room">
+                        <TintableSvg src="img/leave.svg" width="26" height="20"/>
                     </div>;
             }
 
             var forget_button;
             if (this.props.onForgetClick) {
                 forget_button =
-                    <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton">
-                        <img src="img/leave.svg" title="Forget room" alt="Forget room"
-                            width="26" height="20" onClick={this.props.onForgetClick}/>
+                    <div className="mx_RoomHeader_button mx_RoomHeader_leaveButton" onClick={this.props.onForgetClick} title="Forget room">
+                        <TintableSvg src="img/leave.svg" width="26" height="20"/>
                     </div>;
             }
 
@@ -166,8 +165,8 @@ module.exports = React.createClass({
                     <div className="mx_RoomHeader_rightRow">
                         { forget_button }
                         { leave_button }
-                        <div className="mx_RoomHeader_button">
-                            <img src="img/search.svg" title="Search" alt="Search" width="21" height="19" onClick={this.props.onSearchClick}/>
+                        <div className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
+                            <TintableSvg src="img/search.svg" width="21" height="19"/>
                         </div>
                     </div>
                 </div>

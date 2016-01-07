@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -461,6 +461,7 @@ module.exports = React.createClass({
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         var callButton, videoCallButton, hangupButton;
         var call = CallHandler.getCallForRoom(this.props.room.roomId);
@@ -473,12 +474,12 @@ module.exports = React.createClass({
         }
         else {
             callButton =
-                <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick}>
-                    <img src="img/voice.svg" alt="Voice call" title="Voice call" width="16" height="26"/>
+                <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
+                    <TintableSvg src="img/voice.svg" width="16" height="26"/>
                 </div>
             videoCallButton =
-                <div className="mx_MessageComposer_videocall" onClick={this.onCallClick}>
-                    <img src="img/call.svg" alt="Video call" title="Video call" width="30" height="22"/>
+                <div className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
+                    <TintableSvg src="img/call.svg" width="30" height="22"/>
                 </div>
         }
 
@@ -492,8 +493,8 @@ module.exports = React.createClass({
                     <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
                         <textarea ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
                     </div>
-                    <div className="mx_MessageComposer_upload" onClick={this.onUploadClick}>
-                        <img src="img/upload.svg" alt="Upload file" title="Upload file" width="19" height="24"/>
+                    <div className="mx_MessageComposer_upload" onClick={this.onUploadClick} title="Upload file">
+                        <TintableSvg src="img/upload.svg" width="19" height="24"/>
                         <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
                     </div>
                     { hangupButton }

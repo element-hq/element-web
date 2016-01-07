@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ var filesize = require('filesize');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require('../../../Modal');
 var sdk = require('../../../index');
+var dis = require("../../../dispatcher");
 
 module.exports = React.createClass({
     displayName: 'MImageBody',
@@ -97,6 +98,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
 
@@ -118,7 +120,7 @@ module.exports = React.createClass({
                     </a>
                     <div className="mx_MImageBody_download">
                         <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
-                            <img src="img/download.png" width="10" height="12"/>
+                            <TintableSvg src="img/download.svg" width="12" height="14"/>
                             Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
                         </a>
                     </div>

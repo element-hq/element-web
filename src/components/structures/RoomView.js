@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -574,8 +574,8 @@ module.exports = React.createClass({
 
 
     getSearchResultTiles: function() {
-        var DateSeparator = sdk.getComponent('messages.DateSeparator');
         var EventTile = sdk.getComponent('rooms.EventTile');
+        var SearchResultTile = sdk.getComponent('rooms.SearchResultTile');
         var cli = MatrixClientPeg.get();
 
         // XXX: todo: merge overlapping results somehow?
@@ -615,33 +615,27 @@ module.exports = React.createClass({
                 continue;
             }
 
-            var eventId = mxEv.getId();
-
             if (this.state.searchScope === 'All') {
                 var roomId = mxEv.getRoomId();
                 if(roomId != lastRoomId) {
-                    ret.push(<li key={eventId + "-room"}><h1>Room: { cli.getRoom(roomId).name }</h1></li>);
+                    var room = cli.getRoom(roomId);
+
+                    // XXX: if we've left the room, we might not know about
+                    // it. We should tell the js sdk to go and find out about
+                    // it. But that's not an issue currently, as synapse only
+                    // returns results for rooms we're joined to.
+                    var roomName = room ? room.name : "Unknown room "+roomId;
+
+                    ret.push(<li key={mxEv.getId() + "-room"}>
+                                 <h1>Room: { roomName }</h1>
+                             </li>);
                     lastRoomId = roomId;
                 }
             }
 
-            var ts1 = mxEv.getTs();
-            ret.push(<li key={ts1 + "-search"}><DateSeparator ts={ts1}/></li>); // Rank: {resultList[i].rank}
-
-            var timeline = result.context.getTimeline();
-            for (var j = 0; j < timeline.length; j++) {
-                var ev = timeline[j];
-                var highlights;
-                var contextual = (j != result.context.getOurEventIndex());
-                if (!contextual) {
-                    highlights = this.state.searchHighlights;
-                }
-                if (EventTile.haveTileForEvent(ev)) {
-                    ret.push(<li key={eventId+"+"+j} data-scroll-token={eventId+"+"+j}>
-                             <EventTile mxEvent={ev} contextual={contextual} highlights={highlights} />
-                             </li>);
-                }
-            }
+            ret.push(<SearchResultTile key={mxEv.getId()}
+                     searchResult={result}
+                     searchHighlights={this.state.searchHighlights}/>);
         }
         return ret;
     },
@@ -656,6 +650,7 @@ module.exports = React.createClass({
 
 
         var prevEvent = null; // the last event we showed
+        var readReceiptEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
         var startIdx = Math.max(0, this.state.room.timeline.length - this.state.messageCap);
         for (var i = startIdx; i < this.state.room.timeline.length; i++) {
             var mxEv = this.state.room.timeline[i];
@@ -705,6 +700,10 @@ module.exports = React.createClass({
                     <EventTile mxEvent={mxEv} continuation={continuation} last={last}/>
                 </li>
             );
+
+            if (eventId == readReceiptEventId) {
+                ret.push(<hr className="mx_RoomView_myReadMarker" />);
+            }
 
             prevEvent = mxEv;
         }
@@ -1083,6 +1082,7 @@ module.exports = React.createClass({
         var RoomSettings = sdk.getComponent("rooms.RoomSettings");
         var SearchBar = sdk.getComponent("rooms.SearchBar");
         var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         if (!this.state.room) {
             if (this.props.roomId) {
@@ -1157,7 +1157,7 @@ module.exports = React.createClass({
                 if (this.state.syncState === "ERROR") {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning.svg" width="24" height="23" alt="/!\ "/>
+                            <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Connectivity to the server has been lost.
@@ -1176,8 +1176,8 @@ module.exports = React.createClass({
                             <div className="mx_RoomView_tabCompleteImage">...</div>
                             <div className="mx_RoomView_tabCompleteWrapper">
                                 <TabCompleteBar entries={this.tabComplete.peek(6)} />
-                                <div className="mx_RoomView_tabCompleteEol">
-                                    <img src="img/eol.svg" width="22" height="16" alt="->|"/>
+                                <div className="mx_RoomView_tabCompleteEol" title="->|">
+                                    <TintableSvg src="img/eol.svg" width="22" height="16"/>
                                     Auto-complete
                                 </div>
                             </div>
@@ -1187,7 +1187,7 @@ module.exports = React.createClass({
                 else if (this.state.hasUnsentMessages) {
                     statusBar = (
                         <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning.svg" width="24" height="23" alt="/!\ "/>
+                            <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
                             <div className="mx_RoomView_connectionLostBar_textArea">
                                 <div className="mx_RoomView_connectionLostBar_title">
                                     Some of your messages have not been sent.
@@ -1250,8 +1250,8 @@ module.exports = React.createClass({
             var fileDropTarget = null;
             if (this.state.draggingFile) {
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
-                                    <div className="mx_RoomView_fileDropTargetLabel">
-                                        <img src="img/upload-big.svg" width="45" height="59" alt="Drop File Here"/><br/>
+                                    <div className="mx_RoomView_fileDropTargetLabel" title="Drop File Here">
+                                        <TintableSvg src="img/upload-big.svg" width="45" height="59"/><br/>
                                         Drop File Here
                                     </div>
                                  </div>;
@@ -1288,25 +1288,29 @@ module.exports = React.createClass({
 
                 if (call.type === "video") {
                     zoomButton = (
-                        <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick}>
-                            <img src="img/fullscreen.svg" title="Fill screen" alt="Fill screen" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
+                        <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title="Fill screen">
+                            <TintableSvg src="img/fullscreen.svg" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
                         </div>
                     );
 
                     videoMuteButton =
                         <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
-                            <img src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"} width="31" height="27"/>
+                            <img src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"}
+                                 alt={call.isLocalVideoMuted() ? "Click to unmute video" : "Click to mute video"}
+                                 width="31" height="27"/>
                         </div>
                 }
                 voiceMuteButton =
                     <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
-                        <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"} width="21" height="26"/>
+                        <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"} 
+                             alt={call.isMicrophoneMuted() ? "Click to unmute audio" : "Click to mute audio"} 
+                             width="21" height="26"/>
                     </div>
 
                 if (!statusBar) {
                     statusBar =
                         <div className="mx_RoomView_callBar">
-                            <img src="img/sound-indicator.svg" width="23" height="20" alt=""/>
+                            <img src="img/sound-indicator.svg" width="23" height="20"/>
                             <b>Active call</b>
                         </div>;
                 }
@@ -1317,7 +1321,7 @@ module.exports = React.createClass({
                         { videoMuteButton }
                         { zoomButton }
                         { statusBar }
-                        <img className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17"/>
+                        <TintableSvg className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17"/>
                     </div>
             }
 

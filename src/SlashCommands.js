@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ var MatrixClientPeg = require("./MatrixClientPeg");
 var MatrixTools = require("./MatrixTools");
 var dis = require("./dispatcher");
 var encryption = require("./encryption");
+var Tinter = require("./Tinter");
 
 var reject = function(msg) {
     return {
@@ -40,6 +41,12 @@ var commands = {
             );
         }
         return reject("Usage: /nick <display_name>");
+    },
+
+    // Takes an #rrggbb colourcode and retints the UI (just for debugging)
+    tint: function(room_id, args) {
+        Tinter.tint(args);
+        return success();
     },
 
     encrypt: function(room_id, args) {

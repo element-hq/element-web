@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,14 +23,14 @@ limitations under the License.
 
 module.exports.components = {};
 module.exports.components['structures.CreateRoom'] = require('./components/structures/CreateRoom');
-module.exports.components['structures.login.Login'] = require('./components/structures/login/Login');
-module.exports.components['structures.login.PostRegistration'] = require('./components/structures/login/PostRegistration');
-module.exports.components['structures.login.Registration'] = require('./components/structures/login/Registration');
 module.exports.components['structures.MatrixChat'] = require('./components/structures/MatrixChat');
 module.exports.components['structures.RoomView'] = require('./components/structures/RoomView');
 module.exports.components['structures.ScrollPanel'] = require('./components/structures/ScrollPanel');
 module.exports.components['structures.UploadBar'] = require('./components/structures/UploadBar');
 module.exports.components['structures.UserSettings'] = require('./components/structures/UserSettings');
+module.exports.components['structures.login.Login'] = require('./components/structures/login/Login');
+module.exports.components['structures.login.PostRegistration'] = require('./components/structures/login/PostRegistration');
+module.exports.components['structures.login.Registration'] = require('./components/structures/login/Registration');
 module.exports.components['views.avatars.MemberAvatar'] = require('./components/views/avatars/MemberAvatar');
 module.exports.components['views.avatars.RoomAvatar'] = require('./components/views/avatars/RoomAvatar');
 module.exports.components['views.create_room.CreateRoomButton'] = require('./components/views/create_room/CreateRoomButton');
@@ -41,6 +41,7 @@ module.exports.components['views.dialogs.LogoutPrompt'] = require('./components/
 module.exports.components['views.dialogs.QuestionDialog'] = require('./components/views/dialogs/QuestionDialog');
 module.exports.components['views.elements.EditableText'] = require('./components/views/elements/EditableText');
 module.exports.components['views.elements.ProgressBar'] = require('./components/views/elements/ProgressBar');
+module.exports.components['views.elements.TintableSvg'] = require('./components/views/elements/TintableSvg');
 module.exports.components['views.elements.UserSelector'] = require('./components/views/elements/UserSelector');
 module.exports.components['views.login.CaptchaForm'] = require('./components/views/login/CaptchaForm');
 module.exports.components['views.login.CasLogin'] = require('./components/views/login/CasLogin');
@@ -50,10 +51,10 @@ module.exports.components['views.login.LoginHeader'] = require('./components/vie
 module.exports.components['views.login.PasswordLogin'] = require('./components/views/login/PasswordLogin');
 module.exports.components['views.login.RegistrationForm'] = require('./components/views/login/RegistrationForm');
 module.exports.components['views.login.ServerConfig'] = require('./components/views/login/ServerConfig');
-module.exports.components['views.messages.MessageEvent'] = require('./components/views/messages/MessageEvent');
 module.exports.components['views.messages.MFileBody'] = require('./components/views/messages/MFileBody');
 module.exports.components['views.messages.MImageBody'] = require('./components/views/messages/MImageBody');
 module.exports.components['views.messages.MVideoBody'] = require('./components/views/messages/MVideoBody');
+module.exports.components['views.messages.MessageEvent'] = require('./components/views/messages/MessageEvent');
 module.exports.components['views.messages.TextualBody'] = require('./components/views/messages/TextualBody');
 module.exports.components['views.messages.TextualEvent'] = require('./components/views/messages/TextualEvent');
 module.exports.components['views.messages.UnknownBody'] = require('./components/views/messages/UnknownBody');
@@ -66,6 +67,7 @@ module.exports.components['views.rooms.RoomHeader'] = require('./components/view
 module.exports.components['views.rooms.RoomList'] = require('./components/views/rooms/RoomList');
 module.exports.components['views.rooms.RoomSettings'] = require('./components/views/rooms/RoomSettings');
 module.exports.components['views.rooms.RoomTile'] = require('./components/views/rooms/RoomTile');
+module.exports.components['views.rooms.SearchResultTile'] = require('./components/views/rooms/SearchResultTile');
 module.exports.components['views.rooms.TabCompleteBar'] = require('./components/views/rooms/TabCompleteBar');
 module.exports.components['views.settings.ChangeAvatar'] = require('./components/views/settings/ChangeAvatar');
 module.exports.components['views.settings.ChangeDisplayName'] = require('./components/views/settings/ChangeDisplayName');
