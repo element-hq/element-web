@@ -34,6 +34,15 @@ limitations under the License.
     margin: 0 10px;
 }
 
+.mx_RoomSettings h3 {
+    text-transform: uppercase;
+    color: #3d3b39;
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 36px;
+    margin-bottom: 10px;
+}
+
 .mx_RoomSettings input,
 .mx_RoomSettings textarea  {
     border-radius: 3px;
@@ -42,6 +51,36 @@ limitations under the License.
     font-size: 13px;
     padding: 9px;
     margin-top: 6px;
+}
+
+.mx_RoomSettings .mx_RoomSettings_roomColor {
+    display: inline-block;
+    position: relative;
+    width: 37px;
+    height: 37px;
+    border: 1px solid #979797;
+    margin-right: 13px;
+}
+
+.mx_RoomSettings .mx_RoomSettings_roomColor_selected {
+    position: absolute;
+    left: 10px;
+    top: 4px;
+}
+
+.mx_RoomSettings .mx_RoomSettings_roomColorPrimary {
+    height: 10px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
+.mx_RoomSettings .mx_RoomAvatar {
+    border-radius: 120px;
+}
+
+.mx_RoomSettings input[type="file"] {
+    border: none;
 }
 
 .mx_RoomSettings_description {
