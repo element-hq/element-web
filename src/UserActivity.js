@@ -31,6 +31,9 @@ class UserActivity {
     start() {
         document.onmousemove = this._onUserActivity.bind(this);
         document.onkeypress = this._onUserActivity.bind(this);
+        // can't use document.scroll here because that's only the document
+        // itself being scrolled. Need to use addEventListener's useCapture.
+        window.addEventListener('scroll', this._onUserActivity.bind(this), true);
         this.lastActivityAtTs = new Date().getTime();
         this.lastDispatchAtTs = 0;
     }
@@ -41,6 +44,7 @@ class UserActivity {
     stop() {
         document.onmousemove = undefined;
         document.onkeypress = undefined;
+        window.removeEventListener('scroll', this._onUserActivity.bind(this), true);
     }
 
     _onUserActivity(event) {
