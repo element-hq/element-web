@@ -353,11 +353,14 @@ module.exports = React.createClass({
     _paginateCompleted: function() {
         debuglog("paginate complete");
 
-        this.setState({
-            room: MatrixClientPeg.get().getRoom(this.props.roomId)
-        });
+        // we might have switched rooms since the paginate started - just bin
+        // the results if so.
+        if (!this.isMounted()) return;
 
-        this.setState({paginating: false});
+        this.setState({
+            room: MatrixClientPeg.get().getRoom(this.props.roomId),
+            paginating: false,
+        });
     },
 
     onSearchResultsFillRequest: function(backwards) {
@@ -535,7 +538,7 @@ module.exports = React.createClass({
 
         return searchPromise.then(function(results) {
             debuglog("search complete");
-            if (!self.state.searching || self.searchId != localSearchId) {
+            if (!this.isMounted() || !self.state.searching || self.searchId != localSearchId) {
                 console.error("Discarding stale search results");
                 return;
             }

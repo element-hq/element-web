@@ -158,6 +158,10 @@ module.exports = React.createClass({
 
     // check the scroll state and send out backfill requests if necessary.
     checkFillState: function() {
+        if (!this.isMounted()) {
+            return;
+        }
+
         var sn = this._getScrollNode();
 
         // if there is less than a screenful of messages above or below the
@@ -346,6 +350,12 @@ module.exports = React.createClass({
      * message panel.
      */
     _getScrollNode: function() {
+        if (!this.isMounted()) {
+            // this shouldn't happen, but when it does, turn the NPE into
+            // something more meaningful.
+            throw new Error("ScrollPanel._getScrollNode called when unmounted");
+        }
+
         var panel = ReactDOM.findDOMNode(this.refs.geminiPanel);
 
         // If the gemini scrollbar is doing its thing, this will be a div within
