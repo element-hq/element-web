@@ -111,13 +111,14 @@ module.exports = React.createClass({
         // Having just set an avatar we just display that since it will take a little
         // time to propagate through to the RoomAvatar.
         if (this.props.room && !this.avatarSet) {
-            avatarImg = <RoomAvatar room={this.props.room} width='320' height='240' resizeMethod='scale' />;
+            avatarImg = <RoomAvatar room={this.props.room} width='240' height='240' resizeMethod='crop' />;
         } else {
             var style = {
-                maxWidth: 320,
+                maxWidth: 240,
                 maxHeight: 240,
+                objectFit: 'cover',
             };
-            avatarImg = <img src={this.state.avatarUrl} style={style} />;
+            avatarImg = <img className="mx_RoomAvatar" src={this.state.avatarUrl} style={style} />;
         }
 
         var uploadSection;

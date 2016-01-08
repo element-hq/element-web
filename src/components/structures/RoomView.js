@@ -37,6 +37,7 @@ var TabComplete = require("../../TabComplete");
 var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
 var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
+var Tinter = require("../../Tinter");
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
@@ -81,6 +82,7 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
+        MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
@@ -115,6 +117,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
@@ -122,6 +125,8 @@ module.exports = React.createClass({
         }
 
         window.removeEventListener('resize', this.onResize);        
+
+        Tinter.tint(); // reset colourscheme
     },
 
     onAction: function(payload) {
@@ -235,6 +240,29 @@ module.exports = React.createClass({
         }
     },
 
+    updateTint: function() {
+        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        if (!room) return;
+
+        var color_scheme_event = room.getAccountData("m.room.color_scheme");
+        var color_scheme = {};
+        if (color_scheme_event) {
+            color_scheme = color_scheme_event.getContent();
+            // XXX: we should validate the event
+        }                
+        Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+    },
+
+    onRoomAccountData: function(room, event) {
+        if (room.roomId == this.props.roomId) {
+            if (event.getType === "m.room.color_scheme") {
+                var color_scheme = event.getContent();
+                // XXX: we should validate the event
+                Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+            }
+        }
+    },
+
     onRoomReceipt: function(receiptEvent, room) {
         if (room.roomId == this.props.roomId) {
             this.forceUpdate();
@@ -337,6 +365,8 @@ module.exports = React.createClass({
 
         this.scrollToBottom();
         this.sendReadReceipt();
+
+        this.updateTint();
     },
 
     componentDidUpdate: function() {
@@ -711,7 +741,7 @@ module.exports = React.createClass({
         return ret;
     },
 
-    uploadNewState: function(new_name, new_topic, new_join_rule, new_history_visibility, new_power_levels) {
+    uploadNewState: function(new_name, new_topic, new_join_rule, new_history_visibility, new_power_levels, new_color_scheme) {
         var old_name = this.state.room.name;
 
         var old_topic = this.state.room.currentState.getStateEvents('m.room.topic', '');
@@ -773,6 +803,14 @@ module.exports = React.createClass({
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
                     this.state.room.roomId, "m.room.power_levels", new_power_levels, ""
+                )
+            );
+        }
+
+        if (new_color_scheme) {
+            deferreds.push(
+                MatrixClientPeg.get().setRoomAccountData(
+                    this.state.room.roomId, "m.room.color_scheme", new_color_scheme
                 )
             );
         }
@@ -866,17 +904,20 @@ module.exports = React.createClass({
         var new_join_rule = this.refs.room_settings.getJoinRules();
         var new_history_visibility = this.refs.room_settings.getHistoryVisibility();
         var new_power_levels = this.refs.room_settings.getPowerLevels();
+        var new_color_scheme = this.refs.room_settings.getColorScheme();
 
         this.uploadNewState(
             new_name,
             new_topic,
             new_join_rule,
             new_history_visibility,
-            new_power_levels
+            new_power_levels,
+            new_color_scheme
         );
     },
 
     onCancelClick: function() {
+        this.updateTint();
         this.setState({editingRoomSettings: false});
     },
 

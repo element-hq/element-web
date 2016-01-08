@@ -116,7 +116,7 @@ module.exports = React.createClass({
                 }
 
                 name =
-                    <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
+                    <div className="mx_RoomHeader_name">
                         <div className="mx_RoomHeader_nametext" title={ this.props.room.name }>{ this.props.room.name }</div>
                         { searchStatus }
                         <div className="mx_RoomHeader_settingsButton" title="Settings">
@@ -151,7 +151,7 @@ module.exports = React.createClass({
 
             header =
                 <div className="mx_RoomHeader_wrapper">
-                    <div className="mx_RoomHeader_leftRow">
+                    <div className="mx_RoomHeader_leftRow" onClick={this.props.onSettingsClick}>
                         <div className="mx_RoomHeader_avatar">
                             { roomAvatar }
                         </div>

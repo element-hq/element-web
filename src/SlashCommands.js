@@ -43,11 +43,27 @@ var commands = {
         return reject("Usage: /nick <display_name>");
     },
 
-    // Takes an #rrggbb colourcode and retints the UI (just for debugging)
+    // Changes the colorscheme of your current room
     tint: function(room_id, args) {
-        Tinter.tint(args);
-        return success();
-    },
+
+        if (args) {
+            var matches = args.match(/^(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}))( +(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})))?$/);
+            if (matches) {
+                Tinter.tint(matches[1], matches[4]);
+                var colorScheme = {}
+                colorScheme.primary_color = matches[1];
+                if (matches[4]) {
+                    colorScheme.secondary_color = matches[4];
+                }
+                return success(
+                    MatrixClientPeg.get().setRoomAccountData(
+                        room_id, "m.room.color_scheme", colorScheme
+                    )                    
+                );
+            }
+        }
+        return reject("Usage: /tint <primaryColor> [<secondaryColor>]");
+   },
 
     encrypt: function(room_id, args) {
         if (args == "on") {
