@@ -40,6 +40,7 @@ var dis = require("../../dispatcher");
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
+var SEND_READ_RECEIPT_DELAY = 2000;
 
 var DEBUG_SCROLL = false;
 
@@ -74,6 +75,8 @@ module.exports = React.createClass({
             syncState: MatrixClientPeg.get().getSyncState(),
             hasUnsentMessages: this._hasUnsentMessages(room),
             callState: null,
+            readReceiptEventId: room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId),
+            readMarkerGhostEventId: undefined,
         }
     },
 
@@ -100,6 +103,12 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        // if we're waiting to send a read receipt, don't:
+        // message wasn't on screen for long enough
+        if (this.sendRRTimer) {
+            clearTimeout(this.sendRRTimer);
+        }
+
         if (this.refs.messagePanel) {
             // disconnect the D&D event listeners from the message panel. This
             // is really just for hygiene - the messagePanel is going to be
@@ -237,7 +246,16 @@ module.exports = React.createClass({
 
     onRoomReceipt: function(receiptEvent, room) {
         if (room.roomId == this.props.roomId) {
-            this.forceUpdate();
+            var readReceiptEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+            var readMarkerGhostEventId = this.state.readMarkerGhostEventId;
+            if (this.state.readReceiptEventId !== undefined && this.state.readReceiptEventId != readReceiptEventId) {
+                var newReadEventIndex = this._indexForEventId(readReceiptEventId);
+                readMarkerGhostEventId = this.state.readReceiptEventId;
+            }
+            this.setState({
+                readReceiptEventId: readReceiptEventId,
+                readMarkerGhostEventId: readMarkerGhostEventId,
+            });
         }
     },
 
@@ -649,10 +667,10 @@ module.exports = React.createClass({
 
         var EventTile = sdk.getComponent('rooms.EventTile');
 
-
         var prevEvent = null; // the last event we showed
-        var readReceiptEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
         var startIdx = Math.max(0, this.state.room.timeline.length - this.state.messageCap);
+        var readMarkerIndex;
+        var ghostIndex;
         for (var i = startIdx; i < this.state.room.timeline.length; i++) {
             var mxEv = this.state.room.timeline[i];
 
@@ -664,6 +682,24 @@ module.exports = React.createClass({
                         this.props.ConferenceHandler.isConferenceUser(mxEv.getStateKey())) {
                     continue; // suppress conf user join/parts
                 }
+            }
+
+            // now we've decided whether or not to show this messages,
+            // add the read up to marker if appropriate
+            // doing this here means we implicitly do not show the marker
+            // if it's at the bottom
+            // NB. it would be better to decide where the read marker was going
+            // when the state changed rather than here in the render method, but
+            // this is where we decide what messages we show so it's the only
+            // place we know whether we're at the bottom or not.
+            var self = this;
+            if (prevEvent && prevEvent.getId() == this.state.readReceiptEventId) {
+                var hr;
+                hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '85%'}} ref={function(n) {
+                    self.readMarkerNode = n;
+                }} />);
+                readMarkerIndex = ret.length;
+                ret.push(<li key="_readupto" className="mx_RoomView_myReadMarker_container">{hr}</li>);
             }
 
             // is this a continuation of the previous message?
@@ -702,11 +738,27 @@ module.exports = React.createClass({
                 </li>
             );
 
-            if (eventId == readReceiptEventId) {
-                ret.push(<hr className="mx_RoomView_myReadMarker" />);
+            // A read up to marker has died and returned as a ghost!
+            // Lives in the dom as the ghost of the previous one while it fades away
+            if (eventId == this.state.readMarkerGhostEventId) {
+                ghostIndex = i + 1;
             }
 
             prevEvent = mxEv;
+        }
+
+        // splice the read marker ghost in now that we know whether the read receipt
+        // is the last element or not, because we only decide as we're going along.
+        if (readMarkerIndex === undefined && ghostIndex && ghostIndex <= ret.length) {
+            var hr;
+            hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '85%'}} ref={function(n) {
+                Velocity(n, {opacity: '0', width: '10%'}, {duration: 400, complete: function() {
+                    self.setState({readMarkerGhostEventId: undefined});
+                }});
+            }} />);
+            ret.splice(ghostIndex, 0, (
+                <li key="_readuptoghost" className="mx_RoomView_myReadMarker_container">{hr}</li>
+            ));
         }
 
         return ret;
@@ -815,6 +867,7 @@ module.exports = React.createClass({
 
     sendReadReceipt: function() {
         if (!this.state.room) return;
+
         var currentReadUpToEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
 
@@ -822,7 +875,18 @@ module.exports = React.createClass({
         if (lastReadEventIndex === null) return;
 
         if (lastReadEventIndex > currentReadUpToEventIndex) {
-            MatrixClientPeg.get().sendReadReceipt(this.state.room.timeline[lastReadEventIndex]);
+            var self = this;
+
+            var lastReadEventId = self.state.room.timeline[lastReadEventIndex].getId();
+            if (this.pendingRR != lastReadEventId) {
+                this.pendingRR = lastReadEventId;
+                if (this.sendRRTimer) clearTimeout(this.sendRRTimer);
+                this.sendRRTimer = setTimeout(function() {
+                    MatrixClientPeg.get().sendReadReceipt(self.state.room.timeline[lastReadEventIndex]);
+                    self.sendRRTimer = undefined;
+                    self.pendingRR  = undefined;
+                }, SEND_READ_RECEIPT_DELAY);
+            }
         }
     },
 
