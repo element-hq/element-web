@@ -741,7 +741,7 @@ module.exports = React.createClass({
             // A read up to marker has died and returned as a ghost!
             // Lives in the dom as the ghost of the previous one while it fades away
             if (eventId == this.state.readMarkerGhostEventId) {
-                ghostIndex = i + 1;
+                ghostIndex = ret.length;
             }
 
             prevEvent = mxEv;
