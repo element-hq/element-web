@@ -867,27 +867,20 @@ module.exports = React.createClass({
 
     sendReadReceipt: function() {
         if (!this.state.room) return;
+        if (this.sendRRTimer) clearTimeout(this.sendRRTimer);
+        var self = this;
+        this.sendRRTimer = setTimeout(function() {
+            self.sendRRTimer = undefined;
+            var currentReadUpToEventId = self.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+            var currentReadUpToEventIndex = self._indexForEventId(currentReadUpToEventId);
 
-        var currentReadUpToEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
-        var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
+            var lastReadEventIndex = self._getLastDisplayedEventIndexIgnoringOwn();
+            if (lastReadEventIndex === null) return;
 
-        var lastReadEventIndex = this._getLastDisplayedEventIndexIgnoringOwn();
-        if (lastReadEventIndex === null) return;
-
-        if (lastReadEventIndex > currentReadUpToEventIndex) {
-            var self = this;
-
-            var lastReadEventId = self.state.room.timeline[lastReadEventIndex].getId();
-            if (this.pendingRR != lastReadEventId) {
-                this.pendingRR = lastReadEventId;
-                if (this.sendRRTimer) clearTimeout(this.sendRRTimer);
-                this.sendRRTimer = setTimeout(function() {
-                    MatrixClientPeg.get().sendReadReceipt(self.state.room.timeline[lastReadEventIndex]);
-                    self.sendRRTimer = undefined;
-                    self.pendingRR  = undefined;
-                }, SEND_READ_RECEIPT_DELAY);
+            if (lastReadEventIndex > currentReadUpToEventIndex) {
+                MatrixClientPeg.get().sendReadReceipt(self.state.room.timeline[lastReadEventIndex]);
             }
-        }
+        }, SEND_READ_RECEIPT_DELAY);
     },
 
     _getLastDisplayedEventIndexIgnoringOwn: function() {
