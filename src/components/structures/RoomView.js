@@ -249,7 +249,6 @@ module.exports = React.createClass({
             var readReceiptEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
             var readMarkerGhostEventId = this.state.readMarkerGhostEventId;
             if (this.state.readReceiptEventId !== undefined && this.state.readReceiptEventId != readReceiptEventId) {
-                var newReadEventIndex = this._indexForEventId(readReceiptEventId);
                 readMarkerGhostEventId = this.state.readReceiptEventId;
             }
             this.setState({
