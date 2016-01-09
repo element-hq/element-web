@@ -164,9 +164,19 @@ limitations under the License.
     margin-bottom: 12px;
 }
 
+li.mx_RoomView_myReadMarker_container {
+    height: 0px;
+    margin: 0px;
+    padding: 0px;
+    margin-bottom: -8px;
+    border: 0px;
+}
+
 hr.mx_RoomView_myReadMarker {
     border-top: solid 1px #76cfa6;
     border-bottom: none;
+    margin-top: -1px;
+    margin-bottom: 0px;
 }
 
 .mx_RoomView_statusArea {
