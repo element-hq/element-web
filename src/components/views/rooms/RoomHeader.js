@@ -44,9 +44,11 @@ module.exports = React.createClass({
     componentWillReceiveProps: function(newProps) {
         if (newProps.editing) {
             var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
+            var name = this.props.room.currentState.getStateEvents('m.room.name', '');
 
             this.setState({
-                name: this.props.room.name,
+                name: name ? name.getContent().name : '',
+                initialName: name ? name.getContent().name : '',
                 topic: topic ? topic.getContent().topic : '',
             });
         }
@@ -119,12 +121,14 @@ module.exports = React.createClass({
                 //     </div>
                 // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
 
+                var placeholderName = this.state.initialName ? "Unnamed Room" : this.props.room.name;
+
                 name =
                     <div className="mx_RoomHeader_name">
                         <EditableText
                              className="mx_RoomHeader_nametext mx_RoomHeader_editable"
                              placeholderClassName="mx_RoomHeader_placeholder"
-                             placeholder="Unnamed Room"
+                             placeholder={ placeholderName }
                              blurToCancel={ false }
                              onValueChanged={ this.onNameChanged }
                              initialValue={ this.state.name }/>
