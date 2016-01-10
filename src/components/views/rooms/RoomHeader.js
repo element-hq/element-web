@@ -48,7 +48,7 @@ module.exports = React.createClass({
 
             this.setState({
                 name: name ? name.getContent().name : '',
-                initialName: name ? name.getContent().name : '',
+                implicitName: this.props.room.getImplicitRoomName(MatrixClientPeg.get().credentials.userId),
                 topic: topic ? topic.getContent().topic : '',
             });
         }
@@ -121,7 +121,7 @@ module.exports = React.createClass({
                 //     </div>
                 // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
 
-                var placeholderName = this.state.initialName ? "Unnamed Room" : this.props.room.name;
+                var placeholderName = this.state.implicitName || "Unnamed Room";
 
                 name =
                     <div className="mx_RoomHeader_name">
