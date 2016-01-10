@@ -1065,19 +1065,24 @@ module.exports = React.createClass({
         // a minimum of the height of the video element, whilst also capping it from pushing out the page
         // so we have to do it via JS instead.  In this implementation we cap the height by putting
         // a maxHeight on the underlying remote video tag.
-        var auxPanelMaxHeight;
+
+        // header + footer + status + give us at least 100px of scrollback at all times.
+        var auxPanelMaxHeight = window.innerHeight - (83 + 72 + 36 + 100);
+
+        // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
+        // but it's better than the video going missing entirely
+        if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
+
         if (this.refs.callView) {
             // XXX: don't understand why we have to call findDOMNode here in react 0.14 - it should already be a DOM node.
             var video = ReactDOM.findDOMNode(this.refs.callView.refs.video.refs.remote);
 
-            // header + footer + status + give us at least 100px of scrollback at all times.
-            auxPanelMaxHeight = window.innerHeight - (83 + 72 + 36 + 100);
-
-            // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
-            // but it's better than the video going missing entirely
-            if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
-
             video.style.maxHeight = auxPanelMaxHeight + "px";
+        }
+
+        // we need to do this for general auxPanels too
+        if (this.refs.auxPanel) {
+            this.refs.auxPanel.style.maxHeight = auxPanelMaxHeight + "px";
         }
     },
 
@@ -1404,7 +1409,7 @@ module.exports = React.createClass({
                             (myMember && myMember.membership === "join") ? this.onLeaveClick : null
                         } />
                     { fileDropTarget }    
-                    <div className="mx_RoomView_auxPanel">
+                    <div className="mx_RoomView_auxPanel" ref="auxPanel">
                         <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>
                         { conferenceCallNotification }
                         { aux }
