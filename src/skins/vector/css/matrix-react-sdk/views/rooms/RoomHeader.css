@@ -47,12 +47,13 @@ limitations under the License.
 }
 
 .mx_RoomHeader_textButton {
-    height: 48px;
+    height: 36px;
     background-color: #76cfa6;
-    border-radius: 48px;
+    border-radius: 36px;
     margin-right: 8px;
     color: #fff;
-    line-height: 48px;
+    line-height: 34px;
+    margin-top: -2px;
     text-align: center;
 
     -webkit-box-ordinal-group: 2;
@@ -69,7 +70,20 @@ limitations under the License.
 */
     padding-left: 12px;
     padding-right: 12px;
-    }
+}
+
+.mx_RoomHeader_cancelButton {
+    -webkit-box-ordinal-group: 2;
+    -moz-box-ordinal-group: 2;
+    -ms-flex-order: 2;
+    -webkit-order: 2;
+    order: 2;
+
+    cursor: pointer;
+
+    padding-left: 12px;
+    padding-right: 12px;
+}
 
 .mx_RoomHeader_rightRow {
     margin-top: 4px;
@@ -107,9 +121,8 @@ limitations under the License.
 }
 
 .mx_RoomHeader_name {
-    cursor: pointer;
     vertical-align: middle;
-    height: 30px;
+    height: 31px;
     overflow: hidden;
     color: #454545;
     font-weight: bold;
@@ -142,7 +155,11 @@ limitations under the License.
     pointer-events: none;
 }
 
-.mx_RoomHeader_leftRow:hover .mx_RoomHeader_name {
+.mx_RoomHeader_leftRow:hover {
+    cursor: pointer;
+}
+
+.mx_RoomHeader_leftRow:hover .mx_RoomHeader_name div:not(.mx_RoomHeader_editable) {
     color: #76cfa6;
 }
 
@@ -159,7 +176,23 @@ limitations under the License.
     visibility: visible;
 }
 
+.mx_RoomHeader_placeholder {
+    color: #a2a2a2 ! important;
+}
 
+.mx_RoomHeader_editable {
+    border-bottom: 1px solid #c7c7c7;
+    min-width: 70px;
+    cursor: text;
+}
+
+.mx_RoomHeader_editable:focus {
+    border-bottom: 1px solid #76CFA6;
+    outline: none;
+    box-shadow: none;
+}
+
+/*
 .mx_RoomHeader_nameEditing {
     padding-left: 8px;
     padding-right: 16px;
@@ -178,6 +211,7 @@ limitations under the License.
 .mx_RoomHeader_nameInput {
     margin-top: 6px;
 }
+*/
 
 .mx_RoomHeader_topic {
     vertical-align: bottom;
@@ -185,8 +219,8 @@ limitations under the License.
     max-height: 42px;
     color: #454545;
     font-weight: 300;  
-    padding-left: 19px;
-    padding-right: 16px;
+    margin-left: 19px;
+    margin-right: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
 }

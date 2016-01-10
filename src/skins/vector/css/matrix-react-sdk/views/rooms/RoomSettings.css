@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 .mx_RoomSettings {
-    max-height: 250px;
     padding-top: 12px;
 }
 
@@ -81,10 +80,6 @@ limitations under the License.
 
 .mx_RoomSettings input[type="file"] {
     border: none;
-}
-
-.mx_RoomSettings_description {
-    width: 330px;
 }
 
 .mx_RoomSettings_buttons {
