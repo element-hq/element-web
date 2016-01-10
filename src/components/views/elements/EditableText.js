@@ -148,6 +148,15 @@ module.exports = React.createClass({
 
     onFocus: function(ev) {
         //ev.target.setSelectionRange(0, ev.target.textContent.length);
+
+        var node = ev.target.childNodes[0];
+        var range = document.createRange();
+        range.setStart(node, 0);
+        range.setEnd(node, node.length);
+        
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
     },
 
     onFinish: function(ev) {
