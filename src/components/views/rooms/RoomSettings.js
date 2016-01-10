@@ -216,7 +216,7 @@ module.exports = React.createClass({
                                     <img src="img/tick.svg" width="17" height="14" alt="./"/>
                                 </div>
                         }
-                        var boundClick = self.onColorSchemeChanged.bind(this, i)
+                        var boundClick = self.onColorSchemeChanged.bind(self, i)
                         return (
                             <div className="mx_RoomSettings_roomColor"
                                   key={ "room_color_" + i }
