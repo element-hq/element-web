@@ -41,6 +41,17 @@ module.exports = React.createClass({
         };
     },
 
+    componentWillReceiveProps: function(newProps) {
+        if (newProps.editing) {
+            var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
+
+            this.setState({
+                name: this.props.room.name,
+                topic: topic ? topic.getContent().topic : '',
+            });
+        }
+    },
+
     onVideoClick: function(e) {
         dis.dispatch({
             action: 'place_call',
@@ -57,14 +68,20 @@ module.exports = React.createClass({
         });
     },
 
-    onNameChange: function(new_name) {
-        if (this.props.room.name != new_name && new_name) {
-            MatrixClientPeg.get().setRoomName(this.props.room.roomId, new_name);
-        }
+    onNameChanged: function(value) {
+        this.setState({ name : value });
+    },
+
+    onTopicChanged: function(value) {
+        this.setState({ topic : value });
     },
 
     getRoomName: function() {
-        return this.refs.name_edit.value;
+        return this.state.name;
+    },
+
+    getTopic: function() {
+        return this.state.topic;
     },
 
     render: function() {
@@ -76,7 +93,7 @@ module.exports = React.createClass({
         if (this.props.simpleHeader) {
             var cancel;
             if (this.props.onCancelClick) {
-                cancel = <img className="mx_RoomHeader_simpleHeaderCancel" src="img/cancel-black.png" onClick={ this.props.onCancelClick } alt="Close" width="18" height="18"/>
+                cancel = <img className="mx_RoomHeader_simpleHeaderCancel" src="img/cancel.svg" onClick={ this.props.onCancelClick } alt="Close" width="18" height="18"/>
             }
             header =
                 <div className="mx_RoomHeader_wrapper">
@@ -87,27 +104,45 @@ module.exports = React.createClass({
                 </div>
         }
         else {
-            var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
-
             var name = null;
             var searchStatus = null;
             var topic_el = null;
             var cancel_button = null;
             var save_button = null;
             var settings_button = null;
-            var actual_name = this.props.room.currentState.getStateEvents('m.room.name', '');
-            if (actual_name) actual_name = actual_name.getContent().name;
+            // var actual_name = this.props.room.currentState.getStateEvents('m.room.name', '');
+            // if (actual_name) actual_name = actual_name.getContent().name;
             if (this.props.editing) {
-                name = 
-                    <div className="mx_RoomHeader_nameEditing">
-                        <input className="mx_RoomHeader_nameInput" type="text" defaultValue={actual_name} placeholder="Name" ref="name_edit"/>
-                    </div>
+                // name = 
+                //     <div className="mx_RoomHeader_nameEditing">
+                //         <input className="mx_RoomHeader_nameInput" type="text" defaultValue={actual_name} placeholder="Name" ref="name_edit"/>
+                //     </div>
                 // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
-                cancel_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onCancelClick}>Cancel</div>
-                save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save Changes</div>
+
+                name =
+                    <div className="mx_RoomHeader_name">
+                        <EditableText
+                             className="mx_RoomHeader_nametext mx_RoomHeader_editable"
+                             placeholderClassName="mx_RoomHeader_placeholder"
+                             placeholder="Unnamed Room"
+                             blurToCancel={ false }
+                             onValueChanged={ this.onNameChanged }
+                             initialValue={ this.state.name }/>
+                    </div>
+
+                topic_el =
+                    <EditableText 
+                         className="mx_RoomHeader_topic mx_RoomHeader_editable"
+                         placeholderClassName="mx_RoomHeader_placeholder"
+                         placeholder="Add a topic"
+                         blurToCancel={ false }
+                         onValueChanged={ this.onTopicChanged }
+                         initialValue={ this.state.topic }/>
+
+                save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</div>
+                cancel_button = <div className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>
             } else {
                 // <EditableText label={this.props.room.name} initialValue={actual_name} placeHolder="Name" onValueChanged={this.onNameChange} />
-
                 var searchStatus;
                 // don't display the search count until the search completes and
                 // gives us a valid (possibly zero) searchCount.
@@ -123,7 +158,9 @@ module.exports = React.createClass({
                             <TintableSvg src="img/settings.svg" width="12" height="12"/>
                         </div>
                     </div>
-                if (topic) topic_el = <div className="mx_RoomHeader_topic" title={topic.getContent().topic}>{ topic.getContent().topic }</div>;
+
+                var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
+                if (topic) topic_el = <div className="mx_RoomHeader_topic" title={ topic.getContent().topic }>{ topic.getContent().topic }</div>;
             }
 
             var roomAvatar = null;
@@ -149,6 +186,18 @@ module.exports = React.createClass({
                     </div>;
             }
 
+            var right_row;
+            if (!this.props.editing) {
+                right_row = 
+                    <div className="mx_RoomHeader_rightRow">
+                        { forget_button }
+                        { leave_button }
+                        <div className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
+                            <TintableSvg src="img/search.svg" width="21" height="19"/>
+                        </div>
+                    </div>;
+            }
+
             header =
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_leftRow" onClick={this.props.onSettingsClick}>
@@ -160,15 +209,9 @@ module.exports = React.createClass({
                             { topic_el }
                         </div>
                     </div>
-                    {cancel_button}
                     {save_button}
-                    <div className="mx_RoomHeader_rightRow">
-                        { forget_button }
-                        { leave_button }
-                        <div className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
-                            <TintableSvg src="img/search.svg" width="21" height="19"/>
-                        </div>
-                    </div>
+                    {cancel_button}
+                    {right_row}
                 </div>
         }
 

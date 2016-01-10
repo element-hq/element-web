@@ -136,9 +136,6 @@ module.exports = React.createClass({
     render: function() {
         var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
 
-        var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
-        if (topic) topic = topic.getContent().topic;
-
         var join_rule = this.props.room.currentState.getStateEvents('m.room.join_rules', '');
         if (join_rule) join_rule = join_rule.getContent().join_rule;
 
@@ -216,7 +213,7 @@ module.exports = React.createClass({
                                     <img src="img/tick.svg" width="17" height="14" alt="./"/>
                                 </div>
                         }
-                        var boundClick = self.onColorSchemeChanged.bind(this, i)
+                        var boundClick = self.onColorSchemeChanged.bind(self, i)
                         return (
                             <div className="mx_RoomSettings_roomColor"
                                   key={ "room_color_" + i }
@@ -278,7 +275,6 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_RoomSettings">
-                <textarea className="mx_RoomSettings_description" placeholder="Topic" defaultValue={topic} ref="topic"/> <br/>
                 <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label> <br/>
                 <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility == "shared"}/> Share message history with new users</label> <br/>
                 <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>

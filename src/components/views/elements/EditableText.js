@@ -18,13 +18,21 @@ limitations under the License.
 
 var React = require('react');
 
+const KEY_TAB = 9;
+const KEY_SHIFT = 16;
+const KEY_WINDOWS = 91;
+
 module.exports = React.createClass({
     displayName: 'EditableText',
     propTypes: {
         onValueChanged: React.PropTypes.func,
         initialValue: React.PropTypes.string,
         label: React.PropTypes.string,
-        placeHolder: React.PropTypes.string,
+        placeholder: React.PropTypes.string,
+        className: React.PropTypes.string,
+        labelClassName: React.PropTypes.string,
+        placeholderClassName: React.PropTypes.string,
+        blurToCancel: React.PropTypes.bool,
     },
 
     Phases: {
@@ -32,42 +40,51 @@ module.exports = React.createClass({
         Edit: "edit",
     },
 
+    value: '',
+    placeholder: false,
+
     getDefaultProps: function() {
         return {
             onValueChanged: function() {},
             initialValue: '',
-            label: 'Click to set',
+            label: '',
             placeholder: '',
         };
     },
 
     getInitialState: function() {
         return {
-            value: this.props.initialValue,
             phase: this.Phases.Display,
         }
     },
 
     componentWillReceiveProps: function(nextProps) {
-        this.setState({
-            value: nextProps.initialValue
-        });
+        this.value = nextProps.initialValue;
+    },
+
+    componentDidMount: function() {
+        this.value = this.props.initialValue;
+        if (this.refs.editable_div) {
+            this.showPlaceholder(!this.value);
+        }
+    },
+
+    showPlaceholder: function(show) {
+        if (show) {
+            this.refs.editable_div.textContent = this.props.placeholder;
+            this.refs.editable_div.setAttribute("class", this.props.className + " " + this.props.placeholderClassName);
+            this.placeholder = true;
+            this.value = '';
+        }
+        else {
+            this.refs.editable_div.textContent = this.value;
+            this.refs.editable_div.setAttribute("class", this.props.className);
+            this.placeholder = false;
+        }            
     },
 
     getValue: function() {
-        return this.state.value;
-    },
-
-    setValue: function(val, shouldSubmit, suppressListener) {
-        var self = this;
-        this.setState({
-            value: val,
-            phase: this.Phases.Display,
-        }, function() {
-            if (!suppressListener) {
-                self.onValueChanged(shouldSubmit);
-            }
-        });
+        return this.value;
     },
 
     edit: function() {
@@ -84,61 +101,83 @@ module.exports = React.createClass({
     },
 
     onValueChanged: function(shouldSubmit) {
-        this.props.onValueChanged(this.state.value, shouldSubmit);
+        this.props.onValueChanged(this.value, shouldSubmit);
+    },
+
+    onKeyDown: function(ev) {
+        // console.log("keyDown: textContent=" + ev.target.textContent + ", value=" + this.value + ", placeholder=" + this.placeholder);
+        
+        if (this.placeholder) {
+            if (ev.keyCode !== KEY_SHIFT && !ev.metaKey && !ev.ctrlKey && !ev.altKey && ev.keyCode !== KEY_WINDOWS && ev.keyCode !== KEY_TAB) {
+                this.showPlaceholder(false);
+            }
+        }
+
+        if (ev.key == "Enter") {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+
+        // console.log("keyDown: textContent=" + ev.target.textContent + ", value=" + this.value + ", placeholder=" + this.placeholder);
     },
 
     onKeyUp: function(ev) {
+        // console.log("keyUp: textContent=" + ev.target.textContent + ", value=" + this.value + ", placeholder=" + this.placeholder);
+
+        if (!ev.target.textContent) {
+            this.showPlaceholder(true);
+        }
+        else if (!this.placeholder) {
+            this.value = ev.target.textContent;
+        }
+
         if (ev.key == "Enter") {
             this.onFinish(ev);
         } else if (ev.key == "Escape") {
             this.cancelEdit();
         }
+
+        // console.log("keyUp: textContent=" + ev.target.textContent + ", value=" + this.value + ", placeholder=" + this.placeholder);
     },
 
-    onClickDiv: function() {
+    onClickDiv: function(ev) {
         this.setState({
             phase: this.Phases.Edit,
         })
     },
 
     onFocus: function(ev) {
-        ev.target.setSelectionRange(0, ev.target.value.length);
+        //ev.target.setSelectionRange(0, ev.target.textContent.length);
     },
 
     onFinish: function(ev) {
-        if (ev.target.value) {
-            this.setValue(ev.target.value, ev.key === "Enter");
-        } else {
-            this.cancelEdit();
-        }
+        var self = this;
+        this.setState({
+            phase: this.Phases.Display,
+        }, function() {
+            self.onValueChanged(ev.key === "Enter");
+        });
     },
 
-    onBlur: function() {
-        this.cancelEdit();
+    onBlur: function(ev) {
+        if (this.props.blurToCancel)
+            this.cancelEdit();
+        else
+            this.onFinish(ev)
     },
 
     render: function() {
         var editable_el;
 
-        if (this.state.phase == this.Phases.Display) {
-            if (this.state.value) {
-                editable_el = <div ref="display_div" onClick={this.onClickDiv}>{this.state.value}</div>;
-            } else {
-                editable_el = <div ref="display_div" onClick={this.onClickDiv}>{this.props.label}</div>;
-            }
-        } else if (this.state.phase == this.Phases.Edit) {
-            editable_el = (
-                <div>
-                    <input type="text" defaultValue={this.state.value}
-                        onKeyUp={this.onKeyUp} onFocus={this.onFocus} onBlur={this.onBlur} placeholder={this.props.placeHolder} autoFocus/>
-                </div>
-            );
+        if (this.state.phase == this.Phases.Display && (this.props.label || this.props.labelClassName) && !this.value) {
+            // show the label
+            editable_el = <div className={this.props.className + " " + this.props.labelClassName} onClick={this.onClickDiv}>{this.props.label}</div>;
+        } else {
+            // show the content editable div, but manually manage its contents as react and contentEditable don't play nice together
+            editable_el = <div ref="editable_div" contentEditable="true" className={this.props.className}
+                               onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} onFocus={this.onFocus} onBlur={this.onBlur}></div>;
         }
 
-        return (
-            <div className="mx_EditableText">
-                {editable_el}
-            </div>
-        );
+        return editable_el;
     }
 });

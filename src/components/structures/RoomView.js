@@ -767,7 +767,7 @@ module.exports = React.createClass({
 
         var deferreds = [];
 
-        if (old_name != new_name && new_name != undefined && new_name) {
+        if (old_name != new_name && new_name != undefined) {
             deferreds.push(
                 MatrixClientPeg.get().setRoomName(this.state.room.roomId, new_name)
             );
@@ -900,7 +900,7 @@ module.exports = React.createClass({
         });
 
         var new_name = this.refs.header.getRoomName();
-        var new_topic = this.refs.room_settings.getTopic();
+        var new_topic = this.refs.header.getTopic();
         var new_join_rule = this.refs.room_settings.getJoinRules();
         var new_history_visibility = this.refs.room_settings.getHistoryVisibility();
         var new_power_levels = this.refs.room_settings.getPowerLevels();
