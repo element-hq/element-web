@@ -170,10 +170,10 @@ module.exports = React.createClass({
                 }
 
                 name =
-                    <div className="mx_RoomHeader_name">
+                    <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
                         <div className="mx_RoomHeader_nametext" title={ this.props.room.name }>{ this.props.room.name }</div>
                         { searchStatus }
-                        <div className="mx_RoomHeader_settingsButton" title="Settings" onClick={this.props.onSettingsClick}>
+                        <div className="mx_RoomHeader_settingsButton" title="Settings">
                             <TintableSvg src="img/settings.svg" width="12" height="12"/>
                         </div>
                     </div>
