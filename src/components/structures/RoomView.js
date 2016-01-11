@@ -118,6 +118,12 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        // set a boolean to say we've been unmounted, which any pending
+        // promises can use to throw away their results.
+        //
+        // (We could use isMounted, but facebook have deprecated that.)
+        this.unmounted = true;
+
         if (this.refs.messagePanel) {
             // disconnect the D&D event listeners from the message panel. This
             // is really just for hygiene - the messagePanel is going to be
@@ -214,7 +220,7 @@ module.exports = React.createClass({
     },*/
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
-        if (!this.isMounted()) return;
+        if (this.unmounted) return;
 
         // ignore anything that comes in whilst paginating: we get one
         // event for each new matrix event so this would cause a huge
@@ -371,11 +377,14 @@ module.exports = React.createClass({
     _paginateCompleted: function() {
         debuglog("paginate complete");
 
-        this.setState({
-            room: MatrixClientPeg.get().getRoom(this.props.roomId)
-        });
+        // we might have switched rooms since the paginate started - just bin
+        // the results if so.
+        if (this.unmounted) return;
 
-        this.setState({paginating: false});
+        this.setState({
+            room: MatrixClientPeg.get().getRoom(this.props.roomId),
+            paginating: false,
+        });
     },
 
     onSearchResultsFillRequest: function(backwards) {
@@ -559,7 +568,7 @@ module.exports = React.createClass({
 
         return searchPromise.then(function(results) {
             debuglog("search complete");
-            if (!self.state.searching || self.searchId != localSearchId) {
+            if (self.unmounted || !self.state.searching || self.searchId != localSearchId) {
                 console.error("Discarding stale search results");
                 return;
             }
