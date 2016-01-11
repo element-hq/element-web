@@ -21,6 +21,12 @@ var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 
+var linkify = require('linkifyjs');
+var linkifyElement = require('linkifyjs/element');
+var linkifyMatrix = require('../../../linkify-matrix');
+
+linkifyMatrix(linkify);
+
 module.exports = React.createClass({
     displayName: 'RoomHeader',
 
@@ -51,6 +57,12 @@ module.exports = React.createClass({
                 implicitName: this.props.room.getImplicitRoomName(MatrixClientPeg.get().credentials.userId),
                 topic: topic ? topic.getContent().topic : '',
             });
+        }
+    },
+
+    componentDidUpdate: function() {
+        if (this.refs.topic) {
+            linkifyElement(this.refs.topic, linkifyMatrix.options);
         }
     },
 
@@ -121,7 +133,10 @@ module.exports = React.createClass({
                 //     </div>
                 // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
 
-                var placeholderName = this.state.implicitName || "Unnamed Room";
+                var placeholderName = "Unnamed Room";
+                if (this.state.implicitName && this.state.implicitName !== '?') {
+                    placeholderName += " (" + this.state.implicitName + ")";
+                }
 
                 name =
                     <div className="mx_RoomHeader_name">
@@ -158,13 +173,13 @@ module.exports = React.createClass({
                     <div className="mx_RoomHeader_name">
                         <div className="mx_RoomHeader_nametext" title={ this.props.room.name }>{ this.props.room.name }</div>
                         { searchStatus }
-                        <div className="mx_RoomHeader_settingsButton" title="Settings">
+                        <div className="mx_RoomHeader_settingsButton" title="Settings" onClick={this.props.onSettingsClick}>
                             <TintableSvg src="img/settings.svg" width="12" height="12"/>
                         </div>
                     </div>
 
                 var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
-                if (topic) topic_el = <div className="mx_RoomHeader_topic" title={ topic.getContent().topic }>{ topic.getContent().topic }</div>;
+                if (topic) topic_el = <div className="mx_RoomHeader_topic" ref="topic" title={ topic.getContent().topic }>{ topic.getContent().topic }</div>;
             }
 
             var roomAvatar = null;
@@ -204,7 +219,7 @@ module.exports = React.createClass({
 
             header =
                 <div className="mx_RoomHeader_wrapper">
-                    <div className="mx_RoomHeader_leftRow" onClick={this.props.onSettingsClick}>
+                    <div className="mx_RoomHeader_leftRow">
                         <div className="mx_RoomHeader_avatar">
                             { roomAvatar }
                         </div>
