@@ -145,10 +145,6 @@ module.exports = React.createClass({
         this.logoutModal.closeDialog();
     },
 
-    onEnableNotificationsChange: function(event) {
-        UserSettingsStore.setEnableNotifications(event.target.checked);
-    },
-
     render: function() {
         switch (this.state.phase) {
             case "UserSettings.LOADING":
@@ -166,6 +162,7 @@ module.exports = React.createClass({
         var ChangeDisplayName = sdk.getComponent("views.settings.ChangeDisplayName");
         var ChangePassword = sdk.getComponent("views.settings.ChangePassword");
         var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
+        var Notifications = sdk.getComponent("settings.Notifications");
         var avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
         );
@@ -253,22 +250,7 @@ module.exports = React.createClass({
                 <h2>Notifications</h2>
 
                 <div className="mx_UserSettings_section">
-                    <div className="mx_UserSettings_notifTable">
-                        <div className="mx_UserSettings_notifTableRow">
-                            <div className="mx_UserSettings_notifInputCell">
-                                <input id="enableNotifications"
-                                    ref="enableNotifications"
-                                    type="checkbox"
-                                    checked={ UserSettingsStore.getEnableNotifications() }
-                                    onChange={ this.onEnableNotificationsChange } />
-                            </div>
-                            <div className="mx_UserSettings_notifLabelCell">
-                                <label htmlFor="enableNotifications">
-                                    Enable desktop notifications
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                    <Notifications/>
                 </div>
 
                 <h2>Advanced</h2>
