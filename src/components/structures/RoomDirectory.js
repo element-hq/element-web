@@ -56,17 +56,27 @@ module.exports = React.createClass({
         });
     },
 
-    joinRoom: function(roomId) {        
+    joinRoom: function(roomId, shouldPeek) {
         var self = this;
         self.setState({ loading: true });
-        // XXX: check that JS SDK suppresses duplicate attempts to join the same room
-        MatrixClientPeg.get().joinRoom(roomId).done(function() {
+
+        var joinOrPeekPromise;
+
+        if (shouldPeek) {
+            joinOrPeekPromise = MatrixClientPeg.get().peekInRoom(roomId);
+        }
+        else {
+            joinOrPeekPromise = MatrixClientPeg.get().joinRoom(roomId);
+        }
+
+        joinOrPeekPromise.done(function() {
             dis.dispatch({
                 action: 'view_room',
                 room_id: roomId
             });
         }, function(err) {
             console.error("Failed to join room: %s", JSON.stringify(err));
+            console.error(err);
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to join room",
@@ -87,13 +97,34 @@ module.exports = React.createClass({
         });
         var rows = [];
         var self = this;
+        var guestRead, guestJoin;
         for (var i = 0; i < rooms.length; i++) {
             var name = rooms[i].name || rooms[i].aliases[0];
+            guestRead = null;
+            guestJoin = null;
+            var shouldPeek = false;
+
+            if (rooms[i].world_readable) {
+                guestRead = (
+                    <img src="img/members.svg"
+                        alt="World Readable" title="World Readable" width="12" height="12" />
+                );
+                if (MatrixClientPeg.get().isGuest() && !rooms[i].guest_can_join) {
+                    shouldPeek = true;
+                }
+            }
+            if (rooms[i].guest_can_join) {
+                guestJoin = (
+                    <img src="img/leave.svg"
+                        alt="Guests can join" title="Guests can join" width="12" height="12" />
+                );
+            }
+
             // <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(rooms[i].room_id, 40, 40, "crop") } width="40" height="40" alt=""/>
             rows.unshift(
                 <tbody key={ rooms[i].room_id }>
-                    <tr onClick={self.joinRoom.bind(null, rooms[i].room_id)}>
-                        <td className="mx_RoomDirectory_name">{ name }</td>
+                    <tr onClick={self.joinRoom.bind(null, rooms[i].room_id, shouldPeek)}>
+                        <td className="mx_RoomDirectory_name">{ name } {guestRead} {guestJoin}</td>
                         <td>{ rooms[i].aliases[0] }</td>
                         <td>{ rooms[i].num_joined_members }</td>
                     </tr>
