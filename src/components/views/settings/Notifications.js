@@ -77,7 +77,6 @@ module.exports = React.createClass({
             MatrixClientPeg.get().setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, (newPushRuleState !== PushRuleState.OFF)).done(function() {
                
                self._refreshFromServer();
-               self.forceUpdate();
             });
         }  
     },
@@ -191,15 +190,15 @@ module.exports = React.createClass({
             self.setState({
                 phase: self.phases.DISPLAY
             });
-            
-            self.forceUpdate();
         });
     },
 
     renderNotifRulesTableRow: function(title, className, pushRuleState, disabled) {
         return (
             <tr key = {className}>
-                <th class="">{title}</th>
+                <th>
+                    {title}
+                </th>
 
                 <th>
                     <input className= {className + "-" + PushRuleState.ON}
