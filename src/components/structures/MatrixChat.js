@@ -152,6 +152,7 @@ module.exports = React.createClass({
         );
         MatrixClientPeg.get().registerGuest().done(function(creds) {
             console.log("Registered as guest: %s", creds.user_id);
+            self._setAutoRegisterAsGuest(false);
             self.onLoggedIn({
                 userId: creds.user_id,
                 accessToken: creds.access_token,
@@ -185,7 +186,6 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().stopClient();
                 MatrixClientPeg.get().removeAllListeners();
                 MatrixClientPeg.unset();
-
                 this.notifyNewScreen('login');
                 this.replaceState({
                     logged_in: false,
