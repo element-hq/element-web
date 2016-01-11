@@ -56,6 +56,13 @@ limitations under the License.
     border-bottom: 1px solid #eee;
 }
 
+.mx_UserSettings h3 {
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
 .mx_UserSettings_section {
     margin-left: 63px;
     margin-top: 28px;
@@ -74,8 +81,7 @@ limitations under the License.
     float: left;
 }
 
-.mx_UserSettings_profileTableRow,
-.mx_UserSettings_notifTableRow
+.mx_UserSettings_profileTableRow
 {
     display: table-row;
 }
@@ -104,20 +110,6 @@ limitations under the License.
     color: rgba(74, 74, 74, 0.9);
     font-family: 'Open Sans', Helvetica, Arial, Sans-Serif;
     font-size: 16px;
-}
-
-.mx_UserSettings_notifInputCell {
-    display: table-cell;
-    padding-bottom: 21px;
-    padding-right: 8px;
-    width: 16px;
-}
-
-.mx_UserSettings_notifLabelCell
-{
-    padding-bottom: 21px;
-    width: 270px;
-    display: table-cell;
 }
 
 .mx_UserSettings_logout {
