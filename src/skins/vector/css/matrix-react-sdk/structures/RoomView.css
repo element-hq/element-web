@@ -173,8 +173,6 @@ li.mx_RoomView_myReadMarker_container {
 }
 
 hr.mx_RoomView_myReadMarker {
-    position: relative;
-    top: -4px;
     border-top: solid 1px #76cfa6;
     border-bottom: solid 1px #76cfa6;
     margin-top: -1px;
