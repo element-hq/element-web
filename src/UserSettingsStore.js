@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 'use strict';
-
+var q = require("q");
 var MatrixClientPeg = require("./MatrixClientPeg");
 var Notifier = require("./Notifier");
 
@@ -35,6 +35,11 @@ module.exports = {
     },
 
     loadThreePids: function() {
+        if (MatrixClientPeg.get().isGuest()) {
+            return q({
+                threepids: []
+            }); // guests can't poke 3pid endpoint
+        }
         return MatrixClientPeg.get().getThreePids();
     },
 

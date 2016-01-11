@@ -97,6 +97,24 @@ module.exports = React.createClass({
                 this.forceUpdate();
             }
         });
+        // if this is an unknown room then we're in one of three states:
+        // - This is a room we can peek into (search engine) (we can /peek)
+        // - This is a room we can publicly join or were invited to. (we can /join)
+        // - This is a room we cannot join at all. (no action can help us)
+        // We can't try to /join because this may implicitly accept invites (!)
+        // We can /peek though. If it fails then we present the join UI. If it
+        // succeeds then great, show the preview (but we still may be able to /join!).
+        if (!this.state.room) {
+            console.log("Attempting to peek into room %s", this.props.roomId);
+            MatrixClientPeg.get().peekInRoom(this.props.roomId).done(function() {
+                // we don't need to do anything - JS SDK will emit Room events
+                // which will update the UI.
+            }, function(err) {
+                console.error("Failed to peek into room: %s", err);
+            });
+        }
+
+
     },
 
     componentWillUnmount: function() {
@@ -422,6 +440,12 @@ module.exports = React.createClass({
                 joining: false,
                 joinError: error
             });
+            var msg = error.message ? error.message : JSON.stringify(error);
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to join room",
+                description: msg
+            });
         });
         this.setState({
             joining: true
@@ -712,7 +736,7 @@ module.exports = React.createClass({
         return ret;
     },
 
-    uploadNewState: function(new_name, new_topic, new_join_rule, new_history_visibility, new_power_levels) {
+    uploadNewState: function(newVals) {
         var old_name = this.state.room.name;
 
         var old_topic = this.state.room.currentState.getStateEvents('m.room.topic', '');
@@ -738,45 +762,53 @@ module.exports = React.createClass({
 
         var deferreds = [];
 
-        if (old_name != new_name && new_name != undefined && new_name) {
+        if (old_name != newVals.name && newVals.name != undefined && newVals.name) {
             deferreds.push(
-                MatrixClientPeg.get().setRoomName(this.state.room.roomId, new_name)
+                MatrixClientPeg.get().setRoomName(this.state.room.roomId, newVals.name)
             );
         }
 
-        if (old_topic != new_topic && new_topic != undefined) {
+        if (old_topic != newVals.topic && newVals.topic != undefined) {
             deferreds.push(
-                MatrixClientPeg.get().setRoomTopic(this.state.room.roomId, new_topic)
+                MatrixClientPeg.get().setRoomTopic(this.state.room.roomId, newVals.topic)
             );
         }
 
-        if (old_join_rule != new_join_rule && new_join_rule != undefined) {
+        if (old_join_rule != newVals.join_rule && newVals.join_rule != undefined) {
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
                     this.state.room.roomId, "m.room.join_rules", {
-                        join_rule: new_join_rule,
+                        join_rule: newVals.join_rule,
                     }, ""
                 )
             );
         }
 
-        if (old_history_visibility != new_history_visibility && new_history_visibility != undefined) {
+        if (old_history_visibility != newVals.history_visibility &&
+                newVals.history_visibility != undefined) {
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
                     this.state.room.roomId, "m.room.history_visibility", {
-                        history_visibility: new_history_visibility,
+                        history_visibility: newVals.history_visibility,
                     }, ""
                 )
             );
         }
 
-        if (new_power_levels) {
+        if (newVals.power_levels) {
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
-                    this.state.room.roomId, "m.room.power_levels", new_power_levels, ""
+                    this.state.room.roomId, "m.room.power_levels", newVals.power_levels, ""
                 )
             );
         }
+
+        deferreds.push(
+            MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
+                allowRead: newVals.guest_read,
+                allowJoin: newVals.guest_join
+            })
+        );
 
         if (deferreds.length) {
             var self = this;
@@ -862,19 +894,15 @@ module.exports = React.createClass({
             uploadingRoomSettings: true,
         });
 
-        var new_name = this.refs.header.getRoomName();
-        var new_topic = this.refs.room_settings.getTopic();
-        var new_join_rule = this.refs.room_settings.getJoinRules();
-        var new_history_visibility = this.refs.room_settings.getHistoryVisibility();
-        var new_power_levels = this.refs.room_settings.getPowerLevels();
-
-        this.uploadNewState(
-            new_name,
-            new_topic,
-            new_join_rule,
-            new_history_visibility,
-            new_power_levels
-        );
+        this.uploadNewState({
+            name: this.refs.header.getRoomName(),
+            topic: this.refs.room_settings.getTopic(),
+            join_rule: this.refs.room_settings.getJoinRules(),
+            history_visibility: this.refs.room_settings.getHistoryVisibility(),
+            power_levels: this.refs.room_settings.getPowerLevels(),
+            guest_join: this.refs.room_settings.canGuestsJoin(),
+            guest_read: this.refs.room_settings.canGuestsRead()
+        });
     },
 
     onCancelClick: function() {
