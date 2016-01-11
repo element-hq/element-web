@@ -33,6 +33,12 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 module.exports = React.createClass({
     displayName: 'CallView',
 
+    propTypes: {
+        // a callback which is called when the video within the callview
+        // due to a change in video metadata
+        onResize: React.PropTypes.function,
+    },
+
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         if (this.props.room) {
@@ -97,7 +103,7 @@ module.exports = React.createClass({
     render: function(){
         var VideoView = sdk.getComponent('voip.VideoView');
         return (
-            <VideoView ref="video" onClick={ this.props.onClick }/>
+            <VideoView ref="video" onClick={ this.props.onClick } onResize={ this.props.onResize }/>
         );
     }
 });

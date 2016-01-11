@@ -85,7 +85,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_VideoView" ref={this.setContainer} onClick={ this.props.onClick }>
                 <div className="mx_VideoView_remoteVideoFeed">
-                    <VideoFeed ref="remote"/>
+                    <VideoFeed ref="remote" onResize={this.props.onResize}/>
                     <audio ref="remoteAudio"/>
                 </div>
                 <div className="mx_VideoView_localVideoFeed">                

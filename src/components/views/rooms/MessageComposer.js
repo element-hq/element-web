@@ -65,8 +65,17 @@ function mdownToHtml(mdown) {
 module.exports = React.createClass({
     displayName: 'MessageComposer',
 
+    statics: {
+        // the height we limit the composer to
+        MAX_HEIGHT: 100,
+    },
+
     propTypes: {
-        tabComplete: React.PropTypes.any
+        tabComplete: React.PropTypes.any,
+
+        // a callback which is called when the height of the composer is
+        // changed due to a change in content.
+        onResize: React.PropTypes.function,
     },
 
     componentWillMount: function() {
@@ -237,13 +246,15 @@ module.exports = React.createClass({
         // scrollHeight is at least equal to clientHeight, so we have to
         // temporarily crimp clientHeight to 0 to get an accurate scrollHeight value
         this.refs.textarea.style.height = "0px";
-        var newHeight = this.refs.textarea.scrollHeight < 100 ? this.refs.textarea.scrollHeight : 100;
+        var newHeight = Math.min(this.refs.textarea.scrollHeight,
+                                 this.constructor.MAX_HEIGHT);
         this.refs.textarea.style.height = Math.ceil(newHeight) + "px";
-        if (this.props.roomView) {
-            // kick gemini-scrollbar to re-layout
-            this.props.roomView.forceUpdate();
-        }
         this.oldScrollHeight = this.refs.textarea.scrollHeight;
+
+        if (this.props.onResize) {
+            // kick gemini-scrollbar to re-layout
+            this.props.onResize();
+        }
     },
 
     onKeyUp: function(ev) {
