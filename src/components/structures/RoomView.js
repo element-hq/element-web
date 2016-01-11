@@ -1064,17 +1064,23 @@ module.exports = React.createClass({
         // a maxHeight on the underlying remote video tag.
         var auxPanelMaxHeight;
         if (this.refs.callView) {
-            // XXX: don't understand why we have to call findDOMNode here in react 0.14 - it should already be a DOM node.
-            var video = ReactDOM.findDOMNode(this.refs.callView.refs.video.refs.remote);
+            var video = this.refs.callView.getVideoView().getRemoteVideoElement();
 
             // header + footer + status + give us at least 100px of scrollback at all times.
-            auxPanelMaxHeight = window.innerHeight - (83 + 72 + 36 + 100);
+            auxPanelMaxHeight = window.innerHeight -
+                (83 + 72 +
+                 sdk.getComponent('rooms.MessageComposer').MAX_HEIGHT +
+                 100);
 
             // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
             // but it's better than the video going missing entirely
             if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
             video.style.maxHeight = auxPanelMaxHeight + "px";
+
+            // the above might have made the video panel resize itself, so now
+            // we need to tell the gemini panel to adapt.
+            this.onChildResize();
         }
     },
 
@@ -1107,6 +1113,15 @@ module.exports = React.createClass({
         this.setState({
             videoMuted: newState
         });
+    },
+
+    onChildResize: function() {
+        // When the video or the message composer resizes, the scroll panel
+        // also changes size.  Work around GeminiScrollBar fail by telling it
+        // about it. This also ensures that the scroll offset is updated.
+        if (this.refs.messagePanel) {
+            this.refs.messagePanel.forceUpdate();
+        }
     },
 
     render: function() {
@@ -1299,7 +1314,7 @@ module.exports = React.createClass({
             if (canSpeak) {
                 messageComposer =
                     <MessageComposer
-                        room={this.state.room} roomView={this} uploadFile={this.uploadFile}
+                        room={this.state.room} onResize={this.onChildResize} uploadFile={this.uploadFile}
                         callState={this.state.callState} tabComplete={this.tabComplete} />
             }
 
@@ -1402,7 +1417,8 @@ module.exports = React.createClass({
                         } />
                     { fileDropTarget }    
                     <div className="mx_RoomView_auxPanel">
-                        <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>
+                        <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}
+                            onResize={this.onChildResize} />
                         { conferenceCallNotification }
                         { aux }
                     </div>
