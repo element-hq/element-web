@@ -103,12 +103,6 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        // if we're waiting to send a read receipt, don't:
-        // message wasn't on screen for long enough
-        if (this.sendRRTimer) {
-            clearTimeout(this.sendRRTimer);
-        }
-
         if (this.refs.messagePanel) {
             // disconnect the D&D event listeners from the message panel. This
             // is really just for hygiene - the messagePanel is going to be
@@ -770,7 +764,7 @@ module.exports = React.createClass({
         if (readMarkerIndex === undefined && ghostIndex && ghostIndex <= ret.length) {
             var hr;
             hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '85%'}} ref={function(n) {
-                Velocity(n, {opacity: '0', width: '10%'}, {duration: 400, easing: 'easeInSine', complete: function() {
+                Velocity(n, {opacity: '0', width: '10%'}, {duration: 400, easing: 'easeInSine', delay: 1000, complete: function() {
                     self.setState({readMarkerGhostEventId: undefined});
                 }});
             }} />);
@@ -885,20 +879,15 @@ module.exports = React.createClass({
 
     sendReadReceipt: function() {
         if (!this.state.room) return;
-        if (this.sendRRTimer) clearTimeout(this.sendRRTimer);
-        var self = this;
-        this.sendRRTimer = setTimeout(function() {
-            self.sendRRTimer = undefined;
-            var currentReadUpToEventId = self.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
-            var currentReadUpToEventIndex = self._indexForEventId(currentReadUpToEventId);
+        var currentReadUpToEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+        var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
 
-            var lastReadEventIndex = self._getLastDisplayedEventIndexIgnoringOwn();
-            if (lastReadEventIndex === null) return;
+        var lastReadEventIndex = this._getLastDisplayedEventIndexIgnoringOwn();
+        if (lastReadEventIndex === null) return;
 
-            if (lastReadEventIndex > currentReadUpToEventIndex) {
-                MatrixClientPeg.get().sendReadReceipt(self.state.room.timeline[lastReadEventIndex]);
-            }
-        }, SEND_READ_RECEIPT_DELAY);
+        if (lastReadEventIndex > currentReadUpToEventIndex) {
+            MatrixClientPeg.get().sendReadReceipt(this.state.room.timeline[lastReadEventIndex]);
+        }
     },
 
     _getLastDisplayedEventIndexIgnoringOwn: function() {
