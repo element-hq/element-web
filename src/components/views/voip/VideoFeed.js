@@ -24,7 +24,7 @@ module.exports = React.createClass({
     propTypes: {
         // a callback which is called when the video element is resized
         // due to a change in video metadata
-        onResize: React.PropTypes.function,
+        onResize: React.PropTypes.func,
     },
 
     componentDidMount() {

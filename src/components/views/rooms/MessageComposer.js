@@ -75,7 +75,7 @@ module.exports = React.createClass({
 
         // a callback which is called when the height of the composer is
         // changed due to a change in content.
-        onResize: React.PropTypes.function,
+        onResize: React.PropTypes.func,
     },
 
     componentWillMount: function() {
