@@ -75,7 +75,7 @@ module.exports = React.createClass({
             syncState: MatrixClientPeg.get().getSyncState(),
             hasUnsentMessages: this._hasUnsentMessages(room),
             callState: null,
-            readReceiptEventId: room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId),
+            readMarkerEventId: room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId),
             readMarkerGhostEventId: undefined,
         }
     },
@@ -246,13 +246,13 @@ module.exports = React.createClass({
 
     onRoomReceipt: function(receiptEvent, room) {
         if (room.roomId == this.props.roomId) {
-            var readReceiptEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+            var readMarkerEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
             var readMarkerGhostEventId = this.state.readMarkerGhostEventId;
-            if (this.state.readReceiptEventId !== undefined && this.state.readReceiptEventId != readReceiptEventId) {
-                readMarkerGhostEventId = this.state.readReceiptEventId;
+            if (this.state.readMarkerEventId !== undefined && this.state.readMarkerEventId != readMarkerEventId) {
+                readMarkerGhostEventId = this.state.readMarkerEventId;
             }
             this.setState({
-                readReceiptEventId: readReceiptEventId,
+                readMarkerEventId: readMarkerEventId,
                 readMarkerGhostEventId: readMarkerGhostEventId,
             });
         }
@@ -683,7 +683,7 @@ module.exports = React.createClass({
                 }
             }
 
-            // now we've decided whether or not to show this messages,
+            // now we've decided whether or not to show this message,
             // add the read up to marker if appropriate
             // doing this here means we implicitly do not show the marker
             // if it's at the bottom
@@ -692,7 +692,7 @@ module.exports = React.createClass({
             // this is where we decide what messages we show so it's the only
             // place we know whether we're at the bottom or not.
             var self = this;
-            if (prevEvent && prevEvent.getId() == this.state.readReceiptEventId) {
+            if (prevEvent && prevEvent.getId() == this.state.readMarkerEventId) {
                 var hr;
                 hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '99%'}} ref={function(n) {
                     self.readMarkerNode = n;
@@ -751,7 +751,7 @@ module.exports = React.createClass({
         if (readMarkerIndex === undefined && ghostIndex && ghostIndex <= ret.length) {
             var hr;
             hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '85%'}} ref={function(n) {
-                Velocity(n, {opacity: '0', width: '10%'}, {duration: 400, complete: function() {
+                Velocity(n, {opacity: '0', width: '10%'}, {duration: 400, easing: 'easeInSine', complete: function() {
                     self.setState({readMarkerGhostEventId: undefined});
                 }});
             }} />);
