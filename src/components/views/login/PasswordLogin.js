@@ -22,7 +22,8 @@ var ReactDOM = require('react-dom');
  */
 module.exports = React.createClass({displayName: 'PasswordLogin',
     propTypes: {
-        onSubmit: React.PropTypes.func.isRequired // fn(username, password)
+        onSubmit: React.PropTypes.func.isRequired, // fn(username, password)
+        onForgotPasswordClick: React.PropTypes.func // fn()
     },
 
     getInitialState: function() {
@@ -46,6 +47,16 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
     },
 
     render: function() {
+        var forgotPasswordJsx;
+
+        if (this.props.onForgotPasswordClick) {
+            forgotPasswordJsx = (
+                <a className="mx_Login_forgot" onClick={this.props.onForgotPasswordClick} href="#">
+                    Forgot your password?
+                </a>
+            );
+        }
+
         return (
             <div>
                 <form onSubmit={this.onSubmitForm}>
@@ -57,6 +68,7 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
                     value={this.state.password} onChange={this.onPasswordChanged}
                     placeholder="Password" />
                 <br />
+                {forgotPasswordJsx}
                 <input className="mx_Login_submit" type="submit" value="Log in" />
                 </form>
             </div>
