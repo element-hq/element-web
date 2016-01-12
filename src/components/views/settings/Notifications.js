@@ -158,7 +158,7 @@ module.exports = React.createClass({
             // HS default rules
             var defaultRules = {master: [], vector: {}, additional: [], fallthrough: [], suppression: []};
             //  Content/keyword rules
-            var contentRules = {on: [], strong: [], off: [], other: []};
+            var contentRules = {on: [], on_but_disabled:[], strong: [], strong_but_disabled: [], other: []};
 
             for (var kind in rulesets.global) {
                 for (var i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
@@ -180,31 +180,36 @@ module.exports = React.createClass({
                         }
                     }
                     else if (kind === 'content') {
-                        if (r.enabled) {
-                            // Count tweaks to determine if it is a ON or STRONG rule
-                            var tweaks = 0;
-                            for (var j in r.actions) {
-                                var action = r.actions[j];
-                                if (action.set_tweak === 'sound' ||
-                                    (action.set_tweak === 'highlight' &&  action.value)) {
-                                    tweaks++;
-                                }
-                            }
-
-                            switch (tweaks) {
-                                case 0:
-                                    contentRules.on.push(r);
-                                    break;
-                                case 2:
-                                    contentRules.strong.push(r);
-                                    break;
-                                default:
-                                    contentRules.other.push(r);
-                                    break;
+                        // Count tweaks to determine if it is a ON or STRONG rule
+                        var tweaks = 0;
+                        for (var j in r.actions) {
+                            var action = r.actions[j];
+                            if (action.set_tweak === 'sound' ||
+                                (action.set_tweak === 'highlight' &&  action.value)) {
+                                tweaks++;
                             }
                         }
-                        else {
-                            contentRules.off.push(r);
+
+                        switch (tweaks) {
+                            case 0:
+                                if (r.enabled) {
+                                    contentRules.on.push(r);
+                                }
+                                else {
+                                    contentRules.on_but_disabled.push(r);
+                                }
+                                break;
+                            case 2:
+                                if (r.enabled) {
+                                    contentRules.strong.push(r);
+                                }
+                                else {
+                                    contentRules.strong_but_disabled.push(r);
+                                }
+                                break;
+                            default:
+                                contentRules.other.push(r);
+                                break;
                         }
                     }
                 }
@@ -228,21 +233,31 @@ module.exports = React.createClass({
                     state: PushRuleState.STRONG,
                     rules: contentRules.strong
                 } 
-               self.state.externalContentRules = [].concat(contentRules.on, contentRules.other, contentRules.off);
+               self.state.externalContentRules = [].concat(contentRules.strong_but_disabled, contentRules.on, contentRules.on_but_disabled, contentRules.other);
+            }
+            else if (contentRules.strong_but_disabled.length) {
+                self.state.vectorContentRules = {
+                    state: PushRuleState.OFF,
+                    rules: contentRules.strong_but_disabled
+                } 
+               self.state.externalContentRules = [].concat(contentRules.on, contentRules.on_but_disabled, contentRules.other);
             }
             else if (contentRules.on.length) {
                 self.state.vectorContentRules = {
                     state: PushRuleState.ON,
                     rules: contentRules.on
                 }
-                self.state.externalContentRules = [].concat(contentRules.strong, contentRules.other, contentRules.off);
+                self.state.externalContentRules = [].concat(contentRules.on_but_disabled, contentRules.other);
             }
-            else if (contentRules.off.length) {
+            else if (contentRules.on_but_disabled.length) {
                 self.state.vectorContentRules = {
                     state: PushRuleState.OFF,
-                    rules: contentRules.off
+                    rules: contentRules.on_but_disabled
                 }
-                self.state.externalContentRules = [].concat(contentRules.strong, contentRules.on, contentRules.other);
+                self.state.externalContentRules = contentRules.other;
+            }
+            else {
+                self.state.externalContentRules = contentRules.other;
             }
 
             // Build the rules displayed by Vector UI
