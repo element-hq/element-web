@@ -251,6 +251,24 @@ module.exports = React.createClass({
             if (this.state.readMarkerEventId !== undefined && this.state.readMarkerEventId != readMarkerEventId) {
                 readMarkerGhostEventId = this.state.readMarkerEventId;
             }
+
+
+            // if the event after the one referenced in the read receipt if sent by us, do nothing since
+            // this is a temporary period before the synthesized receipt for our own message arrives
+            var readMarkerGhostEventIndex;
+            for (var i = 0; i < room.timeline.length; ++i) {
+                if (room.timeline[i].getId() == readMarkerGhostEventId) {
+                    readMarkerGhostEventIndex = i;
+                    break;
+                }
+            }
+            if (readMarkerGhostEventIndex + 1 < room.timeline.length) {
+                var nextEvent = room.timeline[readMarkerGhostEventIndex + 1];
+                if (nextEvent.sender && nextEvent.sender.userId == MatrixClientPeg.get().credentials.userId) {
+                    readMarkerGhostEventId = undefined;
+                }
+            }
+
             this.setState({
                 readMarkerEventId: readMarkerEventId,
                 readMarkerGhostEventId: readMarkerGhostEventId,
@@ -692,7 +710,8 @@ module.exports = React.createClass({
             // this is where we decide what messages we show so it's the only
             // place we know whether we're at the bottom or not.
             var self = this;
-            if (prevEvent && prevEvent.getId() == this.state.readMarkerEventId) {
+            var mxEvSender = mxEv.sender ? mxEv.sender.userId : null;
+            if (prevEvent && prevEvent.getId() == this.state.readMarkerEventId && mxEvSender != MatrixClientPeg.get().credentials.userId) {
                 var hr;
                 hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '99%'}} ref={function(n) {
                     self.readMarkerNode = n;
