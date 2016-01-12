@@ -694,7 +694,7 @@ module.exports = React.createClass({
             var self = this;
             if (prevEvent && prevEvent.getId() == this.state.readReceiptEventId) {
                 var hr;
-                hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '85%'}} ref={function(n) {
+                hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '99%'}} ref={function(n) {
                     self.readMarkerNode = n;
                 }} />);
                 readMarkerIndex = ret.length;
