@@ -16,9 +16,11 @@ limitations under the License.
 
 'use strict';
 var React = require('react');
+var q = require("q");
 var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
+var Modal = require('matrix-react-sdk/lib/Modal');
 
 /**
  * Enum for state of a push rule as defined by the Vector UI.
@@ -47,7 +49,12 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             phase: this.phases.LOADING,
-            vectorPushRules: []
+            vectorPushRules: [],            // HS default push rules displayed in Vector UI
+            vectorContentRules: {           // Keyword push rules displayed in Vector UI
+                state: PushRuleState.ON,
+                rules: []
+            },
+            externalContentRules: []        // Keyword push rules that have been defined outside Vector UI
         };
     },
     
@@ -60,25 +67,67 @@ module.exports = React.createClass({
     },
     
     onNotifStateButtonClicked: function(event) {
+        var self = this;
+        var cli = MatrixClientPeg.get();
         var vectorRuleId = event.target.className.split("-")[0];
-        var newPushRuleState = event.target.className.split("-")[1];     
+        var newPushRuleState = event.target.className.split("-")[1];
         
-        var rule = this.getRule(vectorRuleId);
-
-        // For now, we support only enabled/disabled. 
-        // Translate ON, STRONG, OFF to one of the 2.
-        if (rule && rule.state !== newPushRuleState) {   
+        if ("keywords" === vectorRuleId 
+                && this.state.vectorContentRules.state !== newPushRuleState 
+                && this.state.vectorContentRules.rules.length) {
             
             this.setState({
                 phase: this.phases.LOADING
             });
             
-            var self = this;
-            MatrixClientPeg.get().setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, (newPushRuleState !== PushRuleState.OFF)).done(function() {
-               
-               self._refreshFromServer();
+            var enabled = true;
+            switch (newPushRuleState) {
+                case PushRuleState.OFF:
+                    enabled = false;
+                    break
+            }
+            
+            // Update all rules in self.state.vectorContentRules
+            var deferreds = [];
+            for (var i in this.state.vectorContentRules.rules) {
+                var rule = this.state.vectorContentRules.rules[i];
+                
+                
+                if (enabled) {
+                    deferreds.push(cli.addPushRule('global', rule.kind, rule.rule_id, rule));                
+                }
+                else {
+                    deferreds.push(cli.setPushRuleEnabled('global', rule.kind, rule.rule_id, false));
+                }
+            }
+            
+            q.all(deferreds).done(function(resps) {
+                self._refreshFromServer();
+            }, function(error) {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Can't update user notification settings",
+                    description: error.toString()
+                });
             });
-        }  
+        }
+        else {
+            var rule = this.getRule(vectorRuleId);
+
+            // For now, we support only enabled/disabled. 
+            // Translate ON, STRONG, OFF to one of the 2.
+            if (rule && rule.state !== newPushRuleState) {   
+
+                this.setState({
+                    phase: this.phases.LOADING
+                });
+
+                cli.setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, (newPushRuleState !== PushRuleState.OFF)).done(function() {
+
+                   self._refreshFromServer();
+                });
+            }
+        }
     },
     
     getRule: function(vectorRuleId) {
@@ -106,7 +155,11 @@ module.exports = React.createClass({
                 '.m.rule.call': 'vector',
             };
 
+            // HS default rules
             var defaultRules = {master: [], vector: {}, additional: [], fallthrough: [], suppression: []};
+            //  Content/keyword rules
+            var contentRules = {on: [], strong: [], off: [], other: []};
+
             for (var kind in rulesets.global) {
                 for (var i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
                     var r = rulesets.global[kind][i];
@@ -126,13 +179,78 @@ module.exports = React.createClass({
                             defaultRules.additional.push(r);
                         }
                     }
+                    else if (kind === 'content') {
+                        if (r.enabled) {
+                            // Count tweaks to determine if it is a ON or STRONG rule
+                            var tweaks = 0;
+                            for (var j in r.actions) {
+                                var action = r.actions[j];
+                                if (action.set_tweak === 'sound' ||
+                                    (action.set_tweak === 'highlight' &&  action.value)) {
+                                    tweaks++;
+                                }
+                            }
+
+                            switch (tweaks) {
+                                case 0:
+                                    contentRules.on.push(r);
+                                    break;
+                                case 2:
+                                    contentRules.strong.push(r);
+                                    break;
+                                default:
+                                    contentRules.other.push(r);
+                                    break;
+                            }
+                        }
+                        else {
+                            contentRules.off.push(r);
+                        }
+                    }
                 }
+            }
+
+            // Decide which content/keyword rules to display in Vector UI.
+            // Vector displays a single global rule for a list of keywords
+            // whereas Matrix has a push rule per keyword.
+            // Vector can set the unique rule in ON, STRONG or OFF state.
+            // Matrix has enabled/disabled plus a combination of (highlight, sound) tweaks.
+            
+            // The code below determines which set of user's content push rules can be 
+            // displayed by the vector UI.
+            // Push rules that does not fir, ie defined by another Matrix client, ends
+            // in self.state.externalContentRules.
+            // There is priority in the determination of which set will be the displayed one.
+            // The set with rules that have STRONG tweaks is the first choice. Then, the ones
+            // with ON tweaks (no tweaks).
+            if (contentRules.strong.length) {
+                self.state.vectorContentRules = {
+                    state: PushRuleState.STRONG,
+                    rules: contentRules.strong
+                } 
+               self.state.externalContentRules = [].concat(contentRules.on, contentRules.other, contentRules.off);
+            }
+            else if (contentRules.on.length) {
+                self.state.vectorContentRules = {
+                    state: PushRuleState.ON,
+                    rules: contentRules.on
+                }
+                self.state.externalContentRules = [].concat(contentRules.strong, contentRules.other, contentRules.off);
+            }
+            else if (contentRules.off.length) {
+                self.state.vectorContentRules = {
+                    state: PushRuleState.OFF,
+                    rules: contentRules.off
+                }
+                self.state.externalContentRules = [].concat(contentRules.strong, contentRules.on, contentRules.other);
             }
 
             // Build the rules displayed by Vector UI
             self.state.vectorPushRules = [];
             var rule, state;
 
+            // Messages containing user's display name 
+            // (skip contains_user_name which is too geeky)
             rule = defaultRules.vector['.m.rule.contains_display_name'];
             state = (rule && rule.enabled) ? PushRuleState.STRONG : PushRuleState.OFF;
             self.state.vectorPushRules.push({
@@ -143,10 +261,16 @@ module.exports = React.createClass({
                 "disabled": PushRuleState.ON
             });
 
-            // TODO: Merge contains_user_name
+            // Messages containing keywords
+            // For Vector UI, this is a single global push rule but translated in Matrix,
+            // it corresponds to all content push rules (stored in self.state.vectorContentRule)
+            self.state.vectorPushRules.push({
+                "vectorRuleId": "keywords",
+                "description" : "Messages containing keywords",
+                "state": self.state.vectorContentRules.state,
+            });
 
-            // TODO: Add "Messages containing keywords"
-
+            // Messages just sent to the user
             rule = defaultRules.vector['.m.rule.room_one_to_one'];
             state = (rule && rule.enabled) ? PushRuleState.STRONG : PushRuleState.OFF;
             self.state.vectorPushRules.push({
@@ -157,6 +281,7 @@ module.exports = React.createClass({
                 "disabled": PushRuleState.ON
             });
 
+            // Invitation for the user
             rule = defaultRules.vector['.m.rule.invite_for_me'];
             state = (rule && rule.enabled) ? PushRuleState.STRONG : PushRuleState.OFF;
             self.state.vectorPushRules.push({
@@ -167,6 +292,7 @@ module.exports = React.createClass({
                 "disabled": PushRuleState.ON
             });
 
+            // When people join or leave a room
             rule = defaultRules.vector['.m.rule.member_event'];
             state = (rule && rule.enabled) ? PushRuleState.ON : PushRuleState.OFF;
             self.state.vectorPushRules.push({
@@ -177,6 +303,7 @@ module.exports = React.createClass({
                 "disabled": PushRuleState.STRONG
             });
 
+            // Incoming call
             rule = defaultRules.vector['.m.rule.call'];
             state = (rule && rule.enabled) ? PushRuleState.STRONG : PushRuleState.OFF;
             self.state.vectorPushRules.push({
@@ -245,43 +372,63 @@ module.exports = React.createClass({
                 </div>
             );
         }
+
+        // Build the list of keywords rules that have been defined outside Vector UI
+        var externalKeyWords = [];
+        for (var i in this.state.externalContentRules) {
+            var rule = this.state.externalContentRules[i];
+            externalKeyWords.push(rule.pattern);
+        }
+        
+        if (externalKeyWords.length) {
+            externalKeyWords = externalKeyWords.join(", ");
+        }
         
         return (
-            <div className="mx_UserSettings_notifTable">
-            
-                <div className="mx_UserNotifSettings_tableRow">
-                    <div className="mx_UserNotifSettings_inputCell">
-                        <input id="enableNotifications"
-                            ref="enableNotifications"
-                            type="checkbox"
-                            checked={ UserSettingsStore.getEnableNotifications() }
-                            onChange={ this.onEnableNotificationsChange } />
+            <div>
+                <div className="mx_UserSettings_notifTable">
+
+                    <div className="mx_UserNotifSettings_tableRow">
+                        <div className="mx_UserNotifSettings_inputCell">
+                            <input id="enableNotifications"
+                                ref="enableNotifications"
+                                type="checkbox"
+                                checked={ UserSettingsStore.getEnableNotifications() }
+                                onChange={ this.onEnableNotificationsChange } />
+                        </div>
+                        <div className="mx_UserNotifSettings_labelCell">
+                            <label htmlFor="enableNotifications">
+                                Enable desktop notifications
+                            </label>
+                        </div>
                     </div>
-                    <div className="mx_UserNotifSettings_labelCell">
-                        <label htmlFor="enableNotifications">
-                            Enable desktop notifications
-                        </label>
+
+                    <h3>General use </h3>
+
+                    <div className="mx_UserNotifSettings_pushRulesTableWrapper">
+                        <table className="mx_UserNotifSettings_pushRulesTable">
+                            <thead>
+                                <tr>
+                                    <th width="55%"></th>
+                                    <th width="15%">Normal</th>
+                                    <th width="15%">Strong</th>
+                                    <th width="15%">Off</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                { this.renderNotifRulesTableRows() }
+
+                            </tbody>
+                        </table>
                     </div>
+
                 </div>
 
-                <h3>General use </h3>
-
-                <div className="mx_UserNotifSettings_pushRulesTableWrapper">
-                    <table className="mx_UserNotifSettings_pushRulesTable">
-                        <thead>
-                            <tr>
-                                <th width="55%"></th>
-                                <th width="15%">Normal</th>
-                                <th width="15%">Strong</th>
-                                <th width="15%">Off</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        
-                            { this.renderNotifRulesTableRows() }
-                    
-                        </tbody>
-                    </table>
+                <div>
+                    <br/><br/>
+                    Warning: Push rules on the following keywords has been defined: <br/>
+                    { externalKeyWords }
                 </div>
 
             </div>
