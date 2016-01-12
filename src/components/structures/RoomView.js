@@ -74,6 +74,7 @@ module.exports = React.createClass({
             syncState: MatrixClientPeg.get().getSyncState(),
             hasUnsentMessages: this._hasUnsentMessages(room),
             callState: null,
+            guestsCanJoin: false
         }
     },
 
@@ -106,15 +107,27 @@ module.exports = React.createClass({
         // succeeds then great, show the preview (but we still may be able to /join!).
         if (!this.state.room) {
             console.log("Attempting to peek into room %s", this.props.roomId);
-            MatrixClientPeg.get().peekInRoom(this.props.roomId).done(function() {
+            MatrixClientPeg.get().peekInRoom(this.props.roomId).done(() => {
                 // we don't need to do anything - JS SDK will emit Room events
-                // which will update the UI.
+                // which will update the UI. We *do* however need to know if we
+                // can join the room so we can fiddle with the UI appropriately.
+                var peekedRoom = MatrixClientPeg.get().getRoom(this.props.roomId);
+                if (!peekedRoom) {
+                    return;
+                }
+                var guestAccessEvent = peekedRoom.currentState.getStateEvents("m.room.guest_access", "");
+                if (!guestAccessEvent) {
+                    return;
+                }
+                if (guestAccessEvent.getContent().guest_access === "can_join") {
+                    this.setState({
+                        guestsCanJoin: true
+                    });
+                }
             }, function(err) {
                 console.error("Failed to peek into room: %s", err);
             });
         }
-
-
     },
 
     componentWillUnmount: function() {
@@ -1132,6 +1145,7 @@ module.exports = React.createClass({
         var SearchBar = sdk.getComponent("rooms.SearchBar");
         var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        var RoomPreviewBar = sdk.getComponent("rooms.RoomPreviewBar");
 
         if (!this.state.room) {
             if (this.props.roomId) {
@@ -1281,6 +1295,12 @@ module.exports = React.createClass({
             }
             else if (this.state.searching) {
                 aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
+            }
+            else if (this.state.guestsCanJoin && MatrixClientPeg.get().isGuest() &&
+                    (!myMember || myMember.membership !== "join")) {
+                aux = (
+                    <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />
+                );
             }
 
             var conferenceCallNotification = null;
