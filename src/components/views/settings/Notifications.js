@@ -80,24 +80,49 @@ module.exports = React.createClass({
                 phase: this.phases.LOADING
             });
             
-            var enabled = true;
-            switch (newPushRuleState) {
-                case PushRuleState.OFF:
-                    enabled = false;
-                    break
-            }
-            
             // Update all rules in self.state.vectorContentRules
             var deferreds = [];
             for (var i in this.state.vectorContentRules.rules) {
                 var rule = this.state.vectorContentRules.rules[i];
                 
-                
-                if (enabled) {
-                    deferreds.push(cli.addPushRule('global', rule.kind, rule.rule_id, rule));                
+                var enabled;
+                var actions;
+                switch (newPushRuleState) {
+                    case PushRuleState.ON:
+                        if (rule.actions.length !== 1) {
+                            actions = ['notify'];
+                        }
+
+                        if (this.state.vectorContentRules.state === PushRuleState.OFF) {
+                            enabled = true;
+                        }
+                        break;
+                        
+                    case PushRuleState.STRONG:
+                        if (rule.actions.length !== 3) {
+                            actions = ['notify',
+                                {'set_tweak': 'sound', 'value': 'default'},
+                                {'set_tweak': 'highlight', 'value': 'true'}
+                            ];
+                        }
+
+                        if (this.state.vectorContentRules.state === PushRuleState.OFF) {
+                            enabled = true;
+                        }
+                        break;
+
+                    case PushRuleState.OFF:
+                        enabled = false;
+                        break;
                 }
-                else {
-                    deferreds.push(cli.setPushRuleEnabled('global', rule.kind, rule.rule_id, false));
+                
+                if (actions) {
+                    // Note that the workaound in _updatePushRuleActions will automatically
+                    // enable the rule
+                    deferreds.push(this._updatePushRuleActions(rule, actions));
+                }
+                else if (enabled != undefined) {
+                    deferreds.push(cli.setPushRuleEnabled('global', rule.kind, rule.rule_id, enabled));
                 }
             }
             
@@ -114,7 +139,7 @@ module.exports = React.createClass({
         else {
             var rule = this.getRule(vectorRuleId);
 
-            // For now, we support only enabled/disabled. 
+            // For now, we support only enabled/disabled for hs default rules
             // Translate ON, STRONG, OFF to one of the 2.
             if (rule && rule.state !== newPushRuleState) {   
 
@@ -334,7 +359,29 @@ module.exports = React.createClass({
             });
         });
     },
-
+    
+    _updatePushRuleActions: function(rule, actions) {
+        // Workaround for SYN-590 : Push rule update fails
+        // Remove the rule and recreate it with the new actions
+        var cli = MatrixClientPeg.get();
+        var deferred = q.defer();
+        
+        cli.deletePushRule('global', rule.kind, rule.rule_id).done(function() {
+            cli.addPushRule('global', rule.kind, rule.rule_id, {
+                actions: actions,
+                pattern: rule.pattern
+            }).done(function() {
+                deferred.resolve();
+            }, function(err) {
+                deferred.reject(err);
+            });
+        }, function(err) {
+            deferred.reject(err);
+        });  
+        
+        return deferred.promise;
+    },
+    
     renderNotifRulesTableRow: function(title, className, pushRuleState, disabled) {
         return (
             <tr key = {className}>
