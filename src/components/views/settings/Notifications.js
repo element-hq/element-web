@@ -238,9 +238,24 @@ module.exports = React.createClass({
                         for (var i in newKeywords) {
                             var keyword = newKeywords[i];
 
+                            var pushRuleStateKind = self.state.vectorContentRules.state;
+                            if (pushRuleStateKind === PushRuleState.OFF) {
+                                // When the current global keywords rule is OFF, we need to look at
+                                // the flavor of rules in 'vectorContentRules' to apply the same actions 
+                                // when creating the new rule.
+                                // Thus, this new rule will join the 'vectorContentRules' set. 
+                                if (self.state.vectorContentRules.rules.length) {
+                                    pushRuleStateKind = self._pushRuleStateKind(self.state.vectorContentRules.rules[0]);
+                                }
+                                else {
+                                    // ON is default
+                                    pushRuleStateKind =  PushRuleState.ON;
+                                }
+                            }
+
                             if (vectorContentRulesPatterns.indexOf(keyword) < 0) {
                                 deferreds.push(cli.addPushRule('global', 'content', keyword, {
-                                    actions: self._actionsFor(self.state.vectorContentRules.state),
+                                    actions: self._actionsFor(pushRuleStateKind),
                                     pattern: keyword
                                 }));
                             }
@@ -274,6 +289,31 @@ module.exports = React.createClass({
                 {'set_tweak': 'highlight', 'value': 'true'}
             ];;
         }
+    },
+    
+    // Determine whether a rule is in the PushRuleState.ON category or in PushRuleState.LOUD
+    // regardless of its enabled state.
+    _pushRuleStateKind: function(rule) {
+        var stateKind;
+ 
+        // Count tweaks to determine if it is a ON or LOUD rule
+        var tweaks = 0;
+        for (var j in rule.actions) {
+            var action = rule.actions[j];
+            if (action.set_tweak === 'sound' ||
+                (action.set_tweak === 'highlight' &&  action.value)) {
+                tweaks++;
+            }
+        }
+        switch (tweaks) {
+            case 0:
+                stateKind = PushRuleState.ON;
+                break;
+            case 2:
+                stateKind = PushRuleState.LOUD;
+                break;
+        }
+        return stateKind;
     },
 
     _refreshFromServer: function() {
@@ -317,18 +357,8 @@ module.exports = React.createClass({
                         }
                     }
                     else if (kind === 'content') {
-                        // Count tweaks to determine if it is a ON or LOUD rule
-                        var tweaks = 0;
-                        for (var j in r.actions) {
-                            var action = r.actions[j];
-                            if (action.set_tweak === 'sound' ||
-                                (action.set_tweak === 'highlight' &&  action.value)) {
-                                tweaks++;
-                            }
-                        }
-
-                        switch (tweaks) {
-                            case 0:
+                        switch (self._pushRuleStateKind(r)) {
+                            case PushRuleState.ON:
                                 if (r.enabled) {
                                     contentRules.on.push(r);
                                 }
@@ -336,7 +366,7 @@ module.exports = React.createClass({
                                     contentRules.on_but_disabled.push(r);
                                 }
                                 break;
-                            case 2:
+                            case PushRuleState.LOUD:
                                 if (r.enabled) {
                                     contentRules.loud.push(r);
                                 }
