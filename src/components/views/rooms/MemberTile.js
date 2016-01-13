@@ -26,6 +26,11 @@ var Modal = require("../../../Modal");
 module.exports = React.createClass({
     displayName: 'MemberTile',
 
+    propTypes: {
+        member: React.PropTypes.any.isRequired, // RoomMember
+        onFinished: React.PropTypes.func
+    },
+
     getInitialState: function() {
         return {};
     },
@@ -71,37 +76,6 @@ module.exports = React.createClass({
         });
     },
 
-    getDuration: function(time) {
-        if (!time) return;
-        var t = parseInt(time / 1000);
-        var s = t % 60;
-        var m = parseInt(t / 60) % 60;
-        var h = parseInt(t / (60 * 60)) % 24;
-        var d = parseInt(t / (60 * 60 * 24));
-        if (t < 60) {
-            if (t < 0) {
-                return "0s";
-            }
-            return s + "s";
-        }
-        if (t < 60 * 60) {
-            return m + "m";
-        }
-        if (t < 24 * 60 * 60) {
-            return h + "h";
-        }
-        return d + "d ";
-    },
-
-    getPrettyPresence: function(user) {
-        if (!user) return "Unknown";
-        var presence = user.presence;
-        if (presence === "online") return "Online";
-        if (presence === "unavailable") return "Idle"; // XXX: is this actually right?
-        if (presence === "offline") return "Offline";
-        return "Unknown";
-    },
-
     getPowerLabel: function() {
         var label = this.props.member.userId;
         if (this.state.isTargetMod) {
@@ -111,6 +85,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
+
         this.member_last_modified_time = this.props.member.getLastModifiedTime();
         if (this.props.member.user) {
             this.user_last_modified_time = this.props.member.user.getLastModifiedTime();
@@ -144,22 +120,17 @@ module.exports = React.createClass({
 
         var nameEl;
         if (this.state.hover) {
-            var presence;
             // FIXME: make presence data update whenever User.presence changes...
             var active = this.props.member.user ? ((Date.now() - (this.props.member.user.lastPresenceTs - this.props.member.user.lastActiveAgo)) || -1) : -1;
-            if (active >= 0) {
-                presence = <div className="mx_MemberTile_presence">{ this.getPrettyPresence(this.props.member.user) } { this.getDuration(active) } ago</div>;
-            }
-            else {
-                presence = <div className="mx_MemberTile_presence">{ this.getPrettyPresence(this.props.member.user) }</div>;
-            }
 
-            nameEl =
+            nameEl = (
                 <div className="mx_MemberTile_details">
                     <img className="mx_MemberTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
                     <div className="mx_MemberTile_userId">{ name }</div>
-                    { presence }
+                    <PresenceLabel activeAgo={active}
+                        presenceState={this.props.member.user ? this.props.member.user.presence : null} />
                 </div>
+            );
         }
         else {
             nameEl =
