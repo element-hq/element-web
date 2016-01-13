@@ -117,9 +117,9 @@ module.exports = React.createClass({
                 }
                 
                 if (actions) {
-                    // Note that the workaound in _updatePushRuleActions will automatically
+                    // Note that the workaround in _updatePushRuleActions will automatically
                     // enable the rule
-                    deferreds.push(this._updatePushRuleActions(rule, actions));
+                    deferreds.push(this._updatePushRuleActions(rule, actions, enabled));
                 }
                 else if (enabled != undefined) {
                     deferreds.push(cli.setPushRuleEnabled('global', rule.kind, rule.rule_id, enabled));
@@ -472,7 +472,7 @@ module.exports = React.createClass({
         });
     },
     
-    _updatePushRuleActions: function(rule, actions) {
+    _updatePushRuleActions: function(rule, actions, enabled) {
         // Workaround for SYN-590 : Push rule update fails
         // Remove the rule and recreate it with the new actions
         var cli = MatrixClientPeg.get();
@@ -483,7 +483,18 @@ module.exports = React.createClass({
                 actions: actions,
                 pattern: rule.pattern
             }).done(function() {
-                deferred.resolve();
+
+                // Then, if requested, enabled or disabled the rule
+                if (undefined != enabled) {
+                    cli.setPushRuleEnabled('global', rule.kind, rule.rule_id, enabled).done(function() {
+                        deferred.resolve();
+                    }, function(err) {
+                        deferred.reject(err);
+                    });
+                }
+                else {  
+                    deferred.resolve();
+                }
             }, function(err) {
                 deferred.reject(err);
             });
