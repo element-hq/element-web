@@ -15,6 +15,7 @@ limitations under the License.
 */
 var React = require('react');
 var classNames = require('classnames');
+var Matrix = require("matrix-js-sdk");
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var sdk = require('../../../index');
@@ -253,14 +254,12 @@ module.exports = React.createClass({
                     // already added them.
                     var memberEvent = room.currentState.getInviteForThreePidToken(e.getStateKey());
                     if (memberEvent) {
-                        console.log("Found match => %s", memberEvent.getStateKey());
                         return;
                     }
-                    console.log("Display match => ");
-                    /*
                     memberList.push(
-                        <MemberTile key={e.getStateKey()} ref={e.getStateKey()} member={}/>
-                    ) */
+                        <MemberTile key={e.getStateKey()} ref={e.getStateKey()}
+                            customDisplayName={e.getContent().display_name} />
+                    )
                 })
             }
         }

@@ -27,24 +27,18 @@ module.exports = React.createClass({
     displayName: 'MemberTile',
 
     propTypes: {
-        member: React.PropTypes.any.isRequired, // RoomMember
-        onFinished: React.PropTypes.func
+        member: React.PropTypes.any, // RoomMember
+        onFinished: React.PropTypes.func,
+        customDisplayName: React.PropTypes.string // for 3pid invites
     },
 
     getInitialState: function() {
         return {};
     },
 
-    onLeaveClick: function() {
-        dis.dispatch({
-            action: 'leave_room',
-            room_id: this.props.member.roomId,
-        });
-        this.props.onFinished();        
-    },
-
     shouldComponentUpdate: function(nextProps, nextState) {
         if (this.state.hover !== nextState.hover) return true;
+        if (!this.props.member) { return false; } // e.g. 3pid members
         if (
             this.member_last_modified_time === undefined ||
             this.member_last_modified_time < nextProps.member.getLastModifiedTime()
@@ -70,13 +64,25 @@ module.exports = React.createClass({
     },
 
     onClick: function(e) {
+        if (!this.props.member) { return; } // e.g. 3pid members
+
         dis.dispatch({
             action: 'view_user',
             member: this.props.member,
         });
     },
 
+    _getDisplayName: function() {
+        if (this.props.customDisplayName) {
+            return this.props.customDisplayName;
+        }
+        return this.props.member.name;
+    },
+
     getPowerLabel: function() {
+        if (!this.props.member) {
+            return this._getDisplayName();
+        }
         var label = this.props.member.userId;
         if (this.state.isTargetMod) {
             label += " - Mod (" + this.props.member.powerLevelNorm + "%)";
@@ -85,68 +91,74 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
-
-        this.member_last_modified_time = this.props.member.getLastModifiedTime();
-        if (this.props.member.user) {
-            this.user_last_modified_time = this.props.member.user.getLastModifiedTime();
-        }
-
-        var isMyUser = MatrixClientPeg.get().credentials.userId == this.props.member.userId;
-
-        var power;
-        // if (this.props.member && this.props.member.powerLevelNorm > 0) {
-        //     var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
-        //     power = <img src={ img } className="mx_MemberTile_power" width="44" height="44" alt=""/>;
-        // }
+        var member = this.props.member;
+        var isMyUser = false;
+        var name = this._getDisplayName();
+        var active = -1;
         var presenceClass = "mx_MemberTile_offline";
-        var mainClassName = "mx_MemberTile ";
-        if (this.props.member.user) {
-            if (this.props.member.user.presence === "online") {
-                presenceClass = "mx_MemberTile_online";
+
+        if (member) {
+            if (member.user) {
+                this.user_last_modified_time = member.user.getLastModifiedTime();
+
+                // FIXME: make presence data update whenever User.presence changes...
+                active = (
+                    (Date.now() - (member.user.lastPresenceTs - member.user.lastActiveAgo)) || -1
+                );
+
+                if (member.user.presence === "online") {
+                    presenceClass = "mx_MemberTile_online";
+                }
+                else if (member.user.presence === "unavailable") {
+                    presenceClass = "mx_MemberTile_unavailable";
+                }
             }
-            else if (this.props.member.user.presence === "unavailable") {
-                presenceClass = "mx_MemberTile_unavailable";
-            }
+            this.member_last_modified_time = member.getLastModifiedTime();
+            isMyUser = MatrixClientPeg.get().credentials.userId == member.userId;
+
+            // if (this.props.member && this.props.member.powerLevelNorm > 0) {
+            //     var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
+            //     power = <img src={ img } className="mx_MemberTile_power" width="44" height="44" alt=""/>;
+            // }
         }
+
+
+        var mainClassName = "mx_MemberTile ";
         mainClassName += presenceClass;
         if (this.state.hover) {
             mainClassName += " mx_MemberTile_hover";
         }
 
-        var name = this.props.member.name;
-        // if (isMyUser) name += " (me)"; // this does nothing other than introduce line wrapping and pain
-        //var leave = isMyUser ? <img className="mx_MemberTile_leave" src="img/delete.png" width="10" height="10" onClick={this.onLeaveClick}/> : null;
-
         var nameEl;
         if (this.state.hover) {
-            // FIXME: make presence data update whenever User.presence changes...
-            var active = this.props.member.user ? ((Date.now() - (this.props.member.user.lastPresenceTs - this.props.member.user.lastActiveAgo)) || -1) : -1;
-
+            var presenceState = (member && member.user) ? member.user.presence : null;
+            var PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
             nameEl = (
                 <div className="mx_MemberTile_details">
                     <img className="mx_MemberTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
                     <div className="mx_MemberTile_userId">{ name }</div>
                     <PresenceLabel activeAgo={active}
-                        presenceState={this.props.member.user ? this.props.member.user.presence : null} />
+                        presenceState={presenceState} />
                 </div>
             );
         }
         else {
-            nameEl =
+            nameEl = (
                 <div className="mx_MemberTile_name">
                     { name }
                 </div>
+            );
         }
 
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+
         return (
             <div className={mainClassName} title={ this.getPowerLabel() }
                     onClick={ this.onClick } onMouseEnter={ this.mouseEnter }
                     onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">
-                    <MemberAvatar member={this.props.member} width={36} height={36} />
-                     { power }
+                    <MemberAvatar member={this.props.member} width={36} height={36}
+                        customDisplayName={this.props.customDisplayName} />
                 </div>
                 { nameEl }
             </div>
