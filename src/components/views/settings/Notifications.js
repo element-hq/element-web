@@ -132,7 +132,8 @@ module.exports = React.createClass({
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Can't update user notification settings",
-                    description: error.toString()
+                    description: error.toString(),
+                    onFinished: self._refreshFromServer
                 });
             });
         }
@@ -163,6 +164,7 @@ module.exports = React.createClass({
         Modal.createDialog(QuestionDialog, {
             title: "Keywords",
             description: this.keywordsDialogDiv,
+            focus: false,
             onFinished: function onFinished(should_leave) {
 
                 if (should_leave && self.newKeywords) {
@@ -173,6 +175,15 @@ module.exports = React.createClass({
                     for (var i in newKeywords) {
                         newKeywords[i] = newKeywords[i].trim();
                     }
+
+                    // Remove duplicates and empty
+                    newKeywords = newKeywords.reduce(function(array, keyword){
+                        if (keyword !== "" && array.indexOf(keyword) < 0) {
+                            array.push(keyword);
+                        }
+                        return array;
+                    },[]);
+
                     self.setState({
                         phase: self.phases.LOADING
                     });
@@ -184,7 +195,7 @@ module.exports = React.createClass({
 
                         vectorContentRulesPatterns.push(rule.pattern);
 
-                        if (-1 === newKeywords.indexOf(rule.pattern)) {
+                        if (newKeywords.indexOf(rule.pattern) < 0) {
                             removeDeferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
                         }
                     }
@@ -194,7 +205,7 @@ module.exports = React.createClass({
                     for (var i in self.state.externalContentRules) {
                         var rule = self.state.externalContentRules[i];
 
-                        if (-1 !== newKeywords.indexOf(rule.pattern)) {
+                        if (newKeywords.indexOf(rule.pattern) >= 0) {
                             removeDeferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
                         }
                     }
@@ -203,7 +214,8 @@ module.exports = React.createClass({
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         Modal.createDialog(ErrorDialog, {
                             title: "Can't update keywords",
-                            description: error.toString()
+                            description: error.toString(),
+                            onFinished: self._refreshFromServer
                         });
                     }
 
@@ -213,7 +225,7 @@ module.exports = React.createClass({
                         for (var i in newKeywords) {
                             var keyword = newKeywords[i];
 
-                            if (-1 === vectorContentRulesPatterns.indexOf(keyword)) {
+                            if (vectorContentRulesPatterns.indexOf(keyword) < 0) {
                                 deferreds.push(cli.addPushRule('global', 'content', keyword, {
                                     actions: self._actionsFor(self.state.vectorContentRules.state),
                                     pattern: keyword
@@ -394,7 +406,7 @@ module.exports = React.createClass({
             self.state.vectorPushRules.push({
                 "vectorRuleId": "keywords",
                 "description" : (<span>Messages containing <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>keywords</span></span>),
-                "state": self.state.vectorContentRules.state,
+                "state": self.state.vectorContentRules.state
             });
 
             // Messages just sent to the user
@@ -541,6 +553,8 @@ module.exports = React.createClass({
 
         var onKeywordsChange = function(e) {
             self.newKeywords = e.target.value;
+            
+            this.props.onFinished(false);
         };
 
         this.keywordsDialogDiv = (
@@ -584,7 +598,7 @@ module.exports = React.createClass({
                         </div>
                     </div>
 
-                    <h3>General use </h3>
+                    <h3>General use</h3>
 
                     <div className="mx_UserNotifSettings_pushRulesTableWrapper">
                         <table className="mx_UserNotifSettings_pushRulesTable">
