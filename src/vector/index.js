@@ -155,7 +155,8 @@ function loadApp() {
                 registrationUrl={makeRegistrationUrl()}
                 ConferenceHandler={VectorConferenceHandler}
                 config={configJson}
-                startingQueryParams={parseQsFromFragment(window.location)} />,
+                startingQueryParams={parseQsFromFragment(window.location)}
+                enableGuest={true} />,
             document.getElementById('matrixchat')
         );
     }
