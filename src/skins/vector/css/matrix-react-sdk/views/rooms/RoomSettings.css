@@ -74,6 +74,50 @@ limitations under the License.
     width: 100%;
 }
 
+.mx_RoomSettings .mx_RoomSettings_aliasesTable {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    margin-left: 56px;
+    display: table;
+}
+
+.mx_RoomSettings .mx_RoomSettings_aliasesRow {
+    display: table-row;
+}
+
+.mx_RoomSettings .mx_RoomSettings_alias {
+    display: table-cell;
+    margin-bottom: 20px;
+}
+
+.mx_RoomSettings_editable {
+    border: 0px;
+    border-bottom: 1px solid #c7c7c7;
+    padding: 0px;
+    min-width: 240px;
+}
+
+.mx_RoomSettings_editable:focus {
+    border-bottom: 1px solid #76CFA6;
+    outline: none;
+    box-shadow: none;
+}
+
+.mx_RoomSettings_deleteAlias,
+.mx_RoomSettings_addAlias {
+    display: table-cell;
+    visibility: visible;
+}
+
+.mx_RoomSettings_deleteAlias:hover,
+.mx_RoomSettings_addAlias:hover {
+    visibility: visible;
+}
+
+.mx_RoomSettings_aliasPlaceholder {
+    color: #a2a2a2;
+}
+
 .mx_RoomSettings .mx_RoomAvatar {
     border-radius: 120px;
 }
