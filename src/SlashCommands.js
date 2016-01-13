@@ -322,5 +322,11 @@ module.exports = {
             }
         }
         return null; // not a command
+    },
+
+    getCommandList: function() {
+        return Object.keys(commands).map(function(cmd) {
+            return "/" + cmd;
+        });
     }
 };
