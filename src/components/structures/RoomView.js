@@ -41,6 +41,7 @@ var Tinter = require("../../Tinter");
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
+var SEND_READ_RECEIPT_DELAY = 2000;
 
 var DEBUG_SCROLL = false;
 
@@ -75,6 +76,8 @@ module.exports = React.createClass({
             syncState: MatrixClientPeg.get().getSyncState(),
             hasUnsentMessages: this._hasUnsentMessages(room),
             callState: null,
+            readMarkerEventId: room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId),
+            readMarkerGhostEventId: undefined,
         }
     },
 
@@ -99,9 +102,33 @@ module.exports = React.createClass({
                 this.forceUpdate();
             }
         });
+        // if this is an unknown room then we're in one of three states:
+        // - This is a room we can peek into (search engine) (we can /peek)
+        // - This is a room we can publicly join or were invited to. (we can /join)
+        // - This is a room we cannot join at all. (no action can help us)
+        // We can't try to /join because this may implicitly accept invites (!)
+        // We can /peek though. If it fails then we present the join UI. If it
+        // succeeds then great, show the preview (but we still may be able to /join!).
+        if (!this.state.room) {
+            console.log("Attempting to peek into room %s", this.props.roomId);
+            MatrixClientPeg.get().peekInRoom(this.props.roomId).done(function() {
+                // we don't need to do anything - JS SDK will emit Room events
+                // which will update the UI.
+            }, function(err) {
+                console.error("Failed to peek into room: %s", err);
+            });
+        }
+
+
     },
 
     componentWillUnmount: function() {
+        // set a boolean to say we've been unmounted, which any pending
+        // promises can use to throw away their results.
+        //
+        // (We could use isMounted, but facebook have deprecated that.)
+        this.unmounted = true;
+
         if (this.refs.messagePanel) {
             // disconnect the D&D event listeners from the message panel. This
             // is really just for hygiene - the messagePanel is going to be
@@ -201,7 +228,7 @@ module.exports = React.createClass({
     },*/
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
-        if (!this.isMounted()) return;
+        if (this.unmounted) return;
 
         // ignore anything that comes in whilst paginating: we get one
         // event for each new matrix event so this would cause a huge
@@ -265,7 +292,33 @@ module.exports = React.createClass({
 
     onRoomReceipt: function(receiptEvent, room) {
         if (room.roomId == this.props.roomId) {
-            this.forceUpdate();
+            var readMarkerEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+            var readMarkerGhostEventId = this.state.readMarkerGhostEventId;
+            if (this.state.readMarkerEventId !== undefined && this.state.readMarkerEventId != readMarkerEventId) {
+                readMarkerGhostEventId = this.state.readMarkerEventId;
+            }
+
+
+            // if the event after the one referenced in the read receipt if sent by us, do nothing since
+            // this is a temporary period before the synthesized receipt for our own message arrives
+            var readMarkerGhostEventIndex;
+            for (var i = 0; i < room.timeline.length; ++i) {
+                if (room.timeline[i].getId() == readMarkerGhostEventId) {
+                    readMarkerGhostEventIndex = i;
+                    break;
+                }
+            }
+            if (readMarkerGhostEventIndex + 1 < room.timeline.length) {
+                var nextEvent = room.timeline[readMarkerGhostEventIndex + 1];
+                if (nextEvent.sender && nextEvent.sender.userId == MatrixClientPeg.get().credentials.userId) {
+                    readMarkerGhostEventId = undefined;
+                }
+            }
+
+            this.setState({
+                readMarkerEventId: readMarkerEventId,
+                readMarkerGhostEventId: readMarkerGhostEventId,
+            });
         }
     },
 
@@ -383,11 +436,14 @@ module.exports = React.createClass({
     _paginateCompleted: function() {
         debuglog("paginate complete");
 
-        this.setState({
-            room: MatrixClientPeg.get().getRoom(this.props.roomId)
-        });
+        // we might have switched rooms since the paginate started - just bin
+        // the results if so.
+        if (this.unmounted) return;
 
-        this.setState({paginating: false});
+        this.setState({
+            room: MatrixClientPeg.get().getRoom(this.props.roomId),
+            paginating: false,
+        });
     },
 
     onSearchResultsFillRequest: function(backwards) {
@@ -451,6 +507,12 @@ module.exports = React.createClass({
             self.setState({
                 joining: false,
                 joinError: error
+            });
+            var msg = error.message ? error.message : JSON.stringify(error);
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to join room",
+                description: msg
             });
         });
         this.setState({
@@ -565,7 +627,7 @@ module.exports = React.createClass({
 
         return searchPromise.then(function(results) {
             debuglog("search complete");
-            if (!self.state.searching || self.searchId != localSearchId) {
+            if (self.unmounted || !self.state.searching || self.searchId != localSearchId) {
                 console.error("Discarding stale search results");
                 return;
             }
@@ -583,7 +645,8 @@ module.exports = React.createClass({
 
             // For overlapping highlights,
             // favour longer (more specific) terms first
-            highlights = highlights.sort(function(a, b) { b.length - a.length });
+            highlights = highlights.sort(function(a, b) {
+                return b.length - a.length });
 
             self.setState({
                 searchHighlights: highlights,
@@ -678,10 +741,10 @@ module.exports = React.createClass({
 
         var EventTile = sdk.getComponent('rooms.EventTile');
 
-
         var prevEvent = null; // the last event we showed
-        var readReceiptEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
         var startIdx = Math.max(0, this.state.room.timeline.length - this.state.messageCap);
+        var readMarkerIndex;
+        var ghostIndex;
         for (var i = startIdx; i < this.state.room.timeline.length; i++) {
             var mxEv = this.state.room.timeline[i];
 
@@ -693,6 +756,25 @@ module.exports = React.createClass({
                         this.props.ConferenceHandler.isConferenceUser(mxEv.getStateKey())) {
                     continue; // suppress conf user join/parts
                 }
+            }
+
+            // now we've decided whether or not to show this message,
+            // add the read up to marker if appropriate
+            // doing this here means we implicitly do not show the marker
+            // if it's at the bottom
+            // NB. it would be better to decide where the read marker was going
+            // when the state changed rather than here in the render method, but
+            // this is where we decide what messages we show so it's the only
+            // place we know whether we're at the bottom or not.
+            var self = this;
+            var mxEvSender = mxEv.sender ? mxEv.sender.userId : null;
+            if (prevEvent && prevEvent.getId() == this.state.readMarkerEventId && mxEvSender != MatrixClientPeg.get().credentials.userId) {
+                var hr;
+                hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '99%'}} ref={function(n) {
+                    self.readMarkerNode = n;
+                }} />);
+                readMarkerIndex = ret.length;
+                ret.push(<li key="_readupto" className="mx_RoomView_myReadMarker_container">{hr}</li>);
             }
 
             // is this a continuation of the previous message?
@@ -731,17 +813,33 @@ module.exports = React.createClass({
                 </li>
             );
 
-            if (eventId == readReceiptEventId) {
-                ret.push(<hr className="mx_RoomView_myReadMarker" />);
+            // A read up to marker has died and returned as a ghost!
+            // Lives in the dom as the ghost of the previous one while it fades away
+            if (eventId == this.state.readMarkerGhostEventId) {
+                ghostIndex = ret.length;
             }
 
             prevEvent = mxEv;
         }
 
+        // splice the read marker ghost in now that we know whether the read receipt
+        // is the last element or not, because we only decide as we're going along.
+        if (readMarkerIndex === undefined && ghostIndex && ghostIndex <= ret.length) {
+            var hr;
+            hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '85%'}} ref={function(n) {
+                Velocity(n, {opacity: '0', width: '10%'}, {duration: 400, easing: 'easeInSine', delay: 1000, complete: function() {
+                    self.setState({readMarkerGhostEventId: undefined});
+                }});
+            }} />);
+            ret.splice(ghostIndex, 0, (
+                <li key="_readuptoghost" className="mx_RoomView_myReadMarker_container">{hr}</li>
+            ));
+        }
+
         return ret;
     },
 
-    uploadNewState: function(new_name, new_topic, new_join_rule, new_history_visibility, new_power_levels, new_color_scheme) {
+    uploadNewState: function(newVals) {
         var old_name = this.state.room.name;
 
         var old_topic = this.state.room.currentState.getStateEvents('m.room.topic', '');
@@ -767,53 +865,61 @@ module.exports = React.createClass({
 
         var deferreds = [];
 
-        if (old_name != new_name && new_name != undefined && new_name) {
+        if (old_name != newVals.name && newVals.name != undefined && newVals.name) {
             deferreds.push(
-                MatrixClientPeg.get().setRoomName(this.state.room.roomId, new_name)
+                MatrixClientPeg.get().setRoomName(this.state.room.roomId, newVals.name)
             );
         }
 
-        if (old_topic != new_topic && new_topic != undefined) {
+        if (old_topic != newVals.topic && newVals.topic != undefined) {
             deferreds.push(
-                MatrixClientPeg.get().setRoomTopic(this.state.room.roomId, new_topic)
+                MatrixClientPeg.get().setRoomTopic(this.state.room.roomId, newVals.topic)
             );
         }
 
-        if (old_join_rule != new_join_rule && new_join_rule != undefined) {
+        if (old_join_rule != newVals.join_rule && newVals.join_rule != undefined) {
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
                     this.state.room.roomId, "m.room.join_rules", {
-                        join_rule: new_join_rule,
+                        join_rule: newVals.join_rule,
                     }, ""
                 )
             );
         }
 
-        if (old_history_visibility != new_history_visibility && new_history_visibility != undefined) {
+        if (old_history_visibility != newVals.history_visibility &&
+                newVals.history_visibility != undefined) {
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
                     this.state.room.roomId, "m.room.history_visibility", {
-                        history_visibility: new_history_visibility,
+                        history_visibility: newVals.history_visibility,
                     }, ""
                 )
             );
         }
 
-        if (new_power_levels) {
+        if (newVals.power_levels) {
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
-                    this.state.room.roomId, "m.room.power_levels", new_power_levels, ""
+                    this.state.room.roomId, "m.room.power_levels", newVals.power_levels, ""
                 )
             );
         }
 
-        if (new_color_scheme) {
+        if (newVals.color_scheme) {
             deferreds.push(
                 MatrixClientPeg.get().setRoomAccountData(
-                    this.state.room.roomId, "org.matrix.room.color_scheme", new_color_scheme
+                    this.state.room.roomId, "org.matrix.room.color_scheme", newVals.color_scheme
                 )
             );
         }
+
+        deferreds.push(
+            MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
+                allowRead: newVals.guest_read,
+                allowJoin: newVals.guest_join
+            })
+        );
 
         if (deferreds.length) {
             var self = this;
@@ -899,21 +1005,16 @@ module.exports = React.createClass({
             uploadingRoomSettings: true,
         });
 
-        var new_name = this.refs.header.getRoomName();
-        var new_topic = this.refs.room_settings.getTopic();
-        var new_join_rule = this.refs.room_settings.getJoinRules();
-        var new_history_visibility = this.refs.room_settings.getHistoryVisibility();
-        var new_power_levels = this.refs.room_settings.getPowerLevels();
-        var new_color_scheme = this.refs.room_settings.getColorScheme();
-
-        this.uploadNewState(
-            new_name,
-            new_topic,
-            new_join_rule,
-            new_history_visibility,
-            new_power_levels,
-            new_color_scheme
-        );
+        this.uploadNewState({
+            name: this.refs.header.getRoomName(),
+            topic: this.refs.room_settings.getTopic(),
+            join_rule: this.refs.room_settings.getJoinRules(),
+            history_visibility: this.refs.room_settings.getHistoryVisibility(),
+            power_levels: this.refs.room_settings.getPowerLevels(),
+            guest_join: this.refs.room_settings.canGuestsJoin(),
+            guest_read: this.refs.room_settings.canGuestsRead(),
+            color_scheme: this.refs.room_settings.getColorScheme(),
+        });
     },
 
     onCancelClick: function() {
@@ -1067,17 +1168,23 @@ module.exports = React.createClass({
         // a maxHeight on the underlying remote video tag.
         var auxPanelMaxHeight;
         if (this.refs.callView) {
-            // XXX: don't understand why we have to call findDOMNode here in react 0.14 - it should already be a DOM node.
-            var video = ReactDOM.findDOMNode(this.refs.callView.refs.video.refs.remote);
+            var video = this.refs.callView.getVideoView().getRemoteVideoElement();
 
             // header + footer + status + give us at least 100px of scrollback at all times.
-            auxPanelMaxHeight = window.innerHeight - (83 + 72 + 36 + 100);
+            auxPanelMaxHeight = window.innerHeight -
+                (83 + 72 +
+                 sdk.getComponent('rooms.MessageComposer').MAX_HEIGHT +
+                 100);
 
             // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
             // but it's better than the video going missing entirely
             if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
             video.style.maxHeight = auxPanelMaxHeight + "px";
+
+            // the above might have made the video panel resize itself, so now
+            // we need to tell the gemini panel to adapt.
+            this.onChildResize();
         }
     },
 
@@ -1110,6 +1217,15 @@ module.exports = React.createClass({
         this.setState({
             videoMuted: newState
         });
+    },
+
+    onChildResize: function() {
+        // When the video or the message composer resizes, the scroll panel
+        // also changes size.  Work around GeminiScrollBar fail by telling it
+        // about it. This also ensures that the scroll offset is updated.
+        if (this.refs.messagePanel) {
+            this.refs.messagePanel.forceUpdate();
+        }
     },
 
     render: function() {
@@ -1302,7 +1418,7 @@ module.exports = React.createClass({
             if (canSpeak) {
                 messageComposer =
                     <MessageComposer
-                        room={this.state.room} roomView={this} uploadFile={this.uploadFile}
+                        room={this.state.room} onResize={this.onChildResize} uploadFile={this.uploadFile}
                         callState={this.state.callState} tabComplete={this.tabComplete} />
             }
 
@@ -1405,7 +1521,8 @@ module.exports = React.createClass({
                         } />
                     { fileDropTarget }    
                     <div className="mx_RoomView_auxPanel">
-                        <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}/>
+                        <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}
+                            onResize={this.onChildResize} />
                         { conferenceCallNotification }
                         { aux }
                     </div>

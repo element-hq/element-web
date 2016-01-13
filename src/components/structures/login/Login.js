@@ -33,7 +33,9 @@ module.exports = React.createClass({displayName: 'Login',
         homeserverUrl: React.PropTypes.string,
         identityServerUrl: React.PropTypes.string,
         // login shouldn't know or care how registration is done.
-        onRegisterClick: React.PropTypes.func.isRequired
+        onRegisterClick: React.PropTypes.func.isRequired,
+        // login shouldn't care how password recovery is done.
+        onForgotPasswordClick: React.PropTypes.func
     },
 
     getDefaultProps: function() {
@@ -138,7 +140,9 @@ module.exports = React.createClass({displayName: 'Login',
         switch (step) {
             case 'm.login.password':
                 return (
-                    <PasswordLogin onSubmit={this.onPasswordLogin} />
+                    <PasswordLogin
+                        onSubmit={this.onPasswordLogin}
+                        onForgotPasswordClick={this.props.onForgotPasswordClick} />
                 );
             case 'm.login.cas':
                 return (

@@ -31,6 +31,11 @@ class UserActivity {
     start() {
         document.onmousemove = this._onUserActivity.bind(this);
         document.onkeypress = this._onUserActivity.bind(this);
+        // can't use document.scroll here because that's only the document
+        // itself being scrolled. Need to use addEventListener's useCapture.
+        // also this needs to be the wheel event, not scroll, as scroll is
+        // fired when the view scrolls down for a new message.
+        window.addEventListener('wheel', this._onUserActivity.bind(this), true);
         this.lastActivityAtTs = new Date().getTime();
         this.lastDispatchAtTs = 0;
     }
@@ -41,10 +46,11 @@ class UserActivity {
     stop() {
         document.onmousemove = undefined;
         document.onkeypress = undefined;
+        window.removeEventListener('wheel', this._onUserActivity.bind(this), true);
     }
 
     _onUserActivity(event) {
-        if (event.screenX) {
+        if (event.screenX && event.type == "mousemove") {
             if (event.screenX === this.lastScreenX &&
                 event.screenY === this.lastScreenY)
             {

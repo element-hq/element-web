@@ -73,6 +73,11 @@ class Presence {
         }
         var old_state = this.state;
         this.state = newState;
+
+        if (MatrixClientPeg.get().isGuest()) {
+            return; // don't try to set presence when a guest; it won't work.
+        }
+
         var self = this;
         MatrixClientPeg.get().setPresence(this.state).done(function() {
             console.log("Presence: %s", newState);

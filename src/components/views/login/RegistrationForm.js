@@ -30,6 +30,7 @@ module.exports = React.createClass({
         defaultUsername: React.PropTypes.string,
         showEmail: React.PropTypes.bool,
         minPasswordLength: React.PropTypes.number,
+        disableUsernameChanges: React.PropTypes.bool,
         onError: React.PropTypes.func,
         onRegisterClick: React.PropTypes.func // onRegisterClick(Object) => ?Promise
     },
@@ -109,7 +110,8 @@ module.exports = React.createClass({
                     {emailSection}
                     <br />
                     <input className="mx_Login_field" type="text" ref="username"
-                        placeholder="User name" defaultValue={this.state.username} />
+                        placeholder="User name" defaultValue={this.state.username}
+                        disabled={this.props.disableUsernameChanges} />
                     <br />
                     <input className="mx_Login_field" type="password" ref="password"
                         placeholder="Password" defaultValue={this.state.password} />
