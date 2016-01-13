@@ -381,7 +381,7 @@ module.exports = React.createClass({
                     <input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/>
                     Allow guests to join this room
                 </label> <br/>
-                <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label> <br/>
+                <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>
 
                 { room_colors_section }
 

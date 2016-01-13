@@ -67,6 +67,7 @@ module.exports.components['views.rooms.MemberTile'] = require('./components/view
 module.exports.components['views.rooms.MessageComposer'] = require('./components/views/rooms/MessageComposer');
 module.exports.components['views.rooms.RoomHeader'] = require('./components/views/rooms/RoomHeader');
 module.exports.components['views.rooms.RoomList'] = require('./components/views/rooms/RoomList');
+module.exports.components['views.rooms.RoomPreviewBar'] = require('./components/views/rooms/RoomPreviewBar');
 module.exports.components['views.rooms.RoomSettings'] = require('./components/views/rooms/RoomSettings');
 module.exports.components['views.rooms.RoomTile'] = require('./components/views/rooms/RoomTile');
 module.exports.components['views.rooms.SearchResultTile'] = require('./components/views/rooms/SearchResultTile');
