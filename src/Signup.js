@@ -69,6 +69,10 @@ class Register extends Signup {
         this.params.idSid = idSid;
     }
 
+    setGuestAccessToken(token) {
+        this.guestAccessToken = token;
+    }
+
     getStep() {
         return this._step;
     }
@@ -126,7 +130,8 @@ class Register extends Signup {
         }
 
         return MatrixClientPeg.get().register(
-            this.username, this.password, this.params.sessionId, authDict, bindEmail
+            this.username, this.password, this.params.sessionId, authDict, bindEmail,
+            this.guestAccessToken
         ).then(function(result) {
             self.credentials = result;
             self.setStep("COMPLETE");

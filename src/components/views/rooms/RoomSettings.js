@@ -77,6 +77,14 @@ module.exports = React.createClass({
         };
     },
 
+    canGuestsJoin: function() {
+        return this.refs.guests_join.checked;
+    },
+
+    canGuestsRead: function() {
+        return this.refs.guests_read.checked;
+    },
+
     getTopic: function() {
         return this.refs.topic.value;
     },
@@ -162,6 +170,10 @@ module.exports = React.createClass({
         if (history_visibility) history_visibility = history_visibility.getContent().history_visibility;
 
         var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
+        var guest_access = this.props.room.currentState.getStateEvents('m.room.guest_access', '');
+        if (guest_access) {
+            guest_access = guest_access.getContent().guest_access;
+        }
 
         var events_levels = power_levels.events || {};
 
@@ -361,8 +373,15 @@ module.exports = React.createClass({
             <div className="mx_RoomSettings">
                 <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label> <br/>
                 <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility == "shared"}/> Share message history with new users</label> <br/>
-                <label><input type="checkbox" ref="guest_access" disabled={join_rule != "public"} defaultChecked={history_visibility == "world_readable"}/> Allow guest access</label> <br/>
-                <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>
+                <label>
+                    <input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/>
+                    Allow guests to read messages in this room
+                </label> <br/>
+                <label>
+                    <input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/>
+                    Allow guests to join this room
+                </label> <br/>
+                <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label> <br/>
 
                 { room_colors_section }
 
