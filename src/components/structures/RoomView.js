@@ -37,6 +37,7 @@ var TabComplete = require("../../TabComplete");
 var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
 var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
+var Tinter = require("../../Tinter");
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
@@ -84,6 +85,7 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
+        MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
@@ -142,6 +144,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
@@ -149,6 +152,8 @@ module.exports = React.createClass({
         }
 
         window.removeEventListener('resize', this.onResize);        
+
+        Tinter.tint(); // reset colourscheme
     },
 
     onAction: function(payload) {
@@ -259,6 +264,29 @@ module.exports = React.createClass({
             this.setState({
                 room: room
             });
+        }
+    },
+
+    updateTint: function() {
+        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        if (!room) return;
+
+        var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
+        var color_scheme = {};
+        if (color_scheme_event) {
+            color_scheme = color_scheme_event.getContent();
+            // XXX: we should validate the event
+        }                
+        Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+    },
+
+    onRoomAccountData: function(room, event) {
+        if (room.roomId == this.props.roomId) {
+            if (event.getType === "org.matrix.room.color_scheme") {
+                var color_scheme = event.getContent();
+                // XXX: we should validate the event
+                Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+            }
         }
     },
 
@@ -390,6 +418,8 @@ module.exports = React.createClass({
 
         this.scrollToBottom();
         this.sendReadReceipt();
+
+        this.updateTint();
     },
 
     componentDidUpdate: function() {
@@ -876,6 +906,14 @@ module.exports = React.createClass({
             );
         }
 
+        if (newVals.color_scheme) {
+            deferreds.push(
+                MatrixClientPeg.get().setRoomAccountData(
+                    this.state.room.roomId, "org.matrix.room.color_scheme", newVals.color_scheme
+                )
+            );
+        }
+
         deferreds.push(
             MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
                 allowRead: newVals.guest_read,
@@ -974,11 +1012,13 @@ module.exports = React.createClass({
             history_visibility: this.refs.room_settings.getHistoryVisibility(),
             power_levels: this.refs.room_settings.getPowerLevels(),
             guest_join: this.refs.room_settings.canGuestsJoin(),
-            guest_read: this.refs.room_settings.canGuestsRead()
+            guest_read: this.refs.room_settings.canGuestsRead(),
+            color_scheme: this.refs.room_settings.getColorScheme(),
         });
     },
 
     onCancelClick: function() {
+        this.updateTint();
         this.setState({editingRoomSettings: false});
     },
 

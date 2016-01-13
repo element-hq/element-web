@@ -30,6 +30,7 @@ var Registration = require("./login/Registration");
 var PostRegistration = require("./login/PostRegistration");
 
 var Modal = require("../../Modal");
+var Tinter = require("../../Tinter");
 var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
@@ -418,7 +419,16 @@ module.exports = React.createClass({
             if (room) {
                 var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
                 if (theAlias) presentedId = theAlias;
+
+                var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
+                var color_scheme = {};
+                if (color_scheme_event) {
+                    color_scheme = color_scheme_event.getContent();
+                    // XXX: we should validate the event
+                }                
+                Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
+
             this.notifyNewScreen('room/'+presentedId);
             newState.ready = true;
         }
