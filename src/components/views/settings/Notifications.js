@@ -32,7 +32,7 @@ var PushRuleState = {
     ON: "on",
     /** The user will receive push notification for this rule with sound and
         highlight if this is legitimate */
-    STRONG: "strong",
+    LOUD: "loud",
     /** The push rule is disabled */
     OFF: "off"
 };
@@ -101,9 +101,9 @@ module.exports = React.createClass({
                         }
                         break;
                         
-                    case PushRuleState.STRONG:
+                    case PushRuleState.LOUD:
                         if (rule.actions.length !== 3) {
-                            actions = this._actionsFor(PushRuleState.STRONG);
+                            actions = this._actionsFor(PushRuleState.LOUD);
                         }
 
                         if (this.state.vectorContentRules.state === PushRuleState.OFF) {
@@ -141,7 +141,7 @@ module.exports = React.createClass({
             var rule = this.getRule(vectorRuleId);
 
             // For now, we support only enabled/disabled for hs default rules
-            // Translate ON, STRONG, OFF to one of the 2.
+            // Translate ON, LOUD, OFF to one of the 2.
             if (rule && rule.state !== newPushRuleState) {   
 
                 this.setState({
@@ -268,7 +268,7 @@ module.exports = React.createClass({
         if (pushRuleState === PushRuleState.ON) {
             return ['notify'];
         }
-        else if (pushRuleState === PushRuleState.STRONG) {
+        else if (pushRuleState === PushRuleState.LOUD) {
             return ['notify',
                 {'set_tweak': 'sound', 'value': 'default'},
                 {'set_tweak': 'highlight', 'value': 'true'}
@@ -295,7 +295,7 @@ module.exports = React.createClass({
             // HS default rules
             var defaultRules = {master: [], vector: {}, additional: [], fallthrough: [], suppression: []};
             //  Content/keyword rules
-            var contentRules = {on: [], on_but_disabled:[], strong: [], strong_but_disabled: [], other: []};
+            var contentRules = {on: [], on_but_disabled:[], loud: [], loud_but_disabled: [], other: []};
 
             for (var kind in rulesets.global) {
                 for (var i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
@@ -317,7 +317,7 @@ module.exports = React.createClass({
                         }
                     }
                     else if (kind === 'content') {
-                        // Count tweaks to determine if it is a ON or STRONG rule
+                        // Count tweaks to determine if it is a ON or LOUD rule
                         var tweaks = 0;
                         for (var j in r.actions) {
                             var action = r.actions[j];
@@ -338,10 +338,10 @@ module.exports = React.createClass({
                                 break;
                             case 2:
                                 if (r.enabled) {
-                                    contentRules.strong.push(r);
+                                    contentRules.loud.push(r);
                                 }
                                 else {
-                                    contentRules.strong_but_disabled.push(r);
+                                    contentRules.loud_but_disabled.push(r);
                                 }
                                 break;
                             default:
@@ -355,7 +355,7 @@ module.exports = React.createClass({
             // Decide which content/keyword rules to display in Vector UI.
             // Vector displays a single global rule for a list of keywords
             // whereas Matrix has a push rule per keyword.
-            // Vector can set the unique rule in ON, STRONG or OFF state.
+            // Vector can set the unique rule in ON, LOUD or OFF state.
             // Matrix has enabled/disabled plus a combination of (highlight, sound) tweaks.
             
             // The code below determines which set of user's content push rules can be 
@@ -363,19 +363,19 @@ module.exports = React.createClass({
             // Push rules that does not fir, ie defined by another Matrix client, ends
             // in self.state.externalContentRules.
             // There is priority in the determination of which set will be the displayed one.
-            // The set with rules that have STRONG tweaks is the first choice. Then, the ones
+            // The set with rules that have LOUD tweaks is the first choice. Then, the ones
             // with ON tweaks (no tweaks).
-            if (contentRules.strong.length) {
+            if (contentRules.loud.length) {
                 self.state.vectorContentRules = {
-                    state: PushRuleState.STRONG,
-                    rules: contentRules.strong
+                    state: PushRuleState.LOUD,
+                    rules: contentRules.loud
                 } 
-               self.state.externalContentRules = [].concat(contentRules.strong_but_disabled, contentRules.on, contentRules.on_but_disabled, contentRules.other);
+               self.state.externalContentRules = [].concat(contentRules.loud_but_disabled, contentRules.on, contentRules.on_but_disabled, contentRules.other);
             }
-            else if (contentRules.strong_but_disabled.length) {
+            else if (contentRules.loud_but_disabled.length) {
                 self.state.vectorContentRules = {
                     state: PushRuleState.OFF,
-                    rules: contentRules.strong_but_disabled
+                    rules: contentRules.loud_but_disabled
                 } 
                self.state.externalContentRules = [].concat(contentRules.on, contentRules.on_but_disabled, contentRules.other);
             }
@@ -404,7 +404,7 @@ module.exports = React.createClass({
             // Messages containing user's display name 
             // (skip contains_user_name which is too geeky)
             rule = defaultRules.vector['.m.rule.contains_display_name'];
-            state = (rule && rule.enabled) ? PushRuleState.STRONG : PushRuleState.OFF;
+            state = (rule && rule.enabled) ? PushRuleState.LOUD : PushRuleState.OFF;
             self.state.vectorPushRules.push({
                 "vectorRuleId": "contains_display_name",
                 "description" : "Messages containing my name",
@@ -424,7 +424,7 @@ module.exports = React.createClass({
 
             // Messages just sent to the user
             rule = defaultRules.vector['.m.rule.room_one_to_one'];
-            state = (rule && rule.enabled) ? PushRuleState.STRONG : PushRuleState.OFF;
+            state = (rule && rule.enabled) ? PushRuleState.LOUD : PushRuleState.OFF;
             self.state.vectorPushRules.push({
                 "vectorRuleId": "room_one_to_one",
                 "description" : "Messages just sent to me",
@@ -435,7 +435,7 @@ module.exports = React.createClass({
 
             // Invitation for the user
             rule = defaultRules.vector['.m.rule.invite_for_me'];
-            state = (rule && rule.enabled) ? PushRuleState.STRONG : PushRuleState.OFF;
+            state = (rule && rule.enabled) ? PushRuleState.LOUD : PushRuleState.OFF;
             self.state.vectorPushRules.push({
                 "vectorRuleId": "invite_for_me",
                 "description" : "When I'm invited to a room",
@@ -452,12 +452,12 @@ module.exports = React.createClass({
                 "description" : "When people join or leave a room",
                 "rule": rule,
                 "state": state,
-                "disabled": PushRuleState.STRONG
+                "disabled": PushRuleState.LOUD
             });
 
             // Incoming call
             rule = defaultRules.vector['.m.rule.call'];
-            state = (rule && rule.enabled) ? PushRuleState.STRONG : PushRuleState.OFF;
+            state = (rule && rule.enabled) ? PushRuleState.LOUD : PushRuleState.OFF;
             self.state.vectorPushRules.push({
                 "vectorRuleId": "call",
                 "description" : "Call invitation",
@@ -510,10 +510,10 @@ module.exports = React.createClass({
                 </th>
 
                 <th>
-                    <input className= {className + "-" + PushRuleState.STRONG}
+                    <input className= {className + "-" + PushRuleState.LOUD}
                         type="radio"
-                        checked={ pushRuleState === PushRuleState.STRONG }
-                        disabled= { (disabled === PushRuleState.STRONG) ? "disabled" : false }
+                        checked={ pushRuleState === PushRuleState.LOUD }
+                        disabled= { (disabled === PushRuleState.LOUD) ? "disabled" : false }
                         onChange={ this.onNotifStateButtonClicked } />
                 </th>
 
@@ -586,8 +586,8 @@ module.exports = React.createClass({
                             <thead>
                                 <tr>
                                     <th width="55%"></th>
-                                    <th width="15%">Normal</th>
-                                    <th width="15%">Strong</th>
+                                    <th width="15%">On</th>
+                                    <th width="15%">Loud</th>
                                     <th width="15%">Off</th>
                                 </tr>
                             </thead>
