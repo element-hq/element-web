@@ -60,11 +60,6 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
-.mx_MemberTile_presence {
-    font-size: 11px;
-    opacity: 0.5;
-}
-
 .mx_MemberTile_chevron {
     margin-top: 8px;
     margin-right: -4px;
