@@ -117,8 +117,7 @@ var commands = {
                     return reject("Usage: /join #alias:domain");
                 }
                 if (!room_alias.match(/:/)) {
-                    var domain = MatrixClientPeg.get().credentials.userId.replace(/^.*:/, '');
-                    room_alias += ':' + domain;
+                    room_alias += ':' + MatrixClientPeg.get().getDomain();
                 }
 
                 // Try to find a room with this alias
@@ -164,8 +163,7 @@ var commands = {
                     return reject("Usage: /part [#alias:domain]");
                 }
                 if (!room_alias.match(/:/)) {
-                    var domain = MatrixClientPeg.get().credentials.userId.replace(/^.*:/, '');
-                    room_alias += ':' + domain;
+                    room_alias += ':' + MatrixClientPeg.get().getDomain();
                 }
 
                 // Try to find a room with this alias
