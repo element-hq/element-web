@@ -56,14 +56,3 @@ limitations under the License.
     cursor: pointer;
     color: #76cfa6;
 }
-
-.mx_UserNotifSettings_keywordsLabel {
-    text-align: left;
-    padding-bottom: 12px;
-}
-
-.mx_UserNotifSettings_keywordsInput {
-    color: #747474;
-    font-weight: 300;
-    font-size: 15px;
-}

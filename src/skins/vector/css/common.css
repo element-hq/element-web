@@ -187,12 +187,22 @@ input[type=text]:focus, textarea:focus, .mx_RoomSettings textarea:focus {
     padding-right: 1em;
 }
 
-.mx_ErrorDialogTitle,
-.mx_QuestionDialogTitle {
+.mx_Dialog_title {
     min-height: 16px;
     padding: 12px;
     border-bottom: 1px solid #a4a4a4;
     font-weight: bold;
     font-size: 18px;
     line-height: 1.4;
+}
+
+.mx_TextInputDialog_label {
+    text-align: left;
+    padding-bottom: 12px;
+}
+
+.mx_TextInputDialog_input {
+    color: #747474;
+    font-weight: 300;
+    font-size: 15px;
 }

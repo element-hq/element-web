@@ -160,18 +160,31 @@ module.exports = React.createClass({
         var self = this;
         this.newKeywords = undefined;
 
-        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createDialog(QuestionDialog, {
-            title: "Keywords",
-            description: this.keywordsDialogDiv,
-            focus: false,
-            onFinished: function onFinished(should_leave) {
+        // Compute the keywords list to display
+        var keywords = [];
+        for (var i in this.state.vectorContentRules.rules) {
+            var rule = this.state.vectorContentRules.rules[i];
+            keywords.push(rule.pattern);
+        }
+        if (keywords.length) {
+            keywords = keywords.join(", ");
+        }
+        else {
+            keywords = "";
+        }
 
-                if (should_leave && self.newKeywords) {
+        var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
+        Modal.createDialog(TextInputDialog, {
+            title: "Keywords",
+            description: "Enter keywords separated by a comma:",
+            value: keywords,
+            onFinished: function onFinished(should_leave, newValue) {
+
+                if (should_leave && newValue !== keywords) {
                     var cli = MatrixClientPeg.get();
                     var removeDeferreds = [];
 
-                    var newKeywords = self.newKeywords.split(',');
+                    var newKeywords = newValue.split(',');
                     for (var i in newKeywords) {
                         newKeywords[i] = newKeywords[i].trim();
                     }
@@ -535,38 +548,6 @@ module.exports = React.createClass({
                 </div>
             );
         }
-
-        // Prepare keywords dialog here, in a render method, else React complains if
-        // it is done later from onKeywordsClicked
-        var keywords = [];
-        for (var i in this.state.vectorContentRules.rules) {
-            var rule = this.state.vectorContentRules.rules[i];
-            keywords.push(rule.pattern);
-        }
-
-        if (keywords.length) {
-            keywords = keywords.join(", ");
-        }
-        else {
-            keywords = "";
-        }
-
-        var onKeywordsChange = function(e) {
-            self.newKeywords = e.target.value;
-            
-            this.props.onFinished(false);
-        };
-
-        this.keywordsDialogDiv = (
-            <div>
-                <div className="mx_UserNotifSettings_keywordsLabel">
-                    <label htmlFor="keywords">Enter keywords separated by a comma:</label>
-                </div>
-                <div>
-                    <input id="keywords" ref="keywords" className="mx_UserNotifSettings_keywordsInput" defaultValue={keywords} autoFocus={true} size="64" onChange={onKeywordsChange}/>
-                </div>
-            </div>
-        );
 
         // Build the list of keywords rules that have been defined outside Vector UI
         var externalKeyWords = [];
