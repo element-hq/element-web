@@ -86,7 +86,7 @@ module.exports = React.createClass({
     },
 
     getTopic: function() {
-        return this.refs.topic.value;
+        return this.refs.topic ? this.refs.topic.value : "";
     },
 
     getJoinRules: function() {
