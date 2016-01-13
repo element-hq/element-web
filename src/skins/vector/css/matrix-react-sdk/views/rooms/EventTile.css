@@ -59,11 +59,6 @@ limitations under the License.
 }
 
 .mx_EventTile_content {
-    padding-right: 100px;
-    display: block;
-}
-
-.mx_EventTile_content {
     display: block;
     margin-right: 100px;
     overflow-y: hidden;
