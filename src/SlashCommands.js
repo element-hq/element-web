@@ -57,7 +57,7 @@ var commands = {
                 }
                 return success(
                     MatrixClientPeg.get().setRoomAccountData(
-                        room_id, "m.room.color_scheme", colorScheme
+                        room_id, "org.matrix.room.color_scheme", colorScheme
                     )                    
                 );
             }

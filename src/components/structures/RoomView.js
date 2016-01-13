@@ -244,7 +244,7 @@ module.exports = React.createClass({
         var room = MatrixClientPeg.get().getRoom(this.props.roomId);
         if (!room) return;
 
-        var color_scheme_event = room.getAccountData("m.room.color_scheme");
+        var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
         var color_scheme = {};
         if (color_scheme_event) {
             color_scheme = color_scheme_event.getContent();
@@ -255,7 +255,7 @@ module.exports = React.createClass({
 
     onRoomAccountData: function(room, event) {
         if (room.roomId == this.props.roomId) {
-            if (event.getType === "m.room.color_scheme") {
+            if (event.getType === "org.matrix.room.color_scheme") {
                 var color_scheme = event.getContent();
                 // XXX: we should validate the event
                 Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
@@ -810,7 +810,7 @@ module.exports = React.createClass({
         if (new_color_scheme) {
             deferreds.push(
                 MatrixClientPeg.get().setRoomAccountData(
-                    this.state.room.roomId, "m.room.color_scheme", new_color_scheme
+                    this.state.room.roomId, "org.matrix.room.color_scheme", new_color_scheme
                 )
             );
         }

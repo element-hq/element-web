@@ -33,6 +33,7 @@ module.exports = React.createClass({
         labelClassName: React.PropTypes.string,
         placeholderClassName: React.PropTypes.string,
         blurToCancel: React.PropTypes.bool,
+        editable: React.PropTypes.bool,
     },
 
     Phases: {
@@ -49,6 +50,7 @@ module.exports = React.createClass({
             initialValue: '',
             label: '',
             placeholder: '',
+            editable: true,
         };
     },
 
@@ -141,6 +143,8 @@ module.exports = React.createClass({
     },
 
     onClickDiv: function(ev) {
+        if (!this.props.editable) return;
+
         this.setState({
             phase: this.Phases.Edit,
         })
@@ -178,9 +182,9 @@ module.exports = React.createClass({
     render: function() {
         var editable_el;
 
-        if (this.state.phase == this.Phases.Display && (this.props.label || this.props.labelClassName) && !this.value) {
+        if (!this.props.editable || (this.state.phase == this.Phases.Display && (this.props.label || this.props.labelClassName) && !this.value)) {
             // show the label
-            editable_el = <div className={this.props.className + " " + this.props.labelClassName} onClick={this.onClickDiv}>{this.props.label}</div>;
+            editable_el = <div className={this.props.className + " " + this.props.labelClassName} onClick={this.onClickDiv}>{ this.props.label || this.props.initialValue }</div>;
         } else {
             // show the content editable div, but manually manage its contents as react and contentEditable don't play nice together
             editable_el = <div ref="editable_div" contentEditable="true" className={this.props.className}

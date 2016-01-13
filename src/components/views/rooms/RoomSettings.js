@@ -43,7 +43,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         // work out the initial color index
         var room_color_index = undefined;
-        var color_scheme_event = this.props.room.getAccountData("m.room.color_scheme");
+        var color_scheme_event = this.props.room.getAccountData("org.matrix.room.color_scheme");
         if (color_scheme_event) {
             var color_scheme = color_scheme_event.getContent();
             if (color_scheme.primary_color) color_scheme.primary_color = color_scheme.primary_color.toLowerCase();
@@ -72,6 +72,8 @@ module.exports = React.createClass({
             power_levels_changed: false,
             color_scheme_changed: false,
             color_scheme_index: room_color_index,
+            aliases_changed: false,
+            aliases: [],
         };
     },
 
@@ -133,7 +135,24 @@ module.exports = React.createClass({
         });
     },
 
+    onAliasChanged: function(i, j) {
+
+    },
+
+    onAliasDeleted: function(i, j) {
+
+    },
+
+    onAliasAdded: function(i, j) {
+
+    },
+
     render: function() {
+        // TODO: go through greying out things you don't have permission to change
+        // (or turning them into informative stuff)
+
+        var EditableText = sdk.getComponent('elements.EditableText');
+        var PowerSelector = sdk.getComponent('elements.PowerSelector');
         var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
 
         var join_rule = this.props.room.currentState.getStateEvents('m.room.join_rules', '');
@@ -145,6 +164,8 @@ module.exports = React.createClass({
         var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
 
         var events_levels = power_levels.events || {};
+
+        var user_id = MatrixClientPeg.get().credentials.userId;
 
         if (power_levels) {
             power_levels = power_levels.getContent();
@@ -162,8 +183,6 @@ module.exports = React.createClass({
             if (power_levels.redact == undefined) redact_level = 50;
 
             var user_levels = power_levels.users || {};
-
-            var user_id = MatrixClientPeg.get().credentials.userId;
 
             var current_user_level = user_levels[user_id];
             if (current_user_level == undefined) current_user_level = default_user_level;
@@ -201,6 +220,67 @@ module.exports = React.createClass({
 
         var self = this;
 
+        var alias_events = this.props.room.currentState.getStateEvents('m.room.aliases');
+        var canonical_alias_event = this.props.room.currentState.getStateEvents('m.room.canonical_alias', '');
+        var canonical_alias = canonical_alias_event ? canonical_alias_event.getContent().alias : "";
+        var domain = MatrixClientPeg.get().getDomain();
+
+        var aliases_section =
+            <div>
+                <h3>Directory</h3>
+                <div className="mx_RoomSettings_aliasLabel">
+                    { alias_events.length ? "This room is accessible via:" : "This room has no aliases." }
+                </div>
+                <div className="mx_RoomSettings_aliasesTable">
+                    { alias_events.map(function(alias_event, i) {
+                        return alias_event.getContent().aliases.map(function(alias, j) {
+                            var deleteButton;
+                            if (alias_event && alias_event.getStateKey() === domain) {
+                                deleteButton = <img src="img/cancel.svg" width="18" height="18" alt="Delete" onClick={ self.onAliasDeleted.bind(self, i, j) }/>;
+                            }
+                            return (
+                                <div className="mx_RoomSettings_aliasesTableRow" key={ i + "_" + j }>
+                                    <EditableText
+                                         className="mx_RoomSettings_alias mx_RoomSettings_editable"
+                                         placeholderClassName="mx_RoomSettings_aliasPlaceholder"
+                                         placeholder={ "New alias (e.g. #foo:" + domain + ")" }
+                                         blurToCancel={ false }
+                                         onValueChanged={ self.onAliasChanged.bind(self, i, j) }
+                                         editable={ alias_event && alias_event.getStateKey() === domain }
+                                         initialValue={ alias }
+                                         />
+                                    <div className="mx_RoomSettings_deleteAlias">
+                                         { deleteButton }
+                                    </div>
+                                </div>
+                            );
+                        });
+                    })}
+
+                    <div className="mx_RoomSettings_aliasesTableRow" key="new">
+                        <EditableText
+                             className="mx_RoomSettings_alias mx_RoomSettings_editable"
+                             placeholderClassName="mx_RoomSettings_aliasPlaceholder"
+                             placeholder={ "New alias (e.g. #foo:" + domain + ")" }
+                             blurToCancel={ false }
+                             onValueChanged={ self.onAliasAdded } />
+                        <div className="mx_RoomSettings_addAlias">
+                             <img src="img/add.svg" width="18" height="18" alt="Add" onClick={ self.onAliasAdded }/>
+                        </div>                        
+                    </div>
+                </div>
+                <div className="mx_RoomSettings_aliasLabel">The canonical entry is&nbsp;
+                    <select defaultValue={ canonical_alias }>
+                        { alias_events.map(function(alias_event, i) {
+                            return alias_event.getContent().aliases.map(function(alias, j) {
+                                return <option value={ alias } key={ i + "_" + j }>{ alias }</option>
+                            });
+                        })}
+                        <option value="" key="unset">not set</option>
+                    </select>
+                </div>
+            </div>;
+
         var room_colors_section =
             <div>
                 <h3>Room Colour</h3>
@@ -236,19 +316,19 @@ module.exports = React.createClass({
                 </div>;
         }
 
-        var banned = this.props.room.getMembersWithMembership("ban");
-
-        var events_levels_section;
-        if (events_levels.length) {
-            events_levels_section = 
+        var user_levels_section;
+        if (user_levels.length) {
+            user_levels_section =
                 <div>
-                    <h3>Event levels</h3>
-                    <div className="mx_RoomSettings_eventLevels mx_RoomSettings_settings">
-                        {Object.keys(events_levels).map(function(event_type, i) {
+                    <div>
+                        Users with specific roles are:
+                    </div>
+                    <div>
+                        {Object.keys(user_levels).map(function(user, i) {
                             return (
-                                <div key={event_type}>
-                                    <label htmlFor={"mx_RoomSettings_event_"+i}>{event_type}</label>
-                                    <input type="text" defaultValue={events_levels[event_type]} size="3" id={"mx_RoomSettings_event_"+i} disabled/>
+                                <div className="mx_RoomSettings_userLevel" key={user}>
+                                    { user } is a
+                                    <PowerSelector value={ user_levels[user] } disabled={true}/>
                                 </div>
                             );
                         })}
@@ -256,6 +336,7 @@ module.exports = React.createClass({
                 </div>;
         }
 
+        var banned = this.props.room.getMembersWithMembership("ban");
         var banned_users_section;
         if (banned.length) {
             banned_users_section =
@@ -273,69 +354,74 @@ module.exports = React.createClass({
                 </div>;
         }
 
+        // TODO: support editing custom events_levels
+        // TODO: support editing custom user_levels
+
         return (
             <div className="mx_RoomSettings">
                 <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label> <br/>
                 <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility == "shared"}/> Share message history with new users</label> <br/>
+                <label><input type="checkbox" ref="guest_access" disabled={join_rule != "public"} defaultChecked={history_visibility == "world_readable"}/> Allow guest access</label> <br/>
                 <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>
 
                 { room_colors_section }
 
-                <h3>Power levels</h3>
-                <div className="mx_RoomSettings_powerLevels mx_RoomSettings_settings">
-                    <div>
-                        <label htmlFor="mx_RoomSettings_ban_level">Ban level</label>
-                        <input type="text" defaultValue={ban_level} size="3" ref="ban" id="mx_RoomSettings_ban_level"
-                            disabled={!can_change_levels || current_user_level < ban_level} onChange={this.onPowerLevelsChanged}/>
-                    </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_kick_level">Kick level</label>
-                        <input type="text" defaultValue={kick_level} size="3" ref="kick" id="mx_RoomSettings_kick_level"
-                            disabled={!can_change_levels || current_user_level < kick_level} onChange={this.onPowerLevelsChanged}/>
-                    </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_redact_level">Redact level</label>
-                        <input type="text" defaultValue={redact_level} size="3" ref="redact" id="mx_RoomSettings_redact_level"
-                            disabled={!can_change_levels || current_user_level < redact_level} onChange={this.onPowerLevelsChanged}/>
-                    </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_invite_level">Invite level</label>
-                        <input type="text" defaultValue={invite_level} size="3" ref="invite" id="mx_RoomSettings_invite_level"
-                            disabled={!can_change_levels || current_user_level < invite_level} onChange={this.onPowerLevelsChanged}/>
-                    </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_event_level">Send event level</label>
-                        <input type="text" defaultValue={send_level} size="3" ref="events_default" id="mx_RoomSettings_event_level"
-                            disabled={!can_change_levels || current_user_level < send_level} onChange={this.onPowerLevelsChanged}/>
-                    </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_state_level">Set state level</label>
-                        <input type="text" defaultValue={state_level} size="3" ref="state_default" id="mx_RoomSettings_state_level"
-                            disabled={!can_change_levels || current_user_level < state_level} onChange={this.onPowerLevelsChanged}/>
-                    </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_user_level">Default user level</label>
-                        <input type="text" defaultValue={default_user_level} size="3" ref="users_default"
-                            id="mx_RoomSettings_user_level" disabled={!can_change_levels || current_user_level < default_user_level}
-                            onChange={this.onPowerLevelsChanged}/>
-                    </div>
-                </div>
+                { aliases_section }
 
-                <h3>User levels</h3>
-                <div className="mx_RoomSettings_userLevels mx_RoomSettings_settings">
-                    {Object.keys(user_levels).map(function(user, i) {
+                <h3>Permissions</h3>
+                <div className="mx_RoomSettings_powerLevels mx_RoomSettings_settings">
+                    <div className="mx_RoomSettings_powerLevel">
+                        The default level for new room members is
+                        <PowerSelector value={default_user_level} disabled={!can_change_levels || current_user_level < default_user_level} onChange={this.onPowerLevelsChanged}/>
+                    </div>
+                    <div className="mx_RoomSettings_powerLevel">
+                        To send messages, you must be a
+                        <PowerSelector value={send_level} disabled={!can_change_levels || current_user_level < send_level} onChange={this.onPowerLevelsChanged}/>
+                    </div>
+                    <div className="mx_RoomSettings_powerLevel">
+                        To invite users into the room, you must be a
+                        <PowerSelector value={invite_level} disabled={!can_change_levels || current_user_level < invite_level} onChange={this.onPowerLevelsChanged}/>
+                    </div>
+                    <div className="mx_RoomSettings_powerLevel">
+                        To configure the room (set room state), you must be a
+                        <PowerSelector value={state_level} disabled={!can_change_levels || current_user_level < state_level} onChange={this.onPowerLevelsChanged}/>
+                    </div>
+                    <div className="mx_RoomSettings_powerLevel">
+                        To kick users, you must be a
+                        <PowerSelector value={kick_level} disabled={!can_change_levels || current_user_level < kick_level} onChange={this.onPowerLevelsChanged}/>
+                    </div>
+                    <div className="mx_RoomSettings_powerLevel">
+                        To ban users, you must be a
+                        <PowerSelector value={ban_level} disabled={!can_change_levels || current_user_level < ban_level} onChange={this.onPowerLevelsChanged}/>
+                    </div>
+                    <div className="mx_RoomSettings_powerLevel">
+                        To redact messages, you must be a
+                        <PowerSelector value={redact_level} disabled={!can_change_levels || current_user_level < redact_level} onChange={this.onPowerLevelsChanged}/>
+                    </div>
+
+                    {Object.keys(events_levels).map(function(event_type, i) {
                         return (
-                            <div key={user}>
-                                <label htmlFor={"mx_RoomSettings_user_"+i}>{user}</label>
-                                <input type="text" defaultValue={user_levels[user]} size="3" id={"mx_RoomSettings_user_"+i} disabled/>
+                            <div className="mx_RoomSettings_powerLevel" key={event_type}>
+                                To send events of type <code>{ event_type }</code>, you must be a
+                                <PowerSelector value={ events_levels[event_type] } disabled={true} onChange={this.onPowerLevelsChanged}/>
                             </div>
                         );
                     })}
                 </div>
 
-                { events_levels_section }
+                <h3>Users</h3>
+                <div className="mx_RoomSettings_userLevels mx_RoomSettings_settings">
+                    <div>
+                        You are a <PowerSelector room={ this.props.room } value={current_user_level} disabled={true}/>
+                    </div>
+
+                    { user_levels_section }
+                </div>
+
                 { banned_users_section }
+
                 { change_avatar }
+
             </div>
         );
     }

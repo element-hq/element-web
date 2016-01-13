@@ -40,6 +40,7 @@ module.exports.components['views.dialogs.ErrorDialog'] = require('./components/v
 module.exports.components['views.dialogs.LogoutPrompt'] = require('./components/views/dialogs/LogoutPrompt');
 module.exports.components['views.dialogs.QuestionDialog'] = require('./components/views/dialogs/QuestionDialog');
 module.exports.components['views.elements.EditableText'] = require('./components/views/elements/EditableText');
+module.exports.components['views.elements.PowerSelector'] = require('./components/views/elements/PowerSelector');
 module.exports.components['views.elements.ProgressBar'] = require('./components/views/elements/ProgressBar');
 module.exports.components['views.elements.TintableSvg'] = require('./components/views/elements/TintableSvg');
 module.exports.components['views.elements.UserSelector'] = require('./components/views/elements/UserSelector');
