@@ -58,6 +58,8 @@ module.exports = React.createClass({
         };
     },
     
+    keywordsDialogDiv: "",
+    
     componentWillMount: function() {
         this._refreshFromServer();
     },
@@ -153,6 +155,19 @@ module.exports = React.createClass({
                 });
             }
         }
+    },
+    
+    onKeywordsClicked: function(event) {
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createDialog(QuestionDialog, {
+            title: "Keywords",
+            description: this.keywordsDialogDiv,
+            onFinished: function onFinished(should_leave) {
+                if (should_leave) {
+                    // TODO
+                }
+            }
+        });
     },
     
     getRule: function(vectorRuleId) {
@@ -306,7 +321,7 @@ module.exports = React.createClass({
             // it corresponds to all content push rules (stored in self.state.vectorContentRule)
             self.state.vectorPushRules.push({
                 "vectorRuleId": "keywords",
-                "description" : "Messages containing keywords",
+                "description" : (<span>Messages containing <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>keywords</span></span>),
                 "state": self.state.vectorContentRules.state,
             });
 
@@ -434,6 +449,32 @@ module.exports = React.createClass({
                 </div>
             );
         }
+
+        // Prepare keywords dialog here, in a render method, else React complains if
+        // it is done later from onKeywordsClicked
+        var keywords = [];
+        for (var i in this.state.vectorContentRules.rules) {
+            var rule = this.state.vectorContentRules.rules[i];
+            keywords.push(rule.pattern);
+        }
+
+        if (keywords.length) {
+            keywords = keywords.join(", ");
+        }
+        else {
+            keywords = "";
+        }
+
+        this.keywordsDialogDiv = (
+            <div>
+                <div className="mx_UserNotifSettings_keywordsLabel">
+                    <label htmlFor="keywords">Enter keywords separated by a comma:</label>
+                </div>
+                <div>
+                    <input id="keywords" ref="keywords" className="mx_UserNotifSettings_keywordsInput" defaultValue={keywords} autoFocus={true} size="64"/>
+                </div>
+            </div>
+        );
 
         // Build the list of keywords rules that have been defined outside Vector UI
         var externalKeyWords = [];
