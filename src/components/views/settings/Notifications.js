@@ -59,6 +59,7 @@ module.exports = React.createClass({
     },
     
     keywordsDialogDiv: "",
+    newKeywords: undefined,
     
     componentWillMount: function() {
         this._refreshFromServer();
@@ -92,7 +93,7 @@ module.exports = React.createClass({
                 switch (newPushRuleState) {
                     case PushRuleState.ON:
                         if (rule.actions.length !== 1) {
-                            actions = ['notify'];
+                            actions = this._actionsFor(PushRuleState.ON);
                         }
 
                         if (this.state.vectorContentRules.state === PushRuleState.OFF) {
@@ -102,10 +103,7 @@ module.exports = React.createClass({
                         
                     case PushRuleState.STRONG:
                         if (rule.actions.length !== 3) {
-                            actions = ['notify',
-                                {'set_tweak': 'sound', 'value': 'default'},
-                                {'set_tweak': 'highlight', 'value': 'true'}
-                            ];
+                            actions = this._actionsFor(PushRuleState.STRONG);
                         }
 
                         if (this.state.vectorContentRules.state === PushRuleState.OFF) {
@@ -158,13 +156,60 @@ module.exports = React.createClass({
     },
     
     onKeywordsClicked: function(event) {
+        var self = this;
+        this.newKeywords = undefined;
+
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
             title: "Keywords",
             description: this.keywordsDialogDiv,
             onFinished: function onFinished(should_leave) {
-                if (should_leave) {
-                    // TODO
+
+                if (should_leave && self.newKeywords) {
+                    var cli = MatrixClientPeg.get();
+                    var deferreds = [];
+
+                    var newKeywords = self.newKeywords.split(',');
+                    for (var i in newKeywords) {
+                        newKeywords[i] = newKeywords[i].trim();
+                    }
+                    self.setState({
+                        phase: self.phases.LOADING
+                    });
+
+                    // Remove per-word push rules of keywords that are no more in the list
+                    var vectorContentRulesPatterns = [];
+                    for (var i in self.state.vectorContentRules.rules) {
+                        var rule = self.state.vectorContentRules.rules[i];
+
+                        vectorContentRulesPatterns.push(rule.pattern);
+
+                        if (-1 === newKeywords.indexOf(rule.pattern)) {
+                            deferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
+                        }
+                    }
+
+                    // Add the new ones
+                    for (var i in newKeywords) {
+                        var keyword = newKeywords[i];
+
+                        if (-1 === vectorContentRulesPatterns.indexOf(keyword)) {
+                            deferreds.push(cli.addPushRule('global', 'content', keyword, {
+                                actions: self._actionsFor(self.state.vectorContentRules.state),
+                                pattern: keyword
+                            }));
+                        }
+                    }
+
+                    q.all(deferreds).done(function(resps) {
+                        self._refreshFromServer();
+                    }, function(error) {
+                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Can't update keywords",
+                            description: error.toString()
+                        });
+                    });
                 }
             }
         });
@@ -176,6 +221,18 @@ module.exports = React.createClass({
             if (rule.vectorRuleId === vectorRuleId) {
                 return rule;
             }
+        }
+    },
+    
+    _actionsFor: function(pushRuleState) {
+        if (pushRuleState === PushRuleState.ON) {
+            return ['notify'];
+        }
+        else if (pushRuleState === PushRuleState.STRONG) {
+            return ['notify',
+                {'set_tweak': 'sound', 'value': 'default'},
+                {'set_tweak': 'highlight', 'value': 'true'}
+            ];;
         }
     },
 
@@ -441,6 +498,8 @@ module.exports = React.createClass({
     },
 
     render: function() { 
+        var self = this;
+
         if (this.state.phase === this.phases.LOADING) {
             var Loader = sdk.getComponent("elements.Spinner");            
             return (
@@ -465,13 +524,17 @@ module.exports = React.createClass({
             keywords = "";
         }
 
+        var onKeywordsChange = function(e) {
+            self.newKeywords = e.target.value;
+        };
+
         this.keywordsDialogDiv = (
             <div>
                 <div className="mx_UserNotifSettings_keywordsLabel">
                     <label htmlFor="keywords">Enter keywords separated by a comma:</label>
                 </div>
                 <div>
-                    <input id="keywords" ref="keywords" className="mx_UserNotifSettings_keywordsInput" defaultValue={keywords} autoFocus={true} size="64"/>
+                    <input id="keywords" ref="keywords" className="mx_UserNotifSettings_keywordsInput" defaultValue={keywords} autoFocus={true} size="64" onChange={onKeywordsChange}/>
                 </div>
             </div>
         );
