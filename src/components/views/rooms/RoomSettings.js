@@ -43,7 +43,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         // work out the initial color index
         var room_color_index = undefined;
-        var color_scheme_event = this.props.room.getAccountData("m.room.color_scheme");
+        var color_scheme_event = this.props.room.getAccountData("org.matrix.room.color_scheme");
         if (color_scheme_event) {
             var color_scheme = color_scheme_event.getContent();
             if (color_scheme.primary_color) color_scheme.primary_color = color_scheme.primary_color.toLowerCase();

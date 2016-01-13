@@ -360,7 +360,7 @@ module.exports = React.createClass({
                 var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
                 if (theAlias) presentedId = theAlias;
 
-                var color_scheme_event = room.getAccountData("m.room.color_scheme");
+                var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
                 var color_scheme = {};
                 if (color_scheme_event) {
                     color_scheme = color_scheme_event.getContent();
