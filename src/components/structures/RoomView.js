@@ -839,7 +839,7 @@ module.exports = React.createClass({
         // is the last element or not, because we only decide as we're going along.
         if (readMarkerIndex === undefined && ghostIndex && ghostIndex <= ret.length) {
             var hr;
-            hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '85%'}} ref={function(n) {
+            hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '99%'}} ref={function(n) {
                 Velocity(n, {opacity: '0', width: '10%'}, {duration: 400, easing: 'easeInSine', delay: 1000, complete: function() {
                     self.setState({readMarkerGhostEventId: undefined});
                 }});
