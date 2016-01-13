@@ -167,7 +167,7 @@ module.exports = React.createClass({
 
                 if (should_leave && self.newKeywords) {
                     var cli = MatrixClientPeg.get();
-                    var deferreds = [];
+                    var removeDeferreds = [];
 
                     var newKeywords = self.newKeywords.split(',');
                     for (var i in newKeywords) {
@@ -185,31 +185,46 @@ module.exports = React.createClass({
                         vectorContentRulesPatterns.push(rule.pattern);
 
                         if (-1 === newKeywords.indexOf(rule.pattern)) {
-                            deferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
+                            removeDeferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
                         }
                     }
 
-                    // Add the new ones
-                    for (var i in newKeywords) {
-                        var keyword = newKeywords[i];
+                    // If the keyword is part of `externalContentRules`, remove the rule
+                    // before recreating it in the right Vector path
+                    for (var i in self.state.externalContentRules) {
+                        var rule = self.state.externalContentRules[i];
 
-                        if (-1 === vectorContentRulesPatterns.indexOf(keyword)) {
-                            deferreds.push(cli.addPushRule('global', 'content', keyword, {
-                                actions: self._actionsFor(self.state.vectorContentRules.state),
-                                pattern: keyword
-                            }));
+                        if (-1 !== newKeywords.indexOf(rule.pattern)) {
+                            removeDeferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
                         }
                     }
 
-                    q.all(deferreds).done(function(resps) {
-                        self._refreshFromServer();
-                    }, function(error) {
+                    var onError = function(error) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         Modal.createDialog(ErrorDialog, {
                             title: "Can't update keywords",
                             description: error.toString()
                         });
-                    });
+                    }
+
+                    // Then, add the new ones
+                    q.all(removeDeferreds).done(function(resps) {
+                        var deferreds = [];
+                        for (var i in newKeywords) {
+                            var keyword = newKeywords[i];
+
+                            if (-1 === vectorContentRulesPatterns.indexOf(keyword)) {
+                                deferreds.push(cli.addPushRule('global', 'content', keyword, {
+                                    actions: self._actionsFor(self.state.vectorContentRules.state),
+                                    pattern: keyword
+                                }));
+                            }
+                        }
+
+                        q.all(deferreds).done(function(resps) {
+                            self._refreshFromServer();
+                        }, onError);
+                    }, onError);
                 }
             }
         });
