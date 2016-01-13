@@ -37,9 +37,11 @@ var TabComplete = require("../../TabComplete");
 var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
 var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
+var Tinter = require("../../Tinter");
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
+var SEND_READ_RECEIPT_DELAY = 2000;
 
 var DEBUG_SCROLL = false;
 
@@ -74,7 +76,9 @@ module.exports = React.createClass({
             syncState: MatrixClientPeg.get().getSyncState(),
             hasUnsentMessages: this._hasUnsentMessages(room),
             callState: null,
-            guestsCanJoin: false
+            guestsCanJoin: false,
+            readMarkerEventId: room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId),
+            readMarkerGhostEventId: undefined
         }
     },
 
@@ -82,6 +86,7 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
+        MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
@@ -152,6 +157,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
@@ -159,6 +165,8 @@ module.exports = React.createClass({
         }
 
         window.removeEventListener('resize', this.onResize);        
+
+        Tinter.tint(); // reset colourscheme
     },
 
     onAction: function(payload) {
@@ -272,9 +280,58 @@ module.exports = React.createClass({
         }
     },
 
+    updateTint: function() {
+        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        if (!room) return;
+
+        var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
+        var color_scheme = {};
+        if (color_scheme_event) {
+            color_scheme = color_scheme_event.getContent();
+            // XXX: we should validate the event
+        }                
+        Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+    },
+
+    onRoomAccountData: function(room, event) {
+        if (room.roomId == this.props.roomId) {
+            if (event.getType === "org.matrix.room.color_scheme") {
+                var color_scheme = event.getContent();
+                // XXX: we should validate the event
+                Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+            }
+        }
+    },
+
     onRoomReceipt: function(receiptEvent, room) {
         if (room.roomId == this.props.roomId) {
-            this.forceUpdate();
+            var readMarkerEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+            var readMarkerGhostEventId = this.state.readMarkerGhostEventId;
+            if (this.state.readMarkerEventId !== undefined && this.state.readMarkerEventId != readMarkerEventId) {
+                readMarkerGhostEventId = this.state.readMarkerEventId;
+            }
+
+
+            // if the event after the one referenced in the read receipt if sent by us, do nothing since
+            // this is a temporary period before the synthesized receipt for our own message arrives
+            var readMarkerGhostEventIndex;
+            for (var i = 0; i < room.timeline.length; ++i) {
+                if (room.timeline[i].getId() == readMarkerGhostEventId) {
+                    readMarkerGhostEventIndex = i;
+                    break;
+                }
+            }
+            if (readMarkerGhostEventIndex + 1 < room.timeline.length) {
+                var nextEvent = room.timeline[readMarkerGhostEventIndex + 1];
+                if (nextEvent.sender && nextEvent.sender.userId == MatrixClientPeg.get().credentials.userId) {
+                    readMarkerGhostEventId = undefined;
+                }
+            }
+
+            this.setState({
+                readMarkerEventId: readMarkerEventId,
+                readMarkerGhostEventId: readMarkerGhostEventId,
+            });
         }
     },
 
@@ -374,6 +431,8 @@ module.exports = React.createClass({
 
         this.scrollToBottom();
         this.sendReadReceipt();
+
+        this.updateTint();
     },
 
     componentDidUpdate: function() {
@@ -695,10 +754,10 @@ module.exports = React.createClass({
 
         var EventTile = sdk.getComponent('rooms.EventTile');
 
-
         var prevEvent = null; // the last event we showed
-        var readReceiptEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
         var startIdx = Math.max(0, this.state.room.timeline.length - this.state.messageCap);
+        var readMarkerIndex;
+        var ghostIndex;
         for (var i = startIdx; i < this.state.room.timeline.length; i++) {
             var mxEv = this.state.room.timeline[i];
 
@@ -710,6 +769,25 @@ module.exports = React.createClass({
                         this.props.ConferenceHandler.isConferenceUser(mxEv.getStateKey())) {
                     continue; // suppress conf user join/parts
                 }
+            }
+
+            // now we've decided whether or not to show this message,
+            // add the read up to marker if appropriate
+            // doing this here means we implicitly do not show the marker
+            // if it's at the bottom
+            // NB. it would be better to decide where the read marker was going
+            // when the state changed rather than here in the render method, but
+            // this is where we decide what messages we show so it's the only
+            // place we know whether we're at the bottom or not.
+            var self = this;
+            var mxEvSender = mxEv.sender ? mxEv.sender.userId : null;
+            if (prevEvent && prevEvent.getId() == this.state.readMarkerEventId && mxEvSender != MatrixClientPeg.get().credentials.userId) {
+                var hr;
+                hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '99%'}} ref={function(n) {
+                    self.readMarkerNode = n;
+                }} />);
+                readMarkerIndex = ret.length;
+                ret.push(<li key="_readupto" className="mx_RoomView_myReadMarker_container">{hr}</li>);
             }
 
             // is this a continuation of the previous message?
@@ -748,11 +826,27 @@ module.exports = React.createClass({
                 </li>
             );
 
-            if (eventId == readReceiptEventId) {
-                ret.push(<hr className="mx_RoomView_myReadMarker" />);
+            // A read up to marker has died and returned as a ghost!
+            // Lives in the dom as the ghost of the previous one while it fades away
+            if (eventId == this.state.readMarkerGhostEventId) {
+                ghostIndex = ret.length;
             }
 
             prevEvent = mxEv;
+        }
+
+        // splice the read marker ghost in now that we know whether the read receipt
+        // is the last element or not, because we only decide as we're going along.
+        if (readMarkerIndex === undefined && ghostIndex && ghostIndex <= ret.length) {
+            var hr;
+            hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '85%'}} ref={function(n) {
+                Velocity(n, {opacity: '0', width: '10%'}, {duration: 400, easing: 'easeInSine', delay: 1000, complete: function() {
+                    self.setState({readMarkerGhostEventId: undefined});
+                }});
+            }} />);
+            ret.splice(ghostIndex, 0, (
+                <li key="_readuptoghost" className="mx_RoomView_myReadMarker_container">{hr}</li>
+            ));
         }
 
         return ret;
@@ -821,6 +915,14 @@ module.exports = React.createClass({
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
                     this.state.room.roomId, "m.room.power_levels", newVals.power_levels, ""
+                )
+            );
+        }
+
+        if (newVals.color_scheme) {
+            deferreds.push(
+                MatrixClientPeg.get().setRoomAccountData(
+                    this.state.room.roomId, "org.matrix.room.color_scheme", newVals.color_scheme
                 )
             );
         }
@@ -923,11 +1025,13 @@ module.exports = React.createClass({
             history_visibility: this.refs.room_settings.getHistoryVisibility(),
             power_levels: this.refs.room_settings.getPowerLevels(),
             guest_join: this.refs.room_settings.canGuestsJoin(),
-            guest_read: this.refs.room_settings.canGuestsRead()
+            guest_read: this.refs.room_settings.canGuestsRead(),
+            color_scheme: this.refs.room_settings.getColorScheme(),
         });
     },
 
     onCancelClick: function() {
+        this.updateTint();
         this.setState({editingRoomSettings: false});
     },
 

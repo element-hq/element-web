@@ -127,6 +127,11 @@ module.exports = {
             cached = true;
         }
 
+        if (!primaryColor) {
+            primaryColor = "#76CFA6"; // Vector green
+            secondaryColor = "#EAF5F0"; // Vector light green
+        }
+
         if (!secondaryColor) {
             var x = 0.16; // average weighting factor calculated from vector green & light green
             var rgb = hexToRgb(primaryColor);
@@ -144,6 +149,13 @@ module.exports = {
             rgb1[1] = x * rgb1[1] + (1 - x) * rgb2[1];
             rgb1[2] = x * rgb1[2] + (1 - x) * rgb2[2];
             tertiaryColor = rgbToHex(rgb1);
+        }
+
+        if (colors[0] === primaryColor &&
+            colors[1] === secondaryColor &&
+            colors[2] === tertiaryColor)
+        {
+            return;
         }
 
         colors = [primaryColor, secondaryColor, tertiaryColor];

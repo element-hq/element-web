@@ -23,6 +23,7 @@ limitations under the License.
 
 module.exports.components = {};
 module.exports.components['structures.CreateRoom'] = require('./components/structures/CreateRoom');
+module.exports.components['structures.login.ForgotPassword'] = require('./components/structures/login/ForgotPassword');
 module.exports.components['structures.login.Login'] = require('./components/structures/login/Login');
 module.exports.components['structures.login.PostRegistration'] = require('./components/structures/login/PostRegistration');
 module.exports.components['structures.login.Registration'] = require('./components/structures/login/Registration');

@@ -30,6 +30,7 @@ var Registration = require("./login/Registration");
 var PostRegistration = require("./login/PostRegistration");
 
 var Modal = require("../../Modal");
+var Tinter = require("../../Tinter");
 var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
@@ -233,6 +234,13 @@ module.exports = React.createClass({
                 });
                 this.notifyNewScreen('register');
                 break;
+            case 'start_password_recovery':
+                if (this.state.logged_in) return;
+                this.replaceState({
+                    screen: 'forgot_password'
+                });
+                this.notifyNewScreen('forgot_password');
+                break;
             case 'token_login':
                 if (this.state.logged_in) return;
 
@@ -411,7 +419,16 @@ module.exports = React.createClass({
             if (room) {
                 var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
                 if (theAlias) presentedId = theAlias;
+
+                var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
+                var color_scheme = {};
+                if (color_scheme_event) {
+                    color_scheme = color_scheme_event.getContent();
+                    // XXX: we should validate the event
+                }                
+                Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
+
             this.notifyNewScreen('room/'+presentedId);
             newState.ready = true;
         }
@@ -559,6 +576,11 @@ module.exports = React.createClass({
                 action: 'token_login',
                 params: params
             });
+        } else if (screen == 'forgot_password') {
+            dis.dispatch({
+                action: 'start_password_recovery',
+                params: params
+            });
         } else if (screen == 'new') {
             dis.dispatch({
                 action: 'view_create_room',
@@ -668,6 +690,10 @@ module.exports = React.createClass({
         this.showScreen("login");
     },
 
+    onForgotPasswordClick: function() {
+        this.showScreen("forgot_password");
+    },
+
     onRegistered: function(credentials) {
         this.onLoggedIn(credentials);
         // do post-registration stuff
@@ -706,6 +732,7 @@ module.exports = React.createClass({
         var CreateRoom = sdk.getComponent('structures.CreateRoom');
         var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
+        var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
 
         // needs to be before normal PageTypes as you are logged in technically
         if (this.state.screen == 'post_registration') {
@@ -801,13 +828,21 @@ module.exports = React.createClass({
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick} />
             );
+        } else if (this.state.screen == 'forgot_password') {
+            return (
+                <ForgotPassword
+                    homeserverUrl={this.props.config.default_hs_url}
+                    identityServerUrl={this.props.config.default_is_url}
+                    onComplete={this.onLoginClick} />
+            );
         } else {
             return (
                 <Login
                     onLoggedIn={this.onLoggedIn}
                     onRegisterClick={this.onRegisterClick}
                     homeserverUrl={this.props.config.default_hs_url}
-                    identityServerUrl={this.props.config.default_is_url} />
+                    identityServerUrl={this.props.config.default_is_url}
+                    onForgotPasswordClick={this.onForgotPasswordClick} />
             );
         }
     }
