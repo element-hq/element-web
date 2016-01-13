@@ -58,7 +58,7 @@ class TabComplete {
             // assign onClick listeners for each entry to complete the text
             this.list.forEach((l) => {
                 l.onClick = () => {
-                    this.completeTo(l.getText());
+                    this.completeTo(l);
                 }
             });
         }
@@ -93,10 +93,10 @@ class TabComplete {
 
     /**
      * Do an auto-complete with the given word. This terminates the tab-complete.
-     * @param {string} someVal
+     * @param {Entry} entry The tab-complete entry to complete to.
      */
-    completeTo(someVal) {
-        this.textArea.value = this._replaceWith(someVal, true);
+    completeTo(entry) {
+        this.textArea.value = this._replaceWith(entry.getText(), true, entry.getOverrideSuffix());
         this.stopTabCompleting();
         // keep focus on the text area
         this.textArea.focus();
@@ -222,8 +222,9 @@ class TabComplete {
         if (!this.inPassiveMode) {
             // set textarea to this new value
             this.textArea.value = this._replaceWith(
-                this.matchedList[this.currentIndex].text,
-                this.currentIndex !== 0 // don't suffix the original text!
+                this.matchedList[this.currentIndex].getText(),
+                this.currentIndex !== 0, // don't suffix the original text!
+                this.matchedList[this.currentIndex].getOverrideSuffix()
             );
         }
 
@@ -243,7 +244,7 @@ class TabComplete {
         }
     }
 
-    _replaceWith(newVal, includeSuffix) {
+    _replaceWith(newVal, includeSuffix, overrideSuffix) {
         // The regex to replace the input matches a character of whitespace AND
         // the partial word. If we just use string.replace() with the regex it will
         // replace the partial word AND the character of whitespace. We want to
@@ -258,13 +259,17 @@ class TabComplete {
             boundaryChar = "";
         }
 
-        var replacementText = (
-            boundaryChar + newVal + (
-                includeSuffix ?
-                    (this.isFirstWord ? this.opts.startingWordSuffix : this.opts.wordSuffix) :
-                    ""
-            )
-        );
+        var suffix = "";
+        if (includeSuffix) {
+            if (overrideSuffix) {
+                suffix = overrideSuffix;
+            }
+            else {
+                suffix = (this.isFirstWord ? this.opts.startingWordSuffix : this.opts.wordSuffix);
+            }
+        }
+
+        var replacementText = boundaryChar + newVal + suffix;
         return this.originalText.replace(MATCH_REGEX, function() {
             return replacementText; // function form to avoid `$` special-casing
         });

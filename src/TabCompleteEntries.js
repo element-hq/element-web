@@ -43,11 +43,39 @@ class Entry {
     }
 
     /**
+     * @return {?string} The suffix to override whatever the default is, or null to
+     * not do this.
+     */
+    getOverrideSuffix() {
+        return null;
+    }
+
+    /**
      * Called when this entry is clicked.
      */
     onClick() {
         // NOP
     }
+}
+
+class CommandEntry extends Entry {
+    constructor(command) {
+        super(command);
+    }
+
+    getKey() {
+        return this.getText();
+    }
+
+    getOverrideSuffix() {
+        return " "; // force a space after the command.
+    }
+}
+
+CommandEntry.fromStrings = function(commandArray) {
+    return commandArray.map(function(cmd) {
+        return new CommandEntry(cmd);
+    });
 }
 
 class MemberEntry extends Entry {
@@ -99,3 +127,4 @@ MemberEntry.fromMemberList = function(members) {
 
 module.exports.Entry = Entry;
 module.exports.MemberEntry = MemberEntry;
+module.exports.CommandEntry = CommandEntry;

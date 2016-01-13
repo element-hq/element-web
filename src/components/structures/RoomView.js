@@ -35,7 +35,9 @@ var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
 var TabComplete = require("../../TabComplete");
 var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
+var CommandEntry = require("../../TabCompleteEntries").CommandEntry;
 var Resend = require("../../Resend");
+var SlashCommands = require("../../SlashCommands");
 var dis = require("../../dispatcher");
 var Tinter = require("../../Tinter");
 
@@ -416,7 +418,9 @@ module.exports = React.createClass({
             return;
         }
         this.tabComplete.setCompletionList(
-            MemberEntry.fromMemberList(room.getJoinedMembers())
+            MemberEntry.fromMemberList(room.getJoinedMembers()).concat(
+                CommandEntry.fromStrings(SlashCommands.getCommandList())
+            )
         );
     },
 
