@@ -89,7 +89,7 @@ limitations under the License.
 }
 
 .mx_EventTile_content .markdown-body .hljs {
-    display: inherit ! important;
+    display: inline ! important;
 }
 
 /* end of overrides */
