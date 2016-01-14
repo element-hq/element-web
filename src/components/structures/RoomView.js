@@ -96,8 +96,6 @@ module.exports = React.createClass({
         // xchat-style tab complete, add a colon if tab
         // completing at the start of the text
         this.tabComplete = new TabComplete({
-            startingWordSuffix: ": ",
-            wordSuffix: " ",
             allowLooping: false,
             autoEnterTabComplete: true,
             onClickCompletes: true,
@@ -419,7 +417,7 @@ module.exports = React.createClass({
         }
         this.tabComplete.setCompletionList(
             MemberEntry.fromMemberList(room.getJoinedMembers()).concat(
-                CommandEntry.fromStrings(SlashCommands.getCommandList())
+                CommandEntry.fromCommands(SlashCommands.getCommandList())
             )
         );
     },
