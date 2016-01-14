@@ -417,7 +417,7 @@ module.exports = React.createClass({
         }
         this.tabComplete.setCompletionList(
             MemberEntry.fromMemberList(room.getJoinedMembers()).concat(
-                CommandEntry.fromStrings(SlashCommands.getCommandList())
+                CommandEntry.fromCommands(SlashCommands.getCommandList())
             )
         );
     },

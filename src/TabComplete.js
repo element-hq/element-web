@@ -95,7 +95,7 @@ class TabComplete {
      */
     completeTo(entry) {
         this.textArea.value = this._replaceWith(
-            entry.getText(), true, entry.getSuffix(this.isFirstWord)
+            entry.getFillText(), true, entry.getSuffix(this.isFirstWord)
         );
         this.stopTabCompleting();
         // keep focus on the text area
@@ -222,7 +222,7 @@ class TabComplete {
         if (!this.inPassiveMode) {
             // set textarea to this new value
             this.textArea.value = this._replaceWith(
-                this.matchedList[this.currentIndex].getText(),
+                this.matchedList[this.currentIndex].getFillText(),
                 this.currentIndex !== 0, // don't suffix the original text!
                 this.matchedList[this.currentIndex].getSuffix(this.isFirstWord)
             );
