@@ -69,7 +69,7 @@ var commands = {
     }),
 
     // Changes the colorscheme of your current room
-    tint: new Command("tint", "<primaryColor> [<secondaryColor>]", function(room_id, args) {
+    tint: new Command("tint", "<color1> [<color2>]", function(room_id, args) {
         if (args) {
             var matches = args.match(/^(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}))( +(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})))?$/);
             if (matches) {
@@ -89,7 +89,7 @@ var commands = {
         return reject(this.getUsage());
     }),
 
-    encrypt: new Command("encrypt", "<on/off>", function(room_id, args) {
+    encrypt: new Command("encrypt", "<on|off>", function(room_id, args) {
         if (args == "on") {
             var client = MatrixClientPeg.get();
             var members = client.getRoom(room_id).currentState.members;
@@ -354,7 +354,7 @@ module.exports = {
     },
 
     getCommandList: function() {
-        return Object.keys(commands).map(function(cmdKey) {
+        return Object.keys(commands).sort().map(function(cmdKey) {
             return commands[cmdKey];
         });
     }
