@@ -220,6 +220,12 @@ module.exports = React.createClass({
 
                 break;
             case 'user_activity':
+            case 'user_activity_end':
+                // we could treat user_activity_end differently and not
+                // send receipts for messages that have arrived between
+                // the actual user activity and the time they stopped
+                // being active, but let's see if this is actually
+                // necessary.
                 this.sendReadReceipt();
                 break;
         }
