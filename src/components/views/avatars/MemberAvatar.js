@@ -24,10 +24,16 @@ module.exports = React.createClass({
     displayName: 'MemberAvatar',
 
     propTypes: {
-        member: React.PropTypes.object.isRequired,
+        member: React.PropTypes.object,
         width: React.PropTypes.number,
         height: React.PropTypes.number,
         resizeMethod: React.PropTypes.string,
+        /**
+         * The custom display name to use for this member. This can serve as a
+         * drop in replacement for RoomMember objects, or as a clobber name on
+         * an existing RoomMember. Used for 3pid invites.
+         */
+        customDisplayName: React.PropTypes.string
     },
 
     getDefaultProps: function() {
@@ -38,64 +44,68 @@ module.exports = React.createClass({
         }
     },
 
+    getInitialState: function() {
+        var defaultImageUrl = Avatar.defaultAvatarUrlForString(
+            this.props.customDisplayName || this.props.member.userId
+        )
+        return {
+            imageUrl: this._getMemberImageUrl() || defaultImageUrl,
+            defaultImageUrl: defaultImageUrl
+        };
+    },
+
     componentWillReceiveProps: function(nextProps) {
         this.refreshUrl();
     },
 
-    defaultAvatarUrl: function(member, width, height, resizeMethod) {
-        return Avatar.defaultAvatarUrlForString(member.userId);
-    },
-
     onError: function(ev) {
         // don't tightloop if the browser can't load a data url
-        if (ev.target.src == this.defaultAvatarUrl(this.props.member)) {
+        if (ev.target.src == this.state.defaultImageUrl) {
             return;
         }
         this.setState({
-            imageUrl: this.defaultAvatarUrl(this.props.member)
+            imageUrl: this.state.defaultImageUrl
         });
     },
 
-    _computeUrl: function() {
+    _getMemberImageUrl: function() {
+        if (!this.props.member) { return null; }
+
         return Avatar.avatarUrlForMember(this.props.member,
                                          this.props.width,
                                          this.props.height,
                                          this.props.resizeMethod);
     },
 
+    _getInitialLetter: function() {
+        var name = this.props.customDisplayName || this.props.member.name;
+        var initial = name[0];
+        if (initial === '@' && name[1]) {
+            initial = name[1];
+        }
+        return initial.toUpperCase();
+    },
+
     refreshUrl: function() {
-        var newUrl = this._computeUrl();
+        var newUrl = this._getMemberImageUrl();
         if (newUrl != this.currentUrl) {
             this.currentUrl = newUrl;
             this.setState({imageUrl: newUrl});
         }
     },
 
-    getInitialState: function() {
-        return {
-            imageUrl: this._computeUrl()
-        };
-    },
-
-
-    ///////////////
-
     render: function() {
-        // XXX: recalculates default avatar url constantly
-        if (this.state.imageUrl === this.defaultAvatarUrl(this.props.member)) {
-            var initial;
-            if (this.props.member.name[0])
-                initial = this.props.member.name[0].toUpperCase();
-            if (initial === '@' && this.props.member.name[1])
-                initial = this.props.member.name[1].toUpperCase();
-         
+        var name = this.props.customDisplayName || this.props.member.name;
+
+        if (this.state.imageUrl === this.state.defaultImageUrl) {
+            var initialLetter = this._getInitialLetter();
             return (
                 <span className="mx_MemberAvatar" {...this.props}>
                     <span className="mx_MemberAvatar_initial" aria-hidden="true"
                           style={{ fontSize: (this.props.width * 0.65) + "px",
                                    width: this.props.width + "px",
-                                   lineHeight: this.props.height + "px" }}>{ initial }</span>
-                    <img className="mx_MemberAvatar_image" src={this.state.imageUrl} title={this.props.member.name}
+                                   lineHeight: this.props.height + "px" }}>{ initialLetter }</span>
+                    <img className="mx_MemberAvatar_image" src={this.state.imageUrl} title={name}
                          onError={this.onError} width={this.props.width} height={this.props.height} />
                 </span>
             );            
@@ -104,9 +114,8 @@ module.exports = React.createClass({
             <img className="mx_MemberAvatar mx_MemberAvatar_image" src={this.state.imageUrl}
                 onError={this.onError}
                 width={this.props.width} height={this.props.height}
-                title={this.props.member.name}
-                {...this.props}
-            />
+                title={name}
+                {...this.props} />
         );
     }
 });
