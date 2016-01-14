@@ -130,7 +130,7 @@ module.exports = React.createClass({
         }
 
         var nameEl;
-        if (this.state.hover) {
+        if (this.state.hover && this.props.member) {
             var presenceState = (member && member.user) ? member.user.presence : null;
             var PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
             nameEl = (
