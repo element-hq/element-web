@@ -59,9 +59,6 @@ module.exports = React.createClass({
         };
     },
     
-    keywordsDialogDiv: "",
-    newKeywords: undefined,
-    
     componentWillMount: function() {
         this._refreshFromServer();
     },
@@ -170,7 +167,6 @@ module.exports = React.createClass({
     
     onKeywordsClicked: function(event) {
         var self = this;
-        this.newKeywords = undefined;
 
         // Compute the keywords list to display
         var keywords = [];
@@ -179,6 +175,10 @@ module.exports = React.createClass({
             keywords.push(rule.pattern);
         }
         if (keywords.length) {
+            // As keeping the order of per-word push rules hs side is a bit tricky to code,
+            // display the keywords in alphabetical order to the user
+            keywords.sort();
+
             keywords = keywords.join(", ");
         }
         else {
