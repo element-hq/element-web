@@ -354,8 +354,12 @@ module.exports = {
     },
 
     getCommandList: function() {
-        return Object.keys(commands).sort().map(function(cmdKey) {
+        // Return all the commands plus /me which isn't handled like normal commands
+        var cmds = Object.keys(commands).sort().map(function(cmdKey) {
             return commands[cmdKey];
-        });
+        })
+        cmds.push(new Command("me", "<action>", function(){}));
+
+        return cmds;
     }
 };
