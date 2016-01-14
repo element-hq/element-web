@@ -43,10 +43,10 @@ class Entry {
     }
 
     /**
-     * @return {?string} The suffix to override whatever the default is, or null to
+     * @return {?string} The suffix to append to the tab-complete, or null to
      * not do this.
      */
-    getOverrideSuffix() {
+    getSuffix(isFirstWord) {
         return null;
     }
 
@@ -67,7 +67,7 @@ class CommandEntry extends Entry {
         return this.getText();
     }
 
-    getOverrideSuffix() {
+    getSuffix(isFirstWord) {
         return " "; // force a space after the command.
     }
 }
@@ -93,6 +93,10 @@ class MemberEntry extends Entry {
 
     getKey() {
         return this.member.userId;
+    }
+
+    getSuffix(isFirstWord) {
+        return isFirstWord ? ": " : " ";
     }
 }
 

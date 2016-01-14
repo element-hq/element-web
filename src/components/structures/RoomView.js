@@ -96,8 +96,6 @@ module.exports = React.createClass({
         // xchat-style tab complete, add a colon if tab
         // completing at the start of the text
         this.tabComplete = new TabComplete({
-            startingWordSuffix: ": ",
-            wordSuffix: " ",
             allowLooping: false,
             autoEnterTabComplete: true,
             onClickCompletes: true,

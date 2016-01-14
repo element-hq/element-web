@@ -32,8 +32,6 @@ const MATCH_REGEX = /(^|\s)(\S+)$/;
 class TabComplete {
 
     constructor(opts) {
-        opts.startingWordSuffix = opts.startingWordSuffix || "";
-        opts.wordSuffix = opts.wordSuffix || "";
         opts.allowLooping = opts.allowLooping || false;
         opts.autoEnterTabComplete = opts.autoEnterTabComplete || false;
         opts.onClickCompletes = opts.onClickCompletes || false;
@@ -96,7 +94,9 @@ class TabComplete {
      * @param {Entry} entry The tab-complete entry to complete to.
      */
     completeTo(entry) {
-        this.textArea.value = this._replaceWith(entry.getText(), true, entry.getOverrideSuffix());
+        this.textArea.value = this._replaceWith(
+            entry.getText(), true, entry.getSuffix(this.isFirstWord)
+        );
         this.stopTabCompleting();
         // keep focus on the text area
         this.textArea.focus();
@@ -224,7 +224,7 @@ class TabComplete {
             this.textArea.value = this._replaceWith(
                 this.matchedList[this.currentIndex].getText(),
                 this.currentIndex !== 0, // don't suffix the original text!
-                this.matchedList[this.currentIndex].getOverrideSuffix()
+                this.matchedList[this.currentIndex].getSuffix(this.isFirstWord)
             );
         }
 
@@ -244,7 +244,7 @@ class TabComplete {
         }
     }
 
-    _replaceWith(newVal, includeSuffix, overrideSuffix) {
+    _replaceWith(newVal, includeSuffix, suffix) {
         // The regex to replace the input matches a character of whitespace AND
         // the partial word. If we just use string.replace() with the regex it will
         // replace the partial word AND the character of whitespace. We want to
@@ -259,14 +259,9 @@ class TabComplete {
             boundaryChar = "";
         }
 
-        var suffix = "";
-        if (includeSuffix) {
-            if (overrideSuffix) {
-                suffix = overrideSuffix;
-            }
-            else {
-                suffix = (this.isFirstWord ? this.opts.startingWordSuffix : this.opts.wordSuffix);
-            }
+        suffix = suffix || "";
+        if (!includeSuffix) {
+            suffix = "";
         }
 
         var replacementText = boundaryChar + newVal + suffix;
