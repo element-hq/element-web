@@ -105,7 +105,7 @@ SearchableEntityList.fromRoomMembers = function(members) {
     });
 };
 
-SearchableEntityList.fromUsers = function(users) {
+SearchableEntityList.fromUsers = function(users) { /*
     var UserTile = sdk.getComponent("rooms.UserTile");
     return users.map(function(u) {
         return {
@@ -119,7 +119,7 @@ SearchableEntityList.fromUsers = function(users) {
                 );
             }
         };
-    });
+    }); */
 };
 
 
