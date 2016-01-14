@@ -15,6 +15,7 @@ limitations under the License.
 */
 var React = require('react');
 var classNames = require('classnames');
+var Matrix = require("matrix-js-sdk");
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var sdk = require('../../../index');
@@ -229,7 +230,8 @@ module.exports = React.createClass({
         var MemberTile = sdk.getComponent("rooms.MemberTile");
 
         var self = this;
-        return self.state.members.filter(function(userId) {
+
+        var memberList = self.state.members.filter(function(userId) {
             var m = self.memberDict[userId];
             return m.membership == membership;
         }).map(function(userId) {
@@ -238,6 +240,31 @@ module.exports = React.createClass({
                 <MemberTile key={userId} member={m} ref={userId} />
             );
         });
+
+        if (membership === "invite") {
+            // include 3pid invites (m.room.third_party_invite) state events.
+            // The HS may have already converted these into m.room.member invites so
+            // we shouldn't add them if the 3pid invite state key (token) is in the
+            // member invite (content.third_party_invite.signed.token)
+            var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+            if (room) {
+                room.currentState.getStateEvents("m.room.third_party_invite").forEach(
+                function(e) {
+                    // discard all invites which have a m.room.member event since we've
+                    // already added them.
+                    var memberEvent = room.currentState.getInviteForThreePidToken(e.getStateKey());
+                    if (memberEvent) {
+                        return;
+                    }
+                    memberList.push(
+                        <MemberTile key={e.getStateKey()} ref={e.getStateKey()}
+                            customDisplayName={e.getContent().display_name} />
+                    )
+                })
+            }
+        }
+
+        return memberList;
     },
 
     onPopulateInvite: function(e) {
