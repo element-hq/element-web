@@ -267,11 +267,6 @@ module.exports = React.createClass({
         return memberList;
     },
 
-    onPopulateInvite: function(e) {
-        this.onInvite(this.refs.invite.value);
-        e.preventDefault();
-    },
-
     inviteTile: function() {
         if (this.state.inviting) {
             var Loader = sdk.getComponent("elements.Spinner");
@@ -279,10 +274,16 @@ module.exports = React.createClass({
                 <Loader />
             );
         } else {
+            var SearchableEntityList = sdk.getComponent("rooms.SearchableEntityList");
+            var room = MatrixClientPeg.get().getRoom(this.props.roomId);
             return (
-                <form onSubmit={this.onPopulateInvite}>
-                    <input className="mx_MemberList_invite" ref="invite" placeholder="Invite user (email)"/>
-                </form>
+                <SearchableEntityList searchPlaceholderText={"Invite / Search"}
+                    onSubmit={this.onInvite}
+                    entities={
+                        SearchableEntityList.fromRoomMembers(
+                            room.currentState.getMembers() // ALLLLL OF THEM
+                        )
+                    } />
             );
         }
     },

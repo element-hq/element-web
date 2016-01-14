@@ -70,6 +70,7 @@ module.exports.components['views.rooms.RoomList'] = require('./components/views/
 module.exports.components['views.rooms.RoomPreviewBar'] = require('./components/views/rooms/RoomPreviewBar');
 module.exports.components['views.rooms.RoomSettings'] = require('./components/views/rooms/RoomSettings');
 module.exports.components['views.rooms.RoomTile'] = require('./components/views/rooms/RoomTile');
+module.exports.components['views.rooms.SearchableEntityList'] = require('./components/views/rooms/SearchableEntityList');
 module.exports.components['views.rooms.SearchResultTile'] = require('./components/views/rooms/SearchResultTile');
 module.exports.components['views.rooms.TabCompleteBar'] = require('./components/views/rooms/TabCompleteBar');
 module.exports.components['views.settings.ChangeAvatar'] = require('./components/views/settings/ChangeAvatar');
