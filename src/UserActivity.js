@@ -16,8 +16,8 @@ limitations under the License.
 
 var dis = require("./dispatcher");
 
-var MIN_DISPATCH_INTERVAL = 500;
-var CURRENTLY_ACTIVE_THRESHOLD = 500;
+var MIN_DISPATCH_INTERVAL_MS = 500;
+var CURRENTLY_ACTIVE_THRESHOLD_MS = 500;
 
 /**
  * This class watches for user activity (moving the mouse or pressing a key)
@@ -56,7 +56,7 @@ class UserActivity {
      * (ie. within a few seconds)
      */
     userCurrentlyActive() {
-        return this.lastActivityAtTs > (new Date).getTime() - CURRENTLY_ACTIVE_THRESHOLD;
+        return this.lastActivityAtTs > (new Date).getTime() - CURRENTLY_ACTIVE_THRESHOLD_MS;
     }
 
     _onUserActivity(event) {
@@ -72,14 +72,14 @@ class UserActivity {
         }
 
         this.lastActivityAtTs = (new Date).getTime();
-        if (this.lastDispatchAtTs < this.lastActivityAtTs - MIN_DISPATCH_INTERVAL) {
+        if (this.lastDispatchAtTs < this.lastActivityAtTs - MIN_DISPATCH_INTERVAL_MS) {
             this.lastDispatchAtTs = this.lastActivityAtTs;
             dis.dispatch({
                 action: 'user_activity'
             });
             if (!this.activityEndTimer) {
                 this.activityEndTimer = setTimeout(
-                    this._onActivityEndTimer.bind(this), MIN_DISPATCH_INTERVAL
+                    this._onActivityEndTimer.bind(this), MIN_DISPATCH_INTERVAL_MS
                 );
             }
         }
@@ -87,7 +87,7 @@ class UserActivity {
 
     _onActivityEndTimer() {
         var now = (new Date).getTime();
-        var targetTime = this.lastActivityAtTs + MIN_DISPATCH_INTERVAL;
+        var targetTime = this.lastActivityAtTs + MIN_DISPATCH_INTERVAL_MS;
         if (now >= targetTime) {
             dis.dispatch({
                 action: 'user_activity_end'
