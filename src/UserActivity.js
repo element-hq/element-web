@@ -56,7 +56,7 @@ class UserActivity {
      * (ie. within a few seconds)
      */
     userCurrentlyActive() {
-        return this.lastActivityAtTs > (new Date).getTime() - CURRENTLY_ACTIVE_THRESHOLD_MS;
+        return this.lastActivityAtTs > new Date().getTime() - CURRENTLY_ACTIVE_THRESHOLD_MS;
     }
 
     _onUserActivity(event) {
@@ -71,7 +71,7 @@ class UserActivity {
             this.lastScreenY = event.screenY;
         }
 
-        this.lastActivityAtTs = (new Date).getTime();
+        this.lastActivityAtTs = new Date().getTime();
         if (this.lastDispatchAtTs < this.lastActivityAtTs - MIN_DISPATCH_INTERVAL_MS) {
             this.lastDispatchAtTs = this.lastActivityAtTs;
             dis.dispatch({
@@ -86,7 +86,7 @@ class UserActivity {
     }
 
     _onActivityEndTimer() {
-        var now = (new Date).getTime();
+        var now = new Date().getTime();
         var targetTime = this.lastActivityAtTs + MIN_DISPATCH_INTERVAL_MS;
         if (now >= targetTime) {
             dis.dispatch({
