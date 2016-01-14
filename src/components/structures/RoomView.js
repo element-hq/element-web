@@ -35,7 +35,9 @@ var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
 var TabComplete = require("../../TabComplete");
 var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
+var CommandEntry = require("../../TabCompleteEntries").CommandEntry;
 var Resend = require("../../Resend");
+var SlashCommands = require("../../SlashCommands");
 var dis = require("../../dispatcher");
 var Tinter = require("../../Tinter");
 
@@ -94,8 +96,6 @@ module.exports = React.createClass({
         // xchat-style tab complete, add a colon if tab
         // completing at the start of the text
         this.tabComplete = new TabComplete({
-            startingWordSuffix: ": ",
-            wordSuffix: " ",
             allowLooping: false,
             autoEnterTabComplete: true,
             onClickCompletes: true,
@@ -422,7 +422,9 @@ module.exports = React.createClass({
             return;
         }
         this.tabComplete.setCompletionList(
-            MemberEntry.fromMemberList(room.getJoinedMembers())
+            MemberEntry.fromMemberList(room.getJoinedMembers()).concat(
+                CommandEntry.fromCommands(SlashCommands.getCommandList())
+            )
         );
     },
 

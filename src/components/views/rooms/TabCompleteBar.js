@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
+var CommandEntry = require("../../../TabCompleteEntries").CommandEntry;
 
 module.exports = React.createClass({
     displayName: 'TabCompleteBar',
@@ -31,8 +32,9 @@ module.exports = React.createClass({
             <div className="mx_TabCompleteBar">
             {this.props.entries.map(function(entry, i) {
                 return (
-                    <div key={entry.getKey() || i + ""} className="mx_TabCompleteBar_item"
-                            onClick={entry.onClick.bind(entry)} >
+                    <div key={entry.getKey() || i + ""}
+                         className={ "mx_TabCompleteBar_item " + (entry instanceof CommandEntry ? "mx_TabCompleteBar_command" : "") } 
+                         onClick={entry.onClick.bind(entry)} >
                         {entry.getImageJsx()}
                         <span className="mx_TabCompleteBar_text">
                             {entry.getText()}
