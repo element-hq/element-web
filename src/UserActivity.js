@@ -16,7 +16,8 @@ limitations under the License.
 
 var dis = require("./dispatcher");
 
-var MIN_DISPATCH_INTERVAL = 1 * 1000;
+var MIN_DISPATCH_INTERVAL = 500;
+var CURRENTLY_ACTIVE_THRESHOLD = 500;
 
 /**
  * This class watches for user activity (moving the mouse or pressing a key)
@@ -38,6 +39,7 @@ class UserActivity {
         window.addEventListener('wheel', this._onUserActivity.bind(this), true);
         this.lastActivityAtTs = new Date().getTime();
         this.lastDispatchAtTs = 0;
+        this.activityEndTimer = undefined;
     }
 
     /**
@@ -47,6 +49,14 @@ class UserActivity {
         document.onmousemove = undefined;
         document.onkeypress = undefined;
         window.removeEventListener('wheel', this._onUserActivity.bind(this), true);
+    }
+
+    /**
+     * Return true if there has been user activity very recently
+     * (ie. within a few seconds)
+     */
+    userCurrentlyActive() {
+        return this.lastActivityAtTs > (new Date).getTime() - CURRENTLY_ACTIVE_THRESHOLD;
     }
 
     _onUserActivity(event) {
@@ -67,6 +77,26 @@ class UserActivity {
             dis.dispatch({
                 action: 'user_activity'
             });
+            if (!this.activityEndTimer) {
+                this.activityEndTimer = setTimeout(
+                    this._onActivityEndTimer.bind(this), MIN_DISPATCH_INTERVAL
+                );
+            }
+        }
+    }
+
+    _onActivityEndTimer() {
+        var now = (new Date).getTime();
+        var targetTime = this.lastActivityAtTs + MIN_DISPATCH_INTERVAL;
+        if (now >= targetTime) {
+            dis.dispatch({
+                action: 'user_activity_end'
+            });
+            this.activityEndTimer = undefined;
+        } else {
+            this.activityEndTimer = setTimeout(
+                this._onActivityEndTimer.bind(this), targetTime - now
+            );
         }
     }
 }
