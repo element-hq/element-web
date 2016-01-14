@@ -341,7 +341,7 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);
         }
 
-        sendMessagePromise.then(function() {
+        sendMessagePromise.done(function() {
             dis.dispatch({
                 action: 'message_sent'
             });
