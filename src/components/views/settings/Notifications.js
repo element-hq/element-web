@@ -49,6 +49,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             phase: this.phases.LOADING,
+            masterPushRule: undefined,      // The master rule ('.m.rule.master')
             vectorPushRules: [],            // HS default push rules displayed in Vector UI
             vectorContentRules: {           // Keyword push rules displayed in Vector UI
                 state: PushRuleState.ON,
@@ -66,6 +67,17 @@ module.exports = React.createClass({
     },
     
     onEnableNotificationsChange: function(event) {
+        var self = this;
+        this.setState({
+            phase: this.phases.LOADING
+        });
+
+        MatrixClientPeg.get().setPushRuleEnabled('global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !event.target.checked).done(function() {
+           self._refreshFromServer();
+        });
+    },
+    
+    onEnableDesktopNotificationsChange: function(event) {
         UserSettingsStore.setEnableNotifications(event.target.checked);
     },
     
@@ -427,7 +439,12 @@ module.exports = React.createClass({
                 self.state.externalContentRules = contentRules.other;
             }
 
-            // Build the rules displayed by Vector UI
+            // Get the master rule if any defined by the hs
+            if (defaultRules.master.length > 0) {
+                self.state.masterPushRule = defaultRules.master[0];
+            }
+
+            // Build the rules displayed in Vector UI matrix table
             self.state.vectorPushRules = [];
             var rule, state;
 
@@ -590,6 +607,38 @@ module.exports = React.createClass({
             );
         }
 
+        if (this.state.masterPushRule) {
+            var masterPushRuleDiv = (
+                <div className="mx_UserNotifSettings_tableRow">
+                        <div className="mx_UserNotifSettings_inputCell">
+                            <input id="enableNotifications"
+                                ref="enableNotifications"
+                                type="checkbox"
+                                checked={ !this.state.masterPushRule.enabled }
+                                onChange={ this.onEnableNotificationsChange } />
+                        </div>
+                        <div className="mx_UserNotifSettings_labelCell">
+                            <label htmlFor="enableNotifications">
+                                Enable notifications
+                            </label>
+                        </div>
+                    </div>
+            );
+        }
+
+        // When enabled, the master rule inhibits all existing rules
+        if (this.state.masterPushRule.enabled) {
+            return (
+                <div>
+                    {masterPushRuleDiv}
+
+                    <div className="mx_UserSettings_notifTable">
+                        All notifications are currently disabled for all devices.
+                    </div>
+                </div>
+            );
+        }
+
         // Build the list of keywords rules that have been defined outside Vector UI
         var externalKeyWords = [];
         for (var i in this.state.externalContentRules) {
@@ -603,18 +652,21 @@ module.exports = React.createClass({
         
         return (
             <div>
+
+                {masterPushRuleDiv}
+
                 <div className="mx_UserSettings_notifTable">
 
                     <div className="mx_UserNotifSettings_tableRow">
                         <div className="mx_UserNotifSettings_inputCell">
-                            <input id="enableNotifications"
-                                ref="enableNotifications"
+                            <input id="enableDesktopNotifications"
+                                ref="enableDesktopNotifications"
                                 type="checkbox"
                                 checked={ UserSettingsStore.getEnableNotifications() }
-                                onChange={ this.onEnableNotificationsChange } />
+                                onChange={ this.onEnableDesktopNotificationsChange } />
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
-                            <label htmlFor="enableNotifications">
+                            <label htmlFor="enableDesktopNotifications">
                                 Enable desktop notifications
                             </label>
                         </div>
