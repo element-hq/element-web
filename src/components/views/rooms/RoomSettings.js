@@ -248,7 +248,7 @@ module.exports = React.createClass({
                         return alias_event.getContent().aliases.map(function(alias, j) {
                             var deleteButton;
                             if (alias_event && alias_event.getStateKey() === domain) {
-                                deleteButton = <img src="img/cancel.svg" width="18" height="18" alt="Delete" onClick={ self.onAliasDeleted.bind(self, i, j) }/>;
+                                deleteButton = <img src="img/cancel-small.svg" width="14" height="14" alt="Delete" onClick={ self.onAliasDeleted.bind(self, i, j) }/>;
                             }
                             return (
                                 <div className="mx_RoomSettings_aliasesTableRow" key={ i + "_" + j }>
@@ -277,7 +277,7 @@ module.exports = React.createClass({
                              blurToCancel={ false }
                              onValueChanged={ self.onAliasAdded } />
                         <div className="mx_RoomSettings_addAlias">
-                             <img src="img/add.svg" width="18" height="18" alt="Add" onClick={ self.onAliasAdded }/>
+                             <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ self.onAliasAdded }/>
                         </div>                        
                     </div>
                 </div>
