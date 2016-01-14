@@ -24,6 +24,22 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_TabCompleteBar_command {
+    margin-right: 8px;
+    background-color: #76CFA6;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-bottom: 6px;
+    border-radius: 30px;
+}
+
+.mx_TabCompleteBar_command .mx_TabCompleteBar_text {
+    opacity: 1.0;
+    color: #fff;
+}
+
 .mx_TabCompleteBar_item img {
     border-radius: 24px;
     margin-right: 8px;
