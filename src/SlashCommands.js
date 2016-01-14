@@ -318,7 +318,9 @@ var commands = {
 };
 
 // helpful aliases
-commands.j = commands.join;
+var aliases = {
+    j: "join"
+}
 
 module.exports = {
     /**
@@ -338,6 +340,9 @@ module.exports = {
             var cmd = bits[1].substring(1).toLowerCase();
             var args = bits[3];
             if (cmd === "me") return null;
+            if (aliases[cmd]) {
+                cmd = aliases[cmd];
+            }
             if (commands[cmd]) {
                 return commands[cmd].run(roomId, args);
             }
