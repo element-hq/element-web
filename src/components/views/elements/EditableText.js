@@ -173,6 +173,9 @@ module.exports = React.createClass({
     },
 
     onBlur: function(ev) {
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+
         if (this.props.blurToCancel)
             this.cancelEdit();
         else
