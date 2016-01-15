@@ -165,7 +165,9 @@ limitations under the License.
 }
 
 .mx_RoomHeader_name,
-.mx_RoomHeader_avatar {
+.mx_RoomHeader_avatar,
+.mx_RoomHeader_avatarPicker,
+.mx_RoomHeader_avatarPicker_edit {
     cursor: pointer;
 }
 
@@ -230,6 +232,10 @@ limitations under the License.
     position: absolute;
     margin-left: 16px;
     margin-top: 4px;
+}
+
+.mx_RoomHeader_avatarPicker_edit > label {
+    cursor: pointer;
 }
 
 .mx_RoomHeader_avatarPicker_edit > input {
