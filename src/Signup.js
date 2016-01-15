@@ -152,7 +152,7 @@ class Register extends Signup {
             } else {
                 if (error.errcode === 'M_USER_IN_USE') {
                     throw new Error("Username in use");
-                } else if (error.errcode == 'M_INVALID_USER_NAME') {
+                } else if (error.errcode == 'M_INVALID_USERNAME') {
                     throw new Error("User names may only contain alphanumeric characters, underscores or dots!");
                 } else if (error.httpStatus == 401) {
                     throw new Error("Authorisation failed!");
