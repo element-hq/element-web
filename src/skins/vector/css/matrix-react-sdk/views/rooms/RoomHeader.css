@@ -16,8 +16,8 @@ limitations under the License.
 
 /* add 20px to the height of the header when editing */
 .mx_RoomHeader_editing {
-    -webit-flex: 0 0 113px ! important;
-    flex: 0 0 113px ! important;
+    -webit-flex: 0 0 103px ! important;
+    flex: 0 0 103px ! important;
 }
 
 .mx_RoomHeader_wrapper {

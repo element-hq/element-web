@@ -15,21 +15,27 @@ limitations under the License.
 */
 
 .mx_RoomSettings {
+    margin-left: 65px;
+    margin-bottom: 20px;
 }
 
-.mx_RoomSettings_settings {
+.mx_RoomSettings_powerLevels {
     display: table;
-    margin: 5px 0;
 }
 
-.mx_RoomSettings_settings > div {
+.mx_RoomSettings_powerLevel {
     display: table-row;
 }
 
-.mx_RoomSettings_settings > div > * {
+.mx_RoomSettings_powerLevelKey,
+.mx_RoomSettings_powerLevel .mx_PowerSelector {
     display: table-cell;
+    padding-bottom: 5px;
+}
 
-    margin: 0 10px;
+.mx_RoomSettings_powerLevelKey {
+    text-align: right;
+    padding-right: 0.3em;
 }
 
 .mx_RoomSettings h3 {
