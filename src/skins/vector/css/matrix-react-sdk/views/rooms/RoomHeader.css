@@ -14,7 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomHeader {
+/* add 12px to the height of the header when editing */
+.mx_RoomHeader_editing {
+    -webit-flex: 0 0 95px ! important;
+    flex: 0 0 95px ! important;
 }
 
 .mx_RoomHeader_wrapper {
@@ -31,6 +34,10 @@ limitations under the License.
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
+}
+
+.mx_RoomHeader_editing .mx_RoomHeader_wrapper {
+    border-bottom: 1px solid transparent;
 }
 
 .mx_RoomHeader_leftRow {
@@ -98,7 +105,7 @@ limitations under the License.
 
 .mx_RoomHeader_info {
     display: table-cell;
-    /* height: 48px; */
+    width: 100%;
     vertical-align: middle;
 }
 
@@ -122,6 +129,7 @@ limitations under the License.
 
 .mx_RoomHeader_name {
     vertical-align: middle;
+    width: 100%;
     height: 31px;
     overflow: hidden;
     color: #454545;
@@ -131,6 +139,7 @@ limitations under the License.
     padding-right: 16px;
     /* why isn't text-overflow working? */
     text-overflow: ellipsis;
+    border-bottom: 1px solid transparent;
 }
 
 .mx_RoomHeader_nametext {
@@ -155,15 +164,16 @@ limitations under the License.
     pointer-events: none;
 }
 
-.mx_RoomHeader_leftRow:hover {
+.mx_RoomHeader_name,
+.mx_RoomHeader_avatar {
     cursor: pointer;
 }
 
-.mx_RoomHeader_leftRow:hover .mx_RoomHeader_name div:not(.mx_RoomHeader_editable) {
+.mx_RoomHeader_name:hover div:not(.mx_RoomHeader_editable) {
     color: #76cfa6;
 }
 
-.mx_RoomHeader_leftRow:hover .mx_RoomHeader_settingsButton {
+.mx_RoomHeader_name:hover .mx_RoomHeader_settingsButton {
     visibility: visible;
 }
 
@@ -181,37 +191,16 @@ limitations under the License.
 }
 
 .mx_RoomHeader_editable {
-    border-bottom: 1px solid #c7c7c7;
+    border-bottom: 1px solid #c7c7c7 ! important;
     min-width: 70px;
     cursor: text;
 }
 
 .mx_RoomHeader_editable:focus {
-    border-bottom: 1px solid #76CFA6;
+    border-bottom: 1px solid #76CFA6 ! important;
     outline: none;
     box-shadow: none;
 }
-
-/*
-.mx_RoomHeader_nameEditing {
-    padding-left: 8px;
-    padding-right: 16px;
-    margin-top: -5px;
-}
-
-.mx_RoomHeader_name input, .mx_RoomHeader_nameInput {
-    border-radius: 3px;
-    width: 260px;
-    border: 1px solid #c7c7c7;
-    font-weight: 300;
-    font-size: 13px;
-    padding: 9px;
-}
-
-.mx_RoomHeader_nameInput {
-    margin-top: 6px;
-}
-*/
 
 .mx_RoomHeader_topic {
     vertical-align: bottom;
@@ -223,6 +212,7 @@ limitations under the License.
     margin-right: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-bottom: 1px solid transparent;    
 }
 
 .mx_RoomHeader_avatar {
@@ -232,8 +222,18 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_RoomHeader_avatar img {
+.mx_RoomHeader_avatar .mx_RoomAvatar {
 	border-radius: 24px;
+}
+
+.mx_RoomHeader_avatarPicker_edit {
+    position: absolute;
+    margin-left: 16px;
+    margin-top: 4px;
+}
+
+.mx_RoomHeader_avatarPicker_edit > input {
+    display: none;
 }
 
 .mx_RoomHeader_button {
