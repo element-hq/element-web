@@ -697,7 +697,14 @@ module.exports = React.createClass({
     onRegistered: function(credentials) {
         this.onLoggedIn(credentials);
         // do post-registration stuff
-        this.showScreen("post_registration");
+        // This now goes straight to user settings
+        // We use _setPage since if we wait for
+        // showScreen to do the dispatch loop,
+        // we'll see the page type is still unset
+        // when the MatrixClient is started and show
+        // the Room Directory instead.
+        //this.showScreen("view_user_settings");
+        this._setPage(this.PageTypes.UserSettings);
     },
 
     onFinishPostRegistration: function() {
