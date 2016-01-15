@@ -154,21 +154,24 @@ module.exports = React.createClass({
         //ev.target.setSelectionRange(0, ev.target.textContent.length);
 
         var node = ev.target.childNodes[0];
-        var range = document.createRange();
-        range.setStart(node, 0);
-        range.setEnd(node, node.length);
-        
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
+        if (node) {
+            var range = document.createRange();
+            range.setStart(node, 0);
+            range.setEnd(node, node.length);
+            
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
     },
 
     onFinish: function(ev) {
         var self = this;
+        var submit = (ev.key === "Enter");
         this.setState({
             phase: this.Phases.Display,
         }, function() {
-            self.onValueChanged(ev.key === "Enter");
+            self.onValueChanged(submit);
         });
     },
 
