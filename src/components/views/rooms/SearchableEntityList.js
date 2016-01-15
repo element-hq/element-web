@@ -14,10 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require('react');
-var classNames = require('classnames');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
-var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 
 // A list capable of displaying entities which conform to the SearchableEntity
@@ -87,40 +85,5 @@ var SearchableEntityList = React.createClass({
         );
     }
 });
-
-SearchableEntityList.fromRoomMembers = function(members) {
-    var MemberTile = sdk.getComponent("rooms.MemberTile");
-    return members.map(function(m) {
-        return {
-            matches: function(query) {
-                return m.name.toLowerCase().indexOf(query.toLowerCase()) === 0;
-            },
-
-            getJsx: function() {
-                return (
-                    <MemberTile key={m.userId} member={m} />
-                );
-            }
-        };
-    });
-};
-
-SearchableEntityList.fromUsers = function(users) { /*
-    var UserTile = sdk.getComponent("rooms.UserTile");
-    return users.map(function(u) {
-        return {
-            matches: function(query) {
-                return u.displayName.toLowerCase().indexOf(query.toLowerCase()) === 0;
-            },
-
-            getJsx: function() {
-                return (
-                    <UserTile key={u.userId} user={u} />
-                );
-            }
-        };
-    }); */
-};
-
 
  module.exports = SearchableEntityList;

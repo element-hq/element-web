@@ -18,6 +18,7 @@ var classNames = require('classnames');
 var Matrix = require("matrix-js-sdk");
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
+var Entities = require("../../../Entities");
 var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 
@@ -280,7 +281,7 @@ module.exports = React.createClass({
                 <SearchableEntityList searchPlaceholderText={"Invite / Search"}
                     onSubmit={this.onInvite}
                     entities={
-                        SearchableEntityList.fromRoomMembers(
+                        Entities.fromRoomMembers(
                             room.currentState.getMembers() // ALLLLL OF THEM
                         )
                     } />
