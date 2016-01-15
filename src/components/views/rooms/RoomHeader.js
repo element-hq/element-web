@@ -245,8 +245,10 @@ module.exports = React.createClass({
             if (this.props.room) {
                 if (can_set_room_avatar) {
                     roomAvatar = (
-                        <div className="mx_RoomHeader_avatarPicker" onClick={ this.onAvatarPickerClick }>
-                            <ChangeAvatar ref="changeAvatar" room={this.props.room} showUploadSection={false} width={48} height={48} />
+                        <div className="mx_RoomHeader_avatarPicker">
+                            <div onClick={ this.onAvatarPickerClick }>
+                                <ChangeAvatar ref="changeAvatar" room={this.props.room} showUploadSection={false} width={48} height={48} />
+                            </div>
                             <div className="mx_RoomHeader_avatarPicker_edit">
                                 <label htmlFor="avatarInput" ref="file_label">
                                     <img src="img/camera.svg"

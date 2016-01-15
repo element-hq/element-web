@@ -233,9 +233,11 @@ module.exports = React.createClass({
                         })}
                     </div>
 
-                    <div className="mx_UserSettings_avatarPicker" onClick={ this.onAvatarPickerClick } >
-                        <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
-                            showUploadSection={false} className="mx_UserSettings_avatarPicker_img"/>
+                    <div className="mx_UserSettings_avatarPicker">
+                        <div onClick={ this.onAvatarPickerClick }>
+                            <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
+                                showUploadSection={false} className="mx_UserSettings_avatarPicker_img"/>
+                        </div>
                         <div className="mx_UserSettings_avatarPicker_edit">
                             <label htmlFor="avatarInput" ref="file_label">
                                 <img src="img/camera.svg"
