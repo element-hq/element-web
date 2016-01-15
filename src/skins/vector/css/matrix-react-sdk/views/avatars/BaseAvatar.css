@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MemberAvatar {
+.mx_BaseAvatar {
     position: relative;
 }
 
-.mx_MemberAvatar_initial {
+.mx_BaseAvatar_initial {
     position: absolute;
     z-index: 1;
     color: #fff;
@@ -27,7 +27,7 @@ limitations under the License.
     pointer-events: none;
 }
 
-.mx_MemberAvatar_image {
+.mx_BaseAvatar_image {
     border-radius: 20px;
     vertical-align: top;
 }
