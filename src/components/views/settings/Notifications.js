@@ -732,7 +732,8 @@ module.exports = React.createClass({
             advancedSettings = (
                 <div>
                     <h3>Advanced notifications settings</h3>
-                    There are advanced rules which are not shown here. You might have configured them in another client than Vector. You cannot tune them in Vector but they still apply.
+                    There are advanced notifications which are not shown here.<br/>
+                    You might have configured them in another client than Vector. You cannot tune them in Vector but they still apply.
                     <ul>
                         { externalRules }
                     </ul>
