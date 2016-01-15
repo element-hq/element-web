@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* add 12px to the height of the header when editing */
+/* add 20px to the height of the header when editing */
 .mx_RoomHeader_editing {
-    -webit-flex: 0 0 95px ! important;
-    flex: 0 0 95px ! important;
+    -webit-flex: 0 0 113px ! important;
+    flex: 0 0 113px ! important;
 }
 
 .mx_RoomHeader_wrapper {
