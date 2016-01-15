@@ -151,20 +151,53 @@ module.exports = React.createClass({
             var cancel_button = null;
             var save_button = null;
             var settings_button = null;
-            // var actual_name = this.props.room.currentState.getStateEvents('m.room.name', '');
-            // if (actual_name) actual_name = actual_name.getContent().name;
             if (this.props.editing) {
-                // name = 
-                //     <div className="mx_RoomHeader_nameEditing">
-                //         <input className="mx_RoomHeader_nameInput" type="text" defaultValue={actual_name} placeholder="Name" ref="name_edit"/>
-                //     </div>
-                // if (topic) topic_el = <div className="mx_RoomHeader_topic"><textarea>{ topic.getContent().topic }</textarea></div>
+
+                // calculate permissions.  XXX: this should be done on mount or something, and factored out with RoomSettings
+                var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
+                var events_levels = power_levels.events || {};
+                var user_id = MatrixClientPeg.get().credentials.userId;
+
+                if (power_levels) {
+                    power_levels = power_levels.getContent();
+                    var default_user_level = parseInt(power_levels.users_default || 0);
+                    var user_levels = power_levels.users || {};
+                    var current_user_level = user_levels[user_id];
+                    if (current_user_level == undefined) current_user_level = default_user_level;
+                } else {
+                    var default_user_level = 0;
+                    var user_levels = [];
+                    var current_user_level = 0;
+                }
+
+                var room_avatar_level = parseInt(power_levels.state_default || 0);
+                if (events_levels['m.room.avatar'] !== undefined) {
+                    room_avatar_level = events_levels['m.room.avatar'];
+                }
+                var can_set_room_avatar = current_user_level >= room_avatar_level;
+
+                var room_name_level = parseInt(power_levels.state_default || 0);
+                if (events_levels['m.room.name'] !== undefined) {
+                    room_name_level = events_levels['m.room.name'];
+                }
+                var can_set_room_name = current_user_level >= room_name_level;
+
+                var room_topic_level = parseInt(power_levels.state_default || 0);
+                if (events_levels['m.room.topic'] !== undefined) {
+                    room_topic_level = events_levels['m.room.topic'];
+                }
+                var can_set_room_topic = current_user_level >= room_topic_level;
 
                 var placeholderName = "Unnamed Room";
                 if (this.state.defaultName && this.state.defaultName !== '?') {
                     placeholderName += " (" + this.state.defaultName + ")";
                 }
 
+                save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</div>
+                cancel_button = <div className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>
+            }
+
+            if (can_set_room_name) {
                 name =
                     <div className="mx_RoomHeader_name">
                         <EditableText
@@ -175,20 +208,8 @@ module.exports = React.createClass({
                              onValueChanged={ this.onNameChanged }
                              initialValue={ this.state.name }/>
                     </div>
-
-                topic_el =
-                    <EditableText 
-                         className="mx_RoomHeader_topic mx_RoomHeader_editable"
-                         placeholderClassName="mx_RoomHeader_placeholder"
-                         placeholder="Add a topic"
-                         blurToCancel={ false }
-                         onValueChanged={ this.onTopicChanged }
-                         initialValue={ this.state.topic }/>
-
-                save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</div>
-                cancel_button = <div className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>
-            } else {
-                // <EditableText label={this.props.room.name} initialValue={actual_name} placeHolder="Name" onValueChanged={this.onNameChange} />
+            }
+            else {
                 var searchStatus;
                 // don't display the search count until the search completes and
                 // gives us a valid (possibly zero) searchCount.
@@ -204,17 +225,28 @@ module.exports = React.createClass({
                             <TintableSvg src="img/settings.svg" width="12" height="12"/>
                         </div>
                     </div>
+            }
 
+            if (can_set_room_topic) {
+                topic_el =
+                    <EditableText 
+                         className="mx_RoomHeader_topic mx_RoomHeader_editable"
+                         placeholderClassName="mx_RoomHeader_placeholder"
+                         placeholder="Add a topic"
+                         blurToCancel={ false }
+                         onValueChanged={ this.onTopicChanged }
+                         initialValue={ this.state.topic }/>
+            } else {
                 var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
                 if (topic) topic_el = <div className="mx_RoomHeader_topic" ref="topic" title={ topic.getContent().topic }>{ topic.getContent().topic }</div>;
             }
 
             var roomAvatar = null;
             if (this.props.room) {
-                if (this.props.editing) {
+                if (can_set_room_avatar) {
                     roomAvatar = (
                         <div className="mx_RoomHeader_avatarPicker" onClick={ this.onAvatarPickerClick }>
-                            <ChangeAvatar room={this.props.room} showUploadSection={false} width={48} height={48} />
+                            <ChangeAvatar ref="changeAvatar" room={this.props.room} showUploadSection={false} width={48} height={48} />
                             <div className="mx_RoomHeader_avatarPicker_edit">
                                 <label htmlFor="avatarInput" ref="file_label">
                                     <img src="img/camera.svg"
