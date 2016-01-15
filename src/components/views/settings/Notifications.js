@@ -79,87 +79,16 @@ module.exports = React.createClass({
     },
     
     onNotifStateButtonClicked: function(event) {
-        var self = this;
-        var cli = MatrixClientPeg.get();
         var vectorRuleId = event.target.className.split("-")[0];
         var newPushRuleVectorState = event.target.className.split("-")[1];
         
-        if ("keywords" === vectorRuleId 
-                && this.state.vectorContentRules.vectorState !== newPushRuleVectorState 
-                && this.state.vectorContentRules.rules.length) {
-            
-            this.setState({
-                phase: this.phases.LOADING
-            });
-            
-            // Update all rules in self.state.vectorContentRules
-            var deferreds = [];
-            for (var i in this.state.vectorContentRules.rules) {
-                var rule = this.state.vectorContentRules.rules[i];
-                
-                var enabled;
-                var actions;
-                switch (newPushRuleVectorState) {
-                    case PushRuleVectorState.ON:
-                        if (rule.actions.length !== 1) {
-                            actions = this._actionsFor(PushRuleVectorState.ON);
-                        }
-
-                        if (this.state.vectorContentRules.vectorState === PushRuleVectorState.OFF) {
-                            enabled = true;
-                        }
-                        break;
-                        
-                    case PushRuleVectorState.LOUD:
-                        if (rule.actions.length !== 3) {
-                            actions = this._actionsFor(PushRuleVectorState.LOUD);
-                        }
-
-                        if (this.state.vectorContentRules.vectorState === PushRuleVectorState.OFF) {
-                            enabled = true;
-                        }
-                        break;
-
-                    case PushRuleVectorState.OFF:
-                        enabled = false;
-                        break;
-                }
-                
-                if (actions) {
-                    // Note that the workaround in _updatePushRuleActions will automatically
-                    // enable the rule
-                    deferreds.push(this._updatePushRuleActions(rule, actions, enabled));
-                }
-                else if (enabled != undefined) {
-                    deferreds.push(cli.setPushRuleEnabled('global', rule.kind, rule.rule_id, enabled));
-                }
-            }
-            
-            q.all(deferreds).done(function(resps) {
-                self._refreshFromServer();
-            }, function(error) {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Can't update user notification settings",
-                    description: error.toString(),
-                    onFinished: self._refreshFromServer
-                });
-            });
+        if ("keywords" === vectorRuleId) {
+            this._changeKeywordsPushRuleVectorState(newPushRuleVectorState)
         }
         else {
             var rule = this.getRule(vectorRuleId);
-
-            // For now, we support only enabled/disabled for hs default rules
-            // Translate ON, LOUD, OFF to one of the 2.
-            if (rule && rule.vectorState !== newPushRuleVectorState) {   
-
-                this.setState({
-                    phase: this.phases.LOADING
-                });
-
-                cli.setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, (newPushRuleVectorState !== PushRuleVectorState.OFF)).done(function() {
-                    self._refreshFromServer();
-                });
+            if (rule) {
+                this._changePushRuleVectorState(rule, newPushRuleVectorState);
             }
         }
     },
@@ -192,9 +121,6 @@ module.exports = React.createClass({
             onFinished: function onFinished(should_leave, newValue) {
 
                 if (should_leave && newValue !== keywords) {
-                    var cli = MatrixClientPeg.get();
-                    var removeDeferreds = [];
-
                     var newKeywords = newValue.split(',');
                     for (var i in newKeywords) {
                         newKeywords[i] = newKeywords[i].trim();
@@ -207,75 +133,8 @@ module.exports = React.createClass({
                         }
                         return array;
                     },[]);
-
-                    self.setState({
-                        phase: self.phases.LOADING
-                    });
-
-                    // Remove per-word push rules of keywords that are no more in the list
-                    var vectorContentRulesPatterns = [];
-                    for (var i in self.state.vectorContentRules.rules) {
-                        var rule = self.state.vectorContentRules.rules[i];
-
-                        vectorContentRulesPatterns.push(rule.pattern);
-
-                        if (newKeywords.indexOf(rule.pattern) < 0) {
-                            removeDeferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
-                        }
-                    }
-
-                    // If the keyword is part of `externalContentRules`, remove the rule
-                    // before recreating it in the right Vector path
-                    for (var i in self.state.externalContentRules) {
-                        var rule = self.state.externalContentRules[i];
-
-                        if (newKeywords.indexOf(rule.pattern) >= 0) {
-                            removeDeferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
-                        }
-                    }
-
-                    var onError = function(error) {
-                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                        Modal.createDialog(ErrorDialog, {
-                            title: "Can't update keywords",
-                            description: error.toString(),
-                            onFinished: self._refreshFromServer
-                        });
-                    }
-
-                    // Then, add the new ones
-                    q.all(removeDeferreds).done(function(resps) {
-                        var deferreds = [];
-                        for (var i in newKeywords) {
-                            var keyword = newKeywords[i];
-
-                            var pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
-                            if (pushRuleVectorStateKind === PushRuleVectorState.OFF) {
-                                // When the current global keywords rule is OFF, we need to look at
-                                // the flavor of rules in 'vectorContentRules' to apply the same actions 
-                                // when creating the new rule.
-                                // Thus, this new rule will join the 'vectorContentRules' set. 
-                                if (self.state.vectorContentRules.rules.length) {
-                                    pushRuleVectorStateKind = self._pushRuleVectorStateKind(self.state.vectorContentRules.rules[0]);
-                                }
-                                else {
-                                    // ON is default
-                                    pushRuleVectorStateKind =  PushRuleVectorState.ON;
-                                }
-                            }
-
-                            if (vectorContentRulesPatterns.indexOf(keyword) < 0) {
-                                deferreds.push(cli.addPushRule('global', 'content', keyword, {
-                                    actions: self._actionsFor(pushRuleVectorStateKind),
-                                    pattern: keyword
-                                }));
-                            }
-                        }
-
-                        q.all(deferreds).done(function(resps) {
-                            self._refreshFromServer();
-                        }, onError);
-                    }, onError);
+                    
+                    self._updateKeywords(newKeywords);
                 }
             }
         });
@@ -325,6 +184,166 @@ module.exports = React.createClass({
                 break;
         }
         return stateKind;
+    },
+    
+    _changePushRuleVectorState: function(rule, newPushRuleVectorState) {        
+        // For now, we support only enabled/disabled for hs default rules
+        // Translate ON, LOUD, OFF to one of the 2.
+        if (rule && rule.vectorState !== newPushRuleVectorState) {   
+
+            this.setState({
+                phase: this.phases.LOADING
+            });
+
+            var self = this;
+            MatrixClientPeg.get().setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, (newPushRuleVectorState !== PushRuleVectorState.OFF)).done(function() {
+                self._refreshFromServer();
+            });
+        }
+    },
+    
+    _changeKeywordsPushRuleVectorState: function(newPushRuleVectorState) {
+        // Is there really a change?
+        if (this.state.vectorContentRules.vectorState === newPushRuleVectorState 
+            || this.state.vectorContentRules.rules.length === 0) {
+            return;
+        }
+        
+        var self = this;
+        var cli = MatrixClientPeg.get();
+
+        this.setState({
+            phase: this.phases.LOADING
+        });
+
+        // Update all rules in self.state.vectorContentRules
+        var deferreds = [];
+        for (var i in this.state.vectorContentRules.rules) {
+            var rule = this.state.vectorContentRules.rules[i];
+
+            var enabled;
+            var actions;
+            switch (newPushRuleVectorState) {
+                case PushRuleVectorState.ON:
+                    if (rule.actions.length !== 1) {
+                        actions = this._actionsFor(PushRuleVectorState.ON);
+                    }
+
+                    if (this.state.vectorContentRules.vectorState === PushRuleVectorState.OFF) {
+                        enabled = true;
+                    }
+                    break;
+
+                case PushRuleVectorState.LOUD:
+                    if (rule.actions.length !== 3) {
+                        actions = this._actionsFor(PushRuleVectorState.LOUD);
+                    }
+
+                    if (this.state.vectorContentRules.vectorState === PushRuleVectorState.OFF) {
+                        enabled = true;
+                    }
+                    break;
+
+                case PushRuleVectorState.OFF:
+                    enabled = false;
+                    break;
+            }
+
+            if (actions) {
+                // Note that the workaround in _updatePushRuleActions will automatically
+                // enable the rule
+                deferreds.push(this._updatePushRuleActions(rule, actions, enabled));
+            }
+            else if (enabled != undefined) {
+                deferreds.push(cli.setPushRuleEnabled('global', rule.kind, rule.rule_id, enabled));
+            }
+        }
+
+        q.all(deferreds).done(function(resps) {
+            self._refreshFromServer();
+        }, function(error) {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Can't update user notification settings",
+                description: error.toString(),
+                onFinished: self._refreshFromServer
+            });
+        });
+    },
+    
+    _updateKeywords: function(newKeywords) {
+        this.setState({
+            phase: this.phases.LOADING
+        });
+
+        var self = this;
+        var cli = MatrixClientPeg.get();
+        var removeDeferreds = [];
+
+        // Remove per-word push rules of keywords that are no more in the list
+        var vectorContentRulesPatterns = [];
+        for (var i in self.state.vectorContentRules.rules) {
+            var rule = self.state.vectorContentRules.rules[i];
+
+            vectorContentRulesPatterns.push(rule.pattern);
+
+            if (newKeywords.indexOf(rule.pattern) < 0) {
+                removeDeferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
+            }
+        }
+
+        // If the keyword is part of `externalContentRules`, remove the rule
+        // before recreating it in the right Vector path
+        for (var i in self.state.externalContentRules) {
+            var rule = self.state.externalContentRules[i];
+
+            if (newKeywords.indexOf(rule.pattern) >= 0) {
+                removeDeferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
+            }
+        }
+
+        var onError = function(error) {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Can't update keywords",
+                description: error.toString(),
+                onFinished: self._refreshFromServer
+            });
+        }
+
+        // Then, add the new ones
+        q.all(removeDeferreds).done(function(resps) {
+            var deferreds = [];
+            for (var i in newKeywords) {
+                var keyword = newKeywords[i];
+
+                var pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
+                if (pushRuleVectorStateKind === PushRuleVectorState.OFF) {
+                    // When the current global keywords rule is OFF, we need to look at
+                    // the flavor of rules in 'vectorContentRules' to apply the same actions 
+                    // when creating the new rule.
+                    // Thus, this new rule will join the 'vectorContentRules' set. 
+                    if (self.state.vectorContentRules.rules.length) {
+                        pushRuleVectorStateKind = self._pushRuleVectorStateKind(self.state.vectorContentRules.rules[0]);
+                    }
+                    else {
+                        // ON is default
+                        pushRuleVectorStateKind =  PushRuleVectorState.ON;
+                    }
+                }
+
+                if (vectorContentRulesPatterns.indexOf(keyword) < 0) {
+                    deferreds.push(cli.addPushRule('global', 'content', keyword, {
+                        actions: self._actionsFor(pushRuleVectorStateKind),
+                        pattern: keyword
+                    }));
+                }
+            }
+
+            q.all(deferreds).done(function(resps) {
+                self._refreshFromServer();
+            }, onError);
+        }, onError);
     },
 
     _refreshFromServer: function() {
