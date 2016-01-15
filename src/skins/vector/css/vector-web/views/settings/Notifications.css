@@ -33,6 +33,10 @@ limitations under the License.
     display: table-cell;
 }
 
+.mx_UserNotifSettings_pushRulesTableWrapper {
+    padding-bottom: 21px;
+}
+
 .mx_UserNotifSettings_pushRulesTable {
     width: 100%;
     table-layout: fixed;

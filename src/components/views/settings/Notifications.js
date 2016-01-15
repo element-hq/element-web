@@ -55,6 +55,7 @@ module.exports = React.createClass({
                 vectorState: PushRuleVectorState.ON,
                 rules: []
             },
+            externalPushRules: [],          // Push rules (except content rule) that have been defined outside Vector UI
             externalContentRules: []        // Keyword push rules that have been defined outside Vector UI
         };
     },
@@ -378,19 +379,24 @@ module.exports = React.createClass({
         MatrixClientPeg.get().getPushRules().done(function(rulesets) {
             MatrixClientPeg.get().pushRules = rulesets;
 
-            // Get homeserver default rules expected by Vector
+            // Get homeserver default rules and triage them by categories
             var rule_categories = {
+                // The master rule (all notifications disabling)
                 '.m.rule.master': 'master',
 
+                // The rules displayed by Vector UI
+                // XXX: .m.rule.contains_user_name is not managed (not a fancy rule for Vector?)
                 '.m.rule.contains_display_name': 'vector',
                 '.m.rule.room_one_to_one': 'vector',
                 '.m.rule.invite_for_me': 'vector',
                 '.m.rule.member_event': 'vector',
-                '.m.rule.call': 'vector',
+                '.m.rule.call': 'vector'
+
+                // Others go to others
             };
 
             // HS default rules
-            var defaultRules = {master: [], vector: {}, additional: [], fallthrough: [], suppression: []};
+            var defaultRules = {master: [], vector: {}, others: []};
             //  Content/keyword rules
             var contentRules = {on: [], on_but_disabled:[], loud: [], loud_but_disabled: [], other: []};
 
@@ -401,16 +407,15 @@ module.exports = React.createClass({
                     r.kind = kind;
                     if (r.rule_id[0] === '.') {
                         if (cat) {
-                            if (cat === 'vector')
-                            {
+                            if (cat === 'vector') {
                                 defaultRules.vector[r.rule_id] = r;
                             }
-                            else
-                            {
+                            else {
                                 defaultRules[cat].push(r);
                             }
-                        } else {
-                            defaultRules.additional.push(r);
+                        }
+                        else {
+                            defaultRules['others'].push(r);
                         }
                     }
                     else if (kind === 'content') {
@@ -558,6 +563,25 @@ module.exports = React.createClass({
                 "disabled": PushRuleVectorState.ON
             });
             
+            // Build the rules not managed by Vector UI
+            var otherRulesDescriptions = {
+                '.m.rule.suppress_notices': "Suppress notifications from bots",
+                '.m.rule.message': "Notify for all other messages/rooms",
+                '.m.rule.fallback': "Notify me for anything else"
+            };
+
+            self.state.externalPushRules = [];
+            for (var i in defaultRules.others) {
+                var rule = defaultRules.others[i];
+                var ruleDescription = otherRulesDescriptions[rule.rule_id];
+                
+                // Show enabled default rules that was modified by the user
+                if (ruleDescription && rule.enabled && !rule.default) {
+                    rule.description = ruleDescription;
+                    self.state.externalPushRules.push(rule);
+                }
+            }
+
             self.setState({
                 phase: self.phases.DISPLAY
             });
@@ -672,6 +696,7 @@ module.exports = React.createClass({
         }
 
         // When enabled, the master rule inhibits all existing rules
+        // So do not show all notification settings
         if (this.state.masterPushRule.enabled) {
             return (
                 <div>
@@ -684,17 +709,37 @@ module.exports = React.createClass({
             );
         }
 
-        // Build the list of keywords rules that have been defined outside Vector UI
+        // Build external push rules
+        var externalRules = [];
+        for (var i in this.state.externalPushRules) {
+            var rule = this.state.externalPushRules[i];
+            externalRules.push(<li>{ rule.description }</li>);
+        }
+
+        // Show keywords not displayed by the vector UI as a single external push rule
         var externalKeyWords = [];
         for (var i in this.state.externalContentRules) {
             var rule = this.state.externalContentRules[i];
             externalKeyWords.push(rule.pattern);
         }
-        
         if (externalKeyWords.length) {
             externalKeyWords = externalKeyWords.join(", ");
+            externalRules.push(<li>Notifications on the following keywords follow rules which can’t be displayed here: { externalKeyWords }</li>);
         }
-        
+
+        var advancedSettings;
+        if (externalRules.length) {
+            advancedSettings = (
+                <div>
+                    <h3>Advanced notifications settings</h3>
+                    There are advanced rules which are not shown here. You might have configured them in another client than Vector. You cannot tune them in Vector but they still apply.
+                    <ul>
+                        { externalRules }
+                    </ul>
+                </div>
+            ); 
+        }
+
         return (
             <div>
 
@@ -737,12 +782,8 @@ module.exports = React.createClass({
                         </table>
                     </div>
 
-                </div>
-
-                <div>
-                    <br/><br/>
-                    Warning: Push rules on the following keywords has been defined: <br/>
-                    { externalKeyWords }
+                    { advancedSettings }
+ 
                 </div>
 
             </div>
