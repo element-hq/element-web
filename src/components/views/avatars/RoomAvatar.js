@@ -38,43 +38,53 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            urls: [
-                this.getRoomAvatarUrl(), // highest priority
-                this.getOneToOneAvatar(),
-                this.getFallbackAvatar() // lowest priority
-            ].filter(function(url) {
-                return url != null;
-            })
+            urls: this.getImageUrls(this.props)
         };
     },
 
-    getRoomAvatarUrl: function() {
-        return this.props.room.getAvatarUrl(
+    componentWillReceiveProps: function(newProps) {
+        this.setState({
+            urls: this.getImageUrls(newProps)
+        })
+    },
+
+    getImageUrls: function(props) {
+        return [
+            this.getRoomAvatarUrl(props), // highest priority
+            this.getOneToOneAvatar(props),
+            this.getFallbackAvatar(props) // lowest priority
+        ].filter(function(url) {
+            return url != null;
+        });
+    },
+
+    getRoomAvatarUrl: function(props) {
+        return props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
-            this.props.width, this.props.height, this.props.resizeMethod,
+            props.width, props.height, props.resizeMethod,
             false
         );
     },
 
-    getOneToOneAvatar: function() {
-        var userIds = Object.keys(this.props.room.currentState.members);
+    getOneToOneAvatar: function(props) {
+        var userIds = Object.keys(props.room.currentState.members);
 
         if (userIds.length == 2) {
             var theOtherGuy = null;
-            if (this.props.room.currentState.members[userIds[0]].userId == MatrixClientPeg.get().credentials.userId) {
-                theOtherGuy = this.props.room.currentState.members[userIds[1]];
+            if (props.room.currentState.members[userIds[0]].userId == MatrixClientPeg.get().credentials.userId) {
+                theOtherGuy = props.room.currentState.members[userIds[1]];
             } else {
-                theOtherGuy = this.props.room.currentState.members[userIds[0]];
+                theOtherGuy = props.room.currentState.members[userIds[0]];
             }
             return theOtherGuy.getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                this.props.width, this.props.height, this.props.resizeMethod,
+                props.width, props.height, props.resizeMethod,
                 false
             );
         } else if (userIds.length == 1) {
-            return this.props.room.currentState.members[userIds[0]].getAvatarUrl(
+            return props.room.currentState.members[userIds[0]].getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                this.props.width, this.props.height, this.props.resizeMethod,
+                props.width, props.height, props.resizeMethod,
                     false
             );
         } else {
@@ -82,8 +92,8 @@ module.exports = React.createClass({
         }
     },
 
-    getFallbackAvatar: function() {
-        return Avatar.defaultAvatarUrlForString(this.props.room.roomId);
+    getFallbackAvatar: function(props) {
+        return Avatar.defaultAvatarUrlForString(props.room.roomId);
     },
 
     render: function() {

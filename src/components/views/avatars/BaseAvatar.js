@@ -26,12 +26,12 @@ module.exports = React.createClass({
         name: React.PropTypes.string.isRequired, // The name (first initial used as default)
         idName: React.PropTypes.string, // ID for generating hash colours
         title: React.PropTypes.string, // onHover title text
-        url: React.PropTypes.string, // highest priority of them all
+        url: React.PropTypes.string, // highest priority of them all, shortcut to set in urls[0]
         urls: React.PropTypes.array, // [highest_priority, ... , lowest_priority]
         width: React.PropTypes.number,
         height: React.PropTypes.number,
         resizeMethod: React.PropTypes.string,
-        defaultToInitialLetter: React.PropTypes.bool
+        defaultToInitialLetter: React.PropTypes.bool // true to add default url
     },
 
     getDefaultProps: function() {
@@ -44,51 +44,58 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
+        return this._getState(this.props);
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        // work out if we need to call setState (if the image URLs array has changed)
+        var newState = this._getState(nextProps);
+        var newImageUrls = newState.imageUrls;
+        var oldImageUrls = this.state.imageUrls;
+        if (newImageUrls.length !== oldImageUrls.length) {
+            this.setState(newState); // detected a new entry
+        }
+        else {
+            // check each one to see if they are the same
+            for (var i = 0; i < newImageUrls.length; i++) {
+                if (oldImageUrls[i] !== newImageUrls[i]) {
+                    this.setState(newState); // detected a diff
+                    break;
+                }
+            }
+        }
+    },
+
+    _getState: function(props) {
+        // work out the full set of urls to try to load. This is formed like so:
+        // imageUrls: [ props.url, props.urls, default image ]
+
+        var urls = props.urls || [];
+        if (props.url) {
+            urls.unshift(props.url); // put in urls[0]
+        }
+
         var defaultImageUrl = null;
-        if (this.props.defaultToInitialLetter) {
+        if (props.defaultToInitialLetter) {
             defaultImageUrl = AvatarLogic.defaultAvatarUrlForString(
-                this.props.idName || this.props.name
+                props.idName || props.name
             );
+            urls.push(defaultImageUrl); // lowest priority
         }
         return {
-            imageUrl: this.props.url || (this.props.urls ? this.props.urls[0] : null),
+            imageUrls: urls,
             defaultImageUrl: defaultImageUrl,
             urlsIndex: 0
         };
     },
 
-    componentWillReceiveProps: function(nextProps) {
-        // retry all the urls again, they may have changed.
-        if (this.props.urls && this.state.urlsIndex > 0) {
-            this.setState({
-                urlsIndex: 0,
-                imageUrl: this.props.urls[0]
-            });
-        }
-    },
-
     onError: function(ev) {
-        var failedUrl = ev.target.src;
-
-        if (this.props.urls) {
-            var nextIndex = this.state.urlsIndex + 1;
-            if (nextIndex < this.props.urls.length) {
-                // try another
-                this.setState({
-                    urlsIndex: nextIndex,
-                    imageUrl: this.props.urls[nextIndex]
-                });
-                return;
-            }
-        }
-
-        // either no urls array or we've reached the end of it, we may have a default
-        // we can use...
-        if (this.props.defaultToInitialLetter) {
-            if (failedUrl === this.state.defaultImageUrl) {
-                return; // don't tightloop if the browser can't load the default URL
-            }
-            this.setState({ imageUrl: this.state.defaultImageUrl })
+        var nextIndex = this.state.urlsIndex + 1;
+        if (nextIndex < this.state.imageUrls.length) {
+            // try the next one
+            this.setState({
+                urlsIndex: nextIndex
+            });
         }
     },
 
@@ -104,7 +111,9 @@ module.exports = React.createClass({
     render: function() {
         var name = this.props.name;
 
-        if (this.state.imageUrl === this.state.defaultImageUrl) {
+        var imageUrl = this.state.imageUrls[this.state.urlsIndex];
+
+        if (imageUrl === this.state.defaultImageUrl) {
             var initialLetter = this._getInitialLetter();
             return (
                 <span className="mx_BaseAvatar" {...this.props}>
@@ -114,14 +123,14 @@ module.exports = React.createClass({
                                     lineHeight: this.props.height + "px" }}>
                         { initialLetter }
                     </span>
-                    <img className="mx_BaseAvatar_image" src={this.state.imageUrl}
+                    <img className="mx_BaseAvatar_image" src={imageUrl}
                         title={this.props.title} onError={this.onError}
                         width={this.props.width} height={this.props.height} />
                 </span>
             );            
         }
         return (
-            <img className="mx_BaseAvatar mx_BaseAvatar_image" src={this.state.imageUrl}
+            <img className="mx_BaseAvatar mx_BaseAvatar_image" src={imageUrl}
                 onError={this.onError}
                 width={this.props.width} height={this.props.height}
                 title={this.props.title}
