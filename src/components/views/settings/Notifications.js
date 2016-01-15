@@ -83,12 +83,12 @@ module.exports = React.createClass({
         var newPushRuleVectorState = event.target.className.split("-")[1];
         
         if ("keywords" === vectorRuleId) {
-            this._changeKeywordsPushRuleVectorState(newPushRuleVectorState)
+            this._setKeywordsPushRuleVectorState(newPushRuleVectorState)
         }
         else {
             var rule = this.getRule(vectorRuleId);
             if (rule) {
-                this._changePushRuleVectorState(rule, newPushRuleVectorState);
+                this._setPushRuleVectorState(rule, newPushRuleVectorState);
             }
         }
     },
@@ -134,7 +134,7 @@ module.exports = React.createClass({
                         return array;
                     },[]);
                     
-                    self._updateKeywords(newKeywords);
+                    self._setKeywords(newKeywords);
                 }
             }
         });
@@ -186,7 +186,7 @@ module.exports = React.createClass({
         return stateKind;
     },
     
-    _changePushRuleVectorState: function(rule, newPushRuleVectorState) {        
+    _setPushRuleVectorState: function(rule, newPushRuleVectorState) {        
         // For now, we support only enabled/disabled for hs default rules
         // Translate ON, LOUD, OFF to one of the 2.
         if (rule && rule.vectorState !== newPushRuleVectorState) {   
@@ -202,7 +202,7 @@ module.exports = React.createClass({
         }
     },
     
-    _changeKeywordsPushRuleVectorState: function(newPushRuleVectorState) {
+    _setKeywordsPushRuleVectorState: function(newPushRuleVectorState) {
         // Is there really a change?
         if (this.state.vectorContentRules.vectorState === newPushRuleVectorState 
             || this.state.vectorContentRules.rules.length === 0) {
@@ -221,8 +221,7 @@ module.exports = React.createClass({
         for (var i in this.state.vectorContentRules.rules) {
             var rule = this.state.vectorContentRules.rules[i];
 
-            var enabled;
-            var actions;
+            var enabled, actions;
             switch (newPushRuleVectorState) {
                 case PushRuleVectorState.ON:
                     if (rule.actions.length !== 1) {
@@ -271,7 +270,7 @@ module.exports = React.createClass({
         });
     },
     
-    _updateKeywords: function(newKeywords) {
+    _setKeywords: function(newKeywords) {
         this.setState({
             phase: this.phases.LOADING
         });
@@ -314,29 +313,39 @@ module.exports = React.createClass({
         // Then, add the new ones
         q.all(removeDeferreds).done(function(resps) {
             var deferreds = [];
+
+            var pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
+            if (pushRuleVectorStateKind === PushRuleVectorState.OFF) {
+                // When the current global keywords rule is OFF, we need to look at
+                // the flavor of rules in 'vectorContentRules' to apply the same actions 
+                // when creating the new rule.
+                // Thus, this new rule will join the 'vectorContentRules' set. 
+                if (self.state.vectorContentRules.rules.length) {
+                    pushRuleVectorStateKind = self._pushRuleVectorStateKind(self.state.vectorContentRules.rules[0]);
+                }
+                else {
+                    // ON is default
+                    pushRuleVectorStateKind =  PushRuleVectorState.ON;
+                }
+            }
+
             for (var i in newKeywords) {
                 var keyword = newKeywords[i];
 
-                var pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
-                if (pushRuleVectorStateKind === PushRuleVectorState.OFF) {
-                    // When the current global keywords rule is OFF, we need to look at
-                    // the flavor of rules in 'vectorContentRules' to apply the same actions 
-                    // when creating the new rule.
-                    // Thus, this new rule will join the 'vectorContentRules' set. 
-                    if (self.state.vectorContentRules.rules.length) {
-                        pushRuleVectorStateKind = self._pushRuleVectorStateKind(self.state.vectorContentRules.rules[0]);
+                if (vectorContentRulesPatterns.indexOf(keyword) < 0) {
+                    if (self.state.vectorContentRules.vectorState !== PushRuleVectorState.OFF) {
+                        deferreds.push(cli.addPushRule
+                        ('global', 'content', keyword, {
+                           actions: self._actionsFor(pushRuleVectorStateKind),
+                           pattern: keyword
+                        }));
                     }
                     else {
-                        // ON is default
-                        pushRuleVectorStateKind =  PushRuleVectorState.ON;
+                        deferreds.push(self._addDisabledPushRule('global', 'content', keyword, {
+                           actions: self._actionsFor(pushRuleVectorStateKind),
+                           pattern: keyword
+                        }));
                     }
-                }
-
-                if (vectorContentRulesPatterns.indexOf(keyword) < 0) {
-                    deferreds.push(cli.addPushRule('global', 'content', keyword, {
-                        actions: self._actionsFor(pushRuleVectorStateKind),
-                        pattern: keyword
-                    }));
                 }
             }
 
@@ -344,6 +353,24 @@ module.exports = React.createClass({
                 self._refreshFromServer();
             }, onError);
         }, onError);
+    },
+
+    // Create a push rule but disabled
+    _addDisabledPushRule: function(scope, kind, ruleId, body) {
+        var cli = MatrixClientPeg.get();
+        var deferred = q.defer();
+
+        cli.addPushRule(scope, kind, ruleId, body).done(function() {
+            cli.setPushRuleEnabled(scope, kind, ruleId, false).done(function() {
+                deferred.resolve();
+            }, function(err) {
+                deferred.reject(err);
+            });
+        }, function(err) {
+            deferred.reject(err);
+        });
+
+        return deferred.promise;
     },
 
     _refreshFromServer: function() {
