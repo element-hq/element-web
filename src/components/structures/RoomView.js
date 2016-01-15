@@ -1189,7 +1189,11 @@ module.exports = React.createClass({
         // a maxHeight on the underlying remote video tag.
 
         // header + footer + status + give us at least 100px of scrollback at all times.
-        var auxPanelMaxHeight = window.innerHeight - (83 + 72 + 36 + 100);
+        var auxPanelMaxHeight = window.innerHeight -
+                (83 + // height of RoomHeader
+                 36 + // height of the status area
+                 72 + // minimum height of the message compmoser
+                 100); // amount of desired scrollback
 
         // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
         // but it's better than the video going missing entirely
@@ -1197,16 +1201,6 @@ module.exports = React.createClass({
 
         if (this.refs.callView) {
             var video = this.refs.callView.getVideoView().getRemoteVideoElement();
-
-            // header + footer + status + give us at least 100px of scrollback at all times.
-            auxPanelMaxHeight = window.innerHeight -
-                (83 + 72 +
-                 sdk.getComponent('rooms.MessageComposer').MAX_HEIGHT +
-                 100);
-
-            // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
-            // but it's better than the video going missing entirely
-            if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
             video.style.maxHeight = auxPanelMaxHeight + "px";
 

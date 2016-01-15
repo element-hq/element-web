@@ -90,6 +90,32 @@ module.exports = React.createClass({
         this.setState({ topic : value });
     },
 
+    onAvatarPickerClick: function(ev) {
+        if (this.refs.file_label) {
+            this.refs.file_label.click();
+        }
+    },
+
+    onAvatarSelected: function(ev) {
+        var self = this;
+        var changeAvatar = this.refs.changeAvatar;
+        if (!changeAvatar) {
+            console.error("No ChangeAvatar found to upload image to!");
+            return;
+        }
+        changeAvatar.onFileSelected(ev).done(function() {
+            // dunno if the avatar changed, re-check it.
+            self._refreshFromServer();
+        }, function(err) {
+            var errMsg = (typeof err === "string") ? err : (err.error || "");
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: "Failed to set avatar. " + errMsg
+            });
+        });
+    },    
+
     getRoomName: function() {
         return this.state.name;
     },
@@ -100,7 +126,8 @@ module.exports = React.createClass({
 
     render: function() {
         var EditableText = sdk.getComponent("elements.EditableText");
-        var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
+        var RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
+        var ChangeAvatar = sdk.getComponent("settings.ChangeAvatar");
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         var header;
@@ -184,9 +211,26 @@ module.exports = React.createClass({
 
             var roomAvatar = null;
             if (this.props.room) {
-                roomAvatar = (
-                    <RoomAvatar room={this.props.room} width="48" height="48" />
-                );
+                if (this.props.editing) {
+                    roomAvatar = (
+                        <div onClick={ this.onAvatarPickerClick }>
+                            <ChangeAvatar room={this.props.room} showUploadSection={false} width={48} height={48} />
+                            <div className="mx_RoomHeader_avatarPicker_edit">
+                                <label htmlFor="avatarInput" ref="file_label">
+                                    <img src="img/camera.svg"
+                                        alt="Upload avatar" title="Upload avatar"
+                                        width="17" height="15" />
+                                </label>
+                                <input id="avatarInput" type="file" onChange={ this.onAvatarSelected }/>
+                            </div>
+                        </div>
+                    );
+                }
+                else {
+                    roomAvatar = (
+                        <RoomAvatar room={this.props.room} width="48" height="48" />
+                    );
+                }
             }
 
             var leave_button;

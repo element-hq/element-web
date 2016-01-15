@@ -366,6 +366,12 @@ module.exports = React.createClass({
                 </div>;
         }
 
+        var create_event = this.props.room.currentState.getStateEvents('m.room.create', '');
+        var unfederatable_section;
+        if (create_event.getContent()["m.federate"] === false) {
+             unfederatable_section = <div>Ths room is not accessible by remote Matrix servers</div>.
+        }
+
         // TODO: support editing custom events_levels
         // TODO: support editing custom user_levels
 
@@ -382,6 +388,8 @@ module.exports = React.createClass({
                     Allow guests to join this room
                 </label> <br/>
                 <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>
+
+                { unfederatable_section }
 
                 { room_colors_section }
 
