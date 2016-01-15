@@ -65,18 +65,44 @@ module.exports = React.createClass({
     onSubmit: function(ev) {
         ev.preventDefault();
 
-        var promise = this.props.onRegisterClick({
-            username: this.refs.username.value.trim(),
-            password: pwd1,
-            email: this.refs.email.value.trim()
-        });
+        // validate everything, in reverse order so
+        // the error that ends up being displayed
+        // is the one from the first invalid field.
+        // It's not super ideal that this just calls
+        // onError once for each invalid field.
+        this.validateField(FIELD_PASSWORD_CONFIRM);
+        this.validateField(FIELD_PASSWORD);
+        this.validateField(FIELD_USERNAME);
+        this.validateField(FIELD_EMAIL);
 
-        if (promise) {
-            ev.target.disabled = true;
-            promise.finally(function() {
-                ev.target.disabled = false;
+        if (this.allFieldsValid()) {
+            var promise = this.props.onRegisterClick({
+                username: this.refs.username.value.trim(),
+                password: this.refs.password.value.trim(),
+                email: this.refs.email.value.trim()
             });
+
+            if (promise) {
+                ev.target.disabled = true;
+                promise.finally(function() {
+                    ev.target.disabled = false;
+                });
+            }
         }
+    },
+
+    /**
+     * Returns true if all fields were valid last time
+     * they were validated.
+     */
+    allFieldsValid: function() {
+        var keys = Object.keys(this.state.fieldValid);
+        for (var i = 0; i < keys.length; ++i) {
+            if (this.state.fieldValid[keys[i]] == false) {
+                return false;
+            }
+        }
+        return true;
     },
 
     validateField: function(field_id) {
@@ -120,24 +146,17 @@ module.exports = React.createClass({
                     this.markFieldValid(
                         field_id,
                         false,
-                        "RegistrationForm.ERR_PASSWORD_MISSING"
-                    );
-                }
-                break;
-            case FIELD_PASSWORD_CONFIRM:
-                if (pwd1 == '') {
-                    this.markFieldValid(
-                        field_id, false,
-                        "RegistrationForm.ERR_PASSWORD_MISSING"
-                    );
-                } else if (pwd1 != pwd2) {
-                    this.markFieldValid(
-                        field_id, false,
                         "RegistrationForm.ERR_PASSWORD_LENGTH"
                     );
                 } else {
                     this.markFieldValid(field_id, true);
                 }
+                break;
+            case FIELD_PASSWORD_CONFIRM:
+                this.markFieldValid(
+                    field_id, pwd1 == pwd2,
+                    "RegistrationForm.ERR_PASSWORD_MISMATCH"
+                );
                 break;
         }
     },
