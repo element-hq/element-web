@@ -1191,12 +1191,12 @@ module.exports = React.createClass({
         // so we have to do it via JS instead.  In this implementation we cap the height by putting
         // a maxHeight on the underlying remote video tag.
 
-        // header + footer + status + give us at least 100px of scrollback at all times.
+        // header + footer + status + give us at least 120px of scrollback at all times.
         var auxPanelMaxHeight = window.innerHeight -
                 (83 + // height of RoomHeader
                  36 + // height of the status area
                  72 + // minimum height of the message compmoser
-                 100); // amount of desired scrollback
+                 120); // amount of desired scrollback
 
         // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
         // but it's better than the video going missing entirely
