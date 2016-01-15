@@ -161,7 +161,6 @@ module.exports = React.createClass({
 
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
-        var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
 
         var join_rule = this.props.room.currentState.getStateEvents('m.room.join_rules', '');
         if (join_rule) join_rule = join_rule.getContent().join_rule;
@@ -319,15 +318,6 @@ module.exports = React.createClass({
                 </div>
             </div>;
 
-        var change_avatar;
-        if (can_set_room_avatar) {
-            change_avatar =
-                <div>
-                    <h3>Room Icon</h3>
-                    <ChangeAvatar room={this.props.room} />
-                </div>;
-        }
-
         var user_levels_section;
         if (user_levels.length) {
             user_levels_section =
@@ -369,7 +359,7 @@ module.exports = React.createClass({
         var create_event = this.props.room.currentState.getStateEvents('m.room.create', '');
         var unfederatable_section;
         if (create_event.getContent()["m.federate"] === false) {
-             unfederatable_section = <div>Ths room is not accessible by remote Matrix servers</div>.
+             unfederatable_section = <div>Ths room is not accessible by remote Matrix servers.</div>
         }
 
         // TODO: support editing custom events_levels
@@ -446,8 +436,6 @@ module.exports = React.createClass({
                 </div>
 
                 { banned_users_section }
-
-                { change_avatar }
 
             </div>
         );
