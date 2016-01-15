@@ -142,16 +142,16 @@ module.exports = React.createClass({
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
 
-        if (this.refs.messagePanel) {
-            // disconnect the D&D event listeners from the message panel. This
-            // is really just for hygiene - the messagePanel is going to be
+        if (this.refs.roomView) {
+            // disconnect the D&D event listeners from the room view. This
+            // is really just for hygiene - we're going to be
             // deleted anyway, so it doesn't matter if the event listeners
             // don't get cleaned up.
-            var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
-            messagePanel.removeEventListener('drop', this.onDrop);
-            messagePanel.removeEventListener('dragover', this.onDragOver);
-            messagePanel.removeEventListener('dragleave', this.onDragLeaveOrEnd);
-            messagePanel.removeEventListener('dragend', this.onDragLeaveOrEnd);
+            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            roomView.removeEventListener('drop', this.onDrop);
+            roomView.removeEventListener('dragover', this.onDragOver);
+            roomView.removeEventListener('dragleave', this.onDragLeaveOrEnd);
+            roomView.removeEventListener('dragend', this.onDragLeaveOrEnd);
         }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
@@ -414,6 +414,14 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.onResize);
         this.onResize();
 
+        if (this.refs.roomView) {
+            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            roomView.addEventListener('drop', this.onDrop);
+            roomView.addEventListener('dragover', this.onDragOver);
+            roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
+            roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
+        }
+
         this._updateTabCompleteList(this.state.room);
     },
 
@@ -431,11 +439,6 @@ module.exports = React.createClass({
     _initialiseMessagePanel: function() {
         var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
         this.refs.messagePanel.initialised = true;
-
-        messagePanel.addEventListener('drop', this.onDrop);
-        messagePanel.addEventListener('dragover', this.onDragOver);
-        messagePanel.addEventListener('dragleave', this.onDragLeaveOrEnd);
-        messagePanel.addEventListener('dragend', this.onDragLeaveOrEnd);
 
         this.scrollToBottom();
         this.sendReadReceipt();
@@ -1439,7 +1442,7 @@ module.exports = React.createClass({
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
                                     <div className="mx_RoomView_fileDropTargetLabel" title="Drop File Here">
                                         <TintableSvg src="img/upload-big.svg" width="45" height="59"/><br/>
-                                        Drop File Here
+                                        Drop file here to upload
                                     </div>
                                  </div>;
             }
@@ -1540,7 +1543,7 @@ module.exports = React.createClass({
             );
 
             return (
-                <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") }>
+                <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") } ref="roomView">
                     <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                         editing={this.state.editingRoomSettings}
                         onSearchClick={this.onSearchClick}
@@ -1553,8 +1556,8 @@ module.exports = React.createClass({
                         onLeaveClick={
                             (myMember && myMember.membership === "join") ? this.onLeaveClick : null
                         } />
-                    { fileDropTarget }    
                     <div className="mx_RoomView_auxPanel" ref="auxPanel">
+                        { fileDropTarget }    
                         <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}
                             onResize={this.onChildResize} />
                         { conferenceCallNotification }
