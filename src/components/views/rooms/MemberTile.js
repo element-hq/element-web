@@ -156,7 +156,7 @@ module.exports = React.createClass({
         var av;
         if (member) {
             av = (
-                <MemberAvatar member={this.props.member} width={36} height={36} />
+                <MemberAvatar member={member} width={36} height={36} />
             );
         }
         else {

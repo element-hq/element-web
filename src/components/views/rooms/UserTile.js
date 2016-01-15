@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 
+var Avatar = require("../../../Avatar");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
 var dis = require('../../../dispatcher');
@@ -106,7 +107,7 @@ module.exports = React.createClass({
             );
         }
 
-        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
         if (this.props.showInvite) {
             // TODO
@@ -117,8 +118,8 @@ module.exports = React.createClass({
                     onClick={ this.props.onClick } onMouseEnter={ this.mouseEnter }
                     onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">
-                    <MemberAvatar member={null} width={36} height={36}
-                        customDisplayName={name} />
+                    <BaseAvatar width={36} height={36} name={name} idName={user.userId}
+                        url={ Avatar.avatarUrlForUser(user, 36, 36, "crop") } />
                 </div>
                 { nameEl }
             </div>

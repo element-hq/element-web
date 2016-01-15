@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 'use strict';
-
+var ContentRepo = require("matrix-js-sdk").ContentRepo;
 var MatrixClientPeg = require('./MatrixClientPeg');
 
 module.exports = {
@@ -33,6 +33,17 @@ module.exports = {
             // does not have enough info to build a RoomMember object for
             // the inviter.
             url = this.defaultAvatarUrlForString(member ? member.userId : '');
+        }
+        return url;
+    },
+
+    avatarUrlForUser: function(user, width, height, resizeMethod) {
+        var url = ContentRepo.getHttpUriForMxc(
+            MatrixClientPeg.get().getHomeserverUrl(), user.avatarUrl,
+            width, height, resizeMethod
+        );
+        if (!url || url.length === 0) {
+            return null;
         }
         return url;
     },
