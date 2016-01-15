@@ -359,7 +359,7 @@ module.exports = React.createClass({
         var create_event = this.props.room.currentState.getStateEvents('m.room.create', '');
         var unfederatable_section;
         if (create_event.getContent()["m.federate"] === false) {
-             unfederatable_section = <div>Ths room is not accessible by remote Matrix servers.</div>
+             unfederatable_section = <div className="mx_RoomSettings_powerLevel">Ths room is not accessible by remote Matrix servers.</div>
         }
 
         // TODO: support editing custom events_levels
@@ -369,17 +369,9 @@ module.exports = React.createClass({
             <div className="mx_RoomSettings">
                 <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label> <br/>
                 <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility == "shared"}/> Share message history with new users</label> <br/>
-                <label>
-                    <input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/>
-                    Allow guests to read messages in this room
-                </label> <br/>
-                <label>
-                    <input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/>
-                    Allow guests to join this room
-                </label> <br/>
+                <label><input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/> Allow guests to read messages in this room</label> <br/>
+                <label><input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/> Allow guests to join this room</label> <br/>
                 <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>
-
-                { unfederatable_section }
 
                 { room_colors_section }
 
@@ -388,48 +380,50 @@ module.exports = React.createClass({
                 <h3>Permissions</h3>
                 <div className="mx_RoomSettings_powerLevels mx_RoomSettings_settings">
                     <div className="mx_RoomSettings_powerLevel">
-                        The default level for new room members is
+                        <span className="mx_RoomSettings_powerLevelKey">The default role for new room members is </span>
                         <PowerSelector value={default_user_level} disabled={!can_change_levels || current_user_level < default_user_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        To send messages, you must be a
+                        <span className="mx_RoomSettings_powerLevelKey">To send messages, you must be a </span>
                         <PowerSelector value={send_level} disabled={!can_change_levels || current_user_level < send_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        To invite users into the room, you must be a
+                        <span className="mx_RoomSettings_powerLevelKey">To invite users into the room, you must be a </span>
                         <PowerSelector value={invite_level} disabled={!can_change_levels || current_user_level < invite_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        To configure the room (set room state), you must be a
+                        <span className="mx_RoomSettings_powerLevelKey">To configure the room, you must be a </span>
                         <PowerSelector value={state_level} disabled={!can_change_levels || current_user_level < state_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        To kick users, you must be a
+                        <span className="mx_RoomSettings_powerLevelKey">To kick users, you must be a </span>
                         <PowerSelector value={kick_level} disabled={!can_change_levels || current_user_level < kick_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        To ban users, you must be a
+                        <span className="mx_RoomSettings_powerLevelKey">To ban users, you must be a </span>
                         <PowerSelector value={ban_level} disabled={!can_change_levels || current_user_level < ban_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        To redact messages, you must be a
+                        <span className="mx_RoomSettings_powerLevelKey">To redact messages, you must be a </span>
                         <PowerSelector value={redact_level} disabled={!can_change_levels || current_user_level < redact_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
 
                     {Object.keys(events_levels).map(function(event_type, i) {
                         return (
                             <div className="mx_RoomSettings_powerLevel" key={event_type}>
-                                To send events of type <code>{ event_type }</code>, you must be a
+                                <span className="mx_RoomSettings_powerLevelKey">To send events of type <code>{ event_type }</code>, you must be a </span>
                                 <PowerSelector value={ events_levels[event_type] } disabled={true} onChange={this.onPowerLevelsChanged}/>
                             </div>
                         );
                     })}
+
+                { unfederatable_section }                    
                 </div>
 
                 <h3>Users</h3>
                 <div className="mx_RoomSettings_userLevels mx_RoomSettings_settings">
                     <div>
-                        You are a <PowerSelector room={ this.props.room } value={current_user_level} disabled={true}/>
+                        Your role in this room is currently <b><PowerSelector room={ this.props.room } value={current_user_level} disabled={true}/></b>.
                     </div>
 
                     { user_levels_section }
