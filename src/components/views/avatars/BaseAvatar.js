@@ -23,9 +23,9 @@ module.exports = React.createClass({
     displayName: 'BaseAvatar',
 
     propTypes: {
-        name: React.PropTypes.string.isRequired,
+        name: React.PropTypes.string.isRequired, // The name (first initial used as default)
         idName: React.PropTypes.string, // ID for generating hash colours
-        title: React.PropTypes.string,
+        title: React.PropTypes.string, // onHover title text
         url: React.PropTypes.string, // highest priority of them all
         urls: React.PropTypes.array, // [highest_priority, ... , lowest_priority]
         width: React.PropTypes.number,
@@ -95,7 +95,7 @@ module.exports = React.createClass({
     _getInitialLetter: function() {
         var name = this.props.name;
         var initial = name[0];
-        if (initial === '@' && name[1]) {
+        if ((initial === '@' || initial === '#') && name[1]) {
             initial = name[1];
         }
         return initial.toUpperCase();
@@ -107,21 +107,21 @@ module.exports = React.createClass({
         if (this.state.imageUrl === this.state.defaultImageUrl) {
             var initialLetter = this._getInitialLetter();
             return (
-                <span className="mx_MemberAvatar" {...this.props}>
-                    <span className="mx_MemberAvatar_initial" aria-hidden="true"
+                <span className="mx_BaseAvatar" {...this.props}>
+                    <span className="mx_BaseAvatar_initial" aria-hidden="true"
                             style={{ fontSize: (this.props.width * 0.65) + "px",
                                     width: this.props.width + "px",
                                     lineHeight: this.props.height + "px" }}>
                         { initialLetter }
                     </span>
-                    <img className="mx_MemberAvatar_image" src={this.state.imageUrl}
+                    <img className="mx_BaseAvatar_image" src={this.state.imageUrl}
                         title={this.props.title} onError={this.onError}
                         width={this.props.width} height={this.props.height} />
                 </span>
             );            
         }
         return (
-            <img className="mx_MemberAvatar mx_MemberAvatar_image" src={this.state.imageUrl}
+            <img className="mx_BaseAvatar mx_BaseAvatar_image" src={this.state.imageUrl}
                 onError={this.onError}
                 width={this.props.width} height={this.props.height}
                 title={this.props.title}

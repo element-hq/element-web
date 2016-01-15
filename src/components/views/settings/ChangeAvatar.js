@@ -111,7 +111,7 @@ module.exports = React.createClass({
         // Having just set an avatar we just display that since it will take a little
         // time to propagate through to the RoomAvatar.
         if (this.props.room && !this.avatarSet) {
-            avatarImg = <RoomAvatar room={this.props.room} width='240' height='240' resizeMethod='crop' />;
+            avatarImg = <RoomAvatar room={this.props.room} width={240} height={240} resizeMethod='crop' />;
         } else {
             var style = {
                 maxWidth: 240,

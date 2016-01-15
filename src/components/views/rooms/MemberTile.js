@@ -151,14 +151,26 @@ module.exports = React.createClass({
         }
 
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+
+        var av;
+        if (member) {
+            av = (
+                <MemberAvatar member={this.props.member} width={36} height={36} />
+            );
+        }
+        else {
+            av = (
+                <BaseAvatar name={name} width={36} height={36} />
+            );
+        }
 
         return (
             <div className={mainClassName} title={ this.getPowerLabel() }
                     onClick={ this.onClick } onMouseEnter={ this.mouseEnter }
                     onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">
-                    <MemberAvatar member={this.props.member} width={36} height={36}
-                        customDisplayName={this.props.customDisplayName} />
+                    {av}
                 </div>
                 { nameEl }
             </div>
