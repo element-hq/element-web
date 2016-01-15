@@ -17,7 +17,14 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var Velocity = require('velocity-animate');
+require('velocity-ui-pack');
 var sdk = require('../../../index');
+
+var FIELD_EMAIL = 'field_email';
+var FIELD_USERNAME = 'field_username';
+var FIELD_PASSWORD = 'field_password';
+var FIELD_PASSWORD_CONFIRM = 'field_password_confirm';
 
 /**
  * A pure UI component which displays a registration form.
@@ -50,30 +57,13 @@ module.exports = React.createClass({
             email: this.props.defaultEmail,
             username: this.props.defaultUsername,
             password: null,
-            passwordConfirm: null
+            passwordConfirm: null,
+            fieldValid: {}
         };
     },
 
     onSubmit: function(ev) {
         ev.preventDefault();
-
-        var pwd1 = this.refs.password.value.trim();
-        var pwd2 = this.refs.passwordConfirm.value.trim()
-
-        var errCode;
-        if (!pwd1 || !pwd2) {
-            errCode = "RegistrationForm.ERR_PASSWORD_MISSING";
-        }
-        else if (pwd1 !== pwd2) {
-            errCode = "RegistrationForm.ERR_PASSWORD_MISMATCH";
-        }
-        else if (pwd1.length < this.props.minPasswordLength) {
-            errCode = "RegistrationForm.ERR_PASSWORD_LENGTH";
-        }
-        if (errCode) {
-            this.props.onError(errCode);
-            return;
-        }
 
         var promise = this.props.onRegisterClick({
             username: this.refs.username.value.trim(),
@@ -89,13 +79,110 @@ module.exports = React.createClass({
         }
     },
 
+    validateField: function(field_id) {
+        var pwd1 = this.refs.password.value.trim();
+        var pwd2 = this.refs.passwordConfirm.value.trim()
+
+        switch (field_id) {
+            case FIELD_EMAIL:
+                this.markFieldValid(
+                    field_id,
+                    this.refs.email.value == '' || !!this.refs.email.value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i),
+                    "RegistrationForm.ERR_EMAIL_INVALID"
+                );
+                break;
+            case FIELD_USERNAME:
+                // XXX: SPEC-1
+                if (encodeURIComponent(this.refs.username.value) != this.refs.username.value) {
+                    this.markFieldValid(
+                        field_id,
+                        false,
+                        "RegistrationForm.ERR_USERNAME_INVALID"
+                    );
+                } else if (this.refs.username.value == '') {
+                    this.markFieldValid(
+                        field_id,
+                        false,
+                        "RegistrationForm.ERR_USERNAME_BLANK"
+                    );
+                } else {
+                    this.markFieldValid(field_id, true);
+                }
+                break;
+            case FIELD_PASSWORD:
+                if (pwd1 == '') {
+                    this.markFieldValid(
+                        field_id,
+                        false,
+                        "RegistrationForm.ERR_PASSWORD_MISSING"
+                    );
+                } else if (pwd1.length < this.props.minPasswordLength) {
+                    this.markFieldValid(
+                        field_id,
+                        false,
+                        "RegistrationForm.ERR_PASSWORD_MISSING"
+                    );
+                }
+                break;
+            case FIELD_PASSWORD_CONFIRM:
+                if (pwd1 == '') {
+                    this.markFieldValid(
+                        field_id, false,
+                        "RegistrationForm.ERR_PASSWORD_MISSING"
+                    );
+                } else if (pwd1 != pwd2) {
+                    this.markFieldValid(
+                        field_id, false,
+                        "RegistrationForm.ERR_PASSWORD_LENGTH"
+                    );
+                } else {
+                    this.markFieldValid(field_id, true);
+                }
+                break;
+        }
+    },
+
+    markFieldValid: function(field_id, val, error_code) {
+        var fieldValid = this.state.fieldValid;
+        fieldValid[field_id] = val;
+        this.setState({fieldValid: fieldValid});
+        if (!val) {
+            Velocity(this.fieldElementById(field_id), "callout.shake", 300);
+            this.props.onError(error_code);
+        }
+    },
+
+    fieldElementById(field_id) {
+        switch (field_id) {
+            case FIELD_EMAIL:
+                return this.refs.email;
+            case FIELD_USERNAME:
+                return this.refs.username;
+            case FIELD_PASSWORD:
+                return this.refs.password;
+            case FIELD_PASSWORD_CONFIRM:
+                return this.refs.passwordConfirm;
+        }
+    },
+
+    _styleField: function(field_id, baseStyle) {
+        var style = baseStyle || {};
+        if (this.state.fieldValid[field_id] === false) {
+            style['borderColor'] = 'red';
+        }
+        return style;
+    },
+
     render: function() {
+        var self = this;
         var emailSection, registerButton;
         if (this.props.showEmail) {
             emailSection = (
                 <input className="mx_Login_field" type="text" ref="email"
                     autoFocus={true} placeholder="Email address"
-                    defaultValue={this.state.email} />
+                    defaultValue={this.state.email}
+                    style={this._styleField(FIELD_EMAIL)}
+                    onBlur={function() {self.validateField(FIELD_EMAIL)}} />
             );
         }
         if (this.props.onRegisterClick) {
@@ -111,13 +198,19 @@ module.exports = React.createClass({
                     <br />
                     <input className="mx_Login_field" type="text" ref="username"
                         placeholder="User name" defaultValue={this.state.username}
+                        style={this._styleField(FIELD_USERNAME)}
+                        onBlur={function() {self.validateField(FIELD_USERNAME)}}
                         disabled={this.props.disableUsernameChanges} />
                     <br />
                     <input className="mx_Login_field" type="password" ref="password"
+                        style={this._styleField(FIELD_PASSWORD)}
+                        onBlur={function() {self.validateField(FIELD_PASSWORD)}}
                         placeholder="Password" defaultValue={this.state.password} />
                     <br />
                     <input className="mx_Login_field" type="password" ref="passwordConfirm"
                         placeholder="Confirm password"
+                        style={this._styleField(FIELD_PASSWORD_CONFIRM)}
+                        onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM)}}
                         defaultValue={this.state.passwordConfirm} />
                     <br />
                     {registerButton}
