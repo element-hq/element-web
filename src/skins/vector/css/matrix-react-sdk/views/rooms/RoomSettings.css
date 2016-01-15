@@ -95,6 +95,13 @@ limitations under the License.
     margin-bottom: 20px;
 }
 
+.mx_RoomSettings .mx_RoomSettings_addAlias,
+.mx_RoomSettings .mx_RoomSettings_deleteAlias {
+    display: table-cell;
+    padding-left: 0.5em;
+    pointer: cursor;
+}
+
 .mx_RoomSettings_editable {
     border: 0px;
     border-bottom: 1px solid #c7c7c7;
