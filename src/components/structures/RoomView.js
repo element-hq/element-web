@@ -79,7 +79,7 @@ module.exports = React.createClass({
             hasUnsentMessages: this._hasUnsentMessages(room),
             callState: null,
             guestsCanJoin: false,
-            readMarkerEventId: room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId),
+            readMarkerEventId: room ? room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId) : null,
             readMarkerGhostEventId: undefined
         }
     },
