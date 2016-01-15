@@ -32,6 +32,7 @@ module.exports.components['structures.RoomView'] = require('./components/structu
 module.exports.components['structures.ScrollPanel'] = require('./components/structures/ScrollPanel');
 module.exports.components['structures.UploadBar'] = require('./components/structures/UploadBar');
 module.exports.components['structures.UserSettings'] = require('./components/structures/UserSettings');
+module.exports.components['views.avatars.BaseAvatar'] = require('./components/views/avatars/BaseAvatar');
 module.exports.components['views.avatars.MemberAvatar'] = require('./components/views/avatars/MemberAvatar');
 module.exports.components['views.avatars.RoomAvatar'] = require('./components/views/avatars/RoomAvatar');
 module.exports.components['views.create_room.CreateRoomButton'] = require('./components/views/create_room/CreateRoomButton');
