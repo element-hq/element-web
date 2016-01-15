@@ -52,7 +52,7 @@ a:visited {
     color: #76cfa6;
 }
 
-input[type=text]:focus, textarea:focus, .mx_RoomSettings textarea:focus {
+input[type=text]:focus, textarea:focus {
     border: 1px solid #76CFA6;
     outline: none;
     box-shadow: none;
