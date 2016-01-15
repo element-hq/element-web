@@ -275,14 +275,24 @@ module.exports = React.createClass({
                 <Loader />
             );
         } else {
-            var SearchableEntityList = sdk.getComponent("rooms.SearchableEntityList");
+            // TODO: Cache this calculation
             var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+            var allUsers = MatrixClientPeg.get().getUsers();
+            // only add Users if they don't exist in the member list
+            allUsers = allUsers.filter(function(u) {
+                return room.getMember(u.userId) === null;
+            });
+
+            var SearchableEntityList = sdk.getComponent("rooms.SearchableEntityList");
+            
             return (
                 <SearchableEntityList searchPlaceholderText={"Invite / Search"}
                     onSubmit={this.onInvite}
                     entities={
                         Entities.fromRoomMembers(
                             room.currentState.getMembers() // ALLLLL OF THEM
+                        ).concat(
+                            Entities.fromUsers(allUsers)
                         )
                     } />
             );

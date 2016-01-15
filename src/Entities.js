@@ -63,7 +63,8 @@ class UserEntity extends Entity {
     }
 
     matches(queryString) {
-        return this.model.displayName.toLowerCase().indexOf(queryString.toLowerCase()) === 0;
+        var name = this.model.displayName || this.model.userId;
+        return name.toLowerCase().indexOf(queryString.toLowerCase()) === 0;
     }
 }
 

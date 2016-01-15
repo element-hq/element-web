@@ -73,6 +73,7 @@ module.exports.components['views.rooms.RoomTile'] = require('./components/views/
 module.exports.components['views.rooms.SearchableEntityList'] = require('./components/views/rooms/SearchableEntityList');
 module.exports.components['views.rooms.SearchResultTile'] = require('./components/views/rooms/SearchResultTile');
 module.exports.components['views.rooms.TabCompleteBar'] = require('./components/views/rooms/TabCompleteBar');
+module.exports.components['views.rooms.UserTile'] = require('./components/views/rooms/UserTile');
 module.exports.components['views.settings.ChangeAvatar'] = require('./components/views/settings/ChangeAvatar');
 module.exports.components['views.settings.ChangeDisplayName'] = require('./components/views/settings/ChangeDisplayName');
 module.exports.components['views.settings.ChangePassword'] = require('./components/views/settings/ChangePassword');
