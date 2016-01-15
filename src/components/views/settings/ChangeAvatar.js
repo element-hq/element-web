@@ -39,7 +39,7 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             showUploadSection: true,
-            className: "mx_Dialog_content", // FIXME - shouldn't be this by default
+            className: "",
             width: 80,
             height: 80,
         };

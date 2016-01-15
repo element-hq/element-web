@@ -213,7 +213,7 @@ module.exports = React.createClass({
             if (this.props.room) {
                 if (this.props.editing) {
                     roomAvatar = (
-                        <div onClick={ this.onAvatarPickerClick }>
+                        <div className="mx_RoomHeader_avatarPicker" onClick={ this.onAvatarPickerClick }>
                             <ChangeAvatar room={this.props.room} showUploadSection={false} width={48} height={48} />
                             <div className="mx_RoomHeader_avatarPicker_edit">
                                 <label htmlFor="avatarInput" ref="file_label">
@@ -228,7 +228,9 @@ module.exports = React.createClass({
                 }
                 else {
                     roomAvatar = (
-                        <RoomAvatar room={this.props.room} width="48" height="48" />
+                        <div onClick={this.props.onSettingsClick}>
+                            <RoomAvatar room={this.props.room} width="48" height="48"/>
+                        </div>
                     );
                 }
             }
@@ -279,7 +281,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="mx_RoomHeader">
+            <div className={ "mx_RoomHeader " + (this.props.editing ? "mx_RoomHeader_editing" : "") }>
                 { header }
             </div>
         );
