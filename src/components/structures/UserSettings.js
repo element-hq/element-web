@@ -21,6 +21,7 @@ var dis = require("../../dispatcher");
 var q = require('q');
 var version = require('../../../package.json').version;
 var UserSettingsStore = require('../../UserSettingsStore');
+var GeminiScrollbar = require('react-gemini-scrollbar');
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
@@ -202,6 +203,8 @@ module.exports = React.createClass({
             <div className="mx_UserSettings">
                 <RoomHeader simpleHeader="Settings" />
 
+                <GeminiScrollbar className="mx_UserSettings_body" autoshow={true}>
+
                 <h2>Profile</h2>
 
                 <div className="mx_UserSettings_section">
@@ -286,6 +289,8 @@ module.exports = React.createClass({
                         Version {this.state.clientVersion}
                     </div>
                 </div>
+
+                </GeminiScrollbar>
             </div>
         );
     }
