@@ -71,6 +71,13 @@ module.exports = React.createClass({
         }
     },
 
+    componentDidUpdate: function(newProps) {
+        this.value = this.props.initialValue;
+        if (this.refs.editable_div) {
+            this.showPlaceholder(!this.value);
+        }        
+    },
+
     showPlaceholder: function(show) {
         if (show) {
             this.refs.editable_div.textContent = this.props.placeholder;
@@ -89,6 +96,11 @@ module.exports = React.createClass({
         return this.value;
     },
 
+    setValue: function(value) {
+        this.value = value;
+        this.showPlaceholder(!this.value);        
+    },
+
     edit: function() {
         this.setState({
             phase: this.Phases.Edit,
@@ -99,6 +111,8 @@ module.exports = React.createClass({
         this.setState({
             phase: this.Phases.Display,
         });
+        this.value = this.props.initialValue;
+        this.showPlaceholder(!this.value);
         this.onValueChanged(false);
     },
 
@@ -110,9 +124,7 @@ module.exports = React.createClass({
         // console.log("keyDown: textContent=" + ev.target.textContent + ", value=" + this.value + ", placeholder=" + this.placeholder);
         
         if (this.placeholder) {
-            if (ev.keyCode !== KEY_SHIFT && !ev.metaKey && !ev.ctrlKey && !ev.altKey && ev.keyCode !== KEY_WINDOWS && ev.keyCode !== KEY_TAB) {
-                this.showPlaceholder(false);
-            }
+            this.showPlaceholder(false);
         }
 
         if (ev.key == "Enter") {
@@ -182,7 +194,9 @@ module.exports = React.createClass({
         if (this.props.blurToCancel)
             this.cancelEdit();
         else
-            this.onFinish(ev)
+            this.onFinish(ev);
+
+        this.showPlaceholder(!this.value);
     },
 
     render: function() {

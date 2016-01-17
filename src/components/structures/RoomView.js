@@ -887,6 +887,24 @@ module.exports = React.createClass({
             old_history_visibility = "shared";
         }
 
+        var old_guest_read = (old_history_visibility === "world_readable");
+
+        var old_guest_join = this.state.room.currentState.getStateEvents('m.room.guest_access', '');
+        if (old_guest_join) {
+            old_guest_join = (old_guest_join.getContent().guest_access === "can_join");
+        }
+        else {
+            old_guest_join = (old_guest_join.getContent().guest_access === "forbidden");            
+        }
+
+        var old_canonical_alias = this.state.room.currentState.getStateEvents('m.room.canonical_alias', '');
+        if (old_canonical_alias) {
+            old_canonical_alias = old_canonical_alias.getContent().alias;
+        }
+        else {
+            old_canonical_alias = "";   
+        }
+
         var deferreds = [];
 
         if (old_name != newVals.name && newVals.name != undefined) {
@@ -930,6 +948,49 @@ module.exports = React.createClass({
             );
         }
 
+        if (newVals.alias_operations) {
+            var oplist = [];
+            for (var i = 0; i < newVals.alias_operations.length; i++) {
+                var alias_operation = newVals.alias_operations[i];
+                switch (alias_operation.type) {
+                    case 'put':
+                        oplist.push(
+                            MatrixClientPeg.get().createAlias(
+                                alias_operation.alias, this.state.room.roomId
+                            )
+                        );
+                        break;
+                    case 'delete':
+                        oplist.push(
+                            MatrixClientPeg.get().deleteAlias(
+                                alias_operation.alias
+                            )
+                        );
+                        break;
+                    default:
+                        console.log("Unknown alias operation, ignoring: " + alias_operation.type);
+                }
+            }
+
+            if (oplist.length) {
+                var deferred = oplist[0];
+                oplist.splice(1).forEach(function (f) {
+                    deferred = deferred.then(f);
+                });
+                deferreds.push(deferred);
+            }
+        }
+
+        if (old_canonical_alias !== newVals.canonical_alias) {
+            deferreds.push(
+                MatrixClientPeg.get().sendStateEvent(
+                    this.state.room.roomId, "m.room.canonical_alias", {
+                        alias: newVals.canonical_alias
+                    }, ""
+                )
+            );            
+        }
+
         if (newVals.color_scheme) {
             deferreds.push(
                 MatrixClientPeg.get().setRoomAccountData(
@@ -938,26 +999,43 @@ module.exports = React.createClass({
             );
         }
 
-        deferreds.push(
-            MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
-                allowRead: newVals.guest_read,
-                allowJoin: newVals.guest_join
-            })
-        );
+        if (old_guest_read != newVals.guest_read ||
+            old_guest_join != newVals.guest_join)
+        {
+            deferreds.push(
+                MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
+                    allowRead: newVals.guest_read,
+                    allowJoin: newVals.guest_join
+                })
+            );
+        }
 
         if (deferreds.length) {
             var self = this;
-            q.all(deferreds).fail(function(err) {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Failed to set state",
-                    description: err.toString()
+            q.allSettled(deferreds).then(
+                function(results) {
+                    var fails = results.filter(function(result) { return result.state !== "fulfilled" });
+                    if (fails.length) {
+                        fails.forEach(function(result) {
+                            console.error(result.reason);
+                        });
+                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Failed to set state",
+                            description: fails.map(function(result) { return result.reason }).join("\n"),
+                        });
+                        self.refs.room_settings.resetState();
+                    }
+                    else {
+                        self.setState({
+                            editingRoomSettings: false
+                        });
+                    }
+                }).finally(function() {
+                    self.setState({
+                        uploadingRoomSettings: false,
+                    });
                 });
-            }).finally(function() {
-                self.setState({
-                    uploadingRoomSettings: false,
-                });
-            });
         } else {
             this.setState({
                 editingRoomSettings: false,
@@ -1025,16 +1103,17 @@ module.exports = React.createClass({
 
     onSaveClick: function() {
         this.setState({
-            editingRoomSettings: false,
             uploadingRoomSettings: true,
         });
 
         this.uploadNewState({
             name: this.refs.header.getRoomName(),
-            topic: this.refs.room_settings.getTopic(),
+            topic: this.refs.header.getTopic(),
             join_rule: this.refs.room_settings.getJoinRules(),
             history_visibility: this.refs.room_settings.getHistoryVisibility(),
             power_levels: this.refs.room_settings.getPowerLevels(),
+            alias_operations: this.refs.room_settings.getAliasOperations(),
+            canonical_alias: this.refs.room_settings.getCanonicalAlias(),
             guest_join: this.refs.room_settings.canGuestsJoin(),
             guest_read: this.refs.room_settings.canGuestsRead(),
             color_scheme: this.refs.room_settings.getColorScheme(),
