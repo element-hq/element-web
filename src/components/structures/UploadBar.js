@@ -57,7 +57,7 @@ module.exports = React.createClass({displayName: 'UploadBar',
             }
         }
         if (!upload) {
-            upload = uploads[0];
+            return <div />
         }
 
         var innerProgressStyle = {
