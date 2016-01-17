@@ -99,7 +99,7 @@ limitations under the License.
 .mx_RoomSettings .mx_RoomSettings_deleteAlias {
     display: table-cell;
     padding-left: 0.5em;
-    pointer: cursor;
+    cursor: pointer;
 }
 
 .mx_RoomSettings_editable {
