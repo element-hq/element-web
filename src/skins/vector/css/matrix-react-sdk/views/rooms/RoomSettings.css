@@ -47,6 +47,7 @@ limitations under the License.
     margin-bottom: 10px;
 }
 
+/*
 .mx_RoomSettings input,
 .mx_RoomSettings textarea  {
     border-radius: 3px;
@@ -55,6 +56,11 @@ limitations under the License.
     font-size: 13px;
     padding: 9px;
     margin-top: 6px;
+}
+*/
+
+.mx_RoomSettings .mx_RoomSettings_tags input[type="checkbox"] {
+    margin-left: 1em;
 }
 
 .mx_RoomSettings .mx_RoomSettings_roomColor {
@@ -132,10 +138,6 @@ limitations under the License.
 
 .mx_RoomSettings .mx_RoomAvatar {
     border-radius: 120px;
-}
-
-.mx_RoomSettings input[type="file"] {
-    border: none;
 }
 
 .mx_RoomSettings_buttons {
