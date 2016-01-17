@@ -88,12 +88,19 @@ module.exports = React.createClass({
         }
         aliases[domain] = aliases[domain] || [];
 
+        var tags = {};
+        Object.keys(this.props.room.tags).forEach(function(tagName) {
+            tags[tagName] = {};
+        });
+
         return {
             power_levels_changed: false,
             color_scheme_changed: false,
             color_scheme_index: room_color_index,
             aliases_changed: false,
             aliases: aliases,
+            tags_changed: false,
+            tags: tags,
         };
     },
 
@@ -298,6 +305,28 @@ module.exports = React.createClass({
         return (alias.match(/^#([^\/:,]+?):(.+)$/) && encodeURI(alias) === alias);
     },
 
+    onTagChange: function(tagName, event) {
+        if (event.target.checked) {
+            if (tagName === 'm.favourite') {
+                delete this.state.tags['m.lowpriority'];
+            }
+            else if (tagName === 'm.lowpriority') {
+                delete this.state.tags['m.favourite'];
+            }
+
+            this.state.tags[tagName] = this.state.tags[tagName] || {};
+        }
+        else {
+            delete this.state.tags[tagName];
+        }
+
+        // XXX: hacky say to deep-edit state
+        this.setState({
+            tags: this.state.tags,
+            tags_changed: true
+        });
+    },
+
     render: function() {
         // TODO: go through greying out things you don't have permission to change
         // (or turning them into informative stuff)
@@ -379,6 +408,12 @@ module.exports = React.createClass({
             room_avatar_level = events_levels['m.room.canonical_alias'];
         }
         var can_set_canonical_alias = current_user_level >= canonical_alias_level;
+
+        var tag_level = state_default;
+        if (events_levels['m.tag'] !== undefined) {
+            tag_level = events_levels['m.tag'];
+        }
+        var can_set_tag = current_user_level >= tag_level;
 
         var self = this;
 
@@ -557,6 +592,33 @@ module.exports = React.createClass({
         // TODO: support editing custom events_levels
         // TODO: support editing custom user_levels
 
+        var tags = [
+            { name: "m.favourite", label: "Favourite", ref: "tag_favourite" },
+            { name: "m.lowpriority", label: "Low priority", ref: "tag_lowpriority" },
+        ];
+
+        Object.keys(this.state.tags).sort().forEach(function(tagName) {
+            if (tagName !== 'm.favourite' && tagName !== 'm.lowpriority') {
+                tags.push({ name: tagName, label: tagName });
+            }
+        });
+
+        var tags_section = 
+            <div>
+                This room is tagged as
+                { can_set_tag ?
+                    tags.map(function(tag, i) {
+                        return (<label key={ i }>
+                                    <input type="checkbox"
+                                           ref={ tag.ref }
+                                           checked={ tag.name in self.state.tags }
+                                           onChange={ self.onTagChange.bind(self, tag.name) }/>
+                                    { tag.label }
+                                </label>);
+                    }) : tags.map(function(tag) { return tag.label; }).join(", ")
+                }
+            </div>
+
         return (
             <div className="mx_RoomSettings">
                 <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label> <br/>
@@ -564,6 +626,8 @@ module.exports = React.createClass({
                 <label><input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/> Allow guests to read messages in this room</label> <br/>
                 <label><input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/> Allow guests to join this room</label> <br/>
                 <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>
+
+                { tags_section }
 
                 { room_colors_section }
 
