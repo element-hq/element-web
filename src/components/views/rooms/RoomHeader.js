@@ -155,7 +155,7 @@ module.exports = React.createClass({
 
                 // calculate permissions.  XXX: this should be done on mount or something, and factored out with RoomSettings
                 var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
-                var events_levels = power_levels.events || {};
+                var events_levels = (power_levels ? power_levels.events : {}) || {};
                 var user_id = MatrixClientPeg.get().credentials.userId;
 
                 if (power_levels) {
@@ -169,20 +169,21 @@ module.exports = React.createClass({
                     var user_levels = [];
                     var current_user_level = 0;
                 }
+                var state_default = parseInt((power_levels ? power_levels.state_default : 0) || 0);
 
-                var room_avatar_level = parseInt(power_levels.state_default || 0);
+                var room_avatar_level = state_default;
                 if (events_levels['m.room.avatar'] !== undefined) {
                     room_avatar_level = events_levels['m.room.avatar'];
                 }
                 var can_set_room_avatar = current_user_level >= room_avatar_level;
 
-                var room_name_level = parseInt(power_levels.state_default || 0);
+                var room_name_level = state_default;
                 if (events_levels['m.room.name'] !== undefined) {
                     room_name_level = events_levels['m.room.name'];
                 }
                 var can_set_room_name = current_user_level >= room_name_level;
 
-                var room_topic_level = parseInt(power_levels.state_default || 0);
+                var room_topic_level = state_default;
                 if (events_levels['m.room.topic'] !== undefined) {
                     room_topic_level = events_levels['m.room.topic'];
                 }

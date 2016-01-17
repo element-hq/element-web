@@ -79,7 +79,7 @@ module.exports = React.createClass({
             hasUnsentMessages: this._hasUnsentMessages(room),
             callState: null,
             guestsCanJoin: false,
-            readMarkerEventId: room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId),
+            readMarkerEventId: room ? room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId) : undefined,
             readMarkerGhostEventId: undefined
         }
     },
@@ -894,7 +894,7 @@ module.exports = React.createClass({
             old_guest_join = (old_guest_join.getContent().guest_access === "can_join");
         }
         else {
-            old_guest_join = (old_guest_join.getContent().guest_access === "forbidden");            
+            old_guest_join = false;
         }
 
         var old_canonical_alias = this.state.room.currentState.getStateEvents('m.room.canonical_alias', '');
@@ -1337,6 +1337,13 @@ module.exports = React.createClass({
         }
     },
 
+    showSettings: function(show) {
+        // XXX: this is a bit naughty; we should be doing this via props
+        if (show) {
+            this.setState({editingRoomSettings: true});
+        }
+    },
+
     render: function() {
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         var MessageComposer = sdk.getComponent('rooms.MessageComposer');
@@ -1487,7 +1494,7 @@ module.exports = React.createClass({
 
             var aux = null;
             if (this.state.editingRoomSettings) {
-                aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
+                aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
             }
             else if (this.state.uploadingRoomSettings) {
                 var Loader = sdk.getComponent("elements.Spinner");                

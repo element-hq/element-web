@@ -39,9 +39,16 @@ module.exports = React.createClass({
 
     propTypes: {
         room: React.PropTypes.object.isRequired,
+        onSaveClick: React.PropTypes.func,
+        onCancelClick: React.PropTypes.func,
     },
 
     componentDidMount: function() {
+        // XXX: dirty hack to gutwrench to focus on the invite box
+        if (this.props.room.getJoinedMembers().length == 1) {
+            var inviteBox = document.getElementById("mx_MemberList_invite");
+            if (inviteBox) setTimeout(function() { inviteBox.focus(); }, 0);
+        }
     },
 
     getInitialState: function() {
@@ -310,7 +317,7 @@ module.exports = React.createClass({
             guest_access = guest_access.getContent().guest_access;
         }
 
-        var events_levels = power_levels.events || {};
+        var events_levels = (power_levels ? power_levels.events : {}) || {};
 
         var user_id = MatrixClientPeg.get().credentials.userId;
 
@@ -359,13 +366,15 @@ module.exports = React.createClass({
             var can_change_levels = false;
         }
 
-        var room_aliases_level = parseInt(power_levels.state_default || 0);
+        var state_default = (parseInt(power_levels ? power_levels.state_default : 0) || 0);
+
+        var room_aliases_level = state_default;
         if (events_levels['m.room.aliases'] !== undefined) {
             room_avatar_level = events_levels['m.room.aliases'];
         }
         var can_set_room_aliases = current_user_level >= room_aliases_level;
 
-        var canonical_alias_level = parseInt(power_levels.state_default || 0);
+        var canonical_alias_level = state_default;
         if (events_levels['m.room.canonical_alias'] !== undefined) {
             room_avatar_level = events_levels['m.room.canonical_alias'];
         }

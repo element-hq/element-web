@@ -61,7 +61,12 @@ module.exports = React.createClass({
     },
 
     componentWillReceiveProps: function(nextProps) {
-        this.value = nextProps.initialValue;
+        if (nextProps.initialValue !== this.props.initialValue) {
+            this.value = nextProps.initialValue;
+            if (this.refs.editable_div) {
+                this.showPlaceholder(!this.value);
+            }
+        }
     },
 
     componentDidMount: function() {
@@ -71,11 +76,7 @@ module.exports = React.createClass({
         }
     },
 
-    componentDidUpdate: function(newProps) {
-        this.value = this.props.initialValue;
-        if (this.refs.editable_div) {
-            this.showPlaceholder(!this.value);
-        }        
+    componentDidUpdate: function() {
     },
 
     showPlaceholder: function(show) {

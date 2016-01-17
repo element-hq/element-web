@@ -64,7 +64,7 @@ module.exports = React.createClass({
             collapse_lhs: false,
             collapse_rhs: false,
             ready: false,
-            width: 10000
+            width: 10000,
         };
         if (s.logged_in) {
             if (MatrixClientPeg.get().getRooms().length) {
@@ -304,7 +304,7 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_room':
-                this._viewRoom(payload.room_id);
+                this._viewRoom(payload.room_id, payload.show_settings);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -357,8 +357,29 @@ module.exports = React.createClass({
                 this.notifyNewScreen('settings');
                 break;
             case 'view_create_room':
-                this._setPage(this.PageTypes.CreateRoom);
-                this.notifyNewScreen('new');
+                //this._setPage(this.PageTypes.CreateRoom);
+                //this.notifyNewScreen('new');
+
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                var Loader = sdk.getComponent("elements.Spinner");
+                var modal = Modal.createDialog(Loader);
+
+                MatrixClientPeg.get().createRoom({
+                    preset: "private_chat"
+                }).done(function(res) {
+                    modal.close();
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: res.room_id,
+                        show_settings: true,
+                    });
+                }, function(err) {
+                    modal.close();
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Failed to create room",
+                        description: err.toString()
+                    });
+                });
                 break;
             case 'view_room_directory':
                 this._setPage(this.PageTypes.RoomDirectory);
@@ -399,7 +420,7 @@ module.exports = React.createClass({
         });
     },
 
-    _viewRoom: function(roomId) {
+    _viewRoom: function(roomId, showSettings) {
         // before we switch room, record the scroll state of the current room
         this._updateScrollMap();
 
@@ -436,6 +457,9 @@ module.exports = React.createClass({
         if (this.scrollStateMap[roomId]) {
             var scrollState = this.scrollStateMap[roomId];
             this.refs.roomView.restoreScrollState(scrollState);
+        }
+        if (this.refs.roomView && showSettings) {
+            this.refs.roomView.showSettings(true);
         }
     },
 
