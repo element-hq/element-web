@@ -218,6 +218,31 @@ module.exports = React.createClass({
         return ops;
     },
 
+    getTagOperations: function() {
+        if (!this.state.tags_changed) return undefined;
+
+        var ops = [];
+
+        var delta = {};
+        Object.keys(this.props.room.tags).forEach(function(oldTag) {
+            delta[oldTag] = delta[oldTag] || 0;
+            delta[oldTag]--;
+        });
+        Object.keys(this.state.tags).forEach(function(newTag) {
+            delta[newTag] = delta[newTag] || 0;
+            delta[newTag]++;
+        });
+        Object.keys(delta).forEach(function(tag) {
+            if (delta[tag] == 1) {
+                ops.push({ type: "put", tag: tag });
+            } else if (delta[tag] == -1) {
+                ops.push({ type: "delete", tag: tag });
+            }
+        });
+
+        return ops;
+    },
+
     onPowerLevelsChanged: function() {
         this.setState({
             power_levels_changed: true
@@ -604,7 +629,7 @@ module.exports = React.createClass({
         });
 
         var tags_section = 
-            <div>
+            <div className="mx_RoomSettings_tags">
                 This room is tagged as
                 { can_set_tag ?
                     tags.map(function(tag, i) {

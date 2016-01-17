@@ -981,6 +981,40 @@ module.exports = React.createClass({
             }
         }
 
+        if (newVals.tag_operations) {
+            // FIXME: should probably be factored out with alias_operations above
+            var oplist = [];
+            for (var i = 0; i < newVals.tag_operations.length; i++) {
+                var tag_operation = newVals.tag_operations[i];
+                switch (tag_operation.type) {
+                    case 'put':
+                        oplist.push(
+                            MatrixClientPeg.get().setRoomTag(
+                                this.props.roomId, tag_operation.tag, {}
+                            )
+                        );
+                        break;
+                    case 'delete':
+                        oplist.push(
+                            MatrixClientPeg.get().deleteRoomTag(
+                                this.props.roomId, tag_operation.tag
+                            )
+                        );
+                        break;
+                    default:
+                        console.log("Unknown tag operation, ignoring: " + tag_operation.type);
+                }
+            }
+
+            if (oplist.length) {
+                var deferred = oplist[0];
+                oplist.splice(1).forEach(function (f) {
+                    deferred = deferred.then(f);
+                });
+                deferreds.push(deferred);
+            }            
+        }
+
         if (old_canonical_alias !== newVals.canonical_alias) {
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
@@ -1113,6 +1147,7 @@ module.exports = React.createClass({
             history_visibility: this.refs.room_settings.getHistoryVisibility(),
             power_levels: this.refs.room_settings.getPowerLevels(),
             alias_operations: this.refs.room_settings.getAliasOperations(),
+            tag_operations: this.refs.room_settings.getTagOperations(),
             canonical_alias: this.refs.room_settings.getCanonicalAlias(),
             guest_join: this.refs.room_settings.canGuestsJoin(),
             guest_read: this.refs.room_settings.canGuestsRead(),
