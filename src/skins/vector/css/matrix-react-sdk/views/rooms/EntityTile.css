@@ -24,6 +24,7 @@ limitations under the License.
 .mx_EntityTile_invite {
     display: table-cell;
     vertical-align: middle;
+    margin-left: 10px;
 }
 
 .mx_EntityTile:hover .mx_MessageTimestamp {
