@@ -27,8 +27,7 @@ module.exports = React.createClass({
     displayName: 'MemberTile',
 
     propTypes: {
-        member: React.PropTypes.any, // RoomMember
-        customDisplayName: React.PropTypes.string, // for 3pid invites
+        member: React.PropTypes.any.isRequired, // RoomMember
     },
 
     getInitialState: function() {
@@ -36,7 +35,6 @@ module.exports = React.createClass({
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
-        if (!this.props.member) { return false; } // e.g. 3pid members
         if (
             this.member_last_modified_time === undefined ||
             this.member_last_modified_time < nextProps.member.getLastModifiedTime()
@@ -54,8 +52,6 @@ module.exports = React.createClass({
     },
 
     onClick: function(e) {
-        if (!this.props.member) { return; } // e.g. 3pid members
-
         dis.dispatch({
             action: 'view_user',
             member: this.props.member,
@@ -63,21 +59,11 @@ module.exports = React.createClass({
     },
 
     _getDisplayName: function() {
-        if (this.props.customDisplayName) {
-            return this.props.customDisplayName;
-        }
         return this.props.member.name;
     },
 
     getPowerLabel: function() {
-        if (!this.props.member) {
-            return this._getDisplayName();
-        }
-        var label = this.props.member.userId;
-        if (this.state.isTargetMod) {
-            label += " - Mod (" + this.props.member.powerLevelNorm + "%)";
-        }
-        return label;
+        return this.props.member.userId;
     },
 
     render: function() {
@@ -88,29 +74,21 @@ module.exports = React.createClass({
         var member = this.props.member;
         var name = this._getDisplayName();
         var active = -1;
-        var presenceState = (member && member.user) ? member.user.presence : null;
+        var presenceState = member.user ? member.user.presence : null;
 
-        var av;
-        if (member) {
-            av = (
-                <MemberAvatar member={member} width={36} height={36} />
-            );
+        var av = (
+            <MemberAvatar member={member} width={36} height={36} />
+        );
 
-            if (member.user) {
-                this.user_last_modified_time = member.user.getLastModifiedTime();
+        if (member.user) {
+            this.user_last_modified_time = member.user.getLastModifiedTime();
 
-                // FIXME: make presence data update whenever User.presence changes...
-                active = (
-                    (Date.now() - (member.user.lastPresenceTs - member.user.lastActiveAgo)) || -1
-                );
-            }
-            this.member_last_modified_time = member.getLastModifiedTime();
-        }
-        else {
-            av = (
-                <BaseAvatar name={name} width={36} height={36} />
+            // FIXME: make presence data update whenever User.presence changes...
+            active = (
+                (Date.now() - (member.user.lastPresenceTs - member.user.lastActiveAgo)) || -1
             );
         }
+        this.member_last_modified_time = member.getLastModifiedTime();
         
         return (
             <EntityTile {...this.props} presenceActiveAgo={active} presenceState={presenceState}

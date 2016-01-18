@@ -285,6 +285,8 @@ module.exports = React.createClass({
             // we shouldn't add them if the 3pid invite state key (token) is in the
             // member invite (content.third_party_invite.signed.token)
             var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+            var EntityTile = sdk.getComponent("rooms.EntityTile");
+            var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
             if (room) {
                 room.currentState.getStateEvents("m.room.third_party_invite").forEach(
                 function(e) {
@@ -294,9 +296,12 @@ module.exports = React.createClass({
                     if (memberEvent) {
                         return;
                     }
+                    var avatarJsx = (
+                        <BaseAvatar name={e.getContent().display_name} width={36} height={36} />
+                    );
                     memberList.push(
-                        <MemberTile key={e.getStateKey()} ref={e.getStateKey()}
-                            customDisplayName={e.getContent().display_name} />
+                        <EntityTile key={e.getStateKey()} ref={e.getStateKey()}
+                            name={e.getContent().display_name} avatarJsx={avatarJsx} />
                     )
                 })
             }
