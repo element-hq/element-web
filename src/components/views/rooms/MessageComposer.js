@@ -211,7 +211,7 @@ module.exports = React.createClass({
         }
         else if (ev.keyCode === KeyCode.UP || ev.keyCode === KeyCode.DOWN) {
             var oldSelectionStart = this.refs.textarea.selectionStart;
-            // Remember the keyboard because React will recycle the synthetic event
+            // Remember the keyCode because React will recycle the synthetic event
             var keyCode = ev.keyCode;
             // set a callback so we can see if the cursor position changes as
             // a result of this event. If it doesn't, we cycle history.
