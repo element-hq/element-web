@@ -319,6 +319,8 @@ module.exports = React.createClass({
         } else {
             // TODO: Cache this calculation
             var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+            if (!room) return <div></div>;
+
             var allUsers = MatrixClientPeg.get().getUsers();
             // only add Users if they are not joined
             allUsers = allUsers.filter(function(u) {
