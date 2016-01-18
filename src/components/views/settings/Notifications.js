@@ -331,9 +331,9 @@ module.exports = React.createClass({
         }
     },
     
-    // Determine whether a rule is in the PushRuleVectorState.ON category or in PushRuleVectorState.LOUD
-    // regardless of its enabled state.
-    _pushRuleVectorStateKind: function(rule) {
+    // Determine whether a content rule is in the PushRuleVectorState.ON category or in PushRuleVectorState.LOUD
+    // regardless of its enabled state. Returns undefined if it does not match these categories.
+    _contentRuleVectorStateKind: function(rule) {
         var stateKind;
  
         // Count tweaks to determine if it is a ON or LOUD rule
@@ -533,7 +533,7 @@ module.exports = React.createClass({
                 // when creating the new rule.
                 // Thus, this new rule will join the 'vectorContentRules' set. 
                 if (self.state.vectorContentRules.rules.length) {
-                    pushRuleVectorStateKind = self._pushRuleVectorStateKind(self.state.vectorContentRules.rules[0]);
+                    pushRuleVectorStateKind = self._contentRuleVectorStateKind(self.state.vectorContentRules.rules[0]);
                 }
                 else {
                     // ON is default
@@ -657,7 +657,7 @@ module.exports = React.createClass({
                         vectorOverridingRules[r.rule_id] = r;
                     }
                     else if (kind === 'content') {
-                        switch (self._pushRuleVectorStateKind(r)) {
+                        switch (self._contentRuleVectorStateKind(r)) {
                             case PushRuleVectorState.ON:
                                 if (r.enabled) {
                                     contentRules.on.push(r);
