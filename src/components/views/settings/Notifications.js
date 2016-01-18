@@ -96,10 +96,13 @@ var VectorPushRulesDefinitions = {
     },
 
     // Messages just sent to a group chat room
-    "im.vector.rule.fallback": {
+    "im.vector.rule.room_group": {
         description: "Messages sent to group",
-        conditions: [],
-        hsDefaultRuleId: ".m.rule.fallback",
+        conditions: [{
+            "is": ">2",
+            "kind": "room_member_count"
+        }],
+        hsDefaultRuleId: undefined,     // Matrix does not define a default hs push rule for group
         hsDefaultRuleVectorState: PushRuleVectorState.on,
         vectorStateToActions: {
             on: [
@@ -736,7 +739,7 @@ module.exports = React.createClass({
                 'im.vector.rule.contains_display_name',
                 '_keywords',
                 'im.vector.rule.room_one_to_one',
-                'im.vector.rule.fallback',
+                'im.vector.rule.room_group',
                 'im.vector.rule.invite_for_me',
                 'im.vector.rule.member_event',
                 'im.vector.rule.call'
