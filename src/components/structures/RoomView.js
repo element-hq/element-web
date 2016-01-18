@@ -57,7 +57,9 @@ if (DEBUG_SCROLL) {
 module.exports = React.createClass({
     displayName: 'RoomView',
     propTypes: {
-        ConferenceHandler: React.PropTypes.any
+        ConferenceHandler: React.PropTypes.any,
+        roomId: React.PropTypes.string,
+        autoPeek: React.PropTypes.bool, // should we try to peek the room on mount, or has whoever invoked us already initiated a peek?
     },
 
     /* properties in RoomView objects include:
@@ -78,7 +80,9 @@ module.exports = React.createClass({
             syncState: MatrixClientPeg.get().getSyncState(),
             hasUnsentMessages: this._hasUnsentMessages(room),
             callState: null,
+            autoPeekDone: false, // track whether our autoPeek (if any) has completed)
             guestsCanJoin: false,
+            canPeek: false,
             readMarkerEventId: room ? room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId) : null,
             readMarkerGhostEventId: undefined
         }
@@ -86,6 +90,7 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        MatrixClientPeg.get().on("Room", this.onNewRoom);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
@@ -110,9 +115,13 @@ module.exports = React.createClass({
         // We can't try to /join because this may implicitly accept invites (!)
         // We can /peek though. If it fails then we present the join UI. If it
         // succeeds then great, show the preview (but we still may be able to /join!).
-        if (!this.state.room) {
+        if (!this.state.room && this.props.autoPeek) {
             console.log("Attempting to peek into room %s", this.props.roomId);
             MatrixClientPeg.get().peekInRoom(this.props.roomId).done(() => {
+                this.setState({
+                    autoPeekDone: true;
+                });
+
                 // we don't need to do anything - JS SDK will emit Room events
                 // which will update the UI. We *do* however need to know if we
                 // can join the room so we can fiddle with the UI appropriately.
@@ -120,13 +129,18 @@ module.exports = React.createClass({
                 if (!peekedRoom) {
                     return;
                 }
+
                 var guestAccessEvent = peekedRoom.currentState.getStateEvents("m.room.guest_access", "");
-                if (!guestAccessEvent) {
-                    return;
-                }
-                if (guestAccessEvent.getContent().guest_access === "can_join") {
+                if (guestAccessEvent && guestAccessEvent.getContent().guest_access === "can_join") {
                     this.setState({
                         guestsCanJoin: true
+                    });
+                }
+
+                var historyVisibility = peekedRoom.currentState.getStateEvents("m.room.history_visibility", "");
+                if (historyVisibility && historyVisibility.getContent().history_visibility === "world_readable") {
+                    this.setState({
+                        canPeek: true
                     });
                 }
             }, function(err) {
@@ -155,6 +169,7 @@ module.exports = React.createClass({
         }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Room", this.onNewRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
@@ -276,6 +291,14 @@ module.exports = React.createClass({
             room: MatrixClientPeg.get().getRoom(this.props.roomId),
             numUnreadMessages: currentUnread
         });
+    },
+
+    onNewRoom: function(room) {
+        if (room.roomId == this.props.roomId) {
+            this.setState({
+                room: room
+            });
+        }
     },
 
     onRoomName: function(room) {
@@ -929,15 +952,37 @@ module.exports = React.createClass({
             );
         }
 
+        var visibilityDeferred;
         if (old_history_visibility != newVals.history_visibility &&
                 newVals.history_visibility != undefined) {
-            deferreds.push(
+            visibilityDeferred = 
                 MatrixClientPeg.get().sendStateEvent(
                     this.state.room.roomId, "m.room.history_visibility", {
                         history_visibility: newVals.history_visibility,
                     }, ""
                 )
             );
+        }
+
+        if (old_guest_read != newVals.guest_read ||
+            old_guest_join != newVals.guest_join)
+        {
+            var guestDeferred = 
+                MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
+                    allowRead: newVals.guest_read,
+                    allowJoin: newVals.guest_join
+                });
+
+            if (visibilityDeferred) {
+                visibilityDeferred = visibilityDeferred.then(guestDeferred);
+            }
+            else {
+                visibilityDeferred = guestDeferred;
+            }
+        }
+
+        if (visibilityDeferred) {
+            deferreds.push(visibilityDeferred);
         }
 
         if (newVals.power_levels) {
@@ -1030,17 +1075,6 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().setRoomAccountData(
                     this.state.room.roomId, "org.matrix.room.color_scheme", newVals.color_scheme
                 )
-            );
-        }
-
-        if (old_guest_read != newVals.guest_read ||
-            old_guest_join != newVals.guest_join)
-        {
-            deferreds.push(
-                MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
-                    allowRead: newVals.guest_read,
-                    allowJoin: newVals.guest_join
-                })
             );
         }
 
@@ -1391,12 +1425,28 @@ module.exports = React.createClass({
 
         if (!this.state.room) {
             if (this.props.roomId) {
-                return (
-                    <div>
-                    <button onClick={this.onJoinButtonClicked}>Join Room</button>
-                    </div>
-                );
-            } else {
+                if (this.props.autoPeek && !this.state.autoPeekDone) {
+                    return (
+                        <div className="mx_RoomView">
+                            <Loader />
+                        </div>
+                    );                
+                }
+                else {
+                    var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
+                    return (
+                        <div className="mx_RoomView">
+                            <RoomHeader ref="header" room={this.state.room} simpleHeader="Join room"/>
+                            <div className="mx_RoomView_auxPanel">
+                                <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
+                                                canJoin={ true } canPreview={ false }/>
+                                <div className="error">{joinErrorText}</div>
+                            </div>
+                        </div>
+                    );                    
+                }
+            }
+            else {
                 return (
                     <div />
                 );
@@ -1417,16 +1467,21 @@ module.exports = React.createClass({
                 var inviteEvent = myMember.events.member;
                 var inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
                 // XXX: Leaving this intentionally basic for now because invites are about to change totally
+                // FIXME: This comment is now outdated - what do we need to fix? ^
                 var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
                 var rejectErrorText = this.state.rejectError ? "Failed to reject invite!" : "";
+
+                // We deliberately don't try to peek into invites, even if we have permission to peek
+                // as they could be a spam vector.
+                // XXX: in future we could give the option of a 'Preview' button which lets them view anyway.
                 return (
                     <div className="mx_RoomView">
                         <RoomHeader ref="header" room={this.state.room} simpleHeader="Room invite"/>
-                        <div className="mx_RoomView_invitePrompt">
-                            <div>{inviterName} has invited you to a room</div>
-                            <br/>
-                            <button ref="joinButton" onClick={this.onJoinButtonClicked}>Join</button>
-                            <button onClick={this.onRejectButtonClicked}>Reject</button>
+                        <div className="mx_RoomView_auxPanel">
+                            <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
+                                            onRejectClick={ this.onRejectButtonClicked }
+                                            inviterName={ inviterName }
+                                            canJoin={ true } canPreview={ false }/>
                             <div className="error">{joinErrorText}</div>
                             <div className="error">{rejectErrorText}</div>
                         </div>
@@ -1539,6 +1594,12 @@ module.exports = React.createClass({
                 aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
             }
             else if (this.state.guestsCanJoin && MatrixClientPeg.get().isGuest() &&
+                    (!myMember || myMember.membership !== "join")) {
+                aux = (
+                    <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />
+                );
+            }
+            else if (this.state.canPeek &&
                     (!myMember || myMember.membership !== "join")) {
                 aux = (
                     <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />

@@ -660,12 +660,13 @@ module.exports = React.createClass({
                 }
             </div>
 
+        // FIXME: disable guests_read if the user hasn't turned on shared history
         return (
             <div className="mx_RoomSettings">
                 <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label> <br/>
-                <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility == "shared"}/> Share message history with new users</label> <br/>
-                <label><input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/> Allow guests to read messages in this room</label> <br/>
-                <label><input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/> Allow guests to join this room</label> <br/>
+                <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility === "shared" || history_visibility === "world_readable"}/> Share message history with new participants</label> <br/>
+                <label><input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/> Let guests join this room</label> <br/>
+                <label><input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/> Let users read message history without joining</label> <br/>
                 <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>
 
                 { tags_section }
