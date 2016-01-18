@@ -14,7 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomHeader {
+/* add 20px to the height of the header when editing */
+.mx_RoomHeader_editing {
+    -webit-flex: 0 0 103px ! important;
+    flex: 0 0 103px ! important;
 }
 
 .mx_RoomHeader_wrapper {
@@ -33,6 +36,10 @@ limitations under the License.
     display: flex;
 }
 
+.mx_RoomHeader_editing .mx_RoomHeader_wrapper {
+    border-bottom: 1px solid transparent;
+}
+
 .mx_RoomHeader_leftRow {
     margin-left: -2px;
 
@@ -47,12 +54,13 @@ limitations under the License.
 }
 
 .mx_RoomHeader_textButton {
-    height: 48px;
+    height: 36px;
     background-color: #76cfa6;
-    border-radius: 48px;
+    border-radius: 36px;
     margin-right: 8px;
     color: #fff;
-    line-height: 48px;
+    line-height: 34px;
+    margin-top: -2px;
     text-align: center;
 
     -webkit-box-ordinal-group: 2;
@@ -69,7 +77,20 @@ limitations under the License.
 */
     padding-left: 12px;
     padding-right: 12px;
-    }
+}
+
+.mx_RoomHeader_cancelButton {
+    -webkit-box-ordinal-group: 2;
+    -moz-box-ordinal-group: 2;
+    -ms-flex-order: 2;
+    -webkit-order: 2;
+    order: 2;
+
+    cursor: pointer;
+
+    padding-left: 12px;
+    padding-right: 12px;
+}
 
 .mx_RoomHeader_rightRow {
     margin-top: 4px;
@@ -84,7 +105,7 @@ limitations under the License.
 
 .mx_RoomHeader_info {
     display: table-cell;
-    /* height: 48px; */
+    width: 100%;
     vertical-align: middle;
 }
 
@@ -107,9 +128,9 @@ limitations under the License.
 }
 
 .mx_RoomHeader_name {
-    cursor: pointer;
     vertical-align: middle;
-    height: 30px;
+    width: 100%;
+    height: 31px;
     overflow: hidden;
     color: #454545;
     font-weight: bold;
@@ -118,6 +139,7 @@ limitations under the License.
     padding-right: 16px;
     /* why isn't text-overflow working? */
     text-overflow: ellipsis;
+    border-bottom: 1px solid transparent;
 }
 
 .mx_RoomHeader_nametext {
@@ -142,11 +164,18 @@ limitations under the License.
     pointer-events: none;
 }
 
-.mx_RoomHeader_leftRow:hover .mx_RoomHeader_name {
+.mx_RoomHeader_name,
+.mx_RoomHeader_avatar,
+.mx_RoomHeader_avatarPicker,
+.mx_RoomHeader_avatarPicker_edit {
+    cursor: pointer;
+}
+
+.mx_RoomHeader_name:hover div:not(.mx_RoomHeader_editable) {
     color: #76cfa6;
 }
 
-.mx_RoomHeader_leftRow:hover .mx_RoomHeader_settingsButton {
+.mx_RoomHeader_name:hover .mx_RoomHeader_settingsButton {
     visibility: visible;
 }
 
@@ -159,24 +188,20 @@ limitations under the License.
     visibility: visible;
 }
 
-
-.mx_RoomHeader_nameEditing {
-    padding-left: 8px;
-    padding-right: 16px;
-    margin-top: -5px;
+.mx_RoomHeader_placeholder {
+    color: #a2a2a2 ! important;
 }
 
-.mx_RoomHeader_name input, .mx_RoomHeader_nameInput {
-    border-radius: 3px;
-    width: 260px;
-    border: 1px solid #c7c7c7;
-    font-weight: 300;
-    font-size: 13px;
-    padding: 9px;
+.mx_RoomHeader_editable {
+    border-bottom: 1px solid #c7c7c7 ! important;
+    min-width: 70px;
+    cursor: text;
 }
 
-.mx_RoomHeader_nameInput {
-    margin-top: 6px;
+.mx_RoomHeader_editable:focus {
+    border-bottom: 1px solid #76CFA6 ! important;
+    outline: none;
+    box-shadow: none;
 }
 
 .mx_RoomHeader_topic {
@@ -185,10 +210,11 @@ limitations under the License.
     max-height: 42px;
     color: #454545;
     font-weight: 300;  
-    padding-left: 19px;
-    padding-right: 16px;
+    margin-left: 19px;
+    margin-right: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-bottom: 1px solid transparent;    
 }
 
 .mx_RoomHeader_avatar {
@@ -198,8 +224,22 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_RoomHeader_avatar img {
+.mx_RoomHeader_avatar .mx_RoomAvatar {
 	border-radius: 24px;
+}
+
+.mx_RoomHeader_avatarPicker_edit {
+    position: absolute;
+    margin-left: 16px;
+    margin-top: 4px;
+}
+
+.mx_RoomHeader_avatarPicker_edit > label {
+    cursor: pointer;
+}
+
+.mx_RoomHeader_avatarPicker_edit > input {
+    display: none;
 }
 
 .mx_RoomHeader_button {
