@@ -173,7 +173,7 @@ limitations under the License.
     height: 14px;
 }
 
-.mx_EventTile_readAvatars .mx_MemberAvatar {
+.mx_EventTile_readAvatars .mx_BaseAvatar {
     position: absolute;
     display: inline-block;
 }
