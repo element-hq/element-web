@@ -22,6 +22,10 @@ limitations under the License.
     color: #a4a4a4;
 }
 
+.mx_RoomPreviewBar_invite_text {
+    color: #454545;
+}
+
 .mx_RoomPreviewBar_join_text {
     color: #ff0064;
 }
