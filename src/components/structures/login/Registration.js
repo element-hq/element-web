@@ -159,6 +159,15 @@ module.exports = React.createClass({
             case "RegistrationForm.ERR_PASSWORD_LENGTH":
                 errMsg = `Password too short (min ${MIN_PASSWORD_LENGTH}).`;
                 break;
+            case "RegistrationForm.ERR_EMAIL_INVALID":
+                errMsg = "This doesn't look like a valid email address";
+                break;
+            case "RegistrationForm.ERR_USERNAME_INVALID":
+                errMsg = "User names may only contain letters, numbers, dots, hyphens and underscores.";
+                break;
+            case "RegistrationForm.ERR_USERNAME_BLANK":
+                errMsg = "You need to enter a user name";
+                break;
             default:
                 console.error("Unknown error code: %s", errCode);
                 errMsg = "An unknown error occurred.";

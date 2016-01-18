@@ -16,6 +16,7 @@ limitations under the License.
 var React = require('react');
 var classNames = require('classnames');
 var Matrix = require("matrix-js-sdk");
+var q = require('q');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var Entities = require("../../../Entities");
@@ -23,6 +24,11 @@ var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 
 var INITIAL_LOAD_NUM_MEMBERS = 50;
+var SHARE_HISTORY_WARNING = "Newly invited users will see the history of this room. "+
+    "If you'd prefer invited users not to see messages that were sent before they joined, "+
+    "turn off, 'Share message history with new users' in the settings for this room.";
+
+var shown_invite_warning_this_session = false;
 
 module.exports = React.createClass({
     displayName: 'MemberList',
@@ -133,12 +139,41 @@ module.exports = React.createClass({
             return;
         }
 
-        var promise;
+        var invite_defer = q.defer();
+
+        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        var history_visibility = room.currentState.getStateEvents('m.room.history_visibility', '');
+        if (history_visibility) history_visibility = history_visibility.getContent().history_visibility;
+
+        if (history_visibility == 'shared' && !shown_invite_warning_this_session) {
+            var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            Modal.createDialog(QuestionDialog, {
+                title: "Warning",
+                description: SHARE_HISTORY_WARNING,
+                button: "Invite",
+                onFinished: function(should_invite) {
+                    if (should_invite) {
+                        shown_invite_warning_this_session = true;
+                        invite_defer.resolve();
+                    } else {
+                        invite_defer.reject(null);
+                    }
+                }
+            });
+        } else {
+            invite_defer.resolve();
+        }
+
+        var promise = invite_defer.promise;;
         if (isEmailAddress) {
-            promise = MatrixClientPeg.get().inviteByEmail(this.props.roomId, inputText);
+            promise = promise.then(function() {
+                 MatrixClientPeg.get().inviteByEmail(self.props.roomId, inputText);
+            });
         }
         else {
-            promise = MatrixClientPeg.get().invite(this.props.roomId, inputText);
+            promise = promise.then(function() {
+                MatrixClientPeg.get().invite(self.props.roomId, inputText);
+            });
         }
 
         self.setState({
@@ -153,11 +188,13 @@ module.exports = React.createClass({
                 inviting: false
             });
         }, function(err) {
-            console.error("Failed to invite: %s", JSON.stringify(err));
-            Modal.createDialog(ErrorDialog, {
-                title: "Server error whilst inviting",
-                description: err.message
-            });
+            if (err !== null) {
+                console.error("Failed to invite: %s", JSON.stringify(err));
+                Modal.createDialog(ErrorDialog, {
+                    title: "Server error whilst inviting",
+                    description: err.message
+                });
+            }
             self.setState({
                 inviting: false
             });
