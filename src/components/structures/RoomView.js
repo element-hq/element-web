@@ -1457,6 +1457,7 @@ module.exports = React.createClass({
                                                 canJoin={ true } canPreview={ false }/>
                                 <div className="error">{joinErrorText}</div>
                             </div>
+                            <div className="mx_RoomView_messagePanel"></div>
                         </div>
                     );                    
                 }
@@ -1489,6 +1490,7 @@ module.exports = React.createClass({
                 // We deliberately don't try to peek into invites, even if we have permission to peek
                 // as they could be a spam vector.
                 // XXX: in future we could give the option of a 'Preview' button which lets them view anyway.
+
                 return (
                     <div className="mx_RoomView">
                         <RoomHeader ref="header" room={this.state.room} simpleHeader="Room invite"/>
@@ -1500,6 +1502,7 @@ module.exports = React.createClass({
                             <div className="error">{joinErrorText}</div>
                             <div className="error">{rejectErrorText}</div>
                         </div>
+                        <div className="mx_RoomView_messagePanel"></div>
                     </div>
                 );
             }
