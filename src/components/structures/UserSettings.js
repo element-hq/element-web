@@ -21,6 +21,7 @@ var dis = require("../../dispatcher");
 var q = require('q');
 var version = require('../../../package.json').version;
 var UserSettingsStore = require('../../UserSettingsStore');
+var GeminiScrollbar = require('react-gemini-scrollbar');
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
@@ -80,6 +81,12 @@ module.exports = React.createClass({
     onAction: function(payload) {
         if (payload.action === "notifier_enabled") {
             this.forceUpdate();
+        }
+    },
+
+    onAvatarPickerClick: function(ev) {
+        if (this.refs.file_label) {
+            this.refs.file_label.click();
         }
     },
 
@@ -145,10 +152,6 @@ module.exports = React.createClass({
         this.logoutModal.closeDialog();
     },
 
-    onEnableNotificationsChange: function(event) {
-        UserSettingsStore.setEnableNotifications(event.target.checked);
-    },
-
     render: function() {
         switch (this.state.phase) {
             case "UserSettings.LOADING":
@@ -166,6 +169,7 @@ module.exports = React.createClass({
         var ChangeDisplayName = sdk.getComponent("views.settings.ChangeDisplayName");
         var ChangePassword = sdk.getComponent("views.settings.ChangePassword");
         var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
+        var Notifications = sdk.getComponent("settings.Notifications");
         var avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
         );
@@ -175,7 +179,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get().isGuest()) {
             accountJsx = (
                 <div className="mx_UserSettings_button" onClick={this.onUpgradeClicked}>
-                    Upgrade (It's free!)
+                    Create an account
                 </div>
             );
         }
@@ -195,6 +199,8 @@ module.exports = React.createClass({
         return (
             <div className="mx_UserSettings">
                 <RoomHeader simpleHeader="Settings" />
+
+                <GeminiScrollbar className="mx_UserSettings_body" autoshow={true}>
 
                 <h2>Profile</h2>
 
@@ -225,13 +231,15 @@ module.exports = React.createClass({
                     </div>
 
                     <div className="mx_UserSettings_avatarPicker">
-                        <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
-                            showUploadSection={false} className="mx_UserSettings_avatarPicker_img"/>
+                        <div onClick={ this.onAvatarPickerClick }>
+                            <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
+                                showUploadSection={false} className="mx_UserSettings_avatarPicker_img"/>
+                        </div>
                         <div className="mx_UserSettings_avatarPicker_edit">
-                            <label htmlFor="avatarInput">
-                                <img src="img/upload.svg"
+                            <label htmlFor="avatarInput" ref="file_label">
+                                <img src="img/camera.svg"
                                     alt="Upload avatar" title="Upload avatar"
-                                    width="19" height="24" />
+                                    width="17" height="15" />
                             </label>
                             <input id="avatarInput" type="file" onChange={this.onAvatarSelected}/>
                         </div>
@@ -241,34 +249,18 @@ module.exports = React.createClass({
                 <h2>Account</h2>
 
                 <div className="mx_UserSettings_section">
-                    {accountJsx}
-                </div>
-
-                <div className="mx_UserSettings_logout">
-                    <div className="mx_UserSettings_button" onClick={this.onLogoutClicked}>
+                    
+                    <div className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
                         Log out
                     </div>
+
+                    {accountJsx}
                 </div>
 
                 <h2>Notifications</h2>
 
                 <div className="mx_UserSettings_section">
-                    <div className="mx_UserSettings_notifTable">
-                        <div className="mx_UserSettings_notifTableRow">
-                            <div className="mx_UserSettings_notifInputCell">
-                                <input id="enableNotifications"
-                                    ref="enableNotifications"
-                                    type="checkbox"
-                                    checked={ UserSettingsStore.getEnableNotifications() }
-                                    onChange={ this.onEnableNotificationsChange } />
-                            </div>
-                            <div className="mx_UserSettings_notifLabelCell">
-                                <label htmlFor="enableNotifications">
-                                    Enable desktop notifications
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                    <Notifications/>
                 </div>
 
                 <h2>Advanced</h2>
@@ -281,6 +273,8 @@ module.exports = React.createClass({
                         Version {this.state.clientVersion}
                     </div>
                 </div>
+
+                </GeminiScrollbar>
             </div>
         );
     }

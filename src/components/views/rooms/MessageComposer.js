@@ -209,23 +209,18 @@ module.exports = React.createClass({
             this.sentHistory.push(input);
             this.onEnter(ev);
         }
-        else if (ev.keyCode === KeyCode.UP) {
-            var input = this.refs.textarea.value;
-            var offset = this.refs.textarea.selectionStart || 0;
-            if (ev.ctrlKey || !input.substr(0, offset).match(/\n/)) {
-                this.sentHistory.next(1);
-                ev.preventDefault();
-                this.resizeInput();
-            }
-        }
-        else if (ev.keyCode === KeyCode.DOWN) {
-            var input = this.refs.textarea.value;
-            var offset = this.refs.textarea.selectionStart || 0;
-            if (ev.ctrlKey || !input.substr(offset).match(/\n/)) {
-                this.sentHistory.next(-1);
-                ev.preventDefault();
-                this.resizeInput();
-            }
+        else if (ev.keyCode === KeyCode.UP || ev.keyCode === KeyCode.DOWN) {
+            var oldSelectionStart = this.refs.textarea.selectionStart;
+            // Remember the keyCode because React will recycle the synthetic event
+            var keyCode = ev.keyCode;
+            // set a callback so we can see if the cursor position changes as
+            // a result of this event. If it doesn't, we cycle history.
+            setTimeout(() => {
+                if (this.refs.textarea.selectionStart == oldSelectionStart) {
+                    this.sentHistory.next(keyCode === KeyCode.UP ? 1 : -1);
+                    this.resizeInput();
+                }
+            }, 0);
         }
 
         if (this.props.tabComplete) {

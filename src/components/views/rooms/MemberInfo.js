@@ -58,15 +58,16 @@ module.exports = React.createClass({
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
         MatrixClientPeg.get().kick(roomId, target).done(function() {
-            // NO-OP; rely on the m.room.member event coming down else we could
-            // get out of sync if we force setState here!
-            console.log("Kick success");
-        }, function(err) {
-            Modal.createDialog(ErrorDialog, {
-                title: "Kick error",
-                description: err.message
-            });
-        });
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Kick success");
+            }, function(err) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Kick error",
+                    description: err.message
+                });
+            }
+        );
         this.props.onFinished();
     },
 
@@ -74,16 +75,18 @@ module.exports = React.createClass({
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
-        MatrixClientPeg.get().ban(roomId, target).done(function() {
-            // NO-OP; rely on the m.room.member event coming down else we could
-            // get out of sync if we force setState here!
-            console.log("Ban success");
-        }, function(err) {
-            Modal.createDialog(ErrorDialog, {
-                title: "Ban error",
-                description: err.message
-            });
-        });
+        MatrixClientPeg.get().ban(roomId, target).done(
+            function() {
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Ban success");
+            }, function(err) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Ban error",
+                    description: err.message
+                });
+            }
+        );
         this.props.onFinished();
     },
 
@@ -118,16 +121,17 @@ module.exports = React.createClass({
         }
 
         MatrixClientPeg.get().setPowerLevel(roomId, target, level, powerLevelEvent).done(
-        function() {
-            // NO-OP; rely on the m.room.member event coming down else we could
-            // get out of sync if we force setState here!
-            console.log("Mute toggle success");
-        }, function(err) {
-            Modal.createDialog(ErrorDialog, {
-                title: "Mute error",
-                description: err.message
-            });
-        });
+            function() {
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Mute toggle success");
+            }, function(err) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Mute error",
+                    description: err.message
+                });
+            }
+        );
         this.props.onFinished();        
     },
 
@@ -154,21 +158,54 @@ module.exports = React.createClass({
         }
         var defaultLevel = powerLevelEvent.getContent().users_default;
         var modLevel = me.powerLevel - 1;
+        if (modLevel > 50 && defaultLevel < 50) modLevel = 50; // try to stick with the vector level defaults
         // toggle the level
         var newLevel = this.state.isTargetMod ? defaultLevel : modLevel;
         MatrixClientPeg.get().setPowerLevel(roomId, target, newLevel, powerLevelEvent).done(
-        function() {
-            // NO-OP; rely on the m.room.member event coming down else we could
-            // get out of sync if we force setState here!
-            console.log("Mod toggle success");
-        }, function(err) {
-            Modal.createDialog(ErrorDialog, {
-                title: "Mod error",
-                description: err.message
-            });
-        });
+            function() {
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Mod toggle success");
+            }, function(err) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Mod error",
+                    description: err.message
+                });
+            }
+        );
         this.props.onFinished();        
     },
+
+    onPowerChange: function(powerLevel) {
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        var roomId = this.props.member.roomId;
+        var target = this.props.member.userId;
+        var room = MatrixClientPeg.get().getRoom(roomId);
+        if (!room) {
+            this.props.onFinished();
+            return;
+        }
+        var powerLevelEvent = room.currentState.getStateEvents(
+            "m.room.power_levels", ""
+        );
+        if (!powerLevelEvent) {
+            this.props.onFinished();
+            return;
+        }
+        MatrixClientPeg.get().setPowerLevel(roomId, target, powerLevel, powerLevelEvent).done(
+            function() {
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Power change success");
+            }, function(err) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failure to change power level",
+                    description: err.message
+                });
+            }
+        );
+        this.props.onFinished();        
+    },    
 
     onChatClick: function() {
         // check if there are any existing rooms with just us and them (1:1)
@@ -209,20 +246,22 @@ module.exports = React.createClass({
             MatrixClientPeg.get().createRoom({
                 invite: [this.props.member.userId],
                 preset: "private_chat"
-            }).done(function(res) {
-                self.setState({ creatingRoom: false });
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: res.room_id
-                });
-                self.props.onFinished();
-            }, function(err) {
-                self.setState({ creatingRoom: false });
-                console.error(
-                    "Failed to create room: %s", JSON.stringify(err)
-                );
-                self.props.onFinished();
-            });
+            }).done(
+                function(res) {
+                    self.setState({ creatingRoom: false });
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: res.room_id
+                    });
+                    self.props.onFinished();
+                }, function(err) {
+                    self.setState({ creatingRoom: false });
+                    console.error(
+                        "Failed to create room: %s", JSON.stringify(err)
+                    );
+                    self.props.onFinished();
+                }
+            );
         }
     },
 
@@ -291,9 +330,15 @@ module.exports = React.createClass({
             (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
             powerLevels.state_default
         );
+        var levelToSend = (
+            (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
+            powerLevels.events_default
+        );
+
         can.kick = me.powerLevel >= powerLevels.kick;
         can.ban = me.powerLevel >= powerLevels.ban;
         can.mute = me.powerLevel >= editPowerLevel;
+        can.toggleMod = me.powerLevel > them.powerLevel && them.powerLevel >= levelToSend;
         can.modifyLevel = me.powerLevel > them.powerLevel;
         return can;
     },
@@ -317,12 +362,11 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var interactButton, kickButton, banButton, muteButton, giveModButton, spinner;
-        if (this.props.member.userId === MatrixClientPeg.get().credentials.userId) {
-            interactButton = <div className="mx_MemberInfo_field" onClick={this.onLeaveClick}>Leave room</div>;
-        }
-        else {
-            interactButton = <div className="mx_MemberInfo_field" onClick={this.onChatClick}>Start chat</div>;
+        var startChat, kickButton, banButton, muteButton, giveModButton, spinner;
+        if (this.props.member.userId !== MatrixClientPeg.get().credentials.userId) {
+            // FIXME: we're referring to a vector component from react-sdk
+            var BottomLeftMenuTile = sdk.getComponent('rooms.BottomLeftMenuTile');
+            startChat = <BottomLeftMenuTile collapsed={ false } img="img/create-big.svg" label="Start chat" onClick={ this.onChatClick }/>
         }
 
         if (this.state.creatingRoom) {
@@ -346,35 +390,56 @@ module.exports = React.createClass({
                 {muteLabel}
             </div>;
         }
-        if (this.state.can.modifyLevel) {
-            var giveOpLabel = this.state.isTargetMod ? "Revoke Mod" : "Make Mod";
+        if (this.state.can.toggleMod) {
+            var giveOpLabel = this.state.isTargetMod ? "Revoke Moderator" : "Make Moderator";
             giveModButton = <div className="mx_MemberInfo_field" onClick={this.onModToggle}>
                 {giveOpLabel}
             </div>
         }
 
+        // TODO: we should have an invite button if this MemberInfo is showing a user who isn't actually in the current room yet
+        // e.g. clicking on a linkified userid in a room
+
+        var adminTools;
+        if (kickButton || banButton || muteButton || giveModButton) {
+            adminTools = 
+                <div>
+                    <h3>Admin tools</h3>
+
+                    <div className="mx_MemberInfo_buttons">
+                        {muteButton}
+                        {kickButton}
+                        {banButton}
+                        {giveModButton}
+                    </div>
+                </div>
+        }
+
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        var PowerSelector = sdk.getComponent('elements.PowerSelector');
         return (
             <div className="mx_MemberInfo">
                 <img className="mx_MemberInfo_cancel" src="img/cancel.svg" width="18" height="18" onClick={this.onCancel}/>
                 <div className="mx_MemberInfo_avatar">
                     <MemberAvatar member={this.props.member} width={48} height={48} />
                 </div>
+
                 <h2>{ this.props.member.name }</h2>
-                <div className="mx_MemberInfo_profileField">
-                    { this.props.member.userId }
+
+                <div className="mx_MemberInfo_profile">
+                    <div className="mx_MemberInfo_profileField">
+                        { this.props.member.userId }
+                    </div>
+                    <div className="mx_MemberInfo_profileField">
+                        Level: <b><PowerSelector value={ parseInt(this.props.member.powerLevel) } disabled={ !this.state.can.modifyLevel } onChange={ this.onPowerChange }/></b>
+                    </div>
                 </div>
-                <div className="mx_MemberInfo_profileField">
-                    power: { this.props.member.powerLevelNorm }%
-                </div>
-                <div className="mx_MemberInfo_buttons">
-                    {interactButton}
-                    {muteButton}
-                    {kickButton}
-                    {banButton}
-                    {giveModButton}
-                    {spinner}
-                </div>
+
+                { startChat }
+
+                { adminTools }
+
+                { spinner }
             </div>
         );
     }
