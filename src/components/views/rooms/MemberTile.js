@@ -83,10 +83,7 @@ module.exports = React.createClass({
         if (!this.props.member) {
             return this._getDisplayName();
         }
-        var label = this.props.member.userId;
-        if (this.state.isTargetMod) {
-            label += " - Mod (" + this.props.member.powerLevelNorm + "%)";
-        }
+        var label = this.props.member.userId + " (power " + this.props.member.powerLevel + ")";
         return label;
     },
 
@@ -120,8 +117,18 @@ module.exports = React.createClass({
             //     var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
             //     power = <img src={ img } className="mx_MemberTile_power" width="44" height="44" alt=""/>;
             // }
-        }
 
+            var power;
+            if (this.props.member) {
+                var powerLevel = this.props.member.powerLevel;
+                if (powerLevel >= 50 && powerLevel < 99) {
+                    power = <img src="img/mod.svg" className="mx_MemberTile_power" width="16" height="17" alt="Mod"/>;
+                }
+                if (powerLevel >= 99) {
+                    power = <img src="img/admin.svg" className="mx_MemberTile_power" width="16" height="17" alt="Admin"/>;
+                }
+            }
+        }
 
         var mainClassName = "mx_MemberTile ";
         mainClassName += presenceClass;
@@ -170,7 +177,8 @@ module.exports = React.createClass({
                     onClick={ this.onClick } onMouseEnter={ this.mouseEnter }
                     onMouseLeave={ this.mouseLeave }>
                 <div className="mx_MemberTile_avatar">
-                    {av}
+                    { av }
+                    { power }
                 </div>
                 { nameEl }
             </div>
