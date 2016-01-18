@@ -320,11 +320,10 @@ module.exports = React.createClass({
             // TODO: Cache this calculation
             var room = MatrixClientPeg.get().getRoom(this.props.roomId);
             var allUsers = MatrixClientPeg.get().getUsers();
-            // only add Users if they don't exist in the member list
+            // only add Users if they are not joined
             allUsers = allUsers.filter(function(u) {
-                return room.getMember(u.userId) === null;
+                return !room.hasMembershipState(u.userId, "join");
             });
-
             var SearchableEntityList = sdk.getComponent("rooms.SearchableEntityList");
             
             return (
@@ -332,9 +331,9 @@ module.exports = React.createClass({
                     onSubmit={this.onInvite}
                     entities={
                         Entities.fromRoomMembers(
-                            room.currentState.getMembers() // ALLLLL OF THEM
+                            room.getJoinedMembers()
                         ).concat(
-                            Entities.fromUsers(allUsers)
+                            Entities.fromUsers(allUsers, true, this.onInvite)
                         )
                     } />
             );

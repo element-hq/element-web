@@ -55,10 +55,23 @@ class MemberEntity extends Entity {
 
 class UserEntity extends Entity {
 
+    constructor(model, showInviteButton, inviteFn) {
+        super(model);
+        this.showInviteButton = Boolean(showInviteButton);
+        this.inviteFn = inviteFn;
+    }
+
+    onClick() {
+        if (this.inviteFn) {
+            this.inviteFn(this.model.userId);
+        }
+    }
+
     getJsx() {
         var UserTile = sdk.getComponent("rooms.UserTile");
         return (
-            <UserTile key={this.model.userId} user={this.model} />
+            <UserTile key={this.model.userId} user={this.model}
+                showInviteButton={this.showInviteButton} onClick={this.onClick.bind(this)} />
         );
     }
 
@@ -82,11 +95,13 @@ module.exports = {
 
     /**
      * @param {User[]} users
+     * @param {boolean} showInviteButton
+     * @param {Function} inviteFn Called with the user ID.
      * @return {Entity[]}
      */
-    fromUsers: function(users) {
+    fromUsers: function(users, showInviteButton, inviteFn) {
         return users.map(function(u) {
-            return new UserEntity(u);
+            return new UserEntity(u, showInviteButton, inviteFn);
         })
     }
 };
