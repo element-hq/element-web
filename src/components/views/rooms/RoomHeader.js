@@ -264,7 +264,7 @@ module.exports = React.createClass({
                 else {
                     roomAvatar = (
                         <div onClick={this.props.onSettingsClick}>
-                            <RoomAvatar room={this.props.room} width="48" height="48"/>
+                            <RoomAvatar room={this.props.room} width={48} height={48}/>
                         </div>
                     );
                 }
