@@ -322,9 +322,15 @@ module.exports = React.createClass({
             (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
             powerLevels.state_default
         );
+        var levelToSend = (
+            (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
+            powerLevels.events_default
+        );
+
         can.kick = me.powerLevel >= powerLevels.kick;
         can.ban = me.powerLevel >= powerLevels.ban;
         can.mute = me.powerLevel >= editPowerLevel;
+        can.toggleMod = me.powerLevel > them.powerLevel && them.powerLevel >= levelToSend;
         can.modifyLevel = me.powerLevel > them.powerLevel;
         return can;
     },
@@ -376,7 +382,7 @@ module.exports = React.createClass({
                 {muteLabel}
             </div>;
         }
-        if (this.state.can.modifyLevel) {
+        if (this.state.can.toggleMod) {
             var giveOpLabel = this.state.isTargetMod ? "Revoke Moderator" : "Make Moderator";
             giveModButton = <div className="mx_MemberInfo_field" onClick={this.onModToggle}>
                 {giveOpLabel}
