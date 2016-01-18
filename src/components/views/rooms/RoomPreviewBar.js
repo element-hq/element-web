@@ -40,15 +40,14 @@ module.exports = React.createClass({
     render: function() {
         var joinBlock, previewBlock;
 
-        if (this.props.inviter) {
+        if (this.props.inviterName) {
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_invite_text">
                         You have been invited to join this room by { this.props.inviterName }
                     </div>
                     <div className="mx_RoomPreviewBar_join_text">
-                        Would you like to <a onClick={ this.props.onJoinClick }>accept</a> or
-                        <a onClick={ this.props.onRejectClick }>decline</a> this invitation?
+                        Would you like to <a onClick={ this.props.onJoinClick }>accept</a> or <a onClick={ this.props.onRejectClick }>decline</a> this invitation?
                     </div>
                 </div>
             );
