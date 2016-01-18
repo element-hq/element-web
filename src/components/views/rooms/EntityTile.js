@@ -103,7 +103,7 @@ module.exports = React.createClass({
         if (this.props.showInviteButton) {
             inviteButton = (
                 <div className="mx_EntityTile_invite">
-                    <img src="img/plus.svg" width="24" height="24" />
+                    <img src="img/plus.svg" width="16" height="16" />
                 </div>
             );
         }
