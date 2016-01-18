@@ -383,6 +383,9 @@ module.exports = React.createClass({
             </div>
         }
 
+        // TODO: we should have an invite button if this MemberInfo is showing a user who isn't actually in the current room yet
+        // e.g. clicking on a linkified userid in a room
+
         var adminTools;
         if (kickButton || banButton || muteButton || giveModButton) {
             adminTools = 
