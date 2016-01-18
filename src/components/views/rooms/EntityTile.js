@@ -108,6 +108,15 @@ module.exports = React.createClass({
             );
         }
 
+        var power;
+        var powerLevel = this.props.powerLevel;
+        if (powerLevel >= 50 && powerLevel < 99) {
+            power = <img src="img/mod.svg" className="mx_EntityTile_power" width="16" height="17" alt="Mod"/>;
+        }
+        if (powerLevel >= 99) {
+            power = <img src="img/admin.svg" className="mx_EntityTile_power" width="16" height="17" alt="Admin"/>;
+        }
+
 
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
@@ -122,6 +131,7 @@ module.exports = React.createClass({
                     {av}
                 </div>
                 { nameEl }
+                { power }
                 { inviteButton }
             </div>
         );
