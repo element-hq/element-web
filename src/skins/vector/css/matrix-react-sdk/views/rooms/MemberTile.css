@@ -35,10 +35,10 @@ limitations under the License.
 
 .mx_MemberTile_power {
     position: absolute;
-    width: 44px;
-    height: 44px;
-    left: 10px;
-    top: -1px;
+    width: 16px;
+    height: 17px;
+    top: 0px;
+    right: 6px;
 }
 
 .mx_MemberTile_name {
