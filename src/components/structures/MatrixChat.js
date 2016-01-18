@@ -700,9 +700,10 @@ module.exports = React.createClass({
         // This now goes straight to user settings
         // We use _setPage since if we wait for
         // showScreen to do the dispatch loop,
-        // we'll see the page type is still unset
-        // when the MatrixClient is started and show
-        // the Room Directory instead.
+        // the showScreen dispatch will race with the
+        // sdk sync finishing and we'll probably see
+        // the page type still unset when the MatrixClient
+        // is started and show the Room Directory instead.
         //this.showScreen("view_user_settings");
         this._setPage(this.PageTypes.UserSettings);
     },
