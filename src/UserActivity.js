@@ -16,7 +16,8 @@ limitations under the License.
 
 var dis = require("./dispatcher");
 
-var MIN_DISPATCH_INTERVAL = 1 * 1000;
+var MIN_DISPATCH_INTERVAL_MS = 500;
+var CURRENTLY_ACTIVE_THRESHOLD_MS = 500;
 
 /**
  * This class watches for user activity (moving the mouse or pressing a key)
@@ -31,8 +32,14 @@ class UserActivity {
     start() {
         document.onmousemove = this._onUserActivity.bind(this);
         document.onkeypress = this._onUserActivity.bind(this);
+        // can't use document.scroll here because that's only the document
+        // itself being scrolled. Need to use addEventListener's useCapture.
+        // also this needs to be the wheel event, not scroll, as scroll is
+        // fired when the view scrolls down for a new message.
+        window.addEventListener('wheel', this._onUserActivity.bind(this), true);
         this.lastActivityAtTs = new Date().getTime();
         this.lastDispatchAtTs = 0;
+        this.activityEndTimer = undefined;
     }
 
     /**
@@ -41,10 +48,19 @@ class UserActivity {
     stop() {
         document.onmousemove = undefined;
         document.onkeypress = undefined;
+        window.removeEventListener('wheel', this._onUserActivity.bind(this), true);
+    }
+
+    /**
+     * Return true if there has been user activity very recently
+     * (ie. within a few seconds)
+     */
+    userCurrentlyActive() {
+        return this.lastActivityAtTs > new Date().getTime() - CURRENTLY_ACTIVE_THRESHOLD_MS;
     }
 
     _onUserActivity(event) {
-        if (event.screenX) {
+        if (event.screenX && event.type == "mousemove") {
             if (event.screenX === this.lastScreenX &&
                 event.screenY === this.lastScreenY)
             {
@@ -55,12 +71,32 @@ class UserActivity {
             this.lastScreenY = event.screenY;
         }
 
-        this.lastActivityAtTs = (new Date).getTime();
-        if (this.lastDispatchAtTs < this.lastActivityAtTs - MIN_DISPATCH_INTERVAL) {
+        this.lastActivityAtTs = new Date().getTime();
+        if (this.lastDispatchAtTs < this.lastActivityAtTs - MIN_DISPATCH_INTERVAL_MS) {
             this.lastDispatchAtTs = this.lastActivityAtTs;
             dis.dispatch({
                 action: 'user_activity'
             });
+            if (!this.activityEndTimer) {
+                this.activityEndTimer = setTimeout(
+                    this._onActivityEndTimer.bind(this), MIN_DISPATCH_INTERVAL_MS
+                );
+            }
+        }
+    }
+
+    _onActivityEndTimer() {
+        var now = new Date().getTime();
+        var targetTime = this.lastActivityAtTs + MIN_DISPATCH_INTERVAL_MS;
+        if (now >= targetTime) {
+            dis.dispatch({
+                action: 'user_activity_end'
+            });
+            this.activityEndTimer = undefined;
+        } else {
+            this.activityEndTimer = setTimeout(
+                this._onActivityEndTimer.bind(this), targetTime - now
+            );
         }
     }
 }

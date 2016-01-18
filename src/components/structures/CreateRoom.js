@@ -251,7 +251,7 @@ module.exports = React.createClass({
             var UserSelector = sdk.getComponent("elements.UserSelector");
             var RoomHeader = sdk.getComponent("rooms.RoomHeader");
 
-            var domain = MatrixClientPeg.get().credentials.userId.replace(/^.*:/, '');
+            var domain = MatrixClientPeg.get().getDomain();
 
             return (
             <div className="mx_CreateRoom">

@@ -30,6 +30,7 @@ var Registration = require("./login/Registration");
 var PostRegistration = require("./login/PostRegistration");
 
 var Modal = require("../../Modal");
+var Tinter = require("../../Tinter");
 var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
@@ -63,7 +64,7 @@ module.exports = React.createClass({
             collapse_lhs: false,
             collapse_rhs: false,
             ready: false,
-            width: 10000
+            width: 10000,
         };
         if (s.logged_in) {
             if (MatrixClientPeg.get().getRooms().length) {
@@ -233,6 +234,13 @@ module.exports = React.createClass({
                 });
                 this.notifyNewScreen('register');
                 break;
+            case 'start_password_recovery':
+                if (this.state.logged_in) return;
+                this.replaceState({
+                    screen: 'forgot_password'
+                });
+                this.notifyNewScreen('forgot_password');
+                break;
             case 'token_login':
                 if (this.state.logged_in) return;
 
@@ -296,7 +304,7 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_room':
-                this._viewRoom(payload.room_id);
+                this._viewRoom(payload.room_id, payload.show_settings);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -349,8 +357,29 @@ module.exports = React.createClass({
                 this.notifyNewScreen('settings');
                 break;
             case 'view_create_room':
-                this._setPage(this.PageTypes.CreateRoom);
-                this.notifyNewScreen('new');
+                //this._setPage(this.PageTypes.CreateRoom);
+                //this.notifyNewScreen('new');
+
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                var Loader = sdk.getComponent("elements.Spinner");
+                var modal = Modal.createDialog(Loader);
+
+                MatrixClientPeg.get().createRoom({
+                    preset: "private_chat"
+                }).done(function(res) {
+                    modal.close();
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: res.room_id,
+                        show_settings: true,
+                    });
+                }, function(err) {
+                    modal.close();
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Failed to create room",
+                        description: err.toString()
+                    });
+                });
                 break;
             case 'view_room_directory':
                 this._setPage(this.PageTypes.RoomDirectory);
@@ -391,7 +420,7 @@ module.exports = React.createClass({
         });
     },
 
-    _viewRoom: function(roomId) {
+    _viewRoom: function(roomId, showSettings) {
         // before we switch room, record the scroll state of the current room
         this._updateScrollMap();
 
@@ -411,7 +440,16 @@ module.exports = React.createClass({
             if (room) {
                 var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
                 if (theAlias) presentedId = theAlias;
+
+                var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
+                var color_scheme = {};
+                if (color_scheme_event) {
+                    color_scheme = color_scheme_event.getContent();
+                    // XXX: we should validate the event
+                }                
+                Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
+
             this.notifyNewScreen('room/'+presentedId);
             newState.ready = true;
         }
@@ -419,6 +457,9 @@ module.exports = React.createClass({
         if (this.scrollStateMap[roomId]) {
             var scrollState = this.scrollStateMap[roomId];
             this.refs.roomView.restoreScrollState(scrollState);
+        }
+        if (this.refs.roomView && showSettings) {
+            this.refs.roomView.showSettings(true);
         }
     },
 
@@ -505,7 +546,9 @@ module.exports = React.createClass({
         UserActivity.start();
         Presence.start();
         cli.startClient({
-            pendingEventOrdering: "end"
+            pendingEventOrdering: "end",
+            // deliberately huge limit for now to avoid hitting gappy /sync's until gappy /sync performance improves
+            initialSyncLimit: 250,
         });
     },
 
@@ -557,6 +600,11 @@ module.exports = React.createClass({
         } else if (screen == 'token_login') {
             dis.dispatch({
                 action: 'token_login',
+                params: params
+            });
+        } else if (screen == 'forgot_password') {
+            dis.dispatch({
+                action: 'start_password_recovery',
                 params: params
             });
         } else if (screen == 'new') {
@@ -614,6 +662,8 @@ module.exports = React.createClass({
 
     onUserClick: function(event, userId) {
         event.preventDefault();
+
+        /*
         var MemberInfo = sdk.getComponent('rooms.MemberInfo');
         var member = new Matrix.RoomMember(null, userId);
         ContextualMenu.createMenu(MemberInfo, {
@@ -621,6 +671,14 @@ module.exports = React.createClass({
             right: window.innerWidth - event.pageX,
             top: event.pageY
         });
+        */
+
+        var member = new Matrix.RoomMember(null, userId);
+        if (!member) { return; }
+        dis.dispatch({
+            action: 'view_user',
+            member: member,
+        });        
     },
 
     onLogoutClick: function(event) {
@@ -668,6 +726,10 @@ module.exports = React.createClass({
         this.showScreen("login");
     },
 
+    onForgotPasswordClick: function() {
+        this.showScreen("forgot_password");
+    },
+
     onRegistered: function(credentials) {
         this.onLoggedIn(credentials);
         // do post-registration stuff
@@ -706,6 +768,7 @@ module.exports = React.createClass({
         var CreateRoom = sdk.getComponent('structures.CreateRoom');
         var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
+        var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
 
         // needs to be before normal PageTypes as you are logged in technically
         if (this.state.screen == 'post_registration') {
@@ -801,13 +864,21 @@ module.exports = React.createClass({
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick} />
             );
+        } else if (this.state.screen == 'forgot_password') {
+            return (
+                <ForgotPassword
+                    homeserverUrl={this.props.config.default_hs_url}
+                    identityServerUrl={this.props.config.default_is_url}
+                    onComplete={this.onLoginClick} />
+            );
         } else {
             return (
                 <Login
                     onLoggedIn={this.onLoggedIn}
                     onRegisterClick={this.onRegisterClick}
                     homeserverUrl={this.props.config.default_hs_url}
-                    identityServerUrl={this.props.config.default_is_url} />
+                    identityServerUrl={this.props.config.default_is_url}
+                    onForgotPasswordClick={this.onForgotPasswordClick} />
             );
         }
     }

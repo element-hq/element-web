@@ -34,7 +34,8 @@
     "react-dom": "^0.14.2",
     "react-gemini-scrollbar": "^2.0.1",
     "sanitize-html": "^1.11.1",
-    "velocity-animate": "^1.2.3"
+    "velocity-animate": "^1.2.3",
+    "velocity-ui-pack": "^1.2.2"
   },
   "//deps": "The loader packages are here because webpack in a project that depends on us needs them in this package's node_modules folder",
   "//depsbuglink": "https://github.com/webpack/webpack/issues/1472",

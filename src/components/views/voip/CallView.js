@@ -36,7 +36,7 @@ module.exports = React.createClass({
     propTypes: {
         // a callback which is called when the video within the callview
         // due to a change in video metadata
-        onResize: React.PropTypes.function,
+        onResize: React.PropTypes.func,
     },
 
     componentDidMount: function() {

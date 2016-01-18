@@ -29,6 +29,14 @@ class Entry {
     }
 
     /**
+     * @return {string} The text to insert into the input box. Most of the time
+     * this is the same as getText().
+     */
+    getFillText() {
+        return this.text;
+    }
+
+    /**
      * @return {ReactClass} Raw JSX
      */
     getImageJsx() {
@@ -43,11 +51,44 @@ class Entry {
     }
 
     /**
+     * @return {?string} The suffix to append to the tab-complete, or null to
+     * not do this.
+     */
+    getSuffix(isFirstWord) {
+        return null;
+    }
+
+    /**
      * Called when this entry is clicked.
      */
     onClick() {
         // NOP
     }
+}
+
+class CommandEntry extends Entry {
+    constructor(cmd, cmdWithArgs) {
+        super(cmdWithArgs);
+        this.cmd = cmd;
+    }
+
+    getFillText() {
+        return this.cmd;
+    }
+
+    getKey() {
+        return this.getFillText();
+    }
+
+    getSuffix(isFirstWord) {
+        return " "; // force a space after the command.
+    }
+}
+
+CommandEntry.fromCommands = function(commandArray) {
+    return commandArray.map(function(cmd) {
+        return new CommandEntry(cmd.getCommand(), cmd.getCommandWithArgs());
+    });
 }
 
 class MemberEntry extends Entry {
@@ -65,6 +106,10 @@ class MemberEntry extends Entry {
 
     getKey() {
         return this.member.userId;
+    }
+
+    getSuffix(isFirstWord) {
+        return isFirstWord ? ": " : " ";
     }
 }
 
@@ -99,3 +144,4 @@ MemberEntry.fromMemberList = function(members) {
 
 module.exports.Entry = Entry;
 module.exports.MemberEntry = MemberEntry;
+module.exports.CommandEntry = CommandEntry;

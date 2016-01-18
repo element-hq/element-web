@@ -36,6 +36,9 @@ module.exports = React.createClass({
     },
 
     componentDidUpdate: function() {
+        // XXX: why don't we linkify here?
+        // XXX: why do we bother doing this on update at all, given events are immutable?
+
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
             HtmlUtils.highlightDom(ReactDOM.findDOMNode(this));
     },

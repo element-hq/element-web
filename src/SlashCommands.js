@@ -20,6 +20,31 @@ var dis = require("./dispatcher");
 var encryption = require("./encryption");
 var Tinter = require("./Tinter");
 
+
+class Command {
+    constructor(name, paramArgs, runFn) {
+        this.name = name;
+        this.paramArgs = paramArgs;
+        this.runFn = runFn;
+    }
+
+    getCommand() {
+        return "/" + this.name;
+    }
+
+    getCommandWithArgs() {
+        return this.getCommand() + " " + this.paramArgs;
+    }
+
+    run(roomId, args) {
+        return this.runFn.bind(this)(roomId, args);
+    }
+
+    getUsage() {
+        return "Usage: " + this.getCommandWithArgs()
+    }
+}
+
 var reject = function(msg) {
     return {
         error: msg
@@ -34,22 +59,37 @@ var success = function(promise) {
 
 var commands = {
     // Change your nickname
-    nick: function(room_id, args) {
+    nick: new Command("nick", "<display_name>", function(room_id, args) {
         if (args) {
             return success(
                 MatrixClientPeg.get().setDisplayName(args)
             );
         }
-        return reject("Usage: /nick <display_name>");
-    },
+        return reject(this.getUsage());
+    }),
 
-    // Takes an #rrggbb colourcode and retints the UI (just for debugging)
-    tint: function(room_id, args) {
-        Tinter.tint(args);
-        return success();
-    },
+    // Changes the colorscheme of your current room
+    tint: new Command("tint", "<color1> [<color2>]", function(room_id, args) {
+        if (args) {
+            var matches = args.match(/^(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}))( +(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})))?$/);
+            if (matches) {
+                Tinter.tint(matches[1], matches[4]);
+                var colorScheme = {}
+                colorScheme.primary_color = matches[1];
+                if (matches[4]) {
+                    colorScheme.secondary_color = matches[4];
+                }
+                return success(
+                    MatrixClientPeg.get().setRoomAccountData(
+                        room_id, "org.matrix.room.color_scheme", colorScheme
+                    )                    
+                );
+            }
+        }
+        return reject(this.getUsage());
+    }),
 
-    encrypt: function(room_id, args) {
+    encrypt: new Command("encrypt", "<on|off>", function(room_id, args) {
         if (args == "on") {
             var client = MatrixClientPeg.get();
             var members = client.getRoom(room_id).currentState.members;
@@ -65,21 +105,21 @@ var commands = {
             );
 
         }
-        return reject("Usage: encrypt <on/off>");
-    },
+        return reject(this.getUsage());
+    }),
 
     // Change the room topic
-    topic: function(room_id, args) {
+    topic: new Command("topic", "<topic>", function(room_id, args) {
         if (args) {
             return success(
                 MatrixClientPeg.get().setRoomTopic(room_id, args)
             );
         }
-        return reject("Usage: /topic <topic>");
-    },
+        return reject(this.getUsage());
+    }),
 
     // Invite a user
-    invite: function(room_id, args) {
+    invite: new Command("invite", "<userId>", function(room_id, args) {
         if (args) {
             var matches = args.match(/^(\S+)$/);
             if (matches) {
@@ -88,11 +128,11 @@ var commands = {
                 );
             }
         }
-        return reject("Usage: /invite <userId>");
-    },
+        return reject(this.getUsage());
+    }),
 
     // Join a room
-    join: function(room_id, args) {
+    join: new Command("join", "<room_alias>", function(room_id, args) {
         if (args) {
             var matches = args.match(/^(\S+)$/);
             if (matches) {
@@ -101,8 +141,7 @@ var commands = {
                     return reject("Usage: /join #alias:domain");
                 }
                 if (!room_alias.match(/:/)) {
-                    var domain = MatrixClientPeg.get().credentials.userId.replace(/^.*:/, '');
-                    room_alias += ':' + domain;
+                    room_alias += ':' + MatrixClientPeg.get().getDomain();
                 }
 
                 // Try to find a room with this alias
@@ -135,21 +174,20 @@ var commands = {
                 );
             }
         }
-        return reject("Usage: /join <room_alias>");
-    },
+        return reject(this.getUsage());
+    }),
 
-    part: function(room_id, args) {
+    part: new Command("part", "[#alias:domain]", function(room_id, args) {
         var targetRoomId;
         if (args) {
             var matches = args.match(/^(\S+)$/);
             if (matches) {
                 var room_alias = matches[1];
                 if (room_alias[0] !== '#') {
-                    return reject("Usage: /part [#alias:domain]");
+                    return reject(this.getUsage());
                 }
                 if (!room_alias.match(/:/)) {
-                    var domain = MatrixClientPeg.get().credentials.userId.replace(/^.*:/, '');
-                    room_alias += ':' + domain;
+                    room_alias += ':' + MatrixClientPeg.get().getDomain();
                 }
 
                 // Try to find a room with this alias
@@ -182,10 +220,10 @@ var commands = {
                 dis.dispatch({action: 'view_next_room'});
             })
         );
-    },
+    }),
 
     // Kick a user from the room with an optional reason
-    kick: function(room_id, args) {
+    kick: new Command("kick", "<userId> [<reason>]", function(room_id, args) {
         if (args) {
             var matches = args.match(/^(\S+?)( +(.*))?$/);
             if (matches) {
@@ -194,11 +232,11 @@ var commands = {
                 );
             }
         }
-        return reject("Usage: /kick <userId> [<reason>]");
-    },
+        return reject(this.getUsage());
+    }),
 
     // Ban a user from the room with an optional reason
-    ban: function(room_id, args) {
+    ban: new Command("ban", "<userId> [<reason>]", function(room_id, args) {
         if (args) {
             var matches = args.match(/^(\S+?)( +(.*))?$/);
             if (matches) {
@@ -207,11 +245,11 @@ var commands = {
                 );
             }
         }
-        return reject("Usage: /ban <userId> [<reason>]");
-    },
+        return reject(this.getUsage());
+    }),
 
     // Unban a user from the room
-    unban: function(room_id, args) {
+    unban: new Command("unban", "<userId>", function(room_id, args) {
         if (args) {
             var matches = args.match(/^(\S+)$/);
             if (matches) {
@@ -221,11 +259,11 @@ var commands = {
                 );
             }
         }
-        return reject("Usage: /unban <userId>");
-    },
+        return reject(this.getUsage());
+    }),
 
     // Define the power level of a user
-    op: function(room_id, args) {
+    op: new Command("op", "<userId> [<power level>]", function(room_id, args) {
         if (args) {
             var matches = args.match(/^(\S+?)( +(\d+))?$/);
             var powerLevel = 50; // default power level for op
@@ -250,11 +288,11 @@ var commands = {
                 }
             }
         }
-        return reject("Usage: /op <userId> [<power level>]");
-    },
+        return reject(this.getUsage());
+    }),
 
     // Reset the power level of a user
-    deop: function(room_id, args) {
+    deop: new Command("deop", "<userId>", function(room_id, args) {
         if (args) {
             var matches = args.match(/^(\S+)$/);
             if (matches) {
@@ -273,12 +311,14 @@ var commands = {
                 );
             }
         }
-        return reject("Usage: /deop <userId>");
-    }
+        return reject(this.getUsage());
+    })
 };
 
 // helpful aliases
-commands.j = commands.join;
+var aliases = {
+    j: "join"
+}
 
 module.exports = {
     /**
@@ -298,13 +338,26 @@ module.exports = {
             var cmd = bits[1].substring(1).toLowerCase();
             var args = bits[3];
             if (cmd === "me") return null;
+            if (aliases[cmd]) {
+                cmd = aliases[cmd];
+            }
             if (commands[cmd]) {
-                return commands[cmd](roomId, args);
+                return commands[cmd].run(roomId, args);
             }
             else {
                 return reject("Unrecognised command: " + input);
             }
         }
         return null; // not a command
+    },
+
+    getCommandList: function() {
+        // Return all the commands plus /me which isn't handled like normal commands
+        var cmds = Object.keys(commands).sort().map(function(cmdKey) {
+            return commands[cmdKey];
+        })
+        cmds.push(new Command("me", "<action>", function(){}));
+
+        return cmds;
     }
 };

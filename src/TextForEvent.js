@@ -66,7 +66,7 @@ function textForMemberEvent(ev) {
 function textForTopicEvent(ev) {
     var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
-    return senderDisplayName + ' changed the topic to, "' + ev.getContent().topic + '"';
+    return senderDisplayName + ' changed the topic to "' + ev.getContent().topic + '"';
 };
 
 function textForRoomNameEvent(ev) {

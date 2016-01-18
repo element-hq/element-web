@@ -16,9 +16,17 @@ limitations under the License.
 var React = require('react');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Avatar = require('../../../Avatar');
+var sdk = require("../../../index");
 
 module.exports = React.createClass({
     displayName: 'RoomAvatar',
+
+    propTypes: {
+        room: React.PropTypes.object.isRequired,
+        width: React.PropTypes.number,
+        height: React.PropTypes.number,
+        resizeMethod: React.PropTypes.string
+    },
 
     getDefaultProps: function() {
         return {
@@ -29,84 +37,54 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        this._update();
         return {
-            imageUrl: this._nextUrl()
+            urls: this.getImageUrls(this.props)
         };
     },
 
-    componentWillReceiveProps: function(nextProps) {
-        this.refreshImageUrl();
+    componentWillReceiveProps: function(newProps) {
+        this.setState({
+            urls: this.getImageUrls(newProps)
+        })
     },
 
-    refreshImageUrl: function(nextProps) {
-        // If the list has changed, we start from scratch and re-check, but
-        // don't do so unless the list has changed or we'd re-try fetching
-        // images each time we re-rendered
-        var newList = this.getUrlList();
-        var differs = false;
-        for (var i = 0; i < newList.length && i < this.urlList.length; ++i) {
-            if (this.urlList[i] != newList[i]) differs = true;
-        }
-        if (this.urlList.length != newList.length) differs = true;
-
-        if (differs) {
-            this._update();
-            this.setState({
-                imageUrl: this._nextUrl()
-            });
-        }
+    getImageUrls: function(props) {
+        return [
+            this.getRoomAvatarUrl(props), // highest priority
+            this.getOneToOneAvatar(props),
+            this.getFallbackAvatar(props) // lowest priority
+        ].filter(function(url) {
+            return url != null;
+        });
     },
 
-    _update: function() {
-        this.urlList = this.getUrlList();
-        this.urlListIndex = -1;
-    },
-
-    _nextUrl: function() {
-        do {
-            ++this.urlListIndex;
-        } while (
-            this.urlList[this.urlListIndex] === null &&
-            this.urlListIndex < this.urlList.length
-        );
-        if (this.urlListIndex < this.urlList.length) {
-            return this.urlList[this.urlListIndex];
-        } else {
-            return null;
-        }
-    },
-
-    // provided to the view class for convenience
-    roomAvatarUrl: function() {
-        var url = this.props.room.getAvatarUrl(
+    getRoomAvatarUrl: function(props) {
+        return props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
-            this.props.width, this.props.height, this.props.resizeMethod,
+            props.width, props.height, props.resizeMethod,
             false
         );
-        return url;
     },
 
-    // provided to the view class for convenience
-    getOneToOneAvatar: function() {
-        var userIds = Object.keys(this.props.room.currentState.members);
+    getOneToOneAvatar: function(props) {
+        var userIds = Object.keys(props.room.currentState.members);
 
         if (userIds.length == 2) {
             var theOtherGuy = null;
-            if (this.props.room.currentState.members[userIds[0]].userId == MatrixClientPeg.get().credentials.userId) {
-                theOtherGuy = this.props.room.currentState.members[userIds[1]];
+            if (props.room.currentState.members[userIds[0]].userId == MatrixClientPeg.get().credentials.userId) {
+                theOtherGuy = props.room.currentState.members[userIds[1]];
             } else {
-                theOtherGuy = this.props.room.currentState.members[userIds[0]];
+                theOtherGuy = props.room.currentState.members[userIds[0]];
             }
             return theOtherGuy.getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                this.props.width, this.props.height, this.props.resizeMethod,
+                props.width, props.height, props.resizeMethod,
                 false
             );
         } else if (userIds.length == 1) {
-            return this.props.room.currentState.members[userIds[0]].getAvatarUrl(
+            return props.room.currentState.members[userIds[0]].getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                this.props.width, this.props.height, this.props.resizeMethod,
+                props.width, props.height, props.resizeMethod,
                     false
             );
         } else {
@@ -114,58 +92,15 @@ module.exports = React.createClass({
         }
     },
 
-
-    onError: function(ev) {
-        this.setState({
-            imageUrl: this._nextUrl()
-        });
-    },
-
-
-
-    ////////////
-
-
-    getUrlList: function() {
-        return [
-            this.roomAvatarUrl(),
-            this.getOneToOneAvatar(),
-            this.getFallbackAvatar()
-        ];
-    },
-
-    getFallbackAvatar: function() {
-        return Avatar.defaultAvatarUrlForString(this.props.room.roomId);
+    getFallbackAvatar: function(props) {
+        return Avatar.defaultAvatarUrlForString(props.room.roomId);
     },
 
     render: function() {
-        var style = {
-            width: this.props.width,
-            height: this.props.height,
-        };
-
-        // XXX: recalculates fallback avatar constantly
-        if (this.state.imageUrl === this.getFallbackAvatar()) {
-            var initial;
-            if (this.props.room.name[0])
-                initial = this.props.room.name[0].toUpperCase();
-            if ((initial === '@' || initial === '#') && this.props.room.name[1])
-                initial = this.props.room.name[1].toUpperCase();
-         
-            return (
-                <span>
-                    <span className="mx_RoomAvatar_initial" aria-hidden="true"
-                          style={{ fontSize: (this.props.width * 0.65) + "px",
-                                   width: this.props.width + "px",
-                                   lineHeight: this.props.height + "px" }}>{ initial }</span>
-                    <img className="mx_RoomAvatar" src={this.state.imageUrl}
-                            onError={this.onError} style={style} />
-                </span>
-            );
-        }
-        else {
-            return <img className="mx_RoomAvatar" src={this.state.imageUrl}
-                        onError={this.onError} style={style} />
-        }
+        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        return (
+            <BaseAvatar {...this.props} name={this.props.room.name}
+                idName={this.props.room.roomId} urls={this.state.urls} />
+        );
     }
 });

@@ -35,11 +35,15 @@ var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
 var TabComplete = require("../../TabComplete");
 var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
+var CommandEntry = require("../../TabCompleteEntries").CommandEntry;
 var Resend = require("../../Resend");
+var SlashCommands = require("../../SlashCommands");
 var dis = require("../../dispatcher");
+var Tinter = require("../../Tinter");
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
+var SEND_READ_RECEIPT_DELAY = 2000;
 
 var DEBUG_SCROLL = false;
 
@@ -74,6 +78,9 @@ module.exports = React.createClass({
             syncState: MatrixClientPeg.get().getSyncState(),
             hasUnsentMessages: this._hasUnsentMessages(room),
             callState: null,
+            guestsCanJoin: false,
+            readMarkerEventId: room ? room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId) : null,
+            readMarkerGhostEventId: undefined
         }
     },
 
@@ -81,6 +88,7 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
+        MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
@@ -88,8 +96,6 @@ module.exports = React.createClass({
         // xchat-style tab complete, add a colon if tab
         // completing at the start of the text
         this.tabComplete = new TabComplete({
-            startingWordSuffix: ": ",
-            wordSuffix: " ",
             allowLooping: false,
             autoEnterTabComplete: true,
             onClickCompletes: true,
@@ -106,15 +112,27 @@ module.exports = React.createClass({
         // succeeds then great, show the preview (but we still may be able to /join!).
         if (!this.state.room) {
             console.log("Attempting to peek into room %s", this.props.roomId);
-            MatrixClientPeg.get().peekInRoom(this.props.roomId).done(function() {
+            MatrixClientPeg.get().peekInRoom(this.props.roomId).done(() => {
                 // we don't need to do anything - JS SDK will emit Room events
-                // which will update the UI.
+                // which will update the UI. We *do* however need to know if we
+                // can join the room so we can fiddle with the UI appropriately.
+                var peekedRoom = MatrixClientPeg.get().getRoom(this.props.roomId);
+                if (!peekedRoom) {
+                    return;
+                }
+                var guestAccessEvent = peekedRoom.currentState.getStateEvents("m.room.guest_access", "");
+                if (!guestAccessEvent) {
+                    return;
+                }
+                if (guestAccessEvent.getContent().guest_access === "can_join") {
+                    this.setState({
+                        guestsCanJoin: true
+                    });
+                }
             }, function(err) {
                 console.error("Failed to peek into room: %s", err);
             });
         }
-
-
     },
 
     componentWillUnmount: function() {
@@ -124,21 +142,22 @@ module.exports = React.createClass({
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
 
-        if (this.refs.messagePanel) {
-            // disconnect the D&D event listeners from the message panel. This
-            // is really just for hygiene - the messagePanel is going to be
+        if (this.refs.roomView) {
+            // disconnect the D&D event listeners from the room view. This
+            // is really just for hygiene - we're going to be
             // deleted anyway, so it doesn't matter if the event listeners
             // don't get cleaned up.
-            var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
-            messagePanel.removeEventListener('drop', this.onDrop);
-            messagePanel.removeEventListener('dragover', this.onDragOver);
-            messagePanel.removeEventListener('dragleave', this.onDragLeaveOrEnd);
-            messagePanel.removeEventListener('dragend', this.onDragLeaveOrEnd);
+            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            roomView.removeEventListener('drop', this.onDrop);
+            roomView.removeEventListener('dragover', this.onDragOver);
+            roomView.removeEventListener('dragleave', this.onDragLeaveOrEnd);
+            roomView.removeEventListener('dragend', this.onDragLeaveOrEnd);
         }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+            MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
@@ -146,6 +165,8 @@ module.exports = React.createClass({
         }
 
         window.removeEventListener('resize', this.onResize);        
+
+        Tinter.tint(); // reset colourscheme
     },
 
     onAction: function(payload) {
@@ -199,6 +220,12 @@ module.exports = React.createClass({
 
                 break;
             case 'user_activity':
+            case 'user_activity_end':
+                // we could treat user_activity_end differently and not
+                // send receipts for messages that have arrived between
+                // the actual user activity and the time they stopped
+                // being active, but let's see if this is actually
+                // necessary.
                 this.sendReadReceipt();
                 break;
         }
@@ -259,9 +286,58 @@ module.exports = React.createClass({
         }
     },
 
+    updateTint: function() {
+        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        if (!room) return;
+
+        var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
+        var color_scheme = {};
+        if (color_scheme_event) {
+            color_scheme = color_scheme_event.getContent();
+            // XXX: we should validate the event
+        }                
+        Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+    },
+
+    onRoomAccountData: function(room, event) {
+        if (room.roomId == this.props.roomId) {
+            if (event.getType === "org.matrix.room.color_scheme") {
+                var color_scheme = event.getContent();
+                // XXX: we should validate the event
+                Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+            }
+        }
+    },
+
     onRoomReceipt: function(receiptEvent, room) {
         if (room.roomId == this.props.roomId) {
-            this.forceUpdate();
+            var readMarkerEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+            var readMarkerGhostEventId = this.state.readMarkerGhostEventId;
+            if (this.state.readMarkerEventId !== undefined && this.state.readMarkerEventId != readMarkerEventId) {
+                readMarkerGhostEventId = this.state.readMarkerEventId;
+            }
+
+
+            // if the event after the one referenced in the read receipt if sent by us, do nothing since
+            // this is a temporary period before the synthesized receipt for our own message arrives
+            var readMarkerGhostEventIndex;
+            for (var i = 0; i < room.timeline.length; ++i) {
+                if (room.timeline[i].getId() == readMarkerGhostEventId) {
+                    readMarkerGhostEventIndex = i;
+                    break;
+                }
+            }
+            if (readMarkerGhostEventIndex + 1 < room.timeline.length) {
+                var nextEvent = room.timeline[readMarkerGhostEventIndex + 1];
+                if (nextEvent.sender && nextEvent.sender.userId == MatrixClientPeg.get().credentials.userId) {
+                    readMarkerGhostEventId = undefined;
+                }
+            }
+
+            this.setState({
+                readMarkerEventId: readMarkerEventId,
+                readMarkerGhostEventId: readMarkerGhostEventId,
+            });
         }
     },
 
@@ -338,6 +414,14 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.onResize);
         this.onResize();
 
+        if (this.refs.roomView) {
+            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            roomView.addEventListener('drop', this.onDrop);
+            roomView.addEventListener('dragover', this.onDragOver);
+            roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
+            roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
+        }
+
         this._updateTabCompleteList(this.state.room);
     },
 
@@ -346,7 +430,9 @@ module.exports = React.createClass({
             return;
         }
         this.tabComplete.setCompletionList(
-            MemberEntry.fromMemberList(room.getJoinedMembers())
+            MemberEntry.fromMemberList(room.getJoinedMembers()).concat(
+                CommandEntry.fromCommands(SlashCommands.getCommandList())
+            )
         );
     },
 
@@ -354,13 +440,10 @@ module.exports = React.createClass({
         var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
         this.refs.messagePanel.initialised = true;
 
-        messagePanel.addEventListener('drop', this.onDrop);
-        messagePanel.addEventListener('dragover', this.onDragOver);
-        messagePanel.addEventListener('dragleave', this.onDragLeaveOrEnd);
-        messagePanel.addEventListener('dragend', this.onDragLeaveOrEnd);
-
         this.scrollToBottom();
         this.sendReadReceipt();
+
+        this.updateTint();
     },
 
     componentDidUpdate: function() {
@@ -682,10 +765,10 @@ module.exports = React.createClass({
 
         var EventTile = sdk.getComponent('rooms.EventTile');
 
-
         var prevEvent = null; // the last event we showed
-        var readReceiptEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
         var startIdx = Math.max(0, this.state.room.timeline.length - this.state.messageCap);
+        var readMarkerIndex;
+        var ghostIndex;
         for (var i = startIdx; i < this.state.room.timeline.length; i++) {
             var mxEv = this.state.room.timeline[i];
 
@@ -697,6 +780,25 @@ module.exports = React.createClass({
                         this.props.ConferenceHandler.isConferenceUser(mxEv.getStateKey())) {
                     continue; // suppress conf user join/parts
                 }
+            }
+
+            // now we've decided whether or not to show this message,
+            // add the read up to marker if appropriate
+            // doing this here means we implicitly do not show the marker
+            // if it's at the bottom
+            // NB. it would be better to decide where the read marker was going
+            // when the state changed rather than here in the render method, but
+            // this is where we decide what messages we show so it's the only
+            // place we know whether we're at the bottom or not.
+            var self = this;
+            var mxEvSender = mxEv.sender ? mxEv.sender.userId : null;
+            if (prevEvent && prevEvent.getId() == this.state.readMarkerEventId && mxEvSender != MatrixClientPeg.get().credentials.userId) {
+                var hr;
+                hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '99%'}} ref={function(n) {
+                    self.readMarkerNode = n;
+                }} />);
+                readMarkerIndex = ret.length;
+                ret.push(<li key="_readupto" className="mx_RoomView_myReadMarker_container">{hr}</li>);
             }
 
             // is this a continuation of the previous message?
@@ -735,11 +837,27 @@ module.exports = React.createClass({
                 </li>
             );
 
-            if (eventId == readReceiptEventId) {
-                ret.push(<hr className="mx_RoomView_myReadMarker" />);
+            // A read up to marker has died and returned as a ghost!
+            // Lives in the dom as the ghost of the previous one while it fades away
+            if (eventId == this.state.readMarkerGhostEventId) {
+                ghostIndex = ret.length;
             }
 
             prevEvent = mxEv;
+        }
+
+        // splice the read marker ghost in now that we know whether the read receipt
+        // is the last element or not, because we only decide as we're going along.
+        if (readMarkerIndex === undefined && ghostIndex && ghostIndex <= ret.length) {
+            var hr;
+            hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '99%'}} ref={function(n) {
+                Velocity(n, {opacity: '0', width: '10%'}, {duration: 400, easing: 'easeInSine', delay: 1000, complete: function() {
+                    self.setState({readMarkerGhostEventId: undefined});
+                }});
+            }} />);
+            ret.splice(ghostIndex, 0, (
+                <li key="_readuptoghost" className="mx_RoomView_myReadMarker_container">{hr}</li>
+            ));
         }
 
         return ret;
@@ -769,9 +887,27 @@ module.exports = React.createClass({
             old_history_visibility = "shared";
         }
 
+        var old_guest_read = (old_history_visibility === "world_readable");
+
+        var old_guest_join = this.state.room.currentState.getStateEvents('m.room.guest_access', '');
+        if (old_guest_join) {
+            old_guest_join = (old_guest_join.getContent().guest_access === "can_join");
+        }
+        else {
+            old_guest_join = false;
+        }
+
+        var old_canonical_alias = this.state.room.currentState.getStateEvents('m.room.canonical_alias', '');
+        if (old_canonical_alias) {
+            old_canonical_alias = old_canonical_alias.getContent().alias;
+        }
+        else {
+            old_canonical_alias = "";   
+        }
+
         var deferreds = [];
 
-        if (old_name != newVals.name && newVals.name != undefined && newVals.name) {
+        if (old_name != newVals.name && newVals.name != undefined) {
             deferreds.push(
                 MatrixClientPeg.get().setRoomName(this.state.room.roomId, newVals.name)
             );
@@ -819,26 +955,128 @@ module.exports = React.createClass({
             );
         }
 
-        deferreds.push(
-            MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
-                allowRead: newVals.guest_read,
-                allowJoin: newVals.guest_join
-            })
-        );
+        if (newVals.alias_operations) {
+            var oplist = [];
+            for (var i = 0; i < newVals.alias_operations.length; i++) {
+                var alias_operation = newVals.alias_operations[i];
+                switch (alias_operation.type) {
+                    case 'put':
+                        oplist.push(
+                            MatrixClientPeg.get().createAlias(
+                                alias_operation.alias, this.state.room.roomId
+                            )
+                        );
+                        break;
+                    case 'delete':
+                        oplist.push(
+                            MatrixClientPeg.get().deleteAlias(
+                                alias_operation.alias
+                            )
+                        );
+                        break;
+                    default:
+                        console.log("Unknown alias operation, ignoring: " + alias_operation.type);
+                }
+            }
+
+            if (oplist.length) {
+                var deferred = oplist[0];
+                oplist.splice(1).forEach(function (f) {
+                    deferred = deferred.then(f);
+                });
+                deferreds.push(deferred);
+            }
+        }
+
+        if (newVals.tag_operations) {
+            // FIXME: should probably be factored out with alias_operations above
+            var oplist = [];
+            for (var i = 0; i < newVals.tag_operations.length; i++) {
+                var tag_operation = newVals.tag_operations[i];
+                switch (tag_operation.type) {
+                    case 'put':
+                        oplist.push(
+                            MatrixClientPeg.get().setRoomTag(
+                                this.props.roomId, tag_operation.tag, {}
+                            )
+                        );
+                        break;
+                    case 'delete':
+                        oplist.push(
+                            MatrixClientPeg.get().deleteRoomTag(
+                                this.props.roomId, tag_operation.tag
+                            )
+                        );
+                        break;
+                    default:
+                        console.log("Unknown tag operation, ignoring: " + tag_operation.type);
+                }
+            }
+
+            if (oplist.length) {
+                var deferred = oplist[0];
+                oplist.splice(1).forEach(function (f) {
+                    deferred = deferred.then(f);
+                });
+                deferreds.push(deferred);
+            }            
+        }
+
+        if (old_canonical_alias !== newVals.canonical_alias) {
+            deferreds.push(
+                MatrixClientPeg.get().sendStateEvent(
+                    this.state.room.roomId, "m.room.canonical_alias", {
+                        alias: newVals.canonical_alias
+                    }, ""
+                )
+            );            
+        }
+
+        if (newVals.color_scheme) {
+            deferreds.push(
+                MatrixClientPeg.get().setRoomAccountData(
+                    this.state.room.roomId, "org.matrix.room.color_scheme", newVals.color_scheme
+                )
+            );
+        }
+
+        if (old_guest_read != newVals.guest_read ||
+            old_guest_join != newVals.guest_join)
+        {
+            deferreds.push(
+                MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
+                    allowRead: newVals.guest_read,
+                    allowJoin: newVals.guest_join
+                })
+            );
+        }
 
         if (deferreds.length) {
             var self = this;
-            q.all(deferreds).fail(function(err) {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Failed to set state",
-                    description: err.toString()
+            q.allSettled(deferreds).then(
+                function(results) {
+                    var fails = results.filter(function(result) { return result.state !== "fulfilled" });
+                    if (fails.length) {
+                        fails.forEach(function(result) {
+                            console.error(result.reason);
+                        });
+                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Failed to set state",
+                            description: fails.map(function(result) { return result.reason }).join("\n"),
+                        });
+                        self.refs.room_settings.resetState();
+                    }
+                    else {
+                        self.setState({
+                            editingRoomSettings: false
+                        });
+                    }
+                }).finally(function() {
+                    self.setState({
+                        uploadingRoomSettings: false,
+                    });
                 });
-            }).finally(function() {
-                self.setState({
-                    uploadingRoomSettings: false,
-                });
-            });
         } else {
             this.setState({
                 editingRoomSettings: false,
@@ -906,23 +1144,27 @@ module.exports = React.createClass({
 
     onSaveClick: function() {
         this.setState({
-            editingRoomSettings: false,
             uploadingRoomSettings: true,
         });
 
         this.uploadNewState({
             name: this.refs.header.getRoomName(),
-            topic: this.refs.room_settings.getTopic(),
+            topic: this.refs.header.getTopic(),
             join_rule: this.refs.room_settings.getJoinRules(),
             history_visibility: this.refs.room_settings.getHistoryVisibility(),
             are_notifications_muted: this.refs.room_settings.areNotificationsMuted(),
             power_levels: this.refs.room_settings.getPowerLevels(),
+            alias_operations: this.refs.room_settings.getAliasOperations(),
+            tag_operations: this.refs.room_settings.getTagOperations(),
+            canonical_alias: this.refs.room_settings.getCanonicalAlias(),
             guest_join: this.refs.room_settings.canGuestsJoin(),
-            guest_read: this.refs.room_settings.canGuestsRead()
+            guest_read: this.refs.room_settings.canGuestsRead(),
+            color_scheme: this.refs.room_settings.getColorScheme(),
         });
     },
 
     onCancelClick: function() {
+        this.updateTint();
         this.setState({editingRoomSettings: false});
     },
 
@@ -1070,25 +1312,31 @@ module.exports = React.createClass({
         // a minimum of the height of the video element, whilst also capping it from pushing out the page
         // so we have to do it via JS instead.  In this implementation we cap the height by putting
         // a maxHeight on the underlying remote video tag.
-        var auxPanelMaxHeight;
+
+        // header + footer + status + give us at least 120px of scrollback at all times.
+        var auxPanelMaxHeight = window.innerHeight -
+                (83 + // height of RoomHeader
+                 36 + // height of the status area
+                 72 + // minimum height of the message compmoser
+                 120); // amount of desired scrollback
+
+        // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
+        // but it's better than the video going missing entirely
+        if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
+
         if (this.refs.callView) {
             var video = this.refs.callView.getVideoView().getRemoteVideoElement();
-
-            // header + footer + status + give us at least 100px of scrollback at all times.
-            auxPanelMaxHeight = window.innerHeight -
-                (83 + 72 +
-                 sdk.getComponent('rooms.MessageComposer').MAX_HEIGHT +
-                 100);
-
-            // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
-            // but it's better than the video going missing entirely
-            if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
             video.style.maxHeight = auxPanelMaxHeight + "px";
 
             // the above might have made the video panel resize itself, so now
             // we need to tell the gemini panel to adapt.
             this.onChildResize();
+        }
+
+        // we need to do this for general auxPanels too
+        if (this.refs.auxPanel) {
+            this.refs.auxPanel.style.maxHeight = auxPanelMaxHeight + "px";
         }
     },
 
@@ -1132,6 +1380,13 @@ module.exports = React.createClass({
         }
     },
 
+    showSettings: function(show) {
+        // XXX: this is a bit naughty; we should be doing this via props
+        if (show) {
+            this.setState({editingRoomSettings: true});
+        }
+    },
+
     render: function() {
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         var MessageComposer = sdk.getComponent('rooms.MessageComposer');
@@ -1140,6 +1395,7 @@ module.exports = React.createClass({
         var SearchBar = sdk.getComponent("rooms.SearchBar");
         var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        var RoomPreviewBar = sdk.getComponent("rooms.RoomPreviewBar");
 
         if (!this.state.room) {
             if (this.props.roomId) {
@@ -1281,7 +1537,7 @@ module.exports = React.createClass({
 
             var aux = null;
             if (this.state.editingRoomSettings) {
-                aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
+                aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
             }
             else if (this.state.uploadingRoomSettings) {
                 var Loader = sdk.getComponent("elements.Spinner");                
@@ -1289,6 +1545,12 @@ module.exports = React.createClass({
             }
             else if (this.state.searching) {
                 aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
+            }
+            else if (this.state.guestsCanJoin && MatrixClientPeg.get().isGuest() &&
+                    (!myMember || myMember.membership !== "join")) {
+                aux = (
+                    <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />
+                );
             }
 
             var conferenceCallNotification = null;
@@ -1309,7 +1571,7 @@ module.exports = React.createClass({
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
                                     <div className="mx_RoomView_fileDropTargetLabel" title="Drop File Here">
                                         <TintableSvg src="img/upload-big.svg" width="45" height="59"/><br/>
-                                        Drop File Here
+                                        Drop file here to upload
                                     </div>
                                  </div>;
             }
@@ -1410,7 +1672,7 @@ module.exports = React.createClass({
             );
 
             return (
-                <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") }>
+                <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") } ref="roomView">
                     <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                         editing={this.state.editingRoomSettings}
                         onSearchClick={this.onSearchClick}
@@ -1423,8 +1685,8 @@ module.exports = React.createClass({
                         onLeaveClick={
                             (myMember && myMember.membership === "join") ? this.onLeaveClick : null
                         } />
-                    { fileDropTarget }    
-                    <div className="mx_RoomView_auxPanel">
+                    <div className="mx_RoomView_auxPanel" ref="auxPanel">
+                        { fileDropTarget }    
                         <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}
                             onResize={this.onChildResize} />
                         { conferenceCallNotification }
