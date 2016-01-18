@@ -56,8 +56,10 @@ module.exports = React.createClass({
         }
         else if (this.props.canJoin) {
             joinBlock = (
-                <div className="mx_RoomPreviewBar_join_text">
-                    Would you like to <a onClick={ this.props.onJoinClick }>join</a> this room?
+                <div>
+                    <div className="mx_RoomPreviewBar_join_text">
+                        Would you like to <a onClick={ this.props.onJoinClick }>join</a> this room?
+                    </div>
                 </div>
             );
         }
@@ -72,8 +74,10 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_RoomPreviewBar">
-                { previewBlock }
-                { joinBlock }
+                <div className="mx_RoomPreviewBar_wrapper">
+                    { joinBlock }
+                    { previewBlock }
+                </div>
             </div>
         );
     }
