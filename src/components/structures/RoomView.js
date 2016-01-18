@@ -115,23 +115,26 @@ module.exports = React.createClass({
         // We can't try to /join because this may implicitly accept invites (!)
         // We can /peek though. If it fails then we present the join UI. If it
         // succeeds then great, show the preview (but we still may be able to /join!).
-        if (!this.state.room && this.props.autoPeek) {
-            console.log("Attempting to peek into room %s", this.props.roomId);
-            MatrixClientPeg.get().peekInRoom(this.props.roomId).done(() => {
-                this.setState({
-                    autoPeekDone: true
-                });
+        if (!this.state.room) {
+            if (this.props.autoPeek) {
+                console.log("Attempting to peek into room %s", this.props.roomId);
+                MatrixClientPeg.get().peekInRoom(this.props.roomId).done(() => {
+                    this.setState({
+                        autoPeekDone: true
+                    });
 
-                // we don't need to do anything - JS SDK will emit Room events
-                // which will update the UI. We *do* however need to know if we
-                // can join the room so we can fiddle with the UI appropriately.
-                var peekedRoom = MatrixClientPeg.get().getRoom(this.props.roomId);
-                if (!peekedRoom) {
-                    return;
-                }
-            }, function(err) {
-                console.error("Failed to peek into room: %s", err);
-            });
+                    // we don't need to do anything - JS SDK will emit Room events
+                    // which will update the UI. We *do* however need to know if we
+                    // can join the room so we can fiddle with the UI appropriately.
+
+                    // ...XXX: or do we? can't we just do them onNewRoom?
+                }, function(err) {
+                    console.error("Failed to peek into room: %s", err);
+                });
+            }
+        }
+        else {
+            this._calculatePeekRules(this.state.room);
         }
     },
 
@@ -284,20 +287,24 @@ module.exports = React.createClass({
             this.setState({
                 room: room
             });
+        }
 
-            var guestAccessEvent = room.currentState.getStateEvents("m.room.guest_access", "");
-            if (guestAccessEvent && guestAccessEvent.getContent().guest_access === "can_join") {
-                this.setState({
-                    guestsCanJoin: true
-                });
-            }
+        this._calculatePeekRules(room);
+    },
 
-            var historyVisibility = room.currentState.getStateEvents("m.room.history_visibility", "");
-            if (historyVisibility && historyVisibility.getContent().history_visibility === "world_readable") {
-                this.setState({
-                    canPeek: true
-                });
-            }
+    _calculatePeekRules: function(room) {
+        var guestAccessEvent = room.currentState.getStateEvents("m.room.guest_access", "");
+        if (guestAccessEvent && guestAccessEvent.getContent().guest_access === "can_join") {
+            this.setState({
+                guestsCanJoin: true
+            });
+        }
+
+        var historyVisibility = room.currentState.getStateEvents("m.room.history_visibility", "");
+        if (historyVisibility && historyVisibility.getContent().history_visibility === "world_readable") {
+            this.setState({
+                canPeek: true
+            });
         }
     },
 
