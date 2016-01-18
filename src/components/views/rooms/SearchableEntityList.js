@@ -27,8 +27,7 @@ var SearchableEntityList = React.createClass({
         searchPlaceholderText: React.PropTypes.string,
         emptyQueryShowsAll: React.PropTypes.bool,
         onSubmit: React.PropTypes.func, // fn(inputText)
-        entities: React.PropTypes.array,
-        onEntityClick: React.PropTypes.func
+        entities: React.PropTypes.array
     },
 
     getDefaultProps: function() {
@@ -36,8 +35,7 @@ var SearchableEntityList = React.createClass({
             searchPlaceholderText: "Search",
             entities: [],
             emptyQueryShowsAll: false,
-            onSubmit: function() {},
-            onEntityClick: function() {}
+            onSubmit: function() {}
         };
     },
 
@@ -80,7 +78,7 @@ var SearchableEntityList = React.createClass({
                 </form>
                 <div className="mx_SearchableEntityList_list">
                     {this.state.results.map((entity) => {
-                        return entity.getJsx(this.props.onEntityClick);
+                        return entity.getJsx();
                     })}
                 </div>
             </div>

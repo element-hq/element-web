@@ -23,9 +23,9 @@ var sdk = require('../../../index');
 
 
 var PRESENCE_CLASS = {
-    "offline": "mx_MemberTile_offline",
-    "online": "mx_MemberTile_online",
-    "unavailable": "mx_MemberTile_unavailable"
+    "offline": "mx_EntityTile_offline",
+    "online": "mx_EntityTile_online",
+    "unavailable": "mx_EntityTile_unavailable"
 };
 
 module.exports = React.createClass({
@@ -73,19 +73,19 @@ module.exports = React.createClass({
 
     render: function() {
         var presenceClass = PRESENCE_CLASS[this.props.presenceState];
-        var mainClassName = "mx_MemberTile ";
+        var mainClassName = "mx_EntityTile ";
         mainClassName += presenceClass;
         if (this.state.hover) {
-            mainClassName += " mx_MemberTile_hover";
+            mainClassName += " mx_EntityTile_hover";
         }
 
         var nameEl;
         if (this.state.hover) {
             var PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
             nameEl = (
-                <div className="mx_MemberTile_details">
-                    <img className="mx_MemberTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
-                    <div className="mx_MemberTile_userId">{ this.props.name }</div>
+                <div className="mx_EntityTile_details">
+                    <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
+                    <div className="mx_EntityTile_name_hover">{ this.props.name }</div>
                     <PresenceLabel activeAgo={this.props.presenceActiveAgo}
                         presenceState={this.props.presenceState} />
                 </div>
@@ -93,11 +93,21 @@ module.exports = React.createClass({
         }
         else {
             nameEl = (
-                <div className="mx_MemberTile_name">
+                <div className="mx_EntityTile_name">
                     { this.props.name }
                 </div>
             );
         }
+
+        var inviteButton;
+        if (this.props.showInviteButton) {
+            inviteButton = (
+                <div className="mx_EntityTile_invite">
+                    <img src="img/plus.svg" width="24" height="24" />
+                </div>
+            );
+        }
+
 
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
@@ -108,10 +118,11 @@ module.exports = React.createClass({
             <div className={mainClassName} title={ this.props.title }
                     onClick={ this.props.onClick } onMouseEnter={ this.mouseEnter }
                     onMouseLeave={ this.mouseLeave }>
-                <div className="mx_MemberTile_avatar">
+                <div className="mx_EntityTile_avatar">
                     {av}
                 </div>
                 { nameEl }
+                { inviteButton }
             </div>
         );
     }
