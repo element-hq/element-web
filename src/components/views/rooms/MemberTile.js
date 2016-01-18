@@ -83,10 +83,7 @@ module.exports = React.createClass({
         if (!this.props.member) {
             return this._getDisplayName();
         }
-        var label = this.props.member.userId;
-        if (this.state.isTargetMod) {
-            label += " - Mod (" + this.props.member.powerLevelNorm + "%)";
-        }
+        var label = this.props.member.userId + " (power " + this.props.member.powerLevel + ")";
         return label;
     },
 

@@ -49,8 +49,14 @@ module.exports = React.createClass({
         this.props.onChange(this.getValue());
     },
 
-    onCustomChange: function(event) {
+    onCustomBlur: function(event) {
         this.props.onChange(this.getValue());
+    },
+
+    onCustomKeyDown: function(event) {
+        if (event.key == "Enter") {
+            this.props.onChange(this.getValue());
+        }
     },
 
     getValue: function() {
@@ -72,7 +78,7 @@ module.exports = React.createClass({
                 input = <span>{ this.props.value }</span>
             }
             else {
-                input = <input ref="custom" type="text" size="3" defaultValue={ this.props.value } onChange={ this.onCustomChange } />
+                input = <input ref="custom" type="text" size="3" defaultValue={ this.props.value } onBlur={ this.onCustomBlur } onKeyDown={ this.onCustomKeyDown }/>
             }
             customPicker = <span> of { input }</span>;
         }

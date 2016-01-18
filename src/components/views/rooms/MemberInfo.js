@@ -154,6 +154,7 @@ module.exports = React.createClass({
         }
         var defaultLevel = powerLevelEvent.getContent().users_default;
         var modLevel = me.powerLevel - 1;
+        if (modLevel > 50 && defaultLevel < 50) modLevel = 50; // try to stick with the vector level defaults
         // toggle the level
         var newLevel = this.state.isTargetMod ? defaultLevel : modLevel;
         MatrixClientPeg.get().setPowerLevel(roomId, target, newLevel, powerLevelEvent).done(
@@ -169,6 +170,36 @@ module.exports = React.createClass({
         });
         this.props.onFinished();        
     },
+
+    onPowerChange: function(powerLevel) {
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        var roomId = this.props.member.roomId;
+        var target = this.props.member.userId;
+        var room = MatrixClientPeg.get().getRoom(roomId);
+        if (!room) {
+            this.props.onFinished();
+            return;
+        }
+        var powerLevelEvent = room.currentState.getStateEvents(
+            "m.room.power_levels", ""
+        );
+        if (!powerLevelEvent) {
+            this.props.onFinished();
+            return;
+        }
+        MatrixClientPeg.get().setPowerLevel(roomId, target, powerLevel, powerLevelEvent).done(
+        function() {
+            // NO-OP; rely on the m.room.member event coming down else we could
+            // get out of sync if we force setState here!
+            console.log("Power change success");
+        }, function(err) {
+            Modal.createDialog(ErrorDialog, {
+                title: "Failure to change power level",
+                description: err.message
+            });
+        });
+        this.props.onFinished();        
+    },    
 
     onChatClick: function() {
         // check if there are any existing rooms with just us and them (1:1)
@@ -317,12 +348,11 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var interactButton, kickButton, banButton, muteButton, giveModButton, spinner;
-        if (this.props.member.userId === MatrixClientPeg.get().credentials.userId) {
-            interactButton = <div className="mx_MemberInfo_field" onClick={this.onLeaveClick}>Leave room</div>;
-        }
-        else {
-            interactButton = <div className="mx_MemberInfo_field" onClick={this.onChatClick}>Start chat</div>;
+        var startChat, kickButton, banButton, muteButton, giveModButton, spinner;
+        if (this.props.member.userId !== MatrixClientPeg.get().credentials.userId) {
+            // FIXME: we're referring to a vector component from react-sdk
+            var BottomLeftMenuTile = sdk.getComponent('rooms.BottomLeftMenuTile');
+            startChat = <BottomLeftMenuTile collapsed={ false } img="img/create-big.svg" label="Start chat" onClick={ this.onChatClick }/>
         }
 
         if (this.state.creatingRoom) {
@@ -347,34 +377,52 @@ module.exports = React.createClass({
             </div>;
         }
         if (this.state.can.modifyLevel) {
-            var giveOpLabel = this.state.isTargetMod ? "Revoke Mod" : "Make Mod";
+            var giveOpLabel = this.state.isTargetMod ? "Revoke Moderator" : "Make Moderator";
             giveModButton = <div className="mx_MemberInfo_field" onClick={this.onModToggle}>
                 {giveOpLabel}
             </div>
         }
 
+        var adminTools;
+        if (kickButton || banButton || muteButton || giveModButton) {
+            adminTools = 
+                <div>
+                    <h3>Admin tools</h3>
+
+                    <div className="mx_MemberInfo_buttons">
+                        {muteButton}
+                        {kickButton}
+                        {banButton}
+                        {giveModButton}
+                    </div>
+                </div>
+        }
+
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        var PowerSelector = sdk.getComponent('elements.PowerSelector');
         return (
             <div className="mx_MemberInfo">
                 <img className="mx_MemberInfo_cancel" src="img/cancel.svg" width="18" height="18" onClick={this.onCancel}/>
                 <div className="mx_MemberInfo_avatar">
                     <MemberAvatar member={this.props.member} width={48} height={48} />
                 </div>
+
                 <h2>{ this.props.member.name }</h2>
-                <div className="mx_MemberInfo_profileField">
-                    { this.props.member.userId }
+
+                <div className="mx_MemberInfo_profile">
+                    <div className="mx_MemberInfo_profileField">
+                        { this.props.member.userId }
+                    </div>
+                    <div className="mx_MemberInfo_profileField">
+                        Level: <b><PowerSelector value={ parseInt(this.props.member.powerLevel) } disabled={ !this.state.can.modifyLevel } onChange={ this.onPowerChange }/></b>
+                    </div>
                 </div>
-                <div className="mx_MemberInfo_profileField">
-                    power: { this.props.member.powerLevelNorm }%
-                </div>
-                <div className="mx_MemberInfo_buttons">
-                    {interactButton}
-                    {muteButton}
-                    {kickButton}
-                    {banButton}
-                    {giveModButton}
-                    {spinner}
-                </div>
+
+                { startChat }
+
+                { adminTools }
+
+                { spinner }
             </div>
         );
     }
