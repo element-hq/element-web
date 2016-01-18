@@ -59,11 +59,6 @@ limitations under the License.
 }
 
 .mx_EventTile_content {
-    padding-right: 100px;
-    display: block;
-}
-
-.mx_EventTile_content {
     display: block;
     margin-right: 100px;
     overflow-y: hidden;
@@ -94,7 +89,7 @@ limitations under the License.
 }
 
 .mx_EventTile_content .markdown-body .hljs {
-    display: inherit ! important;
+    display: inline ! important;
 }
 
 /* end of overrides */
@@ -135,8 +130,8 @@ limitations under the License.
     z-index: 1;
     position: relative;
     width: 90px;
+    height: 1px; /* Hack to stop the height of this pushing the messages apart. Replaces marigin-top: -6px. This interacts better with a read marker being in between. Content overflows. */
     margin-right: 10px;
-    margin-top: -6px;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
@@ -178,7 +173,7 @@ limitations under the License.
     height: 14px;
 }
 
-.mx_EventTile_readAvatars .mx_MemberAvatar {
+.mx_EventTile_readAvatars .mx_BaseAvatar {
     position: absolute;
     display: inline-block;
 }

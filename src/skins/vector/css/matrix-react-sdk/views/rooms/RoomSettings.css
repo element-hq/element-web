@@ -15,23 +15,27 @@ limitations under the License.
 */
 
 .mx_RoomSettings {
-    max-height: 250px;
-    padding-top: 12px;
+    margin-left: 65px;
+    margin-bottom: 20px;
 }
 
-.mx_RoomSettings_settings {
+.mx_RoomSettings_powerLevels {
     display: table;
-    margin: 5px 0;
 }
 
-.mx_RoomSettings_settings > div {
+.mx_RoomSettings_powerLevel {
     display: table-row;
 }
 
-.mx_RoomSettings_settings > div > * {
+.mx_RoomSettings_powerLevelKey,
+.mx_RoomSettings_powerLevel .mx_PowerSelector {
     display: table-cell;
+    padding-bottom: 5px;
+}
 
-    margin: 0 10px;
+.mx_RoomSettings_powerLevelKey {
+    text-align: right;
+    padding-right: 0.3em;
 }
 
 .mx_RoomSettings h3 {
@@ -43,6 +47,7 @@ limitations under the License.
     margin-bottom: 10px;
 }
 
+/*
 .mx_RoomSettings input,
 .mx_RoomSettings textarea  {
     border-radius: 3px;
@@ -51,6 +56,11 @@ limitations under the License.
     font-size: 13px;
     padding: 9px;
     margin-top: 6px;
+}
+*/
+
+.mx_RoomSettings .mx_RoomSettings_tags input[type="checkbox"] {
+    margin-left: 1em;
 }
 
 .mx_RoomSettings .mx_RoomSettings_roomColor {
@@ -75,16 +85,59 @@ limitations under the License.
     width: 100%;
 }
 
+.mx_RoomSettings .mx_RoomSettings_aliasesTable {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    margin-left: 56px;
+    display: table;
+}
+
+.mx_RoomSettings .mx_RoomSettings_aliasesRow {
+    display: table-row;
+}
+
+.mx_RoomSettings .mx_RoomSettings_alias {
+    display: table-cell;
+    margin-bottom: 20px;
+}
+
+.mx_RoomSettings .mx_RoomSettings_addAlias,
+.mx_RoomSettings .mx_RoomSettings_deleteAlias {
+    display: table-cell;
+    padding-left: 0.5em;
+    cursor: pointer;
+}
+
+.mx_RoomSettings_editable {
+    border: 0px;
+    border-bottom: 1px solid #c7c7c7;
+    padding: 0px;
+    min-width: 240px;
+}
+
+.mx_RoomSettings_editable:focus {
+    border-bottom: 1px solid #76CFA6;
+    outline: none;
+    box-shadow: none;
+}
+
+.mx_RoomSettings_deleteAlias,
+.mx_RoomSettings_addAlias {
+    display: table-cell;
+    visibility: visible;
+}
+
+.mx_RoomSettings_deleteAlias:hover,
+.mx_RoomSettings_addAlias:hover {
+    visibility: visible;
+}
+
+.mx_RoomSettings_aliasPlaceholder {
+    color: #a2a2a2;
+}
+
 .mx_RoomSettings .mx_RoomAvatar {
     border-radius: 120px;
-}
-
-.mx_RoomSettings input[type="file"] {
-    border: none;
-}
-
-.mx_RoomSettings_description {
-    width: 330px;
 }
 
 .mx_RoomSettings_buttons {

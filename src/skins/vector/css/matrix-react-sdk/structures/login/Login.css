@@ -105,6 +105,15 @@ limitations under the License.
    color: #4a4a4a;
 }
 
+.mx_Login_forgot {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.mx_Login_forgot:link {
+    color: #4a4a4a;
+}
+
 .mx_Login_loader {
     position: absolute;
     left: 50%;
