@@ -14,14 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MemberTile {
+.mx_EntityTile {
     display: table-row;
     position: relative;
     color: #454545;
     cursor: pointer;
 }
 
-.mx_MemberTile_avatar {
+.mx_EntityTile_invite {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.mx_EntityTile:hover .mx_MessageTimestamp {
+    display: block;
+}
+
+.mx_EntityTile_avatar {
     display: table-cell;
     padding-left: 3px;
     padding-right: 12px;
@@ -33,66 +42,44 @@ limitations under the License.
     position: relative;
 }
 
-.mx_MemberTile_power {
-    position: absolute;
-    width: 16px;
-    height: 17px;
-    top: 0px;
-    right: 6px;
-}
-
-.mx_MemberTile_name {
+.mx_EntityTile_name {
     display: table-cell;
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.mx_MemberTile_details {
+.mx_EntityTile_details {
     display: table-cell;
     padding-right: 14px;
     vertical-align: middle;
 }
 
-.mx_MemberTile_userId {
+.mx_EntityTile_name_hover {
     font-size: 13px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.mx_MemberTile_chevron {
+.mx_EntityTile_chevron {
     margin-top: 8px;
     margin-right: -4px;
     margin-left: 6px;
     float: right;
 }
 
-/*
-.mx_MemberTile_nameWrapper {
-    display: table-cell;
-    vertical-align: middle;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.mx_MemberTile_nameSpan {
-}
-*/
-
-.mx_MemberTile_unavailable .mx_MemberTile_avatar,
-.mx_MemberTile_unavailable .mx_MemberTile_name,
-.mx_MemberTile_unavailable .mx_MemberTile_userId
+.mx_EntityTile_unavailable .mx_EntityTile_avatar,
+.mx_EntityTile_unavailable .mx_EntityTile_name,
+.mx_EntityTile_unavailable .mx_EntityTile_name_hover
 {
     opacity: 0.66;
 }
 
-.mx_MemberTile_offline .mx_MemberTile_avatar,
-.mx_MemberTile_offline .mx_MemberTile_name,
-.mx_MemberTile_offline .mx_MemberTile_userId
+.mx_EntityTile_offline .mx_EntityTile_avatar,
+.mx_EntityTile_offline .mx_EntityTile_name,
+.mx_EntityTile_offline .mx_EntityTile_name_hover
 {
     opacity: 0.25;
 }
 
-.mx_MemberTile:hover .mx_MessageTimestamp {
-    display: block;
-}
+
