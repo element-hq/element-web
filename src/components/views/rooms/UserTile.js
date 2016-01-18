@@ -28,101 +28,29 @@ module.exports = React.createClass({
     displayName: 'UserTile',
 
     propTypes: {
-        user: React.PropTypes.any.isRequired, // User
-        onInviteClick: React.PropTypes.func, //onInviteClick(User)
-        showInvite: React.PropTypes.bool,
-        onClick: React.PropTypes.func
-    },
-
-    getInitialState: function() {
-        return {};
-    },
-
-    getDefaultProps: function() {
-        return {
-            onClick: function() {},
-            onInviteClick: function() {},
-            showInvite: false
-        };
-    },
-
-    shouldComponentUpdate: function(nextProps, nextState) {
-        if (this.state.hover !== nextState.hover) return true;
-        return false;
-    },
-
-    mouseEnter: function(e) {
-        this.setState({ 'hover': true });
-    },
-
-    mouseLeave: function(e) {
-        this.setState({ 'hover': false });
+        user: React.PropTypes.any.isRequired // User
     },
 
     render: function() {
+        var EntityTile = sdk.getComponent("rooms.EntityTile");
         var user = this.props.user;
         var name = user.displayName || user.userId;
-        var isMyUser = MatrixClientPeg.get().credentials.userId == user.userId;
         var active = -1;
-        var presenceClass = "mx_MemberTile_offline";
-
-        this.user_last_modified_time = user.getLastModifiedTime();
 
         // FIXME: make presence data update whenever User.presence changes...
         active = (
             (Date.now() - (user.lastPresenceTs - user.lastActiveAgo)) || -1
         );
 
-        if (user.presence === "online") {
-            presenceClass = "mx_MemberTile_online";
-        }
-        else if (user.presence === "unavailable") {
-            presenceClass = "mx_MemberTile_unavailable";
-        }
-
-
-        var mainClassName = "mx_MemberTile ";
-        mainClassName += presenceClass;
-        if (this.state.hover) {
-            mainClassName += " mx_MemberTile_hover";
-        }
-
-        var nameEl;
-        if (this.state.hover) {
-            var PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
-            nameEl = (
-                <div className="mx_MemberTile_details">
-                    <img className="mx_MemberTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
-                    <div className="mx_MemberTile_userId">{ name }</div>
-                    <PresenceLabel activeAgo={active}
-                        presenceState={user.presence} />
-                </div>
-            );
-        }
-        else {
-            nameEl = (
-                <div className="mx_MemberTile_name">
-                    { name }
-                </div>
-            );
-        }
-
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-
-        if (this.props.showInvite) {
-            // TODO
-        }
+        var avatarJsx = (
+            <BaseAvatar width={36} height={36} name={name} idName={user.userId}
+                        url={ Avatar.avatarUrlForUser(user, 36, 36, "crop") } />
+        );
 
         return (
-            <div className={mainClassName} title={ user.userId }
-                    onClick={ this.props.onClick } onMouseEnter={ this.mouseEnter }
-                    onMouseLeave={ this.mouseLeave }>
-                <div className="mx_MemberTile_avatar">
-                    <BaseAvatar width={36} height={36} name={name} idName={user.userId}
-                        url={ Avatar.avatarUrlForUser(user, 36, 36, "crop") } />
-                </div>
-                { nameEl }
-            </div>
+            <EntityTile {...this.props} presenceState={user.presence} presenceActiveAgo={active}
+                name={name} title={user.userId} avatarJsx={avatarJsx} />
         );
     }
 });
