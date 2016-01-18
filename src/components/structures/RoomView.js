@@ -940,6 +940,13 @@ module.exports = React.createClass({
             );
         }
 
+        // setRoomMutePushRule will do nothing if there is no change
+        deferreds.push(
+            MatrixClientPeg.get().setRoomMutePushRule(
+                "global", this.state.room.roomId, newVals.are_notifications_muted
+            )
+        );
+
         if (newVals.power_levels) {
             deferreds.push(
                 MatrixClientPeg.get().sendStateEvent(
@@ -1145,6 +1152,7 @@ module.exports = React.createClass({
             topic: this.refs.header.getTopic(),
             join_rule: this.refs.room_settings.getJoinRules(),
             history_visibility: this.refs.room_settings.getHistoryVisibility(),
+            are_notifications_muted: this.refs.room_settings.areNotificationsMuted(),
             power_levels: this.refs.room_settings.getPowerLevels(),
             alias_operations: this.refs.room_settings.getAliasOperations(),
             tag_operations: this.refs.room_settings.getTagOperations(),
