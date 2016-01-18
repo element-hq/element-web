@@ -36,6 +36,19 @@ limitations under the License.
     border-radius: 48px;
 }
 
+.mx_MemberInfo_profile {
+    margin-bottom: 16px;
+}
+
+.mx_MemberInfo h3 {
+    text-transform: uppercase;
+    color: #3d3b39;
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 16px;
+    margin-bottom: 14px;
+}
+
 .mx_MemberInfo_profileField {
     font-color: #999999;    
     font-size: 13px;
@@ -44,21 +57,12 @@ limitations under the License.
 }
 
 .mx_MemberInfo_buttons {
-    margin-top: 18px;
 }
 
 .mx_MemberInfo_field {
     cursor: pointer;
-    width: 100px;
-    text-align: center;
-    font-size: 11px;    
-    background-color: #888;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 20px;
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-top: 4px;
-    padding-bottom: 2px;
-    margin-bottom: 4px;
+    font-size: 13px;
+    color: #76cfa6;
+    margin-left: 8px;
+    line-height: 23px;
 }
