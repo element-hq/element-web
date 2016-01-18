@@ -249,7 +249,7 @@ module.exports = React.createClass({
         var vectorRuleId = event.target.className.split("-")[0];
         var newPushRuleVectorState = event.target.className.split("-")[1];
         
-        if ("keywords" === vectorRuleId) {
+        if ("_keywords" === vectorRuleId) {
             this._setKeywordsPushRuleVectorState(newPushRuleVectorState)
         }
         else {
@@ -729,11 +729,12 @@ module.exports = React.createClass({
                 self.state.masterPushRule = defaultRules.master[0];
             }
 
-            // Build the rules displayed in Vector UI matrix table
+            // Build the rules displayed in the Vector UI matrix table
             self.state.vectorPushRules = [];
 
             var vectorRuleIds = [
                 'im.vector.rule.contains_display_name',
+                '_keywords',
                 'im.vector.rule.room_one_to_one',
                 'im.vector.rule.fallback',
                 'im.vector.rule.invite_for_me',
@@ -744,46 +745,49 @@ module.exports = React.createClass({
                 var vectorRuleId = vectorRuleIds[i];
                 var ruleDefinition = VectorPushRulesDefinitions[vectorRuleId];
 
-                var rule = vectorOverridingRules[vectorRuleId];
-                var isHSDefaultRule = false;
-                if (!rule) {
-                    // If the rule is not defined, look at the hs default one
-                    rule = defaultRules.vector[ruleDefinition.hsDefaultRuleId];     
-                    isHSDefaultRule = true;
+                if (vectorRuleId === '_keywords') {
+                    // keywords needs a special handling
+                    // For Vector UI, this is a single global push rule but translated in Matrix,
+                    // it corresponds to all content push rules (stored in self.state.vectorContentRule)
+                    self.state.vectorPushRules.push({
+                        "vectorRuleId": "_keywords",
+                        "description" : (<span>Messages containing <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>keywords</span></span>),
+                        "vectorState": self.state.vectorContentRules.vectorState
+                    });
                 }
+                else {
+                    var rule = vectorOverridingRules[vectorRuleId];
+                    var isHSDefaultRule = false;
+                    if (!rule) {
+                        // If the rule is not defined, look at the hs default one
+                        rule = defaultRules.vector[ruleDefinition.hsDefaultRuleId];     
+                        isHSDefaultRule = true;
+                    }
 
-                // Translate the rule actions into vector state
-                var vectorState = PushRuleVectorState.OFF;
-                if (rule && rule.enabled) {
-                    if (JSON.stringify(rule.actions) === JSON.stringify(ruleDefinition.vectorStateToActions[PushRuleVectorState.ON])) {
-                        vectorState = PushRuleVectorState.ON;
+                    // Translate the rule actions into vector state
+                    var vectorState = PushRuleVectorState.OFF;
+                    if (rule && rule.enabled) {
+                        if (JSON.stringify(rule.actions) === JSON.stringify(ruleDefinition.vectorStateToActions[PushRuleVectorState.ON])) {
+                            vectorState = PushRuleVectorState.ON;
+                        }
+                        else if (JSON.stringify(rule.actions) === JSON.stringify(ruleDefinition.vectorStateToActions[PushRuleVectorState.LOUD])) {
+                            vectorState = PushRuleVectorState.LOUD;
+                        }
+                        else {
+                           console.error("Cannot translate rule actionsinto Vector rule state");                    
+                        }
                     }
-                    else if (JSON.stringify(rule.actions) === JSON.stringify(ruleDefinition.vectorStateToActions[PushRuleVectorState.LOUD])) {
-                        vectorState = PushRuleVectorState.LOUD;
-                    }
-                    else {
-                       console.error("Cannot translate rule actionsinto Vector rule state");                    
-                    }
+
+                    self.state.vectorPushRules.push({
+                        "vectorRuleId": vectorRuleId,
+                        "description" : ruleDefinition.description,
+                        "rule": rule,
+                        "vectorState": vectorState,
+                        "isHSDefaultRule": isHSDefaultRule,
+                        "hsDefaultRule": defaultRules.vector[ruleDefinition.hsDefaultRuleId]
+                    });                    
                 }
-
-                self.state.vectorPushRules.push({
-                    "vectorRuleId": vectorRuleId,
-                    "description" : ruleDefinition.description,
-                    "rule": rule,
-                    "vectorState": vectorState,
-                    "isHSDefaultRule": isHSDefaultRule,
-                    "hsDefaultRule": defaultRules.vector[ruleDefinition.hsDefaultRuleId]
-                });
             }
-
-            // Messages containing keywords
-            // For Vector UI, this is a single global push rule but translated in Matrix,
-            // it corresponds to all content push rules (stored in self.state.vectorContentRule)
-            self.state.vectorPushRules.push({
-                "vectorRuleId": "keywords",
-                "description" : (<span>Messages containing <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>keywords</span></span>),
-                "vectorState": self.state.vectorContentRules.vectorState
-            });
             
             // Build the rules not managed by Vector UI
             var otherRulesDescriptions = {
