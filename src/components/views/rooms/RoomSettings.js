@@ -168,6 +168,9 @@ module.exports = React.createClass({
             oldAliases[domain] = alias_events[i].getContent().aliases.slice(); // shallow copy
         }
 
+        // FIXME: this whole delta-based set comparison function used for domains, aliases & tags
+        // should be factored out asap rather than duplicated like this.
+
         // work out whether any domains have entirely disappeared or appeared
         var domainDelta = {}
         Object.keys(oldAliases).forEach(function(domain) {
@@ -208,9 +211,15 @@ module.exports = React.createClass({
                             ops.push({ type: "put", alias: alias });
                         } else if (delta[alias] == -1) {
                             ops.push({ type: "delete", alias: alias });
+                        } else {
+                            console.error("Calculated alias delta of " + delta[alias] +
+                                          " - this should never happen!");                            
                         }
                     });
-
+                    break;
+                default:
+                    console.error("Calculated domain delta of " + domainDelta[domain] +
+                                  " - this should never happen!");
                     break;
             }
         });
@@ -237,6 +246,9 @@ module.exports = React.createClass({
                 ops.push({ type: "put", tag: tag });
             } else if (delta[tag] == -1) {
                 ops.push({ type: "delete", tag: tag });
+            } else {
+                console.error("Calculated tag delta of " + delta[tag] +
+                              " - this should never happen!");
             }
         });
 
@@ -286,7 +298,11 @@ module.exports = React.createClass({
     },
 
     onAliasDeleted: function(domain, index) {
-        // XXX: can we edit state directly and then set, or should we copy it first?
+        // It's a bit naughty to directly manipulate this.state, and React would
+        // normally whine at you, but it can't see us doing the splice.  Given we
+        // promptly setState anyway, it's just about acceptable.  The alternative
+        // would be to arbitrarily deepcopy to a temp variable and then setState
+        // that, but why bother when we can cut this corner.
         var alias = this.state.aliases[domain].splice(index, 1);
         this.setState({ 
             aliases: this.state.aliases

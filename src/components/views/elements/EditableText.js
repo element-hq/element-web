@@ -41,9 +41,6 @@ module.exports = React.createClass({
         Edit: "edit",
     },
 
-    value: '',
-    placeholder: false,
-
     getDefaultProps: function() {
         return {
             onValueChanged: function() {},
@@ -69,14 +66,18 @@ module.exports = React.createClass({
         }
     },
 
+    componentWillMount: function() {
+        // we track value as an JS object field rather than in React state
+        // as React doesn't play nice with contentEditable.
+        this.value = '';
+        this.placeholder = false;
+    },
+
     componentDidMount: function() {
         this.value = this.props.initialValue;
         if (this.refs.editable_div) {
             this.showPlaceholder(!this.value);
         }
-    },
-
-    componentDidUpdate: function() {
     },
 
     showPlaceholder: function(show) {
