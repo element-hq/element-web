@@ -142,16 +142,16 @@ module.exports = React.createClass({
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
 
-        if (this.refs.messagePanel) {
-            // disconnect the D&D event listeners from the message panel. This
-            // is really just for hygiene - the messagePanel is going to be
+        if (this.refs.roomView) {
+            // disconnect the D&D event listeners from the room view. This
+            // is really just for hygiene - we're going to be
             // deleted anyway, so it doesn't matter if the event listeners
             // don't get cleaned up.
-            var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
-            messagePanel.removeEventListener('drop', this.onDrop);
-            messagePanel.removeEventListener('dragover', this.onDragOver);
-            messagePanel.removeEventListener('dragleave', this.onDragLeaveOrEnd);
-            messagePanel.removeEventListener('dragend', this.onDragLeaveOrEnd);
+            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            roomView.removeEventListener('drop', this.onDrop);
+            roomView.removeEventListener('dragover', this.onDragOver);
+            roomView.removeEventListener('dragleave', this.onDragLeaveOrEnd);
+            roomView.removeEventListener('dragend', this.onDragLeaveOrEnd);
         }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
@@ -414,6 +414,14 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.onResize);
         this.onResize();
 
+        if (this.refs.roomView) {
+            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            roomView.addEventListener('drop', this.onDrop);
+            roomView.addEventListener('dragover', this.onDragOver);
+            roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
+            roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
+        }
+
         this._updateTabCompleteList(this.state.room);
     },
 
@@ -431,11 +439,6 @@ module.exports = React.createClass({
     _initialiseMessagePanel: function() {
         var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
         this.refs.messagePanel.initialised = true;
-
-        messagePanel.addEventListener('drop', this.onDrop);
-        messagePanel.addEventListener('dragover', this.onDragOver);
-        messagePanel.addEventListener('dragleave', this.onDragLeaveOrEnd);
-        messagePanel.addEventListener('dragend', this.onDragLeaveOrEnd);
 
         this.scrollToBottom();
         this.sendReadReceipt();
@@ -884,9 +887,27 @@ module.exports = React.createClass({
             old_history_visibility = "shared";
         }
 
+        var old_guest_read = (old_history_visibility === "world_readable");
+
+        var old_guest_join = this.state.room.currentState.getStateEvents('m.room.guest_access', '');
+        if (old_guest_join) {
+            old_guest_join = (old_guest_join.getContent().guest_access === "can_join");
+        }
+        else {
+            old_guest_join = false;
+        }
+
+        var old_canonical_alias = this.state.room.currentState.getStateEvents('m.room.canonical_alias', '');
+        if (old_canonical_alias) {
+            old_canonical_alias = old_canonical_alias.getContent().alias;
+        }
+        else {
+            old_canonical_alias = "";   
+        }
+
         var deferreds = [];
 
-        if (old_name != newVals.name && newVals.name != undefined && newVals.name) {
+        if (old_name != newVals.name && newVals.name != undefined) {
             deferreds.push(
                 MatrixClientPeg.get().setRoomName(this.state.room.roomId, newVals.name)
             );
@@ -927,6 +948,83 @@ module.exports = React.createClass({
             );
         }
 
+        if (newVals.alias_operations) {
+            var oplist = [];
+            for (var i = 0; i < newVals.alias_operations.length; i++) {
+                var alias_operation = newVals.alias_operations[i];
+                switch (alias_operation.type) {
+                    case 'put':
+                        oplist.push(
+                            MatrixClientPeg.get().createAlias(
+                                alias_operation.alias, this.state.room.roomId
+                            )
+                        );
+                        break;
+                    case 'delete':
+                        oplist.push(
+                            MatrixClientPeg.get().deleteAlias(
+                                alias_operation.alias
+                            )
+                        );
+                        break;
+                    default:
+                        console.log("Unknown alias operation, ignoring: " + alias_operation.type);
+                }
+            }
+
+            if (oplist.length) {
+                var deferred = oplist[0];
+                oplist.splice(1).forEach(function (f) {
+                    deferred = deferred.then(f);
+                });
+                deferreds.push(deferred);
+            }
+        }
+
+        if (newVals.tag_operations) {
+            // FIXME: should probably be factored out with alias_operations above
+            var oplist = [];
+            for (var i = 0; i < newVals.tag_operations.length; i++) {
+                var tag_operation = newVals.tag_operations[i];
+                switch (tag_operation.type) {
+                    case 'put':
+                        oplist.push(
+                            MatrixClientPeg.get().setRoomTag(
+                                this.props.roomId, tag_operation.tag, {}
+                            )
+                        );
+                        break;
+                    case 'delete':
+                        oplist.push(
+                            MatrixClientPeg.get().deleteRoomTag(
+                                this.props.roomId, tag_operation.tag
+                            )
+                        );
+                        break;
+                    default:
+                        console.log("Unknown tag operation, ignoring: " + tag_operation.type);
+                }
+            }
+
+            if (oplist.length) {
+                var deferred = oplist[0];
+                oplist.splice(1).forEach(function (f) {
+                    deferred = deferred.then(f);
+                });
+                deferreds.push(deferred);
+            }            
+        }
+
+        if (old_canonical_alias !== newVals.canonical_alias) {
+            deferreds.push(
+                MatrixClientPeg.get().sendStateEvent(
+                    this.state.room.roomId, "m.room.canonical_alias", {
+                        alias: newVals.canonical_alias
+                    }, ""
+                )
+            );            
+        }
+
         if (newVals.color_scheme) {
             deferreds.push(
                 MatrixClientPeg.get().setRoomAccountData(
@@ -935,26 +1033,43 @@ module.exports = React.createClass({
             );
         }
 
-        deferreds.push(
-            MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
-                allowRead: newVals.guest_read,
-                allowJoin: newVals.guest_join
-            })
-        );
+        if (old_guest_read != newVals.guest_read ||
+            old_guest_join != newVals.guest_join)
+        {
+            deferreds.push(
+                MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
+                    allowRead: newVals.guest_read,
+                    allowJoin: newVals.guest_join
+                })
+            );
+        }
 
         if (deferreds.length) {
             var self = this;
-            q.all(deferreds).fail(function(err) {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Failed to set state",
-                    description: err.toString()
+            q.allSettled(deferreds).then(
+                function(results) {
+                    var fails = results.filter(function(result) { return result.state !== "fulfilled" });
+                    if (fails.length) {
+                        fails.forEach(function(result) {
+                            console.error(result.reason);
+                        });
+                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Failed to set state",
+                            description: fails.map(function(result) { return result.reason }).join("\n"),
+                        });
+                        self.refs.room_settings.resetState();
+                    }
+                    else {
+                        self.setState({
+                            editingRoomSettings: false
+                        });
+                    }
+                }).finally(function() {
+                    self.setState({
+                        uploadingRoomSettings: false,
+                    });
                 });
-            }).finally(function() {
-                self.setState({
-                    uploadingRoomSettings: false,
-                });
-            });
         } else {
             this.setState({
                 editingRoomSettings: false,
@@ -1022,16 +1137,18 @@ module.exports = React.createClass({
 
     onSaveClick: function() {
         this.setState({
-            editingRoomSettings: false,
             uploadingRoomSettings: true,
         });
 
         this.uploadNewState({
             name: this.refs.header.getRoomName(),
-            topic: this.refs.room_settings.getTopic(),
+            topic: this.refs.header.getTopic(),
             join_rule: this.refs.room_settings.getJoinRules(),
             history_visibility: this.refs.room_settings.getHistoryVisibility(),
             power_levels: this.refs.room_settings.getPowerLevels(),
+            alias_operations: this.refs.room_settings.getAliasOperations(),
+            tag_operations: this.refs.room_settings.getTagOperations(),
+            canonical_alias: this.refs.room_settings.getCanonicalAlias(),
             guest_join: this.refs.room_settings.canGuestsJoin(),
             guest_read: this.refs.room_settings.canGuestsRead(),
             color_scheme: this.refs.room_settings.getColorScheme(),
@@ -1187,25 +1304,31 @@ module.exports = React.createClass({
         // a minimum of the height of the video element, whilst also capping it from pushing out the page
         // so we have to do it via JS instead.  In this implementation we cap the height by putting
         // a maxHeight on the underlying remote video tag.
-        var auxPanelMaxHeight;
+
+        // header + footer + status + give us at least 120px of scrollback at all times.
+        var auxPanelMaxHeight = window.innerHeight -
+                (83 + // height of RoomHeader
+                 36 + // height of the status area
+                 72 + // minimum height of the message compmoser
+                 120); // amount of desired scrollback
+
+        // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
+        // but it's better than the video going missing entirely
+        if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
+
         if (this.refs.callView) {
             var video = this.refs.callView.getVideoView().getRemoteVideoElement();
-
-            // header + footer + status + give us at least 100px of scrollback at all times.
-            auxPanelMaxHeight = window.innerHeight -
-                (83 + 72 +
-                 sdk.getComponent('rooms.MessageComposer').MAX_HEIGHT +
-                 100);
-
-            // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
-            // but it's better than the video going missing entirely
-            if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
             video.style.maxHeight = auxPanelMaxHeight + "px";
 
             // the above might have made the video panel resize itself, so now
             // we need to tell the gemini panel to adapt.
             this.onChildResize();
+        }
+
+        // we need to do this for general auxPanels too
+        if (this.refs.auxPanel) {
+            this.refs.auxPanel.style.maxHeight = auxPanelMaxHeight + "px";
         }
     },
 
@@ -1246,6 +1369,13 @@ module.exports = React.createClass({
         // about it. This also ensures that the scroll offset is updated.
         if (this.refs.messagePanel) {
             this.refs.messagePanel.forceUpdate();
+        }
+    },
+
+    showSettings: function(show) {
+        // XXX: this is a bit naughty; we should be doing this via props
+        if (show) {
+            this.setState({editingRoomSettings: true});
         }
     },
 
@@ -1399,7 +1529,7 @@ module.exports = React.createClass({
 
             var aux = null;
             if (this.state.editingRoomSettings) {
-                aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} room={this.state.room} />;
+                aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
             }
             else if (this.state.uploadingRoomSettings) {
                 var Loader = sdk.getComponent("elements.Spinner");                
@@ -1433,7 +1563,7 @@ module.exports = React.createClass({
                 fileDropTarget = <div className="mx_RoomView_fileDropTarget">
                                     <div className="mx_RoomView_fileDropTargetLabel" title="Drop File Here">
                                         <TintableSvg src="img/upload-big.svg" width="45" height="59"/><br/>
-                                        Drop File Here
+                                        Drop file here to upload
                                     </div>
                                  </div>;
             }
@@ -1534,7 +1664,7 @@ module.exports = React.createClass({
             );
 
             return (
-                <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") }>
+                <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") } ref="roomView">
                     <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                         editing={this.state.editingRoomSettings}
                         onSearchClick={this.onSearchClick}
@@ -1547,8 +1677,8 @@ module.exports = React.createClass({
                         onLeaveClick={
                             (myMember && myMember.membership === "join") ? this.onLeaveClick : null
                         } />
-                    { fileDropTarget }    
-                    <div className="mx_RoomView_auxPanel">
+                    <div className="mx_RoomView_auxPanel" ref="auxPanel">
+                        { fileDropTarget }    
                         <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}
                             onResize={this.onChildResize} />
                         { conferenceCallNotification }

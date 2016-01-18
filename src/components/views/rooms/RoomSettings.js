@@ -18,6 +18,7 @@ var React = require('react');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Tinter = require('../../../Tinter');
 var sdk = require('../../../index');
+var Modal = require('../../../Modal');
 
 var room_colors = [
     // magic room default values courtesy of Ribot
@@ -38,6 +39,16 @@ module.exports = React.createClass({
 
     propTypes: {
         room: React.PropTypes.object.isRequired,
+        onSaveClick: React.PropTypes.func,
+        onCancelClick: React.PropTypes.func,
+    },
+
+    componentDidMount: function() {
+        // XXX: dirty hack to gutwrench to focus on the invite box
+        if (this.props.room.getJoinedMembers().length == 1) {
+            var inviteBox = document.getElementById("mx_MemberList_invite");
+            if (inviteBox) setTimeout(function() { inviteBox.focus(); }, 0);
+        }
     },
 
     getInitialState: function() {
@@ -68,11 +79,33 @@ module.exports = React.createClass({
             room_color_index = 0;
         }
 
+        // get the aliases
+        var aliases = {};
+        var domain = MatrixClientPeg.get().getDomain();
+        var alias_events = this.props.room.currentState.getStateEvents('m.room.aliases');
+        for (var i = 0; i < alias_events.length; i++) {
+            aliases[alias_events[i].getStateKey()] = alias_events[i].getContent().aliases.slice(); // shallow copy
+        }
+        aliases[domain] = aliases[domain] || [];
+
+        var tags = {};
+        Object.keys(this.props.room.tags).forEach(function(tagName) {
+            tags[tagName] = {};
+        });
+
         return {
             power_levels_changed: false,
             color_scheme_changed: false,
             color_scheme_index: room_color_index,
+            aliases_changed: false,
+            aliases: aliases,
+            tags_changed: false,
+            tags: tags,
         };
+    },
+
+    resetState: function() {
+        this.set.state(this.getInitialState());
     },
 
     canGuestsJoin: function() {
@@ -84,7 +117,7 @@ module.exports = React.createClass({
     },
 
     getTopic: function() {
-        return this.refs.topic.value;
+        return this.refs.topic ? this.refs.topic.value : "";
     },
 
     getJoinRules: function() {
@@ -102,18 +135,124 @@ module.exports = React.createClass({
         power_levels = power_levels.getContent();
 
         var new_power_levels = {
-            ban: parseInt(this.refs.ban.value),
-            kick: parseInt(this.refs.kick.value),
-            redact: parseInt(this.refs.redact.value),
-            invite: parseInt(this.refs.invite.value),
-            events_default: parseInt(this.refs.events_default.value),
-            state_default: parseInt(this.refs.state_default.value),
-            users_default: parseInt(this.refs.users_default.value),
+            ban: parseInt(this.refs.ban.getValue()),
+            kick: parseInt(this.refs.kick.getValue()),
+            redact: parseInt(this.refs.redact.getValue()),
+            invite: parseInt(this.refs.invite.getValue()),
+            events_default: parseInt(this.refs.events_default.getValue()),
+            state_default: parseInt(this.refs.state_default.getValue()),
+            users_default: parseInt(this.refs.users_default.getValue()),
             users: power_levels.users,
             events: power_levels.events,
         };
 
         return new_power_levels;
+    },
+
+    getCanonicalAlias: function() {
+        return this.refs.canonical_alias ? this.refs.canonical_alias.value : "";        
+    },
+
+    getAliasOperations: function() {
+        if (!this.state.aliases_changed) return undefined;
+
+        // work out the delta from room state to UI state
+        var ops = [];
+
+        // calculate original ("old") aliases
+        var oldAliases = {};
+        var aliases = this.state.aliases;
+        var alias_events = this.props.room.currentState.getStateEvents('m.room.aliases');
+        for (var i = 0; i < alias_events.length; i++) {
+            var domain = alias_events[i].getStateKey();
+            oldAliases[domain] = alias_events[i].getContent().aliases.slice(); // shallow copy
+        }
+
+        // FIXME: this whole delta-based set comparison function used for domains, aliases & tags
+        // should be factored out asap rather than duplicated like this.
+
+        // work out whether any domains have entirely disappeared or appeared
+        var domainDelta = {}
+        Object.keys(oldAliases).forEach(function(domain) {
+            domainDelta[domain] = domainDelta[domain] || 0;
+            domainDelta[domain]--;
+        });
+        Object.keys(aliases).forEach(function(domain) {
+            domainDelta[domain] = domainDelta[domain] || 0;
+            domainDelta[domain]++;
+        });
+
+        Object.keys(domainDelta).forEach(function(domain) {
+            switch (domainDelta[domain]) {
+                case 1: // entirely new domain
+                    aliases[domain].forEach(function(alias) {
+                        ops.push({ type: "put", alias : alias });
+                    });
+                    break;
+                case -1: // entirely removed domain
+                    oldAliases[domain].forEach(function(alias) {
+                        ops.push({ type: "delete", alias : alias });
+                    });
+                    break;
+                case 0: // mix of aliases in this domain.
+                    // compare old & new aliases for this domain
+                    var delta = {};
+                    oldAliases[domain].forEach(function(item) {
+                        delta[item] = delta[item] || 0;
+                        delta[item]--;
+                    });
+                    aliases[domain].forEach(function(item) {
+                        delta[item] = delta[item] || 0;
+                        delta[item]++;
+                    });
+
+                    Object.keys(delta).forEach(function(alias) {
+                        if (delta[alias] == 1) {
+                            ops.push({ type: "put", alias: alias });
+                        } else if (delta[alias] == -1) {
+                            ops.push({ type: "delete", alias: alias });
+                        } else {
+                            console.error("Calculated alias delta of " + delta[alias] +
+                                          " - this should never happen!");                            
+                        }
+                    });
+                    break;
+                default:
+                    console.error("Calculated domain delta of " + domainDelta[domain] +
+                                  " - this should never happen!");
+                    break;
+            }
+        });
+
+        return ops;
+    },
+
+    getTagOperations: function() {
+        if (!this.state.tags_changed) return undefined;
+
+        var ops = [];
+
+        var delta = {};
+        Object.keys(this.props.room.tags).forEach(function(oldTag) {
+            delta[oldTag] = delta[oldTag] || 0;
+            delta[oldTag]--;
+        });
+        Object.keys(this.state.tags).forEach(function(newTag) {
+            delta[newTag] = delta[newTag] || 0;
+            delta[newTag]++;
+        });
+        Object.keys(delta).forEach(function(tag) {
+            if (delta[tag] == 1) {
+                ops.push({ type: "put", tag: tag });
+            } else if (delta[tag] == -1) {
+                ops.push({ type: "delete", tag: tag });
+            } else {
+                console.error("Calculated tag delta of " + delta[tag] +
+                              " - this should never happen!");
+            }
+        });
+
+        return ops;
     },
 
     onPowerLevelsChanged: function() {
@@ -141,11 +280,100 @@ module.exports = React.createClass({
         });
     },
 
-    render: function() {
-        var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
+    onAliasChanged: function(domain, index, alias) {
+        if (alias === "") return; // hit the delete button to delete please
+        var oldAlias;
+        if (this.isAliasValid(alias)) {
+            oldAlias = this.state.aliases[domain][index];
+            this.state.aliases[domain][index] = alias;
+            this.setState({ aliases_changed : true });
+        }
+        else {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");            
+            Modal.createDialog(ErrorDialog, {
+                title: "Invalid alias format", 
+                description: "'" + alias + "' is not a valid format for an alias",
+            });
+        }        
+    },
 
-        var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
-        if (topic) topic = topic.getContent().topic;
+    onAliasDeleted: function(domain, index) {
+        // It's a bit naughty to directly manipulate this.state, and React would
+        // normally whine at you, but it can't see us doing the splice.  Given we
+        // promptly setState anyway, it's just about acceptable.  The alternative
+        // would be to arbitrarily deepcopy to a temp variable and then setState
+        // that, but why bother when we can cut this corner.
+        var alias = this.state.aliases[domain].splice(index, 1);
+        this.setState({ 
+            aliases: this.state.aliases
+        });
+
+        this.setState({ aliases_changed : true });
+    },
+
+    onAliasAdded: function(alias) {
+        if (alias === "") return; // ignore attempts to create blank aliases
+        if (alias === undefined) {
+            alias = this.refs.add_alias ? this.refs.add_alias.getValue() : undefined;
+            if (alias === undefined || alias === "") return;
+        }
+
+        if (this.isAliasValid(alias)) {
+            var domain = alias.replace(/^.*?:/, '');
+            // XXX: do we need to deep copy aliases before editing it?
+            this.state.aliases[domain] = this.state.aliases[domain] || [];
+            this.state.aliases[domain].push(alias);
+            this.setState({ 
+                aliases: this.state.aliases
+            });
+
+            // reset the add field
+            this.refs.add_alias.setValue('');
+
+            this.setState({ aliases_changed : true });
+        }
+        else {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");            
+            Modal.createDialog(ErrorDialog, {
+                title: "Invalid alias format", 
+                description: "'" + alias + "' is not a valid format for an alias",
+            });
+        }
+    },
+
+    isAliasValid: function(alias) {
+        // XXX: FIXME SPEC-1
+        return (alias.match(/^#([^\/:,]+?):(.+)$/) && encodeURI(alias) === alias);
+    },
+
+    onTagChange: function(tagName, event) {
+        if (event.target.checked) {
+            if (tagName === 'm.favourite') {
+                delete this.state.tags['m.lowpriority'];
+            }
+            else if (tagName === 'm.lowpriority') {
+                delete this.state.tags['m.favourite'];
+            }
+
+            this.state.tags[tagName] = this.state.tags[tagName] || {};
+        }
+        else {
+            delete this.state.tags[tagName];
+        }
+
+        // XXX: hacky say to deep-edit state
+        this.setState({
+            tags: this.state.tags,
+            tags_changed: true
+        });
+    },
+
+    render: function() {
+        // TODO: go through greying out things you don't have permission to change
+        // (or turning them into informative stuff)
+
+        var EditableText = sdk.getComponent('elements.EditableText');
+        var PowerSelector = sdk.getComponent('elements.PowerSelector');
 
         var join_rule = this.props.room.currentState.getStateEvents('m.room.join_rules', '');
         if (join_rule) join_rule = join_rule.getContent().join_rule;
@@ -159,7 +387,9 @@ module.exports = React.createClass({
             guest_access = guest_access.getContent().guest_access;
         }
 
-        var events_levels = power_levels.events || {};
+        var events_levels = (power_levels ? power_levels.events : {}) || {};
+
+        var user_id = MatrixClientPeg.get().credentials.userId;
 
         if (power_levels) {
             power_levels = power_levels.getContent();
@@ -177,8 +407,6 @@ module.exports = React.createClass({
             if (power_levels.redact == undefined) redact_level = 50;
 
             var user_levels = power_levels.users || {};
-
-            var user_id = MatrixClientPeg.get().credentials.userId;
 
             var current_user_level = user_levels[user_id];
             if (current_user_level == undefined) current_user_level = default_user_level;
@@ -208,13 +436,126 @@ module.exports = React.createClass({
             var can_change_levels = false;
         }
 
-        var room_avatar_level = parseInt(power_levels.state_default || 0);
-        if (events_levels['m.room.avatar'] !== undefined) {
-            room_avatar_level = events_levels['m.room.avatar'];
+        var state_default = (parseInt(power_levels ? power_levels.state_default : 0) || 0);
+
+        var room_aliases_level = state_default;
+        if (events_levels['m.room.aliases'] !== undefined) {
+            room_avatar_level = events_levels['m.room.aliases'];
         }
-        var can_set_room_avatar = current_user_level >= room_avatar_level;
+        var can_set_room_aliases = current_user_level >= room_aliases_level;
+
+        var canonical_alias_level = state_default;
+        if (events_levels['m.room.canonical_alias'] !== undefined) {
+            room_avatar_level = events_levels['m.room.canonical_alias'];
+        }
+        var can_set_canonical_alias = current_user_level >= canonical_alias_level;
+
+        var tag_level = state_default;
+        if (events_levels['m.tag'] !== undefined) {
+            tag_level = events_levels['m.tag'];
+        }
+        var can_set_tag = current_user_level >= tag_level;
 
         var self = this;
+
+        var canonical_alias_event = this.props.room.currentState.getStateEvents('m.room.canonical_alias', '');
+        var canonical_alias = canonical_alias_event ? canonical_alias_event.getContent().alias : "";
+        var domain = MatrixClientPeg.get().getDomain();
+
+        var remote_domains = Object.keys(this.state.aliases).filter(function(alias) { return alias !== domain });
+
+        var remote_aliases_section;
+        if (remote_domains.length) {
+            remote_aliases_section = 
+                <div>
+                    <div className="mx_RoomSettings_aliasLabel">
+                        This room can be found elsewhere as:
+                    </div>
+                    <div className="mx_RoomSettings_aliasesTable">
+                        { remote_domains.map(function(state_key, i) {
+                            self.state.aliases[state_key].map(function(alias, j) {
+                                return (
+                                    <div className="mx_RoomSettings_aliasesTableRow" key={ i + "_" + j }>
+                                        <EditableText
+                                             className="mx_RoomSettings_alias mx_RoomSettings_editable"
+                                             blurToCancel={ false }
+                                             editable={ false }
+                                             initialValue={ alias } />
+                                        <div className="mx_RoomSettings_deleteAlias">
+                                        </div>
+                                    </div>
+                                );
+                            });
+                        })}
+                    </div>
+                </div>
+        }
+
+        var canonical_alias_section;
+        if (can_set_canonical_alias) {
+            canonical_alias_section = 
+                <select ref="canonical_alias" defaultValue={ canonical_alias }>
+                    { Object.keys(self.state.aliases).map(function(stateKey, i) {
+                        return self.state.aliases[stateKey].map(function(alias, j) {
+                            return <option value={ alias } key={ i + "_" + j }>{ alias }</option>
+                        });
+                    })}
+                    <option value="" key="unset">not set</option>
+                </select>
+        }
+        else {
+            canonical_alias_section = <b>{ canonical_alias || "not set" }</b>;
+        }
+
+        var aliases_section =
+            <div>
+                <h3>Directory</h3>
+                <div className="mx_RoomSettings_aliasLabel">
+                    { this.state.aliases[domain].length
+                      ? "This room can be found on " + domain + " as:"
+                      : "This room is not findable on " + domain }
+                </div>
+                <div className="mx_RoomSettings_aliasesTable">
+                    { this.state.aliases[domain].map(function(alias, i) {
+                        var deleteButton;
+                        if (can_set_room_aliases) {
+                            deleteButton = <img src="img/cancel-small.svg" width="14" height="14" alt="Delete" onClick={ self.onAliasDeleted.bind(self, domain, i) }/>;
+                        }
+                        return (
+                            <div className="mx_RoomSettings_aliasesTableRow" key={ i }>
+                                <EditableText
+                                    className="mx_RoomSettings_alias mx_RoomSettings_editable"
+                                    placeholderClassName="mx_RoomSettings_aliasPlaceholder"
+                                    placeholder={ "New alias (e.g. #foo:" + domain + ")" }
+                                    blurToCancel={ false }
+                                    onValueChanged={ self.onAliasChanged.bind(self, domain, i) }
+                                    editable={ can_set_room_aliases }
+                                    initialValue={ alias } />
+                                <div className="mx_RoomSettings_deleteAlias">
+                                     { deleteButton }
+                                </div>
+                            </div>
+                        );
+                    })}
+
+                    <div className="mx_RoomSettings_aliasesTableRow" key="new">
+                        <EditableText
+                            ref="add_alias"
+                            className="mx_RoomSettings_alias mx_RoomSettings_editable"
+                            placeholderClassName="mx_RoomSettings_aliasPlaceholder"
+                            placeholder={ "New alias (e.g. #foo:" + domain + ")" }
+                            blurToCancel={ false }
+                            onValueChanged={ self.onAliasAdded } />
+                        <div className="mx_RoomSettings_addAlias">
+                             <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ self.onAliasAdded.bind(self, undefined) }/>
+                        </div>                        
+                    </div>                      
+                </div>
+
+                { remote_aliases_section }
+
+                <div className="mx_RoomSettings_aliasLabel">The official way to refer to this room is: { canonical_alias_section }</div>
+            </div>;
 
         var room_colors_section =
             <div>
@@ -242,35 +583,30 @@ module.exports = React.createClass({
                 </div>
             </div>;
 
-        var change_avatar;
-        if (can_set_room_avatar) {
-            change_avatar =
+        var user_levels_section;
+        if (user_levels.length) {
+            user_levels_section =
                 <div>
-                    <h3>Room Icon</h3>
-                    <ChangeAvatar room={this.props.room} />
-                </div>;
-        }
-
-        var banned = this.props.room.getMembersWithMembership("ban");
-
-        var events_levels_section;
-        if (events_levels.length) {
-            events_levels_section = 
-                <div>
-                    <h3>Event levels</h3>
-                    <div className="mx_RoomSettings_eventLevels mx_RoomSettings_settings">
-                        {Object.keys(events_levels).map(function(event_type, i) {
+                    <div>
+                        Users with specific roles are:
+                    </div>
+                    <div>
+                        {Object.keys(user_levels).map(function(user, i) {
                             return (
-                                <div key={event_type}>
-                                    <label htmlFor={"mx_RoomSettings_event_"+i}>{event_type}</label>
-                                    <input type="text" defaultValue={events_levels[event_type]} size="3" id={"mx_RoomSettings_event_"+i} disabled/>
+                                <div className="mx_RoomSettings_userLevel" key={user}>
+                                    { user } is a
+                                    <PowerSelector value={ user_levels[user] } disabled={true}/>
                                 </div>
                             );
                         })}
                     </div>
                 </div>;
         }
+        else {
+            user_levels_section = <div>No users have specific privileges in this room.</div>
+        }
 
+        var banned = this.props.room.getMembersWithMembership("ban");
         var banned_users_section;
         if (banned.length) {
             banned_users_section =
@@ -288,79 +624,115 @@ module.exports = React.createClass({
                 </div>;
         }
 
+        var create_event = this.props.room.currentState.getStateEvents('m.room.create', '');
+        var unfederatable_section;
+        if (create_event.getContent()["m.federate"] === false) {
+             unfederatable_section = <div className="mx_RoomSettings_powerLevel">Ths room is not accessible by remote Matrix servers.</div>
+        }
+
+        // TODO: support editing custom events_levels
+        // TODO: support editing custom user_levels
+
+        var tags = [
+            { name: "m.favourite", label: "Favourite", ref: "tag_favourite" },
+            { name: "m.lowpriority", label: "Low priority", ref: "tag_lowpriority" },
+        ];
+
+        Object.keys(this.state.tags).sort().forEach(function(tagName) {
+            if (tagName !== 'm.favourite' && tagName !== 'm.lowpriority') {
+                tags.push({ name: tagName, label: tagName });
+            }
+        });
+
+        var tags_section = 
+            <div className="mx_RoomSettings_tags">
+                This room is tagged as
+                { can_set_tag ?
+                    tags.map(function(tag, i) {
+                        return (<label key={ i }>
+                                    <input type="checkbox"
+                                           ref={ tag.ref }
+                                           checked={ tag.name in self.state.tags }
+                                           onChange={ self.onTagChange.bind(self, tag.name) }/>
+                                    { tag.label }
+                                </label>);
+                    }) : tags.map(function(tag) { return tag.label; }).join(", ")
+                }
+            </div>
+
         return (
             <div className="mx_RoomSettings">
-                <textarea className="mx_RoomSettings_description" placeholder="Topic" defaultValue={topic} ref="topic"/> <br/>
                 <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label> <br/>
                 <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility == "shared"}/> Share message history with new users</label> <br/>
-                <label>
-                    <input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/>
-                    Allow guests to read messages in this room
-                </label> <br/>
-                <label>
-                    <input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/>
-                    Allow guests to join this room
-                </label> <br/>
+                <label><input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/> Allow guests to read messages in this room</label> <br/>
+                <label><input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/> Allow guests to join this room</label> <br/>
                 <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>
+
+                { tags_section }
 
                 { room_colors_section }
 
+                { aliases_section }
 
-                <h3>Power levels</h3>
+                <h3>Permissions</h3>
                 <div className="mx_RoomSettings_powerLevels mx_RoomSettings_settings">
-                    <div>
-                        <label htmlFor="mx_RoomSettings_ban_level">Ban level</label>
-                        <input type="text" defaultValue={ban_level} size="3" ref="ban" id="mx_RoomSettings_ban_level"
-                            disabled={!can_change_levels || current_user_level < ban_level} onChange={this.onPowerLevelsChanged}/>
+                    <div className="mx_RoomSettings_powerLevel">
+                        <span className="mx_RoomSettings_powerLevelKey">The default role for new room members is </span>
+                        <PowerSelector ref="users_default" value={default_user_level} disabled={!can_change_levels || current_user_level < default_user_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_kick_level">Kick level</label>
-                        <input type="text" defaultValue={kick_level} size="3" ref="kick" id="mx_RoomSettings_kick_level"
-                            disabled={!can_change_levels || current_user_level < kick_level} onChange={this.onPowerLevelsChanged}/>
+                    <div className="mx_RoomSettings_powerLevel">
+                        <span className="mx_RoomSettings_powerLevelKey">To send messages, you must be a </span>
+                        <PowerSelector ref="events_default" value={send_level} disabled={!can_change_levels || current_user_level < send_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_redact_level">Redact level</label>
-                        <input type="text" defaultValue={redact_level} size="3" ref="redact" id="mx_RoomSettings_redact_level"
-                            disabled={!can_change_levels || current_user_level < redact_level} onChange={this.onPowerLevelsChanged}/>
+                    <div className="mx_RoomSettings_powerLevel">
+                        <span className="mx_RoomSettings_powerLevelKey">To invite users into the room, you must be a </span>
+                        <PowerSelector ref="invite" value={invite_level} disabled={!can_change_levels || current_user_level < invite_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_invite_level">Invite level</label>
-                        <input type="text" defaultValue={invite_level} size="3" ref="invite" id="mx_RoomSettings_invite_level"
-                            disabled={!can_change_levels || current_user_level < invite_level} onChange={this.onPowerLevelsChanged}/>
+                    <div className="mx_RoomSettings_powerLevel">
+                        <span className="mx_RoomSettings_powerLevelKey">To configure the room, you must be a </span>
+                        <PowerSelector ref="state_default" value={state_level} disabled={!can_change_levels || current_user_level < state_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_event_level">Send event level</label>
-                        <input type="text" defaultValue={send_level} size="3" ref="events_default" id="mx_RoomSettings_event_level"
-                            disabled={!can_change_levels || current_user_level < send_level} onChange={this.onPowerLevelsChanged}/>
+                    <div className="mx_RoomSettings_powerLevel">
+                        <span className="mx_RoomSettings_powerLevelKey">To kick users, you must be a </span>
+                        <PowerSelector ref="kick" value={kick_level} disabled={!can_change_levels || current_user_level < kick_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_state_level">Set state level</label>
-                        <input type="text" defaultValue={state_level} size="3" ref="state_default" id="mx_RoomSettings_state_level"
-                            disabled={!can_change_levels || current_user_level < state_level} onChange={this.onPowerLevelsChanged}/>
+                    <div className="mx_RoomSettings_powerLevel">
+                        <span className="mx_RoomSettings_powerLevelKey">To ban users, you must be a </span>
+                        <PowerSelector ref="ban" value={ban_level} disabled={!can_change_levels || current_user_level < ban_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
-                    <div>
-                        <label htmlFor="mx_RoomSettings_user_level">Default user level</label>
-                        <input type="text" defaultValue={default_user_level} size="3" ref="users_default"
-                            id="mx_RoomSettings_user_level" disabled={!can_change_levels || current_user_level < default_user_level}
-                            onChange={this.onPowerLevelsChanged}/>
+                    <div className="mx_RoomSettings_powerLevel">
+                        <span className="mx_RoomSettings_powerLevelKey">To redact messages, you must be a </span>
+                        <PowerSelector ref="redact" value={redact_level} disabled={!can_change_levels || current_user_level < redact_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
-                </div>
 
-                <h3>User levels</h3>
-                <div className="mx_RoomSettings_userLevels mx_RoomSettings_settings">
-                    {Object.keys(user_levels).map(function(user, i) {
+                    {Object.keys(events_levels).map(function(event_type, i) {
                         return (
-                            <div key={user}>
-                                <label htmlFor={"mx_RoomSettings_user_"+i}>{user}</label>
-                                <input type="text" defaultValue={user_levels[user]} size="3" id={"mx_RoomSettings_user_"+i} disabled/>
+                            <div className="mx_RoomSettings_powerLevel" key={event_type}>
+                                <span className="mx_RoomSettings_powerLevelKey">To send events of type <code>{ event_type }</code>, you must be a </span>
+                                <PowerSelector value={ events_levels[event_type] } disabled={true} onChange={self.onPowerLevelsChanged}/>
                             </div>
                         );
                     })}
+
+                { unfederatable_section }                    
                 </div>
 
-                { events_levels_section }
+                <h3>Users</h3>
+                <div className="mx_RoomSettings_userLevels mx_RoomSettings_settings">
+                    <div>
+                        Your role in this room is currently <b><PowerSelector room={ this.props.room } value={current_user_level} disabled={true}/></b>.
+                    </div>
+
+                    { user_levels_section }
+                </div>
+
                 { banned_users_section }
-                { change_avatar }
+
+                <h3>Advanced</h3>
+                <div className="mx_RoomSettings_settings">
+                    This room's internal ID is <code>{ this.props.room.roomId }</code>
+                </div>
+
             </div>
         );
     }

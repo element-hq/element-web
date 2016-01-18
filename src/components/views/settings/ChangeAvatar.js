@@ -25,6 +25,8 @@ module.exports = React.createClass({
         room: React.PropTypes.object,
         // if false, you need to call changeAvatar.onFileSelected yourself.
         showUploadSection: React.PropTypes.bool,
+        width: React.PropTypes.number,
+        height: React.PropTypes.number,
         className: React.PropTypes.string
     },
 
@@ -37,7 +39,9 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             showUploadSection: true,
-            className: "mx_Dialog_content" // FIXME - shouldn't be this by default
+            className: "",
+            width: 80,
+            height: 80,
         };
     },
 
@@ -111,13 +115,14 @@ module.exports = React.createClass({
         // Having just set an avatar we just display that since it will take a little
         // time to propagate through to the RoomAvatar.
         if (this.props.room && !this.avatarSet) {
-            avatarImg = <RoomAvatar room={this.props.room} width={240} height={240} resizeMethod='crop' />;
+            avatarImg = <RoomAvatar room={this.props.room} width={ this.props.width } height={ this.props.height } resizeMethod='crop' />;
         } else {
             var style = {
-                maxWidth: 240,
-                maxHeight: 240,
+                width: this.props.width,
+                height: this.props.height,
                 objectFit: 'cover',
             };
+            // FIXME: surely we should be using MemberAvatar or UserAvatar or something here...
             avatarImg = <img className="mx_RoomAvatar" src={this.state.avatarUrl} style={style} />;
         }
 

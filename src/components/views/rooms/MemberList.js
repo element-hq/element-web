@@ -318,7 +318,7 @@ module.exports = React.createClass({
         } else {
             return (
                 <form onSubmit={this.onPopulateInvite}>
-                    <input className="mx_MemberList_invite" ref="invite" placeholder="Invite user (email)"/>
+                    <input className="mx_MemberList_invite" ref="invite" id="mx_MemberList_invite" placeholder="Invite user (email)"/>
                 </form>
             );
         }
