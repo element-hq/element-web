@@ -27,9 +27,7 @@ module.exports = React.createClass({
     displayName: 'MemberTile',
 
     propTypes: {
-        member: React.PropTypes.any, // RoomMember
-        onFinished: React.PropTypes.func,
-        customDisplayName: React.PropTypes.string // for 3pid invites
+        member: React.PropTypes.any.isRequired, // RoomMember
     },
 
     getInitialState: function() {
@@ -37,13 +35,11 @@ module.exports = React.createClass({
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
-        if (this.state.hover !== nextState.hover) return true;
-        if (!this.props.member) { return false; } // e.g. 3pid members
         if (
             this.member_last_modified_time === undefined ||
             this.member_last_modified_time < nextProps.member.getLastModifiedTime()
         ) {
-            return true
+            return true;
         }
         if (
             nextProps.member.user &&
@@ -55,17 +51,7 @@ module.exports = React.createClass({
         return false;
     },
 
-    mouseEnter: function(e) {
-        this.setState({ 'hover': true });
-    },
-
-    mouseLeave: function(e) {
-        this.setState({ 'hover': false });
-    },
-
     onClick: function(e) {
-        if (!this.props.member) { return; } // e.g. 3pid members
-
         dis.dispatch({
             action: 'view_user',
             member: this.props.member,
@@ -73,115 +59,50 @@ module.exports = React.createClass({
     },
 
     _getDisplayName: function() {
-        if (this.props.customDisplayName) {
-            return this.props.customDisplayName;
-        }
         return this.props.member.name;
     },
 
     getPowerLabel: function() {
-        if (!this.props.member) {
-            return this._getDisplayName();
-        }
-        var label = this.props.member.userId + " (power " + this.props.member.powerLevel + ")";
-        return label;
+        return this.props.member.userId + " (power " + this.props.member.powerLevel + ")";
     },
 
     render: function() {
-        var member = this.props.member;
-        var isMyUser = false;
-        var name = this._getDisplayName();
-        var active = -1;
-        var presenceClass = "mx_MemberTile_offline";
-
-        if (member) {
-            if (member.user) {
-                this.user_last_modified_time = member.user.getLastModifiedTime();
-
-                // FIXME: make presence data update whenever User.presence changes...
-                active = (
-                    (Date.now() - (member.user.lastPresenceTs - member.user.lastActiveAgo)) || -1
-                );
-
-                if (member.user.presence === "online") {
-                    presenceClass = "mx_MemberTile_online";
-                }
-                else if (member.user.presence === "unavailable") {
-                    presenceClass = "mx_MemberTile_unavailable";
-                }
-            }
-            this.member_last_modified_time = member.getLastModifiedTime();
-            isMyUser = MatrixClientPeg.get().credentials.userId == member.userId;
-
-            // if (this.props.member && this.props.member.powerLevelNorm > 0) {
-            //     var img = "img/p/p" + Math.floor(20 * this.props.member.powerLevelNorm / 100) + ".png";
-            //     power = <img src={ img } className="mx_MemberTile_power" width="44" height="44" alt=""/>;
-            // }
-
-            var power;
-            if (this.props.member) {
-                var powerLevel = this.props.member.powerLevel;
-                if (powerLevel >= 50 && powerLevel < 99) {
-                    power = <img src="img/mod.svg" className="mx_MemberTile_power" width="16" height="17" alt="Mod"/>;
-                }
-                if (powerLevel >= 99) {
-                    power = <img src="img/admin.svg" className="mx_MemberTile_power" width="16" height="17" alt="Admin"/>;
-                }
-            }
-        }
-
-        var mainClassName = "mx_MemberTile ";
-        mainClassName += presenceClass;
-        if (this.state.hover) {
-            mainClassName += " mx_MemberTile_hover";
-        }
-
-        var nameEl;
-        if (this.state.hover && this.props.member) {
-            var presenceState = (member && member.user) ? member.user.presence : null;
-            var PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
-            nameEl = (
-                <div className="mx_MemberTile_details">
-                    <img className="mx_MemberTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
-                    <div className="mx_MemberTile_userId">{ name }</div>
-                    <PresenceLabel activeAgo={active}
-                        presenceState={presenceState} />
-                </div>
-            );
-        }
-        else {
-            nameEl = (
-                <div className="mx_MemberTile_name">
-                    { name }
-                </div>
-            );
-        }
-
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        var EntityTile = sdk.getComponent('rooms.EntityTile');
 
-        var av;
-        if (member) {
-            av = (
-                <MemberAvatar member={this.props.member} width={36} height={36} />
+        var member = this.props.member;
+        var name = this._getDisplayName();
+        var active = -1;
+        var presenceState = member.user ? member.user.presence : null;
+
+        var av = (
+            <MemberAvatar member={member} width={36} height={36} />
+        );
+        var power;
+        var powerLevel = this.props.member.powerLevel;
+        if (powerLevel >= 50 && powerLevel < 99) {
+            power = <img src="img/mod.svg" className="mx_MemberTile_power" width="16" height="17" alt="Mod"/>;
+        }
+        if (powerLevel >= 99) {
+            power = <img src="img/admin.svg" className="mx_MemberTile_power" width="16" height="17" alt="Admin"/>;
+        }
+
+        if (member.user) {
+            this.user_last_modified_time = member.user.getLastModifiedTime();
+
+            // FIXME: make presence data update whenever User.presence changes...
+            active = (
+                (Date.now() - (member.user.lastPresenceTs - member.user.lastActiveAgo)) || -1
             );
         }
-        else {
-            av = (
-                <BaseAvatar name={name} width={36} height={36} />
-            );
-        }
-
+        this.member_last_modified_time = member.getLastModifiedTime();
+        
         return (
-            <div className={mainClassName} title={ this.getPowerLabel() }
-                    onClick={ this.onClick } onMouseEnter={ this.mouseEnter }
-                    onMouseLeave={ this.mouseLeave }>
-                <div className="mx_MemberTile_avatar">
-                    { av }
-                    { power }
-                </div>
-                { nameEl }
-            </div>
+            <EntityTile {...this.props} presenceActiveAgo={active} presenceState={presenceState}
+                avatarJsx={av} title={this.getPowerLabel()} onClick={this.onClick}
+                shouldComponentUpdate={this.shouldComponentUpdate.bind(this)}
+                name={name} powerLevel={this.props.member.powerLevel} />
         );
     }
 });

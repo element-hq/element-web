@@ -119,7 +119,7 @@ module.exports = React.createClass({
             console.log("Attempting to peek into room %s", this.props.roomId);
             MatrixClientPeg.get().peekInRoom(this.props.roomId).done(() => {
                 this.setState({
-                    autoPeekDone: true;
+                    autoPeekDone: true
                 });
 
                 // we don't need to do anything - JS SDK will emit Room events
@@ -128,20 +128,6 @@ module.exports = React.createClass({
                 var peekedRoom = MatrixClientPeg.get().getRoom(this.props.roomId);
                 if (!peekedRoom) {
                     return;
-                }
-
-                var guestAccessEvent = peekedRoom.currentState.getStateEvents("m.room.guest_access", "");
-                if (guestAccessEvent && guestAccessEvent.getContent().guest_access === "can_join") {
-                    this.setState({
-                        guestsCanJoin: true
-                    });
-                }
-
-                var historyVisibility = peekedRoom.currentState.getStateEvents("m.room.history_visibility", "");
-                if (historyVisibility && historyVisibility.getContent().history_visibility === "world_readable") {
-                    this.setState({
-                        canPeek: true
-                    });
                 }
             }, function(err) {
                 console.error("Failed to peek into room: %s", err);
@@ -298,6 +284,20 @@ module.exports = React.createClass({
             this.setState({
                 room: room
             });
+
+            var guestAccessEvent = room.currentState.getStateEvents("m.room.guest_access", "");
+            if (guestAccessEvent && guestAccessEvent.getContent().guest_access === "can_join") {
+                this.setState({
+                    guestsCanJoin: true
+                });
+            }
+
+            var historyVisibility = room.currentState.getStateEvents("m.room.history_visibility", "");
+            if (historyVisibility && historyVisibility.getContent().history_visibility === "world_readable") {
+                this.setState({
+                    canPeek: true
+                });
+            }
         }
     },
 
@@ -960,8 +960,7 @@ module.exports = React.createClass({
                     this.state.room.roomId, "m.room.history_visibility", {
                         history_visibility: newVals.history_visibility,
                     }, ""
-                )
-            );
+                );
         }
 
         if (old_guest_read != newVals.guest_read ||
@@ -984,6 +983,13 @@ module.exports = React.createClass({
         if (visibilityDeferred) {
             deferreds.push(visibilityDeferred);
         }
+
+        // setRoomMutePushRule will do nothing if there is no change
+        deferreds.push(
+            MatrixClientPeg.get().setRoomMutePushRule(
+                "global", this.state.room.roomId, newVals.are_notifications_muted
+            )
+        );
 
         if (newVals.power_levels) {
             deferreds.push(
@@ -1179,6 +1185,7 @@ module.exports = React.createClass({
             topic: this.refs.header.getTopic(),
             join_rule: this.refs.room_settings.getJoinRules(),
             history_visibility: this.refs.room_settings.getHistoryVisibility(),
+            are_notifications_muted: this.refs.room_settings.areNotificationsMuted(),
             power_levels: this.refs.room_settings.getPowerLevels(),
             alias_operations: this.refs.room_settings.getAliasOperations(),
             tag_operations: this.refs.room_settings.getTagOperations(),
@@ -1426,6 +1433,7 @@ module.exports = React.createClass({
         if (!this.state.room) {
             if (this.props.roomId) {
                 if (this.props.autoPeek && !this.state.autoPeekDone) {
+                    var Loader = sdk.getComponent("elements.Spinner");
                     return (
                         <div className="mx_RoomView">
                             <Loader />

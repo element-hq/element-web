@@ -128,6 +128,10 @@ module.exports = React.createClass({
         return this.refs.share_history.checked ? "shared" : "invited";
     },
 
+    areNotificationsMuted: function() {
+        return this.refs.are_notifications_muted.checked;
+    },
+
     getPowerLevels: function() {
         if (!this.state.power_levels_changed) return undefined;
 
@@ -387,9 +391,18 @@ module.exports = React.createClass({
             guest_access = guest_access.getContent().guest_access;
         }
 
+        var are_notifications_muted;
+        var roomPushRule = MatrixClientPeg.get().getRoomPushRule("global", this.props.room.roomId); 
+        if (roomPushRule) {
+            if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
+                are_notifications_muted = true;
+            }
+        }
+
         var events_levels = (power_levels ? power_levels.events : {}) || {};
 
         var user_id = MatrixClientPeg.get().credentials.userId;
+
 
         if (power_levels) {
             power_levels = power_levels.getContent();
@@ -674,6 +687,11 @@ module.exports = React.createClass({
                 { room_colors_section }
 
                 { aliases_section }
+
+                <h3>Notifications</h3>
+                <div className="mx_RoomSettings_settings">
+                    <label><input type="checkbox" ref="are_notifications_muted" defaultChecked={are_notifications_muted}/> Mute notifications for this room</label>
+                </div>
 
                 <h3>Permissions</h3>
                 <div className="mx_RoomSettings_powerLevels mx_RoomSettings_settings">
