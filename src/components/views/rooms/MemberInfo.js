@@ -58,15 +58,16 @@ module.exports = React.createClass({
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
         MatrixClientPeg.get().kick(roomId, target).done(function() {
-            // NO-OP; rely on the m.room.member event coming down else we could
-            // get out of sync if we force setState here!
-            console.log("Kick success");
-        }, function(err) {
-            Modal.createDialog(ErrorDialog, {
-                title: "Kick error",
-                description: err.message
-            });
-        });
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Kick success");
+            }, function(err) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Kick error",
+                    description: err.message
+                });
+            }
+        );
         this.props.onFinished();
     },
 
@@ -74,16 +75,18 @@ module.exports = React.createClass({
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
-        MatrixClientPeg.get().ban(roomId, target).done(function() {
-            // NO-OP; rely on the m.room.member event coming down else we could
-            // get out of sync if we force setState here!
-            console.log("Ban success");
-        }, function(err) {
-            Modal.createDialog(ErrorDialog, {
-                title: "Ban error",
-                description: err.message
-            });
-        });
+        MatrixClientPeg.get().ban(roomId, target).done(
+            function() {
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Ban success");
+            }, function(err) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Ban error",
+                    description: err.message
+                });
+            }
+        );
         this.props.onFinished();
     },
 
@@ -118,16 +121,17 @@ module.exports = React.createClass({
         }
 
         MatrixClientPeg.get().setPowerLevel(roomId, target, level, powerLevelEvent).done(
-        function() {
-            // NO-OP; rely on the m.room.member event coming down else we could
-            // get out of sync if we force setState here!
-            console.log("Mute toggle success");
-        }, function(err) {
-            Modal.createDialog(ErrorDialog, {
-                title: "Mute error",
-                description: err.message
-            });
-        });
+            function() {
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Mute toggle success");
+            }, function(err) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Mute error",
+                    description: err.message
+                });
+            }
+        );
         this.props.onFinished();        
     },
 
@@ -158,16 +162,17 @@ module.exports = React.createClass({
         // toggle the level
         var newLevel = this.state.isTargetMod ? defaultLevel : modLevel;
         MatrixClientPeg.get().setPowerLevel(roomId, target, newLevel, powerLevelEvent).done(
-        function() {
-            // NO-OP; rely on the m.room.member event coming down else we could
-            // get out of sync if we force setState here!
-            console.log("Mod toggle success");
-        }, function(err) {
-            Modal.createDialog(ErrorDialog, {
-                title: "Mod error",
-                description: err.message
-            });
-        });
+            function() {
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Mod toggle success");
+            }, function(err) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Mod error",
+                    description: err.message
+                });
+            }
+        );
         this.props.onFinished();        
     },
 
@@ -188,16 +193,17 @@ module.exports = React.createClass({
             return;
         }
         MatrixClientPeg.get().setPowerLevel(roomId, target, powerLevel, powerLevelEvent).done(
-        function() {
-            // NO-OP; rely on the m.room.member event coming down else we could
-            // get out of sync if we force setState here!
-            console.log("Power change success");
-        }, function(err) {
-            Modal.createDialog(ErrorDialog, {
-                title: "Failure to change power level",
-                description: err.message
-            });
-        });
+            function() {
+                // NO-OP; rely on the m.room.member event coming down else we could
+                // get out of sync if we force setState here!
+                console.log("Power change success");
+            }, function(err) {
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failure to change power level",
+                    description: err.message
+                });
+            }
+        );
         this.props.onFinished();        
     },    
 
@@ -240,20 +246,22 @@ module.exports = React.createClass({
             MatrixClientPeg.get().createRoom({
                 invite: [this.props.member.userId],
                 preset: "private_chat"
-            }).done(function(res) {
-                self.setState({ creatingRoom: false });
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: res.room_id
-                });
-                self.props.onFinished();
-            }, function(err) {
-                self.setState({ creatingRoom: false });
-                console.error(
-                    "Failed to create room: %s", JSON.stringify(err)
-                );
-                self.props.onFinished();
-            });
+            }).done(
+                function(res) {
+                    self.setState({ creatingRoom: false });
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: res.room_id
+                    });
+                    self.props.onFinished();
+                }, function(err) {
+                    self.setState({ creatingRoom: false });
+                    console.error(
+                        "Failed to create room: %s", JSON.stringify(err)
+                    );
+                    self.props.onFinished();
+                }
+            );
         }
     },
 
