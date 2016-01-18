@@ -123,7 +123,7 @@ module.exports = React.createClass({
         return connectDragSource(connectDropTarget(
             <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className="mx_RoomTile_avatar">
-                    <RoomAvatar room={this.props.room} width="24" height="24" />
+                    <RoomAvatar room={this.props.room} width={24} height={24} />
                     { badge }
                 </div>
                 { label }
