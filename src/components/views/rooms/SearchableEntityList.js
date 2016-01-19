@@ -26,16 +26,20 @@ var SearchableEntityList = React.createClass({
     propTypes: {
         searchPlaceholderText: React.PropTypes.string,
         emptyQueryShowsAll: React.PropTypes.bool,
+        showInputBox: React.PropTypes.bool,
+        onQueryChanged: React.PropTypes.func, // fn(inputText)
         onSubmit: React.PropTypes.func, // fn(inputText)
         entities: React.PropTypes.array
     },
 
     getDefaultProps: function() {
         return {
+            showInputBox: true,
             searchPlaceholderText: "Search",
             entities: [],
             emptyQueryShowsAll: false,
-            onSubmit: function() {}
+            onSubmit: function() {},
+            onQueryChanged: function(input) {}
         };
     },
 
@@ -46,12 +50,24 @@ var SearchableEntityList = React.createClass({
         };
     },
 
+    /**
+     * Public-facing method to set the input query text to the given input.
+     * @param {string} input
+     */
+    setQuery: function(input) {
+        this.setState({
+            query: input,
+            results: this.getSearchResults(input)
+        });
+    },
+
     onQueryChanged: function(ev) {
         var q = ev.target.value;
         this.setState({
             query: q,
             results: this.getSearchResults(q)
         });
+        this.props.onQueryChanged(q);
     },
 
     onQuerySubmit: function(ev) {
@@ -69,13 +85,21 @@ var SearchableEntityList = React.createClass({
     },
 
     render: function() {
-        return (
-            <div>
+        var inputBox;
+
+        if (this.props.showInputBox) {
+            inputBox = (
                 <form onSubmit={this.onQuerySubmit}>
                     <input className="mx_SearchableEntityList_query" type="text"
                         onChange={this.onQueryChanged} value={this.state.query}
                         placeholder={this.props.searchPlaceholderText} />
                 </form>
+            );
+        }
+
+        return (
+            <div>
+                {inputBox}
                 <div className="mx_SearchableEntityList_list">
                     {this.state.results.map((entity) => {
                         return entity.getJsx();
