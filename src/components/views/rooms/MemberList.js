@@ -264,13 +264,23 @@ module.exports = React.createClass({
         return latB - latA;
     },
 
-    makeMemberTiles: function(membership) {
+    onSearchQueryChanged: function(input) {
+        this.setState({
+            searchQuery: input
+        });
+    },
+
+    makeMemberTiles: function(membership, query) {
         var MemberTile = sdk.getComponent("rooms.MemberTile");
+        query = (query || "").toLowerCase();
 
         var self = this;
 
         var memberList = self.state.members.filter(function(userId) {
             var m = self.memberDict[userId];
+            if (query && m.name.toLowerCase().indexOf(query) !== 0) {
+                return false;
+            }
             return m.membership == membership;
         }).map(function(userId) {
             var m = self.memberDict[userId];
@@ -329,20 +339,15 @@ module.exports = React.createClass({
             return (
                 <SearchableEntityList searchPlaceholderText={"Invite / Search"}
                     onSubmit={this.onInvite}
-                    entities={
-                        Entities.fromRoomMembers(
-                            room.getJoinedMembers()
-                        ).concat(
-                            Entities.fromUsers(allUsers, true, this.onInvite)
-                        )
-                    } />
+                    onQueryChanged={this.onSearchQueryChanged}
+                    entities={Entities.fromUsers(allUsers, true, this.onInvite)} />
             );
         }
     },
 
     render: function() {
         var invitedSection = null;
-        var invitedMemberTiles = this.makeMemberTiles('invite');
+        var invitedMemberTiles = this.makeMemberTiles('invite', this.state.searchQuery);
         if (invitedMemberTiles.length > 0) {
             invitedSection = (
                 <div className="mx_MemberList_invited">
@@ -359,7 +364,7 @@ module.exports = React.createClass({
                     {this.inviteTile()}
                     <div>
                         <div className="mx_MemberList_wrapper">
-                            {this.makeMemberTiles('join')}
+                            {this.makeMemberTiles('join', this.state.searchQuery)}
                         </div>
                     </div>
                     {invitedSection}
