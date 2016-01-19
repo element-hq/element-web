@@ -126,7 +126,7 @@ module.exports = React.createClass({
                     // ...XXX: or do we? can't we just do them onNewRoom?
                 }, function(err) {
                     console.error("Failed to peek into room: %s", err);
-                }).finally((() => {
+                }).finally(() => {
                     this.setState({
                         autoPeekDone: true
                     });
