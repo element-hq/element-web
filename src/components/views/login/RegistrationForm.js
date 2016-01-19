@@ -20,6 +20,7 @@ var React = require('react');
 var Velocity = require('velocity-animate');
 require('velocity-ui-pack');
 var sdk = require('../../../index');
+var Email = require('../../../email');
 
 var FIELD_EMAIL = 'field_email';
 var FIELD_USERNAME = 'field_username';
@@ -113,7 +114,7 @@ module.exports = React.createClass({
             case FIELD_EMAIL:
                 this.markFieldValid(
                     field_id,
-                    this.refs.email.value == '' || !!this.refs.email.value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i),
+                    this.refs.email.value == '' || Email.looksValid(this.refs.email.value),
                     "RegistrationForm.ERR_EMAIL_INVALID"
                 );
                 break;
