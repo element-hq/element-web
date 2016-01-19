@@ -176,7 +176,7 @@ module.exports = React.createClass({
         this.add_threepid = new AddThreepid();
         // we always bind emails when registering, so let's do the
         // same here.
-        this.add_threepid.addEmailAddress(email_address, true).then(() => {
+        this.add_threepid.addEmailAddress(email_address, true).done(() => {
             Modal.createDialog(QuestionDialog, {
                 title: "Verification Pending",
                 description: "Please check your email and click on the link it contains. Once this is done, click continue.",
