@@ -75,7 +75,7 @@ var VectorPushRulesDefinitions = {
     // Messages just sent to the user in a 1:1 room
     "im.vector.rule.room_one_to_one": {
         hsDefaultRuleId: ".m.rule.room_one_to_one",
-        description: "Messages just sent to me",
+        description: "Messages in one-to-one chats",
         conditions: [{
             "is": "2",
             "kind": "room_member_count"
@@ -97,7 +97,7 @@ var VectorPushRulesDefinitions = {
 
     // Messages just sent to a group chat room
     "im.vector.rule.room_group": {
-        description: "Messages sent to group",
+        description: "Messages in group chats",
         conditions: [{
             "is": ">2",
             "kind": "room_member_count"

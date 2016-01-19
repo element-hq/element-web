@@ -72,6 +72,7 @@ module.exports = React.createClass({
         joinOrPeekPromise.done(function() {
             dis.dispatch({
                 action: 'view_room',
+                auto_peek: false, // don't peek as we've already peeked here (if it was needed)
                 room_id: roomId
             });
         }, function(err) {
@@ -97,7 +98,7 @@ module.exports = React.createClass({
         });
         var rows = [];
         var self = this;
-        var guestRead, guestJoin;
+        var guestRead, guestJoin, perms;
         for (var i = 0; i < rooms.length; i++) {
             var name = rooms[i].name || rooms[i].aliases[0];
             guestRead = null;
@@ -106,30 +107,37 @@ module.exports = React.createClass({
 
             if (rooms[i].world_readable) {
                 guestRead = (
-                    <img src="img/members.svg"
-                        alt="World Readable" title="World Readable" width="12" height="12" />
+                    <span>[world readable]</span>
                 );
-                if (MatrixClientPeg.get().isGuest() && !rooms[i].guest_can_join) {
+                    // <img src="img/members.svg"
+                    //     alt="World Readable" title="World Readable" width="12" height="12" />
+                if (rooms[i].world_readable) {
                     shouldPeek = true;
                 }
             }
             if (rooms[i].guest_can_join) {
                 guestJoin = (
-                    <img src="img/leave.svg"
-                        alt="Guests can join" title="Guests can join" width="12" height="12" />
+                    <span>[guests allowed]</span>
                 );
+                    // <img src="img/leave.svg"
+                    //     alt="Guests can join" title="Guests can join" width="12" height="12" />
+            }
+            
+            perms = null;
+            if (guestRead || guestJoin) {
+                perms = <div>{guestRead} {guestJoin}</div>;
             }
 
             // <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(rooms[i].room_id, 40, 40, "crop") } width="40" height="40" alt=""/>
             rows.unshift(
                 <tbody key={ rooms[i].room_id }>
                     <tr onClick={self.joinRoom.bind(null, rooms[i].room_id, shouldPeek)}>
-                        <td className="mx_RoomDirectory_name">{ name } {guestRead} {guestJoin}</td>
+                        <td className="mx_RoomDirectory_name">{ name }</td>
                         <td>{ rooms[i].aliases[0] }</td>
                         <td>{ rooms[i].num_joined_members }</td>
                     </tr>
-                    <tr>
-                        <td className="mx_RoomDirectory_topic" colSpan="3">{ rooms[i].topic }</td>
+                    <tr onClick={self.joinRoom.bind(null, rooms[i].room_id, shouldPeek)}>
+                        <td className="mx_RoomDirectory_topic" colSpan="3">{perms} { rooms[i].topic }</td>
                     </tr>
                 </tbody>
             );
