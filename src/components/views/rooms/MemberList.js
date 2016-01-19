@@ -330,19 +330,18 @@ module.exports = React.createClass({
             // TODO: Cache this calculation
             var room = MatrixClientPeg.get().getRoom(this.props.roomId);
             if (!room) return <div></div>;
-
-            var allUsers = MatrixClientPeg.get().getUsers();
+            /* var allUsers = MatrixClientPeg.get().getUsers();
             // only add Users if they are not joined
             allUsers = allUsers.filter(function(u) {
                 return !room.hasMembershipState(u.userId, "join");
-            });
+            }); */
             var SearchableEntityList = sdk.getComponent("rooms.SearchableEntityList");
             
             return (
                 <SearchableEntityList searchPlaceholderText={"Invite / Search"}
                     onSubmit={this.onInvite}
                     onQueryChanged={this.onSearchQueryChanged}
-                    entities={Entities.fromUsers(allUsers, true, this.onInvite)} />
+                    entities={[] /* Entities.fromUsers(allUsers, true, this.onInvite) */} />
             );
         }
     },
