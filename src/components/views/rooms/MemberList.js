@@ -71,7 +71,18 @@ module.exports = React.createClass({
             self.setState({
                 members: self.roomMembers()
             });
+            // Lazy-load the complete user list for inviting new users
+            // TODO: Keep this list bleeding-edge up-to-date. Practically speaking,
+            // it will do for now not being updated as random new users join different
+            // rooms as this list will be reloaded every room swap.
+            var room = MatrixClientPeg.get().getRoom(self.props.roomId);
+            self.userList = MatrixClientPeg.get().getUsers().filter(function(u) {
+                return !room.hasMembershipState(u.userId, "join");
+            });
         }, 50);
+
+        
+        setTimeout
 
         // Attach a SINGLE listener for global presence changes then locate the
         // member tile and re-render it. This is more efficient than every tile
@@ -323,20 +334,13 @@ module.exports = React.createClass({
                 <Loader />
             );
         } else {
-            // TODO: Cache this calculation
-            var room = MatrixClientPeg.get().getRoom(this.props.roomId);
-            /* var allUsers = MatrixClientPeg.get().getUsers();
-            // only add Users if they are not joined
-            allUsers = allUsers.filter(function(u) {
-                return !room.hasMembershipState(u.userId, "join");
-            }); */
             var SearchableEntityList = sdk.getComponent("rooms.SearchableEntityList");
             
             return (
                 <SearchableEntityList searchPlaceholderText={"Invite / Search"}
                     onSubmit={this.onInvite}
                     onQueryChanged={this.onSearchQueryChanged}
-                    entities={[] /* Entities.fromUsers(allUsers, true, this.onInvite) */} />
+                    entities={Entities.fromUsers(this.userList || [], true, this.onInvite)} />
             );
         }
     },

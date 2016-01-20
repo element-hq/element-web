@@ -121,7 +121,7 @@ module.exports = React.createClass({
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
-        var av = this.props.avatarJsx || <BaseAvatar name={name} width={36} height={36} />;
+        var av = this.props.avatarJsx || <BaseAvatar name={this.props.name} width={36} height={36} />;
 
         return (
             <div className={mainClassName} title={ this.props.title }
