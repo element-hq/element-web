@@ -72,7 +72,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var presenceClass = PRESENCE_CLASS[this.props.presenceState];
+        var presenceClass = PRESENCE_CLASS[this.props.presenceState] || "mx_EntityTile_offline";
         var mainClassName = "mx_EntityTile ";
         mainClassName += presenceClass;
         if (this.state.hover) {
@@ -128,10 +128,10 @@ module.exports = React.createClass({
                     onClick={ this.props.onClick } onMouseEnter={ this.mouseEnter }
                     onMouseLeave={ this.mouseLeave }>
                 <div className="mx_EntityTile_avatar">
-                    {av}
+                    { av }
+                    { power }
                 </div>
                 { nameEl }
-                { power }
                 { inviteButton }
             </div>
         );

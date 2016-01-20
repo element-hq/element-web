@@ -295,8 +295,8 @@ module.exports = React.createClass({
         else {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");            
             Modal.createDialog(ErrorDialog, {
-                title: "Invalid alias format", 
-                description: "'" + alias + "' is not a valid format for an alias",
+                title: "Invalid address format", 
+                description: "'" + alias + "' is not a valid format for an address",
             });
         }        
     },
@@ -482,11 +482,11 @@ module.exports = React.createClass({
             remote_aliases_section = 
                 <div>
                     <div className="mx_RoomSettings_aliasLabel">
-                        This room can be found elsewhere as:
+                        Remote addresses for this room:
                     </div>
                     <div className="mx_RoomSettings_aliasesTable">
                         { remote_domains.map(function(state_key, i) {
-                            self.state.aliases[state_key].map(function(alias, j) {
+                            return self.state.aliases[state_key].map(function(alias, j) {
                                 return (
                                     <div className="mx_RoomSettings_aliasesTableRow" key={ i + "_" + j }>
                                         <EditableText
@@ -494,8 +494,6 @@ module.exports = React.createClass({
                                              blurToCancel={ false }
                                              editable={ false }
                                              initialValue={ alias } />
-                                        <div className="mx_RoomSettings_deleteAlias">
-                                        </div>
                                     </div>
                                 );
                             });
@@ -513,7 +511,7 @@ module.exports = React.createClass({
                             return <option value={ alias } key={ i + "_" + j }>{ alias }</option>
                         });
                     })}
-                    <option value="" key="unset">not set</option>
+                    <option value="" key="unset">not specified</option>
                 </select>
         }
         else {
@@ -522,24 +520,26 @@ module.exports = React.createClass({
 
         var aliases_section =
             <div>
-                <h3>Directory</h3>
+                <h3>Addresses</h3>
+                <div className="mx_RoomSettings_aliasLabel">The main address for this room is: { canonical_alias_section }</div>
                 <div className="mx_RoomSettings_aliasLabel">
                     { this.state.aliases[domain].length
-                      ? "This room can be found on " + domain + " as:"
-                      : "This room is not findable on " + domain }
+                      ? "Local addresses for this room:"
+                      : "This room has no local addresses" }
                 </div>
                 <div className="mx_RoomSettings_aliasesTable">
                     { this.state.aliases[domain].map(function(alias, i) {
                         var deleteButton;
                         if (can_set_room_aliases) {
-                            deleteButton = <img src="img/cancel-small.svg" width="14" height="14" alt="Delete" onClick={ self.onAliasDeleted.bind(self, domain, i) }/>;
+                            deleteButton = <img src="img/cancel-small.svg" width="14" height="14" alt="Delete"
+                                                onClick={ self.onAliasDeleted.bind(self, domain, i) }/>;
                         }
                         return (
                             <div className="mx_RoomSettings_aliasesTableRow" key={ i }>
                                 <EditableText
                                     className="mx_RoomSettings_alias mx_RoomSettings_editable"
                                     placeholderClassName="mx_RoomSettings_aliasPlaceholder"
-                                    placeholder={ "New alias (e.g. #foo:" + domain + ")" }
+                                    placeholder={ "New address (e.g. #foo:" + domain + ")" }
                                     blurToCancel={ false }
                                     onValueChanged={ self.onAliasChanged.bind(self, domain, i) }
                                     editable={ can_set_room_aliases }
@@ -556,18 +556,18 @@ module.exports = React.createClass({
                             ref="add_alias"
                             className="mx_RoomSettings_alias mx_RoomSettings_editable"
                             placeholderClassName="mx_RoomSettings_aliasPlaceholder"
-                            placeholder={ "New alias (e.g. #foo:" + domain + ")" }
+                            placeholder={ "New address (e.g. #foo:" + domain + ")" }
                             blurToCancel={ false }
                             onValueChanged={ self.onAliasAdded } />
                         <div className="mx_RoomSettings_addAlias">
-                             <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ self.onAliasAdded.bind(self, undefined) }/>
+                             <img src="img/plus.svg" width="14" height="14" alt="Add"
+                                  onClick={ self.onAliasAdded.bind(self, undefined) }/>
                         </div>                        
                     </div>                      
                 </div>
 
                 { remote_aliases_section }
 
-                <div className="mx_RoomSettings_aliasLabel">The official way to refer to this room is: { canonical_alias_section }</div>
             </div>;
 
         var room_colors_section =
@@ -597,23 +597,17 @@ module.exports = React.createClass({
             </div>;
 
         var user_levels_section;
-        if (user_levels.length) {
+        if (Object.keys(user_levels).length) {
             user_levels_section =
-                <div>
-                    <div>
-                        Users with specific roles are:
-                    </div>
-                    <div>
-                        {Object.keys(user_levels).map(function(user, i) {
-                            return (
-                                <div className="mx_RoomSettings_userLevel" key={user}>
-                                    { user } is a
-                                    <PowerSelector value={ user_levels[user] } disabled={true}/>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>;
+                <ul>
+                    {Object.keys(user_levels).map(function(user, i) {
+                        return (
+                            <li className="mx_RoomSettings_userLevel" key={user}>
+                                { user } is a <PowerSelector value={ user_levels[user] } disabled={true}/>
+                            </li>
+                        );
+                    })}
+                </ul>;
         }
         else {
             user_levels_section = <div>No users have specific privileges in this room.</div>
@@ -659,7 +653,7 @@ module.exports = React.createClass({
 
         var tags_section = 
             <div className="mx_RoomSettings_tags">
-                This room is tagged as
+                Tagged as:
                 { can_set_tag ?
                     tags.map(function(tag, i) {
                         return (<label key={ i }>
@@ -673,24 +667,25 @@ module.exports = React.createClass({
                 }
             </div>
 
+        // FIXME: disable guests_read if the user hasn't turned on shared history
         return (
             <div className="mx_RoomSettings">
-                <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label> <br/>
-                <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility == "shared"}/> Share message history with new users</label> <br/>
-                <label><input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/> Allow guests to read messages in this room</label> <br/>
-                <label><input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/> Allow guests to join this room</label> <br/>
-                <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>
 
                 { tags_section }
+
+                <div className="mx_RoomSettings_toggles">
+                    <label><input type="checkbox" ref="are_notifications_muted" defaultChecked={are_notifications_muted}/> Mute notifications for this room</label>
+                    <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label>
+                    <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility === "shared" || history_visibility === "world_readable"}/> Share message history with new participants</label>
+                    <label><input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/> Let guests join this room</label>
+                    <label><input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/> Let users read message history without joining</label>
+                    <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>
+                </div>
+
 
                 { room_colors_section }
 
                 { aliases_section }
-
-                <h3>Notifications</h3>
-                <div className="mx_RoomSettings_settings">
-                    <label><input type="checkbox" ref="are_notifications_muted" defaultChecked={are_notifications_muted}/> Mute notifications for this room</label>
-                </div>
 
                 <h3>Permissions</h3>
                 <div className="mx_RoomSettings_powerLevels mx_RoomSettings_settings">
@@ -735,12 +730,8 @@ module.exports = React.createClass({
                 { unfederatable_section }                    
                 </div>
 
-                <h3>Users</h3>
+                <h3>Privileged Users</h3>
                 <div className="mx_RoomSettings_userLevels mx_RoomSettings_settings">
-                    <div>
-                        Your role in this room is currently <b><PowerSelector room={ this.props.room } value={current_user_level} disabled={true}/></b>.
-                    </div>
-
                     { user_levels_section }
                 </div>
 
