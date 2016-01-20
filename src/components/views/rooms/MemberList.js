@@ -71,14 +71,8 @@ module.exports = React.createClass({
             self.setState({
                 members: self.roomMembers()
             });
-            // Lazy-load the complete user list for inviting new users
-            // TODO: Keep this list bleeding-edge up-to-date. Practically speaking,
-            // it will do for now not being updated as random new users join different
-            // rooms as this list will be reloaded every room swap.
-            var room = MatrixClientPeg.get().getRoom(self.props.roomId);
-            self.userList = MatrixClientPeg.get().getUsers().filter(function(u) {
-                return !room.hasMembershipState(u.userId, "join");
-            });
+            // lazy load to prevent it blocking the first render
+            self._loadUserList();
         }, 50);
 
         
@@ -107,6 +101,21 @@ module.exports = React.createClass({
     /*componentWillReceiveProps: function(newProps) {
     },*/
 
+    _loadUserList: function() {
+        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        if (!room) {
+            return; // we'll do it later
+        }
+
+        // Load the complete user list for inviting new users
+        // TODO: Keep this list bleeding-edge up-to-date. Practically speaking,
+        // it will do for now not being updated as random new users join different
+        // rooms as this list will be reloaded every room swap.
+        this.userList = MatrixClientPeg.get().getUsers().filter(function(u) {
+            return !room.hasMembershipState(u.userId, "join");
+        });
+    },
+
     onRoom: function(room) {
         if (room.roomId !== this.props.roomId) {
             return;
@@ -115,6 +124,7 @@ module.exports = React.createClass({
         // we need to wait till the room is fully populated with state
         // before refreshing the member list else we get a stale list.
         this._updateList();
+        this._loadUserList();
     },
 
     onRoomStateMember: function(ev, state, member) {
