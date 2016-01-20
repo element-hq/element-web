@@ -486,7 +486,7 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_RoomSettings_aliasesTable">
                         { remote_domains.map(function(state_key, i) {
-                            self.state.aliases[state_key].map(function(alias, j) {
+                            return self.state.aliases[state_key].map(function(alias, j) {
                                 return (
                                     <div className="mx_RoomSettings_aliasesTableRow" key={ i + "_" + j }>
                                         <EditableText
@@ -494,8 +494,6 @@ module.exports = React.createClass({
                                              blurToCancel={ false }
                                              editable={ false }
                                              initialValue={ alias } />
-                                        <div className="mx_RoomSettings_deleteAlias">
-                                        </div>
                                     </div>
                                 );
                             });
@@ -558,7 +556,7 @@ module.exports = React.createClass({
                             ref="add_alias"
                             className="mx_RoomSettings_alias mx_RoomSettings_editable"
                             placeholderClassName="mx_RoomSettings_aliasPlaceholder"
-                            placeholder={ "New alias (e.g. #foo:" + domain + ")" }
+                            placeholder={ "New address (e.g. #foo:" + domain + ")" }
                             blurToCancel={ false }
                             onValueChanged={ self.onAliasAdded } />
                         <div className="mx_RoomSettings_addAlias">
