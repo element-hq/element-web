@@ -25,9 +25,10 @@ limitations under the License.
     text-align: center;
     speak: none;
     pointer-events: none;
+    font-weight: normal;
 }
 
 .mx_BaseAvatar_image {
-    border-radius: 20px;
+    border-radius: 40px;
     vertical-align: top;
 }

@@ -194,7 +194,7 @@ limitations under the License.
 
 .mx_RoomHeader_editable {
     border-bottom: 1px solid #c7c7c7 ! important;
-    min-width: 70px;
+    min-width: 150px;
     cursor: text;
 }
 
@@ -222,10 +222,6 @@ limitations under the License.
     width: 48px;
     height: 50px;
     vertical-align: middle;
-}
-
-.mx_RoomHeader_avatar .mx_RoomAvatar {
-	border-radius: 24px;
 }
 
 .mx_RoomHeader_avatarPicker_edit {

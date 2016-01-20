@@ -31,11 +31,6 @@ limitations under the License.
     top: 0px;
 }
 
-.mx_EventTile_avatar img {
-    border-radius: 20px;
-    border: 0px;
-}
-
 .mx_EventTile_continuation {
     margin-top: 8px ! important;
 }

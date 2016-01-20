@@ -14,10 +14,68 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SearchableEntityList_list {
-    border-bottom: 1px solid #e1dddd;
+.mx_SearchableEntityList {
+    flex: 1;
+    -webkit-flex: 1;
+
+    display: flex;
+    display: -webkit-flex;
+
+    flex-direction: column;
+    -webkit-flex-direction: column;
 }
 
-.mx_SearchableEntityList_list:empty {
-    border-bottom: 0px;
+.mx_SearchableEntityList_query {
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    border-radius: 3px;
+    border: 1px solid #f0f0f0;
+    padding: 9px;
+    color: #454545;
+    margin-left: 3px;
+    font-size: 15px;
+    margin-bottom: 8px;
+    width: 180px;
+}
+
+.mx_SearchableEntityList_query::-moz-placeholder {
+    color: #454545;
+    opacity: 0.5;
+}
+
+.mx_SearchableEntityList_query::-webkit-input-placeholder {
+    color: #454545;
+    opacity: 0.5;
+}
+
+.mx_SearchableEntityList_listWrapper {
+    flex: 1;
+    -webkit-flex: 1;
+
+    overflow-y: auto;    
+}
+
+.mx_SearchableEntityList_list {
+    display: table;
+    table-layout: fixed;
+    width: 100%;    
+}
+
+.mx_SearchableEntityList_list .mx_EntityTile_chevron {
+    display: none;
+}
+
+.mx_SearchableEntityList_hrWrapper {
+    width: 100%;
+    flex: 0px;
+    -webkit-flex: 0;    
+}
+
+.mx_SearchableEntityList hr {
+    height: 1px;
+    border: 0px;
+    color: #e1dddd;
+    background-color: #e1dddd;
+    margin-right: 15px;
+    margin-top: 11px;
+    margin-bottom: 11px;
 }

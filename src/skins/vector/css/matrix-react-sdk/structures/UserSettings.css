@@ -143,6 +143,13 @@ limitations under the License.
     font-size: 16px;
 }
 
+.mx_UserSettings_changePasswordButton {
+    float: right;
+    margin-right: 32px;
+    margin-left: 32px;
+    margin-top: -54px;
+}
+
 .mx_UserSettings_logout {
     float: right;
     margin-right: 32px;
@@ -154,10 +161,6 @@ limitations under the License.
     margin-right: 32px;
     float: right;
     cursor: pointer;
-}
-
-.mx_UserSettings_avatarPicker .mx_RoomAvatar {
-    border-radius: 40px;
 }
 
 .mx_UserSettings_avatarPicker_edit {
