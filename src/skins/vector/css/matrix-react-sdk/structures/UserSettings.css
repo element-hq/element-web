@@ -156,10 +156,6 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_UserSettings_avatarPicker .mx_RoomAvatar {
-    border-radius: 40px;
-}
-
 .mx_UserSettings_avatarPicker_edit {
     text-align: center;
     margin-top: 10px;

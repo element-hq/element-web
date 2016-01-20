@@ -105,7 +105,7 @@ limitations under the License.
 
 .mx_RoomSettings .mx_RoomSettings_aliasesTable {
     margin-top: 12px;
-    margin-bottom: -16px;
+    margin-bottom: 0px;
     margin-left: 56px;
     display: table;
 }
