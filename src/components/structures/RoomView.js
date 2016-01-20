@@ -1190,7 +1190,7 @@ module.exports = React.createClass({
     },
 
     onSettingsClick: function() {
-        this.setState({editingRoomSettings: true});
+        this.showSettings(true);
     },
 
     onSaveClick: function() {
@@ -1369,7 +1369,7 @@ module.exports = React.createClass({
                 (83 + // height of RoomHeader
                  36 + // height of the status area
                  72 + // minimum height of the message compmoser
-                 120); // amount of desired scrollback
+                 (this.state.editingRoomSettings ? (window.innerHeight * 0.3) : 120)); // amount of desired scrollback
 
         // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
         // but it's better than the video going missing entirely
@@ -1379,16 +1379,16 @@ module.exports = React.createClass({
             var video = this.refs.callView.getVideoView().getRemoteVideoElement();
 
             video.style.maxHeight = auxPanelMaxHeight + "px";
-
-            // the above might have made the video panel resize itself, so now
-            // we need to tell the gemini panel to adapt.
-            this.onChildResize();
         }
 
         // we need to do this for general auxPanels too
         if (this.refs.auxPanel) {
             this.refs.auxPanel.style.maxHeight = auxPanelMaxHeight + "px";
         }
+
+        // the above might have made the aux panel resize itself, so now
+        // we need to tell the gemini panel to adapt.
+        this.onChildResize();
     },
 
     onFullscreenClick: function() {
@@ -1435,6 +1435,8 @@ module.exports = React.createClass({
         // XXX: this is a bit naughty; we should be doing this via props
         if (show) {
             this.setState({editingRoomSettings: true});
+            var self = this;
+            setTimeout(function() { self.onResize() }, 0);
         }
     },
 
@@ -1725,7 +1727,6 @@ module.exports = React.createClass({
                         <TintableSvg className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17"/>
                     </div>
             }
-
 
             // if we have search results, we keep the messagepanel (so that it preserves its
             // scroll state), but hide it.
