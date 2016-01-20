@@ -104,13 +104,16 @@ var SearchableEntityList = React.createClass({
         }
 
         return (
-            <div>
+            <div className={ "mx_SearchableEntityList " + (this.state.results.length ? "mx_SearchableEntityList_expanded" : "") }>
                 {inputBox}
-                <div className="mx_SearchableEntityList_list">
-                    {this.state.results.map((entity) => {
-                        return entity.getJsx();
-                    })}
+                <div className="mx_SearchableEntityList_listWrapper">
+                    <div autoshow={true} className="mx_SearchableEntityList_list">
+                        {this.state.results.map((entity) => {
+                            return entity.getJsx();
+                        })}
+                    </div>
                 </div>
+                { this.state.results.length ? <div className="mx_SearchableEntityList_hrWrapper"><hr/></div> : '' }
             </div>
         );
     }
