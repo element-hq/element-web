@@ -60,7 +60,7 @@ limitations under the License.
 */
 
 .mx_RoomSettings .mx_RoomSettings_toggles label {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     display: block;
 }
 
@@ -74,7 +74,7 @@ limitations under the License.
 }
 
 .mx_RoomSettings .mx_RoomSettings_tags {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .mx_RoomSettings .mx_RoomSettings_roomColor {
@@ -99,27 +99,46 @@ limitations under the License.
     width: 100%;
 }
 
+.mx_RoomSettings .mx_RoomSettings_aliasLabel {
+    margin-bottom: 8px;
+}
+
 .mx_RoomSettings .mx_RoomSettings_aliasesTable {
     margin-top: 12px;
-    margin-bottom: 12px;
+    margin-bottom: -16px;
     margin-left: 56px;
     display: table;
 }
 
-.mx_RoomSettings .mx_RoomSettings_aliasesRow {
+.mx_RoomSettings .mx_RoomSettings_aliasesTableRow {
     display: table-row;
+    margin-bottom: 16px;
 }
 
 .mx_RoomSettings .mx_RoomSettings_alias {
-    display: table-cell;
-    margin-bottom: 20px;
+    max-width: 400px;
+    margin-bottom: 16px;
+    /* 
+    commented out so margin applies
+    display: table-cell; */
 }
 
 .mx_RoomSettings .mx_RoomSettings_addAlias,
 .mx_RoomSettings .mx_RoomSettings_deleteAlias {
     display: table-cell;
     padding-left: 0.5em;
+    position: relative;
     cursor: pointer;
+}
+
+.mx_RoomSettings .mx_RoomSettings_addAlias img,
+.mx_RoomSettings .mx_RoomSettings_deleteAlias img {
+    visibility: hidden;
+}
+
+.mx_RoomSettings .mx_RoomSettings_aliasesTableRow:hover .mx_RoomSettings_addAlias img,
+.mx_RoomSettings .mx_RoomSettings_aliasesTableRow:hover .mx_RoomSettings_deleteAlias img {
+    visibility: visible;
 }
 
 .mx_RoomSettings_editable {

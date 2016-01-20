@@ -194,7 +194,7 @@ limitations under the License.
 
 .mx_RoomHeader_editable {
     border-bottom: 1px solid #c7c7c7 ! important;
-    min-width: 70px;
+    min-width: 150px;
     cursor: text;
 }
 
