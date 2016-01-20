@@ -306,7 +306,7 @@ module.exports = React.createClass({
                         rowClassName="mx_UserSettings_profileTableRow"
                         rowLabelClassName="mx_UserSettings_profileLabelCell"
                         rowInputClassName="mx_UserSettings_profileInputCell"
-                        buttonClassName="mx_UserSettings_button mx_UserSettings_rhsButton"
+                        buttonClassName="mx_UserSettings_button mx_UserSettings_changePasswordButton"
                         onError={this.onPasswordChangeError}
                         onFinished={this.onPasswordChanged} />
             );
@@ -353,7 +353,7 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_section">
                     
-                    <div className="mx_UserSettings_rhsButton mx_UserSettings_button" onClick={this.onLogoutClicked}>
+                    <div className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
                         Log out
                     </div>
 
