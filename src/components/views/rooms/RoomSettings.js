@@ -295,8 +295,8 @@ module.exports = React.createClass({
         else {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");            
             Modal.createDialog(ErrorDialog, {
-                title: "Invalid alias format", 
-                description: "'" + alias + "' is not a valid format for an alias",
+                title: "Invalid address format", 
+                description: "'" + alias + "' is not a valid format for an address",
             });
         }        
     },
@@ -533,7 +533,8 @@ module.exports = React.createClass({
                     { this.state.aliases[domain].map(function(alias, i) {
                         var deleteButton;
                         if (can_set_room_aliases) {
-                            deleteButton = <img src="img/cancel-small.svg" width="14" height="14" alt="Delete" onClick={ self.onAliasDeleted.bind(self, domain, i) }/>;
+                            deleteButton = <img src="img/cancel-small.svg" width="14" height="14" alt="Delete"
+                                                onClick={ self.onAliasDeleted.bind(self, domain, i) }/>;
                         }
                         return (
                             <div className="mx_RoomSettings_aliasesTableRow" key={ i }>
@@ -561,7 +562,8 @@ module.exports = React.createClass({
                             blurToCancel={ false }
                             onValueChanged={ self.onAliasAdded } />
                         <div className="mx_RoomSettings_addAlias">
-                             <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ self.onAliasAdded.bind(self, undefined) }/>
+                             <img src="img/plus.svg" width="14" height="14" alt="Add"
+                                  onClick={ self.onAliasAdded.bind(self, undefined) }/>
                         </div>                        
                     </div>                      
                 </div>
@@ -659,7 +661,7 @@ module.exports = React.createClass({
 
         var tags_section = 
             <div className="mx_RoomSettings_tags">
-                This room is tagged as
+                Tagged as:
                 { can_set_tag ?
                     tags.map(function(tag, i) {
                         return (<label key={ i }>
