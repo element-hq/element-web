@@ -35,7 +35,7 @@ class PasswordReset {
             baseUrl: homeserverUrl,
             idBaseUrl: identityUrl
         });
-        this.clientSecret = generateClientSecret();
+        this.clientSecret = this.client.generateClientSecret();
         this.identityServerDomain = identityUrl.split("://")[1];
     }
 
@@ -87,18 +87,6 @@ class PasswordReset {
             throw err;
         });
     }
-}
-
-// from Angular SDK
-function generateClientSecret() {
-    var ret = "";
-    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (var i = 0; i < 32; i++) {
-        ret += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-
-    return ret;
 }
 
 module.exports = PasswordReset;

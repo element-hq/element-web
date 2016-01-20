@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require('react');
+var ReactDOM = require('react-dom');
 var sdk = require('../../index');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var Modal = require('../../Modal');
@@ -22,6 +23,8 @@ var q = require('q');
 var version = require('../../../package.json').version;
 var UserSettingsStore = require('../../UserSettingsStore');
 var GeminiScrollbar = require('react-gemini-scrollbar');
+var Email = require('../../email');
+var AddThreepid = require('../../AddThreepid');
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
@@ -42,6 +45,7 @@ module.exports = React.createClass({
             threePids: [],
             clientVersion: version,
             phase: "UserSettings.LOADING", // LOADING, DISPLAY
+            email_add_pending: false,
         };
     },
 
@@ -152,10 +156,85 @@ module.exports = React.createClass({
         this.logoutModal.closeDialog();
     },
 
+    onEnableNotificationsChange: function(event) {
+        UserSettingsStore.setEnableNotifications(event.target.checked);
+    },
+
+    onAddThreepidClicked: function(value, shouldSubmit) {
+        if (!shouldSubmit) return;
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+        var email_address = this.refs.add_threepid_input.value;
+        if (!Email.looksValid(email_address)) {
+            Modal.createDialog(ErrorDialog, {
+                title: "Invalid Email Address",
+                description: "This doesn't appear to be a valid email address",
+            });
+            return;
+        }
+        this.add_threepid = new AddThreepid();
+        // we always bind emails when registering, so let's do the
+        // same here.
+        this.add_threepid.addEmailAddress(email_address, true).done(() => {
+            Modal.createDialog(QuestionDialog, {
+                title: "Verification Pending",
+                description: "Please check your email and click on the link it contains. Once this is done, click continue.",
+                button: 'Continue',
+                onFinished: this.onEmailDialogFinished,
+            });
+        }, (err) => {
+            Modal.createDialog(ErrorDialog, {
+                title: "Unable to add email address",
+                description: err.toString()
+            });
+        });
+        ReactDOM.findDOMNode(this.refs.add_threepid_input).blur();
+        this.setState({email_add_pending: true});
+    },
+
+    onEmailDialogFinished: function(ok) {
+        if (ok) {
+            this.verifyEmailAddress();
+        } else {
+            this.setState({email_add_pending: false});
+        }
+    },
+
+    verifyEmailAddress: function() {
+        this.add_threepid.checkEmailLinkClicked().done(() => {
+            this.add_threepid = undefined;
+            this.setState({
+                phase: "UserSettings.LOADING",
+            });
+            this._refreshFromServer();
+            this.setState({email_add_pending: false});
+        }, (err) => {
+            if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
+                var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                var message = "Unable to verify email address. "
+                message += "Please check your email and click on the link it contains. Once this is done, click continue."
+                Modal.createDialog(QuestionDialog, {
+                    title: "Verification Pending",
+                    description: message,
+                    button: 'Continue',
+                    onFinished: this.onEmailDialogFinished,
+                });
+            } else {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Unable to verify email address",
+                    description: err.toString(),
+                });
+            }
+        });
+    },
+
     render: function() {
+        var self = this;
+        var Loader = sdk.getComponent("elements.Spinner");
         switch (this.state.phase) {
             case "UserSettings.LOADING":
-                var Loader = sdk.getComponent("elements.Spinner");
                 return (
                     <Loader />
                 );
@@ -170,9 +249,46 @@ module.exports = React.createClass({
         var ChangePassword = sdk.getComponent("views.settings.ChangePassword");
         var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
         var Notifications = sdk.getComponent("settings.Notifications");
+        var EditableText = sdk.getComponent('elements.EditableText');
         var avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
         );
+
+        var threepidsSection = this.state.threepids.map(function(val, pidIndex) {
+            var id = "email-" + val.address;
+            return (
+                <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
+                    <div className="mx_UserSettings_profileLabelCell">
+                        <label htmlFor={id}>Email</label>
+                    </div>
+                    <div className="mx_UserSettings_profileInputCell">
+                        <input key={val.address} id={id} value={val.address} disabled />
+                    </div>
+                </div>
+            );
+        });
+        var addThreepidSection;
+        if (this.state.email_add_pending) {
+            addThreepidSection = <Loader />;
+        } else {
+            addThreepidSection = (
+                <div className="mx_UserSettings_profileTableRow" key="new">
+                    <div className="mx_UserSettings_profileLabelCell">
+                    </div>
+                    <EditableText
+                        ref="add_threepid_input"
+                        className="mx_UserSettings_profileInputCell mx_UserSettings_editable"
+                        placeholderClassName="mx_RoomSettings_threepidPlaceholder"
+                        placeholder={ "Add email address" }
+                        blurToCancel={ false }
+                        onValueChanged={ this.onAddThreepidClicked } />
+                    <div className="mx_RoomSettings_addThreepid">
+                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked }/>
+                    </div>
+                </div>
+            );
+        }
+        threepidsSection.push(addThreepidSection);
 
         var accountJsx;
 
@@ -214,20 +330,7 @@ module.exports = React.createClass({
                                 <ChangeDisplayName />
                             </div>
                         </div>
-
-                        {this.state.threepids.map(function(val, pidIndex) {
-                            var id = "email-" + val.address;
-                            return (
-                                <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
-                                    <div className="mx_UserSettings_profileLabelCell">
-                                        <label htmlFor={id}>Email</label>
-                                    </div>
-                                    <div className="mx_UserSettings_profileInputCell">
-                                        <input key={val.address} id={id} value={val.address} disabled />
-                                    </div>
-                                </div>
-                            );
-                        })}
+                        {threepidsSection}
                     </div>
 
                     <div className="mx_UserSettings_avatarPicker">
