@@ -63,6 +63,7 @@ var cssAttrs = [
     "backgroundColor",
     "borderColor",
     "borderTopColor",
+    "borderBottomColor",
 ];
 
 var svgAttrs = [
