@@ -379,6 +379,14 @@ module.exports = React.createClass({
         if (member.roomId === this.props.roomId) {
             // a member state changed in this room, refresh the tab complete list
             this._updateTabCompleteList(this.state.room);
+
+            var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+            var me = MatrixClientPeg.get().credentials.userId;
+            if (this.state.joining && room.hasMembershipState(me, "join")) {
+                this.setState({
+                    joining: false
+                });
+            }
         }
 
         if (!this.props.ConferenceHandler) {
@@ -552,10 +560,17 @@ module.exports = React.createClass({
 
     onJoinButtonClicked: function(ev) {
         var self = this;
-        MatrixClientPeg.get().joinRoom(this.props.roomId).then(function() {
+        MatrixClientPeg.get().joinRoom(this.props.roomId).done(function() {
+            // It is possible that there is no Room yet if state hasn't come down
+            // from /sync - joinRoom will resolve when the HTTP request to join succeeds,
+            // NOT when it comes down /sync. If there is no room, we'll keep the
+            // joining flag set until we see it. Likewise, if our state is not
+            // "join" we'll keep this flag set until it comes down /sync.
+            var room = MatrixClientPeg.get().getRoom(self.props.roomId);
+            var me = MatrixClientPeg.get().credentials.userId;
             self.setState({
-                joining: false,
-                room: MatrixClientPeg.get().getRoom(self.props.roomId)
+                joining: room ? !room.hasMembershipState(me, "join") : true,
+                room: room
             });
         }, function(error) {
             self.setState({
