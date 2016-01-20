@@ -122,7 +122,7 @@ module.exports = React.createClass({
                 height: this.props.height,
                 objectFit: 'cover',
             };
-            avatarImg = <img className="mx_BaseAvatar" src={this.state.avatarUrl} style={style} />;
+            avatarImg = <img className="mx_BaseAvatar_image" src={this.state.avatarUrl} style={style} />;
         }
 
         var uploadSection;
