@@ -33,10 +33,6 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_RoomTile_avatar img {
-    border-radius: 20px;
-}
-
 .mx_RoomTile_name {
     display: table-cell;
     width: 100%;

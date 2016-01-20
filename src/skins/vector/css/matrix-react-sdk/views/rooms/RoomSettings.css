@@ -150,10 +150,6 @@ limitations under the License.
     color: #a2a2a2;
 }
 
-.mx_RoomSettings .mx_RoomAvatar {
-    border-radius: 120px;
-}
-
 .mx_RoomSettings_buttons {
     text-align: right;
     margin-bottom: 16px;

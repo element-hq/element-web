@@ -224,10 +224,6 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_RoomHeader_avatar .mx_RoomAvatar {
-	border-radius: 24px;
-}
-
 .mx_RoomHeader_avatarPicker_edit {
     position: absolute;
     margin-left: 16px;
