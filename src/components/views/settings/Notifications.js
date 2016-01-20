@@ -195,8 +195,8 @@ var VectorPushRulesDefinitions = {
             loud: [
                 "notify",
                 {
-                    "set_tweak": "ring",
-                    "value": "default"
+                    "set_tweak": "sound",
+                    "value": "ring"
                 }
             ]
         }
