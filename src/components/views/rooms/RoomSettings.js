@@ -599,15 +599,18 @@ module.exports = React.createClass({
         var user_levels_section;
         if (Object.keys(user_levels).length) {
             user_levels_section =
-                <ul>
-                    {Object.keys(user_levels).map(function(user, i) {
-                        return (
-                            <li className="mx_RoomSettings_userLevel" key={user}>
-                                { user } is a <PowerSelector value={ user_levels[user] } disabled={true}/>
-                            </li>
-                        );
-                    })}
-                </ul>;
+                <div>
+                    <h3>Privileged Users</h3>
+                    <ul className="mx_RoomSettings_userLevels">
+                        {Object.keys(user_levels).map(function(user, i) {
+                            return (
+                                <li className="mx_RoomSettings_userLevel" key={user}>
+                                    { user } is a <PowerSelector value={ user_levels[user] } disabled={true}/>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>;
         }
         else {
             user_levels_section = <div>No users have specific privileges in this room.</div>
@@ -619,15 +622,15 @@ module.exports = React.createClass({
             banned_users_section =
                 <div>
                     <h3>Banned users</h3>
-                    <div className="mx_RoomSettings_banned">
+                    <ul className="mx_RoomSettings_banned">
                         {banned.map(function(member, i) {
                             return (
-                                <div key={i}>
+                                <li key={i}>
                                     {member.userId}
-                                </div>
+                                </li>
                             );
                         })}
-                    </div>
+                    </ul>
                 </div>;
         }
 
@@ -730,10 +733,7 @@ module.exports = React.createClass({
                 { unfederatable_section }                    
                 </div>
 
-                <h3>Privileged Users</h3>
-                <div className="mx_RoomSettings_userLevels mx_RoomSettings_settings">
-                    { user_levels_section }
-                </div>
+                { user_levels_section }
 
                 { banned_users_section }
 
