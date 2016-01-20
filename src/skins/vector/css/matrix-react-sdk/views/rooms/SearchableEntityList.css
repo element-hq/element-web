@@ -36,6 +36,9 @@ limitations under the License.
 }
 
 .mx_SearchableEntityList_list {
+    display: table;
+    table-layout: fixed;
+    width: 100%;    
     border-bottom: 1px solid #e1dddd;
 }
 
