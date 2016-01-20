@@ -44,27 +44,6 @@ limitations under the License.
     flex: 1 1 0px;
 }
 
-.mx_MemberList_invite {
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
-    border-radius: 3px;
-    border: 1px solid #f0f0f0;
-    padding: 9px;
-    color: #454545;
-    margin-left: 3px;
-    font-size: 15px;
-    margin-bottom: 8px;
-    width: 180px;
-}
-
-.mx_MemberList_invite::-moz-placeholder {
-    color: #454545;
-    opacity: 0.5;
-}
-.mx_MessageList_invite::-webkit-input-placeholder {
-    color: #454545;
-    opacity: 0.5;
-}
-
 .mx_MemberList_invited h2 {
     text-transform: uppercase;
     color: #3d3b39;

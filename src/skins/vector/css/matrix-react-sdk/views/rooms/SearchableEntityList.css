@@ -14,6 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_SearchableEntityList_query {
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    border-radius: 3px;
+    border: 1px solid #f0f0f0;
+    padding: 9px;
+    color: #454545;
+    margin-left: 3px;
+    font-size: 15px;
+    margin-bottom: 8px;
+    width: 180px;
+}
+
+.mx_SearchableEntityList_query::-moz-placeholder {
+    color: #454545;
+    opacity: 0.5;
+}
+.mx_SearchableEntityList_query::-webkit-input-placeholder {
+    color: #454545;
+    opacity: 0.5;
+}
+
 .mx_SearchableEntityList_list {
     border-bottom: 1px solid #e1dddd;
 }
