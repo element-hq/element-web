@@ -597,7 +597,7 @@ module.exports = React.createClass({
             </div>;
 
         var user_levels_section;
-        if (user_levels.length) {
+        if (Object.keys(user_levels).length) {
             user_levels_section =
                 <div>
                     <div>
