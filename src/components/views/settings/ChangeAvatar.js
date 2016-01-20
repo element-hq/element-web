@@ -122,8 +122,7 @@ module.exports = React.createClass({
                 height: this.props.height,
                 objectFit: 'cover',
             };
-            // FIXME: surely we should be using MemberAvatar or UserAvatar or something here...
-            avatarImg = <img className="mx_RoomAvatar" src={this.state.avatarUrl} style={style} />;
+            avatarImg = <img className="mx_BaseAvatar" src={this.state.avatarUrl} style={style} />;
         }
 
         var uploadSection;
