@@ -128,10 +128,10 @@ module.exports = React.createClass({
                     onClick={ this.props.onClick } onMouseEnter={ this.mouseEnter }
                     onMouseLeave={ this.mouseLeave }>
                 <div className="mx_EntityTile_avatar">
-                    {av}
+                    { av }
+                    { power }
                 </div>
                 { nameEl }
-                { power }
                 { inviteButton }
             </div>
         );
