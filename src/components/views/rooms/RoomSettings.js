@@ -599,21 +599,15 @@ module.exports = React.createClass({
         var user_levels_section;
         if (Object.keys(user_levels).length) {
             user_levels_section =
-                <div>
-                    <div>
-                        Users with specific roles are:
-                    </div>
-                    <div>
-                        {Object.keys(user_levels).map(function(user, i) {
-                            return (
-                                <div className="mx_RoomSettings_userLevel" key={user}>
-                                    { user } is a
-                                    <PowerSelector value={ user_levels[user] } disabled={true}/>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>;
+                <ul>
+                    {Object.keys(user_levels).map(function(user, i) {
+                        return (
+                            <li className="mx_RoomSettings_userLevel" key={user}>
+                                { user } is a <PowerSelector value={ user_levels[user] } disabled={true}/>
+                            </li>
+                        );
+                    })}
+                </ul>;
         }
         else {
             user_levels_section = <div>No users have specific privileges in this room.</div>
@@ -738,10 +732,6 @@ module.exports = React.createClass({
 
                 <h3>Privileged Users</h3>
                 <div className="mx_RoomSettings_userLevels mx_RoomSettings_settings">
-                    <div>
-                        Your role in this room is currently <b><PowerSelector room={ this.props.room } value={current_user_level} disabled={true}/></b>.
-                    </div>
-
                     { user_levels_section }
                 </div>
 
