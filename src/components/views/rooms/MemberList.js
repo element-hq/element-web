@@ -371,12 +371,12 @@ module.exports = React.createClass({
         return (
             <div className="mx_MemberList">
                     {this.inviteTile()}
-                    <div autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
+                    <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
                         <div className="mx_MemberList_wrapper">
                             {this.makeMemberTiles('join', this.state.searchQuery)}
                         </div>
                         {invitedSection}
-                    </div>
+                    </GeminiScrollbar>
                     <div className="mx_MemberList_bottom">
                     </div>
             </div>
