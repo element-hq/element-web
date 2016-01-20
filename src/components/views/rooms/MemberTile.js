@@ -79,14 +79,6 @@ module.exports = React.createClass({
         var av = (
             <MemberAvatar member={member} width={36} height={36} />
         );
-        var power;
-        var powerLevel = this.props.member.powerLevel;
-        if (powerLevel >= 50 && powerLevel < 99) {
-            power = <img src="img/mod.svg" className="mx_MemberTile_power" width="16" height="17" alt="Mod"/>;
-        }
-        if (powerLevel >= 99) {
-            power = <img src="img/admin.svg" className="mx_MemberTile_power" width="16" height="17" alt="Admin"/>;
-        }
 
         if (member.user) {
             this.user_last_modified_time = member.user.getLastModifiedTime();

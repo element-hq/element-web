@@ -50,6 +50,12 @@ var SearchableEntityList = React.createClass({
         };
     },
 
+    componentWillUnmount: function() {
+        // pretend the query box was blanked out else filters could still be
+        // applied to other components which rely on onQueryChanged.
+        this.props.onQueryChanged("");
+    },
+
     /**
      * Public-facing method to set the input query text to the given input.
      * @param {string} input
