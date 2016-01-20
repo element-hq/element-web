@@ -44,6 +44,43 @@ limitations under the License.
     flex: 1 1 0px;
 }
 
+.mx_MemberList .mx_SearchableEntityList {
+    order: 1;
+    flex: 0;
+    -webkit-flex: 0;
+}
+
+.mx_MemberList .mx_SearchableEntityList_expanded {
+    flex: 1 1 0;
+    -webkit-flex: 1 1 0;
+}
+
+.mx_MemberList_joined {
+    order: 2;
+    flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+
+    overflow-y: auto;
+}
+
+/*
+.mx_MemberList_invited {
+    order: 3;
+    flex: 0 0 100px;
+    -webkit-flex: 0 0 100px;
+    overflow-y: auto;
+}
+*/
+
+.mx_MemberList_bottom {
+    order: 4;
+    flex: 0 0 72px;
+    -webkit-flex: 0 0 72px;
+
+    border-top: 2px solid #e1dddd;
+    margin-right: 15px;
+}
+
 .mx_MemberList_invited h2 {
     text-transform: uppercase;
     color: #3d3b39;
@@ -55,8 +92,13 @@ limitations under the License.
     margin-bottom: 4px;    
 }
 
+/* we have to have display: table in order for the horizontal wrapping to work */
 .mx_MemberList_wrapper {
-    display: table;
+    display: table; 
     table-layout: fixed;
     width: 100%;
+}
+
+.mx_MemberList_outerWrapper {
+    height: 0px;
 }

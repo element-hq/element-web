@@ -25,10 +25,7 @@ limitations under the License.
     display: table-cell;
     vertical-align: middle;
     margin-left: 10px;
-}
-
-.mx_EntityTile:hover .mx_MessageTimestamp {
-    display: block;
+    width: 26px;
 }
 
 .mx_EntityTile_avatar {
@@ -87,6 +84,13 @@ limitations under the License.
 .mx_EntityTile_offline .mx_EntityTile_avatar,
 .mx_EntityTile_offline .mx_EntityTile_name,
 .mx_EntityTile_offline .mx_EntityTile_name_hover
+{
+    opacity: 0.25;
+}
+
+.mx_EntityTile_unknown .mx_EntityTile_avatar,
+.mx_EntityTile_unknown .mx_EntityTile_name,
+.mx_EntityTile_unknown .mx_EntityTile_name_hover
 {
     opacity: 0.25;
 }
