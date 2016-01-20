@@ -43,6 +43,14 @@ limitations under the License.
     position: relative;
 }
 
+.mx_EntityTile_power {
+    position: absolute;
+    width: 16px;
+    height: 17px;
+    top: 0px;
+    right: 6px;
+}
+  
 .mx_EntityTile_name {
     display: table-cell;
     vertical-align: middle;
