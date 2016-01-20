@@ -118,15 +118,11 @@ module.exports = React.createClass({
         if (!this.state.room) {
             if (this.props.autoPeek) {
                 console.log("Attempting to peek into room %s", this.props.roomId);
-                MatrixClientPeg.get().peekInRoom(this.props.roomId).done(() => {
-                    // we don't need to do anything - JS SDK will emit Room events
-                    // which will update the UI. We *do* however need to know if we
-                    // can join the room so we can fiddle with the UI appropriately.
-
-                    // ...XXX: or do we? can't we just do them onNewRoom?
-                }, function(err) {
+                MatrixClientPeg.get().peekInRoom(this.props.roomId).catch((err) => {
                     console.error("Failed to peek into room: %s", err);
                 }).finally(() => {
+                    // we don't need to do anything - JS SDK will emit Room events
+                    // which will update the UI.
                     this.setState({
                         autoPeekDone: true
                     });
