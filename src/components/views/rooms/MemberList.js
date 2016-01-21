@@ -43,7 +43,7 @@ module.exports = React.createClass({
         var members = this.roomMembers(INITIAL_LOAD_NUM_MEMBERS);
         return {
             members: members,
-            truncateAt: 3
+            truncateAt: 10
         };
     },
 
