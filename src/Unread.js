@@ -36,21 +36,27 @@ module.exports = {
         // up probably won't be very much, so if the last couple of events are ones that
         // don't count, we don't know if there are any events that do count between where
         // we have and the read receipt. We could fetch more history to try & find out,
-        // but currently we just guess. This impl assumes there are unread messages
-        // on the theory that false positives are better than false negatives here.
-        var unread = true;
+        // but currently we just guess.
+
+        // Loop through messages, starting with the most recent...
         for (var i = room.timeline.length - 1; i >= 0; --i) {
             var ev = room.timeline[i];
 
             if (ev.getId() == readUpToId) {
-                unread = false;
-                break;
-            }
-
-            if (this.eventTriggersUnreadCount(ev)) {
-                break;
+                // If we've read up to this event, there's nothing more recents
+                // that counts and we can stop looking because the user's read
+                // this and everything before.
+                return false;
+            } else if (this.eventTriggersUnreadCount(ev)) {
+                // We've found a message that counts before we hit
+                // the read marker, so this room is definitely unread.
+                return true;
             }
         }
-        return unread;
+        // If we got here, we didn't find a message that counted but didn't
+        // find the read marker either, so we guess and say that the room
+        // is unread on the theory that false positives are better than
+        // false negatives here.
+        return true;
     }
 };
