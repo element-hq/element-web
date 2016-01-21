@@ -19,8 +19,12 @@ module.exports = React.createClass({
     displayName: 'TruncatedList',
 
     propTypes: {
+        // The number of elements to show before truncating
         truncateAt: React.PropTypes.number,
+        // The className to apply to the wrapping div
         className: React.PropTypes.string,
+        // A function which will be invoked when an overflow element is required.
+        // This will be inserted after the children.
         createOverflowElement: React.PropTypes.func
     },
 

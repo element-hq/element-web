@@ -260,7 +260,21 @@ module.exports = React.createClass({
         return to_display;
     },
 
+    _createOverflowTile: function(overflowCount, totalCount) {
+        // For now we'll pretend this is any entity. It should probably be a separate tile.
+        var EntityTile = sdk.getComponent("rooms.EntityTile");
+        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        return (
+            <EntityTile avatarJsx={
+                <BaseAvatar name="+" width={36} height={36} />
+            } key="overflow" name={`and ${overflowCount} more`} presenceState="online"
+            suppressOnHover={true} onClick={this._showFullMemberList} />
+        );
+    },
 
+    _showFullMemberList: function() {
+        console.log("TODO");
+    },
 
     memberSort: function(userIdA, userIdB) {
         var userA = this.memberDict[userIdA].user;
@@ -373,7 +387,8 @@ module.exports = React.createClass({
             <div className="mx_MemberList">
                     {this.inviteTile()}
                     <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
-                        <TruncatedList className="mx_MemberList_wrapper">
+                        <TruncatedList className="mx_MemberList_wrapper"
+                                createOverflowElement={this._createOverflowTile}>
                             {this.makeMemberTiles('join', this.state.searchQuery)}
                         </TruncatedList>
                         {invitedSection}
