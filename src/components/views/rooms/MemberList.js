@@ -368,13 +368,14 @@ module.exports = React.createClass({
                 </div>
             );
         }
+        var TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
             <div className="mx_MemberList">
                     {this.inviteTile()}
                     <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
-                        <div className="mx_MemberList_wrapper">
+                        <TruncatedList className="mx_MemberList_wrapper">
                             {this.makeMemberTiles('join', this.state.searchQuery)}
-                        </div>
+                        </TruncatedList>
                         {invitedSection}
                     </GeminiScrollbar>
                     <div className="mx_MemberList_bottom">
