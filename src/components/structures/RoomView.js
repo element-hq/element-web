@@ -1515,7 +1515,7 @@ module.exports = React.createClass({
 
                 return (
                     <div className="mx_RoomView">
-                        <RoomHeader ref="header" room={this.state.room} simpleHeader="Room invite"/>
+                        <RoomHeader ref="header" room={this.state.room}/>
                         <div className="mx_RoomView_auxPanel">
                             <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
                                             onRejectClick={ this.onRejectButtonClicked }
