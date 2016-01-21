@@ -455,11 +455,7 @@ module.exports = React.createClass({
         }
         var can_set_canonical_alias = current_user_level >= canonical_alias_level;
 
-        var tag_level = state_default;
-        if (events_levels['m.tag'] !== undefined) {
-            tag_level = events_levels['m.tag'];
-        }
-        var can_set_tag = current_user_level >= tag_level;
+        var can_set_tag = true;
 
         var self = this;
 
