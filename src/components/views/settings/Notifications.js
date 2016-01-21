@@ -171,7 +171,7 @@ var VectorPushRulesDefinitions = {
     },
 
     // When people join or leave a room
-    "im.vector.rule.member_event": {
+    /*"im.vector.rule.member_event": {
         hsDefaultRuleId: ".m.rule.member_event",
         description: "When people join or leave a room",
         conditions: [{
@@ -196,7 +196,7 @@ var VectorPushRulesDefinitions = {
             loud: undefined,
             off: false
         }
-    },
+    },*/
 
     // Incoming call
     "im.vector.rule.call": {
@@ -665,7 +665,7 @@ module.exports = React.createClass({
                 '.m.rule.contains_display_name': 'vector',
                 '.m.rule.room_one_to_one': 'vector',
                 '.m.rule.invite_for_me': 'vector',
-                '.m.rule.member_event': 'vector',
+                //'.m.rule.member_event': 'vector',
                 '.m.rule.call': 'vector',
                 '.m.rule.suppress_notices': 'vector'
 
@@ -793,7 +793,7 @@ module.exports = React.createClass({
                 'im.vector.rule.room_one_to_one',
                 'im.vector.rule.room_group',
                 'im.vector.rule.invite_for_me',
-                'im.vector.rule.member_event',
+                //'im.vector.rule.member_event',
                 'im.vector.rule.call',
                 'im.vector.rule.notices'
             ];
