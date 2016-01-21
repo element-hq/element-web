@@ -42,7 +42,8 @@ module.exports = React.createClass({
 
         var members = this.roomMembers(INITIAL_LOAD_NUM_MEMBERS);
         return {
-            members: members
+            members: members,
+            truncateAt: 3
         };
     },
 
@@ -74,9 +75,6 @@ module.exports = React.createClass({
             // lazy load to prevent it blocking the first render
             self._loadUserList();
         }, 50);
-
-        
-        setTimeout
 
         // Attach a SINGLE listener for global presence changes then locate the
         // member tile and re-render it. This is more efficient than every tile
@@ -264,16 +262,19 @@ module.exports = React.createClass({
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         var EntityTile = sdk.getComponent("rooms.EntityTile");
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        var text = "and " + overflowCount + " more";
         return (
             <EntityTile avatarJsx={
                 <BaseAvatar name="+" width={36} height={36} />
-            } key="overflow" name={`and ${overflowCount} more`} presenceState="online"
-            suppressOnHover={true} onClick={this._showFullMemberList} />
+            } name={text} presenceState="online" suppressOnHover={true}
+            onClick={this._showFullMemberList} />
         );
     },
 
     _showFullMemberList: function() {
-        console.log("TODO");
+        this.setState({
+            truncateAt: -1
+        });
     },
 
     memberSort: function(userIdA, userIdB) {
@@ -341,8 +342,7 @@ module.exports = React.createClass({
                         return;
                     }
                     memberList.push(
-                        <EntityTile key={e.getStateKey()} ref={e.getStateKey()}
-                            name={e.getContent().display_name} />
+                        <EntityTile key={e.getStateKey()} name={e.getContent().display_name} />
                     )
                 })
             }
@@ -387,7 +387,7 @@ module.exports = React.createClass({
             <div className="mx_MemberList">
                     {this.inviteTile()}
                     <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
-                        <TruncatedList className="mx_MemberList_wrapper"
+                        <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
                                 createOverflowElement={this._createOverflowTile}>
                             {this.makeMemberTiles('join', this.state.searchQuery)}
                         </TruncatedList>

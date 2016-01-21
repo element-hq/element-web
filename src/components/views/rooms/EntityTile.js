@@ -45,7 +45,7 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            shouldComponentUpdate: function(nextProps, nextState) { return false; },
+            shouldComponentUpdate: function(nextProps, nextState) { return true; },
             onClick: function() {},
             presenceState: "offline",
             presenceActiveAgo: -1,

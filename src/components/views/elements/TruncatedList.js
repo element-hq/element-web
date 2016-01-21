@@ -19,7 +19,7 @@ module.exports = React.createClass({
     displayName: 'TruncatedList',
 
     propTypes: {
-        // The number of elements to show before truncating
+        // The number of elements to show before truncating. If negative, no truncation is done.
         truncateAt: React.PropTypes.number,
         // The className to apply to the wrapping div
         className: React.PropTypes.string,
@@ -43,16 +43,19 @@ module.exports = React.createClass({
         var childsJsx = this.props.children;
         var overflowJsx;
         var childCount = React.Children.count(this.props.children);
-        var overflowCount = childCount - this.props.truncateAt;
 
-        if (overflowCount > 0) {
-            overflowJsx = this.props.createOverflowElement(
-                overflowCount, childCount
-            );
-            var childArray = React.Children.toArray(this.props.children);
-            // cut out the overflow elements
-            childArray.splice(childCount - overflowCount, overflowCount);
-            childsJsx = childArray; // use what is left
+        if (this.props.truncateAt >= 0) {
+            var overflowCount = childCount - this.props.truncateAt;
+
+            if (overflowCount > 0) {
+                overflowJsx = this.props.createOverflowElement(
+                    overflowCount, childCount
+                );
+                var childArray = React.Children.toArray(this.props.children);
+                // cut out the overflow elements
+                childArray.splice(childCount - overflowCount, overflowCount);
+                childsJsx = childArray; // use what is left
+            }
         }
 
         return (
