@@ -255,7 +255,7 @@ var RoomSubList = React.createClass({
                     collapsed={ self.props.collapsed || false}
                     selected={ selected }
                     unread={ self.props.activityMap[room.roomId] === 1 }
-                    highlight={ (room.unread_notifications && room.unread_notifications['notification_count'] > 0) || self.props.label === 'Invites' }
+                    highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites' }
                     isInvite={ self.props.label === 'Invites' }
                     incomingCall={ self.props.incomingCall && (self.props.incomingCall.roomId === room.roomId) ? self.props.incomingCall : null }
                      />
