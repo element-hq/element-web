@@ -35,6 +35,7 @@ module.exports = React.createClass({
         name: React.PropTypes.string,
         title: React.PropTypes.string,
         avatarJsx: React.PropTypes.any, // <BaseAvatar />
+        className: React.PropTypes.string,
         presenceState: React.PropTypes.string,
         presenceActiveAgo: React.PropTypes.number,
         showInviteButton: React.PropTypes.bool,
@@ -76,7 +77,7 @@ module.exports = React.createClass({
     render: function() {
         var presenceClass = PRESENCE_CLASS[this.props.presenceState] || "mx_EntityTile_offline";
         var mainClassName = "mx_EntityTile ";
-        mainClassName += presenceClass;
+        mainClassName += presenceClass + (this.props.className ? (" " + this.props.className) : "");
         var nameEl;
 
         if (this.state.hover && !this.props.suppressOnHover) {
