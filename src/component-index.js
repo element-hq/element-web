@@ -23,6 +23,7 @@ limitations under the License.
 
 module.exports.components = {};
 module.exports.components['structures.CreateRoom'] = require('./components/structures/CreateRoom');
+module.exports.components['structures.login.ForgotPassword'] = require('./components/structures/login/ForgotPassword');
 module.exports.components['structures.login.Login'] = require('./components/structures/login/Login');
 module.exports.components['structures.login.PostRegistration'] = require('./components/structures/login/PostRegistration');
 module.exports.components['structures.login.Registration'] = require('./components/structures/login/Registration');
@@ -31,10 +32,6 @@ module.exports.components['structures.RoomView'] = require('./components/structu
 module.exports.components['structures.ScrollPanel'] = require('./components/structures/ScrollPanel');
 module.exports.components['structures.UploadBar'] = require('./components/structures/UploadBar');
 module.exports.components['structures.UserSettings'] = require('./components/structures/UserSettings');
-module.exports.components['structures.login.ForgotPassword'] = require('./components/structures/login/ForgotPassword');
-module.exports.components['structures.login.Login'] = require('./components/structures/login/Login');
-module.exports.components['structures.login.PostRegistration'] = require('./components/structures/login/PostRegistration');
-module.exports.components['structures.login.Registration'] = require('./components/structures/login/Registration');
 module.exports.components['views.avatars.BaseAvatar'] = require('./components/views/avatars/BaseAvatar');
 module.exports.components['views.avatars.MemberAvatar'] = require('./components/views/avatars/MemberAvatar');
 module.exports.components['views.avatars.RoomAvatar'] = require('./components/views/avatars/RoomAvatar');
@@ -49,6 +46,7 @@ module.exports.components['views.elements.EditableText'] = require('./components
 module.exports.components['views.elements.PowerSelector'] = require('./components/views/elements/PowerSelector');
 module.exports.components['views.elements.ProgressBar'] = require('./components/views/elements/ProgressBar');
 module.exports.components['views.elements.TintableSvg'] = require('./components/views/elements/TintableSvg');
+module.exports.components['views.elements.TruncatedList'] = require('./components/views/elements/TruncatedList');
 module.exports.components['views.elements.UserSelector'] = require('./components/views/elements/UserSelector');
 module.exports.components['views.login.CaptchaForm'] = require('./components/views/login/CaptchaForm');
 module.exports.components['views.login.CasLogin'] = require('./components/views/login/CasLogin');

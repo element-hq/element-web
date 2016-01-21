@@ -39,16 +39,18 @@ module.exports = React.createClass({
         presenceActiveAgo: React.PropTypes.number,
         showInviteButton: React.PropTypes.bool,
         shouldComponentUpdate: React.PropTypes.func,
-        onClick: React.PropTypes.func
+        onClick: React.PropTypes.func,
+        suppressOnHover: React.PropTypes.bool
     },
 
     getDefaultProps: function() {
         return {
-            shouldComponentUpdate: function(nextProps, nextState) { return false; },
+            shouldComponentUpdate: function(nextProps, nextState) { return true; },
             onClick: function() {},
             presenceState: "offline",
             presenceActiveAgo: -1,
             showInviteButton: false,
+            suppressOnHover: false
         };
     },
 
@@ -75,12 +77,10 @@ module.exports = React.createClass({
         var presenceClass = PRESENCE_CLASS[this.props.presenceState] || "mx_EntityTile_offline";
         var mainClassName = "mx_EntityTile ";
         mainClassName += presenceClass;
-        if (this.state.hover) {
-            mainClassName += " mx_EntityTile_hover";
-        }
-
         var nameEl;
-        if (this.state.hover) {
+
+        if (this.state.hover && !this.props.suppressOnHover) {
+            mainClassName += " mx_EntityTile_hover";
             var PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
             nameEl = (
                 <div className="mx_EntityTile_details">
