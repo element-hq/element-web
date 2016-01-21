@@ -19,7 +19,6 @@ limitations under the License.
 var React = require('react');
 
 var sdk = require('../../../index');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
 var dis = require('../../../dispatcher');
 var Signup = require("../../../Signup");
 var ServerConfig = require("../../views/login/ServerConfig");
@@ -40,6 +39,9 @@ module.exports = React.createClass({
         hsUrl: React.PropTypes.string,
         isUrl: React.PropTypes.string,
         email: React.PropTypes.string,
+        username: React.PropTypes.string,
+        guestAccessToken: React.PropTypes.string,
+        disableUsernameChanges: React.PropTypes.bool,
         // registration shouldn't know or care how login is done.
         onLoginClick: React.PropTypes.func.isRequired
     },
@@ -63,6 +65,7 @@ module.exports = React.createClass({
         this.registerLogic.setSessionId(this.props.sessionId);
         this.registerLogic.setRegistrationUrl(this.props.registrationUrl);
         this.registerLogic.setIdSid(this.props.idSid);
+        this.registerLogic.setGuestAccessToken(this.props.guestAccessToken);
         this.registerLogic.recheckState();
     },
 
@@ -156,6 +159,15 @@ module.exports = React.createClass({
             case "RegistrationForm.ERR_PASSWORD_LENGTH":
                 errMsg = `Password too short (min ${MIN_PASSWORD_LENGTH}).`;
                 break;
+            case "RegistrationForm.ERR_EMAIL_INVALID":
+                errMsg = "This doesn't look like a valid email address";
+                break;
+            case "RegistrationForm.ERR_USERNAME_INVALID":
+                errMsg = "User names may only contain letters, numbers, dots, hyphens and underscores.";
+                break;
+            case "RegistrationForm.ERR_USERNAME_BLANK":
+                errMsg = "You need to enter a user name";
+                break;
             default:
                 console.error("Unknown error code: %s", errCode);
                 errMsg = "An unknown error occurred.";
@@ -186,7 +198,9 @@ module.exports = React.createClass({
                 registerStep = (
                     <RegistrationForm
                         showEmail={true}
+                        defaultUsername={this.props.username}
                         defaultEmail={this.props.email}
+                        disableUsernameChanges={this.props.disableUsernameChanges}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit} />

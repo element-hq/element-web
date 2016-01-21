@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require('react');
+var ReactDOM = require('react-dom');
 var sdk = require('../../index');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var Modal = require('../../Modal');
@@ -21,6 +22,9 @@ var dis = require("../../dispatcher");
 var q = require('q');
 var version = require('../../../package.json').version;
 var UserSettingsStore = require('../../UserSettingsStore');
+var GeminiScrollbar = require('react-gemini-scrollbar');
+var Email = require('../../email');
+var AddThreepid = require('../../AddThreepid');
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
@@ -41,6 +45,7 @@ module.exports = React.createClass({
             threePids: [],
             clientVersion: version,
             phase: "UserSettings.LOADING", // LOADING, DISPLAY
+            email_add_pending: false,
         };
     },
 
@@ -80,6 +85,12 @@ module.exports = React.createClass({
     onAction: function(payload) {
         if (payload.action === "notifier_enabled") {
             this.forceUpdate();
+        }
+    },
+
+    onAvatarPickerClick: function(ev) {
+        if (this.refs.file_label) {
+            this.refs.file_label.click();
         }
     },
 
@@ -135,6 +146,12 @@ module.exports = React.createClass({
         });
     },
 
+    onUpgradeClicked: function() {
+        dis.dispatch({
+            action: "start_upgrade_registration"
+        });
+    },
+
     onLogoutPromptCancel: function() {
         this.logoutModal.closeDialog();
     },
@@ -143,10 +160,81 @@ module.exports = React.createClass({
         UserSettingsStore.setEnableNotifications(event.target.checked);
     },
 
+    onAddThreepidClicked: function(value, shouldSubmit) {
+        if (!shouldSubmit) return;
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+        var email_address = this.refs.add_threepid_input.value;
+        if (!Email.looksValid(email_address)) {
+            Modal.createDialog(ErrorDialog, {
+                title: "Invalid Email Address",
+                description: "This doesn't appear to be a valid email address",
+            });
+            return;
+        }
+        this.add_threepid = new AddThreepid();
+        // we always bind emails when registering, so let's do the
+        // same here.
+        this.add_threepid.addEmailAddress(email_address, true).done(() => {
+            Modal.createDialog(QuestionDialog, {
+                title: "Verification Pending",
+                description: "Please check your email and click on the link it contains. Once this is done, click continue.",
+                button: 'Continue',
+                onFinished: this.onEmailDialogFinished,
+            });
+        }, (err) => {
+            Modal.createDialog(ErrorDialog, {
+                title: "Unable to add email address",
+                description: err.toString()
+            });
+        });
+        ReactDOM.findDOMNode(this.refs.add_threepid_input).blur();
+        this.setState({email_add_pending: true});
+    },
+
+    onEmailDialogFinished: function(ok) {
+        if (ok) {
+            this.verifyEmailAddress();
+        } else {
+            this.setState({email_add_pending: false});
+        }
+    },
+
+    verifyEmailAddress: function() {
+        this.add_threepid.checkEmailLinkClicked().done(() => {
+            this.add_threepid = undefined;
+            this.setState({
+                phase: "UserSettings.LOADING",
+            });
+            this._refreshFromServer();
+            this.setState({email_add_pending: false});
+        }, (err) => {
+            if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
+                var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                var message = "Unable to verify email address. "
+                message += "Please check your email and click on the link it contains. Once this is done, click continue."
+                Modal.createDialog(QuestionDialog, {
+                    title: "Verification Pending",
+                    description: message,
+                    button: 'Continue',
+                    onFinished: this.onEmailDialogFinished,
+                });
+            } else {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Unable to verify email address",
+                    description: err.toString(),
+                });
+            }
+        });
+    },
+
     render: function() {
+        var self = this;
+        var Loader = sdk.getComponent("elements.Spinner");
         switch (this.state.phase) {
             case "UserSettings.LOADING":
-                var Loader = sdk.getComponent("elements.Spinner");
                 return (
                     <Loader />
                 );
@@ -160,13 +248,75 @@ module.exports = React.createClass({
         var ChangeDisplayName = sdk.getComponent("views.settings.ChangeDisplayName");
         var ChangePassword = sdk.getComponent("views.settings.ChangePassword");
         var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
+        var Notifications = sdk.getComponent("settings.Notifications");
+        var EditableText = sdk.getComponent('elements.EditableText');
         var avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
         );
 
+        var threepidsSection = this.state.threepids.map(function(val, pidIndex) {
+            var id = "email-" + val.address;
+            return (
+                <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
+                    <div className="mx_UserSettings_profileLabelCell">
+                        <label htmlFor={id}>Email</label>
+                    </div>
+                    <div className="mx_UserSettings_profileInputCell">
+                        <input key={val.address} id={id} value={val.address} disabled />
+                    </div>
+                </div>
+            );
+        });
+        var addThreepidSection;
+        if (this.state.email_add_pending) {
+            addThreepidSection = <Loader />;
+        } else {
+            addThreepidSection = (
+                <div className="mx_UserSettings_profileTableRow" key="new">
+                    <div className="mx_UserSettings_profileLabelCell">
+                    </div>
+                    <EditableText
+                        ref="add_threepid_input"
+                        className="mx_UserSettings_profileInputCell mx_UserSettings_editable"
+                        placeholderClassName="mx_RoomSettings_threepidPlaceholder"
+                        placeholder={ "Add email address" }
+                        blurToCancel={ false }
+                        onValueChanged={ this.onAddThreepidClicked } />
+                    <div className="mx_RoomSettings_addThreepid">
+                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked }/>
+                    </div>
+                </div>
+            );
+        }
+        threepidsSection.push(addThreepidSection);
+
+        var accountJsx;
+
+        if (MatrixClientPeg.get().isGuest()) {
+            accountJsx = (
+                <div className="mx_UserSettings_button" onClick={this.onUpgradeClicked}>
+                    Create an account
+                </div>
+            );
+        }
+        else {
+            accountJsx = (
+                <ChangePassword
+                        className="mx_UserSettings_accountTable"
+                        rowClassName="mx_UserSettings_profileTableRow"
+                        rowLabelClassName="mx_UserSettings_profileLabelCell"
+                        rowInputClassName="mx_UserSettings_profileInputCell"
+                        buttonClassName="mx_UserSettings_button mx_UserSettings_changePasswordButton"
+                        onError={this.onPasswordChangeError}
+                        onFinished={this.onPasswordChanged} />
+            );
+        }
+
         return (
             <div className="mx_UserSettings">
                 <RoomHeader simpleHeader="Settings" />
+
+                <GeminiScrollbar className="mx_UserSettings_body" autoshow={true}>
 
                 <h2>Profile</h2>
 
@@ -180,30 +330,19 @@ module.exports = React.createClass({
                                 <ChangeDisplayName />
                             </div>
                         </div>
-
-                        {this.state.threepids.map(function(val, pidIndex) {
-                            var id = "email-" + val.address;
-                            return (
-                                <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
-                                    <div className="mx_UserSettings_profileLabelCell">
-                                        <label htmlFor={id}>Email</label>
-                                    </div>
-                                    <div className="mx_UserSettings_profileInputCell">
-                                        <input key={val.address} id={id} value={val.address} disabled />
-                                    </div>
-                                </div>
-                            );
-                        })}
+                        {threepidsSection}
                     </div>
 
                     <div className="mx_UserSettings_avatarPicker">
-                        <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
-                            showUploadSection={false} className="mx_UserSettings_avatarPicker_img"/>
+                        <div onClick={ this.onAvatarPickerClick }>
+                            <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
+                                showUploadSection={false} className="mx_UserSettings_avatarPicker_img"/>
+                        </div>
                         <div className="mx_UserSettings_avatarPicker_edit">
-                            <label htmlFor="avatarInput">
-                                <img src="img/upload.svg"
+                            <label htmlFor="avatarInput" ref="file_label">
+                                <img src="img/camera.svg"
                                     alt="Upload avatar" title="Upload avatar"
-                                    width="19" height="24" />
+                                    width="17" height="15" />
                             </label>
                             <input id="avatarInput" type="file" onChange={this.onAvatarSelected}/>
                         </div>
@@ -213,41 +352,18 @@ module.exports = React.createClass({
                 <h2>Account</h2>
 
                 <div className="mx_UserSettings_section">
-                    <ChangePassword
-                        className="mx_UserSettings_accountTable"
-                        rowClassName="mx_UserSettings_profileTableRow"
-                        rowLabelClassName="mx_UserSettings_profileLabelCell"
-                        rowInputClassName="mx_UserSettings_profileInputCell"
-                        buttonClassName="mx_UserSettings_button"
-                        onError={this.onPasswordChangeError}
-                        onFinished={this.onPasswordChanged} />                   
-                </div>
-
-                <div className="mx_UserSettings_logout">
-                    <div className="mx_UserSettings_button" onClick={this.onLogoutClicked}>
+                    
+                    <div className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
                         Log out
                     </div>
+
+                    {accountJsx}
                 </div>
 
                 <h2>Notifications</h2>
 
                 <div className="mx_UserSettings_section">
-                    <div className="mx_UserSettings_notifTable">
-                        <div className="mx_UserSettings_notifTableRow">
-                            <div className="mx_UserSettings_notifInputCell">
-                                <input id="enableNotifications"
-                                    ref="enableNotifications"
-                                    type="checkbox"
-                                    checked={ UserSettingsStore.getEnableNotifications() }
-                                    onChange={ this.onEnableNotificationsChange } />
-                            </div>
-                            <div className="mx_UserSettings_notifLabelCell">
-                                <label htmlFor="enableNotifications">
-                                    Enable desktop notifications
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                    <Notifications/>
                 </div>
 
                 <h2>Advanced</h2>
@@ -260,6 +376,8 @@ module.exports = React.createClass({
                         Version {this.state.clientVersion}
                     </div>
                 </div>
+
+                </GeminiScrollbar>
             </div>
         );
     }

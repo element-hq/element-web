@@ -65,8 +65,17 @@ function mdownToHtml(mdown) {
 module.exports = React.createClass({
     displayName: 'MessageComposer',
 
+    statics: {
+        // the height we limit the composer to
+        MAX_HEIGHT: 100,
+    },
+
     propTypes: {
-        tabComplete: React.PropTypes.any
+        tabComplete: React.PropTypes.any,
+
+        // a callback which is called when the height of the composer is
+        // changed due to a change in content.
+        onResize: React.PropTypes.func,
     },
 
     componentWillMount: function() {
@@ -200,23 +209,18 @@ module.exports = React.createClass({
             this.sentHistory.push(input);
             this.onEnter(ev);
         }
-        else if (ev.keyCode === KeyCode.UP) {
-            var input = this.refs.textarea.value;
-            var offset = this.refs.textarea.selectionStart || 0;
-            if (ev.ctrlKey || !input.substr(0, offset).match(/\n/)) {
-                this.sentHistory.next(1);
-                ev.preventDefault();
-                this.resizeInput();
-            }
-        }
-        else if (ev.keyCode === KeyCode.DOWN) {
-            var input = this.refs.textarea.value;
-            var offset = this.refs.textarea.selectionStart || 0;
-            if (ev.ctrlKey || !input.substr(offset).match(/\n/)) {
-                this.sentHistory.next(-1);
-                ev.preventDefault();
-                this.resizeInput();
-            }
+        else if (ev.keyCode === KeyCode.UP || ev.keyCode === KeyCode.DOWN) {
+            var oldSelectionStart = this.refs.textarea.selectionStart;
+            // Remember the keyCode because React will recycle the synthetic event
+            var keyCode = ev.keyCode;
+            // set a callback so we can see if the cursor position changes as
+            // a result of this event. If it doesn't, we cycle history.
+            setTimeout(() => {
+                if (this.refs.textarea.selectionStart == oldSelectionStart) {
+                    this.sentHistory.next(keyCode === KeyCode.UP ? 1 : -1);
+                    this.resizeInput();
+                }
+            }, 0);
         }
 
         if (this.props.tabComplete) {
@@ -237,13 +241,15 @@ module.exports = React.createClass({
         // scrollHeight is at least equal to clientHeight, so we have to
         // temporarily crimp clientHeight to 0 to get an accurate scrollHeight value
         this.refs.textarea.style.height = "0px";
-        var newHeight = this.refs.textarea.scrollHeight < 100 ? this.refs.textarea.scrollHeight : 100;
+        var newHeight = Math.min(this.refs.textarea.scrollHeight,
+                                 this.constructor.MAX_HEIGHT);
         this.refs.textarea.style.height = Math.ceil(newHeight) + "px";
-        if (this.props.roomView) {
-            // kick gemini-scrollbar to re-layout
-            this.props.roomView.forceUpdate();
-        }
         this.oldScrollHeight = this.refs.textarea.scrollHeight;
+
+        if (this.props.onResize) {
+            // kick gemini-scrollbar to re-layout
+            this.props.onResize();
+        }
     },
 
     onKeyUp: function(ev) {
@@ -330,7 +336,7 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);
         }
 
-        sendMessagePromise.then(function() {
+        sendMessagePromise.done(function() {
             dis.dispatch({
                 action: 'message_sent'
             });
@@ -461,6 +467,7 @@ module.exports = React.createClass({
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         var callButton, videoCallButton, hangupButton;
         var call = CallHandler.getCallForRoom(this.props.room.roomId);
@@ -473,12 +480,12 @@ module.exports = React.createClass({
         }
         else {
             callButton =
-                <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick}>
-                    <img src="img/voice.svg" alt="Voice call" title="Voice call" width="16" height="26"/>
+                <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
+                    <TintableSvg src="img/voice.svg" width="16" height="26"/>
                 </div>
             videoCallButton =
-                <div className="mx_MessageComposer_videocall" onClick={this.onCallClick}>
-                    <img src="img/call.svg" alt="Video call" title="Video call" width="30" height="22"/>
+                <div className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
+                    <TintableSvg src="img/call.svg" width="30" height="22"/>
                 </div>
         }
 
@@ -492,8 +499,8 @@ module.exports = React.createClass({
                     <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
                         <textarea ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
                     </div>
-                    <div className="mx_MessageComposer_upload" onClick={this.onUploadClick}>
-                        <img src="img/upload.svg" alt="Upload file" title="Upload file" width="19" height="24"/>
+                    <div className="mx_MessageComposer_upload" onClick={this.onUploadClick} title="Upload file">
+                        <TintableSvg src="img/upload.svg" width="19" height="24"/>
                         <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
                     </div>
                     { hangupButton }

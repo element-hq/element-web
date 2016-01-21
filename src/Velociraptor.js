@@ -36,7 +36,7 @@ module.exports = React.createClass({
                 var old = oldChildren[c.key];
                 var oldNode = ReactDom.findDOMNode(self.nodes[old.key]);
 
-                if (oldNode.style.left != c.props.style.left) {
+                if (oldNode && oldNode.style.left != c.props.style.left) {
                     Velocity(oldNode, { left: c.props.style.left }, self.props.transition).then(function() {
                         // special case visibility because it's nonsensical to animate an invisible element
                         // so we always hidden->visible pre-transition and visible->hidden after
@@ -73,6 +73,7 @@ module.exports = React.createClass({
 
     collectNode: function(k, node) {
         if (
+            node &&
             this.nodes[k] === undefined &&
             node.props.startStyle &&
             Object.keys(node.props.startStyle).length

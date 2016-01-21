@@ -15,12 +15,20 @@ limitations under the License.
 */
 var React = require('react');
 var classNames = require('classnames');
+var Matrix = require("matrix-js-sdk");
+var q = require('q');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
+var Entities = require("../../../Entities");
 var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 
 var INITIAL_LOAD_NUM_MEMBERS = 50;
+var SHARE_HISTORY_WARNING = "Newly invited users will see the history of this room. "+
+    "If you'd prefer invited users not to see messages that were sent before they joined, "+
+    "turn off, 'Share message history with new users' in the settings for this room.";
+
+var shown_invite_warning_this_session = false;
 
 module.exports = React.createClass({
     displayName: 'MemberList',
@@ -63,7 +71,12 @@ module.exports = React.createClass({
             self.setState({
                 members: self.roomMembers()
             });
+            // lazy load to prevent it blocking the first render
+            self._loadUserList();
         }, 50);
+
+        
+        setTimeout
 
         // Attach a SINGLE listener for global presence changes then locate the
         // member tile and re-render it. This is more efficient than every tile
@@ -88,6 +101,21 @@ module.exports = React.createClass({
     /*componentWillReceiveProps: function(newProps) {
     },*/
 
+    _loadUserList: function() {
+        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        if (!room) {
+            return; // we'll do it later
+        }
+
+        // Load the complete user list for inviting new users
+        // TODO: Keep this list bleeding-edge up-to-date. Practically speaking,
+        // it will do for now not being updated as random new users join different
+        // rooms as this list will be reloaded every room swap.
+        this.userList = MatrixClientPeg.get().getUsers().filter(function(u) {
+            return !room.hasMembershipState(u.userId, "join");
+        });
+    },
+
     onRoom: function(room) {
         if (room.roomId !== this.props.roomId) {
             return;
@@ -96,6 +124,7 @@ module.exports = React.createClass({
         // we need to wait till the room is fully populated with state
         // before refreshing the member list else we get a stale list.
         this._updateList();
+        this._loadUserList();
     },
 
     onRoomStateMember: function(ev, state, member) {
@@ -131,12 +160,41 @@ module.exports = React.createClass({
             return;
         }
 
-        var promise;
+        var invite_defer = q.defer();
+
+        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        var history_visibility = room.currentState.getStateEvents('m.room.history_visibility', '');
+        if (history_visibility) history_visibility = history_visibility.getContent().history_visibility;
+
+        if (history_visibility == 'shared' && !shown_invite_warning_this_session) {
+            var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            Modal.createDialog(QuestionDialog, {
+                title: "Warning",
+                description: SHARE_HISTORY_WARNING,
+                button: "Invite",
+                onFinished: function(should_invite) {
+                    if (should_invite) {
+                        shown_invite_warning_this_session = true;
+                        invite_defer.resolve();
+                    } else {
+                        invite_defer.reject(null);
+                    }
+                }
+            });
+        } else {
+            invite_defer.resolve();
+        }
+
+        var promise = invite_defer.promise;;
         if (isEmailAddress) {
-            promise = MatrixClientPeg.get().inviteByEmail(this.props.roomId, inputText);
+            promise = promise.then(function() {
+                 MatrixClientPeg.get().inviteByEmail(self.props.roomId, inputText);
+            });
         }
         else {
-            promise = MatrixClientPeg.get().invite(this.props.roomId, inputText);
+            promise = promise.then(function() {
+                MatrixClientPeg.get().invite(self.props.roomId, inputText);
+            });
         }
 
         self.setState({
@@ -151,11 +209,13 @@ module.exports = React.createClass({
                 inviting: false
             });
         }, function(err) {
-            console.error("Failed to invite: %s", JSON.stringify(err));
-            Modal.createDialog(ErrorDialog, {
-                title: "Server error whilst inviting",
-                description: err.message
-            });
+            if (err !== null) {
+                console.error("Failed to invite: %s", JSON.stringify(err));
+                Modal.createDialog(ErrorDialog, {
+                    title: "Server error whilst inviting",
+                    description: err.message
+                });
+            }
             self.setState({
                 inviting: false
             });
@@ -225,12 +285,23 @@ module.exports = React.createClass({
         return latB - latA;
     },
 
-    makeMemberTiles: function(membership) {
+    onSearchQueryChanged: function(input) {
+        this.setState({
+            searchQuery: input
+        });
+    },
+
+    makeMemberTiles: function(membership, query) {
         var MemberTile = sdk.getComponent("rooms.MemberTile");
+        query = (query || "").toLowerCase();
 
         var self = this;
-        return self.state.members.filter(function(userId) {
+
+        var memberList = self.state.members.filter(function(userId) {
             var m = self.memberDict[userId];
+            if (query && m.name.toLowerCase().indexOf(query) !== 0) {
+                return false;
+            }
             return m.membership == membership;
         }).map(function(userId) {
             var m = self.memberDict[userId];
@@ -238,11 +309,32 @@ module.exports = React.createClass({
                 <MemberTile key={userId} member={m} ref={userId} />
             );
         });
-    },
 
-    onPopulateInvite: function(e) {
-        this.onInvite(this.refs.invite.value);
-        e.preventDefault();
+        if (membership === "invite") {
+            // include 3pid invites (m.room.third_party_invite) state events.
+            // The HS may have already converted these into m.room.member invites so
+            // we shouldn't add them if the 3pid invite state key (token) is in the
+            // member invite (content.third_party_invite.signed.token)
+            var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+            var EntityTile = sdk.getComponent("rooms.EntityTile");
+            if (room) {
+                room.currentState.getStateEvents("m.room.third_party_invite").forEach(
+                function(e) {
+                    // discard all invites which have a m.room.member event since we've
+                    // already added them.
+                    var memberEvent = room.currentState.getInviteForThreePidToken(e.getStateKey());
+                    if (memberEvent) {
+                        return;
+                    }
+                    memberList.push(
+                        <EntityTile key={e.getStateKey()} ref={e.getStateKey()}
+                            name={e.getContent().display_name} />
+                    )
+                })
+            }
+        }
+
+        return memberList;
     },
 
     inviteTile: function() {
@@ -252,22 +344,25 @@ module.exports = React.createClass({
                 <Loader />
             );
         } else {
+            var SearchableEntityList = sdk.getComponent("rooms.SearchableEntityList");
+            
             return (
-                <form onSubmit={this.onPopulateInvite}>
-                    <input className="mx_MemberList_invite" ref="invite" placeholder="Invite user (email)"/>
-                </form>
+                <SearchableEntityList searchPlaceholderText={"Invite / Search"}
+                    onSubmit={this.onInvite}
+                    onQueryChanged={this.onSearchQueryChanged}
+                    entities={Entities.fromUsers(this.userList || [], true, this.onInvite)} />
             );
         }
     },
 
     render: function() {
         var invitedSection = null;
-        var invitedMemberTiles = this.makeMemberTiles('invite');
+        var invitedMemberTiles = this.makeMemberTiles('invite', this.state.searchQuery);
         if (invitedMemberTiles.length > 0) {
             invitedSection = (
                 <div className="mx_MemberList_invited">
                     <h2>Invited</h2>
-                    <div className="mx_MemberList_wrapper">
+                    <div autoshow={true} className="mx_MemberList_wrapper">
                         {invitedMemberTiles}
                     </div>
                 </div>
@@ -275,15 +370,17 @@ module.exports = React.createClass({
         }
         return (
             <div className="mx_MemberList">
-                <GeminiScrollbar autoshow={true} className="mx_MemberList_border">
                     {this.inviteTile()}
-                    <div>
+                    <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
                         <div className="mx_MemberList_wrapper">
-                            {this.makeMemberTiles('join')}
+                            {this.makeMemberTiles('join', this.state.searchQuery)}
+                        </div>
+                        {invitedSection}
+                    </GeminiScrollbar>
+                    <div className="mx_MemberList_bottom">
+                        <div className="mx_MemberList_bottomRule">
                         </div>
                     </div>
-                    {invitedSection}
-                </GeminiScrollbar>
             </div>
         );
     }

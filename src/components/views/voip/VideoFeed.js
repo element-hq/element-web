@@ -21,9 +21,29 @@ var React = require('react');
 module.exports = React.createClass({
     displayName: 'VideoFeed',
 
+    propTypes: {
+        // a callback which is called when the video element is resized
+        // due to a change in video metadata
+        onResize: React.PropTypes.func,
+    },
+
+    componentDidMount() {
+        this.refs.vid.addEventListener('resize', this.onResize);
+    },
+
+    componentWillUnmount() {
+        this.refs.vid.removeEventListener('resize', this.onResize);
+    },
+
+    onResize: function(e) {
+        if(this.props.onResize) {
+            this.props.onResize(e);
+        }
+    },
+
     render: function() {
         return (
-            <video>
+            <video ref="vid">
             </video>
         );
     },

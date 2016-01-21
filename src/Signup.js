@@ -69,6 +69,10 @@ class Register extends Signup {
         this.params.idSid = idSid;
     }
 
+    setGuestAccessToken(token) {
+        this.guestAccessToken = token;
+    }
+
     getStep() {
         return this._step;
     }
@@ -126,7 +130,8 @@ class Register extends Signup {
         }
 
         return MatrixClientPeg.get().register(
-            this.username, this.password, this.params.sessionId, authDict, bindEmail
+            this.username, this.password, this.params.sessionId, authDict, bindEmail,
+            this.guestAccessToken
         ).then(function(result) {
             self.credentials = result;
             self.setStep("COMPLETE");
@@ -147,6 +152,8 @@ class Register extends Signup {
             } else {
                 if (error.errcode === 'M_USER_IN_USE') {
                     throw new Error("Username in use");
+                } else if (error.errcode == 'M_INVALID_USERNAME') {
+                    throw new Error("User names may only contain alphanumeric characters, underscores or dots!");
                 } else if (error.httpStatus == 401) {
                     throw new Error("Authorisation failed!");
                 } else if (error.httpStatus >= 400 && error.httpStatus < 500) {

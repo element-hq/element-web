@@ -48,7 +48,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_ErrorDialog">
-                <div className="mx_ErrorDialogTitle">
+                <div className="mx_Dialog_title">
                     {this.props.title}
                 </div>
                 <div className="mx_Dialog_content">

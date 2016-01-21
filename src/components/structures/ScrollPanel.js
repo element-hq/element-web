@@ -112,6 +112,14 @@ module.exports = React.createClass({
         this.checkFillState();
     },
 
+    componentWillUnmount: function() {
+        // set a boolean to say we've been unmounted, which any pending
+        // promises can use to throw away their results.
+        //
+        // (We could use isMounted(), but facebook have deprecated that.)
+        this.unmounted = true;
+    },
+
     onScroll: function(ev) {
         var sn = this._getScrollNode();
         debuglog("Scroll event: offset now:", sn.scrollTop, "recentEventScroll:", this.recentEventScroll);
@@ -158,6 +166,10 @@ module.exports = React.createClass({
 
     // check the scroll state and send out backfill requests if necessary.
     checkFillState: function() {
+        if (this.unmounted) {
+            return;
+        }
+
         var sn = this._getScrollNode();
 
         // if there is less than a screenful of messages above or below the
@@ -346,6 +358,12 @@ module.exports = React.createClass({
      * message panel.
      */
     _getScrollNode: function() {
+        if (this.unmounted) {
+            // this shouldn't happen, but when it does, turn the NPE into
+            // something more meaningful.
+            throw new Error("ScrollPanel._getScrollNode called when unmounted");
+        }
+
         var panel = ReactDOM.findDOMNode(this.refs.geminiPanel);
 
         // If the gemini scrollbar is doing its thing, this will be a div within
