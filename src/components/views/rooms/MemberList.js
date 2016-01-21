@@ -378,6 +378,8 @@ module.exports = React.createClass({
                         {invitedSection}
                     </GeminiScrollbar>
                     <div className="mx_MemberList_bottom">
+                        <div className="mx_MemberList_bottomRule">
+                        </div>
                     </div>
             </div>
         );
