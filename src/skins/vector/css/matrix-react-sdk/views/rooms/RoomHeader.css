@@ -146,6 +146,10 @@ limitations under the License.
     display: inline-block;
 }
 
+.mx_RoomHeader_settingsHint {
+    color: #a2a2a2 ! important;
+}
+
 .mx_RoomHeader_searchStatus {
     display: inline-block;
     font-weight: normal;
