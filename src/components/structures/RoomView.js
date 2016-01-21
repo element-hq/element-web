@@ -89,6 +89,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this.last_rr_sent_event_id = undefined;
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room", this.onNewRoom);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
@@ -1167,8 +1168,15 @@ module.exports = React.createClass({
         var lastReadEventIndex = this._getLastDisplayedEventIndexIgnoringOwn();
         if (lastReadEventIndex === null) return;
 
-        if (lastReadEventIndex > currentReadUpToEventIndex) {
-            MatrixClientPeg.get().sendReadReceipt(this.state.room.timeline[lastReadEventIndex]);
+        var lastReadEvent = this.state.room.timeline[lastReadEventIndex];
+
+        // we also remember the last read receipt we sent to avoid spamming the same one at the server repeatedly
+        if (lastReadEventIndex > currentReadUpToEventIndex && this.last_rr_sent_event_id != lastReadEvent.getId()) {
+            this.last_rr_sent_event_id = lastReadEvent.getId();
+            MatrixClientPeg.get().sendReadReceipt(lastReadEvent).catch(() => {
+                // it failed, so allow retries next time the user is active
+                this.last_rr_sent_event_id = undefined;
+            });
         }
     },
 
