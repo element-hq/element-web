@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -117,6 +117,7 @@ var onNewScreen = function(screen) {
         var hash = '#/' + screen;
         lastLocationHashSet = hash;
         window.location.hash = hash;
+        if (ga) ga('send', 'pageview', window.location.pathname + window.location.search + window.location.hash);
     }
 }
 
@@ -154,7 +155,8 @@ function loadApp() {
                 registrationUrl={makeRegistrationUrl()}
                 ConferenceHandler={VectorConferenceHandler}
                 config={configJson}
-                startingQueryParams={parseQsFromFragment(window.location)} />,
+                startingQueryParams={parseQsFromFragment(window.location)}
+                enableGuest={true} />,
             document.getElementById('matrixchat')
         );
     }

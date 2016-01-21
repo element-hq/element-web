@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -100,6 +100,7 @@ module.exports = React.createClass({
 
     render: function() {
         var MemberList = sdk.getComponent('rooms.MemberList');
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var buttonGroup;
         var panel;
 
@@ -126,13 +127,13 @@ module.exports = React.createClass({
         if (this.props.roomId) {
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
-                        <div className="mx_RightPanel_headerButton" onClick={ this.onMemberListButtonClick }>
-                            <img src="img/members.svg" width="17" height="22" title="Members" alt="Members"/>
+                        <div className="mx_RightPanel_headerButton" title="Members" onClick={ this.onMemberListButtonClick }>
+                            <TintableSvg src="img/members.svg" width="17" height="22"/>
                             { membersBadge }
                             { membersHighlight }
                         </div>
-                        <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton">
-                            <img src="img/files.svg" width="17" height="22" title="Files" alt="Files"/>
+                        <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton" title="Files">
+                            <TintableSvg src="img/files.svg" width="17" height="22"/>
                             { filesHighlight }
                         </div>
                     </div>;

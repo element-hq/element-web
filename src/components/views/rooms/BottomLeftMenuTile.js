@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_RoomTile" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.props.onClick}>
                 <div className="mx_RoomTile_avatar">
-                    <img src={ this.props.img } width="24" height="24"/>
+                    <img src={ this.props.img } width="26" height="26"/>
                 </div>
                 { label }
             </div>

@@ -1,5 +1,5 @@
 /*
-Copyright 2015 OpenMarket Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -255,17 +255,17 @@ var RoomSubList = React.createClass({
                     unread={ Unread.doesRoomHaveUnreadMessages(room) }
                     highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites' }
                     isInvite={ self.props.label === 'Invites' }
-                    incomingCall={ self.props.incomingCall && (self.props.incomingCall.roomId === room.roomId) ? self.props.incomingCall : null }
-                     />
+                    incomingCall={ self.props.incomingCall && (self.props.incomingCall.roomId === room.roomId) ? self.props.incomingCall : null } />
             );
         });
     },
 
     _getHeaderJsx: function() {
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");        
         return (
             <h2 onClick={ this.onClick } className="mx_RoomSubList_label">
                 { this.props.collapsed ? '' : this.props.label }
-                <img className="mx_RoomSubList_chevron"
+                <TintableSvg className="mx_RoomSubList_chevron"
                     src={ this.state.hidden ? "img/list-close.svg" : "img/list-open.svg" }
                     width="10" height="10" />
             </h2>
