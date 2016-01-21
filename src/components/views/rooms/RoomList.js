@@ -52,6 +52,7 @@ module.exports = React.createClass({
         cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
         cli.on("Room.tags", this.onRoomTags);
+        cli.on("Room.receipt", this.onRoomReceipt);
         cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
 
@@ -93,6 +94,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+            MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
@@ -139,14 +141,6 @@ module.exports = React.createClass({
             if (UnreadStatus.eventTriggersUnreadCount(ev)) {
                 hl = 1;
             }
-
-            var me = room.getMember(MatrixClientPeg.get().credentials.userId);
-            var actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
-            if ((actions && actions.tweaks && actions.tweaks.highlight) ||
-                (me && me.membership == "invite"))
-            {
-                hl = 2;
-            }
         }
 
         var newState = this.getRoomLists();
@@ -161,6 +155,19 @@ module.exports = React.createClass({
         // still want to update the list even if the highlight status
         // hasn't changed because the ordering may have
         this.setState(newState);
+    },
+
+    onRoomReceipt: function(receiptEvent, room) {
+        // because if we read a notification, it will affect notification count
+        // only bother updating if there's a receipt from us
+        var receiptKeys = Object.keys(receiptEvent.getContent());
+        for (var i = 0; i < receiptKeys.length; ++i) {
+            var rcpt = receiptEvent.getContent()[receiptKeys[i]];
+            if (rcpt['m.read'] && rcpt['m.read'][MatrixClientPeg.get().credentials.userId]) {
+                this.refreshRoomList();
+                break;
+            }
+        }
     },
 
     onRoomName: function(room) {

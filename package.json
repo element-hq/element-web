@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "classnames": "^2.1.2",
+    "favico.js": "^0.3.10",
     "filesize": "^3.1.2",
     "flux": "^2.0.3",
     "glob": "^5.0.14",

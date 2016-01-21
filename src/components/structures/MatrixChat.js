@@ -16,6 +16,7 @@ limitations under the License.
 var React = require('react');
 var Matrix = require("matrix-js-sdk");
 var url = require('url');
+var Favico = require('favico.js');
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var Notifier = require("../../Notifier");
@@ -83,6 +84,10 @@ module.exports = React.createClass({
         return {
             startingQueryParams: {}
         };
+    },
+
+    componentWillMount: function() {
+        this.favicon = new Favico({animation: 'none'});
     },
 
     componentDidMount: function() {
@@ -498,6 +503,7 @@ module.exports = React.createClass({
         var cli = MatrixClientPeg.get();
         var self = this;
         cli.on('sync', function(state, prevState) {
+            self.updateFavicon();
             if (state === "SYNCING" && prevState === "SYNCING") {
                 return;
             }
@@ -754,6 +760,21 @@ module.exports = React.createClass({
             screen: undefined
         });
         this.showScreen("settings");
+    },
+
+    updateFavicon: function() {
+        var notifCount = 0;
+
+        var rooms = MatrixClientPeg.get().getRooms();
+        for (var i = 0; i < rooms.length; ++i) {
+            if (rooms[i].hasMembershipState(MatrixClientPeg.get().credentials.userId, 'invite')) {
+                ++notifCount;
+            } else if (rooms[i].getUnreadNotificationCount()) {
+                notifCount += rooms[i].getUnreadNotificationCount();
+            }
+        }
+        this.favicon.badge(notifCount);
+        document.title = (notifCount > 0 ? "["+notifCount+"] " : "")+"Vector";
     },
 
     onUserSettingsClose: function() {
