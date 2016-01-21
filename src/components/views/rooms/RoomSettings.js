@@ -43,14 +43,6 @@ module.exports = React.createClass({
         onCancelClick: React.PropTypes.func,
     },
 
-    componentDidMount: function() {
-        // XXX: dirty hack to gutwrench to focus on the invite box
-        if (this.props.room.getJoinedMembers().length == 1) {
-            var inviteBox = document.getElementById("mx_MemberList_invite");
-            if (inviteBox) setTimeout(function() { inviteBox.focus(); }, 0);
-        }
-    },
-
     getInitialState: function() {
         // work out the initial color index
         var room_color_index = undefined;

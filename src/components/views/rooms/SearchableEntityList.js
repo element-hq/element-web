@@ -96,7 +96,7 @@ var SearchableEntityList = React.createClass({
         if (this.props.showInputBox) {
             inputBox = (
                 <form onSubmit={this.onQuerySubmit}>
-                    <input className="mx_SearchableEntityList_query" type="text"
+                    <input className="mx_SearchableEntityList_query" id="mx_SearchableEntityList_query" type="text"
                         onChange={this.onQueryChanged} value={this.state.query}
                         placeholder={this.props.searchPlaceholderText} />
                 </form>

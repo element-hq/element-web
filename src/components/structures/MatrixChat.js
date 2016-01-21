@@ -375,7 +375,7 @@ module.exports = React.createClass({
                     dis.dispatch({
                         action: 'view_room',
                         room_id: res.room_id,
-                        show_settings: true,
+                        // show_settings: true,
                     });
                 }, function(err) {
                     modal.close();

@@ -457,6 +457,15 @@ module.exports = React.createClass({
         }
 
         this._updateTabCompleteList(this.state.room);
+
+        // XXX: EVIL HACK to autofocus inviting on empty rooms.
+        // We use the setTimeout to avoid racing with focus_composer.
+        if (this.state.room && this.state.room.getJoinedMembers().length == 1) {
+            var inviteBox = document.getElementById("mx_SearchableEntityList_query");
+            setTimeout(function() {
+                inviteBox.focus();
+            }, 50);
+        }
     },
 
     _updateTabCompleteList: function(room) {

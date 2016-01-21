@@ -190,7 +190,7 @@ module.exports = React.createClass({
                 var can_set_room_topic = current_user_level >= room_topic_level;
 
                 var placeholderName = "Unnamed Room";
-                if (this.state.defaultName && this.state.defaultName !== '?') {
+                if (this.state.defaultName && this.state.defaultName !== 'Empty room') {
                     placeholderName += " (" + this.state.defaultName + ")";
                 }
 
@@ -218,9 +218,19 @@ module.exports = React.createClass({
                     searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;(~{ this.props.searchInfo.searchCount } results)</div>;
                 }
 
+                // XXX: this is a bit inefficient - we could just compare room.name for 'Empty room'...
+                var members = this.props.room.getJoinedMembers();
+                var settingsHint = false;
+                if (members.length === 1 && members[0].userId === MatrixClientPeg.get().credentials.userId) {
+                    var name = this.props.room.currentState.getStateEvents('m.room.name', '');
+                    if (!name || !name.getContent().name) {
+                        settingsHint = true;
+                    }
+                }
+
                 name =
                     <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                        <div className="mx_RoomHeader_nametext" title={ this.props.room.name }>{ this.props.room.name }</div>
+                        <div className={ "mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "") } title={ this.props.room.name }>{ this.props.room.name }</div>
                         { searchStatus }
                         <div className="mx_RoomHeader_settingsButton" title="Settings">
                             <TintableSvg src="img/settings.svg" width="12" height="12"/>
