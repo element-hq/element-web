@@ -106,8 +106,8 @@ var SearchableEntityList = React.createClass({
         return (
             <div className={ "mx_SearchableEntityList " + (this.state.query.length ? "mx_SearchableEntityList_expanded" : "") }>
                 {inputBox}
-                <GeminiScrollbar className="mx_SearchableEntityList_listWrapper">
-                    <div autoshow={true} className="mx_SearchableEntityList_list">
+                <GeminiScrollbar autoshow={true} className="mx_SearchableEntityList_listWrapper">
+                    <div className="mx_SearchableEntityList_list">
                         {this.state.results.map((entity) => {
                             return entity.getJsx();
                         })}
