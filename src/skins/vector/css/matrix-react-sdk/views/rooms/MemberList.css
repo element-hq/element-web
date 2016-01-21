@@ -51,14 +51,14 @@ limitations under the License.
 }
 
 .mx_MemberList .mx_SearchableEntityList_expanded {
-    flex: 1 1 0;
-    -webkit-flex: 1 1 0;
+    flex: 1 1 100%;
+    -webkit-flex: 1 1 100%;
 }
 
 .mx_MemberList_joined {
     order: 2;
-    flex: 1 1 auto;
-    -webkit-flex: 1 1 auto;
+    flex: 1 1 50%;
+    -webkit-flex: 1 1 50%;
 
     overflow-y: auto;
 }
@@ -76,7 +76,9 @@ limitations under the License.
     order: 4;
     flex: 0 0 72px;
     -webkit-flex: 0 0 72px;
+}
 
+.mx_MemberList_bottomRule {
     border-top: 2px solid #e1dddd;
     margin-right: 15px;
 }

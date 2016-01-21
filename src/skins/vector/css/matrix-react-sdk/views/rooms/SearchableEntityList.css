@@ -15,9 +15,6 @@ limitations under the License.
 */
 
 .mx_SearchableEntityList {
-    flex: 1;
-    -webkit-flex: 1;
-
     display: flex;
     display: -webkit-flex;
 
@@ -66,7 +63,7 @@ limitations under the License.
 
 .mx_SearchableEntityList_hrWrapper {
     width: 100%;
-    flex: 0px;
+    flex: 0;
     -webkit-flex: 0;    
 }
 
