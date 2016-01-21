@@ -641,8 +641,8 @@ module.exports = React.createClass({
         for (var i = 0; i < rooms.length; ++i) {
             if (rooms[i].hasMembershipState(MatrixClientPeg.get().credentials.userId, 'invite')) {
                 ++notifCount;
-            } else if (rooms[i].unread_notifications && rooms[i].unread_notifications['notification_count']) {
-                notifCount += rooms[i].unread_notifications['notification_count'];
+            } else if (rooms[i].getUnreadNotificationCount()) {
+                notifCount += rooms[i].getUnreadNotificationCount();
             }
         }
         this.favicon.badge(notifCount);
