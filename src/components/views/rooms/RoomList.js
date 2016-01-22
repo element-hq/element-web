@@ -325,6 +325,12 @@ module.exports = React.createClass({
         });
     },
 
+    onShowMoreRooms: function() {
+        // kick gemini in the balls to get it to wake up
+        // XXX: uuuuuuugh.
+        this.refs.gemscroll.forceUpdate();
+    },
+
     render: function() {
         var expandButton = this.props.collapsed ? 
                            <img className="mx_RoomList_expandButton" onClick={ this.onShowClick } src="img/menu.png" width="20" alt=">"/> :
@@ -334,7 +340,7 @@ module.exports = React.createClass({
         var self = this;
 
         return (
-            <GeminiScrollbar className="mx_RoomList_scrollbar" autoshow={true} onScroll={ self._repositionTooltips }>
+            <GeminiScrollbar className="mx_RoomList_scrollbar" autoshow={true} onScroll={ self._repositionTooltips } ref="gemscroll">
             <div className="mx_RoomList">
                 { expandButton }
 
@@ -344,7 +350,8 @@ module.exports = React.createClass({
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
-                             collapsed={ self.props.collapsed } />
+                             collapsed={ self.props.collapsed }
+                             onShowMoreRooms={ this.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['m.favourite'] }
                              label="Favourites"
@@ -354,7 +361,8 @@ module.exports = React.createClass({
                              order="manual"
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
-                             collapsed={ self.props.collapsed } />
+                             collapsed={ self.props.collapsed }
+                             onShowMoreRooms={ this.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
                              label="Rooms"
@@ -363,7 +371,8 @@ module.exports = React.createClass({
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
-                             collapsed={ self.props.collapsed } />
+                             collapsed={ self.props.collapsed }
+                             onShowMoreRooms={ this.onShowMoreRooms } />
 
                 { Object.keys(self.state.lists).map(function(tagName) {
                     if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|archived))$/)) {
@@ -376,7 +385,8 @@ module.exports = React.createClass({
                              order="manual"
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
-                             collapsed={ self.props.collapsed } />
+                             collapsed={ self.props.collapsed }
+                             onShowMoreRooms={ this.onShowMoreRooms } />
 
                     }
                 }) }
@@ -389,7 +399,8 @@ module.exports = React.createClass({
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
-                             collapsed={ self.props.collapsed } />
+                             collapsed={ self.props.collapsed }
+                             onShowMoreRooms={ this.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.archived'] }
                              label="Historical"
@@ -401,7 +412,8 @@ module.exports = React.createClass({
                              startAsHidden={ true }
                              showSpinner={ self.state.isLoadingLeftRooms }
                              onHeaderClick= { self.onArchivedHeaderClick }
-                             incomingCall={ self.state.incomingCall } />
+                             incomingCall={ self.state.incomingCall }
+                             onShowMoreRooms={ this.onShowMoreRooms } />
             </div>
             </GeminiScrollbar>
         );
