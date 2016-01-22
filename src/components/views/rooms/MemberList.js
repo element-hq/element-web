@@ -312,11 +312,18 @@ module.exports = React.createClass({
 
     onSearchQueryChanged: function(input) {
         var EntityTile = sdk.getComponent("rooms.EntityTile");
+
+        var label;
+        if (input[0] === "@") {
+            label = input;
+        }
+        else {
+            label = "Email: " + input;
+        }
+
         this._emailEntity = new Entities.newEntity(
-            <EntityTile key="inv_email" suppressOnHover={true} showInviteButton={true}
-            presenceState="online" onClick={this.onInvite.bind(this, input)} name={
-                `Email: ${input}`
-            } />,
+            <EntityTile key="dynamic_invite_tile" suppressOnHover={true} showInviteButton={true}
+            presenceState="online" onClick={this.onInvite.bind(this, input)} name={label} />,
             function(query) {
                 return true; // always show this
             }
