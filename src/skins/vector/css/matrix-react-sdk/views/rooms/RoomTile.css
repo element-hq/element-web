@@ -97,12 +97,16 @@ limitations under the License.
 */
 
 .mx_RoomTile_badge {
-    background-color: #76cfa6;
+    background-color: #ff0064;
     width: 4px;
     position: absolute;
     left: 0px;
     top: 5px;
     height: 24px;
+} 
+
+.mx_RoomTile_unreadNotify .mx_RoomTile_badge {
+    background-color: #454545;
 }
 
 .mx_RoomTile_unread,
