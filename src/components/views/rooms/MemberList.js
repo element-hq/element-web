@@ -69,11 +69,13 @@ module.exports = React.createClass({
         // Lazy-load in more than the first N members
         setTimeout(function() {
             if (!self.isMounted()) return;
+            // lazy load to prevent it blocking the first render
+            self._loadUserList();
+
             self.setState({
                 members: self.roomMembers()
             });
-            // lazy load to prevent it blocking the first render
-            self._loadUserList();
+            
         }, 50);
 
         // Attach a SINGLE listener for global presence changes then locate the
