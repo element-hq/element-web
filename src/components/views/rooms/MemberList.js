@@ -262,7 +262,7 @@ module.exports = React.createClass({
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         var EntityTile = sdk.getComponent("rooms.EntityTile");
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        var text = "and " + overflowCount + " other" + (overflowCount > 1 : "s" : "") +  "...";
+        var text = "and " + overflowCount + " other" + (overflowCount > 1 ? "s" : "") +  "...";
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
                 <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
