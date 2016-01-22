@@ -49,6 +49,7 @@ var VectorPushRulesDefinitions = {
      // Messages containing user's display name 
      // (skip contains_user_name which is too geeky)
      "im.vector.rule.contains_display_name": {
+        kind: "underride",
         hsDefaultRuleId: ".m.rule.contains_display_name",
         description: "Messages containing my name",
         conditions: [{
@@ -78,6 +79,7 @@ var VectorPushRulesDefinitions = {
 
     // Messages just sent to the user in a 1:1 room
     "im.vector.rule.room_one_to_one": {
+        kind: "underride",
         hsDefaultRuleId: ".m.rule.room_one_to_one",
         description: "Messages in one-to-one chats",
         conditions: [{
@@ -110,6 +112,7 @@ var VectorPushRulesDefinitions = {
     // 1:1 room messages are catched by the .m.rule.room_one_to_one rule if any defined
     // By opposition, all other room messages are from group chat rooms.
     "im.vector.rule.room_message": {
+        kind: "underride",
         description: "Messages in group chats",
         conditions: [{
                 "pattern": "m.room.message",
@@ -141,6 +144,7 @@ var VectorPushRulesDefinitions = {
 
     // Invitation for the user
     "im.vector.rule.invite_for_me": {
+        kind: "underride",
         hsDefaultRuleId: ".m.rule.invite_for_me",
         description: "When I'm invited to a room",
         conditions: [
@@ -209,6 +213,7 @@ var VectorPushRulesDefinitions = {
 
     // Incoming call
     "im.vector.rule.call": {
+        kind: "underride",
         hsDefaultRuleId: ".m.rule.call",
         description: "Call invitation",
         conditions: [{
@@ -237,6 +242,7 @@ var VectorPushRulesDefinitions = {
 
     // Notifications from bots
     "im.vector.rule.notices": {
+        kind: "override",
         hsDefaultRuleId: ".m.rule.suppress_notices",
         description: "Messages sent by bot",
         conditions: [{
@@ -656,7 +662,7 @@ module.exports = React.createClass({
             actions: ruleDefinition.vectorStateToActions[vectorState]
         }
         
-        return MatrixClientPeg.get().addPushRule('global', "override", vectorRuleId, body);
+        return MatrixClientPeg.get().addPushRule('global', ruleDefinition.kind, vectorRuleId, body);
     },
 
     _refreshFromServer: function() {
