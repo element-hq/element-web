@@ -94,23 +94,29 @@ var VectorPushRulesDefinitions = {
                     "set_tweak": "sound",
                     "value": "default"
                 }
+            ],
+            off: [
+                "dont_notify"
             ]
         },
         vectorStateToHsDefaultRuleEnabled: {
             on: undefined,
             loud: true,
-            off: false
+            off: undefined
         }
     },
 
     // Messages just sent to a group chat room
-    "im.vector.rule.room_group": {
+    // 1:1 room messages are catched by the .m.rule.room_one_to_one rule if any defined
+    // By opposition, all other room messages are from group chat rooms.
+    "im.vector.rule.room_message": {
         description: "Messages in group chats",
         conditions: [{
-            "is": ">2",
-            "kind": "room_member_count"
+                "pattern": "m.room.message",
+                "kind": "event_match",
+                "key": "type"
         }],
-        hsDefaultRuleId: undefined,     // Matrix does not define a default hs push rule for group
+        hsDefaultRuleId: ".m.rule.message",
         vectorStateToActions: {
             on: [
                 "notify"
@@ -121,12 +127,15 @@ var VectorPushRulesDefinitions = {
                     "set_tweak": "sound",
                     "value": "default"
                 }
+            ],
+            off: [
+                "dont_notify"
             ]
         },
         vectorStateToHsDefaultRuleEnabled: {
             on: true,
             loud: undefined,
-            off: false
+            off: undefined
         }
     },
 
@@ -664,6 +673,7 @@ module.exports = React.createClass({
                 // XXX: .m.rule.contains_user_name is not managed (not a fancy rule for Vector?)
                 '.m.rule.contains_display_name': 'vector',
                 '.m.rule.room_one_to_one': 'vector',
+                '.m.rule.message': 'vector',
                 '.m.rule.invite_for_me': 'vector',
                 //'.m.rule.member_event': 'vector',
                 '.m.rule.call': 'vector',
@@ -791,7 +801,7 @@ module.exports = React.createClass({
                 'im.vector.rule.contains_display_name',
                 '_keywords',
                 'im.vector.rule.room_one_to_one',
-                'im.vector.rule.room_group',
+                'im.vector.rule.room_message',
                 'im.vector.rule.invite_for_me',
                 //'im.vector.rule.member_event',
                 'im.vector.rule.call',
