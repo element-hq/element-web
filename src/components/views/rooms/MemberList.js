@@ -51,6 +51,7 @@ module.exports = React.createClass({
         var cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("RoomMember.name", this.onRoomMemberName);
+        cli.on("RoomState.events", this.onRoomStateEvent);
         cli.on("Room", this.onRoom); // invites
     },
 
@@ -60,6 +61,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
             MatrixClientPeg.get().removeListener("User.presence", this.userPresenceFn);
+            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvent);
         }
     },
 
@@ -131,6 +133,12 @@ module.exports = React.createClass({
 
     onRoomMemberName: function(ev, member) {
         this._updateList();
+    },
+
+    onRoomStateEvent: function(event, state) {
+        if (event.getType() === "m.room.third_party_invite") {
+            this._updateList();
+        }
     },
 
     _updateList: function() {
