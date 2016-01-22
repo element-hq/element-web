@@ -46,8 +46,15 @@ var SearchableEntityList = React.createClass({
     getInitialState: function() {
         return {
             query: "",
-            results: this.getSearchResults("")
+            results: this.getSearchResults("", this.props.entities)
         };
+    },
+
+    componentWillReceiveProps: function(newProps) {
+        // recalculate the search results in case we got new entities
+        this.setState({
+            results: this.getSearchResults(this.state.query, newProps.entities)
+        });
     },
 
     componentWillUnmount: function() {
@@ -63,7 +70,7 @@ var SearchableEntityList = React.createClass({
     setQuery: function(input) {
         this.setState({
             query: input,
-            results: this.getSearchResults(input)
+            results: this.getSearchResults(input, this.props.entities)
         });
     },
 
@@ -71,9 +78,15 @@ var SearchableEntityList = React.createClass({
         var q = ev.target.value;
         this.setState({
             query: q,
-            results: this.getSearchResults(q)
+            results: this.getSearchResults(q, this.props.entities)
+        }, () => {
+            // invoke the callback AFTER we've flushed the new state. We need to
+            // do this because onQueryChanged can result in new props being passed
+            // to this component, which will then try to recalculate the search
+            // list. If we do this without flushing, we'll recalc with the last
+            // search term and not the current one!
+            this.props.onQueryChanged(q);
         });
-        this.props.onQueryChanged(q);
     },
 
     onQuerySubmit: function(ev) {
@@ -81,11 +94,11 @@ var SearchableEntityList = React.createClass({
         this.props.onSubmit(this.state.query);
     },
 
-    getSearchResults: function(query) {
+    getSearchResults: function(query, entities) {
         if (!query || query.length === 0) {
-            return this.props.emptyQueryShowsAll ? this.props.entities : []
+            return this.props.emptyQueryShowsAll ? entities : []
         }
-        return this.props.entities.filter(function(e) {
+        return entities.filter(function(e) {
             return e.matches(query);
         });
     },
@@ -95,7 +108,7 @@ var SearchableEntityList = React.createClass({
 
         if (this.props.showInputBox) {
             inputBox = (
-                <form onSubmit={this.onQuerySubmit}>
+                <form onSubmit={this.onQuerySubmit} autoComplete="off">
                     <input className="mx_SearchableEntityList_query" id="mx_SearchableEntityList_query" type="text"
                         onChange={this.onQueryChanged} value={this.state.query}
                         placeholder={this.props.searchPlaceholderText} />
