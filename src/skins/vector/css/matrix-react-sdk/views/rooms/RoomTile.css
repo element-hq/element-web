@@ -43,6 +43,11 @@ limitations under the License.
     color: rgba(69, 69, 69, 0.8);
 }
 
+.mx_RoomTile_ellipsis .mx_RoomTile_name {
+    font-style: italic;
+    color: #454545;
+}
+
 .mx_RoomTile_invite {
 /*    color: rgba(69, 69, 69, 0.5);
 */

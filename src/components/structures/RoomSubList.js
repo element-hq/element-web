@@ -78,6 +78,7 @@ var RoomSubList = React.createClass({
     getInitialState: function() {
         return {
             hidden: this.props.startAsHidden || false,
+            truncateAt: 20,
             sortedList: [],
         };
     },
@@ -96,6 +97,10 @@ var RoomSubList = React.createClass({
         // order the room list appropriately before we re-render
         //if (debug) console.log("received new props, list = " + newProps.list);
         this.sortList(newProps.list, newProps.order);
+
+        if (newProps.collapsed) { // as good a way as any to reset the truncate state
+            this.setState({ truncateAt : 20 });
+        }
     },
 
     onClick: function(ev) {
@@ -272,9 +277,32 @@ var RoomSubList = React.createClass({
         );
     },
 
+    _createOverflowTile: function(overflowCount, totalCount) {
+        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        // XXX: this is duplicated from RoomTile - factor it out
+        return (
+            <div className="mx_RoomTile mx_RoomTile_ellipsis" onClick={this._showFullMemberList}>
+                <div className="mx_RoomTile_avatar">
+                    <BaseAvatar url="img/ellipsis.svg" name="..." width={24} height={24} />
+                </div>
+                <div className="mx_RoomTile_name">and { overflowCount } others...</div>
+            </div>
+        );
+    },
+
+    _showFullMemberList: function() {
+        this.setState({
+            truncateAt: -1
+        });
+        // kick gemini in the balls to get it to wake up
+        // XXX: uuuuuuugh.
+        this.props.list.forceUpdate();
+    },
+
     render: function() {
         var connectDropTarget = this.props.connectDropTarget;
         var RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
+        var TruncatedList = sdk.getComponent('elements.TruncatedList');
 
         var label = this.props.collapsed ? null : this.props.label;
 
@@ -290,14 +318,15 @@ var RoomSubList = React.createClass({
             var classes = "mx_RoomSubList";
 
             if (!this.state.hidden) {
-                subList = <div className={ classes }>
+                subList = <TruncatedList className={ classes } truncateAt={this.state.truncateAt}
+                                         createOverflowElement={this._createOverflowTile} >
                                 { target }
                                 { this.makeRoomTiles() }
-                          </div>;
+                          </TruncatedList>;
             }
             else {
-                subList = <div className={ classes }>
-                          </div>;                
+                subList = <TruncatedList className={ classes }>
+                          </TruncatedList>;                
             }
 
             return connectDropTarget(
