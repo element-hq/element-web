@@ -18,9 +18,11 @@
     "build:bundle": "NODE_ENV=production webpack -p lib/vector/index.js vector/bundle.js",
     "build": "npm run build:css && npm run build:compile && npm run build:bundle",
     "start:js": "webpack -w src/vector/index.js vector/bundle.js",
+    "start:js:prod": "NODE_ENV=production webpack -w src/vector/index.js vector/bundle.js",
     "start:skins:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/components.css",
     "//cache": "Note the -c 1 below due to https://code.google.com/p/chromium/issues/detail?id=508270",
     "start": "parallelshell \"npm run start:js\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
+    "start:prod": "parallelshell \"npm run start:js:prod\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
     "clean": "rimraf lib vector/bundle.css vector/bundle.js vector/bundle.js.map vector/webpack.css*",
     "prepublish": "npm run build:css && npm run build:compile"
   },
