@@ -119,19 +119,22 @@ module.exports = React.createClass({
         else { // mute
             level = levelToSend - 1;
         }
+        level = parseInt(level);
 
-        MatrixClientPeg.get().setPowerLevel(roomId, target, level, powerLevelEvent).done(
-            function() {
-                // NO-OP; rely on the m.room.member event coming down else we could
-                // get out of sync if we force setState here!
-                console.log("Mute toggle success");
-            }, function(err) {
-                Modal.createDialog(ErrorDialog, {
-                    title: "Mute error",
-                    description: err.message
-                });
-            }
-        );
+        if (level !== NaN) {
+            MatrixClientPeg.get().setPowerLevel(roomId, target, level, powerLevelEvent).done(
+                function() {
+                    // NO-OP; rely on the m.room.member event coming down else we could
+                    // get out of sync if we force setState here!
+                    console.log("Mute toggle success");
+                }, function(err) {
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Mute error",
+                        description: err.message
+                    });
+                }
+            );
+        }
         this.props.onFinished();        
     },
 
@@ -161,7 +164,7 @@ module.exports = React.createClass({
         if (modLevel > 50 && defaultLevel < 50) modLevel = 50; // try to stick with the vector level defaults
         // toggle the level
         var newLevel = this.state.isTargetMod ? defaultLevel : modLevel;
-        MatrixClientPeg.get().setPowerLevel(roomId, target, newLevel, powerLevelEvent).done(
+        MatrixClientPeg.get().setPowerLevel(roomId, target, parseInt(newLevel), powerLevelEvent).done(
             function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
@@ -192,7 +195,7 @@ module.exports = React.createClass({
             this.props.onFinished();
             return;
         }
-        MatrixClientPeg.get().setPowerLevel(roomId, target, powerLevel, powerLevelEvent).done(
+        MatrixClientPeg.get().setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).done(
             function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
