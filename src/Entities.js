@@ -17,6 +17,31 @@ limitations under the License.
 var React = require('react');
 var sdk = require('./index');
 
+function isMatch(query, name, uid) {
+    query = query.toLowerCase();
+    name = name.toLowerCase();
+    uid = uid.toLowerCase();
+
+    // direct prefix matches
+    if (name.indexOf(query) === 0 || uid.indexOf(query) === 0) {
+        return true;
+    }
+
+    // strip @ on uid and try matching again
+    if (uid.length > 1 && uid[0] === "@" && uid.substring(1).indexOf(query) === 0) {
+        return true;
+    }
+
+    // split spaces in name and try matching constituent parts
+    var parts = name.split(" ");
+    for (var i = 0; i < parts.length; i++) {
+        if (parts[i].indexOf(query) === 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /*
  * Converts various data models to Entity objects.
  *
@@ -49,7 +74,7 @@ class MemberEntity extends Entity {
     }
 
     matches(queryString) {
-        return this.model.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0;
+        return isMatch(queryString, this.model.name, this.model.userId);
     }
 }
 
@@ -77,7 +102,7 @@ class UserEntity extends Entity {
 
     matches(queryString) {
         var name = this.model.displayName || this.model.userId;
-        return name.toLowerCase().indexOf(queryString.toLowerCase()) === 0;
+        return isMatch(queryString, name, this.model.userId);
     }
 }
 
