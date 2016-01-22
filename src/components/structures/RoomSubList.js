@@ -72,19 +72,22 @@ var RoomSubList = React.createClass({
         collapsed: React.PropTypes.bool.isRequired,
         onHeaderClick: React.PropTypes.func,
         alwaysShowHeader: React.PropTypes.bool,
-        incomingCall: React.PropTypes.object
+        incomingCall: React.PropTypes.object,
+        onShowMoreRooms: React.PropTypes.func
     },
 
     getInitialState: function() {
         return {
             hidden: this.props.startAsHidden || false,
+            truncateAt: 20,
             sortedList: [],
         };
     },
 
     getDefaultProps: function() {
         return {
-            onHeaderClick: function() {} // NOP
+            onHeaderClick: function() {}, // NOP
+            onShowMoreRooms: function() {} // NOP
         };
     },
 
@@ -101,6 +104,13 @@ var RoomSubList = React.createClass({
     onClick: function(ev) {
         var isHidden = !this.state.hidden;
         this.setState({ hidden : isHidden });
+
+        if (isHidden) {
+            // as good a way as any to reset the truncate state
+            this.setState({ truncateAt : 20 });
+            this.props.onShowMoreRooms();
+        }
+
         this.props.onHeaderClick(isHidden);
     },
 
@@ -272,9 +282,30 @@ var RoomSubList = React.createClass({
         );
     },
 
+    _createOverflowTile: function(overflowCount, totalCount) {
+        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        // XXX: this is duplicated from RoomTile - factor it out
+        return (
+            <div className="mx_RoomTile mx_RoomTile_ellipsis" onClick={this._showFullMemberList}>
+                <div className="mx_RoomTile_avatar">
+                    <BaseAvatar url="img/ellipsis.svg" name="..." width={24} height={24} />
+                </div>
+                <div className="mx_RoomTile_name">and { overflowCount } others...</div>
+            </div>
+        );
+    },
+
+    _showFullMemberList: function() {
+        this.setState({
+            truncateAt: -1
+        });
+        this.props.onShowMoreRooms();
+    },
+
     render: function() {
         var connectDropTarget = this.props.connectDropTarget;
         var RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
+        var TruncatedList = sdk.getComponent('elements.TruncatedList');
 
         var label = this.props.collapsed ? null : this.props.label;
 
@@ -290,14 +321,15 @@ var RoomSubList = React.createClass({
             var classes = "mx_RoomSubList";
 
             if (!this.state.hidden) {
-                subList = <div className={ classes }>
+                subList = <TruncatedList className={ classes } truncateAt={this.state.truncateAt}
+                                         createOverflowElement={this._createOverflowTile} >
                                 { target }
                                 { this.makeRoomTiles() }
-                          </div>;
+                          </TruncatedList>;
             }
             else {
-                subList = <div className={ classes }>
-                          </div>;                
+                subList = <TruncatedList className={ classes }>
+                          </TruncatedList>;                
             }
 
             return connectDropTarget(
