@@ -980,11 +980,11 @@ module.exports = React.createClass({
             );
         }
 
-        // XXX: EVIL HACK: for now, don't let Vector clobber 'invite' visibility to 'join'
-        // just because it doesn't know about 'invite' yet.  In future we should fix it
+        // XXX: EVIL HACK: for now, don't let Vector clobber 'joined' visibility to 'invited'
+        // just because it doesn't know about 'joined' yet.  In future we should fix it
         // properly - https://github.com/vector-im/vector-web/issues/731
-        if (old_history_visibility === "invited") {
-            old_history_visibility = "joined";
+        if (old_history_visibility === "joined") {
+            old_history_visibility = "invited";
         }
 
         var visibilityDeferred;
