@@ -311,6 +311,17 @@ module.exports = React.createClass({
     },
 
     onSearchQueryChanged: function(input) {
+        var EntityTile = sdk.getComponent("rooms.EntityTile");
+        this._emailEntity = new Entities.newEntity(
+            <EntityTile key="inv_email" suppressOnHover={true} showInviteButton={true}
+            presenceState="online" onClick={this.onInvite.bind(this, input)} name={
+                `Email: ${input}`
+            } />,
+            function(query) {
+                return true; // always show this
+            }
+        );
+
         this.setState({
             searchQuery: input
         });
@@ -369,12 +380,19 @@ module.exports = React.createClass({
             );
         } else {
             var SearchableEntityList = sdk.getComponent("rooms.SearchableEntityList");
-            
+            var entities = Entities.fromUsers(this.userList || [], true, this.onInvite);
+
+            // Add an "Email: foo@bar.com" tile as the first tile
+            if (this._emailEntity) {
+                entities.unshift(this._emailEntity);
+            }
+
+
             return (
                 <SearchableEntityList searchPlaceholderText={"Invite / Search"}
                     onSubmit={this.onInvite}
                     onQueryChanged={this.onSearchQueryChanged}
-                    entities={Entities.fromUsers(this.userList || [], true, this.onInvite)} />
+                    entities={entities} />
             );
         }
     },

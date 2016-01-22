@@ -108,6 +108,15 @@ class UserEntity extends Entity {
 
 
 module.exports = {
+    newEntity: function(jsx, matchFn) {
+        var entity = new Entity();
+        entity.getJsx = function() {
+            return jsx;
+        };
+        entity.matches = matchFn;
+        return entity;
+    },
+
     /**
      * @param {RoomMember[]} members
      * @return {Entity[]}
