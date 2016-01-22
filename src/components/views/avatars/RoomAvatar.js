@@ -67,14 +67,24 @@ module.exports = React.createClass({
     },
 
     getOneToOneAvatar: function(props) {
-        var userIds = Object.keys(props.room.currentState.members);
+        var mlist = props.room.currentState.members;
+        var userIds = [];
+        // for .. in optimisation to return early if there are >2 keys
+        for (var uid in mlist) {
+            if (mlist.hasOwnProperty(uid)) {
+                userIds.push(uid);
+            }
+            if (userIds.length > 2) {
+                return null;
+            }
+        }
 
         if (userIds.length == 2) {
             var theOtherGuy = null;
-            if (props.room.currentState.members[userIds[0]].userId == MatrixClientPeg.get().credentials.userId) {
-                theOtherGuy = props.room.currentState.members[userIds[1]];
+            if (mlist[userIds[0]].userId == MatrixClientPeg.get().credentials.userId) {
+                theOtherGuy = mlist[userIds[1]];
             } else {
-                theOtherGuy = props.room.currentState.members[userIds[0]];
+                theOtherGuy = mlist[userIds[0]];
             }
             return theOtherGuy.getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
@@ -82,7 +92,7 @@ module.exports = React.createClass({
                 false
             );
         } else if (userIds.length == 1) {
-            return props.room.currentState.members[userIds[0]].getAvatarUrl(
+            return mlist[userIds[0]].getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
                 props.width, props.height, props.resizeMethod,
                     false
