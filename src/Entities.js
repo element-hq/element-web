@@ -28,11 +28,11 @@ function isMatch(query, name, uid) {
     }
 
     // strip @ on uid and try matching again
-    if (uid.length > 1 && uid.substring(1).indexOf(query) === 0) {
+    if (uid.length > 1 && uid[0] === "@" && uid.substring(1).indexOf(query) === 0) {
         return true;
     }
 
-    // split spaces in name and try matching constituient parts
+    // split spaces in name and try matching constituent parts
     var parts = name.split(" ");
     for (var i = 0; i < parts.length; i++) {
         if (parts[i].indexOf(query) === 0) {
