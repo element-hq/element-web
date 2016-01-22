@@ -76,6 +76,9 @@ var cached = false;
 function calcCssFixups() {
     for (var i = 0; i < document.styleSheets.length; i++) {
         var ss = document.styleSheets[i];
+        // Chromium apparently sometimes returns null here; unsure why.
+        // see $14534907369972FRXBx:matrix.org in HQ
+        if (!ss.cssRules) continue;
         for (var j = 0; j < ss.cssRules.length; j++) {
             var rule = ss.cssRules[j];
             if (!rule.style) continue;
