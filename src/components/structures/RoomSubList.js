@@ -99,15 +99,18 @@ var RoomSubList = React.createClass({
         // order the room list appropriately before we re-render
         //if (debug) console.log("received new props, list = " + newProps.list);
         this.sortList(newProps.list, newProps.order);
-
-        if (newProps.collapsed) { // as good a way as any to reset the truncate state
-            this.setState({ truncateAt : 20 });
-        }
     },
 
     onClick: function(ev) {
         var isHidden = !this.state.hidden;
         this.setState({ hidden : isHidden });
+
+        if (isHidden) {
+            // as good a way as any to reset the truncate state
+            this.setState({ truncateAt : 20 });
+            this.props.onShowMoreRooms();
+        }
+
         this.props.onHeaderClick(isHidden);
     },
 
