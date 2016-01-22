@@ -63,10 +63,15 @@ module.exports = React.createClass({
     render: function() {
         var myUserId = MatrixClientPeg.get().credentials.userId;
         var me = this.props.room.currentState.members[myUserId];
+
+        var notificationCount = this.props.room.getUnreadNotificationCount();
+        // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
+
         var classes = classNames({
             'mx_RoomTile': true,
             'mx_RoomTile_selected': this.props.selected,
             'mx_RoomTile_unread': this.props.unread,
+            'mx_RoomTile_unreadNotify': notificationCount > 0,
             'mx_RoomTile_highlight': this.props.highlight,
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
         });
@@ -77,7 +82,7 @@ module.exports = React.createClass({
 
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
         var badge;
-        if (this.props.highlight) {
+        if (this.props.highlight || notificationCount > 0) {
             badge = <div className="mx_RoomTile_badge"/>;
         }
         /*
