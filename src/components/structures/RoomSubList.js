@@ -72,7 +72,8 @@ var RoomSubList = React.createClass({
         collapsed: React.PropTypes.bool.isRequired,
         onHeaderClick: React.PropTypes.func,
         alwaysShowHeader: React.PropTypes.bool,
-        incomingCall: React.PropTypes.object
+        incomingCall: React.PropTypes.object,
+        onShowMoreRooms: React.PropTypes.func
     },
 
     getInitialState: function() {
@@ -85,7 +86,8 @@ var RoomSubList = React.createClass({
 
     getDefaultProps: function() {
         return {
-            onHeaderClick: function() {} // NOP
+            onHeaderClick: function() {}, // NOP
+            onShowMoreRooms: function() {} // NOP
         };
     },
 
@@ -294,9 +296,7 @@ var RoomSubList = React.createClass({
         this.setState({
             truncateAt: -1
         });
-        // kick gemini in the balls to get it to wake up
-        // XXX: uuuuuuugh.
-        this.props.list.forceUpdate();
+        this.props.onShowMoreRooms();
     },
 
     render: function() {
