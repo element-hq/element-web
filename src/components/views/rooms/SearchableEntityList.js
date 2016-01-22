@@ -108,7 +108,7 @@ var SearchableEntityList = React.createClass({
 
         if (this.props.showInputBox) {
             inputBox = (
-                <form onSubmit={this.onQuerySubmit}>
+                <form onSubmit={this.onQuerySubmit} autoComplete="off">
                     <input className="mx_SearchableEntityList_query" id="mx_SearchableEntityList_query" type="text"
                         onChange={this.onQueryChanged} value={this.state.query}
                         placeholder={this.props.searchPlaceholderText} />
