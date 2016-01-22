@@ -109,6 +109,10 @@ limitations under the License.
     background-color: #454545;
 }
 
+.mx_RoomTile_highlight .mx_RoomTile_badge {
+    background-color: #ff0064;
+}
+
 .mx_RoomTile_unread,
 .mx_RoomTile_highlight {
     font-weight: bold;
