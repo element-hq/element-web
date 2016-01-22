@@ -20,6 +20,7 @@ var React = require('react');
 var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var Modal = require("../../../Modal");
 
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
@@ -103,17 +104,14 @@ module.exports = React.createClass({
             console.error("No ChangeAvatar found to upload image to!");
             return;
         }
-        changeAvatar.onFileSelected(ev).done(function() {
-            // dunno if the avatar changed, re-check it.
-            self._refreshFromServer();
-        }, function(err) {
+        changeAvatar.onFileSelected(ev).catch(function(err) {
             var errMsg = (typeof err === "string") ? err : (err.error || "");
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Error",
                 description: "Failed to set avatar. " + errMsg
             });
-        });
+        }).done();
     },    
 
     getRoomName: function() {
