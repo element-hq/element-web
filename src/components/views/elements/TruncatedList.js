@@ -42,7 +42,11 @@ module.exports = React.createClass({
     render: function() {
         var childsJsx = this.props.children;
         var overflowJsx;
-        var childCount = React.Children.count(this.props.children);
+        var childArray = React.Children.toArray(this.props.children).filter((c) => {
+            return c != null;
+        });
+
+        var childCount = childArray.length;
 
         if (this.props.truncateAt >= 0) {
             var overflowCount = childCount - this.props.truncateAt;
@@ -51,7 +55,7 @@ module.exports = React.createClass({
                 overflowJsx = this.props.createOverflowElement(
                     overflowCount, childCount
                 );
-                var childArray = React.Children.toArray(this.props.children);
+                
                 // cut out the overflow elements
                 childArray.splice(childCount - overflowCount, overflowCount);
                 childsJsx = childArray; // use what is left
