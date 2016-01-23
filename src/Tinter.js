@@ -182,7 +182,20 @@ module.exports = {
 
         var fixups = [];
         for (var i = 0; i < svgs.length; i++) {
-            var svgDoc = svgs[i].contentDocument;
+            var svgDoc;
+            try {
+                svgDoc = svgs[i].contentDocument;   
+            }
+            catch(e) {
+                var msg = 'Failed to get svg.contentDocument of ' + svgs[i].toString();
+                if (e.message) {
+                    msg += e.message;
+                }
+                if (e.stack) {
+                    msg += ' | stack: ' + e.stack;
+                }
+                console.error(e);
+            }
             if (!svgDoc) continue;
             var tags = svgDoc.getElementsByTagName("*");
             for (var j = 0; j < tags.length; j++) {
