@@ -78,6 +78,11 @@ function calcCssFixups() {
         var ss = document.styleSheets[i];
         // Chromium apparently sometimes returns null here; unsure why.
         // see $14534907369972FRXBx:matrix.org in HQ
+        // ...ah, it's because there's a third party extension like
+        // privacybadger inserting its own stylesheet in there with a
+        // resource:// URI or something which results in a XSS error.
+        // See also #vector:matrix.org/$145357669685386ebCfr:matrix.org
+        if (!ss.href.endsWith("/bundle.css")) continue;
         if (!ss.cssRules) continue;
         for (var j = 0; j < ss.cssRules.length; j++) {
             var rule = ss.cssRules[j];
