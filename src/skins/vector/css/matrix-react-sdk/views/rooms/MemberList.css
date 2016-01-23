@@ -46,8 +46,8 @@ limitations under the License.
 
 .mx_MemberList .mx_SearchableEntityList {
     order: 1;
-    flex: 0;
-    -webkit-flex: 0;
+    flex: 0 0 auto;
+    -webkit-flex: 0 0 auto;
 }
 
 .mx_MemberList .mx_SearchableEntityList_expanded {
