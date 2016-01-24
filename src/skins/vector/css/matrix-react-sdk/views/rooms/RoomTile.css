@@ -102,7 +102,7 @@ limitations under the License.
     position: absolute;
     left: 0px;
     top: 5px;
-    height: 24px;
+    bottom: 5px;
 } 
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
