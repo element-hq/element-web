@@ -84,7 +84,8 @@ module.exports = React.createClass({
             guestsCanJoin: false,
             canPeek: false,
             readMarkerEventId: room ? room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId) : null,
-            readMarkerGhostEventId: undefined
+            readMarkerGhostEventId: undefined,
+            atBottom: true,
         }
     },
 
@@ -596,9 +597,18 @@ module.exports = React.createClass({
     },
 
     onMessageListScroll: function(ev) {
-        if (this.state.numUnreadMessages != 0 &&
-                this.refs.messagePanel.isAtBottom()) {
-            this.setState({numUnreadMessages: 0});
+        if (this.refs.messagePanel.isAtBottom()) {
+            if (this.state.numUnreadMessages != 0) {
+                this.setState({ numUnreadMessages: 0 });
+            }
+            if (!this.state.atBottom) {
+                this.setState({ atBottom: true });                
+            }
+        }
+        else {
+            if (this.state.atBottom) {
+                this.setState({ atBottom: false });
+            }            
         }
     },
 
@@ -1622,7 +1632,7 @@ module.exports = React.createClass({
                 else if (unreadMsgs) {
                     statusBar = (
                         <div className="mx_RoomView_unreadMessagesBar" onClick={ this.scrollToBottom }>
-                            <img src="img/newmessages.png" width="24" height="24" alt=""/>
+                            <img src="img/newmessages.svg" width="24" height="24" alt=""/>
                             {unreadMsgs}
                         </div>
                     );
@@ -1633,6 +1643,13 @@ module.exports = React.createClass({
                             <div className="mx_RoomView_typingImage">...</div>
                             <span className="mx_RoomView_typingText">{typingString}</span>
                         </div>
+                    );
+                }
+                else if (!this.state.atBottom) {
+                    statusBar = (
+                        <div className="mx_RoomView_scrollToBottomBar" onClick={ this.scrollToBottom }>
+                            <img src="img/scrolldown.svg" width="24" height="24" alt="Scroll to bottom of page"/>
+                        </div>                        
                     );
                 }
             }
