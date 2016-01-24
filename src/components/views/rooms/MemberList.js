@@ -23,7 +23,7 @@ var Entities = require("../../../Entities");
 var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 
-var INITIAL_LOAD_NUM_MEMBERS = 50;
+var INITIAL_LOAD_NUM_MEMBERS = 30;
 var SHARE_HISTORY_WARNING = "Newly invited users will see the history of this room. "+
     "If you'd prefer invited users not to see messages that were sent before they joined, "+
     "turn off, 'Share message history with new users' in the settings for this room.";
@@ -43,7 +43,9 @@ module.exports = React.createClass({
         var members = this.roomMembers(INITIAL_LOAD_NUM_MEMBERS);
         return {
             members: members,
-            truncateAt: 10
+            // ideally we'd size this to the page height, but
+            // in practice I find that a little constraining
+            truncateAt: INITIAL_LOAD_NUM_MEMBERS,
         };
     },
 
