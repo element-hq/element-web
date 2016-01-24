@@ -82,7 +82,9 @@ function calcCssFixups() {
         // privacybadger inserting its own stylesheet in there with a
         // resource:// URI or something which results in a XSS error.
         // See also #vector:matrix.org/$145357669685386ebCfr:matrix.org
-        if (!ss.href.endsWith("/bundle.css")) continue;
+        // ...except some browsers apparently return stylesheets without
+        // hrefs, which we have no choice but ignore right now
+        if (ss.href && !ss.href.endsWith("/bundle.css")) continue;
         if (!ss.cssRules) continue;
         for (var j = 0; j < ss.cssRules.length; j++) {
             var rule = ss.cssRules[j];
