@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 .mx_RoomDirectory {
-    width: 960px;
+    max-width: 960px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 12px;

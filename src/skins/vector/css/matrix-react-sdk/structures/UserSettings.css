@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 .mx_UserSettings {
-    width: 960px;
+    max-width: 960px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 
@@ -141,6 +142,13 @@ limitations under the License.
     color: rgba(74, 74, 74, 0.9);
     font-family: 'Open Sans', Helvetica, Arial, Sans-Serif;
     font-size: 16px;
+}
+
+.mx_UserSettings_addThreepid {
+    display: table-cell;
+    padding-left: 0.5em;
+    position: relative;
+    cursor: pointer;
 }
 
 .mx_UserSettings_changePasswordButton {
