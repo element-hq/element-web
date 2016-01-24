@@ -162,10 +162,10 @@ module.exports = React.createClass({
 
         // sanity check the input for user IDs
         if (!isEmailAddress && (inputText[0] !== '@' || inputText.indexOf(":") === -1)) {
-            console.error("Bad user ID to invite: %s", inputText);
+            console.error("Bad ID to invite: %s", inputText);
             Modal.createDialog(ErrorDialog, {
                 title: "Invite Error",
-                description: "Malformed user ID. Should look like '@localpart:domain'"
+                description: "Malformed ID. Should be an email address or a Matrix ID like '@localpart:domain'"
             });
             return;
         }
@@ -273,7 +273,7 @@ module.exports = React.createClass({
     _createOverflowTile: function(overflowCount, totalCount) {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         var EntityTile = sdk.getComponent("rooms.EntityTile");
-        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
         var text = "and " + overflowCount + " other" + (overflowCount > 1 ? "s" : "") +  "...";
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
@@ -314,17 +314,20 @@ module.exports = React.createClass({
 
     onSearchQueryChanged: function(input) {
         var EntityTile = sdk.getComponent("rooms.EntityTile");
+        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        var label;
-        if (input[0] === "@") {
-            label = input;
-        }
-        else {
-            label = "Email: " + input;
-        }
+        var label = input;
+        // if (input[0] === "@") {
+        //     label = input;
+        // }
+        // else {
+        //     label = "Email: " + input;
+        // }
 
         this._emailEntity = new Entities.newEntity(
             <EntityTile key="dynamic_invite_tile" suppressOnHover={true} showInviteButton={true}
+            avatarJsx={ <BaseAvatar name="@" width={36} height={36} /> }
+            className="mx_EntityTile_invitePlaceholder"
             presenceState="online" onClick={this.onInvite.bind(this, input)} name={label} />,
             function(query) {
                 return true; // always show this
