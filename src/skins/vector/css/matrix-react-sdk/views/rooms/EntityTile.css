@@ -79,6 +79,11 @@ limitations under the License.
     font-color: #454545;
 }
 
+.mx_EntityTile_invitePlaceholder .mx_EntityTile_name {
+    font-style: italic;
+    font-color: #454545;
+}
+
 .mx_EntityTile_unavailable .mx_EntityTile_avatar,
 .mx_EntityTile_unavailable .mx_EntityTile_name,
 .mx_EntityTile_unavailable .mx_EntityTile_name_hover
