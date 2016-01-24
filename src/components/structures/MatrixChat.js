@@ -655,7 +655,7 @@ module.exports = React.createClass({
             }
         }
         else {
-            console.error("Unknown screen : %s", screen);
+            if (screen) console.error("Unknown screen : %s", screen);
         }
     },
 
