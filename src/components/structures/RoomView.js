@@ -1648,7 +1648,7 @@ module.exports = React.createClass({
                 else if (!this.state.atBottom) {
                     statusBar = (
                         <div className="mx_RoomView_scrollToBottomBar" onClick={ this.scrollToBottom }>
-                            <img src="img/scrolldown.svg" width="24" height="24" alt="Scroll to bottom of page"/>
+                            <img src="img/scrolldown.svg" width="24" height="24" alt="Scroll to bottom of page" title="Scroll to bottom of page"/>
                         </div>                        
                     );
                 }
