@@ -275,14 +275,16 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_profileTableRow" key="new">
                     <div className="mx_UserSettings_profileLabelCell">
                     </div>
-                    <EditableText
-                        ref="add_threepid_input"
-                        className="mx_UserSettings_profileInputCell mx_UserSettings_editable"
-                        placeholderClassName="mx_RoomSettings_threepidPlaceholder"
-                        placeholder={ "Add email address" }
-                        blurToCancel={ false }
-                        onValueChanged={ this.onAddThreepidClicked } />
-                    <div className="mx_RoomSettings_addThreepid">
+                    <div className="mx_UserSettings_profileInputCell">
+                        <EditableText
+                            ref="add_threepid_input"
+                            className="mx_UserSettings_editable"
+                            placeholderClassName="mx_UserSettings_threepidPlaceholder"
+                            placeholder={ "Add email address" }
+                            blurToCancel={ false }
+                            onValueChanged={ this.onAddThreepidClicked } />
+                    </div>
+                    <div className="mx_UserSettings_addThreepid">
                          <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked }/>
                     </div>
                 </div>
