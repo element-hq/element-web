@@ -51,6 +51,46 @@ the skin's index by running, `npm run reskindex`.
 You may need to run `npm i source-map-loader` in matrix-js-sdk if you get errors
 about "Cannot resolve module 'source-map-loader'" due to shortcomings in webpack.
 
+Example:
+
+If you are deving on react-sdk or js-sdk you should need to do:
+
+```
+mkdir ~/matrix
+
+cd ~/matrix
+git clone https://github.com/matrix-org/matrix-js-sdk
+cd matrix-js-sdk
+git checkout develop
+npm install
+npm link
+npm i source-map-loader
+npm start
+
+cd ~/matrix
+git clone https://github.com/matrix-org/matrix-react-sdk.git
+cd matrix-react-sdk
+git checkout develop
+npm install
+npm link matrix-js-sdk
+npm link
+npm i source-map-loader
+npm start
+
+cd ~/matrix
+git clone https://github.com/vector-im/vector-web.git
+cd vector-web
+git checkout develop
+npm install
+npm link matrix-react-sdk
+npm link matrix-js-sdk
+npm start
+```
+
+What happens here is that npm link on its own will look for a package.json file to find the name of the dep (matrix-react-sdk) and then create a symlink in the global node deps pointing to the directory you ran npm link in
+
+Then in vector-web, you need to tell it to use the global node dep rather than the checkout from npm install, which is what `npm link matrix-react-sdk` does
+
 Deployment
 ==========
 
@@ -61,8 +101,6 @@ Configure the app by modifying the `config.json` file to the correct values:
 
 Just run `npm run build` and then mount the `vector` directory on your webserver to
 actually serve up the app, which is entirely static content.
-
-If you want to expose your service outside, don't forget to open the port in your firewall / box
 
 Example of apache vhost configuration:
 
