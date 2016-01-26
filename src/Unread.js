@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 var MatrixClientPeg = require('./MatrixClientPeg');
+var sdk = require('./index');
 
 module.exports = {
     /**
@@ -27,7 +28,8 @@ module.exports = {
         } else if (ev.getType == 'm.room.message' && ev.getContent().msgtype == 'm.notify') {
             return false;
         }
-        return true;
+        var EventTile = sdk.getComponent('rooms.EventTile');
+        return EventTile.haveTileForEvent(ev);
     },
 
     doesRoomHaveUnreadMessages: function(room) {
