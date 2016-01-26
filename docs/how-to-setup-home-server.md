@@ -111,5 +111,3 @@ You can now configure vector like this a rebuild it:
 
 1. default_hs_url: http://your.server.name/matrix,
 2. default_is_url: https://vector.im (but could be empty)
-
-[Synapse](https://github.com/matrix-org/synapse) (the server) listen on port 8008 for http and 8448 for https. Set `http://your.server.ip:8008` or `https://your.server.ip:8448` if you did not made the proxy configuration.
