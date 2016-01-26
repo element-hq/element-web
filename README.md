@@ -82,7 +82,7 @@ Deployment
 Configure the app by modifying the `config.json` file to the correct values:
 
 1. default_hs_url is for the home server url (could be http://your.server.ip:8008 if vector and synapse are on the same machine),
-2. default_is_url is for the identity server (could be empty) but email notifications and email login will not work.
+2. default_is_url is for the identity server (could be empty but if you let it empty, email notifications and email login may not work).
 
 
 Just run `npm run build` and then mount the `vector` directory on your webserver to
