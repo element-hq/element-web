@@ -39,7 +39,8 @@ function createClient(hs_url, is_url, user_id, access_token, guestAccess) {
         baseUrl: hs_url,
         idBaseUrl: is_url,
         accessToken: access_token,
-        userId: user_id
+        userId: user_id,
+        timelineSupport: true,
     };
 
     if (localStorage) {

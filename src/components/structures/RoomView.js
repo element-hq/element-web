@@ -26,6 +26,7 @@ var ReactDOM = require("react-dom");
 var q = require("q");
 var classNames = require("classnames");
 var Matrix = require("matrix-js-sdk");
+var EventTimeline = Matrix.EventTimeline;
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var ContentMessages = require("../../ContentMessages");
@@ -44,6 +45,7 @@ var Tinter = require("../../Tinter");
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
 var SEND_READ_RECEIPT_DELAY = 2000;
+var TIMELINE_CAP = 1000; // the most events to show in a timeline
 
 var DEBUG_SCROLL = false;
 
@@ -70,7 +72,9 @@ module.exports = React.createClass({
         var room = this.props.roomId ? MatrixClientPeg.get().getRoom(this.props.roomId) : null;
         return {
             room: room,
-            messageCap: INITIAL_SIZE,
+            events: [],
+            canBackPaginate: true,
+            paginating: room != null,
             editingRoomSettings: false,
             uploadingRoomSettings: false,
             numUnreadMessages: 0,
@@ -80,7 +84,7 @@ module.exports = React.createClass({
             syncState: MatrixClientPeg.get().getSyncState(),
             hasUnsentMessages: this._hasUnsentMessages(room),
             callState: null,
-            autoPeekDone: false, // track whether our autoPeek (if any) has completed)
+            timelineLoaded: false, // track whether our room timeline has loaded
             guestsCanJoin: false,
             canPeek: false,
             readMarkerEventId: room ? room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId) : null,
@@ -92,7 +96,6 @@ module.exports = React.createClass({
     componentWillMount: function() {
         this.last_rr_sent_event_id = undefined;
         this.dispatcherRef = dis.register(this.onAction);
-        MatrixClientPeg.get().on("Room", this.onNewRoom);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
@@ -110,6 +113,15 @@ module.exports = React.createClass({
                 this.forceUpdate();
             }
         });
+
+
+        // to make the timeline load work correctly, build up a chain of promises which
+        // take us through the necessary steps.
+
+        // First of all, we may need to load the room. Construct a promise
+        // which resolves to the Room object.
+        var roomProm;
+
         // if this is an unknown room then we're in one of three states:
         // - This is a room we can peek into (search engine) (we can /peek)
         // - This is a room we can publicly join or were invited to. (we can /join)
@@ -118,22 +130,43 @@ module.exports = React.createClass({
         // We can /peek though. If it fails then we present the join UI. If it
         // succeeds then great, show the preview (but we still may be able to /join!).
         if (!this.state.room) {
-            if (this.props.autoPeek) {
-                console.log("Attempting to peek into room %s", this.props.roomId);
-                MatrixClientPeg.get().peekInRoom(this.props.roomId).catch((err) => {
-                    console.error("Failed to peek into room: %s", err);
-                }).finally(() => {
-                    // we don't need to do anything - JS SDK will emit Room events
-                    // which will update the UI.
-                    this.setState({
-                        autoPeekDone: true
-                    });
-                });
+            if (!this.props.autoPeek) {
+                console.log("No room loaded, and autopeek disabled");
+                return;
             }
+
+            console.log("Attempting to peek into room %s", this.props.roomId);
+
+            roomProm = MatrixClientPeg.get().peekInRoom(this.props.roomId).catch((err) => {
+                console.error("Failed to peek into room: %s", err);
+                throw err;
+            }).then((room) => {
+                this.setState({
+                    room: room
+                });
+                return room;
+            });
+        } else {
+            roomProm = q(this.state.room);
         }
-        else {
-            this._calculatePeekRules(this.state.room);
-        }
+
+        // Next, load the timeline.
+        roomProm.then((room) => {
+            this._calculatePeekRules(room);
+            this._timelineWindow = new Matrix.TimelineWindow(
+                MatrixClientPeg.get(), room,
+                {windowLimit: TIMELINE_CAP});
+
+            return this._timelineWindow.load(undefined,
+                                             INITIAL_SIZE);
+        }).then(() => {
+            debuglog("RoomView: timeline loaded");
+            this._onTimelineUpdated(true);
+        }).finally(() => {
+            this.setState({
+                timelineLoaded: true
+            });
+        }).done();
     },
 
     componentWillUnmount: function() {
@@ -156,7 +189,6 @@ module.exports = React.createClass({
         }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("Room", this.onNewRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
@@ -248,46 +280,36 @@ module.exports = React.createClass({
     /*componentWillReceiveProps: function(props) {
     },*/
 
-    onRoomTimeline: function(ev, room, toStartOfTimeline) {
+    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
         if (this.unmounted) return;
 
-        // ignore anything that comes in whilst paginating: we get one
-        // event for each new matrix event so this would cause a huge
-        // number of UI updates. Just update the UI when the paginate
-        // call returns.
-        if (this.state.paginating) return;
+        // ignore events for other rooms
+        if (room.roomId != this.props.roomId) return;
+
+        // ignore anything but real-time updates at the end of the room:
+        // updates from pagination will happen when the paginate completes.
+        if (toStartOfTimeline || !data || !data.liveEvent) return;
 
         // no point handling anything while we're waiting for the join to finish:
         // we'll only be showing a spinner.
         if (this.state.joining) return;
-        if (room.roomId != this.props.roomId) return;
 
-        var currentUnread = this.state.numUnreadMessages;
-        if (!toStartOfTimeline &&
-                (ev.getSender() !== MatrixClientPeg.get().credentials.userId)) {
+        if (ev.getSender() !== MatrixClientPeg.get().credentials.userId) {
             // update unread count when scrolled up
             if (!this.state.searchResults && this.refs.messagePanel && this.refs.messagePanel.isAtBottom()) {
-                currentUnread = 0;
+                // no change
             }
             else {
-                currentUnread += 1;
+                this.setState((state, props) => { 
+                    return {numUnreadMessages: state.numUnreadMessages + 1};
+                });
             }
         }
 
-        this.setState({
-            room: MatrixClientPeg.get().getRoom(this.props.roomId),
-            numUnreadMessages: currentUnread
-        });
-    },
-
-    onNewRoom: function(room) {
-        if (room.roomId == this.props.roomId) {
-            this.setState({
-                room: room
-            });
+        // tell the messagepanel to go paginate itself
+        if (this.refs.messagePanel) {
+            this.refs.messagePanel.checkFillState();
         }
-
-        this._calculatePeekRules(room);
     },
 
     _calculatePeekRules: function(room) {
@@ -349,14 +371,14 @@ module.exports = React.createClass({
             // if the event after the one referenced in the read receipt if sent by us, do nothing since
             // this is a temporary period before the synthesized receipt for our own message arrives
             var readMarkerGhostEventIndex;
-            for (var i = 0; i < room.timeline.length; ++i) {
-                if (room.timeline[i].getId() == readMarkerGhostEventId) {
+            for (var i = 0; i < this.state.events.length; ++i) {
+                if (this.state.events[i].getId() == readMarkerGhostEventId) {
                     readMarkerGhostEventIndex = i;
                     break;
                 }
             }
-            if (readMarkerGhostEventIndex + 1 < room.timeline.length) {
-                var nextEvent = room.timeline[readMarkerGhostEventIndex + 1];
+            if (readMarkerGhostEventIndex + 1 < this.state.events.length) {
+                var nextEvent = this.state.events[readMarkerGhostEventIndex + 1];
                 if (nextEvent.sender && nextEvent.sender.userId == MatrixClientPeg.get().credentials.userId) {
                     readMarkerGhostEventId = undefined;
                 }
@@ -504,17 +526,21 @@ module.exports = React.createClass({
         }
     },
 
-    _paginateCompleted: function() {
-        debuglog("paginate complete");
-
-        // we might have switched rooms since the paginate started - just bin
+    _onTimelineUpdated: function(gotResults) {
+        // we might have switched rooms since the load started - just bin
         // the results if so.
         if (this.unmounted) return;
 
         this.setState({
-            room: MatrixClientPeg.get().getRoom(this.props.roomId),
             paginating: false,
         });
+
+        if (gotResults) {
+            this.setState({
+                events: this._timelineWindow.getEvents(),
+                canBackPaginate: this._timelineWindow.canPaginate(EventTimeline.BACKWARDS),
+            });
+        }
     },
 
     onSearchResultsFillRequest: function(backwards) {
@@ -534,30 +560,19 @@ module.exports = React.createClass({
 
     // set off a pagination request.
     onMessageListFillRequest: function(backwards) {
-        if (!backwards)
+        var dir = backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS;
+        if(!this._timelineWindow.canPaginate(dir)) {
+            debuglog("RoomView: can't paginate at this time; backwards:"+backwards);
             return q(false);
-
-        // Either wind back the message cap (if there are enough events in the
-        // timeline to do so), or fire off a pagination request.
-
-        if (this.state.messageCap < this.state.room.timeline.length) {
-            var cap = Math.min(this.state.messageCap + PAGINATE_SIZE, this.state.room.timeline.length);
-            debuglog("winding back message cap to", cap);
-            this.setState({messageCap: cap});
-            return q(true);
-        } else if(this.state.room.oldState.paginationToken) {
-            var cap = this.state.messageCap + PAGINATE_SIZE;
-            debuglog("starting paginate to cap", cap);
-            this.setState({messageCap: cap, paginating: true});
-            return MatrixClientPeg.get().scrollback(this.state.room, PAGINATE_SIZE).
-                finally(this._paginateCompleted).then(true);
         }
-    },
+        this.setState({paginating: true});
 
-    // return true if there's more messages in the backlog which we aren't displaying
-    _canPaginate: function() {
-        return (this.state.messageCap < this.state.room.timeline.length) ||
-            this.state.room.oldState.paginationToken;
+        debuglog("RoomView: Initiating paginate; backwards:"+backwards);
+        return this._timelineWindow.paginate(dir, PAGINATE_SIZE).then((r) => {
+            debuglog("RoomView: paginate complete backwards:"+backwards+"; success:"+r);
+            this._onTimelineUpdated(r);
+            return r;
+        });
     },
 
     onResendAllClick: function() {
@@ -829,11 +844,10 @@ module.exports = React.createClass({
         var EventTile = sdk.getComponent('rooms.EventTile');
 
         var prevEvent = null; // the last event we showed
-        var startIdx = Math.max(0, this.state.room.timeline.length - this.state.messageCap);
-        var readMarkerIndex;
         var ghostIndex;
-        for (var i = startIdx; i < this.state.room.timeline.length; i++) {
-            var mxEv = this.state.room.timeline[i];
+        var readMarkerIndex;
+        for (var i = 0; i < this.state.events.length; i++) {
+            var mxEv = this.state.events[i];
 
             if (!EventTile.haveTileForEvent(mxEv)) {
                 continue;
@@ -879,7 +893,7 @@ module.exports = React.createClass({
 
             // do we need a date separator since the last event?
             var ts1 = mxEv.getTs();
-            if ((prevEvent == null && !this._canPaginate()) ||
+            if ((prevEvent == null && !this.state.canBackPaginate) ||
                 (prevEvent != null &&
                  new Date(prevEvent.getTs()).toDateString() !== new Date(ts1).toDateString())) {
                 var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
@@ -888,7 +902,7 @@ module.exports = React.createClass({
             }
 
             var last = false;
-            if (i == this.state.room.timeline.length - 1) {
+            if (i == this.state.events.length - 1) {
                 // XXX: we might not show a tile for the last event.
                 last = true;
             }
@@ -1171,8 +1185,8 @@ module.exports = React.createClass({
     },
 
     _indexForEventId(evId) {
-        for (var i = 0; i < this.state.room.timeline.length; ++i) {
-            if (evId == this.state.room.timeline[i].getId()) {
+        for (var i = 0; i < this.state.events.length; ++i) {
+            if (evId == this.state.events[i].getId()) {
                 return i;
             }
         }
@@ -1187,7 +1201,7 @@ module.exports = React.createClass({
         var lastReadEventIndex = this._getLastDisplayedEventIndexIgnoringOwn();
         if (lastReadEventIndex === null) return;
 
-        var lastReadEvent = this.state.room.timeline[lastReadEventIndex];
+        var lastReadEvent = this.state.events[lastReadEventIndex];
 
         // we also remember the last read receipt we sent to avoid spamming the same one at the server repeatedly
         if (lastReadEventIndex > currentReadUpToEventIndex && this.last_rr_sent_event_id != lastReadEvent.getId()) {
@@ -1206,8 +1220,8 @@ module.exports = React.createClass({
         if (messageWrapper === undefined) return null;
         var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
 
-        for (var i = this.state.room.timeline.length-1; i >= 0; --i) {
-            var ev = this.state.room.timeline[i];
+        for (var i = this.state.events.length-1; i >= 0; --i) {
+            var ev = this.state.events[i];
 
             if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
                 continue;
@@ -1326,46 +1340,6 @@ module.exports = React.createClass({
         messagePanel.scrollToBottom();
     },
 
-    // scroll the event view to put the given event at the bottom.
-    //
-    // pixel_offset gives the number of pixels between the bottom of the event
-    // and the bottom of the container.
-    scrollToEvent: function(eventId, pixelOffset) {
-        var messagePanel = this.refs.messagePanel;
-        if (!messagePanel) return;
-
-        var idx = this._indexForEventId(eventId);
-        if (idx === null) {
-            // we don't seem to have this event in our timeline. Presumably
-            // it's fallen out of scrollback. We ought to backfill until we
-            // find it, but we'd have to be careful we didn't backfill forever
-            // looking for a non-existent event.
-            //
-            // for now, just scroll to the top of the buffer.
-            console.log("Refusing to scroll to unknown event "+eventId);
-            messagePanel.scrollToTop();
-            return;
-        }
-
-        // we might need to roll back the messagecap (to generate tiles for
-        // older messages). This just means telling getEventTiles to create
-        // tiles for events we already have in our timeline (we already know
-        // the event in question is in our timeline, so we shouldn't need to
-        // backfill).
-        //
-        // we actually wind back slightly further than the event in question,
-        // because we want the event to be at the *bottom* of the container.
-        // Don't roll it back past the timeline we have, though.
-        var minCap = this.state.room.timeline.length - Math.min(idx - INITIAL_SIZE, 0);
-        if (minCap > this.state.messageCap) {
-            this.setState({messageCap: minCap});
-        }
-
-        // the scrollTokens on our DOM nodes are the event IDs, so we can pass
-        // eventId directly into _scrollToToken.
-        messagePanel.scrollToToken(eventId, pixelOffset);
-    },
-
     // get the current scroll position of the room, so that it can be
     // restored when we switch back to it
     getScrollState: function() {
@@ -1373,25 +1347,6 @@ module.exports = React.createClass({
         if (!messagePanel) return null;
 
         return messagePanel.getScrollState();
-    },
-
-    restoreScrollState: function(scrollState) {
-        var messagePanel = this.refs.messagePanel;
-        if (!messagePanel) return null;
-
-        if(scrollState.atBottom) {
-            // we were at the bottom before. Ideally we'd scroll to the
-            // 'read-up-to' mark here.
-            messagePanel.scrollToBottom();
-
-        } else if (scrollState.lastDisplayedScrollToken) {
-            // we might need to backfill, so we call scrollToEvent rather than
-            // scrollToToken here. The scrollTokens on our DOM nodes are the
-            // event IDs, so lastDisplayedScrollToken will be the event ID we need,
-            // and we can pass it directly into scrollToEvent.
-            this.scrollToEvent(scrollState.lastDisplayedScrollToken,
-                               scrollState.pixelOffset);
-        }
     },
 
     onResize: function(e) {
@@ -1486,9 +1441,9 @@ module.exports = React.createClass({
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var RoomPreviewBar = sdk.getComponent("rooms.RoomPreviewBar");
 
-        if (!this.state.room) {
+        if (!this._timelineWindow) {
             if (this.props.roomId) {
-                if (this.props.autoPeek && !this.state.autoPeekDone) {
+                if (!this.state.timelineLoaded) {
                     var Loader = sdk.getComponent("elements.Spinner");
                     return (
                         <div className="mx_RoomView">
