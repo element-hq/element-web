@@ -94,7 +94,12 @@ module.exports = React.createClass({
         if (payload.action !== "registration_step_update") {
             return;
         }
-        this.forceUpdate(); // registration state has changed.
+        // If the registration state has changed, this means the
+        // user now needs to do something. It would be better
+        // to expose the explicitly in the register logic.
+        this.setState({
+            busy: false
+        });
     },
 
     onFormSubmit: function(formVals) {
