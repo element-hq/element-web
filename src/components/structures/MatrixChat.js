@@ -773,7 +773,14 @@ module.exports = React.createClass({
                 notifCount += rooms[i].getUnreadNotificationCount();
             }
         }
-        this.favicon.badge(notifCount);
+        try {
+            // This needs to be in in a try block as it will throw
+            // if there are more than 100 badge count changes in
+            // its internal queue
+            this.favicon.badge(notifCount);
+        } catch (e) {
+            console.warn("Failed to set badge count: "+e.message);
+        }
         document.title = (notifCount > 0 ? "["+notifCount+"] " : "")+"Vector";
     },
 
