@@ -781,7 +781,7 @@ module.exports = React.createClass({
         } catch (e) {
             console.warn("Failed to set badge count: "+e.message);
         }
-        document.title = (notifCount > 0 ? "["+notifCount+"] " : "")+"Vector";
+        document.title = "Vector"+(notifCount > 0 ? " ["+notifCount+"]" : "");
     },
 
     onUserSettingsClose: function() {
