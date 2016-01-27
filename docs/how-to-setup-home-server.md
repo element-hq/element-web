@@ -1,18 +1,30 @@
-Installation for vector on a home server
-========================================
+Installation for vector on a home server setup on the develop branch
+====================================================================
 
 Install or update `node.js` so that your `npm` is at least at version `2.0.0`
 
 Follow those steps:
 
 ```
+mkdir ~/matrix
+
+cd ~/matrix
+git clone https://github.com/matrix-org/matrix-react-sdk.git
+cd matrix-react-sdk
+git checkout develop
+npm install
+npm run build
+npm link
+
 cd ~/matrix
 git clone https://github.com/vector-im/vector-web.git
 cd vector-web
 git checkout develop
 npm install
+npm link matrix-react-sdk
 npm run build
 ```
+What happens here is that npm link on its own will look for a package.json file to find the name of the dep (matrix-react-sdk) and then create a symlink in the global node deps pointing to the directory you ran npm link in.
 
 matrix-js-sdk and matrix-js-sdk should be fetched automatically from the develop branch version.
 
@@ -28,33 +40,7 @@ Mount the `vector` directory on your webserver to actually serve up the app, whi
 
 If you want to expose your service outside, don't forget to open the port in your firewall / box
 
-Example of apache vhost configuration:
-
-```
-<VirtualHost *:80>
-	ServerAdmin webmaster@localhost
-
-	DocumentRoot /var/www/vector-web/vector
-	<Directory />
-		Options FollowSymLinks
-		AllowOverride None
-	</Directory>
-	<Directory /var/www/vector-web/vector/>
-		Options Indexes FollowSymLinks MultiViews
-		AllowOverride None
-		Order allow,deny
-		allow from all
-	</Directory>
-
-	ErrorLog ${APACHE_LOG_DIR}/error.log
-
-	# Possible values include: debug, info, notice, warn, error, crit,
-	# alert, emerg.
-	LogLevel warn
-
-	CustomLog ${APACHE_LOG_DIR}/access.log combined
-</VirtualHost>
-```
+See the sample of apache vhost configuration in the README:
 
 You can add a reverse proxy if you do not want to expose your server on a new port.
 
@@ -69,14 +55,14 @@ And add this to inside your apache vhost:
 ProxyRequests Off
 ProxyPreservehost on
 ServerName  your.server.name
-ServerAlias www.your.server.name                # optional
-ProxyPass /matrix http://127.0.0.1:8008         # do not add a slash after the port number
-ProxyPassReverse /matrix http://127.0.0.1:8008  # do not add a slash after the port number
+ServerAlias www.your.server.name                         # optional
+ProxyPass /_matrix http://127.0.0.1:8448/_matrix         # do not add a slash after the port number
+ProxyPassReverse /matrix http://127.0.0.1:8448/_matrix   # do not add a slash after the port number
 ```
 
 And reload apache.
 
-You can now configure vector like this a rebuild it:
+You can now configure vector like this and rebuild it:
 
-1. default_hs_url: http://your.server.name/matrix,
+1. default_hs_url: http://your.server.name,
 2. default_is_url: https://vector.im (but could be empty)

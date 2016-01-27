@@ -87,7 +87,7 @@ npm link matrix-js-sdk
 npm start
 ```
 
-What happens here is that npm link on its own will look for a package.json file to find the name of the dep (matrix-react-sdk) and then create a symlink in the global node deps pointing to the directory you ran npm link in
+What happens here is that npm link on its own will look for a package.json file to find the name of the dep (matrix-react-sdk) and then create a symlink in the global node deps pointing to the directory you ran npm link in.
 
 Then in vector-web, you need to tell it to use the global node dep rather than the checkout from npm install, which is what `npm link matrix-react-sdk` does
 
@@ -98,6 +98,8 @@ Configure the app by modifying the `config.json` file to the correct values:
 
 1. default_hs_url is for the home server url (could be http://your.server.ip:8008 if vector and synapse are on the same machine),
 2. default_is_url is the default server used for verifying third party identifiers like email addresses. If this is blank, registering with an email address or adding an email address to your account will not work
+
+[Synapse](https://github.com/matrix-org/synapse) (the server) listens on port 8008 for http and 8448 for https. Set `http://your.server.ip:8008` or `https://your.server.ip:8448`.
 
 Just run `npm run build` and then mount the `vector` directory on your webserver to
 actually serve up the app, which is entirely static content.
@@ -129,8 +131,6 @@ Example of apache vhost configuration:
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
 ```
-
-[Synapse](https://github.com/matrix-org/synapse) (the server) listen on port 8008 for http and 8448 for https. Set `http://your.server.ip:8008` or `https://your.server.ip:8448`.
 
 Guest connection
 ================
