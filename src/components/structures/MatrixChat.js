@@ -814,6 +814,7 @@ module.exports = React.createClass({
         var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
+
         // needs to be before normal PageTypes as you are logged in technically
         if (this.state.screen == 'post_registration') {
             return (
