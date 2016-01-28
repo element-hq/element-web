@@ -386,7 +386,7 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
-                             onShowMoreRooms={ this.onShowMoreRooms } />
+                             onShowMoreRooms={ self.onShowMoreRooms } />
 
                     }
                 }) }
