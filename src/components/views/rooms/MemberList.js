@@ -29,6 +29,8 @@ var SHARE_HISTORY_WARNING = "Newly invited users will see the history of this ro
     "turn off, 'Share message history with new users' in the settings for this room.";
 
 var shown_invite_warning_this_session = false;
+// global promise so people can bulk invite and they all get resolved
+var invite_defer = q.defer();
 
 module.exports = React.createClass({
     displayName: 'MemberList',
@@ -158,6 +160,20 @@ module.exports = React.createClass({
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var self = this;
         inputText = inputText.trim(); // react requires es5-shim so we know trim() exists
+
+        // email addresses and user IDs do not allow space, comma, semicolon so split
+        // on them for bulk inviting.
+        var separators =[ ";", " ", "," ];
+        for (var i = 0; i < separators.length; i++) {
+            if (inputText.indexOf(separators[i]) >= 0) {
+                var inputs = inputText.split(separators[i]);
+                inputs.forEach(function(input) {
+                    self.onInvite(input);
+                });
+                return;
+            }
+        }
+
         var isEmailAddress = /^\S+@\S+\.\S+$/.test(inputText);
 
         // sanity check the input for user IDs
@@ -170,13 +186,14 @@ module.exports = React.createClass({
             return;
         }
 
-        var invite_defer = q.defer();
+        var inviteWarningDefer = q.defer();
 
         var room = MatrixClientPeg.get().getRoom(this.props.roomId);
         var history_visibility = room.currentState.getStateEvents('m.room.history_visibility', '');
         if (history_visibility) history_visibility = history_visibility.getContent().history_visibility;
 
         if (history_visibility == 'shared' && !shown_invite_warning_this_session) {
+            inviteWarningDefer = invite_defer; // whether we continue depends on this defer
             var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createDialog(QuestionDialog, {
                 title: "Warning",
@@ -188,14 +205,17 @@ module.exports = React.createClass({
                         invite_defer.resolve();
                     } else {
                         invite_defer.reject(null);
+                        // reset the promise so we don't auto-reject all invites from
+                        // now on.
+                        invite_defer = q.defer();
                     }
                 }
             });
         } else {
-            invite_defer.resolve();
+            inviteWarningDefer.resolve();
         }
 
-        var promise = invite_defer.promise;;
+        var promise = inviteWarningDefer.promise;
         if (isEmailAddress) {
             promise = promise.then(function() {
                  MatrixClientPeg.get().inviteByEmail(self.props.roomId, inputText);
@@ -214,7 +234,7 @@ module.exports = React.createClass({
             "Invite %s to %s - isEmail=%s", inputText, this.props.roomId, isEmailAddress
         );
         promise.done(function(res) {
-            console.log("Invited");
+            console.log("Invited %s", inputText);
             self.setState({
                 inviting: false
             });
