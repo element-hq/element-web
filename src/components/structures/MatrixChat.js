@@ -820,6 +820,7 @@ module.exports = React.createClass({
         var CreateRoom = sdk.getComponent('structures.CreateRoom');
         var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
+        var GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
 
         // needs to be before normal PageTypes as you are logged in technically
@@ -860,7 +861,20 @@ module.exports = React.createClass({
             }
 
             // TODO: Fix duplication here and do conditionals like we do above
-            if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
+            if (MatrixClientPeg.get().isGuest()) {
+                return (
+                        <div className="mx_MatrixChat_wrapper">
+                            <GuestWarningBar />
+                            <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
+                                <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
+                                <main className="mx_MatrixChat_middlePanel">
+                                    {page_element}
+                                </main>
+                                {right_panel}
+                            </div>
+                        </div>
+                );
+            } else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
                 return (
                         <div className="mx_MatrixChat_wrapper">
                             <MatrixToolbar />
