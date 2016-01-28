@@ -465,7 +465,9 @@ module.exports = React.createClass({
         if (this.state.room && this.state.room.getJoinedMembers().length == 1) {
             var inviteBox = document.getElementById("mx_SearchableEntityList_query");
             setTimeout(function() {
-                inviteBox.focus();
+                if (inviteBox) {
+                    inviteBox.focus();
+                }
             }, 50);
         }
     },
