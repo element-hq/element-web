@@ -1474,16 +1474,6 @@ module.exports = React.createClass({
         }
     },
 
-    onRegisterClicked: function() {
-        dis.dispatch({'action': 'logout'});
-        dis.dispatch({'action': 'start_registration'});
-    },
-
-    onLoginClicked: function() {
-        dis.dispatch({'action': 'logout'});
-        dis.dispatch({'action': 'start_login'});
-    },
-
     render: function() {
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         var MessageComposer = sdk.getComponent('rooms.MessageComposer');
@@ -1591,13 +1581,13 @@ module.exports = React.createClass({
                 // a connection!
                 if (this.state.syncState === "ERROR") {
                     statusBar = (
-                        <div className="mx_RoomView_warningBar">
+                        <div className="mx_RoomView_connectionLostBar">
                             <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
-                            <div className="mx_RoomView_warningBar_textArea">
-                                <div className="mx_RoomView_warningBar_title">
+                            <div className="mx_RoomView_connectionLostBar_textArea">
+                                <div className="mx_RoomView_connectionLostBar_title">
                                     Connectivity to the server has been lost.
                                 </div>
-                                <div className="mx_RoomView_warningBar_desc">
+                                <div className="mx_RoomView_connectionLostBar_desc">
                                     Sent messages will be stored until your connection has returned.
                                 </div>
                             </div>
@@ -1621,13 +1611,13 @@ module.exports = React.createClass({
                 }
                 else if (this.state.hasUnsentMessages) {
                     statusBar = (
-                        <div className="mx_RoomView_warningBar">
+                        <div className="mx_RoomView_connectionLostBar">
                             <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
-                            <div className="mx_RoomView_warningBar_textArea">
-                                <div className="mx_RoomView_warningBar_title">
+                            <div className="mx_RoomView_connectionLostBar_textArea">
+                                <div className="mx_RoomView_connectionLostBar_title">
                                     Some of your messages have not been sent.
                                 </div>
-                                <div className="mx_RoomView_warningBar_desc">
+                                <div className="mx_RoomView_connectionLostBar_desc">
                                     <a className="mx_RoomView_resend_link"
                                         onClick={ this.onResendAllClick }>
                                     Resend all now
@@ -1660,20 +1650,6 @@ module.exports = React.createClass({
                         <div className="mx_RoomView_scrollToBottomBar" onClick={ this.scrollToBottom }>
                             <img src="img/scrolldown.svg" width="24" height="24" alt="Scroll to bottom of page" title="Scroll to bottom of page"/>
                         </div>                        
-                    );
-                } else if (MatrixClientPeg.get().isGuest()) {
-                    statusBar = (
-                        <div className="mx_RoomView_warningBar">
-                            <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
-                            <div className="mx_RoomView_warningBar_textArea">
-                                <div className="mx_RoomView_warningBar_title">
-                                    You are using Vector as a guest.
-                                </div>
-                                <div className="mx_RoomView_warningBar_desc">
-                                    <a onClick={this.onRegisterClicked}>Register</a> or <a onClick={this.onLoginClicked}>log in</a> to access more rooms and features.
-                                </div>
-                            </div>
-                        </div>
                     );
                 }
             }
