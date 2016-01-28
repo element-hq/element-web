@@ -50,6 +50,16 @@ limitations under the License.
     height: 40px;
 }
 
+.mx_GuestWarningBar {
+    -webkit-box-ordinal-group: 1;
+    -moz-box-ordinal-group: 1;
+    -ms-flex-order: 1;
+    -webkit-order: 1;
+    order: 1;
+
+    height: 40px;
+}
+
 .mx_MatrixChat_toolbarShowing {
     height: auto;
 }
