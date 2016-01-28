@@ -23,7 +23,9 @@ module.exports = {
      * count of unread messages
      */
     eventTriggersUnreadCount: function(ev) {
-        if (ev.getType() == "m.room.member") {
+        if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
+            return false;
+        } else if (ev.getType() == "m.room.member") {
             return false;
         } else if (ev.getType == 'm.room.message' && ev.getContent().msgtype == 'm.notify') {
             return false;
