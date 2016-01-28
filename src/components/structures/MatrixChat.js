@@ -96,6 +96,10 @@ module.exports = React.createClass({
             if (!this.props.config || !this.props.config.default_hs_url) {
                 console.error("Cannot enable guest access: No supplied config prop for HS/IS URLs");
             }
+            else if (this.props.startingQueryParams.email) {
+                console.log("Not registering as guest; email invite.");
+                this._autoRegisterAsGuest = false;
+            }
             else {
                 this._autoRegisterAsGuest = true;
             }
@@ -634,6 +638,14 @@ module.exports = React.createClass({
                 action: 'start_post_registration',
             });
         } else if (screen.indexOf('room/') == 0) {
+
+            if (!this.state.logged_in && this.props.startingQueryParams.email) {
+                console.log("Redirecting to email registration");
+                this.showScreen("register");
+                this.notifyNewScreen('register'); // this doesn't call showScreen, just updates the hash
+                return;
+            }
+
             var roomString = screen.split('/')[1];
             if (roomString[0] == '#') {
                 if (this.state.logged_in) {
@@ -655,7 +667,7 @@ module.exports = React.createClass({
             }
         }
         else {
-            if (screen) console.error("Unknown screen : %s", screen);
+            console.error("Unknown screen : %s", screen);
         }
     },
 
