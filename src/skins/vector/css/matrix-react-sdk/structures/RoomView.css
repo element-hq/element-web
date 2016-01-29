@@ -261,23 +261,23 @@ hr.mx_RoomView_myReadMarker {
     vertical-align: middle;
 }
 
-.mx_RoomView_warningBar {
+.mx_RoomView_connectionLostBar {
     margin-top: 19px;
     height: 58px;
 }
 
-.mx_RoomView_warningBar img {
+.mx_RoomView_connectionLostBar img {
     padding-left: 10px;
     padding-right: 22px;
     vertical-align: middle;
     float: left;
 }
 
-.mx_RoomView_warningBar_title {
+.mx_RoomView_connectionLostBar_title {
     color: #ff0064;
 }
 
-.mx_RoomView_warningBar_desc {
+.mx_RoomView_connectionLostBar_desc {
     color: #454545;
     font-size: 13px;
     opacity: 0.5;
