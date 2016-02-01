@@ -306,7 +306,11 @@ module.exports = React.createClass({
             }
         }
 
-        // tell the messagepanel to go paginate itself
+        // tell the messagepanel to go paginate itself. This in turn will cause
+        // onMessageListFillRequest to be called, which will call
+        // _onTimelineUpdated, which will update the state with the new event -
+        // so there is no need update the state here.
+        //
         if (this.refs.messagePanel) {
             this.refs.messagePanel.checkFillState();
         }
