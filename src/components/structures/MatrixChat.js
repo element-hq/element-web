@@ -208,7 +208,6 @@ module.exports = React.createClass({
                 });
                 break;
             case 'start_registration':
-                if (this.state.logged_in) return;
                 var newState = payload.params || {};
                 newState.screen = 'register';
                 if (
