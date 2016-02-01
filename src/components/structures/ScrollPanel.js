@@ -160,8 +160,8 @@ module.exports = React.createClass({
     // content. So don't call it in render() cycles.
     isAtBottom: function() {
         var sn = this._getScrollNode();
-        // + 1 here to avoid fractional pixel rounding errors
-        return sn.scrollHeight - sn.scrollTop <= sn.clientHeight + 1;
+        // + 2 here to avoid fractional pixel rounding errors
+        return sn.scrollHeight - sn.scrollTop <= sn.clientHeight + 2;
     },
 
     // check the scroll state and send out backfill requests if necessary.
