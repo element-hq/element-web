@@ -151,9 +151,6 @@ module.exports = React.createClass({
         if (ev.key == "Enter") {
             this.joinRoom(this.refs.roomAlias.value);
         }
-        if (ev.key == "Down") {
-
-        }
     },
 
     render: function() {
