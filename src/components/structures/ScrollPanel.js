@@ -37,14 +37,31 @@ if (DEBUG_SCROLL) {
  * It also provides a hook which allows parents to provide more list elements
  * when we get close to the start or end of the list.
  *
- * We don't save the absolute scroll offset, because that would be affected by
- * window width, zoom level, amount of scrollback, etc. Instead we save an
- * identifier for the last fully-visible message, and the number of pixels the
- * window was scrolled below it - which is hopefully be near enough.
- *
  * Each child element should have a 'data-scroll-token'. This token is used to
  * serialise the scroll state, and returned as the 'lastDisplayedScrollToken'
  * attribute by getScrollState().
+ *
+ * Some notes about the implementation:
+ *
+ * The saved 'scrollState' can exist in one of two states:
+ *
+ *   - atBottom: (the default, and restored by resetScrollState): the viewport
+ *     is scrolled down as far as it can be. When the children are updated, the
+ *     scroll position will be updated to ensure it is still at the bottom.
+ *
+ *   - fixed, in which the viewport is conceptually tied at a specific scroll
+ *     offset.  We don't save the absolute scroll offset, because that would be
+ *     affected by window width, zoom level, amount of scrollback, etc. Instead
+ *     we save an identifier for the last fully-visible message, and the number
+ *     of pixels the window was scrolled below it - which is hopefully be near
+ *     enough.
+ *
+ * The 'stickyBottom' property controls the behaviour when we reach the bottom
+ * of the window (either through a user-initiated scroll, or by calling
+ * scrollToBottom). If stickyBottom is enabled, the scrollState will enter
+ * 'atBottom' state - ensuring that new additions cause the window to scroll
+ * down further. If stickyBottom is disabled, we just save the scroll offset as
+ * normal.
  */
 module.exports = React.createClass({
     displayName: 'ScrollPanel',
@@ -145,8 +162,15 @@ module.exports = React.createClass({
             this.recentEventScroll = undefined;
         }
 
-        this.scrollState = this._calculateScrollState();
-        debuglog("Saved scroll state", this.scrollState);
+        // If there weren't enough children to fill the viewport, the scroll we
+        // got might be different to the scroll we wanted; we don't want to
+        // forget what we wanted, so don't overwrite the saved state unless
+        // this appears to be a user-initiated scroll.
+        if (sn.scrollTop != this._lastSetScroll) {
+            this._saveScrollState();
+        } else {
+            debuglog("Ignoring scroll echo");
+        }
 
         this.props.onScroll(ev);
 
@@ -154,14 +178,16 @@ module.exports = React.createClass({
     },
 
     // return true if the content is fully scrolled down right now; else false.
-    //
-    // Note that if the content hasn't yet been fully populated, this may
-    // spuriously return true even if the user wanted to be looking at earlier
-    // content. So don't call it in render() cycles.
     isAtBottom: function() {
         var sn = this._getScrollNode();
-        // + 1 here to avoid fractional pixel rounding errors
-        return sn.scrollHeight - sn.scrollTop <= sn.clientHeight + 1;
+
+        // there seems to be some bug with flexbox/gemini/chrome/richvdh's
+        // understanding of the box model, wherein the scrollNode ends up 2
+        // pixels higher than the available space, even when there are less
+        // than a screenful of messages. + 3 is a fudge factor to pretend
+        // that we're at the bottom when we're still a few pixels off.
+
+        return sn.scrollHeight - Math.ceil(sn.scrollTop) <= sn.clientHeight + 3;
     },
 
     // check the scroll state and send out backfill requests if necessary.
@@ -230,9 +256,9 @@ module.exports = React.createClass({
         }
 
         q.finally(fillPromise, () => {
-            debuglog("ScrollPanel: "+dir+" fill complete");
             this._pendingFillRequests[dir] = false;
         }).then((hasMoreResults) => {
+            debuglog("ScrollPanel: "+dir+" fill complete; hasMoreResults:"+hasMoreResults);
             if (hasMoreResults) {
                 // further pagination requests have been disabled until now, so
                 // it's time to check the fill state again in case the pagination
@@ -250,34 +276,64 @@ module.exports = React.createClass({
 
     /* reset the saved scroll state.
      *
-     * This will cause the scroll to be reinitialised on the next update of the
-     * child list.
-     *
      * This is useful if the list is being replaced, and you don't want to
      * preserve scroll even if new children happen to have the same scroll
      * tokens as old ones.
+     *
+     * This will cause the viewport to be scrolled down to the bottom on the
+     * next update of the child list. This is different to scrollToBottom(),
+     * which would save the current bottom-most child as the active one (so is
+     * no use if no children exist yet, or if you are about to replace the
+     * child list.)
      */
     resetScrollState: function() {
-        this.scrollState = null;
-    },
-
-    scrollToTop: function() {
-        this._getScrollNode().scrollTop = 0;
-        debuglog("Scrolled to top");
+        this.scrollState = {atBottom: true};
     },
 
     scrollToBottom: function() {
+        // the easiest way to make sure that the scroll state is correctly
+        // saved is to do the scroll, then save the updated state. (Calculating
+        // it ourselves is hard, and we can't rely on an onScroll callback
+        // happening, since there may be no user-visible change here).
         var scrollNode = this._getScrollNode();
+
         scrollNode.scrollTop = scrollNode.scrollHeight;
         debuglog("Scrolled to bottom; offset now", scrollNode.scrollTop);
+        this._lastSetScroll = scrollNode.scrollTop;
+
+        this._saveScrollState();
     },
 
-    // scroll the message list to the node with the given scrollToken. See
-    // notes in _calculateScrollState on how this works.
-    //
-    // pixel_offset gives the number of pixels between the bottom of the node
-    // and the bottom of the container.
+    // pixelOffset gives the number of pixels between the bottom of the node
+    // and the bottom of the container. If undefined, it will put the node
+    // in the middle of the container.
     scrollToToken: function(scrollToken, pixelOffset) {
+        var scrollNode = this._getScrollNode();
+
+        // default to the middle
+        if (pixelOffset === undefined) {
+            pixelOffset = scrollNode.clientHeight / 2;
+        }
+
+        // save the desired scroll state. It's important we do this here rather
+        // than as a result of the scroll event, because (a) we might not *get*
+        // a scroll event, and (b) it might not currently be possible to set
+        // the requested scroll state (eg, because we hit the end of the
+        // timeline and need to do more pagination); we want to save the
+        // *desired* scroll state rather than what we end up achieving.
+        this.scrollState = {
+            atBottom: false,
+            lastDisplayedScrollToken: scrollToken,
+            pixelOffset: pixelOffset
+        };
+
+        // ... then make it so.
+        this._restoreSavedScrollState();
+    },
+
+    // set the scrollTop attribute appropriately to position the given child at the
+    // given offset in the window. A helper for _restoreSavedScrollState.
+    _scrollToToken: function(scrollToken, pixelOffset) {
         /* find the dom node with the right scrolltoken */
         var node;
         var messages = this.refs.itemlist.children;
@@ -291,7 +347,7 @@ module.exports = React.createClass({
         }
 
         if (!node) {
-            console.error("No node with scrollToken '"+scrollToken+"'");
+            debuglog("ScrollPanel: No node with scrollToken '"+scrollToken+"'");
             return;
         }
 
@@ -312,15 +368,12 @@ module.exports = React.createClass({
         debuglog("recentEventScroll now "+this.recentEventScroll);
     },
 
-    _calculateScrollState: function() {
-        // Our scroll implementation is agnostic of the precise contents of the
-        // message list (since it needs to work with both search results and
-        // timelines). 'refs.messageList' is expected to be a DOM node with a
-        // number of children, each of which may have a 'data-scroll-token'
-        // attribute. It is this token which is stored as the
-        // 'lastDisplayedScrollToken'.
-
-        var atBottom = this.isAtBottom();
+    _saveScrollState: function() {
+        if (this.props.stickyBottom && this.isAtBottom()) {
+            this.scrollState = { atBottom: true };
+            debuglog("Saved scroll state", this.scrollState);
+            return;
+        }
 
         var itemlist = this.refs.itemlist;
         var wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
@@ -332,27 +385,33 @@ module.exports = React.createClass({
 
             var boundingRect = node.getBoundingClientRect();
             if (boundingRect.bottom < wrapperRect.bottom) {
-                return {
-                    atBottom: atBottom,
+                this.scrollState = {
+                    atBottom: false,
                     lastDisplayedScrollToken: node.dataset.scrollToken,
                     pixelOffset: wrapperRect.bottom - boundingRect.bottom,
                 }
+                debuglog("Saved scroll state", this.scrollState);
+                return;
             }
         }
 
-        // apparently the entire timeline is below the viewport. Give up.
-        return { atBottom: true };
+        debuglog("Unable to save scroll state: found no children in the viewport");
     },
 
     _restoreSavedScrollState: function() {
         var scrollState = this.scrollState;
-        if (!scrollState || (this.props.stickyBottom && scrollState.atBottom)) {
-            this.scrollToBottom();
+        var scrollNode = this._getScrollNode();
+
+        if (scrollState.atBottom) {
+            scrollNode.scrollTop = scrollNode.scrollHeight;
+            debuglog("Scrolled to bottom; offset now", scrollNode.scrollTop);
         } else if (scrollState.lastDisplayedScrollToken) {
-            this.scrollToToken(scrollState.lastDisplayedScrollToken,
+            this._scrollToToken(scrollState.lastDisplayedScrollToken,
                                scrollState.pixelOffset);
         }
+        this._lastSetScroll = scrollNode.scrollTop;
     },
+
 
     /* get the DOM node which has the scrollTop property we care about for our
      * message panel.
