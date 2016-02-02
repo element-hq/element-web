@@ -1,0 +1,79 @@
+/*
+Copyright 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/**
+ * For two objects of the form { key: [val1, val2, val3] }, work out the added/removed
+ * values. Entirely new keys will result in the entire value array being added.
+ * @param {Object} before
+ * @param {Object} after
+ * @return {Object[]} An array of objects with the form:
+ * { key: $KEY, val: $VALUE, place: "add|del" }
+ */
+module.exports.getKeyValueArrayDiffs = function(before, after) {
+    var results = [];
+    var delta = {};
+    Object.keys(before).forEach(function(beforeKey) {
+        delta[beforeKey] = delta[beforeKey] || 0; // init to 0 initially
+        delta[beforeKey]--; // keys present in the past have -ve values
+    });
+    Object.keys(after).forEach(function(afterKey) {
+        delta[afterKey] = delta[afterKey] || 0; // init to 0 initially
+        delta[afterKey]++; // keys present in the future have +ve values
+    });
+
+    Object.keys(delta).forEach(function(muxedKey) {
+        switch (delta[muxedKey]) {
+            case 1: // A new key in after
+                after[muxedKey].forEach(function(afterVal) {
+                    results.push({ place: "add", key: muxedKey, val: afterVal });
+                });
+                break;
+            case -1: // A before key was removed
+                before[muxedKey].forEach(function(beforeVal) {
+                    results.push({ place: "del", key: muxedKey, val: beforeVal });
+                });
+                break;
+            case 0: // A mix of added/removed keys
+                // compare old & new vals
+                var itemDelta = {};
+                before[muxedKey].forEach(function(beforeVal) {
+                    itemDelta[beforeVal] = itemDelta[beforeVal] || 0;
+                    itemDelta[beforeVal]--;
+                });
+                after[muxedKey].forEach(function(afterVal) {
+                    itemDelta[afterVal] = itemDelta[afterVal] || 0;
+                    itemDelta[afterVal]++;
+                });
+
+                Object.keys(itemDelta).forEach(function(item) {
+                    if (itemDelta[item] === 1) {
+                        results.push({ place: "add", key: muxedKey, val: item });
+                    } else if (itemDelta[item] === -1) {
+                        results.push({ place: "del", key: muxedKey, val: item });
+                    } else {
+                        // itemDelta of 0 means it was unchanged between before/after                     
+                    }
+                });
+                break;
+            default:
+                console.error("Calculated key delta of " + delta[muxedKey] +
+                              " - this should never happen!");
+                break;
+        }
+    });
+
+    return results;
+};
