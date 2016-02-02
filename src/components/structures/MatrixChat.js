@@ -66,7 +66,6 @@ module.exports = React.createClass({
             collapse_rhs: false,
             ready: false,
             width: 10000,
-            autoPeek: true, // by default, we peek into rooms when we try to join them
         };
         if (s.logged_in) {
             if (MatrixClientPeg.get().getRooms().length) {
@@ -317,9 +316,6 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_room':
-                // by default we autoPeek rooms, unless we were called explicitly with
-                // autoPeek=false by something like RoomDirectory who has already peeked
-                this.setState({ autoPeek : payload.auto_peek === false ? false : true });
                 this._viewRoom(payload.room_id, payload.show_settings);
                 break;
             case 'view_prev_room':
@@ -843,7 +839,6 @@ module.exports = React.createClass({
                         <RoomView
                             ref="roomView"
                             roomId={this.state.currentRoom}
-                            autoPeek={this.state.autoPeek}
                             key={this.state.currentRoom}
                             ConferenceHandler={this.props.ConferenceHandler} />
                     );

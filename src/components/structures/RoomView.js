@@ -59,7 +59,13 @@ module.exports = React.createClass({
     propTypes: {
         ConferenceHandler: React.PropTypes.any,
         roomId: React.PropTypes.string,
-        autoPeek: React.PropTypes.bool, // should we try to peek the room on mount, or has whoever invoked us already initiated a peek?
+        autoPeek: React.PropTypes.bool, // Now unused, left here temporarily to avoid merge conflicts with @richvdh's branch.
+    },
+
+    getDefaultProps: function() {
+        return {
+            autoPeek: true,
+        }
     },
 
     /* properties in RoomView objects include:
