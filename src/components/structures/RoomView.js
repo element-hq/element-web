@@ -385,6 +385,7 @@ module.exports = React.createClass({
             this._updateTabCompleteList(this.state.room);
 
             var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+            if (!room) return;
             var me = MatrixClientPeg.get().credentials.userId;
             if (this.state.joining && room.hasMembershipState(me, "join")) {
                 this.setState({
