@@ -167,4 +167,4 @@ if __name__ == "__main__":
         (args.port, arg_extract_path,
             " (clean after)" if arg_should_clean else "", arg_symlink, arg_jenkins_url)
     )
-    app.run(port=args.port, debug=True)
+    app.run(host="0.0.0.0", port=args.port, debug=True)
