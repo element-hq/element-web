@@ -177,11 +177,15 @@ module.exports = React.createClass({
         roomProm.then((room) => {
             this._calculatePeekRules(room);
             return this._initTimeline(this.props);
-        }).catch(() => {
-            // This is fine: the room just isn't peekable (we assume).
-            this.setState({
-                timelineLoading: false,
-            });
+        }).catch((err) => {
+            if (err.errcode == "M_GUEST_ACCESS_FORBIDDEN") {
+                // This is fine: the room just isn't peekable (we assume).
+                this.setState({
+                    timelineLoading: false,
+                });
+            } else {
+                throw err;
+            }
         }).done();
     },
 
