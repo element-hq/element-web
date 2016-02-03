@@ -58,7 +58,7 @@ module.exports = React.createClass({
     onHomeserverChanged: function(ev) {
         this.setState({hs_url: ev.target.value}, function() {
             this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, function() {
-                this.props.onHsUrlChanged(this.state.hs_url);
+                this.props.onHsUrlChanged(this.state.hs_url.replace(/\/$/, ""));
             });
         });
     },
@@ -66,7 +66,7 @@ module.exports = React.createClass({
     onIdentityServerChanged: function(ev) {
         this.setState({is_url: ev.target.value}, function() {
             this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, function() {
-                this.props.onIsUrlChanged(this.state.is_url);
+                this.props.onIsUrlChanged(this.state.is_url.replace(/\/$/, ""));
             });
         });
     },
