@@ -163,10 +163,7 @@ module.exports = React.createClass({
 
             console.log("Attempting to peek into room %s", this.props.roomId);
 
-            roomProm = MatrixClientPeg.get().peekInRoom(this.props.roomId).catch((err) => {
-                console.error("Failed to peek into room: %s", err);
-                throw err;
-            }).then((room) => {
+            roomProm = MatrixClientPeg.get().peekInRoom(this.props.roomId).then((room) => {
                 this.setState({
                     room: room
                 });
@@ -180,6 +177,11 @@ module.exports = React.createClass({
         roomProm.then((room) => {
             this._calculatePeekRules(room);
             return this._initTimeline(this.props);
+        }).catch(() => {
+            // This is fine: the room just isn't peekable (we assume).
+            this.setState({
+                timelineLoading: false,
+            });
         }).done();
     },
 
