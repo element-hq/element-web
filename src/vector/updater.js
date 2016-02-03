@@ -29,12 +29,13 @@ module.exports = {
             if (!req.responseText) {
                 return;
             }
+            var ver = req.responseText.trim();
             if (!currentVersion) {
-                currentVersion = req.responseText.trim();
+                currentVersion = ver;
             }
 
-            if (req.responseText !== latestVersion) {
-                latestVersion = req.responseText.trim();
+            if (ver !== latestVersion) {
+                latestVersion = ver;
                 if (module.exports.hasNewVersion()) {
                     console.log("Current=%s Latest=%s", currentVersion, latestVersion);
                     listener(currentVersion, latestVersion);
