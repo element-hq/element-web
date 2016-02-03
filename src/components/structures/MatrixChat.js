@@ -657,15 +657,9 @@ module.exports = React.createClass({
                 action: 'start_post_registration',
             });
         } else if (screen.indexOf('room/') == 0) {
-            var roomString = screen.substring(5);
-            var eventId;
-
-            // extract event id, if one is given
-            var idx = roomString.indexOf('/');
-            if (idx >= 0) {
-                eventId = roomString.substring(idx+1);
-                roomString = roomString.substring(0, idx);
-            }
+            var segments = screen.substring(5).split('/');
+            var roomString = segments[0];
+            var eventId = segments[1]; // undefined if no event id given
 
             if (roomString[0] == '#') {
                 if (this.state.logged_in) {

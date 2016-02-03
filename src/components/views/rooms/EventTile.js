@@ -100,7 +100,7 @@ module.exports = React.createClass({
         onHighlightClick: React.PropTypes.func,
 
         /* is this the focussed event */
-        selectedEvent: React.PropTypes.bool,
+        isSelectedEvent: React.PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -276,7 +276,7 @@ module.exports = React.createClass({
             ) !== -1,
             mx_EventTile_notSent: this.props.mxEvent.status == 'not_sent',
             mx_EventTile_highlight: this.shouldHighlight(),
-            mx_EventTile_selected: this.props.selectedEvent,
+            mx_EventTile_selected: this.props.isSelectedEvent,
             mx_EventTile_continuation: this.props.continuation,
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,

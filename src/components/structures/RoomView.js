@@ -102,7 +102,11 @@ module.exports = React.createClass({
             canPeek: false,
             readMarkerEventId: room ? room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId) : null,
             readMarkerGhostEventId: undefined,
-            atBottom: true,
+
+            // this is true if we are fully scrolled-down, and are looking at
+            // the end of the live timeline. It has the effect of hiding the
+            // 'scroll to bottom' knob, among a couple of other things.
+            atEndOfLiveTimeline: true,
         }
     },
 
@@ -360,7 +364,7 @@ module.exports = React.createClass({
 
         if (ev.getSender() !== MatrixClientPeg.get().credentials.userId) {
             // update unread count when scrolled up
-            if (!this.state.searchResults && this.state.atBottom) {
+            if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
                 // no change
             }
             else {
@@ -467,7 +471,7 @@ module.exports = React.createClass({
             //
             // we do this here as well as in sendReadReceipt to deal with
             // people using two clients at once.
-            if (this.refs.messagePanel && this.state.atBottom) {
+            if (this.refs.messagePanel && this.state.atEndOfLiveTimeline) {
                 this.refs.messagePanel.scrollToToken(readMarkerEventId);
             }
         }
@@ -700,14 +704,14 @@ module.exports = React.createClass({
             if (this.state.numUnreadMessages != 0) {
                 this.setState({ numUnreadMessages: 0 });
             }
-            if (!this.state.atBottom) {
-                this.setState({ atBottom: true });                
+            if (!this.state.atEndOfLiveTimeline) {
+                this.setState({ atEndOfLiveTimeline: true });
             }
         }
         else {
-            if (this.state.atBottom) {
-                this.setState({ atBottom: false });
-            }            
+            if (this.state.atEndOfLiveTimeline) {
+                this.setState({ atEndOfLiveTimeline: false });
+            }
         }
     },
 
@@ -994,7 +998,7 @@ module.exports = React.createClass({
             ret.push(
                 <li key={eventId} ref={this._collectEventNode.bind(this, eventId)} data-scroll-token={eventId}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
-                        last={last} selectedEvent={highlight}/>
+                        last={last} isSelectedEvent={highlight}/>
                 </li>
             );
 
@@ -1285,11 +1289,18 @@ module.exports = React.createClass({
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
 
         // We want to avoid sending out read receipts when we are looking at
-        // events in the past.
+        // events in the past which are before the latest RR.
         //
-        // For now, let's apply a heuristic: if (a) the server has a
-        // readUpToEvent for us, (b) we can't find it, and (c) we could
-        // forward-paginate the event timeline, then suppress read receipts.
+        // For now, let's apply a heuristic: if (a) the event corresponding to
+        // the latest RR (either from the server, or sent by ourselves) doesn't
+        // appear in our timeline, and (b) we could forward-paginate the event
+        // timeline, then don't send any more RRs.
+        //
+        // This isn't watertight, as we could be looking at a section of
+        // timeline which is *after* the latest RR (so we should actually send
+        // RRs) - but that is a bit of a niche case. It will sort itself out when
+        // the user eventually hits the live timeline.
+        //
         if (currentReadUpToEventId && currentReadUpToEventIndex === null &&
                 this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
             return;
@@ -1317,7 +1328,7 @@ module.exports = React.createClass({
             //
             // we do this here as well as in onRoomReceipt to cater for guest users
             // (which do not send out read receipts).
-            if (this.state.atBottom) {
+            if (this.state.atEndOfLiveTimeline) {
                 this.refs.messagePanel.scrollToToken(lastReadEvent.getId());
             }
         }
@@ -1444,7 +1455,8 @@ module.exports = React.createClass({
         return this.state.numUnreadMessages + " new message" + (this.state.numUnreadMessages > 1 ? "s" : "");
     },
 
-    scrollToBottom: function() {
+    // jump down to the bottom of this room, where new events are arriving
+    jumpToLiveTimeline: function() {
         // if we can't forward-paginate the existing timeline, then there
         // is no point reloading it - just jump straight to the bottom.
         //
@@ -1479,16 +1491,20 @@ module.exports = React.createClass({
 
         var scrollState = messagePanel.getScrollState();
 
-        if (scrollState.atBottom) {
+        if (scrollState.stuckAtBottom) {
             // we don't really expect to be in this state, but it will
-            // occasionally happen when we are in a transition. Treat it the
-            // same as having no saved state (which will cause us to scroll to
-            // last unread on reload).
+            // occasionally happen when no scroll state has been set on the
+            // messagePanel (ie, we didn't have an initial event (so it's
+            // probably a new room), there has been no user-initiated scroll, and
+            // no read-receipts have arrived to update the scroll position).
+            //
+            // Return null, which will cause us to scroll to last unread on
+            // reload.
             return null;
         }
 
         return {
-            focussedEvent: scrollState.lastDisplayedScrollToken,
+            focussedEvent: scrollState.trackedScrollToken,
             pixelOffset: scrollState.pixelOffset,
         };
     },
@@ -1731,7 +1747,7 @@ module.exports = React.createClass({
                 // set when you've scrolled up
                 else if (unreadMsgs) {
                     statusBar = (
-                        <div className="mx_RoomView_unreadMessagesBar" onClick={ this.scrollToBottom }>
+                        <div className="mx_RoomView_unreadMessagesBar" onClick={ this.jumpToLiveTimeline }>
                             <img src="img/newmessages.svg" width="24" height="24" alt=""/>
                             {unreadMsgs}
                         </div>
@@ -1745,9 +1761,9 @@ module.exports = React.createClass({
                         </div>
                     );
                 }
-                else if (!this.state.atBottom) {
+                else if (!this.state.atEndOfLiveTimeline) {
                     statusBar = (
-                        <div className="mx_RoomView_scrollToBottomBar" onClick={ this.scrollToBottom }>
+                        <div className="mx_RoomView_scrollToBottomBar" onClick={ this.jumpToLiveTimeline }>
                             <img src="img/scrolldown.svg" width="24" height="24" alt="Scroll to bottom of page" title="Scroll to bottom of page"/>
                         </div>                        
                     );
@@ -1888,8 +1904,10 @@ module.exports = React.createClass({
 
             // just show a spinner while the timeline loads.
             //
-            // put it in a div of the right class so that the order in the
-            // roomview flexbox is correct.
+            // put it in a div of the right class (mx_RoomView_messagePanel) so
+            // that the order in the roomview flexbox is correct, and
+            // mx_RoomView_messageListWrapper to position the inner div in the
+            // right place.
             //
             // Note that the click-on-search-result functionality relies on the
             // fact that the messagePanel is hidden while the timeline reloads,
@@ -1897,7 +1915,7 @@ module.exports = React.createClass({
             // exist.
             if (this.state.timelineLoading) {
                 messagePanel = (
-                        <div className="mx_RoomView_messagePanel" style={{display: "flex"}}>
+                        <div className="mx_RoomView_messagePanel mx_RoomView_messageListWrapper">
                             <Loader />
                         </div>
                 );

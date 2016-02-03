@@ -38,16 +38,17 @@ if (DEBUG_SCROLL) {
  * when we get close to the start or end of the list.
  *
  * Each child element should have a 'data-scroll-token'. This token is used to
- * serialise the scroll state, and returned as the 'lastDisplayedScrollToken'
+ * serialise the scroll state, and returned as the 'trackedScrollToken'
  * attribute by getScrollState().
  *
  * Some notes about the implementation:
  *
  * The saved 'scrollState' can exist in one of two states:
  *
- *   - atBottom: (the default, and restored by resetScrollState): the viewport
- *     is scrolled down as far as it can be. When the children are updated, the
- *     scroll position will be updated to ensure it is still at the bottom.
+ *   - stuckAtBottom: (the default, and restored by resetScrollState): the
+ *     viewport is scrolled down as far as it can be. When the children are
+ *     updated, the scroll position will be updated to ensure it is still at
+ *     the bottom.
  *
  *   - fixed, in which the viewport is conceptually tied at a specific scroll
  *     offset.  We don't save the absolute scroll offset, because that would be
@@ -59,9 +60,9 @@ if (DEBUG_SCROLL) {
  * The 'stickyBottom' property controls the behaviour when we reach the bottom
  * of the window (either through a user-initiated scroll, or by calling
  * scrollToBottom). If stickyBottom is enabled, the scrollState will enter
- * 'atBottom' state - ensuring that new additions cause the window to scroll
- * down further. If stickyBottom is disabled, we just save the scroll offset as
- * normal.
+ * 'stuckAtBottom' state - ensuring that new additions cause the window to
+ * scroll down further. If stickyBottom is disabled, we just save the scroll
+ * offset as normal.
  */
 module.exports = React.createClass({
     displayName: 'ScrollPanel',
@@ -178,6 +179,10 @@ module.exports = React.createClass({
     },
 
     // return true if the content is fully scrolled down right now; else false.
+    //
+    // note that this is independent of the 'stuckAtBottom' state - it is simply
+    // about whether the the content is scrolled down right now, irrespective of
+    // whether it will stay that way when the children update.
     isAtBottom: function() {
         var sn = this._getScrollNode();
 
@@ -268,8 +273,19 @@ module.exports = React.createClass({
         }).done();
     },
 
-    // get the current scroll position of the room, so that it can be
-    // restored later
+    /* get the current scroll state. This returns an object with the following
+     * properties:
+     *
+     * boolean stuckAtBottom: true if we are tracking the bottom of the
+     *   scroll. false if we are tracking a particular child.
+     *
+     * string trackedScrollToken: undefined if stuckAtBottom is true; if it is
+     *   false, the data-scroll-token of the child which we are tracking.
+     *
+     * number pixelOffset: undefined if stuckAtBottom is true; if it is false,
+     *   the number of pixels the bottom of the tracked child is above the
+     *   bottom of the scroll panel.
+     */
     getScrollState: function() {
         return this.scrollState;
     },
@@ -287,7 +303,7 @@ module.exports = React.createClass({
      * child list.)
      */
     resetScrollState: function() {
-        this.scrollState = {atBottom: true};
+        this.scrollState = {stuckAtBottom: true};
     },
 
     scrollToBottom: function() {
@@ -322,8 +338,8 @@ module.exports = React.createClass({
         // timeline and need to do more pagination); we want to save the
         // *desired* scroll state rather than what we end up achieving.
         this.scrollState = {
-            atBottom: false,
-            lastDisplayedScrollToken: scrollToken,
+            stuckAtBottom: false,
+            trackedScrollToken: scrollToken,
             pixelOffset: pixelOffset
         };
 
@@ -370,7 +386,7 @@ module.exports = React.createClass({
 
     _saveScrollState: function() {
         if (this.props.stickyBottom && this.isAtBottom()) {
-            this.scrollState = { atBottom: true };
+            this.scrollState = { stuckAtBottom: true };
             debuglog("Saved scroll state", this.scrollState);
             return;
         }
@@ -386,8 +402,8 @@ module.exports = React.createClass({
             var boundingRect = node.getBoundingClientRect();
             if (boundingRect.bottom < wrapperRect.bottom) {
                 this.scrollState = {
-                    atBottom: false,
-                    lastDisplayedScrollToken: node.dataset.scrollToken,
+                    stuckAtBottom: false,
+                    trackedScrollToken: node.dataset.scrollToken,
                     pixelOffset: wrapperRect.bottom - boundingRect.bottom,
                 }
                 debuglog("Saved scroll state", this.scrollState);
@@ -402,11 +418,11 @@ module.exports = React.createClass({
         var scrollState = this.scrollState;
         var scrollNode = this._getScrollNode();
 
-        if (scrollState.atBottom) {
+        if (scrollState.stuckAtBottom) {
             scrollNode.scrollTop = scrollNode.scrollHeight;
             debuglog("Scrolled to bottom; offset now", scrollNode.scrollTop);
-        } else if (scrollState.lastDisplayedScrollToken) {
-            this._scrollToToken(scrollState.lastDisplayedScrollToken,
+        } else if (scrollState.trackedScrollToken) {
+            this._scrollToToken(scrollState.trackedScrollToken,
                                scrollState.pixelOffset);
         }
         this._lastSetScroll = scrollNode.scrollTop;
