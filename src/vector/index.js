@@ -106,8 +106,8 @@ function onHashChange(ev) {
     routeUrl(window.location);
 }
 
-function onNewVersion(current, latest) {
-    window.matrixChat.onNewVersion(current, latest);
+function onVersion(current, latest) {
+    window.matrixChat.onVersion(current, latest);
 }
 
 var loaded = false;
@@ -143,7 +143,7 @@ window.onload = function() {
     if (!validBrowser) {
         return;
     }
-    UpdateChecker.setNewVersionListener(onNewVersion);
+    UpdateChecker.setVersionListener(onVersion);
     UpdateChecker.run();
     routeUrl(window.location);
     loaded = true;

@@ -19,7 +19,7 @@ var latestVersion = null;
 var listener = function(){}; // NOP
 
 module.exports = {
-    setNewVersionListener: function(fn) { // invoked with fn(currentVer, newVer)
+    setVersionListener: function(fn) { // invoked with fn(currentVer, newVer)
         listener = fn;
     },
 
@@ -32,6 +32,7 @@ module.exports = {
             var ver = req.responseText.trim();
             if (!currentVersion) {
                 currentVersion = ver;
+                listener(currentVersion, currentVersion);
             }
 
             if (ver !== latestVersion) {
