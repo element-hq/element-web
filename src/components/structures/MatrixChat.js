@@ -804,6 +804,13 @@ module.exports = React.createClass({
         this.showScreen("settings");
     },
 
+    onVersion: function(current, latest) {
+        this.setState({
+            version: current,
+            hasNewVersion: current !== latest
+        });
+    },
+
     updateFavicon: function() {
         var notifCount = 0;
 
@@ -851,6 +858,7 @@ module.exports = React.createClass({
         var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         var GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
+        var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
 
         // needs to be before normal PageTypes as you are logged in technically
@@ -880,7 +888,7 @@ module.exports = React.createClass({
                     right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} />
                     break;
                 case this.PageTypes.UserSettings:
-                    page_element = <UserSettings onClose={this.onUserSettingsClose} />
+                    page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
                     break;
                 case this.PageTypes.CreateRoom:
@@ -911,6 +919,19 @@ module.exports = React.createClass({
                 return (
                         <div className="mx_MatrixChat_wrapper">
                             <MatrixToolbar />
+                            <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
+                                <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
+                                <main className="mx_MatrixChat_middlePanel">
+                                    {page_element}
+                                </main>
+                                {right_panel}
+                            </div>
+                        </div>
+                );
+            } else if (this.state.hasNewVersion) {
+                return (
+                        <div className="mx_MatrixChat_wrapper">
+                            <NewVersionBar />
                             <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
                                 <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
                                 <main className="mx_MatrixChat_middlePanel">
