@@ -34,6 +34,7 @@ module.exports.components['views.elements.ImageView'] = require('./components/vi
 module.exports.components['views.elements.Spinner'] = require('./components/views/elements/Spinner');
 module.exports.components['views.globals.GuestWarningBar'] = require('./components/views/globals/GuestWarningBar');
 module.exports.components['views.globals.MatrixToolbar'] = require('./components/views/globals/MatrixToolbar');
+module.exports.components['views.globals.NewVersionBar'] = require('./components/views/globals/NewVersionBar');
 module.exports.components['views.login.VectorCustomServerDialog'] = require('./components/views/login/VectorCustomServerDialog');
 module.exports.components['views.login.VectorLoginFooter'] = require('./components/views/login/VectorLoginFooter');
 module.exports.components['views.login.VectorLoginHeader'] = require('./components/views/login/VectorLoginHeader');
