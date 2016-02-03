@@ -60,6 +60,9 @@ module.exports = React.createClass({
     displayName: 'RoomView',
     propTypes: {
         ConferenceHandler: React.PropTypes.any,
+        roomId: React.PropTypes.string,
+        autoPeek: React.PropTypes.bool, // Now unused, left here temporarily to avoid merge conflicts with @richvdh's branch.
+
         roomId: React.PropTypes.string.isRequired,
 
         // id of an event to jump to. If not given, will use the read-up-to-marker.
@@ -75,6 +78,12 @@ module.exports = React.createClass({
         highlightedEventId: React.PropTypes.string,
 
         autoPeek: React.PropTypes.bool, // should we try to peek the room on mount, or has whoever invoked us already initiated a peek?
+    },
+
+    getDefaultProps: function() {
+        return {
+            autoPeek: true,
+        }
     },
 
     /* properties in RoomView objects include:
@@ -487,6 +496,7 @@ module.exports = React.createClass({
             this._updateTabCompleteList(this.state.room);
 
             var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+            if (!room) return;
             var me = MatrixClientPeg.get().credentials.userId;
             if (this.state.joining && room.hasMembershipState(me, "join")) {
                 this.setState({

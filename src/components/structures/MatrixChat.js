@@ -66,7 +66,6 @@ module.exports = React.createClass({
             collapse_rhs: false,
             ready: false,
             width: 10000,
-            autoPeek: true, // by default, we peek into rooms when we try to join them
         };
         if (s.logged_in) {
             if (MatrixClientPeg.get().getRooms().length) {
