@@ -56,33 +56,10 @@ module.exports = React.createClass({
         });
     },
 
-    joinRoom: function(roomId, shouldPeek) {
-        var self = this;
-        self.setState({ loading: true });
-
-        var joinOrPeekPromise;
-
-        if (shouldPeek) {
-            joinOrPeekPromise = MatrixClientPeg.get().peekInRoom(roomId);
-        }
-        else {
-            joinOrPeekPromise = MatrixClientPeg.get().joinRoom(roomId);
-        }
-
-        joinOrPeekPromise.done(function() {
-            dis.dispatch({
-                action: 'view_room',
-                auto_peek: false, // don't peek as we've already peeked here (if it was needed)
-                room_id: roomId
-            });
-        }, function(err) {
-            console.error("Failed to join room: %s", JSON.stringify(err));
-            console.error(err);
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Failed to join room",
-                description: err.message
-            });
+    showRoom: function(roomId) {
+        dis.dispatch({
+            action: 'view_room',
+            room_id: roomId
         });
     },
 
@@ -103,7 +80,6 @@ module.exports = React.createClass({
             var name = rooms[i].name || rooms[i].aliases[0];
             guestRead = null;
             guestJoin = null;
-            var shouldPeek = false;
 
             if (rooms[i].world_readable) {
                 guestRead = (
@@ -111,9 +87,6 @@ module.exports = React.createClass({
                 );
                     // <img src="img/members.svg"
                     //     alt="World Readable" title="World Readable" width="12" height="12" />
-                if (rooms[i].world_readable) {
-                    shouldPeek = true;
-                }
             }
             if (rooms[i].guest_can_join) {
                 guestJoin = (
@@ -131,12 +104,12 @@ module.exports = React.createClass({
             // <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(rooms[i].room_id, 40, 40, "crop") } width="40" height="40" alt=""/>
             rows.unshift(
                 <tbody key={ rooms[i].room_id }>
-                    <tr onClick={self.joinRoom.bind(null, rooms[i].room_id, shouldPeek)}>
+                    <tr onClick={self.showRoom.bind(null, rooms[i].room_id)}>
                         <td className="mx_RoomDirectory_name">{ name }</td>
                         <td>{ rooms[i].aliases[0] }</td>
                         <td>{ rooms[i].num_joined_members }</td>
                     </tr>
-                    <tr onClick={self.joinRoom.bind(null, rooms[i].room_id, shouldPeek)}>
+                    <tr onClick={self.showRoom.bind(null, rooms[i].room_id)}>
                         <td className="mx_RoomDirectory_topic" colSpan="3">{perms} { rooms[i].topic }</td>
                     </tr>
                 </tbody>
@@ -149,7 +122,7 @@ module.exports = React.createClass({
         this.forceUpdate();
         this.setState({ roomAlias : this.refs.roomAlias.value })
         if (ev.key == "Enter") {
-            this.joinRoom(this.refs.roomAlias.value);
+            this.showRoom(this.refs.roomAlias.value);
         }
     },
 
