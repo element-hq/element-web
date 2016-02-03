@@ -30,6 +30,7 @@ module.exports = React.createClass({
     displayName: 'UserSettings',
 
     propTypes: {
+        version: React.PropTypes.string,
         onClose: React.PropTypes.func
     },
 
@@ -377,6 +378,8 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_UserSettings_advanced">
                         Version {this.state.clientVersion}
+                        <br />
+                        {this.props.version}
                     </div>
                 </div>
 

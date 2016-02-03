@@ -804,9 +804,10 @@ module.exports = React.createClass({
         this.showScreen("settings");
     },
 
-    onNewVersion: function(current, latest) {
+    onVersion: function(current, latest) {
         this.setState({
-            hasNewVersion: true
+            version: current,
+            hasNewVersion: current !== latest
         });
     },
 
@@ -887,7 +888,7 @@ module.exports = React.createClass({
                     right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} />
                     break;
                 case this.PageTypes.UserSettings:
-                    page_element = <UserSettings onClose={this.onUserSettingsClose} />
+                    page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
                     break;
                 case this.PageTypes.CreateRoom:
