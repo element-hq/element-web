@@ -804,6 +804,12 @@ module.exports = React.createClass({
         this.showScreen("settings");
     },
 
+    onNewVersion: function(current, latest) {
+        this.setState({
+            hasNewVersion: true
+        });
+    },
+
     updateFavicon: function() {
         var notifCount = 0;
 
@@ -851,6 +857,7 @@ module.exports = React.createClass({
         var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         var GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
+        var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
 
         // needs to be before normal PageTypes as you are logged in technically
@@ -911,6 +918,19 @@ module.exports = React.createClass({
                 return (
                         <div className="mx_MatrixChat_wrapper">
                             <MatrixToolbar />
+                            <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
+                                <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
+                                <main className="mx_MatrixChat_middlePanel">
+                                    {page_element}
+                                </main>
+                                {right_panel}
+                            </div>
+                        </div>
+                );
+            } else if (this.state.hasNewVersion) {
+                return (
+                        <div className="mx_MatrixChat_wrapper">
+                            <NewVersionBar />
                             <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
                                 <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
                                 <main className="mx_MatrixChat_middlePanel">
