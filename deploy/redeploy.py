@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 from __future__ import print_function
-import json, requests, tarfile, argparse, os
+import json, requests, tarfile, argparse, os, errno
 from urlparse import urljoin
 from flask import Flask, jsonify, request, abort
 app = Flask(__name__)
 
-arg_jenkins_url, arg_listen_port, arg_extract_path, arg_should_clean = None, None, None, None
+arg_jenkins_url, arg_listen_port, arg_extract_path, arg_should_clean, arg_symlink = (
+    None, None, None, None, None
+)
 
 def download_file(url):
     local_filename = url.split('/')[-1]
@@ -19,6 +21,17 @@ def download_file(url):
 def untar_to(tarball, dest):
     with tarfile.open(tarball) as tar:
         tar.extractall(dest)
+
+def create_symlink(source, linkname):
+    try:
+        os.symlink(source, linkname)
+    except OSError, e:
+        if e.errno == errno.EEXIST:
+            # atomic modification
+            os.symlink(source, linkname + ".tmp")
+            os.rename(linkname + ".tmp", linkname)
+        else:
+            raise e
 
 @app.route("/", methods=["POST"])
 def on_receive_jenkins_poke():
@@ -107,6 +120,7 @@ def on_receive_jenkins_poke():
     with open(os.path.join(untar_location, "vector/version"), "w") as stamp_file:
         stamp_file.write(name_str)
 
+    create_symlink(source=os.path.join(untar_location, "vector"), linkname=arg_symlink)
 
     return jsonify({})
 
@@ -133,6 +147,13 @@ if __name__ == "__main__":
             "Remove .tar.gz files after they have been downloaded and extracted."
         )
     )
+    parser.add_argument(
+        "-s", "--symlink", dest="symlink", default="./latest", help=(
+            "Write a symlink to this location pointing to the extracted tarball. \
+            New builds will keep overwriting this symlink. The symlink will point \
+            to the /vector directory INSIDE the tarball."
+        )
+    )
     args = parser.parse_args()
     if args.jenkins.endswith("/"): # important for urljoin
         arg_jenkins_url = args.jenkins
@@ -141,10 +162,10 @@ if __name__ == "__main__":
     arg_extract_path = args.extract
     arg_listen_port = args.port
     arg_should_clean = args.clean
+    arg_symlink = args.symlink
     print(
-        "Listening on port %s. Extracting to %s%s. Jenkins URL: %s" %
+        "Listening on port %s. Extracting to %s%s. Symlinking to %s. Jenkins URL: %s" %
         (arg_listen_port, arg_extract_path,
-            " (clean after)" if arg_should_clean else "", arg_jenkins_url)
-
+            " (clean after)" if arg_should_clean else "", arg_symlink, arg_jenkins_url)
     )
     app.run(debug=True)
