@@ -470,10 +470,11 @@ module.exports = React.createClass({
             newState.ready = true;
         }
         this.setState(newState);
+        /*
         if (this.scrollStateMap[roomId]) {
             var scrollState = this.scrollStateMap[roomId];
             this.refs.roomView.restoreScrollState(scrollState);
-        }
+        }*/
         if (this.refs.roomView && showSettings) {
             this.refs.roomView.showSettings(true);
         }
