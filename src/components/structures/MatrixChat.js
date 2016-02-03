@@ -320,7 +320,7 @@ module.exports = React.createClass({
                 // by default we autoPeek rooms, unless we were called explicitly with
                 // autoPeek=false by something like RoomDirectory who has already peeked
                 this.setState({ autoPeek : payload.auto_peek === false ? false : true });
-                this._viewRoom(payload.room_id, payload.show_settings);
+                this._viewRoom(payload.room_id, payload.show_settings, payload.event_id);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -355,7 +355,8 @@ module.exports = React.createClass({
                 if (foundRoom) {
                     dis.dispatch({
                         action: 'view_room',
-                        room_id: foundRoom.roomId
+                        room_id: foundRoom.roomId,
+                        event_id: payload.event_id,
                     });
                     return;
                 }
@@ -364,7 +365,8 @@ module.exports = React.createClass({
                 function(result) {
                     dis.dispatch({
                         action: 'view_room',
-                        room_id: result.room_id
+                        room_id: result.room_id,
+                        event_id: payload.event_id,
                     });
                 });
                 break;
@@ -436,15 +438,34 @@ module.exports = React.createClass({
         });
     },
 
-    _viewRoom: function(roomId, showSettings) {
+    // switch view to the given room
+    //
+    // eventId is optional and will cause a switch to the context of that
+    // particular event.
+    _viewRoom: function(roomId, showSettings, eventId) {
         // before we switch room, record the scroll state of the current room
         this._updateScrollMap();
 
         this.focusComposer = true;
+
         var newState = {
             currentRoom: roomId,
+            initialEventId: eventId,
+            highlightedEventId: eventId,
+            initialEventPixelOffset: undefined,
             page_type: this.PageTypes.RoomView,
         };
+
+        // if we aren't given an explicit event id, look for one in the
+        // scrollStateMap.
+        if (!eventId) {
+            var scrollState = this.scrollStateMap[roomId];
+            if (scrollState) {
+                newState.initialEventId = scrollState.focussedEvent;
+                newState.initialEventPixelOffset = scrollState.pixelOffset;
+            }
+        }
+
         if (this.sdkReady) {
             // if the SDK is not ready yet, remember what room
             // we're supposed to be on but don't notify about
@@ -466,15 +487,14 @@ module.exports = React.createClass({
                 Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
 
+            if (eventId) {
+                presentedId += "/"+eventId;
+            }
             this.notifyNewScreen('room/'+presentedId);
             newState.ready = true;
         }
         this.setState(newState);
-        /*
-        if (this.scrollStateMap[roomId]) {
-            var scrollState = this.scrollStateMap[roomId];
-            this.refs.roomView.restoreScrollState(scrollState);
-        }*/
+
         if (this.refs.roomView && showSettings) {
             this.refs.roomView.showSettings(true);
         }
@@ -522,9 +542,11 @@ module.exports = React.createClass({
             if (self.starting_room_alias) {
                 dis.dispatch({
                     action: 'view_room_alias',
-                    room_alias: self.starting_room_alias
+                    room_alias: self.starting_room_alias,
+                    event_id: self.starting_event_id,
                 });
                 delete self.starting_room_alias;
+                delete self.starting_event_id;
             } else if (!self.state.page_type) {
                 if (!self.state.currentRoom) {
                     var firstRoom = null;
@@ -650,23 +672,28 @@ module.exports = React.createClass({
                 return;
             }
 
-            var roomString = screen.split('/')[1];
+            var segments = screen.substring(5).split('/');
+            var roomString = segments[0];
+            var eventId = segments[1]; // undefined if no event id given
             if (roomString[0] == '#') {
                 if (this.state.logged_in) {
                     dis.dispatch({
                         action: 'view_room_alias',
-                        room_alias: roomString
+                        room_alias: roomString,
+                        event_id: eventId,
                     });
                 } else {
                     // Okay, we'll take you here soon...
                     this.starting_room_alias = roomString;
+                    this.starting_event_id = eventId;
                     // ...but you're still going to have to log in.
                     this.notifyNewScreen('login');
                 }
             } else {
                 dis.dispatch({
                     action: 'view_room',
-                    room_id: roomString
+                    room_id: roomString,
+                    event_id: eventId,
                 });
             }
         }
@@ -844,6 +871,9 @@ module.exports = React.createClass({
                         <RoomView
                             ref="roomView"
                             roomId={this.state.currentRoom}
+                            eventId={this.state.initialEventId}
+                            highlightedEventId={this.state.highlightedEventId}
+                            eventPixelOffset={this.state.initialEventPixelOffset}
                             autoPeek={this.state.autoPeek}
                             key={this.state.currentRoom}
                             ConferenceHandler={this.props.ConferenceHandler} />
