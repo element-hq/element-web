@@ -5,8 +5,8 @@ from urlparse import urljoin
 from flask import Flask, jsonify, request, abort
 app = Flask(__name__)
 
-arg_jenkins_url, arg_listen_port, arg_extract_path, arg_should_clean, arg_symlink = (
-    None, None, None, None, None
+arg_jenkins_url, arg_extract_path, arg_should_clean, arg_symlink = (
+    None, None, None, None
 )
 
 def download_file(url):
@@ -133,7 +133,7 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
-        "-p", "--port", dest="port", default=4000, help=(
+        "-p", "--port", dest="port", default=4000, type=int, help=(
             "The port to listen on for requests from Jenkins."
         )
     )
@@ -160,12 +160,11 @@ if __name__ == "__main__":
     else:
         arg_jenkins_url = args.jenkins + "/"
     arg_extract_path = args.extract
-    arg_listen_port = args.port
     arg_should_clean = args.clean
     arg_symlink = args.symlink
     print(
         "Listening on port %s. Extracting to %s%s. Symlinking to %s. Jenkins URL: %s" %
-        (arg_listen_port, arg_extract_path,
+        (args.port, arg_extract_path,
             " (clean after)" if arg_should_clean else "", arg_symlink, arg_jenkins_url)
     )
-    app.run(debug=True)
+    app.run(port=args.port, debug=True)
