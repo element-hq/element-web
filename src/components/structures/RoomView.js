@@ -1017,7 +1017,7 @@ module.exports = React.createClass({
             var hr;
             hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '99%'}} ref={function(n) {
                 Velocity(n, {opacity: '0', width: '10%'}, {duration: 400, easing: 'easeInSine', delay: 1000, complete: function() {
-                    self.setState({readMarkerGhostEventId: undefined});
+                    if (!self.unmounted) self.setState({readMarkerGhostEventId: undefined});
                 }});
             }} />);
             ret.splice(ghostIndex, 0, (

@@ -96,6 +96,14 @@ module.exports = React.createClass({
             if (!this.props.config || !this.props.config.default_hs_url) {
                 console.error("Cannot enable guest access: No supplied config prop for HS/IS URLs");
             }
+            else if (this.props.startingQueryParams.email) {
+                console.log("Not registering as guest; email invite.");
+                this._autoRegisterAsGuest = false;
+            }
+            else if (this.props.startingQueryParams.client_secret && this.props.startingQueryParams.sid) {
+                console.log("Not registering as guest; registration.");
+                this._autoRegisterAsGuest = false;
+            }
             else {
                 this._autoRegisterAsGuest = true;
             }
@@ -200,7 +208,6 @@ module.exports = React.createClass({
                 });
                 break;
             case 'start_registration':
-                if (this.state.logged_in) return;
                 var newState = payload.params || {};
                 newState.screen = 'register';
                 if (
@@ -657,10 +664,17 @@ module.exports = React.createClass({
                 action: 'start_post_registration',
             });
         } else if (screen.indexOf('room/') == 0) {
+
+            if (!this.state.logged_in && this.props.startingQueryParams.email) {
+                console.log("Redirecting to email registration");
+                this.showScreen("register");
+                this.notifyNewScreen('register'); // this doesn't call showScreen, just updates the hash
+                return;
+            }
+
             var segments = screen.substring(5).split('/');
             var roomString = segments[0];
             var eventId = segments[1]; // undefined if no event id given
-
             if (roomString[0] == '#') {
                 if (this.state.logged_in) {
                     dis.dispatch({
@@ -684,7 +698,7 @@ module.exports = React.createClass({
             }
         }
         else {
-            if (screen) console.error("Unknown screen : %s", screen);
+            console.error("Unknown screen : %s", screen);
         }
     },
 
@@ -837,6 +851,7 @@ module.exports = React.createClass({
         var CreateRoom = sdk.getComponent('structures.CreateRoom');
         var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
+        var GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
 
         // needs to be before normal PageTypes as you are logged in technically
@@ -880,7 +895,20 @@ module.exports = React.createClass({
             }
 
             // TODO: Fix duplication here and do conditionals like we do above
-            if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
+            if (MatrixClientPeg.get().isGuest()) {
+                return (
+                        <div className="mx_MatrixChat_wrapper">
+                            <GuestWarningBar />
+                            <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
+                                <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
+                                <main className="mx_MatrixChat_middlePanel">
+                                    {page_element}
+                                </main>
+                                {right_panel}
+                            </div>
+                        </div>
+                );
+            } else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
                 return (
                         <div className="mx_MatrixChat_wrapper">
                             <MatrixToolbar />
