@@ -30,6 +30,7 @@ var sdk = require("matrix-react-sdk");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
 var configJson = require("../../config.json");
+var UpdateChecker = require("./updater");
 
 var qs = require("querystring");
 
@@ -105,6 +106,10 @@ function onHashChange(ev) {
     routeUrl(window.location);
 }
 
+function onVersion(current, latest) {
+    window.matrixChat.onVersion(current, latest);
+}
+
 var loaded = false;
 var lastLoadedScreen = null;
 
@@ -138,6 +143,8 @@ window.onload = function() {
     if (!validBrowser) {
         return;
     }
+    UpdateChecker.setVersionListener(onVersion);
+    UpdateChecker.run();
     routeUrl(window.location);
     loaded = true;
     if (lastLoadedScreen) {
