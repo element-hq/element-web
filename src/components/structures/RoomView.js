@@ -995,8 +995,18 @@ module.exports = React.createClass({
 
             var eventId = mxEv.getId();
             var highlight = (eventId == this.props.highlightedEventId);
+
+            var scrollToken = eventId;
+            // we can't use local echoes as scroll tokens, because their event
+            // IDs change.
+            if (mxEv.status) {
+                scrollToken = undefined;
+            }
+
             ret.push(
-                <li key={eventId} ref={this._collectEventNode.bind(this, eventId)} data-scroll-token={eventId}>
+                <li key={eventId} 
+                        ref={this._collectEventNode.bind(this, eventId)} 
+                        data-scroll-token={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
                         last={last} isSelectedEvent={highlight}/>
                 </li>
