@@ -63,6 +63,7 @@ module.exports.components['views.messages.MVideoBody'] = require('./components/v
 module.exports.components['views.messages.TextualBody'] = require('./components/views/messages/TextualBody');
 module.exports.components['views.messages.TextualEvent'] = require('./components/views/messages/TextualEvent');
 module.exports.components['views.messages.UnknownBody'] = require('./components/views/messages/UnknownBody');
+module.exports.components['views.room_settings.AliasSettings'] = require('./components/views/room_settings/AliasSettings');
 module.exports.components['views.rooms.EntityTile'] = require('./components/views/rooms/EntityTile');
 module.exports.components['views.rooms.EventTile'] = require('./components/views/rooms/EventTile');
 module.exports.components['views.rooms.MemberInfo'] = require('./components/views/rooms/MemberInfo');

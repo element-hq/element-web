@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+var q = require("q");
 var React = require('react');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Tinter = require('../../../Tinter');
@@ -71,15 +72,6 @@ module.exports = React.createClass({
             room_color_index = 0;
         }
 
-        // get the aliases
-        var aliases = {};
-        var domain = MatrixClientPeg.get().getDomain();
-        var alias_events = this.props.room.currentState.getStateEvents('m.room.aliases');
-        for (var i = 0; i < alias_events.length; i++) {
-            aliases[alias_events[i].getStateKey()] = alias_events[i].getContent().aliases.slice(); // shallow copy
-        }
-        aliases[domain] = aliases[domain] || [];
-
         var tags = {};
         Object.keys(this.props.room.tags).forEach(function(tagName) {
             tags[tagName] = {};
@@ -89,15 +81,18 @@ module.exports = React.createClass({
             power_levels_changed: false,
             color_scheme_changed: false,
             color_scheme_index: room_color_index,
-            aliases_changed: false,
-            aliases: aliases,
             tags_changed: false,
             tags: tags,
         };
     },
 
+    saveAliases: function() {
+        if (!this.refs.alias_settings) { return q(); }
+        return this.refs.alias_settings.saveSettings();
+    },
+
     resetState: function() {
-        this.set.state(this.getInitialState());
+        this.setState(this.getInitialState());
     },
 
     canGuestsJoin: function() {
@@ -143,84 +138,6 @@ module.exports = React.createClass({
         };
 
         return new_power_levels;
-    },
-
-    getCanonicalAlias: function() {
-        return this.refs.canonical_alias ? this.refs.canonical_alias.value : "";        
-    },
-
-    getAliasOperations: function() {
-        if (!this.state.aliases_changed) return undefined;
-
-        // work out the delta from room state to UI state
-        var ops = [];
-
-        // calculate original ("old") aliases
-        var oldAliases = {};
-        var aliases = this.state.aliases;
-        var alias_events = this.props.room.currentState.getStateEvents('m.room.aliases');
-        for (var i = 0; i < alias_events.length; i++) {
-            var domain = alias_events[i].getStateKey();
-            oldAliases[domain] = alias_events[i].getContent().aliases.slice(); // shallow copy
-        }
-
-        // FIXME: this whole delta-based set comparison function used for domains, aliases & tags
-        // should be factored out asap rather than duplicated like this.
-
-        // work out whether any domains have entirely disappeared or appeared
-        var domainDelta = {}
-        Object.keys(oldAliases).forEach(function(domain) {
-            domainDelta[domain] = domainDelta[domain] || 0;
-            domainDelta[domain]--;
-        });
-        Object.keys(aliases).forEach(function(domain) {
-            domainDelta[domain] = domainDelta[domain] || 0;
-            domainDelta[domain]++;
-        });
-
-        Object.keys(domainDelta).forEach(function(domain) {
-            switch (domainDelta[domain]) {
-                case 1: // entirely new domain
-                    aliases[domain].forEach(function(alias) {
-                        ops.push({ type: "put", alias : alias });
-                    });
-                    break;
-                case -1: // entirely removed domain
-                    oldAliases[domain].forEach(function(alias) {
-                        ops.push({ type: "delete", alias : alias });
-                    });
-                    break;
-                case 0: // mix of aliases in this domain.
-                    // compare old & new aliases for this domain
-                    var delta = {};
-                    oldAliases[domain].forEach(function(item) {
-                        delta[item] = delta[item] || 0;
-                        delta[item]--;
-                    });
-                    aliases[domain].forEach(function(item) {
-                        delta[item] = delta[item] || 0;
-                        delta[item]++;
-                    });
-
-                    Object.keys(delta).forEach(function(alias) {
-                        if (delta[alias] == 1) {
-                            ops.push({ type: "put", alias: alias });
-                        } else if (delta[alias] == -1) {
-                            ops.push({ type: "delete", alias: alias });
-                        } else {
-                            console.error("Calculated alias delta of " + delta[alias] +
-                                          " - this should never happen!");                            
-                        }
-                    });
-                    break;
-                default:
-                    console.error("Calculated domain delta of " + domainDelta[domain] +
-                                  " - this should never happen!");
-                    break;
-            }
-        });
-
-        return ops;
     },
 
     getTagOperations: function() {
@@ -276,72 +193,6 @@ module.exports = React.createClass({
         });
     },
 
-    onAliasChanged: function(domain, index, alias) {
-        if (alias === "") return; // hit the delete button to delete please
-        var oldAlias;
-        if (this.isAliasValid(alias)) {
-            oldAlias = this.state.aliases[domain][index];
-            this.state.aliases[domain][index] = alias;
-            this.setState({ aliases_changed : true });
-        }
-        else {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");            
-            Modal.createDialog(ErrorDialog, {
-                title: "Invalid address format", 
-                description: "'" + alias + "' is not a valid format for an address",
-            });
-        }        
-    },
-
-    onAliasDeleted: function(domain, index) {
-        // It's a bit naughty to directly manipulate this.state, and React would
-        // normally whine at you, but it can't see us doing the splice.  Given we
-        // promptly setState anyway, it's just about acceptable.  The alternative
-        // would be to arbitrarily deepcopy to a temp variable and then setState
-        // that, but why bother when we can cut this corner.
-        var alias = this.state.aliases[domain].splice(index, 1);
-        this.setState({ 
-            aliases: this.state.aliases
-        });
-
-        this.setState({ aliases_changed : true });
-    },
-
-    onAliasAdded: function(alias) {
-        if (alias === "") return; // ignore attempts to create blank aliases
-        if (alias === undefined) {
-            alias = this.refs.add_alias ? this.refs.add_alias.getValue() : undefined;
-            if (alias === undefined || alias === "") return;
-        }
-
-        if (this.isAliasValid(alias)) {
-            var domain = alias.replace(/^.*?:/, '');
-            // XXX: do we need to deep copy aliases before editing it?
-            this.state.aliases[domain] = this.state.aliases[domain] || [];
-            this.state.aliases[domain].push(alias);
-            this.setState({ 
-                aliases: this.state.aliases
-            });
-
-            // reset the add field
-            this.refs.add_alias.setValue('');
-
-            this.setState({ aliases_changed : true });
-        }
-        else {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");            
-            Modal.createDialog(ErrorDialog, {
-                title: "Invalid alias format", 
-                description: "'" + alias + "' is not a valid format for an alias",
-            });
-        }
-    },
-
-    isAliasValid: function(alias) {
-        // XXX: FIXME SPEC-1
-        return (alias.match(/^#([^\/:,]+?):(.+)$/) && encodeURI(alias) === alias);
-    },
-
     onTagChange: function(tagName, event) {
         if (event.target.checked) {
             if (tagName === 'm.favourite') {
@@ -368,6 +219,7 @@ module.exports = React.createClass({
         // TODO: go through greying out things you don't have permission to change
         // (or turning them into informative stuff)
 
+        var AliasSettings = sdk.getComponent("room_settings.AliasSettings");
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
 
@@ -445,118 +297,19 @@ module.exports = React.createClass({
 
         var room_aliases_level = state_default;
         if (events_levels['m.room.aliases'] !== undefined) {
-            room_avatar_level = events_levels['m.room.aliases'];
+            room_aliases_level = events_levels['m.room.aliases'];
         }
         var can_set_room_aliases = current_user_level >= room_aliases_level;
 
         var canonical_alias_level = state_default;
         if (events_levels['m.room.canonical_alias'] !== undefined) {
-            room_avatar_level = events_levels['m.room.canonical_alias'];
+            canonical_alias_level = events_levels['m.room.canonical_alias'];
         }
         var can_set_canonical_alias = current_user_level >= canonical_alias_level;
 
         var can_set_tag = true;
 
         var self = this;
-
-        var canonical_alias_event = this.props.room.currentState.getStateEvents('m.room.canonical_alias', '');
-        var canonical_alias = canonical_alias_event ? canonical_alias_event.getContent().alias : "";
-        var domain = MatrixClientPeg.get().getDomain();
-
-        var remote_domains = Object.keys(this.state.aliases).filter(function(alias) { return alias !== domain });
-
-        var remote_aliases_section;
-        if (remote_domains.length) {
-            remote_aliases_section = 
-                <div>
-                    <div className="mx_RoomSettings_aliasLabel">
-                        Remote addresses for this room:
-                    </div>
-                    <div className="mx_RoomSettings_aliasesTable">
-                        { remote_domains.map(function(state_key, i) {
-                            return self.state.aliases[state_key].map(function(alias, j) {
-                                return (
-                                    <div className="mx_RoomSettings_aliasesTableRow" key={ i + "_" + j }>
-                                        <EditableText
-                                             className="mx_RoomSettings_alias mx_RoomSettings_editable"
-                                             blurToCancel={ false }
-                                             editable={ false }
-                                             initialValue={ alias } />
-                                    </div>
-                                );
-                            });
-                        })}
-                    </div>
-                </div>
-        }
-
-        var canonical_alias_section;
-        if (can_set_canonical_alias) {
-            canonical_alias_section = 
-                <select ref="canonical_alias" defaultValue={ canonical_alias }>
-                    { Object.keys(self.state.aliases).map(function(stateKey, i) {
-                        return self.state.aliases[stateKey].map(function(alias, j) {
-                            return <option value={ alias } key={ i + "_" + j }>{ alias }</option>
-                        });
-                    })}
-                    <option value="" key="unset">not specified</option>
-                </select>
-        }
-        else {
-            canonical_alias_section = <b>{ canonical_alias || "not set" }</b>;
-        }
-
-        var aliases_section =
-            <div>
-                <h3>Addresses</h3>
-                <div className="mx_RoomSettings_aliasLabel">The main address for this room is: { canonical_alias_section }</div>
-                <div className="mx_RoomSettings_aliasLabel">
-                    { this.state.aliases[domain].length
-                      ? "Local addresses for this room:"
-                      : "This room has no local addresses" }
-                </div>
-                <div className="mx_RoomSettings_aliasesTable">
-                    { this.state.aliases[domain].map(function(alias, i) {
-                        var deleteButton;
-                        if (can_set_room_aliases) {
-                            deleteButton = <img src="img/cancel-small.svg" width="14" height="14" alt="Delete"
-                                                onClick={ self.onAliasDeleted.bind(self, domain, i) }/>;
-                        }
-                        return (
-                            <div className="mx_RoomSettings_aliasesTableRow" key={ i }>
-                                <EditableText
-                                    className="mx_RoomSettings_alias mx_RoomSettings_editable"
-                                    placeholderClassName="mx_RoomSettings_aliasPlaceholder"
-                                    placeholder={ "New address (e.g. #foo:" + domain + ")" }
-                                    blurToCancel={ false }
-                                    onValueChanged={ self.onAliasChanged.bind(self, domain, i) }
-                                    editable={ can_set_room_aliases }
-                                    initialValue={ alias } />
-                                <div className="mx_RoomSettings_deleteAlias">
-                                     { deleteButton }
-                                </div>
-                            </div>
-                        );
-                    })}
-
-                    <div className="mx_RoomSettings_aliasesTableRow" key="new">
-                        <EditableText
-                            ref="add_alias"
-                            className="mx_RoomSettings_alias mx_RoomSettings_editable"
-                            placeholderClassName="mx_RoomSettings_aliasPlaceholder"
-                            placeholder={ "New address (e.g. #foo:" + domain + ")" }
-                            blurToCancel={ false }
-                            onValueChanged={ self.onAliasAdded } />
-                        <div className="mx_RoomSettings_addAlias">
-                             <img src="img/plus.svg" width="14" height="14" alt="Add"
-                                  onClick={ self.onAliasAdded.bind(self, undefined) }/>
-                        </div>                        
-                    </div>                      
-                </div>
-
-                { remote_aliases_section }
-
-            </div>;
 
         var room_colors_section =
             <div>
@@ -676,7 +429,12 @@ module.exports = React.createClass({
 
                 { room_colors_section }
 
-                { aliases_section }
+                <AliasSettings ref="alias_settings"
+                    roomId={this.props.room.roomId}
+                    canSetCanonicalAlias={can_set_canonical_alias}
+                    canSetAliases={can_set_room_aliases}
+                    canonicalAliasEvent={this.props.room.currentState.getStateEvents('m.room.canonical_alias', '')}
+                    aliasEvents={this.props.room.currentState.getStateEvents('m.room.aliases')} />
 
                 <h3>Permissions</h3>
                 <div className="mx_RoomSettings_powerLevels mx_RoomSettings_settings">
