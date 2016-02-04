@@ -420,6 +420,7 @@ module.exports = React.createClass({
             this.setState({
                 room: room
             });
+            this._initTimeline(this.props);
         }
     },
 
