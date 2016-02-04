@@ -27,12 +27,8 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            value: this.props.currentDisplayName || this.getDefaultDisplayName(),
+            value: this.props.currentDisplayName || "Guest "+MatrixClientPeg.get().getUserIdLocalpart(),
         }
-    },
-
-    getDefaultDisplayName: function() {
-        return "Guest "+MatrixClientPeg.get().getUserIdLocalpart();
     },
 
     getValue: function() {

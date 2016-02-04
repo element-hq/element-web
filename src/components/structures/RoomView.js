@@ -700,15 +700,14 @@ module.exports = React.createClass({
         var self = this;
 
         var cli = MatrixClientPeg.get();
-        var join_defer;
-        var join_promise;
+        var display_name_promise = q();
         // if this is the first room we're joining, check the user has a display name
         // and if they don't, prompt them to set one.
         // NB. This unfortunately does not re-use the ChangeDisplayName component because
         // it doesn't behave quite as desired here (we want an input field here rather than
         // content-editable, and we want a default).
         if (MatrixClientPeg.get().getRooms().length == 0) {
-            join_promise = cli.getProfileInfo(cli.credentials.userId).then((result) => {
+            display_name_promise = cli.getProfileInfo(cli.credentials.userId).then((result) => {
                 if (!result.displayname) {
                     var SetDisplayNameDialog = sdk.getComponent('views.dialogs.SetDisplayNameDialog');
                     var dialog_defer = q.defer();
@@ -717,8 +716,7 @@ module.exports = React.createClass({
                     var dialog_instance = <SetDisplayNameDialog currentDisplayName={result.displayname} ref={(r) => {
                             dialog_ref = r;
                     }} onFinished={() => {
-                        var new_displayname = dialog_ref.getValue() || dialog_ref.getDefaultValue();
-                        cli.setDisplayName(new_displayname).done(() => {
+                        cli.setDisplayName(dialog_ref.getValue()).done(() => {
                             dialog_defer.resolve();
                         });
                         modal.close();
@@ -727,13 +725,9 @@ module.exports = React.createClass({
                     return dialog_defer.promise;
                 }
             });
-        } else {
-            join_defer = q.defer();
-            join_promise = join_defer.promise;
-            join_defer.resolve();
         }
 
-        join_promise.then(() => {
+        display_name_promise.then(() => {
             return MatrixClientPeg.get().joinRoom(this.props.roomId)
         }).done(function() {
             // It is possible that there is no Room yet if state hasn't come down
