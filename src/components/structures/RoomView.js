@@ -252,6 +252,8 @@ module.exports = React.createClass({
                 } else {
                     this.refs.messagePanel.scrollToBottom();
                 }
+
+                this.sendReadReceipt();
             });
         });
     },
@@ -631,9 +633,6 @@ module.exports = React.createClass({
     _initialiseMessagePanel: function() {
         var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
         this.refs.messagePanel.initialised = true;
-
-        this.sendReadReceipt();
-
         this.updateTint();
     },
 
@@ -1323,6 +1322,13 @@ module.exports = React.createClass({
         if (!this.state.room) return;
         if (!this.refs.messagePanel) return;
 
+        // we don't want to see our RR marker dropping down as we scroll
+        // through old history. For now, do this just by leaving the RR where
+        // it is until we hit the bottom of the room, though ultimately we
+        // probably want to keep sending RR, but hide the RR until we reach
+        // the bottom of the room again, or something.
+        if (!this.state.atEndOfLiveTimeline) return;
+
         var currentReadUpToEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
 
@@ -1510,7 +1516,9 @@ module.exports = React.createClass({
     // get the current scroll position of the room, so that it can be
     // restored when we switch back to it.
     //
-    // This returns an object with the following properties:
+    // If there is no special scroll state (ie, we are following the live
+    // timeline), returns null. Otherwise, returns an object with the following
+    // properties:
     //
     //    focussedEvent: the ID of the 'focussed' event. Typically this is the
     //        last event fully visible in the viewport, though if we have done
@@ -1519,11 +1527,22 @@ module.exports = React.createClass({
     //    pixelOffset: the number of pixels the window is scrolled down from
     //        the focussedEvent.
     //
-    // If there are no visible events, returns null.
     //
     getScrollState: function() {
         var messagePanel = this.refs.messagePanel;
         if (!messagePanel) return null;
+
+        // if we're following the live timeline, we want to return null; that
+        // means that, if we switch back, we will jump to the read-up-to mark.
+        //
+        // That should be more intuitive than slavishly preserving the current
+        // scroll state, in the case where the room advances in the meantime
+        // (particularly in the case that the user reads some stuff on another
+        // device).
+        //
+        if (this.state.atEndOfLiveTimeline) {
+            return null;
+        }
 
         var scrollState = messagePanel.getScrollState();
 
