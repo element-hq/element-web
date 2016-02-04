@@ -173,7 +173,7 @@ input[type=text]:focus, textarea:focus {
     padding-bottom: 24px;
 }
 
-.mx_Dialog button {
+.mx_Dialog button, .mx_Dialog input[type="submit"] {
     border: 0px;
     height: 36px;
     border-radius: 36px;
