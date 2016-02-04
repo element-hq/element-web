@@ -122,6 +122,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         this.last_rr_sent_event_id = undefined;
         this.dispatcherRef = dis.register(this.onAction);
+        MatrixClientPeg.get().on("Room", this.onRoom);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
@@ -418,12 +419,20 @@ module.exports = React.createClass({
         }
     },
 
+    onRoom: function(room) {
+        if (room.roomId == this.props.roomId) {
+            this.setState({
+                room: room
+            });
+            this._initTimeline(this.props).done();
+        }
+    },
+
     onRoomName: function(room) {
         if (room.roomId == this.props.roomId) {
             this.setState({
                 room: room
             });
-            this._initTimeline(this.props);
         }
     },
 
