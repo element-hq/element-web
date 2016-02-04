@@ -702,7 +702,7 @@ module.exports = React.createClass({
         var cli = MatrixClientPeg.get();
         var join_defer;
         var join_promise;
-        // if this is the first room we're joining, checkthe user has a display name
+        // if this is the first room we're joining, check the user has a display name
         // and if they don't, prompt them to set one.
         // NB. This unfortunately does not re-use the ChangeDisplayName component because
         // it doesn't behave quite as desired here (we want an input field here rather than
