@@ -15,7 +15,8 @@ Getting started
 7. Open http://127.0.0.1:8080/ in your browser to see your newly built Vector.
 
 With `npm start`, any changes you make to the source files will cause a rebuild so
-your changes will show up when you refresh.
+your changes will show up when you refresh. This development server also disables
+caching, so do NOT use it in production.
 
 For production use, run `npm run build` to build all the necessary files
 into the `vector` directory and run your own server.
