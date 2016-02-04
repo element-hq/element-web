@@ -24,6 +24,7 @@ var RoomListSorter = require("../../../RoomListSorter");
 var Unread = require('../../../Unread');
 var dis = require("../../../dispatcher");
 var sdk = require('../../../index');
+var rate_limited_func = require('../../../ratelimitedfunc');
 
 var HIDE_CONFERENCE_CHANS = true;
 
@@ -155,36 +156,9 @@ module.exports = React.createClass({
         this._delayedRefreshRoomList();
     },
 
-    _delayedRefreshRoomList: function() {
-        // There can be 1000s of JS SDK events when rooms are initially synced;
-        // we don't want to do lots of work rendering until things have settled.
-        // Therefore, keep a 1s refresh buffer which will refresh the room list
-        // at MOST once every 1s to prevent thrashing.
-        var MAX_REFRESH_INTERVAL_MS = 1000;
-        var self = this;
-
-        if (!self._lastRefreshRoomListTs) {
-            self.refreshRoomList(); // first refresh evar
-        }
-        else {
-            var timeWaitedMs = Date.now() - self._lastRefreshRoomListTs;
-            if (timeWaitedMs > MAX_REFRESH_INTERVAL_MS) {
-                clearTimeout(self._refreshRoomListTimerId);
-                self._refreshRoomListTimerId = null;
-                self.refreshRoomList(); // refreshed more than MAX_REFRESH_INTERVAL_MS ago
-            }
-            else {
-                // refreshed less than MAX_REFRESH_INTERVAL_MS ago, wait the difference
-                // if we aren't already waiting. If we are waiting then NOP, it will
-                // fire soon, promise!
-                if (!self._refreshRoomListTimerId) {
-                    self._refreshRoomListTimerId = setTimeout(function() {
-                        self.refreshRoomList();
-                    }, 10 + MAX_REFRESH_INTERVAL_MS - timeWaitedMs); // 10 is a buffer amount
-                }
-            }
-        }
-    },
+    _delayedRefreshRoomList: new rate_limited_func(function() {
+        this.refreshRoomList();
+    }, 500),
 
     refreshRoomList: function() {
         // console.log("DEBUG: Refresh room list delta=%s ms",
