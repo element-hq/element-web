@@ -996,12 +996,9 @@ module.exports = React.createClass({
             var eventId = mxEv.getId();
             var highlight = (eventId == this.props.highlightedEventId);
 
-            var scrollToken = eventId;
-            // we can't use local echoes as scroll tokens, because their event
-            // IDs change.
-            if (mxEv.status) {
-                scrollToken = undefined;
-            }
+            // we can't use local echoes as scroll tokens, because their event IDs change.
+            // Local echos have a send "status".
+            var scrollToken = mxEv.status ? undefined : eventId;
 
             ret.push(
                 <li key={eventId} 
