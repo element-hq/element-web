@@ -165,20 +165,12 @@ module.exports = React.createClass({
         this.setState(this.getInitialState());
     },
 
-    canGuestsJoin: function() {
-        return this.refs.guests_join.checked;
-    },
-
     canGuestsRead: function() {
         return this.refs.guests_read.checked;
     },
 
     getTopic: function() {
         return this.refs.topic ? this.refs.topic.value : "";
-    },
-
-    getJoinRules: function() {
-        return this.refs.is_private.checked ? "invite" : "public";
     },
 
     getHistoryVisibility: function() {
@@ -272,10 +264,10 @@ module.exports = React.createClass({
         return event.getContent()[keyName] || defaultValue;
     },
     
-    _onToggle: function(keyName, ev) {
+    _onToggle: function(keyName, checkedValue, uncheckedValue, ev) {
         console.log("Checkbox toggle: %s %s", keyName, ev.target.checked);
         var state = {};
-        state[keyName] = ev.target.checked;
+        state[keyName] = ev.target.checked ? checkedValue : uncheckedValue;
         this.setState(state);
     },
 
@@ -309,16 +301,7 @@ module.exports = React.createClass({
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
 
-        
-
-        var history_visibility = this.props.room.currentState.getStateEvents('m.room.history_visibility', '');
-        if (history_visibility) history_visibility = history_visibility.getContent().history_visibility;
-
         var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
-        var guest_access = this.props.room.currentState.getStateEvents('m.room.guest_access', '');
-        if (guest_access) {
-            guest_access = guest_access.getContent().guest_access;
-        }
 
         var events_levels = (power_levels ? power_levels.events : {}) || {};
 
@@ -496,23 +479,26 @@ module.exports = React.createClass({
 
                 <div className="mx_RoomSettings_toggles">
                     <label>
-                        <input type="checkbox" onChange={this._onToggle.bind(this, "areNotifsMuted")} defaultChecked={this.state.areNotifsMuted}/>
+                        <input type="checkbox" onChange={this._onToggle.bind(this, "areNotifsMuted", true, false)} defaultChecked={this.state.areNotifsMuted}/>
                         Mute notifications for this room
                     </label>
                     <label>
-                        <input type="checkbox" ref="is_private" defaultChecked={this.state.join_rule != "public"}/>
+                        <input type="checkbox" onChange={this._onToggle.bind(this, "join_rule", "invite", "public")}
+                            defaultChecked={this.state.join_rule !== "public"}/>
                         Make this room private
                     </label>
                     <label>
-                        <input type="checkbox" ref="share_history" defaultChecked={history_visibility === "shared" || history_visibility === "world_readable"}/>
+                        <input type="checkbox" ref="share_history"
+                            defaultChecked={this.state.history_visibility === "shared" || this.state.history_visibility === "world_readable"}/>
                         Share message history with new participants
                     </label>
                     <label>
-                        <input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/>
+                        <input type="checkbox" onChange={this._onToggle.bind(this, "guest_access", "can_join", "forbidden")}
+                            defaultChecked={this.state.guest_access === "can_join"}/>
                         Let guests join this room
                     </label>
                     <label>
-                        <input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/>
+                        <input type="checkbox" ref="guests_read" defaultChecked={this.state.history_visibility === "world_readable"}/>
                         Let users read message history without joining
                     </label>
                     <label className="mx_RoomSettings_encrypt">
