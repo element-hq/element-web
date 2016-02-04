@@ -178,6 +178,9 @@ module.exports = React.createClass({
             this._calculatePeekRules(room);
             return this._initTimeline(this.props);
         }).catch((err) => {
+            // This won't necessarily be a MatrixError, but we duck-type
+            // here and say if it's got an 'errcode' key with the right value,
+            // it means we can't peek.
             if (err.errcode == "M_GUEST_ACCESS_FORBIDDEN") {
                 // This is fine: the room just isn't peekable (we assume).
                 this.setState({
