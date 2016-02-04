@@ -586,8 +586,7 @@ module.exports = React.createClass({
         Presence.start();
         cli.startClient({
             pendingEventOrdering: "end",
-            // deliberately huge limit for now to avoid hitting gappy /sync's until gappy /sync performance improves
-            initialSyncLimit: 250,
+            initialSyncLimit: 20,
         });
     },
 

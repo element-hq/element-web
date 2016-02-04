@@ -122,6 +122,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         this.last_rr_sent_event_id = undefined;
         this.dispatcherRef = dis.register(this.onAction);
+        MatrixClientPeg.get().on("Room", this.onRoom);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
@@ -163,10 +164,7 @@ module.exports = React.createClass({
 
             console.log("Attempting to peek into room %s", this.props.roomId);
 
-            roomProm = MatrixClientPeg.get().peekInRoom(this.props.roomId).catch((err) => {
-                console.error("Failed to peek into room: %s", err);
-                throw err;
-            }).then((room) => {
+            roomProm = MatrixClientPeg.get().peekInRoom(this.props.roomId).then((room) => {
                 this.setState({
                     room: room
                 });
@@ -180,6 +178,18 @@ module.exports = React.createClass({
         roomProm.then((room) => {
             this._calculatePeekRules(room);
             return this._initTimeline(this.props);
+        }).catch((err) => {
+            // This won't necessarily be a MatrixError, but we duck-type
+            // here and say if it's got an 'errcode' key with the right value,
+            // it means we can't peek.
+            if (err.errcode == "M_GUEST_ACCESS_FORBIDDEN") {
+                // This is fine: the room just isn't peekable (we assume).
+                this.setState({
+                    timelineLoading: false,
+                });
+            } else {
+                throw err;
+            }
         }).done();
     },
 
@@ -214,6 +224,8 @@ module.exports = React.createClass({
 
         this.setState({
             events: [],
+            searchResults: null, // we may have arrived here by clicking on a
+                                 // search result. Hide the results.
             timelineLoading: true,
         });
 
@@ -264,6 +276,7 @@ module.exports = React.createClass({
         }
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
@@ -406,6 +419,20 @@ module.exports = React.createClass({
             this.setState({
                 canPeek: true
             });
+        }
+    },
+
+    onRoom: function(room) {
+        // This event is fired when the room is 'stored' by the JS SDK, which
+        // means it's now a fully-fledged room object ready to be used, so
+        // set it in our state and start using it (ie. init the timeline)
+        // This will happen if we start off viewing a room we're not joined,
+        // then join it whilst RoomView is looking at that room.
+        if (room.roomId == this.props.roomId) {
+            this.setState({
+                room: room
+            });
+            this._initTimeline(this.props).done();
         }
     },
 
@@ -679,12 +706,47 @@ module.exports = React.createClass({
 
     onJoinButtonClicked: function(ev) {
         var self = this;
-        MatrixClientPeg.get().joinRoom(this.props.roomId).done(function() {
+
+        var cli = MatrixClientPeg.get();
+        var display_name_promise = q();
+        // if this is the first room we're joining, check the user has a display name
+        // and if they don't, prompt them to set one.
+        // NB. This unfortunately does not re-use the ChangeDisplayName component because
+        // it doesn't behave quite as desired here (we want an input field here rather than
+        // content-editable, and we want a default).
+        if (MatrixClientPeg.get().getRooms().length == 0) {
+            display_name_promise = cli.getProfileInfo(cli.credentials.userId).then((result) => {
+                if (!result.displayname) {
+                    var SetDisplayNameDialog = sdk.getComponent('views.dialogs.SetDisplayNameDialog');
+                    var dialog_defer = q.defer();
+                    var dialog_ref;
+                    var modal;
+                    var dialog_instance = <SetDisplayNameDialog currentDisplayName={result.displayname} ref={(r) => {
+                            dialog_ref = r;
+                    }} onFinished={() => {
+                        cli.setDisplayName(dialog_ref.getValue()).done(() => {
+                            dialog_defer.resolve();
+                        });
+                        modal.close();
+                    }} />
+                    modal = Modal.createDialogWithElement(dialog_instance);
+                    return dialog_defer.promise;
+                }
+            });
+        }
+
+        display_name_promise.then(() => {
+            return MatrixClientPeg.get().joinRoom(this.props.roomId)
+        }).done(function() {
             // It is possible that there is no Room yet if state hasn't come down
             // from /sync - joinRoom will resolve when the HTTP request to join succeeds,
             // NOT when it comes down /sync. If there is no room, we'll keep the
             // joining flag set until we see it. Likewise, if our state is not
             // "join" we'll keep this flag set until it comes down /sync.
+
+            // We'll need to initialise the timeline when joining, but due to
+            // the above, we can't do it here: we do it in onRoom instead,
+            // once we have a useable room object.
             var room = MatrixClientPeg.get().getRoom(self.props.roomId);
             var me = MatrixClientPeg.get().credentials.userId;
             self.setState({
@@ -863,6 +925,14 @@ module.exports = React.createClass({
         });
     },
 
+    _onSearchResultSelected: function(result) {
+        var event = result.context.getEvent();
+        dis.dispatch({
+            action: 'view_room',
+            room_id: event.getRoomId(),
+            event_id: event.getId(),
+        });
+    },
 
     getSearchResultTiles: function() {
         var EventTile = sdk.getComponent('rooms.EventTile');
@@ -926,7 +996,8 @@ module.exports = React.createClass({
 
             ret.push(<SearchResultTile key={mxEv.getId()}
                      searchResult={result}
-                     searchHighlights={this.state.searchHighlights}/>);
+                     searchHighlights={this.state.searchHighlights}
+                     onSelect={this._onSearchResultSelected.bind(this, result)}/>);
         }
         return ret;
     },
@@ -1005,8 +1076,15 @@ module.exports = React.createClass({
 
             var eventId = mxEv.getId();
             var highlight = (eventId == this.props.highlightedEventId);
+
+            // we can't use local echoes as scroll tokens, because their event IDs change.
+            // Local echos have a send "status".
+            var scrollToken = mxEv.status ? undefined : eventId;
+
             ret.push(
-                <li key={eventId} ref={this._collectEventNode.bind(this, eventId)} data-scroll-token={eventId}>
+                <li key={eventId} 
+                        ref={this._collectEventNode.bind(this, eventId)} 
+                        data-scroll-token={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
                         last={last} isSelectedEvent={highlight}/>
                 </li>
