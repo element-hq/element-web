@@ -421,7 +421,12 @@ module.exports = React.createClass({
     },
 
     onRoom: function(room) {
-        if (room.roomId == this.props.roomId) {
+        // This event is fired when the room is 'stored' by the JS SDK, which
+        // means it's now a fully-fledged room object ready to be used, so
+        // set it in our state and start using it (ie. init the timeline)
+        // This will happen if we start off viewing a room we're not joined,
+        // then join it whilst RoomView is looking at that room.
+        if (room.roomId == this.props.roomId && !this.state.room) {
             this.setState({
                 room: room
             });
@@ -705,6 +710,10 @@ module.exports = React.createClass({
             // NOT when it comes down /sync. If there is no room, we'll keep the
             // joining flag set until we see it. Likewise, if our state is not
             // "join" we'll keep this flag set until it comes down /sync.
+
+            // We'll need to initialise the timeline when joining, but due to
+            // the above, we can't do it here: we do it in onRoom instead,
+            // once we have a useable room object.
             var room = MatrixClientPeg.get().getRoom(self.props.roomId);
             var me = MatrixClientPeg.get().credentials.userId;
             self.setState({
