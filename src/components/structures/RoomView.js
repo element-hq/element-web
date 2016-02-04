@@ -214,6 +214,8 @@ module.exports = React.createClass({
 
         this.setState({
             events: [],
+            searchResults: null, // we may have arrived here by clicking on a
+                                 // search result. Hide the results.
             timelineLoading: true,
         });
 
@@ -863,6 +865,14 @@ module.exports = React.createClass({
         });
     },
 
+    _onSearchResultSelected: function(result) {
+        var event = result.context.getEvent();
+        dis.dispatch({
+            action: 'view_room',
+            room_id: event.getRoomId(),
+            event_id: event.getId(),
+        });
+    },
 
     getSearchResultTiles: function() {
         var EventTile = sdk.getComponent('rooms.EventTile');
@@ -926,7 +936,8 @@ module.exports = React.createClass({
 
             ret.push(<SearchResultTile key={mxEv.getId()}
                      searchResult={result}
-                     searchHighlights={this.state.searchHighlights}/>);
+                     searchHighlights={this.state.searchHighlights}
+                     onSelect={this._onSearchResultSelected.bind(this, result)}/>);
         }
         return ret;
     },
