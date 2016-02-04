@@ -426,7 +426,7 @@ module.exports = React.createClass({
         // set it in our state and start using it (ie. init the timeline)
         // This will happen if we start off viewing a room we're not joined,
         // then join it whilst RoomView is looking at that room.
-        if (room.roomId == this.props.roomId && !this.state.room) {
+        if (room.roomId == this.props.roomId) {
             this.setState({
                 room: room
             });
