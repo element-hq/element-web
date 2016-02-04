@@ -1,0 +1,77 @@
+/*
+Copyright 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+var React = require("react");
+var sdk = require("../../../index.js");
+var MatrixClientPeg = require("../../../MatrixClientPeg");
+
+module.exports = React.createClass({
+    displayName: 'SetDisplayNameDialog',
+    propTypes: {
+        onFinished: React.PropTypes.func.isRequired,
+        currentDisplayName: React.PropTypes.string,
+    },
+
+    getInitialState: function() {
+        return {
+            value: this.props.currentDisplayName || this.getDefaultDisplayName(),
+        }
+    },
+
+    getDefaultDisplayName: function() {
+        return "Guest "+MatrixClientPeg.get().getUserIdLocalpart();
+    },
+
+    getValue: function() {
+        return this.state.value;
+    },
+
+    onValueChange: function(ev) {
+        this.setState({
+            value: ev.target.value
+        });
+    },
+
+    onFormSubmit: function(ev) {
+        ev.preventDefault();
+        this.props.onFinished();
+        return false;
+    },
+
+    render: function() {
+        return (
+            <div className="mx_SetDisplayNameDialog">
+                <div className="mx_Dialog_title">
+                    Set a Display Name
+                </div>
+                <div className="mx_Dialog_content">
+                    Your display name is how you'll appear to others when you speak in rooms. What would you like it to be?
+                </div>
+                <form onSubmit={this.onFormSubmit}>
+                    <div className="mx_Dialog_content">
+                        <input type="text" value={this.state.value}
+                            autoFocus={true} onChange={this.onValueChange} size="30"
+                            className="mx_SetDisplayNameDialog_input"
+                        />
+                    </div>
+                    <div className="mx_Dialog_buttons">
+                        <input type="submit" value="Set" />
+                    </div>
+                </form>
+            </div>
+        );
+    }
+});

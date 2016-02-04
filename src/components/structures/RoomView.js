@@ -698,7 +698,44 @@ module.exports = React.createClass({
 
     onJoinButtonClicked: function(ev) {
         var self = this;
-        MatrixClientPeg.get().joinRoom(this.props.roomId).done(function() {
+
+        var cli = MatrixClientPeg.get();
+        var join_defer;
+        var join_promise;
+        // if this is the first room we're joining, checkthe user has a display name
+        // and if they don't, prompt them to set one.
+        // NB. This unfortunately does not re-use the ChangeDisplayName component because
+        // it doesn't behave quite as desired here (we want an input field here rather than
+        // content-editable, and we want a default).
+        if (MatrixClientPeg.get().getRooms().length == 0) {
+            join_promise = cli.getProfileInfo(cli.credentials.userId).then((result) => {
+                if (!result.displayname) {
+                    var SetDisplayNameDialog = sdk.getComponent('views.dialogs.SetDisplayNameDialog');
+                    var dialog_defer = q.defer();
+                    var dialog_ref;
+                    var modal;
+                    var dialog_instance = <SetDisplayNameDialog currentDisplayName={result.displayname} ref={(r) => {
+                            dialog_ref = r;
+                    }} onFinished={() => {
+                        var new_displayname = dialog_ref.getValue() || dialog_ref.getDefaultValue();
+                        cli.setDisplayName(new_displayname).done(() => {
+                            dialog_defer.resolve();
+                        });
+                        modal.close();
+                    }} />
+                    modal = Modal.createDialogWithElement(dialog_instance);
+                    return dialog_defer.promise;
+                }
+            });
+        } else {
+            join_defer = q.defer();
+            join_promise = join_defer.promise;
+            join_defer.resolve();
+        }
+
+        join_promise.then(() => {
+            return MatrixClientPeg.get().joinRoom(this.props.roomId)
+        }).done(function() {
             // It is possible that there is no Room yet if state hasn't come down
             // from /sync - joinRoom will resolve when the HTTP request to join succeeds,
             // NOT when it comes down /sync. If there is no room, we'll keep the
