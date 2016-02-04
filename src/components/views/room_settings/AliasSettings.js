@@ -114,7 +114,7 @@ module.exports = React.createClass({
             }
         }
 
-        return q.allSettled(promises);
+        return promises;
     },
 
     aliasEventsToDictionary: function(aliasEvents) { // m.room.alias events

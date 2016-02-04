@@ -21,7 +21,7 @@ var Tinter = require('../../../Tinter');
 var sdk = require('../../../index');
 var Modal = require('../../../Modal');
 
-var room_colors = [
+var ROOM_COLORS = [
     // magic room default values courtesy of Ribot
     ["#76cfa6", "#eaf5f0"],
     ["#81bddb", "#eaf1f4"],
@@ -53,8 +53,8 @@ module.exports = React.createClass({
             if (color_scheme.primary_color) color_scheme.primary_color = color_scheme.primary_color.toLowerCase();
             if (color_scheme.secondary_color) color_scheme.secondary_color = color_scheme.secondary_color.toLowerCase();
             // XXX: we should validate these values
-            for (var i = 0; i < room_colors.length; i++) {
-                var room_color = room_colors[i];
+            for (var i = 0; i < ROOM_COLORS.length; i++) {
+                var room_color = ROOM_COLORS[i];
                 if (room_color[0] === color_scheme.primary_color &&
                     room_color[1] === color_scheme.secondary_color)
                 {
@@ -64,8 +64,8 @@ module.exports = React.createClass({
             }
             if (room_color_index === undefined) {
                 // append the unrecognised colours to our palette
-                room_color_index = room_colors.length;
-                room_colors[room_color_index] = [ color_scheme.primary_color, color_scheme.secondary_color ];
+                room_color_index = ROOM_COLORS.length;
+                ROOM_COLORS[room_color_index] = [ color_scheme.primary_color, color_scheme.secondary_color ];
             }
         }
         else {
@@ -77,13 +77,83 @@ module.exports = React.createClass({
             tags[tagName] = {};
         });
 
+        var are_notifications_muted = false;
+        var roomPushRule = MatrixClientPeg.get().getRoomPushRule("global", this.props.room.roomId); 
+        if (roomPushRule) {
+            if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
+                are_notifications_muted = true;
+            }
+        }
+        
+
         return {
+            name: this._yankValueFromEvent("m.room.name", "name"),
+            topic: this._yankValueFromEvent("m.room.topic", "topic"),
+            join_rule: this._yankValueFromEvent("m.room.join_rules", "join_rule"),
+            history_visibility: this._yankValueFromEvent("m.room.history_visibility", "history_visibility"),
+            guest_access: this._yankValueFromEvent("m.room.guest_access", "guest_access"),
             power_levels_changed: false,
             color_scheme_changed: false,
             color_scheme_index: room_color_index,
             tags_changed: false,
             tags: tags,
+            areNotifsMuted: are_notifications_muted
         };
+    },
+    
+    setName: function(name) {
+        this.setState({
+            name: name
+        });
+    },
+    
+    setTopic: function(topic) {
+        this.setState({
+            topic: topic
+        });
+    },
+    
+    save: function() {
+        var stateWasSetDefer = q.defer();
+        // the caller may have JUST called setState on stuff, so we need to re-render before saving
+        // else we won't use the latest values of things.
+        // We can be a bit cheeky here and set a loading flag, and listen for the callback on that
+        // to know when things have been set.
+        this.setState({ _loading: true}, () => {
+            stateWasSetDefer.resolve();
+            this.setState({ _loading: false});
+        });
+        
+        return stateWasSetDefer.promise.then(() => {
+            return this._save();
+        });
+    },
+
+    _save: function() {    
+        const roomId = this.props.room.roomId;
+        var promises = this.saveAliases(); // returns Promise[]
+        var originalState = this.getInitialState();
+        // diff between original state and this.state to work out what has been changed
+        console.log("Original: %s", JSON.stringify(originalState));
+        console.log("New: %s", JSON.stringify(this.state));
+        if (this.state.name !== originalState.name) {
+            promises.push(MatrixClientPeg.get().setRoomName(roomId, this.state.name));
+        }
+        if (this.state.topic !== originalState.topic) { // TODO: 0-length strings?
+            promises.push(MatrixClientPeg.get().setRoomTopic(roomId, this.state.topic));
+        }
+        // TODO:
+        // this.state.join_rule
+        // this.state.history_visibility
+        // this.state.guest_access
+        // setRoomMutePushRule
+        // power levels
+        // tags
+        // color scheme
+        
+        // submit diffs
+        
+        return q.allSettled(promises);
     },
 
     saveAliases: function() {
@@ -116,7 +186,7 @@ module.exports = React.createClass({
     },
 
     areNotificationsMuted: function() {
-        return this.refs.are_notifications_muted.checked;
+        return this.state.are_notifications_muted;
     },
 
     getPowerLevels: function() {
@@ -178,19 +248,35 @@ module.exports = React.createClass({
         if (!this.state.color_scheme_changed) return undefined;
 
         return {
-            primary_color: room_colors[this.state.color_scheme_index][0],
-            secondary_color: room_colors[this.state.color_scheme_index][1],            
+            primary_color: ROOM_COLORS[this.state.color_scheme_index][0],
+            secondary_color: ROOM_COLORS[this.state.color_scheme_index][1],            
         };
     },
 
     onColorSchemeChanged: function(index) {
         // preview what the user just changed the scheme to.
-        Tinter.tint(room_colors[index][0], room_colors[index][1]);
+        Tinter.tint(ROOM_COLORS[index][0], ROOM_COLORS[index][1]);
 
         this.setState({
             color_scheme_changed: true,
             color_scheme_index: index,
         });
+    },
+    
+    _yankValueFromEvent: function(stateEventType, keyName, defaultValue) {
+        // E.g.("m.room.name","name") would yank the "name" content key from "m.room.name"
+        var event = this.props.room.currentState.getStateEvents(stateEventType, '');
+        if (!event) {
+            return defaultValue;
+        }
+        return event.getContent()[keyName] || defaultValue;
+    },
+    
+    _onToggle: function(keyName, ev) {
+        console.log("Checkbox toggle: %s %s", keyName, ev.target.checked);
+        var state = {};
+        state[keyName] = ev.target.checked;
+        this.setState(state);
     },
 
     onTagChange: function(tagName, event) {
@@ -223,8 +309,7 @@ module.exports = React.createClass({
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
 
-        var join_rule = this.props.room.currentState.getStateEvents('m.room.join_rules', '');
-        if (join_rule) join_rule = join_rule.getContent().join_rule;
+        
 
         var history_visibility = this.props.room.currentState.getStateEvents('m.room.history_visibility', '');
         if (history_visibility) history_visibility = history_visibility.getContent().history_visibility;
@@ -233,14 +318,6 @@ module.exports = React.createClass({
         var guest_access = this.props.room.currentState.getStateEvents('m.room.guest_access', '');
         if (guest_access) {
             guest_access = guest_access.getContent().guest_access;
-        }
-
-        var are_notifications_muted;
-        var roomPushRule = MatrixClientPeg.get().getRoomPushRule("global", this.props.room.roomId); 
-        if (roomPushRule) {
-            if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
-                are_notifications_muted = true;
-            }
         }
 
         var events_levels = (power_levels ? power_levels.events : {}) || {};
@@ -315,7 +392,7 @@ module.exports = React.createClass({
             <div>
                 <h3>Room Colour</h3>
                 <div className="mx_RoomSettings_roomColors">
-                    {room_colors.map(function(room_color, i) {
+                    {ROOM_COLORS.map(function(room_color, i) {
                         var selected;
                         if (i === self.state.color_scheme_index) {
                             selected =
@@ -418,12 +495,30 @@ module.exports = React.createClass({
                 { tags_section }
 
                 <div className="mx_RoomSettings_toggles">
-                    <label><input type="checkbox" ref="are_notifications_muted" defaultChecked={are_notifications_muted}/> Mute notifications for this room</label>
-                    <label><input type="checkbox" ref="is_private" defaultChecked={join_rule != "public"}/> Make this room private</label>
-                    <label><input type="checkbox" ref="share_history" defaultChecked={history_visibility === "shared" || history_visibility === "world_readable"}/> Share message history with new participants</label>
-                    <label><input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/> Let guests join this room</label>
-                    <label><input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/> Let users read message history without joining</label>
-                    <label className="mx_RoomSettings_encrypt"><input type="checkbox" /> Encrypt room</label>
+                    <label>
+                        <input type="checkbox" onChange={this._onToggle.bind(this, "areNotifsMuted")} defaultChecked={this.state.areNotifsMuted}/>
+                        Mute notifications for this room
+                    </label>
+                    <label>
+                        <input type="checkbox" ref="is_private" defaultChecked={this.state.join_rule != "public"}/>
+                        Make this room private
+                    </label>
+                    <label>
+                        <input type="checkbox" ref="share_history" defaultChecked={history_visibility === "shared" || history_visibility === "world_readable"}/>
+                        Share message history with new participants
+                    </label>
+                    <label>
+                        <input type="checkbox" ref="guests_join" defaultChecked={guest_access === "can_join"}/>
+                        Let guests join this room
+                    </label>
+                    <label>
+                        <input type="checkbox" ref="guests_read" defaultChecked={history_visibility === "world_readable"}/>
+                        Let users read message history without joining
+                    </label>
+                    <label className="mx_RoomSettings_encrypt">
+                        <input type="checkbox" />
+                        Encrypt room
+                    </label>
                 </div>
 
 
