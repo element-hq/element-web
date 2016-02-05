@@ -77,7 +77,7 @@ module.exports = React.createClass({
     },
 
     _delayedUpdate: new rate_limited_func(function() {
-        this.forceUpdate()
+        this.forceUpdate();
     }, 500),
 
     onAction: function(payload) {
