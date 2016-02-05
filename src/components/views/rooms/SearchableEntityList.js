@@ -16,6 +16,7 @@ limitations under the License.
 var React = require('react');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
+var sdk = require("../../../index");
 var GeminiScrollbar = require('react-gemini-scrollbar');
 
 // A list capable of displaying entities which conform to the SearchableEntity
@@ -29,7 +30,8 @@ var SearchableEntityList = React.createClass({
         showInputBox: React.PropTypes.bool,
         onQueryChanged: React.PropTypes.func, // fn(inputText)
         onSubmit: React.PropTypes.func, // fn(inputText)
-        entities: React.PropTypes.array
+        entities: React.PropTypes.array,
+        truncateAt: React.PropTypes.number
     },
 
     getDefaultProps: function() {
@@ -46,6 +48,7 @@ var SearchableEntityList = React.createClass({
     getInitialState: function() {
         return {
             query: "",
+            truncateAt: this.props.truncateAt,
             results: this.getSearchResults("", this.props.entities)
         };
     },
@@ -103,6 +106,24 @@ var SearchableEntityList = React.createClass({
         });
     },
 
+    _showAll: function() {
+        this.setState({
+            truncateAt: -1
+        });
+    },
+
+    _createOverflowEntity: function(overflowCount, totalCount) {
+        var EntityTile = sdk.getComponent("rooms.EntityTile");
+        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        var text = "and " + overflowCount + " other" + (overflowCount > 1 ? "s" : "") +  "...";
+        return (
+            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
+                <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
+            } name={text} presenceState="online" suppressOnHover={true}
+            onClick={this._showAll} />
+        );
+    },
+
     render: function() {
         var inputBox;
 
@@ -116,15 +137,34 @@ var SearchableEntityList = React.createClass({
             );
         }
 
+        var list;
+        if (this.props.truncateAt) { // caller wants list truncated
+            var TruncatedList = sdk.getComponent("elements.TruncatedList");
+            list = (
+                <TruncatedList className="mx_SearchableEntityList_list"
+                        truncateAt={this.state.truncateAt} // use state truncation as it may be expanded
+                        createOverflowElement={this._createOverflowEntity}>
+                    {this.state.results.map((entity) => {
+                        return entity.getJsx();
+                    })}
+                </TruncatedList>
+            );
+        }
+        else {
+            list = (
+                <div className="mx_SearchableEntityList_list">
+                    {this.state.results.map((entity) => {
+                        return entity.getJsx();
+                    })}
+                </div>
+            );
+        }
+
         return (
             <div className={ "mx_SearchableEntityList " + (this.state.query.length ? "mx_SearchableEntityList_expanded" : "") }>
                 {inputBox}
                 <GeminiScrollbar autoshow={true} className="mx_SearchableEntityList_listWrapper">
-                    <div className="mx_SearchableEntityList_list">
-                        {this.state.results.map((entity) => {
-                            return entity.getJsx();
-                        })}
-                    </div>
+                    { list }
                 </GeminiScrollbar>
                 { this.state.query.length ? <div className="mx_SearchableEntityList_hrWrapper"><hr/></div> : '' }
             </div>

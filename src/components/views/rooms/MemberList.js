@@ -24,6 +24,7 @@ var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var rate_limited_func = require('../../../ratelimitedfunc');
 
+var INITIAL_SEARCH_RESULTS_COUNT = 10;
 var INITIAL_LOAD_NUM_MEMBERS = 30;
 var SHARE_HISTORY_WARNING = "Newly invited users will see the history of this room. "+
     "If you'd prefer invited users not to see messages that were sent before they joined, "+
@@ -420,12 +421,12 @@ module.exports = React.createClass({
                 entities.unshift(this._emailEntity);
             }
 
-
             return (
                 <SearchableEntityList searchPlaceholderText={"Invite / Search"}
                     onSubmit={this.onInvite}
                     onQueryChanged={this.onSearchQueryChanged}
-                    entities={entities} />
+                    entities={entities}
+                    truncateAt={INITIAL_SEARCH_RESULTS_COUNT}/>
             );
         }
     },
