@@ -19,6 +19,7 @@ var React = require('react');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
 var Modal = require('../../../Modal');
+var ObjectUtils = require("../../../ObjectUtils");
 
 module.exports = React.createClass({
     displayName: 'RoomSettings',
@@ -88,27 +89,64 @@ module.exports = React.createClass({
         const roomId = this.props.room.roomId;
         var promises = this.saveAliases(); // returns Promise[]
         var originalState = this.getInitialState();
+
         // diff between original state and this.state to work out what has been changed
         console.log("Original: %s", JSON.stringify(originalState));
         console.log("New: %s", JSON.stringify(this.state));
+
+        // name and topic
         if (this._hasDiff(this.state.name, originalState.name)) {
             promises.push(MatrixClientPeg.get().setRoomName(roomId, this.state.name));
         }
         if (this._hasDiff(this.state.topic, originalState.topic)) {
             promises.push(MatrixClientPeg.get().setRoomTopic(roomId, this.state.topic));
         }
+
         // TODO:
         // this.state.join_rule
         // this.state.history_visibility
         // this.state.guest_access
+
         // setRoomMutePushRule
+        if (this.state.areNotifsMuted !== originalState.areNotifsMuted) {
+            promises.push(MatrixClientPeg.get().setRoomMutePushRule(
+                "global", roomId, this.state.areNotifsMuted
+            ));
+        }
+
         // power levels
+        var powerLevels = this._getPowerLevels();
+        if (powerLevels) {
+            promises.push(MatrixClientPeg.get().sendStateEvent(
+                roomId, "m.room.power_levels", powerLevels, ""
+            ));
+        }
+
         // tags
+        if (this.state.tags_changed) {
+            var tagDiffs = ObjectUtils.getKeyValueArrayDiffs(originalState.tags, this.state.tags);
+            // [ {place: add, key: "m.favourite", val: "yep"} ]
+            tagDiffs.forEach(function(diff) {
+                switch (diff.place) {
+                    case "add":
+                        promises.push(
+                            MatrixClientPeg.get().setRoomTag(roomId, diff.key, {})
+                        );
+                        break;
+                    case "del":
+                        promises.push(
+                            MatrixClientPeg.get().deleteRoomTag(roomId, diff.key)
+                        );
+                        break;
+                    default:
+                        console.error("Unknown tag operation: %s", diff.place);
+                        break;
+                }
+            });
+        }
 
         // color scheme
         promises.push(this.saveColor());
-        
-        // submit diffs
         
         return q.allSettled(promises);
     },
@@ -131,27 +169,7 @@ module.exports = React.createClass({
         return strA !== strB;
     },
 
-    resetState: function() {
-        this.setState(this.getInitialState());
-    },
-
-    canGuestsRead: function() {
-        return this.refs.guests_read.checked;
-    },
-
-    getTopic: function() {
-        return this.refs.topic ? this.refs.topic.value : "";
-    },
-
-    getHistoryVisibility: function() {
-        return this.refs.share_history.checked ? "shared" : "invited";
-    },
-
-    areNotificationsMuted: function() {
-        return this.state.are_notifications_muted;
-    },
-
-    getPowerLevels: function() {
+    _getPowerLevels: function() {
         if (!this.state.power_levels_changed) return undefined;
 
         var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
@@ -170,34 +188,6 @@ module.exports = React.createClass({
         };
 
         return new_power_levels;
-    },
-
-    getTagOperations: function() {
-        if (!this.state.tags_changed) return undefined;
-
-        var ops = [];
-
-        var delta = {};
-        Object.keys(this.props.room.tags).forEach(function(oldTag) {
-            delta[oldTag] = delta[oldTag] || 0;
-            delta[oldTag]--;
-        });
-        Object.keys(this.state.tags).forEach(function(newTag) {
-            delta[newTag] = delta[newTag] || 0;
-            delta[newTag]++;
-        });
-        Object.keys(delta).forEach(function(tag) {
-            if (delta[tag] == 1) {
-                ops.push({ type: "put", tag: tag });
-            } else if (delta[tag] == -1) {
-                ops.push({ type: "delete", tag: tag });
-            } else {
-                console.error("Calculated tag delta of " + delta[tag] +
-                              " - this should never happen!");
-            }
-        });
-
-        return ops;
     },
 
     onPowerLevelsChanged: function() {
@@ -222,7 +212,7 @@ module.exports = React.createClass({
         this.setState(state);
     },
 
-    onTagChange: function(tagName, event) {
+    _onTagChange: function(tagName, event) {
         if (event.target.checked) {
             if (tagName === 'm.favourite') {
                 delete this.state.tags['m.lowpriority'];
@@ -231,13 +221,12 @@ module.exports = React.createClass({
                 delete this.state.tags['m.favourite'];
             }
 
-            this.state.tags[tagName] = this.state.tags[tagName] || {};
+            this.state.tags[tagName] = this.state.tags[tagName] || ["yep"];
         }
         else {
             delete this.state.tags[tagName];
         }
 
-        // XXX: hacky say to deep-edit state
         this.setState({
             tags: this.state.tags,
             tags_changed: true
@@ -390,7 +379,7 @@ module.exports = React.createClass({
                                     <input type="checkbox"
                                            ref={ tag.ref }
                                            checked={ tag.name in self.state.tags }
-                                           onChange={ self.onTagChange.bind(self, tag.name) }/>
+                                           onChange={ self._onTagChange.bind(self, tag.name) }/>
                                     { tag.label }
                                 </label>);
                     }) : tags.map(function(tag) { return tag.label; }).join(", ")

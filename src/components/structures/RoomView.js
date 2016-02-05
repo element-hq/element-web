@@ -1245,7 +1245,7 @@ module.exports = React.createClass({
                 uploadingRoomSettings: false,
                 editingRoomSettings: false
             });
-        });
+        }).done();
     },
 
     onCancelClick: function() {
