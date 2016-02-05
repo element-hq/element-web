@@ -68,7 +68,6 @@ module.exports = React.createClass({
     },
 
     saveSettings: function() {
-        console.log("AliasSettings.saveSettings room=%s", this.props.roomId);
         var promises = [];
 
         // save new canonical alias
@@ -76,8 +75,8 @@ module.exports = React.createClass({
         if (this.props.canonicalAliasEvent) {
             oldCanonicalAlias = this.props.canonicalAliasEvent.getContent().alias;
         }
-        console.log("canon old=%s new=%s", oldCanonicalAlias, this.state.canonicalAlias);
         if (oldCanonicalAlias !== this.state.canonicalAlias) {
+            console.log("AliasSettings: Updating canonical alias");
             promises.push(
                 MatrixClientPeg.get().sendStateEvent(
                     this.props.roomId, "m.room.canonical_alias", {
@@ -114,7 +113,7 @@ module.exports = React.createClass({
             }
         }
 
-        return q.allSettled(promises);
+        return promises;
     },
 
     aliasEventsToDictionary: function(aliasEvents) { // m.room.alias events

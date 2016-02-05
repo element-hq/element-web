@@ -1116,195 +1116,6 @@ module.exports = React.createClass({
         return ret;
     },
 
-    uploadNewState: function(newVals) {
-        var old_name = this.state.room.name;
-
-        var old_topic = this.state.room.currentState.getStateEvents('m.room.topic', '');
-        if (old_topic) {
-            old_topic = old_topic.getContent().topic;
-        } else {
-            old_topic = "";
-        }
-
-        var old_join_rule = this.state.room.currentState.getStateEvents('m.room.join_rules', '');
-        if (old_join_rule) {
-            old_join_rule = old_join_rule.getContent().join_rule;
-        } else {
-            old_join_rule = "invite";
-        }
-
-        var old_history_visibility = this.state.room.currentState.getStateEvents('m.room.history_visibility', '');
-        if (old_history_visibility) {
-            old_history_visibility = old_history_visibility.getContent().history_visibility;
-        } else {
-            old_history_visibility = "shared";
-        }
-
-        var old_guest_read = (old_history_visibility === "world_readable");
-
-        var old_guest_join = this.state.room.currentState.getStateEvents('m.room.guest_access', '');
-        if (old_guest_join) {
-            old_guest_join = (old_guest_join.getContent().guest_access === "can_join");
-        }
-        else {
-            old_guest_join = false;
-        }
-
-        var deferreds = [];
-
-        if (old_name != newVals.name && newVals.name != undefined) {
-            deferreds.push(
-                MatrixClientPeg.get().setRoomName(this.state.room.roomId, newVals.name)
-            );
-        }
-
-        if (old_topic != newVals.topic && newVals.topic != undefined) {
-            deferreds.push(
-                MatrixClientPeg.get().setRoomTopic(this.state.room.roomId, newVals.topic)
-            );
-        }
-
-        if (old_join_rule != newVals.join_rule && newVals.join_rule != undefined) {
-            deferreds.push(
-                MatrixClientPeg.get().sendStateEvent(
-                    this.state.room.roomId, "m.room.join_rules", {
-                        join_rule: newVals.join_rule,
-                    }, ""
-                )
-            );
-        }
-
-        // XXX: EVIL HACK: for now, don't let Vector clobber 'joined' visibility to 'invited'
-        // just because it doesn't know about 'joined' yet.  In future we should fix it
-        // properly - https://github.com/vector-im/vector-web/issues/731
-        if (old_history_visibility === "joined") {
-            old_history_visibility = "invited";
-        }
-
-        var visibilityDeferred;
-        if (old_history_visibility != newVals.history_visibility &&
-                newVals.history_visibility != undefined) {
-            visibilityDeferred = 
-                MatrixClientPeg.get().sendStateEvent(
-                    this.state.room.roomId, "m.room.history_visibility", {
-                        history_visibility: newVals.history_visibility,
-                    }, ""
-                );
-        }
-
-        if (old_guest_read != newVals.guest_read ||
-            old_guest_join != newVals.guest_join)
-        {
-            var guestDeferred = 
-                MatrixClientPeg.get().setGuestAccess(this.state.room.roomId, {
-                    allowRead: newVals.guest_read,
-                    allowJoin: newVals.guest_join
-                });
-
-            if (visibilityDeferred) {
-                visibilityDeferred = visibilityDeferred.then(guestDeferred);
-            }
-            else {
-                visibilityDeferred = guestDeferred;
-            }
-        }
-
-        if (visibilityDeferred) {
-            deferreds.push(visibilityDeferred);
-        }
-
-        // setRoomMutePushRule will do nothing if there is no change
-        deferreds.push(
-            MatrixClientPeg.get().setRoomMutePushRule(
-                "global", this.state.room.roomId, newVals.are_notifications_muted
-            )
-        );
-
-        if (newVals.power_levels) {
-            deferreds.push(
-                MatrixClientPeg.get().sendStateEvent(
-                    this.state.room.roomId, "m.room.power_levels", newVals.power_levels, ""
-                )
-            );
-        }
-
-        if (newVals.tag_operations) {
-            var oplist = [];
-            for (var i = 0; i < newVals.tag_operations.length; i++) {
-                var tag_operation = newVals.tag_operations[i];
-                switch (tag_operation.type) {
-                    case 'put':
-                        oplist.push(
-                            MatrixClientPeg.get().setRoomTag(
-                                this.props.roomId, tag_operation.tag, {}
-                            )
-                        );
-                        break;
-                    case 'delete':
-                        oplist.push(
-                            MatrixClientPeg.get().deleteRoomTag(
-                                this.props.roomId, tag_operation.tag
-                            )
-                        );
-                        break;
-                    default:
-                        console.log("Unknown tag operation, ignoring: " + tag_operation.type);
-                }
-            }
-
-            if (oplist.length) {
-                var deferred = oplist[0];
-                oplist.splice(1).forEach(function (f) {
-                    deferred = deferred.then(f);
-                });
-                deferreds.push(deferred);
-            }            
-        }
-
-        if (newVals.color_scheme) {
-            deferreds.push(
-                MatrixClientPeg.get().setRoomAccountData(
-                    this.state.room.roomId, "org.matrix.room.color_scheme", newVals.color_scheme
-                )
-            );
-        }
-
-        deferreds.push(this.refs.room_settings.saveAliases());
-
-        if (deferreds.length) {
-            var self = this;
-            q.allSettled(deferreds).then(
-                function(results) {
-                    var fails = results.filter(function(result) { return result.state !== "fulfilled" });
-                    if (fails.length) {
-                        fails.forEach(function(result) {
-                            console.error(result.reason);
-                        });
-                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                        Modal.createDialog(ErrorDialog, {
-                            title: "Failed to set state",
-                            description: fails.map(function(result) { return result.reason }).join("\n"),
-                        });
-                        self.refs.room_settings.resetState();
-                    }
-                    else {
-                        self.setState({
-                            editingRoomSettings: false
-                        });
-                    }
-                }).finally(function() {
-                    self.setState({
-                        uploadingRoomSettings: false,
-                    });
-                });
-        } else {
-            this.setState({
-                editingRoomSettings: false,
-                uploadingRoomSettings: false,
-            });
-        }
-    },
-
     _collectEventNode: function(eventId, node) {
         if (this.eventNodes == undefined) this.eventNodes = {};
         this.eventNodes[eventId] = node;
@@ -1409,23 +1220,39 @@ module.exports = React.createClass({
         this.showSettings(true);
     },
 
-    onSaveClick: function() {
+    onSettingsSaveClick: function() {
         this.setState({
             uploadingRoomSettings: true,
         });
-
-        this.uploadNewState({
-            name: this.refs.header.getRoomName(),
-            topic: this.refs.header.getTopic(),
-            join_rule: this.refs.room_settings.getJoinRules(),
-            history_visibility: this.refs.room_settings.getHistoryVisibility(),
-            are_notifications_muted: this.refs.room_settings.areNotificationsMuted(),
-            power_levels: this.refs.room_settings.getPowerLevels(),
-            tag_operations: this.refs.room_settings.getTagOperations(),
-            guest_join: this.refs.room_settings.canGuestsJoin(),
-            guest_read: this.refs.room_settings.canGuestsRead(),
-            color_scheme: this.refs.room_settings.getColorScheme(),
-        });
+        
+        this.refs.room_settings.setName(this.refs.header.getRoomName());
+        this.refs.room_settings.setTopic(this.refs.header.getTopic());
+        
+        this.refs.room_settings.save().then((results) => {
+            var fails = results.filter(function(result) { return result.state !== "fulfilled" });
+            console.log("Settings saved with %s errors", fails.length);
+            if (fails.length) {
+                fails.forEach(function(result) {
+                    console.error(result.reason);
+                });
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failed to save settings",
+                    description: fails.map(function(result) { return result.reason }).join("\n"),
+                });
+                // still editing room settings
+            }
+            else {
+                this.setState({
+                    editingRoomSettings: false
+                });
+            }
+        }).finally(() => {
+            this.setState({
+                uploadingRoomSettings: false,
+                editingRoomSettings: false
+            });
+        }).done();
     },
 
     onCancelClick: function() {
@@ -1828,7 +1655,7 @@ module.exports = React.createClass({
 
             var aux = null;
             if (this.state.editingRoomSettings) {
-                aux = <RoomSettings ref="room_settings" onSaveClick={this.onSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
+                aux = <RoomSettings ref="room_settings" onSaveClick={this.onSettingsSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
             }
             else if (this.state.uploadingRoomSettings) {
                 aux = <Loader/>;
@@ -1997,7 +1824,7 @@ module.exports = React.createClass({
                         editing={this.state.editingRoomSettings}
                         onSearchClick={this.onSearchClick}
                         onSettingsClick={this.onSettingsClick}
-                        onSaveClick={this.onSaveClick}
+                        onSaveClick={this.onSettingsSaveClick}
                         onCancelClick={this.onCancelClick}
                         onForgetClick={
                             (myMember && myMember.membership === "leave") ? this.onForgetClick : null
