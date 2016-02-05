@@ -36,11 +36,11 @@ module.exports = React.createClass({
             tags[tagName] = {};
         });
 
-        var are_notifications_muted = false;
+        var areNotifsMuted = false;
         var roomPushRule = MatrixClientPeg.get().getRoomPushRule("global", this.props.room.roomId); 
         if (roomPushRule) {
             if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
-                are_notifications_muted = true;
+                areNotifsMuted = true;
             }
         }
 
@@ -53,7 +53,7 @@ module.exports = React.createClass({
             power_levels_changed: false,
             tags_changed: false,
             tags: tags,
-            areNotifsMuted: are_notifications_muted
+            areNotifsMuted: areNotifsMuted
         };
     },
     
@@ -192,10 +192,10 @@ module.exports = React.createClass({
     _getPowerLevels: function() {
         if (!this.state.power_levels_changed) return undefined;
 
-        var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
-        power_levels = power_levels.getContent();
+        var powerLevels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
+        powerLevels = powerLevels ? powerLevels.getContent() : {};
 
-        var new_power_levels = {
+        var newPowerLevels = {
             ban: parseInt(this.refs.ban.getValue()),
             kick: parseInt(this.refs.kick.getValue()),
             redact: parseInt(this.refs.redact.getValue()),
@@ -203,11 +203,11 @@ module.exports = React.createClass({
             events_default: parseInt(this.refs.events_default.getValue()),
             state_default: parseInt(this.refs.state_default.getValue()),
             users_default: parseInt(this.refs.users_default.getValue()),
-            users: power_levels.users,
-            events: power_levels.events,
+            users: powerLevels.users,
+            events: powerLevels.events,
         };
 
-        return new_power_levels;
+        return newPowerLevels;
     },
 
     onPowerLevelsChanged: function() {
@@ -269,11 +269,8 @@ module.exports = React.createClass({
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
 
         var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
-
         var events_levels = (power_levels ? power_levels.events : {}) || {};
-
         var user_id = MatrixClientPeg.get().credentials.userId;
-
 
         if (power_levels) {
             power_levels = power_levels.getContent();
@@ -332,15 +329,14 @@ module.exports = React.createClass({
         if (events_levels['m.room.canonical_alias'] !== undefined) {
             canonical_alias_level = events_levels['m.room.canonical_alias'];
         }
-        var can_set_canonical_alias = current_user_level >= canonical_alias_level;
-
-        var can_set_tag = true;
+        var canSetCanonicalAlias = current_user_level >= canonical_alias_level;
+        var canSetTag = true;
 
         var self = this;
 
-        var user_levels_section;
+        var userLevelsSection;
         if (Object.keys(user_levels).length) {
-            user_levels_section =
+            userLevelsSection =
                 <div>
                     <h3>Privileged Users</h3>
                     <ul className="mx_RoomSettings_userLevels">
@@ -355,13 +351,13 @@ module.exports = React.createClass({
                 </div>;
         }
         else {
-            user_levels_section = <div>No users have specific privileges in this room.</div>
+            userLevelsSection = <div>No users have specific privileges in this room.</div>
         }
 
         var banned = this.props.room.getMembersWithMembership("ban");
-        var banned_users_section;
+        var bannedUsersSection;
         if (banned.length) {
-            banned_users_section =
+            bannedUsersSection =
                 <div>
                     <h3>Banned users</h3>
                     <ul className="mx_RoomSettings_banned">
@@ -376,10 +372,13 @@ module.exports = React.createClass({
                 </div>;
         }
 
-        var create_event = this.props.room.currentState.getStateEvents('m.room.create', '');
-        var unfederatable_section;
-        if (create_event.getContent()["m.federate"] === false) {
-             unfederatable_section = <div className="mx_RoomSettings_powerLevel">Ths room is not accessible by remote Matrix servers.</div>
+        var unfederatableSection;
+        if (this._yankValueFromEvent("m.room.create", "m.federate") === false) {
+             unfederatableSection = (
+                <div className="mx_RoomSettings_powerLevel">
+                Ths room is not accessible by remote Matrix servers.
+                </div>
+            );
         }
 
         // TODO: support editing custom events_levels
@@ -396,10 +395,10 @@ module.exports = React.createClass({
             }
         });
 
-        var tags_section = 
+        var tagsSection = 
             <div className="mx_RoomSettings_tags">
                 Tagged as:
-                { can_set_tag ?
+                { canSetTag ?
                     tags.map(function(tag, i) {
                         return (<label key={ i }>
                                     <input type="checkbox"
@@ -420,7 +419,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_RoomSettings">
 
-                { tags_section }
+                { tagsSection }
 
                 <div className="mx_RoomSettings_toggles">
                     <label>
@@ -478,7 +477,7 @@ module.exports = React.createClass({
 
                 <AliasSettings ref="alias_settings"
                     roomId={this.props.room.roomId}
-                    canSetCanonicalAlias={can_set_canonical_alias}
+                    canSetCanonicalAlias={canSetCanonicalAlias}
                     canSetAliases={can_set_room_aliases}
                     canonicalAliasEvent={this.props.room.currentState.getStateEvents('m.room.canonical_alias', '')}
                     aliasEvents={this.props.room.currentState.getStateEvents('m.room.aliases')} />
@@ -523,12 +522,12 @@ module.exports = React.createClass({
                         );
                     })}
 
-                { unfederatable_section }                    
+                { unfederatableSection }
                 </div>
 
-                { user_levels_section }
+                { userLevelsSection }
 
-                { banned_users_section }
+                { bannedUsersSection }
 
                 <h3>Advanced</h3>
                 <div className="mx_RoomSettings_settings">
