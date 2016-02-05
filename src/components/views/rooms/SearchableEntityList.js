@@ -81,6 +81,8 @@ var SearchableEntityList = React.createClass({
         var q = ev.target.value;
         this.setState({
             query: q,
+            // reset truncation if they back out the entire text
+            truncateAt: (q.length === 0 ? this.props.truncateAt : this.state.truncateAt),
             results: this.getSearchResults(q, this.props.entities)
         }, () => {
             // invoke the callback AFTER we've flushed the new state. We need to
