@@ -67,7 +67,11 @@ if (localStorage) {
     var user_id = localStorage.getItem("mx_user_id");
     var guestAccess = new GuestAccess(localStorage);
     if (access_token && user_id && hs_url) {
+        console.log("Restoring session for %s", user_id);
         createClient(hs_url, is_url, user_id, access_token, guestAccess);
+    }
+    else {
+        console.log("Session not found.");
     }
 }
 
@@ -130,6 +134,7 @@ class MatrixClient {
                 localStorage.setItem("mx_is_url", is_url);
                 localStorage.setItem("mx_user_id", user_id);
                 localStorage.setItem("mx_access_token", access_token);
+                console.log("Session persisted for %s", user_id);
             } catch (e) {
                 console.warn("Error using local storage: can't persist session!");
             }
