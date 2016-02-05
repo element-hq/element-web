@@ -102,12 +102,31 @@ module.exports = React.createClass({
             promises.push(MatrixClientPeg.get().setRoomTopic(roomId, this.state.topic));
         }
 
-        // TODO:
-        // this.state.join_rule
-        // this.state.history_visibility
-        // this.state.guest_access
+        if (this.state.history_visibility !== originalState.history_visibility) {
+            promises.push(MatrixClientPeg.get().sendStateEvent(
+                roomId, "m.room.history_visibility",
+                { history_visibility: this.state.history_visibility },
+                ""
+            ));
+        }
 
-        // setRoomMutePushRule
+        if (this.state.join_rule !== originalState.join_rule) {
+            promises.push(MatrixClientPeg.get().sendStateEvent(
+                roomId, "m.room.join_rules",
+                { join_rule: this.state.join_rule },
+                ""
+            ));
+        }
+
+        if (this.state.guest_access !== originalState.guest_access) {
+            promises.push(MatrixClientPeg.get().sendStateEvent(
+                roomId, "m.room.guest_access",
+                { guest_access: this.state.guest_access },
+                ""
+            ));
+        }
+
+
         if (this.state.areNotifsMuted !== originalState.areNotifsMuted) {
             promises.push(MatrixClientPeg.get().setRoomMutePushRule(
                 "global", roomId, this.state.areNotifsMuted
@@ -144,6 +163,7 @@ module.exports = React.createClass({
                 }
             });
         }
+        console.log("Performing %s operations", promises.length);
 
         // color scheme
         promises.push(this.saveColor());
@@ -203,6 +223,12 @@ module.exports = React.createClass({
             return defaultValue;
         }
         return event.getContent()[keyName] || defaultValue;
+    },
+
+    _onHistoryRadioToggle: function(ev) {
+        this.setState({
+            history_visibility: ev.target.value
+        });
     },
     
     _onToggle: function(keyName, checkedValue, uncheckedValue, ev) {
@@ -386,6 +412,10 @@ module.exports = React.createClass({
                 }
             </div>
 
+        // If there is no history_visibility, it is assumed to be 'shared'.
+        // http://matrix.org/docs/spec/r0.0.0/client_server.html#id31
+        var historyVisibility = this.state.history_visibility || "shared";
+
         // FIXME: disable guests_read if the user hasn't turned on shared history
         return (
             <div className="mx_RoomSettings">
@@ -403,19 +433,37 @@ module.exports = React.createClass({
                         Make this room private
                     </label>
                     <label>
-                        <input type="checkbox" ref="share_history"
-                            defaultChecked={this.state.history_visibility === "shared" || this.state.history_visibility === "world_readable"}/>
-                        Share message history with new participants
-                    </label>
-                    <label>
                         <input type="checkbox" onChange={this._onToggle.bind(this, "guest_access", "can_join", "forbidden")}
                             defaultChecked={this.state.guest_access === "can_join"}/>
                         Let guests join this room
                     </label>
-                    <label>
-                        <input type="checkbox" ref="guests_read" defaultChecked={this.state.history_visibility === "world_readable"}/>
-                        Let users read message history without joining
-                    </label>
+                    <div className="mx_RoomSettings_settings">
+                        <h3>Who can read history?</h3>
+                        <label htmlFor="hvis_wr">
+                            <input type="radio" id="hvis_wr" name="historyVis" value="world_readable"
+                                    defaultChecked={historyVisibility === "world_readable"}
+                                    onChange={this._onHistoryRadioToggle} />
+                            Anyone
+                        </label>
+                        <label htmlFor="hvis_sh">
+                            <input type="radio" id="hvis_sh" name="historyVis" value="shared"
+                                    defaultChecked={historyVisibility === "shared"}
+                                    onChange={this._onHistoryRadioToggle} />
+                            Members only (since the room began)
+                        </label>
+                        <label htmlFor="hvis_inv">
+                            <input type="radio" id="hvis_inv" name="historyVis" value="invited"
+                                    defaultChecked={historyVisibility === "invited"}
+                                    onChange={this._onHistoryRadioToggle} />
+                            Members only (since they were invited)
+                        </label>
+                        <label htmlFor="hvis_joi">
+                            <input type="radio" id="hvis_joi" name="historyVis" value="joined"
+                                    defaultChecked={historyVisibility === "joined"}
+                                    onChange={this._onHistoryRadioToggle} />
+                            Members only (since they joined)
+                        </label>
+                    </div>
                     <label className="mx_RoomSettings_encrypt">
                         <input type="checkbox" />
                         Encrypt room

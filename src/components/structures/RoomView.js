@@ -1222,15 +1222,15 @@ module.exports = React.createClass({
         this.refs.room_settings.setTopic(this.refs.header.getTopic());
         
         this.refs.room_settings.save().then((results) => {
-            console.log("Settings saved.");
             var fails = results.filter(function(result) { return result.state !== "fulfilled" });
+            console.log("Settings saved with %s errors", fails.length);
             if (fails.length) {
                 fails.forEach(function(result) {
                     console.error(result.reason);
                 });
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failed to set state",
+                    title: "Failed to save settings",
                     description: fails.map(function(result) { return result.reason }).join("\n"),
                 });
                 // still editing room settings
