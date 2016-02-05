@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-module.exports = function(f, min_interval_ms) {
+module.exports = function(f, minIntervalMs) {
     this.lastCall = 0;
     this.scheduledCall = undefined;
 
@@ -22,16 +22,17 @@ module.exports = function(f, min_interval_ms) {
     return function() {
         var now = Date.now();
 
-        if (self.lastCall < now - min_interval_ms) {
+        if (self.lastCall < now - minIntervalMs) {
             f.apply(this);
             self.lastCall = now;
         } else if (self.scheduledCall === undefined) {
-            self.scheduledCall = setTimeout(() => {
+            self.scheduledCall = setTimeout(
+                () => {
                     self.scheduledCall = undefined;
                     f.apply(this);
                     self.lastCall = now;
                 },
-                (self.lastCall + min_interval_ms) - now
+                (self.lastCall + minIntervalMs) - now
             );
         }
     };
