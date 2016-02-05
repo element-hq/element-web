@@ -43,7 +43,8 @@ module.exports = {
                 }
             }
         });
-        req.open("GET", "version");
+        var cacheBuster = "?ts=" + new Date().getTime();
+        req.open("GET", "version" + cacheBuster);
         req.send(); // can't suppress 404s from being logged.
 
         setTimeout(module.exports.run, POKE_RATE_MS);
