@@ -41,6 +41,7 @@ var Resend = require("../../Resend");
 var SlashCommands = require("../../SlashCommands");
 var dis = require("../../dispatcher");
 var Tinter = require("../../Tinter");
+var rate_limited_func = require('../../ratelimitedfunc');
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
@@ -619,7 +620,7 @@ module.exports = React.createClass({
         }
     },
 
-    _updateTabCompleteList: function(room) {
+    _updateTabCompleteList: new rate_limited_func(function(room) {
         if (!room || !this.tabComplete) {
             return;
         }
@@ -628,7 +629,7 @@ module.exports = React.createClass({
                 CommandEntry.fromCommands(SlashCommands.getCommandList())
             )
         );
-    },
+    }, 500),
 
     _initialiseMessagePanel: function() {
         var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);

@@ -22,6 +22,7 @@ var Modal = require("../../../Modal");
 var Entities = require("../../../Entities");
 var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
+var rate_limited_func = require('../../../ratelimitedfunc');
 
 var INITIAL_LOAD_NUM_MEMBERS = 30;
 var SHARE_HISTORY_WARNING = "Newly invited users will see the history of this room. "+
@@ -147,14 +148,14 @@ module.exports = React.createClass({
         }
     },
 
-    _updateList: function() {
+    _updateList: new rate_limited_func(function() {
         this.memberDict = this.getMemberDict();
 
         var self = this;
         this.setState({
             members: self.roomMembers()
         });
-    },
+    }, 500),
 
     onInvite: function(inputText) {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
