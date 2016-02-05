@@ -17,23 +17,8 @@ limitations under the License.
 var q = require("q");
 var React = require('react');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
-var Tinter = require('../../../Tinter');
 var sdk = require('../../../index');
 var Modal = require('../../../Modal');
-
-var ROOM_COLORS = [
-    // magic room default values courtesy of Ribot
-    ["#76cfa6", "#eaf5f0"],
-    ["#81bddb", "#eaf1f4"],
-    ["#bd79cb", "#f3eaf5"],
-    ["#c65d94", "#f5eaef"],
-    ["#e55e5e", "#f5eaea"],
-    ["#eca46f", "#f5eeea"],
-    ["#dad658", "#f5f4ea"],
-    ["#80c553", "#eef5ea"],
-    ["#bb814e", "#eee8e3"],
-    ["#595959", "#ececec"],
-];
 
 module.exports = React.createClass({
     displayName: 'RoomSettings',
@@ -45,33 +30,6 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        // work out the initial color index
-        var room_color_index = undefined;
-        var color_scheme_event = this.props.room.getAccountData("org.matrix.room.color_scheme");
-        if (color_scheme_event) {
-            var color_scheme = color_scheme_event.getContent();
-            if (color_scheme.primary_color) color_scheme.primary_color = color_scheme.primary_color.toLowerCase();
-            if (color_scheme.secondary_color) color_scheme.secondary_color = color_scheme.secondary_color.toLowerCase();
-            // XXX: we should validate these values
-            for (var i = 0; i < ROOM_COLORS.length; i++) {
-                var room_color = ROOM_COLORS[i];
-                if (room_color[0] === color_scheme.primary_color &&
-                    room_color[1] === color_scheme.secondary_color)
-                {
-                    room_color_index = i;
-                    break;
-                }
-            }
-            if (room_color_index === undefined) {
-                // append the unrecognised colours to our palette
-                room_color_index = ROOM_COLORS.length;
-                ROOM_COLORS[room_color_index] = [ color_scheme.primary_color, color_scheme.secondary_color ];
-            }
-        }
-        else {
-            room_color_index = 0;
-        }
-
         var tags = {};
         Object.keys(this.props.room.tags).forEach(function(tagName) {
             tags[tagName] = {};
@@ -84,7 +42,6 @@ module.exports = React.createClass({
                 are_notifications_muted = true;
             }
         }
-        
 
         return {
             name: this._yankValueFromEvent("m.room.name", "name"),
@@ -93,8 +50,6 @@ module.exports = React.createClass({
             history_visibility: this._yankValueFromEvent("m.room.history_visibility", "history_visibility"),
             guest_access: this._yankValueFromEvent("m.room.guest_access", "guest_access"),
             power_levels_changed: false,
-            color_scheme_changed: false,
-            color_scheme_index: room_color_index,
             tags_changed: false,
             tags: tags,
             areNotifsMuted: are_notifications_muted
@@ -136,10 +91,10 @@ module.exports = React.createClass({
         // diff between original state and this.state to work out what has been changed
         console.log("Original: %s", JSON.stringify(originalState));
         console.log("New: %s", JSON.stringify(this.state));
-        if (this.state.name !== originalState.name) {
+        if (this._hasDiff(this.state.name, originalState.name)) {
             promises.push(MatrixClientPeg.get().setRoomName(roomId, this.state.name));
         }
-        if (this.state.topic !== originalState.topic) { // TODO: 0-length strings?
+        if (this._hasDiff(this.state.topic, originalState.topic)) {
             promises.push(MatrixClientPeg.get().setRoomTopic(roomId, this.state.topic));
         }
         // TODO:
@@ -149,7 +104,9 @@ module.exports = React.createClass({
         // setRoomMutePushRule
         // power levels
         // tags
+
         // color scheme
+        promises.push(this.saveColor());
         
         // submit diffs
         
@@ -157,8 +114,21 @@ module.exports = React.createClass({
     },
 
     saveAliases: function() {
-        if (!this.refs.alias_settings) { return q(); }
+        if (!this.refs.alias_settings) { return [q()]; }
         return this.refs.alias_settings.saveSettings();
+    },
+
+    saveColor: function() {
+        if (!this.refs.color_settings) { return q(); }
+        return this.refs.color_settings.saveSettings();
+    },
+
+    _hasDiff: function(strA, strB) {
+        // treat undefined as an empty string because other components may blindly
+        // call setName("") when there has been no diff made to the name!
+        strA = strA || "";
+        strB = strB || "";
+        return strA !== strB;
     },
 
     resetState: function() {
@@ -235,25 +205,6 @@ module.exports = React.createClass({
             power_levels_changed: true
         });
     },
-
-    getColorScheme: function() {
-        if (!this.state.color_scheme_changed) return undefined;
-
-        return {
-            primary_color: ROOM_COLORS[this.state.color_scheme_index][0],
-            secondary_color: ROOM_COLORS[this.state.color_scheme_index][1],            
-        };
-    },
-
-    onColorSchemeChanged: function(index) {
-        // preview what the user just changed the scheme to.
-        Tinter.tint(ROOM_COLORS[index][0], ROOM_COLORS[index][1]);
-
-        this.setState({
-            color_scheme_changed: true,
-            color_scheme_index: index,
-        });
-    },
     
     _yankValueFromEvent: function(stateEventType, keyName, defaultValue) {
         // E.g.("m.room.name","name") would yank the "name" content key from "m.room.name"
@@ -298,6 +249,7 @@ module.exports = React.createClass({
         // (or turning them into informative stuff)
 
         var AliasSettings = sdk.getComponent("room_settings.AliasSettings");
+        var ColorSettings = sdk.getComponent("room_settings.ColorSettings");
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
 
@@ -370,32 +322,6 @@ module.exports = React.createClass({
         var can_set_tag = true;
 
         var self = this;
-
-        var room_colors_section =
-            <div>
-                <h3>Room Colour</h3>
-                <div className="mx_RoomSettings_roomColors">
-                    {ROOM_COLORS.map(function(room_color, i) {
-                        var selected;
-                        if (i === self.state.color_scheme_index) {
-                            selected =
-                                <div className="mx_RoomSettings_roomColor_selected">
-                                    <img src="img/tick.svg" width="17" height="14" alt="./"/>
-                                </div>
-                        }
-                        var boundClick = self.onColorSchemeChanged.bind(self, i)
-                        return (
-                            <div className="mx_RoomSettings_roomColor"
-                                  key={ "room_color_" + i }
-                                  style={{ backgroundColor: room_color[1] }}
-                                  onClick={ boundClick }>
-                                { selected }
-                                <div className="mx_RoomSettings_roomColorPrimary" style={{ backgroundColor: room_color[0] }}></div>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>;
 
         var user_levels_section;
         if (Object.keys(user_levels).length) {
@@ -508,7 +434,10 @@ module.exports = React.createClass({
                 </div>
 
 
-                { room_colors_section }
+                <div>
+                    <h3>Room Colour</h3>
+                    <ColorSettings ref="color_settings" room={this.props.room} />
+                </div>
 
                 <AliasSettings ref="alias_settings"
                     roomId={this.props.room.roomId}
