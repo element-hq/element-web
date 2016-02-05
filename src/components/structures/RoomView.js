@@ -523,7 +523,7 @@ module.exports = React.createClass({
     onRoomStateMember: function(ev, state, member) {
         if (member.roomId === this.props.roomId) {
             // a member state changed in this room, refresh the tab complete list
-            this._updateTabCompleteList(this.state.room);
+            this._updateTabCompleteList();
 
             var room = MatrixClientPeg.get().getRoom(this.props.roomId);
             if (!room) return;
@@ -606,7 +606,7 @@ module.exports = React.createClass({
             roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
         }
 
-        this._updateTabCompleteList(this.state.room);
+        this._updateTabCompleteList();
 
         // XXX: EVIL HACK to autofocus inviting on empty rooms.
         // We use the setTimeout to avoid racing with focus_composer.
@@ -620,12 +620,12 @@ module.exports = React.createClass({
         }
     },
 
-    _updateTabCompleteList: new rate_limited_func(function(room) {
-        if (!room || !this.tabComplete) {
+    _updateTabCompleteList: new rate_limited_func(function() {
+        if (!this.state.room || !this.tabComplete) {
             return;
         }
         this.tabComplete.setCompletionList(
-            MemberEntry.fromMemberList(room.getJoinedMembers()).concat(
+            MemberEntry.fromMemberList(this.state.room.getJoinedMembers()).concat(
                 CommandEntry.fromCommands(SlashCommands.getCommandList())
             )
         );
