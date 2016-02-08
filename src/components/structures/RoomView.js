@@ -1554,304 +1554,307 @@ module.exports = React.createClass({
                     </div>
                 );
             }
-        } else {
-            var scrollheader_classes = classNames({
-                mx_RoomView_scrollheader: true,
-                loading: this.state.paginating
-            });
+        }
 
-            var statusBar;
+        // We have successfully loaded this room, and are not previewing.
+        // Display the "normal" room view.
 
-            // for testing UI...
-            // this.state.upload = {
-            //     uploadedBytes: 123493,
-            //     totalBytes: 347534,
-            //     fileName: "testing_fooble.jpg",
-            // }
+        var scrollheader_classes = classNames({
+            mx_RoomView_scrollheader: true,
+            loading: this.state.paginating
+        });
 
-            if (ContentMessages.getCurrentUploads().length > 0) {
-                var UploadBar = sdk.getComponent('structures.UploadBar');
-                statusBar = <UploadBar room={this.state.room} />
-            } else if (!this.state.searchResults) {
-                var typingString = this.getWhoIsTypingString();
-                // typingString = "S͚͍̭̪̤͙̱͙̖̥͙̥̤̻̙͕͓͂̌ͬ͐̂k̜̝͎̰̥̻̼̂̌͛͗͊̅̒͂̊̍̍͌̈̈́͌̋̊ͬa͉̯͚̺̗̳̩ͪ̋̑͌̓̆̍̂̉̏̅̆ͧ̌̑v̲̲̪̝ͥ̌ͨͮͭ̊͆̾ͮ̍ͮ͑̚e̮̙͈̱̘͕̼̮͒ͩͨͫ̃͗̇ͩ͒ͣͦ͒̄̍͐ͣ̿ͥṘ̗̺͇̺̺͔̄́̊̓͊̍̃ͨ̚ā̼͎̘̟̼͎̜̪̪͚̋ͨͨͧ̓ͦͯͤ̄͆̋͂ͩ͌ͧͅt̙̙̹̗̦͖̞ͫͪ͑̑̅ͪ̃̚ͅ is typing...";
-                var unreadMsgs = this.getUnreadMessagesString();
-                // no conn bar trumps unread count since you can't get unread messages
-                // without a connection! (technically may already have some but meh)
-                // It also trumps the "some not sent" msg since you can't resend without
-                // a connection!
-                if (this.state.syncState === "ERROR") {
-                    statusBar = (
-                        <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
-                            <div className="mx_RoomView_connectionLostBar_textArea">
-                                <div className="mx_RoomView_connectionLostBar_title">
-                                    Connectivity to the server has been lost.
-                                </div>
-                                <div className="mx_RoomView_connectionLostBar_desc">
-                                    Sent messages will be stored until your connection has returned.
-                                </div>
+        var statusBar;
+
+        // for testing UI...
+        // this.state.upload = {
+        //     uploadedBytes: 123493,
+        //     totalBytes: 347534,
+        //     fileName: "testing_fooble.jpg",
+        // }
+
+        if (ContentMessages.getCurrentUploads().length > 0) {
+            var UploadBar = sdk.getComponent('structures.UploadBar');
+            statusBar = <UploadBar room={this.state.room} />
+        } else if (!this.state.searchResults) {
+            var typingString = this.getWhoIsTypingString();
+            // typingString = "S͚͍̭̪̤͙̱͙̖̥͙̥̤̻̙͕͓͂̌ͬ͐̂k̜̝͎̰̥̻̼̂̌͛͗͊̅̒͂̊̍̍͌̈̈́͌̋̊ͬa͉̯͚̺̗̳̩ͪ̋̑͌̓̆̍̂̉̏̅̆ͧ̌̑v̲̲̪̝ͥ̌ͨͮͭ̊͆̾ͮ̍ͮ͑̚e̮̙͈̱̘͕̼̮͒ͩͨͫ̃͗̇ͩ͒ͣͦ͒̄̍͐ͣ̿ͥṘ̗̺͇̺̺͔̄́̊̓͊̍̃ͨ̚ā̼͎̘̟̼͎̜̪̪͚̋ͨͨͧ̓ͦͯͤ̄͆̋͂ͩ͌ͧͅt̙̙̹̗̦͖̞ͫͪ͑̑̅ͪ̃̚ͅ is typing...";
+            var unreadMsgs = this.getUnreadMessagesString();
+            // no conn bar trumps unread count since you can't get unread messages
+            // without a connection! (technically may already have some but meh)
+            // It also trumps the "some not sent" msg since you can't resend without
+            // a connection!
+            if (this.state.syncState === "ERROR") {
+                statusBar = (
+                    <div className="mx_RoomView_connectionLostBar">
+                        <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
+                        <div className="mx_RoomView_connectionLostBar_textArea">
+                            <div className="mx_RoomView_connectionLostBar_title">
+                                Connectivity to the server has been lost.
+                            </div>
+                            <div className="mx_RoomView_connectionLostBar_desc">
+                                Sent messages will be stored until your connection has returned.
                             </div>
                         </div>
-                    );
-                }
-                else if (this.tabComplete.isTabCompleting()) {
-                    var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
-                    statusBar = (
-                        <div className="mx_RoomView_tabCompleteBar">
-                            <div className="mx_RoomView_tabCompleteImage">...</div>
-                            <div className="mx_RoomView_tabCompleteWrapper">
-                                <TabCompleteBar entries={this.tabComplete.peek(6)} />
-                                <div className="mx_RoomView_tabCompleteEol" title="->|">
-                                    <TintableSvg src="img/eol.svg" width="22" height="16"/>
-                                    Auto-complete
-                                </div>
-                            </div>
-                        </div>
-                    );
-                }
-                else if (this.state.hasUnsentMessages) {
-                    statusBar = (
-                        <div className="mx_RoomView_connectionLostBar">
-                            <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
-                            <div className="mx_RoomView_connectionLostBar_textArea">
-                                <div className="mx_RoomView_connectionLostBar_title">
-                                    Some of your messages have not been sent.
-                                </div>
-                                <div className="mx_RoomView_connectionLostBar_desc">
-                                    <a className="mx_RoomView_resend_link"
-                                        onClick={ this.onResendAllClick }>
-                                    Resend all now
-                                    </a> or select individual messages to re-send.
-                                </div>
-                            </div>
-                        </div>
-                    );
-                }
-                // unread count trumps who is typing since the unread count is only
-                // set when you've scrolled up
-                else if (unreadMsgs) {
-                    statusBar = (
-                        <div className="mx_RoomView_unreadMessagesBar" onClick={ this.jumpToLiveTimeline }>
-                            <img src="img/newmessages.svg" width="24" height="24" alt=""/>
-                            {unreadMsgs}
-                        </div>
-                    );
-                }
-                else if (typingString) {
-                    statusBar = (
-                        <div className="mx_RoomView_typingBar">
-                            <div className="mx_RoomView_typingImage">...</div>
-                            <span className="mx_RoomView_typingText">{typingString}</span>
-                        </div>
-                    );
-                }
-                else if (!this.state.atEndOfLiveTimeline) {
-                    statusBar = (
-                        <div className="mx_RoomView_scrollToBottomBar" onClick={ this.jumpToLiveTimeline }>
-                            <img src="img/scrolldown.svg" width="24" height="24" alt="Scroll to bottom of page" title="Scroll to bottom of page"/>
-                        </div>                        
-                    );
-                }
-            }
-
-            var aux = null;
-            if (this.state.editingRoomSettings) {
-                aux = <RoomSettings ref="room_settings" onSaveClick={this.onSettingsSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
-            }
-            else if (this.state.uploadingRoomSettings) {
-                aux = <Loader/>;
-            }
-            else if (this.state.searching) {
-                aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
-            }
-            else if (this.state.guestsCanJoin && MatrixClientPeg.get().isGuest() &&
-                    (!myMember || myMember.membership !== "join")) {
-                aux = (
-                    <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />
-                );
-            }
-            else if (this.state.canPeek &&
-                    (!myMember || myMember.membership !== "join")) {
-                aux = (
-                    <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />
-                );
-            }
-
-            var conferenceCallNotification = null;
-            if (this.state.displayConfCallNotification) {
-                var supportedText;
-                if (!MatrixClientPeg.get().supportsVoip()) {
-                    supportedText = " (unsupported)";
-                }
-                conferenceCallNotification = (
-                    <div className="mx_RoomView_ongoingConfCallNotification" onClick={this.onConferenceNotificationClick}>
-                        Ongoing conference call {supportedText}
                     </div>
                 );
             }
-
-            var fileDropTarget = null;
-            if (this.state.draggingFile) {
-                fileDropTarget = <div className="mx_RoomView_fileDropTarget">
-                                    <div className="mx_RoomView_fileDropTargetLabel" title="Drop File Here">
-                                        <TintableSvg src="img/upload-big.svg" width="45" height="59"/><br/>
-                                        Drop file here to upload
-                                    </div>
-                                 </div>;
+            else if (this.tabComplete.isTabCompleting()) {
+                var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
+                statusBar = (
+                    <div className="mx_RoomView_tabCompleteBar">
+                        <div className="mx_RoomView_tabCompleteImage">...</div>
+                        <div className="mx_RoomView_tabCompleteWrapper">
+                            <TabCompleteBar entries={this.tabComplete.peek(6)} />
+                            <div className="mx_RoomView_tabCompleteEol" title="->|">
+                                <TintableSvg src="img/eol.svg" width="22" height="16"/>
+                                Auto-complete
+                            </div>
+                        </div>
+                    </div>
+                );
             }
+            else if (this.state.hasUnsentMessages) {
+                statusBar = (
+                    <div className="mx_RoomView_connectionLostBar">
+                        <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
+                        <div className="mx_RoomView_connectionLostBar_textArea">
+                            <div className="mx_RoomView_connectionLostBar_title">
+                                Some of your messages have not been sent.
+                            </div>
+                            <div className="mx_RoomView_connectionLostBar_desc">
+                                <a className="mx_RoomView_resend_link"
+                                    onClick={ this.onResendAllClick }>
+                                Resend all now
+                                </a> or select individual messages to re-send.
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+            // unread count trumps who is typing since the unread count is only
+            // set when you've scrolled up
+            else if (unreadMsgs) {
+                statusBar = (
+                    <div className="mx_RoomView_unreadMessagesBar" onClick={ this.jumpToLiveTimeline }>
+                        <img src="img/newmessages.svg" width="24" height="24" alt=""/>
+                        {unreadMsgs}
+                    </div>
+                );
+            }
+            else if (typingString) {
+                statusBar = (
+                    <div className="mx_RoomView_typingBar">
+                        <div className="mx_RoomView_typingImage">...</div>
+                        <span className="mx_RoomView_typingText">{typingString}</span>
+                    </div>
+                );
+            }
+            else if (!this.state.atEndOfLiveTimeline) {
+                statusBar = (
+                    <div className="mx_RoomView_scrollToBottomBar" onClick={ this.jumpToLiveTimeline }>
+                        <img src="img/scrolldown.svg" width="24" height="24" alt="Scroll to bottom of page" title="Scroll to bottom of page"/>
+                    </div>                        
+                );
+            }
+        }
 
-            var messageComposer, searchInfo;
-            var canSpeak = (
-                // joined and not showing search results
-                myMember && (myMember.membership == 'join') && !this.state.searchResults
+        var aux = null;
+        if (this.state.editingRoomSettings) {
+            aux = <RoomSettings ref="room_settings" onSaveClick={this.onSettingsSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
+        }
+        else if (this.state.uploadingRoomSettings) {
+            aux = <Loader/>;
+        }
+        else if (this.state.searching) {
+            aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
+        }
+        else if (this.state.guestsCanJoin && MatrixClientPeg.get().isGuest() &&
+                (!myMember || myMember.membership !== "join")) {
+            aux = (
+                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />
             );
-            if (canSpeak) {
-                messageComposer =
-                    <MessageComposer
-                        room={this.state.room} onResize={this.onChildResize} uploadFile={this.uploadFile}
-                        callState={this.state.callState} tabComplete={this.tabComplete} />
+        }
+        else if (this.state.canPeek &&
+                (!myMember || myMember.membership !== "join")) {
+            aux = (
+                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />
+            );
+        }
+
+        var conferenceCallNotification = null;
+        if (this.state.displayConfCallNotification) {
+            var supportedText;
+            if (!MatrixClientPeg.get().supportsVoip()) {
+                supportedText = " (unsupported)";
             }
-
-            // TODO: Why aren't we storing the term/scope/count in this format
-            // in this.state if this is what RoomHeader desires?
-            if (this.state.searchResults) {
-                searchInfo = {
-                    searchTerm : this.state.searchTerm,
-                    searchScope : this.state.searchScope,
-                    searchCount : this.state.searchResults.count,
-                };
-            }
-
-            var call = CallHandler.getCallForRoom(this.props.roomId);
-            //var call = CallHandler.getAnyActiveCall();
-            var inCall = false;
-            if (call && (this.state.callState !== 'ended' && this.state.callState !== 'ringing')) {
-                inCall = true;
-                var zoomButton, voiceMuteButton, videoMuteButton;
-
-                if (call.type === "video") {
-                    zoomButton = (
-                        <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title="Fill screen">
-                            <TintableSvg src="img/fullscreen.svg" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
-                        </div>
-                    );
-
-                    videoMuteButton =
-                        <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
-                            <img src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"}
-                                 alt={call.isLocalVideoMuted() ? "Click to unmute video" : "Click to mute video"}
-                                 width="31" height="27"/>
-                        </div>
-                }
-                voiceMuteButton =
-                    <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
-                        <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"} 
-                             alt={call.isMicrophoneMuted() ? "Click to unmute audio" : "Click to mute audio"} 
-                             width="21" height="26"/>
-                    </div>
-
-                if (!statusBar) {
-                    statusBar =
-                        <div className="mx_RoomView_callBar">
-                            <img src="img/sound-indicator.svg" width="23" height="20"/>
-                            <b>Active call</b>
-                        </div>;
-                }
-
-                statusBar =
-                    <div className="mx_RoomView_callStatusBar">
-                        { voiceMuteButton }
-                        { videoMuteButton }
-                        { zoomButton }
-                        { statusBar }
-                        <TintableSvg className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17"/>
-                    </div>
-            }
-
-            // if we have search results, we keep the messagepanel (so that it preserves its
-            // scroll state), but hide it.
-            var searchResultsPanel;
-            var hideMessagePanel = false;
-
-            if (this.state.searchResults) {
-                searchResultsPanel = (
-                    <ScrollPanel ref="searchResultsPanel" className="mx_RoomView_messagePanel"
-                            onFillRequest={ this.onSearchResultsFillRequest }>
-                        <li className={scrollheader_classes}></li>
-                        {this.getSearchResultTiles()}
-                    </ScrollPanel>
-                );
-                hideMessagePanel = true;
-            }
-
-            var messagePanel;
-
-            // just show a spinner while the timeline loads.
-            //
-            // put it in a div of the right class (mx_RoomView_messagePanel) so
-            // that the order in the roomview flexbox is correct, and
-            // mx_RoomView_messageListWrapper to position the inner div in the
-            // right place.
-            //
-            // Note that the click-on-search-result functionality relies on the
-            // fact that the messagePanel is hidden while the timeline reloads,
-            // but that the RoomHeader (complete with search term) continues to
-            // exist.
-            if (this.state.timelineLoading) {
-                messagePanel = (
-                        <div className="mx_RoomView_messagePanel mx_RoomView_messageListWrapper">
-                            <Loader />
-                        </div>
-                );
-            } else {
-                // it's important that stickyBottom = false on this, otherwise if somebody hits the
-                // bottom of the loaded events when viewing historical messages, we get stuck in a
-                // loop of paginating our way through the entire history of the room.
-                messagePanel = (
-                    <ScrollPanel ref="messagePanel" className="mx_RoomView_messagePanel"
-                            onScroll={ this.onMessageListScroll } 
-                            onFillRequest={ this.onMessageListFillRequest }
-                            style={ hideMessagePanel ? { display: 'none' } : {} }
-                            stickyBottom={ false }>
-                        <li className={scrollheader_classes}></li>
-                        {this.getEventTiles()}
-                    </ScrollPanel>
-                );
-            }
-
-            return (
-                <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") } ref="roomView">
-                    <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
-                        editing={this.state.editingRoomSettings}
-                        onSearchClick={this.onSearchClick}
-                        onSettingsClick={this.onSettingsClick}
-                        onSaveClick={this.onSettingsSaveClick}
-                        onCancelClick={this.onCancelClick}
-                        onForgetClick={
-                            (myMember && myMember.membership === "leave") ? this.onForgetClick : null
-                        }
-                        onLeaveClick={
-                            (myMember && myMember.membership === "join") ? this.onLeaveClick : null
-                        } />
-                    <div className="mx_RoomView_auxPanel" ref="auxPanel">
-                        { fileDropTarget }    
-                        <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}
-                            onResize={this.onChildResize} />
-                        { conferenceCallNotification }
-                        { aux }
-                    </div>
-                    { messagePanel }
-                    { searchResultsPanel }
-                    <div className="mx_RoomView_statusArea">
-                        <div className="mx_RoomView_statusAreaBox">
-                            <div className="mx_RoomView_statusAreaBox_line"></div>
-                            { statusBar }
-                        </div>
-                    </div>
-                    { messageComposer }
+            conferenceCallNotification = (
+                <div className="mx_RoomView_ongoingConfCallNotification" onClick={this.onConferenceNotificationClick}>
+                    Ongoing conference call {supportedText}
                 </div>
             );
         }
+
+        var fileDropTarget = null;
+        if (this.state.draggingFile) {
+            fileDropTarget = <div className="mx_RoomView_fileDropTarget">
+                                <div className="mx_RoomView_fileDropTargetLabel" title="Drop File Here">
+                                    <TintableSvg src="img/upload-big.svg" width="45" height="59"/><br/>
+                                    Drop file here to upload
+                                </div>
+                             </div>;
+        }
+
+        var messageComposer, searchInfo;
+        var canSpeak = (
+            // joined and not showing search results
+            myMember && (myMember.membership == 'join') && !this.state.searchResults
+        );
+        if (canSpeak) {
+            messageComposer =
+                <MessageComposer
+                    room={this.state.room} onResize={this.onChildResize} uploadFile={this.uploadFile}
+                    callState={this.state.callState} tabComplete={this.tabComplete} />
+        }
+
+        // TODO: Why aren't we storing the term/scope/count in this format
+        // in this.state if this is what RoomHeader desires?
+        if (this.state.searchResults) {
+            searchInfo = {
+                searchTerm : this.state.searchTerm,
+                searchScope : this.state.searchScope,
+                searchCount : this.state.searchResults.count,
+            };
+        }
+
+        var call = CallHandler.getCallForRoom(this.props.roomId);
+        //var call = CallHandler.getAnyActiveCall();
+        var inCall = false;
+        if (call && (this.state.callState !== 'ended' && this.state.callState !== 'ringing')) {
+            inCall = true;
+            var zoomButton, voiceMuteButton, videoMuteButton;
+
+            if (call.type === "video") {
+                zoomButton = (
+                    <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title="Fill screen">
+                        <TintableSvg src="img/fullscreen.svg" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
+                    </div>
+                );
+
+                videoMuteButton =
+                    <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
+                        <img src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"}
+                             alt={call.isLocalVideoMuted() ? "Click to unmute video" : "Click to mute video"}
+                             width="31" height="27"/>
+                    </div>
+            }
+            voiceMuteButton =
+                <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
+                    <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"} 
+                         alt={call.isMicrophoneMuted() ? "Click to unmute audio" : "Click to mute audio"} 
+                         width="21" height="26"/>
+                </div>
+
+            if (!statusBar) {
+                statusBar =
+                    <div className="mx_RoomView_callBar">
+                        <img src="img/sound-indicator.svg" width="23" height="20"/>
+                        <b>Active call</b>
+                    </div>;
+            }
+
+            statusBar =
+                <div className="mx_RoomView_callStatusBar">
+                    { voiceMuteButton }
+                    { videoMuteButton }
+                    { zoomButton }
+                    { statusBar }
+                    <TintableSvg className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17"/>
+                </div>
+        }
+
+        // if we have search results, we keep the messagepanel (so that it preserves its
+        // scroll state), but hide it.
+        var searchResultsPanel;
+        var hideMessagePanel = false;
+
+        if (this.state.searchResults) {
+            searchResultsPanel = (
+                <ScrollPanel ref="searchResultsPanel" className="mx_RoomView_messagePanel"
+                        onFillRequest={ this.onSearchResultsFillRequest }>
+                    <li className={scrollheader_classes}></li>
+                    {this.getSearchResultTiles()}
+                </ScrollPanel>
+            );
+            hideMessagePanel = true;
+        }
+
+        var messagePanel;
+
+        // just show a spinner while the timeline loads.
+        //
+        // put it in a div of the right class (mx_RoomView_messagePanel) so
+        // that the order in the roomview flexbox is correct, and
+        // mx_RoomView_messageListWrapper to position the inner div in the
+        // right place.
+        //
+        // Note that the click-on-search-result functionality relies on the
+        // fact that the messagePanel is hidden while the timeline reloads,
+        // but that the RoomHeader (complete with search term) continues to
+        // exist.
+        if (this.state.timelineLoading) {
+            messagePanel = (
+                    <div className="mx_RoomView_messagePanel mx_RoomView_messageListWrapper">
+                        <Loader />
+                    </div>
+            );
+        } else {
+            // it's important that stickyBottom = false on this, otherwise if somebody hits the
+            // bottom of the loaded events when viewing historical messages, we get stuck in a
+            // loop of paginating our way through the entire history of the room.
+            messagePanel = (
+                <ScrollPanel ref="messagePanel" className="mx_RoomView_messagePanel"
+                        onScroll={ this.onMessageListScroll } 
+                        onFillRequest={ this.onMessageListFillRequest }
+                        style={ hideMessagePanel ? { display: 'none' } : {} }
+                        stickyBottom={ false }>
+                    <li className={scrollheader_classes}></li>
+                    {this.getEventTiles()}
+                </ScrollPanel>
+            );
+        }
+
+        return (
+            <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") } ref="roomView">
+                <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
+                    editing={this.state.editingRoomSettings}
+                    onSearchClick={this.onSearchClick}
+                    onSettingsClick={this.onSettingsClick}
+                    onSaveClick={this.onSettingsSaveClick}
+                    onCancelClick={this.onCancelClick}
+                    onForgetClick={
+                        (myMember && myMember.membership === "leave") ? this.onForgetClick : null
+                    }
+                    onLeaveClick={
+                        (myMember && myMember.membership === "join") ? this.onLeaveClick : null
+                    } />
+                <div className="mx_RoomView_auxPanel" ref="auxPanel">
+                    { fileDropTarget }    
+                    <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}
+                        onResize={this.onChildResize} />
+                    { conferenceCallNotification }
+                    { aux }
+                </div>
+                { messagePanel }
+                { searchResultsPanel }
+                <div className="mx_RoomView_statusArea">
+                    <div className="mx_RoomView_statusAreaBox">
+                        <div className="mx_RoomView_statusAreaBox_line"></div>
+                        { statusBar }
+                    </div>
+                </div>
+                { messageComposer }
+            </div>
+        );
     },
 });
