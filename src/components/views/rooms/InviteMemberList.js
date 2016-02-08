@@ -35,10 +35,6 @@ module.exports = React.createClass({
         };
     },
 
-    getInitialState: function() {
-        return {};
-    },
-
     componentWillMount: function() {
         this._room = MatrixClientPeg.get().getRoom(this.props.roomId);
         this._emailEntity = null;
@@ -49,10 +45,14 @@ module.exports = React.createClass({
         this._userList = MatrixClientPeg.get().getUsers().filter((u) => {
             return !this._room.hasMembershipState(u.userId, "join");
         });
-        console.log("%s users", this._userList.length);
+    },
+
+    onInvite: function(ev) {
+        this.props.onInvite(this._input);
     },
 
     onSearchQueryChanged: function(input) {
+        this._input = input;
         var EntityTile = sdk.getComponent("rooms.EntityTile");
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
@@ -68,7 +68,7 @@ module.exports = React.createClass({
             <EntityTile key="dynamic_invite_tile" suppressOnHover={true} showInviteButton={true}
             avatarJsx={ <BaseAvatar name="@" width={36} height={36} /> }
             className="mx_EntityTile_invitePlaceholder"
-            presenceState="online" onClick={this.props.onInvite} name={label} />,
+            presenceState="online" onClick={this.onInvite} name={label} />,
             function(query) {
                 return true; // always show this
             }
