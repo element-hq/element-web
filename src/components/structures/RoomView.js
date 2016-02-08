@@ -714,7 +714,9 @@ module.exports = React.createClass({
         // NB. This unfortunately does not re-use the ChangeDisplayName component because
         // it doesn't behave quite as desired here (we want an input field here rather than
         // content-editable, and we want a default).
-        if (MatrixClientPeg.get().getRooms().length == 0) {
+        if (cli.getRooms().filter((r) => {
+            return r.hasMembershipState(cli.credentials.userId, "join");
+        })) {
             display_name_promise = cli.getProfileInfo(cli.credentials.userId).then((result) => {
                 if (!result.displayname) {
                     var SetDisplayNameDialog = sdk.getComponent('views.dialogs.SetDisplayNameDialog');
