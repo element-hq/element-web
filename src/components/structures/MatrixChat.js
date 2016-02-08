@@ -900,58 +900,34 @@ module.exports = React.createClass({
                     break;
             }
 
-            // TODO: Fix duplication here and do conditionals like we do above
+            var topBar;
             if (MatrixClientPeg.get().isGuest()) {
-                return (
-                        <div className="mx_MatrixChat_wrapper">
-                            <GuestWarningBar />
-                            <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
-                                <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
-                                <main className="mx_MatrixChat_middlePanel">
-                                    {page_element}
-                                </main>
-                                {right_panel}
-                            </div>
-                        </div>
-                );
-            } else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
-                return (
-                        <div className="mx_MatrixChat_wrapper">
-                            <MatrixToolbar />
-                            <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
-                                <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
-                                <main className="mx_MatrixChat_middlePanel">
-                                    {page_element}
-                                </main>
-                                {right_panel}
-                            </div>
-                        </div>
-                );
-            } else if (this.state.hasNewVersion) {
-                return (
-                        <div className="mx_MatrixChat_wrapper">
-                            <NewVersionBar />
-                            <div className="mx_MatrixChat mx_MatrixChat_toolbarShowing">
-                                <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
-                                <main className="mx_MatrixChat_middlePanel">
-                                    {page_element}
-                                </main>
-                                {right_panel}
-                            </div>
-                        </div>
-                );
+                topBar = <GuestWarningBar />;
             }
-            else {
-                return (
-                        <div className="mx_MatrixChat">
-                            <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
-                            <main className="mx_MatrixChat_middlePanel">
-                                {page_element}
-                            </main>
-                            {right_panel}
-                        </div>
-                );
+            else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
+                topBar = <MatrixToolbar />;
             }
+            else if (this.state.hasNewVersion) {
+                topBar = <NewVersionBar />;
+            }
+
+            var bodyClasses = "mx_MatrixChat";
+            if (topBar) {
+                bodyClasses += " mx_MatrixChat_toolbarShowing";
+            }
+
+            return (
+                <div className="mx_MatrixChat_wrapper">
+                    {topBar}
+                    <div className={bodyClasses}>
+                        <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
+                        <main className="mx_MatrixChat_middlePanel">
+                            {page_element}
+                        </main>
+                        {right_panel}
+                    </div>
+                </div>
+            );
         } else if (this.state.logged_in || (!this.state.logged_in && this._autoRegisterAsGuest)) {
             var Spinner = sdk.getComponent('elements.Spinner');
             var logoutLink;
