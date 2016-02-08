@@ -68,6 +68,7 @@ module.exports.components['views.room_settings.AliasSettings'] = require('./comp
 module.exports.components['views.room_settings.ColorSettings'] = require('./components/views/room_settings/ColorSettings');
 module.exports.components['views.rooms.EntityTile'] = require('./components/views/rooms/EntityTile');
 module.exports.components['views.rooms.EventTile'] = require('./components/views/rooms/EventTile');
+module.exports.components['views.rooms.InviteMemberList'] = require('./components/views/rooms/InviteMemberList');
 module.exports.components['views.rooms.MemberInfo'] = require('./components/views/rooms/MemberInfo');
 module.exports.components['views.rooms.MemberList'] = require('./components/views/rooms/MemberList');
 module.exports.components['views.rooms.MemberTile'] = require('./components/views/rooms/MemberTile');

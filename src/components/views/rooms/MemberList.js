@@ -24,7 +24,6 @@ var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var rate_limited_func = require('../../../ratelimitedfunc');
 
-var INITIAL_SEARCH_RESULTS_COUNT = 10;
 var INITIAL_LOAD_NUM_MEMBERS = 30;
 var SHARE_HISTORY_WARNING = "Newly invited users will see the history of this room. "+
     "If you'd prefer invited users not to see messages that were sent before they joined, "+
@@ -78,12 +77,9 @@ module.exports = React.createClass({
         setTimeout(function() {
             if (!self.isMounted()) return;
             // lazy load to prevent it blocking the first render
-            self._loadUserList();
-
             self.setState({
                 members: self.roomMembers()
             });
-            
         }, 50);
 
         // Attach a SINGLE listener for global presence changes then locate the
@@ -105,24 +101,6 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("User.presence", updateUserState);
         this.userPresenceFn = updateUserState;
     },
-    // Remember to set 'key' on a MemberList to the ID of the room it's for
-    /*componentWillReceiveProps: function(newProps) {
-    },*/
-
-    _loadUserList: function() {
-        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
-        if (!room) {
-            return; // we'll do it later
-        }
-
-        // Load the complete user list for inviting new users
-        // TODO: Keep this list bleeding-edge up-to-date. Practically speaking,
-        // it will do for now not being updated as random new users join different
-        // rooms as this list will be reloaded every room swap.
-        this.userList = MatrixClientPeg.get().getUsers().filter(function(u) {
-            return !room.hasMembershipState(u.userId, "join");
-        });
-    },
 
     onRoom: function(room) {
         if (room.roomId !== this.props.roomId) {
@@ -132,7 +110,6 @@ module.exports = React.createClass({
         // we need to wait till the room is fully populated with state
         // before refreshing the member list else we get a stale list.
         this._updateList();
-        this._loadUserList();
     },
 
     onRoomStateMember: function(ev, state, member) {
@@ -335,27 +312,6 @@ module.exports = React.createClass({
     },
 
     onSearchQueryChanged: function(input) {
-        var EntityTile = sdk.getComponent("rooms.EntityTile");
-        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-
-        var label = input;
-        // if (input[0] === "@") {
-        //     label = input;
-        // }
-        // else {
-        //     label = "Email: " + input;
-        // }
-
-        this._emailEntity = new Entities.newEntity(
-            <EntityTile key="dynamic_invite_tile" suppressOnHover={true} showInviteButton={true}
-            avatarJsx={ <BaseAvatar name="@" width={36} height={36} /> }
-            className="mx_EntityTile_invitePlaceholder"
-            presenceState="online" onClick={this.onInvite.bind(this, input)} name={label} />,
-            function(query) {
-                return true; // always show this
-            }
-        );
-
         this.setState({
             searchQuery: input
         });
@@ -406,32 +362,9 @@ module.exports = React.createClass({
         return memberList;
     },
 
-    inviteTile: function() {
-        if (this.state.inviting) {
-            var Loader = sdk.getComponent("elements.Spinner");
-            return (
-                <Loader />
-            );
-        } else {
-            var SearchableEntityList = sdk.getComponent("rooms.SearchableEntityList");
-            var entities = Entities.fromUsers(this.userList || [], true, this.onInvite);
-
-            // Add an "Email: foo@bar.com" tile as the first tile
-            if (this._emailEntity) {
-                entities.unshift(this._emailEntity);
-            }
-
-            return (
-                <SearchableEntityList searchPlaceholderText={"Invite / Search"}
-                    onSubmit={this.onInvite}
-                    onQueryChanged={this.onSearchQueryChanged}
-                    entities={entities}
-                    truncateAt={INITIAL_SEARCH_RESULTS_COUNT}/>
-            );
-        }
-    },
-
     render: function() {
+        var InviteMemberList = sdk.getComponent("rooms.InviteMemberList");
+
         var invitedSection = null;
         var invitedMemberTiles = this.makeMemberTiles('invite', this.state.searchQuery);
         if (invitedMemberTiles.length > 0) {
@@ -444,10 +377,27 @@ module.exports = React.createClass({
                 </div>
             );
         }
+
+        var inviteMemberListSection;
+        if (this.state.inviting) {
+            var Loader = sdk.getComponent("elements.Spinner");
+            inviteMemberListSection = (
+                <Loader />
+            );
+        }
+        else {
+            inviteMemberListSection = (
+                <InviteMemberList roomId={this.props.roomId}
+                    onSearchQueryChanged={this.onSearchQueryChanged}
+                    onInvite={this.onInvite} />
+            );
+        }
+
+
         var TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
             <div className="mx_MemberList">
-                    {this.inviteTile()}
+                    {inviteMemberListSection}
                     <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
                         <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
                                 createOverflowElement={this._createOverflowTile}>
