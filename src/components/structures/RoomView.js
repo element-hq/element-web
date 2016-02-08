@@ -715,8 +715,8 @@ module.exports = React.createClass({
         // it doesn't behave quite as desired here (we want an input field here rather than
         // content-editable, and we want a default).
         if (cli.getRooms().filter((r) => {
-            return !!r.getMember(cli.credentials.userId);
-        }).length == 0) {
+            return r.hasMembershipState(cli.credentials.userId, "join");
+        })) {
             display_name_promise = cli.getProfileInfo(cli.credentials.userId).then((result) => {
                 if (!result.displayname) {
                     var SetDisplayNameDialog = sdk.getComponent('views.dialogs.SetDisplayNameDialog');
