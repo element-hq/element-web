@@ -22,8 +22,9 @@ var highlight = require('highlight.js');
 
 var sanitizeHtmlParams = {
     allowedTags: [
-        'font', // custom to matrix. deliberately no h1/h2 to stop people shouting.
+        'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown
+        // deliberately no h1/h2 to stop people shouting.
         'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
         'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
         'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre'
@@ -65,7 +66,7 @@ class Highlighter {
         // but we're attempting to apply the highlights here to the HTML body.  This is
         // never going to end well - we really should be hooking into the sanitzer HTML
         // parser to only attempt to highlight text nodes to avoid corrupting tags.  
-        // If and when this happens, we'll probably have to split his method in two between
+        // If and when this happens, we'll probably have to split this method in two between
         // HTML and plain-text highlighting.
 
         var safeHighlight = this.html ? sanitizeHtml(highlights[0], sanitizeHtmlParams) : highlights[0];
