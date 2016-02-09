@@ -42,9 +42,11 @@ module.exports = React.createClass({
         // TODO: Keep this list bleeding-edge up-to-date. Practically speaking,
         // it will do for now not being updated as random new users join different
         // rooms as this list will be reloaded every room swap.
-        this._userList = MatrixClientPeg.get().getUsers().filter((u) => {
-            return !this._room.hasMembershipState(u.userId, "join");
-        });
+        if (this._room) {
+            this._userList = MatrixClientPeg.get().getUsers().filter((u) => {
+                return !this._room.hasMembershipState(u.userId, "join");
+            });
+        }
     },
 
     onInvite: function(ev) {
