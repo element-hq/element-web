@@ -26,6 +26,9 @@ strm.write(" * THIS FILE IS AUTO-GENERATED\n");
 strm.write(" * You can edit it you like, but your changes will be overwritten,\n");
 strm.write(" * so you'd just be trying to swim upstream like a salmon.\n");
 strm.write(" * You are not a salmon.\n");
+strm.write(" *\n");
+strm.write(" * To update it, run:\n");
+strm.write(" *    ./reskindex.js -h header\n");
 strm.write(" */\n\n");
 
 if (packageJson['matrix-react-parent']) {
