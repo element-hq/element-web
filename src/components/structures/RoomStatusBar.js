@@ -36,10 +36,6 @@ module.exports = React.createClass({
         // true if there are messages in the room which had errors on send
         hasUnsentMessages: React.PropTypes.bool,
 
-        // callback for when the user clicks on the 'resend all' button in the
-        // 'unsent messages' bar
-        onResendAllClick: React.PropTypes.func,
-
         // this is true if we are fully scrolled-down, and are looking at
         // the end of the live timeline.
         atEndOfLiveTimeline: React.PropTypes.bool,
@@ -48,6 +44,13 @@ module.exports = React.createClass({
         // the 'Active Call' text in the status bar if there is nothing
         // more interesting)
         hasActiveCall: React.PropTypes.bool,
+
+        // callback for when the user clicks on the 'resend all' button in the
+        // 'unsent messages' bar
+        onResendAllClick: React.PropTypes.func,
+
+        // callback for when the user clicks on the 'scroll to bottom' button
+        onScrollToBottomClick: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -138,7 +141,7 @@ module.exports = React.createClass({
                 (this.props.numUnreadMessages > 1 ? "s" : "");
 
             return (
-                <div className="mx_RoomView_unreadMessagesBar" onClick={ this.jumpToLiveTimeline }>
+                <div className="mx_RoomView_unreadMessagesBar" onClick={ this.props.onScrollToBottomClick }>
                     <img src="img/newmessages.svg" width="24" height="24" alt=""/>
                     {unreadMsgs}
                 </div>
@@ -157,7 +160,7 @@ module.exports = React.createClass({
 
         if (!this.props.atEndOfLiveTimeline) {
             return (
-                <div className="mx_RoomView_scrollToBottomBar" onClick={ this.jumpToLiveTimeline }>
+                <div className="mx_RoomView_scrollToBottomBar" onClick={ this.props.onScrollToBottomClick }>
                     <img src="img/scrolldown.svg" width="24" height="24" alt="Scroll to bottom of page" title="Scroll to bottom of page"/>
                 </div>                        
             );

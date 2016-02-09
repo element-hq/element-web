@@ -1568,9 +1568,10 @@ module.exports = React.createClass({
                 tabCompleteEntries={tabEntries}
                 numUnreadMessages={this.state.numUnreadMessages}
                 hasUnsentMessages={this.state.hasUnsentMessages}
-                onResendAllClick={this.onResendAllClick}
                 atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
                 hasActiveCall={inCall}
+                onResendAllClick={this.onResendAllClick}
+                onScrollToBottomClick={this.jumpToLiveTimeline}
                 />
         }
 
