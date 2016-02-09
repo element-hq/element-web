@@ -1464,7 +1464,9 @@ module.exports = React.createClass({
                             <RoomHeader ref="header" room={this.state.room} simpleHeader="Join room"/>
                             <div className="mx_RoomView_auxPanel">
                                 <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
-                                                canJoin={ true } canPreview={ false }/>
+                                                canJoin={ true } canPreview={ false }
+                                                spinner={this.state.joining}
+                                />
                                 <div className="error">{joinErrorText}</div>
                             </div>
                             <div className="mx_RoomView_messagePanel"></div>
@@ -1507,7 +1509,9 @@ module.exports = React.createClass({
                             <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
                                             onRejectClick={ this.onRejectButtonClicked }
                                             inviterName={ inviterName }
-                                            canJoin={ true } canPreview={ false }/>
+                                            canJoin={ true } canPreview={ false }
+                                            spinner={this.state.joining}
+                            />
                             <div className="error">{joinErrorText}</div>
                             <div className="error">{rejectErrorText}</div>
                         </div>
@@ -1573,13 +1577,17 @@ module.exports = React.createClass({
         else if (this.state.guestsCanJoin && MatrixClientPeg.get().isGuest() &&
                 (!myMember || myMember.membership !== "join")) {
             aux = (
-                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />
+                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true}
+                                spinner={this.state.joining}
+                />
             );
         }
         else if (this.state.canPeek &&
                 (!myMember || myMember.membership !== "join")) {
             aux = (
-                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />
+                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true}
+                                spinner={this.state.joining}
+                />
             );
         }
 
