@@ -60,8 +60,6 @@ module.exports = React.createClass({
     displayName: 'RoomView',
     propTypes: {
         ConferenceHandler: React.PropTypes.any,
-        roomId: React.PropTypes.string,
-        autoPeek: React.PropTypes.bool, // Now unused, left here temporarily to avoid merge conflicts with @richvdh's branch.
 
         roomId: React.PropTypes.string.isRequired,
 
@@ -76,14 +74,6 @@ module.exports = React.createClass({
         // ID of an event to highlight. If undefined, no event will be highlighted.
         // Typically this will either be the same as 'eventId', or undefined.
         highlightedEventId: React.PropTypes.string,
-
-        autoPeek: React.PropTypes.bool, // should we try to peek the room on mount, or has whoever invoked us already initiated a peek?
-    },
-
-    getDefaultProps: function() {
-        return {
-            autoPeek: true,
-        }
     },
 
     /* properties in RoomView objects include:
@@ -155,11 +145,6 @@ module.exports = React.createClass({
         // We can /peek though. If it fails then we present the join UI. If it
         // succeeds then great, show the preview (but we still may be able to /join!).
         if (!this.state.room) {
-            if (!this.props.autoPeek) {
-                console.log("No room loaded, and autopeek disabled");
-                return;
-            }
-
             console.log("Attempting to peek into room %s", this.props.roomId);
 
             roomProm = MatrixClientPeg.get().peekInRoom(this.props.roomId).then((room) => {
