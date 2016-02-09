@@ -3,6 +3,8 @@ Vector/Web
 
 Vector is a Matrix web client built using the Matrix React SDK (https://github.com/matrix-org/matrix-react-sdk).
 
+## Currently the master branch of Vector is very stale.  Please use the develop branch.
+
 Getting started
 ===============
 
