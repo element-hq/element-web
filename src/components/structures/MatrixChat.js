@@ -316,9 +316,6 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_room':
-                // by default we autoPeek rooms, unless we were called explicitly with
-                // autoPeek=false by something like RoomDirectory who has already peeked
-                this.setState({ autoPeek : payload.auto_peek === false ? false : true });
                 this._viewRoom(payload.room_id, payload.show_settings, payload.event_id);
                 break;
             case 'view_prev_room':
@@ -880,7 +877,6 @@ module.exports = React.createClass({
                             eventId={this.state.initialEventId}
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}
-                            autoPeek={this.state.autoPeek}
                             key={this.state.currentRoom}
                             ConferenceHandler={this.props.ConferenceHandler} />
                     );
