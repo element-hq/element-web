@@ -136,7 +136,7 @@ module.exports = React.createClass({
 
         // unread count trumps who is typing since the unread count is only
         // set when you've scrolled up
-        if (this.props.numUnreadMsgs) {
+        if (this.props.numUnreadMessages) {
             var unreadMsgs = this.props.numUnreadMessages + " new message" + 
                 (this.props.numUnreadMessages > 1 ? "s" : "");
 
