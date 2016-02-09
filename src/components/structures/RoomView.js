@@ -30,7 +30,6 @@ var EventTimeline = Matrix.EventTimeline;
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var ContentMessages = require("../../ContentMessages");
-var WhoIsTyping = require("../../WhoIsTyping");
 var Modal = require("../../Modal");
 var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
@@ -104,7 +103,6 @@ module.exports = React.createClass({
             draggingFile: false,
             searching: false,
             searchResults: null,
-            syncState: MatrixClientPeg.get().getSyncState(),
             hasUnsentMessages: this._hasUnsentMessages(room),
             callState: null,
             timelineLoading: true, // track whether our room timeline is loading
@@ -130,7 +128,6 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
-        MatrixClientPeg.get().on("sync", this.onSyncStateChange);
         // xchat-style tab complete, add a colon if tab
         // completing at the start of the text
         this.tabComplete = new TabComplete({
@@ -286,7 +283,6 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
-            MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
         }
 
         window.removeEventListener('resize', this.onResize);        
@@ -350,15 +346,6 @@ module.exports = React.createClass({
                 this.sendReadReceipt();
                 break;
         }
-    },
-
-    onSyncStateChange: function(state, prevState) {
-        if (state === "SYNCING" && prevState === "SYNCING") {
-            return;
-        }
-        this.setState({
-            syncState: state
-        });
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -831,10 +818,6 @@ module.exports = React.createClass({
                 description: error.toString()
             });
         });
-    },
-
-    getWhoIsTypingString: function() {
-        return WhoIsTyping.whoIsTypingString(this.state.room);
     },
 
     onSearch: function(term, scope) {
@@ -1320,13 +1303,6 @@ module.exports = React.createClass({
         });
     },
 
-    getUnreadMessagesString: function() {
-        if (!this.state.numUnreadMessages) {
-            return "";
-        }
-        return this.state.numUnreadMessages + " new message" + (this.state.numUnreadMessages > 1 ? "s" : "");
-    },
-
     // jump down to the bottom of this room, where new events are arriving
     jumpToLiveTimeline: function() {
         // if we can't forward-paginate the existing timeline, then there
@@ -1559,6 +1535,12 @@ module.exports = React.createClass({
         // We have successfully loaded this room, and are not previewing.
         // Display the "normal" room view.
 
+        var call = CallHandler.getCallForRoom(this.props.roomId);
+        var inCall = false;
+        if (call && (this.state.callState !== 'ended' && this.state.callState !== 'ringing')) {
+            inCall = true;
+        }
+
         var scrollheader_classes = classNames({
             mx_RoomView_scrollheader: true,
             loading: this.state.paginating
@@ -1577,86 +1559,20 @@ module.exports = React.createClass({
             var UploadBar = sdk.getComponent('structures.UploadBar');
             statusBar = <UploadBar room={this.state.room} />
         } else if (!this.state.searchResults) {
-            var typingString = this.getWhoIsTypingString();
-            // typingString = "S͚͍̭̪̤͙̱͙̖̥͙̥̤̻̙͕͓͂̌ͬ͐̂k̜̝͎̰̥̻̼̂̌͛͗͊̅̒͂̊̍̍͌̈̈́͌̋̊ͬa͉̯͚̺̗̳̩ͪ̋̑͌̓̆̍̂̉̏̅̆ͧ̌̑v̲̲̪̝ͥ̌ͨͮͭ̊͆̾ͮ̍ͮ͑̚e̮̙͈̱̘͕̼̮͒ͩͨͫ̃͗̇ͩ͒ͣͦ͒̄̍͐ͣ̿ͥṘ̗̺͇̺̺͔̄́̊̓͊̍̃ͨ̚ā̼͎̘̟̼͎̜̪̪͚̋ͨͨͧ̓ͦͯͤ̄͆̋͂ͩ͌ͧͅt̙̙̹̗̦͖̞ͫͪ͑̑̅ͪ̃̚ͅ is typing...";
-            var unreadMsgs = this.getUnreadMessagesString();
-            // no conn bar trumps unread count since you can't get unread messages
-            // without a connection! (technically may already have some but meh)
-            // It also trumps the "some not sent" msg since you can't resend without
-            // a connection!
-            if (this.state.syncState === "ERROR") {
-                statusBar = (
-                    <div className="mx_RoomView_connectionLostBar">
-                        <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
-                        <div className="mx_RoomView_connectionLostBar_textArea">
-                            <div className="mx_RoomView_connectionLostBar_title">
-                                Connectivity to the server has been lost.
-                            </div>
-                            <div className="mx_RoomView_connectionLostBar_desc">
-                                Sent messages will be stored until your connection has returned.
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-            else if (this.tabComplete.isTabCompleting()) {
-                var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
-                statusBar = (
-                    <div className="mx_RoomView_tabCompleteBar">
-                        <div className="mx_RoomView_tabCompleteImage">...</div>
-                        <div className="mx_RoomView_tabCompleteWrapper">
-                            <TabCompleteBar entries={this.tabComplete.peek(6)} />
-                            <div className="mx_RoomView_tabCompleteEol" title="->|">
-                                <TintableSvg src="img/eol.svg" width="22" height="16"/>
-                                Auto-complete
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-            else if (this.state.hasUnsentMessages) {
-                statusBar = (
-                    <div className="mx_RoomView_connectionLostBar">
-                        <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
-                        <div className="mx_RoomView_connectionLostBar_textArea">
-                            <div className="mx_RoomView_connectionLostBar_title">
-                                Some of your messages have not been sent.
-                            </div>
-                            <div className="mx_RoomView_connectionLostBar_desc">
-                                <a className="mx_RoomView_resend_link"
-                                    onClick={ this.onResendAllClick }>
-                                Resend all now
-                                </a> or select individual messages to re-send.
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-            // unread count trumps who is typing since the unread count is only
-            // set when you've scrolled up
-            else if (unreadMsgs) {
-                statusBar = (
-                    <div className="mx_RoomView_unreadMessagesBar" onClick={ this.jumpToLiveTimeline }>
-                        <img src="img/newmessages.svg" width="24" height="24" alt=""/>
-                        {unreadMsgs}
-                    </div>
-                );
-            }
-            else if (typingString) {
-                statusBar = (
-                    <div className="mx_RoomView_typingBar">
-                        <div className="mx_RoomView_typingImage">...</div>
-                        <span className="mx_RoomView_typingText">{typingString}</span>
-                    </div>
-                );
-            }
-            else if (!this.state.atEndOfLiveTimeline) {
-                statusBar = (
-                    <div className="mx_RoomView_scrollToBottomBar" onClick={ this.jumpToLiveTimeline }>
-                        <img src="img/scrolldown.svg" width="24" height="24" alt="Scroll to bottom of page" title="Scroll to bottom of page"/>
-                    </div>                        
-                );
-            }
+            var RoomStatusBar = sdk.getComponent('structures.RoomStatusBar');
+            var tabEntries = this.tabComplete.isTabCompleting() ?
+                this.tabComplete.peek(6) : null;
+
+            statusBar = <RoomStatusBar
+                room={this.state.room}
+                tabCompleteEntries={tabEntries}
+                numUnreadMessages={this.state.numUnreadMessages}
+                hasUnsentMessages={this.state.hasUnsentMessages}
+                atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
+                hasActiveCall={inCall}
+                onResendAllClick={this.onResendAllClick}
+                onScrollToBottomClick={this.jumpToLiveTimeline}
+                />
         }
 
         var aux = null;
@@ -1727,11 +1643,7 @@ module.exports = React.createClass({
             };
         }
 
-        var call = CallHandler.getCallForRoom(this.props.roomId);
-        //var call = CallHandler.getAnyActiveCall();
-        var inCall = false;
-        if (call && (this.state.callState !== 'ended' && this.state.callState !== 'ringing')) {
-            inCall = true;
+        if (inCall) {
             var zoomButton, voiceMuteButton, videoMuteButton;
 
             if (call.type === "video") {
@@ -1755,14 +1667,7 @@ module.exports = React.createClass({
                          width="21" height="26"/>
                 </div>
 
-            if (!statusBar) {
-                statusBar =
-                    <div className="mx_RoomView_callBar">
-                        <img src="img/sound-indicator.svg" width="23" height="20"/>
-                        <b>Active call</b>
-                    </div>;
-            }
-
+            // wrap the existing status bar into a 'callStatusBar' which adds more knobs.
             statusBar =
                 <div className="mx_RoomView_callStatusBar">
                     { voiceMuteButton }

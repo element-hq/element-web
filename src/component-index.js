@@ -19,6 +19,9 @@ limitations under the License.
  * You can edit it you like, but your changes will be overwritten,
  * so you'd just be trying to swim upstream like a salmon.
  * You are not a salmon.
+ *
+ * To update it, run:
+ *    ./reskindex.js -h header
  */
 
 module.exports.components = {};
@@ -28,6 +31,7 @@ module.exports.components['structures.login.Login'] = require('./components/stru
 module.exports.components['structures.login.PostRegistration'] = require('./components/structures/login/PostRegistration');
 module.exports.components['structures.login.Registration'] = require('./components/structures/login/Registration');
 module.exports.components['structures.MatrixChat'] = require('./components/structures/MatrixChat');
+module.exports.components['structures.RoomStatusBar'] = require('./components/structures/RoomStatusBar');
 module.exports.components['structures.RoomView'] = require('./components/structures/RoomView');
 module.exports.components['structures.ScrollPanel'] = require('./components/structures/ScrollPanel');
 module.exports.components['structures.UploadBar'] = require('./components/structures/UploadBar');
