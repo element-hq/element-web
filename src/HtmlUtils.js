@@ -144,15 +144,17 @@ module.exports = {
             // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
             if (highlights && highlights.length > 0) {
                 var highlighter = new Highlighter(isHtml, "mx_EventTile_searchHighlight", opts.onHighlightClick);
+                var safeHighlights = highlights.map(function(highlight) {
+                    return sanitizeHtml(highlight, sanitizeHtmlParams);
+                });
                 // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
                 sanitizeHtmlParams.textFilter = function(safeText) {
-                    var html = highlighter.applyHighlights(safeText, highlights).map(function(span) {
+                    return highlighter.applyHighlights(safeText, safeHighlights).map(function(span) {
                         // XXX: rather clunky conversion from the react nodes returned by applyHighlights
                         // (which need to be nodes for the non-html highlighting case), to convert them
                         // back into raw HTML given that's what sanitize-html works in terms of.
                         return ReactDOMServer.renderToString(span);
                     }).join('');
-                    return html;
                 };
             }
             safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
