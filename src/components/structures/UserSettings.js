@@ -315,6 +315,16 @@ module.exports = React.createClass({
                         onFinished={this.onPasswordChanged} />
             );
         }
+        var notification_area;
+        if (!MatrixClientPeg.get().isGuest()) {
+            notification_area = (<div>
+                <h2>Notifications</h2>
+
+                <div className="mx_UserSettings_section">
+                    <Notifications/>
+                </div>
+            </div>);
+        }
 
         return (
             <div className="mx_UserSettings">
@@ -364,11 +374,7 @@ module.exports = React.createClass({
                     {accountJsx}
                 </div>
 
-                <h2>Notifications</h2>
-
-                <div className="mx_UserSettings_section">
-                    <Notifications/>
-                </div>
+                {notification_area}
 
                 <h2>Advanced</h2>
 
