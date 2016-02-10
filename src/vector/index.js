@@ -94,7 +94,8 @@ function routeUrl(location) {
     else if (location.hash.indexOf('#/register') == 0) {
         window.matrixChat.showScreen('register', parseQsFromFragment(location));
     } else {
-        window.matrixChat.showScreen(location.hash.substring(2));
+        var hashparts = location.hash.split('?');
+        window.matrixChat.showScreen(hashparts[0].substring(2));
     }
 }
 
