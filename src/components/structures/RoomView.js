@@ -90,6 +90,8 @@ module.exports = React.createClass({
             // the end of the live timeline. It has the effect of hiding the
             // 'scroll to bottom' knob, among a couple of other things.
             atEndOfLiveTimeline: true,
+
+            showTopUnreadMessagesBar: false,
         }
     },
 
@@ -553,6 +555,7 @@ module.exports = React.createClass({
                 atEndOfLiveTimeline: false,
             });
         }
+        this._updateTopUnreadMessagesBar();
     },
 
     onDragOver: function(ev) {
@@ -871,6 +874,30 @@ module.exports = React.createClass({
     // jump down to the bottom of this room, where new events are arriving
     jumpToLiveTimeline: function() {
         this.refs.messagePanel.jumpToLiveTimeline();
+    },
+
+    // jump up to wherever our read marker is
+    jumpToReadMarker: function() {
+        this.refs.messagePanel.jumpToReadMarker();
+    },
+
+    // update the read marker to match the read-receipt
+    forgetReadMarker: function() {
+        this.refs.messagePanel.forgetReadMarker();
+    },
+
+    // decide whether or not the top 'unread messages' bar should be shown
+    _updateTopUnreadMessagesBar: function() {
+        if (!this.refs.messagePanel)
+            return;
+
+        var pos = this.refs.messagePanel.getReadMarkerPosition();
+
+        // we want to show the bar if the read-marker is off the top of the
+        // screen.
+        var showBar = (pos < 0);
+
+        this.setState({showTopUnreadMessagesBar: showBar});
     },
 
     // get the current scroll position of the room, so that it can be
@@ -1272,7 +1299,21 @@ module.exports = React.createClass({
                                   this.props.ConferenceHandler.isConferenceUser :
                                   null }
                 onScroll={ this.onMessageListScroll }
+                onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
             />);
+
+        var topUnreadMessagesBar = null;
+        if (this.state.showTopUnreadMessagesBar) {
+            var TopUnreadMessagesBar = sdk.getComponent('rooms.TopUnreadMessagesBar');
+            topUnreadMessagesBar = (
+                <div className="mx_RoomView_topUnreadMessagesBar">
+                    <TopUnreadMessagesBar
+                       onScrollUpClick={this.jumpToReadMarker}
+                       onCloseClick={this.forgetReadMarker}
+                    />
+                </div>
+            );
+        }
 
         return (
             <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") } ref="roomView">
@@ -1295,6 +1336,7 @@ module.exports = React.createClass({
                     { conferenceCallNotification }
                     { aux }
                 </div>
+                { topUnreadMessagesBar }
                 { messagePanel }
                 { searchResultsPanel }
                 <div className="mx_RoomView_statusArea">
