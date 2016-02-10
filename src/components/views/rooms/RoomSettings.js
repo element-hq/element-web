@@ -37,10 +37,12 @@ module.exports = React.createClass({
         });
 
         var areNotifsMuted = false;
-        var roomPushRule = MatrixClientPeg.get().getRoomPushRule("global", this.props.room.roomId); 
-        if (roomPushRule) {
-            if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
-                areNotifsMuted = true;
+        if (!MatrixClientPeg.get().isGuest()) {
+            var roomPushRule = MatrixClientPeg.get().getRoomPushRule("global", this.props.room.roomId);
+            if (roomPushRule) {
+                if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
+                    areNotifsMuted = true;
+                }
             }
         }
 
