@@ -35,6 +35,7 @@ module.exports.components['structures.MessagePanel'] = require('./components/str
 module.exports.components['structures.RoomStatusBar'] = require('./components/structures/RoomStatusBar');
 module.exports.components['structures.RoomView'] = require('./components/structures/RoomView');
 module.exports.components['structures.ScrollPanel'] = require('./components/structures/ScrollPanel');
+module.exports.components['structures.TimelinePanel'] = require('./components/structures/TimelinePanel');
 module.exports.components['structures.UploadBar'] = require('./components/structures/UploadBar');
 module.exports.components['structures.UserSettings'] = require('./components/structures/UserSettings');
 module.exports.components['views.avatars.BaseAvatar'] = require('./components/views/avatars/BaseAvatar');
