@@ -31,6 +31,7 @@ module.exports.components['structures.login.Login'] = require('./components/stru
 module.exports.components['structures.login.PostRegistration'] = require('./components/structures/login/PostRegistration');
 module.exports.components['structures.login.Registration'] = require('./components/structures/login/Registration');
 module.exports.components['structures.MatrixChat'] = require('./components/structures/MatrixChat');
+module.exports.components['structures.MessagePanel'] = require('./components/structures/MessagePanel');
 module.exports.components['structures.RoomStatusBar'] = require('./components/structures/RoomStatusBar');
 module.exports.components['structures.RoomView'] = require('./components/structures/RoomView');
 module.exports.components['structures.ScrollPanel'] = require('./components/structures/ScrollPanel');

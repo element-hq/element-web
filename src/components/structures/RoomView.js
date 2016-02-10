@@ -19,7 +19,6 @@ limitations under the License.
 //  - Search results component
 //  - Drag and drop
 //  - File uploading - uploadFile()
-//  - Timeline component (alllll the logic in getEventTiles())
 
 var React = require("react");
 var ReactDOM = require("react-dom");
@@ -77,10 +76,6 @@ module.exports = React.createClass({
         highlightedEventId: React.PropTypes.string,
     },
 
-    /* properties in RoomView objects include:
-     *
-     * eventNodes: a map from event id to DOM node representing that event
-     */
     getInitialState: function() {
         var room = this.props.roomId ? MatrixClientPeg.get().getRoom(this.props.roomId) : null;
         return {
@@ -227,7 +222,7 @@ module.exports = React.createClass({
                     return;
                 }
                 if (eventId) {
-                    this.refs.messagePanel.scrollToToken(eventId, pixelOffset);
+                    this.refs.messagePanel.scrollToEvent(eventId, pixelOffset);
                 } else {
                     this.refs.messagePanel.scrollToBottom();
                 }
@@ -537,10 +532,6 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        if (this.refs.messagePanel) {
-            this._initialiseMessagePanel();
-        }
-
         var call = CallHandler.getCallForRoom(this.props.roomId);
         var callState = call ? call.call_state : "ended";
         this.setState({
@@ -584,23 +575,6 @@ module.exports = React.createClass({
             )
         );
     }, 500),
-
-    _initialiseMessagePanel: function() {
-        var messagePanel = ReactDOM.findDOMNode(this.refs.messagePanel);
-        this.refs.messagePanel.initialised = true;
-        this.updateTint();
-    },
-
-    componentDidUpdate: function() {
-        // we need to initialise the messagepanel if we've just joined the
-        // room. TODO: we really really ought to factor out messagepanel to a
-        // separate component to avoid this ridiculous dance.
-        if (!this.refs.messagePanel) return;
-
-        if (!this.refs.messagePanel.initialised) {
-            this._initialiseMessagePanel();
-        }
-    },
 
     _onTimelineUpdated: function(gotResults) {
         // we might have switched rooms since the load started - just bin
@@ -954,125 +928,6 @@ module.exports = React.createClass({
         return ret;
     },
 
-    getEventTiles: function() {
-        var DateSeparator = sdk.getComponent('messages.DateSeparator');
-
-        var ret = [];
-        var count = 0;
-
-        var EventTile = sdk.getComponent('rooms.EventTile');
-
-        var prevEvent = null; // the last event we showed
-        var ghostIndex;
-        var readMarkerIndex;
-        for (var i = 0; i < this.state.events.length; i++) {
-            var mxEv = this.state.events[i];
-
-            if (!EventTile.haveTileForEvent(mxEv)) {
-                continue;
-            }
-            if (this.props.ConferenceHandler && mxEv.getType() === "m.room.member") {
-                if (this.props.ConferenceHandler.isConferenceUser(mxEv.getSender()) ||
-                        this.props.ConferenceHandler.isConferenceUser(mxEv.getStateKey())) {
-                    continue; // suppress conf user join/parts
-                }
-            }
-
-            // now we've decided whether or not to show this message,
-            // add the read up to marker if appropriate
-            // doing this here means we implicitly do not show the marker
-            // if it's at the bottom
-            // NB. it would be better to decide where the read marker was going
-            // when the state changed rather than here in the render method, but
-            // this is where we decide what messages we show so it's the only
-            // place we know whether we're at the bottom or not.
-            var self = this;
-            var mxEvSender = mxEv.sender ? mxEv.sender.userId : null;
-            if (prevEvent && prevEvent.getId() == this.state.readMarkerEventId && mxEvSender != MatrixClientPeg.get().credentials.userId) {
-                var hr;
-                hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '99%'}} ref={function(n) {
-                    self.readMarkerNode = n;
-                }} />);
-                readMarkerIndex = ret.length;
-                ret.push(<li key="_readupto" className="mx_RoomView_myReadMarker_container">{hr}</li>);
-            }
-
-            // is this a continuation of the previous message?
-            var continuation = false;
-            if (prevEvent !== null) {
-                if (mxEv.sender &&
-                    prevEvent.sender &&
-                    (mxEv.sender.userId === prevEvent.sender.userId) &&
-                    (mxEv.getType() == prevEvent.getType())
-                    )
-                {
-                    continuation = true;
-                }
-            }
-
-            // do we need a date separator since the last event?
-            var ts1 = mxEv.getTs();
-            if ((prevEvent == null && !this.state.canBackPaginate) ||
-                (prevEvent != null &&
-                 new Date(prevEvent.getTs()).toDateString() !== new Date(ts1).toDateString())) {
-                var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
-                ret.push(dateSeparator);
-                continuation = false;
-            }
-
-            var last = false;
-            if (i == this.state.events.length - 1) {
-                // XXX: we might not show a tile for the last event.
-                last = true;
-            }
-
-            var eventId = mxEv.getId();
-            var highlight = (eventId == this.props.highlightedEventId);
-
-            // we can't use local echoes as scroll tokens, because their event IDs change.
-            // Local echos have a send "status".
-            var scrollToken = mxEv.status ? undefined : eventId;
-
-            ret.push(
-                <li key={eventId} 
-                        ref={this._collectEventNode.bind(this, eventId)} 
-                        data-scroll-token={scrollToken}>
-                    <EventTile mxEvent={mxEv} continuation={continuation}
-                        last={last} isSelectedEvent={highlight}/>
-                </li>
-            );
-
-            // A read up to marker has died and returned as a ghost!
-            // Lives in the dom as the ghost of the previous one while it fades away
-            if (eventId == this.state.readMarkerGhostEventId) {
-                ghostIndex = ret.length;
-            }
-
-            prevEvent = mxEv;
-        }
-
-        // splice the read marker ghost in now that we know whether the read receipt
-        // is the last element or not, because we only decide as we're going along.
-        if (readMarkerIndex === undefined && ghostIndex && ghostIndex <= ret.length) {
-            var hr;
-            hr = (<hr className="mx_RoomView_myReadMarker" style={{opacity: 1, width: '99%'}} ref={function(n) {
-                Velocity(n, {opacity: '0', width: '10%'}, {duration: 400, easing: 'easeInSine', delay: 1000, complete: function() {
-                    if (!self.unmounted) self.setState({readMarkerGhostEventId: undefined});
-                }});
-            }} />);
-            ret.splice(ghostIndex, 0, (
-                <li key="_readuptoghost" className="mx_RoomView_myReadMarker_container">{hr}</li>
-            ));
-        }
-
-        return ret;
-    },
-
-    _collectEventNode: function(eventId, node) {
-        if (this.eventNodes == undefined) this.eventNodes = {};
-        this.eventNodes[eventId] = node;
-    },
-
     _indexForEventId(evId) {
         for (var i = 0; i < this.state.events.length; ++i) {
             if (evId == this.state.events[i].getId()) {
@@ -1130,11 +985,10 @@ module.exports = React.createClass({
     },
 
     _getLastDisplayedEventIndexIgnoringOwn: function() {
-        if (this.eventNodes === undefined) return null;
+        var messagePanel = this.refs.messagePanel;
+        if (messagePanel === undefined) return null;
 
-        var messageWrapper = this.refs.messagePanel;
-        if (messageWrapper === undefined) return null;
-        var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
+        var wrapperRect = ReactDOM.findDOMNode(messagePanel).getBoundingClientRect();
 
         for (var i = this.state.events.length-1; i >= 0; --i) {
             var ev = this.state.events[i];
@@ -1143,7 +997,7 @@ module.exports = React.createClass({
                 continue;
             }
 
-            var node = this.eventNodes[ev.getId()];
+            var node = messagePanel.getNodeForEventId(ev.getId());
             if (!node) continue;
 
             var boundingRect = node.getBoundingClientRect();
@@ -1412,10 +1266,10 @@ module.exports = React.createClass({
         var CallView = sdk.getComponent("voip.CallView");
         var RoomSettings = sdk.getComponent("rooms.RoomSettings");
         var SearchBar = sdk.getComponent("rooms.SearchBar");
-        var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var RoomPreviewBar = sdk.getComponent("rooms.RoomPreviewBar");
         var Loader = sdk.getComponent("elements.Spinner");
+        var MessagePanel = sdk.getComponent("structures.MessagePanel");
 
         if (!this._timelineWindow) {
             if (this.props.roomId) {
@@ -1687,14 +1541,24 @@ module.exports = React.createClass({
             var stickyBottom = !this._timelineWindow.canPaginate(EventTimeline.FORWARDS);
 
             messagePanel = (
-                <ScrollPanel ref="messagePanel" className="mx_RoomView_messagePanel"
+                <MessagePanel ref={(r) => {
+                            this.refs.messagePanel = r;
+                            this.updateTint();
+                        }}
+                        hidden={ hideMessagePanel }
+                        events={ this.state.events }
+                        highlightedEventId={ this.props.highlightedEventId }
+                        readMarkerEventId={ this.state.readMarkerEventId }
+                        readMarkerGhostEventId={ this.state.readMarkerGhostEventId }
+                        ourUserId={ MatrixClientPeg.get().credentials.userId }
+                        suppressFirstDateSeparator={ this.state.canBackPaginate }
+                        stickyBottom={ stickyBottom }
+                        isConferenceUser={this.props.ConferenceHandler ? 
+                                          this.props.ConferenceHandler.isConferenceUser :
+                                          null }
                         onScroll={ this.onMessageListScroll } 
                         onFillRequest={ this.onMessageListFillRequest }
-                        style={ hideMessagePanel ? { display: 'none' } : {} }
-                        stickyBottom={ stickyBottom }>
-                    <li className={scrollheader_classes}></li>
-                    {this.getEventTiles()}
-                </ScrollPanel>
+                />
             );
         }
 
