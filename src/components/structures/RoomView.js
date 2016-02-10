@@ -63,7 +63,8 @@ module.exports = React.createClass({
 
         roomId: React.PropTypes.string.isRequired,
 
-        // id of an event to jump to. If not given, will use the read-up-to-marker.
+        // id of an event to jump to. If not given, will go to the end of the
+        // live timeline.
         eventId: React.PropTypes.string,
 
         // where to position the event given by eventId, in pixels from the
@@ -178,11 +179,6 @@ module.exports = React.createClass({
 
     _initTimeline: function(props) {
         var initialEvent = props.eventId;
-        if (!initialEvent) {
-            // go to the 'read-up-to' mark if no explicit event given
-            initialEvent = this.state.readMarkerEventId;
-        }
-
         var pixelOffset = props.eventPixelOffset;
         return this._loadTimeline(initialEvent, pixelOffset);
     },
@@ -471,20 +467,6 @@ module.exports = React.createClass({
                 readMarkerEventId: readMarkerEventId,
                 readMarkerGhostEventId: readMarkerGhostEventId,
             });
-
-
-            // if the scrollpanel is following the timeline, attempt to scroll
-            // it to bring the read message up to the middle of the panel. This
-            // will have no immediate effect (since we are already at the
-            // bottom), but will ensure that if there is no further user
-            // activity, but room activity continues, the read message will
-            // scroll up to the middle of the window, but no further.
-            //
-            // we do this here as well as in sendReadReceipt to deal with
-            // people using two clients at once.
-            if (this.refs.messagePanel && this.state.atEndOfLiveTimeline) {
-                this.refs.messagePanel.scrollToToken(readMarkerEventId);
-            }
         }
     },
 
@@ -1144,19 +1126,6 @@ module.exports = React.createClass({
                 // it failed, so allow retries next time the user is active
                 this.last_rr_sent_event_id = undefined;
             });
-
-            // if the scrollpanel is following the timeline, attempt to scroll
-            // it to bring the read message up to the middle of the panel. This
-            // will have no immediate effect (since we are already at the
-            // bottom), but will ensure that if there is no further user
-            // activity, but room activity continues, the read message will
-            // scroll up to the middle of the window, but no further.
-            //
-            // we do this here as well as in onRoomReceipt to cater for guest users
-            // (which do not send out read receipts).
-            if (this.state.atEndOfLiveTimeline) {
-                this.refs.messagePanel.scrollToToken(lastReadEvent.getId());
-            }
         }
     },
 
@@ -1707,15 +1676,22 @@ module.exports = React.createClass({
                     </div>
             );
         } else {
-            // it's important that stickyBottom = false on this, otherwise if somebody hits the
-            // bottom of the loaded events when viewing historical messages, we get stuck in a
-            // loop of paginating our way through the entire history of the room.
+            // give the messagepanel a stickybottom if we're at the end of the
+            // live timeline, so that the arrival of new events triggers a
+            // scroll.
+            //
+            // Make sure that stickyBottom is *false* if we can paginate
+            // forwards, otherwise if somebody hits the bottom of the loaded
+            // events when viewing historical messages, we get stuck in a loop
+            // of paginating our way through the entire history of the room.
+            var stickyBottom = !this._timelineWindow.canPaginate(EventTimeline.FORWARDS);
+
             messagePanel = (
                 <ScrollPanel ref="messagePanel" className="mx_RoomView_messagePanel"
                         onScroll={ this.onMessageListScroll } 
                         onFillRequest={ this.onMessageListFillRequest }
                         style={ hideMessagePanel ? { display: 'none' } : {} }
-                        stickyBottom={ false }>
+                        stickyBottom={ stickyBottom }>
                     <li className={scrollheader_classes}></li>
                     {this.getEventTiles()}
                 </ScrollPanel>
