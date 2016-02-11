@@ -17,7 +17,7 @@
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "NODE_ENV=production webpack -p lib/vector/index.js vector/bundle.js",
     "build": "npm run build:css && npm run build:compile && npm run build:bundle",
-    "package": "npm run build && mkdir packages && bestzip packages/vector-`git describe --dirty || echo unknown`.zip vector",
+    "package": "npm run build && mkdir packages; bestzip packages/vector-`git describe --dirty || echo unknown`.zip vector",
     "start:js": "webpack -w src/vector/index.js vector/bundle.js",
     "start:js:prod": "NODE_ENV=production webpack -w src/vector/index.js vector/bundle.js",
     "start:skins:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/components.css",
