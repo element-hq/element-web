@@ -51,7 +51,7 @@ module.exports = React.createClass({
         // representing.
         room: React.PropTypes.object.isRequired,
 
-        // true to give the component a 'display: hidden' style.
+        // true to give the component a 'display: none' style.
         hidden: React.PropTypes.bool,
 
         // ID of an event to highlight. If undefined, no event will be highlighted.
@@ -279,56 +279,6 @@ module.exports = React.createClass({
         return this.refs.messagePanel.getScrollState();
     },
 
-    render: function() {
-        var MessagePanel = sdk.getComponent("structures.MessagePanel");
-        var Loader = sdk.getComponent("elements.Spinner");
-
-        // just show a spinner while the timeline loads.
-        //
-        // put it in a div of the right class (mx_RoomView_messagePanel) so
-        // that the order in the roomview flexbox is correct, and
-        // mx_RoomView_messageListWrapper to position the inner div in the
-        // right place.
-        //
-        // Note that the click-on-search-result functionality relies on the
-        // fact that the messagePanel is hidden while the timeline reloads,
-        // but that the RoomHeader (complete with search term) continues to
-        // exist.
-        if (this.state.timelineLoading) {
-            return (
-                    <div className="mx_RoomView_messagePanel mx_RoomView_messageListWrapper">
-                        <Loader />
-                    </div>
-            );
-        }
-
-        // give the messagepanel a stickybottom if we're at the end of the
-        // live timeline, so that the arrival of new events triggers a
-        // scroll.
-        //
-        // Make sure that stickyBottom is *false* if we can paginate
-        // forwards, otherwise if somebody hits the bottom of the loaded
-        // events when viewing historical messages, we get stuck in a loop
-        // of paginating our way through the entire history of the room.
-        var stickyBottom = !this._timelineWindow.canPaginate(EventTimeline.FORWARDS);
-
-        return (
-            <MessagePanel ref="messagePanel"
-                    hidden={ this.props.hidden }
-                    events={ this.state.events }
-                    highlightedEventId={ this.props.highlightedEventId }
-                    readMarkerEventId={ this.state.readMarkerEventId }
-                    readMarkerGhostEventId={ this.state.readMarkerGhostEventId }
-                    suppressFirstDateSeparator={ this.state.canBackPaginate }
-                    ourUserId={ MatrixClientPeg.get().credentials.userId }
-                    stickyBottom={ stickyBottom }
-                    isConferenceUser={ this.props.isConferenceUser }
-                    onScroll={ this.props.onScroll }
-                    onFillRequest={ this.onMessageListFillRequest }
-            />
-        );
-    },
-
     _initTimeline: function(props) {
         var initialEvent = props.eventId;
         var pixelOffset = props.eventPixelOffset;
@@ -445,5 +395,56 @@ module.exports = React.createClass({
 
         var myUserId = client.credentials.userId;
         return this.props.room.getEventReadUpTo(myUserId);
+    },
+
+
+    render: function() {
+        var MessagePanel = sdk.getComponent("structures.MessagePanel");
+        var Loader = sdk.getComponent("elements.Spinner");
+
+        // just show a spinner while the timeline loads.
+        //
+        // put it in a div of the right class (mx_RoomView_messagePanel) so
+        // that the order in the roomview flexbox is correct, and
+        // mx_RoomView_messageListWrapper to position the inner div in the
+        // right place.
+        //
+        // Note that the click-on-search-result functionality relies on the
+        // fact that the messagePanel is hidden while the timeline reloads,
+        // but that the RoomHeader (complete with search term) continues to
+        // exist.
+        if (this.state.timelineLoading) {
+            return (
+                    <div className="mx_RoomView_messagePanel mx_RoomView_messageListWrapper">
+                        <Loader />
+                    </div>
+            );
+        }
+
+        // give the messagepanel a stickybottom if we're at the end of the
+        // live timeline, so that the arrival of new events triggers a
+        // scroll.
+        //
+        // Make sure that stickyBottom is *false* if we can paginate
+        // forwards, otherwise if somebody hits the bottom of the loaded
+        // events when viewing historical messages, we get stuck in a loop
+        // of paginating our way through the entire history of the room.
+        var stickyBottom = !this._timelineWindow.canPaginate(EventTimeline.FORWARDS);
+
+        return (
+            <MessagePanel ref="messagePanel"
+                    hidden={ this.props.hidden }
+                    events={ this.state.events }
+                    highlightedEventId={ this.props.highlightedEventId }
+                    readMarkerEventId={ this.state.readMarkerEventId }
+                    readMarkerGhostEventId={ this.state.readMarkerGhostEventId }
+                    suppressFirstDateSeparator={ this.state.canBackPaginate }
+                    ourUserId={ MatrixClientPeg.get().credentials.userId }
+                    stickyBottom={ stickyBottom }
+                    isConferenceUser={ this.props.isConferenceUser }
+                    onScroll={ this.props.onScroll }
+                    onFillRequest={ this.onMessageListFillRequest }
+            />
+        );
     },
 });

@@ -23,7 +23,7 @@ module.exports = React.createClass({
     displayName: 'MessagePanel',
 
     propTypes: {
-        // true to give the component a 'display: hidden' style.
+        // true to give the component a 'display: none' style.
         hidden: React.PropTypes.bool,
 
         // the list of MatrixEvents to display
@@ -115,19 +115,6 @@ module.exports = React.createClass({
         if (this.refs.scrollPanel) {
             this.refs.scrollPanel.checkFillState();
         }
-    },
-
-    render: function() {
-        var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
-        return (
-            <ScrollPanel ref="scrollPanel" className="mx_RoomView_messagePanel"
-                    onScroll={ this.props.onScroll } 
-                    onFillRequest={ this.props.onFillRequest }
-                    style={ this.props.hidden ? { display: 'none' } : {} }
-                    stickyBottom={ this.props.stickyBottom }>
-                {this._getEventTiles()}
-            </ScrollPanel>
-        );
     },
 
     _getEventTiles: function() {
@@ -240,15 +227,18 @@ module.exports = React.createClass({
         // is the last element or not, because we only decide as we're going along.
         if (readMarkerIndex === undefined && ghostIndex && ghostIndex <= ret.length) {
             var hr;
-            hr = (<hr className="mx_RoomView_myReadMarker" 
-                          style={{opacity: 1, width: '99%'}} 
-                          ref={function(n) {
-                              Velocity(n, {opacity: '0', width: '10%'}, 
-                                       {duration: 400, easing: 'easeInSine', delay: 1000});
-            }} />);
+            hr = (
+                <hr className="mx_RoomView_myReadMarker" 
+                  style={{opacity: 1, width: '99%'}} 
+                  ref={function(n) {
+                        Velocity(n, {opacity: '0', width: '10%'},
+                                    {duration: 400, easing: 'easeInSine',
+                                     delay: 1000});
+                  }}
+            />);
             ret.splice(ghostIndex, 0, (
                 <li key="_readuptoghost" 
-                        className="mx_RoomView_myReadMarker_container">
+                  className="mx_RoomView_myReadMarker_container">
                     {hr}
                 </li>
             ));
@@ -260,5 +250,18 @@ module.exports = React.createClass({
     _collectEventNode: function(eventId, node) {
         if (this.eventNodes == undefined) this.eventNodes = {};
         this.eventNodes[eventId] = node;
+    },
+
+    render: function() {
+        var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+        return (
+            <ScrollPanel ref="scrollPanel" className="mx_RoomView_messagePanel"
+                    onScroll={ this.props.onScroll } 
+                    onFillRequest={ this.props.onFillRequest }
+                    style={ this.props.hidden ? { display: 'none' } : {} }
+                    stickyBottom={ this.props.stickyBottom }>
+                {this._getEventTiles()}
+            </ScrollPanel>
+        );
     },
 });
