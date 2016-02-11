@@ -136,29 +136,33 @@ module.exports = {
 
         var isHtml = (content.format === "org.matrix.custom.html");
 
-        var safeBody, body;
+        var safeBody;
         if (isHtml) {
             // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
             // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
             // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
             // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
-            if (highlights && highlights.length > 0) {
-                var highlighter = new Highlighter(isHtml, "mx_EventTile_searchHighlight", opts.onHighlightClick);
-                var safeHighlights = highlights.map(function(highlight) {
-                    return sanitizeHtml(highlight, sanitizeHtmlParams);
-                });
-                // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
-                sanitizeHtmlParams.textFilter = function(safeText) {
-                    return highlighter.applyHighlights(safeText, safeHighlights).map(function(span) {
-                        // XXX: rather clunky conversion from the react nodes returned by applyHighlights
-                        // (which need to be nodes for the non-html highlighting case), to convert them
-                        // back into raw HTML given that's what sanitize-html works in terms of.
-                        return ReactDOMServer.renderToString(span);
-                    }).join('');
-                };
+            try {
+                if (highlights && highlights.length > 0) {
+                    var highlighter = new Highlighter(isHtml, "mx_EventTile_searchHighlight", opts.onHighlightClick);
+                    var safeHighlights = highlights.map(function(highlight) {
+                        return sanitizeHtml(highlight, sanitizeHtmlParams);
+                    });
+                    // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
+                    sanitizeHtmlParams.textFilter = function(safeText) {
+                        return highlighter.applyHighlights(safeText, safeHighlights).map(function(span) {
+                            // XXX: rather clunky conversion from the react nodes returned by applyHighlights
+                            // (which need to be nodes for the non-html highlighting case), to convert them
+                            // back into raw HTML given that's what sanitize-html works in terms of.
+                            return ReactDOMServer.renderToString(span);
+                        }).join('');
+                    };
+                }
+                safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
             }
-            safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
-            delete sanitizeHtmlParams.textFilter;
+            finally {
+                delete sanitizeHtmlParams.textFilter;
+            }
             return <span className="markdown-body" dangerouslySetInnerHTML={{ __html: safeBody }} />;
         } else {
             safeBody = content.body;
