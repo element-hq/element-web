@@ -30,6 +30,7 @@ class UserActivity {
      * Start listening to user activity
      */
     start() {
+        document.onmousedown = this._onUserActivity.bind(this);
         document.onmousemove = this._onUserActivity.bind(this);
         document.onkeypress = this._onUserActivity.bind(this);
         // can't use document.scroll here because that's only the document
@@ -46,6 +47,7 @@ class UserActivity {
      * Stop tracking user activity
      */
     stop() {
+        document.onmousedown = undefined;
         document.onmousemove = undefined;
         document.onkeypress = undefined;
         window.removeEventListener('wheel', this._onUserActivity.bind(this), true);
