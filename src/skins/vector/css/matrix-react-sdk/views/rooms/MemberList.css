@@ -57,8 +57,8 @@ limitations under the License.
 
 .mx_MemberList_joined {
     order: 2;
-    flex: 1 1 50%;
-    -webkit-flex: 1 1 50%;
+    flex: 1 1 100%;
+    -webkit-flex: 1 1 100%;
 
     overflow-y: auto;
 }

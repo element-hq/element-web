@@ -17,6 +17,8 @@ limitations under the License.
 .mx_RightPanel {
     position: relative;
 
+    height: 100%; /* needed for memberlist flexbox to work in chrome 48+ */
+
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
