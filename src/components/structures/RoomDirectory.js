@@ -69,7 +69,7 @@ module.exports = React.createClass({
         var rooms = this.state.publicRooms.filter(function(a) {
             // FIXME: if incrementally typing, keep narrowing down the search set
             // incrementally rather than starting over each time.
-            return (a.aliases[0].search(filter) >= 0 && a.num_joined_members > 0);
+            return (a.aliases[0].toLowerCase().search(filter.toLowerCase()) >= 0 && a.num_joined_members > 0);
         }).sort(function(a,b) {
             return a.num_joined_members - b.num_joined_members;
         });
