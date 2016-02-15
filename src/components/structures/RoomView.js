@@ -1229,11 +1229,19 @@ module.exports = React.createClass({
             self.setState({
                 rejecting: false
             });
-        }, function(err) {
-            console.error("Failed to reject invite: %s", err);
+        }, function(error) {
+            console.error("Failed to reject invite: %s", error);
+
+            var msg = error.message ? error.message : JSON.stringify(error);
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to reject invite",
+                description: msg
+            });
+
             self.setState({
                 rejecting: false,
-                rejectError: err
+                rejectError: error
             });
         });
     },
@@ -1427,7 +1435,6 @@ module.exports = React.createClass({
                     );                
                 }
                 else {
-                    var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
                     return (
                         <div className="mx_RoomView">
                             <RoomHeader ref="header" room={this.state.room} simpleHeader="Join room"/>
@@ -1436,7 +1443,6 @@ module.exports = React.createClass({
                                                 canJoin={ true } canPreview={ false }
                                                 spinner={this.state.joining}
                                 />
-                                <div className="error">{joinErrorText}</div>
                             </div>
                             <div className="mx_RoomView_messagePanel"></div>
                         </div>
@@ -1462,10 +1468,6 @@ module.exports = React.createClass({
             } else {
                 var inviteEvent = myMember.events.member;
                 var inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
-                // XXX: Leaving this intentionally basic for now because invites are about to change totally
-                // FIXME: This comment is now outdated - what do we need to fix? ^
-                var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
-                var rejectErrorText = this.state.rejectError ? "Failed to reject invite!" : "";
 
                 // We deliberately don't try to peek into invites, even if we have permission to peek
                 // as they could be a spam vector.
@@ -1481,8 +1483,6 @@ module.exports = React.createClass({
                                             canJoin={ true } canPreview={ false }
                                             spinner={this.state.joining}
                             />
-                            <div className="error">{joinErrorText}</div>
-                            <div className="error">{rejectErrorText}</div>
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
                     </div>
