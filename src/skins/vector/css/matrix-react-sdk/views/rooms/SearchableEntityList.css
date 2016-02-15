@@ -37,11 +37,13 @@ limitations under the License.
 .mx_SearchableEntityList_query::-moz-placeholder {
     color: #454545;
     opacity: 0.5;
+    font-size: 12px;
 }
 
 .mx_SearchableEntityList_query::-webkit-input-placeholder {
     color: #454545;
     opacity: 0.5;
+    font-size: 12px;
 }
 
 .mx_SearchableEntityList_listWrapper {
