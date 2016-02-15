@@ -552,14 +552,6 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.onResize);
         this.onResize();
 
-        if (this.refs.roomView) {
-            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
-            roomView.addEventListener('drop', this.onDrop);
-            roomView.addEventListener('dragover', this.onDragOver);
-            roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
-            roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
-        }
-
         this._updateTabCompleteList();
 
         // XXX: EVIL HACK to autofocus inviting on empty rooms.
@@ -596,6 +588,16 @@ module.exports = React.createClass({
         // room. TODO: we really really ought to factor out messagepanel to a
         // separate component to avoid this ridiculous dance.
         if (!this.refs.messagePanel) return;
+
+        if (this.refs.roomView) {
+            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            if (!roomView.ondrop) {
+                roomView.addEventListener('drop', this.onDrop);
+                roomView.addEventListener('dragover', this.onDragOver);
+                roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
+                roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
+            }
+        }
 
         if (!this.refs.messagePanel.initialised) {
             this._initialiseMessagePanel();
