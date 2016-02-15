@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_TopUnreadMessagesBar { 
+.mx_TopUnreadMessagesBar {
+    margin: auto;  /* centre horizontally */
     max-width: 960px;
     padding-top: 5px;
     padding-bottom: 5px;
