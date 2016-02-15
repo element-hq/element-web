@@ -102,7 +102,9 @@ limitations under the License.
     background-color: #76cfa6;
     color: #fff;
     border-radius: 5px;
-    padding: 4px;
+    padding-left: 2px;
+    padding-right: 2px;
+    cursor: pointer;
 }
 
 .mx_EventTile_searchHighlight a {
