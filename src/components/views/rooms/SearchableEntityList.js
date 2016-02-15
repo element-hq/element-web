@@ -140,34 +140,37 @@ var SearchableEntityList = React.createClass({
         }
 
         var list;
-        if (this.props.truncateAt) { // caller wants list truncated
-            var TruncatedList = sdk.getComponent("elements.TruncatedList");
-            list = (
-                <TruncatedList className="mx_SearchableEntityList_list"
-                        truncateAt={this.state.truncateAt} // use state truncation as it may be expanded
-                        createOverflowElement={this._createOverflowEntity}>
-                    {this.state.results.map((entity) => {
-                        return entity.getJsx();
-                    })}
-                </TruncatedList>
-            );
-        }
-        else {
-            list = (
-                <div className="mx_SearchableEntityList_list">
-                    {this.state.results.map((entity) => {
-                        return entity.getJsx();
-                    })}
-                </div>
-            );
+        if (this.state.results.length) {
+            if (this.props.truncateAt) { // caller wants list truncated
+                var TruncatedList = sdk.getComponent("elements.TruncatedList");
+                list = (
+                    <TruncatedList className="mx_SearchableEntityList_list"
+                            truncateAt={this.state.truncateAt} // use state truncation as it may be expanded
+                            createOverflowElement={this._createOverflowEntity}>
+                        {this.state.results.map((entity) => {
+                            return entity.getJsx();
+                        })}
+                    </TruncatedList>
+                );
+            }
+            else {
+                list = (
+                    <div className="mx_SearchableEntityList_list">
+                        {this.state.results.map((entity) => {
+                            return entity.getJsx();
+                        })}
+                    </div>
+                );
+            }
+            list = <GeminiScrollbar autoshow={true} className="mx_SearchableEntityList_listWrapper">
+                        { list }
+                    </GeminiScrollbar>;
         }
 
         return (
             <div className={ "mx_SearchableEntityList " + (this.state.query.length ? "mx_SearchableEntityList_expanded" : "") }>
-                {inputBox}
-                <GeminiScrollbar autoshow={true} className="mx_SearchableEntityList_listWrapper">
-                    { list }
-                </GeminiScrollbar>
+                { inputBox }
+                { list }
                 { this.state.query.length ? <div className="mx_SearchableEntityList_hrWrapper"><hr/></div> : '' }
             </div>
         );
