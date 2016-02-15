@@ -89,7 +89,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <SearchableEntityList searchPlaceholderText={"Invite / Search"}
+            <SearchableEntityList searchPlaceholderText={"Invite/search by name, email, id"}
                 onSubmit={this.props.onInvite}
                 onQueryChanged={this.onSearchQueryChanged}
                 entities={entities}
