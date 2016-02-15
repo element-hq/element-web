@@ -64,7 +64,8 @@ limitations under the License.
     display: block;
 }
 
-.mx_RoomSettings .mx_RoomSettings_toggles input[type="checkbox"] {
+.mx_RoomSettings .mx_RoomSettings_toggles input[type="checkbox"],
+.mx_RoomSettings .mx_RoomSettings_toggles input[type="radio"] {
     margin-right: 7px;
 }
 
