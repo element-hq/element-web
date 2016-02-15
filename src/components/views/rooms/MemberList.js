@@ -327,7 +327,7 @@ module.exports = React.createClass({
 
         var memberList = self.state.members.filter(function(userId) {
             var m = self.memberDict[userId];
-            if (query && m.name.toLowerCase().indexOf(query) !== 0) {
+            if (query && m.name.toLowerCase().indexOf(query) === -1) {
                 return false;
             }
             return m.membership == membership;
