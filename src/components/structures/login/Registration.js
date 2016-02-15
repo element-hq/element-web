@@ -126,7 +126,7 @@ module.exports = React.createClass({
             if (!response || !response.user_id || !response.access_token) {
                 console.error("Final response is missing keys.");
                 self.setState({
-                    errorText: "There was a problem processing the response."
+                    errorText: "Registration failed on server"
                 });
                 return;
             }
