@@ -140,7 +140,7 @@ module.exports = React.createClass({
      *
      * pixelOffset gives the number of pixels between the bottom of the node
      * and the bottom of the container. If undefined, it will put the node
-     * in the middle of the container.
+     * 1/3 of the way down of the container.
      */
     scrollToEvent: function(eventId, pixelOffset) {
         if (this.refs.scrollPanel) {

@@ -61,8 +61,8 @@ module.exports = React.createClass({
         eventId: React.PropTypes.string,
 
         // where to position the event given by eventId, in pixels from the
-        // bottom of the viewport. If not given, will try to put the event in the
-        // middle of the viewprt.
+        // bottom of the viewport. If not given, will try to put the event
+        // 1/3 of the way down the viewport.
         eventPixelOffset: React.PropTypes.number,
 
         // ID of an event to highlight. If undefined, no event will be highlighted.

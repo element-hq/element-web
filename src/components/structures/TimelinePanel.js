@@ -68,8 +68,8 @@ var TimelinePanel = React.createClass({
         eventId: React.PropTypes.string,
 
         // where to position the event given by eventId, in pixels from the
-        // bottom of the viewport. If not given, will try to put the event in the
-        // middle of the viewprt.
+        // bottom of the viewport. If not given, will try to put the event
+        // 1/3 of the way down the viewport.
         eventPixelOffset: React.PropTypes.number,
 
         // callback to determine if a user is the magic freeswitch conference
@@ -427,7 +427,7 @@ var TimelinePanel = React.createClass({
      *
      * @param {number?} pixelOffset   offset to position the given event at
      *    (pixels from the bottom of the view). If undefined, will put the
-     *    event in the middle of the view.
+     *    event 1/3 of the way down the view.
      *
      * returns a promise which will resolve when the load completes.
      */
