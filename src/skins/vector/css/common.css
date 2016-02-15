@@ -202,7 +202,9 @@ input[type=text]:focus, textarea:focus {
 }
 
 .mx_TextInputDialog_input {
-    color: #747474;
-    font-weight: 300;
     font-size: 15px;
+    border-radius: 3px;
+    border: 1px solid #f0f0f0;
+    padding: 9px;
+    color: #454545;
 }
