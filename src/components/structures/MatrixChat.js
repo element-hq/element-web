@@ -175,7 +175,7 @@ module.exports = React.createClass({
                 guest: true
             });
         }, function(err) {
-            console.error(err.data);
+            console.error("Failed to register as guest: " + err + " " + err.data);
             self._setAutoRegisterAsGuest(false);
         });
     },
@@ -970,7 +970,9 @@ module.exports = React.createClass({
                     onRegisterClick={this.onRegisterClick}
                     homeserverUrl={this.props.config.default_hs_url}
                     identityServerUrl={this.props.config.default_is_url}
-                    onForgotPasswordClick={this.onForgotPasswordClick} />
+                    onForgotPasswordClick={this.onForgotPasswordClick} 
+                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest: undefined}
+                    />
             );
         }
     }

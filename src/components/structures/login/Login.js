@@ -35,7 +35,8 @@ module.exports = React.createClass({displayName: 'Login',
         // login shouldn't know or care how registration is done.
         onRegisterClick: React.PropTypes.func.isRequired,
         // login shouldn't care how password recovery is done.
-        onForgotPasswordClick: React.PropTypes.func
+        onForgotPasswordClick: React.PropTypes.func,
+        onLoginAsGuestClick: React.PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -167,6 +168,13 @@ module.exports = React.createClass({displayName: 'Login',
         var LoginFooter = sdk.getComponent("login.LoginFooter");
         var loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
+        var loginAsGuestJsx;
+        if (this.props.onLoginAsGuestClick) {
+            loginAsGuestJsx =
+                <a className="mx_Login_create" onClick={this.props.onLoginAsGuestClick} href="#">
+                    Login as guest
+                </a>
+        }
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
@@ -188,6 +196,7 @@ module.exports = React.createClass({displayName: 'Login',
                         <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
                             Create a new account
                         </a>
+                        { loginAsGuestJsx }
                         <br/>
                         <LoginFooter />
                     </div>
