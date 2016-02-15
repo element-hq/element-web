@@ -117,8 +117,12 @@ module.exports = React.createClass({
         this.unmounted = true;
 
         dis.unregister(this.dispatcherRef);
-        MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
-        MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
+
+        var client = MatrixClientPeg.get();
+        if (client) {
+            client.removeListener("Room.timeline", this.onRoomTimeline);
+            client.removeListener("Room.receipt", this.onRoomReceipt);
+        }
     },
 
     // set off a pagination request.
