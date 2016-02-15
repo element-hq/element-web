@@ -45,7 +45,7 @@ module.exports = React.createClass({
                 <div className="mx_Dialog_content">
                     Sign out?
                 </div>
-                <div className="mx_Dialog_buttons" onKeyDown={ this.onKeyDown } >
+                <div className="mx_Dialog_buttons" onKeyDown={ this.onKeyDown }>
                     <button autoFocus onClick={this.logOut}>Sign Out</button>
                     <button onClick={this.cancelPrompt}>Cancel</button>
                 </div>
