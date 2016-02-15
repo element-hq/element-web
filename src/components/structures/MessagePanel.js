@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 var React = require('react');
+var ReactDOM = require("react-dom");
 var sdk = require('../../index');
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
