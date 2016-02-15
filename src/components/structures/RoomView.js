@@ -1258,8 +1258,10 @@ module.exports = React.createClass({
 
         var messagePanel = (
             <TimelinePanel ref={(r) => {
-                        this.refs.messagePanel = r;
+                    this.refs.messagePanel = r;
+                    if(r) {
                         this.updateTint();
+                    }
                 }}
                 room={this.state.room}
                 hidden={hideMessagePanel}
