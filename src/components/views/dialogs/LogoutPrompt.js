@@ -31,14 +31,22 @@ module.exports = React.createClass({
         }
     },
 
+    onKeyDown: function(e) {
+        if (e.keyCode === 27) { // escape
+            e.stopPropagation();
+            e.preventDefault();
+            this.cancelPrompt();
+        }
+    },
+
     render: function() {
         return (
             <div>
                 <div className="mx_Dialog_content">
                     Sign out?
                 </div>
-                <div className="mx_Dialog_buttons">
-                    <button onClick={this.logOut}>Sign Out</button>
+                <div className="mx_Dialog_buttons" onKeyDown={ this.onKeyDown } >
+                    <button autoFocus onClick={this.logOut}>Sign Out</button>
                     <button onClick={this.cancelPrompt}>Cancel</button>
                 </div>
             </div>
