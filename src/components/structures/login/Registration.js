@@ -115,6 +115,9 @@ module.exports = React.createClass({
     onProcessingRegistration: function(promise) {
         var self = this;
         promise.done(function(response) {
+            self.setState({
+                busy: false
+            });
             if (!response || !response.access_token) {
                 console.warn(
                     "FIXME: Register fulfilled without a final response, " +
@@ -135,9 +138,6 @@ module.exports = React.createClass({
                 homeserverUrl: self.registerLogic.getHomeserverUrl(),
                 identityServerUrl: self.registerLogic.getIdentityServerUrl(),
                 accessToken: response.access_token
-            });
-            self.setState({
-                busy: false
             });
         }, function(err) {
             if (err.message) {
