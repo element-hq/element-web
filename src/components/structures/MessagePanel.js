@@ -75,7 +75,7 @@ module.exports = React.createClass({
     /* return true if the content is fully scrolled down right now; else false.
      */
     isAtBottom: function() {
-        return this.refs.scrollPanel 
+        return this.refs.scrollPanel
             && this.refs.scrollPanel.isAtBottom();
     },
 
@@ -118,137 +118,165 @@ module.exports = React.createClass({
     },
 
     _getEventTiles: function() {
-        var DateSeparator = sdk.getComponent('messages.DateSeparator');
         var EventTile = sdk.getComponent('rooms.EventTile');
 
-        var ret = [];
+        this.eventNodes = {};
 
-        var prevEvent = null; // the last event we showed
-        var ghostIndex;
-        var readMarkerIndex;
+        // we do two passes over the events list; first of all, we figure out
+        // which events we want to show, and where the read markers fit into
+        // the list; then we actually create the event tiles. This allows us to
+        // behave slightly differently for the last event in the list.
+        //
+        // (Arguably we could do this when the events are added to this.props,
+        // but that would make it trickier to keep in sync with the read marker, given
+        // the read marker isn't necessarily on an event which we will show).
+        //
+        var eventsToShow = [];
+
+        // the index in 'eventsToShow' of the event *before* which we put the
+        // read marker or its ghost. (Note that it may be equal to
+        // eventsToShow.length, which means it would be at the end of the timeline)
+        var ghostIndex, readMarkerIndex;
+
         for (var i = 0; i < this.props.events.length; i++) {
             var mxEv = this.props.events[i];
+            var wantTile = true;
 
             if (!EventTile.haveTileForEvent(mxEv)) {
-                continue;
+                wantTile = false;
             }
 
             if (this.props.isConferenceUser && mxEv.getType() === "m.room.member") {
                 if (this.props.isConferenceUser(mxEv.getSender()) ||
                         this.props.isConferenceUser(mxEv.getStateKey())) {
-                    continue; // suppress conf user join/parts
+                    wantTile = false; // suppress conf user join/parts
                 }
             }
 
-            // now we've decided whether or not to show this message,
-            // add the read up to marker if appropriate
-            // doing this here means we implicitly do not show the marker
-            // if it's at the bottom
-            // NB. it would be better to decide where the read marker was going
-            // when the state changed rather than here in the render method, but
-            // this is where we decide what messages we show so it's the only
-            // place we know whether we're at the bottom or not.
-            var mxEvSender = mxEv.sender ? mxEv.sender.userId : null;
-            if (prevEvent && prevEvent.getId() == this.props.readMarkerEventId) {
-                // suppress the read marker if the next event is sent by us; this
-                // is a nonsensical and temporary situation caused by the delay between
-                // us sending a message and receiving the synthesized receipt.
-                if (mxEvSender != this.props.ourUserId) {
-                    var hr;
-                    hr = (
-                        <hr className="mx_RoomView_myReadMarker"
-                            style={{opacity: 1, width: '99%'}} 
-                        />);
-                    readMarkerIndex = ret.length;
-                    ret.push(
-                        <li key="_readupto"
-                                className="mx_RoomView_myReadMarker_container">
-                            {hr}
-                        </li>);
-                }
-            }
-
-            // is this a continuation of the previous message?
-            var continuation = false;
-            if (prevEvent !== null) {
-                if (mxEvSender &&
-                    prevEvent.sender &&
-                    (mxEvSender === prevEvent.sender.userId) &&
-                    (mxEv.getType() == prevEvent.getType())
-                    )
-                {
-                    continuation = true;
-                }
-            }
-
-            // do we need a date separator since the last event?
-            var ts1 = mxEv.getTs();
-            if ((prevEvent == null && !this.props.suppressFirstDateSeparator) ||
-                (prevEvent != null &&
-                 new Date(prevEvent.getTs()).toDateString() 
-                     !== new Date(ts1).toDateString())) {
-                var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
-                ret.push(dateSeparator);
-                continuation = false;
-            }
-
-            var last = false;
-            if (i == this.props.events.length - 1) {
-                // XXX: we might not show a tile for the last event.
-                last = true;
+            if (wantTile) {
+                eventsToShow.push(mxEv);
             }
 
             var eventId = mxEv.getId();
-            var highlight = (eventId == this.props.highlightedEventId);
-
-            // we can't use local echoes as scroll tokens, because their event IDs change.
-            // Local echos have a send "status".
-            var scrollToken = mxEv.status ? undefined : eventId;
-
-            ret.push(
-                <li key={eventId} 
-                        ref={this._collectEventNode.bind(this, eventId)} 
-                        data-scroll-token={scrollToken}>
-                    <EventTile mxEvent={mxEv} continuation={continuation}
-                        last={last} isSelectedEvent={highlight}/>
-                </li>
-            );
-
-            // A read up to marker has died and returned as a ghost!
-            // Lives in the dom as the ghost of the previous one while it fades away
             if (eventId == this.props.readMarkerGhostEventId) {
-                ghostIndex = ret.length;
+                ghostIndex = eventsToShow.length;
             }
-
-            prevEvent = mxEv;
+            if (eventId == this.props.readMarkerEventId) {
+                readMarkerIndex = eventsToShow.length;
+            }
         }
 
-        // splice the read marker ghost in now that we know whether the read receipt
-        // is the last element or not, because we only decide as we're going along.
-        if (readMarkerIndex === undefined && ghostIndex && ghostIndex <= ret.length) {
-            var hr;
-            hr = (
-                <hr className="mx_RoomView_myReadMarker" 
-                  style={{opacity: 1, width: '99%'}} 
-                  ref={function(n) {
-                        Velocity(n, {opacity: '0', width: '10%'},
-                                    {duration: 400, easing: 'easeInSine',
-                                     delay: 1000});
-                  }}
-            />);
-            ret.splice(ghostIndex, 0, (
-                <li key="_readuptoghost" 
-                  className="mx_RoomView_myReadMarker_container">
-                    {hr}
-                </li>
-            ));
+        var ret = [];
+
+        var prevEvent = null; // the last event we showed
+
+        for (var i = 0; i < eventsToShow.length; i++) {
+            var mxEv = eventsToShow[i];
+            var wantTile = true;
+
+            // insert the read marker if appropriate. Note that doing it here
+            // implicitly means that we never put it at the end of the timeline,
+            // because i will never reach eventsToShow.length.
+            if (i == readMarkerIndex) {
+                // suppress the read marker if the next event is sent by us; this
+                // is a nonsensical and temporary situation caused by the delay between
+                // us sending a message and receiving the synthesized receipt.
+                if (mxEv.sender && mxEv.sender.userId != this.props.ourUserId) {
+                    ret.push(this._getReadMarkerTile());
+                }
+            } else if (i == ghostIndex) {
+                ret.push(this._getReadMarkerGhostTile());
+            }
+
+            var last = false;
+            if (i == eventsToShow.length - 1) {
+                last = true;
+            }
+
+            // add the tiles for this event
+            ret.push(this._getTilesForEvent(prevEvent, mxEv, last));
+            prevEvent = mxEv;
         }
 
         return ret;
     },
 
+    _getTilesForEvent: function(prevEvent, mxEv, last) {
+        var EventTile = sdk.getComponent('rooms.EventTile');
+        var DateSeparator = sdk.getComponent('messages.DateSeparator');
+        var ret = [];
+
+        // is this a continuation of the previous message?
+        var continuation = false;
+        if (prevEvent !== null && prevEvent.sender && mxEv.sender
+                && mxEv.sender.userId === prevEvent.sender.userId
+                && mxEv.getType() == prevEvent.getType()) {
+            continuation = true;
+        }
+
+        // do we need a date separator since the last event?
+        var ts1 = mxEv.getTs();
+        if ((prevEvent == null && !this.props.suppressFirstDateSeparator) ||
+                (prevEvent != null &&
+                     new Date(prevEvent.getTs()).toDateString()
+                          !== new Date(ts1).toDateString())) {
+            var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
+            ret.push(dateSeparator);
+            continuation = false;
+        }
+
+        var eventId = mxEv.getId();
+        var highlight = (eventId == this.props.highlightedEventId);
+
+        // we can't use local echoes as scroll tokens, because their event IDs change.
+        // Local echos have a send "status".
+        var scrollToken = mxEv.status ? undefined : eventId;
+
+        ret.push(
+                <li key={eventId}
+                        ref={this._collectEventNode.bind(this, eventId)}
+                        data-scroll-token={scrollToken}>
+                    <EventTile mxEvent={mxEv} continuation={continuation}
+                        last={last} isSelectedEvent={highlight}/>
+                </li>
+        );
+
+        return ret;
+    },
+
+    _getReadMarkerTile: function() {
+        var hr;
+        hr = <hr className="mx_RoomView_myReadMarker"
+                  style={{opacity: 1, width: '99%'}}
+            />;
+
+        return (
+            <li key="_readupto"
+                  className="mx_RoomView_myReadMarker_container">
+                {hr}
+            </li>
+        );
+    },
+
+    _getReadMarkerGhostTile: function() {
+        var hr;
+        hr = <hr className="mx_RoomView_myReadMarker"
+                  style={{opacity: 1, width: '99%'}}
+                  ref={function(n) {
+                        Velocity(n, {opacity: '0', width: '10%'},
+                                    {duration: 400, easing: 'easeInSine',
+                                     delay: 1000});
+                  }}
+            />;
+        return (
+            <li key="_readuptoghost"
+                  className="mx_RoomView_myReadMarker_container">
+                {hr}
+            </li>
+        );
+    },
+
     _collectEventNode: function(eventId, node) {
-        if (this.eventNodes == undefined) this.eventNodes = {};
         this.eventNodes[eventId] = node;
     },
 
