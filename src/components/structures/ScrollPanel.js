@@ -418,9 +418,7 @@ module.exports = React.createClass({
         var scrollState = this.scrollState;
         var scrollNode = this._getScrollNode();
 
-        // XXX: DISABLE SCROLL TO TOKEN ENTIRELY TEMPORARILY AS IT'S SCREWING
-        // UP MY DEMO - see https://github.com/vector-im/vector-web/issues/946
-        if (true || scrollState.stuckAtBottom) {
+        if (scrollState.stuckAtBottom) {
             scrollNode.scrollTop = scrollNode.scrollHeight;
             debuglog("Scrolled to bottom; offset now", scrollNode.scrollTop);
         } else if (scrollState.trackedScrollToken) {
