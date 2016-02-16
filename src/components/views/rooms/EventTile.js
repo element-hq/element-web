@@ -65,6 +65,7 @@ module.exports = React.createClass({
 
     statics: {
         haveTileForEvent: function(e) {
+            if (e.isRedacted()) return false;
             if (eventTileTypes[e.getType()] == undefined) return false;
             if (eventTileTypes[e.getType()] == 'messages.TextualEvent') {
                 return TextForEvent.textForEvent(e) !== '';
