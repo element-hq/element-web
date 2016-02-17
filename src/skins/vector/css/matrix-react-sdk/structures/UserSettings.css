@@ -170,6 +170,10 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_UserSettings_avatarPicker_img .mx_BaseAvatar_image {
+    object-fit: cover;
+}
+
 .mx_UserSettings_avatarPicker_edit {
     text-align: center;
     margin-top: 10px;

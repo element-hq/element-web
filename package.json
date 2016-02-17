@@ -17,6 +17,7 @@
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "NODE_ENV=production webpack -p lib/vector/index.js vector/bundle.js",
     "build": "npm run build:css && npm run build:compile && npm run build:bundle",
+    "package": "npm run build && mkdir -p packages && tar chvzf packages/vector-`git describe --dirty || echo unknown`.tar.gz vector",
     "start:js": "webpack -w src/vector/index.js vector/bundle.js",
     "start:js:prod": "NODE_ENV=production webpack -w src/vector/index.js vector/bundle.js",
     "start:skins:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/components.css",
@@ -27,6 +28,7 @@
     "prepublish": "npm run build:css && npm run build:compile"
   },
   "dependencies": {
+    "babel-polyfill": "^6.5.0",
     "classnames": "^2.1.2",
     "extract-text-webpack-plugin": "^0.9.1",
     "filesize": "^3.1.2",
@@ -56,6 +58,6 @@
     "parallelshell": "^1.2.0",
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.1.5",
-    "webpack": "^1.12.6"
+    "webpack": "^1.12.13"
   }
 }

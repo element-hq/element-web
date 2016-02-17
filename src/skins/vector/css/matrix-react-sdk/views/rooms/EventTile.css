@@ -90,19 +90,21 @@ limitations under the License.
 /* end of overrides */
 
 /* this is used for the tile for the event which is selected via the URL.  
- * for now, it is just a crude color; ultimately we probably want some
- * transition on here.  
+ * TODO: ultimately we probably want some transition on here.  
  */
 .mx_EventTile_selected { 
-    background-color: #76cfa6; 
-    color: #fff;
+    border-left: #76cfa6 5px solid;
+    margin-left: 53px;
+    padding-left: 7px;
 }
 
 .mx_EventTile_searchHighlight {
     background-color: #76cfa6;
     color: #fff;
     border-radius: 5px;
-    padding: 4px;
+    padding-left: 2px;
+    padding-right: 2px;
+    cursor: pointer;
 }
 
 .mx_EventTile_searchHighlight a {

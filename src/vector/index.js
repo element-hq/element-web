@@ -16,6 +16,10 @@ limitations under the License.
 
 'use strict';
 
+// for ES6 stuff like startsWith() that Safari doesn't handle
+// and babel doesn't do by default
+require('babel-polyfill');
+
 // CSS requires: just putting them here for now as CSS is going to be
 // refactored soon anyway
 require('../../vector/components.css');
@@ -94,7 +98,8 @@ function routeUrl(location) {
     else if (location.hash.indexOf('#/register') == 0) {
         window.matrixChat.showScreen('register', parseQsFromFragment(location));
     } else {
-        window.matrixChat.showScreen(location.hash.substring(2));
+        var hashparts = location.hash.split('?');
+        window.matrixChat.showScreen(hashparts[0].substring(2));
     }
 }
 

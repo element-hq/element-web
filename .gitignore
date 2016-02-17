@@ -5,3 +5,4 @@ lib
 key.pem
 cert.pem
 vector/components.css
+packages/

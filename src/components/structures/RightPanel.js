@@ -20,6 +20,7 @@ var React = require('react');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
+var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 
 module.exports = React.createClass({
     displayName: 'RightPanel',
@@ -66,14 +67,18 @@ module.exports = React.createClass({
     onRoomStateMember: function(ev, state, member) {
         // redraw the badge on the membership list
         if (this.state.phase == this.Phase.MemberList && member.roomId === this.props.roomId) {
-            this.forceUpdate();
+            this._delayedUpdate();
         }
         else if (this.state.phase === this.Phase.MemberInfo && member.roomId === this.props.roomId &&
                 member.userId === this.state.member.userId) {
             // refresh the member info (e.g. new power level)
-            this.forceUpdate();
+            this._delayedUpdate();
         }
     },
+
+    _delayedUpdate: new rate_limited_func(function() {
+        this.forceUpdate();
+    }, 500),
 
     onAction: function(payload) {
         if (payload.action === "view_user") {

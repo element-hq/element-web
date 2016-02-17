@@ -116,6 +116,13 @@ limitations under the License.
     -webkit-flex: 1;
     flex: 1;
 
+    /* Experimental fix for https://github.com/vector-im/vector-web/issues/947
+       and https://github.com/vector-im/vector-web/issues/946.
+       Empirically this stops the MessagePanel's width exploding outwards when
+       gemini is in 'prevented' mode
+       */
+    overflow-x: auto;
+
     /* XXX: Hack: apparently if you try to nest a flex-box
      * within a non-flex-box within a flex-box, the height
      * of the innermost element gets miscalculated if the
