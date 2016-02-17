@@ -879,15 +879,6 @@ module.exports = React.createClass({
         });
     },
 
-    _onSearchResultSelected: function(result) {
-        var event = result.context.getEvent();
-        dis.dispatch({
-            action: 'view_room',
-            room_id: event.getRoomId(),
-            event_id: event.getId(),
-        });
-    },
-
     getSearchResultTiles: function() {
         var EventTile = sdk.getComponent('rooms.EventTile');
         var SearchResultTile = sdk.getComponent('rooms.SearchResultTile');
@@ -948,10 +939,12 @@ module.exports = React.createClass({
                 }
             }
 
+            var resultLink = "#/room/"+this.props.roomId+"/"+mxEv.getId();
+
             ret.push(<SearchResultTile key={mxEv.getId()}
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
-                     onSelect={this._onSearchResultSelected.bind(this, result)}/>);
+                     resultLink={resultLink}/>);
         }
         return ret;
     },

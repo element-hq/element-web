@@ -29,8 +29,8 @@ module.exports = React.createClass({
         // a list of strings to be highlighted in the results
         searchHighlights: React.PropTypes.array,
 
-        // callback to be called when the user selects this result
-        onSelect: React.PropTypes.func,
+        // href for the highlights in this result
+        resultLink: React.PropTypes.string,
     },
 
     render: function() {
@@ -53,7 +53,7 @@ module.exports = React.createClass({
             }
             if (EventTile.haveTileForEvent(ev)) {
                 ret.push(<EventTile key={eventId+"+"+j} mxEvent={ev} contextual={contextual} highlights={highlights}
-                         onHighlightClick={this.props.onSelect}/>)
+                          highlightLink={this.props.resultLink}/>);
             }
         }
         return (
