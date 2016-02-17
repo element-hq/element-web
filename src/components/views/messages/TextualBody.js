@@ -28,6 +28,17 @@ linkifyMatrix(linkify);
 module.exports = React.createClass({
     displayName: 'TextualBody',
 
+    propTypes: {
+        /* the MatrixEvent to show */
+        mxEvent: React.PropTypes.object.isRequired,
+
+        /* a list of words to highlight */
+        highlights: React.PropTypes.array,
+
+        /* link URL for the highlights */
+        highlightLink: React.PropTypes.string,
+    },
+
     componentDidMount: function() {
         linkifyElement(this.refs.content, linkifyMatrix.options);
 
@@ -46,14 +57,15 @@ module.exports = React.createClass({
     shouldComponentUpdate: function(nextProps) {
         // exploit that events are immutable :)
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
-                nextProps.highlights !== this.props.highlights);
+                nextProps.highlights !== this.props.highlights ||
+                nextProps.highlightLink !== this.props.highlightLink);
     },
 
     render: function() {
         var mxEvent = this.props.mxEvent;
         var content = mxEvent.getContent();
         var body = HtmlUtils.bodyToHtml(content, this.props.highlights,
-                                       {onHighlightClick: this.props.onHighlightClick});
+                                       {highlightLink: this.props.highlightLink});
 
         switch (content.msgtype) {
             case "m.emote":
