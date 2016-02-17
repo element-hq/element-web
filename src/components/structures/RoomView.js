@@ -114,6 +114,7 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room", this.onRoom);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
+        MatrixClientPeg.get().on("Room.redaction", this.onRoomRedaction);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
@@ -259,6 +260,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+            MatrixClientPeg.get().removeListener("Room.redaction", this.onRoomRedaction);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
@@ -375,6 +377,17 @@ module.exports = React.createClass({
         if (this.refs.messagePanel) {
             this.refs.messagePanel.checkFillState();
         }
+    },
+
+    onRoomRedaction: function(ev, room) {
+        if (this.unmounted) return;
+
+        // ignore events for other rooms
+        if (room.roomId != this.props.roomId) return;
+
+        // we could skip an update if the event isn't in our timeline,
+        // but that's probably an early optimisation.
+        this.forceUpdate();
     },
 
     _calculatePeekRules: function(room) {
@@ -962,15 +975,29 @@ module.exports = React.createClass({
         var readMarkerIndex;
         for (var i = 0; i < this.state.events.length; i++) {
             var mxEv = this.state.events[i];
+            var eventId = mxEv.getId();
+
+            // we can't use local echoes as scroll tokens, because their event IDs change.
+            // Local echos have a send "status".
+            var scrollToken = mxEv.status ? undefined : eventId;
+
+            var wantTile = true;
 
             if (!EventTile.haveTileForEvent(mxEv)) {
-                continue;
+                wantTile = false;
             }
-            if (this.props.ConferenceHandler && mxEv.getType() === "m.room.member") {
+            else if (this.props.ConferenceHandler && mxEv.getType() === "m.room.member") {
                 if (this.props.ConferenceHandler.isConferenceUser(mxEv.getSender()) ||
                         this.props.ConferenceHandler.isConferenceUser(mxEv.getStateKey())) {
-                    continue; // suppress conf user join/parts
+                    wantTile = false; // suppress conf user join/parts
                 }
+            }
+
+            if (!wantTile) {
+                // if we aren't showing the event, put in a dummy scroll token anyway, so
+                // that we can scroll to the right place.
+                ret.push(<li key={eventId} data-scroll-token={scrollToken}/>);
+                continue;
             }
 
             // now we've decided whether or not to show this message,
@@ -1021,12 +1048,7 @@ module.exports = React.createClass({
                 last = true;
             }
 
-            var eventId = mxEv.getId();
             var highlight = (eventId == this.props.highlightedEventId);
-
-            // we can't use local echoes as scroll tokens, because their event IDs change.
-            // Local echos have a send "status".
-            var scrollToken = mxEv.status ? undefined : eventId;
 
             ret.push(
                 <li key={eventId} 
