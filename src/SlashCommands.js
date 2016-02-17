@@ -352,11 +352,12 @@ module.exports = {
     },
 
     getCommandList: function() {
-        // Return all the commands plus /me which isn't handled like normal commands
+        // Return all the commands plus /me and /markdown which aren't handled like normal commands
         var cmds = Object.keys(commands).sort().map(function(cmdKey) {
             return commands[cmdKey];
         })
         cmds.push(new Command("me", "<action>", function(){}));
+        cmds.push(new Command("markdown", "<on|off>", function(){}));
 
         return cmds;
     }

@@ -76,6 +76,7 @@ var cached = false;
 function calcCssFixups() {
     for (var i = 0; i < document.styleSheets.length; i++) {
         var ss = document.styleSheets[i];
+        if (!ss) continue; // well done safari >:(
         // Chromium apparently sometimes returns null here; unsure why.
         // see $14534907369972FRXBx:matrix.org in HQ
         // ...ah, it's because there's a third party extension like

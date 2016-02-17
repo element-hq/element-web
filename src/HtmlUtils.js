@@ -17,13 +17,15 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOMServer = require('react-dom/server')
 var sanitizeHtml = require('sanitize-html');
 var highlight = require('highlight.js');
 
 var sanitizeHtmlParams = {
     allowedTags: [
-        'font', // custom to matrix. deliberately no h1/h2 to stop people shouting.
+        'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown
+        // deliberately no h1/h2 to stop people shouting.
         'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
         'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
         'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre'
@@ -56,24 +58,17 @@ class Highlighter {
         this._key = 0;
     }
 
-    applyHighlights(safeSnippet, highlights) {
+    applyHighlights(safeSnippet, safeHighlights) {
         var lastOffset = 0;
         var offset;
         var nodes = [];
 
-        // XXX: when highlighting HTML, synapse performs the search on the plaintext body,
-        // but we're attempting to apply the highlights here to the HTML body.  This is
-        // never going to end well - we really should be hooking into the sanitzer HTML
-        // parser to only attempt to highlight text nodes to avoid corrupting tags.  
-        // If and when this happens, we'll probably have to split his method in two between
-        // HTML and plain-text highlighting.
-
-        var safeHighlight = this.html ? sanitizeHtml(highlights[0], sanitizeHtmlParams) : highlights[0];
+        var safeHighlight = safeHighlights[0];
         while ((offset = safeSnippet.toLowerCase().indexOf(safeHighlight.toLowerCase(), lastOffset)) >= 0) {
             // handle preamble
             if (offset > lastOffset) {
                 var subSnippet = safeSnippet.substring(lastOffset, offset);
-                nodes = nodes.concat(this._applySubHighlights(subSnippet, highlights));
+                nodes = nodes.concat(this._applySubHighlights(subSnippet, safeHighlights));
             }
 
             // do highlight
@@ -85,15 +80,15 @@ class Highlighter {
         // handle postamble
         if (lastOffset != safeSnippet.length) {
             var subSnippet = safeSnippet.substring(lastOffset, undefined);
-            nodes = nodes.concat(this._applySubHighlights(subSnippet, highlights));
+            nodes = nodes.concat(this._applySubHighlights(subSnippet, safeHighlights));
         }
         return nodes;
     }
 
-    _applySubHighlights(safeSnippet, highlights) {
-        if (highlights[1]) {
+    _applySubHighlights(safeSnippet, safeHighlights) {
+        if (safeHighlights[1]) {
             // recurse into this range to check for the next set of highlight matches
-            return this.applyHighlights(safeSnippet, highlights.slice(1));
+            return this.applyHighlights(safeSnippet, safeHighlights.slice(1));
         }
         else {
             // no more highlights to be found, just return the unhighlighted string
@@ -131,7 +126,7 @@ module.exports = {
      *
      * content: 'content' of the MatrixEvent
      *
-     * highlights: optional list of words to highlight
+     * highlights: optional list of words to highlight, ordered by longest word first
      *
      * opts.onHighlightClick: optional callback function to be called when a
      *     highlighted word is clicked
@@ -143,26 +138,42 @@ module.exports = {
 
         var safeBody;
         if (isHtml) {
-            safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
+            // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
+            // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
+            // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
+            // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
+            try {
+                if (highlights && highlights.length > 0) {
+                    var highlighter = new Highlighter(isHtml, "mx_EventTile_searchHighlight", opts.onHighlightClick);
+                    var safeHighlights = highlights.map(function(highlight) {
+                        return sanitizeHtml(highlight, sanitizeHtmlParams);
+                    });
+                    // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
+                    sanitizeHtmlParams.textFilter = function(safeText) {
+                        return highlighter.applyHighlights(safeText, safeHighlights).map(function(span) {
+                            // XXX: rather clunky conversion from the react nodes returned by applyHighlights
+                            // (which need to be nodes for the non-html highlighting case), to convert them
+                            // back into raw HTML given that's what sanitize-html works in terms of.
+                            return ReactDOMServer.renderToString(span);
+                        }).join('');
+                    };
+                }
+                safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
+            }
+            finally {
+                delete sanitizeHtmlParams.textFilter;
+            }
+            return <span className="markdown-body" dangerouslySetInnerHTML={{ __html: safeBody }} />;
         } else {
             safeBody = content.body;
-        }
-
-        var body;
-        if (highlights && highlights.length > 0) {
-            var highlighter = new Highlighter(isHtml, "mx_EventTile_searchHighlight", opts.onHighlightClick);
-            body = highlighter.applyHighlights(safeBody, highlights);
-        }
-        else {
-            if (isHtml) {
-                body = <span className="markdown-body" dangerouslySetInnerHTML={{ __html: safeBody }} />;
+            if (highlights && highlights.length > 0) {
+                var highlighter = new Highlighter(isHtml, "mx_EventTile_searchHighlight", opts.onHighlightClick);
+                return highlighter.applyHighlights(safeBody, highlights);
             }
             else {
-                body = safeBody;
+                return safeBody;
             }
         }
-
-        return body;
     },
 
     highlightDom: function(element) {

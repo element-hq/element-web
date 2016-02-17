@@ -60,12 +60,11 @@ module.exports = React.createClass({
     displayName: 'RoomView',
     propTypes: {
         ConferenceHandler: React.PropTypes.any,
-        roomId: React.PropTypes.string,
-        autoPeek: React.PropTypes.bool, // Now unused, left here temporarily to avoid merge conflicts with @richvdh's branch.
 
         roomId: React.PropTypes.string.isRequired,
 
-        // id of an event to jump to. If not given, will use the read-up-to-marker.
+        // id of an event to jump to. If not given, will go to the end of the
+        // live timeline.
         eventId: React.PropTypes.string,
 
         // where to position the event given by eventId, in pixels from the
@@ -76,14 +75,6 @@ module.exports = React.createClass({
         // ID of an event to highlight. If undefined, no event will be highlighted.
         // Typically this will either be the same as 'eventId', or undefined.
         highlightedEventId: React.PropTypes.string,
-
-        autoPeek: React.PropTypes.bool, // should we try to peek the room on mount, or has whoever invoked us already initiated a peek?
-    },
-
-    getDefaultProps: function() {
-        return {
-            autoPeek: true,
-        }
     },
 
     /* properties in RoomView objects include:
@@ -155,11 +146,6 @@ module.exports = React.createClass({
         // We can /peek though. If it fails then we present the join UI. If it
         // succeeds then great, show the preview (but we still may be able to /join!).
         if (!this.state.room) {
-            if (!this.props.autoPeek) {
-                console.log("No room loaded, and autopeek disabled");
-                return;
-            }
-
             console.log("Attempting to peek into room %s", this.props.roomId);
 
             roomProm = MatrixClientPeg.get().peekInRoom(this.props.roomId).then((room) => {
@@ -193,11 +179,6 @@ module.exports = React.createClass({
 
     _initTimeline: function(props) {
         var initialEvent = props.eventId;
-        if (!initialEvent) {
-            // go to the 'read-up-to' mark if no explicit event given
-            initialEvent = this.state.readMarkerEventId;
-        }
-
         var pixelOffset = props.eventPixelOffset;
         return this._loadTimeline(initialEvent, pixelOffset);
     },
@@ -486,20 +467,6 @@ module.exports = React.createClass({
                 readMarkerEventId: readMarkerEventId,
                 readMarkerGhostEventId: readMarkerGhostEventId,
             });
-
-
-            // if the scrollpanel is following the timeline, attempt to scroll
-            // it to bring the read message up to the middle of the panel. This
-            // will have no immediate effect (since we are already at the
-            // bottom), but will ensure that if there is no further user
-            // activity, but room activity continues, the read message will
-            // scroll up to the middle of the window, but no further.
-            //
-            // we do this here as well as in sendReadReceipt to deal with
-            // people using two clients at once.
-            if (this.refs.messagePanel && this.state.atEndOfLiveTimeline) {
-                this.refs.messagePanel.scrollToToken(readMarkerEventId);
-            }
         }
     },
 
@@ -585,14 +552,6 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.onResize);
         this.onResize();
 
-        if (this.refs.roomView) {
-            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
-            roomView.addEventListener('drop', this.onDrop);
-            roomView.addEventListener('dragover', this.onDragOver);
-            roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
-            roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
-        }
-
         this._updateTabCompleteList();
 
         // XXX: EVIL HACK to autofocus inviting on empty rooms.
@@ -629,6 +588,16 @@ module.exports = React.createClass({
         // room. TODO: we really really ought to factor out messagepanel to a
         // separate component to avoid this ridiculous dance.
         if (!this.refs.messagePanel) return;
+
+        if (this.refs.roomView) {
+            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            if (!roomView.ondrop) {
+                roomView.addEventListener('drop', this.onDrop);
+                roomView.addEventListener('dragover', this.onDragOver);
+                roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
+                roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
+            }
+        }
 
         if (!this.refs.messagePanel.initialised) {
             this._initialiseMessagePanel();
@@ -1159,19 +1128,6 @@ module.exports = React.createClass({
                 // it failed, so allow retries next time the user is active
                 this.last_rr_sent_event_id = undefined;
             });
-
-            // if the scrollpanel is following the timeline, attempt to scroll
-            // it to bring the read message up to the middle of the panel. This
-            // will have no immediate effect (since we are already at the
-            // bottom), but will ensure that if there is no further user
-            // activity, but room activity continues, the read message will
-            // scroll up to the middle of the window, but no further.
-            //
-            // we do this here as well as in onRoomReceipt to cater for guest users
-            // (which do not send out read receipts).
-            if (this.state.atEndOfLiveTimeline) {
-                this.refs.messagePanel.scrollToToken(lastReadEvent.getId());
-            }
         }
     },
 
@@ -1275,11 +1231,19 @@ module.exports = React.createClass({
             self.setState({
                 rejecting: false
             });
-        }, function(err) {
-            console.error("Failed to reject invite: %s", err);
+        }, function(error) {
+            console.error("Failed to reject invite: %s", error);
+
+            var msg = error.message ? error.message : JSON.stringify(error);
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to reject invite",
+                description: msg
+            });
+
             self.setState({
                 rejecting: false,
-                rejectError: err
+                rejectError: error
             });
         });
     },
@@ -1473,14 +1437,14 @@ module.exports = React.createClass({
                     );                
                 }
                 else {
-                    var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
                     return (
                         <div className="mx_RoomView">
                             <RoomHeader ref="header" room={this.state.room} simpleHeader="Join room"/>
                             <div className="mx_RoomView_auxPanel">
                                 <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
-                                                canJoin={ true } canPreview={ false }/>
-                                <div className="error">{joinErrorText}</div>
+                                                canJoin={ true } canPreview={ false }
+                                                spinner={this.state.joining}
+                                />
                             </div>
                             <div className="mx_RoomView_messagePanel"></div>
                         </div>
@@ -1506,10 +1470,6 @@ module.exports = React.createClass({
             } else {
                 var inviteEvent = myMember.events.member;
                 var inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
-                // XXX: Leaving this intentionally basic for now because invites are about to change totally
-                // FIXME: This comment is now outdated - what do we need to fix? ^
-                var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
-                var rejectErrorText = this.state.rejectError ? "Failed to reject invite!" : "";
 
                 // We deliberately don't try to peek into invites, even if we have permission to peek
                 // as they could be a spam vector.
@@ -1522,9 +1482,9 @@ module.exports = React.createClass({
                             <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
                                             onRejectClick={ this.onRejectButtonClicked }
                                             inviterName={ inviterName }
-                                            canJoin={ true } canPreview={ false }/>
-                            <div className="error">{joinErrorText}</div>
-                            <div className="error">{rejectErrorText}</div>
+                                            canJoin={ true } canPreview={ false }
+                                            spinner={this.state.joining}
+                            />
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
                     </div>
@@ -1588,13 +1548,17 @@ module.exports = React.createClass({
         else if (this.state.guestsCanJoin && MatrixClientPeg.get().isGuest() &&
                 (!myMember || myMember.membership !== "join")) {
             aux = (
-                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />
+                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true}
+                                spinner={this.state.joining}
+                />
             );
         }
         else if (this.state.canPeek &&
                 (!myMember || myMember.membership !== "join")) {
             aux = (
-                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true} />
+                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true}
+                                spinner={this.state.joining}
+                />
             );
         }
 
@@ -1714,15 +1678,22 @@ module.exports = React.createClass({
                     </div>
             );
         } else {
-            // it's important that stickyBottom = false on this, otherwise if somebody hits the
-            // bottom of the loaded events when viewing historical messages, we get stuck in a
-            // loop of paginating our way through the entire history of the room.
+            // give the messagepanel a stickybottom if we're at the end of the
+            // live timeline, so that the arrival of new events triggers a
+            // scroll.
+            //
+            // Make sure that stickyBottom is *false* if we can paginate
+            // forwards, otherwise if somebody hits the bottom of the loaded
+            // events when viewing historical messages, we get stuck in a loop
+            // of paginating our way through the entire history of the room.
+            var stickyBottom = !this._timelineWindow.canPaginate(EventTimeline.FORWARDS);
+
             messagePanel = (
                 <ScrollPanel ref="messagePanel" className="mx_RoomView_messagePanel"
                         onScroll={ this.onMessageListScroll } 
                         onFillRequest={ this.onMessageListFillRequest }
                         style={ hideMessagePanel ? { display: 'none' } : {} }
-                        stickyBottom={ false }>
+                        stickyBottom={ stickyBottom }>
                     <li className={scrollheader_classes}></li>
                     {this.getEventTiles()}
                 </ScrollPanel>

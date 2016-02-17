@@ -35,21 +35,23 @@ var invite_defer = q.defer();
 
 module.exports = React.createClass({
     displayName: 'MemberList',
+
     getInitialState: function() {
-        if (!this.props.roomId) return { members: [] };
-        var cli = MatrixClientPeg.get();
-        var room = cli.getRoom(this.props.roomId);
-        if (!room) return { members: [] };
-
-        this.memberDict = this.getMemberDict();
-
-        var members = this.roomMembers(INITIAL_LOAD_NUM_MEMBERS);
-        return {
-            members: members,
+        var state = {
+            members: [],
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
             truncateAt: INITIAL_LOAD_NUM_MEMBERS,
         };
+        if (!this.props.roomId) return state;
+        var cli = MatrixClientPeg.get();
+        var room = cli.getRoom(this.props.roomId);
+        if (!room) return state;
+
+        this.memberDict = this.getMemberDict();
+
+        state.members = this.roomMembers(INITIAL_LOAD_NUM_MEMBERS);
+        return state;
     },
 
     componentWillMount: function() {
@@ -325,7 +327,7 @@ module.exports = React.createClass({
 
         var memberList = self.state.members.filter(function(userId) {
             var m = self.memberDict[userId];
-            if (query && m.name.toLowerCase().indexOf(query) !== 0) {
+            if (query && m.name.toLowerCase().indexOf(query) === -1) {
                 return false;
             }
             return m.membership == membership;

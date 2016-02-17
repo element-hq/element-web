@@ -175,7 +175,7 @@ module.exports = React.createClass({
                 guest: true
             });
         }, function(err) {
-            console.error(err.data);
+            console.error("Failed to register as guest: " + err + " " + err.data);
             self._setAutoRegisterAsGuest(false);
         });
     },
@@ -316,9 +316,6 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_room':
-                // by default we autoPeek rooms, unless we were called explicitly with
-                // autoPeek=false by something like RoomDirectory who has already peeked
-                this.setState({ autoPeek : payload.auto_peek === false ? false : true });
                 this._viewRoom(payload.room_id, payload.show_settings, payload.event_id);
                 break;
             case 'view_prev_room':
@@ -880,7 +877,6 @@ module.exports = React.createClass({
                             eventId={this.state.initialEventId}
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}
-                            autoPeek={this.state.autoPeek}
                             key={this.state.currentRoom}
                             ConferenceHandler={this.props.ConferenceHandler} />
                     );
@@ -974,7 +970,9 @@ module.exports = React.createClass({
                     onRegisterClick={this.onRegisterClick}
                     homeserverUrl={this.props.config.default_hs_url}
                     identityServerUrl={this.props.config.default_is_url}
-                    onForgotPasswordClick={this.onForgotPasswordClick} />
+                    onForgotPasswordClick={this.onForgotPasswordClick} 
+                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest: undefined}
+                    />
             );
         }
     }

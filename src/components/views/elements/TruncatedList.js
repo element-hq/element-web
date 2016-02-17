@@ -51,7 +51,7 @@ module.exports = React.createClass({
         if (this.props.truncateAt >= 0) {
             var overflowCount = childCount - this.props.truncateAt;
 
-            if (overflowCount > 0) {
+            if (overflowCount > 1) {
                 overflowJsx = this.props.createOverflowElement(
                     overflowCount, childCount
                 );

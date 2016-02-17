@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var sdk = require('../../../index');
 
 module.exports = React.createClass({
     displayName: 'RoomPreviewBar',
@@ -27,6 +28,7 @@ module.exports = React.createClass({
         inviterName: React.PropTypes.string,
         canJoin: React.PropTypes.bool,
         canPreview: React.PropTypes.bool,
+        spinner: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -39,6 +41,13 @@ module.exports = React.createClass({
 
     render: function() {
         var joinBlock, previewBlock;
+
+        if (this.props.spinner) {
+            var Spinner = sdk.getComponent("elements.Spinner");
+            return (<div className="mx_RoomPreviewBar">
+                <Spinner />
+            </div>);
+        }
 
         if (this.props.inviterName) {
             joinBlock = (

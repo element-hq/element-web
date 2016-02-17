@@ -92,6 +92,7 @@ class ContentMessages {
         this.inprogress.push(upload);
         dis.dispatch({action: 'upload_started'});
 
+        var error;
         var self = this;
         return def.promise.then(function() {
             upload.promise = matrixClient.uploadContent(file);
@@ -103,11 +104,10 @@ class ContentMessages {
                 dis.dispatch({action: 'upload_progress', upload: upload});
             }
         }).then(function(url) {
-            dis.dispatch({action: 'upload_finished', upload: upload});
             content.url = url;
             return matrixClient.sendMessage(roomId, content);
         }, function(err) {
-            dis.dispatch({action: 'upload_failed', upload: upload});
+            error = err;
             if (!upload.canceled) {
                 var desc = "The file '"+upload.fileName+"' failed to upload.";
                 if (err.http_status == 413) {
@@ -127,6 +127,12 @@ class ContentMessages {
                     self.inprogress.splice(k, 1);
                     break;
                 }
+            }
+            if (error) {
+                dis.dispatch({action: 'upload_failed', upload: upload});
+            }
+            else {
+                dis.dispatch({action: 'upload_finished', upload: upload});
             }
         });
     }
