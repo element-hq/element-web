@@ -17,7 +17,7 @@ limitations under the License.
 var React = require('react');
 var sdk = require('../../index');
 
-/* stateless UI component which builds the event tiles in the room timeline.
+/* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
 module.exports = React.createClass({
     displayName: 'MessagePanel',
@@ -34,10 +34,6 @@ module.exports = React.createClass({
 
         // event after which we should show a read marker
         readMarkerEventId: React.PropTypes.string,
-
-        // event after which we should show an animating disappearance of a
-        // read marker
-        readMarkerGhostEventId: React.PropTypes.string,
 
         // the userid of our user. This is used to suppress the read marker
         // for pending messages.
@@ -61,6 +57,17 @@ module.exports = React.createClass({
 
         // callback which is called when more content is needed.
         onFillRequest: React.PropTypes.func,
+    },
+
+    componentWillMount: function() {
+        // the event after which we put a visible unread marker on the last
+        // render cycle; null if readMarkerVisible was false or the RM was
+        // suppressed (eg because it was at the end of the timeline)
+        this.currentReadMarkerEventId = null;
+
+        // the event after which we are showing a disappearing read marker
+        // animation
+        this.currentGhostEventId = null;
     },
 
     /* get the DOM node representing the given event */
@@ -158,17 +165,25 @@ module.exports = React.createClass({
             }
 
             var eventId = mxEv.getId();
-            if (eventId == this.props.readMarkerGhostEventId) {
-                ghostIndex = eventsToShow.length;
-            }
             if (eventId == this.props.readMarkerEventId) {
                 readMarkerIndex = eventsToShow.length;
+            } else if (eventId == this.currentReadMarkerEventId && !this.currentGhostEventId) {
+                // there is currently a read-up-to marker at this point, but no
+                // more. Show an animation of it disappearing.
+                ghostIndex = eventsToShow.length;
+                this.currentGhostEventId = eventId;
+            } else if (eventId == this.currentGhostEventId) {
+                // if we're showing an animation, continue to show it.
+                ghostIndex = eventsToShow.length;
             }
         }
 
         var ret = [];
 
         var prevEvent = null; // the last event we showed
+
+        // assume there is no read marker until proven otherwise
+        var readMarkerVisible = false;
 
         for (var i = 0; i < eventsToShow.length; i++) {
             var mxEv = eventsToShow[i];
@@ -183,6 +198,7 @@ module.exports = React.createClass({
                 // us sending a message and receiving the synthesized receipt.
                 if (mxEv.sender && mxEv.sender.userId != this.props.ourUserId) {
                     ret.push(this._getReadMarkerTile());
+                    readMarkerVisible = true;
                 }
             } else if (i == ghostIndex) {
                 ret.push(this._getReadMarkerGhostTile());
@@ -198,6 +214,7 @@ module.exports = React.createClass({
             prevEvent = mxEv;
         }
 
+        this.currentReadMarkerEventId = readMarkerVisible ? this.props.readMarkerEventId : null;
         return ret;
     },
 
@@ -259,17 +276,27 @@ module.exports = React.createClass({
     },
 
     _getReadMarkerGhostTile: function() {
-        var hr;
-        hr = <hr className="mx_RoomView_myReadMarker"
+        // reset the ghostEventId when the animation finishes, so that
+        // we can make a new one (and so that we don't run the
+        // animation code every time we render)
+        var completeFunc = () => {
+            this.currentGhostEventId = null;
+        };
+
+        var hr = <hr className="mx_RoomView_myReadMarker"
                   style={{opacity: 1, width: '99%'}}
                   ref={function(n) {
                         Velocity(n, {opacity: '0', width: '10%'},
                                     {duration: 400, easing: 'easeInSine',
-                                     delay: 1000});
+                                     delay: 1000, complete: completeFunc});
                   }}
             />;
+
+        // give it a key which depends on the event id. That will ensure that
+        // we get a new DOM node (restarting the animation) when the ghost
+        // moves to a different event.
         return (
-            <li key="_readuptoghost"
+            <li key={"_readuptoghost_"+this.currentGhostEventId}
                   className="mx_RoomView_myReadMarker_container">
                 {hr}
             </li>

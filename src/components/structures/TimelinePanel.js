@@ -82,7 +82,6 @@ module.exports = React.createClass({
             timelineLoading: true, // track whether our room timeline is loading
             canBackPaginate: true,
             readMarkerEventId: this._getCurrentReadReceipt(),
-            readMarkerGhostEventId: null,
         };
     },
 
@@ -200,7 +199,6 @@ module.exports = React.createClass({
 
         this.setState({
             readMarkerEventId: newReadMarker,
-            readMarkerGhostEventId: oldReadMarker,
         });
     },
 
@@ -441,7 +439,6 @@ module.exports = React.createClass({
                     events={ this.state.events }
                     highlightedEventId={ this.props.highlightedEventId }
                     readMarkerEventId={ this.state.readMarkerEventId }
-                    readMarkerGhostEventId={ this.state.readMarkerGhostEventId }
                     suppressFirstDateSeparator={ this.state.canBackPaginate }
                     ourUserId={ MatrixClientPeg.get().credentials.userId }
                     stickyBottom={ stickyBottom }
