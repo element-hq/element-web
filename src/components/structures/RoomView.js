@@ -989,7 +989,8 @@ module.exports = React.createClass({
             else if (this.props.ConferenceHandler && mxEv.getType() === "m.room.member") {
                 if (this.props.ConferenceHandler.isConferenceUser(mxEv.getSender()) ||
                         this.props.ConferenceHandler.isConferenceUser(mxEv.getStateKey())) {
-                    wantTile = false; // suppress conf user join/parts
+                    // don't suppress conf user join/parts entirely, as they're useful!
+                    // wantTile = false;
                 }
             }
 
