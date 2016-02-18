@@ -51,11 +51,11 @@ limitations under the License.
 
 .mx_EventTile_line {
     position: relative;
+    margin-right: 100px;
 }
 
 .mx_EventTile_content {
     display: block;
-    margin-right: 100px;
     overflow-y: hidden;
 }
 

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 .mx_MImageBody_thumbnail {
+    max-width: 100%;
 /*
     background-color: #fff;
     border: 2px solid #fff;
@@ -25,7 +26,6 @@ limitations under the License.
 .mx_MImageBody_download {
     color: #76cfa6;
     cursor: pointer;
-    margin-left: -16px;
 }
 
 .mx_MImageBody_download a {
@@ -34,6 +34,7 @@ limitations under the License.
 }
 
 .mx_MImageBody_download object {
+    margin-left: -16px;
     padding-right: 4px;
     margin-top: -4px;
     vertical-align: middle;
