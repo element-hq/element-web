@@ -51,7 +51,8 @@ limitations under the License.
 
 .mx_EventTile_line {
     position: relative;
-    margin-right: 100px;
+    /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
+    margin-right: 95px;
 }
 
 .mx_EventTile_content {
