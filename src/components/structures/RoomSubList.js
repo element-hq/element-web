@@ -21,6 +21,7 @@ var DropTarget = require('react-dnd').DropTarget;
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Unread = require('matrix-react-sdk/lib/Unread');
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 // turn this on for drop & drag console debugging galore
 var debug = false;
@@ -117,7 +118,9 @@ var RoomSubList = React.createClass({
     tsOfNewestEvent: function(room) {
         for (var i = room.timeline.length - 1; i >= 0; --i) {
             var ev = room.timeline[i];
-            if (Unread.eventTriggersUnreadCount(ev)) {
+            if (Unread.eventTriggersUnreadCount(ev) ||
+                ev.sender.userId === MatrixClientPeg.get().credentials.userId)
+            {
                 return ev.getTs();
             }
         }
