@@ -114,6 +114,17 @@ matrixLinkify.options = {
                     }
                 };
         }
+    },
+
+    formatHref: function (href, type) {
+        switch (type) {
+             case 'roomalias':
+                 return '#/room/' + href;
+             case 'userid':
+                 return '#';
+             default:
+                 return href;
+        }
     }
 };
 
