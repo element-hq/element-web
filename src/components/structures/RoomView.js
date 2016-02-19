@@ -1111,7 +1111,7 @@ module.exports = React.createClass({
         // the bottom of the room again, or something.
         if (!this.state.atEndOfLiveTimeline) return;
 
-        var currentReadUpToEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId);
+        var currentReadUpToEventId = this.state.room.getEventReadUpTo(MatrixClientPeg.get().credentials.userId, true);
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
 
         // We want to avoid sending out read receipts when we are looking at
