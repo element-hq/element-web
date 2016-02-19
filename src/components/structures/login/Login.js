@@ -129,11 +129,30 @@ module.exports = React.createClass({displayName: 'Login',
         if (!errCode && err.httpStatus) {
             errCode = "HTTP " + err.httpStatus;
         }
-        this.setState({
-            errorText: (
-                "Error: Problem communicating with the given homeserver " +
+
+        var errorText = "Error: Problem communicating with the given homeserver " +
                 (errCode ? "(" + errCode + ")" : "")
-            )
+
+        if (err.cors === 'rejected') {
+            if (window.location.protocol === 'https:' &&
+                (this.state.enteredHomeserverUrl.startsWith("http:") || 
+                 !this.state.enteredHomeserverUrl.startsWith("http")))
+            {
+                errorText = <span>
+                    Can't connect to homeserver via HTTP when using a vector served by HTTPS.
+                    Either use HTTPS or <a href='https://www.google.com/search?&q=enable%20unsafe%20scripts'>enable unsafe scripts</a>
+                </span>;
+            }
+            else {
+                errorText = <span>
+                    Can't connect to homeserver - please check your connectivity and ensure
+                    your <a href={ this.state.enteredHomeserverUrl }>homeserver's SSL certificate</a> is trusted.
+                </span>;
+            }
+        }
+
+        this.setState({
+            errorText: errorText
         });
     },
 
