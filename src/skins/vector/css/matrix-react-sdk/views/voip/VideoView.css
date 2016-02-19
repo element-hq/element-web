@@ -31,9 +31,15 @@ limitations under the License.
 }
 
 .mx_VideoView_localVideoFeed {
-    width: 20%;
+    width: 25%;
+    height: 25%;
     position: absolute;
-    left: 16px;
-    bottom: 28px;
+    left: 10px;
+    bottom: 10px;
     z-index: 100;
+}
+
+.mx_VideoView_localVideoFeed video {
+    width: auto;
+    height: 100%;
 }
