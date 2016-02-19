@@ -111,6 +111,14 @@ module.exports = React.createClass({
     shouldHighlight: function() {
         var actions = MatrixClientPeg.get().getPushActionsForEvent(this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
+
+        // don't show self-highlights from another of our clients
+        if (this.props.mxEvent.sender &&
+            this.props.mxEvent.sender.userId === MatrixClientPeg.get().credentials.userId)
+        {
+            return false;
+        }
+        
         return actions.tweaks.highlight;
     },
 
