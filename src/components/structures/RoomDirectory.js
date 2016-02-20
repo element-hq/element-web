@@ -25,8 +25,9 @@ var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
 var linkify = require('linkifyjs');
-var linkifyElement = require('linkifyjs/element');
+var linkifyString = require('linkifyjs/string');
 var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
+var sanitizeHtml = require('sanitize-html');
 
 linkifyMatrix(linkify);
 
@@ -61,8 +62,6 @@ module.exports = React.createClass({
                 self.forceUpdate();
             }
         });
-
-        //linkifyElement(this.refs.directory_table, linkifyMatrix.options);
     },
 
     showRoom: function(roomId) {
@@ -108,6 +107,9 @@ module.exports = React.createClass({
                 perms = <div className="mx_RoomDirectory_perms">{guestRead} {guestJoin}</div>;
             }
 
+            var topic = rooms[i].topic || '';
+            topic = linkifyString(sanitizeHtml(topic));
+
             rows.unshift(
                 <tr key={ rooms[i].room_id } onClick={self.showRoom.bind(null, rooms[i].room_id)}>
                     <td className="mx_RoomDirectory_roomAvatar">
@@ -120,7 +122,9 @@ module.exports = React.createClass({
                     <td className="mx_RoomDirectory_roomDescription">
                         <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
                         { perms }
-                        <div className="mx_RoomDirectory_topic">{ rooms[i].topic }</div>
+                        <div className="mx_RoomDirectory_topic"
+                             onClick={ function(e) { e.stopPropagation() } }
+                             dangerouslySetInnerHTML={{ __html: topic }}/>
                         <div className="mx_RoomDirectory_alias">{ rooms[i].aliases[0] }</div>
                     </td>
                     <td className="mx_RoomDirectory_roomMemberCount">
