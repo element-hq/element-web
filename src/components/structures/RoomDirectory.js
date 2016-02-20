@@ -19,9 +19,17 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var ContentRepo = require("matrix-js-sdk").ContentRepo;
 var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
+
+var linkify = require('linkifyjs');
+var linkifyString = require('linkifyjs/string');
+var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
+var sanitizeHtml = require('sanitize-html');
+
+linkifyMatrix(linkify);
 
 module.exports = React.createClass({
     displayName: 'RoomDirectory',
@@ -64,6 +72,8 @@ module.exports = React.createClass({
     },
 
     getRows: function(filter) {
+        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+
         if (!this.state.publicRooms) return [];
 
         var rooms = this.state.publicRooms.filter(function(a) {
@@ -83,36 +93,44 @@ module.exports = React.createClass({
 
             if (rooms[i].world_readable) {
                 guestRead = (
-                    <span>[world readable]</span>
+                    <div className="mx_RoomDirectory_perm">World readable</div>
                 );
-                    // <img src="img/members.svg"
-                    //     alt="World Readable" title="World Readable" width="12" height="12" />
             }
             if (rooms[i].guest_can_join) {
                 guestJoin = (
-                    <span>[guests allowed]</span>
+                    <div className="mx_RoomDirectory_perm">Guests can join</div>
                 );
-                    // <img src="img/leave.svg"
-                    //     alt="Guests can join" title="Guests can join" width="12" height="12" />
             }
             
             perms = null;
             if (guestRead || guestJoin) {
-                perms = <div>{guestRead} {guestJoin}</div>;
+                perms = <div className="mx_RoomDirectory_perms">{guestRead} {guestJoin}</div>;
             }
 
-            // <img src={ MatrixClientPeg.get().getAvatarUrlForRoom(rooms[i].room_id, 40, 40, "crop") } width="40" height="40" alt=""/>
+            var topic = rooms[i].topic || '';
+            topic = linkifyString(sanitizeHtml(topic));
+
             rows.unshift(
-                <tbody key={ rooms[i].room_id }>
-                    <tr onClick={self.showRoom.bind(null, rooms[i].room_id)}>
-                        <td className="mx_RoomDirectory_name">{ name }</td>
-                        <td>{ rooms[i].aliases[0] }</td>
-                        <td>{ rooms[i].num_joined_members }</td>
-                    </tr>
-                    <tr onClick={self.showRoom.bind(null, rooms[i].room_id)}>
-                        <td className="mx_RoomDirectory_topic" colSpan="3">{perms} { rooms[i].topic }</td>
-                    </tr>
-                </tbody>
+                <tr key={ rooms[i].room_id } onClick={self.showRoom.bind(null, rooms[i].room_id)}>
+                    <td className="mx_RoomDirectory_roomAvatar">
+                        <BaseAvatar width={24} height={24} resizeMethod='crop'
+                            name={ name } idName={ name }
+                            url={ ContentRepo.getHttpUriForMxc(
+                                    MatrixClientPeg.get().getHomeserverUrl(),
+                                    rooms[i].avatar_url, 24, 24, "crop") } />
+                    </td>
+                    <td className="mx_RoomDirectory_roomDescription">
+                        <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
+                        { perms }
+                        <div className="mx_RoomDirectory_topic"
+                             onClick={ function(e) { e.stopPropagation() } }
+                             dangerouslySetInnerHTML={{ __html: topic }}/>
+                        <div className="mx_RoomDirectory_alias">{ rooms[i].aliases[0] }</div>
+                    </td>
+                    <td className="mx_RoomDirectory_roomMemberCount">
+                        { rooms[i].num_joined_members }
+                    </td>
+                </tr>
             );
         }
         return rows;
@@ -139,15 +157,14 @@ module.exports = React.createClass({
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         return (
             <div className="mx_RoomDirectory">
-                <RoomHeader simpleHeader="Public Rooms" />
+                <RoomHeader simpleHeader="Directory" />
                 <div className="mx_RoomDirectory_list">
                     <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
                     <div className="mx_RoomDirectory_tableWrapper">
-                        <table className="mx_RoomDirectory_table">
-                            <thead>
-                                <tr><th width="45%">Room</th><th width="45%">Alias</th><th width="10%">Members</th></tr>
-                            </thead>
-                            { this.getRows(this.state.roomAlias) }
+                        <table ref="directory_table" className="mx_RoomDirectory_table">
+                            <tbody>
+                                { this.getRows(this.state.roomAlias) }
+                            </tbody>
                         </table>
                     </div>
                 </div>
