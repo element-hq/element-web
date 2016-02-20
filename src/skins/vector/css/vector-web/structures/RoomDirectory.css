@@ -64,36 +64,60 @@ limitations under the License.
 }
 
 .mx_RoomDirectory_table {
+    font-size: 14px;
+    color: #4a4a4a;
     width: 100%;
     text-align: left;
     table-layout: fixed;
 }
 
-.mx_RoomDirectory_table th {
-    font-weight: 400;
-    font-size: 11px;
+.mx_RoomDirectory_roomAvatar {
+    width: 24px;
+    padding-left: 16px;
+    padding-right: 24px;
+    vertical-align: top;
 }
 
-.mx_RoomDirectory_table tbody {
+.mx_RoomDirectory_roomDescription {
+    padding-bottom: 16px;
+}
+
+.mx_RoomDirectory_name {
+    display: inline-block;
+    font-weight: 600;
+}
+
+.mx_RoomDirectory_perms {
+    display: inline-block;
+}
+
+.mx_RoomDirectory_perm {
+    display: inline;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 15px;
+    border-radius: 11px;
+    background-color: #eaf5f0;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 11px;
+    color: #61c295;
+}
+
+.mx_RoomDirectory_topic {
+}
+
+.mx_RoomDirectory_alias {
+    font-size: 12px;
+    color: #b3b3b3;
+}
+
+.mx_RoomDirectory_roomMemberCount {
+    text-align: right;
+    width: 100px;
+}
+
+.mx_RoomDirectory_table tr {
+    padding-bottom: 10px;
     cursor: pointer;
-}
-
-.mx_RoomDirectory_table td {
-    font-weight: 300;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-}
-
-.mx_RoomDirectory_table .mx_RoomDirectory_name {
-    font-weight: 400;
-}
-
-.mx_RoomDirectory_table .mx_RoomDirectory_topic {
-    font-weight: 400;
-    font-size: 11px;
-}
-
-.mx_RoomDirectory_table td,
-.mx_RoomDirectory_table th, {
-    padding: 6px;
 }
