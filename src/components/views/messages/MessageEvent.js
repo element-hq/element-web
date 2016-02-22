@@ -37,6 +37,9 @@ module.exports = React.createClass({
 
         /* link URL for the highlights */
         highlightLink: React.PropTypes.string,
+
+        /* callback called when images in events are loaded */
+        onImageLoad: React.PropTypes.func,
     },
 
 
@@ -60,6 +63,7 @@ module.exports = React.createClass({
         }
 
         return <TileType mxEvent={this.props.mxEvent} highlights={this.props.highlights} 
-                    highlightLink={this.props.highlightLink} />;
+                    highlightLink={this.props.highlightLink}
+                    onImageLoad={this.props.onImageLoad} />;
     },
 });
