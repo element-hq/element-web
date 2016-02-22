@@ -146,19 +146,17 @@ class TextHighlighter extends BaseHighlighter {
      * returns a React node
      */
     _processSnippet(snippet, highlight) {
-        var spanProps = {
-            key: this._key++,
-        };
+        var key = this._key++;
 
-        if (highlight) {
-            spanProps.className = this.highlightClass;
-        }
-
-        var node = <span {...spanProps}>{ snippet }</span>;
+        var node =
+            <span key={key} className={highlight ? this.highlightClass : null }>
+                { snippet }
+            </span>;
 
         if (highlight && this.highlightLink) {
-            node = <a href={this.highlightLink}>{node}</a>
+            node = <a key={key} href={this.highlightLink}>{node}</a>
         }
+
         return node;
     }
 }
