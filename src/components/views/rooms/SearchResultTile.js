@@ -31,6 +31,8 @@ module.exports = React.createClass({
 
         // href for the highlights in this result
         resultLink: React.PropTypes.string,
+
+        onImageLoad: React.PropTypes.func,
     },
 
     render: function() {
@@ -53,7 +55,8 @@ module.exports = React.createClass({
             }
             if (EventTile.haveTileForEvent(ev)) {
                 ret.push(<EventTile key={eventId+"+"+j} mxEvent={ev} contextual={contextual} highlights={highlights}
-                          highlightLink={this.props.resultLink}/>);
+                          highlightLink={this.props.resultLink}
+                          onImageLoad={this.props.onImageLoad} />);
             }
         }
         return (

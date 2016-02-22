@@ -27,6 +27,14 @@ var dis = require("../../../dispatcher");
 module.exports = React.createClass({
     displayName: 'MImageBody',
 
+    propTypes: {
+        /* the MatrixEvent to show */
+        mxEvent: React.PropTypes.object.isRequired,
+
+        /* callback called when images in events are loaded */
+        onImageLoad: React.PropTypes.func,
+    },
+
     thumbHeight: function(fullWidth, fullHeight, thumbWidth, thumbHeight) {
         if (!fullWidth || !fullHeight) {
             // Cannot calculate thumbnail height for image: missing w/h in metadata. We can't even
@@ -116,7 +124,8 @@ module.exports = React.createClass({
                         <img className="mx_MImageBody_thumbnail" src={thumbUrl}
                             alt={content.body} style={imgStyle}
                             onMouseEnter={this.onImageEnter}
-                            onMouseLeave={this.onImageLeave} />
+                            onMouseLeave={this.onImageLeave}
+                            onLoad={this.props.onImageLoad} />
                     </a>
                     <div className="mx_MImageBody_download">
                         <a href={cli.mxcUrlToHttp(content.url)} target="_blank">

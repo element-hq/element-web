@@ -921,6 +921,15 @@ module.exports = React.createClass({
             }
         }
 
+        // once images in the search results load, make the scrollPanel check
+        // the scroll offsets.
+        var onImageLoad = () => {
+            var scrollPanel = this.refs.searchResultsPanel;
+            if (scrollPanel) {
+                scrollPanel.checkScroll();
+            }
+        }
+
         var lastRoomId;
 
         for (var i = this.state.searchResults.results.length - 1; i >= 0; i--) {
@@ -957,18 +966,27 @@ module.exports = React.createClass({
             ret.push(<SearchResultTile key={mxEv.getId()}
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
-                     resultLink={resultLink}/>);
+                     resultLink={resultLink}
+                     onImageLoad={onImageLoad}/>);
         }
         return ret;
     },
 
     getEventTiles: function() {
         var DateSeparator = sdk.getComponent('messages.DateSeparator');
+        var EventTile = sdk.getComponent('rooms.EventTile');
+
+        // once images in the events load, make the scrollPanel check the
+        // scroll offsets.
+        var onImageLoad = () => {
+            var scrollPanel = this.refs.messagePanel;
+            if (scrollPanel) {
+                scrollPanel.checkScroll();
+            }
+        }
 
         var ret = [];
         var count = 0;
-
-        var EventTile = sdk.getComponent('rooms.EventTile');
 
         var prevEvent = null; // the last event we showed
         var ghostIndex;
@@ -1056,7 +1074,8 @@ module.exports = React.createClass({
                         ref={this._collectEventNode.bind(this, eventId)} 
                         data-scroll-token={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
-                        last={last} isSelectedEvent={highlight}/>
+                        last={last} isSelectedEvent={highlight}
+                        onImageLoad={onImageLoad} />
                 </li>
             );
 
