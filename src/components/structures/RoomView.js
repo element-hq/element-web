@@ -927,6 +927,7 @@ module.exports = React.createClass({
             var result = this.state.searchResults.results[i];
 
             var mxEv = result.context.getEvent();
+            var roomId = mxEv.getRoomId();
 
             if (!EventTile.haveTileForEvent(mxEv)) {
                 // XXX: can this ever happen? It will make the result count
@@ -935,7 +936,6 @@ module.exports = React.createClass({
             }
 
             if (this.state.searchScope === 'All') {
-                var roomId = mxEv.getRoomId();
                 if(roomId != lastRoomId) {
                     var room = cli.getRoom(roomId);
 
@@ -952,7 +952,7 @@ module.exports = React.createClass({
                 }
             }
 
-            var resultLink = "#/room/"+this.props.roomId+"/"+mxEv.getId();
+            var resultLink = "#/room/"+roomId+"/"+mxEv.getId();
 
             ret.push(<SearchResultTile key={mxEv.getId()}
                      searchResult={result}
