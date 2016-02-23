@@ -111,6 +111,10 @@ module.exports = React.createClass({
             );
         }
 
+        if (this.state.syncState === "ERROR") {
+            return null;
+        }
+
         if (wantPlaceholder) {
             return (
                  <div className="mx_RoomStatusBar_placeholderIndicator">...</div>

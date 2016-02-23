@@ -947,9 +947,14 @@ module.exports = React.createClass({
         if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
         if (this.refs.callView) {
-            var video = this.refs.callView.getVideoView().getRemoteVideoElement();
-
-            video.style.maxHeight = auxPanelMaxHeight + "px";
+            var fullscreenElement =
+                (document.fullscreenElement ||
+                 document.mozFullScreenElement ||
+                 document.webkitFullscreenElement);
+            if (!fullscreenElement) {
+                var video = this.refs.callView.getVideoView().getRemoteVideoElement();
+                video.style.maxHeight = auxPanelMaxHeight + "px";
+            }
         }
 
         // we need to do this for general auxPanels too
@@ -991,6 +996,11 @@ module.exports = React.createClass({
         this.setState({
             videoMuted: newState
         });
+    },
+
+    onCallViewResize: function() {
+        this.onChildResize();
+        this.onResize();
     },
 
     onChildResize: function() {
@@ -1285,7 +1295,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomView_auxPanel" ref="auxPanel">
                     { fileDropTarget }    
                     <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}
-                        onResize={this.onChildResize} />
+                        onResize={this.onCallViewResize} />
                     { conferenceCallNotification }
                     { aux }
                 </div>

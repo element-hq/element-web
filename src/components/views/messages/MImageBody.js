@@ -94,7 +94,7 @@ module.exports = React.createClass({
 
     _getThumbUrl: function() {
         var content = this.props.mxEvent.getContent();
-        return MatrixClientPeg.get().mxcUrlToHttp(content.url, 480, 360);
+        return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
     },
 
     render: function() {
@@ -103,10 +103,10 @@ module.exports = React.createClass({
         var cli = MatrixClientPeg.get();
 
         var thumbHeight = null;
-        if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, 480, 360);
+        if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, 800, 600);
 
         var imgStyle = {};
-        if (thumbHeight) imgStyle['height'] = thumbHeight;
+        if (thumbHeight) imgStyle['maxHeight'] = thumbHeight;
 
         var thumbUrl = this._getThumbUrl();
         if (thumbUrl) {
