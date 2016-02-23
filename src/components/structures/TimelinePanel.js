@@ -67,11 +67,6 @@ module.exports = React.createClass({
         // middle of the viewprt.
         eventPixelOffset: React.PropTypes.number,
 
-        // callback to determine if a user is the magic freeswitch conference
-        // user. Takes one parameter, which is a user id. Should return true if
-        // the user is the conference user.
-        isConferenceUser: React.PropTypes.func,
-
         // callback which is called when the panel is scrolled.
         onScroll: React.PropTypes.func,
     },
@@ -455,7 +450,6 @@ module.exports = React.createClass({
                     suppressFirstDateSeparator={ this.state.canBackPaginate }
                     ourUserId={ MatrixClientPeg.get().credentials.userId }
                     stickyBottom={ stickyBottom }
-                    isConferenceUser={ this.props.isConferenceUser }
                     onScroll={ this.props.onScroll }
                     onFillRequest={ this.onMessageListFillRequest }
             />

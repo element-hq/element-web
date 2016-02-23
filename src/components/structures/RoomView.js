@@ -1265,9 +1265,6 @@ module.exports = React.createClass({
                 highlightedEventId={this.props.highlightedEventId}
                 eventId={this.props.eventId}
                 eventPixelOffset={this.props.eventPixelOffset}
-                isConferenceUser={this.props.ConferenceHandler ?
-                                  this.props.ConferenceHandler.isConferenceUser :
-                                  null }
                 onScroll={ this.onMessageListScroll }
             />);
 

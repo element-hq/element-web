@@ -47,11 +47,6 @@ module.exports = React.createClass({
         // for more details.
         stickyBottom: React.PropTypes.bool,
 
-        // callback to determine if a user is the magic freeswitch conference
-        // user. Takes one parameter, which is a user id. Should return true if
-        // the user is the conference user.
-        isConferenceUser: React.PropTypes.func,
-
         // callback which is called when the panel is scrolled.
         onScroll: React.PropTypes.func,
 
@@ -140,13 +135,6 @@ module.exports = React.createClass({
                 continue;
             }
 
-            if (this.props.isConferenceUser && mxEv.getType() === "m.room.member") {
-                if (this.props.isConferenceUser(mxEv.getSender()) ||
-                        this.props.isConferenceUser(mxEv.getStateKey())) {
-                    continue; // suppress conf user join/parts
-                }
-            }
-            
             break;
         }
         var lastShownEventIndex = i;
@@ -165,13 +153,6 @@ module.exports = React.createClass({
 
             if (!EventTile.haveTileForEvent(mxEv)) {
                 wantTile = false;
-            }
-
-            if (this.props.isConferenceUser && mxEv.getType() === "m.room.member") {
-                if (this.props.isConferenceUser(mxEv.getSender()) ||
-                        this.props.isConferenceUser(mxEv.getStateKey())) {
-                    wantTile = false; // suppress conf user join/parts
-                }
             }
 
             var last = (i == lastShownEventIndex);
