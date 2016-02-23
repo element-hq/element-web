@@ -70,6 +70,7 @@ module.exports.components['views.messages.TextualEvent'] = require('./components
 module.exports.components['views.messages.UnknownBody'] = require('./components/views/messages/UnknownBody');
 module.exports.components['views.room_settings.AliasSettings'] = require('./components/views/room_settings/AliasSettings');
 module.exports.components['views.room_settings.ColorSettings'] = require('./components/views/room_settings/ColorSettings');
+module.exports.components['views.rooms.AuxPanel'] = require('./components/views/rooms/AuxPanel');
 module.exports.components['views.rooms.EntityTile'] = require('./components/views/rooms/EntityTile');
 module.exports.components['views.rooms.EventTile'] = require('./components/views/rooms/EventTile');
 module.exports.components['views.rooms.InviteMemberList'] = require('./components/views/rooms/InviteMemberList');
