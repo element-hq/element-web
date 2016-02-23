@@ -7,3 +7,6 @@ include:
 
 * https://github.com/neko259
   Improved scrollbar CSS
+
+* Florent VIOLLEAU (https://github.com/floviolleau) <floviolleau at gmail dot com>
+  Improve README.md for a better understanding of installation instructions

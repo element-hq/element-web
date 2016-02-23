@@ -52,11 +52,95 @@ the skin's index by running, `npm run reskindex`.
 You may need to run `npm i source-map-loader` in matrix-js-sdk if you get errors
 about "Cannot resolve module 'source-map-loader'" due to shortcomings in webpack.
 
+Example:
+
+If you are deving on react-sdk or js-sdk you should need to do:
+
+```
+mkdir ~/matrix
+
+cd ~/matrix
+git clone https://github.com/matrix-org/matrix-js-sdk
+cd matrix-js-sdk
+git checkout develop
+npm install
+npm link
+npm i source-map-loader
+npm start
+
+cd ~/matrix
+git clone https://github.com/matrix-org/matrix-react-sdk.git
+cd matrix-react-sdk
+git checkout develop
+npm install
+npm link matrix-js-sdk
+npm link
+npm i source-map-loader
+npm start
+
+cd ~/matrix
+git clone https://github.com/vector-im/vector-web.git
+cd vector-web
+git checkout develop
+npm install
+npm link matrix-react-sdk
+npm link matrix-js-sdk
+npm start
+```
+
+What happens here is that npm link on its own will look for a package.json file to find the name of the dep (matrix-react-sdk) and then create a symlink in the global node deps pointing to the directory you ran npm link in.
+
+Then in vector-web, you need to tell it to use the global node dep rather than the checkout from npm install, which is what `npm link matrix-react-sdk` does
+
 Deployment
 ==========
 
+Configure the app by modifying the `config.json` file to the correct values:
+
+1. default_hs_url is for the home server url (could be http://your.server.ip:8008 if vector and synapse are on the same machine),
+2. default_is_url is the default server used for verifying third party identifiers like email addresses. If this is blank, registering with an email address or adding an email address to your account will not work
+
+[Synapse](https://github.com/matrix-org/synapse) (the server) listens on port 8008 for http and 8448 for https. Set `http://your.server.ip:8008` or `https://your.server.ip:8448`.
+
 Just run `npm run build` and then mount the `vector` directory on your webserver to
 actually serve up the app, which is entirely static content.
+
+Example of apache vhost configuration:
+
+```
+<VirtualHost *:80>
+	ServerAdmin webmaster@localhost
+
+	DocumentRoot /var/www/vector-web/vector
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /var/www/vector-web/vector/>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+Guest connection
+================
+
+If you want to allow users to be connected anonymously, activate the option to the synapse server and restart it.
+
+Then, just hit the url of vector (page refresh) and you will be connected anonymously without typing anything and without going to the login page.
+
+If you want to allow guest users to join a room, you can go to the room throught vector-web, mouse over the name and click on the gear setting icon and change the status.
 
 Enabling encryption
 ===================
