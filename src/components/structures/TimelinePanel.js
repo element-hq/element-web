@@ -92,6 +92,7 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
+        MatrixClientPeg.get().on("Room.redaction", this.onRoomRedaction);
 
         this._initTimeline(this.props);
     },
@@ -121,6 +122,7 @@ module.exports = React.createClass({
         if (client) {
             client.removeListener("Room.timeline", this.onRoomTimeline);
             client.removeListener("Room.receipt", this.onRoomReceipt);
+            client.removeListener("Room.redaction", this.onRoomRedaction);
         }
     },
 
@@ -200,6 +202,17 @@ module.exports = React.createClass({
         this.setState({
             readMarkerEventId: newReadMarker,
         });
+    },
+
+    onRoomRedaction: function(ev, room) {
+        if (this.unmounted) return;
+
+        // ignore events for other rooms
+        if (room !== this.props.room) return;
+
+        // we could skip an update if the event isn't in our timeline,
+        // but that's probably an early optimisation.
+        this.forceUpdate();
     },
 
     sendReadReceipt: function() {
