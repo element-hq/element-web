@@ -99,7 +99,7 @@ function routeUrl(location) {
         window.matrixChat.showScreen('register', parseQsFromFragment(location));
     } else {
         var hashparts = location.hash.split('?');
-        window.matrixChat.showScreen(hashparts[0].substring(2));
+        window.matrixChat.showScreen(hashparts[0].substring(2), parseQsFromFragment(location));
     }
 }
 
