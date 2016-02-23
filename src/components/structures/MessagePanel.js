@@ -152,8 +152,6 @@ module.exports = React.createClass({
     },
 
     _getEventTiles: function() {
-        this.eventNodes = {};
-
         var EventTile = sdk.getComponent('rooms.EventTile');
 
         this.eventNodes = {};
@@ -208,15 +206,6 @@ module.exports = React.createClass({
                 // algorithms which depend on its position on the screen aren't confused.
                 if (i >= lastShownEventIndex) {
                     visible = false;
-                } else {
-                    // XXX is this still needed?
-                    // suppress the read marker if the next event is sent by us; this
-                    // is a nonsensical and temporary situation caused by the delay between
-                    // us sending a message and receiving the synthesized receipt.
-                    var nextEvent = this.props.events[i+1];
-                    if (nextEvent.sender && nextEvent.sender.userId == this.props.ourUserId) {
-                        visible = false;
-                    }
                 }
                 ret.push(this._getReadMarkerTile(visible));
                 readMarkerVisible = visible;
@@ -232,7 +221,6 @@ module.exports = React.createClass({
         }
 
         this.currentReadMarkerEventId = readMarkerVisible ? this.props.readMarkerEventId : null;
-
         return ret;
     },
 
