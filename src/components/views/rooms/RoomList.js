@@ -291,6 +291,13 @@ module.exports = React.createClass({
                 }
             }
 
+            // slightly ugly hack to offset if there's a toolbar present.
+            // we really should be calculating our absolute offsets of top by recursing through the DOM
+            toolbar = document.getElementsByClassName("mx_MatrixToolbar")[0];
+            if (toolbar) {
+                top += toolbar.offsetHeight;
+            }
+
             incomingCallBox.style.top = top + "px";
             incomingCallBox.style.left = scroll.offsetLeft + scroll.offsetWidth + "px";
         }
