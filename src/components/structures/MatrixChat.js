@@ -95,10 +95,6 @@ module.exports = React.createClass({
             if (!this.props.config || !this.props.config.default_hs_url) {
                 console.error("Cannot enable guest access: No supplied config prop for HS/IS URLs");
             }
-            else if (this.props.startingQueryParams.email) {
-                console.log("Not registering as guest; email invite.");
-                this._autoRegisterAsGuest = false;
-            }
             else if (this.props.startingQueryParams.client_secret && this.props.startingQueryParams.sid) {
                 console.log("Not registering as guest; registration.");
                 this._autoRegisterAsGuest = false;
