@@ -95,12 +95,20 @@ limitations under the License.
     flex: 0 0 auto;
 }
 
-.mx_RoomView_messagePanel {
+.mx_RoomView_topUnreadMessagesBar {
     -webkit-box-ordinal-group: 3;
     -moz-box-ordinal-group: 3;
     -ms-flex-order: 3;
     -webkit-order: 3;
     order: 3;
+}
+
+.mx_RoomView_messagePanel {
+    -webkit-box-ordinal-group: 4;
+    -moz-box-ordinal-group: 4;
+    -ms-flex-order: 4;
+    -webkit-order: 4;
+    order: 4;
 
     -webkit-flex: 1 1 0;
     flex: 1 1 0;
@@ -180,11 +188,11 @@ hr.mx_RoomView_myReadMarker {
 }
 
 .mx_RoomView_statusArea {
-    -webkit-box-ordinal-group: 4;
-    -moz-box-ordinal-group: 4;
-    -ms-flex-order: 4;
-    -webkit-order: 4;
-    order: 4;
+    -webkit-box-ordinal-group: 5;
+    -moz-box-ordinal-group: 5;
+    -ms-flex-order: 5;
+    -webkit-order: 5;
+    order: 5;
 
     width: 100%;
     -webkit-flex: 0 0 auto;
@@ -233,11 +241,11 @@ hr.mx_RoomView_myReadMarker {
 }
 
 .mx_RoomView .mx_MessageComposer {
-    -webkit-box-ordinal-group: 5;
-    -moz-box-ordinal-group: 5;
-    -ms-flex-order: 5;
-    -webkit-order: 5;
-    order: 5;
+    -webkit-box-ordinal-group: 6;
+    -moz-box-ordinal-group: 6;
+    -ms-flex-order: 6;
+    -webkit-order: 6;
+    order: 6;
 
     width: 100%;
     -webkit-flex: 0 0 auto;
