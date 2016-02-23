@@ -87,8 +87,7 @@ function parseQs(location) {
 }
 
 // Here, we do some crude URL analysis to allow
-// deep-linking. We only support registration
-// deep-links in this example.
+// deep-linking.
 function routeUrl(location) {
     var params = parseQs(location);
     var loginToken = params.loginToken;
