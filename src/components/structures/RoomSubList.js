@@ -119,7 +119,7 @@ var RoomSubList = React.createClass({
         for (var i = room.timeline.length - 1; i >= 0; --i) {
             var ev = room.timeline[i];
             if (Unread.eventTriggersUnreadCount(ev) ||
-                ev.sender.userId === MatrixClientPeg.get().credentials.userId)
+                (ev.sender && ev.sender.userId === MatrixClientPeg.get().credentials.userId))
             {
                 return ev.getTs();
             }
