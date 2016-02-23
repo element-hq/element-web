@@ -30,27 +30,57 @@ setup above, and your changes will cause an instant rebuild.
 However, all serious development on Vector happens on the `develop` branch.  This typically
 depends on the `develop` snapshot versions of `matrix-react-sdk` and `matrix-js-sdk`
 too, which isn't handled by Vector's `package.json`.  To get the right dependencies, check out
-the `develop` branches of these libraries and then use `npm link` to tell Vector
+the `develop` branches of these libraries and then use `ln -s` to tell Vector
 about them:
 
+[Be aware that there may be problems with this process under npm version 3.]
+
+First clone and build `matrix-js-sdk`:
+
+1. `git clone git@github.com:matrix-org/matrix-js-sdk.git`
+1. `pushd matrix-js-sdk`
+1. `git checkout develop`
+1. `npm install`
+1. `npm install source-map-loader` # because webpack is made of fail
+1. `popd`
+
+Then similarly with `matrix-react-sdk`:
+
 1. `git clone git@github.com:matrix-org/matrix-react-sdk.git`
-2. `cd matrix-react-sdk`
+2. `pushd matrix-react-sdk`
 3. `git checkout develop`
 4. `npm install`
-5. `npm run build`
-6. `npm start` (to start the dev rebuilder)
-7. `cd ../vector-web`
-8. Link the react sdk package into the example:
-   `npm link path/to/your/react/sdk`
+5. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
+6. `popd`
 
-Similarly, you may need to `npm link path/to/your/js/sdk` in your `matrix-react-sdk`
-directory.
+Finally, build and start vector itself:
+
+1. `git clone git@github.com:vector-im/vector-web.git`
+1. `cd vector-web`
+1. `git checkout develop`
+1. `npm install`
+1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
+1. `rm -r node_modules/matrix-react-sdk; ln -s ../../matrix-react-sdk node_modules/`
+1. `npm start`
+1. Wait a few seconds for the initial build to finish; you should see something like:
+    Hash: b0af76309dd56d7275c8
+    Version: webpack 1.12.14
+    Time: 14533ms
+             Asset     Size  Chunks             Chunk Names
+         bundle.js   4.2 MB       0  [emitted]  main
+        bundle.css  91.5 kB       0  [emitted]  main
+     bundle.js.map  5.29 MB       0  [emitted]  main
+    bundle.css.map   116 kB       0  [emitted]  main
+        + 1013 hidden modules
+1. Open http://127.0.0.1:8080/ in your browser to see your newly built Vector.
+
+When you make changes to `matrix-js-sdk` or `matrix-react-sdk`, you will need
+to run `npm run build` in the relevant directory. You can do this automatically
+by instead running `npm start` in each directory, to start a development
+builder which will watch for changes to the files and rebuild automatically.
 
 If you add or remove any components from the Vector skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.
-
-You may need to run `npm i source-map-loader` in matrix-js-sdk if you get errors
-about "Cannot resolve module 'source-map-loader'" due to shortcomings in webpack.
 
 Deployment
 ==========
