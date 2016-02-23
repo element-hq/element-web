@@ -722,6 +722,15 @@ module.exports = React.createClass({
             }
         }
 
+        // once images in the search results load, make the scrollPanel check
+        // the scroll offsets.
+        var onImageLoad = () => {
+            var scrollPanel = this.refs.searchResultsPanel;
+            if (scrollPanel) {
+                scrollPanel.checkScroll();
+            }
+        }
+
         var lastRoomId;
 
         for (var i = this.state.searchResults.results.length - 1; i >= 0; i--) {
@@ -758,7 +767,8 @@ module.exports = React.createClass({
             ret.push(<SearchResultTile key={mxEv.getId()}
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
-                     resultLink={resultLink}/>);
+                     resultLink={resultLink}
+                     onImageLoad={onImageLoad}/>);
         }
         return ret;
     },
