@@ -63,6 +63,10 @@ module.exports = React.createClass({
 
         roomId: React.PropTypes.string.isRequired,
 
+        // The URL used to join this room from an email invite
+        // (given as part of the link in the invite email)
+        inviteSignUrl: React.PropTypes.string,
+
         // id of an event to jump to. If not given, will go to the end of the
         // live timeline.
         eventId: React.PropTypes.string,
@@ -707,7 +711,7 @@ module.exports = React.createClass({
         }
 
         display_name_promise.then(() => {
-            return MatrixClientPeg.get().joinRoom(this.props.roomId)
+            return MatrixClientPeg.get().joinRoom(this.props.roomId, { inviteSignUrl: this.props.inviteSignUrl } )
         }).done(function() {
             // It is possible that there is no Room yet if state hasn't come down
             // from /sync - joinRoom will resolve when the HTTP request to join succeeds,
