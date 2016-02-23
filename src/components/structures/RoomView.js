@@ -1014,9 +1014,10 @@ module.exports = React.createClass({
     },
 
     onChildResize: function() {
-        // When the video or the message composer resizes, the scroll panel
-        // also changes size.  Work around GeminiScrollBar fail by telling it
-        // about it. This also ensures that the scroll offset is updated.
+        // When the video, status bar, or the message composer resizes, the
+        // scroll panel also changes size.  Work around GeminiScrollBar fail by
+        // telling it about it. This also ensures that the scroll offset is
+        // updated.
         if (this.refs.messagePanel) {
             this.refs.messagePanel.forceUpdate();
         }
@@ -1147,6 +1148,7 @@ module.exports = React.createClass({
                 hasActiveCall={inCall}
                 onResendAllClick={this.onResendAllClick}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
+                onResize={this.onChildResize}
                 />
         }
 
