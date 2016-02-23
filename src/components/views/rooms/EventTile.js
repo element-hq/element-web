@@ -96,8 +96,8 @@ module.exports = React.createClass({
         /* a list of words to highlight */
         highlights: React.PropTypes.array,
 
-        /* a function to be called when the highlight is clicked */
-        onHighlightClick: React.PropTypes.func,
+        /* link URL for the highlights */
+        highlightLink: React.PropTypes.string,
 
         /* is this the focussed event */
         isSelectedEvent: React.PropTypes.bool,
@@ -313,8 +313,8 @@ module.exports = React.createClass({
                 { avatar }
                 { sender }
                 <div className="mx_EventTile_line">
-                    <EventTileType mxEvent={this.props.mxEvent} highlights={this.props.highlights} 
-                          onHighlightClick={this.props.onHighlightClick} />
+                    <EventTileType mxEvent={this.props.mxEvent} highlights={this.props.highlights}
+                          highlightLink={this.props.highlightLink}/>
                 </div>
             </div>
         );

@@ -64,7 +64,10 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
+        // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
+        }
     },
 
     onSyncStateChange: function(state, prevState) {

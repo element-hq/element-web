@@ -28,6 +28,18 @@ module.exports = React.createClass({
         }
     },
 
+    propTypes: {
+        /* the MatrixEvent to show */
+        mxEvent: React.PropTypes.object.isRequired,
+
+        /* a list of words to highlight */
+        highlights: React.PropTypes.array,
+
+        /* link URL for the highlights */
+        highlightLink: React.PropTypes.string,
+    },
+
+
     render: function() {
         var UnknownMessageTile = sdk.getComponent('messages.UnknownBody');
 
@@ -48,6 +60,6 @@ module.exports = React.createClass({
         }
 
         return <TileType mxEvent={this.props.mxEvent} highlights={this.props.highlights} 
-                    onHighlightClick={this.props.onHighlightClick} />;
+                    highlightLink={this.props.highlightLink} />;
     },
 });
