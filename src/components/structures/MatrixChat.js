@@ -316,7 +316,7 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_room':
-                this._viewRoom(payload.room_id, payload.show_settings, payload.event_id);
+                this._viewRoom(payload.room_id, payload.show_settings, payload.event_id, payload.invite_sign_url);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -353,6 +353,7 @@ module.exports = React.createClass({
                         action: 'view_room',
                         room_id: foundRoom.roomId,
                         event_id: payload.event_id,
+                        invite_sign_url: payload.invite_sign_url,
                     });
                     return;
                 }
@@ -363,6 +364,7 @@ module.exports = React.createClass({
                         action: 'view_room',
                         room_id: result.room_id,
                         event_id: payload.event_id,
+                        invite_sign_url: payload.invite_sign_url,
                     });
                 });
                 break;
@@ -438,7 +440,7 @@ module.exports = React.createClass({
     //
     // eventId is optional and will cause a switch to the context of that
     // particular event.
-    _viewRoom: function(roomId, showSettings, eventId) {
+    _viewRoom: function(roomId, showSettings, eventId, invite_sign_url) {
         // before we switch room, record the scroll state of the current room
         this._updateScrollMap();
 
@@ -450,6 +452,7 @@ module.exports = React.createClass({
             highlightedEventId: eventId,
             initialEventPixelOffset: undefined,
             page_type: this.PageTypes.RoomView,
+            inviteSignUrl: invite_sign_url,
         };
 
         // if we aren't given an explicit event id, look for one in the
@@ -540,9 +543,11 @@ module.exports = React.createClass({
                     action: 'view_room_alias',
                     room_alias: self.starting_room_alias,
                     event_id: self.starting_event_id,
+                    invite_sign_url: self.starting_room_invite_sign_url,
                 });
                 delete self.starting_room_alias;
                 delete self.starting_event_id;
+                delete self.starting_room_invite_sign_url;
             } else if (!self.state.page_type) {
                 if (!self.state.currentRoom) {
                     var firstRoom = null;
@@ -659,7 +664,6 @@ module.exports = React.createClass({
                 action: 'start_post_registration',
             });
         } else if (screen.indexOf('room/') == 0) {
-
             if (!this.state.logged_in && this.props.startingQueryParams.email) {
                 console.log("Redirecting to email registration");
                 this.showScreen("register");
@@ -676,10 +680,12 @@ module.exports = React.createClass({
                         action: 'view_room_alias',
                         room_alias: roomString,
                         event_id: eventId,
+                        invite_sign_url: params.signurl,
                     });
                 } else {
                     // Okay, we'll take you here soon...
                     this.starting_room_alias = roomString;
+                    this.starting_room_invite_sign_url = params.signurl;
                     this.starting_event_id = eventId;
                     // ...but you're still going to have to log in.
                     this.notifyNewScreen('login');
@@ -689,6 +695,7 @@ module.exports = React.createClass({
                     action: 'view_room',
                     room_id: roomString,
                     event_id: eventId,
+                    invite_sign_url: params.signurl,
                 });
             }
         }
@@ -875,6 +882,7 @@ module.exports = React.createClass({
                             ref="roomView"
                             roomId={this.state.currentRoom}
                             eventId={this.state.initialEventId}
+                            inviteSignUrl={this.state.inviteSignUrl}
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}
                             key={this.state.currentRoom}
