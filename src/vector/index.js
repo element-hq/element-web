@@ -87,8 +87,7 @@ function parseQs(location) {
 }
 
 // Here, we do some crude URL analysis to allow
-// deep-linking. We only support registration
-// deep-links in this example.
+// deep-linking.
 function routeUrl(location) {
     var params = parseQs(location);
     var loginToken = params.loginToken;
@@ -99,7 +98,7 @@ function routeUrl(location) {
         window.matrixChat.showScreen('register', parseQsFromFragment(location));
     } else {
         var hashparts = location.hash.split('?');
-        window.matrixChat.showScreen(hashparts[0].substring(2));
+        window.matrixChat.showScreen(hashparts[0].substring(2), parseQsFromFragment(location));
     }
 }
 
