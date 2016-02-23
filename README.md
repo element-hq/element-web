@@ -63,6 +63,8 @@ Finally, build and start vector itself:
 1. `rm -r node_modules/matrix-react-sdk; ln -s ../../matrix-react-sdk node_modules/`
 1. `npm start`
 1. Wait a few seconds for the initial build to finish; you should see something like:
+
+    ```
     Hash: b0af76309dd56d7275c8
     Version: webpack 1.12.14
     Time: 14533ms
@@ -72,6 +74,7 @@ Finally, build and start vector itself:
      bundle.js.map  5.29 MB       0  [emitted]  main
     bundle.css.map   116 kB       0  [emitted]  main
         + 1013 hidden modules
+    ```
 1. Open http://127.0.0.1:8080/ in your browser to see your newly built Vector.
 
 When you make changes to `matrix-js-sdk` or `matrix-react-sdk`, you will need
