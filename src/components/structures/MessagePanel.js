@@ -159,6 +159,7 @@ module.exports = React.createClass({
 
             if (wantTile) {
                 ret.push(this._getTilesForEvent(prevEvent, mxEv, last));
+                prevEvent = mxEv;
             } else if (!mxEv.status) {
                 // if we aren't showing the event, put in a dummy scroll token anyway, so
                 // that we can scroll to the right place.
