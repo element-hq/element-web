@@ -182,6 +182,9 @@ var Notifier = {
         if (state === "PREPARED" || state === "SYNCING") {
             this.isPrepared = true;
         }
+        else if (state === "STOPPED" || state === "ERROR") {
+            this.isPrepared = false;
+        }
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {

@@ -17,7 +17,6 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var ReactDOMServer = require('react-dom/server')
 var sanitizeHtml = require('sanitize-html');
 var highlight = require('highlight.js');
 
@@ -50,14 +49,23 @@ var sanitizeHtmlParams = {
     },
 };
 
-class Highlighter {
-    constructor(html, highlightClass, onHighlightClick) {
-        this.html = html;
+class BaseHighlighter {
+    constructor(highlightClass, highlightLink) {
         this.highlightClass = highlightClass;
-        this.onHighlightClick = onHighlightClick;
-        this._key = 0;
+        this.highlightLink = highlightLink;
     }
 
+    /**
+     * apply the highlights to a section of text
+     *
+     * @param {string} safeSnippet The snippet of text to apply the highlights
+     *     to.
+     * @param {string[]} safeHighlights A list of substrings to highlight,
+     *     sorted by descending length.
+     *
+     * returns a list of results (strings for HtmlHighligher, react nodes for
+     * TextHighlighter).
+     */
     applyHighlights(safeSnippet, safeHighlights) {
         var lastOffset = 0;
         var offset;
@@ -71,10 +79,12 @@ class Highlighter {
                 nodes = nodes.concat(this._applySubHighlights(subSnippet, safeHighlights));
             }
 
-            // do highlight
-            nodes.push(this._createSpan(safeHighlight, true));
+            // do highlight. use the original string rather than safeHighlight
+            // to preserve the original casing.
+            var endOffset = offset + safeHighlight.length;
+            nodes.push(this._processSnippet(safeSnippet.substring(offset, endOffset), true));
 
-            lastOffset = offset + safeHighlight.length;
+            lastOffset = endOffset;
         }
 
         // handle postamble
@@ -92,31 +102,62 @@ class Highlighter {
         }
         else {
             // no more highlights to be found, just return the unhighlighted string
-            return [this._createSpan(safeSnippet, false)];
+            return [this._processSnippet(safeSnippet, false)];
         }
+    }
+}
+
+class HtmlHighlighter extends BaseHighlighter {
+    /* highlight the given snippet if required
+     *
+     * snippet: content of the span; must have been sanitised
+     * highlight: true to highlight as a search match
+     *
+     * returns an HTML string
+     */
+    _processSnippet(snippet, highlight) {
+        if (!highlight) {
+            // nothing required here
+            return snippet;
+        }
+
+        var span = "<span class=\""+this.highlightClass+"\">"
+            + snippet + "</span>";
+
+        if (this.highlightLink) {
+            span = "<a href=\""+encodeURI(this.highlightLink)+"\">"
+                +span+"</a>";
+        }
+        return span;
+    }
+}
+
+class TextHighlighter extends BaseHighlighter {
+    constructor(highlightClass, highlightLink) {
+        super(highlightClass, highlightLink);
+        this._key = 0;
     }
 
     /* create a <span> node to hold the given content
      *
-     * spanBody: content of the span. If html, must have been sanitised
+     * snippet: content of the span
      * highlight: true to highlight as a search match
+     *
+     * returns a React node
      */
-    _createSpan(spanBody, highlight) {
-        var spanProps = {
-            key: this._key++,
-        };
+    _processSnippet(snippet, highlight) {
+        var key = this._key++;
 
-        if (highlight) {
-            spanProps.onClick = this.onHighlightClick;
-            spanProps.className = this.highlightClass;
+        var node =
+            <span key={key} className={highlight ? this.highlightClass : null }>
+                { snippet }
+            </span>;
+
+        if (highlight && this.highlightLink) {
+            node = <a key={key} href={this.highlightLink}>{node}</a>
         }
 
-        if (this.html) {
-            return (<span {...spanProps} dangerouslySetInnerHTML={{ __html: spanBody }} />);
-        }
-        else {
-            return (<span {...spanProps}>{ spanBody }</span>);
-        }
+        return node;
     }
 }
 
@@ -128,8 +169,7 @@ module.exports = {
      *
      * highlights: optional list of words to highlight, ordered by longest word first
      *
-     * opts.onHighlightClick: optional callback function to be called when a
-     *     highlighted word is clicked
+     * opts.highlightLink: optional href to add to highlights
      */
     bodyToHtml: function(content, highlights, opts) {
         opts = opts || {};
@@ -144,18 +184,13 @@ module.exports = {
             // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
             try {
                 if (highlights && highlights.length > 0) {
-                    var highlighter = new Highlighter(isHtml, "mx_EventTile_searchHighlight", opts.onHighlightClick);
+                    var highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
                     var safeHighlights = highlights.map(function(highlight) {
                         return sanitizeHtml(highlight, sanitizeHtmlParams);
                     });
                     // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
                     sanitizeHtmlParams.textFilter = function(safeText) {
-                        return highlighter.applyHighlights(safeText, safeHighlights).map(function(span) {
-                            // XXX: rather clunky conversion from the react nodes returned by applyHighlights
-                            // (which need to be nodes for the non-html highlighting case), to convert them
-                            // back into raw HTML given that's what sanitize-html works in terms of.
-                            return ReactDOMServer.renderToString(span);
-                        }).join('');
+                        return highlighter.applyHighlights(safeText, safeHighlights).join('');
                     };
                 }
                 safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
@@ -167,7 +202,7 @@ module.exports = {
         } else {
             safeBody = content.body;
             if (highlights && highlights.length > 0) {
-                var highlighter = new Highlighter(isHtml, "mx_EventTile_searchHighlight", opts.onHighlightClick);
+                var highlighter = new TextHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
                 return highlighter.applyHighlights(safeBody, highlights);
             }
             else {

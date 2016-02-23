@@ -65,6 +65,7 @@ module.exports = React.createClass({
 
     statics: {
         haveTileForEvent: function(e) {
+            if (e.isRedacted()) return false;
             if (eventTileTypes[e.getType()] == undefined) return false;
             if (eventTileTypes[e.getType()] == 'messages.TextualEvent') {
                 return TextForEvent.textForEvent(e) !== '';
@@ -96,11 +97,14 @@ module.exports = React.createClass({
         /* a list of words to highlight */
         highlights: React.PropTypes.array,
 
-        /* a function to be called when the highlight is clicked */
-        onHighlightClick: React.PropTypes.func,
+        /* link URL for the highlights */
+        highlightLink: React.PropTypes.string,
 
         /* is this the focussed event */
         isSelectedEvent: React.PropTypes.bool,
+
+        /* callback called when images in events are loaded */
+        onImageLoad: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -110,6 +114,14 @@ module.exports = React.createClass({
     shouldHighlight: function() {
         var actions = MatrixClientPeg.get().getPushActionsForEvent(this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
+
+        // don't show self-highlights from another of our clients
+        if (this.props.mxEvent.sender &&
+            this.props.mxEvent.sender.userId === MatrixClientPeg.get().credentials.userId)
+        {
+            return false;
+        }
+        
         return actions.tweaks.highlight;
     },
 
@@ -313,8 +325,9 @@ module.exports = React.createClass({
                 { avatar }
                 { sender }
                 <div className="mx_EventTile_line">
-                    <EventTileType mxEvent={this.props.mxEvent} highlights={this.props.highlights} 
-                          onHighlightClick={this.props.onHighlightClick} />
+                    <EventTileType mxEvent={this.props.mxEvent} highlights={this.props.highlights}
+                          highlightLink={this.props.highlightLink}
+                          onImageLoad={this.props.onImageLoad} />
                 </div>
             </div>
         );

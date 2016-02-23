@@ -85,9 +85,9 @@ module.exports = React.createClass({
             // if this call is a conf call, don't display local video as the
             // conference will have us in it
             this.getVideoView().getLocalVideoElement().style.display = (
-                call.confUserId ? "none" : "initial"
+                call.confUserId ? "none" : "block"
             );
-            this.getVideoView().getRemoteVideoElement().style.display = "initial";
+            this.getVideoView().getRemoteVideoElement().style.display = "block";
         }
         else {
             this.getVideoView().getLocalVideoElement().style.display = "none";

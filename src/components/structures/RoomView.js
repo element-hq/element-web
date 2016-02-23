@@ -420,14 +420,6 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.onResize);
         this.onResize();
 
-        if (this.refs.roomView) {
-            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
-            roomView.addEventListener('drop', this.onDrop);
-            roomView.addEventListener('dragover', this.onDragOver);
-            roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
-            roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
-        }
-
         this._updateTabCompleteList();
 
         // XXX: EVIL HACK to autofocus inviting on empty rooms.
@@ -452,6 +444,18 @@ module.exports = React.createClass({
             )
         );
     }, 500),
+
+    componentDidUpdate: function() {
+        if (this.refs.roomView) {
+            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            if (!roomView.ondrop) {
+                roomView.addEventListener('drop', this.onDrop);
+                roomView.addEventListener('dragover', this.onDragOver);
+                roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
+                roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
+            }
+        }
+    },
 
     onSearchResultsFillRequest: function(backwards) {
         if (!backwards)
@@ -692,15 +696,6 @@ module.exports = React.createClass({
         });
     },
 
-    _onSearchResultSelected: function(result) {
-        var event = result.context.getEvent();
-        dis.dispatch({
-            action: 'view_room',
-            room_id: event.getRoomId(),
-            event_id: event.getId(),
-        });
-    },
-
     getSearchResultTiles: function() {
         var EventTile = sdk.getComponent('rooms.EventTile');
         var SearchResultTile = sdk.getComponent('rooms.SearchResultTile');
@@ -730,12 +725,22 @@ module.exports = React.createClass({
             }
         }
 
+        // once images in the search results load, make the scrollPanel check
+        // the scroll offsets.
+        var onImageLoad = () => {
+            var scrollPanel = this.refs.searchResultsPanel;
+            if (scrollPanel) {
+                scrollPanel.checkScroll();
+            }
+        }
+
         var lastRoomId;
 
         for (var i = this.state.searchResults.results.length - 1; i >= 0; i--) {
             var result = this.state.searchResults.results[i];
 
             var mxEv = result.context.getEvent();
+            var roomId = mxEv.getRoomId();
 
             if (!EventTile.haveTileForEvent(mxEv)) {
                 // XXX: can this ever happen? It will make the result count
@@ -744,7 +749,6 @@ module.exports = React.createClass({
             }
 
             if (this.state.searchScope === 'All') {
-                var roomId = mxEv.getRoomId();
                 if(roomId != lastRoomId) {
                     var room = cli.getRoom(roomId);
 
@@ -761,10 +765,13 @@ module.exports = React.createClass({
                 }
             }
 
+            var resultLink = "#/room/"+roomId+"/"+mxEv.getId();
+
             ret.push(<SearchResultTile key={mxEv.getId()}
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
-                     onSelect={this._onSearchResultSelected.bind(this, result)}/>);
+                     resultLink={resultLink}
+                     onImageLoad={onImageLoad}/>);
         }
         return ret;
     },
@@ -843,11 +850,19 @@ module.exports = React.createClass({
             self.setState({
                 rejecting: false
             });
-        }, function(err) {
-            console.error("Failed to reject invite: %s", err);
+        }, function(error) {
+            console.error("Failed to reject invite: %s", error);
+
+            var msg = error.message ? error.message : JSON.stringify(error);
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to reject invite",
+                description: msg
+            });
+
             self.setState({
                 rejecting: false,
-                rejectError: err
+                rejectError: error
             });
         });
     },
@@ -969,9 +984,14 @@ module.exports = React.createClass({
         if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
         if (this.refs.callView) {
-            var video = this.refs.callView.getVideoView().getRemoteVideoElement();
-
-            video.style.maxHeight = auxPanelMaxHeight + "px";
+            var fullscreenElement =
+                (document.fullscreenElement ||
+                 document.mozFullScreenElement ||
+                 document.webkitFullscreenElement);
+            if (!fullscreenElement) {
+                var video = this.refs.callView.getVideoView().getRemoteVideoElement();
+                video.style.maxHeight = auxPanelMaxHeight + "px";
+            }
         }
 
         // we need to do this for general auxPanels too
@@ -1015,10 +1035,16 @@ module.exports = React.createClass({
         });
     },
 
+    onCallViewResize: function() {
+        this.onChildResize();
+        this.onResize();
+    },
+
     onChildResize: function() {
-        // When the video or the message composer resizes, the scroll panel
-        // also changes size.  Work around GeminiScrollBar fail by telling it
-        // about it. This also ensures that the scroll offset is updated.
+        // When the video, status bar, or the message composer resizes, the
+        // scroll panel also changes size.  Work around GeminiScrollBar fail by
+        // telling it about it. This also ensures that the scroll offset is
+        // updated.
         if (this.refs.messagePanel) {
             this.refs.messagePanel.forceUpdate();
         }
@@ -1055,7 +1081,6 @@ module.exports = React.createClass({
                     );                
                 }
                 else {
-                    var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
                     return (
                         <div className="mx_RoomView">
                             <RoomHeader ref="header" room={this.state.room} simpleHeader="Join room"/>
@@ -1064,7 +1089,6 @@ module.exports = React.createClass({
                                                 canJoin={ true } canPreview={ false }
                                                 spinner={this.state.joining}
                                 />
-                                <div className="error">{joinErrorText}</div>
                             </div>
                             <div className="mx_RoomView_messagePanel"></div>
                         </div>
@@ -1090,10 +1114,6 @@ module.exports = React.createClass({
             } else {
                 var inviteEvent = myMember.events.member;
                 var inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
-                // XXX: Leaving this intentionally basic for now because invites are about to change totally
-                // FIXME: This comment is now outdated - what do we need to fix? ^
-                var joinErrorText = this.state.joinError ? "Failed to join room!" : "";
-                var rejectErrorText = this.state.rejectError ? "Failed to reject invite!" : "";
 
                 // We deliberately don't try to peek into invites, even if we have permission to peek
                 // as they could be a spam vector.
@@ -1109,8 +1129,6 @@ module.exports = React.createClass({
                                             canJoin={ true } canPreview={ false }
                                             spinner={this.state.joining}
                             />
-                            <div className="error">{joinErrorText}</div>
-                            <div className="error">{rejectErrorText}</div>
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
                     </div>
@@ -1157,6 +1175,7 @@ module.exports = React.createClass({
                 hasActiveCall={inCall}
                 onResendAllClick={this.onResendAllClick}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
+                onResize={this.onChildResize}
                 />
         }
 
@@ -1295,9 +1314,6 @@ module.exports = React.createClass({
                 highlightedEventId={this.props.highlightedEventId}
                 eventId={this.props.eventId}
                 eventPixelOffset={this.props.eventPixelOffset}
-                isConferenceUser={this.props.ConferenceHandler ?
-                                  this.props.ConferenceHandler.isConferenceUser :
-                                  null }
                 onScroll={ this.onMessageListScroll }
                 onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
             />);
@@ -1332,7 +1348,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomView_auxPanel" ref="auxPanel">
                     { fileDropTarget }    
                     <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}
-                        onResize={this.onChildResize} />
+                        onResize={this.onCallViewResize} />
                     { conferenceCallNotification }
                     { aux }
                 </div>

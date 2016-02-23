@@ -124,10 +124,9 @@ module.exports = React.createClass({
         // after adding event tiles, we may need to tweak the scroll (either to
         // keep at the bottom of the timeline, or to maintain the view after
         // adding events to the top).
-        this._restoreSavedScrollState();
-
-        // we also re-check the fill state, in case the paginate was inadequate
-        this.checkFillState();
+        //
+        // This will also re-check the fill state, in case the paginate was inadequate
+        this.checkScroll();
     },
 
     componentWillUnmount: function() {
@@ -175,6 +174,13 @@ module.exports = React.createClass({
 
         this.props.onScroll(ev);
 
+        this.checkFillState();
+    },
+
+    // after an update to the contents of the panel, check that the scroll is
+    // where it ought to be, and set off pagination requests if necessary.
+    checkScroll: function() {
+        this._restoreSavedScrollState();
         this.checkFillState();
     },
 

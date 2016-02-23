@@ -27,6 +27,14 @@ var dis = require("../../../dispatcher");
 module.exports = React.createClass({
     displayName: 'MImageBody',
 
+    propTypes: {
+        /* the MatrixEvent to show */
+        mxEvent: React.PropTypes.object.isRequired,
+
+        /* callback called when images in events are loaded */
+        onImageLoad: React.PropTypes.func,
+    },
+
     thumbHeight: function(fullWidth, fullHeight, thumbWidth, thumbHeight) {
         if (!fullWidth || !fullHeight) {
             // Cannot calculate thumbnail height for image: missing w/h in metadata. We can't even
@@ -94,7 +102,7 @@ module.exports = React.createClass({
 
     _getThumbUrl: function() {
         var content = this.props.mxEvent.getContent();
-        return MatrixClientPeg.get().mxcUrlToHttp(content.url, 480, 360);
+        return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
     },
 
     render: function() {
@@ -103,10 +111,10 @@ module.exports = React.createClass({
         var cli = MatrixClientPeg.get();
 
         var thumbHeight = null;
-        if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, 480, 360);
+        if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, 800, 600);
 
         var imgStyle = {};
-        if (thumbHeight) imgStyle['height'] = thumbHeight;
+        if (thumbHeight) imgStyle['maxHeight'] = thumbHeight;
 
         var thumbUrl = this._getThumbUrl();
         if (thumbUrl) {
@@ -116,7 +124,8 @@ module.exports = React.createClass({
                         <img className="mx_MImageBody_thumbnail" src={thumbUrl}
                             alt={content.body} style={imgStyle}
                             onMouseEnter={this.onImageEnter}
-                            onMouseLeave={this.onImageLeave} />
+                            onMouseLeave={this.onImageLeave}
+                            onLoad={this.props.onImageLoad} />
                     </a>
                     <div className="mx_MImageBody_download">
                         <a href={cli.mxcUrlToHttp(content.url)} target="_blank">

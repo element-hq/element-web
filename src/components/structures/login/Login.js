@@ -35,7 +35,8 @@ module.exports = React.createClass({displayName: 'Login',
         // login shouldn't know or care how registration is done.
         onRegisterClick: React.PropTypes.func.isRequired,
         // login shouldn't care how password recovery is done.
-        onForgotPasswordClick: React.PropTypes.func
+        onForgotPasswordClick: React.PropTypes.func,
+        onLoginAsGuestClick: React.PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -128,11 +129,30 @@ module.exports = React.createClass({displayName: 'Login',
         if (!errCode && err.httpStatus) {
             errCode = "HTTP " + err.httpStatus;
         }
-        this.setState({
-            errorText: (
-                "Error: Problem communicating with the given homeserver " +
+
+        var errorText = "Error: Problem communicating with the given homeserver " +
                 (errCode ? "(" + errCode + ")" : "")
-            )
+
+        if (err.cors === 'rejected') {
+            if (window.location.protocol === 'https:' &&
+                (this.state.enteredHomeserverUrl.startsWith("http:") || 
+                 !this.state.enteredHomeserverUrl.startsWith("http")))
+            {
+                errorText = <span>
+                    Can't connect to homeserver via HTTP when using a vector served by HTTPS.
+                    Either use HTTPS or <a href='https://www.google.com/search?&q=enable%20unsafe%20scripts'>enable unsafe scripts</a>
+                </span>;
+            }
+            else {
+                errorText = <span>
+                    Can't connect to homeserver - please check your connectivity and ensure
+                    your <a href={ this.state.enteredHomeserverUrl }>homeserver's SSL certificate</a> is trusted.
+                </span>;
+            }
+        }
+
+        this.setState({
+            errorText: errorText
         });
     },
 
@@ -167,6 +187,13 @@ module.exports = React.createClass({displayName: 'Login',
         var LoginFooter = sdk.getComponent("login.LoginFooter");
         var loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
+        var loginAsGuestJsx;
+        if (this.props.onLoginAsGuestClick) {
+            loginAsGuestJsx =
+                <a className="mx_Login_create" onClick={this.props.onLoginAsGuestClick} href="#">
+                    Login as guest
+                </a>
+        }
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
@@ -188,6 +215,7 @@ module.exports = React.createClass({displayName: 'Login',
                         <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
                             Create a new account
                         </a>
+                        { loginAsGuestJsx }
                         <br/>
                         <LoginFooter />
                     </div>

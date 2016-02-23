@@ -110,19 +110,17 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
         var avatarImg;
         // Having just set an avatar we just display that since it will take a little
         // time to propagate through to the RoomAvatar.
         if (this.props.room && !this.avatarSet) {
+            var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
             avatarImg = <RoomAvatar room={this.props.room} width={ this.props.width } height={ this.props.height } resizeMethod='crop' />;
         } else {
-            var style = {
-                width: this.props.width,
-                height: this.props.height,
-                objectFit: 'cover',
-            };
-            avatarImg = <img className="mx_BaseAvatar_image" src={this.state.avatarUrl} style={style} />;
+            var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+            // XXX: FIXME: once we track in the JS what our own displayname is(!) then use it here rather than ?
+            avatarImg = <BaseAvatar width={this.props.width} height={this.props.height} resizeMethod='crop'
+                        name='?' idName={ MatrixClientPeg.get().getUserIdLocalpart() } url={this.state.avatarUrl} />
         }
 
         var uploadSection;

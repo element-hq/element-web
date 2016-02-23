@@ -51,11 +51,6 @@ module.exports = React.createClass({
         // for more details.
         stickyBottom: React.PropTypes.bool,
 
-        // callback to determine if a user is the magic freeswitch conference
-        // user. Takes one parameter, which is a user id. Should return true if
-        // the user is the conference user.
-        isConferenceUser: React.PropTypes.func,
-
         // callback which is called when the panel is scrolled.
         onScroll: React.PropTypes.func,
 
@@ -163,54 +158,20 @@ module.exports = React.createClass({
 
         this.eventNodes = {};
 
-        // we do two passes over the events list; first of all, we figure out
-        // which events we want to show, and where the read markers fit into
-        // the list; then we actually create the event tiles. This allows us to
-        // behave slightly differently for the last event in the list.
-        //
-        // (Arguably we could do this when the events are added to this.props,
-        // but that would make it trickier to keep in sync with the read marker, given
-        // the read marker isn't necessarily on an event which we will show).
-        //
-        var eventsToShow = [];
+        var i;
 
-        // the index in 'eventsToShow' of the event *before* which we put the
-        // read marker or its ghost. (Note that it may be equal to
-        // eventsToShow.length, which means it would be at the end of the timeline)
-        var ghostIndex, readMarkerIndex;
-
-        for (var i = 0; i < this.props.events.length; i++) {
+        // first figure out which is the last event in the list which we're
+        // actually going to show; this allows us to behave slightly
+        // differently for the last event in the list.
+        for (i = this.props.events.length-1; i >= 0; i--) {
             var mxEv = this.props.events[i];
-            var wantTile = true;
-
             if (!EventTile.haveTileForEvent(mxEv)) {
-                wantTile = false;
+                continue;
             }
 
-            if (this.props.isConferenceUser && mxEv.getType() === "m.room.member") {
-                if (this.props.isConferenceUser(mxEv.getSender()) ||
-                        this.props.isConferenceUser(mxEv.getStateKey())) {
-                    wantTile = false; // suppress conf user join/parts
-                }
-            }
-
-            if (wantTile) {
-                eventsToShow.push(mxEv);
-            }
-
-            var eventId = mxEv.getId();
-            if (eventId == this.props.readMarkerEventId) {
-                readMarkerIndex = eventsToShow.length;
-            } else if (eventId == this.currentReadMarkerEventId && !this.currentGhostEventId) {
-                // there is currently a read-up-to marker at this point, but no
-                // more. Show an animation of it disappearing.
-                ghostIndex = eventsToShow.length;
-                this.currentGhostEventId = eventId;
-            } else if (eventId == this.currentGhostEventId) {
-                // if we're showing an animation, continue to show it.
-                ghostIndex = eventsToShow.length;
-            }
+            break;
         }
+        var lastShownEventIndex = i;
 
         var ret = [];
 
@@ -219,42 +180,54 @@ module.exports = React.createClass({
         // assume there is no read marker until proven otherwise
         var readMarkerVisible = false;
 
-        for (var i = 0; i < eventsToShow.length; i++) {
-            var mxEv = eventsToShow[i];
+        for (i = 0; i < this.props.events.length; i++) {
+            var mxEv = this.props.events[i];
             var wantTile = true;
+            var eventId = mxEv.getId();
 
-            // insert the read marker if appropriate.
-            if (i == readMarkerIndex) {
+            if (!EventTile.haveTileForEvent(mxEv)) {
+                wantTile = false;
+            }
+
+            var last = (i == lastShownEventIndex);
+
+            if (wantTile) {
+                ret.push(this._getTilesForEvent(prevEvent, mxEv, last));
+            } else if (!mxEv.status) {
+                // if we aren't showing the event, put in a dummy scroll token anyway, so
+                // that we can scroll to the right place.
+                ret.push(<li key={eventId} data-scroll-token={eventId}/>);
+            }
+
+            if (eventId == this.props.readMarkerEventId) {
                 var visible = this.props.readMarkerVisible;
 
-                // XXX is this still needed?
-                // suppress the read marker if the next event is sent by us; this
-                // is a nonsensical and temporary situation caused by the delay between
-                // us sending a message and receiving the synthesized receipt.
-                if (mxEv.sender && mxEv.sender.userId == this.props.ourUserId) {
+                // if the read marker comes at the end of the timeline, we don't want
+                // to show it, but we still want to create the <li/> for it so that the
+                // algorithms which depend on its position on the screen aren't confused.
+                if (i >= lastShownEventIndex) {
                     visible = false;
+                } else {
+                    // XXX is this still needed?
+                    // suppress the read marker if the next event is sent by us; this
+                    // is a nonsensical and temporary situation caused by the delay between
+                    // us sending a message and receiving the synthesized receipt.
+                    var nextEvent = this.props.events[i+1];
+                    if (nextEvent.sender && nextEvent.sender.userId == this.props.ourUserId) {
+                        visible = false;
+                    }
                 }
                 ret.push(this._getReadMarkerTile(visible));
                 readMarkerVisible = visible;
-            } else if (i == ghostIndex) {
+            } else if (eventId == this.currentReadMarkerEventId && !this.currentGhostEventId) {
+                // there is currently a read-up-to marker at this point, but no
+                // more. Show an animation of it disappearing.
+                ret.push(this._getReadMarkerGhostTile());
+                this.currentGhostEventId = eventId;
+            } else if (eventId == this.currentGhostEventId) {
+                // if we're showing an animation, continue to show it.
                 ret.push(this._getReadMarkerGhostTile());
             }
-
-            var last = false;
-            if (i == eventsToShow.length - 1) {
-                last = true;
-            }
-
-            // add the tiles for this event
-            ret.push(this._getTilesForEvent(prevEvent, mxEv, last));
-            prevEvent = mxEv;
-        }
-
-        // if the read marker comes at the end of the timeline, we don't want
-        // to show it, but we still want to create the <li/> for it so that the
-        // algorithms which depend on its position on the screen aren't confused.
-        if (i == readMarkerIndex) {
-            ret.push(this._getReadMarkerTile(false));
         }
 
         this.currentReadMarkerEventId = readMarkerVisible ? this.props.readMarkerEventId : null;
@@ -298,7 +271,8 @@ module.exports = React.createClass({
                         ref={this._collectEventNode.bind(this, eventId)}
                         data-scroll-token={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
-                        last={last} isSelectedEvent={highlight}/>
+                        last={last} isSelectedEvent={highlight}
+                        onImageLoad={this._onImageLoad} />
                 </li>
         );
 
@@ -351,6 +325,16 @@ module.exports = React.createClass({
 
     _collectEventNode: function(eventId, node) {
         this.eventNodes[eventId] = node;
+    },
+
+
+    // once images in the events load, make the scrollPanel check the
+    // scroll offsets.
+    _onImageLoad: function() {
+        var scrollPanel = this.refs.messagePanel;
+        if (scrollPanel) {
+            scrollPanel.checkScroll();
+        }
     },
 
     render: function() {

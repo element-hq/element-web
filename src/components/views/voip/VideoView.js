@@ -64,6 +64,7 @@ module.exports = React.createClass({
                         element.msRequestFullscreen
                     );
                     requestMethod.call(element);
+                    this.getRemoteVideoElement().style.maxHeight = "inherit";
                 }
                 else {
                     var exitMethod = (

@@ -51,6 +51,11 @@ module.exports = React.createClass({
 
         // callback for when the user clicks on the 'scroll to bottom' button
         onScrollToBottomClick: React.PropTypes.func,
+
+        // callback for when we do something that changes the size of the
+        // status bar. This is used to trigger a re-layout in the parent
+        // component.
+        onResize: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -63,8 +68,17 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
     },
 
+    componentDidUpdate: function(prevProps, prevState) {
+        if(this.props.onResize && this._checkForResize(prevProps, prevState)) {
+            this.props.onResize();
+        }
+    },
+
     componentWillUnmount: function() {
-        MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
+        // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
+        }
     },
 
     onSyncStateChange: function(state, prevState) {
@@ -76,7 +90,85 @@ module.exports = React.createClass({
         });
     },
 
-    render: function() {
+    // determine if we need to call onResize
+    _checkForResize: function(prevProps, prevState) {
+        // figure out the old height and the new height of the status bar. We
+        // don't need the actual height - just whether it is likely to have
+        // changed - so we use '0' to indicate normal size, and other values to
+        // indicate other sizes.
+        var oldSize, newSize;
+
+        if (prevState.syncState === "ERROR") {
+            oldSize = 1;
+        } else if (prevProps.tabCompleteEntries) {
+            oldSize = 0;
+        } else if (prevProps.hasUnsentMessages) {
+            oldSize = 2;
+        } else {
+            oldSize = 0;
+        }
+
+        if (this.state.syncState === "ERROR") {
+            newSize = 1;
+        } else if (this.props.tabCompleteEntries) {
+            newSize = 0;
+        } else if (this.props.hasUnsentMessages) {
+            newSize = 2;
+        } else {
+            newSize = 0;
+        }
+
+        return newSize != oldSize;
+    },
+
+    // return suitable content for the image on the left of the status bar.
+    //
+    // if wantPlaceholder is true, we include a "..." placeholder if
+    // there is nothing better to put in.
+    _getIndicator: function(wantPlaceholder) {
+        if (this.props.numUnreadMessages) {
+            return (
+                <div className="mx_RoomStatusBar_scrollDownIndicator"
+                        onClick={ this.props.onScrollToBottomClick }>
+                    <img src="img/newmessages.svg" width="24" height="24"
+                        alt=""/>
+                </div>
+            );
+        }
+
+        if (!this.props.atEndOfLiveTimeline) {
+            return (
+                <div className="mx_RoomStatusBar_scrollDownIndicator"
+                        onClick={ this.props.onScrollToBottomClick }>
+                    <img src="img/scrolldown.svg" width="24" height="24"
+                        alt="Scroll to bottom of page"
+                        title="Scroll to bottom of page"/>
+                </div>
+            );
+        }
+
+        if (this.props.hasActiveCall) {
+            return (
+                <img src="img/sound-indicator.svg" width="23" height="20"/>
+            );
+        }
+
+        if (this.state.syncState === "ERROR") {
+            return null;
+        }
+
+        if (wantPlaceholder) {
+            return (
+                 <div className="mx_RoomStatusBar_placeholderIndicator">...</div>
+            );
+        }
+
+        return null;
+    },
+
+
+    // return suitable content for the main (text) part of the status bar.
+    _getContent: function() {
         var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
@@ -86,15 +178,13 @@ module.exports = React.createClass({
         // a connection!
         if (this.state.syncState === "ERROR") {
             return (
-                <div className="mx_RoomView_connectionLostBar">
+                <div className="mx_RoomStatusBar_connectionLostBar">
                     <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
-                    <div className="mx_RoomView_connectionLostBar_textArea">
-                        <div className="mx_RoomView_connectionLostBar_title">
-                            Connectivity to the server has been lost.
-                        </div>
-                        <div className="mx_RoomView_connectionLostBar_desc">
-                            Sent messages will be stored until your connection has returned.
-                        </div>
+                    <div className="mx_RoomStatusBar_connectionLostBar_title">
+                        Connectivity to the server has been lost.
+                    </div>
+                    <div className="mx_RoomStatusBar_connectionLostBar_desc">
+                        Sent messages will be stored until your connection has returned.
                     </div>
                 </div>
             );
@@ -102,11 +192,10 @@ module.exports = React.createClass({
 
         if (this.props.tabCompleteEntries) {
             return (
-                <div className="mx_RoomView_tabCompleteBar">
-                    <div className="mx_RoomView_tabCompleteImage">...</div>
-                    <div className="mx_RoomView_tabCompleteWrapper">
+                <div className="mx_RoomStatusBar_tabCompleteBar">
+                    <div className="mx_RoomStatusBar_tabCompleteWrapper">
                         <TabCompleteBar entries={this.props.tabCompleteEntries} />
-                        <div className="mx_RoomView_tabCompleteEol" title="->|">
+                        <div className="mx_RoomStatusBar_tabCompleteEol" title="->|">
                             <TintableSvg src="img/eol.svg" width="22" height="16"/>
                             Auto-complete
                         </div>
@@ -117,18 +206,16 @@ module.exports = React.createClass({
 
         if (this.props.hasUnsentMessages) {
             return (
-                <div className="mx_RoomView_connectionLostBar">
+                <div className="mx_RoomStatusBar_connectionLostBar">
                     <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
-                    <div className="mx_RoomView_connectionLostBar_textArea">
-                        <div className="mx_RoomView_connectionLostBar_title">
-                            Some of your messages have not been sent.
-                        </div>
-                        <div className="mx_RoomView_connectionLostBar_desc">
-                            <a className="mx_RoomView_resend_link"
-                                onClick={ this.props.onResendAllClick }>
-                            Resend all now
-                            </a> or select individual messages to re-send.
-                        </div>
+                    <div className="mx_RoomStatusBar_connectionLostBar_title">
+                        Some of your messages have not been sent.
+                    </div>
+                    <div className="mx_RoomStatusBar_connectionLostBar_desc">
+                        <a className="mx_RoomStatusBar_resend_link"
+                            onClick={ this.props.onResendAllClick }>
+                        Resend all now
+                        </a> or select individual messages to re-send.
                     </div>
                 </div>
             );
@@ -141,8 +228,8 @@ module.exports = React.createClass({
                 (this.props.numUnreadMessages > 1 ? "s" : "");
 
             return (
-                <div className="mx_RoomView_unreadMessagesBar" onClick={ this.props.onScrollToBottomClick }>
-                    <img src="img/newmessages.svg" width="24" height="24" alt=""/>
+                <div className="mx_RoomStatusBar_unreadMessagesBar"
+                        onClick={ this.props.onScrollToBottomClick }>
                     {unreadMsgs}
                 </div>
             );
@@ -151,30 +238,35 @@ module.exports = React.createClass({
         var typingString = WhoIsTyping.whoIsTypingString(this.props.room);
         if (typingString) {
             return (
-                <div className="mx_RoomView_typingBar">
-                    <div className="mx_RoomView_typingImage">...</div>
-                    <span className="mx_RoomView_typingText">{typingString}</span>
+                <div className="mx_RoomStatusBar_typingBar">
+                    {typingString}
                 </div>
-            );
-        }
-
-        if (!this.props.atEndOfLiveTimeline) {
-            return (
-                <div className="mx_RoomView_scrollToBottomBar" onClick={ this.props.onScrollToBottomClick }>
-                    <img src="img/scrolldown.svg" width="24" height="24" alt="Scroll to bottom of page" title="Scroll to bottom of page"/>
-                </div>                        
             );
         }
 
         if (this.props.hasActiveCall) {
             return (
-                <div className="mx_RoomView_callBar">
-                    <img src="img/sound-indicator.svg" width="23" height="20"/>
+                <div className="mx_RoomStatusBar_callBar">
                     <b>Active call</b>
                 </div>
             );
         }
 
-        return <div />;
+        return null;
     },
+
+
+    render: function() {
+        var content = this._getContent();
+        var indicator = this._getIndicator(content !== null);
+
+        return (
+            <div className="mx_RoomStatusBar">
+                <div className="mx_RoomStatusBar_indicator">
+                    {indicator}
+                </div>
+                {content}
+            </div>
+        );
+    },  
 });

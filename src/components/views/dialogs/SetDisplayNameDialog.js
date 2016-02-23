@@ -26,9 +26,20 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return {
-            value: this.props.currentDisplayName || "Guest "+MatrixClientPeg.get().getUserIdLocalpart(),
+        if (this.props.currentDisplayName) {
+            return { value: this.props.currentDisplayName };
         }
+
+        if (MatrixClientPeg.get().isGuest()) {
+            return { value : "Guest " + MatrixClientPeg.get().getUserIdLocalpart() };
+        }
+        else {
+            return { value : MatrixClientPeg.get().getUserIdLocalpart() };
+        }
+    },
+
+    componentDidMount: function() {
+        this.refs.input_value.select();
     },
 
     getValue: function() {
@@ -54,11 +65,12 @@ module.exports = React.createClass({
                     Set a Display Name
                 </div>
                 <div className="mx_Dialog_content">
-                    Your display name is how you'll appear to others when you speak in rooms. What would you like it to be?
+                    Your display name is how you'll appear to others when you speak in rooms.<br/>
+                    What would you like it to be?
                 </div>
                 <form onSubmit={this.onFormSubmit}>
                     <div className="mx_Dialog_content">
-                        <input type="text" value={this.state.value}
+                        <input type="text" ref="input_value" value={this.state.value}
                             autoFocus={true} onChange={this.onValueChange} size="30"
                             className="mx_SetDisplayNameDialog_input"
                         />
