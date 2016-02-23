@@ -676,13 +676,6 @@ module.exports = React.createClass({
                 action: 'start_post_registration',
             });
         } else if (screen.indexOf('room/') == 0) {
-            if (!this.state.logged_in && this.props.startingQueryParams.email) {
-                console.log("Redirecting to email registration");
-                this.showScreen("register");
-                this.notifyNewScreen('register'); // this doesn't call showScreen, just updates the hash
-                return;
-            }
-
             var segments = screen.substring(5).split('/');
             var roomString = segments[0];
             var eventId = segments[1]; // undefined if no event id given
