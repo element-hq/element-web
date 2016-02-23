@@ -51,6 +51,11 @@ module.exports = React.createClass({
 
         // callback for when the user clicks on the 'scroll to bottom' button
         onScrollToBottomClick: React.PropTypes.func,
+
+        // callback for when we do something that changes the size of the
+        // status bar. This is used to trigger a re-layout in the parent
+        // component.
+        onResize: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -61,6 +66,12 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if(this.props.onResize && this._checkForResize(prevProps, prevState)) {
+            this.props.onResize();
+        }
     },
 
     componentWillUnmount: function() {
@@ -77,6 +88,37 @@ module.exports = React.createClass({
         this.setState({
             syncState: state
         });
+    },
+
+    // determine if we need to call onResize
+    _checkForResize: function(prevProps, prevState) {
+        // figure out the old height and the new height of the status bar. We
+        // don't need the actual height - just whether it is likely to have
+        // changed - so we use '0' to indicate normal size, and other values to
+        // indicate other sizes.
+        var oldSize, newSize;
+
+        if (prevState.syncState === "ERROR") {
+            oldSize = 1;
+        } else if (prevProps.tabCompleteEntries) {
+            oldSize = 0;
+        } else if (prevProps.hasUnsentMessages) {
+            oldSize = 2;
+        } else {
+            oldSize = 0;
+        }
+
+        if (this.state.syncState === "ERROR") {
+            newSize = 1;
+        } else if (this.props.tabCompleteEntries) {
+            newSize = 0;
+        } else if (this.props.hasUnsentMessages) {
+            newSize = 2;
+        } else {
+            newSize = 0;
+        }
+
+        return newSize != oldSize;
     },
 
     // return suitable content for the image on the left of the status bar.
