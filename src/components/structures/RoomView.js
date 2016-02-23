@@ -418,14 +418,6 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.onResize);
         this.onResize();
 
-        if (this.refs.roomView) {
-            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
-            roomView.addEventListener('drop', this.onDrop);
-            roomView.addEventListener('dragover', this.onDragOver);
-            roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
-            roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
-        }
-
         this._updateTabCompleteList();
 
         // XXX: EVIL HACK to autofocus inviting on empty rooms.
@@ -450,6 +442,18 @@ module.exports = React.createClass({
             )
         );
     }, 500),
+
+    componentDidUpdate: function() {
+        if (this.refs.roomView) {
+            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            if (!roomView.ondrop) {
+                roomView.addEventListener('drop', this.onDrop);
+                roomView.addEventListener('dragover', this.onDragOver);
+                roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
+                roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
+            }
+        }
+    },
 
     onSearchResultsFillRequest: function(backwards) {
         if (!backwards)
