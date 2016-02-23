@@ -381,7 +381,16 @@ module.exports = React.createClass({
                 var modal = Modal.createDialog(Loader);
 
                 MatrixClientPeg.get().createRoom({
-                    preset: "private_chat"
+                    preset: "private_chat",
+                    initial_state: [
+                        {
+                            content: {
+                                guest_access: 'can_join'
+                            },
+                            type: 'm.room.guest_access',
+                            state_key: '',
+                        }
+                    ],
                 }).done(function(res) {
                     modal.close();
                     dis.dispatch({
