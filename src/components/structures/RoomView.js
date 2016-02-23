@@ -99,7 +99,6 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
-        MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         // xchat-style tab complete, add a colon if tab
         // completing at the start of the text
@@ -171,7 +170,6 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
-            MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
 
@@ -338,10 +336,6 @@ module.exports = React.createClass({
                 Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
         }
-    },
-
-    onRoomMemberTyping: function(ev, member) {
-        this.forceUpdate();
     },
 
     onRoomStateMember: function(ev, state, member) {
