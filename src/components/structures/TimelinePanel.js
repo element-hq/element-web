@@ -102,6 +102,9 @@ var TimelinePanel = React.createClass({
             readMarkerVisible: true,
 
             readMarkerEventId: initialReadMarker,
+
+            backPaginating: false,
+            forwardPaginating: false,
         };
     },
 
@@ -154,8 +157,12 @@ var TimelinePanel = React.createClass({
             return q(false);
         }
         debuglog("TimelinePanel: Initiating paginate; backwards:"+backwards);
+        var statekey = backwards ? 'backPaginating' : 'forwardPaginating';
+        this.setState({[statekey]: true});
+
         return this._timelineWindow.paginate(dir, PAGINATE_SIZE).then((r) => {
             debuglog("TimelinePanel: paginate complete backwards:"+backwards+"; success:"+r);
+            this.setState({[statekey]: false});
             this._onTimelineUpdated(r);
             return r;
         });
@@ -615,6 +622,8 @@ var TimelinePanel = React.createClass({
         return (
             <MessagePanel ref="messagePanel"
                     hidden={ this.props.hidden }
+                    backPaginating={ this.state.backPaginating }
+                    forwardPaginating={ this.state.forwardPaginating }
                     events={ this.state.events }
                     highlightedEventId={ this.props.highlightedEventId }
                     readMarkerEventId={ this.state.readMarkerEventId }
