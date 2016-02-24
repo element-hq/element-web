@@ -19,6 +19,19 @@ With `npm start`, any changes you make to the source files will cause a rebuild 
 your changes will show up when you refresh. This development server also disables
 caching, so do NOT use it in production.
 
+Configuring
+===========
+
+Configure the app by modifying the `config.json` file:
+
+1. `default_hs_url` is the default home server url.
+1. `default_is_url` is the default identity server url (this is the server used
+   for verifying third party identifiers like email addresses). If this is blank,
+   registering with an email address or adding an email address to your account
+   will not work.
+
+You will need to re-run `npm run build` after editing `config.json`.
+
 Deployment
 ==========
 
