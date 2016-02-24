@@ -321,9 +321,11 @@ var TimelinePanel = React.createClass({
 
         // the read-marker should become invisible, so that if the user scrolls
         // down, they don't see it.
-        this.setState({
-            readMarkerVisible: false,
-        });
+        if(this.state.readMarkerVisible) {
+            this.setState({
+                readMarkerVisible: false,
+            });
+        }
     },
 
     /* jump down to the bottom of this room, where new events are arriving
@@ -556,6 +558,12 @@ var TimelinePanel = React.createClass({
     },
 
     _setReadMarker: function(eventId, eventTs) {
+        if (TimelinePanel.roomReadMarkerMap[this.props.room.roomId] == eventId) {
+            // don't update the state (and cause a re-render) if there is
+            // no change to the RM.
+            return;
+        }
+
         // ideally we'd sync these via the server, but for now just stash them
         // in a map.
         TimelinePanel.roomReadMarkerMap[this.props.room.roomId] = eventId;
