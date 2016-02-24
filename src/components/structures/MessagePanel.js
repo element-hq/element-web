@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 var React = require('react');
+var ReactDOM = require("react-dom");
 var sdk = require('../../index');
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
@@ -34,6 +35,9 @@ module.exports = React.createClass({
 
         // event after which we should show a read marker
         readMarkerEventId: React.PropTypes.string,
+
+        // whether the read marker should be visible
+        readMarkerVisible: React.PropTypes.bool,
 
         // the userid of our user. This is used to suppress the read marker
         // for pending messages.
@@ -91,6 +95,34 @@ module.exports = React.createClass({
         return this.refs.scrollPanel.getScrollState();
     },
 
+    // returns one of:
+    //
+    //  null: there is no read marker
+    //  -1: read marker is above the window
+    //   0: read marker is within the window
+    //  +1: read marker is below the window
+    getReadMarkerPosition: function() {
+        var readMarker = this.refs.readMarkerNode;
+        var messageWrapper = this.refs.scrollPanel;
+
+        if (!readMarker || !messageWrapper) {
+            return null;
+        }
+
+        var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
+        var readMarkerRect = readMarker.getBoundingClientRect();
+
+        // the read-marker pretends to have zero height when it is actually
+        // two pixels high; +2 here to account for that.
+        if (readMarkerRect.bottom + 2 < wrapperRect.top) {
+            return -1;
+        } else if (readMarkerRect.top < wrapperRect.bottom) {
+            return 0;
+        } else {
+            return 1;
+        }
+    },
+
     /* jump to the bottom of the content.
      */
     scrollToBottom: function() {
@@ -103,7 +135,7 @@ module.exports = React.createClass({
      *
      * pixelOffset gives the number of pixels between the bottom of the node
      * and the bottom of the container. If undefined, it will put the node
-     * in the middle of the container.
+     * 1/3 of the way down of the container.
      */
     scrollToEvent: function(eventId, pixelOffset) {
         if (this.refs.scrollPanel) {
@@ -166,15 +198,17 @@ module.exports = React.createClass({
                 ret.push(<li key={eventId} data-scroll-token={eventId}/>);
             }
 
-            if (eventId == this.props.readMarkerEventId && i < lastShownEventIndex) {
-                // suppress the read marker if the next event is sent by us; this
-                // is a nonsensical and temporary situation caused by the delay between
-                // us sending a message and receiving the synthesized receipt.
-                var nextEvent = this.props.events[i+1];
-                if (nextEvent.sender && nextEvent.sender.userId != this.props.ourUserId) {
-                    ret.push(this._getReadMarkerTile());
-                    readMarkerVisible = true;
+            if (eventId == this.props.readMarkerEventId) {
+                var visible = this.props.readMarkerVisible;
+
+                // if the read marker comes at the end of the timeline, we don't want
+                // to show it, but we still want to create the <li/> for it so that the
+                // algorithms which depend on its position on the screen aren't confused.
+                if (i >= lastShownEventIndex) {
+                    visible = false;
                 }
+                ret.push(this._getReadMarkerTile(visible));
+                readMarkerVisible = visible;
             } else if (eventId == this.currentReadMarkerEventId && !this.currentGhostEventId) {
                 // there is currently a read-up-to marker at this point, but no
                 // more. Show an animation of it disappearing.
@@ -234,14 +268,16 @@ module.exports = React.createClass({
         return ret;
     },
 
-    _getReadMarkerTile: function() {
+    _getReadMarkerTile: function(visible) {
         var hr;
-        hr = <hr className="mx_RoomView_myReadMarker"
-                  style={{opacity: 1, width: '99%'}}
-            />;
+        if (visible) {
+            hr = <hr className="mx_RoomView_myReadMarker"
+                    style={{opacity: 1, width: '99%'}}
+                />;
+        }
 
         return (
-            <li key="_readupto"
+            <li key="_readupto" ref="readMarkerNode"
                   className="mx_RoomView_myReadMarker_container">
                 {hr}
             </li>
