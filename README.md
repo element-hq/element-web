@@ -23,7 +23,8 @@ Deployment
 ==========
 
 For production use, run `npm run build` to build all the necessary files
-into the `vector` directory and run your own server.
+into the `vector` directory. You can then mount the vector directory on
+your webserver to actually serve up the app, which is entirely static content.
 
 Development
 ===========
