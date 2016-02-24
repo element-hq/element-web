@@ -61,11 +61,13 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
+            whoisTypingString: WhoIsTyping.whoIsTypingString(this.props.room),
         };
     },
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
+        MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
     },
 
     componentDidUpdate: function(prevProps, prevState) {
@@ -76,8 +78,10 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
-        if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("sync", this.onSyncStateChange);
+        var client = MatrixClientPeg.get();
+        if (client) {
+            client.removeListener("sync", this.onSyncStateChange);
+            client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
         }
     },
 
@@ -87,6 +91,12 @@ module.exports = React.createClass({
         }
         this.setState({
             syncState: state
+        });
+    },
+
+    onRoomMemberTyping: function(ev, member) {
+        this.setState({
+            whoisTypingString: WhoIsTyping.whoIsTypingString(this.props.room),
         });
     },
 
@@ -235,7 +245,7 @@ module.exports = React.createClass({
             );
         }
 
-        var typingString = WhoIsTyping.whoIsTypingString(this.props.room);
+        var typingString = this.state.whoisTypingString;
         if (typingString) {
             return (
                 <div className="mx_RoomStatusBar_typingBar">
