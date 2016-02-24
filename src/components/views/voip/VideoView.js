@@ -25,6 +25,18 @@ var dis = require('../../../dispatcher');
 module.exports = React.createClass({
     displayName: 'VideoView',
 
+    propTypes: {
+        // maxHeight style attribute for the video element
+        maxHeight: React.PropTypes.number,
+
+        // a callback which is called when the user clicks on the video div
+        onClick: React.PropTypes.func,
+
+        // a callback which is called when the video element is resized due to
+        // a change in video metadata
+        onResize: React.PropTypes.func,
+    },
+
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
     },
@@ -64,7 +76,6 @@ module.exports = React.createClass({
                         element.msRequestFullscreen
                     );
                     requestMethod.call(element);
-                    this.getRemoteVideoElement().style.maxHeight = "inherit";
                 }
                 else {
                     var exitMethod = (
@@ -83,10 +94,18 @@ module.exports = React.createClass({
 
     render: function() {
         var VideoFeed = sdk.getComponent('voip.VideoFeed');
+
+        // if we're fullscreen, we don't want to set a maxHeight on the video element.
+        var fullscreenElement = (document.fullscreenElement ||
+                 document.mozFullScreenElement ||
+                 document.webkitFullscreenElement);
+        var maxVideoHeight = fullscreenElement ? null : this.props.maxHeight;
+
         return (
             <div className="mx_VideoView" ref={this.setContainer} onClick={ this.props.onClick }>
                 <div className="mx_VideoView_remoteVideoFeed">
-                    <VideoFeed ref="remote" onResize={this.props.onResize}/>
+                    <VideoFeed ref="remote" onResize={this.props.onResize}
+                        maxHeight={maxVideoHeight} />
                     <audio ref="remoteAudio"/>
                 </div>
                 <div className="mx_VideoView_localVideoFeed">                
