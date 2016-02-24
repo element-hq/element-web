@@ -328,13 +328,13 @@ module.exports = React.createClass({
 
     // pixelOffset gives the number of pixels between the bottom of the node
     // and the bottom of the container. If undefined, it will put the node
-    // in the middle of the container.
+    // 1/3 of the way down the container.
     scrollToToken: function(scrollToken, pixelOffset) {
         var scrollNode = this._getScrollNode();
 
-        // default to the middle
+        // default to 1/3 of the way down
         if (pixelOffset === undefined) {
-            pixelOffset = scrollNode.clientHeight / 2;
+            pixelOffset = (scrollNode.clientHeight * 2)/ 3;
         }
 
         // save the desired scroll state. It's important we do this here rather
