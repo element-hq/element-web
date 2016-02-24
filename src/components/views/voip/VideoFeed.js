@@ -22,6 +22,9 @@ module.exports = React.createClass({
     displayName: 'VideoFeed',
 
     propTypes: {
+        // maxHeight style attribute for the video element
+        maxHeight: React.PropTypes.number,
+
         // a callback which is called when the video element is resized
         // due to a change in video metadata
         onResize: React.PropTypes.func,
@@ -43,7 +46,7 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <video ref="vid">
+            <video ref="vid" style={{maxHeight: this.props.maxHeight}}>
             </video>
         );
     },

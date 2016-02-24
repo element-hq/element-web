@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 // TODO: This component is enormous! There's several things which could stand-alone:
-//  - Aux component
 //  - Search results component
 //  - Drag and drop
 //  - File uploading - uploadFile()
@@ -92,6 +91,8 @@ module.exports = React.createClass({
             atEndOfLiveTimeline: true,
 
             showTopUnreadMessagesBar: false,
+
+            auxPanelMaxHeight: undefined,
         }
     },
 
@@ -101,7 +102,6 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
-        MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         // xchat-style tab complete, add a colon if tab
         // completing at the start of the text
@@ -173,7 +173,6 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
-            MatrixClientPeg.get().removeListener("RoomMember.typing", this.onRoomMemberTyping);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
 
@@ -340,10 +339,6 @@ module.exports = React.createClass({
                 Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
         }
-    },
-
-    onRoomMemberTyping: function(ev, member) {
-        this.forceUpdate();
     },
 
     onRoomStateMember: function(ev, state, member) {
@@ -878,14 +873,6 @@ module.exports = React.createClass({
         });
     },
 
-    onConferenceNotificationClick: function() {
-        dis.dispatch({
-            action: 'place_call',
-            type: "video",
-            room_id: this.props.roomId
-        });
-    },
-
     // jump down to the bottom of this room, where new events are arriving
     jumpToLiveTimeline: function() {
         this.refs.messagePanel.jumpToLiveTimeline();
@@ -983,25 +970,10 @@ module.exports = React.createClass({
         // but it's better than the video going missing entirely
         if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
-        if (this.refs.callView) {
-            var fullscreenElement =
-                (document.fullscreenElement ||
-                 document.mozFullScreenElement ||
-                 document.webkitFullscreenElement);
-            if (!fullscreenElement) {
-                var video = this.refs.callView.getVideoView().getRemoteVideoElement();
-                video.style.maxHeight = auxPanelMaxHeight + "px";
-            }
-        }
-
-        // we need to do this for general auxPanels too
-        if (this.refs.auxPanel) {
-            this.refs.auxPanel.style.maxHeight = auxPanelMaxHeight + "px";
-        }
-
-        // the above might have made the aux panel resize itself, so now
-        // we need to tell the gemini panel to adapt.
-        this.onChildResize();
+        // we may need to resize the gemini panel after changing the aux panel
+        // size, so add a callback to onChildResize.
+        this.setState({auxPanelMaxHeight: auxPanelMaxHeight},
+                      this.onChildResize);
     },
 
     onFullscreenClick: function() {
@@ -1035,11 +1007,6 @@ module.exports = React.createClass({
         });
     },
 
-    onCallViewResize: function() {
-        this.onChildResize();
-        this.onResize();
-    },
-
     onChildResize: function() {
         // When the video, status bar, or the message composer resizes, the
         // scroll panel also changes size.  Work around GeminiScrollBar fail by
@@ -1062,8 +1029,8 @@ module.exports = React.createClass({
     render: function() {
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         var MessageComposer = sdk.getComponent('rooms.MessageComposer');
-        var CallView = sdk.getComponent("voip.CallView");
         var RoomSettings = sdk.getComponent("rooms.RoomSettings");
+        var AuxPanel = sdk.getComponent("rooms.AuxPanel");
         var SearchBar = sdk.getComponent("rooms.SearchBar");
         var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
@@ -1206,28 +1173,16 @@ module.exports = React.createClass({
             );
         }
 
-        var conferenceCallNotification = null;
-        if (this.state.displayConfCallNotification) {
-            var supportedText;
-            if (!MatrixClientPeg.get().supportsVoip()) {
-                supportedText = " (unsupported)";
-            }
-            conferenceCallNotification = (
-                <div className="mx_RoomView_ongoingConfCallNotification" onClick={this.onConferenceNotificationClick}>
-                    Ongoing conference call {supportedText}
-                </div>
-            );
-        }
-
-        var fileDropTarget = null;
-        if (this.state.draggingFile) {
-            fileDropTarget = <div className="mx_RoomView_fileDropTarget">
-                                <div className="mx_RoomView_fileDropTargetLabel" title="Drop File Here">
-                                    <TintableSvg src="img/upload-big.svg" width="45" height="59"/><br/>
-                                    Drop file here to upload
-                                </div>
-                             </div>;
-        }
+        var auxPanel = (
+            <AuxPanel ref="auxPanel" room={this.state.room}
+              conferenceHandler={this.props.ConferenceHandler}
+              draggingFile={this.state.draggingFile}
+              displayConfCallNotification={this.state.displayConfCallNotification}
+              maxHeight={this.state.auxPanelMaxHeight}
+              onCallViewVideoRezize={this.onChildResize} >
+                { aux }
+            </AuxPanel>
+        );
 
         var messageComposer, searchInfo;
         var canSpeak = (
@@ -1345,13 +1300,7 @@ module.exports = React.createClass({
                     onLeaveClick={
                         (myMember && myMember.membership === "join") ? this.onLeaveClick : null
                     } />
-                <div className="mx_RoomView_auxPanel" ref="auxPanel">
-                    { fileDropTarget }    
-                    <CallView ref="callView" room={this.state.room} ConferenceHandler={this.props.ConferenceHandler}
-                        onResize={this.onCallViewResize} />
-                    { conferenceCallNotification }
-                    { aux }
-                </div>
+                { auxPanel }
                 { topUnreadMessagesBar }
                 { messagePanel }
                 { searchResultsPanel }
