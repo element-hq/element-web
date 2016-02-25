@@ -14,5 +14,8 @@ npm install ./node_modules/matrix-js-sdk-*.tgz
 # install the other dependencies
 npm install
 
+# delete the old tarball, if it exists
+rm -f matrix-react-sdk-*.tgz
+
 # build our tarball
 npm pack
