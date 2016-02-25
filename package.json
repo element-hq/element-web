@@ -17,7 +17,7 @@
     "build": "babel src -d lib --source-maps",
     "start": "babel src -w -d lib --source-maps",
     "clean": "rimraf lib",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build; git rev-parse HEAD > git-revision.txt"
   },
   "dependencies": {
     "classnames": "^2.1.2",

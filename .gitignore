@@ -1,2 +1,6 @@
-node_modules
-lib
+/node_modules
+/lib
+
+# version file and tarball created by 'npm pack'
+/git-revision.txt
+/matrix-react-sdk-*.tgz
