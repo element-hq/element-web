@@ -113,6 +113,7 @@ var TimelinePanel = React.createClass({
 
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
+        MatrixClientPeg.get().on("Room.timelineReset", this.onRoomTimelineReset);
         MatrixClientPeg.get().on("Room.redaction", this.onRoomRedaction);
 
         this._initTimeline(this.props);
@@ -142,6 +143,7 @@ var TimelinePanel = React.createClass({
         var client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("Room.timeline", this.onRoomTimeline);
+            client.removeListener("Room.timelineReset", this.onRoomTimelineReset);
             client.removeListener("Room.redaction", this.onRoomRedaction);
         }
     },
@@ -232,6 +234,14 @@ var TimelinePanel = React.createClass({
         //
         if (this.refs.messagePanel) {
             this.refs.messagePanel.checkFillState();
+        }
+    },
+
+    onRoomTimelineReset: function(room) {
+        if (room !== this.props.room) return;
+
+        if (this.refs.messagePanel && this.refs.messagePanel.isAtBottom()) {
+            this._loadTimeline();
         }
     },
 
