@@ -1,2 +1,5 @@
-node_modules
-lib
+/node_modules
+/lib
+
+# tarball created by 'npm pack'
+/matrix-react-sdk-*.tgz
