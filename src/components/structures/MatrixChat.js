@@ -596,7 +596,7 @@ module.exports = React.createClass({
         Presence.start();
         cli.startClient({
             pendingEventOrdering: "end",
-            initialSyncLimit: 20,
+            initialSyncLimit: this.props.config.sync_timeline_limit || 20,
         });
     },
 
