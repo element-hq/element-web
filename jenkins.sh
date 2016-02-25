@@ -21,7 +21,7 @@ npm run build
 # gzip up ./vector
 rm vector-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
 
-REACT_SHA=$(head -c 12 node_modules/matrix-react-sdk/version.txt)
-JSSDK_SHA=$(head -c 12 node_modules/matrix-js-sdk/version.txt)
+REACT_SHA=$(head -c 12 node_modules/matrix-react-sdk/git-revision.txt)
+JSSDK_SHA=$(head -c 12 node_modules/matrix-js-sdk/git-revision.txt)
 VECTOR_SHA=$(git rev-parse --short=12 HEAD) # use the ACTUAL SHA rather than assume develop
 tar -zcvhf vector-$VECTOR_SHA-react-$REACT_SHA-js-$JSSDK_SHA.tar.gz vector #g[z]ip, [c]reate archive, [v]erbose, [f]ilename, [h]ard-dereference (do not archive symlinks)
