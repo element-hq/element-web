@@ -101,9 +101,11 @@ module.exports = React.createClass({
 
     _getInitialLetter: function() {
         var name = this.props.name;
-        var initial = name[0];
+        //For large characters (exceeding 2 bytes), this function will get the correct character.
+        //However, this does NOT get the second character correctly if a large character is before it.
+        var initial = String.fromCodePoint(name.codePointAt(0));
         if ((initial === '@' || initial === '#') && name[1]) {
-            initial = name[1];
+            initial = String.fromCodePoint(name.codePointAt(1));
         }
         return initial.toUpperCase();
     },
@@ -127,7 +129,7 @@ module.exports = React.createClass({
                         title={this.props.title} onError={this.onError}
                         width={this.props.width} height={this.props.height} />
                 </span>
-            );            
+            );
         }
         return (
             <img className="mx_BaseAvatar mx_BaseAvatar_image" src={imageUrl}
