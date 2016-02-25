@@ -127,7 +127,7 @@ module.exports = React.createClass({
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (toStartOfTimeline) return;
-        this.refreshRoomList();
+        this._delayedRefreshRoomList();
     },
 
     onRoomReceipt: function(receiptEvent, room) {
@@ -137,7 +137,7 @@ module.exports = React.createClass({
         for (var i = 0; i < receiptKeys.length; ++i) {
             var rcpt = receiptEvent.getContent()[receiptKeys[i]];
             if (rcpt['m.read'] && rcpt['m.read'][MatrixClientPeg.get().credentials.userId]) {
-                this.refreshRoomList();
+                this._delayedRefreshRoomList();
                 break;
             }
         }
