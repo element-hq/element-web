@@ -2,5 +2,5 @@
 /lib
 
 # version file and tarball created by 'npm pack'
-/version.txt
+/git-revision.txt
 /matrix-react-sdk-*.tgz
