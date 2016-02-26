@@ -439,7 +439,7 @@ var TimelinePanel = React.createClass({
         // the messagePanel doesn't know where the read marker is.
         // if we know the timestamp of the read marker, make a guess based on that.
         var rmTs = TimelinePanel.roomReadMarkerTsMap[this.props.room.roomId];
-        if (rmTs && this.state.events) {
+        if (rmTs && this.state.events.length > 0) {
             if (rmTs < this.state.events[0].getTs()) {
                 return -1;
             } else {
