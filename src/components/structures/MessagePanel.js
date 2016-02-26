@@ -27,6 +27,14 @@ module.exports = React.createClass({
         // true to give the component a 'display: none' style.
         hidden: React.PropTypes.bool,
 
+        // true to show a spinner at the top of the timeline to indicate
+        // back-pagination in progress
+        backPaginating: React.PropTypes.bool,
+
+        // true to show a spinner at the end of the timeline to indicate
+        // forward-pagination in progress
+        forwardPaginating: React.PropTypes.bool,
+
         // the list of MatrixEvents to display
         events: React.PropTypes.array.isRequired,
 
@@ -328,13 +336,24 @@ module.exports = React.createClass({
 
     render: function() {
         var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+        var Spinner = sdk.getComponent("elements.Spinner");
+        var topSpinner, bottomSpinner;
+        if (this.props.backPaginating) {
+            topSpinner = <li key="_topSpinner"><Spinner /></li>;
+        }
+        if (this.props.forwardPaginating) {
+            bottomSpinner = <li key="_bottomSpinner"><Spinner /></li>;
+        }
+
         return (
             <ScrollPanel ref="scrollPanel" className="mx_RoomView_messagePanel"
                     onScroll={ this.props.onScroll } 
                     onFillRequest={ this.props.onFillRequest }
                     style={ this.props.hidden ? { display: 'none' } : {} }
                     stickyBottom={ this.props.stickyBottom }>
+                {topSpinner}
                 {this._getEventTiles()}
+                {bottomSpinner}
             </ScrollPanel>
         );
     },
