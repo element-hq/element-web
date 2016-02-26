@@ -124,7 +124,18 @@ var TimelinePanel = React.createClass({
 
     componentWillReceiveProps: function(newProps) {
         if (newProps.room !== this.props.room) {
-            throw new Error("changing room on a TimelinePanel is not supported");
+            // throw new Error("changing room on a TimelinePanel is not supported");
+
+            // regrettably, this does happen; in particular, when joining a
+            // room with /join. In that case, there are two Rooms in
+            // circulation - one which is created by the MatrixClient.joinRoom
+            // call and used to create the RoomView, and a second which is
+            // created by the sync loop once the room comes back down the /sync
+            // pipe. Once the latter happens, our room is replaced with the new one.
+            //
+            // for now, just warn about this. But we're going to end up paginating
+            // both rooms separately, and it's all bad.
+            console.warn("Replacing room on a TimelinePanel - confusion may ensue");
         }
 
         if (newProps.eventId != this.props.eventId) {
