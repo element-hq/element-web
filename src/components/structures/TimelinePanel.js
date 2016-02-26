@@ -459,29 +459,33 @@ var TimelinePanel = React.createClass({
      * returns a promise which will resolve when the load completes.
      */
     _loadTimeline: function(eventId, pixelOffset) {
-        // TODO: we could optimise this, by not resetting the window if the
-        // event is in the current window (though it's not obvious how we can
-        // tell if the current window is on the live event stream)
+        this._timelineWindow = new Matrix.TimelineWindow(
+            MatrixClientPeg.get(), this.props.room,
+            {windowLimit: TIMELINE_CAP});
+
+        var prom = this._timelineWindow.load(eventId, INITIAL_SIZE);
 
         this.setState({
             events: [],
             timelineLoading: true,
         });
 
-        this._timelineWindow = new Matrix.TimelineWindow(
-            MatrixClientPeg.get(), this.props.room,
-            {windowLimit: TIMELINE_CAP});
+        // if we already have the event in question, TimelineWindow.load
+        // returns a resolved promise.
+        //
+        // In this situation, we don't really want to defer the update of the
+        // state to the next event loop, because it makes room-switching feel
+        // quite slow. So we detect that situation and shortcut straight to
+        // calling _onTimelineUpdated and updating the state.
 
-        return this._timelineWindow.load(eventId, INITIAL_SIZE).then(() => {
-            debuglog("TimelinePanel: timeline loaded");
+        var onLoaded = () => {
             this._onTimelineUpdated(true);
-        }).finally(() => {
-            this.setState({
-                timelineLoading: false,
-            }, () => {
+
+            this.setState({timelineLoading: false}, () => {
                 // initialise the scroll state of the message panel
                 if (!this.refs.messagePanel) {
-                    // this shouldn't happen.
+                    // this shouldn't happen - _onTimelineUpdated checks we're
+                    // mounted, and timelineLoading is now false.
                     console.log("can't initialise scroll state because " +
                                 "messagePanel didn't load");
                     return;
@@ -495,7 +499,15 @@ var TimelinePanel = React.createClass({
                 this.sendReadReceipt();
                 this.updateReadMarker();
             });
-        });
+        };
+
+        if (prom.isPending()) {
+            prom = prom.then(onLoaded);
+        } else {
+            onLoaded();
+        }
+
+        prom.done();
     },
 
     _onTimelineUpdated: function(gotResults) {
