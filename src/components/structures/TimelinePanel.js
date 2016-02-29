@@ -174,6 +174,8 @@ var TimelinePanel = React.createClass({
         this.setState({[statekey]: true});
 
         return this._timelineWindow.paginate(dir, PAGINATE_SIZE).then((r) => {
+            if (this.unmounted) { return; }
+
             debuglog("TimelinePanel: paginate complete backwards:"+backwards+"; success:"+r);
             this.setState({[statekey]: false});
             this._onTimelineUpdated(r);
