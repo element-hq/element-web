@@ -23,8 +23,9 @@ module.exports = React.createClass({
     displayName: 'CallView',
 
     propTypes: {
-        // js-sdk room object
-        room: React.PropTypes.object.isRequired,
+        // js-sdk room object. If set, we will only show calls for the given
+        // room; if not, we will show any active call.
+        room: React.PropTypes.object,
 
         // A Conference Handler implementation
         // Must have a function signature:
@@ -44,7 +45,7 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.showCall(this.props.room.roomId);
+        this.showCall();
     },
 
     componentWillUnmount: function() {
@@ -54,20 +55,27 @@ module.exports = React.createClass({
     onAction: function(payload) {
         // don't filter out payloads for room IDs other than props.room because
         // we may be interested in the conf 1:1 room
-        if (payload.action !== 'call_state' || !payload.room_id) {
+        if (payload.action !== 'call_state') {
             return;
         }
-        this.showCall(payload.room_id);
+        this.showCall();
     },
 
-    showCall: function(roomId) {
-        var call = (
-            CallHandler.getCallForRoom(roomId) ||
-            (this.props.ConferenceHandler ?
-                this.props.ConferenceHandler.getConferenceCallForRoom(roomId) :
-                null
-            )
-        );
+    showCall: function() {
+        var call;
+
+        if (this.props.room) {
+            var roomId = this.props.room.roomId;
+            call = CallHandler.getCallForRoom(roomId) ||
+                (this.props.ConferenceHandler ?
+                 this.props.ConferenceHandler.getConferenceCallForRoom(roomId) :
+                 null
+                );
+        }
+        else {
+            call = CallHandler.getAnyActiveCall();
+        }
+
         if (call) {
             call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
             call.setRemoteVideoElement(this.getVideoView().getRemoteVideoElement());
