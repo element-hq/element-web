@@ -38,13 +38,23 @@ var PushRuleVectorState = {
 };
 
 
-var ACTION_NOTIFY = [ "notify" ];
+var ACTION_NOTIFY = [
+    "notify",
+    {
+        "set_tweak": "highlight",
+        "value": false
+    }
+];
 
 var ACTION_NOTIFY_DEFAULT_SOUND = [
     "notify",
     {
         "set_tweak": "sound",
         "value": "default"
+    },
+    {
+        "set_tweak": "highlight",
+        "value": false
     }
 ];
 
@@ -53,6 +63,10 @@ var ACTION_NOTIFY_RING_SOUND = [
     {
         "set_tweak": "sound",
         "value": "ring"
+    },
+    {
+        "set_tweak": "highlight",
+        "value": false
     }
 ];
 
@@ -87,7 +101,7 @@ var VectorPushRulesDefinitions = {
         description: "Messages containing my name",
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
             on: ACTION_NOTIFY,
-            loud: ACTION_HIGHLIGHT_DEFAULT,
+            loud: ACTION_HIGHLIGHT_DEFAULT_SOUND,
             off: ACTION_DISABLED
         }
     },
@@ -106,7 +120,7 @@ var VectorPushRulesDefinitions = {
     // Messages just sent to a group chat room
     // 1:1 room messages are catched by the .m.rule.room_one_to_one rule if any defined
     // By opposition, all other room messages are from group chat rooms.
-    ".m.rule.room_message": {
+    ".m.rule.message": {
         kind: "underride",
         description: "Messages in group chats",
         vectorStateToActions: {
@@ -266,10 +280,10 @@ module.exports = React.createClass({
     
     _actionsFor: function(pushRuleVectorState) {
         if (pushRuleVectorState === PushRuleVectorState.ON) {
-            return ACTIONS_NOTIFY;
+            return ACTION_NOTIFY;
         }
         else if (pushRuleVectorState === PushRuleVectorState.LOUD) {
-            return ACTIONS_HIGHLIGHT_DEFAULT_SOUND;
+            return ACTION_HIGHLIGHT_DEFAULT_SOUND;
         }
     },
     
@@ -311,9 +325,9 @@ module.exports = React.createClass({
             var ruleDefinition = VectorPushRulesDefinitions[rule.vectorRuleId];
 
             if (rule.rule) {
-                var actions = ruleDefinition.vectorStateToActions(newPushRuleVectorState);
+                var actions = ruleDefinition.vectorStateToActions[newPushRuleVectorState];
 
-                if (actions === ACTIONS_DISABLED) {
+                if (actions === ACTION_DISABLED) {
                     // The new state corresponds to disabling the rule.
                     deferreds.push(cli.setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, false));
                 }
@@ -648,11 +662,11 @@ module.exports = React.createClass({
                 '.m.rule.contains_display_name',
                 '_keywords',
                 '.m.rule.room_one_to_one',
-                '.m.rule.room_message',
+                '.m.rule.message',
                 '.m.rule.invite_for_me',
                 //'im.vector.rule.member_event',
                 '.m.rule.call',
-                '.m.rule.notices'
+                '.m.rule.suppress_notices'
             ];
             for (var i in vectorRuleIds) {
                 var vectorRuleId = vectorRuleIds[i];
@@ -678,7 +692,7 @@ module.exports = React.createClass({
                             var state = PushRuleVectorState[stateKey];
                             var vectorStateToActions = ruleDefinition.vectorStateToActions[state];
 
-                            if (vectorStateToActions === ACTIONS_DISABLED) {
+                            if (vectorStateToActions === ACTION_DISABLED) {
                                 // No defined actions means that this vector state expects a disabled default hs rule
                                 if (rule.enabled === false) {
                                     vectorState = state;
