@@ -229,6 +229,8 @@ var TimelinePanel = React.createClass({
 
         if (!this.refs.messagePanel) return;
 
+        if (!this.refs.messagePanel.getScrollState().stuckAtBottom) return;
+
         // when a new event arrives when the user is not watching the window, but the
         // window is in its auto-scroll mode, make sure the read marker is visible.
         //
@@ -242,19 +244,21 @@ var TimelinePanel = React.createClass({
         var myUserId = MatrixClientPeg.get().credentials.userId;
         var sender = ev.sender ? ev.sender.userId : null;
         var activity_age = Date.now() - this.user_last_active;
-        if (sender != myUserId && this.refs.messagePanel.getScrollState().stuckAtBottom
-                && activity_age > CONSIDER_USER_ACTIVE_FOR_MS) {
+        if (sender != myUserId && activity_age > CONSIDER_USER_ACTIVE_FOR_MS) {
             this.setState({readMarkerVisible: true});
         }
 
-        // tell the messagepanel to go paginate itself. This in turn will cause
-        // onMessageListFillRequest to be called, which will call
-        // _onTimelineUpdated, which will update the state with the new event -
-        // so there is no need update the state here.
+        // tell the timeline window to try to advance itself, but not to make
+        // an http request to do so.
         //
-        if (this.refs.messagePanel) {
-            this.refs.messagePanel.checkFillState();
-        }
+        // we deliberately avoid going via the ScrollPanel for this call - the
+        // ScrollPanel might already have an active pagination promise, which
+        // will fail, but would stop us passing the pagination request to the
+        // timeline window. 
+        //
+        // see https://github.com/vector-im/vector-web/issues/1035
+        this._timelineWindow.paginate(EventTimeline.FORWARDS, 1, false)
+            .done(this._onTimelineUpdated);
     },
 
     onRoomTimelineReset: function(room) {
