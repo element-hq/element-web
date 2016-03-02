@@ -453,7 +453,7 @@ module.exports = React.createClass({
     //
     // eventId is optional and will cause a switch to the context of that
     // particular event.
-    // @param {Object} room_oob_data Object of additional data about the room
+    // @param {Object} roomOobData Object of additional data about the room
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
     _viewRoom: function(roomId, showSettings, eventId, invite_sign_url, oob_data) {
