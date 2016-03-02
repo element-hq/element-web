@@ -1308,7 +1308,7 @@ module.exports = React.createClass({
         return (
             <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") } ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
-                    oobData={this.state.oobData}
+                    oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}
