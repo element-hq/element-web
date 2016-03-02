@@ -233,7 +233,7 @@ module.exports = React.createClass({
                 if (this.props.oobData && this.props.oobData.name) {
                     roomName = this.props.oobData.name;
                 } else if (this.props.room) {
-                    this.props.room.name;
+                    roomName = this.props.room.name;
                 }
 
                 name =
