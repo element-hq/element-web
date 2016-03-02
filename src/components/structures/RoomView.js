@@ -63,6 +63,9 @@ module.exports = React.createClass({
         // but has been passed out-of-band, eg. the room name and avatar URL
         // from an email invite (a workaround for the fact that we can't
         // get this information from the HS using an email invite).
+        // Fields:
+        //  * name (string) The room's name
+        //  * avatarUrl (string) The mxc:// avatar URL for the room
         oobData: React.PropTypes.object,
 
         // id of an event to jump to. If not given, will go to the end of the
