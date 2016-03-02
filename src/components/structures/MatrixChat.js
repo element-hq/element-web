@@ -561,7 +561,7 @@ module.exports = React.createClass({
                     room_alias: self.starting_room_alias,
                     event_id: self.starting_event_id,
                     invite_sign_url: self.starting_room_invite_sign_url,
-                    room_oob_data: self.starting_room_oob_data,
+                    oob_data: self.starting_room_oob_data,
                 });
                 delete self.starting_room_alias;
                 delete self.starting_event_id;
