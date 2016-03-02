@@ -66,6 +66,8 @@ module.exports = React.createClass({
         // Fields:
         //  * name (string) The room's name
         //  * avatarUrl (string) The mxc:// avatar URL for the room
+        //  * inviterName (string) The display name of the person who
+        //  *                      invited us tovthe room
         oobData: React.PropTypes.object,
 
         // id of an event to jump to. If not given, will go to the end of the
