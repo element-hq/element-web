@@ -66,6 +66,10 @@ module.exports = React.createClass({
     },
 
     showRoom: function(roomId) {
+        // extract the metadata from the publicRooms structure to pass
+        // as out-of-band data to view_room, because we get information
+        // here that we can't get other than by joining the room in some
+        // cases.
         var room;
         for (var i = 0; i < this.state.publicRooms.length; ++i) {
             if (this.state.publicRooms[i].room_id == roomId) {
