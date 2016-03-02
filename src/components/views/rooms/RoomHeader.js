@@ -68,22 +68,6 @@ module.exports = React.createClass({
         }
     },
 
-    onVideoClick: function(e) {
-        dis.dispatch({
-            action: 'place_call',
-            type: e.shiftKey ? "screensharing" : "video",
-            room_id: this.props.room.roomId
-        });
-    },
-
-    onVoiceClick: function() {
-        dis.dispatch({
-            action: 'place_call',
-            type: "voice",
-            room_id: this.props.room.roomId
-        });
-    },
-
     onNameChanged: function(value) {
         this.setState({ name : value });
     },
