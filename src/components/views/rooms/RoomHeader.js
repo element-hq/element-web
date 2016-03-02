@@ -229,10 +229,10 @@ module.exports = React.createClass({
                     }
                 }
 
-                var roomName;
+                var roomName = 'Join Room';
                 if (this.props.oobData && this.props.oobData.name) {
                     roomName = this.props.oobData.name;
-                } else {
+                } else if (this.props.room) {
                     this.props.room.name;
                 }
 
@@ -278,7 +278,7 @@ module.exports = React.createClass({
                     </div>
                 );
             }
-            else {
+            else if (this.props.room || (this.props.oobData && this.props.oobData.name)) {
                 roomAvatar = (
                     <div onClick={this.props.onSettingsClick}>
                         <RoomAvatar room={this.props.room} width={48} height={48} oobData={this.props.oobData} />
