@@ -365,7 +365,7 @@ module.exports = React.createClass({
                         room_id: result.room_id,
                         event_id: payload.event_id,
                         invite_sign_url: payload.invite_sign_url,
-                        room_oob_data: payload.oob_data,
+                        oob_data: payload.oob_data,
                     });
                 });
                 break;
