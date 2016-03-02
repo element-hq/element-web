@@ -22,6 +22,9 @@ var sdk = require("../../../index");
 module.exports = React.createClass({
     displayName: 'RoomAvatar',
 
+    // Room may be left unset here, but if it is,
+    // oobData.avatarUrl should be set (else there
+    // would be nowhere to get the avatar from)
     propTypes: {
         room: React.PropTypes.object,
         oobData: React.PropTypes.object,
