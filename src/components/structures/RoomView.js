@@ -59,6 +59,17 @@ module.exports = React.createClass({
         // (given as part of the link in the invite email)
         inviteSignUrl: React.PropTypes.string,
 
+        // Any data about the room that would normally come from the Home Server
+        // but has been passed out-of-band, eg. the room name and avatar URL
+        // from an email invite (a workaround for the fact that we can't
+        // get this information from the HS using an email invite).
+        // Fields:
+        //  * name (string) The room's name
+        //  * avatarUrl (string) The mxc:// avatar URL for the room
+        //  * inviterName (string) The display name of the person who
+        //  *                      invited us tovthe room
+        oobData: React.PropTypes.object,
+
         // id of an event to jump to. If not given, will go to the end of the
         // live timeline.
         eventId: React.PropTypes.string,
@@ -1052,13 +1063,19 @@ module.exports = React.createClass({
                     );                
                 }
                 else {
+                    var inviterName = undefined;
+                    if (this.props.oobData) {
+                        inviterName = this.props.oobData.inviterName;
+                    }
+
                     return (
                         <div className="mx_RoomView">
-                            <RoomHeader ref="header" room={this.state.room} simpleHeader="Join room"/>
+                            <RoomHeader ref="header" room={this.state.room} oobData={this.props.oobData} />
                             <div className="mx_RoomView_auxPanel">
                                 <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
                                                 canJoin={ true } canPreview={ false }
                                                 spinner={this.state.joining}
+                                                inviterName={inviterName}
                                 />
                             </div>
                             <div className="mx_RoomView_messagePanel"></div>
@@ -1293,6 +1310,7 @@ module.exports = React.createClass({
         return (
             <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") } ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
+                    oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}

@@ -33,6 +33,7 @@ module.exports = React.createClass({
 
     propTypes: {
         room: React.PropTypes.object,
+        oobData: React.PropTypes.object,
         editing: React.PropTypes.bool,
         onSettingsClick: React.PropTypes.func,
         onSaveClick: React.PropTypes.func,
@@ -217,18 +218,27 @@ module.exports = React.createClass({
                 }
 
                 // XXX: this is a bit inefficient - we could just compare room.name for 'Empty room'...
-                var members = this.props.room.getJoinedMembers();
                 var settingsHint = false;
-                if (members.length === 1 && members[0].userId === MatrixClientPeg.get().credentials.userId) {
-                    var name = this.props.room.currentState.getStateEvents('m.room.name', '');
-                    if (!name || !name.getContent().name) {
-                        settingsHint = true;
+                var members = this.props.room ? this.props.room.getJoinedMembers() : undefined;
+                if (members) {
+                    if (members.length === 1 && members[0].userId === MatrixClientPeg.get().credentials.userId) {
+                        var name = this.props.room.currentState.getStateEvents('m.room.name', '');
+                        if (!name || !name.getContent().name) {
+                            settingsHint = true;
+                        }
                     }
+                }
+
+                var roomName = 'Join Room';
+                if (this.props.oobData && this.props.oobData.name) {
+                    roomName = this.props.oobData.name;
+                } else if (this.props.room) {
+                    roomName = this.props.room.name;
                 }
 
                 name =
                     <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                        <div className={ "mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "") } title={ this.props.room.name }>{ this.props.room.name }</div>
+                        <div className={ "mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "") } title={ roomName }>{ roomName }</div>
                         { searchStatus }
                         <div className="mx_RoomHeader_settingsButton" title="Settings">
                             <TintableSvg src="img/settings.svg" width="12" height="12"/>
@@ -246,36 +256,34 @@ module.exports = React.createClass({
                          onValueChanged={ this.onTopicChanged }
                          initialValue={ this.state.topic }/>
             } else {
-                var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
+                var topic = this.props.room ? this.props.room.currentState.getStateEvents('m.room.topic', '') : '';
                 if (topic) topic_el = <div className="mx_RoomHeader_topic" ref="topic" title={ topic.getContent().topic }>{ topic.getContent().topic }</div>;
             }
 
             var roomAvatar = null;
-            if (this.props.room) {
-                if (can_set_room_avatar) {
-                    roomAvatar = (
-                        <div className="mx_RoomHeader_avatarPicker">
-                            <div onClick={ this.onAvatarPickerClick }>
-                                <ChangeAvatar ref="changeAvatar" room={this.props.room} showUploadSection={false} width={48} height={48} />
-                            </div>
-                            <div className="mx_RoomHeader_avatarPicker_edit">
-                                <label htmlFor="avatarInput" ref="file_label">
-                                    <img src="img/camera.svg"
-                                        alt="Upload avatar" title="Upload avatar"
-                                        width="17" height="15" />
-                                </label>
-                                <input id="avatarInput" type="file" onChange={ this.onAvatarSelected }/>
-                            </div>
+            if (can_set_room_avatar) {
+                roomAvatar = (
+                    <div className="mx_RoomHeader_avatarPicker">
+                        <div onClick={ this.onAvatarPickerClick }>
+                            <ChangeAvatar ref="changeAvatar" room={this.props.room} showUploadSection={false} width={48} height={48} />
                         </div>
-                    );
-                }
-                else {
-                    roomAvatar = (
-                        <div onClick={this.props.onSettingsClick}>
-                            <RoomAvatar room={this.props.room} width={48} height={48}/>
+                        <div className="mx_RoomHeader_avatarPicker_edit">
+                            <label htmlFor="avatarInput" ref="file_label">
+                                <img src="img/camera.svg"
+                                    alt="Upload avatar" title="Upload avatar"
+                                    width="17" height="15" />
+                            </label>
+                            <input id="avatarInput" type="file" onChange={ this.onAvatarSelected }/>
                         </div>
-                    );
-                }
+                    </div>
+                );
+            }
+            else if (this.props.room || (this.props.oobData && this.props.oobData.name)) {
+                roomAvatar = (
+                    <div onClick={this.props.onSettingsClick}>
+                        <RoomAvatar room={this.props.room} width={48} height={48} oobData={this.props.oobData} />
+                    </div>
+                );
             }
 
             var leave_button;

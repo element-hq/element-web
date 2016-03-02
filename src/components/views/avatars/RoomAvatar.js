@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require('react');
+var ContentRepo = require("matrix-js-sdk").ContentRepo;
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Avatar = require('../../../Avatar');
 var sdk = require("../../../index");
@@ -21,8 +22,12 @@ var sdk = require("../../../index");
 module.exports = React.createClass({
     displayName: 'RoomAvatar',
 
+    // Room may be left unset here, but if it is,
+    // oobData.avatarUrl should be set (else there
+    // would be nowhere to get the avatar from)
     propTypes: {
-        room: React.PropTypes.object.isRequired,
+        room: React.PropTypes.object,
+        oobData: React.PropTypes.object,
         width: React.PropTypes.number,
         height: React.PropTypes.number,
         resizeMethod: React.PropTypes.string
@@ -32,7 +37,8 @@ module.exports = React.createClass({
         return {
             width: 36,
             height: 36,
-            resizeMethod: 'crop'
+            resizeMethod: 'crop',
+            oobData: {},
         }
     },
 
@@ -50,7 +56,12 @@ module.exports = React.createClass({
 
     getImageUrls: function(props) {
         return [
-            this.getRoomAvatarUrl(props), // highest priority
+            ContentRepo.getHttpUriForMxc(
+                MatrixClientPeg.get().getHomeserverUrl(),
+                props.oobData.avatarUrl,
+                props.width, props.height, props.resizeMethod
+            ), // highest priority
+            this.getRoomAvatarUrl(props),
             this.getOneToOneAvatar(props),
             this.getFallbackAvatar(props) // lowest priority
         ].filter(function(url) {
@@ -59,6 +70,8 @@ module.exports = React.createClass({
     },
 
     getRoomAvatarUrl: function(props) {
+        if (!this.props.room) return null;
+
         return props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
             props.width, props.height, props.resizeMethod,
@@ -67,6 +80,8 @@ module.exports = React.createClass({
     },
 
     getOneToOneAvatar: function(props) {
+        if (!this.props.room) return null;
+
         var mlist = props.room.currentState.members;
         var userIds = [];
         // for .. in optimisation to return early if there are >2 keys
@@ -103,14 +118,20 @@ module.exports = React.createClass({
     },
 
     getFallbackAvatar: function(props) {
+        if (!this.props.room) return null;
+
         return Avatar.defaultAvatarUrlForString(props.room.roomId);
     },
 
     render: function() {
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+
+        var roomName = this.props.room ? this.props.room.name : this.props.oobData.name;
+
         return (
-            <BaseAvatar {...this.props} name={this.props.room.name}
-                idName={this.props.room.roomId} urls={this.state.urls} />
+            <BaseAvatar {...this.props} name={roomName}
+                idName={this.props.room ? this.props.room.roomId : null}
+                urls={this.state.urls} />
         );
     }
 });

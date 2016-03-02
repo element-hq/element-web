@@ -312,7 +312,10 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_room':
-                this._viewRoom(payload.room_id, payload.show_settings, payload.event_id, payload.invite_sign_url);
+                this._viewRoom(
+                    payload.room_id, payload.show_settings, payload.event_id,
+                    payload.invite_sign_url, payload.oob_data
+                );
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -350,6 +353,7 @@ module.exports = React.createClass({
                         room_id: foundRoom.roomId,
                         event_id: payload.event_id,
                         invite_sign_url: payload.invite_sign_url,
+                        oob_data: payload.oob_data,
                     });
                     return;
                 }
@@ -361,6 +365,7 @@ module.exports = React.createClass({
                         room_id: result.room_id,
                         event_id: payload.event_id,
                         invite_sign_url: payload.invite_sign_url,
+                        oob_data: payload.oob_data,
                     });
                 });
                 break;
@@ -448,7 +453,10 @@ module.exports = React.createClass({
     //
     // eventId is optional and will cause a switch to the context of that
     // particular event.
-    _viewRoom: function(roomId, showSettings, eventId, invite_sign_url) {
+    // @param {Object} oob_data Object of additional data about the room
+    //                               that has been passed out-of-band (eg.
+    //                               room name and avatar from an invite email)
+    _viewRoom: function(roomId, showSettings, eventId, invite_sign_url, oob_data) {
         // before we switch room, record the scroll state of the current room
         this._updateScrollMap();
 
@@ -461,6 +469,7 @@ module.exports = React.createClass({
             initialEventPixelOffset: undefined,
             page_type: this.PageTypes.RoomView,
             inviteSignUrl: invite_sign_url,
+            roomOobData: oob_data,
         };
 
         // if we aren't given an explicit event id, look for one in the
@@ -552,10 +561,12 @@ module.exports = React.createClass({
                     room_alias: self.starting_room_alias,
                     event_id: self.starting_event_id,
                     invite_sign_url: self.starting_room_invite_sign_url,
+                    oob_data: self.starting_room_oob_data,
                 });
                 delete self.starting_room_alias;
                 delete self.starting_event_id;
                 delete self.starting_room_invite_sign_url;
+                delete self.starting_room_oob_data;
             } else if (!self.state.page_type) {
                 if (!self.state.currentRoom) {
                     var firstRoom = null;
@@ -675,6 +686,13 @@ module.exports = React.createClass({
             var segments = screen.substring(5).split('/');
             var roomString = segments[0];
             var eventId = segments[1]; // undefined if no event id given
+
+            var oob_data = {
+                name: params.room_name,
+                avatarUrl: params.room_avatar_url,
+                inviterName: params.inviter_name,
+            };
+
             if (roomString[0] == '#') {
                 if (this.state.logged_in) {
                     dis.dispatch({
@@ -682,11 +700,16 @@ module.exports = React.createClass({
                         room_alias: roomString,
                         event_id: eventId,
                         invite_sign_url: params.signurl,
+                        oob_data: oob_data,
                     });
                 } else {
                     // Okay, we'll take you here soon...
+                    // XXX: There are way too many of these:
+                    // It would probably be better to handle whether the SDK is
+                    // ready or not in the view_room_alias handler instead.
                     this.starting_room_alias = roomString;
                     this.starting_room_invite_sign_url = params.signurl;
+                    this.starting_room_oob_data = oob_data;
                     this.starting_event_id = eventId;
                     // ...but you're still going to have to log in.
                     this.notifyNewScreen('login');
@@ -697,6 +720,7 @@ module.exports = React.createClass({
                     room_id: roomString,
                     event_id: eventId,
                     invite_sign_url: params.signurl,
+                    oob_data: oob_data,
                 });
             }
         }
@@ -884,6 +908,7 @@ module.exports = React.createClass({
                             roomId={this.state.currentRoom}
                             eventId={this.state.initialEventId}
                             inviteSignUrl={this.state.inviteSignUrl}
+                            oobData={this.state.roomOobData}
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}
                             key={this.state.currentRoom}
