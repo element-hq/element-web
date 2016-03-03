@@ -46,8 +46,9 @@ module.exports = React.createClass({
                 </p>
                 <p>
                 Please install <a href="https://www.google.com/chrome">Chrome</a> for
-                the best experience. <a href="https://getfirefox.com">Firefox</a> and
-                <a href="http://apple.com/safari">Safari</a> work too.
+                the best experience. <a href="https://getfirefox.com">Firefox</a>,
+                <a href="http://apple.com/safari">Safari</a> and
+                <a href="http://opera.com">Opera</a> work too.
                 </p>
                 <p>
                 With your current browser, the look and feel of the application may
