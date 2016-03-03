@@ -83,15 +83,24 @@ var Notifier = {
             });
             global.focus();
         };
-        
-        /*var audioClip;
-        
-        if (audioNotification) {
-            audioClip = playAudio(audioNotification);
-        }*/
+
+        var playAudio = function() {
+            var e = document.getElementById("messageAudio");
+            if (e) {
+                e.load();
+                e.play();
+                return e;
+            }
+        };
+
+        var audioClip;
+        audioClip = playAudio();
 
         global.setTimeout(function() {
             notification.close();
+            if (audioClip) {
+                audioClip.pause();
+            }
         }, 5 * 1000);
         
     },
