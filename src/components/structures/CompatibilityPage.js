@@ -41,16 +41,19 @@ module.exports = React.createClass({
             <div className="mx_CompatibilityPage_box">
                 <p>Sorry, your browser is <b>not</b> able to run Vector.</p>
                 <p>
-                Buttons and images may appear out of place, communication may
-                not be possible and all manner of chaos may be unleashed.
+                Vector uses many advanced browser features, some of which are not
+                available or experimental in your current browser.
                 </p>
                 <p>
-                Please install <a href={"https://www.google.com/chrome"}>Chrome</a> for
-                the best experience.
+                Please install <a href="https://www.google.com/chrome">Chrome</a> for
+                the best experience. <a href="https://getfirefox.com">Firefox</a> and
+                <a href="http://apple.com/safari">Safari</a> work too.
                 </p>
                 <p>
-                Though if you like taking risks with your life, you can still try it
-                out by clicking that you understand the risks involved.
+                With your current browser, the look and feel of the application may
+                be completely incorrect, and some or all features may not function.
+                If you want to try it anyway you can continue, but you are on your own
+                in terms of any issues you may encounter!
                 </p>
                 <button onClick={this.onAccept}>
                     I understand the risks and wish to continue
