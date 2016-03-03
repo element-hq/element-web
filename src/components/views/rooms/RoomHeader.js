@@ -136,41 +136,21 @@ module.exports = React.createClass({
             var settings_button = null;
             if (this.props.editing) {
 
-                // calculate permissions.  XXX: this should be done on mount or something, and factored out with RoomSettings
-                var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
-                var events_levels = (power_levels ? power_levels.events : {}) || {};
+                // calculate permissions.  XXX: this should be done on mount or something
                 var user_id = MatrixClientPeg.get().credentials.userId;
 
-                if (power_levels) {
-                    power_levels = power_levels.getContent();
-                    var default_user_level = parseInt(power_levels.users_default || 0);
-                    var user_levels = power_levels.users || {};
-                    var current_user_level = user_levels[user_id];
-                    if (current_user_level == undefined) current_user_level = default_user_level;
-                } else {
-                    var default_user_level = 0;
-                    var user_levels = [];
-                    var current_user_level = 0;
-                }
-                var state_default = parseInt((power_levels ? power_levels.state_default : 0) || 0);
-
-                var room_avatar_level = state_default;
-                if (events_levels['m.room.avatar'] !== undefined) {
-                    room_avatar_level = events_levels['m.room.avatar'];
-                }
-                var can_set_room_avatar = current_user_level >= room_avatar_level;
-
-                var room_name_level = state_default;
-                if (events_levels['m.room.name'] !== undefined) {
-                    room_name_level = events_levels['m.room.name'];
-                }
-                var can_set_room_name = current_user_level >= room_name_level;
-
-                var room_topic_level = state_default;
-                if (events_levels['m.room.topic'] !== undefined) {
-                    room_topic_level = events_levels['m.room.topic'];
-                }
-                var can_set_room_topic = current_user_level >= room_topic_level;
+                var can_set_room_name = this.props.room.currentState.maySendStateEvent(
+                    'm.room.name', user_id
+                );
+                var can_set_room_avatar = this.props.room.currentState.maySendStateEvent(
+                    'm.room.avatar', user_id
+                );
+                var can_set_room_topic = this.props.room.currentState.maySendStateEvent(
+                    'm.room.topic', user_id
+                );
+                var can_set_room_name = this.props.room.currentState.maySendStateEvent(
+                    'm.room.name', user_id
+                );
 
                 var placeholderName = "Unnamed Room";
                 if (this.state.defaultName && this.state.defaultName !== 'Empty room') {
