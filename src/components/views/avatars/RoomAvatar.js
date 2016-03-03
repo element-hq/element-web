@@ -65,7 +65,7 @@ module.exports = React.createClass({
             this.getOneToOneAvatar(props),
             this.getFallbackAvatar(props) // lowest priority
         ].filter(function(url) {
-            return url != null;
+            return (url != null && url != "");
         });
     },
 
