@@ -282,7 +282,7 @@ module.exports = React.createClass({
             var redact_level = parseInt(power_levels.redact);
             var invite_level = parseInt(power_levels.invite || 0);
             var send_level = parseInt(power_levels.events_default || 0);
-            var state_level = parseInt(power_levels.state_default || 0);
+            var state_level = parseInt(power_levels.state_default || 50);
             var default_user_level = parseInt(power_levels.users_default || 0);
 
             if (power_levels.ban == undefined) ban_level = 50;
