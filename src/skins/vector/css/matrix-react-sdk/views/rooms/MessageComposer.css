@@ -68,6 +68,7 @@ limitations under the License.
 .mx_MessageComposer_input textarea::-moz-placeholder {
     line-height: 100%;
     color: #76cfa6;
+    opacity: 1.0;
 }
 .mx_MessageComposer_input textarea::-webkit-input-placeholder {
     color: #76cfa6;
