@@ -25,9 +25,12 @@ var GeminiScrollbar = require('react-gemini-scrollbar');
 var rate_limited_func = require('../../../ratelimitedfunc');
 
 var INITIAL_LOAD_NUM_MEMBERS = 30;
-var SHARE_HISTORY_WARNING = "Newly invited users will see the history of this room. "+
-    "If you'd prefer invited users not to see messages that were sent before they joined, "+
-    "turn off, 'Share message history with new users' in the settings for this room.";
+var SHARE_HISTORY_WARNING =
+    <span>
+        Newly invited users will see the history of this room. <br/>
+        If you'd prefer invited users not to see messages that were sent before they joined, <br/>
+        turn off, 'Share message history with new users' in the settings for this room.
+    </span>
 
 var shown_invite_warning_this_session = false;
 // global promise so people can bulk invite and they all get resolved
