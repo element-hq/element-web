@@ -57,6 +57,7 @@ limitations under the License.
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
+    background-color: #fff;
 
     /* needed for FF */
     font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
