@@ -12,7 +12,7 @@ function textForMemberEvent(ev) {
             var threePidContent = ev.getContent().third_party_invite;
             if (threePidContent) {
                 if (threePidContent.display_name) {
-                    return targetName + " accepted " + " the invitation for " +
+                    return targetName + " accepted the invitation for " +
                         threePidContent.display_name + ".";
                 } else {
                     return targetName + " accepted an invitation.";
