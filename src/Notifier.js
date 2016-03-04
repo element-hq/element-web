@@ -35,7 +35,7 @@ var Notifier = {
         return TextForEvent.textForEvent(ev);
     },
 
-    displayNotification: function(ev, room) {
+    displayNotification: function(ev, room, actions) {
         if (!global.Notification || global.Notification.permission != 'granted') {
             return;
         }
@@ -94,7 +94,9 @@ var Notifier = {
         };
 
         var audioClip;
-        audioClip = playAudio();
+        if (actions.tweaks.sound) {
+            audioClip = playAudio();
+        }
 
         global.setTimeout(function() {
             notification.close();
@@ -207,7 +209,7 @@ var Notifier = {
 
         var actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions && actions.notify) {
-            this.displayNotification(ev, room);
+            this.displayNotification(ev, room, actions);
         }
     }
 };
