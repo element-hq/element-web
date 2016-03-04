@@ -100,9 +100,6 @@ var Notifier = {
 
         global.setTimeout(function() {
             notification.close();
-            if (audioClip) {
-                audioClip.pause();
-            }
         }, 5 * 1000);
         
     },
