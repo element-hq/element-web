@@ -21,8 +21,7 @@ module.exports = React.createClass({
     displayName: 'GuestWarningBar',
 
     onRegisterClicked: function() {
-        dis.dispatch({'action': 'logout'});
-        dis.dispatch({'action': 'start_registration'});
+        dis.dispatch({'action': 'start_upgrade_registration'});
     },
  
     onLoginClicked: function() {
