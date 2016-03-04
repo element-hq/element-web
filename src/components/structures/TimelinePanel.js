@@ -27,7 +27,7 @@ var dis = require("../../dispatcher");
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
-var TIMELINE_CAP = 1000; // the most events to show in a timeline
+var TIMELINE_CAP = 250; // the most events to show in a timeline
 
 // consider that the user remains "active" for this many milliseconds after a
 // user_activity event (and thus don't make the read-marker visible on new
