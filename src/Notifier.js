@@ -35,7 +35,7 @@ var Notifier = {
         return TextForEvent.textForEvent(ev);
     },
 
-    displayNotification: function(ev, room) {
+    displayNotification: function(ev, room, actions) {
         if (!global.Notification || global.Notification.permission != 'granted') {
             return;
         }
@@ -83,12 +83,20 @@ var Notifier = {
             });
             global.focus();
         };
-        
-        /*var audioClip;
-        
-        if (audioNotification) {
-            audioClip = playAudio(audioNotification);
-        }*/
+
+        var playAudio = function() {
+            var e = document.getElementById("messageAudio");
+            if (e) {
+                e.load();
+                e.play();
+                return e;
+            }
+        };
+
+        var audioClip;
+        if (actions.tweaks.sound) {
+            audioClip = playAudio();
+        }
 
         global.setTimeout(function() {
             notification.close();
@@ -198,7 +206,7 @@ var Notifier = {
 
         var actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions && actions.notify) {
-            this.displayNotification(ev, room);
+            this.displayNotification(ev, room, actions);
         }
     }
 };
