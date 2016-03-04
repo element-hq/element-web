@@ -149,8 +149,7 @@ module.exports = React.createClass({
 
     onUpgradeClicked: function() {
         dis.dispatch({
-            //action: "start_upgrade_registration"
-            action: "start_registration" // temporary (https://github.com/vector-im/vector-web/issues/818)
+            action: "start_upgrade_registration"
         });
     },
 
