@@ -158,7 +158,6 @@ limitations under the License.
 
 .mx_RoomHeader_settingsButton {
     display: inline-block;
-    visibility: hidden;
     position: relative;
     bottom: 10px;
     left: 4px;
@@ -177,10 +176,6 @@ limitations under the License.
 
 .mx_RoomHeader_name:hover div:not(.mx_RoomHeader_editable) {
     color: #76cfa6;
-}
-
-.mx_RoomHeader_name:hover .mx_RoomHeader_settingsButton {
-    visibility: visible;
 }
 
 .mx_RoomHeader_leaveButton {
