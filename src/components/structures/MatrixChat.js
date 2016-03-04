@@ -344,6 +344,14 @@ module.exports = React.createClass({
                 }
                 break;
             case 'view_room_alias':
+                if (!this.state.logged_in) {
+                    this.starting_room_alias_payload = payload;
+                    // Login is the default screen, so we'd do this anyway,
+                    // but this will set the URL bar appropriately.
+                    dis.dispatch({ action: 'start_login' });
+                    return;
+                }
+
                 var foundRoom = MatrixTools.getRoomForAlias(
                     MatrixClientPeg.get().getRooms(), payload.room_alias
                 );
@@ -555,18 +563,9 @@ module.exports = React.createClass({
             if (state !== "PREPARED") { return; }
             self.sdkReady = true;
 
-            if (self.starting_room_alias) {
-                dis.dispatch({
-                    action: 'view_room_alias',
-                    room_alias: self.starting_room_alias,
-                    event_id: self.starting_event_id,
-                    invite_sign_url: self.starting_room_invite_sign_url,
-                    oob_data: self.starting_room_oob_data,
-                });
-                delete self.starting_room_alias;
-                delete self.starting_event_id;
-                delete self.starting_room_invite_sign_url;
-                delete self.starting_room_oob_data;
+            if (self.starting_room_alias_payload) {
+                dis.dispatch(self.starting_room_alias_payload);
+                delete self.starting_room_alias_payload;
             } else if (!self.state.page_type) {
                 if (!self.state.currentRoom) {
                     var firstRoom = null;
@@ -694,26 +693,13 @@ module.exports = React.createClass({
             };
 
             if (roomString[0] == '#') {
-                if (this.state.logged_in) {
-                    dis.dispatch({
-                        action: 'view_room_alias',
-                        room_alias: roomString,
-                        event_id: eventId,
-                        invite_sign_url: params.signurl,
-                        oob_data: oob_data,
-                    });
-                } else {
-                    // Okay, we'll take you here soon...
-                    // XXX: There are way too many of these:
-                    // It would probably be better to handle whether the SDK is
-                    // ready or not in the view_room_alias handler instead.
-                    this.starting_room_alias = roomString;
-                    this.starting_room_invite_sign_url = params.signurl;
-                    this.starting_room_oob_data = oob_data;
-                    this.starting_event_id = eventId;
-                    // ...but you're still going to have to log in.
-                    this.notifyNewScreen('login');
-                }
+                dis.dispatch({
+                    action: 'view_room_alias',
+                    room_alias: roomString,
+                    event_id: eventId,
+                    invite_sign_url: params.signurl,
+                    oob_data: oob_data,
+                });
             } else {
                 dis.dispatch({
                     action: 'view_room',
