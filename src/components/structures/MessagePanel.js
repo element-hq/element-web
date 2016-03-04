@@ -198,7 +198,10 @@ module.exports = React.createClass({
             var last = (i == lastShownEventIndex);
 
             if (wantTile) {
-                ret.push(this._getTilesForEvent(prevEvent, mxEv, last));
+                // make sure we unpack the array returned by _getTilesForEvent,
+                // otherwise react will auto-generate keys and we will end up
+                // replacing all of the DOM elements every time we paginate.
+                ret.push(...this._getTilesForEvent(prevEvent, mxEv, last));
                 prevEvent = mxEv;
             } else if (!mxEv.status) {
                 // if we aren't showing the event, put in a dummy scroll token anyway, so
