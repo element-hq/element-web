@@ -35,9 +35,15 @@ You will need to re-run `npm run build` after editing `config.json`.
 Deployment
 ==========
 
-For production use, run `npm run build` to build all the necessary files
-into the `vector` directory. You can then mount the vector directory on
-your webserver to actually serve up the app, which is entirely static content.
+On a Unix-based OS, run `npm run package` to build a tarball package.  Untaring
+this file will give a version-specific directory containing all the files that
+need to go on your web server.
+
+The package script is not supported on Windows, so Windows users can run `npm
+run build`, which will build all the necessary files into the `vector`
+directory. Note that the version of Vector will not appear in Settings without
+using the package script. You can then mount the vector directory on your
+webserver to actually serve up the app, which is entirely static content.
 
 Development
 ===========

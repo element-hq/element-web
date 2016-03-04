@@ -66,9 +66,31 @@ module.exports = React.createClass({
     },
 
     showRoom: function(roomId) {
+        // extract the metadata from the publicRooms structure to pass
+        // as out-of-band data to view_room, because we get information
+        // here that we can't get other than by joining the room in some
+        // cases.
+        var room;
+        for (var i = 0; i < this.state.publicRooms.length; ++i) {
+            if (this.state.publicRooms[i].room_id == roomId) {
+                room = this.state.publicRooms[i];
+                break;
+            }
+        }
+        var oob_data = {};
+        if (room) {
+            oob_data = {
+                avatarUrl: room.avatar_url,
+                // XXX: This logic is duplicated from the JS SDK which
+                // would normally decide what the name is.
+                name: room.name || room.aliases[0],
+            };
+        }
+
         dis.dispatch({
             action: 'view_room',
-            room_id: roomId
+            room_id: roomId,
+            oob_data: oob_data,
         });
     },
 

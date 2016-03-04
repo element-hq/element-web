@@ -207,4 +207,5 @@ input[type=text]:focus, textarea:focus {
     border: 1px solid #f0f0f0;
     padding: 9px;
     color: #454545;
+    background-color: #fff;
 }

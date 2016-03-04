@@ -47,18 +47,6 @@ limitations under the License.
     margin-bottom: 10px;
 }
 
-/*
-.mx_RoomSettings input,
-.mx_RoomSettings textarea  {
-    border-radius: 3px;
-    border: 1px solid #c7c7c7;
-    font-weight: 300;
-    font-size: 13px;
-    padding: 9px;
-    margin-top: 6px;
-}
-*/
-
 .mx_RoomSettings .mx_RoomSettings_toggles label {
     margin-bottom: 8px;
     display: block;
