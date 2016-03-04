@@ -246,6 +246,13 @@ module.exports = React.createClass({
 
         // XXX: evil hack until SYJS-28 is fixed
         Object.keys(all_members).map(function(userId) {
+            // work around a race where you might have a room member object
+            // before the user object exists.  This may or may not cause
+            // https://github.com/vector-im/vector-web/issues/186
+            if (all_members[userId].user === null) {
+                all_members[userId].user = MatrixClientPeg.get().getUser(userId);
+            }
+
             if (all_members[userId].user && !all_members[userId].user.lastPresenceTs) {
                 all_members[userId].user.lastPresenceTs = Date.now();
             }
