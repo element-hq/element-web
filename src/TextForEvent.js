@@ -11,11 +11,12 @@ function textForMemberEvent(ev) {
         case 'invite':
             var threePidContent = ev.getContent().third_party_invite;
             if (threePidContent) {
-                // TODO: When we have third_party_invite.display_name we should
-                // do this as "$displayname received the invitation from $sender"
-                // or equiv
-                return targetName + " received an invitation from " + senderName +
-                    ".";
+                if (threePidContent.display_name) {
+                    return targetName + " accepted the invitation for " +
+                        threePidContent.display_name + ".";
+                } else {
+                    return targetName + " accepted an invitation.";
+                }
             }
             else {
                 return senderName + " invited " + targetName + ".";
