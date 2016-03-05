@@ -1,9 +1,11 @@
-Changes in vector v0.1.2 (2016-02-24)
+Changes in vector v0.2.0 (2016-02-24)
 ======================================
  * Refactor of matrix-react-sdk and vector to remove separation between views and
    controllers
- * Very significant features, including read receipts, read-up-to markers,
-   updated look and feel, new room and user settings, and email invites.
+ * Temporarily break the layering abstraction between vector and matrix-react-sdk
+   for expedience in developing vector.
+ * Vast numbers of new features, including read receipts, read-up-to markers,
+   updated look and feel, search, new room and user settings, and email invites.
 
 Changes in vector v0.1.2 (2015-10-28)
 ======================================
