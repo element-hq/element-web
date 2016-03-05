@@ -94,13 +94,13 @@ module.exports = React.createClass({
          */
         contextual: React.PropTypes.bool,
 
-        /* a list of words to highlight */
+        /* a list of words to highlight, ordered by longest first */
         highlights: React.PropTypes.array,
 
         /* link URL for the highlights */
         highlightLink: React.PropTypes.string,
 
-        /* is this the focussed event */
+        /* is this the focused event */
         isSelectedEvent: React.PropTypes.bool,
 
         /* callback called when images in events are loaded */
