@@ -29,6 +29,9 @@ module.exports = React.createClass({
 
     onClick: function() {
         Notifier.setEnabled(true);
+
+        // Hide the prompt when user click on enable link.
+        Notifier.setToolbarHidden(true);
     },
 
     render: function() {
