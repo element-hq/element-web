@@ -96,6 +96,7 @@ limitations under the License.
 .mx_Login_links {
     display: block;
     text-align: center;
+    margin-top: 15px;
     width: 100%;
     font-size: 13px;
     opacity: 0.8;
@@ -103,6 +104,12 @@ limitations under the License.
 
 .mx_Login_links a:link {
    color: #4a4a4a;
+}
+
+.mx_Login_prompt {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 13px;
 }
 
 .mx_Login_forgot {
