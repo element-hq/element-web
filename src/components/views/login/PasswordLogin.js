@@ -34,6 +34,8 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
         return {
             onUsernameChanged: function() {},
             onPasswordChanged: function() {},
+            initialUsername: "",
+            initialPassword: "",
         };
     },
 
