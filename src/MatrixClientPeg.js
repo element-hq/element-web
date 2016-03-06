@@ -25,6 +25,7 @@ var matrixClient = null;
 var localStorage = window.localStorage;
 
 function deviceId() {
+    // XXX: is Math.random()'s deterministicity a problem here?
     var id = Math.floor(Math.random()*16777215).toString(16);
     id = "W" + "000000".substring(id.length) + id;
     if (localStorage) {
@@ -101,10 +102,12 @@ class MatrixClient {
     // -matthew
 
     replaceUsingUrls(hs_url, is_url) {
+        // ...not to be confused with MatrixClientPeg's createClient...
         matrixClient = Matrix.createClient({
             baseUrl: hs_url,
             idBaseUrl: is_url
         });
+
         // XXX: factor this out with the localStorage setting in replaceUsingAccessToken
         if (localStorage) {
             try {
@@ -115,7 +118,7 @@ class MatrixClient {
             }
         } else {
             console.warn("No local storage available: can't persist HS/IS URLs!");
-        }
+        }    
     }
 
     replaceUsingAccessToken(hs_url, is_url, user_id, access_token, isGuest) {
@@ -123,10 +126,11 @@ class MatrixClient {
             try {
                 localStorage.clear();
             } catch (e) {
-                console.warn("Error using local storage");
+                console.warn("Error clearing local storage", e);
             }
         }
         this.guestAccess.markAsGuest(Boolean(isGuest));
+        // ...not to be confused with Matrix.createClient()...
         createClient(hs_url, is_url, user_id, access_token, this.guestAccess);
         if (localStorage) {
             try {
@@ -136,7 +140,7 @@ class MatrixClient {
                 localStorage.setItem("mx_access_token", access_token);
                 console.log("Session persisted for %s", user_id);
             } catch (e) {
-                console.warn("Error using local storage: can't persist session!");
+                console.warn("Error using local storage: can't persist session!", e);
             }
         } else {
             console.warn("No local storage available: can't persist session!");

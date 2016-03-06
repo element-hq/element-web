@@ -23,13 +23,24 @@ var ReactDOM = require('react-dom');
 module.exports = React.createClass({displayName: 'PasswordLogin',
     propTypes: {
         onSubmit: React.PropTypes.func.isRequired, // fn(username, password)
-        onForgotPasswordClick: React.PropTypes.func // fn()
+        onForgotPasswordClick: React.PropTypes.func, // fn()
+        initialUsername: React.PropTypes.string,
+        initialPassword: React.PropTypes.string,
+        onUsernameChanged: React.PropTypes.func,
+        onPasswordChanged: React.PropTypes.func,
+    },
+
+    getDefaultProps: function() {
+        return {
+            onUsernameChanged: function() {},
+            onPasswordChanged: function() {},
+        };
     },
 
     getInitialState: function() {
         return {
-            username: "",
-            password: ""
+            username: this.props.initialUsername,
+            password: this.props.initialPassword,
         };
     },
 
@@ -40,10 +51,12 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
 
     onUsernameChanged: function(ev) {
         this.setState({username: ev.target.value});
+        this.props.onUsernameChanged(ev.target.value);
     },
 
     onPasswordChanged: function(ev) {
         this.setState({password: ev.target.value});
+        this.props.onPasswordChanged(ev.target.value);
     },
 
     render: function() {

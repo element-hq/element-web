@@ -29,8 +29,10 @@ module.exports = React.createClass({
     propTypes: {
         onHsUrlChanged: React.PropTypes.func,
         onIsUrlChanged: React.PropTypes.func,
-        defaultHsUrl: React.PropTypes.string,
-        defaultIsUrl: React.PropTypes.string,
+        initialHsUrl: React.PropTypes.string, // whatever the current value is when we create the component
+        initialIsUrl: React.PropTypes.string, // whatever the current value is when we create the component
+        defaultHsUrl: React.PropTypes.string, // e.g. https://matrix.org
+        defaultIsUrl: React.PropTypes.string, // e.g. https://vector.im
         withToggleButton: React.PropTypes.bool,
         delayTimeMs: React.PropTypes.number // time to wait before invoking onChanged
     },
@@ -46,19 +48,21 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            hs_url: this.props.defaultHsUrl,
-            is_url: this.props.defaultIsUrl,
-            original_hs_url: this.props.defaultHsUrl,
-            original_is_url: this.props.defaultIsUrl,
-            // no toggle button = show, toggle button = hide
-            configVisible: !this.props.withToggleButton
+            hs_url: this.props.initialHsUrl,
+            is_url: this.props.initialIsUrl,
+            // if withToggleButton is false, then show the config all the time given we have no way otherwise of making it visible
+            configVisible: !this.props.withToggleButton || 
+                           (this.props.initialHsUrl !== this.props.defaultHsUrl) ||
+                           (this.props.initialIsUrl !== this.props.defaultIsUrl)
         }
     },
 
     onHomeserverChanged: function(ev) {
         this.setState({hs_url: ev.target.value}, function() {
             this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, function() {
-                this.props.onHsUrlChanged(this.state.hs_url.replace(/\/$/, ""));
+                var hsUrl = this.state.hs_url.trim().replace(/\/$/, "");
+                if (hsUrl === "") hsUrl = this.props.defaultHsUrl;
+                this.props.onHsUrlChanged(hsUrl);
             });
         });
     },
@@ -66,7 +70,9 @@ module.exports = React.createClass({
     onIdentityServerChanged: function(ev) {
         this.setState({is_url: ev.target.value}, function() {
             this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, function() {
-                this.props.onIsUrlChanged(this.state.is_url.replace(/\/$/, ""));
+                var isUrl = this.state.is_url.trim().replace(/\/$/, "");
+                if (isUrl === "") isUrl = this.props.defaultIsUrl;
+                this.props.onIsUrlChanged(isUrl);
             });
         });
     },
@@ -78,18 +84,18 @@ module.exports = React.createClass({
         return setTimeout(fn.bind(this), this.props.delayTimeMs);
     },
 
-    getHsUrl: function() {
-        return this.state.hs_url;
-    },
-
-    getIsUrl: function() {
-        return this.state.is_url;
-    },
-
     onServerConfigVisibleChange: function(ev) {
         this.setState({
             configVisible: ev.target.checked
         });
+        if (!ev.target.checked) {
+            this.props.onHsUrlChanged(this.props.defaultHsUrl);
+            this.props.onIsUrlChanged(this.props.defaultIsUrl);
+        }
+        else {
+            this.props.onHsUrlChanged(this.state.hs_url);
+            this.props.onIsUrlChanged(this.state.is_url);
+        }
     },
 
     showHelpPopup: function() {
@@ -124,14 +130,14 @@ module.exports = React.createClass({
                         Home server URL
                     </label>
                     <input className="mx_Login_field" id="hsurl" type="text"
-                        placeholder={this.state.original_hs_url}
+                        placeholder={this.props.defaultHsUrl}
                         value={this.state.hs_url}
                         onChange={this.onHomeserverChanged} />
                     <label className="mx_Login_label mx_ServerConfig_islabel" htmlFor="isurl">
                         Identity server URL
                     </label>
                     <input className="mx_Login_field" id="isurl" type="text"
-                        placeholder={this.state.original_is_url}
+                        placeholder={this.props.defaultIsUrl}
                         value={this.state.is_url}
                         onChange={this.onIdentityServerChanged} />
                     <a className="mx_ServerConfig_help" href="#" onClick={this.showHelpPopup}>

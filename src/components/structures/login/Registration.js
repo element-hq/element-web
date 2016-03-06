@@ -36,8 +36,10 @@ module.exports = React.createClass({
         sessionId: React.PropTypes.string,
         registrationUrl: React.PropTypes.string,
         idSid: React.PropTypes.string,
-        hsUrl: React.PropTypes.string,
-        isUrl: React.PropTypes.string,
+        initialHsUrl: React.PropTypes.string,
+        initialIsUrl: React.PropTypes.string,
+        defaultHsUrl: React.PropTypes.string,
+        defaultIsUrl: React.PropTypes.string,
         email: React.PropTypes.string,
         username: React.PropTypes.string,
         guestAccessToken: React.PropTypes.string,
@@ -50,8 +52,6 @@ module.exports = React.createClass({
         return {
             busy: false,
             errorText: null,
-            enteredHomeserverUrl: this.props.hsUrl,
-            enteredIdentityServerUrl: this.props.isUrl
         };
     },
 
@@ -59,7 +59,7 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         // attach this to the instance rather than this.state since it isn't UI
         this.registerLogic = new Signup.Register(
-            this.props.hsUrl, this.props.isUrl
+            this.props.initialHsUrl, this.props.initialIsUrl
         );
         this.registerLogic.setClientSecret(this.props.clientSecret);
         this.registerLogic.setSessionId(this.props.sessionId);
@@ -242,11 +242,15 @@ module.exports = React.createClass({
                 {busySpinner}
                 <ServerConfig ref="serverConfig"
                     withToggleButton={true}
-                    defaultHsUrl={this.state.enteredHomeserverUrl}
-                    defaultIsUrl={this.state.enteredIdentityServerUrl}
+                    initialHsUrl={this.props.initialHsUrl}
+                    initialIsUrl={this.props.initialIsUrl}
+                    defaultHsUrl={this.props.defaultHsUrl}
+                    defaultIsUrl={this.props.defaultIsUrl}
                     onHsUrlChanged={this.onHsUrlChanged}
                     onIsUrlChanged={this.onIsUrlChanged}
                     delayTimeMs={1000} />
+                <div className="mx_Login_error">
+                </div>
                 <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
                     I already have an account
                 </a>
@@ -256,11 +260,13 @@ module.exports = React.createClass({
 
     render: function() {
         var LoginHeader = sdk.getComponent('login.LoginHeader');
+        var LoginFooter = sdk.getComponent('login.LoginFooter');
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
                     <LoginHeader />
                     {this._getRegisterContentJsx()}
+                    <LoginFooter />
                 </div>
             </div>
         );

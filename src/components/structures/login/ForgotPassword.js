@@ -27,8 +27,12 @@ module.exports = React.createClass({
     displayName: 'ForgotPassword',
 
     propTypes: {
-        homeserverUrl: React.PropTypes.string,
-        identityServerUrl: React.PropTypes.string,
+        defaultHsUrl: React.PropTypes.string,
+        defaultIsUrl: React.PropTypes.string,
+        initialHsUrl: React.PropTypes.string,
+        initialIsUrl: React.PropTypes.string,
+        onLoginClick: React.PropTypes.func,
+        onRegisterClick: React.PropTypes.func,
         onComplete: React.PropTypes.func.isRequired
     },
 
@@ -152,8 +156,9 @@ module.exports = React.createClass({
         else {
             resetPasswordJsx = (
             <div>
-                To reset your password, enter the email address linked to your account:
-                <br />
+                <div className="mx_Login_prompt">
+                    To reset your password, enter the email address linked to your account:
+                </div>
                 <div>
                     <form onSubmit={this.onSubmitForm}>
                         <input className="mx_Login_field" ref="user" type="text"
@@ -175,11 +180,21 @@ module.exports = React.createClass({
                     </form>
                     <ServerConfig ref="serverConfig"
                         withToggleButton={true}
-                        defaultHsUrl={this.props.homeserverUrl}
-                        defaultIsUrl={this.props.identityServerUrl}
+                        defaultHsUrl={this.props.defaultHsUrl}
+                        defaultIsUrl={this.props.defaultIsUrl}
+                        initialHsUrl={this.props.initialHsUrl}
+                        initialIsUrl={this.props.initialIsUrl}
                         onHsUrlChanged={this.onHsUrlChanged}
                         onIsUrlChanged={this.onIsUrlChanged}
                         delayTimeMs={0}/>
+                    <div className="mx_Login_error">
+                    </div>                        
+                    <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
+                        Return to login
+                    </a>
+                    <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
+                        Create a new account
+                    </a>
                     <LoginFooter />
                 </div>
             </div>
