@@ -99,6 +99,18 @@ module.exports = React.createClass({
                 console.log("Not registering as guest; registration.");
                 this._autoRegisterAsGuest = false;
             }
+            else if (this.props.startingQueryParams.guest_user_id &&
+                this.props.startingQueryParams.guest_access_token)
+            {
+                this._autoRegisterAsGuest = false;
+                this.onLoggedIn({
+                    userId: this.props.startingQueryParams.guest_user_id,
+                    accessToken: this.props.startingQueryParams.guest_access_token,
+                    homeserverUrl: this.props.config.default_hs_url,
+                    identityServerUrl: this.props.config.default_is_url,
+                    guest: true
+                });
+            }
             else {
                 this._autoRegisterAsGuest = true;
             }
