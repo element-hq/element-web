@@ -24,7 +24,6 @@ var EventTimeline = Matrix.EventTimeline;
 var sdk = require('../../index');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
-var ObjectUtils = require('../../ObjectUtils');
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
@@ -145,11 +144,6 @@ var TimelinePanel = React.createClass({
                         " (was " + this.props.eventId + ")");
             return this._initTimeline(newProps);
         }
-    },
-
-    shouldComponentUpdate: function(nextProps, nextState) {
-        return (!ObjectUtils.shallowEqual(this.props, nextProps) ||
-                !ObjectUtils.shallowEqual(this.state, nextState));
     },
 
     componentWillUnmount: function() {
