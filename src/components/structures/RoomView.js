@@ -38,6 +38,7 @@ var SlashCommands = require("../../SlashCommands");
 var dis = require("../../dispatcher");
 var Tinter = require("../../Tinter");
 var rate_limited_func = require('../../ratelimitedfunc');
+var ObjectUtils = require('../../ObjectUtils');
 
 var DEBUG = false;
 
@@ -162,6 +163,11 @@ module.exports = React.createClass({
         } else {
             this._onRoomLoaded(this.state.room);
         }
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+        return (!ObjectUtils.shallowEqual(this.props, nextProps) ||
+                !ObjectUtils.shallowEqual(this.state, nextState));
     },
 
     componentWillUnmount: function() {
