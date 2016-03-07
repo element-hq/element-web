@@ -589,7 +589,15 @@ module.exports = React.createClass({
                     var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
                     if (theAlias) presentedId = theAlias;
                 }
-                self.notifyNewScreen('room/'+presentedId);
+
+                if (presentedId != undefined) {
+                    self.notifyNewScreen('room/'+presentedId);
+                } else {
+                    // There is no information on presentedId
+                    // so point user to fallback like /directory
+                    self.notifyNewScreen('directory');
+                }
+
                 dis.dispatch({action: 'focus_composer'});
             } else {
                 self.setState({ready: true});
