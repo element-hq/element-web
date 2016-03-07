@@ -590,12 +590,11 @@ module.exports = React.createClass({
                     if (theAlias) presentedId = theAlias;
                 }
 
-                if (typeof presentedId != 'undefined') {
+                if (presentedId != undefined) {
                     self.notifyNewScreen('room/'+presentedId);
                 } else {
                     // There is no information on presentedId
                     // so point user to fallback like /directory
-                    // TODO(mebjas): confirm if this is correct fallback
                     self.notifyNewScreen('directory');
                 }
 
