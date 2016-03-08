@@ -467,6 +467,13 @@ var TimelinePanel = React.createClass({
         return null;
     },
 
+    // makes the TimelinePanel update itself after it is resized (due to other
+    // changes in the DOM)
+    onResize: function() {
+        if (!this.refs.messagePanel) { return; }
+        this.refs.messagePanel.onResize();
+    },
+
     _initTimeline: function(props) {
         var initialEvent = props.eventId;
         var pixelOffset = props.eventPixelOffset;

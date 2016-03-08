@@ -1028,7 +1028,7 @@ module.exports = React.createClass({
         // telling it about it. This also ensures that the scroll offset is
         // updated.
         if (this.refs.messagePanel) {
-            this.refs.messagePanel.forceUpdate();
+            this.refs.messagePanel.onResize();
         }
     },
 
