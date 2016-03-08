@@ -331,7 +331,7 @@ module.exports = React.createClass({
     // once images in the events load, make the scrollPanel check the
     // scroll offsets.
     _onImageLoad: function() {
-        var scrollPanel = this.refs.messagePanel;
+        var scrollPanel = this.refs.scrollPanel;
         if (scrollPanel) {
             scrollPanel.checkScroll();
         }
