@@ -38,8 +38,8 @@ module.exports = React.createClass({
         // a callback which is called when the user clicks on the video div
         onClick: React.PropTypes.func,
 
-        // a callback which is called when the video within the callview is
-        // resized due to a change in video metadata
+        // a callback which is called when the content in the callview changes
+        // in a way that is likely to cause a resize.
         onResize: React.PropTypes.func,
     },
 
@@ -95,6 +95,10 @@ module.exports = React.createClass({
             this.getVideoView().getLocalVideoElement().style.display = "none";
             this.getVideoView().getRemoteVideoElement().style.display = "none";
             dis.dispatch({action: 'video_fullscreen', fullscreen: false});
+        }
+
+        if (this.props.onResize) {
+            this.props.onResize();
         }
     },
 

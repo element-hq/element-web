@@ -991,10 +991,10 @@ module.exports = React.createClass({
         // but it's better than the video going missing entirely
         if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
-        // we may need to resize the gemini panel after changing the aux panel
-        // size, so add a callback to onChildResize.
-        this.setState({auxPanelMaxHeight: auxPanelMaxHeight},
-                      this.onChildResize);
+        this.setState({auxPanelMaxHeight: auxPanelMaxHeight});
+
+        // changing the maxHeight on the auxpanel will trigger a callback go
+        // onChildResize, so no need to worry about that here.
     },
 
     onFullscreenClick: function() {
@@ -1042,8 +1042,15 @@ module.exports = React.createClass({
         // XXX: this is a bit naughty; we should be doing this via props
         if (show) {
             this.setState({editingRoomSettings: true});
-            var self = this;
-            setTimeout(function() { self.onResize() }, 0);
+        }
+    },
+
+    // this has to be a proper method rather than an unnamed function,
+    // otherwise react calls it with null on each update.
+    _gatherTimelinePanelRef: function(r) {
+        this.refs.messagePanel = r;
+        if(r) {
+            this.updateTint();
         }
     },
 
@@ -1206,7 +1213,7 @@ module.exports = React.createClass({
               draggingFile={this.state.draggingFile}
               displayConfCallNotification={this.state.displayConfCallNotification}
               maxHeight={this.state.auxPanelMaxHeight}
-              onCallViewVideoRezize={this.onChildResize} >
+              onResize={this.onChildResize} >
                 { aux }
             </AuxPanel>
         );
@@ -1285,12 +1292,7 @@ module.exports = React.createClass({
         }
 
         var messagePanel = (
-            <TimelinePanel ref={(r) => {
-                    this.refs.messagePanel = r;
-                    if(r) {
-                        this.updateTint();
-                    }
-                }}
+            <TimelinePanel ref={this._gatherTimelinePanelRef}
                 room={this.state.room}
                 hidden={hideMessagePanel}
                 highlightedEventId={this.props.highlightedEventId}
