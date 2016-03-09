@@ -202,12 +202,12 @@ module.exports = React.createClass({
         var promise = inviteWarningDefer.promise;
         if (isEmailAddress) {
             promise = promise.then(function() {
-                 MatrixClientPeg.get().inviteByEmail(self.props.roomId, inputText);
+                 return MatrixClientPeg.get().inviteByEmail(self.props.roomId, inputText);
             });
         }
         else {
             promise = promise.then(function() {
-                MatrixClientPeg.get().invite(self.props.roomId, inputText);
+                return MatrixClientPeg.get().invite(self.props.roomId, inputText);
             });
         }
 
