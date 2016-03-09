@@ -167,7 +167,6 @@ module.exports = React.createClass({
         // we don't need to forceUpdate ourselves here, but we do need to
         // forceUpdate the scrollpanel, which will make the gemini panel update
         // itself and trigger a scroll position check.
-        console.log("MessagePanel.onResize");
         this.refs.scrollPanel.forceUpdate();
     },
 
