@@ -393,11 +393,29 @@ var TimelinePanel = React.createClass({
     /* scroll to show the read-up-to marker
      */
     jumpToReadMarker: function() {
-        if (!this.state.readMarkerEventId)
-            return;
         if (!this.refs.messagePanel)
             return;
-        this.refs.messagePanel.scrollToEvent(this.state.readMarkerEventId);
+
+        if (!this.state.readMarkerEventId)
+            return;
+
+        // we may not have loaded the event corresponding to the read-marker
+        // into the _timelineWindow. In that case, attempts to scroll to it
+        // will fail.
+        //
+        // a quick way to figure out if we've loaded the relevant event is
+        // simply to check if the messagepanel knows where the read-marker is.
+        var ret = this.refs.messagePanel.getReadMarkerPosition();
+        if (ret !== null) {
+            // The messagepanel knows where the RM is, so we must have loaded
+            // the relevant event.
+            this.refs.messagePanel.scrollToEvent(this.state.readMarkerEventId);
+        }
+
+        // Looks like we haven't loaded the event corresponding to the read-marker.
+        // As with jumpToLiveTimeline, we want to reload the timeline around the
+        // read-marker.
+        this._loadTimeline(this.state.readMarkerEventId);
     },
 
 
