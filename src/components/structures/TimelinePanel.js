@@ -24,6 +24,7 @@ var EventTimeline = Matrix.EventTimeline;
 var sdk = require('../../index');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
+var ObjectUtils = require('../../ObjectUtils');
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
@@ -119,6 +120,7 @@ var TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.timelineReset", this.onRoomTimelineReset);
         MatrixClientPeg.get().on("Room.redaction", this.onRoomRedaction);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
+        MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
 
         this._initTimeline(this.props);
     },
@@ -146,6 +148,11 @@ var TimelinePanel = React.createClass({
         }
     },
 
+    shouldComponentUpdate: function(nextProps, nextState) {
+        return (!ObjectUtils.shallowEqual(this.props, nextProps) ||
+                !ObjectUtils.shallowEqual(this.state, nextState));
+    },
+
     componentWillUnmount: function() {
         // set a boolean to say we've been unmounted, which any pending
         // promises can use to throw away their results.
@@ -161,6 +168,7 @@ var TimelinePanel = React.createClass({
             client.removeListener("Room.timelineReset", this.onRoomTimelineReset);
             client.removeListener("Room.redaction", this.onRoomRedaction);
             client.removeListener("Room.receipt", this.onRoomReceipt);
+            client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
         }
     },
 
@@ -290,6 +298,21 @@ var TimelinePanel = React.createClass({
 
         this.forceUpdate();
     },
+
+    onLocalEchoUpdated: function(ev, room, oldEventId) {
+        if (this.unmounted) return;
+
+        // ignore events for other rooms
+        if (room !== this.props.room) return;
+
+        // Once the remote echo for an event arrives, we need to turn the
+        // greyed-out event black.  When the localEchoUpdated event is raised,
+        // the nested 'event' property within one of the events in
+        // _timelineWindow will have been replaced with the new event. So
+        // all that is left to do here is to make the message-panel re-render.
+        this.forceUpdate();
+    },
+
 
     sendReadReceipt: function() {
         if (!this.refs.messagePanel) return;

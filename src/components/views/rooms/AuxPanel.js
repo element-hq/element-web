@@ -18,6 +18,7 @@ var React = require('react');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
+var ObjectUtils = require('../../../ObjectUtils');
 
 module.exports = React.createClass({
     displayName: 'AuxPanel',
@@ -39,9 +40,21 @@ module.exports = React.createClass({
         // therein
         maxHeight: React.PropTypes.number,
 
-        // a callback which is called when the video element in a voip call is
-        // resized due to a change in video metadata
-        onCallViewVideoResize: React.PropTypes.func,
+        // a callback which is called when the content of the aux panel changes
+        // content in a way that is likely to make it change size.
+        onResize: React.PropTypes.func,
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+        return (!ObjectUtils.shallowEqual(this.props, nextProps) ||
+                !ObjectUtils.shallowEqual(this.state, nextState));
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        // most changes are likely to cause a resize
+        if (this.props.onResize) {
+            this.props.onResize();
+        }
     },
 
     onConferenceNotificationClick: function() {
@@ -87,7 +100,7 @@ module.exports = React.createClass({
         var callView = (
             <CallView ref="callView" room={this.props.room}
                 ConferenceHandler={this.props.conferenceHandler}
-                onResize={this.props.onCallViewVideoResize}
+                onResize={this.props.onResize}
                 maxVideoHeight={this.props.maxHeight}
             />
         );
