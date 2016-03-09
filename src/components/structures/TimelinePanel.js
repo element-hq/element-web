@@ -120,6 +120,7 @@ var TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.timelineReset", this.onRoomTimelineReset);
         MatrixClientPeg.get().on("Room.redaction", this.onRoomRedaction);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
+        MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
 
         this._initTimeline(this.props);
     },
@@ -167,6 +168,7 @@ var TimelinePanel = React.createClass({
             client.removeListener("Room.timelineReset", this.onRoomTimelineReset);
             client.removeListener("Room.redaction", this.onRoomRedaction);
             client.removeListener("Room.receipt", this.onRoomReceipt);
+            client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
         }
     },
 
@@ -296,6 +298,21 @@ var TimelinePanel = React.createClass({
 
         this.forceUpdate();
     },
+
+    onLocalEchoUpdated: function(ev, room, oldEventId) {
+        if (this.unmounted) return;
+
+        // ignore events for other rooms
+        if (room !== this.props.room) return;
+
+        // Once the remote echo for an event arrives, we need to turn the
+        // greyed-out event black.  When the localEchoUpdated event is raised,
+        // the nested 'event' property within one of the events in
+        // _timelineWindow will have been replaced with the new event. So
+        // all that is left to do here is to make the message-panel re-render.
+        this.forceUpdate();
+    },
+
 
     sendReadReceipt: function() {
         if (!this.refs.messagePanel) return;
