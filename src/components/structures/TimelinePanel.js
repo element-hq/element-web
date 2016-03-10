@@ -188,7 +188,7 @@ var TimelinePanel = React.createClass({
 
             debuglog("TimelinePanel: paginate complete backwards:"+backwards+"; success:"+r);
             this.setState({[statekey]: false});
-            this._onTimelineUpdated(r);
+            this._onTimelineUpdated();
             return r;
         });
     },
@@ -555,7 +555,7 @@ var TimelinePanel = React.createClass({
         // calling _onTimelineUpdated and updating the state.
 
         var onLoaded = () => {
-            this._onTimelineUpdated(true);
+            this._onTimelineUpdated();
 
             this.setState({timelineLoading: false}, () => {
                 // initialise the scroll state of the message panel
@@ -586,17 +586,15 @@ var TimelinePanel = React.createClass({
         prom.done();
     },
 
-    _onTimelineUpdated: function(gotResults) {
+    _onTimelineUpdated: function() {
         // we might have switched rooms since the load started - just bin
         // the results if so.
         if (this.unmounted) return;
 
-        if (gotResults) {
-            this.setState({
-                events: this._timelineWindow.getEvents(),
-                canBackPaginate: this._timelineWindow.canPaginate(EventTimeline.BACKWARDS),
-            });
-        }
+        this.setState({
+            events: this._timelineWindow.getEvents(),
+            canBackPaginate: this._timelineWindow.canPaginate(EventTimeline.BACKWARDS),
+        });
     },
 
     _indexForEventId: function(evId) {
