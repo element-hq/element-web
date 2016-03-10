@@ -25,6 +25,9 @@ module.exports = React.createClass({
     propTypes: {
         onJoinClick: React.PropTypes.func,
         onRejectClick: React.PropTypes.func,
+
+        // if inviterName is specified, the preview bar will shown an invite to the room.
+        // You should also specify onRejectClick if specifiying inviterName
         inviterName: React.PropTypes.string,
         canJoin: React.PropTypes.bool,
         canPreview: React.PropTypes.bool,
