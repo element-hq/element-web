@@ -259,12 +259,15 @@ module.exports = React.createClass({
             continuation = true;
         }
 
-        // do we need a date separator since the last event?
+        // local echoes have a fake date, which could even be yesterday. Treat them
+        // as 'today' for the date separators.
         var ts1 = mxEv.getTs();
-        if ((prevEvent == null && !this.props.suppressFirstDateSeparator) ||
-                (prevEvent != null &&
-                     new Date(prevEvent.getTs()).toDateString()
-                          !== new Date(ts1).toDateString())) {
+        if (mxEv.status) {
+            ts1 = new Date();
+        }
+
+        // do we need a date separator since the last event?
+        if (this._wantsDateSeparator(prevEvent, ts1)) {
             var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
             ret.push(dateSeparator);
             continuation = false;
@@ -288,6 +291,17 @@ module.exports = React.createClass({
         );
 
         return ret;
+    },
+
+    _wantsDateSeparator: function(prevEvent, nextEventTs) {
+        if (prevEvent == null) {
+            // first event in the panel: depends if we could back-paginate from
+            // here.
+            return !this.props.suppressFirstDateSeparator;
+        }
+
+        return (new Date(prevEvent.getTs()).toDateString()
+                !== new Date(nextEventTs).toDateString());
     },
 
     _getReadMarkerTile: function(visible) {
