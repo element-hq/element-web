@@ -58,6 +58,14 @@ module.exports = {
         Notifier.setEnabled(enable);
     },
 
+    getEnableAudioNotifications: function() {
+        return Notifier.isAudioEnabled();
+    },
+
+    setEnableAudioNotifications: function(enable) {
+        Notifier.setAudioEnabled(enable);
+    },
+
     changePassword: function(old_password, new_password) {
         var cli = MatrixClientPeg.get();
 

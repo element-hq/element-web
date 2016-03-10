@@ -35,7 +35,7 @@ var Notifier = {
         return TextForEvent.textForEvent(ev);
     },
 
-    displayNotification: function(ev, room, actions) {
+    _displayPopupNotification: function(ev, room) {
         if (!global.Notification || global.Notification.permission != 'granted') {
             return;
         }
@@ -84,24 +84,17 @@ var Notifier = {
             global.focus();
         };
 
-        var playAudio = function() {
-            var e = document.getElementById("messageAudio");
-            if (e) {
-                e.load();
-                e.play();
-                return e;
-            }
-        };
-
-        var audioClip;
-        if (actions.tweaks.sound) {
-            audioClip = playAudio();
-        }
-
         global.setTimeout(function() {
             notification.close();
         }, 5 * 1000);
-        
+    },
+
+    _playAudioNotification: function(ev, room) {
+        var e = document.getElementById("messageAudio");
+        if (e) {
+            e.load();
+            e.play();
+        };
     },
 
     start: function() {
@@ -129,6 +122,14 @@ var Notifier = {
     },
 
     setEnabled: function(enable, callback) {
+        // make sure that we persist the current setting audio_enabled setting
+        // before changing anything
+        if (global.localStorage) {
+            if(global.localStorage.getItem('audio_notifications_enabled') == null) {
+                this.setAudioEnabled(this.isEnabled());
+            }
+        }
+
         if(enable) {
             if (!this.havePermission()) {
                 global.Notification.requestPermission(function() {
@@ -174,6 +175,21 @@ var Notifier = {
         return enabled === 'true';
     },
 
+    setAudioEnabled: function(enable) {
+        if (!global.localStorage) return;
+        global.localStorage.setItem('audio_notifications_enabled',
+                                    enable ? 'true' : 'false');
+    },
+
+    isAudioEnabled: function(enable) {
+        if (!global.localStorage) return true;
+        var enabled = global.localStorage.getItem(
+            'audio_notifications_enabled');
+        // default to true if the popups are enabled
+        if (enabled === null) return this.isEnabled();
+        return enabled === 'true';
+    },
+
     setToolbarHidden: function(hidden) {
         this.toolbarHidden = hidden;
         dis.dispatch({
@@ -200,13 +216,14 @@ var Notifier = {
         if (!this.isPrepared) return; // don't alert for any messages initially
         if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) return;
 
-        if (!this.isEnabled()) {
-            return;
-        }
-
         var actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions && actions.notify) {
-            this.displayNotification(ev, room, actions);
+            if (this.isEnabled()) {
+                this._displayPopupNotification(ev, room);
+            }
+            if (actions.tweaks.sound && this.isAudioEnabled()) {
+                this._playAudioNotification(ev, room);
+            }
         }
     }
 };
