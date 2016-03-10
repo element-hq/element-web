@@ -326,16 +326,24 @@ module.exports = React.createClass({
         this._saveScrollState();
     },
 
-    // pixelOffset gives the number of pixels between the bottom of the node
-    // and the bottom of the container. If undefined, it will put the node
-    // 1/3 of the way down the container.
-    scrollToToken: function(scrollToken, pixelOffset) {
-        var scrollNode = this._getScrollNode();
+    /* Scroll the panel to bring the DOM node with the scroll token
+     * `scrollToken` into view.
+     *
+     * offsetBase gives the reference point for the pixelOffset. 0 means the
+     * top of the container, 1 means the bottom, and fractional values mean
+     * somewhere in the middle. If omitted, it defaults to 0.
+     *
+     * pixelOffset gives the number of pixels *above* the offsetBase that the
+     * node (specifically, the bottom of it) will be positioned. If omitted, it
+     * defaults to 0.
+     */
+    scrollToToken: function(scrollToken, pixelOffset, offsetBase) {
+        pixelOffset = pixelOffset || 0;
+        offsetBase = offsetBase || 0;
 
-        // default to 1/3 of the way down
-        if (pixelOffset === undefined) {
-            pixelOffset = (scrollNode.clientHeight * 2)/ 3;
-        }
+        // convert pixelOffset so that it is based on the bottom of the
+        // container.
+        pixelOffset += this._getScrollNode().clientHeight * (1-offsetBase);
 
         // save the desired scroll state. It's important we do this here rather
         // than as a result of the scroll event, because (a) we might not *get*

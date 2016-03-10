@@ -70,7 +70,7 @@ var TimelinePanel = React.createClass({
 
         // where to position the event given by eventId, in pixels from the
         // bottom of the viewport. If not given, will try to put the event
-        // 1/3 of the way down the viewport.
+        // half way down the viewport.
         eventPixelOffset: React.PropTypes.number,
 
         // callback which is called when the panel is scrolled.
@@ -413,7 +413,8 @@ var TimelinePanel = React.createClass({
         }
     },
 
-    /* scroll to show the read-up-to marker
+    /* scroll to show the read-up-to marker. We put it 1/3 of the way down
+     * the container.
      */
     jumpToReadMarker: function() {
         if (!this.refs.messagePanel)
@@ -432,13 +433,14 @@ var TimelinePanel = React.createClass({
         if (ret !== null) {
             // The messagepanel knows where the RM is, so we must have loaded
             // the relevant event.
-            this.refs.messagePanel.scrollToEvent(this.state.readMarkerEventId);
+            this.refs.messagePanel.scrollToEvent(this.state.readMarkerEventId,
+                                                 0, 1/3);
         }
 
         // Looks like we haven't loaded the event corresponding to the read-marker.
         // As with jumpToLiveTimeline, we want to reload the timeline around the
         // read-marker.
-        this._loadTimeline(this.state.readMarkerEventId);
+        this._loadTimeline(this.state.readMarkerEventId, 0, 1/3);
     },
 
 
@@ -518,7 +520,15 @@ var TimelinePanel = React.createClass({
     _initTimeline: function(props) {
         var initialEvent = props.eventId;
         var pixelOffset = props.eventPixelOffset;
-        return this._loadTimeline(initialEvent, pixelOffset);
+
+        // if a pixelOffset is given, it is relative to the bottom of the
+        // container. If not, put the event in the middle of the container.
+        var offsetBase = 1;
+        if (pixelOffset == null) {
+            offsetBase = 0.5;
+        }
+
+        return this._loadTimeline(initialEvent, pixelOffset, offsetBase);
     },
 
     /**
@@ -529,12 +539,15 @@ var TimelinePanel = React.createClass({
      *    scroll to the bottom of the room.
      *
      * @param {number?} pixelOffset   offset to position the given event at
-     *    (pixels from the bottom of the view). If undefined, will put the
-     *    event 1/3 of the way down the view.
+     *    (pixels from the offsetBase). If omitted, defaults to 0.
+     *
+     * @param {number?} offsetBase the reference point for the pixelOffset. 0
+     *     means the top of the container, 1 means the bottom, and fractional
+     *     values mean somewhere in the middle. If omitted, it defaults to 0.
      *
      * returns a promise which will resolve when the load completes.
      */
-    _loadTimeline: function(eventId, pixelOffset) {
+    _loadTimeline: function(eventId, pixelOffset, offsetBase) {
         this._timelineWindow = new Matrix.TimelineWindow(
             MatrixClientPeg.get(), this.props.room,
             {windowLimit: TIMELINE_CAP});
@@ -567,7 +580,8 @@ var TimelinePanel = React.createClass({
                     return;
                 }
                 if (eventId) {
-                    this.refs.messagePanel.scrollToEvent(eventId, pixelOffset);
+                    this.refs.messagePanel.scrollToEvent(eventId, pixelOffset,
+                                                         offsetBase);
                 } else {
                     this.refs.messagePanel.scrollToBottom();
                 }
