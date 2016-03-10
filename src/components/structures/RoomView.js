@@ -920,7 +920,10 @@ module.exports = React.createClass({
         // screen.
         var showBar = (pos < 0);
 
-        this.setState({showTopUnreadMessagesBar: showBar});
+        if (this.state.showTopUnreadMessagesBar != showBar) {
+            this.setState({showTopUnreadMessagesBar: showBar},
+                          this.onChildResize);
+        }
     },
 
     // get the current scroll position of the room, so that it can be
