@@ -1085,6 +1085,24 @@ module.exports = React.createClass({
                         </div>
                     </div>
 
+                    <div className="mx_UserNotifSettings_tableRow">
+                        <div className="mx_UserNotifSettings_inputCell">
+                            <input id="enableDesktopAudioNotifications"
+                                ref="enableDesktopAudioNotifications"
+                                type="checkbox"
+                                checked={ UserSettingsStore.getEnableAudioNotifications() }
+                                onChange={ (e) => {
+                                    UserSettingsStore.setEnableAudioNotifications(e.target.checked);
+                                    this.forceUpdate();
+                                }} />
+                        </div>
+                        <div className="mx_UserNotifSettings_labelCell">
+                            <label htmlFor="enableDesktopAudioNotifications">
+                                Enable audible notifications in web client
+                            </label>
+                        </div>
+                    </div>
+
                     <h3>General use</h3>
 
                     <div className="mx_UserNotifSettings_pushRulesTableWrapper">
