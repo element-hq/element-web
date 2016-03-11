@@ -1,3 +1,7 @@
+Changes in vector v0.3.0 (2016-03-11)
+======================================
+ * Lots of new bug fixes and updates
+
 Changes in vector v0.2.0 (2016-02-24)
 ======================================
  * Refactor of matrix-react-sdk and vector to remove separation between views and
