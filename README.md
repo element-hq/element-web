@@ -59,6 +59,8 @@ However, much of the functionality in Vector is actually in the
 in a way that makes it easy to track the `develop` branches in git and to make
 local changes without having to manually rebuild each time.
 
+[Be aware that there may be problems with this process under npm version 3.]
+
 First clone and build `matrix-js-sdk`:
 
 1. `git clone git@github.com:matrix-org/matrix-js-sdk.git`
