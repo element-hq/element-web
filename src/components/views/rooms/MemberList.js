@@ -348,6 +348,7 @@ module.exports = React.createClass({
             );
         });
 
+        // XXX: surely this is not the right home for this logic.
         if (membership === "invite") {
             // include 3pid invites (m.room.third_party_invite) state events.
             // The HS may have already converted these into m.room.member invites so
@@ -358,6 +359,12 @@ module.exports = React.createClass({
             if (room) {
                 room.currentState.getStateEvents("m.room.third_party_invite").forEach(
                 function(e) {
+                    // any events without these keys are not valid 3pid invites, so we ignore them
+                    var required_keys = ['key_validity_url', 'public_key', 'display_name'];
+                    for (var i = 0; i < required_keys.length; ++i) {
+                        if (e.getContent()[required_keys[i]] === undefined) return;
+                    }
+
                     // discard all invites which have a m.room.member event since we've
                     // already added them.
                     var memberEvent = room.currentState.getInviteForThreePidToken(e.getStateKey());
