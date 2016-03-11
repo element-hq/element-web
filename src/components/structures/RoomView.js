@@ -883,6 +883,16 @@ module.exports = React.createClass({
         });
     },
 
+    onRejectThreepidInviteButtonClicked: function(ev) {
+        // We can reject 3pid invites in the same way that we accept them,
+        // using /leave rather than /join. In the short term though, we
+        // just ignore them.
+        // https://github.com/vector-im/vector-web/issues/1134
+        dis.dispatch({
+            action: 'view_room_directory',
+        });
+    },
+
     onSearchClick: function() {
         this.setState({ searching: true });
     },
@@ -1089,6 +1099,7 @@ module.exports = React.createClass({
                             <RoomHeader ref="header" room={this.state.room} oobData={this.props.oobData} />
                             <div className="mx_RoomView_auxPanel">
                                 <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
+                                                onRejectClick={ this.onRejectThreepidInviteButtonClicked }
                                                 canJoin={ true } canPreview={ false }
                                                 spinner={this.state.joining}
                                                 inviterName={inviterName}
@@ -1195,9 +1206,15 @@ module.exports = React.createClass({
         }
         else if (this.state.guestsCanJoin && MatrixClientPeg.get().isGuest() &&
                 (!myMember || myMember.membership !== "join")) {
+            var inviterName = undefined;
+            if (this.props.oobData) {
+                inviterName = this.props.oobData.inviterName;
+            }
             aux = (
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true}
+                                onRejectClick={ this.onRejectThreepidInviteButtonClicked }
                                 spinner={this.state.joining}
+                                inviterName={inviterName}
                 />
             );
         }
