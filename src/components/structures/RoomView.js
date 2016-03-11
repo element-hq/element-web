@@ -884,6 +884,10 @@ module.exports = React.createClass({
     },
 
     onRejectThreepidInviteButtonClicked: function(ev) {
+        // We can reject 3pid invites in the same way that we accept them,
+        // using /leave rather than /join. In the short term though, we
+        // just ignore them.
+        // https://github.com/vector-im/vector-web/issues/1134
         dis.dispatch({
             action: 'view_room_directory',
         });
