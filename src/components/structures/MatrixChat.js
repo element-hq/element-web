@@ -118,8 +118,8 @@ module.exports = React.createClass({
     componentDidMount: function() {
         this._autoRegisterAsGuest = false;
         if (this.props.enableGuest) {
-            if (!this.getCurrentHsUrl() || !this.getCurrentIsUrl()) {
-                console.error("Cannot enable guest access: can't determine HS/IS URLs to use");
+            if (!this.getCurrentHsUrl()) {
+                console.error("Cannot enable guest access: can't determine HS URL to use");
             }
             else if (this.props.startingQueryParams.client_secret && this.props.startingQueryParams.sid) {
                 console.log("Not registering as guest; registration.");
@@ -182,18 +182,18 @@ module.exports = React.createClass({
     _registerAsGuest: function() {
         var self = this;
         console.log("Doing guest login on %s", this.getCurrentHsUrl());
-        MatrixClientPeg.replaceUsingUrls(
-            this.getCurrentHsUrl(),
-            this.getCurrentIsUrl()
-        );
+        var hsUrl = this.getCurrentHsUrl();
+        var isUrl = this.getCurrentIsUrl();
+
+        MatrixClientPeg.replaceUsingUrls(hsUrl, isUrl);
         MatrixClientPeg.get().registerGuest().done(function(creds) {
             console.log("Registered as guest: %s", creds.user_id);
             self._setAutoRegisterAsGuest(false);
             self.onLoggedIn({
                 userId: creds.user_id,
                 accessToken: creds.access_token,
-                homeserverUrl: self.getCurrentHsUrl(),
-                identityServerUrl: self.getCurrentIsUrl(),
+                homeserverUrl: hsUrl,
+                identityServerUrl: isUrl,
                 guest: true
             });
         }, function(err) {
@@ -214,12 +214,10 @@ module.exports = React.createClass({
         switch (payload.action) {
             case 'logout':
                 if (window.localStorage) {
-                    // preserve our HS & IS URLs for convenience
-                    var hsUrl = this.getCurrentHsUrl();
-                    var isUrl = this.getCurrentIsUrl();
                     window.localStorage.clear();
-                    window.localStorage.setItem("mx_hs_url", hsUrl);
-                    window.localStorage.setItem("mx_is_url", isUrl);
+                    // preserve our HS & IS URLs for convenience
+                    window.localStorage.setItem("mx_hs_url", this.getCurrentHsUrl());
+                    window.localStorage.setItem("mx_is_url", this.getCurrentIsUrl());
                 }
                 Notifier.stop();
                 UserActivity.stop();

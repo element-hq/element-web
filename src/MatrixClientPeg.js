@@ -35,7 +35,7 @@ function deviceId() {
     return id;
 }
 
-function createClient(hs_url, is_url, user_id, access_token, guestAccess) {
+function createClientForPeg(hs_url, is_url, user_id, access_token, guestAccess) {
     var opts = {
         baseUrl: hs_url,
         idBaseUrl: is_url,
@@ -69,7 +69,7 @@ if (localStorage) {
     var guestAccess = new GuestAccess(localStorage);
     if (access_token && user_id && hs_url) {
         console.log("Restoring session for %s", user_id);
-        createClient(hs_url, is_url, user_id, access_token, guestAccess);
+        createClientForPeg(hs_url, is_url, user_id, access_token, guestAccess);
     }
     else {
         console.log("Session not found.");
@@ -92,7 +92,7 @@ class MatrixClient {
 
     // FIXME, XXX: this all seems very convoluted :(
     //   
-    // if we replace the singleton using URLs we bypass our createClient()
+    // if we replace the singleton using URLs we bypass our createClientForPeg()
     // global helper function... but if we replace it using
     // an access_token we don't?
     //
@@ -102,7 +102,6 @@ class MatrixClient {
     // -matthew
 
     replaceUsingUrls(hs_url, is_url) {
-        // ...not to be confused with MatrixClientPeg's createClient...
         matrixClient = Matrix.createClient({
             baseUrl: hs_url,
             idBaseUrl: is_url
@@ -118,7 +117,7 @@ class MatrixClient {
             }
         } else {
             console.warn("No local storage available: can't persist HS/IS URLs!");
-        }    
+        }
     }
 
     replaceUsingAccessToken(hs_url, is_url, user_id, access_token, isGuest) {
@@ -130,8 +129,7 @@ class MatrixClient {
             }
         }
         this.guestAccess.markAsGuest(Boolean(isGuest));
-        // ...not to be confused with Matrix.createClient()...
-        createClient(hs_url, is_url, user_id, access_token, this.guestAccess);
+        createClientForPeg(hs_url, is_url, user_id, access_token, this.guestAccess);
         if (localStorage) {
             try {
                 localStorage.setItem("mx_hs_url", hs_url);
