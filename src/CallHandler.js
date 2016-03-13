@@ -327,6 +327,10 @@ var callHandler = {
 
     setConferenceHandler: function(confHandler) {
         ConferenceHandler = confHandler;
+    },
+
+    getConferenceHandler: function() {
+        return ConferenceHandler;
     }
 };
 // Only things in here which actually need to be global are the

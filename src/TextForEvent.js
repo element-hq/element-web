@@ -1,9 +1,27 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 var MatrixClientPeg = require("./MatrixClientPeg");
+var CallHandler = require("./CallHandler");
 
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
     var senderName = ev.sender ? ev.sender.name : ev.getSender();
     var targetName = ev.target ? ev.target.name : ev.getStateKey();
+    var ConferenceHandler = CallHandler.getConferenceHandler();
     var reason = ev.getContent().reason ? (
         " Reason: " + ev.getContent().reason
     ) : "";
@@ -19,7 +37,12 @@ function textForMemberEvent(ev) {
                 }
             }
             else {
-                return senderName + " invited " + targetName + ".";
+                if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
+                    return senderName + " requested a VoIP conference";
+                }
+                else {
+                    return senderName + " invited " + targetName + ".";
+                }
             }
         case 'ban':
             return senderName + " banned " + targetName + "." + reason;
@@ -42,12 +65,22 @@ function textForMemberEvent(ev) {
                 }
             } else {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
-                return targetName + " joined the room.";
+                if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
+                    return "VoIP conference started";
+                }
+                else {
+                    return targetName + " joined the room.";
+                }
             }
             return '';
         case 'leave':
             if (ev.getSender() === ev.getStateKey()) {
-                return targetName + " left the room.";
+                if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
+                    return "VoIP conference finished";
+                }
+                else {
+                    return targetName + " left the room.";
+                }
             }
             else if (ev.getPrevContent().membership === "ban") {
                 return senderName + " unbanned " + targetName + ".";
