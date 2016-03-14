@@ -470,7 +470,8 @@ module.exports = React.createClass({
         // TODO: the classnames on the div and ol could do with being updated to
         // reflect the fact that we don't necessarily contain a list of messages.
         // it's not obvious why we have a separate div and ol anyway.
-        return (<GeminiScrollbar autoshow={true} ref="geminiPanel" onScroll={ this.onScroll }
+        return (<GeminiScrollbar autoshow={true} ref="geminiPanel"
+                onScroll={this.onScroll} onResize={this.checkScroll}
                 className={this.props.className} style={this.props.style}>
                     <div className="mx_RoomView_messageListWrapper">
                         <ol ref="itemlist" className="mx_RoomView_MessageList" aria-live="polite">
