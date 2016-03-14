@@ -33,7 +33,7 @@
     "q": "^1.4.1",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
-    "react-gemini-scrollbar": "^2.0.1",
+    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#d9a808d",
     "sanitize-html": "^1.11.1",
     "velocity-animate": "^1.2.3",
     "velocity-ui-pack": "^1.2.2"
