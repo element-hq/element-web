@@ -141,13 +141,17 @@ module.exports = React.createClass({
 
     /* jump to the given event id.
      *
-     * pixelOffset gives the number of pixels between the bottom of the node
-     * and the bottom of the container. If undefined, it will put the node
-     * 1/3 of the way down of the container.
+     * offsetBase gives the reference point for the pixelOffset. 0 means the
+     * top of the container, 1 means the bottom, and fractional values mean
+     * somewhere in the middle. If omitted, it defaults to 0.
+     *
+     * pixelOffset gives the number of pixels *above* the offsetBase that the
+     * node (specifically, the bottom of it) will be positioned. If omitted, it
+     * defaults to 0.
      */
-    scrollToEvent: function(eventId, pixelOffset) {
+    scrollToEvent: function(eventId, pixelOffset, offsetBase) {
         if (this.refs.scrollPanel) {
-            this.refs.scrollPanel.scrollToToken(eventId, pixelOffset);
+            this.refs.scrollPanel.scrollToToken(eventId, pixelOffset, offsetBase);
         }
     },
 
