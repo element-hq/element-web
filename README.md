@@ -10,6 +10,9 @@ Getting started
 1. Clone the repo: `git clone https://github.com/vector-im/vector-web.git` 
 1. Switch to the vector directory: `cd vector-web`
 1. Install the prerequisites: `npm install`
+1. If you are using the `develop` branch of vector, you will probably need to
+   rebuild one of the dependencies, due to https://github.com/npm/npm/issues/3055:
+   `(cd node_modules/matrix-react-sdk && npm install)`
 1. Start the development builder and a testing server: `npm start`
 1. Wait a few seconds for the initial build to finish (the command won't
    terminate: it's running a web server for you).
@@ -48,14 +51,13 @@ webserver to actually serve up the app, which is entirely static content.
 Development
 ===========
 
-For simple tweaks, you can work on any of the source files within Vector with the
-setup above, and your changes will cause an instant rebuild.
+For simple tweaks, you can work on any of the source files within Vector with
+the setup above, and your changes will cause an instant rebuild.
 
-However, all serious development on Vector happens on the `develop` branch.  This typically
-depends on the `develop` snapshot versions of `matrix-react-sdk` and `matrix-js-sdk`
-too, which can't be installed automatically due to https://github.com/npm/npm/issues/3055.
-To get the right dependencies, check out the `develop` branches of these libraries and
-then use `ln -s` to tell Vector about them:
+However, much of the functionality in Vector is actually in the
+`matrix-react-sdk` and `matrix-js-sdk` modules. It is possible to set these up
+in a way that makes it easy to track the `develop` branches in git and to make
+local changes without having to manually rebuild each time.
 
 [Be aware that there may be problems with this process under npm version 3.]
 
