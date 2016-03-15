@@ -321,18 +321,18 @@ module.exports = React.createClass({
 
         var state_default = (parseInt(power_levels ? power_levels.state_default : 0) || 0);
 
-        var room_aliases_level = state_default;
-        if (events_levels['m.room.aliases'] !== undefined) {
-            room_aliases_level = events_levels['m.room.aliases'];
+        var canSetEventType = function(eventType) {
+            if (MatrixClientPeg.get().isGuest()) {
+                return false;
+            }
+            var level = state_default;
+            if (events_levels[eventType] !== undefined) {
+                level = events_levels[eventType];
+            }
+            return current_user_level >= level;
         }
-        var can_set_room_aliases = current_user_level >= room_aliases_level;
 
-        var canonical_alias_level = state_default;
-        if (events_levels['m.room.canonical_alias'] !== undefined) {
-            canonical_alias_level = events_levels['m.room.canonical_alias'];
-        }
-        var canSetCanonicalAlias = current_user_level >= canonical_alias_level;
-        var canSetTag = true;
+        var canSetTag = !MatrixClientPeg.get().isGuest();
 
         var self = this;
 
@@ -409,7 +409,7 @@ module.exports = React.createClass({
                                            onChange={ self._onTagChange.bind(self, tag.name) }/>
                                     { tag.label }
                                 </label>);
-                    }) : tags.map(function(tag) { return tag.label; }).join(", ")
+                    }) : (self.state.tags && self.state.tags.join) ? self.state.tags.join(", ") : "None"
                 }
             </div>
 
@@ -425,16 +425,20 @@ module.exports = React.createClass({
 
                 <div className="mx_RoomSettings_toggles">
                     <label>
-                        <input type="checkbox" onChange={this._onToggle.bind(this, "areNotifsMuted", true, false)} defaultChecked={this.state.areNotifsMuted}/>
+                        <input type="checkbox" disabled={ MatrixClientPeg.get().isGuest() }
+                               onChange={this._onToggle.bind(this, "areNotifsMuted", true, false)}
+                               defaultChecked={this.state.areNotifsMuted}/>
                         Mute notifications for this room
                     </label>
                     <label>
-                        <input type="checkbox" onChange={this._onToggle.bind(this, "join_rule", "invite", "public")}
+                        <input type="checkbox" disabled={ !canSetEventType("m.room.join_rule") }
+                            onChange={this._onToggle.bind(this, "join_rule", "invite", "public")}
                             defaultChecked={this.state.join_rule !== "public"}/>
                         Make this room private
                     </label>
                     <label>
-                        <input type="checkbox" onChange={this._onToggle.bind(this, "guest_access", "can_join", "forbidden")}
+                        <input type="checkbox" disabled={ !canSetEventType("m.room.guest_access") }
+                            onChange={this._onToggle.bind(this, "guest_access", "can_join", "forbidden")}
                             defaultChecked={this.state.guest_access === "can_join"}/>
                         Let guests join this room
                     </label>
@@ -442,24 +446,28 @@ module.exports = React.createClass({
                         <h3>Who can read history?</h3>
                         <label htmlFor="hvis_wr">
                             <input type="radio" id="hvis_wr" name="historyVis" value="world_readable"
+                                    disabled={ !canSetEventType("m.room.history_visibility") }
                                     defaultChecked={historyVisibility === "world_readable"}
                                     onChange={this._onHistoryRadioToggle} />
                             Anyone
                         </label>
                         <label htmlFor="hvis_sh">
                             <input type="radio" id="hvis_sh" name="historyVis" value="shared"
+                                    disabled={ !canSetEventType("m.room.history_visibility") }
                                     defaultChecked={historyVisibility === "shared"}
                                     onChange={this._onHistoryRadioToggle} />
                             Members only (since the room began)
                         </label>
                         <label htmlFor="hvis_inv">
                             <input type="radio" id="hvis_inv" name="historyVis" value="invited"
+                                    disabled={ !canSetEventType("m.room.history_visibility") }
                                     defaultChecked={historyVisibility === "invited"}
                                     onChange={this._onHistoryRadioToggle} />
                             Members only (since they were invited)
                         </label>
                         <label htmlFor="hvis_joi">
                             <input type="radio" id="hvis_joi" name="historyVis" value="joined"
+                                    disabled={ !canSetEventType("m.room.history_visibility") }
                                     defaultChecked={historyVisibility === "joined"}
                                     onChange={this._onHistoryRadioToggle} />
                             Members only (since they joined)
@@ -479,8 +487,8 @@ module.exports = React.createClass({
 
                 <AliasSettings ref="alias_settings"
                     roomId={this.props.room.roomId}
-                    canSetCanonicalAlias={canSetCanonicalAlias}
-                    canSetAliases={can_set_room_aliases}
+                    canSetCanonicalAlias={ canSetEventType("m.room.canonical_alias") }
+                    canSetAliases={ canSetEventType("m.room.aliases") }
                     canonicalAliasEvent={this.props.room.currentState.getStateEvents('m.room.canonical_alias', '')}
                     aliasEvents={this.props.room.currentState.getStateEvents('m.room.aliases')} />
 
