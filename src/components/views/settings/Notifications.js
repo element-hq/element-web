@@ -598,7 +598,7 @@ module.exports = React.createClass({
         }
 
         if (needsUpdate.length > 0) {
-            // If somme of the rules need to be ported then wait for the porting
+            // If some of the rules need to be ported then wait for the porting
             // to happen and then fetch the rules again.
             return q.allSettled(needsUpdate).then( function() {
                 return cli.getPushRules();
