@@ -211,6 +211,7 @@ module.exports = React.createClass({
     },    
 
     onChatClick: function() {
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         // check if there are any existing rooms with just us and them (1:1)
         // If so, just view that room. If not, create a private room with them.
         var self = this;
@@ -259,9 +260,10 @@ module.exports = React.createClass({
                     self.props.onFinished();
                 }, function(err) {
                     self.setState({ creatingRoom: false });
-                    console.error(
-                        "Failed to create room: %s", JSON.stringify(err)
-                    );
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Failure to start chat",
+                        description: err.message
+                    });
                     self.props.onFinished();
                 }
             );
