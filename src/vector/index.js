@@ -184,7 +184,7 @@ function loadApp() {
             }} />,
             document.getElementById('matrixchat')
         );
-    }  
+    }
 }
 
 loadApp();

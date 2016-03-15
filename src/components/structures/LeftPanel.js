@@ -40,7 +40,7 @@ var LeftPanel = React.createClass({
 
     componentWillReceiveProps: function(newProps) {
         this._recheckCallElement(newProps.selectedRoom);
-    },    
+    },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
@@ -95,7 +95,7 @@ var LeftPanel = React.createClass({
         }
         else {
             // Hide the collapse button until we work out how to display it in the new skin
-            // collapseButton = <img className="mx_LeftPanel_hideButton" onClick={ this.onHideClick } src="img/hide.png" width="12" height="20" alt="<"/>   
+            // collapseButton = <img className="mx_LeftPanel_hideButton" onClick={ this.onHideClick } src="img/hide.png" width="12" height="20" alt="<"/>
         }
 
         var callPreview;

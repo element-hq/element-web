@@ -35,7 +35,7 @@ limitations under the License.
 }
 
 .mx_LeftPanel_callView {
-    
+
 }
 
 .mx_LeftPanel .mx_RoomList_scrollbar {
@@ -48,7 +48,7 @@ limitations under the License.
     -webkit-flex: 1 1 0;
     flex: 1 1 0;
 
-    overflow-y: auto; 
+    overflow-y: auto;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu {

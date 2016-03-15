@@ -51,13 +51,13 @@ limitations under the License.
     flex: 1;
     -webkit-flex: 1;
 
-    overflow-y: auto;    
+    overflow-y: auto;
 }
 
 .mx_SearchableEntityList_list {
     display: table;
     table-layout: fixed;
-    width: 100%;    
+    width: 100%;
 }
 
 .mx_SearchableEntityList_list .mx_EntityTile_chevron {
@@ -67,7 +67,7 @@ limitations under the License.
 .mx_SearchableEntityList_hrWrapper {
     width: 100%;
     flex: 0 0 auto;
-    -webkit-flex: 0 0 auto;    
+    -webkit-flex: 0 0 auto;
 }
 
 .mx_SearchableEntityList hr {

@@ -28,7 +28,7 @@ limitations under the License.
 
     -webkit-align-items: center;
     align-items: center;
-    
+
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -71,7 +71,7 @@ limitations under the License.
 
     cursor: pointer;
 
-/*  
+/*
     -webkit-flex: 0 0 90px;
     flex: 0 0 90px;
 */
@@ -203,12 +203,12 @@ limitations under the License.
     float: left;
     max-height: 42px;
     color: #454545;
-    font-weight: 300;  
+    font-weight: 300;
     margin-left: 19px;
     margin-right: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
-    border-bottom: 1px solid transparent;    
+    border-bottom: 1px solid transparent;
 }
 
 .mx_RoomHeader_avatar {

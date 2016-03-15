@@ -40,7 +40,7 @@ module.exports = React.createClass({
             this.props.onFinished();
         }
     },
-    
+
     render: function() {
         return (
             <div className="mx_ViewSource">

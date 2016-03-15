@@ -26,7 +26,7 @@ limitations under the License.
     display: -webkit-flex;
     display: flex;
     flex-direction: column;
-    -webkit-flex-direction: column;    
+    -webkit-flex-direction: column;
 }
 
 .mx_UserSettings .mx_RoomHeader {
@@ -50,7 +50,7 @@ limitations under the License.
     -webkit-flex: 1 1 0;
     flex: 1 1 0;
 
-    overflow-y: auto;    
+    overflow-y: auto;
 }
 
 .mx_UserSettings_spinner {

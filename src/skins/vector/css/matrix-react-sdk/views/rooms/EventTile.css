@@ -97,10 +97,10 @@ limitations under the License.
 
 /* end of overrides */
 
-/* this is used for the tile for the event which is selected via the URL.  
- * TODO: ultimately we probably want some transition on here.  
+/* this is used for the tile for the event which is selected via the URL.
+ * TODO: ultimately we probably want some transition on here.
  */
-.mx_EventTile_selected { 
+.mx_EventTile_selected {
     border-left: #76cfa6 5px solid;
     margin-left: 53px;
     padding-left: 7px;
@@ -117,7 +117,7 @@ limitations under the License.
 
 .mx_EventTile_searchHighlight a {
     background-color: #76cfa6;
-    color: #fff;    
+    color: #fff;
 }
 
 .mx_EventTile_sending {
@@ -165,7 +165,7 @@ limitations under the License.
 .mx_EventTile_editButton {
     position: absolute;
     display: inline-block;
-    visibility: hidden; 
+    visibility: hidden;
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton {

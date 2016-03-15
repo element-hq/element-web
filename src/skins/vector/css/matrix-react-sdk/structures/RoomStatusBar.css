@@ -14,12 +14,12 @@
     text-align: center;
 }
 
-.mx_RoomStatusBar_placeholderIndicator { 
+.mx_RoomStatusBar_placeholderIndicator {
     color: #4a4a4a;
     opacity: 0.5;
 }
 
-.mx_RoomStatusBar_scrollDownIndicator { 
+.mx_RoomStatusBar_scrollDownIndicator {
     cursor: pointer;
 }
 
