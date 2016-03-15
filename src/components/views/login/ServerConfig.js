@@ -52,6 +52,8 @@ module.exports = React.createClass({
         return {
             onHsUrlChanged: function() {},
             onIsUrlChanged: function() {},
+            customHsUrl: "",
+            customIsUrl: "",
             withToggleButton: false,
             delayTimeMs: 0
         };
