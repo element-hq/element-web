@@ -55,9 +55,16 @@ limitations under the License.
     margin-right: 95px;
 }
 
+/* all the overflow-y: hidden; are to trap Zalgos -
+   but they introduce an implicit overflow-x: auto.
+   so make that explicitly hidden too to avoid random
+   horizontal scrollbars occasionally appearing, like in
+   https://github.com/vector-im/vector-web/issues/1154
+    */
 .mx_EventTile_content {
     display: block;
     overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 /* Various markdown overrides */
