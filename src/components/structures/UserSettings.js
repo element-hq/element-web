@@ -90,6 +90,15 @@ module.exports = React.createClass({
     },
 
     onAvatarPickerClick: function(ev) {
+        if (MatrixClientPeg.get().isGuest()) {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: "Guests can't set avatars. Please register.",
+            });
+            return;
+        }
+
         if (this.refs.file_label) {
             this.refs.file_label.click();
         }
