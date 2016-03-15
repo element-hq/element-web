@@ -126,7 +126,7 @@ module.exports = React.createClass({
                         { initialLetter }
                     </span>
                     <img className="mx_BaseAvatar_image" src={imageUrl}
-                        title={this.props.title} onError={this.onError}
+                        alt="" title={this.props.title} onError={this.onError}
                         width={this.props.width} height={this.props.height} />
                 </span>
             );
@@ -135,7 +135,7 @@ module.exports = React.createClass({
             <img className="mx_BaseAvatar mx_BaseAvatar_image" src={imageUrl}
                 onError={this.onError}
                 width={this.props.width} height={this.props.height}
-                title={this.props.title}
+                title={this.props.title} alt=""
                 {...this.props} />
         );
     }
