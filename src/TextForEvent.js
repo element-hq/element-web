@@ -151,6 +151,28 @@ function textForThreePidInviteEvent(event) {
      " to join the room.";
 };
 
+function textForHistoryVisibilityEvent(event) {
+    var senderName = event.sender ? event.sender.name : event.getSender();
+    var vis = event.getContent().history_visibility;
+    var text = senderName + " made future room history visible to ";
+    if (vis === "invited") {
+        text += "all room members, from the point they are invited.";
+    }
+    else if (vis === "joined") {
+        text += "all room members, from the point they joined.";
+    }
+    else if (vis === "shared") {
+        text += "all room members.";
+    }
+    else if (vis === "world_readable") {
+        text += "anyone.";
+    }
+    else {
+        text += " unknown (" + vis + ")";
+    }
+    return text;
+};
+
 var handlers = {
     'm.room.message': textForMessageEvent,
     'm.room.name':    textForRoomNameEvent,
@@ -159,7 +181,8 @@ var handlers = {
     'm.call.invite':  textForCallInviteEvent,
     'm.call.answer':  textForCallAnswerEvent,
     'm.call.hangup':  textForCallHangupEvent,
-    'm.room.third_party_invite': textForThreePidInviteEvent
+    'm.room.third_party_invite': textForThreePidInviteEvent,
+    'm.room.history_visibility': textForHistoryVisibilityEvent,
 };
 
 module.exports = {

@@ -450,7 +450,7 @@ module.exports = React.createClass({
                             <input type="radio" id="hvis_sh" name="historyVis" value="shared"
                                     defaultChecked={historyVisibility === "shared"}
                                     onChange={this._onHistoryRadioToggle} />
-                            Members only (since the room began)
+                            Members only (since the point in time of selecting this option)
                         </label>
                         <label htmlFor="hvis_inv">
                             <input type="radio" id="hvis_inv" name="historyVis" value="invited"
