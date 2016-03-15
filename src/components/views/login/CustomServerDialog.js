@@ -31,12 +31,11 @@ module.exports = React.createClass({
                         servers by specifying a different Home server URL.
                         <br/>
                         This allows you to use this app with an existing Matrix account on
-                        a different Home server.
+                        a different home server.
                         <br/>
                         <br/>
-                        You can also set a custom Identity server but this will affect
-                        people&#39;s ability to find you if you use a server in a group other
-                        than the main Matrix.org group.
+                        You can also set a custom identity server but this will typically prevent
+                        interaction with users based on email address.
                     </span>
                 </div>
                 <div className="mx_Dialog_buttons">

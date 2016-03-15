@@ -85,6 +85,32 @@ module.exports = React.createClass({
         };
     },
 
+    getCurrentHsUrl: function() {
+        if (MatrixClientPeg.get()) {
+            return MatrixClientPeg.get().getHomeserverUrl();
+        }
+        else if (window.localStorage && window.localStorage.getItem("mx_hs_url")) {
+            return window.localStorage.getItem("mx_hs_url");
+        }
+        else if (this.props.config) {
+            return this.props.config.default_hs_url
+        }
+        return "https://matrix.org";
+    },
+
+    getCurrentIsUrl: function() {
+        if (MatrixClientPeg.get()) {
+            return MatrixClientPeg.get().getIdentityServerUrl();
+        }
+        else if (window.localStorage && window.localStorage.getItem("mx_is_url")) {
+            return window.localStorage.getItem("mx_is_url");
+        }
+        else if (this.props.config) {
+            return this.props.config.default_is_url
+        }
+        return "https://matrix.org";
+    },
+
     componentWillMount: function() {
         this.favicon = new Favico({animation: 'none'});
     },
@@ -92,8 +118,8 @@ module.exports = React.createClass({
     componentDidMount: function() {
         this._autoRegisterAsGuest = false;
         if (this.props.enableGuest) {
-            if (!this.props.config || !this.props.config.default_hs_url) {
-                console.error("Cannot enable guest access: No supplied config prop for HS/IS URLs");
+            if (!this.getCurrentHsUrl()) {
+                console.error("Cannot enable guest access: can't determine HS URL to use");
             }
             else if (this.props.startingQueryParams.client_secret && this.props.startingQueryParams.sid) {
                 console.log("Not registering as guest; registration.");
@@ -167,19 +193,19 @@ module.exports = React.createClass({
 
     _registerAsGuest: function() {
         var self = this;
-        var config = this.props.config;
-        console.log("Doing guest login on %s", config.default_hs_url);
-        MatrixClientPeg.replaceUsingUrls(
-            config.default_hs_url, config.default_is_url
-        );
+        console.log("Doing guest login on %s", this.getCurrentHsUrl());
+        var hsUrl = this.getCurrentHsUrl();
+        var isUrl = this.getCurrentIsUrl();
+
+        MatrixClientPeg.replaceUsingUrls(hsUrl, isUrl);
         MatrixClientPeg.get().registerGuest().done(function(creds) {
             console.log("Registered as guest: %s", creds.user_id);
             self._setAutoRegisterAsGuest(false);
             self.onLoggedIn({
                 userId: creds.user_id,
                 accessToken: creds.access_token,
-                homeserverUrl: config.default_hs_url,
-                identityServerUrl: config.default_is_url,
+                homeserverUrl: hsUrl,
+                identityServerUrl: isUrl,
                 guest: true
             });
         }, function(err) {
@@ -201,6 +227,9 @@ module.exports = React.createClass({
             case 'logout':
                 if (window.localStorage) {
                     window.localStorage.clear();
+                    // preserve our HS & IS URLs for convenience
+                    window.localStorage.setItem("mx_hs_url", this.getCurrentHsUrl());
+                    window.localStorage.setItem("mx_is_url", this.getCurrentIsUrl());
                 }
                 Notifier.stop();
                 UserActivity.stop();
@@ -744,7 +773,7 @@ module.exports = React.createClass({
             }
         }
         else {
-            console.error("Unknown screen : %s", screen);
+            console.info("Ignoring showScreen for '%s'", screen);
         }
     },
 
@@ -908,6 +937,8 @@ module.exports = React.createClass({
         var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
 
+        // work out the HS URL prompts we should show for 
+
         // needs to be before normal PageTypes as you are logged in technically
         if (this.state.screen == 'post_registration') {
             return (
@@ -1004,26 +1035,34 @@ module.exports = React.createClass({
                     username={this.state.upgradeUsername}
                     disableUsernameChanges={Boolean(this.state.upgradeUsername)}
                     guestAccessToken={this.state.guestAccessToken}
-                    hsUrl={this.props.config.default_hs_url}
-                    isUrl={this.props.config.default_is_url}
+                    defaultHsUrl={this.props.config.default_hs_url}
+                    defaultIsUrl={this.props.config.default_is_url}
+                    customHsUrl={this.getCurrentHsUrl()}
+                    customIsUrl={this.getCurrentIsUrl()}
                     registrationUrl={this.props.registrationUrl}
                     onLoggedIn={this.onRegistered}
-                    onLoginClick={this.onLoginClick} />
+                    onLoginClick={this.onLoginClick}
+                    onRegisterClick={this.onRegisterClick} />
             );
         } else if (this.state.screen == 'forgot_password') {
             return (
                 <ForgotPassword
-                    homeserverUrl={this.props.config.default_hs_url}
-                    identityServerUrl={this.props.config.default_is_url}
-                    onComplete={this.onLoginClick} />
+                    defaultHsUrl={this.props.config.default_hs_url}
+                    defaultIsUrl={this.props.config.default_is_url}
+                    customHsUrl={this.getCurrentHsUrl()}
+                    customIsUrl={this.getCurrentIsUrl()}
+                    onComplete={this.onLoginClick}
+                    onLoginClick={this.onLoginClick} />
             );
         } else {
             return (
                 <Login
                     onLoggedIn={this.onLoggedIn}
                     onRegisterClick={this.onRegisterClick}
-                    homeserverUrl={this.props.config.default_hs_url}
-                    identityServerUrl={this.props.config.default_is_url}
+                    defaultHsUrl={this.props.config.default_hs_url}
+                    defaultIsUrl={this.props.config.default_is_url}
+                    customHsUrl={this.getCurrentHsUrl()}
+                    customIsUrl={this.getCurrentIsUrl()}
                     onForgotPasswordClick={this.onForgotPasswordClick} 
                     onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest: undefined}
                     />

@@ -30,28 +30,29 @@ var ServerConfig = require("../../views/login/ServerConfig");
 module.exports = React.createClass({displayName: 'Login',
     propTypes: {
         onLoggedIn: React.PropTypes.func.isRequired,
-        homeserverUrl: React.PropTypes.string,
-        identityServerUrl: React.PropTypes.string,
+
+        customHsUrl: React.PropTypes.string,
+        customIsUrl: React.PropTypes.string,
+        defaultHsUrl: React.PropTypes.string,
+        defaultIsUrl: React.PropTypes.string,
+
         // login shouldn't know or care how registration is done.
         onRegisterClick: React.PropTypes.func.isRequired,
+
         // login shouldn't care how password recovery is done.
         onForgotPasswordClick: React.PropTypes.func,
         onLoginAsGuestClick: React.PropTypes.func,
-    },
-
-    getDefaultProps: function() {
-        return {
-            homeserverUrl: 'https://matrix.org/',
-            identityServerUrl: 'https://matrix.org'
-        };
     },
 
     getInitialState: function() {
         return {
             busy: false,
             errorText: null,
-            enteredHomeserverUrl: this.props.homeserverUrl,
-            enteredIdentityServerUrl: this.props.identityServerUrl
+            enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
+            enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
+
+            // used for preserving username when changing homeserver
+            username: "",
         };
     },
 
@@ -76,12 +77,26 @@ module.exports = React.createClass({displayName: 'Login',
         });
     },
 
+    onUsernameChanged: function(username) {
+        this.setState({ username: username });
+    },
+
     onHsUrlChanged: function(newHsUrl) {
-        this._initLoginLogic(newHsUrl);
+        var self = this;
+        this.setState({
+            enteredHomeserverUrl: newHsUrl
+        }, function() {
+            self._initLoginLogic(newHsUrl);
+        });
     },
 
     onIsUrlChanged: function(newIsUrl) {
-        this._initLoginLogic(null, newIsUrl);
+        var self = this;
+        this.setState({
+            enteredIdentityServerUrl: newIsUrl
+        }, function() {
+            self._initLoginLogic(null, newIsUrl);            
+        });
     },
 
     _initLoginLogic: function(hsUrl, isUrl) {
@@ -162,6 +177,8 @@ module.exports = React.createClass({displayName: 'Login',
                 return (
                     <PasswordLogin
                         onSubmit={this.onPasswordLogin}
+                        initialUsername={this.state.username}
+                        onUsernameChanged={this.onUsernameChanged}
                         onForgotPasswordClick={this.props.onForgotPasswordClick} />
                 );
             case 'm.login.cas':
@@ -203,8 +220,10 @@ module.exports = React.createClass({displayName: 'Login',
                         { this.componentForStep(this._getCurrentFlowStep()) }
                         <ServerConfig ref="serverConfig"
                             withToggleButton={true}
-                            defaultHsUrl={this.props.homeserverUrl}
-                            defaultIsUrl={this.props.identityServerUrl}
+                            customHsUrl={this.props.customHsUrl}
+                            customIsUrl={this.props.customIsUrl}
+                            defaultHsUrl={this.props.defaultHsUrl}
+                            defaultIsUrl={this.props.defaultIsUrl}
                             onHsUrlChanged={this.onHsUrlChanged}
                             onIsUrlChanged={this.onIsUrlChanged}
                             delayTimeMs={1000}/>
@@ -216,7 +235,6 @@ module.exports = React.createClass({displayName: 'Login',
                             Create a new account
                         </a>
                         { loginAsGuestJsx }
-                        <br/>
                         <LoginFooter />
                     </div>
                 </div>
