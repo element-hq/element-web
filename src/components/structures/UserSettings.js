@@ -280,7 +280,7 @@ module.exports = React.createClass({
         var addThreepidSection;
         if (this.state.email_add_pending) {
             addThreepidSection = <Loader />;
-        } else {
+        } else if (!MatrixClientPeg.get().isGuest) {
             addThreepidSection = (
                 <div className="mx_UserSettings_profileTableRow" key="new">
                     <div className="mx_UserSettings_profileLabelCell">
