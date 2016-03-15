@@ -45,7 +45,8 @@ module.exports = React.createClass({
         guestAccessToken: React.PropTypes.string,
         disableUsernameChanges: React.PropTypes.bool,
         // registration shouldn't know or care how login is done.
-        onLoginClick: React.PropTypes.func.isRequired
+        onLoginClick: React.PropTypes.func.isRequired,
+        onCancelClick: React.PropTypes.func
     },
 
     getInitialState: function() {
@@ -234,6 +235,15 @@ module.exports = React.createClass({
                 <Spinner />
             );
         }
+
+        var returnToAppJsx;
+        if (this.props.onCancelClick) {
+            returnToAppJsx = 
+                <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
+                    Return to app
+                </a>
+        }
+
         return (
             <div>
                 <h2>Create an account</h2>
@@ -254,6 +264,7 @@ module.exports = React.createClass({
                 <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
                     I already have an account
                 </a>
+                { returnToAppJsx }
             </div>
         );
     },
