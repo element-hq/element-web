@@ -85,12 +85,9 @@ var ACTION_DONT_NOTIFY = [ "dont_notify" ];
 
 var ACTION_DISABLED = null;
 
+
 /**
  * The descriptions of rules managed by the Vector UI.
- * Each rule is described so that if the server does not have it in its default 
- * rules or if the user wants to use actions ('PushRuleVectorState') that are 
- * different from the hs one, the code will create a new rule that will override
- * the hs one.
  */
 var VectorPushRulesDefinitions = {
 
@@ -164,6 +161,66 @@ var VectorPushRulesDefinitions = {
         }
     }
 };
+
+/**
+ * Rules that Vector used to set in order to override the actions of default rules.
+ * These are used to port peoples existing overrides to match the current API.
+ * These can be removed and forgotten once everyone has moved to the new client.
+ */
+var LEGACY_RULES = {
+    "im.vector.rule.contains_display_name": ".m.rule.contains_display_name",
+    "im.vector.rule.room_one_to_one": ".m.rule.room_one_to_one",
+    "im.vector.rule.room_message": ".m.rule.message",
+    "im.vector.rule.invite_for_me": ".m.rule.invite_for_me",
+    "im.vector.rule.call": ".m.rule.call",
+    "im.vector.rule.notices": ".m.rule.suppress_notices"
+};
+
+function portLegacyActions(actions) {
+    var notify = false;
+    var sound = null;
+    var highlight = false;
+    var unknown_action = false;
+
+    for (var i = 0; i < actions.length; ++i) {
+        var action = actions[i];
+        if (action === "notify") {
+            notify = true;
+        } else if (action === "dont_notify") {
+            notify = false;
+        } else if (typeof action === 'object') {
+            if (action.set_tweak === "sound") {
+                sound = action.value
+            } else if (action.set_tweak === "highlight") {
+                highlight = action.value;
+            } else {
+                unknown_action = true;
+            }
+        } else {
+            unknown_action = true;
+        }
+    }
+
+    // We don't regconise one of the actions here, so we don't try to
+    // canonicalise them.
+    if (unknown_action) return actions;
+
+    if (notify) {
+        var new_actions = ["notify"];
+        if (sound !== null) {
+            new_actions.push({"set_tweak": "sound", "value": sound});
+        }
+        if (highlight) {
+            new_actions.push({"set_tweak": "highlight"});
+        } else {
+            new_actions.push({"set_tweak": "highlight", "value": false});
+        }
+        return new_actions;
+    } else {
+        return ACTION_DONT_NOTIFY;
+    }
+}
+
 
 module.exports = React.createClass({
     displayName: 'Notififications',
@@ -521,23 +578,45 @@ module.exports = React.createClass({
         return deferred.promise;
     },
 
-    // Add a push rule server side according to the 'VectorPushRulesDefinitions' spec
-    _addOverridingVectorPushRule: function(vectorRuleId, vectorState) {
+    // Check if any legacy im.vector rules need to be ported to the new API
+    // for overriding the actions of default rules.
+    _portRulesToNewAPI: function(rulesets) {
         var self = this;
+        var needsUpdate = [];
+        var cli = MatrixClientPeg.get();
 
-        // Create the rule as predefined
-        var ruleDefinition = VectorPushRulesDefinitions[vectorRuleId];
-        var body = {
-            conditions: ruleDefinition.conditions,
-            actions: ruleDefinition.vectorStateToActions[vectorState]
+        for (var kind in rulesets.global) {
+            var ruleset = rulesets.global[kind];
+            for (var i = 0; i < ruleset.length; ++i) {
+                var rule = ruleset[i];
+                if (rule.rule_id in LEGACY_RULES) {
+                    console.log("Porting legacy rule", rule);
+                    needsUpdate.push( function(kind, rule) {
+                        return cli.setPushRuleActions(
+                            'global', kind, LEGACY_RULES[rule.rule_id], portLegacyActions(rule.actions)
+                        ).then( function() {
+                            return cli.deletePushRule('global', kind, rule.rule_id);
+                        })
+                    }(kind, rule));
+                }
+            }
         }
-        
-        return MatrixClientPeg.get().addPushRule('global', ruleDefinition.kind, vectorRuleId, body);
+
+        if (needsUpdate.length > 0) {
+            // If somme of the rules need to be ported then wait for the porting
+            // to happen and then fetch the rules again.
+            return q.allSettled(needsUpdate).then( function() {
+                return cli.getPushRules();
+            });
+        } else {
+            // Otherwise return the rules that we already have.
+            return rulesets;
+        }
     },
 
     _refreshFromServer: function() {
         var self = this;  
-        MatrixClientPeg.get().getPushRules().done(function(rulesets) {
+        MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).done(function(rulesets) {
             MatrixClientPeg.get().pushRules = rulesets;
 
             // Get homeserver default rules and triage them by categories
@@ -568,6 +647,7 @@ module.exports = React.createClass({
                     var r = rulesets.global[kind][i];
                     var cat = rule_categories[r.rule_id];
                     r.kind = kind;
+
                     if (r.rule_id[0] === '.') {
                         if (cat === 'vector') {
                             defaultRules.vector[r.rule_id] = r;
@@ -842,7 +922,7 @@ module.exports = React.createClass({
 
         // When enabled, the master rule inhibits all existing rules
         // So do not show all notification settings
-        if (this.state.masterPushRule.enabled) {
+        if (this.state.masterPushRule && this.state.masterPushRule.enabled) {
             return (
                 <div>
                     {masterPushRuleDiv}
