@@ -37,52 +37,81 @@ var PushRuleVectorState = {
     OFF: "off"
 };
 
-
-var ACTION_NOTIFY = [
-    "notify",
-    {
-        "set_tweak": "highlight",
-        "value": false
+// Encodes a dictionary of {
+//   "notify": true/false,
+//   "sound": string or undefined,
+//   "highlight: true/false,
+// }
+// to a list of push actions.
+function encodeActions(action) {
+    var notify = action.notify;
+    var sound = action.sound;
+    var highlight = action.highlight;
+    if (notify) {
+        var actions = ["notify"];
+        if (sound) {
+            actions.push({"set_tweak": "sound", "value": sound});
+        }
+        if (highlight) {
+            actions.push({"set_tweak": "highlight"});
+        } else {
+            actions.push({"set_tweak": "highlight", "value": false});
+        }
+        return actions;
+    } else {
+        return ["dont_notify"];
     }
-];
+}
 
-var ACTION_NOTIFY_DEFAULT_SOUND = [
-    "notify",
-    {
-        "set_tweak": "sound",
-        "value": "default"
-    },
-    {
-        "set_tweak": "highlight",
-        "value": false
+// Decode a list of actions to a dictionary of {
+//   "notify": true/false,
+//   "sound": string or undefined,
+//   "highlight: true/false,
+// }
+// If the actions couldn't be decoded then returns null.
+function decodeActions(actions) {
+    var notify = false;
+    var sound = null;
+    var highlight = false;
+
+    for (var i = 0; i < actions.length; ++i) {
+        var action = actions[i];
+        if (action === "notify") {
+            notify = true;
+        } else if (action === "dont_notify") {
+            notify = false;
+        } else if (typeof action === 'object') {
+            if (action.set_tweak === "sound") {
+                sound = action.value
+            } else if (action.set_tweak === "highlight") {
+                highlight = action.value;
+            } else {
+                // We don't understand this kind of tweak, so give up.
+                return null;
+            }
+        } else {
+            // We don't understand this kind of action, so give up.
+            return null;
+        }
     }
-];
 
-var ACTION_NOTIFY_RING_SOUND = [
-    "notify",
-    {
-        "set_tweak": "sound",
-        "value": "ring"
-    },
-    {
-        "set_tweak": "highlight",
-        "value": false
+    if (highlight === undefined) {
+        // If a highlight tweak is missing a value then it defaults to true.
+        highlight = true;
     }
-];
 
-var ACTION_HIGHLIGHT_DEFAULT_SOUND = [
-    "notify",
-    {
-        "set_tweak": "sound",
-        "value": "default"
-    },
-    {
-        "set_tweak":"highlight"
+    var result = {notify: notify, highlight: highlight};
+    if (sound !== null) {
+        result.sound = sound;
     }
-];
+    return result;
+}
 
-var ACTION_DONT_NOTIFY = [ "dont_notify" ];
-
+var ACTION_NOTIFY = encodeActions({notify: true});
+var ACTION_NOTIFY_DEFAULT_SOUND = encodeActions({notify: true, sound: "default"});
+var ACTION_NOTIFY_RING_SOUND = encodeActions({notify: true, sound: "ring"});
+var ACTION_HIGHLIGHT_DEFAULT_SOUND = encodeActions({notify: true, sound: "default", highlight: true});
+var ACTION_DONT_NOTIFY = encodeActions({notify: false});
 var ACTION_DISABLED = null;
 
 
@@ -177,47 +206,13 @@ var LEGACY_RULES = {
 };
 
 function portLegacyActions(actions) {
-    var notify = false;
-    var sound = null;
-    var highlight = false;
-    var unknown_action = false;
-
-    for (var i = 0; i < actions.length; ++i) {
-        var action = actions[i];
-        if (action === "notify") {
-            notify = true;
-        } else if (action === "dont_notify") {
-            notify = false;
-        } else if (typeof action === 'object') {
-            if (action.set_tweak === "sound") {
-                sound = action.value
-            } else if (action.set_tweak === "highlight") {
-                highlight = action.value;
-            } else {
-                unknown_action = true;
-            }
-        } else {
-            unknown_action = true;
-        }
-    }
-
-    // We don't regconise one of the actions here, so we don't try to
-    // canonicalise them.
-    if (unknown_action) return actions;
-
-    if (notify) {
-        var new_actions = ["notify"];
-        if (sound !== null) {
-            new_actions.push({"set_tweak": "sound", "value": sound});
-        }
-        if (highlight) {
-            new_actions.push({"set_tweak": "highlight"});
-        } else {
-            new_actions.push({"set_tweak": "highlight", "value": false});
-        }
-        return new_actions;
+    var decoded = decodeActions(actions);
+    if (decoded !== null) {
+        return encodeActions(decoded);
     } else {
-        return ACTION_DONT_NOTIFY;
+        // We don't recognise one of the actions here, so we don't try to
+        // canonicalise them.
+        return actions;
     }
 }
 
