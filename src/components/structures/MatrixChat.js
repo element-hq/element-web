@@ -325,7 +325,7 @@ module.exports = React.createClass({
                 break;
             case 'view_room':
                 this._viewRoom(
-                    payload.room_id, payload.room_alias, payload.show_settings, payload.event_id,
+                    payload.room_id, payload.show_settings, payload.event_id,
                     payload.invite_sign_url, payload.oob_data
                 );
                 break;
@@ -371,7 +371,6 @@ module.exports = React.createClass({
                     dis.dispatch({
                         action: 'view_room',
                         room_id: foundRoom.roomId,
-                        room_alias: payload.room_alias,
                         event_id: payload.event_id,
                         invite_sign_url: payload.invite_sign_url,
                         oob_data: payload.oob_data,
@@ -384,7 +383,6 @@ module.exports = React.createClass({
                     dis.dispatch({
                         action: 'view_room',
                         room_id: result.room_id,
-                        room_alias: payload.room_alias,
                         event_id: payload.event_id,
                         invite_sign_url: payload.invite_sign_url,
                         oob_data: payload.oob_data,
@@ -478,7 +476,7 @@ module.exports = React.createClass({
     // @param {Object} oob_data Object of additional data about the room
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
-    _viewRoom: function(roomId, roomAlias, showSettings, eventId, invite_sign_url, oob_data) {
+    _viewRoom: function(roomId, showSettings, eventId, invite_sign_url, oob_data) {
         // before we switch room, record the scroll state of the current room
         this._updateScrollMap();
 
@@ -510,7 +508,7 @@ module.exports = React.createClass({
             // the new screen yet (we won't be showing it yet)
             // The normal case where this happens is navigating
             // to the room in the URL bar on page load.
-            var presentedId = roomAlias || roomId;
+            var presentedId = roomId;
             var room = MatrixClientPeg.get().getRoom(roomId);
             if (room) {
                 var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
