@@ -37,239 +37,185 @@ var PushRuleVectorState = {
     OFF: "off"
 };
 
+// Encodes a dictionary of {
+//   "notify": true/false,
+//   "sound": string or undefined,
+//   "highlight: true/false,
+// }
+// to a list of push actions.
+function encodeActions(action) {
+    var notify = action.notify;
+    var sound = action.sound;
+    var highlight = action.highlight;
+    if (notify) {
+        var actions = ["notify"];
+        if (sound) {
+            actions.push({"set_tweak": "sound", "value": sound});
+        }
+        if (highlight) {
+            actions.push({"set_tweak": "highlight"});
+        } else {
+            actions.push({"set_tweak": "highlight", "value": false});
+        }
+        return actions;
+    } else {
+        return ["dont_notify"];
+    }
+}
+
+// Decode a list of actions to a dictionary of {
+//   "notify": true/false,
+//   "sound": string or undefined,
+//   "highlight: true/false,
+// }
+// If the actions couldn't be decoded then returns null.
+function decodeActions(actions) {
+    var notify = false;
+    var sound = null;
+    var highlight = false;
+
+    for (var i = 0; i < actions.length; ++i) {
+        var action = actions[i];
+        if (action === "notify") {
+            notify = true;
+        } else if (action === "dont_notify") {
+            notify = false;
+        } else if (typeof action === 'object') {
+            if (action.set_tweak === "sound") {
+                sound = action.value
+            } else if (action.set_tweak === "highlight") {
+                highlight = action.value;
+            } else {
+                // We don't understand this kind of tweak, so give up.
+                return null;
+            }
+        } else {
+            // We don't understand this kind of action, so give up.
+            return null;
+        }
+    }
+
+    if (highlight === undefined) {
+        // If a highlight tweak is missing a value then it defaults to true.
+        highlight = true;
+    }
+
+    var result = {notify: notify, highlight: highlight};
+    if (sound !== null) {
+        result.sound = sound;
+    }
+    return result;
+}
+
+var ACTION_NOTIFY = encodeActions({notify: true});
+var ACTION_NOTIFY_DEFAULT_SOUND = encodeActions({notify: true, sound: "default"});
+var ACTION_NOTIFY_RING_SOUND = encodeActions({notify: true, sound: "ring"});
+var ACTION_HIGHLIGHT_DEFAULT_SOUND = encodeActions({notify: true, sound: "default", highlight: true});
+var ACTION_DONT_NOTIFY = encodeActions({notify: false});
+var ACTION_DISABLED = null;
+
+
 /**
  * The descriptions of rules managed by the Vector UI.
- * Each rule is described so that if the server does not have it in its default 
- * rules or if the user wants to use actions ('PushRuleVectorState') that are 
- * different from the hs one, the code will create a new rule that will override
- * the hs one.
  */
 var VectorPushRulesDefinitions = {
 
      // Messages containing user's display name 
      // (skip contains_user_name which is too geeky)
-     "im.vector.rule.contains_display_name": {
+     ".m.rule.contains_display_name": {
         kind: "underride",
-        hsDefaultRuleId: ".m.rule.contains_display_name",
         description: "Messages containing my name",
-        conditions: [{
-            "kind": "contains_display_name"
-        }],
-        vectorStateToActions: {     // The actions for each vector state
-            on: [
-                "notify"
-            ],
-            loud: [
-                "notify",
-                {
-                    "set_tweak": "sound",
-                    "value": "default"
-                },
-                {
-                    "set_tweak":"highlight"
-                }
-            ]
-        },
-        vectorStateToHsDefaultRuleEnabled: {    // If it exists, the hs default push rule enabled expected value for each vector state
-            on: undefined,      // ON (and its actions) does not corresponds to the default hs push rule, so NA
-            loud: true,         // LOUD corresponds to the default rule when its enabled value is true
-            off: false          // OFF corresponds to the default rule  when its enabled value is false
-        },
+        vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
+            on: ACTION_NOTIFY,
+            loud: ACTION_HIGHLIGHT_DEFAULT_SOUND,
+            off: ACTION_DISABLED
+        }
     },
 
     // Messages just sent to the user in a 1:1 room
-    "im.vector.rule.room_one_to_one": {
+    ".m.rule.room_one_to_one": {
         kind: "underride",
-        hsDefaultRuleId: ".m.rule.room_one_to_one",
         description: "Messages in one-to-one chats",
-        conditions: [{
-            "is": "2",
-            "kind": "room_member_count"
-        }],
         vectorStateToActions: {
-            on: [
-                "notify"
-            ],
-            loud: [
-                "notify",
-                {
-                    "set_tweak": "sound",
-                    "value": "default"
-                }
-            ],
-            off: [
-                "dont_notify"
-            ]
-        },
-        vectorStateToHsDefaultRuleEnabled: {
-            on: undefined,
-            loud: true,
-            off: undefined
+            on: ACTION_NOTIFY,
+            loud: ACTION_NOTIFY_DEFAULT_SOUND,
+            off: ACTION_DONT_NOTIFY
         }
     },
 
     // Messages just sent to a group chat room
     // 1:1 room messages are catched by the .m.rule.room_one_to_one rule if any defined
     // By opposition, all other room messages are from group chat rooms.
-    "im.vector.rule.room_message": {
+    ".m.rule.message": {
         kind: "underride",
         description: "Messages in group chats",
-        conditions: [{
-                "pattern": "m.room.message",
-                "kind": "event_match",
-                "key": "type"
-        }],
-        hsDefaultRuleId: ".m.rule.message",
         vectorStateToActions: {
-            on: [
-                "notify"
-            ],
-            loud: [
-                "notify",
-                {
-                    "set_tweak": "sound",
-                    "value": "default"
-                }
-            ],
-            off: [
-                "dont_notify"
-            ]
-        },
-        vectorStateToHsDefaultRuleEnabled: {
-            on: true,
-            loud: undefined,
-            off: undefined
+            on: ACTION_NOTIFY,
+            loud: ACTION_NOTIFY_DEFAULT_SOUND,
+            off: ACTION_DONT_NOTIFY
         }
     },
 
     // Invitation for the user
-    "im.vector.rule.invite_for_me": {
+    ".m.rule.invite_for_me": {
         kind: "underride",
-        hsDefaultRuleId: ".m.rule.invite_for_me",
         description: "When I'm invited to a room",
-        conditions: [
-            {
-                "key": "type",
-                "kind": "event_match",
-                "pattern": "m.room.member"
-            },
-            {
-                "key": "content.membership",
-                "kind": "event_match",
-                "pattern": "invite"
-            },
-            {
-                "key": "state_key",
-                "kind": "event_match",
-                "pattern": ""   // It is updated at runtime the user id
-            }
-        ],
         vectorStateToActions: {
-            on: [
-                "notify"
-            ],
-            loud: [
-                "notify",
-                {
-                    "set_tweak": "sound",
-                    "value": "default"
-                }
-            ]
-        },
-        vectorStateToHsDefaultRuleEnabled: {
-            on: undefined,
-            loud: true,
-            off: false
+            on: ACTION_NOTIFY,
+            loud: ACTION_NOTIFY_DEFAULT_SOUND,
+            off: ACTION_DISABLED
         }
     },
 
-    // When people join or leave a room
-    /*"im.vector.rule.member_event": {
-        hsDefaultRuleId: ".m.rule.member_event",
-        description: "When people join or leave a room",
-        conditions: [{
-            "pattern": "m.room.member",
-            "kind": "event_match",
-            "key": "type"
-        }],
-        vectorStateToActions: {
-            on: [
-                "notify"
-            ],
-            loud: [
-                "notify",
-                {
-                    "set_tweak": "sound",
-                    "value": "default"
-                }
-            ]
-        },
-        vectorStateToHsDefaultRuleEnabled: {
-            on: true,
-            loud: undefined,
-            off: false
-        }
-    },*/
-
     // Incoming call
-    "im.vector.rule.call": {
+    ".m.rule.call": {
         kind: "underride",
-        hsDefaultRuleId: ".m.rule.call",
         description: "Call invitation",
-        conditions: [{
-            "pattern": "m.room.member",
-            "kind": "event_match",
-            "key": "type"
-        }],
         vectorStateToActions: {
-            on: [
-                "notify"
-            ],
-            loud: [
-                "notify",
-                {
-                    "set_tweak": "sound",
-                    "value": "ring"
-                }
-            ],
-        },
-       vectorStateToHsDefaultRuleEnabled: {
-            on: undefined,
-            loud: true,
-            off: false
+            on: ACTION_NOTIFY,
+            loud: ACTION_NOTIFY_RING_SOUND,
+            off: ACTION_DISABLED
         }
     },
 
     // Notifications from bots
-    "im.vector.rule.notices": {
+    ".m.rule.suppress_notices": {
         kind: "override",
-        hsDefaultRuleId: ".m.rule.suppress_notices",
         description: "Messages sent by bot",
-        conditions: [{
-            "kind": "event_match",
-            "key": "content.msgtype",
-            "pattern": "m.notice"
-        }],
         vectorStateToActions: {
-            on: undefined,  // ON for vector UI means that the .m.rule.suppress_notices rule is disabled.
-            loud: [
-                "notify",
-                {
-                    "set_tweak": "sound",
-                    "value": "ring"
-                }
-            ],
-            off: [
-                "dont_notify"
-            ]
-        },
-        vectorStateToHsDefaultRuleEnabled: {
-            on: false,      // .m.rule.suppress_notices is a "negative" rule, we have to invert its enabled value for vector UI
-            loud: undefined,
-            off: true
+            // .m.rule.suppress_notices is a "negative" rule, we have to invert its enabled value for vector UI
+            on: ACTION_DISABLED,
+            loud: ACTION_NOTIFY_DEFAULT_SOUND,
+            off: ACTION_DONT_NOTIFY,
         }
     }
 };
+
+/**
+ * Rules that Vector used to set in order to override the actions of default rules.
+ * These are used to port peoples existing overrides to match the current API.
+ * These can be removed and forgotten once everyone has moved to the new client.
+ */
+var LEGACY_RULES = {
+    "im.vector.rule.contains_display_name": ".m.rule.contains_display_name",
+    "im.vector.rule.room_one_to_one": ".m.rule.room_one_to_one",
+    "im.vector.rule.room_message": ".m.rule.message",
+    "im.vector.rule.invite_for_me": ".m.rule.invite_for_me",
+    "im.vector.rule.call": ".m.rule.call",
+    "im.vector.rule.notices": ".m.rule.suppress_notices"
+};
+
+function portLegacyActions(actions) {
+    var decoded = decodeActions(actions);
+    if (decoded !== null) {
+        return encodeActions(decoded);
+    } else {
+        // We don't recognise one of the actions here, so we don't try to
+        // canonicalise them.
+        return actions;
+    }
+}
+
 
 module.exports = React.createClass({
     displayName: 'Notififications',
@@ -295,9 +241,6 @@ module.exports = React.createClass({
     },
     
     componentWillMount: function() {
-        // Finalise the vector definitions
-        VectorPushRulesDefinitions["im.vector.rule.invite_for_me"].conditions[2].pattern = MatrixClientPeg.get().credentials.userId;
-        
         this._refreshFromServer();
     },
     
@@ -389,13 +332,10 @@ module.exports = React.createClass({
     
     _actionsFor: function(pushRuleVectorState) {
         if (pushRuleVectorState === PushRuleVectorState.ON) {
-            return ['notify'];
+            return ACTION_NOTIFY;
         }
         else if (pushRuleVectorState === PushRuleVectorState.LOUD) {
-            return ['notify',
-                {'set_tweak': 'sound', 'value': 'default'},
-                {'set_tweak': 'highlight', 'value': 'true'}
-            ];;
+            return ACTION_HIGHLIGHT_DEFAULT_SOUND;
         }
     },
     
@@ -437,36 +377,18 @@ module.exports = React.createClass({
             var ruleDefinition = VectorPushRulesDefinitions[rule.vectorRuleId];
 
             if (rule.rule) {
-                if (undefined !== ruleDefinition.vectorStateToHsDefaultRuleEnabled[newPushRuleVectorState] && rule.hsDefaultRule) {
-                    // The new state corresponds to the default hs rule
-                    // Enable or disable it according to the rule definition
-                    deferreds.push(cli.setPushRuleEnabled('global', rule.hsDefaultRule.kind, ruleDefinition.hsDefaultRuleId,
-                                                            ruleDefinition.vectorStateToHsDefaultRuleEnabled[newPushRuleVectorState]));
+                var actions = ruleDefinition.vectorStateToActions[newPushRuleVectorState];
 
-                    // Remove the vector rule if any
-                    if (!rule.isHSDefaultRule) {
-                        deferreds.push(cli.deletePushRule('global', rule.rule.kind, rule.rule.rule_id))
-                    }
+                if (actions === ACTION_DISABLED) {
+                    // The new state corresponds to disabling the rule.
+                    deferreds.push(cli.setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, false));
                 }
                 else {
-                    // The new state (and its implied actions) does not correspond to a default hs rule
-                    // or the HS does not expose this default rule.
-                    if (rule.isHSDefaultRule) {
-                        // Create a new rule that will override the default one
-                        deferreds.push(this._addOverridingVectorPushRule(rule.vectorRuleId, newPushRuleVectorState));   
-                    }
-                    else {
-                        // Change the actions of the existing overriding Vector rule
-                        deferreds.push(this._updatePushRuleActions(rule.rule, ruleDefinition.vectorStateToActions[newPushRuleVectorState]));
-                    } 
+                    // The new state corresponds to enabling the rule and setting specific actions
+                    deferreds.push(this._updatePushRuleActions(rule.rule, actions, true));
                 }
             }
-            else {
-                // This is a Vector rule which does not exist yet server side
-                // Create it
-                deferreds.push(this._addOverridingVectorPushRule(rule.vectorRuleId, newPushRuleVectorState));
-            }
-            
+
             q.all(deferreds).done(function() {
                 self._refreshFromServer();
             }, function(error) {
@@ -651,23 +573,45 @@ module.exports = React.createClass({
         return deferred.promise;
     },
 
-    // Add a push rule server side according to the 'VectorPushRulesDefinitions' spec
-    _addOverridingVectorPushRule: function(vectorRuleId, vectorState) {
+    // Check if any legacy im.vector rules need to be ported to the new API
+    // for overriding the actions of default rules.
+    _portRulesToNewAPI: function(rulesets) {
         var self = this;
+        var needsUpdate = [];
+        var cli = MatrixClientPeg.get();
 
-        // Create the rule as predefined
-        var ruleDefinition = VectorPushRulesDefinitions[vectorRuleId];
-        var body = {
-            conditions: ruleDefinition.conditions,
-            actions: ruleDefinition.vectorStateToActions[vectorState]
+        for (var kind in rulesets.global) {
+            var ruleset = rulesets.global[kind];
+            for (var i = 0; i < ruleset.length; ++i) {
+                var rule = ruleset[i];
+                if (rule.rule_id in LEGACY_RULES) {
+                    console.log("Porting legacy rule", rule);
+                    needsUpdate.push( function(kind, rule) {
+                        return cli.setPushRuleActions(
+                            'global', kind, LEGACY_RULES[rule.rule_id], portLegacyActions(rule.actions)
+                        ).then( function() {
+                            return cli.deletePushRule('global', kind, rule.rule_id);
+                        })
+                    }(kind, rule));
+                }
+            }
         }
-        
-        return MatrixClientPeg.get().addPushRule('global', ruleDefinition.kind, vectorRuleId, body);
+
+        if (needsUpdate.length > 0) {
+            // If some of the rules need to be ported then wait for the porting
+            // to happen and then fetch the rules again.
+            return q.allSettled(needsUpdate).then( function() {
+                return cli.getPushRules();
+            });
+        } else {
+            // Otherwise return the rules that we already have.
+            return rulesets;
+        }
     },
 
     _refreshFromServer: function() {
         var self = this;  
-        MatrixClientPeg.get().getPushRules().done(function(rulesets) {
+        MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).done(function(rulesets) {
             MatrixClientPeg.get().pushRules = rulesets;
 
             // Get homeserver default rules and triage them by categories
@@ -690,8 +634,6 @@ module.exports = React.createClass({
 
             // HS default rules
             var defaultRules = {master: [], vector: {}, others: []};
-            // Push rules defined py Vector to override hs default rules
-            var vectorOverridingRules = {};
             //  Content/keyword rules
             var contentRules = {on: [], on_but_disabled:[], loud: [], loud_but_disabled: [], other: []};
 
@@ -700,29 +642,17 @@ module.exports = React.createClass({
                     var r = rulesets.global[kind][i];
                     var cat = rule_categories[r.rule_id];
                     r.kind = kind;
-                    if (r.rule_id[0] === '.') {
-                        if (cat) {
-                            if (cat === 'vector') {
-                                // Remove disabled, useless actions
-                                r.actions = r.actions.reduce(function(array, action){
-                                    if (action.value !== false) {
-                                        array.push(action);
-                                    }
-                                    return array;
-                                },[]);
 
-                                defaultRules.vector[r.rule_id] = r;
-                            }
-                            else {
-                                defaultRules[cat].push(r);
-                            }
+                    if (r.rule_id[0] === '.') {
+                        if (cat === 'vector') {
+                            defaultRules.vector[r.rule_id] = r;
+                        }
+                        else if (cat === 'master') {
+                            defaultRules.master.push(r);
                         }
                         else {
                             defaultRules['others'].push(r);
                         }
-                    }
-                    else if (r.rule_id.startsWith('im.vector')) {
-                        vectorOverridingRules[r.rule_id] = r;
                     }
                     else if (kind === 'content') {
                         switch (self._contentRuleVectorStateKind(r)) {
@@ -804,14 +734,14 @@ module.exports = React.createClass({
             self.state.vectorPushRules = [];
 
             var vectorRuleIds = [
-                'im.vector.rule.contains_display_name',
+                '.m.rule.contains_display_name',
                 '_keywords',
-                'im.vector.rule.room_one_to_one',
-                'im.vector.rule.room_message',
-                'im.vector.rule.invite_for_me',
+                '.m.rule.room_one_to_one',
+                '.m.rule.message',
+                '.m.rule.invite_for_me',
                 //'im.vector.rule.member_event',
-                'im.vector.rule.call',
-                'im.vector.rule.notices'
+                '.m.rule.call',
+                '.m.rule.suppress_notices'
             ];
             for (var i in vectorRuleIds) {
                 var vectorRuleId = vectorRuleIds[i];
@@ -828,13 +758,7 @@ module.exports = React.createClass({
                     });
                 }
                 else {
-                    var rule = vectorOverridingRules[vectorRuleId];
-                    var isHSDefaultRule = false;
-                    if (!rule) {
-                        // If the rule is not defined, look at the hs default one
-                        rule = defaultRules.vector[ruleDefinition.hsDefaultRuleId];     
-                        isHSDefaultRule = true;
-                    }
+                    var rule = defaultRules.vector[vectorRuleId];
 
                     // Translate the rule actions and its enabled value into vector state
                     var vectorState;
@@ -843,9 +767,9 @@ module.exports = React.createClass({
                             var state = PushRuleVectorState[stateKey];
                             var vectorStateToActions = ruleDefinition.vectorStateToActions[state];
 
-                            if (!vectorStateToActions) {
+                            if (vectorStateToActions === ACTION_DISABLED) {
                                 // No defined actions means that this vector state expects a disabled default hs rule
-                                if (isHSDefaultRule && rule.enabled === ruleDefinition.vectorStateToHsDefaultRuleEnabled[state]) {
+                                if (rule.enabled === false) {
                                     vectorState = state;
                                     break;
                                 }
@@ -853,14 +777,8 @@ module.exports = React.createClass({
                             else {
                                 // The actions must match to the ones expected by vector state
                                 if (JSON.stringify(rule.actions) === JSON.stringify(vectorStateToActions)) {
-                                    if (isHSDefaultRule) {
-                                        // In the case of a default hs push rule, the enabled value must also match
-                                        if (rule.enabled === ruleDefinition.vectorStateToHsDefaultRuleEnabled[state]) {
-                                            vectorState = state;
-                                            break;
-                                        }
-                                    }
-                                    else {
+                                    // And the rule must be enabled.
+                                    if (rule.enabled === true) {
                                         vectorState = state;
                                         break;
                                     }
@@ -870,7 +788,7 @@ module.exports = React.createClass({
 
                         if (!vectorState) {
                             console.error("Cannot translate rule actions into Vector rule state. Rule: " + rule); 
-                            vectorState = PushRuleVectorState.OFF; 
+                            vectorState = PushRuleVectorState.OFF;
                         }
                     }
                     else {
@@ -882,9 +800,7 @@ module.exports = React.createClass({
                         "description" : ruleDefinition.description,
                         "rule": rule,
                         "vectorState": vectorState,
-                        "isHSDefaultRule": isHSDefaultRule,
-                        "hsDefaultRule": defaultRules.vector[ruleDefinition.hsDefaultRuleId]
-                    });                    
+                    });
                 }
             }
             
@@ -913,39 +829,21 @@ module.exports = React.createClass({
     },
     
     _updatePushRuleActions: function(rule, actions, enabled) {
-        // Workaround for SYN-590 : Push rule update fails
-        // Remove the rule and recreate it with the new actions
         var cli = MatrixClientPeg.get();
         var deferred = q.defer();
-        
-        cli.deletePushRule('global', rule.kind, rule.rule_id).done(function() {
-            cli.addPushRule('global', rule.kind, rule.rule_id, {
-                conditions: rule.conditions,
-                actions: actions,
-                pattern: rule.pattern
-            }).done(function() {
 
-                // Then, if requested, enabled or disabled the rule
-                if (undefined != enabled) {
-                    cli.setPushRuleEnabled('global', rule.kind, rule.rule_id, enabled).done(function() {
-                        deferred.resolve();
-                    }, function(err) {
-                        deferred.reject(err);
-                    });
-                }
-                else {  
-                    deferred.resolve();
-                }
-            }, function(err) {
-                deferred.reject(err);
-            });
-        }, function(err) {
-            deferred.reject(err);
-        });  
-        
-        return deferred.promise;
+        return cli.setPushRuleActions(
+            'global', rule.kind, rule.rule_id, actions
+        ).then( function() {
+            // Then, if requested, enabled or disabled the rule
+            if (undefined != enabled) {
+                return cli.setPushRuleEnabled(
+                    'global', rule.kind, rule.rule_id, enabled
+                );
+            }
+        });
     },
-    
+
     renderNotifRulesTableRow: function(title, className, pushRuleVectorState) {
         return (
             <tr key = {className}>
@@ -1019,7 +917,7 @@ module.exports = React.createClass({
 
         // When enabled, the master rule inhibits all existing rules
         // So do not show all notification settings
-        if (this.state.masterPushRule.enabled) {
+        if (this.state.masterPushRule && this.state.masterPushRule.enabled) {
             return (
                 <div>
                     {masterPushRuleDiv}
