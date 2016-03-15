@@ -36,8 +36,8 @@ module.exports = React.createClass({
         sessionId: React.PropTypes.string,
         registrationUrl: React.PropTypes.string,
         idSid: React.PropTypes.string,
-        initialHsUrl: React.PropTypes.string,
-        initialIsUrl: React.PropTypes.string,
+        customHsUrl: React.PropTypes.string,
+        customIsUrl: React.PropTypes.string,
         defaultHsUrl: React.PropTypes.string,
         defaultIsUrl: React.PropTypes.string,
         email: React.PropTypes.string,
@@ -59,7 +59,7 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         // attach this to the instance rather than this.state since it isn't UI
         this.registerLogic = new Signup.Register(
-            this.props.initialHsUrl, this.props.initialIsUrl
+            this.props.customHsUrl, this.props.customIsUrl
         );
         this.registerLogic.setClientSecret(this.props.clientSecret);
         this.registerLogic.setSessionId(this.props.sessionId);
@@ -242,8 +242,8 @@ module.exports = React.createClass({
                 {busySpinner}
                 <ServerConfig ref="serverConfig"
                     withToggleButton={true}
-                    initialHsUrl={this.props.initialHsUrl}
-                    initialIsUrl={this.props.initialIsUrl}
+                    customHsUrl={this.props.customHsUrl}
+                    customIsUrl={this.props.customIsUrl}
                     defaultHsUrl={this.props.defaultHsUrl}
                     defaultIsUrl={this.props.defaultIsUrl}
                     onHsUrlChanged={this.onHsUrlChanged}

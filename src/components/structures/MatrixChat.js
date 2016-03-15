@@ -1003,8 +1003,8 @@ module.exports = React.createClass({
                     guestAccessToken={this.state.guestAccessToken}
                     defaultHsUrl={this.props.config.default_hs_url}
                     defaultIsUrl={this.props.config.default_is_url}
-                    initialHsUrl={this.getCurrentHsUrl()}
-                    initialIsUrl={this.getCurrentIsUrl()}
+                    customHsUrl={this.getCurrentHsUrl()}
+                    customIsUrl={this.getCurrentIsUrl()}
                     registrationUrl={this.props.registrationUrl}
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
@@ -1015,8 +1015,8 @@ module.exports = React.createClass({
                 <ForgotPassword
                     defaultHsUrl={this.props.config.default_hs_url}
                     defaultIsUrl={this.props.config.default_is_url}
-                    initialHsUrl={this.getCurrentHsUrl()}
-                    initialIsUrl={this.getCurrentIsUrl()}
+                    customHsUrl={this.getCurrentHsUrl()}
+                    customIsUrl={this.getCurrentIsUrl()}
                     onComplete={this.onLoginClick}
                     onLoginClick={this.onLoginClick} />
             );
@@ -1027,8 +1027,8 @@ module.exports = React.createClass({
                     onRegisterClick={this.onRegisterClick}
                     defaultHsUrl={this.props.config.default_hs_url}
                     defaultIsUrl={this.props.config.default_is_url}
-                    initialHsUrl={this.getCurrentHsUrl()}
-                    initialIsUrl={this.getCurrentIsUrl()}
+                    customHsUrl={this.getCurrentHsUrl()}
+                    customIsUrl={this.getCurrentIsUrl()}
                     onForgotPasswordClick={this.onForgotPasswordClick} 
                     onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest: undefined}
                     />

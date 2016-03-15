@@ -29,8 +29,8 @@ module.exports = React.createClass({
     propTypes: {
         defaultHsUrl: React.PropTypes.string,
         defaultIsUrl: React.PropTypes.string,
-        initialHsUrl: React.PropTypes.string,
-        initialIsUrl: React.PropTypes.string,
+        customHsUrl: React.PropTypes.string,
+        customIsUrl: React.PropTypes.string,
         onLoginClick: React.PropTypes.func,
         onRegisterClick: React.PropTypes.func,
         onComplete: React.PropTypes.func.isRequired
@@ -182,8 +182,8 @@ module.exports = React.createClass({
                         withToggleButton={true}
                         defaultHsUrl={this.props.defaultHsUrl}
                         defaultIsUrl={this.props.defaultIsUrl}
-                        initialHsUrl={this.props.initialHsUrl}
-                        initialIsUrl={this.props.initialIsUrl}
+                        customHsUrl={this.props.customHsUrl}
+                        customIsUrl={this.props.customIsUrl}
                         onHsUrlChanged={this.onHsUrlChanged}
                         onIsUrlChanged={this.onIsUrlChanged}
                         delayTimeMs={0}/>

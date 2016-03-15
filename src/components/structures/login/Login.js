@@ -31,8 +31,8 @@ module.exports = React.createClass({displayName: 'Login',
     propTypes: {
         onLoggedIn: React.PropTypes.func.isRequired,
 
-        initialHsUrl: React.PropTypes.string,
-        initialIsUrl: React.PropTypes.string,
+        customHsUrl: React.PropTypes.string,
+        customIsUrl: React.PropTypes.string,
         defaultHsUrl: React.PropTypes.string,
         defaultIsUrl: React.PropTypes.string,
 
@@ -48,8 +48,8 @@ module.exports = React.createClass({displayName: 'Login',
         return {
             busy: false,
             errorText: null,
-            enteredHomeserverUrl: this.props.initialHsUrl || this.props.defaultHsUrl,
-            enteredIdentityServerUrl: this.props.initialIsUrl || this.props.defaultIsUrl,
+            enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
+            enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
 
             // used for preserving username when changing homeserver
             username: "",
@@ -220,8 +220,8 @@ module.exports = React.createClass({displayName: 'Login',
                         { this.componentForStep(this._getCurrentFlowStep()) }
                         <ServerConfig ref="serverConfig"
                             withToggleButton={true}
-                            initialHsUrl={this.props.initialHsUrl}
-                            initialIsUrl={this.props.initialIsUrl}
+                            customHsUrl={this.props.customHsUrl}
+                            customIsUrl={this.props.customIsUrl}
                             defaultHsUrl={this.props.defaultHsUrl}
                             defaultIsUrl={this.props.defaultIsUrl}
                             onHsUrlChanged={this.onHsUrlChanged}

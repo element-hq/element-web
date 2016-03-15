@@ -29,10 +29,21 @@ module.exports = React.createClass({
     propTypes: {
         onHsUrlChanged: React.PropTypes.func,
         onIsUrlChanged: React.PropTypes.func,
-        initialHsUrl: React.PropTypes.string, // whatever the current value is when we create the component
-        initialIsUrl: React.PropTypes.string, // whatever the current value is when we create the component
+
+        // default URLs are defined in config.json (or the hardcoded defaults)
+        // they are used if the user has not overridden them with a custom URL.
+        // In other words, if the custom URL is blank, the default is used.
         defaultHsUrl: React.PropTypes.string, // e.g. https://matrix.org
         defaultIsUrl: React.PropTypes.string, // e.g. https://vector.im
+
+        // custom URLs are explicitly provided by the user and override the
+        // default URLs.  The user enters them via the component's input fields,
+        // which is reflected on these properties whenever on..UrlChanged fires.
+        // They are persisted in localStorage by MatrixClientPeg, and so can
+        // override the default URLs when the component initially loads.
+        customHsUrl: React.PropTypes.string,
+        customIsUrl: React.PropTypes.string,
+
         withToggleButton: React.PropTypes.bool,
         delayTimeMs: React.PropTypes.number // time to wait before invoking onChanged
     },
@@ -48,12 +59,12 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            hs_url: this.props.initialHsUrl,
-            is_url: this.props.initialIsUrl,
+            hs_url: this.props.customHsUrl,
+            is_url: this.props.customIsUrl,
             // if withToggleButton is false, then show the config all the time given we have no way otherwise of making it visible
             configVisible: !this.props.withToggleButton || 
-                           (this.props.initialHsUrl !== this.props.defaultHsUrl) ||
-                           (this.props.initialIsUrl !== this.props.defaultIsUrl)
+                           (this.props.customHsUrl !== this.props.defaultHsUrl) ||
+                           (this.props.customIsUrl !== this.props.defaultIsUrl)
         }
     },
 
@@ -84,11 +95,11 @@ module.exports = React.createClass({
         return setTimeout(fn.bind(this), this.props.delayTimeMs);
     },
 
-    onServerConfigVisibleChange: function(ev) {
+    onServerConfigVisibleChange: function(visible, ev) {
         this.setState({
-            configVisible: ev.target.checked
+            configVisible: visible
         });
-        if (!ev.target.checked) {
+        if (!visible) {
             this.props.onHsUrlChanged(this.props.defaultHsUrl);
             this.props.onIsUrlChanged(this.props.defaultIsUrl);
         }
@@ -110,12 +121,19 @@ module.exports = React.createClass({
         var toggleButton;
         if (this.props.withToggleButton) {
             toggleButton = (
-                <div>
-                    <input className="mx_Login_checkbox" id="advanced" type="checkbox"
+                <div style={{ textAlign: 'center' }}>
+                    <input className="mx_Login_radio" id="basic" name="configVisible" type="radio"
+                        checked={!this.state.configVisible}
+                        onChange={this.onServerConfigVisibleChange.bind(this, false)} />
+                    <label className="mx_Login_label" htmlFor="basic">
+                        Default server
+                    </label>
+                    &nbsp;&nbsp;
+                    <input className="mx_Login_radio" id="advanced" name="configVisible" type="radio"
                         checked={this.state.configVisible}
-                        onChange={this.onServerConfigVisibleChange} />
+                        onChange={this.onServerConfigVisibleChange.bind(this, true)} />
                     <label className="mx_Login_label" htmlFor="advanced">
-                        Use custom server options (advanced)
+                        Custom server
                     </label>
                 </div>
             );
