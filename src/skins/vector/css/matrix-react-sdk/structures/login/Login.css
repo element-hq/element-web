@@ -77,7 +77,8 @@ limitations under the License.
     opacity: 0.8;
 }
 
-.mx_Login_checkbox {
+.mx_Login_checkbox,
+.mx_Login_radio {
     margin-right: 10px;
 }
 
