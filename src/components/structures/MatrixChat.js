@@ -599,7 +599,7 @@ module.exports = React.createClass({
         var cli = MatrixClientPeg.get();
         var self = this;
         cli.on('sync', function(state, prevState) {
-            self.updateFavicon();
+            self.updateFavicon(state, prevState);
             if (state === "SYNCING" && prevState === "SYNCING") {
                 return;
             }
@@ -887,7 +887,7 @@ module.exports = React.createClass({
         });
     },
 
-    updateFavicon: function() {
+    updateFavicon: function(state, prevState) {
         var notifCount = 0;
 
         var rooms = MatrixClientPeg.get().getRooms();
@@ -907,6 +907,11 @@ module.exports = React.createClass({
             console.warn("Failed to set badge count: "+e.message);
         }
         document.title = "Vector"+(notifCount > 0 ? " ["+notifCount+"]" : "");
+
+        if(state === "ERROR") {
+            this.favicon.badge("×");
+            document.title = "Vector [ERROR]";
+        }
     },
 
     onUserSettingsClose: function() {
