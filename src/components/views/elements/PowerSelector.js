@@ -45,8 +45,10 @@ module.exports = React.createClass({
     },
 
     onSelectChange: function(event) {
-        this.state.custom = (event.target.value === "Custom");
-        this.props.onChange(this.getValue());
+        this.setState({ custom: event.target.value === "Custom" });
+        if (event.target.value !== "Custom") {
+            this.props.onChange(this.getValue());
+        }
     },
 
     onCustomBlur: function(event) {
