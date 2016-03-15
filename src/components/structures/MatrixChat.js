@@ -1033,6 +1033,7 @@ module.exports = React.createClass({
                     idSid={this.state.register_id_sid}
                     email={this.props.startingQueryParams.email}
                     username={this.state.upgradeUsername}
+                    disableUsernameChanges={Boolean(this.state.upgradeUsername)}
                     guestAccessToken={this.state.guestAccessToken}
                     defaultHsUrl={this.props.config.default_hs_url}
                     defaultIsUrl={this.props.config.default_is_url}

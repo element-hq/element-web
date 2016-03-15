@@ -38,6 +38,7 @@ module.exports = React.createClass({
         defaultUsername: React.PropTypes.string,
         showEmail: React.PropTypes.bool,
         minPasswordLength: React.PropTypes.number,
+        disableUsernameChanges: React.PropTypes.bool,
         onError: React.PropTypes.func,
         onRegisterClick: React.PropTypes.func // onRegisterClick(Object) => ?Promise
     },
@@ -55,7 +56,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             email: this.props.defaultEmail,
-            username: null,
+            username: this.props.defaultUsername,
             password: null,
             passwordConfirm: null,
             fieldValid: {}
@@ -77,7 +78,7 @@ module.exports = React.createClass({
 
         if (this.allFieldsValid()) {
             var promise = this.props.onRegisterClick({
-                username: this.refs.username.value.trim() || this.props.defaultUsername,
+                username: this.refs.username.value.trim(),
                 password: this.refs.password.value.trim(),
                 email: this.refs.email.value.trim()
             });
@@ -119,14 +120,13 @@ module.exports = React.createClass({
                 break;
             case FIELD_USERNAME:
                 // XXX: SPEC-1
-                var username = this.refs.username.value.trim() || this.props.defaultUsername;
-                if (encodeURIComponent(username) != username) {
+                if (encodeURIComponent(this.refs.username.value) != this.refs.username.value) {
                     this.markFieldValid(
                         field_id,
                         false,
                         "RegistrationForm.ERR_USERNAME_INVALID"
                     );
-                } else if (username == '') {
+                } else if (this.refs.username.value == '') {
                     this.markFieldValid(
                         field_id,
                         false,
@@ -199,7 +199,7 @@ module.exports = React.createClass({
         if (this.props.showEmail) {
             emailSection = (
                 <input className="mx_Login_field" type="text" ref="email"
-                    autoFocus={true} placeholder="Email address (optional)"
+                    autoFocus={true} placeholder="Email address"
                     defaultValue={this.state.email}
                     style={this._styleField(FIELD_EMAIL)}
                     onBlur={function() {self.validateField(FIELD_EMAIL)}} />
@@ -211,24 +211,17 @@ module.exports = React.createClass({
             );
         }
 
-        var placeholderUserName = "User name";
-        if (this.props.defaultUsername) {
-            placeholderUserName += " (default: " + this.props.defaultUsername + ")"
-        }
-
         return (
             <div>
                 <form onSubmit={this.onSubmit}>
                     {emailSection}
                     <br />
                     <input className="mx_Login_field" type="text" ref="username"
-                        placeholder={ placeholderUserName } defaultValue={this.state.username}
+                        placeholder="User name" defaultValue={this.state.username}
                         style={this._styleField(FIELD_USERNAME)}
-                        onBlur={function() {self.validateField(FIELD_USERNAME)}} />
+                        onBlur={function() {self.validateField(FIELD_USERNAME)}}
+                        disabled={this.props.disableUsernameChanges} />
                     <br />
-                    { this.props.defaultUsername ?
-                        <div className="mx_Login_fieldLabel">Setting a user name will create a fresh account</div> : null
-                    }
                     <input className="mx_Login_field" type="password" ref="password"
                         style={this._styleField(FIELD_PASSWORD)}
                         onBlur={function() {self.validateField(FIELD_PASSWORD)}}
