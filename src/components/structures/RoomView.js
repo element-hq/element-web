@@ -56,6 +56,10 @@ module.exports = React.createClass({
 
         roomId: React.PropTypes.string.isRequired,
 
+        // if we are referring to this room by a given alias (e.g. in the URL), track it.
+        // useful for joining rooms by alias correctly (and fixing https://github.com/vector-im/vector-web/issues/819)
+        roomAlias: React.PropTypes.string,
+
         // The URL used to join this room from an email invite
         // (given as part of the link in the invite email)
         inviteSignUrl: React.PropTypes.string,
@@ -529,7 +533,8 @@ module.exports = React.createClass({
         }
 
         display_name_promise.then(() => {
-            return MatrixClientPeg.get().joinRoom(this.props.roomId, { inviteSignUrl: this.props.inviteSignUrl } )
+            return MatrixClientPeg.get().joinRoom(this.props.roomAlias || this.props.roomId,
+                                                  { inviteSignUrl: this.props.inviteSignUrl } )
         }).done(function() {
             // It is possible that there is no Room yet if state hasn't come down
             // from /sync - joinRoom will resolve when the HTTP request to join succeeds,
