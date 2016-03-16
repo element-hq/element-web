@@ -43,7 +43,6 @@ module.exports = React.createClass({
         email: React.PropTypes.string,
         username: React.PropTypes.string,
         guestAccessToken: React.PropTypes.string,
-        disableUsernameChanges: React.PropTypes.bool,
         // registration shouldn't know or care how login is done.
         onLoginClick: React.PropTypes.func.isRequired
     },
@@ -108,6 +107,12 @@ module.exports = React.createClass({
             errorText: "",
             busy: true
         });
+
+        if (formVals.username !== this.props.username) {
+            // don't try to upgrade if we changed our username
+            this.registerLogic.setGuestAccessToken(null);
+        }
+
         this.onProcessingRegistration(this.registerLogic.register(formVals));
     },
 
@@ -205,7 +210,6 @@ module.exports = React.createClass({
                         showEmail={true}
                         defaultUsername={this.props.username}
                         defaultEmail={this.props.email}
-                        disableUsernameChanges={this.props.disableUsernameChanges}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit} />
