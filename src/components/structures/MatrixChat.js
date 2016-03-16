@@ -233,10 +233,14 @@ module.exports = React.createClass({
         switch (payload.action) {
             case 'logout':
                 if (window.localStorage) {
+                    var hsUrl = this.getCurrentHsUrl();
+                    var isUrl = this.getCurrentIsUrl();
                     window.localStorage.clear();
                     // preserve our HS & IS URLs for convenience
-                    window.localStorage.setItem("mx_hs_url", this.getCurrentHsUrl());
-                    window.localStorage.setItem("mx_is_url", this.getCurrentIsUrl());
+                    // N.B. we cache them in hsUrl/isUrl and can't really inline them
+                    // as getCurrentHsUrl() may call through to localStorage.
+                    window.localStorage.setItem("mx_hs_url", hsUrl);
+                    window.localStorage.setItem("mx_is_url", isUrl);
                 }
                 Notifier.stop();
                 UserActivity.stop();
@@ -282,11 +286,31 @@ module.exports = React.createClass({
                     screen: 'post_registration'
                 });
                 break;
+            case 'start_login_from_guest':
+                this.replaceState({
+                    screen: 'login',
+                    guestCreds: { // stash our guest creds so we can backout if needed
+                        userId: MatrixClientPeg.get().credentials.userId,
+                        accessToken: MatrixClientPeg.get().getAccessToken(),
+                        homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
+                        identityServerUrl: MatrixClientPeg.get().getIdentityServerUrl(),
+                        guest: true
+                    }
+                });
+                this.notifyNewScreen('login');
+                break;            
             case 'start_upgrade_registration':
                 this.replaceState({
                     screen: "register",
                     upgradeUsername: MatrixClientPeg.get().getUserIdLocalpart(),
-                    guestAccessToken: MatrixClientPeg.get().getAccessToken()
+                    guestAccessToken: MatrixClientPeg.get().getAccessToken(),
+                    guestCreds: { // stash our guest creds so we can backout if needed
+                        userId: MatrixClientPeg.get().credentials.userId,
+                        accessToken: MatrixClientPeg.get().getAccessToken(),
+                        homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
+                        identityServerUrl: MatrixClientPeg.get().getIdentityServerUrl(),
+                        guest: true
+                    }
                 });
                 this.notifyNewScreen('register');
                 break;
@@ -865,6 +889,12 @@ module.exports = React.createClass({
         this.showScreen("forgot_password");
     },
 
+    onReturnToGuestClick: function() {
+        // reanimate our guest login
+        this.onLoggedIn(this.state.guestCreds);
+        this.setState({ guestCreds: null });
+    },
+
     onRegistered: function(credentials) {
         this.onLoggedIn(credentials);
         // do post-registration stuff
@@ -1048,7 +1078,9 @@ module.exports = React.createClass({
                     registrationUrl={this.props.registrationUrl}
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
-                    onRegisterClick={this.onRegisterClick} />
+                    onRegisterClick={this.onRegisterClick}
+                    onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
+                    />
             );
         } else if (this.state.screen == 'forgot_password') {
             return (
@@ -1071,6 +1103,7 @@ module.exports = React.createClass({
                     customIsUrl={this.getCurrentIsUrl()}
                     onForgotPasswordClick={this.onForgotPasswordClick} 
                     onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest.bind(this, true) : undefined}
+                    onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
                     />
             );
         }

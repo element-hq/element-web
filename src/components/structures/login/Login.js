@@ -42,6 +42,7 @@ module.exports = React.createClass({displayName: 'Login',
         // login shouldn't care how password recovery is done.
         onForgotPasswordClick: React.PropTypes.func,
         onLoginAsGuestClick: React.PropTypes.func,
+        onCancelClick: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -211,6 +212,15 @@ module.exports = React.createClass({displayName: 'Login',
                     Login as guest
                 </a>
         }
+
+        var returnToAppJsx;
+        if (this.props.onCancelClick) {
+            returnToAppJsx = 
+                <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
+                    Return to app
+                </a>
+        }
+
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
@@ -235,6 +245,7 @@ module.exports = React.createClass({displayName: 'Login',
                             Create a new account
                         </a>
                         { loginAsGuestJsx }
+                        { returnToAppJsx }
                         <LoginFooter />
                     </div>
                 </div>
