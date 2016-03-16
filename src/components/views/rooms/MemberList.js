@@ -317,10 +317,10 @@ module.exports = React.createClass({
             return presenceOrdB - presenceOrdA;
         }
 
-        var latA = userA ? (userA.lastPresenceTs - (userA.lastActiveAgo || userA.lastPresenceTs)) : 0;
-        var latB = userB ? (userB.lastPresenceTs - (userB.lastActiveAgo || userB.lastPresenceTs)) : 0;
-
-        return latB - latA;
+        var lastActiveTsA = userA && userA.lastActiveAgo ? userA.lastPresenceTs - userA.lastActiveAgo : 0;
+        var lastActiveTsB = userB && userB.lastActiveAgo ? userB.lastPresenceTs - userB.lastActiveAgo : 0;
+        
+        return lastActiveTsB - lastActiveTsA;
     },
 
     onSearchQueryChanged: function(input) {
