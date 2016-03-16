@@ -558,19 +558,9 @@ module.exports = React.createClass({
     // Create a push rule but disabled
     _addDisabledPushRule: function(scope, kind, ruleId, body) {
         var cli = MatrixClientPeg.get();
-        var deferred = q.defer();
-
-        cli.addPushRule(scope, kind, ruleId, body).done(function() {
-            cli.setPushRuleEnabled(scope, kind, ruleId, false).done(function() {
-                deferred.resolve();
-            }, function(err) {
-                deferred.reject(err);
-            });
-        }, function(err) {
-            deferred.reject(err);
+        return cli.addPushRule(scope, kind, ruleId, body).then(function() {
+            return cli.setPushRuleEnabled(scope, kind, ruleId, false);
         });
-
-        return deferred.promise;
     },
 
     // Check if any legacy im.vector rules need to be ported to the new API
@@ -830,7 +820,6 @@ module.exports = React.createClass({
 
     _updatePushRuleActions: function(rule, actions, enabled) {
         var cli = MatrixClientPeg.get();
-        var deferred = q.defer();
 
         return cli.setPushRuleActions(
             'global', rule.kind, rule.rule_id, actions
