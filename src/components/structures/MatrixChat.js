@@ -885,6 +885,7 @@ module.exports = React.createClass({
     onReturnToGuestClick: function() {
         // reanimate our guest login
         this.onLoggedIn(this.state.guestCreds);
+        this.setState({ guestCreds: null });
     },
 
     onRegistered: function(credentials) {
@@ -1072,7 +1073,7 @@ module.exports = React.createClass({
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
                     onRegisterClick={this.onRegisterClick}
-                    onCancelClick={ MatrixClientPeg.get() && MatrixClientPeg.get().isGuest() ? this.onReturnToGuestClick : null }
+                    onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
                     />
             );
         } else if (this.state.screen == 'forgot_password') {
@@ -1096,7 +1097,7 @@ module.exports = React.createClass({
                     customIsUrl={this.getCurrentIsUrl()}
                     onForgotPasswordClick={this.onForgotPasswordClick} 
                     onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest: undefined}
-                    onCancelClick={ MatrixClientPeg.get() && MatrixClientPeg.get().isGuest() ? this.onReturnToGuestClick : null }
+                    onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
                     />
             );
         }
