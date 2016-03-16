@@ -34,7 +34,7 @@ module.exports = React.createClass({
             });
         }
         else {
-            tooltip.style.top = tooltip.parentElement.getBoundingClientRect().top + "px"; 
+            tooltip.style.top = tooltip.parentElement.getBoundingClientRect().top + "px";
             tooltip.style.display = "block";
         }
     },

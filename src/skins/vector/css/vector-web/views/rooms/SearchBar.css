@@ -52,7 +52,7 @@ limitations under the License.
 
 .mx_SearchBar_searching img {
     animation: pulsate 0.5s ease-out;
-    animation-iteration-count: infinite; 
+    animation-iteration-count: infinite;
 }
 
 .mx_SearchBar_button {
@@ -77,7 +77,7 @@ limitations under the License.
     background-color: #fff;
     color: #76CFA6;
     border: #76CFA6 1px solid;
-} 
+}
 
 .mx_SearchBar_cancel {
     padding-left: 14px;

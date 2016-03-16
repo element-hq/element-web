@@ -31,7 +31,7 @@ limitations under the License.
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
-    display: flex;    
+    display: flex;
 
     flex-direction: column;
     -webkit-flex-direction: column;

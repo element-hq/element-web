@@ -26,21 +26,21 @@ limitations under the License.
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
-    display: flex;    
+    display: flex;
 
     flex-direction: column;
     -webkit-flex-direction: column;
 }
 
 .mx_RoomDirectory_list {
-    -webkit-flex: 1;    
+    -webkit-flex: 1;
     flex: 1;
 
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
-    display: flex;    
+    display: flex;
 
     flex-direction: column;
     -webkit-flex-direction: column;
@@ -59,7 +59,7 @@ limitations under the License.
 
 .mx_RoomDirectory_tableWrapper {
     overflow-y: auto;
-    -webkit-flex: 1 1 0;    
+    -webkit-flex: 1 1 0;
     flex: 1 1 0;
 }
 

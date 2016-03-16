@@ -107,7 +107,7 @@ limitations under the License.
 .mx_RoomSettings .mx_RoomSettings_alias {
     max-width: 400px;
     margin-bottom: 16px;
-    /* 
+    /*
     commented out so margin applies
     display: table-cell; */
 }

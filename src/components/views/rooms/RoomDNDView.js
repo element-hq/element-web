@@ -38,7 +38,7 @@ var roomTileSource = {
         // Return the data describing the dragged item
         var item = {
             room: props.room,
-            originalList: props.roomSubList,            
+            originalList: props.roomSubList,
             originalIndex: props.roomSubList.findRoomTile(props.room).index,
             targetList: props.roomSubList, // at first target is same as original
             // lastTargetRoom: null,
@@ -145,10 +145,10 @@ var roomTileTarget = {
                 // shuffle the list to add our tile to that position.
                 props.roomSubList.moveRoomTile(item.room, roomTile.index);
             }
-            
+
             // stop us from flickering between our droptarget and the previous room.
             // whenever the cursor changes direction we have to reset the flicker-damping.
-/*            
+/*
             var yDelta = off.y - item.lastYOffset;
 
             if ((yDelta > 0 && item.lastYDelta < 0) ||
@@ -168,7 +168,7 @@ var roomTileTarget = {
 
             if (yDelta) item.lastYDelta = yDelta;
             item.lastYOffset = off.y;
-*/            
+*/
         }
         else if (switchedTarget) {
             if (!props.roomSubList.findRoomTile(item.room).room) {
@@ -183,7 +183,7 @@ var roomTileTarget = {
 
 // Export the wrapped version, inlining the 'collect' functions
 // to more closely resemble the ES7
-module.exports = 
+module.exports =
 DropTarget('RoomTile', roomTileTarget, function(connect, monitor) {
     return {
         // Call this function inside render()

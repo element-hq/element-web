@@ -39,7 +39,7 @@ limitations under the License.
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding-right: 16px;    
+    padding-right: 16px;
     color: rgba(69, 69, 69, 0.8);
 }
 
@@ -70,7 +70,7 @@ limitations under the License.
     width: 26px;
 }
 
-.mx_RoomTile_badge {    
+.mx_RoomTile_badge {
     background-color: #76cfa6;
     color: #fff;
     border-radius: 26px;
@@ -84,7 +84,7 @@ limitations under the License.
 */
 
 /*
-.mx_RoomTile_badge {    
+.mx_RoomTile_badge {
     background-color: #ff0064;
     border: 3px solid #fff;
     border-radius: 16px;
@@ -103,7 +103,7 @@ limitations under the License.
     left: 0px;
     top: 5px;
     bottom: 5px;
-} 
+}
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
     background-color: #454545;

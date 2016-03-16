@@ -187,15 +187,15 @@ var RoomSubList = React.createClass({
         var rooms = this.state.sortedList;
         if (found.room) {
             rooms.splice(found.index, 1);
-        }        
+        }
         else {
             console.warn("Can't remove room " + room.roomId + " - can't find it");
         }
         this.setState({ sortedList: rooms });
     },
 
-    findRoomTile: function(room) {        
-        var index = this.state.sortedList.indexOf(room); 
+    findRoomTile: function(room) {
+        var index = this.state.sortedList.indexOf(room);
         if (index >= 0) {
             // console.log("found: room: " + room.roomId + " with index " + index);
         }
@@ -210,7 +210,7 @@ var RoomSubList = React.createClass({
     },
 
     calcManualOrderTagData: function(room) {
-        var index = this.state.sortedList.indexOf(room); 
+        var index = this.state.sortedList.indexOf(room);
 
         // we sort rooms by the lexicographic ordering of the 'order' metadata on their tags.
         // for convenience, we calculate this for now a floating point number between 0.0 and 1.0.
@@ -274,7 +274,7 @@ var RoomSubList = React.createClass({
     },
 
     _getHeaderJsx: function() {
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");        
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
         return (
             <h2 onClick={ this.onClick } className="mx_RoomSubList_label">
                 { this.props.collapsed ? '' : this.props.label }
@@ -332,7 +332,7 @@ var RoomSubList = React.createClass({
             }
             else {
                 subList = <TruncatedList className={ classes }>
-                          </TruncatedList>;                
+                          </TruncatedList>;
             }
 
             return connectDropTarget(
@@ -356,7 +356,7 @@ var RoomSubList = React.createClass({
 
 // Export the wrapped version, inlining the 'collect' functions
 // to more closely resemble the ES7
-module.exports = 
+module.exports =
 DropTarget('RoomTile', roomListTarget, function(connect) {
     return {
         connectDropTarget: connect.dropTarget(),

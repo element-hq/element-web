@@ -38,7 +38,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        dis.unregister(this.dispatcherRef);        
+        dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }

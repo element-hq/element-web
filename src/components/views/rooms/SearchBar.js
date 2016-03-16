@@ -50,7 +50,7 @@ module.exports = React.createClass({
     onSearch: function() {
         this.props.onSearch(this.refs.search_term.value, this.state.scope);
     },
-    
+
     render: function() {
         var searchButtonClasses = classNames({ mx_SearchBar_searchButton : true, mx_SearchBar_searching: this.props.searchInProgress });
         var thisRoomClasses = classNames({ mx_SearchBar_button : true, mx_SearchBar_unselected : this.state.scope !== 'Room' });

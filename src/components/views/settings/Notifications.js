@@ -120,7 +120,7 @@ var ACTION_DISABLED = null;
  */
 var VectorPushRulesDefinitions = {
 
-     // Messages containing user's display name 
+     // Messages containing user's display name
      // (skip contains_user_name which is too geeky)
      ".m.rule.contains_display_name": {
         kind: "underride",
@@ -225,7 +225,7 @@ module.exports = React.createClass({
         DISPLAY: "DISPLAY", // The component is ready and display data
         ERROR: "ERROR"      // There was an error
     },
-    
+
     getInitialState: function() {
         return {
             phase: this.phases.LOADING,
@@ -239,11 +239,11 @@ module.exports = React.createClass({
             externalContentRules: []        // Keyword push rules that have been defined outside Vector UI
         };
     },
-    
+
     componentWillMount: function() {
         this._refreshFromServer();
     },
-    
+
     onEnableNotificationsChange: function(event) {
         var self = this;
         this.setState({
@@ -254,15 +254,15 @@ module.exports = React.createClass({
            self._refreshFromServer();
         });
     },
-    
+
     onEnableDesktopNotificationsChange: function(event) {
         UserSettingsStore.setEnableNotifications(event.target.checked);
     },
-    
+
     onNotifStateButtonClicked: function(event) {
         var vectorRuleId = event.target.className.split("-")[0];
         var newPushRuleVectorState = event.target.className.split("-")[1];
-        
+
         if ("_keywords" === vectorRuleId) {
             this._setKeywordsPushRuleVectorState(newPushRuleVectorState)
         }
@@ -273,7 +273,7 @@ module.exports = React.createClass({
             }
         }
     },
-    
+
     onKeywordsClicked: function(event) {
         var self = this;
 
@@ -314,13 +314,13 @@ module.exports = React.createClass({
                         }
                         return array;
                     },[]);
-                    
+
                     self._setKeywords(newKeywords);
                 }
             }
         });
     },
-    
+
     getRule: function(vectorRuleId) {
         for (var i in this.state.vectorPushRules) {
             var rule = this.state.vectorPushRules[i];
@@ -329,7 +329,7 @@ module.exports = React.createClass({
             }
         }
     },
-    
+
     _actionsFor: function(pushRuleVectorState) {
         if (pushRuleVectorState === PushRuleVectorState.ON) {
             return ACTION_NOTIFY;
@@ -338,12 +338,12 @@ module.exports = React.createClass({
             return ACTION_HIGHLIGHT_DEFAULT_SOUND;
         }
     },
-    
+
     // Determine whether a content rule is in the PushRuleVectorState.ON category or in PushRuleVectorState.LOUD
     // regardless of its enabled state. Returns undefined if it does not match these categories.
     _contentRuleVectorStateKind: function(rule) {
         var stateKind;
- 
+
         // Count tweaks to determine if it is a ON or LOUD rule
         var tweaks = 0;
         for (var j in rule.actions) {
@@ -363,9 +363,9 @@ module.exports = React.createClass({
         }
         return stateKind;
     },
-    
-    _setPushRuleVectorState: function(rule, newPushRuleVectorState) {        
-        if (rule && rule.vectorState !== newPushRuleVectorState) {   
+
+    _setPushRuleVectorState: function(rule, newPushRuleVectorState) {
+        if (rule && rule.vectorState !== newPushRuleVectorState) {
 
             this.setState({
                 phase: this.phases.LOADING
@@ -401,14 +401,14 @@ module.exports = React.createClass({
             });
         }
     },
-    
+
     _setKeywordsPushRuleVectorState: function(newPushRuleVectorState) {
         // Is there really a change?
-        if (this.state.vectorContentRules.vectorState === newPushRuleVectorState 
+        if (this.state.vectorContentRules.vectorState === newPushRuleVectorState
             || this.state.vectorContentRules.rules.length === 0) {
             return;
         }
-        
+
         var self = this;
         var cli = MatrixClientPeg.get();
 
@@ -469,7 +469,7 @@ module.exports = React.createClass({
             });
         });
     },
-    
+
     _setKeywords: function(newKeywords) {
         this.setState({
             phase: this.phases.LOADING
@@ -517,9 +517,9 @@ module.exports = React.createClass({
             var pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
             if (pushRuleVectorStateKind === PushRuleVectorState.OFF) {
                 // When the current global keywords rule is OFF, we need to look at
-                // the flavor of rules in 'vectorContentRules' to apply the same actions 
+                // the flavor of rules in 'vectorContentRules' to apply the same actions
                 // when creating the new rule.
-                // Thus, this new rule will join the 'vectorContentRules' set. 
+                // Thus, this new rule will join the 'vectorContentRules' set.
                 if (self.state.vectorContentRules.rules.length) {
                     pushRuleVectorStateKind = self._contentRuleVectorStateKind(self.state.vectorContentRules.rules[0]);
                 }
@@ -610,7 +610,7 @@ module.exports = React.createClass({
     },
 
     _refreshFromServer: function() {
-        var self = this;  
+        var self = this;
         MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).done(function(rulesets) {
             MatrixClientPeg.get().pushRules = rulesets;
 
@@ -685,8 +685,8 @@ module.exports = React.createClass({
             // whereas Matrix has a push rule per keyword.
             // Vector can set the unique rule in ON, LOUD or OFF state.
             // Matrix has enabled/disabled plus a combination of (highlight, sound) tweaks.
-            
-            // The code below determines which set of user's content push rules can be 
+
+            // The code below determines which set of user's content push rules can be
             // displayed by the vector UI.
             // Push rules that does not fit, ie defined by another Matrix client, ends
             // in self.state.externalContentRules.
@@ -697,14 +697,14 @@ module.exports = React.createClass({
                 self.state.vectorContentRules = {
                     vectorState: PushRuleVectorState.LOUD,
                     rules: contentRules.loud
-                } 
+                }
                self.state.externalContentRules = [].concat(contentRules.loud_but_disabled, contentRules.on, contentRules.on_but_disabled, contentRules.other);
             }
             else if (contentRules.loud_but_disabled.length) {
                 self.state.vectorContentRules = {
                     vectorState: PushRuleVectorState.OFF,
                     rules: contentRules.loud_but_disabled
-                } 
+                }
                self.state.externalContentRules = [].concat(contentRules.on, contentRules.on_but_disabled, contentRules.other);
             }
             else if (contentRules.on.length) {
@@ -787,7 +787,7 @@ module.exports = React.createClass({
                         }
 
                         if (!vectorState) {
-                            console.error("Cannot translate rule actions into Vector rule state. Rule: " + rule); 
+                            console.error("Cannot translate rule actions into Vector rule state. Rule: " + rule);
                             vectorState = PushRuleVectorState.OFF;
                         }
                     }
@@ -803,7 +803,7 @@ module.exports = React.createClass({
                     });
                 }
             }
-            
+
             // Build the rules not managed by Vector UI
             var otherRulesDescriptions = {
                 '.m.rule.message': "Notify for all other messages/rooms",
@@ -814,7 +814,7 @@ module.exports = React.createClass({
             for (var i in defaultRules.others) {
                 var rule = defaultRules.others[i];
                 var ruleDescription = otherRulesDescriptions[rule.rule_id];
-                
+
                 // Show enabled default rules that was modified by the user
                 if (ruleDescription && rule.enabled && !rule.default) {
                     rule.description = ruleDescription;
@@ -827,7 +827,7 @@ module.exports = React.createClass({
             });
         });
     },
-    
+
     _updatePushRuleActions: function(rule, actions, enabled) {
         var cli = MatrixClientPeg.get();
         var deferred = q.defer();
@@ -874,7 +874,7 @@ module.exports = React.createClass({
             </tr>
         );
     },
-    
+
     renderNotifRulesTableRows: function() {
         var rows = [];
         for (var i in this.state.vectorPushRules) {
@@ -884,7 +884,7 @@ module.exports = React.createClass({
         return rows;
     },
 
-    render: function() { 
+    render: function() {
         var self = this;
 
         if (this.state.phase === this.phases.LOADING) {
@@ -958,7 +958,7 @@ module.exports = React.createClass({
                         { externalRules }
                     </ul>
                 </div>
-            ); 
+            );
         }
 
         return (
@@ -1022,7 +1022,7 @@ module.exports = React.createClass({
                     </div>
 
                     { advancedSettings }
- 
+
                 </div>
 
             </div>

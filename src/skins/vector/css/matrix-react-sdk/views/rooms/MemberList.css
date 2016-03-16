@@ -91,12 +91,12 @@ limitations under the License.
     padding-left: 3px;
     padding-right: 12px;
     margin-top: 8px;
-    margin-bottom: 4px;    
+    margin-bottom: 4px;
 }
 
 /* we have to have display: table in order for the horizontal wrapping to work */
 .mx_MemberList_wrapper {
-    display: table; 
+    display: table;
     table-layout: fixed;
     width: 100%;
 }

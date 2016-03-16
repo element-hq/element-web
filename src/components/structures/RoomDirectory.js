@@ -47,7 +47,7 @@ module.exports = React.createClass({
         var self = this;
         MatrixClientPeg.get().publicRooms(function (err, data) {
             if (err) {
-                self.setState({ loading: false });                
+                self.setState({ loading: false });
                 console.error("Failed to get publicRooms: %s", JSON.stringify(err));
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
@@ -124,7 +124,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomDirectory_perm">Guests can join</div>
                 );
             }
-            
+
             perms = null;
             if (guestRead || guestJoin) {
                 perms = <div className="mx_RoomDirectory_perms">{guestRead} {guestJoin}</div>;
@@ -169,7 +169,7 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.state.loading) {
-            var Loader = sdk.getComponent("elements.Spinner");            
+            var Loader = sdk.getComponent("elements.Spinner");
             return (
                 <div className="mx_RoomDirectory">
                     <Loader />

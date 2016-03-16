@@ -23,7 +23,7 @@ module.exports = React.createClass({
     onRegisterClicked: function() {
         dis.dispatch({'action': 'start_upgrade_registration'});
     },
- 
+
     onLoginClicked: function() {
         dis.dispatch({'action': 'logout'});
         dis.dispatch({'action': 'start_login'});
