@@ -939,12 +939,12 @@ module.exports = React.createClass({
             // This needs to be in in a try block as it will throw
             // if there are more than 100 badge count changes in
             // its internal queue
-            var bgColor = "#0d0",
+            var bgColor = "#d00",
                 notif = notifCount;
 
             if(state === "ERROR") {
                 notif = notif || "×";
-                bgColor = "#d00";
+                bgColor = "#f00";
             }
 
             this.favicon.badge(notif, {
