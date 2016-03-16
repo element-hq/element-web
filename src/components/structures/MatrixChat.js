@@ -902,16 +902,21 @@ module.exports = React.createClass({
             // This needs to be in in a try block as it will throw
             // if there are more than 100 badge count changes in
             // its internal queue
-            this.favicon.badge(notifCount);
+            var bgColor = "#0d0",
+                notif = notifCount;
+
+            if(state === "ERROR") {
+                notif = notif || "×";
+                bgColor = "#d00";
+            }
+
+            this.favicon.badge(notif, {
+                bgColor: bgColor
+            });
         } catch (e) {
             console.warn("Failed to set badge count: "+e.message);
         }
-        document.title = "Vector"+(notifCount > 0 ? " ["+notifCount+"]" : "");
-
-        if(state === "ERROR") {
-            this.favicon.badge("×");
-            document.title = "Vector [ERROR]";
-        }
+        document.title = `Vector ${state === "ERROR" ? " [offline]" : ""}${notifCount > 0 ? ` [${notifCount}]` : ""}`;
     },
 
     onUserSettingsClose: function() {
