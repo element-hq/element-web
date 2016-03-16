@@ -127,15 +127,9 @@ MemberEntry.fromMemberList = function(members) {
             return 0; // don't care
         }
         else { // both User objects exist
-            if (userA.lastActiveAgo < userB.lastActiveAgo) {
-                return -1; // a comes first
-            }
-            else if (userA.lastActiveAgo > userB.lastActiveAgo) {
-                return 1; // b comes first
-            }
-            else {
-                return 0; // same last active ago
-            }
+            var lastActiveAgoA = userA.lastActiveAgo || Number.MAX_SAFE_INTEGER;
+            var lastActiveAgoB = userB.lastActiveAgo || Number.MAX_SAFE_INTEGER;
+            return lastActiveAgoA - lastActiveAgoB;
         }
     }).map(function(m) {
         return new MemberEntry(m);
