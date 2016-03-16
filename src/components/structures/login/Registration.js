@@ -255,7 +255,7 @@ module.exports = React.createClass({
                 <div className="mx_Login_error">{this.state.errorText}</div>
                 {busySpinner}
                 <ServerConfig ref="serverConfig"
-                    withToggleButton={true}
+                    withToggleButton={ this.registerLogic.getStep() === "Register.START" }
                     customHsUrl={this.props.customHsUrl}
                     customIsUrl={this.props.customIsUrl}
                     defaultHsUrl={this.props.defaultHsUrl}

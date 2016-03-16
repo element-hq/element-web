@@ -151,6 +151,7 @@ module.exports = React.createClass({
                     </label>
                     <input className="mx_Login_field" id="hsurl" type="text"
                         placeholder={this.props.defaultHsUrl}
+                        disabled={!this.props.withToggleButton}
                         value={this.state.hs_url}
                         onChange={this.onHomeserverChanged} />
                     <label className="mx_Login_label mx_ServerConfig_islabel" htmlFor="isurl">
@@ -158,6 +159,7 @@ module.exports = React.createClass({
                     </label>
                     <input className="mx_Login_field" id="isurl" type="text"
                         placeholder={this.props.defaultIsUrl}
+                        disabled={!this.props.withToggleButton}
                         value={this.state.is_url}
                         onChange={this.onIdentityServerChanged} />
                     <a className="mx_ServerConfig_help" href="#" onClick={this.showHelpPopup}>
