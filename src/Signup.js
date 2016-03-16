@@ -118,7 +118,7 @@ class Register extends Signup {
         return this._tryRegister();
     }
 
-    _tryRegister(authDict) {
+    _tryRegister(authDict, poll_for_success) {
         var self = this;
 
         var bindEmail;
@@ -137,25 +137,32 @@ class Register extends Signup {
             self.setStep("COMPLETE");
             return result; // contains the credentials
         }, function(error) {
-            if (error.httpStatus === 401 && error.data && error.data.flows) {
-                self.data = error.data || {};
-                var flow = self.chooseFlow(error.data.flows);
+            if (error.httpStatus === 401) {
+                if (error.data && error.data.flows) {
+                    self.params.sessionId = error.data.session;
+                    self.data = error.data || {};
+                    var flow = self.chooseFlow(error.data.flows);
 
-                if (flow) {
-                    console.log("Active flow => %s", JSON.stringify(flow));
-                    var flowStage = self.firstUncompletedStage(flow);
-                    return self.startStage(flowStage);
+                    if (flow) {
+                        console.log("Active flow => %s", JSON.stringify(flow));
+                        var flowStage = self.firstUncompletedStage(flow);
+                        if (flowStage != self.activeStage) {
+                            return self.startStage(flowStage);
+                        }
+                    }
                 }
-                else {
-                    throw new Error("Unable to register - missing email address?");
+                if (poll_for_success) {
+                    return q.delay(5000).then(function() {
+                        return self._tryRegister(authDict, poll_for_success);
+                    });
+                } else {
+                    throw new Error("Authorisation failed!");
                 }
             } else {
                 if (error.errcode === 'M_USER_IN_USE') {
                     throw new Error("Username in use");
                 } else if (error.errcode == 'M_INVALID_USERNAME') {
                     throw new Error("User names may only contain alphanumeric characters, underscores or dots!");
-                } else if (error.httpStatus == 401) {
-                    throw new Error("Authorisation failed!");
                 } else if (error.httpStatus >= 400 && error.httpStatus < 500) {
                     throw new Error(`Registration failed! (${error.httpStatus})`);
                 } else if (error.httpStatus >= 500 && error.httpStatus < 600) {
@@ -200,7 +207,7 @@ class Register extends Signup {
         return stage.complete().then(function(request) {
             if (request.auth) {
                 console.log("Stage %s is returning an auth dict", stageName);
-                return self._tryRegister(request.auth);
+                return self._tryRegister(request.auth, request.poll_for_success);
             }
             else {
                 // never resolve the promise chain. This is for things like email auth

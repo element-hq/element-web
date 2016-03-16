@@ -130,12 +130,15 @@ class EmailIdentityStage extends Stage {
         var isLocation = document.createElement('a');
         isLocation.href = this.signupInstance.getIdentityServerUrl();
 
+        var clientSecret = this.clientSecret || this.signupInstance.params.clientSecret;
+        var sid = this.sid || this.signupInstance.params.idSid;
+
         return q({
             auth: {
                 type: 'm.login.email.identity',
                 threepid_creds: {
-                    sid: this.signupInstance.params.idSid,
-                    client_secret: this.signupInstance.params.clientSecret,
+                    sid: sid,
+                    client_secret: clientSecret,
                     id_server: isLocation.host
                 }
             }
@@ -155,10 +158,10 @@ class EmailIdentityStage extends Stage {
             return this._completeVerify();
         }
 
-        var clientSecret = this.client.generateClientSecret();
+        this.clientSecret = this.client.generateClientSecret();
         var nextLink = this.signupInstance.params.registrationUrl +
                        '?client_secret=' +
-                       encodeURIComponent(clientSecret) +
+                       encodeURIComponent(this.clientSecret) +
                        "&hs_url=" +
                        encodeURIComponent(this.signupInstance.getHomeserverUrl()) +
                        "&is_url=" +
@@ -166,13 +169,18 @@ class EmailIdentityStage extends Stage {
                        "&session_id=" +
                        encodeURIComponent(this.signupInstance.getServerData().session);
 
+        var self = this;
         return this.client.requestEmailToken(
             this.signupInstance.email,
-            clientSecret,
+            this.clientSecret,
             1, // TODO: Multiple send attempts?
             nextLink
         ).then(function(response) {
-            return {}; // don't want to make a request
+            self.sid = response.sid;
+            return self._completeVerify();
+        }).then(function(request) {
+            request.poll_for_success = true;
+            return request;
         }, function(error) {
             console.error(error);
             var e = {
