@@ -78,6 +78,9 @@ function textForMemberEvent(ev) {
                 if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
                     return "VoIP conference finished";
                 }
+                else if (ev.getPrevContent().membership === "invite") {
+                    return targetName + " rejected the invitation.";
+                }
                 else {
                     return targetName + " left the room.";
                 }
