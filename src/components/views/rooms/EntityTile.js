@@ -88,6 +88,7 @@ module.exports = React.createClass({
                     <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
                     <div className="mx_EntityTile_name_hover">{ this.props.name }</div>
                     <PresenceLabel activeAgo={this.props.presenceActiveAgo}
+                        currentlyActive={this.props.presenceCurrentlyActive}
                         presenceState={this.props.presenceState} />
                 </div>
             );

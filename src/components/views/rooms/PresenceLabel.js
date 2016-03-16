@@ -67,9 +67,10 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.props.activeAgo >= 0) {
+            var ago = this.props.currentlyActive ? "now" : (this.getDuration(this.props.activeAgo) + " ago");
             return (
                 <div className="mx_PresenceLabel">
-                    { this.getPrettyPresence(this.props.presenceState) } { this.getDuration(this.props.activeAgo) } ago
+                    { this.getPrettyPresence(this.props.presenceState) } { ago }
                 </div>
             );
         }

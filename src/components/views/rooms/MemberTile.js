@@ -91,6 +91,7 @@ module.exports = React.createClass({
         
         return (
             <EntityTile {...this.props} presenceActiveAgo={active} presenceState={presenceState}
+                presenceCurrentlyActive={ member.user ? member.user.currentlyActive : false }
                 avatarJsx={av} title={this.getPowerLabel()} onClick={this.onClick}
                 shouldComponentUpdate={this.shouldComponentUpdate.bind(this)}
                 name={name} powerLevel={this.props.member.powerLevel} />

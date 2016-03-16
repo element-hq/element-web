@@ -49,6 +49,7 @@ module.exports = React.createClass({
 
         return (
             <EntityTile {...this.props} presenceState={user.presence} presenceActiveAgo={active}
+                presenceCurrentlyActive={ user.currentlyActive }
                 name={name} title={user.userId} avatarJsx={avatarJsx} />
         );
     }
