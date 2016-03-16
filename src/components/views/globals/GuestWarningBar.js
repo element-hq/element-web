@@ -25,8 +25,7 @@ module.exports = React.createClass({
     },
 
     onLoginClicked: function() {
-        dis.dispatch({'action': 'logout'});
-        dis.dispatch({'action': 'start_login'});
+        dis.dispatch({'action': 'start_login_from_guest'});
     },
 
     render: function() {
