@@ -273,6 +273,7 @@ module.exports = React.createClass({
         var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
         var events_levels = (power_levels ? power_levels.events : {}) || {};
         var cli = MatrixClientPeg.get();
+        var roomState = this.props.room.currentState;
         var user_id = cli.credentials.userId;
 
         if (power_levels) {
@@ -421,13 +422,13 @@ module.exports = React.createClass({
                         Mute notifications for this room
                     </label>
                     <label>
-                        <input type="checkbox" disabled={ !cli.maySendStateEvent("m.room.join_rule") }
+                        <input type="checkbox" disabled={ !roomState.maySendStateEvent("m.room.join_rule", user_id) }
                             onChange={this._onToggle.bind(this, "join_rule", "invite", "public")}
                             defaultChecked={this.state.join_rule !== "public"}/>
                         Make this room private
                     </label>
                     <label>
-                        <input type="checkbox" disabled={ !cli.maySendStateEvent("m.room.guest_access") }
+                        <input type="checkbox" disabled={ !roomState.maySendStateEvent("m.room.guest_access", user_id) }
                             onChange={this._onToggle.bind(this, "guest_access", "can_join", "forbidden")}
                             defaultChecked={this.state.guest_access === "can_join"}/>
                         Let guests join this room
@@ -436,28 +437,28 @@ module.exports = React.createClass({
                         <h3>Who can read history?</h3>
                         <label htmlFor="hvis_wr">
                             <input type="radio" id="hvis_wr" name="historyVis" value="world_readable"
-                                    disabled={ !cli.maySendStateEvent("m.room.history_visibility") }
+                                    disabled={ !roomState.maySendStateEvent("m.room.history_visibility", user_id) }
                                     defaultChecked={historyVisibility === "world_readable"}
                                     onChange={this._onHistoryRadioToggle} />
                             Anyone
                         </label>
                         <label htmlFor="hvis_sh">
                             <input type="radio" id="hvis_sh" name="historyVis" value="shared"
-                                    disabled={ !cli.maySendStateEvent("m.room.history_visibility") }
+                                    disabled={ !roomState.maySendStateEvent("m.room.history_visibility", user_id) }
                                     defaultChecked={historyVisibility === "shared"}
                                     onChange={this._onHistoryRadioToggle} />
                             Members only (since the room began)
                         </label>
                         <label htmlFor="hvis_inv">
                             <input type="radio" id="hvis_inv" name="historyVis" value="invited"
-                                    disabled={ !cli.maySendStateEvent("m.room.history_visibility") }
+                                    disabled={ !roomState.maySendStateEvent("m.room.history_visibility", user_id) }
                                     defaultChecked={historyVisibility === "invited"}
                                     onChange={this._onHistoryRadioToggle} />
                             Members only (since they were invited)
                         </label>
                         <label htmlFor="hvis_joi">
                             <input type="radio" id="hvis_joi" name="historyVis" value="joined"
-                                    disabled={ !cli.maySendStateEvent("m.room.history_visibility") }
+                                    disabled={ !roomState.maySendStateEvent("m.room.history_visibility", user_id) }
                                     defaultChecked={historyVisibility === "joined"}
                                     onChange={this._onHistoryRadioToggle} />
                             Members only (since they joined)
@@ -477,8 +478,8 @@ module.exports = React.createClass({
 
                 <AliasSettings ref="alias_settings"
                     roomId={this.props.room.roomId}
-                    canSetCanonicalAlias={ cli.maySendStateEvent("m.room.canonical_alias") }
-                    canSetAliases={ cli.maySendStateEvent("m.room.aliases") }
+                    canSetCanonicalAlias={ roomState.maySendStateEvent("m.room.canonical_alias", user_id) }
+                    canSetAliases={ roomState.maySendStateEvent("m.room.aliases", user_id) }
                     canonicalAliasEvent={this.props.room.currentState.getStateEvents('m.room.canonical_alias', '')}
                     aliasEvents={this.props.room.currentState.getStateEvents('m.room.aliases')} />
 
