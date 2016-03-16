@@ -314,7 +314,7 @@ module.exports = React.createClass({
             return;
         }
 
-        var isEmote = /^\/me /i.test(contentText);
+        var isEmote = /^\/me( |$)/i.test(contentText);
         var sendMessagePromise;
 
         if (isEmote) {
