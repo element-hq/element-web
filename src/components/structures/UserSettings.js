@@ -90,6 +90,15 @@ module.exports = React.createClass({
     },
 
     onAvatarPickerClick: function(ev) {
+        if (MatrixClientPeg.get().isGuest()) {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: "Guests can't set avatars. Please register.",
+            });
+            return;
+        }
+
         if (this.refs.file_label) {
             this.refs.file_label.click();
         }
@@ -271,7 +280,7 @@ module.exports = React.createClass({
         var addThreepidSection;
         if (this.state.email_add_pending) {
             addThreepidSection = <Loader />;
-        } else {
+        } else if (!MatrixClientPeg.get().isGuest()) {
             addThreepidSection = (
                 <div className="mx_UserSettings_profileTableRow" key="new">
                     <div className="mx_UserSettings_profileLabelCell">

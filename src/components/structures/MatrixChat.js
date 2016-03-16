@@ -191,7 +191,7 @@ module.exports = React.createClass({
         }
     },
 
-    _registerAsGuest: function() {
+    _registerAsGuest: function(showWarning) {
         var self = this;
         console.log("Doing guest login on %s", this.getCurrentHsUrl());
         var hsUrl = this.getCurrentHsUrl();
@@ -209,6 +209,13 @@ module.exports = React.createClass({
                 guest: true
             });
         }, function(err) {
+            if (showWarning) {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failed to login as guest",
+                    description: err.data
+                });
+            }
             console.error("Failed to register as guest: " + err + " " + err.data);
             self._setAutoRegisterAsGuest(false);
         });
@@ -1096,7 +1103,7 @@ module.exports = React.createClass({
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     onForgotPasswordClick={this.onForgotPasswordClick} 
-                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest: undefined}
+                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest.bind(this, true) : undefined}
                     onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
                     />
             );

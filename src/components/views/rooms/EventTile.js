@@ -44,7 +44,8 @@ var eventTileTypes = {
     'm.call.hangup' : 'messages.TextualEvent',
     'm.room.name'   : 'messages.TextualEvent',
     'm.room.topic'  : 'messages.TextualEvent',
-    'm.room.third_party_invite': 'messages.TextualEvent'
+    'm.room.third_party_invite' : 'messages.TextualEvent',
+    'm.room.history_visibility' : 'messages.TextualEvent',
 };
 
 var MAX_READ_AVATARS = 5;

@@ -1217,11 +1217,10 @@ module.exports = React.createClass({
                 />
             );
         }
-        else if (this.state.canPeek &&
-                (!myMember || myMember.membership !== "join")) {
+        else if (!myMember || myMember.membership !== "join") {
             aux = (
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true}
-                                spinner={this.state.joining}
+                                spinner={this.state.joining} canPreview={ this.state.canPeek }
                 />
             );
         }
