@@ -60,9 +60,12 @@ module.exports = React.createClass({
         // useful for joining rooms by alias correctly (and fixing https://github.com/vector-im/vector-web/issues/819)
         roomAlias: React.PropTypes.string,
 
-        // The URL used to join this room from an email invite
-        // (given as part of the link in the invite email)
-        inviteSignUrl: React.PropTypes.string,
+        // An object representing a third party invite to join this room
+        // Fields:
+        // * inviteSignUrl (string) The URL used to join this room from an email invite
+        //                          (given as part of the link in the invite email)
+        // * invitedEmail (string) The email address that was invited to this room
+        thirdPartyInvite: React.PropTypes.object,
 
         // Any data about the room that would normally come from the Home Server
         // but has been passed out-of-band, eg. the room name and avatar URL
@@ -538,8 +541,9 @@ module.exports = React.createClass({
         }
 
         display_name_promise.then(() => {
+            var sign_url = this.props.thirdPartyInvite ? this.props.thirdPartyInvite.inviteSignUrl : undefined;
             return MatrixClientPeg.get().joinRoom(this.props.roomAlias || this.props.roomId,
-                                                  { inviteSignUrl: this.props.inviteSignUrl } )
+                                                  { inviteSignUrl: sign_url } )
         }).done(function() {
             // It is possible that there is no Room yet if state hasn't come down
             // from /sync - joinRoom will resolve when the HTTP request to join succeeds,
@@ -1097,7 +1101,13 @@ module.exports = React.createClass({
                     if (this.props.oobData) {
                         inviterName = this.props.oobData.inviterName;
                     }
+                    var invitedEmail = undefined;
+                    if (this.props.thirdPartyInvite) {
+                        invitedEmail = this.props.thirdPartyInvite.invitedEmail;
+                    }
 
+                    // We have no room object for this room, only the ID.
+                    // We've got to this room by following a link, possibly a third party invite.
                     return (
                         <div className="mx_RoomView">
                             <RoomHeader ref="header" room={this.state.room} oobData={this.props.oobData} />
@@ -1107,6 +1117,7 @@ module.exports = React.createClass({
                                                 canJoin={ true } canPreview={ false }
                                                 spinner={this.state.joining}
                                                 inviterName={inviterName}
+                                                invitedEmail={invitedEmail}
                                 />
                             </div>
                             <div className="mx_RoomView_messagePanel"></div>
@@ -1138,6 +1149,7 @@ module.exports = React.createClass({
                 // as they could be a spam vector.
                 // XXX: in future we could give the option of a 'Preview' button which lets them view anyway.
 
+                // We have a regular invite for this room.
                 return (
                     <div className="mx_RoomView">
                         <RoomHeader ref="header" room={this.state.room}/>
@@ -1208,24 +1220,24 @@ module.exports = React.createClass({
         else if (this.state.searching) {
             aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
         }
-        else if (this.state.guestsCanJoin && MatrixClientPeg.get().isGuest() &&
-                (!myMember || myMember.membership !== "join")) {
+        else if (!myMember || myMember.membership !== "join") {
             var inviterName = undefined;
             if (this.props.oobData) {
                 inviterName = this.props.oobData.inviterName;
             }
+            var invitedEmail = undefined;
+            if (this.props.thirdPartyInvite) {
+                invitedEmail = this.props.thirdPartyInvite.invitedEmail;
+            }
+            // We do have a room object for this room, but we're not currently in it.
+            // We may have a 3rd party invite to it.
             aux = (
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true}
-                                onRejectClick={ this.onRejectThreepidInviteButtonClicked }
+                                onRejectClick={this.onRejectThreepidInviteButtonClicked}
                                 spinner={this.state.joining}
                                 inviterName={inviterName}
-                />
-            );
-        }
-        else if (!myMember || myMember.membership !== "join") {
-            aux = (
-                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true}
-                                spinner={this.state.joining} canPreview={ this.state.canPeek }
+                                invitedEmail={invitedEmail}
+                                canPreview={this.state.canPeek}
                 />
             );
         }

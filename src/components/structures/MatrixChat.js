@@ -390,7 +390,7 @@ module.exports = React.createClass({
             case 'view_room':
                 this._viewRoom(
                     payload.room_id, payload.room_alias, payload.show_settings, payload.event_id,
-                    payload.invite_sign_url, payload.oob_data
+                    payload.third_party_invite, payload.oob_data
                 );
                 break;
             case 'view_prev_room':
@@ -437,7 +437,7 @@ module.exports = React.createClass({
                         room_id: foundRoom.roomId,
                         room_alias: payload.room_alias,
                         event_id: payload.event_id,
-                        invite_sign_url: payload.invite_sign_url,
+                        third_party_invite: payload.third_party_invite,
                         oob_data: payload.oob_data,
                     });
                     return;
@@ -450,7 +450,7 @@ module.exports = React.createClass({
                         room_id: result.room_id,
                         room_alias: payload.room_alias,
                         event_id: payload.event_id,
-                        invite_sign_url: payload.invite_sign_url,
+                        third_party_invite: payload.third_party_invite,
                         oob_data: payload.oob_data,
                     });
                 });
@@ -539,10 +539,14 @@ module.exports = React.createClass({
     //
     // eventId is optional and will cause a switch to the context of that
     // particular event.
+    // @param {Object} thirdPartyInvite Object containing data about the third party
+    //                                    we received to join the room, if any.
+    // @param {Object} thirdPartyInvite.inviteSignUrl 3pid invite sign URL
+    // @param {Object} thirdPartyInvite.invitedwithEmail The email address the invite was sent to
     // @param {Object} oob_data Object of additional data about the room
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
-    _viewRoom: function(roomId, roomAlias, showSettings, eventId, invite_sign_url, oob_data) {
+    _viewRoom: function(roomId, roomAlias, showSettings, eventId, thirdPartyInvite, oob_data) {
         // before we switch room, record the scroll state of the current room
         this._updateScrollMap();
 
@@ -555,7 +559,7 @@ module.exports = React.createClass({
             highlightedEventId: eventId,
             initialEventPixelOffset: undefined,
             page_type: this.PageTypes.RoomView,
-            inviteSignUrl: invite_sign_url,
+            thirdPartyInvite: thirdPartyInvite,
             roomOobData: oob_data,
         };
 
@@ -783,6 +787,11 @@ module.exports = React.createClass({
             var roomString = segments[0];
             var eventId = segments[1]; // undefined if no event id given
 
+            // FIXME: sort_out caseConsistency
+            var third_party_invite = {
+                inviteSignUrl: params.signurl,
+                invitedEmail: params.email,
+            };
             var oob_data = {
                 name: params.room_name,
                 avatarUrl: params.room_avatar_url,
@@ -794,7 +803,7 @@ module.exports = React.createClass({
                     action: 'view_room_alias',
                     room_alias: roomString,
                     event_id: eventId,
-                    invite_sign_url: params.signurl,
+                    third_party_invite: third_party_invite,
                     oob_data: oob_data,
                 });
             } else {
@@ -802,7 +811,7 @@ module.exports = React.createClass({
                     action: 'view_room',
                     room_id: roomString,
                     event_id: eventId,
-                    invite_sign_url: params.signurl,
+                    third_party_invite: third_party_invite,
                     oob_data: oob_data,
                 });
             }
@@ -1009,7 +1018,7 @@ module.exports = React.createClass({
                             roomId={this.state.currentRoom}
                             roomAlias={this.state.currentRoomAlias}
                             eventId={this.state.initialEventId}
-                            inviteSignUrl={this.state.inviteSignUrl}
+                            thirdPartyInvite={this.state.thirdPartyInvite}
                             oobData={this.state.roomOobData}
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}

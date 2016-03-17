@@ -29,6 +29,9 @@ module.exports = React.createClass({
         // if inviterName is specified, the preview bar will shown an invite to the room.
         // You should also specify onRejectClick if specifiying inviterName
         inviterName: React.PropTypes.string,
+
+        // If invited by 3rd party invite, the email address the invite was sent to
+        invitedEmail: React.PropTypes.string,
         canJoin: React.PropTypes.bool,
         canPreview: React.PropTypes.bool,
         spinner: React.PropTypes.bool,
@@ -61,6 +64,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomPreviewBar_join_text">
                         Would you like to <a onClick={ this.props.onJoinClick }>accept</a> or <a onClick={ this.props.onRejectClick }>decline</a> this invitation?
                     </div>
+                    <div>{this.props.invitedEmail} was invited</div>
                 </div>
             );
 
