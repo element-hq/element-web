@@ -217,11 +217,8 @@ module.exports = React.createClass({
         console.log(
             "Invite %s to %s - isEmail=%s", inputText, this.props.roomId, isEmailAddress
         );
-        promise.done(function(res) {
+        promise.then(function(res) {
             console.log("Invited %s", inputText);
-            self.setState({
-                inviting: false
-            });
         }, function(err) {
             if (err !== null) {
                 console.error("Failed to invite: %s", JSON.stringify(err));
@@ -230,9 +227,17 @@ module.exports = React.createClass({
                     description: err.message
                 });
             }
+        }).finally(function() {
             self.setState({
                 inviting: false
             });
+            // XXX: hacky focus on the invite box
+            setTimeout(function() {
+                var inviteBox = document.getElementById("mx_SearchableEntityList_query");
+                if (inviteBox) {
+                    inviteBox.focus();
+                }
+            }, 0);
         });
     },
 
