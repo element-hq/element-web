@@ -1107,6 +1107,7 @@ module.exports = React.createClass({
                                                 canJoin={ true } canPreview={ false }
                                                 spinner={this.state.joining}
                                                 inviterName={inviterName}
+                                                room={this.state.room}
                                 />
                             </div>
                             <div className="mx_RoomView_messagePanel"></div>
@@ -1147,6 +1148,7 @@ module.exports = React.createClass({
                                             inviterName={ inviterName }
                                             canJoin={ true } canPreview={ false }
                                             spinner={this.state.joining}
+                                            room={this.state.room}                                            
                             />
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
@@ -1219,6 +1221,7 @@ module.exports = React.createClass({
                                 onRejectClick={ this.onRejectThreepidInviteButtonClicked }
                                 spinner={this.state.joining}
                                 inviterName={inviterName}
+                                room={this.state.room}                                
                 />
             );
         }
@@ -1226,6 +1229,7 @@ module.exports = React.createClass({
             aux = (
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true}
                                 spinner={this.state.joining} canPreview={ this.state.canPeek }
+                                room={this.state.room}
                 />
             );
         }
