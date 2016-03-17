@@ -232,6 +232,17 @@ module.exports = React.createClass({
         var self = this;
         switch (payload.action) {
             case 'logout':
+                var guestCreds;
+                if (MatrixClientPeg.get().isGuest()) {
+                    guestCreds = { // stash our guest creds so we can backout if needed
+                        userId: MatrixClientPeg.get().credentials.userId,
+                        accessToken: MatrixClientPeg.get().getAccessToken(),
+                        homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
+                        identityServerUrl: MatrixClientPeg.get().getIdentityServerUrl(),
+                        guest: true
+                    }
+                }
+
                 if (window.localStorage) {
                     var hsUrl = this.getCurrentHsUrl();
                     var isUrl = this.getCurrentIsUrl();
@@ -251,7 +262,8 @@ module.exports = React.createClass({
                 this.notifyNewScreen('login');
                 this.replaceState({
                     logged_in: false,
-                    ready: false
+                    ready: false,
+                    guestCreds: guestCreds,
                 });
                 break;
             case 'start_registration':
@@ -277,7 +289,8 @@ module.exports = React.createClass({
             case 'start_login':
                 if (this.state.logged_in) return;
                 this.replaceState({
-                    screen: 'login'
+                    screen: 'login',
+                    guestCreds: this.state.guestCreds,
                 });
                 this.notifyNewScreen('login');
                 break;
@@ -286,19 +299,6 @@ module.exports = React.createClass({
                     screen: 'post_registration'
                 });
                 break;
-            case 'start_login_from_guest':
-                this.replaceState({
-                    screen: 'login',
-                    guestCreds: { // stash our guest creds so we can backout if needed
-                        userId: MatrixClientPeg.get().credentials.userId,
-                        accessToken: MatrixClientPeg.get().getAccessToken(),
-                        homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
-                        identityServerUrl: MatrixClientPeg.get().getIdentityServerUrl(),
-                        guest: true
-                    }
-                });
-                this.notifyNewScreen('login');
-                break;            
             case 'start_upgrade_registration':
                 this.replaceState({
                     screen: "register",
