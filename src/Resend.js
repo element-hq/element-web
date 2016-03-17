@@ -32,18 +32,9 @@ module.exports = {
                 event: event
             });
         });
-        dis.dispatch({
-            action: 'message_resend_started',
-            event: event
-        });
     },
 
     removeFromQueue: function(event) {
-        MatrixClientPeg.get().getScheduler().removeEventFromQueue(event);
-        var room = MatrixClientPeg.get().getRoom(event.getRoomId());
-        if (!room) {
-            return;
-        }
-        room.removeEvents([event.getId()]);
-    }
+        MatrixClientPeg.get().cancelPendingEvent(event);
+    },
 };

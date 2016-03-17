@@ -702,7 +702,7 @@ module.exports = React.createClass({
         UserActivity.start();
         Presence.start();
         cli.startClient({
-            pendingEventOrdering: "end",
+            pendingEventOrdering: "detached",
             initialSyncLimit: this.props.config.sync_timeline_limit || 20,
         });
     },
