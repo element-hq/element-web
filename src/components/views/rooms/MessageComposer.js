@@ -198,7 +198,7 @@ module.exports = React.createClass({
                 textarea.focus();
                 break;
             case 'insert_displayname':
-                if (textarea.value) {
+                if (textarea.value.length) {
                     var left = textarea.value.substring(0, textarea.selectionStart);
                     var right = textarea.value.substring(textarea.selectionEnd);
                     if (right && right.length) {
