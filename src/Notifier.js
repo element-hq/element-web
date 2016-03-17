@@ -103,6 +103,7 @@ var Notifier = {
         MatrixClientPeg.get().on('Room.timeline', this.boundOnRoomTimeline);
         MatrixClientPeg.get().on("sync", this.boundOnSyncStateChange);
         this.toolbarHidden = false;
+        this.isPrepared = false;
     },
 
     stop: function() {
@@ -110,6 +111,7 @@ var Notifier = {
             MatrixClientPeg.get().removeListener('Room.timeline', this.boundOnRoomTimeline);
             MatrixClientPeg.get().removeListener('sync', this.boundOnSyncStateChange);
         }
+        this.isPrepared = false;
     },
 
     supportsDesktopNotifications: function() {
@@ -203,6 +205,7 @@ var Notifier = {
     },
 
     onSyncStateChange: function(state) {
+        console.log("sync state change: " + state);
         if (state === "PREPARED" || state === "SYNCING") {
             this.isPrepared = true;
         }
