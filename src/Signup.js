@@ -139,6 +139,11 @@ class Register extends Signup {
         }, function(error) {
             if (error.httpStatus === 401) {
                 if (error.data && error.data.flows) {
+                    // Remember the session ID from the server:
+                    // Either this is our first 401 in which case we need to store the
+                    // session ID for future calls, or it isn't in which case this
+                    // is just a no-op since it ought to be the same (or if it isn't,
+                    // we should use the latest one from the server in any case).
                     self.params.sessionId = error.data.session;
                     self.data = error.data || {};
                     var flow = self.chooseFlow(error.data.flows);
