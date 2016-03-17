@@ -268,7 +268,7 @@ module.exports = React.createClass({
 
     render: function() {
         var content = this._getContent();
-        var indicator = this._getIndicator(content !== null);
+        var indicator = this._getIndicator(this.state.whoisTypingString !== null);
 
         return (
             <div className="mx_RoomStatusBar">
