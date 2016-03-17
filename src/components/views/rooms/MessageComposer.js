@@ -201,7 +201,7 @@ module.exports = React.createClass({
                 if (textarea.value.length) {
                     var left = textarea.value.substring(0, textarea.selectionStart);
                     var right = textarea.value.substring(textarea.selectionEnd);
-                    if (right && right.length) {
+                    if (right.length) {
                         left += payload.displayname;
                     }
                     else {
