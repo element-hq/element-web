@@ -84,9 +84,38 @@ class TabComplete {
     }
 
     startTabCompleting(passive) {
+        this.originalText = this.textArea.value; // cache starting text
+
+        // grab the partial word from the text which we'll be tab-completing
+        var res = MATCH_REGEX.exec(this.originalText);
+        if (!res) {
+            this.matchedList = [];
+            return;
+        }
+        // ES6 destructuring; ignore first element (the complete match)
+        var [ , boundaryGroup, partialGroup] = res;
+
+        if (partialGroup.length === 0 && passive) {
+            return;
+        }
+
+        this.isFirstWord = partialGroup.length === this.originalText.length;
+
         this.completing = true;
         this.currentIndex = 0;
-        this._calculateCompletions(passive);
+
+        this.matchedList = [
+            new Entry(partialGroup) // first entry is always the original partial
+        ];
+
+        // find matching entries in the set of entries given to us
+        this.list.forEach((entry) => {
+            if (entry.text.toLowerCase().indexOf(partialGroup.toLowerCase()) === 0) {
+                this.matchedList.push(entry);
+            }
+        });
+
+        // console.log("calculated completions => %s", JSON.stringify(this.matchedList));
     }
 
     /**
@@ -268,38 +297,6 @@ class TabComplete {
         return this.originalText.replace(MATCH_REGEX, function() {
             return replacementText; // function form to avoid `$` special-casing
         });
-    }
-
-    _calculateCompletions(passive) {
-        this.originalText = this.textArea.value; // cache starting text
-
-        // grab the partial word from the text which we'll be tab-completing
-        var res = MATCH_REGEX.exec(this.originalText);
-        if (!res) {
-            this.matchedList = [];
-            return;
-        }
-        // ES6 destructuring; ignore first element (the complete match)
-        var [ , boundaryGroup, partialGroup] = res;
-        this.isFirstWord = partialGroup.length === this.originalText.length;
-
-        if (partialGroup.length === 0 && passive) {
-            this.stopTabCompleting();
-            return;
-        }
-
-        this.matchedList = [
-            new Entry(partialGroup) // first entry is always the original partial
-        ];
-
-        // find matching entries in the set of entries given to us
-        this.list.forEach((entry) => {
-            if (entry.text.toLowerCase().indexOf(partialGroup.toLowerCase()) === 0) {
-                this.matchedList.push(entry);
-            }
-        });
-
-        // console.log("_calculateCompletions => %s", JSON.stringify(this.matchedList));
     }
 
     _notifyStateChange() {
