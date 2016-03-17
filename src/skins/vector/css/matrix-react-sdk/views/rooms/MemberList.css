@@ -30,6 +30,11 @@ limitations under the License.
     -webkit-flex-direction: column;
 }
 
+.mx_MemberList .mx_Spinner {
+    flex: 0;
+    -webkit-flex: 0;
+}
+
 .mx_MemberList_chevron {
     position: absolute;
     right: 35px;
