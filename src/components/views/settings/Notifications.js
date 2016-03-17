@@ -28,13 +28,13 @@ var Modal = require('matrix-react-sdk/lib/Modal');
  * @enum {string}
  */
 var PushRuleVectorState = {
+    /** The push rule is disabled */
+    OFF: "off",
     /** The user will receive push notification for this rule */
     ON: "on",
     /** The user will receive push notification for this rule with sound and
         highlight if this is legitimate */
     LOUD: "loud",
-    /** The push rule is disabled */
-    OFF: "off"
 };
 
 // Encodes a dictionary of {
@@ -841,6 +841,13 @@ module.exports = React.createClass({
                 </th>
 
                 <th>
+                    <input className= {className + "-" + PushRuleVectorState.OFF}
+                        type="radio"
+                        checked={ pushRuleVectorState === PushRuleVectorState.OFF }
+                        onChange={ this.onNotifStateButtonClicked } />
+                </th>
+
+                <th>
                     <input className= {className + "-" + PushRuleVectorState.ON}
                         type="radio"
                         checked={ pushRuleVectorState === PushRuleVectorState.ON }
@@ -851,13 +858,6 @@ module.exports = React.createClass({
                     <input className= {className + "-" + PushRuleVectorState.LOUD}
                         type="radio"
                         checked={ pushRuleVectorState === PushRuleVectorState.LOUD }
-                        onChange={ this.onNotifStateButtonClicked } />
-                </th>
-
-                <th>
-                    <input className= {className + "-" + PushRuleVectorState.OFF}
-                        type="radio"
-                        checked={ pushRuleVectorState === PushRuleVectorState.OFF }
                         onChange={ this.onNotifStateButtonClicked } />
                 </th>
             </tr>
@@ -997,9 +997,9 @@ module.exports = React.createClass({
                             <thead>
                                 <tr>
                                     <th width="55%"></th>
+                                    <th width="15%">Off</th>
                                     <th width="15%">On</th>
                                     <th width="15%">Loud</th>
-                                    <th width="15%">Off</th>
                                 </tr>
                             </thead>
                             <tbody>
