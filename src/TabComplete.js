@@ -24,10 +24,10 @@ const KEY_WINDOWS = 91;
 //
 // Capturing group containing the start
 // of line or a whitespace char
-//     \_______________       __________Capturing group of 1 or more non-whitespace chars
+//     \_______________       __________Capturing group of 0 or more non-whitespace chars
 //                    _|__  _|_         followed by the end of line
 //                   /    \/   \
-const MATCH_REGEX = /(^|\s)(\S+)$/;
+const MATCH_REGEX = /(^|\s)(\S*)$/;
 
 class TabComplete {
 

@@ -38,9 +38,8 @@ module.exports = React.createClass({
         var active = -1;
 
         // FIXME: make presence data update whenever User.presence changes...
-        active = (
-            (Date.now() - (user.lastPresenceTs - user.lastActiveAgo)) || -1
-        );
+        active = user.lastActiveAgo ? 
+            (Date.now() - (user.lastPresenceTs - user.lastActiveAgo)) : -1;
 
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         var avatarJsx = (
@@ -50,6 +49,7 @@ module.exports = React.createClass({
 
         return (
             <EntityTile {...this.props} presenceState={user.presence} presenceActiveAgo={active}
+                presenceCurrentlyActive={ user.currentlyActive }
                 name={name} title={user.userId} avatarJsx={avatarJsx} />
         );
     }

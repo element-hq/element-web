@@ -25,7 +25,15 @@ module.exports = React.createClass({
     displayName: 'PresenceLabel',
 
     propTypes: {
+        // number of milliseconds ago this user was last active.
+        // zero = unknown
         activeAgo: React.PropTypes.number,
+
+        // if true, activeAgo is an approximation and "Now" should
+        // be shown instead
+        currentlyActive: React.PropTypes.bool,
+
+        // offline, online, etc
         presenceState: React.PropTypes.string
     },
 
@@ -67,9 +75,10 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.props.activeAgo >= 0) {
+            var ago = this.props.currentlyActive ? "now" : (this.getDuration(this.props.activeAgo) + " ago");
             return (
                 <div className="mx_PresenceLabel">
-                    { this.getPrettyPresence(this.props.presenceState) } { this.getDuration(this.props.activeAgo) } ago
+                    { this.getPrettyPresence(this.props.presenceState) } { ago }
                 </div>
             );
         }

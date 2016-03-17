@@ -84,14 +84,14 @@ module.exports = React.createClass({
             this.user_last_modified_time = member.user.getLastModifiedTime();
 
             // FIXME: make presence data update whenever User.presence changes...
-            active = (
-                (Date.now() - (member.user.lastPresenceTs - member.user.lastActiveAgo)) || -1
-            );
+            active = member.user.lastActiveAgo ? 
+                (Date.now() - (member.user.lastPresenceTs - member.user.lastActiveAgo)) : -1;
         }
         this.member_last_modified_time = member.getLastModifiedTime();
         
         return (
             <EntityTile {...this.props} presenceActiveAgo={active} presenceState={presenceState}
+                presenceCurrentlyActive={ member.user ? member.user.currentlyActive : false }
                 avatarJsx={av} title={this.getPowerLabel()} onClick={this.onClick}
                 name={name} powerLevel={this.props.member.powerLevel} />
         );

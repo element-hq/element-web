@@ -455,11 +455,16 @@ module.exports = React.createClass({
     },
 
     _updateTabCompleteList: new rate_limited_func(function() {
+        var cli = MatrixClientPeg.get();
+
         if (!this.state.room || !this.tabComplete) {
             return;
         }
+        var members = this.state.room.getJoinedMembers().filter(function(member) {
+            if (member.userId !== cli.credentials.userId) return true;
+        });
         this.tabComplete.setCompletionList(
-            MemberEntry.fromMemberList(this.state.room.getJoinedMembers()).concat(
+            MemberEntry.fromMemberList(members).concat(
                 CommandEntry.fromCommands(SlashCommands.getCommandList())
             )
         );
