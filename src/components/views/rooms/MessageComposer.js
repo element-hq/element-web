@@ -192,17 +192,28 @@ module.exports = React.createClass({
     },
 
     onAction: function(payload) {
+        var textarea = this.refs.textarea;
         switch (payload.action) {
             case 'focus_composer':
-                this.refs.textarea.focus();
+                textarea.focus();
                 break;
             case 'insert_displayname':
-                if (this.refs.textarea.value) {
-                    this.refs.textarea.value =
-                        this.refs.textarea.value.replace(/( ?)$/, " " + payload.displayname);
+                if (textarea.value) {
+                    var left = textarea.value.substring(0, textarea.selectionStart);
+                    var right = textarea.value.substring(textarea.selectionEnd);
+                    if (right && right.length) {
+                        left += payload.displayname;
+                    }
+                    else {
+                        left = left.replace(/( ?)$/, " " + payload.displayname);
+                    }
+                    textarea.value = left + right;
+                    textarea.focus();
+                    textarea.setSelectionRange(left.length, left.length);
                 }
                 else {
                     this.refs.textarea.value = payload.displayname + ": ";
+                    this.refs.textarea.focus();
                 }
                 break;
         }
