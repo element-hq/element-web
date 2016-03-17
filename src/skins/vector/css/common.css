@@ -63,7 +63,12 @@ input[type=text]:focus, textarea:focus {
    flexbox to adapt to the new size and cause the view to keep growing.
  */
 .gm-scrollbar-container .gm-scroll-view {
-  position: absolute;
+    position: absolute;
+}
+
+/* hack to avoid accidental click-throughs if you miss the narrow scrollbar */
+.gm-scrollbar.-vertical {
+    border-left: 6px solid transparent;
 }
 
 .mx_ContextualMenu_background {
