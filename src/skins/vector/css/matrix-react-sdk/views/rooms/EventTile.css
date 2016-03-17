@@ -29,6 +29,7 @@ limitations under the License.
     float: left;
     position: relative;
     top: 0px;
+    cursor: pointer;
 }
 
 .mx_EventTile_continuation {
