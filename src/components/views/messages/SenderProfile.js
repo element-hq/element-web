@@ -27,12 +27,6 @@ module.exports = React.createClass({
         onClick: React.PropTypes.func,
     },
 
-    getDefaultProps: function() {
-        return {
-            onClick: function() {},
-        }
-    },
-
     render: function() {
         var mxEvent = this.props.mxEvent;
         var name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
