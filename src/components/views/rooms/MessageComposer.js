@@ -196,6 +196,15 @@ module.exports = React.createClass({
             case 'focus_composer':
                 this.refs.textarea.focus();
                 break;
+            case 'insert_displayname':
+                if (this.refs.textarea.value) {
+                    this.refs.textarea.value =
+                        this.refs.textarea.value.replace(/( ?)$/, " " + payload.displayname);
+                }
+                else {
+                    this.refs.textarea.value = payload.displayname + ": ";
+                }
+                break;
         }
     },
 

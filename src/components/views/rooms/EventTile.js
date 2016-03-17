@@ -268,10 +268,17 @@ module.exports = React.createClass({
         this.readAvatarNode = ReactDom.findDOMNode(node);
     },
 
-    onMemberAvatarClicked: function(sender) {
+    onMemberAvatarClick: function(event) {
         dispatcher.dispatch({
             action: 'view_user',
-            member: sender
+            member: this.props.mxEvent.sender,
+        });
+    },
+
+    onSenderProfileClick: function(event) {
+        dispatcher.dispatch({
+            action: 'insert_displayname',
+            displayname: this.props.mxEvent.sender.name,
         });
     },
 
@@ -318,12 +325,12 @@ module.exports = React.createClass({
                 avatar = (
                     <div className="mx_EventTile_avatar">
                         <MemberAvatar member={this.props.mxEvent.sender} width={24} height={24}
-                         onClick={ this.onMemberAvatarClicked.bind(this, this.props.mxEvent.sender) } />
+                         onClick={ this.onMemberAvatarClick } />
                     </div>
                 );
             }
             if (EventTileType.needsSenderProfile()) {
-                sender = <SenderProfile mxEvent={this.props.mxEvent} aux={aux} />;
+                sender = <SenderProfile onClick={ this.onSenderProfileClick } mxEvent={this.props.mxEvent} aux={aux} />;
             }
         }
         return (
