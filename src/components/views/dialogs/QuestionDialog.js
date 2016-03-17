@@ -20,7 +20,7 @@ module.exports = React.createClass({
     displayName: 'QuestionDialog',
     propTypes: {
         title: React.PropTypes.string,
-        description: React.PropTypes.string,
+        description: React.PropTypes.object,
         button: React.PropTypes.string,
         focus: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired,
