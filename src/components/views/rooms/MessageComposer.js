@@ -212,8 +212,8 @@ module.exports = React.createClass({
                     textarea.setSelectionRange(left.length, left.length);
                 }
                 else {
-                    this.refs.textarea.value = payload.displayname + ": ";
-                    this.refs.textarea.focus();
+                    textarea.value = payload.displayname + ": ";
+                    textarea.focus();
                 }
                 break;
         }
