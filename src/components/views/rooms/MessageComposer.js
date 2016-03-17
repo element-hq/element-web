@@ -517,7 +517,7 @@ module.exports = React.createClass({
                         <MemberAvatar member={me} width={24} height={24} />
                     </div>
                     <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
-                        <textarea ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
+                        <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
                     </div>
                     <div className="mx_MessageComposer_upload" onClick={this.onUploadClick} title="Upload file">
                         <TintableSvg src="img/upload.svg" width="19" height="24"/>
