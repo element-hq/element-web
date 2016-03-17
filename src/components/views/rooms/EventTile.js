@@ -268,6 +268,13 @@ module.exports = React.createClass({
         this.readAvatarNode = ReactDom.findDOMNode(node);
     },
 
+    onMemberAvatarClicked: function(sender) {
+        dispatcher.dispatch({
+            action: 'view_user',
+            member: sender
+        });
+    },
+
     render: function() {
         var MessageTimestamp = sdk.getComponent('messages.MessageTimestamp');
         var SenderProfile = sdk.getComponent('messages.SenderProfile');
@@ -305,23 +312,13 @@ module.exports = React.createClass({
 
         var readAvatars = this.getReadAvatars();
 
-        function onMemberAvatarClicked(sender) {
-            return () => {
-                //var member = new Matrix.RoomMember(null, userId);
-                //if (!member) { return; }
-                dispatcher.dispatch({
-                    action: 'view_user',
-                    member: sender
-                });
-            };
-        }
-
         var avatar, sender;
         if (!this.props.continuation) {
             if (this.props.mxEvent.sender) {
                 avatar = (
-                    <div className="mx_EventTile_avatar" style={{cursor: "pointer"}}>
-                        <MemberAvatar member={this.props.mxEvent.sender} width={24} height={24} onClick={onMemberAvatarClicked(this.props.mxEvent.sender)} />
+                    <div className="mx_EventTile_avatar">
+                        <MemberAvatar member={this.props.mxEvent.sender} width={24} height={24}
+                         onClick={ this.onMemberAvatarClicked.bind(this, this.props.mxEvent.sender) } />
                     </div>
                 );
             }
