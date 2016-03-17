@@ -205,7 +205,6 @@ var Notifier = {
     },
 
     onSyncStateChange: function(state) {
-        console.log("sync state change: " + state);
         if (state === "PREPARED" || state === "SYNCING") {
             this.isPrepared = true;
         }
