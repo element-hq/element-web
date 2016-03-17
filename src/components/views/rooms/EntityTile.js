@@ -38,6 +38,7 @@ module.exports = React.createClass({
         className: React.PropTypes.string,
         presenceState: React.PropTypes.string,
         presenceActiveAgo: React.PropTypes.number,
+        currentlyActive: React.PropTypes.bool,
         showInviteButton: React.PropTypes.bool,
         shouldComponentUpdate: React.PropTypes.func,
         onClick: React.PropTypes.func,
