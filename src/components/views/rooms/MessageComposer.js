@@ -240,7 +240,7 @@ module.exports = React.createClass({
     resizeInput: function() {
         // scrollHeight is at least equal to clientHeight, so we have to
         // temporarily crimp clientHeight to 0 to get an accurate scrollHeight value
-        this.refs.textarea.style.height = "0px";
+        this.refs.textarea.style.height = "20px"; // 20 hardcoded from CSS
         var newHeight = Math.min(this.refs.textarea.scrollHeight,
                                  this.constructor.MAX_HEIGHT);
         this.refs.textarea.style.height = Math.ceil(newHeight) + "px";
