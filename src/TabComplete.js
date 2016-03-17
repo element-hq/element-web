@@ -83,10 +83,10 @@ class TabComplete {
         this._notifyStateChange();
     }
 
-    startTabCompleting() {
+    startTabCompleting(passive) {
         this.completing = true;
         this.currentIndex = 0;
-        this._calculateCompletions();
+        this._calculateCompletions(passive);
     }
 
     /**
@@ -137,7 +137,7 @@ class TabComplete {
         this.inPassiveMode = passive;
 
         if (!this.completing) {
-            this.startTabCompleting();
+            this.startTabCompleting(passive);
         }
 
         if (shiftKey) {
@@ -270,7 +270,7 @@ class TabComplete {
         });
     }
 
-    _calculateCompletions() {
+    _calculateCompletions(passive) {
         this.originalText = this.textArea.value; // cache starting text
 
         // grab the partial word from the text which we'll be tab-completing
@@ -282,6 +282,11 @@ class TabComplete {
         // ES6 destructuring; ignore first element (the complete match)
         var [ , boundaryGroup, partialGroup] = res;
         this.isFirstWord = partialGroup.length === this.originalText.length;
+
+        if (partialGroup.length === 0 && passive) {
+            this.stopTabCompleting();
+            return;
+        }
 
         this.matchedList = [
             new Entry(partialGroup) // first entry is always the original partial
