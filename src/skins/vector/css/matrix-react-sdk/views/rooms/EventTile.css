@@ -43,6 +43,7 @@ limitations under the License.
     margin-bottom: 4px;
     display: block;
     overflow-y: hidden;
+    cursor: pointer;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
