@@ -192,11 +192,17 @@ module.exports = React.createClass({
             var me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
 
+            // console.log("room = " + room.name + ", me.membership = " + me.membership + 
+            //             ", sender = " + me.events.member.getSender() +
+            //             ", target = " + me.events.member.getStateKey() + 
+            //             ", prevMembership = " + me.events.member.getPrevContent().membership);
+
             if (me.membership == "invite") {
                 s.lists["im.vector.fake.invite"].push(room);
             }
             else if (me.membership == "join" || me.membership === "ban" ||
-                     (me.membership === "leave" && me.events.member.getPrevContent().membership === "join")) {
+                     (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
+            {
                 var shouldShowRoom = true;
 
                 // hiding conf rooms only ever toggles shouldShowRoom to false
