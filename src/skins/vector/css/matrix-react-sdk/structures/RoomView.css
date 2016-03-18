@@ -260,4 +260,5 @@ hr.mx_RoomView_myReadMarker {
     color: #fff;
     font-weight: bold;
     padding: 6px 0;
+    cursor: pointer;
 }
