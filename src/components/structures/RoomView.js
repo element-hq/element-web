@@ -525,16 +525,22 @@ module.exports = React.createClass({
                     var SetDisplayNameDialog = sdk.getComponent('views.dialogs.SetDisplayNameDialog');
                     var dialog_defer = q.defer();
                     var dialog_ref;
-                    var modal;
-                    var dialog_instance = <SetDisplayNameDialog currentDisplayName={result.displayname} ref={(r) => {
+                    Modal.createDialog(SetDisplayNameDialog, {
+                        currentDisplayName: result.displayname,
+                        ref: (r) => {
                             dialog_ref = r;
-                    }} onFinished={() => {
-                        cli.setDisplayName(dialog_ref.getValue()).done(() => {
-                            dialog_defer.resolve();
-                        });
-                        modal.close();
-                    }} />
-                    modal = Modal.createDialogWithElement(dialog_instance);
+                        },
+                        onFinished: (submitted) => {
+                            if (submitted) {
+                                cli.setDisplayName(dialog_ref.getValue()).done(() => {
+                                    dialog_defer.resolve();
+                                });
+                            }
+                            else {
+                                dialog_defer.reject();
+                            }
+                        }
+                    });
                     return dialog_defer.promise;
                 }
             });
@@ -565,6 +571,8 @@ module.exports = React.createClass({
                 joining: false,
                 joinError: error
             });
+
+            if (!error) return;
             var msg = error.message ? error.message : JSON.stringify(error);
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
@@ -1118,6 +1126,7 @@ module.exports = React.createClass({
                                                 spinner={this.state.joining}
                                                 inviterName={inviterName}
                                                 invitedEmail={invitedEmail}
+                                                room={this.state.room}
                                 />
                             </div>
                             <div className="mx_RoomView_messagePanel"></div>
@@ -1159,6 +1168,7 @@ module.exports = React.createClass({
                                             inviterName={ inviterName }
                                             canJoin={ true } canPreview={ false }
                                             spinner={this.state.joining}
+                                            room={this.state.room}                                            
                             />
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
@@ -1238,6 +1248,7 @@ module.exports = React.createClass({
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
                                 canPreview={this.state.canPeek}
+                                room={this.state.room}                                
                 />
             );
         }

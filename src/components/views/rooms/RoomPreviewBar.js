@@ -36,6 +36,7 @@ module.exports = React.createClass({
         canJoin: React.PropTypes.bool,
         canPreview: React.PropTypes.bool,
         spinner: React.PropTypes.bool,
+        room: React.PropTypes.object,
     },
 
     getDefaultProps: function() {
@@ -110,10 +111,13 @@ module.exports = React.createClass({
 
         }
         else if (this.props.canJoin) {
+            var name = this.props.room ? this.props.room.name : "";
+            name = name ? <b>{ name }</b> : "a room";
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_join_text">
-                        Would you like to <a onClick={ this.props.onJoinClick }>join</a> this room?
+                        You are trying to access { name }.<br/>
+                        Would you like to <a onClick={ this.props.onJoinClick }>join</a> in order to participate in the discussion?
                     </div>
                 </div>
             );

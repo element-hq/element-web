@@ -192,9 +192,29 @@ module.exports = React.createClass({
     },
 
     onAction: function(payload) {
+        var textarea = this.refs.textarea;
         switch (payload.action) {
             case 'focus_composer':
-                this.refs.textarea.focus();
+                textarea.focus();
+                break;
+            case 'insert_displayname':
+                if (textarea.value.length) {
+                    var left = textarea.value.substring(0, textarea.selectionStart);
+                    var right = textarea.value.substring(textarea.selectionEnd);
+                    if (right.length) {
+                        left += payload.displayname;
+                    }
+                    else {
+                        left = left.replace(/( ?)$/, " " + payload.displayname);
+                    }
+                    textarea.value = left + right;
+                    textarea.focus();
+                    textarea.setSelectionRange(left.length, left.length);
+                }
+                else {
+                    textarea.value = payload.displayname + ": ";
+                    textarea.focus();
+                }
                 break;
         }
     },
@@ -497,7 +517,7 @@ module.exports = React.createClass({
                         <MemberAvatar member={me} width={24} height={24} />
                     </div>
                     <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
-                        <textarea ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
+                        <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
                     </div>
                     <div className="mx_MessageComposer_upload" onClick={this.onUploadClick} title="Upload file">
                         <TintableSvg src="img/upload.svg" width="19" height="24"/>

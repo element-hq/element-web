@@ -55,13 +55,13 @@ function textForMemberEvent(ev) {
                 } else if (!ev.getPrevContent().displayname && ev.getContent().displayname) {
                     return ev.getSender() + " set their display name to " + ev.getContent().displayname;
                 } else if (ev.getPrevContent().displayname && !ev.getContent().displayname) {
-                    return ev.getSender() + " removed their display name";
+                    return ev.getSender() + " removed their display name (" + ev.getPrevContent().displayname + ")";
                 } else if (ev.getPrevContent().avatar_url && !ev.getContent().avatar_url) {
-                    return ev.getSender() + " removed their profile picture";
+                    return senderName + " removed their profile picture";
                 } else if (ev.getPrevContent().avatar_url && ev.getContent().avatar_url && ev.getPrevContent().avatar_url != ev.getContent().avatar_url) {
-                    return ev.getSender() + " changed their profile picture";
+                    return senderName + " changed their profile picture";
                 } else if (!ev.getPrevContent().avatar_url && ev.getContent().avatar_url) {
-                    return ev.getSender() + " set a profile picture";
+                    return senderName + " set a profile picture";
                 }
             } else {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
