@@ -216,11 +216,6 @@ module.exports = React.createClass({
                 this.setState({
                     hasUnsentMessages: this._hasUnsentMessages(this.state.room)
                 });
-            case 'message_resend_started':
-                this.setState({
-                    room: MatrixClientPeg.get().getRoom(this.props.roomId)
-                });
-                this.forceUpdate();
                 break;
             case 'notifier_enabled':
             case 'upload_failed':
@@ -400,9 +395,7 @@ module.exports = React.createClass({
 
     _getUnsentMessages: function(room) {
         if (!room) { return []; }
-        // TODO: It would be nice if the JS SDK provided nicer constant-time
-        // constructs rather than O(N) (N=num msgs) on this.
-        return room.timeline.filter(function(ev) {
+        return room.getPendingEvents().filter(function(ev) {
             return ev.status === Matrix.EventStatus.NOT_SENT;
         });
     },

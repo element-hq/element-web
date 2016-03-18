@@ -188,7 +188,7 @@ var TimelinePanel = React.createClass({
 
             debuglog("TimelinePanel: paginate complete backwards:"+backwards+"; success:"+r);
             this.setState({[statekey]: false});
-            this._onTimelineUpdated();
+            this._reloadEvents();
             return r;
         });
     },
@@ -268,7 +268,7 @@ var TimelinePanel = React.createClass({
         //
         // see https://github.com/vector-im/vector-web/issues/1035
         this._timelineWindow.paginate(EventTimeline.FORWARDS, 1, false)
-            .done(this._onTimelineUpdated);
+            .done(this._reloadEvents);
     },
 
     onRoomTimelineReset: function(room) {
@@ -305,12 +305,7 @@ var TimelinePanel = React.createClass({
         // ignore events for other rooms
         if (room !== this.props.room) return;
 
-        // Once the remote echo for an event arrives, we need to turn the
-        // greyed-out event black.  When the localEchoUpdated event is raised,
-        // the nested 'event' property within one of the events in
-        // _timelineWindow will have been replaced with the new event. So
-        // all that is left to do here is to make the message-panel re-render.
-        this.forceUpdate();
+        this._reloadEvents();
     },
 
 
@@ -558,16 +553,18 @@ var TimelinePanel = React.createClass({
         // In this situation, we don't really want to defer the update of the
         // state to the next event loop, because it makes room-switching feel
         // quite slow. So we detect that situation and shortcut straight to
-        // calling _onTimelineUpdated and updating the state.
+        // calling _reloadEvents and updating the state.
 
         var onLoaded = () => {
-            this._onTimelineUpdated();
+            this._reloadEvents();
 
             this.setState({timelineLoading: false}, () => {
                 // initialise the scroll state of the message panel
                 if (!this.refs.messagePanel) {
-                    // this shouldn't happen - _onTimelineUpdated checks we're
-                    // mounted, and timelineLoading is now false.
+                    // this shouldn't happen - we know we're mounted because
+                    // we're in a setState callback, and we know
+                    // timelineLoading is now false, so render() should have
+                    // mounted the message panel.
                     console.log("can't initialise scroll state because " +
                                 "messagePanel didn't load");
                     return;
@@ -593,13 +590,23 @@ var TimelinePanel = React.createClass({
         prom.done();
     },
 
-    _onTimelineUpdated: function() {
+    // handle the completion of a timeline load or localEchoUpdate, by
+    // reloading the events from the timelinewindow and pending event list into
+    // the state.
+    _reloadEvents: function() {
         // we might have switched rooms since the load started - just bin
         // the results if so.
         if (this.unmounted) return;
 
+        var events = this._timelineWindow.getEvents();
+
+        // if we're at the end of the live timeline, append the pending events
+        if (!this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
+            events.push(... this.props.room.getPendingEvents());
+        }
+
         this.setState({
-            events: this._timelineWindow.getEvents(),
+            events: events,
             canBackPaginate: this._timelineWindow.canPaginate(EventTimeline.BACKWARDS),
         });
     },
