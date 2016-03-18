@@ -194,6 +194,10 @@ module.exports = React.createClass({
             if (me && me.membership == "invite") {
                 s.lists["im.vector.fake.invite"].push(room);
             }
+            // XXX: somewhat hacky gut-wrenching to special-case kicks
+            else if (me && me.membership === "leave" && me.events.member.getPrevContent().membership === "join") {
+                s.lists["im.vector.fake.recent"].push(room); 
+            }
             else if (me && me.membership === "leave") {
                 s.lists["im.vector.fake.archived"].push(room);
             }
