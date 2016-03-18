@@ -276,9 +276,10 @@ module.exports = React.createClass({
     },
 
     onSenderProfileClick: function(event) {
+        var mxEvent = this.props.mxEvent;
         dispatcher.dispatch({
             action: 'insert_displayname',
-            displayname: this.props.mxEvent.sender.name,
+            displayname: mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender(),
         });
     },
 
