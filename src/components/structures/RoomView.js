@@ -1231,6 +1231,8 @@ module.exports = React.createClass({
             aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
         }
         else if (!myMember || myMember.membership !== "join") {
+            // We do have a room object for this room, but we're not currently in it.
+            // We may have a 3rd party invite to it.
             var inviterName = undefined;
             if (this.props.oobData) {
                 inviterName = this.props.oobData.inviterName;
@@ -1239,8 +1241,6 @@ module.exports = React.createClass({
             if (this.props.thirdPartyInvite) {
                 invitedEmail = this.props.thirdPartyInvite.invitedEmail;
             }
-            // We do have a room object for this room, but we're not currently in it.
-            // We may have a 3rd party invite to it.
             aux = (
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true}
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
