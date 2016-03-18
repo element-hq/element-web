@@ -33,7 +33,7 @@
     "extract-text-webpack-plugin": "^0.9.1",
     "filesize": "^3.1.2",
     "flux": "~2.0.3",
-    "gemini-scrollbar": "^1.3.0",
+    "gemini-scrollbar": "matrix-org/gemini-scrollbar#75aecd7",
     "gfm.css": "^1.1.1",
     "highlight.js": "^9.0.0",
     "linkifyjs": "^2.0.0-beta.4",
