@@ -82,6 +82,9 @@ module.exports = React.createClass({
 
     onAction: function(payload) {
         if (payload.action === "view_user") {
+            dis.dispatch({
+                action: 'show_right_panel',
+            });
             if (payload.member) {
                 this.setState({
                     phase: this.Phase.MemberInfo,
