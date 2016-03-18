@@ -35,36 +35,13 @@ module.exports = {
         return container;
     },
 
-    createDialogWithElement: function(element, props, className) {
-        var self = this;
-
-        var closeDialog = function() {
-            ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
-
-            if (props && props.onFinished) props.onFinished.apply(null, arguments);
-        };
-
-        var dialog = (
-            <div className={"mx_Dialog_wrapper " + className}>
-                <div className="mx_Dialog">
-                    {element}
-                </div>
-                <div className="mx_Dialog_background" onClick={closeDialog}></div>
-            </div>
-        );
-
-        ReactDOM.render(dialog, this.getOrCreateContainer());
-
-        return {close: closeDialog};
-    },
-
     createDialog: function (Element, props, className) {
         var self = this;
 
+        // never call this via modal.close() from onFinished() otherwise it will loop
         var closeDialog = function() {
-            ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
-
             if (props && props.onFinished) props.onFinished.apply(null, arguments);
+            ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
         };
 
         // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
@@ -74,7 +51,7 @@ module.exports = {
                 <div className="mx_Dialog">
                     <Element {...props} onFinished={closeDialog}/>
                 </div>
-                <div className="mx_Dialog_background" onClick={closeDialog}></div>
+                <div className="mx_Dialog_background" onClick={ closeDialog.bind(this, false) }></div>
             </div>
         );
 
