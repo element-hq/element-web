@@ -126,9 +126,7 @@ module.exports = React.createClass({
 
     onLogoutClicked: function(ev) {
         var LogoutPrompt = sdk.getComponent('dialogs.LogoutPrompt');
-        this.logoutModal = Modal.createDialog(
-            LogoutPrompt, {onCancel: this.onLogoutPromptCancel}
-        );
+        this.logoutModal = Modal.createDialog(LogoutPrompt);
     },
 
     onPasswordChangeError: function(err) {
@@ -160,10 +158,6 @@ module.exports = React.createClass({
         dis.dispatch({
             action: "start_upgrade_registration"
         });
-    },
-
-    onLogoutPromptCancel: function() {
-        this.logoutModal.closeDialog();
     },
 
     onEnableNotificationsChange: function(event) {

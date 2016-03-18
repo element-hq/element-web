@@ -54,7 +54,7 @@ module.exports = React.createClass({
 
     onFormSubmit: function(ev) {
         ev.preventDefault();
-        this.props.onFinished();
+        this.props.onFinished(true);
         return false;
     },
 

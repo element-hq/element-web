@@ -20,7 +20,10 @@ module.exports = React.createClass({
     displayName: 'TextInputDialog',
     propTypes: {
         title: React.PropTypes.string,
-        description: React.PropTypes.string,
+        description: React.PropTypes.oneOfType([
+            React.PropTypes.element,
+            React.PropTypes.string,
+        ]),
         value: React.PropTypes.string,
         button: React.PropTypes.string,
         focus: React.PropTypes.bool,
