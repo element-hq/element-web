@@ -49,8 +49,12 @@ module.exports = React.createClass({
         };
     },
 
+    getInitialState: function() {
+        return {};
+    },
+
     componentWillReceiveProps: function(newProps) {
-        if (newProps.editing) {
+        if (this.props.room !== newProps.room && newProps.editing) {
             var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
             var name = this.props.room.currentState.getStateEvents('m.room.name', '');
 
