@@ -541,8 +541,8 @@ module.exports = React.createClass({
     // particular event.
     // @param {Object} thirdPartyInvite Object containing data about the third party
     //                                    we received to join the room, if any.
-    // @param {Object} thirdPartyInvite.inviteSignUrl 3pid invite sign URL
-    // @param {Object} thirdPartyInvite.invitedwithEmail The email address the invite was sent to
+    // @param {string} thirdPartyInvite.inviteSignUrl 3pid invite sign URL
+    // @param {string} thirdPartyInvite.invitedwithEmail The email address the invite was sent to
     // @param {Object} oob_data Object of additional data about the room
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
