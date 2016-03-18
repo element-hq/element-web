@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var sdk = require('../../../index');
+var MatrixClientPeg = require('../../../MatrixClientPeg');
 
 module.exports = React.createClass({
     displayName: 'RoomPreviewBar',
@@ -29,6 +30,9 @@ module.exports = React.createClass({
         // if inviterName is specified, the preview bar will shown an invite to the room.
         // You should also specify onRejectClick if specifiying inviterName
         inviterName: React.PropTypes.string,
+
+        // If invited by 3rd party invite, the email address the invite was sent to
+        invitedEmail: React.PropTypes.string,
         canJoin: React.PropTypes.bool,
         canPreview: React.PropTypes.bool,
         spinner: React.PropTypes.bool,
@@ -43,10 +47,34 @@ module.exports = React.createClass({
         };
     },
 
+    getInitialState: function() {
+        return {
+            busy: false
+        }
+    },
+
+    componentWillMount: function() {
+        // If this is an invite and we've been told what email
+        // address was invited, fetch the user's list of 3pids
+        // so we can check them against the one that was invited
+        if (this.props.inviterName && this.props.invitedEmail) {
+            this.setState({busy: true});
+            MatrixClientPeg.get().lookupThreePid(
+                'email', this.props.invitedEmail
+            ).finally(() => {
+                this.setState({busy: false});
+            }).done((result) => {
+                this.setState({invitedEmailMxid: result.mxid});
+            }, (err) => {
+                this.setState({threePidFetchError: err});
+            });
+        }
+    },
+
     render: function() {
         var joinBlock, previewBlock;
 
-        if (this.props.spinner) {
+        if (this.props.spinner || this.state.busy) {
             var Spinner = sdk.getComponent("elements.Spinner");
             return (<div className="mx_RoomPreviewBar">
                 <Spinner />
@@ -54,6 +82,21 @@ module.exports = React.createClass({
         }
 
         if (this.props.inviterName) {
+            var emailMatchBlock;
+            if (this.props.invitedEmail) {
+                if (this.state.threePidFetchError) {
+                    emailMatchBlock = <div className="error">
+                        Vector was unable to ascertain that the address this invite was
+                        sent to matches one associated with your account.
+                    </div>
+                } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().credentials.userId) {
+                    emailMatchBlock = <div className="warning">
+                        <img src="img/warning.svg" width="24" height="23" title= "/!\\" alt="/!\\" />
+                        This invitation was sent to <span className="email">{this.props.invitedEmail}</span>
+                        which is not publicly associated with your account.
+                    </div>
+                }
+            }
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_invite_text">
@@ -62,6 +105,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomPreviewBar_join_text">
                         Would you like to <a onClick={ this.props.onJoinClick }>accept</a> or <a onClick={ this.props.onRejectClick }>decline</a> this invitation?
                     </div>
+                    {emailMatchBlock}
                 </div>
             );
 
