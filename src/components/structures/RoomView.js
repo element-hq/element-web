@@ -1321,7 +1321,7 @@ module.exports = React.createClass({
 
         if (this.state.searchResults) {
             searchResultsPanel = (
-                <ScrollPanel ref="searchResultsPanel" className="mx_RoomView_messagePanel"
+                <ScrollPanel ref="searchResultsPanel" className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
                         onFillRequest={ this.onSearchResultsFillRequest }>
                     <li className={scrollheader_classes}></li>
                     {this.getSearchResultTiles()}
