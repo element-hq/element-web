@@ -190,24 +190,17 @@ module.exports = React.createClass({
 
         MatrixClientPeg.get().getRooms().forEach(function(room) {
             var me = room.getMember(MatrixClientPeg.get().credentials.userId);
+            if (!me) return;
 
-            if (me && me.membership == "invite") {
+            if (me.membership == "invite") {
                 s.lists["im.vector.fake.invite"].push(room);
             }
-            // XXX: somewhat hacky gut-wrenching to special-case kicks
-            else if (me && me.membership === "leave" && me.events.member.getPrevContent().membership === "join") {
-                s.lists["im.vector.fake.recent"].push(room); 
-            }
-            else if (me && me.membership === "leave") {
-                s.lists["im.vector.fake.archived"].push(room);
-            }
-            else {
-                var shouldShowRoom =  (
-                    me && (me.membership == "join" || me.membership === "ban")
-                );
+            else if (me.membership == "join" || me.membership === "ban" ||
+                     (me.membership === "leave" && me.events.member.getPrevContent().membership === "join")) {
+                var shouldShowRoom = true;
 
                 // hiding conf rooms only ever toggles shouldShowRoom to false
-                if (shouldShowRoom && HIDE_CONFERENCE_CHANS) {
+                if (HIDE_CONFERENCE_CHANS) {
                     // we want to hide the 1:1 conf<->user room and not the group chat
                     var joinedMembers = room.getJoinedMembers();
                     if (joinedMembers.length === 2) {
@@ -235,6 +228,12 @@ module.exports = React.createClass({
                         s.lists["im.vector.fake.recent"].push(room); 
                     }
                 }
+            }
+            else if (me.membership === "leave") {
+                s.lists["im.vector.fake.archived"].push(room);
+            }
+            else {
+                console.error("unrecognised membership: " + me.membership + " - this should never happen";
             }
         });
 
