@@ -86,7 +86,7 @@ module.exports = React.createClass({
             if (this.props.invitedEmail) {
                 if (this.state.threePidFetchError) {
                     emailMatchBlock = <div className="error">
-                        Vector was unable to ascertain that the addres this invite was
+                        Vector was unable to ascertain that the address this invite was
                         sent to matches one associated with your account.
                     </div>
                 } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().credentials.userId) {
