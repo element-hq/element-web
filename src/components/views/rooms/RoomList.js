@@ -233,7 +233,7 @@ module.exports = React.createClass({
                 s.lists["im.vector.fake.archived"].push(room);
             }
             else {
-                console.error("unrecognised membership: " + me.membership + " - this should never happen";
+                console.error("unrecognised membership: " + me.membership + " - this should never happen");
             }
         });
 
