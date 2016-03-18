@@ -23,7 +23,7 @@ module.exports = React.createClass({
 
     propTypes: {
         mxEvent: React.PropTypes.object.isRequired, // event whose sender we're showing
-        aux: React.PropTypes.object, // stuff to go after the sender name, if anything
+        aux: React.PropTypes.string, // stuff to go after the sender name, if anything
         onClick: React.PropTypes.func,
     },
 
