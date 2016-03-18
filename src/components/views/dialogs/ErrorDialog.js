@@ -31,6 +31,10 @@ module.exports = React.createClass({
     displayName: 'ErrorDialog',
     propTypes: {
         title: React.PropTypes.string,
+        description: React.PropTypes.oneOfType([
+            React.PropTypes.element,
+            React.PropTypes.string,
+        ]),
         button: React.PropTypes.string,
         focus: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired,
