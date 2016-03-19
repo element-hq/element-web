@@ -228,8 +228,27 @@ module.exports = React.createClass({
     },
 
     _onHistoryRadioToggle: function(ev) {
-        this.setState({
-            history_visibility: ev.target.value
+        var self = this;
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+        // cancel the click unless the user confirms it
+        ev.preventDefault();
+
+        Modal.createDialog(QuestionDialog, {
+            title: "Privacy warning",
+            description:
+                <div>
+                    Changes to who can read history will only apply to future messages in this room.<br/>
+                    The visibility of existing history will be unchanged.
+                </div>,
+            button: "Continue",
+            onFinished: function(confirmed) {
+                if (confirmed) {
+                    self.setState({
+                        history_visibility: ev.target.value
+                    });
+                }
+            },
         });
     },
     
@@ -438,28 +457,28 @@ module.exports = React.createClass({
                         <label htmlFor="hvis_wr">
                             <input type="radio" id="hvis_wr" name="historyVis" value="world_readable"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
-                                    defaultChecked={historyVisibility === "world_readable"}
+                                    checked={historyVisibility === "world_readable"}
                                     onChange={this._onHistoryRadioToggle} />
                             Anyone
                         </label>
                         <label htmlFor="hvis_sh">
                             <input type="radio" id="hvis_sh" name="historyVis" value="shared"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
-                                    defaultChecked={historyVisibility === "shared"}
+                                    checked={historyVisibility === "shared"}
                                     onChange={this._onHistoryRadioToggle} />
                             Members only (since the point in time of selecting this option)
                         </label>
                         <label htmlFor="hvis_inv">
                             <input type="radio" id="hvis_inv" name="historyVis" value="invited"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
-                                    defaultChecked={historyVisibility === "invited"}
+                                    checked={historyVisibility === "invited"}
                                     onChange={this._onHistoryRadioToggle} />
                             Members only (since they were invited)
                         </label>
                         <label htmlFor="hvis_joi">
                             <input type="radio" id="hvis_joi" name="historyVis" value="joined"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
-                                    defaultChecked={historyVisibility === "joined"}
+                                    checked={historyVisibility === "joined"}
                                     onChange={this._onHistoryRadioToggle} />
                             Members only (since they joined)
                         </label>
