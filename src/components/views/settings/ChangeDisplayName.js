@@ -43,8 +43,19 @@ module.exports = React.createClass({
         this.setState({busy: true});
         var self = this;
         cli.getProfileInfo(cli.credentials.userId).done(function(result) {
+
+            var displayname = result.displayname;
+            if (!displayname) {
+                if (MatrixClientPeg.get().isGuest()) {
+                    displayname = "Guest " + MatrixClientPeg.get().getUserIdLocalpart();
+                }
+                else {
+                    displayname = MatrixClientPeg.get().getUserIdLocalpart();
+                }
+            }
+
             self.setState({
-                displayName: result.displayname,
+                displayName: displayname,
                 busy: false
             });
         }, function(error) {
