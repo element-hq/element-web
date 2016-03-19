@@ -62,12 +62,17 @@ module.exports = React.createClass({
         if (this.props.onFinished) this.props.onFinished();
     },
 
+    onPermalinkClick: function() {
+        if (this.props.onFinished) this.props.onFinished();
+    },
+
     render: function() {
         var eventStatus = this.props.mxEvent.status;
         var resendButton;
         var viewSourceButton;
         var redactButton;
         var cancelButton;
+        var permalinkButton;
 
         if (eventStatus === 'not_sent') {
             resendButton = (
@@ -99,12 +104,22 @@ module.exports = React.createClass({
             </div>
         );
 
+        // XXX: this should be https://matrix.to.
+        // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
+        permalinkButton = (
+            <div className="mx_ContextualMenu_field">
+                <a href={ "#/room/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }
+                   onClick={ this.onPermalinkClick }>Permalink</a>
+            </div>
+        );
+
         return (
             <div>
                 {resendButton}
                 {redactButton}
                 {cancelButton}
                 {viewSourceButton}
+                {permalinkButton}
             </div>
         );
     }
