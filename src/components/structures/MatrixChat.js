@@ -467,6 +467,7 @@ module.exports = React.createClass({
                 var Loader = sdk.getComponent("elements.Spinner");
                 var modal = Modal.createDialog(Loader);
 
+                // XXX: FIXME: deduplicate this with MemberInfo's 'start chat' impl
                 MatrixClientPeg.get().createRoom({
                     preset: "private_chat",
                     // Allow guests by default since the room is private and they'd
