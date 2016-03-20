@@ -220,18 +220,31 @@ module.exports = React.createClass({
             this.props.member.userId,
             MatrixClientPeg.get().credentials.userId
         ];
-        var existingRoomId = null;
-        for (var i = 0; i < rooms.length; i++) {
-            var members = rooms[i].getJoinedMembers();
-            if (members.length === 2) {
-                var hasTargetUsers = true;
-                for (var j = 0; j < members.length; j++) {
-                    if (userIds.indexOf(members[j].userId) === -1) {
-                        hasTargetUsers = false;
-                        break;
-                    }
-                }
-                if (hasTargetUsers) {
+        var existingRoomId;
+
+        var currentRoom = MatrixClientPeg.get().getRoom(this.props.member.roomId);
+        var currentMembers = currentRoom.getJoinedMembers();
+        // if we're currently in a 1:1 with this user, start a new chat
+        if (currentMembers.length === 2 &&
+            userIds.indexOf(currentMembers[0].userId) !== -1 &&
+            userIds.indexOf(currentMembers[1].userId) !== -1)
+        {
+            existingRoomId = null;
+        }
+        // otherwise reuse the first private 1:1 we find
+        else {
+            existingRoomId = null;
+
+            for (var i = 0; i < rooms.length; i++) {
+                // don't try to reuse public 1:1 rooms
+                var join_rules = rooms[i].currentState.getStateEvents("m.room.join_rules", '');
+                if (join_rules && join_rules.getContent().join_rule === 'public') continue;
+
+                var members = rooms[i].getJoinedMembers();
+                if (members.length === 2 &&
+                    userIds.indexOf(members[0].userId) !== -1 &&
+                    userIds.indexOf(members[1].userId) !== -1)
+                {
                     existingRoomId = rooms[i].roomId;
                     break;
                 }
