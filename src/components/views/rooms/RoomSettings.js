@@ -441,7 +441,7 @@ module.exports = React.createClass({
                         Mute notifications for this room
                     </label>
                     <label>
-                        <input type="checkbox" disabled={ !roomState.mayClientSendStateEvent("m.room.join_rule", cli) }
+                        <input type="checkbox" disabled={ !roomState.mayClientSendStateEvent("m.room.join_rules", cli) }
                             onChange={this._onToggle.bind(this, "join_rule", "invite", "public")}
                             defaultChecked={this.state.join_rule !== "public"}/>
                         Make this room private
