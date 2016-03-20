@@ -47,10 +47,9 @@ var sanitizeHtmlParams = {
     transformTags: { // custom to matrix
         // add blank targets to all hyperlinks except vector URLs
         'a': function(tagName, attribs) {
-            // XXX: use matrix.to instead and deduplicate regexp with linkify-matrix.js
             var m = attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN);
             if (m) {
-                return { tagName: 'a', attribs: { href: m[4] } };
+                return { tagName: 'a', attribs: { href: attribs.href } };
             }
             else {
                 return { tagName: 'a', attribs: { href: attribs.href, target: '_blank'} };
