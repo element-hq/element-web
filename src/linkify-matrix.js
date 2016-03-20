@@ -98,6 +98,8 @@ function matrixLinkify(linkify) {
 matrixLinkify.onUserClick = function(e, userId) { e.preventDefault(); };
 matrixLinkify.onAliasClick = function(e, roomAlias) { e.preventDefault(); };
 
+matrixLinkify.VECTOR_URL_PATTERN = /(https?:\/\/)?(www\.)?vector\.im\/(beta|staging|develop)?\/(#.*)/;
+
 matrixLinkify.options = {
     events: function (href, type) {
         switch (type) {
@@ -118,14 +120,33 @@ matrixLinkify.options = {
 
     formatHref: function (href, type) {
         switch (type) {
-             case 'roomalias':
-                 return '#/room/' + href;
-             case 'userid':
-                 return '#';
-             default:
-                 return href;
+            case 'roomalias':
+                return '#/room/' + href;
+            case 'userid':
+                return '#';
+            case 'url':
+                // intercept vector links directly into the app
+                // FIXME: use matrix.to asap, as this is fragile as sin
+                var m = href.match(matrixLinkify.VECTOR_URL_PATTERN);
+                return m ? m[4] : href;
+            default:
+                return href;
         }
-    }
+    },
+
+    target: function(href, type) {
+        if (type === 'url') {
+            if (href.match(matrixLinkify.VECTOR_URL_PATTERN)) {
+                return null;
+            }
+            else {
+                return '_blank';
+            }
+        }
+        else {
+            return '_blank';
+        }
+    },
 };
 
 module.exports = matrixLinkify;
