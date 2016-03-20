@@ -730,6 +730,8 @@ module.exports = React.createClass({
     getSearchResultTiles: function() {
         var EventTile = sdk.getComponent('rooms.EventTile');
         var SearchResultTile = sdk.getComponent('rooms.SearchResultTile');
+        var Spinner = sdk.getComponent("elements.Spinner");
+
         var cli = MatrixClientPeg.get();
 
         // XXX: todo: merge overlapping results somehow?
@@ -741,6 +743,12 @@ module.exports = React.createClass({
         }
 
         var ret = [];
+
+        if (this.state.searchInProgress) {
+            ret.push(<li key="search-spinner">
+                         <Spinner />
+                     </li>);
+        }
 
         if (!this.state.searchResults.next_batch) {
             if (this.state.searchResults.results.length == 0) {
