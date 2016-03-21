@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var sanitizeHtml = require('sanitize-html');
 var highlight = require('highlight.js');
+var linkifyMatrix = require('./linkify-matrix');
 
 var sanitizeHtmlParams = {
     allowedTags: [
@@ -44,8 +45,17 @@ var sanitizeHtmlParams = {
     allowedSchemesByTag: {},
     
     transformTags: { // custom to matrix
-        // add blank targets to all hyperlinks
-        'a': sanitizeHtml.simpleTransform('a', { target: '_blank'} )
+        // add blank targets to all hyperlinks except vector URLs
+        'a': function(tagName, attribs) {
+            var m = attribs.href ? attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN) : null;
+            if (m) {
+                delete attribs.target;
+            }
+            else {
+                attribs.target = '_blank';
+            }
+            return attribs;
+        },
     },
 };
 

@@ -98,6 +98,16 @@ function matrixLinkify(linkify) {
 matrixLinkify.onUserClick = function(e, userId) { e.preventDefault(); };
 matrixLinkify.onAliasClick = function(e, roomAlias) { e.preventDefault(); };
 
+var escapeRegExp = function(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
+// we only recognise URLs which match our current URL as being the same app
+// as if someone explicitly links to vector.im/develop and we're on vector.im/beta
+// they may well be trying to get us to explicitly go to develop.
+// FIXME: intercept matrix.to URLs as well.
+matrixLinkify.VECTOR_URL_PATTERN = "^(https?:\/\/)?" + escapeRegExp(window.location.host + window.location.pathname);
+
 matrixLinkify.options = {
     events: function (href, type) {
         switch (type) {
@@ -118,14 +128,26 @@ matrixLinkify.options = {
 
     formatHref: function (href, type) {
         switch (type) {
-             case 'roomalias':
-                 return '#/room/' + href;
-             case 'userid':
-                 return '#';
-             default:
-                 return href;
+            case 'roomalias':
+                return '#/room/' + href;
+            case 'userid':
+                return '#';
+            default:
+                return href;
         }
-    }
+    },
+
+    target: function(href, type) {
+        if (type === 'url') {
+            if (href.match(matrixLinkify.VECTOR_URL_PATTERN)) {
+                return null;
+            }
+            else {
+                return '_blank';
+            }
+        }
+        return null;
+    },
 };
 
 module.exports = matrixLinkify;
