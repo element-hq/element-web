@@ -123,6 +123,26 @@ var Notifier = {
         return global.Notification.permission == 'granted';
     },
 
+    isPermissionDefault: function() {
+        if (!this.supportsDesktopNotifications()) return false;
+        return global.Notification.permission == 'default';
+    },
+
+    showToolbar: function() {
+        // Check localStorage for any such meta data
+        if (global.localStorage) {
+            if (global.localStorage.getItem('notifications_hidden') === 'true')
+                return false;
+        }
+
+        // Check if permission is granted by any chance.
+        if (this.havePermission()) return false;
+
+        // means the permission is blocked
+        if (!this.isPermissionDefault()) return false;
+        return true;
+    },
+
     setEnabled: function(enable, callback) {
         // make sure that we persist the current setting audio_enabled setting
         // before changing anything
@@ -133,29 +153,35 @@ var Notifier = {
         }
 
         if(enable) {
-            if (!this.havePermission()) {
-                global.Notification.requestPermission(function() {
-                    if (callback) {
-                        callback();
+            // Case when we do not have the permission as 'granted'
+            if (this.isPermissionDefault()) {
+                // Attempt to get permission from user
+                var _this = this;
+                global.Notification.requestPermission().then(function(result) {
+                    if (result === 'denied') {
                         dis.dispatch({
                             action: "notifier_enabled",
-                            value: true
+                            value: false
                         });
+                        _this.setToolbarHidden(true);
+                        return;
                     }
+                    if (result === 'default') {
+                        // The permission request was dismissed
+                        return;
+                    }
+
+                    if (callback) callback();
+                    dis.dispatch({
+                        action: "notifier_enabled",
+                        value: true
+                    });
+
+                    if (!global.localStorage) return;
+                    global.localStorage.setItem('notifications_enabled', 'true');
                 });
             }
-
-            if (!global.localStorage) return;
-            global.localStorage.setItem('notifications_enabled', 'true');
-
-            if (this.havePermission) {
-                dis.dispatch({
-                    action: "notifier_enabled",
-                    value: true
-                });
-            }
-        }
-        else {
+        } else {
             if (!global.localStorage) return;
             global.localStorage.setItem('notifications_enabled', 'false');
             dis.dispatch({
@@ -163,8 +189,6 @@ var Notifier = {
                 value: false
             });
         }
-
-        this.setToolbarHidden(false);
     },
 
     isEnabled: function() {
@@ -192,12 +216,22 @@ var Notifier = {
         return enabled === 'true';
     },
 
-    setToolbarHidden: function(hidden) {
+     setToolbarHidden: function(hidden, persistent) {
         this.toolbarHidden = hidden;
         dis.dispatch({
             action: "notifier_enabled",
             value: this.isEnabled()
         });
+
+        if (persistent === true)
+            this.setToolbarPersistantHidden();
+    },
+
+    setToolbarPersistantHidden: function() {
+        // update the info to localStorage
+        if (global.localStorage) {
+            global.localStorage.setItem('notifications_hidden', 'true');
+        }
     },
 
     isToolbarHidden: function() {
