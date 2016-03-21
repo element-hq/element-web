@@ -18,13 +18,18 @@ limitations under the License.
 
 var React = require('react');
 var Notifier = require("matrix-react-sdk/lib/Notifier");
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
 
 module.exports = React.createClass({
     displayName: 'MatrixToolbar',
 
+    getInitialState: function() {
+        return {showToolbar: Notifier.showToolbar()};
+    },
+
     hideToolbar: function() {
-        Notifier.setToolbarHidden(true);
+        // TODO (mebjas): may be a add a confirm dialog here @tag: ara4n
+        Notifier.setToolbarHidden(true, true);
     },
 
     onClick: function() {
@@ -32,6 +37,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        if (this.state.showToolbar != true) return null;
         return (
             <div className="mx_MatrixToolbar">
                 <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
