@@ -53,17 +53,25 @@ module.exports = React.createClass({
         return {};
     },
 
-    componentWillReceiveProps: function(newProps) {
-        if (this.props.room !== newProps.room && newProps.editing) {
-            var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
-            var name = this.props.room.currentState.getStateEvents('m.room.name', '');
+    componentWillMount: function() {
+        this._recalculateState();
+    },
 
-            this.setState({
-                name: name ? name.getContent().name : '',
-                defaultName: this.props.room.getDefaultRoomName(MatrixClientPeg.get().credentials.userId),
-                topic: topic ? topic.getContent().topic : '',
-            });
+    componentWillReceiveProps: function(newProps) {
+        if (this.props.room !== newProps.room) {
+            this._recalculateState();
         }
+    },
+
+    _recalculateState: function() {
+        var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
+        var name = this.props.room.currentState.getStateEvents('m.room.name', '');
+
+        this.setState({
+            name: name ? name.getContent().name : '',
+            defaultName: this.props.room.getDefaultRoomName(MatrixClientPeg.get().credentials.userId),
+            topic: topic ? topic.getContent().topic : '',
+        });        
     },
 
     componentDidUpdate: function() {
@@ -224,8 +232,8 @@ module.exports = React.createClass({
                          onValueChanged={ this.onTopicChanged }
                          initialValue={ this.state.topic }/>
             } else {
-                var topic = this.props.room ? this.props.room.currentState.getStateEvents('m.room.topic', '') : '';
-                if (topic) topic_el = <div className="mx_RoomHeader_topic" ref="topic" title={ topic.getContent().topic }>{ topic.getContent().topic }</div>;
+                if (this.state.topic)
+                    topic_el = <div className="mx_RoomHeader_topic" ref="topic" title={ this.state.topic }>{ this.state.topic }</div>;
             }
 
             var roomAvatar = null;
