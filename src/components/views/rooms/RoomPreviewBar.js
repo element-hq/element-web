@@ -92,8 +92,7 @@ module.exports = React.createClass({
                 } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().credentials.userId) {
                     emailMatchBlock = <div className="warning">
                         <img src="img/warning.svg" width="24" height="23" title= "/!\\" alt="/!\\" />
-                        This invitation was sent to <span className="email">{this.props.invitedEmail}</span>
-                        which is not publicly associated with your account.
+                        This invitation was sent to <span className="email">{this.props.invitedEmail}</span> which is not publicly associated with your account.
                     </div>
                 }
             }
