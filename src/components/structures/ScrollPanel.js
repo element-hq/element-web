@@ -170,6 +170,10 @@ module.exports = React.createClass({
             this._saveScrollState();
         } else {
             debuglog("Ignoring scroll echo");
+
+            // only ignore the echo once, otherwise we'll get confused when the
+            // user scrolls away from, and back to, the autoscroll point.
+            this._lastSetScroll = undefined;
         }
 
         this.props.onScroll(ev);
