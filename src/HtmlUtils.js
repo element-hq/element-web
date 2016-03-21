@@ -49,11 +49,12 @@ var sanitizeHtmlParams = {
         'a': function(tagName, attribs) {
             var m = attribs.href ? attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN) : null;
             if (m) {
-                return { tagName: 'a', attribs: { href: attribs.href, name: attribs.name } };
+                delete attribs.target;
             }
             else {
-                return { tagName: 'a', attribs: { href: attribs.href, name: attribs.name, target: '_blank' } };
+                attribs.target = '_blank';
             }
+            return attribs;
         },
     },
 };
