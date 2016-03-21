@@ -106,7 +106,7 @@ var escapeRegExp = function(string) {
 // as if someone explicitly links to vector.im/develop and we're on vector.im/beta
 // they may well be trying to get us to explicitly go to develop.
 // FIXME: intercept matrix.to URLs as well.
-matrixLinkify.VECTOR_URL_PATTERN = "(https?:\/\/)?" + escapeRegExp(window.location.host + window.location.pathname);
+matrixLinkify.VECTOR_URL_PATTERN = "^(https?:\/\/)?" + escapeRegExp(window.location.host + window.location.pathname);
 
 matrixLinkify.options = {
     events: function (href, type) {
@@ -146,9 +146,7 @@ matrixLinkify.options = {
                 return '_blank';
             }
         }
-        else {
-            return '_blank';
-        }
+        return null;
     },
 };
 

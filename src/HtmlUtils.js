@@ -47,12 +47,12 @@ var sanitizeHtmlParams = {
     transformTags: { // custom to matrix
         // add blank targets to all hyperlinks except vector URLs
         'a': function(tagName, attribs) {
-            var m = attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN);
+            var m = attribs.href ? attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN) : null;
             if (m) {
-                return { tagName: 'a', attribs: { href: attribs.href } };
+                return { tagName: 'a', attribs: { href: attribs.href, name: attribs.name } };
             }
             else {
-                return { tagName: 'a', attribs: { href: attribs.href, target: '_blank'} };
+                return { tagName: 'a', attribs: { href: attribs.href, name: attribs.name, target: '_blank' } };
             }
         },
     },
