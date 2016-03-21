@@ -64,6 +64,8 @@ module.exports = React.createClass({
     },
 
     _recalculateState: function() {
+        if (!this.props.room) return;
+        
         var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
         var name = this.props.room.currentState.getStateEvents('m.room.name', '');
 
