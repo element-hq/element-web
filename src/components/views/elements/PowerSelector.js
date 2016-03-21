@@ -85,14 +85,20 @@ module.exports = React.createClass({
             customPicker = <span> of { input }</span>;
         }
 
-        var selectValue = roles[this.props.value] || "Custom";
+        var selectValue;
+        if (this.state.custom) {
+            selectValue = "Custom";
+        }
+        else {
+            selectValue = roles[this.props.value] || "Custom";
+        }
         var select;
         if (this.props.disabled) {
             select = <span>{ selectValue }</span>;
         }
         else {
             select =
-                <select ref="select" defaultValue={ selectValue } onChange={ this.onSelectChange }>
+                <select ref="select" value={ selectValue } onChange={ this.onSelectChange }>
                     <option value="User">User (0)</option>
                     <option value="Moderator">Moderator (50)</option>
                     <option value="Admin">Admin (100)</option>

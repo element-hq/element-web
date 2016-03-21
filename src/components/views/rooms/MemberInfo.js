@@ -179,22 +179,7 @@ module.exports = React.createClass({
         this.props.onFinished();        
     },
 
-    onPowerChange: function(powerLevel) {
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        var roomId = this.props.member.roomId;
-        var target = this.props.member.userId;
-        var room = MatrixClientPeg.get().getRoom(roomId);
-        if (!room) {
-            this.props.onFinished();
-            return;
-        }
-        var powerLevelEvent = room.currentState.getStateEvents(
-            "m.room.power_levels", ""
-        );
-        if (!powerLevelEvent) {
-            this.props.onFinished();
-            return;
-        }
+    _applyPowerChange: function(roomId, target, powerLevel, powerLevelEvent) {
         MatrixClientPeg.get().setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).done(
             function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
@@ -207,7 +192,55 @@ module.exports = React.createClass({
                 });
             }
         );
-        this.props.onFinished();        
+        this.props.onFinished();
+    },
+
+    onPowerChange: function(powerLevel) {
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        var roomId = this.props.member.roomId;
+        var target = this.props.member.userId;
+        var room = MatrixClientPeg.get().getRoom(roomId);
+        var self = this;
+        if (!room) {
+            this.props.onFinished();
+            return;
+        }
+        var powerLevelEvent = room.currentState.getStateEvents(
+            "m.room.power_levels", ""
+        );
+        if (!powerLevelEvent) {
+            this.props.onFinished();
+            return;
+        }
+        if (powerLevelEvent.getContent().users) {
+            var myPower = powerLevelEvent.getContent().users[MatrixClientPeg.get().credentials.userId];
+            if (parseInt(myPower) === parseInt(powerLevel)) {
+                var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                Modal.createDialog(QuestionDialog, {
+                    title: "Warning",
+                    description:
+                        <div>
+                            You will not be able to undo this change as you are promoting the user to have the same power level as yourself.<br/>
+                            Are you sure?
+                        </div>,
+                    button: "Continue",
+                    onFinished: function(confirmed) {
+                        if (confirmed) {
+                            self._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                        }
+                        else {
+                            self.props.onFinished();
+                        }
+                    },
+                });
+            }
+            else {
+                this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+            }
+        }
+        else {
+            this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+        }
     },    
 
     onChatClick: function() {
