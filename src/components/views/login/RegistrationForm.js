@@ -21,6 +21,7 @@ var Velocity = require('velocity-animate');
 require('velocity-ui-pack');
 var sdk = require('../../../index');
 var Email = require('../../../email');
+var Modal = require("../../../Modal");
 
 var FIELD_EMAIL = 'field_email';
 var FIELD_USERNAME = 'field_username';
@@ -75,20 +76,44 @@ module.exports = React.createClass({
         this.validateField(FIELD_USERNAME);
         this.validateField(FIELD_EMAIL);
 
+        var self = this;
         if (this.allFieldsValid()) {
-            var promise = this.props.onRegisterClick({
-                username: this.refs.username.value.trim() || this.props.defaultUsername,
-                password: this.refs.password.value.trim(),
-                email: this.refs.email.value.trim()
-            });
-
-            if (promise) {
-                ev.target.disabled = true;
-                promise.finally(function() {
-                    ev.target.disabled = false;
+            if (this.refs.email.value == '') {
+                var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                Modal.createDialog(QuestionDialog, {
+                    title: "Warning",
+                    description:
+                        <div>
+                            If you don't specify an email address, you won't be able to reset your password.<br/>
+                            Are you sure?
+                        </div>,
+                    button: "Continue",
+                    onFinished: function(confirmed) {
+                        if (confirmed) {
+                            self._doSubmit();
+                        }
+                    },
                 });
             }
+            else {
+                self._doSubmit();
+            }
         }
+    },
+
+    _doSubmit: function() {
+        var promise = this.props.onRegisterClick({
+            username: this.refs.username.value.trim() || this.props.defaultUsername,
+            password: this.refs.password.value.trim(),
+            email: this.refs.email.value.trim()
+        });
+
+        if (promise) {
+            ev.target.disabled = true;
+            promise.finally(function() {
+                ev.target.disabled = false;
+            });
+        }        
     },
 
     /**
