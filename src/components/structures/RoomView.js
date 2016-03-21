@@ -168,6 +168,7 @@ module.exports = React.createClass({
                 }
             }).done();
         } else {
+            MatrixClientPeg.get().stopPeeking();
             this._onRoomLoaded(this.state.room);
         }
     },
