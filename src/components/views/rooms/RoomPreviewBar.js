@@ -90,16 +90,22 @@ module.exports = React.createClass({
                         sent to matches one associated with your account.
                     </div>
                 } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().credentials.userId) {
-                    emailMatchBlock = <div className="warning">
-                        <img src="img/warning.svg" width="24" height="23" title= "/!\\" alt="/!\\" />
-                        This invitation was sent to <span className="email">{this.props.invitedEmail}</span> which is not publicly associated with your account.
-                    </div>
+                    emailMatchBlock =
+                        <div className="mx_RoomPreviewBar_warning">
+                            <div className="mx_RoomPreviewBar_warningIcon">
+                                <img src="img/warning.svg" width="24" height="23" title= "/!\\" alt="/!\\" />
+                            </div>
+                            <div className="mx_RoomPreviewBar_warningText">
+                                This invitation was sent to <b><span className="email">{this.props.invitedEmail}</span></b>, which is not associated with this account.<br/>
+                                You may wish to login with a different account, or add this email to your this account.
+                            </div>
+                        </div>
                 }
             }
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_invite_text">
-                        You have been invited to join this room by { this.props.inviterName }
+                        You have been invited to join this room by <b>{ this.props.inviterName }</b>
                     </div>
                     <div className="mx_RoomPreviewBar_join_text">
                         Would you like to <a onClick={ this.props.onJoinClick }>accept</a> or <a onClick={ this.props.onRejectClick }>decline</a> this invitation?
