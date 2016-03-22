@@ -16,8 +16,10 @@ limitations under the License.
 var q = require("q");
 var React = require('react');
 
+var sdk = require('../../../index');
 var Tinter = require('../../../Tinter');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
+var Modal = require("../../../Modal");
 
 var ROOM_COLORS = [
     // magic room default values courtesy of Ribot
@@ -74,12 +76,23 @@ module.exports = React.createClass({
         if (originalState.primary_color !== this.state.primary_color ||
                 originalState.secondary_color !== this.state.secondary_color) {
             console.log("ColorSettings: Saving new color");
+            // We would like guests to be able to set room colour but currently
+            // they can't, so we still send the request but display a sensible
+            // error if it fails.
             return MatrixClientPeg.get().setRoomAccountData(
                 this.props.room.roomId, "org.matrix.room.color_scheme", {
                     primary_color: this.state.primary_color,
                     secondary_color: this.state.secondary_color
                 }
-            );
+            ).catch(function(err) {
+                if (err.errcode == 'M_GUEST_ACCESS_FORBIDDEN') {
+                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+                    Modal.createDialog(NeedToRegisterDialog, {
+                        title: "Please Register",
+                        description: "Guest users can't create new rooms. Please register to create room and start a chat."
+                    });
+                }
+            });
         }
         return q(); // no color diff
     },
