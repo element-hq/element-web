@@ -133,6 +133,8 @@ limitations under the License.
 .mx_RoomSettings_warning {
     color: #ff0064;
     font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .mx_RoomSettings_editable {
