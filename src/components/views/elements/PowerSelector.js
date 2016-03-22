@@ -34,6 +34,10 @@ module.exports = React.createClass({
 
     propTypes: {
         value: React.PropTypes.number.isRequired,
+        // if true, the <select/> should be a 'controlled' form element and updated by React
+        // to reflect the current value, rather than left freeform.
+        // MemberInfo uses controlled; RoomSettings uses non-controlled.
+        controlled: React.PropTypes.bool.isRequired,
         disabled: React.PropTypes.bool,
         onChange: React.PropTypes.func,
     },
@@ -98,7 +102,10 @@ module.exports = React.createClass({
         }
         else {
             select =
-                <select ref="select" value={ selectValue } onChange={ this.onSelectChange }>
+                <select ref="select"
+                        value={ this.props.controlled ? selectValue : undefined }
+                        defaultValue={ !this.props.controlled ? selectValue : undefined }
+                        onChange={ this.onSelectChange }>
                     <option value="User">User (0)</option>
                     <option value="Moderator">Moderator (50)</option>
                     <option value="Admin">Admin (100)</option>

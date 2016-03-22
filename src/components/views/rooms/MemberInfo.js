@@ -495,7 +495,7 @@ module.exports = React.createClass({
                         { this.props.member.userId }
                     </div>
                     <div className="mx_MemberInfo_profileField">
-                        Level: <b><PowerSelector value={ parseInt(this.props.member.powerLevel) } disabled={ !this.state.can.modifyLevel } onChange={ this.onPowerChange }/></b>
+                        Level: <b><PowerSelector controlled={true} value={ parseInt(this.props.member.powerLevel) } disabled={ !this.state.can.modifyLevel } onChange={ this.onPowerChange }/></b>
                     </div>
                 </div>
 
