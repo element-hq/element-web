@@ -469,20 +469,23 @@ module.exports = React.createClass({
             }
         });
 
-        var tagsSection = 
-            <div className="mx_RoomSettings_tags">
-                { canSetTag ?
-                    ("Tagged as: " + tags.map(function(tag, i) {
-                        return (<label key={ i }>
-                                    <input type="checkbox"
-                                           ref={ tag.ref }
-                                           checked={ tag.name in self.state.tags }
-                                           onChange={ self._onTagChange.bind(self, tag.name) }/>
-                                    { tag.label }
-                                </label>);
-                    })) : (self.state.tags && self.state.tags.join) ? ("Tagged as: " +self.state.tags.join(", ")) : ""
-                }
-            </div>
+        var tagsSection = null;
+        if (canSetTag || self.state.tags) {
+            var tagsSection = 
+                <div className="mx_RoomSettings_tags">
+                    Tagged as: { canSetTag ?
+                        (tags.map(function(tag, i) {
+                            return (<label key={ i }>
+                                        <input type="checkbox"
+                                               ref={ tag.ref }
+                                               checked={ tag.name in self.state.tags }
+                                               onChange={ self._onTagChange.bind(self, tag.name) }/>
+                                        { tag.label }
+                                    </label>);
+                        })) : (self.state.tags && self.state.tags.join) ? self.state.tags.join(", ") : ""
+                    }
+                </div>
+        }
 
         // If there is no history_visibility, it is assumed to be 'shared'.
         // http://matrix.org/docs/spec/r0.0.0/client_server.html#id31
