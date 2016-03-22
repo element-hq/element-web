@@ -343,8 +343,6 @@ var TimelinePanel = React.createClass({
             return;
         }
 
-        var currentIndex = this._indexForEventId(this.state.readMarkerEventId);
-
         // move the RM to *after* the message at the bottom of the screen. This
         // avoids a problem whereby we never advance the RM if there is a huge
         // message which doesn't fit on the screen.
@@ -373,6 +371,38 @@ var TimelinePanel = React.createClass({
                 readMarkerVisible: false,
             });
         }
+    },
+
+
+    // advance the read marker past any events we sent ourselves.
+    _advanceReadMarkerPastMyEvents: function() {
+        // we call _timelineWindow.getEvents() rather than using
+        // this.state.events, because react batches the update to the latter, so it
+        // may not have been updated yet.
+        var events = this._timelineWindow.getEvents();
+
+        // first find where the current RM is
+        for (var i = 0; i < events.length; i++) {
+            if (events[i].getId() == this.state.readMarkerEventId)
+                break;
+        }
+        if (i >= events.length) {
+            return;
+        }
+
+        // now think about advancing it
+        var myUserId = MatrixClientPeg.get().credentials.userId;
+        for (; i < events.length; i++) {
+            var ev = events[i];
+            if (!ev.sender || ev.sender.userId != myUserId) {
+                break;
+            }
+        }
+        // i is now the first unread message which we didn't send ourselves.
+        i--;
+
+        var ev = events[i];
+        this._setReadMarker(ev.getId(), ev.getTs());
     },
 
     /* jump down to the bottom of this room, where new events are arriving
@@ -526,6 +556,11 @@ var TimelinePanel = React.createClass({
 
         var onLoaded = () => {
             this._reloadEvents();
+
+            // If we switched away from the room while there were pending
+            // outgoing events, the read-marker will be before those events.
+            // We need to skip over any which have subsequently been sent.
+            this._advanceReadMarkerPastMyEvents();
 
             this.setState({timelineLoading: false}, () => {
                 // initialise the scroll state of the message panel
