@@ -66,7 +66,7 @@ module.exports = React.createClass({
                     <button onClick={this.onRegisterClicked}>
                         Register
                     </button>
-                    <button onClick={this.props.onFinished} autoFocus={this.props.focus}>
+                    <button onClick={this.props.onFinished} autoFocus={true}>
                         Cancel
                     </button>
                 </div>
