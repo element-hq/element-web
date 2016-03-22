@@ -587,9 +587,15 @@ var TimelinePanel = React.createClass({
                     });
                 };
             }
+            var message = "Vector was trying to load a specific point in this room's timeline but ";
+            if (error.errcode == 'M_FORBIDDEN') {
+                message += "you do not have permission to view the message in question.";
+            } else {
+                message += "was unable to find it.";
+            }
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to load timeline position",
-                description: "Vector was trying to load a specific point in this room's timeline but was unable to find it.",
+                description: message,
                 onFinished: onFinished,
             });
         }
