@@ -89,7 +89,7 @@ module.exports = React.createClass({
                     var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
                     Modal.createDialog(NeedToRegisterDialog, {
                         title: "Please Register",
-                        description: "Guest users can't create new rooms. Please register to create room and start a chat."
+                        description: "Saving room color settings is only available to registered users"
                     });
                 }
             });

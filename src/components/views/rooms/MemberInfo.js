@@ -170,10 +170,18 @@ module.exports = React.createClass({
                 // get out of sync if we force setState here!
                 console.log("Mod toggle success");
             }, function(err) {
-                Modal.createDialog(ErrorDialog, {
-                    title: "Mod error",
-                    description: err.message
-                });
+                if (err.errcode == 'M_GUEST_ACCESS_FORBIDDEN') {
+                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+                    Modal.createDialog(NeedToRegisterDialog, {
+                        title: "Please Register",
+                        description: "This action cannot be performed by a guest user. Please register to be able to do this."
+                    });
+                } else {
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Mod error",
+                        description: err.message
+                    });
+                }
             }
         );
         this.props.onFinished();        
