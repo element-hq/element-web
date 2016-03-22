@@ -79,6 +79,15 @@ limitations under the License.
     font-size: 15px;
 }
 
+/* have to use overlay rather than auto otherwise Linux and Windows
+   Chrome gets very confused about vertical spacing:
+   https://github.com/vector-im/vector-web/issues/754
+*/
+.mx_EventTile_content .markdown-body pre {
+    overflow-x: overlay;
+    overflow-y: visible;
+}
+
 .mx_EventTile_content .markdown-body h1,
 .mx_EventTile_content .markdown-body h2,
 .mx_EventTile_content .markdown-body h3,
