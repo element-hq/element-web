@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,42 +16,46 @@ limitations under the License.
 
 /*
  * Usage:
- * Modal.createDialog(ErrorDialog, {
- *   title: "some text", (default: "Error")
+ * Modal.createDialog(NeedToRegisterDialog, {
+ *   title: "some text", (default: "Registration required")
  *   description: "some more text",
- *   button: "Button Text",
  *   onFinished: someFunction,
- *   focus: true|false (default: true)
  * });
  */
 
 var React = require("react");
+var dis = require("../../../dispatcher");
 
 module.exports = React.createClass({
-    displayName: 'ErrorDialog',
+    displayName: 'NeedToRegisterDialog',
     propTypes: {
         title: React.PropTypes.string,
         description: React.PropTypes.oneOfType([
             React.PropTypes.element,
             React.PropTypes.string,
         ]),
-        button: React.PropTypes.string,
-        focus: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
         return {
-            title: "Error",
-            description: "An error has occurred.",
-            button: "OK",
-            focus: true,
+            title: "Registration required",
+            description: "A registered account is required for this action",
         };
+    },
+
+    onRegisterClicked: function() {
+        dis.dispatch({
+            action: "start_upgrade_registration",
+        });
+        if (this.props.onFinished) {
+            this.props.onFinished();
+        }
     },
 
     render: function() {
         return (
-            <div className="mx_ErrorDialog">
+            <div className="mx_NeedToRegisterDialog">
                 <div className="mx_Dialog_title">
                     {this.props.title}
                 </div>
@@ -59,8 +63,11 @@ module.exports = React.createClass({
                     {this.props.description}
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this.props.onFinished} autoFocus={this.props.focus}>
-                        {this.props.button}
+                    <button onClick={this.onRegisterClicked}>
+                        Register
+                    </button>
+                    <button onClick={this.props.onFinished} autoFocus={true}>
+                        Cancel
                     </button>
                 </div>
             </div>
