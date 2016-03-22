@@ -130,6 +130,11 @@ limitations under the License.
     visibility: visible;
 }
 
+.mx_RoomSettings_warning {
+    color: #ff0064;
+    font-weight: bold;
+}
+
 .mx_RoomSettings_editable {
     border: 0px;
     border-bottom: 1px solid #c7c7c7;
