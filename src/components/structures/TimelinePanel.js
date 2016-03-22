@@ -25,6 +25,7 @@ var sdk = require('../../index');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
 var ObjectUtils = require('../../ObjectUtils');
+var Modal = require("../../Modal");
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
@@ -540,21 +541,6 @@ var TimelinePanel = React.createClass({
             MatrixClientPeg.get(), this.props.room,
             {windowLimit: TIMELINE_CAP});
 
-        var prom = this._timelineWindow.load(eventId, INITIAL_SIZE);
-
-        this.setState({
-            events: [],
-            timelineLoading: true,
-        });
-
-        // if we already have the event in question, TimelineWindow.load
-        // returns a resolved promise.
-        //
-        // In this situation, we don't really want to defer the update of the
-        // state to the next event loop, because it makes room-switching feel
-        // quite slow. So we detect that situation and shortcut straight to
-        // calling _reloadEvents and updating the state.
-
         var onLoaded = () => {
             this._reloadEvents();
 
@@ -581,10 +567,52 @@ var TimelinePanel = React.createClass({
             });
         };
 
-        if (prom.isPending()) {
-            prom = prom.then(onLoaded);
-        } else {
+        var onError = (error) => {
+            this.setState({timelineLoading: false});
+            var msg = error.message ? error.message : JSON.stringify(error);
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+            var onFinished;
+
+            // if we were given an event ID, then when the user closes the
+            // dialog, let's jump to the end of the timeline. If we weren't,
+            // something has gone badly wrong and rather than causing a loop of
+            // undismissable dialogs, let's just give up.
+            if (eventId) {
+                onFinished = () => {
+                    // go via the dispatcher so that the URL is updated
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: this.props.room.roomId,
+                    });
+                };
+            }
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to load event",
+                description: msg,
+                onFinished: onFinished,
+            });
+        }
+
+        var prom = this._timelineWindow.load(eventId, INITIAL_SIZE);
+
+        // if we already have the event in question, TimelineWindow.load
+        // returns a resolved promise.
+        //
+        // In this situation, we don't really want to defer the update of the
+        // state to the next event loop, because it makes room-switching feel
+        // quite slow. So we detect that situation and shortcut straight to
+        // calling _reloadEvents and updating the state.
+
+        if (prom.isFulfilled()) {
             onLoaded();
+        } else {
+            this.setState({
+                events: [],
+                timelineLoading: true,
+            });
+
+            prom = prom.then(onLoaded, onError)
         }
 
         prom.done();
