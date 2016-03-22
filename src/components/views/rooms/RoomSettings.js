@@ -56,15 +56,15 @@ module.exports = React.createClass({
             tags_changed: false,
             tags: tags,
             areNotifsMuted: areNotifsMuted,
+            isRoomPublished: false, // updated in componentWillMount
         };
     },
 
     componentWillMount: function() {
-        var self = this;
-        MatrixClientPeg.get().getRoomVisibility(
+        MatrixClientPeg.get().getRoomDirectoryVisibility(
             this.props.room.roomId
         ).done((result) => {
-            self.setState({ isRoomPublished: result.visibility === "public" });
+            this.setState({ isRoomPublished: result.visibility === "public" });
         }, (err) => {
             console.error("Failed to get room visibility: " + err);
         });
@@ -124,7 +124,7 @@ module.exports = React.createClass({
         }
 
         if (this.state.isRoomPublished !== originalState.isRoomPublished) {
-            promises.push(MatrixClientPeg.get().setRoomVisibility(
+            promises.push(MatrixClientPeg.get().setRoomDirectoryVisibility(
                 roomId, 
                 this.state.isRoomPublished ? "public" : "private"
             ));
@@ -271,22 +271,30 @@ module.exports = React.createClass({
     },
     
     _onRoomAccessRadioToggle: function(ev) {
-        var self = this;
+
+        //                         join_rule
+        //                      INVITE  |  PUBLIC
+        //        ----------------------+----------------
+        // guest  CAN_JOIN   | inv_only | pub_with_guest
+        // access ----------------------+----------------
+        //        FORBIDDEN  | inv_only | pub_no_guest
+        //        ----------------------+----------------
+
         switch (ev.target.value) {
             case "invite_only":
-                self.setState({
+                this.setState({
                     join_rule: "invite",
                     guest_access: "can_join",
                 });
                 break;
             case "public_no_guests":
-                self.setState({
+                this.setState({
                     join_rule: "public",
                     guest_access: "forbidden",
                 });
                 break;
             case "public_with_guests":
-                self.setState({
+                this.setState({
                     join_rule: "public",
                     guest_access: "can_join",
                 });
@@ -483,6 +491,17 @@ module.exports = React.createClass({
                 </div>
         }
 
+        var inviteGuestWarning;
+        if (this.state.join_rule !== "public" && this.state.guest_access === "forbidden") {
+            inviteGuestWarning =
+                <div className="mx_RoomSettings_warning">
+                    Guests cannot join this room even if explicitly invited. <a href="#" onClick={ (e) => {
+                        this.setState({ join_rule: "invite", guest_access: "can_join" });
+                        e.preventDefault();
+                    }}>Click here to fix</a>.
+                </div>
+        }
+
         return (
             <div className="mx_RoomSettings">
 
@@ -497,11 +516,12 @@ module.exports = React.createClass({
                     </label>
                     <div className="mx_RoomSettings_settings">
                         <h3>Who can access this room?</h3>
+                        { inviteGuestWarning }
                         <label>
                             <input type="radio" name="roomVis" value="invite_only"
                                 disabled={ !roomState.mayClientSendStateEvent("m.room.join_rules", cli) }
                                 onChange={this._onRoomAccessRadioToggle}
-                                defaultChecked={this.state.join_rule !== "public"}/>
+                                checked={this.state.join_rule !== "public"}/>
                             Only people who have been invited
                         </label>
                         <label>
@@ -509,7 +529,7 @@ module.exports = React.createClass({
                                 disabled={ !(roomState.mayClientSendStateEvent("m.room.join_rules", cli) &&
                                              roomState.mayClientSendStateEvent("m.room.guest_access", cli)) }
                                 onChange={this._onRoomAccessRadioToggle}
-                                defaultChecked={this.state.join_rule === "public" && this.state.guest_access !== "can_join"}/>
+                                checked={this.state.join_rule === "public" && this.state.guest_access !== "can_join"}/>
                             Anyone who knows the room's link, apart from guests
                         </label>
                         <label>
@@ -517,7 +537,7 @@ module.exports = React.createClass({
                                 disabled={ !(roomState.mayClientSendStateEvent("m.room.join_rules", cli) &&
                                              roomState.mayClientSendStateEvent("m.room.guest_access", cli)) }
                                 onChange={this._onRoomAccessRadioToggle}
-                                defaultChecked={this.state.join_rule === "public" && this.state.guest_access === "can_join"}/>
+                                checked={this.state.join_rule === "public" && this.state.guest_access === "can_join"}/>
                             Anyone who knows the room's link, including guests
                         </label>
                         { addressWarning }
