@@ -173,15 +173,29 @@ module.exports = React.createClass({
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
         // differently for the last event in the list.
+        //
+        // we also need to figure out which is the last event we show which isn't
+        // a local echo, to manage the read-marker.
+        var lastShownEventIndex = -1;
+        var lastShownNonLocalEchoIndex = -1;
         for (i = this.props.events.length-1; i >= 0; i--) {
             var mxEv = this.props.events[i];
             if (!EventTile.haveTileForEvent(mxEv)) {
                 continue;
             }
 
+            if (lastShownEventIndex < 0) {
+                lastShownEventIndex = i;
+            }
+
+            if (mxEv.status) {
+                // this is a local echo
+                continue;
+            }
+
+            lastShownNonLocalEchoIndex = i;
             break;
         }
-        var lastShownEventIndex = i;
 
         var ret = [];
 
@@ -213,25 +227,34 @@ module.exports = React.createClass({
                 ret.push(<li key={eventId} data-scroll-token={eventId}/>);
             }
 
+            var isVisibleReadMarker = false;
+
             if (eventId == this.props.readMarkerEventId) {
                 var visible = this.props.readMarkerVisible;
 
-                // if the read marker comes at the end of the timeline, we don't want
-                // to show it, but we still want to create the <li/> for it so that the
-                // algorithms which depend on its position on the screen aren't confused.
-                if (i >= lastShownEventIndex) {
+                // if the read marker comes at the end of the timeline (except
+                // for local echoes, which are excluded from RMs, because they
+                // don't have useful event ids), we don't want to show it, but
+                // we still want to create the <li/> for it so that the
+                // algorithms which depend on its position on the screen aren't
+                // confused.
+                if (i >= lastShownNonLocalEchoIndex) {
                     visible = false;
                 }
                 ret.push(this._getReadMarkerTile(visible));
                 readMarkerVisible = visible;
-            } else if (eventId == this.currentReadMarkerEventId && !this.currentGhostEventId) {
+                isVisibleReadMarker = visible;
+            }
+
+            if (eventId == this.currentGhostEventId) {
+                // if we're showing an animation, continue to show it.
+                ret.push(this._getReadMarkerGhostTile());
+            } else if (!isVisibleReadMarker &&
+                       eventId == this.currentReadMarkerEventId) {
                 // there is currently a read-up-to marker at this point, but no
                 // more. Show an animation of it disappearing.
                 ret.push(this._getReadMarkerGhostTile());
                 this.currentGhostEventId = eventId;
-            } else if (eventId == this.currentGhostEventId) {
-                // if we're showing an animation, continue to show it.
-                ret.push(this._getReadMarkerGhostTile());
             }
         }
 
