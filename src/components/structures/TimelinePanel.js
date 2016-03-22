@@ -588,8 +588,8 @@ var TimelinePanel = React.createClass({
                 };
             }
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to load event",
-                description: msg,
+                title: "Failed to load timeline position",
+                description: "Vector was trying to load a specific point in this room's timeline but was unable to find it.",
                 onFinished: onFinished,
             });
         }
