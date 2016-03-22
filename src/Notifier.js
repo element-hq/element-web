@@ -156,14 +156,14 @@ var Notifier = {
             // Case when we do not have the permission as 'granted'
             if (this.isPermissionDefault()) {
                 // Attempt to get permission from user
-                var _this = this;
+                var self = this;
                 global.Notification.requestPermission().then(function(result) {
                     if (result === 'denied') {
                         dis.dispatch({
                             action: "notifier_enabled",
                             value: false
                         });
-                        _this.setToolbarHidden(true);
+                        self.setToolbarHidden(true);
                         return;
                     }
                     if (result === 'default') {
@@ -223,8 +223,9 @@ var Notifier = {
             value: this.isEnabled()
         });
 
-        if (persistent === true)
+        if (persistent) {
             this.setToolbarPersistantHidden();
+        }
     },
 
     setToolbarPersistantHidden: function() {
