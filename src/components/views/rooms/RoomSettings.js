@@ -55,8 +55,19 @@ module.exports = React.createClass({
             power_levels_changed: false,
             tags_changed: false,
             tags: tags,
-            areNotifsMuted: areNotifsMuted
+            areNotifsMuted: areNotifsMuted,
         };
+    },
+
+    componentWillMount: function() {
+        var self = this;
+        MatrixClientPeg.get().getRoomVisibility(
+            this.props.room.roomId
+        ).done((result) => {
+            self.setState({ isRoomPublished: result.visibility === "public" });
+        }, (err) => {
+            console.error("Failed to get room visibility: " + err);
+        });
     },
     
     setName: function(name) {
@@ -109,6 +120,13 @@ module.exports = React.createClass({
                 roomId, "m.room.history_visibility",
                 { history_visibility: this.state.history_visibility },
                 ""
+            ));
+        }
+
+        if (this.state.isRoomPublished !== originalState.isRoomPublished) {
+            promises.push(MatrixClientPeg.get().setRoomVisibility(
+                roomId, 
+                this.state.isRoomPublished ? "public" : "private"
             ));
         }
 
@@ -252,6 +270,30 @@ module.exports = React.createClass({
         });
     },
     
+    _onRoomAccessRadioToggle: function(ev) {
+        var self = this;
+        switch (ev.target.value) {
+            case "invite_only":
+                self.setState({
+                    join_rule: "invite",
+                    guest_access: "can_join",
+                });
+                break;
+            case "public_no_guests":
+                self.setState({
+                    join_rule: "public",
+                    guest_access: "forbidden",
+                });
+                break;
+            case "public_with_guests":
+                self.setState({
+                    join_rule: "public",
+                    guest_access: "can_join",
+                });
+                break;
+        }
+    },
+
     _onToggle: function(keyName, checkedValue, uncheckedValue, ev) {
         console.log("Checkbox toggle: %s %s", keyName, ev.target.checked);
         var state = {};
@@ -427,7 +469,20 @@ module.exports = React.createClass({
         // http://matrix.org/docs/spec/r0.0.0/client_server.html#id31
         var historyVisibility = this.state.history_visibility || "shared";
 
-        // FIXME: disable guests_read if the user hasn't turned on shared history
+        var addressWarning;
+        var aliasEvents = this.props.room.currentState.getStateEvents('m.room.aliases') || [];
+        var aliasCount = 0;
+        aliasEvents.forEach((event) => {
+            aliasCount += event.getContent().aliases.length;
+        });
+
+        if (this.state.join_rule === "public" && aliasCount == 0) {
+            addressWarning =
+                <div className="mx_RoomSettings_warning">
+                    To link to a room it must have <a href="#addresses">an address</a>.
+                </div>
+        }
+
         return (
             <div className="mx_RoomSettings">
 
@@ -440,43 +495,65 @@ module.exports = React.createClass({
                                defaultChecked={this.state.areNotifsMuted}/>
                         Mute notifications for this room
                     </label>
-                    <label>
-                        <input type="checkbox" disabled={ !roomState.mayClientSendStateEvent("m.room.join_rules", cli) }
-                            onChange={this._onToggle.bind(this, "join_rule", "invite", "public")}
-                            defaultChecked={this.state.join_rule !== "public"}/>
-                        Make this room private
-                    </label>
-                    <label>
-                        <input type="checkbox" disabled={ !roomState.mayClientSendStateEvent("m.room.guest_access", cli) }
-                            onChange={this._onToggle.bind(this, "guest_access", "can_join", "forbidden")}
-                            defaultChecked={this.state.guest_access === "can_join"}/>
-                        Let guests join this room
-                    </label>
+                    <div className="mx_RoomSettings_settings">
+                        <h3>Who can access this room?</h3>
+                        <label>
+                            <input type="radio" name="roomVis" value="invite_only"
+                                disabled={ !roomState.mayClientSendStateEvent("m.room.join_rules", cli) }
+                                onChange={this._onRoomAccessRadioToggle}
+                                defaultChecked={this.state.join_rule !== "public"}/>
+                            Only people who have been invited
+                        </label>
+                        <label>
+                            <input type="radio" name="roomVis" value="public_no_guests"
+                                disabled={ !(roomState.mayClientSendStateEvent("m.room.join_rules", cli) &&
+                                             roomState.mayClientSendStateEvent("m.room.guest_access", cli)) }
+                                onChange={this._onRoomAccessRadioToggle}
+                                defaultChecked={this.state.join_rule === "public" && this.state.guest_access !== "can_join"}/>
+                            Anyone who knows the room's link, apart from guests
+                        </label>
+                        <label>
+                            <input type="radio" name="roomVis" value="public_with_guests"
+                                disabled={ !(roomState.mayClientSendStateEvent("m.room.join_rules", cli) &&
+                                             roomState.mayClientSendStateEvent("m.room.guest_access", cli)) }
+                                onChange={this._onRoomAccessRadioToggle}
+                                defaultChecked={this.state.join_rule === "public" && this.state.guest_access === "can_join"}/>
+                            Anyone who knows the room's link, including guests
+                        </label>
+                        { addressWarning }
+                        <br/>
+                        <label>
+                            <input type="checkbox" disabled={ !roomState.mayClientSendStateEvent("m.room.aliases", cli) }
+                                   onChange={ this._onToggle.bind(this, "isRoomPublished", true, false)}
+                                   checked={this.state.isRoomPublished}/>
+                            List this room in { MatrixClientPeg.get().getDomain() }'s directory?
+                        </label>
+                    </div>
                     <div className="mx_RoomSettings_settings">
                         <h3>Who can read history?</h3>
-                        <label htmlFor="hvis_wr">
-                            <input type="radio" id="hvis_wr" name="historyVis" value="world_readable"
+                        <label>
+                            <input type="radio" name="historyVis" value="world_readable"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
                                     checked={historyVisibility === "world_readable"}
                                     onChange={this._onHistoryRadioToggle} />
                             Anyone
                         </label>
-                        <label htmlFor="hvis_sh">
-                            <input type="radio" id="hvis_sh" name="historyVis" value="shared"
+                        <label>
+                            <input type="radio" name="historyVis" value="shared"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
                                     checked={historyVisibility === "shared"}
                                     onChange={this._onHistoryRadioToggle} />
                             Members only (since the point in time of selecting this option)
                         </label>
-                        <label htmlFor="hvis_inv">
-                            <input type="radio" id="hvis_inv" name="historyVis" value="invited"
+                        <label>
+                            <input type="radio" name="historyVis" value="invited"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
                                     checked={historyVisibility === "invited"}
                                     onChange={this._onHistoryRadioToggle} />
                             Members only (since they were invited)
                         </label>
-                        <label htmlFor="hvis_joi">
-                            <input type="radio" id="hvis_joi" name="historyVis" value="joined"
+                        <label >
+                            <input type="radio" name="historyVis" value="joined"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
                                     checked={historyVisibility === "joined"}
                                     onChange={this._onHistoryRadioToggle} />
@@ -494,6 +571,8 @@ module.exports = React.createClass({
                     <h3>Room Colour</h3>
                     <ColorSettings ref="color_settings" room={this.props.room} />
                 </div>
+
+                <a id="addresses"/>
 
                 <AliasSettings ref="alias_settings"
                     roomId={this.props.room.roomId}
