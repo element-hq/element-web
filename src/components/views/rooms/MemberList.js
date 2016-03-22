@@ -231,10 +231,17 @@ module.exports = React.createClass({
         }, function(err) {
             if (err !== null) {
                 console.error("Failed to invite: %s", JSON.stringify(err));
-                Modal.createDialog(ErrorDialog, {
-                    title: "Server error whilst inviting",
-                    description: err.message
-                });
+                if (err.errcode == 'M_FORBIDDEN') {
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Unable to Invite",
+                        description: "You do not have permission to invite people to this room."
+                    });
+                } else {
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Server error whilst inviting",
+                        description: err.message
+                    });
+                }
             }
         }).finally(function() {
             self.setState({
