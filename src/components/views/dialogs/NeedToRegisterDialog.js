@@ -19,7 +19,7 @@ limitations under the License.
  * Modal.createDialog(NeedToRegisterDialog, {
  *   title: "some text", (default: "Registration required")
  *   description: "some more text",
- *   onClose: someFunction,
+ *   onFinished: someFunction,
  * });
  */
 

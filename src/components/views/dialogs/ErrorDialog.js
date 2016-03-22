@@ -20,7 +20,7 @@ limitations under the License.
  *   title: "some text", (default: "Error")
  *   description: "some more text",
  *   button: "Button Text",
- *   onClose: someFunction,
+ *   onFinished: someFunction,
  *   focus: true|false (default: true)
  * });
  */
