@@ -56,7 +56,7 @@ module.exports = React.createClass({
             tags_changed: false,
             tags: tags,
             areNotifsMuted: areNotifsMuted,
-            isRoomPublished: false, // updated in componentWillMount
+            // isRoomPublished: // set in componentWillMount
         };
     },
 
@@ -284,6 +284,11 @@ module.exports = React.createClass({
             case "invite_only":
                 this.setState({
                     join_rule: "invite",
+                    // we always set guests can_join here as it makes no sense to have
+                    // an invite-only room that guests can't join.  If you explicitly
+                    // invite them, you clearly want them to join, whether they're a
+                    // guest or not.  In practice, guest_access should probably have
+                    // been implemented as part of the join_rules enum.
                     guest_access: "can_join",
                 });
                 break;
@@ -328,6 +333,13 @@ module.exports = React.createClass({
             tags: this.state.tags,
             tags_changed: true
         });
+    },
+
+    mayChangeRoomAccess: function() {
+        var cli = MatrixClientPeg.get();
+        var roomState = this.props.room.currentState;
+        return (roomState.mayClientSendStateEvent("m.room.join_rules", cli) &&
+                roomState.mayClientSendStateEvent("m.room.guest_access", cli))
     },
 
     render: function() {
@@ -519,23 +531,21 @@ module.exports = React.createClass({
                         { inviteGuestWarning }
                         <label>
                             <input type="radio" name="roomVis" value="invite_only"
-                                disabled={ !roomState.mayClientSendStateEvent("m.room.join_rules", cli) }
+                                disabled={ !this.mayChangeRoomAccess() }
                                 onChange={this._onRoomAccessRadioToggle}
                                 checked={this.state.join_rule !== "public"}/>
                             Only people who have been invited
                         </label>
                         <label>
                             <input type="radio" name="roomVis" value="public_no_guests"
-                                disabled={ !(roomState.mayClientSendStateEvent("m.room.join_rules", cli) &&
-                                             roomState.mayClientSendStateEvent("m.room.guest_access", cli)) }
+                                disabled={ !this.mayChangeRoomAccess() }
                                 onChange={this._onRoomAccessRadioToggle}
                                 checked={this.state.join_rule === "public" && this.state.guest_access !== "can_join"}/>
                             Anyone who knows the room's link, apart from guests
                         </label>
                         <label>
                             <input type="radio" name="roomVis" value="public_with_guests"
-                                disabled={ !(roomState.mayClientSendStateEvent("m.room.join_rules", cli) &&
-                                             roomState.mayClientSendStateEvent("m.room.guest_access", cli)) }
+                                disabled={ !this.mayChangeRoomAccess() }
                                 onChange={this._onRoomAccessRadioToggle}
                                 checked={this.state.join_rule === "public" && this.state.guest_access === "can_join"}/>
                             Anyone who knows the room's link, including guests
