@@ -17,7 +17,7 @@ limitations under the License.
 var dis = require("./dispatcher");
 
 var MIN_DISPATCH_INTERVAL_MS = 500;
-var CURRENTLY_ACTIVE_THRESHOLD_MS = 500;
+var CURRENTLY_ACTIVE_THRESHOLD_MS = 2000;
 
 /**
  * This class watches for user activity (moving the mouse or pressing a key)
