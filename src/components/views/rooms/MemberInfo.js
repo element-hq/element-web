@@ -293,6 +293,16 @@ module.exports = React.createClass({
         }
         else {
             self.setState({ creatingRoom: true });
+
+            if (MatrixClientPeg.get().isGuest()) {
+                var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+                Modal.createDialog(NeedToRegisterDialog, {
+                    title: "Please Register",
+                    description: "Guest users can't create new rooms. Please register to create room and start a chat."
+                });
+                return;
+            }
+
             MatrixClientPeg.get().createRoom({
                 // XXX: FIXME: deduplicate this with "view_create_room" in MatrixChat
                 invite: [this.props.member.userId],

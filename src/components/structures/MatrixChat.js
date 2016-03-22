@@ -464,8 +464,17 @@ module.exports = React.createClass({
                 //this.notifyNewScreen('new');
 
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
                 var Loader = sdk.getComponent("elements.Spinner");
                 var modal = Modal.createDialog(Loader);
+
+                if (MatrixClientPeg.get().isGuest) {
+                    Modal.createDialog(NeedToRegisterDialog, {
+                        title: "Please Register",
+                        description: "Guest users can't create new rooms. Please register to create room and start a chat."
+                    });
+                    return;
+                }
 
                 // XXX: FIXME: deduplicate this with MemberInfo's 'start chat' impl
                 MatrixClientPeg.get().createRoom({
