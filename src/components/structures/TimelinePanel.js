@@ -26,15 +26,11 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
 var ObjectUtils = require('../../ObjectUtils');
 var Modal = require("../../Modal");
+var UserActivity = require("../../UserActivity");
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
 var TIMELINE_CAP = 500; // the most events to show in a timeline
-
-// consider that the user remains "active" for this many milliseconds after a
-// user_activity event (and thus don't make the read-marker visible on new
-// events)
-var CONSIDER_USER_ACTIVE_FOR_MS = 500;
 
 var DEBUG = false;
 
@@ -114,7 +110,6 @@ var TimelinePanel = React.createClass({
         debuglog("TimelinePanel: mounting");
 
         this.last_rr_sent_event_id = undefined;
-        this._resetActivityTimer();
 
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
@@ -210,10 +205,6 @@ var TimelinePanel = React.createClass({
     onAction: function(payload) {
         switch (payload.action) {
             case 'user_activity':
-                this._resetActivityTimer();
-
-                // fall-through!
-
             case 'user_activity_end':
                 // we could treat user_activity_end differently and not
                 // send receipts for messages that have arrived between
@@ -224,10 +215,6 @@ var TimelinePanel = React.createClass({
                 this.updateReadMarker();
                 break;
         }
-    },
-
-    _resetActivityTimer: function() {
-        this.user_last_active = Date.now();
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
@@ -245,17 +232,13 @@ var TimelinePanel = React.createClass({
         // when a new event arrives when the user is not watching the window, but the
         // window is in its auto-scroll mode, make sure the read marker is visible.
         //
-        // We consider the user to be watching the window if they performed an action
-        // less than CONSIDER_USER_ACTIVE_FOR_MS ago.
-        //
         // We ignore events we have sent ourselves; we don't want to see the
         // read-marker when a remote echo of an event we have just sent takes
-        // more than CONSIDER_USER_ACTIVE_FOR_MS.
+        // more than the timeout on userCurrentlyActive.
         //
         var myUserId = MatrixClientPeg.get().credentials.userId;
         var sender = ev.sender ? ev.sender.userId : null;
-        var activity_age = Date.now() - this.user_last_active;
-        if (sender != myUserId && activity_age > CONSIDER_USER_ACTIVE_FOR_MS) {
+        if (sender != myUserId && !UserActivity.userCurrentlyActive()) {
             this.setState({readMarkerVisible: true});
         }
 
