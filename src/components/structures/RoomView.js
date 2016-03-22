@@ -575,12 +575,28 @@ module.exports = React.createClass({
             });
 
             if (!error) return;
-            var msg = error.message ? error.message : JSON.stringify(error);
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Failed to join room",
-                description: msg
-            });
+
+            // https://matrix.org/jira/browse/SYN-659
+            if (
+                error.errcode == 'M_GUEST_ACCESS_FORBIDDEN' ||
+                (
+                    error.errcode == 'M_FORBIDDEN' &&
+                    MatrixClientPeg.get().isGuest()
+                )
+            ) {
+                var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+                Modal.createDialog(NeedToRegisterDialog, {
+                    title: "Failed to join the room",
+                    description: "This room is private or inaccessible to guests. You may be able to join if you register."
+                });
+            } else {
+                var msg = error.message ? error.message : JSON.stringify(error);
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failed to join room",
+                    description: msg
+                });
+            }
         });
         this.setState({
             joining: true
