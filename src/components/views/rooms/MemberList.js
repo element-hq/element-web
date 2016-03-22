@@ -142,8 +142,17 @@ module.exports = React.createClass({
 
     onInvite: function(inputText) {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
         var self = this;
         inputText = inputText.trim(); // react requires es5-shim so we know trim() exists
+
+        if (MatrixClientPeg.get().isGuest()) {
+            Modal.createDialog(NeedToRegisterDialog, {
+                title: "Unable to Invite",
+                description: "Guest user can't invite new users. Please register to be able to invite new users into a room."
+            });
+            return;
+        }
 
         // email addresses and user IDs do not allow space, comma, semicolon so split
         // on them for bulk inviting.

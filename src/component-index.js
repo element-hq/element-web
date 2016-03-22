@@ -46,6 +46,7 @@ module.exports.components['views.create_room.Presets'] = require('./components/v
 module.exports.components['views.create_room.RoomAlias'] = require('./components/views/create_room/RoomAlias');
 module.exports.components['views.dialogs.ErrorDialog'] = require('./components/views/dialogs/ErrorDialog');
 module.exports.components['views.dialogs.LogoutPrompt'] = require('./components/views/dialogs/LogoutPrompt');
+module.exports.components['views.dialogs.NeedToRegisterDialog'] = require('./components/views/dialogs/NeedToRegisterDialog');
 module.exports.components['views.dialogs.QuestionDialog'] = require('./components/views/dialogs/QuestionDialog');
 module.exports.components['views.dialogs.SetDisplayNameDialog'] = require('./components/views/dialogs/SetDisplayNameDialog');
 module.exports.components['views.dialogs.TextInputDialog'] = require('./components/views/dialogs/TextInputDialog');
