@@ -214,6 +214,7 @@ module.exports = React.createClass({
         switch (payload.action) {
             case 'message_send_failed':
             case 'message_sent':
+            case 'message_send_cancelled':
                 this.setState({
                     hasUnsentMessages: this._hasUnsentMessages(this.state.room)
                 });
@@ -498,6 +499,13 @@ module.exports = React.createClass({
         var eventsToResend = this._getUnsentMessages(this.state.room);
         eventsToResend.forEach(function(event) {
             Resend.resend(event);
+        });
+    },
+
+    onCancelAllClick: function() {
+        var eventsToResend = this._getUnsentMessages(this.state.room);
+        eventsToResend.forEach(function(event) {
+            Resend.removeFromQueue(event);
         });
     },
 
@@ -1209,6 +1217,7 @@ module.exports = React.createClass({
                 atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
                 hasActiveCall={inCall}
                 onResendAllClick={this.onResendAllClick}
+                onCancelAllClick={this.onCancelAllClick}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
                 onResize={this.onChildResize}
                 />

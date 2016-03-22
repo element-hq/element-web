@@ -36,5 +36,9 @@ module.exports = {
 
     removeFromQueue: function(event) {
         MatrixClientPeg.get().cancelPendingEvent(event);
+        dis.dispatch({
+            action: 'message_send_cancelled',
+            event: event
+        });
     },
 };

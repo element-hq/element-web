@@ -49,6 +49,10 @@ module.exports = React.createClass({
         // 'unsent messages' bar
         onResendAllClick: React.PropTypes.func,
 
+        // callback for when the user clicks on the 'cancel all' button in the
+        // 'unsent messages' bar
+        onCancelAllClick: React.PropTypes.func,
+
         // callback for when the user clicks on the 'scroll to bottom' button
         onScrollToBottomClick: React.PropTypes.func,
 
@@ -223,9 +227,14 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_RoomStatusBar_connectionLostBar_desc">
                         <a className="mx_RoomStatusBar_resend_link"
-                            onClick={ this.props.onResendAllClick }>
-                        Resend all now
-                        </a> or select individual messages to re-send.
+                          onClick={ this.props.onResendAllClick }>
+                            Resend all
+                        </a> or <a 
+                          className="mx_RoomStatusBar_resend_link"
+                          onClick={ this.props.onCancelAllClick }>
+                            cancel all
+                        </a> now. You can also select individual messages to
+                        resend or cancel.
                     </div>
                 </div>
             );
