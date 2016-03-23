@@ -163,7 +163,7 @@ var Notifier = {
                             action: "notifier_enabled",
                             value: false
                         });
-                        self.setToolbarHidden(true);
+                        self.setToolbarHidden(true, false);
                         return;
                     }
                     if (result === 'default') {
@@ -216,7 +216,7 @@ var Notifier = {
         return enabled === 'true';
     },
 
-     setToolbarHidden: function(hidden, persistent) {
+    setToolbarHidden: function(hidden, persistent = true) {
         this.toolbarHidden = hidden;
         dis.dispatch({
             action: "notifier_enabled",
