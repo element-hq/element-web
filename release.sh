@@ -9,4 +9,4 @@ set -e
 
 cd `dirname $0`
 
-exec ./node_modules/matrix-js-sdk/release.sh -z -c CHANGES.rst "$@"
+exec ./node_modules/matrix-js-sdk/release.sh -z "$@"
