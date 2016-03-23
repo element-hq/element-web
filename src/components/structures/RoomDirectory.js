@@ -112,8 +112,8 @@ module.exports = React.createClass({
         var self = this;
         var guestRead, guestJoin, perms;
         for (var i = 0; i < rooms.length; i++) {
-            var alias = rooms[i].canonical_alias || (rooms[i].aliases ? rooms[i].aliases[0] : "Unnamed room");
-            var name = rooms[i].name || alias;
+            var alias = rooms[i].canonical_alias || (rooms[i].aliases ? rooms[i].aliases[0] : "");
+            var name = rooms[i].name || alias || "Unnamed room";
             guestRead = null;
             guestJoin = null;
 
