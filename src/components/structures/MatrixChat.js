@@ -1052,14 +1052,14 @@ module.exports = React.createClass({
             }
 
             var topBar;
-            if (MatrixClientPeg.get().isGuest()) {
+            if (this.state.hasNewVersion) {
+                topBar = <NewVersionBar />;
+            }
+            else if (MatrixClientPeg.get().isGuest()) {
                 topBar = <GuestWarningBar />;
             }
             else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
                 topBar = <MatrixToolbar />;
-            }
-            else if (this.state.hasNewVersion) {
-                topBar = <NewVersionBar />;
             }
 
             var bodyClasses = "mx_MatrixChat";
