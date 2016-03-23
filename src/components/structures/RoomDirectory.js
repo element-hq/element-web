@@ -83,7 +83,7 @@ module.exports = React.createClass({
                 avatarUrl: room.avatar_url,
                 // XXX: This logic is duplicated from the JS SDK which
                 // would normally decide what the name is.
-                name: room.name || room.aliases[0],
+                name: room.name || room.canonical_alias || room.aliases[0],
             };
         }
 
@@ -102,7 +102,9 @@ module.exports = React.createClass({
         var rooms = this.state.publicRooms.filter(function(a) {
             // FIXME: if incrementally typing, keep narrowing down the search set
             // incrementally rather than starting over each time.
-            return (a.aliases[0].toLowerCase().search(filter.toLowerCase()) >= 0 && a.num_joined_members > 0);
+            return (((a.name && a.name.toLowerCase().search(filter.toLowerCase()) >= 0) || 
+                     (a.aliases && a.aliases[0].toLowerCase().search(filter.toLowerCase()) >= 0)) && 
+                      a.num_joined_members > 0);
         }).sort(function(a,b) {
             return a.num_joined_members - b.num_joined_members;
         });
@@ -110,7 +112,8 @@ module.exports = React.createClass({
         var self = this;
         var guestRead, guestJoin, perms;
         for (var i = 0; i < rooms.length; i++) {
-            var name = rooms[i].name || rooms[i].aliases[0];
+            var alias = rooms[i].canonical_alias || rooms[i].aliases[0];
+            var name = rooms[i].name || alias;
             guestRead = null;
             guestJoin = null;
 
@@ -148,7 +151,7 @@ module.exports = React.createClass({
                         <div className="mx_RoomDirectory_topic"
                              onClick={ function(e) { e.stopPropagation() } }
                              dangerouslySetInnerHTML={{ __html: topic }}/>
-                        <div className="mx_RoomDirectory_alias">{ rooms[i].aliases[0] }</div>
+                        <div className="mx_RoomDirectory_alias">{ alias }</div>
                     </td>
                     <td className="mx_RoomDirectory_roomMemberCount">
                         { rooms[i].num_joined_members }
