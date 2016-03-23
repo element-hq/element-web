@@ -1,3 +1,10 @@
+Changes in [0.4.1](https://github.com/vector-im/vector-web/releases/tag/v0.4.1) (2016-03-23)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.4.0...v0.4.1)
+ * Update to matrix-react-sdk 0.3.1; see
+   https://github.com/matrix-org/matrix-react-sdk/blob/v0.3.1/CHANGELOG.md
+   (Disables debug logging)
+
 Changes in [0.4.0](https://github.com/vector-im/vector-web/releases/tag/v0.4.0) (2016-03-23)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.3.0...v0.4.0)
