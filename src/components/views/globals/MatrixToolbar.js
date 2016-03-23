@@ -24,12 +24,11 @@ module.exports = React.createClass({
     displayName: 'MatrixToolbar',
 
     getInitialState: function() {
-        return {showToolbar: Notifier.showToolbar()};
+        return {showToolbar: Notifier.shouldShowToolbar()};
     },
 
     hideToolbar: function() {
-        // TODO (mebjas): may be a add a confirm dialog here @tag: ara4n
-        Notifier.setToolbarHidden(true, true);
+        Notifier.setToolbarHidden(true);
     },
 
     onClick: function() {
@@ -37,7 +36,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        if (this.state.showToolbar != true) return null;
         return (
             <div className="mx_MatrixToolbar">
                 <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
