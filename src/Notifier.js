@@ -123,28 +123,6 @@ var Notifier = {
         return global.Notification.permission == 'granted';
     },
 
-    isPermissionDefault: function() {
-        if (!this.supportsDesktopNotifications()) return false;
-        return global.Notification.permission == 'default';
-    },
-
-    // Function to be used by clients to check weather or not to
-    // show the toolbar.
-    shouldShowToolbar: function() {
-        // Check localStorage for any such meta data
-        if (global.localStorage) {
-            if (global.localStorage.getItem('notifications_hidden') === 'true')
-                return false;
-        }
-
-        // Check if permission is granted by any chance.
-        if (this.havePermission()) return false;
-
-        // means the permission is blocked
-        if (!this.isPermissionDefault()) return false;
-        return true;
-    },
-
     setEnabled: function(enable, callback) {
         // make sure that we persist the current setting audio_enabled setting
         // before changing anything
@@ -156,33 +134,22 @@ var Notifier = {
 
         if(enable) {
             // Case when we do not have the permission as 'granted'
-            if (this.isPermissionDefault()) {
-                // Attempt to get permission from user
-                var self = this;
-                global.Notification.requestPermission(function(result) {
-                    if (result === 'denied') {
-                        dis.dispatch({
-                            action: "notifier_enabled",
-                            value: false
-                        });
-                        self.setToolbarHidden(true, false);
-                        return;
-                    }
-                    if (result === 'default') {
-                        // The permission request was dismissed
-                        return;
-                    }
+            // Attempt to get permission from user
+            global.Notification.requestPermission(function(result) {
+                if (result !== 'granted') {
+                    // The permission request was dismissed or denied
+                    return;
+                }
 
-                    if (callback) callback();
-                    dis.dispatch({
-                        action: "notifier_enabled",
-                        value: true
-                    });
-
-                    if (!global.localStorage) return;
-                    global.localStorage.setItem('notifications_enabled', 'true');
+                if (callback) callback();
+                dis.dispatch({
+                    action: "notifier_enabled",
+                    value: true
                 });
-            }
+
+                if (!global.localStorage) return;
+                global.localStorage.setItem('notifications_enabled', 'true');
+            });
         } else {
             if (!global.localStorage) return;
             global.localStorage.setItem('notifications_enabled', 'false');
@@ -232,6 +199,13 @@ var Notifier = {
     },
 
     isToolbarHidden: function() {
+        // Check localStorage for any such meta data
+        if (global.localStorage) {
+            if (global.localStorage.getItem('notifications_hidden') === 'true') {
+                return true;
+            }
+        }
+
         return this.toolbarHidden;
     },
 

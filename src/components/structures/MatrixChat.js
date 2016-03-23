@@ -1046,7 +1046,7 @@ module.exports = React.createClass({
             if (MatrixClientPeg.get().isGuest()) {
                 topBar = <GuestWarningBar />;
             }
-            else if (Notifier.supportsDesktopNotifications() && Notifier.shouldShowToolbar()) {
+            else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
                 topBar = <MatrixToolbar />;
             }
             else if (this.state.hasNewVersion) {
