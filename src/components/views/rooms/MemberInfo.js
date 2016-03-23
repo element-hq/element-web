@@ -178,7 +178,7 @@ module.exports = React.createClass({
                     });
                 } else {
                     Modal.createDialog(ErrorDialog, {
-                        title: "Mod error",
+                        title: "Moderator toggle error",
                         description: err.message
                     });
                 }
@@ -303,11 +303,13 @@ module.exports = React.createClass({
             self.setState({ creatingRoom: true });
 
             if (MatrixClientPeg.get().isGuest()) {
+                self.setState({ creatingRoom: false });
                 var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
                 Modal.createDialog(NeedToRegisterDialog, {
                     title: "Please Register",
                     description: "Guest users can't create new rooms. Please register to create room and start a chat."
                 });
+                self.props.onFinished();                
                 return;
             }
 
