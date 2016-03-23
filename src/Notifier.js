@@ -132,8 +132,7 @@ var Notifier = {
             }
         }
 
-        if(enable) {
-            // Case when we do not have the permission as 'granted'
+        if (enable) {
             // Attempt to get permission from user
             global.Notification.requestPermission(function(result) {
                 if (result !== 'granted') {
@@ -141,14 +140,15 @@ var Notifier = {
                     return;
                 }
 
+                if (global.localStorage) {
+                    global.localStorage.setItem('notifications_enabled', 'true');
+                }
+
                 if (callback) callback();
                 dis.dispatch({
                     action: "notifier_enabled",
                     value: true
                 });
-
-                if (!global.localStorage) return;
-                global.localStorage.setItem('notifications_enabled', 'true');
             });
         } else {
             if (!global.localStorage) return;
