@@ -128,7 +128,9 @@ var Notifier = {
         return global.Notification.permission == 'default';
     },
 
-    showToolbar: function() {
+    // Function to be used by clients to check weather or not to
+    // show the toolbar.
+    shouldShowToolbar: function() {
         // Check localStorage for any such meta data
         if (global.localStorage) {
             if (global.localStorage.getItem('notifications_hidden') === 'true')
