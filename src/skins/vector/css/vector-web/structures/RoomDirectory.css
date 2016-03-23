@@ -116,6 +116,7 @@ limitations under the License.
 .mx_RoomDirectory_roomMemberCount {
     text-align: right;
     width: 100px;
+    padding-right: 10px;
 }
 
 .mx_RoomDirectory_table tr {
