@@ -83,7 +83,7 @@ module.exports = React.createClass({
                 avatarUrl: room.avatar_url,
                 // XXX: This logic is duplicated from the JS SDK which
                 // would normally decide what the name is.
-                name: room.name || room.canonical_alias || room.aliases[0],
+                name: room.name || room.canonical_alias || (room.aliases ? room.aliases[0] : "Unnamed room"),
             };
         }
 
@@ -112,7 +112,7 @@ module.exports = React.createClass({
         var self = this;
         var guestRead, guestJoin, perms;
         for (var i = 0; i < rooms.length; i++) {
-            var alias = rooms[i].canonical_alias || rooms[i].aliases[0];
+            var alias = rooms[i].canonical_alias || (rooms[i].aliases ? rooms[i].aliases[0] : "Unnamed room");
             var name = rooms[i].name || alias;
             guestRead = null;
             guestJoin = null;
