@@ -159,7 +159,7 @@ var Notifier = {
             if (this.isPermissionDefault()) {
                 // Attempt to get permission from user
                 var self = this;
-                global.Notification.requestPermission().then(function(result) {
+                global.Notification.requestPermission(function(result) {
                     if (result === 'denied') {
                         dis.dispatch({
                             action: "notifier_enabled",
@@ -225,14 +225,8 @@ var Notifier = {
             value: this.isEnabled()
         });
 
-        if (persistent) {
-            this.setToolbarPersistantHidden();
-        }
-    },
-
-    setToolbarPersistantHidden: function() {
-        // update the info to localStorage
-        if (global.localStorage) {
+        // update the info to localStorage for persistent settings
+        if (persistent && global.localStorage) {
             global.localStorage.setItem('notifications_hidden', 'true');
         }
     },
