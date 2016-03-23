@@ -37,6 +37,16 @@ limitations under the License.
     display: block;
 }
 
+.mx_MessageComposer_noperm_error {
+    display: table-cell;
+    width: 100%;
+    vertical-align: middle;
+    height: 70px;
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}
+
 .mx_MessageComposer_input {
     display: table-cell;
     width: 100%;
