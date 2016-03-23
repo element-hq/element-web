@@ -74,12 +74,27 @@ var validBrowser = checkBrowserFeatures([
 
 // We want to support some name / value pairs in the fragment
 // so we're re-using query string like format
+//
+// returns {location, params}
 function parseQsFromFragment(location) {
-    var hashparts = location.hash.split('?');
+    // if we have a fragment, it will start with '#', which we need to drop.
+    // (if we don't, this will return '').
+    var fragment = location.hash.substring(1);
+
+    // our fragment may contain a query-param-like section. we need to fish
+    // this out *before* URI-decoding because the params may contain ? and &
+    // characters which are only URI-encoded once.
+    var hashparts = fragment.split('?');
+
+    var result = {
+        location: decodeURIComponent(hashparts[0]),
+        params: {}
+    };
+
     if (hashparts.length > 1) {
-        return qs.parse(hashparts[1]);
+        result.params = qs.parse(hashparts[1]);
     }
-    return {};
+    return result;
 }
 
 function parseQs(location) {
@@ -92,14 +107,13 @@ function routeUrl(location) {
     var params = parseQs(location);
     var loginToken = params.loginToken;
     if (loginToken) {
-        window.matrixChat.showScreen('token_login', parseQs(location));
+        window.matrixChat.showScreen('token_login', params);
+        return;
     }
-    else if (location.hash.indexOf('#/register') == 0) {
-        window.matrixChat.showScreen('register', parseQsFromFragment(location));
-    } else {
-        var hashparts = location.hash.split('?');
-        window.matrixChat.showScreen(hashparts[0].substring(2), parseQsFromFragment(location));
-    }
+
+    var fragparts = parseQsFromFragment(location);
+    window.matrixChat.showScreen(fragparts.location.substring(1),
+                                 fragparts.params);
 }
 
 function onHashChange(ev) {
@@ -160,13 +174,14 @@ window.onload = function() {
 function loadApp() {
     if (validBrowser) {
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
+        var fragParts = parseQsFromFragment(window.location);
         window.matrixChat = ReactDOM.render(
             <MatrixChat
                 onNewScreen={onNewScreen}
                 registrationUrl={makeRegistrationUrl()}
                 ConferenceHandler={VectorConferenceHandler}
                 config={configJson}
-                startingQueryParams={parseQsFromFragment(window.location)}
+                startingQueryParams={fragParts.params}
                 enableGuest={true} />,
             document.getElementById('matrixchat')
         );
