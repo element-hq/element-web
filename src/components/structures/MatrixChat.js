@@ -468,7 +468,7 @@ module.exports = React.createClass({
                 var Loader = sdk.getComponent("elements.Spinner");
                 var modal = Modal.createDialog(Loader);
 
-                if (MatrixClientPeg.get().isGuest) {
+                if (MatrixClientPeg.get().isGuest()) {
                     Modal.createDialog(NeedToRegisterDialog, {
                         title: "Please Register",
                         description: "Guest users can't create new rooms. Please register to create room and start a chat."
