@@ -443,10 +443,12 @@ module.exports = React.createClass({
         var scrollNode = this._getScrollNode();
 
         var prevScroll = scrollNode.scrollTop;
-        scrollNode.scrollTop = scrollTop;
 
-        // If this change generates a scroll event, we should not update the saved
-        // scroll state on it. See the comments in onScroll.
+        // FF ignores attempts to set scrollTop to very large numbers
+        scrollNode.scrollTop = Math.min(scrollTop, scrollNode.scrollHeight);
+
+        // If this change generates a scroll event, we should not update the
+        // saved scroll state on it. See the comments in onScroll.
         //
         // If we *don't* expect a scroll event, we need to leave _lastSetScroll
         // alone, otherwise we'll end up ignoring a future scroll event which is
