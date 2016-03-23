@@ -392,7 +392,7 @@ var TimelinePanel = React.createClass({
 
         // now think about advancing it
         var myUserId = MatrixClientPeg.get().credentials.userId;
-        for (; i < events.length; i++) {
+        for (i++; i < events.length; i++) {
             var ev = events[i];
             if (!ev.sender || ev.sender.userId != myUserId) {
                 break;
