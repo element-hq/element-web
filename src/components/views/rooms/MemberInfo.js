@@ -386,6 +386,9 @@ module.exports = React.createClass({
             return defaultPerms;
         }
         var me = room.getMember(MatrixClientPeg.get().credentials.userId);
+        if (!me) {
+            return defaultPerms;
+        }
         var them = member;
         return {
             can: this._calculateCanPermissions(
