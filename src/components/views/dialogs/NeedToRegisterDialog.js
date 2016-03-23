@@ -63,11 +63,11 @@ module.exports = React.createClass({
                     {this.props.description}
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this.onRegisterClicked}>
-                        Register
-                    </button>
                     <button onClick={this.props.onFinished} autoFocus={true}>
                         Cancel
+                    </button>
+                    <button onClick={this.onRegisterClicked}>
+                        Register
                     </button>
                 </div>
             </div>
