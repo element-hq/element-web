@@ -897,7 +897,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableNotifications">
-                                Enable notifications
+                                Enable notifications for this account
                             </label>
                         </div>
                     </div>
