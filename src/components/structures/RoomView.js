@@ -486,7 +486,7 @@ module.exports = React.createClass({
     },
 
     onSearchResultsResize: function() {
-        dis.dispatch({ action: 'timeline_resize' });
+        dis.dispatch({ action: 'timeline_resize' }, true);
     },
 
     onSearchResultsFillRequest: function(backwards) {
