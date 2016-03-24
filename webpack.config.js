@@ -14,7 +14,14 @@ module.exports = {
             { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
             // css-raw-loader loads CSS but doesn't try to treat url()s as require()s
             { test: /\.css$/, loader: ExtractTextPlugin.extract("css-raw-loader") },
-        ]
+        ],
+        noParse: [
+            // don't parse the languages within highlight.js. They cause stack
+            // overflows (https://github.com/webpack/webpack/issues/1721), and
+            // there is no need for webpack to parse them - they can just be
+            // included as-is.
+            /highlight\.js\/lib\/languages/,
+        ],
     },
     output: {
         devtoolModuleFilenameTemplate: function(info) {
