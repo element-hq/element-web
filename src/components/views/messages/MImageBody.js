@@ -105,24 +105,45 @@ module.exports = React.createClass({
         return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
     },
 
+    componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+        this.fixupHeight();
+    },
+
+    componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
+    },
+
+    onAction: function(payload) {
+        if (payload.action === "timeline_resize") {
+            this.fixupHeight();
+        }
+    },
+
+    fixupHeight: function() {
+        var content = this.props.mxEvent.getContent();
+
+        var thumbHeight = null;
+        var timelineWidth = this._body.offsetWidth;
+        var maxHeight = 600*timelineWidth/800;
+
+        //console.log("trying to fit image into timelineWidth of " + this._body.offsetWidth + " or " + this._body.clientWidth);
+        if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
+        this._image.style.height = thumbHeight + "px";
+    },
+
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
 
-        var thumbHeight = null;
-        if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, 800, 600);
-
-        var imgStyle = {};
-        if (thumbHeight) imgStyle['maxHeight'] = thumbHeight;
-
         var thumbUrl = this._getThumbUrl();
         if (thumbUrl) {
             return (
-                <span className="mx_MImageBody">
+                <span className="mx_MImageBody" ref={(c) => this._body = c}>
                     <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
-                        <img className="mx_MImageBody_thumbnail" src={thumbUrl}
-                            alt={content.body} style={imgStyle}
+                        <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref={(c) => this._image = c}
+                            alt={content.body}
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave}
                             onLoad={this.props.onImageLoad} />

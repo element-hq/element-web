@@ -94,6 +94,11 @@ module.exports = React.createClass({
          */
         onScroll: React.PropTypes.func,
 
+        /* onResize: a callback which is called whenever the Gemini scroll
+         * panel is resized
+         */
+        onResize: React.PropTypes.func,
+
         /* className: classnames to add to the top-level div
          */
         className: React.PropTypes.string,
@@ -179,6 +184,11 @@ module.exports = React.createClass({
         this.props.onScroll(ev);
 
         this.checkFillState();
+    },
+
+    onResize: function() {
+        this.props.onResize();
+        this.checkScroll();
     },
 
     // after an update to the contents of the panel, check that the scroll is
@@ -481,7 +491,7 @@ module.exports = React.createClass({
         // reflect the fact that we don't necessarily contain a list of messages.
         // it's not obvious why we have a separate div and ol anyway.
         return (<GeminiScrollbar autoshow={true} ref="geminiPanel"
-                onScroll={this.onScroll} onResize={this.checkScroll}
+                onScroll={this.onScroll} onResize={this.onResize}
                 className={this.props.className} style={this.props.style}>
                     <div className="mx_RoomView_messageListWrapper">
                         <ol ref="itemlist" className="mx_RoomView_MessageList" aria-live="polite">
