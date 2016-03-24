@@ -189,6 +189,7 @@ module.exports = React.createClass({
     onResize: function() {
         this.props.onResize();
         this.checkScroll();
+        this.refs.geminiPanel.forceUpdate();
     },
 
     // after an update to the contents of the panel, check that the scroll is

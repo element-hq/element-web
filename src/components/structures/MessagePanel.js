@@ -369,7 +369,7 @@ module.exports = React.createClass({
     },
 
     onResize: function() {
-        dis.dispatch({ action: 'timeline_resize' });
+        dis.dispatch({ action: 'timeline_resize' }, true);
     },
 
     render: function() {

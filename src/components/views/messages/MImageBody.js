@@ -125,7 +125,8 @@ module.exports = React.createClass({
 
         var thumbHeight = null;
         var timelineWidth = this._body.offsetWidth;
-        var maxHeight = 600*timelineWidth/800;
+        var maxHeight = 600; // let images take up as much width as they can so long as the height doesn't exceed 600px.
+        // the alternative here would be 600*timelineWidth/800; to scale them down to fit inside a 4:3 bounding box
 
         //console.log("trying to fit image into timelineWidth of " + this._body.offsetWidth + " or " + this._body.clientWidth);
         if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
