@@ -150,6 +150,7 @@ var Notifier = {
                     value: true
                 });
             });
+            this.setToolbarHidden(false);
         } else {
             if (!global.localStorage) return;
             global.localStorage.setItem('notifications_enabled', 'false');
@@ -194,7 +195,7 @@ var Notifier = {
 
         // update the info to localStorage for persistent settings
         if (persistent && global.localStorage) {
-            global.localStorage.setItem('notifications_hidden', 'true');
+            global.localStorage.setItem('notifications_hidden', hidden);
         }
     },
 
