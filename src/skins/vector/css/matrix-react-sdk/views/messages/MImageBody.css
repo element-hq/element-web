@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_MImageBody {
+    display: block;
+}
+
 .mx_MImageBody_thumbnail {
     max-width: 100%;
 /*
