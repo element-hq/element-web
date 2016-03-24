@@ -85,6 +85,7 @@ limitations under the License.
     padding-left: 60px;
     padding-right: 60px;
     min-height: 100%;
+    max-width: 270px;
     color: #fff;
 }
 
@@ -99,6 +100,7 @@ limitations under the License.
 .mx_ImageView_name {
     font-size: 18px;
     margin-bottom: 6px;
+    word-wrap: break-word;
 }
 
 .mx_ImageView_metadata {
