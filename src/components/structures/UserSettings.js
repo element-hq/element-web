@@ -214,6 +214,7 @@ module.exports = React.createClass({
             this._refreshFromServer();
             this.setState({email_add_pending: false});
         }, (err) => {
+            this.setState({email_add_pending: false});
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 var message = "Unable to verify email address. "
