@@ -40,8 +40,7 @@ limitations under the License.
     color: #454545;
     opacity: 0.5;
     font-size: 13px;
-    margin-bottom: 4px;
-    display: block;
+    display: inline-block;
     overflow-y: hidden;
     cursor: pointer;
 }
