@@ -54,7 +54,7 @@ var sanitizeHtmlParams = {
             else {
                 attribs.target = '_blank';
             }
-            return attribs;
+            return { tagName: tagName, attribs : attribs };
         },
     },
 };
