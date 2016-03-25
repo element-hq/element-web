@@ -251,6 +251,7 @@ module.exports = React.createClass({
 
         // cancel the click unless the user confirms it
         ev.preventDefault();
+        var value = ev.target.value;
 
         Modal.createDialog(QuestionDialog, {
             title: "Privacy warning",
@@ -263,7 +264,7 @@ module.exports = React.createClass({
             onFinished: function(confirmed) {
                 if (confirmed) {
                     self.setState({
-                        history_visibility: ev.target.value
+                        history_visibility: value
                     });
                 }
             },
