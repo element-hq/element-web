@@ -18,7 +18,7 @@
     "start": "babel src -w -d lib --source-maps",
     "clean": "rimraf lib",
     "prepublish": "npm run build; git rev-parse HEAD > git-revision.txt",
-    "test": "karma start",
+    "test": "karma start --browsers PhantomJS",
     "test-multi": "karma start --single-run=false"
   },
   "dependencies": {
@@ -44,18 +44,19 @@
   "//depsbuglink": "https://github.com/webpack/webpack/issues/1472",
   "devDependencies": {
     "babel": "^5.8.23",
+    "expect": "^1.16.0",
     "json-loader": "^0.5.3",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^0.2.3",
+    "karma-cli": "^0.1.2",
+    "karma-mocha": "^0.2.2",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^1.7.0",
+    "mocha": "^2.4.5",
+    "phantomjs-prebuilt": "^2.1.7",
     "require-json": "0.0.1",
     "rimraf": "^2.4.3",
-    "source-map-loader": "^0.1.5",
-
-    "karma": "^0.0.0",
-    "karma-cli": "^0.0.0",
-    "karma-mocha": "^0.0.0",
-    "karma-webpack": "^0.0.0",
-    "karma-sourcemap-loader": "^0.0.0",
-    "karma-chrome-launcher": "^0.0.0",
-    "mocha": "^0.0.0",
-    "expect": "^0.0.0"
+    "source-map-loader": "^0.1.5"
   }
 }

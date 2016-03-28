@@ -1,16 +1,20 @@
-// karma.conf.js
+// karma.conf.js - the config file for karma, which runs our tests.
+
 var webpack = require('webpack');
 var path = require('path');
 
 /*
- * It's a pain to have to wait for webpack to build everything; however it's
- * the easiest way to load our dependencies from node_modules.
+ * We use webpack to build our tests. It's a pain to have to wait for webpack
+ * to build everything; however it's the easiest way to load our dependencies
+ * from node_modules.
  *
  * TODO:
  * - can we run one test at a time
- * - can we can we run under phantomjs/jsdom?
  * - write junit out
  */
+
+process.env.PHANTOMJS_BIN = 'node_modules/.bin/phantomjs';
+
 module.exports = function (config) {
     config.set({
         // frameworks to use
