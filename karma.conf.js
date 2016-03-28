@@ -9,8 +9,7 @@ var path = require('path');
  * from node_modules.
  *
  * TODO:
- * - can we run one test at a time
- * - write junit out
+ * - can we run one test at a time?
  */
 
 process.env.PHANTOMJS_BIN = 'node_modules/.bin/phantomjs';
@@ -43,7 +42,7 @@ module.exports = function (config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress'],
+        reporters: ['progress', 'junit'],
 
         // web server port
         port: 9876,
@@ -75,6 +74,10 @@ module.exports = function (config) {
         // Concurrency level
         // how many browser should be started simultaneous
         concurrency: Infinity,
+
+        junitReporter: {
+            outputDir: 'karma-reports',
+        },
 
         webpack: {
             module: {

@@ -4,3 +4,6 @@
 # version file and tarball created by 'npm pack'
 /git-revision.txt
 /matrix-react-sdk-*.tgz
+
+# test reports created by karma
+/karma-reports
