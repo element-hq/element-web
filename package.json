@@ -42,8 +42,13 @@
   },
   "devDependencies": {
     "babel": "^5.8.23",
+    "babel-core": "^6.7.4",
     "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-runtime": "^6.6.1",
     "expect": "^1.16.0",
+    "imports-loader": "^0.6.5",
     "json-loader": "^0.5.3",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^0.2.3",
@@ -55,8 +60,11 @@
     "karma-webpack": "^1.7.0",
     "mocha": "^2.4.5",
     "phantomjs-prebuilt": "^2.1.7",
+    "react-addons-test-utils": "^0.14.7",
     "require-json": "0.0.1",
     "rimraf": "^2.4.3",
-    "source-map-loader": "^0.1.5"
+    "sinon": "^1.17.3",
+    "source-map-loader": "^0.1.5",
+    "webpack": "^1.12.14"
   }
 }
