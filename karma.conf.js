@@ -5,6 +5,12 @@ var path = require('path');
 /*
  * It's a pain to have to wait for webpack to build everything; however it's
  * the easiest way to load our dependencies from node_modules.
+ *
+ * TODO:
+ * - how do we stub out the js-sdk
+ * - can we run one test at a time
+ * - can we can we run under phantomjs/jsdom?
+ * - write junit out
  */
 module.exports = function (config) {
     config.set({
@@ -68,6 +74,9 @@ module.exports = function (config) {
                       include: [path.resolve('./src'),
                                 path.resolve('./test'),
                                ],
+                      query: {
+                          presets: ['react', 'es2015']
+                      },
                     },
                 ],
                 noParse: [
