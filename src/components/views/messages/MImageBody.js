@@ -122,6 +122,7 @@ module.exports = React.createClass({
 
     fixupHeight: function() {
         if (!this.refs.image) {
+            console.warn("Refusing to fix up height on MImageBody with no image element");
             return;
         }
 
@@ -135,7 +136,7 @@ module.exports = React.createClass({
         //console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
         if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
         this.refs.image.style.height = thumbHeight + "px";
-        console.log("Imageheight now", thumbHeight);
+        // console.log("Image height now", thumbHeight);
     },
 
     render: function() {
