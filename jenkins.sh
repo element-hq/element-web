@@ -14,6 +14,9 @@ npm install ./node_modules/matrix-js-sdk-*.tgz
 # install the other dependencies
 npm install
 
+# run the mocha tests
+npm run test
+
 # delete the old tarball, if it exists
 rm -f matrix-react-sdk-*.tgz
 
