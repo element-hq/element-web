@@ -485,6 +485,10 @@ module.exports = React.createClass({
         }
     },
 
+    onSearchResultsResize: function() {
+        dis.dispatch({ action: 'timeline_resize' }, true);
+    },
+
     onSearchResultsFillRequest: function(backwards) {
         if (!backwards)
             return q(false);
@@ -1361,7 +1365,7 @@ module.exports = React.createClass({
         if (this.state.searchResults) {
             searchResultsPanel = (
                 <ScrollPanel ref="searchResultsPanel" className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
-                        onFillRequest={ this.onSearchResultsFillRequest }>
+                        onFillRequest={ this.onSearchResultsFillRequest } onResize={ this.onSearchResultsResize }>
                     <li className={scrollheader_classes}></li>
                     {this.getSearchResultTiles()}
                 </ScrollPanel>

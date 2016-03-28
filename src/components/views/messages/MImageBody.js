@@ -105,24 +105,52 @@ module.exports = React.createClass({
         return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
     },
 
+    componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+        this.fixupHeight();
+    },
+
+    componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
+    },
+
+    onAction: function(payload) {
+        if (payload.action === "timeline_resize") {
+            this.fixupHeight();
+        }
+    },
+
+    fixupHeight: function() {
+        if (!this.refs.image) {
+            console.warn("Refusing to fix up height on MImageBody with no image element");
+            return;
+        }
+
+        var content = this.props.mxEvent.getContent();
+
+        var thumbHeight = null;
+        var timelineWidth = this.refs.body.offsetWidth;
+        var maxHeight = 600; // let images take up as much width as they can so long as the height doesn't exceed 600px.
+        // the alternative here would be 600*timelineWidth/800; to scale them down to fit inside a 4:3 bounding box
+
+        //console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
+        if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
+        this.refs.image.style.height = thumbHeight + "px";
+        // console.log("Image height now", thumbHeight);
+    },
+
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
 
-        var thumbHeight = null;
-        if (content.info) thumbHeight = this.thumbHeight(content.info.w, content.info.h, 800, 600);
-
-        var imgStyle = {};
-        if (thumbHeight) imgStyle['maxHeight'] = thumbHeight;
-
         var thumbUrl = this._getThumbUrl();
         if (thumbUrl) {
             return (
-                <span className="mx_MImageBody">
+                <span className="mx_MImageBody" ref="body">
                     <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
-                        <img className="mx_MImageBody_thumbnail" src={thumbUrl}
-                            alt={content.body} style={imgStyle}
+                        <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                            alt={content.body}
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave}
                             onLoad={this.props.onImageLoad} />

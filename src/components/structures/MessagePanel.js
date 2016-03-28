@@ -16,6 +16,7 @@ limitations under the License.
 
 var React = require('react');
 var ReactDOM = require("react-dom");
+var dis = require("../../dispatcher");
 var sdk = require('../../index');
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
@@ -301,8 +302,7 @@ module.exports = React.createClass({
                         ref={this._collectEventNode.bind(this, eventId)}
                         data-scroll-token={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
-                        last={last} isSelectedEvent={highlight}
-                        onImageLoad={this._onImageLoad} />
+                        last={last} isSelectedEvent={highlight} />
                 </li>
         );
 
@@ -368,14 +368,8 @@ module.exports = React.createClass({
         this.eventNodes[eventId] = node;
     },
 
-
-    // once images in the events load, make the scrollPanel check the
-    // scroll offsets.
-    _onImageLoad: function() {
-        var scrollPanel = this.refs.scrollPanel;
-        if (scrollPanel) {
-            scrollPanel.checkScroll();
-        }
+    onResize: function() {
+        dis.dispatch({ action: 'timeline_resize' }, true);
     },
 
     render: function() {
@@ -392,6 +386,7 @@ module.exports = React.createClass({
         return (
             <ScrollPanel ref="scrollPanel" className="mx_RoomView_messagePanel"
                     onScroll={ this.props.onScroll } 
+                    onResize={ this.onResize }
                     onFillRequest={ this.props.onFillRequest }
                     style={ this.props.hidden ? { display: 'none' } : {} }
                     stickyBottom={ this.props.stickyBottom }>
