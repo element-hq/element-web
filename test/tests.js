@@ -5,7 +5,7 @@
 
 // this is a handly place to make sure the sdk has been skinned
 var sdk = require("matrix-react-sdk");
-sdk.loadSkin(require('test-component-index'));
+sdk.loadSkin(require('./test-component-index'));
 
 var context = require.context('.', true, /-test\.jsx?$/);
 context.keys().forEach(context);

@@ -91,7 +91,6 @@ module.exports = function (config) {
             resolve: {
                 alias: {
                     'matrix-react-sdk': path.resolve('src/index.js'),
-                    'test-component-index': path.resolve('test/test-component-index.js'),
                 },
             },
             devtool: 'inline-source-map',
