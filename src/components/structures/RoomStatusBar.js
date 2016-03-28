@@ -173,7 +173,11 @@ module.exports = React.createClass({
 
         if (wantPlaceholder) {
             return (
-                 <div className="mx_RoomStatusBar_placeholderIndicator">...</div>
+                <div className="mx_RoomStatusBar_placeholderIndicator">
+                    <span>.</span>
+                    <span>.</span>
+                    <span>.</span>
+                </div>
             );
         }
 
