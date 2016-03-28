@@ -7,7 +7,6 @@ var path = require('path');
  * the easiest way to load our dependencies from node_modules.
  *
  * TODO:
- * - how do we stub out the js-sdk
  * - can we run one test at a time
  * - can we can we run under phantomjs/jsdom?
  * - write junit out
@@ -20,7 +19,14 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'test/tests.js'
+            'test/tests.js',
+        ],
+
+        // list of files to exclude
+        // (this doesn't work, and I don't know why - we still rerun the tests
+        // when lockfiles are created)
+        exclude: [
+            '**/.#*'
         ],
 
         // preprocess matching files before serving them to the browser
@@ -70,13 +76,21 @@ module.exports = function (config) {
             module: {
                 loaders: [
                     { test: /\.json$/, loader: "json" },
-                    { test: /\.js$/, loader: "babel",
-                      include: [path.resolve('./src'),
-                                path.resolve('./test'),
-                               ],
-                      query: {
-                          presets: ['react', 'es2015']
-                      },
+                    {
+                        // disable 'require' and 'define' for sinon, per
+                        // https://github.com/webpack/webpack/issues/304#issuecomment-170883329
+                        test: /sinon\/pkg\/sinon\.js/,
+                        // TODO: use 'query'?
+                        loader: 'imports?define=>false,require=>false',
+                    },
+                    {
+                        test: /\.js$/, loader: "babel",
+                        include: [path.resolve('./src'),
+                                  path.resolve('./test'),
+                                 ],
+                        query: {
+                            presets: ['react', 'es2015']
+                        },
                     },
                 ],
                 noParse: [
@@ -91,6 +105,7 @@ module.exports = function (config) {
             resolve: {
                 alias: {
                     'matrix-react-sdk': path.resolve('src/index.js'),
+                    'sinon': 'sinon/pkg/sinon.js',
                 },
             },
             devtool: 'inline-source-map',
