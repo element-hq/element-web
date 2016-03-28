@@ -16,7 +16,7 @@ describe('MatrixChat', function () {
     });
     
     it('gives a login panel by default', function () {
-        peg.get().loginFlows.returns(q({}));
+        peg.get().loginFlows.returns(q({flows:[]}));
 
         var res = TestUtils.renderIntoDocument(
                 <MatrixChat config={{}}/>
