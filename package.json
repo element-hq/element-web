@@ -40,10 +40,9 @@
     "velocity-animate": "^1.2.3",
     "velocity-ui-pack": "^1.2.2"
   },
-  "//deps": "The loader packages are here because webpack in a project that depends on us needs them in this package's node_modules folder",
-  "//depsbuglink": "https://github.com/webpack/webpack/issues/1472",
   "devDependencies": {
     "babel": "^5.8.23",
+    "babel-loader": "^6.2.4",
     "expect": "^1.16.0",
     "json-loader": "^0.5.3",
     "karma": "^0.13.22",
