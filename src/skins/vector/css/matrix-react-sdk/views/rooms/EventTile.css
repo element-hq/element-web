@@ -40,9 +40,9 @@ limitations under the License.
     color: #454545;
     opacity: 0.5;
     font-size: 13px;
-    display: inline-block;
     overflow-y: hidden;
     cursor: pointer;
+    vertical-align: text-top;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
