@@ -180,10 +180,12 @@ module.exports = React.createClass({
             );
         }
 
-        var RoomHeader = sdk.getComponent('rooms.RoomHeader');
+        var SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         return (
             <div className="mx_RoomDirectory">
-                <RoomHeader simpleHeader="Directory" />
+                <SimpleRoomHeader>
+                    Directory
+                </SimpleRoomHeader>
                 <div className="mx_RoomDirectory_list">
                     <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
                     <GeminiScrollbar className="mx_RoomDirectory_tableWrapper">
