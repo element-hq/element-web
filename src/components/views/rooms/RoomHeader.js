@@ -48,10 +48,31 @@ module.exports = React.createClass({
         };
     },
 
+    componentDidMount: function() {
+        var cli = MatrixClientPeg.get();
+        cli.on("RoomState.events", this._onRoomStateEvents);
+    },
+
     componentDidUpdate: function() {
         if (this.refs.topic) {
             linkifyElement(this.refs.topic, linkifyMatrix.options);
         }
+    },
+
+    componentWillUnmount: function() {
+        var cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("RoomState.events", this._onRoomStateEvents);
+        }
+    },
+
+    _onRoomStateEvents: function(event, state) {
+        if (!this.props.room || event.getRoomId() != this.props.room.roomId) {
+            return;
+        }
+
+        // redisplay the room name, topic, etc.
+        this.forceUpdate();
     },
 
     onAvatarPickerClick: function(ev) {
