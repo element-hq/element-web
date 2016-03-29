@@ -858,8 +858,14 @@ module.exports = React.createClass({
             uploadingRoomSettings: true,
         });
         
-        this.refs.room_settings.setName(this.refs.header.getRoomName());
-        this.refs.room_settings.setTopic(this.refs.header.getTopic());
+        var newName = this.refs.header.getEditedName();
+        if (newName !== undefined) {
+            this.refs.room_settings.setName(newName);
+        }
+        var newTopic = this.refs.header.getEditedTopic();
+        if (newTopic !== undefined) {
+            this.refs.room_settings.setTopic(newTopic);
+        }
         
         this.refs.room_settings.save().then((results) => {
             var fails = results.filter(function(result) { return result.state !== "fulfilled" });

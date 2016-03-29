@@ -18,7 +18,6 @@ limitations under the License.
 
 var React = require('react');
 var sdk = require('../../../index');
-var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require("../../../Modal");
 
@@ -49,45 +48,10 @@ module.exports = React.createClass({
         };
     },
 
-    getInitialState: function() {
-        return {};
-    },
-
-    componentWillMount: function() {
-        this._recalculateState();
-    },
-
-    componentWillReceiveProps: function(newProps) {
-        if (this.props.room !== newProps.room) {
-            this._recalculateState();
-        }
-    },
-
-    _recalculateState: function() {
-        if (!this.props.room) return;
-        
-        var topic = this.props.room.currentState.getStateEvents('m.room.topic', '');
-        var name = this.props.room.currentState.getStateEvents('m.room.name', '');
-
-        this.setState({
-            name: name ? name.getContent().name : '',
-            defaultName: this.props.room.getDefaultRoomName(MatrixClientPeg.get().credentials.userId),
-            topic: topic ? topic.getContent().topic : '',
-        });        
-    },
-
     componentDidUpdate: function() {
         if (this.refs.topic) {
             linkifyElement(this.refs.topic, linkifyMatrix.options);
         }
-    },
-
-    onNameChanged: function(value) {
-        this.setState({ name : value });
-    },
-
-    onTopicChanged: function(value) {
-        this.setState({ topic : value });
     },
 
     onAvatarPickerClick: function(ev) {
@@ -113,16 +77,33 @@ module.exports = React.createClass({
         }).done();
     },    
 
-    getRoomName: function() {
-        return this.state.name;
+    /**
+     * After editing the settings, get the new name for the room
+     *
+     * Returns undefined if we didn't let the user edit the room name
+     */
+    getEditedName: function() {
+        var newName;
+        if (this.refs.nameEditor) {
+            newName = this.refs.nameEditor.getRoomName();
+        }
+        return newName;
     },
 
-    getTopic: function() {
-        return this.state.topic;
+    /**
+     * After editing the settings, get the new topic for the room
+     *
+     * Returns undefined if we didn't let the user edit the room topic
+     */
+    getEditedTopic: function() {
+        var newTopic;
+        if (this.refs.topicEditor) {
+            newTopic = this.refs.topicEditor.getTopic();
+        }
+        return newTopic;
     },
 
     render: function() {
-        var EditableText = sdk.getComponent("elements.EditableText");
         var RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
         var ChangeAvatar = sdk.getComponent("settings.ChangeAvatar");
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
@@ -152,26 +133,13 @@ module.exports = React.createClass({
                 'm.room.name', user_id
             );
 
-            var placeholderName = "Unnamed Room";
-            if (this.state.defaultName && this.state.defaultName !== 'Empty room') {
-                placeholderName += " (" + this.state.defaultName + ")";
-            }
-
             save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</div>
             cancel_button = <div className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>
         }
 
         if (can_set_room_name) {
-            name =
-                <div className="mx_RoomHeader_name">
-                    <EditableText
-                         className="mx_RoomHeader_nametext mx_RoomHeader_editable"
-                         placeholderClassName="mx_RoomHeader_placeholder"
-                         placeholder={ placeholderName }
-                         blurToCancel={ false }
-                         onValueChanged={ this.onNameChanged }
-                         initialValue={ this.state.name }/>
-                </div>
+            var RoomNameEditor = sdk.getComponent("rooms.RoomNameEditor");
+            name = <RoomNameEditor ref="nameEditor" room={this.props.room} />
         }
         else {
             var searchStatus;
@@ -211,17 +179,19 @@ module.exports = React.createClass({
         }
 
         if (can_set_room_topic) {
-            topic_el =
-                <EditableText 
-                     className="mx_RoomHeader_topic mx_RoomHeader_editable"
-                     placeholderClassName="mx_RoomHeader_placeholder"
-                     placeholder="Add a topic"
-                     blurToCancel={ false }
-                     onValueChanged={ this.onTopicChanged }
-                     initialValue={ this.state.topic }/>
+            var RoomTopicEditor = sdk.getComponent("rooms.RoomTopicEditor");
+            topic_el = <RoomTopicEditor ref="topicEditor" room={this.props.room} />
         } else {
-            if (this.state.topic)
-                topic_el = <div className="mx_RoomHeader_topic" ref="topic" title={ this.state.topic }>{ this.state.topic }</div>;
+            var topic;
+            if (this.props.room) {
+                var ev = this.props.room.currentState.getStateEvents('m.room.topic', '');
+                if (ev) {
+                    topic = ev.getContent().topic;
+                }
+            }
+            if (topic) {
+                topic_el = <div className="mx_RoomHeader_topic" ref="topic" title={ topic }>{ topic }</div>;
+            }
         }
 
         var roomAvatar = null;
