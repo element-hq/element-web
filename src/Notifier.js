@@ -132,30 +132,26 @@ var Notifier = {
             }
         }
 
-        if(enable) {
-            if (!this.havePermission()) {
-                global.Notification.requestPermission(function() {
-                    if (callback) {
-                        callback();
-                        dis.dispatch({
-                            action: "notifier_enabled",
-                            value: true
-                        });
-                    }
-                });
-            }
+        if (enable) {
+            // Attempt to get permission from user
+            global.Notification.requestPermission(function(result) {
+                if (result !== 'granted') {
+                    // The permission request was dismissed or denied
+                    return;
+                }
 
-            if (!global.localStorage) return;
-            global.localStorage.setItem('notifications_enabled', 'true');
+                if (global.localStorage) {
+                    global.localStorage.setItem('notifications_enabled', 'true');
+                }
 
-            if (this.havePermission) {
+                if (callback) callback();
                 dis.dispatch({
                     action: "notifier_enabled",
                     value: true
                 });
-            }
-        }
-        else {
+            });
+            this.setToolbarHidden(false);
+        } else {
             if (!global.localStorage) return;
             global.localStorage.setItem('notifications_enabled', 'false');
             dis.dispatch({
@@ -163,8 +159,6 @@ var Notifier = {
                 value: false
             });
         }
-
-        this.setToolbarHidden(false);
     },
 
     isEnabled: function() {
@@ -192,15 +186,27 @@ var Notifier = {
         return enabled === 'true';
     },
 
-    setToolbarHidden: function(hidden) {
+    setToolbarHidden: function(hidden, persistent = true) {
         this.toolbarHidden = hidden;
         dis.dispatch({
             action: "notifier_enabled",
             value: this.isEnabled()
         });
+
+        // update the info to localStorage for persistent settings
+        if (persistent && global.localStorage) {
+            global.localStorage.setItem('notifications_hidden', hidden);
+        }
     },
 
     isToolbarHidden: function() {
+        // Check localStorage for any such meta data
+        if (global.localStorage) {
+            if (global.localStorage.getItem('notifications_hidden') === 'true') {
+                return true;
+            }
+        }
+
         return this.toolbarHidden;
     },
 
