@@ -249,7 +249,7 @@ module.exports = React.createClass({
                 throw new Error("Unknown state.phase => " + this.state.phase);
         }
         // can only get here if phase is UserSettings.DISPLAY
-        var RoomHeader = sdk.getComponent('rooms.RoomHeader');
+        var SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         var ChangeDisplayName = sdk.getComponent("views.settings.ChangeDisplayName");
         var ChangePassword = sdk.getComponent("views.settings.ChangePassword");
         var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
@@ -331,7 +331,9 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_UserSettings">
-                <RoomHeader simpleHeader="Settings" />
+                <SimpleRoomHeader>
+                    Settings
+                </SimpleRoomHeader>
 
                 <GeminiScrollbar className="mx_UserSettings_body" autoshow={true}>
 
