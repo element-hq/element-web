@@ -25,19 +25,18 @@ var React = require('react');
 module.exports = React.createClass({
     displayName: 'SimpleRoomHeader',
 
-    render: function() {
-        var cancel;
-        var header = (
-            <div className="mx_RoomHeader_wrapper">
-                <div className="mx_RoomHeader_simpleHeader">
-                    { this.props.children }
-                </div>
-            </div>
-        );
+    propTypes: {
+        title: React.PropTypes.string,
+    },
 
+    render: function() {
         return (
             <div className="mx_RoomHeader" >
-                { header }
+                <div className="mx_RoomHeader_wrapper">
+                    <div className="mx_RoomHeader_simpleHeader">
+                        { this.props.title }
+                    </div>
+                </div>
             </div>
         );
     },

@@ -255,9 +255,7 @@ module.exports = React.createClass({
 
             return (
             <div className="mx_CreateRoom">
-                <SimpleRoomHeader>
-                    Create room
-                </SimpleRoomHeader>
+                <SimpleRoomHeader title="CreateRoom" />
                 <div className="mx_CreateRoom_body">
                     <input type="text" ref="room_name" value={this.state.room_name} onChange={this.onNameChange} placeholder="Name"/> <br />
                     <textarea className="mx_CreateRoom_description" ref="topic" value={this.state.topic} onChange={this.onTopicChange} placeholder="Topic"/> <br />
