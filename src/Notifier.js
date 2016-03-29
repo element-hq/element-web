@@ -150,6 +150,8 @@ var Notifier = {
                     value: true
                 });
             });
+            // clear the notifications_hidden flag, so that if notifications are
+            // disabled again in the future, we will show the banner again.
             this.setToolbarHidden(false);
         } else {
             if (!global.localStorage) return;
@@ -188,6 +190,9 @@ var Notifier = {
 
     setToolbarHidden: function(hidden, persistent = true) {
         this.toolbarHidden = hidden;
+        
+        // XXX: why are we dispatching this here?
+        // this is nothing to do with notifier_enabled
         dis.dispatch({
             action: "notifier_enabled",
             value: this.isEnabled()
