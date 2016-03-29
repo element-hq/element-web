@@ -249,13 +249,13 @@ module.exports = React.createClass({
             var RoomAlias = sdk.getComponent("create_room.RoomAlias");
             var Presets = sdk.getComponent("create_room.Presets");
             var UserSelector = sdk.getComponent("elements.UserSelector");
-            var RoomHeader = sdk.getComponent("rooms.RoomHeader");
+            var SimpleRoomHeader = sdk.getComponent("rooms.SimpleRoomHeader");
 
             var domain = MatrixClientPeg.get().getDomain();
 
             return (
             <div className="mx_CreateRoom">
-                <RoomHeader simpleHeader="Create room" />
+                <SimpleRoomHeader title="CreateRoom" />
                 <div className="mx_CreateRoom_body">
                     <input type="text" ref="room_name" value={this.state.room_name} onChange={this.onNameChange} placeholder="Name"/> <br />
                     <textarea className="mx_CreateRoom_description" ref="topic" value={this.state.topic} onChange={this.onTopicChange} placeholder="Topic"/> <br />
