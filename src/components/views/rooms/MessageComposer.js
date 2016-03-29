@@ -91,6 +91,14 @@ module.exports = React.createClass({
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
+        var controls = [];
+
+        controls.push(
+            <div className="mx_MessageComposer_avatar">
+                <MemberAvatar member={me} width={24} height={24} />
+            </div>
+        );
+
         var callButton, videoCallButton, hangupButton;
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
@@ -109,25 +117,47 @@ module.exports = React.createClass({
                 </div>
         }
 
+        var canSendMessages = this.props.room.currentState.maySendMessage(
+            MatrixClientPeg.get().credentials.userId);
+
+        if (canSendMessages) {
+            // This also currently includes the call buttons. Really we should
+            // check separately for whether we can call, but this is slightly
+            // complex because of conference calls.
+            var uploadButton = (
+                <div className="mx_MessageComposer_upload"
+                        onClick={this.onUploadClick} title="Upload file">
+                    <TintableSvg src="img/upload.svg" width="19" height="24"/>
+                    <input ref="uploadInput" type="file"
+                        style={uploadInputStyle}
+                        onChange={this.onUploadFileSelected} />
+                </div>
+            );
+
+            controls.push(
+                <MessageComposerInput tabComplete={this.props.tabComplete}
+                    onResize={this.props.onResize} room={this.props.room} />,
+                uploadButton,
+                hangupButton,
+                callButton,
+                videoCallButton,
+            );
+        } else {
+            controls.push(
+                <div className="mx_MessageComposer_noperm_error">
+                    You do not have permission to post to this room
+                </div>
+            );
+        }
+
         return (
-        <div className="mx_MessageComposer">
-            <div className="mx_MessageComposer_wrapper">
-                <div className="mx_MessageComposer_row">
-                    <div className="mx_MessageComposer_avatar">
-                        <MemberAvatar member={me} width={24} height={24} />
+            <div className="mx_MessageComposer">
+                <div className="mx_MessageComposer_wrapper">
+                    <div className="mx_MessageComposer_row">
+                        {controls}
                     </div>
-                    <MessageComposerInput tabComplete={this.props.tabComplete} onResize={this.props.onResize}
-                        room={this.props.room} />
-                    <div className="mx_MessageComposer_upload" onClick={this.onUploadClick} title="Upload file">
-                        <TintableSvg src="img/upload.svg" width="19" height="24"/>
-                        <input type="file" style={uploadInputStyle} ref="uploadInput" onChange={this.onUploadFileSelected} />
-                    </div>
-                    { hangupButton }
-                    { callButton }
-                    { videoCallButton }
                 </div>
             </div>
-        </div>
         );
     }
 });
