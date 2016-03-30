@@ -48,7 +48,6 @@
     "babel-preset-react": "^6.5.0",
     "babel-runtime": "^6.6.1",
     "expect": "^1.16.0",
-    "imports-loader": "^0.6.5",
     "json-loader": "^0.5.3",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^0.2.3",

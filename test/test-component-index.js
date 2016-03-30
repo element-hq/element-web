@@ -5,14 +5,17 @@
  * provide
  */
 var components = require('../src/component-index.js').components;
-var stub = require('./components/stub-component.js');
+var stubComponent = require('./components/stub-component.js');
 
-components['structures.LeftPanel'] = stub;
-components['structures.RightPanel'] = stub;
-components['structures.RoomDirectory'] = stub;
-components['views.globals.MatrixToolbar'] = stub;
-components['views.globals.GuestWarningBar'] = stub;
-components['views.globals.NewVersionBar'] = stub;
-components['views.elements.Spinner'] = stub;
+components['structures.LeftPanel'] = stubComponent();
+components['structures.RightPanel'] = stubComponent();
+components['structures.RoomDirectory'] = stubComponent();
+components['views.globals.MatrixToolbar'] = stubComponent();
+components['views.globals.GuestWarningBar'] = stubComponent();
+components['views.globals.NewVersionBar'] = stubComponent();
+components['views.elements.Spinner'] = stubComponent({displayName: 'Spinner'});
+components['views.messages.DateSeparator'] = stubComponent({displayName: 'DateSeparator'});
+components['views.messages.MessageTimestamp'] = stubComponent({displayName: 'MessageTimestamp'});
+components['views.messages.SenderProfile'] = stubComponent({displayName: 'SenderProfile'});
 
 module.exports.components = components;

@@ -1,12 +1,15 @@
 // karma.conf.js - the config file for karma, which runs our tests.
 
-var webpack = require('webpack');
 var path = require('path');
 
 /*
  * We use webpack to build our tests. It's a pain to have to wait for webpack
  * to build everything; however it's the easiest way to load our dependencies
  * from node_modules.
+ *
+ * If you run karma in multi-run mode (with `npm run test-multi`), it will watch
+ * the tests for changes, and webpack will rebuild using a cache. This is much quicker
+ * than a clean rebuild.
  *
  * TODO:
  * - can we run one test at a time?
@@ -26,11 +29,18 @@ module.exports = function (config) {
         ],
 
         // list of files to exclude
-        // (this doesn't work, and I don't know why - we still rerun the tests
-        // when lockfiles are created)
-        exclude: [
-            '**/.#*'
-        ],
+        //
+        // This doesn't work. It turns out that it's webpack which does the
+        // watching of the /test directory (possibly karma only watches
+        // tests.js itself). Webpack watches the directory so that it can spot
+        // new tests, which is fair enough; unfortunately it triggers a rebuild
+        // every time a lockfile is created in that directory, and there
+        // doesn't seem to be any way to tell webpack to ignore particular
+        // files in a watched directory.
+        //
+        // exclude: [
+        //     '**/.#*'
+        // ],
 
         // preprocess matching files before serving them to the browser
         // available preprocessors:
@@ -84,13 +94,6 @@ module.exports = function (config) {
                 loaders: [
                     { test: /\.json$/, loader: "json" },
                     {
-                        // disable 'require' and 'define' for sinon, per
-                        // https://github.com/webpack/webpack/issues/304#issuecomment-170883329
-                        test: /sinon\/pkg\/sinon\.js/,
-                        // TODO: use 'query'?
-                        loader: 'imports?define=>false,require=>false',
-                    },
-                    {
                         test: /\.js$/, loader: "babel",
                         include: [path.resolve('./src'),
                                   path.resolve('./test'),
@@ -107,6 +110,11 @@ module.exports = function (config) {
                     // there is no need for webpack to parse them - they can
                     // just be included as-is.
                     /highlight\.js\/lib\/languages/,
+
+                    // also disable parsing for sinon, because it
+                    // tries to do voodoo with 'require' which upsets
+                    // webpack (https://github.com/webpack/webpack/issues/304)
+                    /sinon\/pkg\/sinon\.js$/,
                 ],
             },
             resolve: {
@@ -114,6 +122,10 @@ module.exports = function (config) {
                     'matrix-react-sdk': path.resolve('src/index.js'),
                     'sinon': 'sinon/pkg/sinon.js',
                 },
+                root: [
+                    path.resolve('./src'),
+                    path.resolve('./test'),
+                ],
             },
             devtool: 'inline-source-map',
         },

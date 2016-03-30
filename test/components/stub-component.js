@@ -4,8 +4,17 @@
 
 var React = require('react');
 
-module.exports = React.createClass({
-    render: function() {
-        return <div />;
-    },
-});
+module.exports = function(opts) {
+    opts = opts || {};
+    if (!opts.displayName) {
+        opts.displayName = 'StubComponent';
+    }
+
+    if (!opts.render) {
+        opts.render = function() {
+            return <div>{this.displayName}</div>;
+        }
+    }
+
+    return React.createClass(opts);
+};
