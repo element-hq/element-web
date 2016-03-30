@@ -444,6 +444,7 @@ var TimelinePanel = React.createClass({
             // the relevant event.
             this.refs.messagePanel.scrollToEvent(this.state.readMarkerEventId,
                                                  0, 1/3);
+            return;
         }
 
         // Looks like we haven't loaded the event corresponding to the read-marker.
