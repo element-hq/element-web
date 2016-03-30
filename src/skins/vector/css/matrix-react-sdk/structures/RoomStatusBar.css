@@ -15,13 +15,15 @@
 }
 
 .mx_RoomStatusBar_placeholderIndicator span {
-    color: #333;
+    color: #4a4a4a;
     opacity: 0.5;
+/*    
     position: relative;
     animation-duration: 1s;
     animation-name: bounce;
     animation-direction: alternate;
     animation-iteration-count: infinite;
+*/    
 }
 
 .mx_RoomStatusBar_placeholderIndicator span:nth-child(1) {
@@ -41,8 +43,8 @@
     }
 
     to {
-        opacity: 1;
-        top: -6px;
+        opacity: 0.2;
+        top: -3px;
     }
 }
 
