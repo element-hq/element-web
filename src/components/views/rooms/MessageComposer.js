@@ -140,7 +140,7 @@ module.exports = React.createClass({
                 uploadButton,
                 hangupButton,
                 callButton,
-                videoCallButton,
+                videoCallButton
             );
         } else {
             controls.push(
