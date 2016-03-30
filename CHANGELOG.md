@@ -1,3 +1,19 @@
+Changes in [0.5.0](https://github.com/vector-im/vector-web/releases/tag/v0.5.0) (2016-03-30)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.4.1...v0.5.0)
+
+ * Prettier, animated placeholder :D
+   [\#1292](https://github.com/vector-im/vector-web/pull/1292)
+   (Disabled for now due to high CPU usage)
+ * RoomDirectory: use SimpleRoomHeader instead of RoomHeader
+   [\#1307](https://github.com/vector-im/vector-web/pull/1307)
+ * Tell webpack not to parse the highlight.js languages
+   [\#1277](https://github.com/vector-im/vector-web/pull/1277)
+ * CSS for https://github.com/matrix-org/matrix-react-sdk/pull/247
+   [\#1249](https://github.com/vector-im/vector-web/pull/1249)
+ * URI-decode the hash-fragment
+   [\#1254](https://github.com/vector-im/vector-web/pull/1254)
+
 Changes in [0.4.1](https://github.com/vector-im/vector-web/releases/tag/v0.4.1) (2016-03-23)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.4.0...v0.4.1)
