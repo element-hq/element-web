@@ -1,3 +1,21 @@
+Changes in [0.4.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.4.0) (2016-03-30)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.3.1...v0.4.0)
+
+ * Prettier, animated placeholder :D
+   [\#251](https://github.com/matrix-org/matrix-react-sdk/pull/251)
+ * Refactor RoomHeader, and fix topic updates
+   [\#252](https://github.com/matrix-org/matrix-react-sdk/pull/252)
+ * Disable the message composer if we don't have permission to post
+   [\#250](https://github.com/matrix-org/matrix-react-sdk/pull/250)
+ * notification issue fixed
+   [\#240](https://github.com/matrix-org/matrix-react-sdk/pull/240)
+ * Fix scroll offset popping around during image load by putting explicit
+   height back on images
+   [\#248](https://github.com/matrix-org/matrix-react-sdk/pull/248)
+ * Split a textinput component out of MessageComposer
+   [\#249](https://github.com/matrix-org/matrix-react-sdk/pull/249)
+
 Changes in [0.3.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.3.1) (2016-03-23)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.3.0...v0.3.1)
