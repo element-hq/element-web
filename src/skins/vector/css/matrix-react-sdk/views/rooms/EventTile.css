@@ -39,10 +39,10 @@ limitations under the License.
 .mx_EventTile .mx_SenderProfile {
     color: #454545;
     opacity: 0.5;
+    display: inline-block;
     font-size: 13px;
     overflow-y: hidden;
     cursor: pointer;
-    vertical-align: text-top;
 }
 
 .mx_EventTile .mx_MessageTimestamp {

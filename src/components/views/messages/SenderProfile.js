@@ -33,7 +33,7 @@ module.exports = React.createClass({
 
         var msgtype = mxEvent.getContent().msgtype;
         if (msgtype && msgtype == 'm.emote') {
-            name = ''; // emote message must include the name so don't duplicate it
+            return <span/>; // emote message must include the name so don't duplicate it
         }
         return (
             <span className="mx_SenderProfile" onClick={this.props.onClick}>
