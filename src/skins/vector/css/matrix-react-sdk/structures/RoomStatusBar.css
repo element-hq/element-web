@@ -14,9 +14,36 @@
     text-align: center;
 }
 
-.mx_RoomStatusBar_placeholderIndicator {
-    color: #4a4a4a;
+.mx_RoomStatusBar_placeholderIndicator span {
+    color: #333;
     opacity: 0.5;
+    position: relative;
+    animation-duration: 1s;
+    animation-name: bounce;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+
+.mx_RoomStatusBar_placeholderIndicator span:nth-child(1) {
+    animation-delay: 0.3s;
+}
+.mx_RoomStatusBar_placeholderIndicator span:nth-child(2) {
+    animation-delay: 0.6s;
+}
+.mx_RoomStatusBar_placeholderIndicator span:nth-child(3) {
+    animation-delay: 0.9s;
+}
+
+@keyframes bounce {
+    from {
+        opacity: 0.5;
+        top: 0;
+    }
+
+    to {
+        opacity: 1;
+        top: -6px;
+    }
 }
 
 .mx_RoomStatusBar_scrollDownIndicator {
