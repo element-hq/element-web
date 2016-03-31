@@ -30,7 +30,7 @@
     "highlight.js": "^8.9.1",
     "linkifyjs": "^2.0.0-beta.4",
     "marked": "^0.3.5",
-    "matrix-js-sdk": "^0.5.1",
+    "matrix-js-sdk": "matrix-org/matrix-js-sdk#develop",
     "optimist": "^0.6.1",
     "q": "^1.4.1",
     "react": "^0.14.2",
