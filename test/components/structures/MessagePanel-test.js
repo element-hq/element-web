@@ -91,11 +91,13 @@ describe('MessagePanel', function () {
 
         var tiles = TestUtils.scryRenderedComponentsWithType(
             mp, sdk.getComponent('rooms.EventTile'));
+        var tileContainers = tiles.map(function (t) {
+            return ReactDOM.findDOMNode(t).parentNode;
+        });
 
         // find the <li> which wraps the read marker
         var rm = TestUtils.findRenderedDOMComponentWithClass(mp, 'mx_RoomView_myReadMarker_container');
-        var eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
-        expect(rm.previousSibling).toEqual(eventContainer);
+        expect(rm.previousSibling).toEqual(tileContainers[4]);
 
         // now move the RM
         mp = ReactDOM.render(
@@ -108,18 +110,11 @@ describe('MessagePanel', function () {
         expect(found.length).toEqual(2);
         
         // the first should be the ghost
-        var ghost = found[0];
-        eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
-        expect(ghost.previousSibling).toEqual(eventContainer);
-        var hr = ghost.children[0];
-
-        // the first should be the ghost
-        eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
-        expect(found[0].previousSibling).toEqual(eventContainer);
+        expect(found[0].previousSibling).toEqual(tileContainers[4]);
+        var hr = found[0].children[0];
 
         // the second should be the real thing
-        eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
-        expect(ghost.previousSibling).toEqual(eventContainer);
+        expect(found[1].previousSibling).toEqual(tileContainers[6]);
 
         // advance the clock, and then let the browser run an animation frame,
         // to let the animation start
