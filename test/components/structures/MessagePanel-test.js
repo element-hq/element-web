@@ -112,7 +112,6 @@ describe('MessagePanel', function () {
         eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
         expect(ghost.previousSibling).toEqual(eventContainer);
         var hr = ghost.children[0];
-        console.log("Opacity:", hr.style.opacity);
 
         // the first should be the ghost
         eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
@@ -131,7 +130,7 @@ describe('MessagePanel', function () {
             clock.tick(1000);
             realSetTimeout(() => {
                 // the ghost should now have finished
-                expect(hr.style.opacity).toEqual(0);
+                expect(hr.style.opacity).toEqual('0');
                 done();
             }, 100);
         }, 100);
