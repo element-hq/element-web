@@ -22,6 +22,7 @@ var HtmlUtils = require('../../../HtmlUtils');
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
 var linkifyMatrix = require('../../../linkify-matrix');
+var sdk = require('../../../index');
 
 linkifyMatrix(linkify);
 
@@ -39,26 +40,42 @@ module.exports = React.createClass({
         highlightLink: React.PropTypes.string,
     },
 
+    getInitialState: function() {
+        return {
+            link: null,
+        };
+    },
+
     componentDidMount: function() {
         linkifyElement(this.refs.content, linkifyMatrix.options);
 
-        if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
-            HtmlUtils.highlightDom(ReactDOM.findDOMNode(this));
-    },
-
-    componentDidUpdate: function() {
-        // XXX: why don't we linkify here?
-        // XXX: why do we bother doing this on update at all, given events are immutable?
+        var link = this.findLink(this.refs.content.children);
+        if (link) {
+            this.setState({ link: link.getAttribute("href") });
+        }
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
             HtmlUtils.highlightDom(ReactDOM.findDOMNode(this));
     },
 
-    shouldComponentUpdate: function(nextProps) {
+    findLink: function(nodes) {
+        for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            if (node.tagName === "A" && node.getAttribute("href")) {
+                return node;
+            }
+            else if (node.children && node.children.length) {
+                return this.findLink(node.children)
+            }
+        }
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
         // exploit that events are immutable :)
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
                 nextProps.highlights !== this.props.highlights ||
-                nextProps.highlightLink !== this.props.highlightLink);
+                nextProps.highlightLink !== this.props.highlightLink ||
+                nextState.link !== this.state.link);
     },
 
     render: function() {
@@ -67,24 +84,34 @@ module.exports = React.createClass({
         var body = HtmlUtils.bodyToHtml(content, this.props.highlights,
                                        {highlightLink: this.props.highlightLink});
 
+
+        var widget;
+        if (this.state.link) {
+            var LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
+            widget = <LinkPreviewWidget link={ this.state.link }/>;
+        }
+
         switch (content.msgtype) {
             case "m.emote":
                 var name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 return (
                     <span ref="content" className="mx_MEmoteBody mx_EventTile_content">
                         * { name } { body }
+                        { widget }
                     </span>
                 );
             case "m.notice":
                 return (
                     <span ref="content" className="mx_MNoticeBody mx_EventTile_content">
                         { body }
+                        { widget }
                     </span>
                 );
             default: // including "m.text"
                 return (
                     <span ref="content" className="mx_MTextBody mx_EventTile_content">
                         { body }
+                        { widget }
                     </span>
                 );
         }
