@@ -99,7 +99,10 @@ module.exports = function (config) {
                                   path.resolve('./test'),
                                  ],
                         query: {
-                            presets: ['react', 'es2015']
+                            // we're using react 5, for consistency with
+                            // the release build, which doesn't use the
+                            // presets.
+                            // presets: ['react', 'es2015'],
                         },
                     },
                 ],
