@@ -20,6 +20,11 @@ var React = require('react');
 
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 
+var linkify = require('linkifyjs');
+var linkifyElement = require('linkifyjs/element');
+var linkifyMatrix = require('../../../linkify-matrix');
+linkifyMatrix(linkify);
+
 module.exports = React.createClass({
     displayName: 'LinkPreviewWidget',
 
@@ -29,7 +34,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            preview: null;
+            preview: null
         };
     },
 
@@ -39,6 +44,16 @@ module.exports = React.createClass({
         }, (error)=>{
             console.error("Failed to get preview for " + this.props.link + " " + error);
         });
+    },
+
+    componentDidMount: function() {
+        if (this.refs.description)
+            linkifyElement(this.refs.description, linkifyMatrix.options);
+    },
+
+    componentDidUpdate: function() {
+        if (this.refs.description)
+            linkifyElement(this.refs.description, linkifyMatrix.options);
     },
 
     render: function() {
@@ -54,7 +69,7 @@ module.exports = React.createClass({
                 <div className="mx_LinkPreviewWidget_caption">
                     <div className="mx_LinkPreviewWidget_title"><a href={ this.props.link } target="_blank">{ p["og:title"] }</a></div>
                     <div className="mx_LinkPreviewWidget_siteName">{ p["og:site_name"] ? (" - " + p["og:site_name"]) : null }</div>
-                    <div className="mx_LinkPreviewWidget_description">
+                    <div className="mx_LinkPreviewWidget_description" ref="description">
                         { p["og:description"] }
                     </div>
                 </div>
