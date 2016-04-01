@@ -105,8 +105,8 @@ module.exports = React.createClass({
         /* is this the focused event */
         isSelectedEvent: React.PropTypes.bool,
 
-        /* callback called when images in events are loaded */
-        onImageLoad: React.PropTypes.func,
+        /* callback called when dynamic content in events are loaded */
+        onWidgetLoad: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -345,7 +345,7 @@ module.exports = React.createClass({
                 <div className="mx_EventTile_line">
                     <EventTileType mxEvent={this.props.mxEvent} highlights={this.props.highlights}
                           highlightLink={this.props.highlightLink}
-                          onImageLoad={this.props.onImageLoad} />
+                          onWidgetLoad={this.props.onWidgetLoad} />
                 </div>
             </div>
         );

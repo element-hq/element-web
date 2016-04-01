@@ -302,6 +302,7 @@ module.exports = React.createClass({
                         ref={this._collectEventNode.bind(this, eventId)}
                         data-scroll-token={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
+                        onWidgetLoad={this._onWidgetLoad}
                         last={last} isSelectedEvent={highlight} />
                 </li>
         );
@@ -366,6 +367,15 @@ module.exports = React.createClass({
 
     _collectEventNode: function(eventId, node) {
         this.eventNodes[eventId] = node;
+    },
+
+    // once dynamic content in the events load, make the scrollPanel check the
+    // scroll offsets.
+    _onWidgetLoad: function() {
+        var scrollPanel = this.refs.scrollPanel;
+        if (scrollPanel) {
+            scrollPanel.checkScroll();
+        }
     },
 
     onResize: function() {

@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var ImageUtils = require('../../../ImageUtils');
 
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
@@ -29,7 +30,8 @@ module.exports = React.createClass({
     displayName: 'LinkPreviewWidget',
 
     propTypes: {
-        link: React.PropTypes.string.isRequired
+        link: React.PropTypes.string.isRequired,
+        onWidgetLoad: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -41,6 +43,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         MatrixClientPeg.get().getUrlPreview(this.props.link).then((res)=>{
             this.setState({ preview: res });
+            this.props.onWidgetLoad();
         }, (error)=>{
             console.error("Failed to get preview for " + this.props.link + " " + error);
         });
@@ -59,13 +62,28 @@ module.exports = React.createClass({
     render: function() {
         var p = this.state.preview;
         if (!p) return <div/>;
-        var img = p["og:image"]
-        if (img && img.startsWith("mxc://")) img = MatrixClientPeg.get().mxcUrlToHttp(img, 100, 100)
+
+        var image = p["og:image"];
+        var imageMaxWidth = 100, imageMaxHeight = 100;
+        if (image && image.startsWith("mxc://")) {
+            image = MatrixClientPeg.get().mxcUrlToHttp(image, imageMaxWidth, imageMaxHeight);
+        }
+
+        var thumbHeight = imageMaxHeight;
+        if (p["og:image:width"] && p["og:image:height"]) {
+            thumbHeight = ImageUtils.thumbHeight(p["og:image:width"], p["og:image:height"], imageMaxWidth, imageMaxHeight);
+        }
+
+        var img;
+        if (image) {
+            img = <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
+                    <a href={ this.props.link } target="_blank"><img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={ image }/></a>
+                  </div>
+        }
+
         return (
-            <div className="mx_LinkPreviewWidget">
-                <div className="mx_LinkPreviewWidget_image">
-                    <a href={ this.props.link } target="_blank"><img style={{ maxWidth: 100, maxHeight: 100 }} src={ img }/></a>
-                </div>
+            <div className="mx_LinkPreviewWidget" >
+                { img }
                 <div className="mx_LinkPreviewWidget_caption">
                     <div className="mx_LinkPreviewWidget_title"><a href={ this.props.link } target="_blank">{ p["og:title"] }</a></div>
                     <div className="mx_LinkPreviewWidget_siteName">{ p["og:site_name"] ? (" - " + p["og:site_name"]) : null }</div>

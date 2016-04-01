@@ -38,6 +38,9 @@ module.exports = React.createClass({
 
         /* link URL for the highlights */
         highlightLink: React.PropTypes.string,
+
+        /* callback for when our widget has loaded */
+        onWidgetLoad: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -88,7 +91,7 @@ module.exports = React.createClass({
         var widget;
         if (this.state.link) {
             var LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
-            widget = <LinkPreviewWidget link={ this.state.link }/>;
+            widget = <LinkPreviewWidget link={ this.state.link } onWidgetLoad={ this.props.onWidgetLoad }/>;
         }
 
         switch (content.msgtype) {
