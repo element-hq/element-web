@@ -29,7 +29,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            preview: {}
+            preview: null;
         };
     },
 
@@ -37,23 +37,27 @@ module.exports = React.createClass({
         MatrixClientPeg.get().getUrlPreview(this.props.link).then((res)=>{
             this.setState({ preview: res });
         }, (error)=>{
-            console.error("Failed to get preview for URL: " + error);
+            console.error("Failed to get preview for " + this.props.link + " " + error);
         });
     },
 
     render: function() {
         var p = this.state.preview;
+        if (!p) return <div/>;
+        var img = p["og:image"]
+        if (img && img.startsWith("mxc://")) img = MatrixClientPeg.get().mxcUrlToHttp(img, 100, 100)
         return (
             <div className="mx_LinkPreviewWidget">
-                <div className="mx_LinkPreviewWidget_title">{ p["og:title"] }</div>
-                <div className="mx_LinkPreviewWidget_siteName">{ p["og:site_name"] ? (" &emdash; " + p["og:site_name"]) : null }</div>
                 <div className="mx_LinkPreviewWidget_image">
-                    <img src={ p["og:image"] }/>
+                    <a href={ this.props.link } target="_blank"><img style={{ maxWidth: 100, maxHeight: 100 }} src={ img }/></a>
                 </div>
-                <div className="mx_LinkPreviewWidget_description">
-                    { p["og:description"] }
+                <div className="mx_LinkPreviewWidget_caption">
+                    <div className="mx_LinkPreviewWidget_title"><a href={ this.props.link } target="_blank">{ p["og:title"] }</a></div>
+                    <div className="mx_LinkPreviewWidget_siteName">{ p["og:site_name"] ? (" - " + p["og:site_name"]) : null }</div>
+                    <div className="mx_LinkPreviewWidget_description">
+                        { p["og:description"] }
+                    </div>
                 </div>
-
             </div>
         );
     }
