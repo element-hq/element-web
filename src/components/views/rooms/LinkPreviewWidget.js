@@ -63,6 +63,7 @@ module.exports = React.createClass({
         var p = this.state.preview;
         if (!p) return <div/>;
 
+        // FIXME: do we want to factor out all image displaying between this and MImageBody - especially for lightboxing?
         var image = p["og:image"];
         var imageMaxWidth = 100, imageMaxHeight = 100;
         if (image && image.startsWith("mxc://")) {
