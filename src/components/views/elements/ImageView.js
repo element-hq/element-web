@@ -27,7 +27,8 @@ module.exports = React.createClass({
     displayName: 'ImageView',
 
     propTypes: {
-        onFinished: React.PropTypes.func.isRequired
+        onFinished: React.PropTypes.func.isRequired,
+        name: React.PropTypes.string
     },
 
     // XXX: keyboard shortcuts for managing dialogs should be done by the modal
@@ -63,6 +64,20 @@ module.exports = React.createClass({
                 description: "You cannot delete this image. (" + code + ")"
             });
         });
+    },
+
+    getName: function () {
+        var name;
+
+        if(this.props.name) {
+            name = this.props.name;
+        } else if(this.props.mxEvent) {
+            name = props.mxEvent.getContent().body;
+        } else {
+            name = null;
+        }
+
+        return name;
     },
 
     render: function() {
@@ -106,8 +121,26 @@ module.exports = React.createClass({
         }
 
         var size;
-        if (this.props.mxEvent.getContent().info && this.props.mxEvent.getContent().info.size) {
+        if (this.props.mxEvent &&
+            this.props.mxEvent.getContent().info &&
+            this.props.mxEvent.getContent().info.size) {
             size = filesize(this.props.mxEvent.getContent().info.size);
+        }
+
+        var showEventMeta = !!this.props.mxEvent;
+
+        var eventMeta;
+        if(showEventMeta) {
+            eventMeta = (<div className="mx_ImageView_metadata">
+                Uploaded on { DateUtils.formatDate(new Date(this.props.mxEvent.getTs())) } by { this.props.mxEvent.getSender() }
+            </div>);
+        }
+
+        var eventRedact;
+        if(showEventMeta) {
+            eventRedact = (<div className="mx_ImageView_button" onClick={this.onRedactClick}>
+                Redact
+            </div>);
         }
 
         return (
@@ -122,11 +155,9 @@ module.exports = React.createClass({
                             <div className="mx_ImageView_shim">
                             </div>
                             <div className="mx_ImageView_name">
-                                { this.props.mxEvent.getContent().body }
+                                { this.getName() }
                             </div>
-                            <div className="mx_ImageView_metadata">
-                                Uploaded on { DateUtils.formatDate(new Date(this.props.mxEvent.getTs())) } by { this.props.mxEvent.getSender() }
-                            </div>
+                            { eventMeta }
                             <a className="mx_ImageView_link" href={ this.props.src } target="_blank">
                                 <div className="mx_ImageView_download">
                                         Download this file<br/>
@@ -138,9 +169,7 @@ module.exports = React.createClass({
                                     View full screen
                                 </a>
                             </div>
-                            <div className="mx_ImageView_button" onClick={this.onRedactClick}>
-                                Redact
-                            </div>
+                            { eventRedact }
                             <div className="mx_ImageView_shim">
                             </div>
                         </div>
