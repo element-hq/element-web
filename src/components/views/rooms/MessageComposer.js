@@ -48,8 +48,10 @@ module.exports = React.createClass({
     onUploadFileSelected: function(ev) {
         var files = ev.target.files;
         // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
-        if (files && files.length > 0) {
-            this.props.uploadFile(files[0]);
+        if (files) {
+            for(var i=0; i<files.length; i++) {
+                this.props.uploadFile(files[i]);
+            }
         }
         this.refs.uploadInput.value = null;
     },
@@ -130,6 +132,7 @@ module.exports = React.createClass({
                     <TintableSvg src="img/upload.svg" width="19" height="24"/>
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
+                        multiple
                         onChange={this.onUploadFileSelected} />
                 </div>
             );
