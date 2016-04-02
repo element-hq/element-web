@@ -26,6 +26,9 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'test/tests.js',
+
+            // XXX this will break on npm 3
+            'node_modules/react-gemini-scrollbar/node_modules/gemini-scrollbar/gemini-scrollbar.css',
         ],
 
         // list of files to exclude
