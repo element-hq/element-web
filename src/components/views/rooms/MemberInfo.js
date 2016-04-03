@@ -448,6 +448,20 @@ module.exports = React.createClass({
         });
     },
 
+    onMemberAvatarClick: function () {
+        var avatarUrl = this.props.member.user.avatarUrl;
+        if(!avatarUrl) return;
+        
+        var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(avatarUrl);
+        var ImageView = sdk.getComponent("elements.ImageView");
+        var params = {
+            src: httpUrl,
+            name: this.props.member.name
+        };
+
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+    },
+
     render: function() {
         var startChat, kickButton, banButton, muteButton, giveModButton, spinner;
         if (this.props.member.userId !== MatrixClientPeg.get().credentials.userId) {
@@ -508,7 +522,7 @@ module.exports = React.createClass({
             <div className="mx_MemberInfo">
                 <img className="mx_MemberInfo_cancel" src="img/cancel.svg" width="18" height="18" onClick={this.onCancel}/>
                 <div className="mx_MemberInfo_avatar">
-                    <MemberAvatar member={this.props.member} width={48} height={48} />
+                    <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
                 </div>
 
                 <h2>{ this.props.member.name }</h2>

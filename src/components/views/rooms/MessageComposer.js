@@ -17,6 +17,7 @@ var React = require('react');
 
 var CallHandler = require('../../../CallHandler');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var Modal = require('../../../Modal');
 var sdk = require('../../../index');
 var dis = require('../../../dispatcher');
 
@@ -47,11 +48,40 @@ module.exports = React.createClass({
 
     onUploadFileSelected: function(ev) {
         var files = ev.target.files;
-        // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
-        if (files && files.length > 0) {
-            this.props.uploadFile(files[0]);
+
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
+
+        var fileList = [];
+        for(var i=0; i<files.length; i++) {
+            fileList.push(<li>
+                <TintableSvg src="img/files.svg" width="16" height="16" /> {files[i].name}
+            </li>);
         }
-        this.refs.uploadInput.value = null;
+
+        Modal.createDialog(QuestionDialog, {
+            title: "Upload Files",
+            description: (
+                <div>
+                    <p>Are you sure you want upload the following files?</p>
+                    <ul style={{listStyle: 'none', textAlign: 'left'}}>
+                        {fileList}
+                    </ul>
+                </div>
+            ),
+            onFinished: (shouldUpload) => {
+                if(shouldUpload) {
+                    // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
+                    if (files) {
+                        for(var i=0; i<files.length; i++) {
+                            this.props.uploadFile(files[i]);
+                        }
+                    }
+                }
+
+                this.refs.uploadInput.value = null;
+            }
+        });
     },
 
     onHangupClick: function() {
@@ -130,6 +160,7 @@ module.exports = React.createClass({
                     <TintableSvg src="img/upload.svg" width="19" height="24"/>
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
+                        multiple
                         onChange={this.onUploadFileSelected} />
                 </div>
             );
