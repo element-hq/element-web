@@ -50,6 +50,7 @@ module.exports = React.createClass({
             if (content.info) {
                 params.width = content.info.w;
                 params.height = content.info.h;
+                params.size = content.info.size;
             }
 
             Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");

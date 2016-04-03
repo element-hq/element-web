@@ -18,8 +18,10 @@ limitations under the License.
 
 var React = require('react');
 
+var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var ImageUtils = require('../../../ImageUtils');
+var Modal = require('../../../Modal');
 
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
@@ -61,6 +63,30 @@ module.exports = React.createClass({
             linkifyElement(this.refs.description, linkifyMatrix.options);
     },
 
+    onImageClick: function(ev) {
+        var p = this.state.preview;
+        if (ev.button == 0 && !ev.metaKey) {
+            ev.preventDefault();
+            var ImageView = sdk.getComponent("elements.ImageView");
+
+            var src = p["og:image"];
+            if (src && src.startsWith("mxc://")) {
+                src = MatrixClientPeg.get().mxcUrlToHttp(src);
+            }
+
+            var params = {
+                src: src,
+                width: p["og:image:width"],
+                height: p["og:image:height"],
+                name: p["og:title"] || p["og:description"],
+                size: p["matrix:image:size"],
+                link: this.props.link,
+            };
+
+            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+        }
+    },
+
     render: function() {
         var p = this.state.preview;
         if (!p) return <div/>;
@@ -80,7 +106,7 @@ module.exports = React.createClass({
         var img;
         if (image) {
             img = <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
-                    <a href={ this.props.link } target="_blank"><img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={ image }/></a>
+                    <img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={ image } onClick={ this.onImageClick }/>
                   </div>
         }
 
