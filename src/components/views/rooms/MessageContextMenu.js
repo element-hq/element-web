@@ -71,8 +71,9 @@ module.exports = React.createClass({
             // FIXME: factor this out with LinkPreviewWidget
             // FIXME: somehow propagate this to the EventTile such that it updates itself and realises the link has rematerialised
             global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
-            if (this.props.onFinished) this.props.onFinished();
         }
+        this.props.mxEvent.widgetHidden = false;
+        if (this.props.onFinished) this.props.onFinished();
     },
 
     render: function() {
@@ -116,7 +117,7 @@ module.exports = React.createClass({
 
 
         if (global.localStorage) {
-            // FIXME: factor this out with LinkPreviewWidget            
+            // FIXME: factor this out with LinkPreviewWidget
             if (global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId()) === "1") {
                 unhidePreviewButton = (
                     <div className="mx_ContextualMenu_field" onClick={this.onUnhidePreviewClick}>
