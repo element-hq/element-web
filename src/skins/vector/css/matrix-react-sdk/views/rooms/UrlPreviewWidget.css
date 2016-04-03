@@ -33,6 +33,8 @@ limitations under the License.
 
 .mx_LinkPreviewWidget_caption {
     margin-left: 15px;
+    -webkit-flex: 1;
+    flex: 1;
 }
 
 .mx_LinkPreviewWidget_title {
@@ -47,4 +49,13 @@ limitations under the License.
 .mx_LinkPreviewWidget_description {
     margin-top: 8px;
     white-space: normal;
+}
+
+.mx_LinkPreviewWidget_cancel {
+    visibility: hidden;
+    cursor: pointer;
+}
+
+.mx_LinkPreviewWidget:hover .mx_LinkPreviewWidget_cancel {
+    visibility: visible;
 }

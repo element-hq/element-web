@@ -66,6 +66,15 @@ module.exports = React.createClass({
         if (this.props.onFinished) this.props.onFinished();
     },
 
+    onUnhidePreviewClick: function() {
+        if (global.localStorage) {
+            // FIXME: factor this out with LinkPreviewWidget
+            // FIXME: somehow propagate this to the EventTile such that it updates itself and realises the link has rematerialised
+            global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
+            if (this.props.onFinished) this.props.onFinished();
+        }
+    },
+
     render: function() {
         var eventStatus = this.props.mxEvent.status;
         var resendButton;
@@ -73,6 +82,7 @@ module.exports = React.createClass({
         var redactButton;
         var cancelButton;
         var permalinkButton;
+        var unhidePreviewButton;
 
         if (eventStatus === 'not_sent') {
             resendButton = (
@@ -104,6 +114,18 @@ module.exports = React.createClass({
             </div>
         );
 
+
+        if (global.localStorage) {
+            // FIXME: factor this out with LinkPreviewWidget            
+            if (global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId()) === "1") {
+                unhidePreviewButton = (
+                    <div className="mx_ContextualMenu_field" onClick={this.onUnhidePreviewClick}>
+                        Unhide Preview
+                    </div>
+                )
+            }
+        }
+
         // XXX: this should be https://matrix.to.
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         permalinkButton = (
@@ -119,6 +141,7 @@ module.exports = React.createClass({
                 {redactButton}
                 {cancelButton}
                 {viewSourceButton}
+                {unhidePreviewButton}
                 {permalinkButton}
             </div>
         );
