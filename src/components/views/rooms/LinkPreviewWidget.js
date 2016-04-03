@@ -31,7 +31,7 @@ module.exports = React.createClass({
 
     propTypes: {
         link: React.PropTypes.string.isRequired,
-        ts: React.PropTypes.number,
+        mxEvent: React.PropTypes.object.isRequired,
         onWidgetLoad: React.PropTypes.func,
     },
 
@@ -42,7 +42,13 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        MatrixClientPeg.get().getUrlPreview(this.props.link, this.props.ts).then((res)=>{
+        if (global.localStorage) {
+            if (global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId()) === "1") {
+                return;
+            }
+        }
+
+        MatrixClientPeg.get().getUrlPreview(this.props.link, this.props.mxEvent.getTs()).then((res)=>{
             this.setState({ preview: res });
             this.props.onWidgetLoad();
         }, (error)=>{
@@ -59,6 +65,15 @@ module.exports = React.createClass({
         if (this.refs.description)
             linkifyElement(this.refs.description, linkifyMatrix.options);
     },
+
+    onCancelClick: function(event) {
+        this.setState({ preview: null });
+        // FIXME: persist this somewhere smarter than local storage
+        // FIXME: add to event contextual menu ability to unhide hidden previews
+        if (global.localStorage) {
+            global.localStorage.setItem("hide_preview_" + this.props.mxEvent.getId(), "1");
+        }
+    },    
 
     render: function() {
         var p = this.state.preview;
@@ -93,6 +108,8 @@ module.exports = React.createClass({
                         { p["og:description"] }
                     </div>
                 </div>
+                <img className="mx_LinkPreviewWidget_cancel" src="img/cancel.svg" width="18" height="18"
+                     onClick={ this.onCancelClick }/>
             </div>
         );
     }

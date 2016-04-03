@@ -91,7 +91,7 @@ module.exports = React.createClass({
         var widget;
         if (this.state.link) {
             var LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
-            widget = <LinkPreviewWidget link={ this.state.link } ts={ this.props.mxEvent.getTs() } onWidgetLoad={ this.props.onWidgetLoad }/>;
+            widget = <LinkPreviewWidget link={ this.state.link } mxEvent={ this.props.mxEvent } onWidgetLoad={ this.props.onWidgetLoad }/>;
         }
 
         switch (content.msgtype) {
