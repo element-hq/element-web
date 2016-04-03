@@ -31,6 +31,7 @@ module.exports = React.createClass({
 
     propTypes: {
         link: React.PropTypes.string.isRequired,
+        ts: React.PropTypes.number,
         onWidgetLoad: React.PropTypes.func,
     },
 
@@ -41,7 +42,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        MatrixClientPeg.get().getUrlPreview(this.props.link).then((res)=>{
+        MatrixClientPeg.get().getUrlPreview(this.props.link, this.props.ts).then((res)=>{
             this.setState({ preview: res });
             this.props.onWidgetLoad();
         }, (error)=>{
