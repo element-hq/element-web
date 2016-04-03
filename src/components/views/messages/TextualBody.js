@@ -46,6 +46,13 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             link: null,
+
+            // track whether the preview widget is hidden
+            // we can't directly use mxEvent's widgetHidden property
+            // as shouldComponentUpdate needs to be able to do before & after
+            // comparisons of the property (and we don't pass it in as a top
+            // level prop to avoid bloating the number of props flying around)
+            widgetHidden: false,
         };
     },
 
@@ -55,6 +62,13 @@ module.exports = React.createClass({
         var link = this.findLink(this.refs.content.children);
         if (link) {
             this.setState({ link: link.getAttribute("href") });
+
+            // lazy-load the hidden state of the preview widget from localstorage
+            if (global.localStorage) {
+                var hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
+                this.props.mxEvent.widgetHidden = hidden;
+                this.setState({ widgetHidden: hidden });
+            }
         }
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
@@ -78,7 +92,22 @@ module.exports = React.createClass({
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
                 nextProps.highlights !== this.props.highlights ||
                 nextProps.highlightLink !== this.props.highlightLink ||
-                nextState.link !== this.state.link);
+                nextState.link !== this.state.link ||
+                nextProps.mxEvent.widgetHidden !== this.state.widgetHidden);
+    },
+
+    componentWillUpdate: function(nextProps, nextState) {
+        this.setState({ widgetHidden: nextProps.mxEvent.widgetHidden });
+    },
+
+    onCancelClick: function(event) {
+        this.props.mxEvent.widgetHidden = true;
+        this.setState({ widgetHidden: true });
+        // FIXME: persist this somewhere smarter than local storage
+        if (global.localStorage) {
+            global.localStorage.setItem("hide_preview_" + this.props.mxEvent.getId(), "1");
+        }
+        this.forceUpdate();
     },
 
     render: function() {
@@ -89,9 +118,13 @@ module.exports = React.createClass({
 
 
         var widget;
-        if (this.state.link) {
+        if (this.state.link && !this.state.widgetHidden) {
             var LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
-            widget = <LinkPreviewWidget link={ this.state.link } mxEvent={ this.props.mxEvent } onWidgetLoad={ this.props.onWidgetLoad }/>;
+            widget = <LinkPreviewWidget
+                link={ this.state.link }
+                mxEvent={ this.props.mxEvent }
+                onCancelClick={ this.onCancelClick }
+                onWidgetLoad={ this.props.onWidgetLoad }/>;
         }
 
         switch (content.msgtype) {
