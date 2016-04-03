@@ -72,7 +72,7 @@ module.exports = React.createClass({
         if(this.props.name) {
             name = this.props.name;
         } else if(this.props.mxEvent) {
-            name = props.mxEvent.getContent().body;
+            name = this.props.mxEvent.getContent().body;
         } else {
             name = null;
         }
