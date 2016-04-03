@@ -214,3 +214,8 @@ input[type=text]:focus, textarea:focus {
     color: #454545;
     background-color: #fff;
 }
+
+.emojione {
+    height: 1em;
+    vertical-align: middle;
+}

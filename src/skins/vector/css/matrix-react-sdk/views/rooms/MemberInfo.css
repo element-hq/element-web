@@ -32,6 +32,14 @@ limitations under the License.
     clear: both;
 }
 
+.mx_MemberInfo_avatar .mx_BaseAvatar {
+    cursor: not-allowed;
+}
+
+.mx_MemberInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
+    cursor: pointer;
+}
+
 .mx_MemberInfo_profile {
     margin-bottom: 16px;
 }
