@@ -27,6 +27,10 @@ module.exports = React.createClass({
     displayName: 'ImageView',
 
     propTypes: {
+        mxEvent: React.PropTypes.object,
+        src: React.PropTypes.string.isRequired,
+        width: React.PropTypes.number,
+        height: React.PropTypes.number,
         onFinished: React.PropTypes.func.isRequired,
         name: React.PropTypes.string
     },
@@ -164,11 +168,6 @@ module.exports = React.createClass({
                                          <span className="mx_ImageView_size">{ size } { res }</span>
                                 </div>
                             </a>
-                            <div className="mx_ImageView_button">
-                                <a className="mx_ImageView_link" href={ this.props.src } target="_blank">
-                                    View full screen
-                                </a>
-                            </div>
                             { eventRedact }
                             <div className="mx_ImageView_shim">
                             </div>
