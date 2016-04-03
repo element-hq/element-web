@@ -29,8 +29,10 @@ module.exports = React.createClass({
     propTypes: {
         mxEvent: React.PropTypes.object,
         src: React.PropTypes.string.isRequired,
+        link: React.PropTypes.string,
         width: React.PropTypes.number,
         height: React.PropTypes.number,
+        size: React.PropTypes.number,
         onFinished: React.PropTypes.func.isRequired,
         name: React.PropTypes.string
     },
@@ -76,9 +78,13 @@ module.exports = React.createClass({
         if(this.props.name) {
             name = this.props.name;
         } else if(this.props.mxEvent) {
-            name = props.mxEvent.getContent().body;
+            name = this.props.mxEvent.getContent().body;
         } else {
             name = null;
+        }
+
+        if (name && this.props.link) {
+            name = <a href={ this.props.link } target="_blank">{ name }</a>;
         }
 
         return name;
@@ -121,14 +127,20 @@ module.exports = React.createClass({
                 width: this.props.width,
                 height: this.props.height,
             };
-            res = ", " + style.width + "x" + style.height + "px";
+            res = style.width + "x" + style.height + "px";
         }
 
         var size;
-        if (this.props.mxEvent &&
-            this.props.mxEvent.getContent().info &&
-            this.props.mxEvent.getContent().info.size) {
-            size = filesize(this.props.mxEvent.getContent().info.size);
+        if (this.props.size) {
+            size = filesize(this.props.size);
+        }
+
+        var size_res;
+        if (size && res) {
+            size_res = size + ", " + res;
+        }
+        else {
+            size_res = size || res;
         }
 
         var showEventMeta = !!this.props.mxEvent;
@@ -165,7 +177,7 @@ module.exports = React.createClass({
                             <a className="mx_ImageView_link" href={ this.props.src } target="_blank">
                                 <div className="mx_ImageView_download">
                                         Download this file<br/>
-                                         <span className="mx_ImageView_size">{ size } { res }</span>
+                                         <span className="mx_ImageView_size">{ size_res }</span>
                                 </div>
                             </a>
                             { eventRedact }
