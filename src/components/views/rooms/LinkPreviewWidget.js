@@ -78,7 +78,7 @@ module.exports = React.createClass({
                 src: src,
                 width: p["og:image:width"],
                 height: p["og:image:height"],
-                name: p["og:title"] || p["og:description"],
+                name: p["og:title"] || p["og:description"] || this.props.link,
                 size: p["matrix:image:size"],
                 link: this.props.link,
             };
