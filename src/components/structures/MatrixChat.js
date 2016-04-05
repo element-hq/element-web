@@ -35,6 +35,7 @@ var Tinter = require("../../Tinter");
 var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
+var KeyCode = require('../../KeyCode');
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
@@ -722,11 +723,10 @@ module.exports = React.createClass({
     },
 
     onKeyDown: function(ev) {
-        if (ev.altKey) {
             /*
             // Remove this for now as ctrl+alt = alt-gr so this breaks keyboards which rely on alt-gr for numbers
             // Will need to find a better meta key if anyone actually cares about using this.
-            if (ev.ctrlKey && ev.keyCode > 48 && ev.keyCode < 58) {
+            if (ev.altKey && ev.ctrlKey && ev.keyCode > 48 && ev.keyCode < 58) {
                 dis.dispatch({
                     action: 'view_indexed_room',
                     roomIndex: ev.keyCode - 49,
@@ -736,18 +736,45 @@ module.exports = React.createClass({
                 return;
             }
             */
-            switch (ev.keyCode) {
-                case 38:
-                    dis.dispatch({action: 'view_prev_room'});
-                    ev.stopPropagation();
-                    ev.preventDefault();
-                    break;
-                case 40:
-                    dis.dispatch({action: 'view_next_room'});
-                    ev.stopPropagation();
-                    ev.preventDefault();
-                    break;
-            }
+
+        var handled = false;
+
+        switch (ev.keyCode) {
+            case KeyCode.UP:
+            case KeyCode.DOWN:
+                if (ev.altKey) {
+                    var action = ev.keyCode == KeyCode.UP ?
+                        'view_prev_room' : 'view_next_room';
+                    dis.dispatch({action: action});
+                    handled = true;
+                }
+                break;
+
+            case KeyCode.PAGE_UP:
+            case KeyCode.PAGE_DOWN:
+                this._onScrollKeyPressed(ev);
+                handled = true;
+                break;
+
+            case KeyCode.HOME:
+            case KeyCode.END:
+                if (ev.ctrlKey) {
+                    this._onScrollKeyPressed(ev);
+                    handled = true;
+                }
+                break;
+        }
+
+        if (handled) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+    },
+
+    /** dispatch a page-up/page-down/etc to the appropriate component */
+    _onScrollKeyPressed(ev) {
+        if (this.refs.roomView) {
+            this.refs.roomView.handleScrollKey(ev);
         }
     },
 

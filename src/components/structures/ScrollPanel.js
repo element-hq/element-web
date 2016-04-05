@@ -18,6 +18,7 @@ var React = require("react");
 var ReactDOM = require("react-dom");
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var q = require("q");
+var KeyCode = require('../../KeyCode');
 
 var DEBUG_SCROLL = false;
 // var DEBUG_SCROLL = true;
@@ -326,6 +327,17 @@ module.exports = React.createClass({
         this.scrollState = {stuckAtBottom: true};
     },
 
+    /**
+     * jump to the top of the content.
+     */
+    scrollToTop: function() {
+        this._setScrollTop(0);
+        this._saveScrollState();
+    },
+
+    /**
+     * jump to the bottom of the content.
+     */
     scrollToBottom: function() {
         // the easiest way to make sure that the scroll state is correctly
         // saved is to do the scroll, then save the updated state. (Calculating
@@ -333,6 +345,45 @@ module.exports = React.createClass({
         // happening, since there may be no user-visible change here).
         this._setScrollTop(Number.MAX_VALUE);
         this._saveScrollState();
+    },
+
+    /**
+     * Page up/down.
+     *
+     * mult: -1 to page up, +1 to page down
+     */
+    scrollRelative: function(mult) {
+        var scrollNode = this._getScrollNode();
+        var delta = mult * scrollNode.clientHeight * 0.5;
+        this._setScrollTop(scrollNode.scrollTop + delta);
+        this._saveScrollState();
+    },
+
+    /**
+     * Scroll up/down in response to a scroll key
+     */
+    handleScrollKey: function(ev) {
+        switch (ev.keyCode) {
+            case KeyCode.PAGE_UP:
+                this.scrollRelative(-1);
+                break;
+
+            case KeyCode.PAGE_DOWN:
+                this.scrollRelative(1);
+                break;
+
+            case KeyCode.HOME:
+                if (ev.ctrlKey) {
+                    this.scrollToTop();
+                }
+                break;
+
+            case KeyCode.END:
+                if (ev.ctrlKey) {
+                    this.scrollToBottom();
+                }
+                break;
+        }
     },
 
     /* Scroll the panel to bring the DOM node with the scroll token

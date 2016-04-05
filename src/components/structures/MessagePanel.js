@@ -132,11 +132,39 @@ module.exports = React.createClass({
         }
     },
 
+    /* jump to the top of the content.
+     */
+    scrollToTop: function() {
+        if (this.refs.scrollPanel) {
+            this.refs.scrollPanel.scrollToTop();
+        }
+    },
+
     /* jump to the bottom of the content.
      */
     scrollToBottom: function() {
         if (this.refs.scrollPanel) {
             this.refs.scrollPanel.scrollToBottom();
+        }
+    },
+    
+    /**
+     * Page up/down.
+     *
+     * mult: -1 to page up, +1 to page down
+     */
+    scrollRelative: function(mult) {
+        if (this.refs.scrollPanel) {
+            this.refs.scrollPanel.scrollRelative(mult);
+        }
+    },
+
+    /**
+     * Scroll up/down in response to a scroll key
+     */
+    handleScrollKey: function(ev) {
+        if (this.refs.scrollPanel) {
+            this.refs.handleScrollKey(ev);
         }
     },
 

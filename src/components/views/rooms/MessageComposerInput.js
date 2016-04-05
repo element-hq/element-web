@@ -34,15 +34,7 @@ var MemberEntry = require("../../../TabCompleteEntries").MemberEntry;
 var sdk = require('../../../index');
 
 var dis = require("../../../dispatcher");
-var KeyCode = {
-    ENTER: 13,
-    BACKSPACE: 8,
-    DELETE: 46,
-    TAB: 9,
-    SHIFT: 16,
-    UP: 38,
-    DOWN: 40
-};
+var KeyCode = require("../../../KeyCode");
 
 var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
