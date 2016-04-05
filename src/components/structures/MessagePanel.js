@@ -205,6 +205,13 @@ module.exports = React.createClass({
         // assume there is no read marker until proven otherwise
         var readMarkerVisible = false;
 
+        // if the readmarker has moved, cancel any active ghost.
+        if (this.currentReadMarkerEventId && this.props.readMarkerEventId &&
+                this.props.readMarkerVisible &&
+                this.currentReadMarkerEventId != this.props.readMarkerEventId) {
+            this.currentGhostEventId = null;
+        }
+
         for (i = 0; i < this.props.events.length; i++) {
             var mxEv = this.props.events[i];
             var wantTile = true;
@@ -336,21 +343,16 @@ module.exports = React.createClass({
         );
     },
 
-    _getReadMarkerGhostTile: function() {
-        // reset the ghostEventId when the animation finishes, so that
-        // we can make a new one (and so that we don't run the
-        // animation code every time we render)
-        var completeFunc = () => {
-            this.currentGhostEventId = null;
-        };
+    _startAnimation: function(ghostNode) {
+        Velocity(ghostNode, {opacity: '0', width: '10%'},
+                 {duration: 400, easing: 'easeInSine',
+                  delay: 1000});
+    },
 
+    _getReadMarkerGhostTile: function() {
         var hr = <hr className="mx_RoomView_myReadMarker"
                   style={{opacity: 1, width: '99%'}}
-                  ref={function(n) {
-                        Velocity(n, {opacity: '0', width: '10%'},
-                                    {duration: 400, easing: 'easeInSine',
-                                     delay: 1000, complete: completeFunc});
-                  }}
+                  ref={this._startAnimation}
             />;
 
         // give it a key which depends on the event id. That will ensure that
