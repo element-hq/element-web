@@ -1,6 +1,7 @@
 // karma.conf.js - the config file for karma, which runs our tests.
 
 var path = require('path');
+var fs = require('fs');
 
 /*
  * We use webpack to build our tests. It's a pain to have to wait for webpack
@@ -17,6 +18,21 @@ var path = require('path');
 
 process.env.PHANTOMJS_BIN = 'node_modules/.bin/phantomjs';
 
+function fileExists(name) {
+    try {
+        fs.statSync(gsCss);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+// try find the gemini-scrollbar css in an npm-version-agnostic way
+var gsCss = 'node_modules/gemini-scrollbar/gemini-scrollbar.css';
+if (!fileExists(gsCss)) {
+    gsCss = 'node_modules/react-gemini-scrollbar/'+gsCss;
+}
+
 module.exports = function (config) {
     config.set({
         // frameworks to use
@@ -26,9 +42,7 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'test/tests.js',
-
-            // XXX this will break on npm 3
-            'node_modules/react-gemini-scrollbar/node_modules/gemini-scrollbar/gemini-scrollbar.css',
+            gsCss,
         ],
 
         // list of files to exclude
