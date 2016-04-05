@@ -345,8 +345,8 @@ module.exports = React.createClass({
 
     _startAnimation: function(ghostNode) {
         Velocity(ghostNode, {opacity: '0', width: '10%'},
-                 {duration: 600, easing: 'easeInSine',
-                  delay: 200});
+                 {duration: 400, easing: 'easeInSine',
+                  delay: 1000});
     },
 
     _getReadMarkerGhostTile: function() {
