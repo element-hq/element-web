@@ -1115,6 +1115,24 @@ module.exports = React.createClass({
         }
     },
 
+    /**
+     * called by the parent component when PageUp/Down/etc is pressed.
+     *
+     * We pass it down to the scroll panel.
+     */
+    handleScrollKey: function(ev) {
+        var panel;
+        if(this.refs.searchResultsPanel) {
+            panel = this.refs.searchResultsPanel;
+        } else if(this.refs.messagePanel) {
+            panel = this.refs.messagePanel;
+        }
+
+        if(panel) {
+            panel.handleScrollKey(ev);
+        }
+    },
+
     // this has to be a proper method rather than an unnamed function,
     // otherwise react calls it with null on each update.
     _gatherTimelinePanelRef: function(r) {

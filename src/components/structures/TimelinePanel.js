@@ -27,6 +27,7 @@ var dis = require("../../dispatcher");
 var ObjectUtils = require('../../ObjectUtils');
 var Modal = require("../../Modal");
 var UserActivity = require("../../UserActivity");
+var KeyCode = require('../../KeyCode');
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
@@ -518,6 +519,23 @@ var TimelinePanel = React.createClass({
         }
 
         return null;
+    },
+
+    /**
+     * called by the parent component when PageUp/Down/etc is pressed.
+     *
+     * We pass it down to the scroll panel.
+     */
+    handleScrollKey: function(ev) {
+        if (!this.refs.messagePanel) { return; }
+
+        // jump to the live timeline on ctrl-end, rather than the end of the
+        // timeline window.
+        if (ev.ctrlKey && ev.keyCode == KeyCode.END) {
+            this.jumpToLiveTimeline();
+        } else {
+            this.refs.messagePanel.handleScrollKey(ev);
+        }
     },
 
     _initTimeline: function(props) {
