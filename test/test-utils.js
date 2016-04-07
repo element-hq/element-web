@@ -21,12 +21,23 @@ module.exports.beforeEach = function(context) {
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
  * return it when get() is called.
+ *
+ * @returns {sinon.Sandbox}; remember to call sandbox.restore afterwards.
  */
 module.exports.stubClient = function() {
-    var pegstub = sinon.stub(peg);
+    var sandbox = sinon.sandbox.create();
+
+    // 'sandbox.restore()' doesn't work correctly on inherited methods,
+    // so we do this for each method
+    var methods = ['get', 'unset', 'replaceUsingUrls',
+                   'replaceUsingAccessToken'];
+    for (var i = 0; i < methods.length; i++) {
+        sandbox.stub(peg, methods[i]);
+    }
 
     var matrixClientStub = sinon.createStubInstance(jssdk.MatrixClient);
-    pegstub.get.returns(matrixClientStub);
+    peg.get.returns(matrixClientStub);
+    return sandbox;
 }
 
 
