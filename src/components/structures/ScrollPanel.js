@@ -18,8 +18,10 @@ var React = require("react");
 var ReactDOM = require("react-dom");
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var q = require("q");
+var KeyCode = require('../../KeyCode');
 
 var DEBUG_SCROLL = false;
+// var DEBUG_SCROLL = true;
 
 if (DEBUG_SCROLL) {
     // using bind means that we get to keep useful line numbers in the console
@@ -144,7 +146,8 @@ module.exports = React.createClass({
 
     onScroll: function(ev) {
         var sn = this._getScrollNode();
-        debuglog("Scroll event: offset now:", sn.scrollTop, "recentEventScroll:", this.recentEventScroll);
+        debuglog("Scroll event: offset now:", sn.scrollTop,
+                 "_lastSetScroll:", this._lastSetScroll);
 
         // Sometimes we see attempts to write to scrollTop essentially being
         // ignored. (Or rather, it is successfully written, but on the next
@@ -158,13 +161,10 @@ module.exports = React.createClass({
         // By way of a workaround, we detect this situation and just keep
         // resetting scrollTop until we see the scroll node have the right
         // value.
-        if (this.recentEventScroll !== undefined) {
-            if(sn.scrollTop < this.recentEventScroll-200) {
-                console.log("Working around vector-im/vector-web#528");
-                this._restoreSavedScrollState();
-                return;
-            }
-            this.recentEventScroll = undefined;
+        if (this._lastSetScroll !== undefined && sn.scrollTop < this._lastSetScroll-200) {
+            console.log("Working around vector-im/vector-web#528");
+            this._restoreSavedScrollState();
+            return;
         }
 
         // If there weren't enough children to fill the viewport, the scroll we
@@ -327,6 +327,17 @@ module.exports = React.createClass({
         this.scrollState = {stuckAtBottom: true};
     },
 
+    /**
+     * jump to the top of the content.
+     */
+    scrollToTop: function() {
+        this._setScrollTop(0);
+        this._saveScrollState();
+    },
+
+    /**
+     * jump to the bottom of the content.
+     */
     scrollToBottom: function() {
         // the easiest way to make sure that the scroll state is correctly
         // saved is to do the scroll, then save the updated state. (Calculating
@@ -334,6 +345,45 @@ module.exports = React.createClass({
         // happening, since there may be no user-visible change here).
         this._setScrollTop(Number.MAX_VALUE);
         this._saveScrollState();
+    },
+
+    /**
+     * Page up/down.
+     *
+     * mult: -1 to page up, +1 to page down
+     */
+    scrollRelative: function(mult) {
+        var scrollNode = this._getScrollNode();
+        var delta = mult * scrollNode.clientHeight * 0.5;
+        this._setScrollTop(scrollNode.scrollTop + delta);
+        this._saveScrollState();
+    },
+
+    /**
+     * Scroll up/down in response to a scroll key
+     */
+    handleScrollKey: function(ev) {
+        switch (ev.keyCode) {
+            case KeyCode.PAGE_UP:
+                this.scrollRelative(-1);
+                break;
+
+            case KeyCode.PAGE_DOWN:
+                this.scrollRelative(1);
+                break;
+
+            case KeyCode.HOME:
+                if (ev.ctrlKey) {
+                    this.scrollToTop();
+                }
+                break;
+
+            case KeyCode.END:
+                if (ev.ctrlKey) {
+                    this.scrollToBottom();
+                }
+                break;
+        }
     },
 
     /* Scroll the panel to bring the DOM node with the scroll token
@@ -395,17 +445,14 @@ module.exports = React.createClass({
         var wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
         var boundingRect = node.getBoundingClientRect();
         var scrollDelta = boundingRect.bottom + pixelOffset - wrapperRect.bottom;
+
+        debuglog("Scrolling to token '" + node.dataset.scrollToken + "'+" +
+                 pixelOffset + " (delta: "+scrollDelta+")");
+
         if(scrollDelta != 0) {
             this._setScrollTop(scrollNode.scrollTop + scrollDelta);
-
-            // see the comments in onScroll regarding recentEventScroll
-            this.recentEventScroll = scrollNode.scrollTop;
         }
 
-        debuglog("Scrolled to token", node.dataset.scrollToken, "+",
-                 pixelOffset+":", scrollNode.scrollTop, 
-                 "(delta: "+scrollDelta+")");
-        debuglog("recentEventScroll now "+this.recentEventScroll);
     },
 
     _saveScrollState: function() {
