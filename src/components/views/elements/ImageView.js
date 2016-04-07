@@ -27,14 +27,19 @@ module.exports = React.createClass({
     displayName: 'ImageView',
 
     propTypes: {
+        src: React.PropTypes.string.isRequired, // the source of the image being displayed
+        name: React.PropTypes.string, // the main title ('name') for the image
+        link: React.PropTypes.string, // the link (if any) applied to the name of the image
+        width: React.PropTypes.number, // width of the image src in pixels
+        height: React.PropTypes.number, // height of the image src in pixels
+        fileSize: React.PropTypes.number, // size of the image src in bytes
+        onFinished: React.PropTypes.func.isRequired, // callback when the lightbox is dismissed
+
+        // the event (if any) that the Image is displaying. Used for event-specific stuff like
+        // redactions, senders, timestamps etc.  Other descriptors are taken from the explicit
+        // properties above, which let us use lightboxes to display images which aren't associated
+        // with events.
         mxEvent: React.PropTypes.object,
-        src: React.PropTypes.string.isRequired,
-        link: React.PropTypes.string,
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
-        size: React.PropTypes.number,
-        onFinished: React.PropTypes.func.isRequired,
-        name: React.PropTypes.string
     },
 
     // XXX: keyboard shortcuts for managing dialogs should be done by the modal
@@ -73,20 +78,10 @@ module.exports = React.createClass({
     },
 
     getName: function () {
-        var name;
-
-        if(this.props.name) {
-            name = this.props.name;
-        } else if(this.props.mxEvent) {
-            name = this.props.mxEvent.getContent().body;
-        } else {
-            name = null;
-        }
-
+        var name = this.props.name;
         if (name && this.props.link) {
             name = <a href={ this.props.link } target="_blank">{ name }</a>;
         }
-
         return name;
     },
 
@@ -131,8 +126,8 @@ module.exports = React.createClass({
         }
 
         var size;
-        if (this.props.size) {
-            size = filesize(this.props.size);
+        if (this.props.fileSize) {
+            size = filesize(this.props.fileSize);
         }
 
         var size_res;
