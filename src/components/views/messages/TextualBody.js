@@ -66,6 +66,7 @@ module.exports = React.createClass({
             // lazy-load the hidden state of the preview widget from localstorage
             if (global.localStorage) {
                 var hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
+                // XXX: we're gutwrenching mxEvent here by setting our own custom property on it
                 this.props.mxEvent.widgetHidden = hidden;
                 this.setState({ widgetHidden: hidden });
             }
@@ -73,18 +74,6 @@ module.exports = React.createClass({
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
             HtmlUtils.highlightDom(ReactDOM.findDOMNode(this));
-    },
-
-    findLink: function(nodes) {
-        for (var i = 0; i < nodes.length; i++) {
-            var node = nodes[i];
-            if (node.tagName === "A" && node.getAttribute("href")) {
-                return node;
-            }
-            else if (node.children && node.children.length) {
-                return this.findLink(node.children)
-            }
-        }
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -100,7 +89,20 @@ module.exports = React.createClass({
         this.setState({ widgetHidden: nextProps.mxEvent.widgetHidden });
     },
 
+    findLink: function(nodes) {
+        for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            if (node.tagName === "A" && node.getAttribute("href")) {
+                return node;
+            }
+            else if (node.children && node.children.length) {
+                return this.findLink(node.children)
+            }
+        }
+    },
+
     onCancelClick: function(event) {
+        // XXX: we're gutwrenching mxEvent here by setting our own custom property on it
         this.props.mxEvent.widgetHidden = true;
         this.setState({ widgetHidden: true });
         // FIXME: persist this somewhere smarter than local storage

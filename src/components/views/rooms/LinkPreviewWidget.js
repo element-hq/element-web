@@ -32,10 +32,10 @@ module.exports = React.createClass({
     displayName: 'LinkPreviewWidget',
 
     propTypes: {
-        link: React.PropTypes.string.isRequired,
-        mxEvent: React.PropTypes.object.isRequired,
-        onCancelClick: React.PropTypes.func,
-        onWidgetLoad: React.PropTypes.func,
+        link: React.PropTypes.string.isRequired, // the URL being previewed
+        mxEvent: React.PropTypes.object.isRequired, // the Event associated with the preview
+        onCancelClick: React.PropTypes.func, // called when the preview's cancel ('hide') button is clicked
+        onWidgetLoad: React.PropTypes.func, // called when the preview's contents has loaded
     },
 
     getInitialState: function() {
@@ -46,8 +46,10 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         MatrixClientPeg.get().getUrlPreview(this.props.link, this.props.mxEvent.getTs()).then((res)=>{
-            this.setState({ preview: res });
-            this.props.onWidgetLoad();
+            this.setState(
+                { preview: res },
+                this.props.onWidgetLoad
+            );
         }, (error)=>{
             console.error("Failed to get preview for " + this.props.link + " " + error);
         });
@@ -65,26 +67,25 @@ module.exports = React.createClass({
 
     onImageClick: function(ev) {
         var p = this.state.preview;
-        if (ev.button == 0 && !ev.metaKey) {
-            ev.preventDefault();
-            var ImageView = sdk.getComponent("elements.ImageView");
+        if (ev.button != 0 || ev.metaKey) return;
+        ev.preventDefault();
+        var ImageView = sdk.getComponent("elements.ImageView");
 
-            var src = p["og:image"];
-            if (src && src.startsWith("mxc://")) {
-                src = MatrixClientPeg.get().mxcUrlToHttp(src);
-            }
-
-            var params = {
-                src: src,
-                width: p["og:image:width"],
-                height: p["og:image:height"],
-                name: p["og:title"] || p["og:description"] || this.props.link,
-                size: p["matrix:image:size"],
-                link: this.props.link,
-            };
-
-            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+        var src = p["og:image"];
+        if (src && src.startsWith("mxc://")) {
+            src = MatrixClientPeg.get().mxcUrlToHttp(src);
         }
+
+        var params = {
+            src: src,
+            width: p["og:image:width"],
+            height: p["og:image:height"],
+            name: p["og:title"] || p["og:description"] || this.props.link,
+            fileSize: p["matrix:image:size"],
+            link: this.props.link,
+        };
+
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
     },
 
     render: function() {

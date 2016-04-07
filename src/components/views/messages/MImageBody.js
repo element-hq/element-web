@@ -31,9 +31,6 @@ module.exports = React.createClass({
     propTypes: {
         /* the MatrixEvent to show */
         mxEvent: React.PropTypes.object.isRequired,
-
-        /* callback called when images in events are loaded */
-        onWidgetLoad: React.PropTypes.func,
     },
 
     onClick: function onClick(ev) {
@@ -50,7 +47,7 @@ module.exports = React.createClass({
             if (content.info) {
                 params.width = content.info.w;
                 params.height = content.info.h;
-                params.size = content.info.size;
+                params.fileSize = content.info.size;
             }
 
             Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");

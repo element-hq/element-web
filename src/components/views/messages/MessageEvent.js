@@ -38,7 +38,7 @@ module.exports = React.createClass({
         /* link URL for the highlights */
         highlightLink: React.PropTypes.string,
 
-        /* callback called when images in events are loaded */
+        /* callback called when dynamic content in events are loaded */
         onWidgetLoad: React.PropTypes.func,
     },
 
