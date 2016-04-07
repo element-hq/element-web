@@ -38,8 +38,8 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            enteredHomeserverUrl: this.props.homeserverUrl,
-            enteredIdentityServerUrl: this.props.identityServerUrl,
+            enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
+            enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
             progress: null
         };
     },
