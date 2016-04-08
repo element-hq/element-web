@@ -1,12 +1,16 @@
 /*
- * test-component-index.js
+ * skinned-sdk.js
  *
- * Stub out a bunch of the components which we expect the application to
- * provide
+ * Skins the react-sdk with a few stub components which we expect the
+ * application to provide
  */
-var components = require('../src/component-index.js').components;
+
+var sdk = require("../src/index");
+
+var skin = require('../src/component-index.js');
 var stubComponent = require('./components/stub-component.js');
 
+var components = skin.components;
 components['structures.LeftPanel'] = stubComponent();
 components['structures.RightPanel'] = stubComponent();
 components['structures.RoomDirectory'] = stubComponent();
@@ -18,4 +22,6 @@ components['views.messages.DateSeparator'] = stubComponent({displayName: 'DateSe
 components['views.messages.MessageTimestamp'] = stubComponent({displayName: 'MessageTimestamp'});
 components['views.messages.SenderProfile'] = stubComponent({displayName: 'SenderProfile'});
 
-module.exports.components = components;
+sdk.loadSkin(skin);
+
+module.exports = sdk;

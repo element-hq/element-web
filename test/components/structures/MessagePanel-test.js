@@ -27,12 +27,19 @@ var test_utils = require('test-utils');
 var mockclock = require('mock-clock');
 
 describe('MessagePanel', function () {
+    var sandbox;
     var clock = mockclock.clock();
     var realSetTimeout = window.setTimeout;
     var events = mkEvents();
 
+    beforeEach(function() {
+        test_utils.beforeEach(this);
+        sandbox = test_utils.stubClient(sandbox);
+    });
+
     afterEach(function () {
         clock.uninstall();
+        sandbox.restore();
     });
 
     function mkEvents() {

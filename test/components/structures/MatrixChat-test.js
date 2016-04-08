@@ -3,16 +3,21 @@ var TestUtils = require('react-addons-test-utils');
 var expect = require('expect');
 
 var sdk = require('matrix-react-sdk');
+var MatrixChat = sdk.getComponent('structures.MatrixChat');
+var peg = require('../../../src/MatrixClientPeg');
 
 var test_utils = require('../../test-utils');
-var peg = require('../../../src/MatrixClientPeg.js');
 var q = require('q');
 
 describe('MatrixChat', function () {
-    var MatrixChat;
-    before(function() {
-        test_utils.stubClient();
-        MatrixChat = sdk.getComponent('structures.MatrixChat');
+    var sandbox;
+
+    beforeEach(function() {
+        sandbox = test_utils.stubClient();
+    });
+
+    afterEach(function() {
+        sandbox.restore();
     });
     
     it('gives a login panel by default', function () {
