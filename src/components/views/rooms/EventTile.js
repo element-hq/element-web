@@ -123,7 +123,7 @@ module.exports = React.createClass({
         {
             return false;
         }
-        
+
         return actions.tweaks.highlight;
     },
 
@@ -137,6 +137,7 @@ module.exports = React.createClass({
             mxEvent: this.props.mxEvent,
             left: x,
             top: y,
+            eventTileOps: this.refs.tile ? this.refs.tile.getEventTileOps() : undefined,
             onFinished: function() {
                 self.setState({menu: false});
             }
@@ -343,7 +344,7 @@ module.exports = React.createClass({
                 { avatar }
                 { sender }
                 <div className="mx_EventTile_line">
-                    <EventTileType mxEvent={this.props.mxEvent} highlights={this.props.highlights}
+                    <EventTileType ref="tile" mxEvent={this.props.mxEvent} highlights={this.props.highlights}
                           highlightLink={this.props.highlightLink}
                           onWidgetLoad={this.props.onWidgetLoad} />
                 </div>
