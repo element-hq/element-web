@@ -94,7 +94,33 @@ var TimelinePanel = React.createClass({
         return {
             events: [],
             timelineLoading: true, // track whether our room timeline is loading
-            canBackPaginate: true,
+
+            // canBackPaginate == false may mean:
+            //
+            // * we haven't (successfully) loaded the timeline yet, or:
+            //
+            // * we have got to the point where the room was created, or:
+            //
+            // * the server indicated that there were no more visible events
+            //  (normally implying we got to the start of the room), or:
+            //
+            // * we gave up asking the server for more events
+            canBackPaginate: false,
+
+            // canForwardPaginate == false may mean:
+            //
+            // * we haven't (successfully) loaded the timeline yet
+            //
+            // * we have got to the end of time and are now tracking the live
+            //   timeline, or:
+            //
+            // * the server indicated that there were no more visible events
+            //   (not sure if this ever happens when we're not at the live
+            //   timeline), or:
+            //
+            // * we are looking at some historical point, but gave up asking
+            //   the server for more events
+            canForwardPaginate: false,
 
             // start with the read-marker visible, so that we see its animated
             // disappearance when swtitching into the room.
@@ -172,19 +198,31 @@ var TimelinePanel = React.createClass({
     // set off a pagination request.
     onMessageListFillRequest: function(backwards) {
         var dir = backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS;
-        if(!this._timelineWindow.canPaginate(dir)) {
-            debuglog("TimelinePanel: can't paginate at this time; backwards:"+backwards);
+        var canPaginateKey = backwards ? 'canBackPaginate' : 'canForwardPaginate';
+        var paginatingKey = backwards ? 'backPaginating' : 'forwardPaginating';
+
+        if (!this.state[canPaginateKey]) {
+            debuglog("TimelinePanel: have given up", dir, "paginating this timeline");
             return q(false);
         }
+
+        if(!this._timelineWindow.canPaginate(dir)) {
+            debuglog("TimelinePanel: can't", dir, "paginate any further");
+            this.setState({[canPaginateKey]: false});
+            return q(false);
+        }
+
         debuglog("TimelinePanel: Initiating paginate; backwards:"+backwards);
-        var statekey = backwards ? 'backPaginating' : 'forwardPaginating';
-        this.setState({[statekey]: true});
+        this.setState({[paginatingKey]: true});
 
         return this._timelineWindow.paginate(dir, PAGINATE_SIZE).then((r) => {
             if (this.unmounted) { return; }
 
             debuglog("TimelinePanel: paginate complete backwards:"+backwards+"; success:"+r);
-            this.setState({[statekey]: false});
+            this.setState({
+                [paginatingKey]: false,
+                [canPaginateKey]: r,
+            });
             this._reloadEvents();
             return r;
         });
@@ -581,7 +619,11 @@ var TimelinePanel = React.createClass({
             // We need to skip over any which have subsequently been sent.
             this._advanceReadMarkerPastMyEvents();
 
-            this.setState({timelineLoading: false}, () => {
+            this.setState({
+                canBackPaginate: this._timelineWindow.canPaginate(EventTimeline.BACKWARDS),
+                canForwardPaginate: this._timelineWindow.canPaginate(EventTimeline.FORWARDS),
+                timelineLoading: false,
+            }, () => {
                 // initialise the scroll state of the message panel
                 if (!this.refs.messagePanel) {
                     // this shouldn't happen - we know we're mounted because
@@ -652,6 +694,8 @@ var TimelinePanel = React.createClass({
         } else {
             this.setState({
                 events: [],
+                canBackPaginate: false,
+                canForwardPaginate: false,
                 timelineLoading: true,
             });
 
@@ -678,7 +722,6 @@ var TimelinePanel = React.createClass({
 
         this.setState({
             events: events,
-            canBackPaginate: this._timelineWindow.canPaginate(EventTimeline.BACKWARDS),
         });
     },
 
