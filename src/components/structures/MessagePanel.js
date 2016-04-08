@@ -405,7 +405,7 @@ module.exports = React.createClass({
         var scrollPanel = this.refs.scrollPanel;
         if (scrollPanel) {
             scrollPanel.checkScroll();
-            scrollPanel.refs.geminiPanel.forceUpdate();
+            scrollPanel.forceUpdate();
         }
     },
 
