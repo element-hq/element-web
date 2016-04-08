@@ -27,6 +27,17 @@ var Resend = require("matrix-react-sdk/lib/Resend");
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
 
+    propTypes: {
+        /* the MatrixEvent associated with the context menu */
+        mxEvent: React.PropTypes.object.isRequired,
+
+        /* an optional EventTileOps implementation that can be used to unhide preview widgets */
+        eventTileOps: React.PropTypes.object,
+
+        /* callback called when the menu is dismissed */
+        onFinished: React.PropTypes.func,
+    },
+
     onResendClick: function() {
         Resend.resend(this.props.mxEvent);
         if (this.props.onFinished) this.props.onFinished();
@@ -69,10 +80,11 @@ module.exports = React.createClass({
     onUnhidePreviewClick: function() {
         if (global.localStorage) {
             // FIXME: factor this out with LinkPreviewWidget
-            // FIXME: somehow propagate this to the EventTile such that it updates itself and realises the link has rematerialised
             global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
         }
-        this.props.mxEvent.widgetHidden = false;
+        if (this.props.eventTileOps) {
+            this.props.eventTileOps.unhideWidget();
+        }
         if (this.props.onFinished) this.props.onFinished();
     },
 
