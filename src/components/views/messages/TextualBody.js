@@ -45,6 +45,8 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
+            // the URL (if any) to be previewed with a LinkPreviewWidget
+            // inside this TextualBody.
             link: null,
 
             // track whether the preview widget is hidden
