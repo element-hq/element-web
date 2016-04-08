@@ -1,9 +1,11 @@
 "use strict";
 
+var sinon = require('sinon');
+var q = require('q');
+
 var peg = require('../src/MatrixClientPeg.js');
 var jssdk = require('matrix-js-sdk');
 var MatrixEvent = jssdk.MatrixEvent;
-var sinon = require('sinon');
 
 /**
  * Perform common actions before each test case, e.g. printing the test case
@@ -27,6 +29,21 @@ module.exports.beforeEach = function(context) {
 module.exports.stubClient = function() {
     var sandbox = sinon.sandbox.create();
 
+    var client = {
+        getHomeserverUrl: sinon.stub(),
+        getIdentityServerUrl: sinon.stub(),
+
+        getPushActionsForEvent: sinon.stub(),
+        getRoom: sinon.stub(),
+        loginFlows: sinon.stub(),
+        on: sinon.stub(),
+
+        paginateEventTimeline: sinon.stub().returns(q()),
+        sendReadReceipt: sinon.stub().returns(q()),
+    };
+
+    // create the peg
+
     // 'sandbox.restore()' doesn't work correctly on inherited methods,
     // so we do this for each method
     var methods = ['get', 'unset', 'replaceUsingUrls',
@@ -34,9 +51,7 @@ module.exports.stubClient = function() {
     for (var i = 0; i < methods.length; i++) {
         sandbox.stub(peg, methods[i]);
     }
-
-    var matrixClientStub = sinon.createStubInstance(jssdk.MatrixClient);
-    peg.get.returns(matrixClientStub);
+    peg.get.returns(client);
     return sandbox;
 }
 
