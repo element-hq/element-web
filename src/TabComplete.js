@@ -219,6 +219,9 @@ class TabComplete {
             return;
         }
 
+        // ctrl-tab/alt-tab etc shouldn't trigger a complete
+        if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
+
         // tab key has been pressed at this point
         this.handleTabPress(false, ev.shiftKey)
 
