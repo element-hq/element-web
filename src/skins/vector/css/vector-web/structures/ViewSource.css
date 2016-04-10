@@ -19,4 +19,5 @@ limitations under the License.
     font-size: 12px;
     padding: 0.5em 1em 0.5em 1em;
     word-wrap: break-word;
+    white-space: pre-wrap;
 }
