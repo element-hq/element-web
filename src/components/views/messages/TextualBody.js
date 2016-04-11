@@ -111,6 +111,9 @@ module.exports = React.createClass({
 
             unhideWidget: function() {
                 self.setState({ widgetHidden: false });
+                if (global.localStorage) {
+                    global.localStorage.removeItem("hide_preview_" + self.props.mxEvent.getId());
+                }
             },
         }
     },
