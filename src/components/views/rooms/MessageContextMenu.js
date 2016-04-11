@@ -27,6 +27,17 @@ var Resend = require("matrix-react-sdk/lib/Resend");
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
 
+    propTypes: {
+        /* the MatrixEvent associated with the context menu */
+        mxEvent: React.PropTypes.object.isRequired,
+
+        /* an optional EventTileOps implementation that can be used to unhide preview widgets */
+        eventTileOps: React.PropTypes.object,
+
+        /* callback called when the menu is dismissed */
+        onFinished: React.PropTypes.func,
+    },
+
     onResendClick: function() {
         Resend.resend(this.props.mxEvent);
         if (this.props.onFinished) this.props.onFinished();
@@ -66,6 +77,13 @@ module.exports = React.createClass({
         if (this.props.onFinished) this.props.onFinished();
     },
 
+    onUnhidePreviewClick: function() {
+        if (this.props.eventTileOps) {
+            this.props.eventTileOps.unhideWidget();
+        }
+        if (this.props.onFinished) this.props.onFinished();
+    },
+
     render: function() {
         var eventStatus = this.props.mxEvent.status;
         var resendButton;
@@ -73,6 +91,7 @@ module.exports = React.createClass({
         var redactButton;
         var cancelButton;
         var permalinkButton;
+        var unhidePreviewButton;
 
         if (eventStatus === 'not_sent') {
             resendButton = (
@@ -104,6 +123,16 @@ module.exports = React.createClass({
             </div>
         );
 
+        if (this.props.eventTileOps) {
+            if (this.props.eventTileOps.isWidgetHidden()) {
+                unhidePreviewButton = (
+                    <div className="mx_ContextualMenu_field" onClick={this.onUnhidePreviewClick}>
+                        Unhide Preview
+                    </div>
+                )
+            }
+        }
+
         // XXX: this should be https://matrix.to.
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         permalinkButton = (
@@ -119,6 +148,7 @@ module.exports = React.createClass({
                 {redactButton}
                 {cancelButton}
                 {viewSourceButton}
+                {unhidePreviewButton}
                 {permalinkButton}
             </div>
         );
