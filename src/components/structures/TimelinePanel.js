@@ -264,6 +264,10 @@ var TimelinePanel = React.createClass({
         // updates from pagination will happen when the paginate completes.
         if (toStartOfTimeline || !data || !data.liveEvent) return;
 
+        // even if we previously gave up forward-paginating, it's worth
+        // having another go now.
+        this.setState({canForwardPaginate: true});
+
         if (!this.refs.messagePanel) return;
 
         if (!this.refs.messagePanel.getScrollState().stuckAtBottom) return;
