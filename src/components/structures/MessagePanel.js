@@ -404,7 +404,6 @@ module.exports = React.createClass({
     _onWidgetLoad: function() {
         var scrollPanel = this.refs.scrollPanel;
         if (scrollPanel) {
-            scrollPanel.checkScroll();
             scrollPanel.forceUpdate();
         }
     },
