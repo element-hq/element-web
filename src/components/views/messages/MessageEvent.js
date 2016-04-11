@@ -38,15 +38,18 @@ module.exports = React.createClass({
         /* link URL for the highlights */
         highlightLink: React.PropTypes.string,
 
-        /* callback called when images in events are loaded */
-        onImageLoad: React.PropTypes.func,
+        /* callback called when dynamic content in events are loaded */
+        onWidgetLoad: React.PropTypes.func,
     },
 
+    getEventTileOps: function() {
+        return this.refs.body ? this.refs.body.getEventTileOps() : null;
+    },
 
     render: function() {
-        var UnknownMessageTile = sdk.getComponent('messages.UnknownBody');
+        var UnknownBody = sdk.getComponent('messages.UnknownBody');
 
-        var tileTypes = {
+        var bodyTypes = {
             'm.text': sdk.getComponent('messages.TextualBody'),
             'm.notice': sdk.getComponent('messages.TextualBody'),
             'm.emote': sdk.getComponent('messages.TextualBody'),
@@ -57,13 +60,13 @@ module.exports = React.createClass({
 
         var content = this.props.mxEvent.getContent();
         var msgtype = content.msgtype;
-        var TileType = UnknownMessageTile;
-        if (msgtype && tileTypes[msgtype]) {
-            TileType = tileTypes[msgtype];
+        var BodyType = UnknownBody;
+        if (msgtype && bodyTypes[msgtype]) {
+            BodyType = bodyTypes[msgtype];
         }
 
-        return <TileType mxEvent={this.props.mxEvent} highlights={this.props.highlights} 
+        return <BodyType ref="body" mxEvent={this.props.mxEvent} highlights={this.props.highlights}
                     highlightLink={this.props.highlightLink}
-                    onImageLoad={this.props.onImageLoad} />;
+                    onWidgetLoad={this.props.onWidgetLoad} />;
     },
 });

@@ -451,7 +451,7 @@ module.exports = React.createClass({
     onMemberAvatarClick: function () {
         var avatarUrl = this.props.member.user.avatarUrl;
         if(!avatarUrl) return;
-        
+
         var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(avatarUrl);
         var ImageView = sdk.getComponent("elements.ImageView");
         var params = {

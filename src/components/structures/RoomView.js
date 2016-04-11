@@ -798,9 +798,9 @@ module.exports = React.createClass({
             }
         }
 
-        // once images in the search results load, make the scrollPanel check
+        // once dynamic content in the search results load, make the scrollPanel check
         // the scroll offsets.
-        var onImageLoad = () => {
+        var onWidgetLoad = () => {
             var scrollPanel = this.refs.searchResultsPanel;
             if (scrollPanel) {
                 scrollPanel.checkScroll();
@@ -844,7 +844,7 @@ module.exports = React.createClass({
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
                      resultLink={resultLink}
-                     onImageLoad={onImageLoad}/>);
+                     onWidgetLoad={onWidgetLoad}/>);
         }
         return ret;
     },
