@@ -40,6 +40,19 @@ describe('TimelinePanel', function() {
     var timeline;
     var parentDiv;
 
+    function mkMessage() {
+        return test_utils.mkMessage(
+            {
+                event: true, room: ROOM_ID, user: USER_ID,
+                ts: Date.now(),
+            });
+    }
+
+    function scryEventTiles(panel) {
+        return ReactTestUtils.scryRenderedComponentsWithType(
+            panel, sdk.getComponent('rooms.EventTile'));
+    };
+
     beforeEach(function() {
         test_utils.beforeEach(this);
         sandbox = test_utils.stubClient(sandbox);
@@ -67,6 +80,77 @@ describe('TimelinePanel', function() {
             parentDiv = null;
         }
         sandbox.restore();
+    });
+
+    it('should load new events even if you are scrolled up', function(done) {
+        // this is https://github.com/vector-im/vector-web/issues/1367
+
+        // enough events to allow us to scroll back
+        for (var i = 0; i < 40; i++) {
+            timeline.addEvent(mkMessage());
+        }
+
+        var scrollDefer;
+        var panel = ReactDOM.render(
+                <TimelinePanel room={room} onScroll={() => {scrollDefer.resolve()}}
+                />,
+                parentDiv,
+        );
+        var scrollingDiv = ReactTestUtils.findRenderedDOMComponentWithClass(
+            panel, "gm-scroll-view");
+
+        // helper function which will return a promise which resolves when the
+        // panel isn't paginating
+        var awaitPaginationCompletion = function() {
+            if(!panel.state.forwardPaginating)
+                return q();
+            else
+                return q.delay(0).then(awaitPaginationCompletion);
+        };
+
+        // helper function which will return a promise which resolves when
+        // the TimelinePanel fires a scroll event
+        var awaitScroll = function() {
+            scrollDefer = q.defer();
+            return scrollDefer.promise;
+        };
+
+        // wait for the panel to load - we'll get a scroll event once it
+        // happens
+        awaitScroll().then(() => {
+            expect(panel.state.canBackPaginate).toBe(false);
+            expect(scryEventTiles(panel).length).toEqual(40);
+
+            // scroll up
+            console.log("setting scrollTop = 0");
+            scrollingDiv.scrollTop = 0;
+
+            // wait for the scroll event to land
+        }).then(awaitScroll).then(() => {
+            // there should be no pagination going on now
+            expect(panel.state.backPaginating).toBe(false);
+            expect(panel.state.forwardPaginating).toBe(false);
+            expect(panel.state.canBackPaginate).toBe(false);
+            expect(panel.state.canForwardPaginate).toBe(false);
+            expect(panel.isAtEndOfLiveTimeline()).toBe(false);
+            expect(scrollingDiv.scrollTop).toEqual(0);
+
+            console.log("adding event");
+
+            // a new event!
+            var ev = mkMessage();
+            timeline.addEvent(ev);
+            panel.onRoomTimeline(ev, room, false, false, {liveEvent: true});
+
+            // that won't make much difference, because we don't paginate
+            // unless we're at the bottom of the timeline, but a scroll event
+            // should be enough to set off a pagination.
+            expect(scryEventTiles(panel).length).toEqual(40);
+
+            scrollingDiv.scrollTop = 10;
+        }).delay(0).then(awaitPaginationCompletion).then(() => {
+            expect(scryEventTiles(panel).length).toEqual(41);
+        }).done(done);
     });
 
     it('should not paginate forever if there are no events', function(done) {
