@@ -82,10 +82,10 @@ limitations under the License.
     -webkit-justify-content: center;
     flex-direction: column;
     -webkit-flex-direction: column;
-    padding-left: 60px;
-    padding-right: 60px;
+    padding-left: 30px;
+    padding-right: 30px;
     min-height: 100%;
-    max-width: 270px;
+    max-width: 240px;
     color: #fff;
 }
 
