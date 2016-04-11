@@ -78,10 +78,6 @@ module.exports = React.createClass({
     },
 
     onUnhidePreviewClick: function() {
-        if (global.localStorage) {
-            // FIXME: factor this out with LinkPreviewWidget
-            global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
-        }
         if (this.props.eventTileOps) {
             this.props.eventTileOps.unhideWidget();
         }
@@ -127,10 +123,8 @@ module.exports = React.createClass({
             </div>
         );
 
-
-        if (global.localStorage) {
-            // FIXME: factor this out with LinkPreviewWidget
-            if (global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId()) === "1") {
+        if (this.props.eventTileOps) {
+            if (this.props.eventTileOps.isWidgetHidden()) {
                 unhidePreviewButton = (
                     <div className="mx_ContextualMenu_field" onClick={this.onUnhidePreviewClick}>
                         Unhide Preview
