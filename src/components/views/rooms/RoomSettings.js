@@ -56,7 +56,7 @@ module.exports = React.createClass({
             tags_changed: false,
             tags: tags,
             areNotifsMuted: areNotifsMuted,
-            // isRoomPublished: // set in componentWillMount
+            isRoomPublished: this._originalIsRoomPublished, // loaded async in componentWillMount
         };
     },
 
@@ -65,23 +65,24 @@ module.exports = React.createClass({
             this.props.room.roomId
         ).done((result) => {
             this.setState({ isRoomPublished: result.visibility === "public" });
+            this._originalIsRoomPublished = result.visibility === "public";
         }, (err) => {
             console.error("Failed to get room visibility: " + err);
         });
     },
-    
+
     setName: function(name) {
         this.setState({
             name: name
         });
     },
-    
+
     setTopic: function(topic) {
         this.setState({
             topic: topic
         });
     },
-    
+
     save: function() {
         var stateWasSetDefer = q.defer();
         // the caller may have JUST called setState on stuff, so we need to re-render before saving
@@ -92,13 +93,13 @@ module.exports = React.createClass({
             stateWasSetDefer.resolve();
             this.setState({ _loading: false});
         });
-        
+
         return stateWasSetDefer.promise.then(() => {
             return this._save();
         });
     },
 
-    _save: function() {    
+    _save: function() {
         const roomId = this.props.room.roomId;
         var promises = this.saveAliases(); // returns Promise[]
         var originalState = this.getInitialState();
@@ -125,7 +126,7 @@ module.exports = React.createClass({
 
         if (this.state.isRoomPublished !== originalState.isRoomPublished) {
             promises.push(MatrixClientPeg.get().setRoomDirectoryVisibility(
-                roomId, 
+                roomId,
                 this.state.isRoomPublished ? "public" : "private"
             ));
         }
@@ -187,7 +188,7 @@ module.exports = React.createClass({
 
         // color scheme
         promises.push(this.saveColor());
-        
+
         return q.allSettled(promises);
     },
 
