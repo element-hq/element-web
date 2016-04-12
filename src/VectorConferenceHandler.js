@@ -44,6 +44,7 @@ ConferenceCall.prototype.setup = function() {
         // looking for a 1:1 room with this conf user ID!)
         var call = Matrix.createNewMatrixCall(self.client, room.roomId);
         call.confUserId = self.confUserId;
+        call.groupRoomId = self.groupRoomId;
         return call;
     });
 };

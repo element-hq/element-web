@@ -79,7 +79,7 @@ var LeftPanel = React.createClass({
         if (call) {
             dis.dispatch({
                 action: 'view_room',
-                room_id: call.roomId,
+                room_id: call.groupRoomId || call.roomId,
             });
         }
     },
