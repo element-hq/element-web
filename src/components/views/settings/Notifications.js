@@ -226,6 +226,11 @@ module.exports = React.createClass({
         ERROR: "ERROR"      // There was an error
     },
 
+    propTypes: {
+        // The array of threepids from the JS SDK (required for email notifications)
+        threepids: React.PropTypes.array.isRequired,
+    },
+
     getInitialState: function() {
         return {
             phase: this.phases.LOADING,
@@ -883,6 +888,41 @@ module.exports = React.createClass({
         return rows;
     },
 
+    emailNotificationsRow: function(address, label) {
+        return (<div className="mx_UserNotifSettings_tableRow">
+            <div className="mx_UserNotifSettings_inputCell">
+                <input id="enableEmailNotifications_{address}"
+                    ref="enableEmailNotifications_{address}"
+                    type="checkbox"
+                    checked={ UserSettingsStore.hasEmailPusher(this.state.pushers, address) }
+                    onChange={ (e) => {
+                        var emailPusherPromise;
+                        if (e.target.checked) {
+                            emailPusherPromise = UserSettingsStore.addEmailPusher(address);
+                        } else {
+                            var emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
+                            emailPusher.kind = null;
+                            emailPusherPromise = MatrixClientPeg.get().setPusher(emailPusher);
+                        }
+                        emailPusherPromise.done(() => {
+                            this._refreshFromServer();
+                        }, (error) => {
+                            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                            Modal.createDialog(ErrorDialog, {
+                                title: "Error saving email notification preferences",
+                                description: "Vector was unable to save your email notification preferences.",
+                            });
+                        });
+                    }} />
+            </div>
+            <div className="mx_UserNotifSettings_labelCell">
+                <label htmlFor="enableEmailNotifications_{address}">
+                    {label}
+                </label>
+            </div>
+        </div>);
+    },
+
     render: function() {
         var self = this;
 
@@ -928,6 +968,23 @@ module.exports = React.createClass({
             );
         }
 
+        var emailNotificationsRow;
+        if (this.props.threepids.filter(function(tp) {
+                if (tp.medium == "email") {
+                    return true;
+                }
+            }).length == 0) {
+            emailNotificationsRow = <div>
+                Add an email address above to configure email notifications
+            </div>;
+        } else {
+            // This only supports the first email address in your profile for now
+            emailNotificationsRow = this.emailNotificationsRow(
+                this.props.threepids[0].address,
+                "Enable email notifications ("+this.props.threepids[0].address+")"
+            );
+        }
+
         // Build external push rules
         var externalRules = [];
         for (var i in this.state.externalPushRules) {
@@ -958,17 +1015,19 @@ module.exports = React.createClass({
             // and this wouldn't be hard to add.
             var rows = [];
             for (var i = 0; i < this.state.pushers.length; ++i) {
-                rows.push(<tr>
-                    <td>{this.state.pushers[i].app_display_name}</td>
-                    <td>{this.state.pushers[i].device_display_name}</td>
+                var p = this.state.pushers[i];
+
+                rows.push(<tr key={p.app_id+p.pushkey}>
+                    <td>{p.app_display_name}</td>
+                    <td>{p.device_display_name}</td>
                 </tr>);
             }
-            devicesSection = (<table className="mx_UserSettings_devicesTable">
+            devicesSection = (<table className="mx_UserSettings_devicesTable"><thead>
                 <tr>
                     <th>Application</th>
                     <th>Device</th>
-                </tr>
-                {rows}
+                </tr></thead>
+                <tbody>{rows}</tbody>
             </table>);
         }
 
@@ -1025,6 +1084,8 @@ module.exports = React.createClass({
                             </label>
                         </div>
                     </div>
+
+                    { emailNotificationsRow }
 
                     <h3>General use</h3>
 
