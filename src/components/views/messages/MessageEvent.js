@@ -43,7 +43,7 @@ module.exports = React.createClass({
     },
 
     getEventTileOps: function() {
-        return this.refs.body ? this.refs.body.getEventTileOps() : null;
+        return this.refs.body && this.refs.body.getEventTileOps ? this.refs.body.getEventTileOps() : null;
     },
 
     render: function() {
