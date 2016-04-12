@@ -312,7 +312,9 @@ module.exports = React.createClass({
             mx_EventTile_contextual: this.props.contextual,
             menu: this.state.menu,
         });
-        var timestamp = <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+        var timestamp = <a href={ "#/room/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }>
+                            <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                        </a>
 
         var aux = null;
         if (msgtype === 'm.image') aux = "sent an image";
