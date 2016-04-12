@@ -20,6 +20,7 @@ var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
 var Modal = require('../../../Modal');
 var ObjectUtils = require("../../../ObjectUtils");
+var dis = require("../../../dispatcher");
 
 module.exports = React.createClass({
     displayName: 'RoomSettings',
@@ -68,6 +69,20 @@ module.exports = React.createClass({
             this._originalIsRoomPublished = result.visibility === "public";
         }, (err) => {
             console.error("Failed to get room visibility: " + err);
+        });
+
+        dis.dispatch({
+            action: 'ui_opacity',
+            sideOpacity: 0.3,
+            middleOpacity: 0.3,
+        });
+    },
+
+    componentWillUnmount: function() {
+        dis.dispatch({
+            action: 'ui_opacity',
+            sideOpacity: 1.0,
+            middleOpacity: 1.0,
         });
     },
 

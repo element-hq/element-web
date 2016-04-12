@@ -76,6 +76,9 @@ var TimelinePanel = React.createClass({
 
         // callback which is called when the read-up-to mark is updated.
         onReadMarkerUpdated: React.PropTypes.func,
+
+        // opacity for dynamic UI fading effects
+        opacity: React.PropTypes.number,
     },
 
     statics: {
@@ -861,6 +864,7 @@ var TimelinePanel = React.createClass({
                     stickyBottom={ stickyBottom }
                     onScroll={ this.onMessageListScroll }
                     onFillRequest={ this.onMessageListFillRequest }
+                    opacity={ this.props.opacity }
             />
         );
     },

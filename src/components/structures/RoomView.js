@@ -1167,7 +1167,7 @@ module.exports = React.createClass({
                         <div className="mx_RoomView">
                             <Loader />
                         </div>
-                    );                
+                    );
                 }
                 else {
                     var inviterName = undefined;
@@ -1233,7 +1233,7 @@ module.exports = React.createClass({
                                             inviterName={ inviterName }
                                             canJoin={ true } canPreview={ false }
                                             spinner={this.state.joining}
-                                            room={this.state.room}                                            
+                                            room={this.state.room}
                             />
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
@@ -1314,7 +1314,7 @@ module.exports = React.createClass({
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
                                 canPreview={this.state.canPeek}
-                                room={this.state.room}                                
+                                room={this.state.room}
                 />
             );
         }
@@ -1339,7 +1339,7 @@ module.exports = React.createClass({
             messageComposer =
                 <MessageComposer
                     room={this.state.room} onResize={this.onChildResize} uploadFile={this.uploadFile}
-                    callState={this.state.callState} tabComplete={this.tabComplete} />
+                    callState={this.state.callState} tabComplete={this.tabComplete} opacity={ this.props.opacity }/>
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format
@@ -1394,8 +1394,12 @@ module.exports = React.createClass({
 
         if (this.state.searchResults) {
             searchResultsPanel = (
-                <ScrollPanel ref="searchResultsPanel" className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
-                        onFillRequest={ this.onSearchResultsFillRequest } onResize={ this.onSearchResultsResize }>
+                <ScrollPanel ref="searchResultsPanel"
+                    className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
+                    onFillRequest={ this.onSearchResultsFillRequest }
+                    onResize={ this.onSearchResultsResize }
+                    style={{ opacity: this.props.opacity }}
+                >
                     <li className={scrollheader_classes}></li>
                     {this.getSearchResultTiles()}
                 </ScrollPanel>
@@ -1412,6 +1416,7 @@ module.exports = React.createClass({
                 eventPixelOffset={this.props.eventPixelOffset}
                 onScroll={ this.onMessageListScroll }
                 onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
+                opacity={ this.props.opacity }
             />);
 
         var topUnreadMessagesBar = null;
@@ -1446,7 +1451,7 @@ module.exports = React.createClass({
                 { topUnreadMessagesBar }
                 { messagePanel }
                 { searchResultsPanel }
-                <div className="mx_RoomView_statusArea">
+                <div className="mx_RoomView_statusArea mx_fadable" style={{ opacity: this.props.opacity }}>
                     <div className="mx_RoomView_statusAreaBox">
                         <div className="mx_RoomView_statusAreaBox_line"></div>
                         { statusBar }
