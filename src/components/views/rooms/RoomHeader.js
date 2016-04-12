@@ -34,6 +34,7 @@ module.exports = React.createClass({
         room: React.PropTypes.object,
         oobData: React.PropTypes.object,
         editing: React.PropTypes.bool,
+        saving: React.PropTypes.bool,
         onSettingsClick: React.PropTypes.func,
         onSaveClick: React.PropTypes.func,
         onSearchClick: React.PropTypes.func,
@@ -134,6 +135,7 @@ module.exports = React.createClass({
         var searchStatus = null;
         var topic_el = null;
         var cancel_button = null;
+        var spinner = null;
         var save_button = null;
         var settings_button = null;
         if (this.props.editing) {
@@ -156,6 +158,11 @@ module.exports = React.createClass({
 
             save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</div>
             cancel_button = <div className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>
+        }
+
+        if (this.props.saving) {
+            var Spinner = sdk.getComponent("elements.Spinner");
+            spinner = <div className="mx_RoomHeader_spinner"><Spinner/></div>;
         }
 
         if (can_set_room_name) {
@@ -280,6 +287,7 @@ module.exports = React.createClass({
                         { topic_el }
                     </div>
                 </div>
+                {spinner}
                 {save_button}
                 {cancel_button}
                 {right_row}

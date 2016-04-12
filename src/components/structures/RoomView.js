@@ -860,6 +860,8 @@ module.exports = React.createClass({
     },
 
     onSettingsSaveClick: function() {
+        if (!this.refs.room_settings) return;
+
         this.setState({
             uploadingRoomSettings: true,
         });
@@ -1432,6 +1434,7 @@ module.exports = React.createClass({
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                     oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
+                    saving={this.state.uploadingRoomSettings}
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}
                     onSaveClick={this.onSettingsSaveClick}
