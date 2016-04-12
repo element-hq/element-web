@@ -586,6 +586,7 @@ module.exports = React.createClass({
             if (!error) return;
 
             // https://matrix.org/jira/browse/SYN-659
+            // Need specific error message if joining a room is refused because the user is a guest and guest access is not allowed
             if (
                 error.errcode == 'M_GUEST_ACCESS_FORBIDDEN' ||
                 (
@@ -601,6 +602,11 @@ module.exports = React.createClass({
             } else {
                 var msg = error.message ? error.message : JSON.stringify(error);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                if (msg === "No known servers") {
+                    // minging kludge until https://matrix.org/jira/browse/SYN-678 is fixed
+                    // 'Error when trying to join an empty room should be more explicit'
+                    msg = "It is not currently possible to re-join an empty room.";
+                }
                 Modal.createDialog(ErrorDialog, {
                     title: "Failed to join room",
                     description: msg
