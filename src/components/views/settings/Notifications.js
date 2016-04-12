@@ -952,6 +952,8 @@ module.exports = React.createClass({
         } else if (this.state.pushers.length == 0) {
             devicesSection = <div><i>No devices are push notifications</i></div>
         } else {
+            // It would be great to be able to delete pushers from here too,
+            // and this wouldn't be hard to add.
             var rows = [];
             for (var i = 0; i < this.state.pushers.length; ++i) {
                 rows.push(<tr>
