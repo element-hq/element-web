@@ -74,10 +74,13 @@ class ContentMessages {
         var def = q.defer();
         if (file.type.indexOf('image/') == 0) {
             content.msgtype = 'm.image';
-            infoForImageFile(file).then(function(imageInfo) {
+            infoForImageFile(file).then(function (imageInfo) {
                 extend(content.info, imageInfo);
                 def.resolve();
             });
+        } else if (file.type.indexOf('audio/') == 0) {
+            content.msgtype = 'm.audio';
+            def.resolve();
         } else {
             content.msgtype = 'm.file';
             def.resolve();
