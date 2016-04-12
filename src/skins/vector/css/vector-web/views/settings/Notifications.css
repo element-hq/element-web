@@ -60,3 +60,11 @@ limitations under the License.
     cursor: pointer;
     color: #76cfa6;
 }
+
+.mx_UserSettings_devicesTable td {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.mx_UserSettings_devicesTable_nodevices {
+    font-style: italic;
+}
