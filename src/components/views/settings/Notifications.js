@@ -950,7 +950,9 @@ module.exports = React.createClass({
         if (this.state.pushers === undefined) {
             devicesSection = <div className="error">Unable to fetch device list</div>
         } else if (this.state.pushers.length == 0) {
-            devicesSection = <div><i>No devices are push notifications</i></div>
+            devicesSection = <div className="mx_UserSettings_devicesTable_nodevices">
+                No devices are receiving push notifications
+            </div>
         } else {
             // It would be great to be able to delete pushers from here too,
             // and this wouldn't be hard to add.

@@ -65,3 +65,6 @@ limitations under the License.
     padding-left: 20px;
     padding-right: 20px;
 }
+.mx_UserSettings_devicesTable_nodevices {
+    font-style: italic;
+}
