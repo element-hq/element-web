@@ -67,6 +67,8 @@ module.exports = React.createClass({
             collapse_rhs: false,
             ready: false,
             width: 10000,
+            sideOpacity: 1.0,
+            middleOpacity: 1.0,
         };
         if (s.logged_in) {
             if (MatrixClientPeg.get().getRooms().length) {
@@ -369,7 +371,7 @@ module.exports = React.createClass({
                     onFinished: function(should_leave) {
                         if (should_leave) {
                             var d = MatrixClientPeg.get().leave(roomId);
-                            
+
                             // FIXME: controller shouldn't be loading a view :(
                             var Loader = sdk.getComponent("elements.Spinner");
                             var modal = Modal.createDialog(Loader);
@@ -532,6 +534,12 @@ module.exports = React.createClass({
             case 'show_right_panel':
                 this.setState({
                     collapse_rhs: false,
+                });
+                break;
+            case 'ui_opacity':
+                this.setState({
+                    sideOpacity: payload.sideOpacity,
+                    middleOpacity: payload.middleOpacity,
                 });
                 break;
         }
@@ -887,7 +895,7 @@ module.exports = React.createClass({
         dis.dispatch({
             action: 'view_user',
             member: member,
-        });        
+        });
     },
 
     onLogoutClick: function(event) {
@@ -1034,7 +1042,7 @@ module.exports = React.createClass({
         var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
 
-        // work out the HS URL prompts we should show for 
+        // work out the HS URL prompts we should show for
 
         // needs to be before normal PageTypes as you are logged in technically
         if (this.state.screen == 'post_registration') {
@@ -1060,21 +1068,22 @@ module.exports = React.createClass({
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}
                             key={this.state.currentRoom}
+                            opacity={this.state.middleOpacity}
                             ConferenceHandler={this.props.ConferenceHandler} />
                     );
-                    right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} />
+                    right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity} />
                     break;
                 case this.PageTypes.UserSettings:
                     page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} />
-                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
                 case this.PageTypes.CreateRoom:
                     page_element = <CreateRoom onRoomCreated={this.onRoomCreated}/>
-                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
                 case this.PageTypes.RoomDirectory:
                     page_element = <RoomDirectory />
-                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
             }
 
@@ -1098,7 +1107,7 @@ module.exports = React.createClass({
                 <div className="mx_MatrixChat_wrapper">
                     {topBar}
                     <div className={bodyClasses}>
-                        <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
+                        <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} opacity={this.state.sideOpacity}/>
                         <main className="mx_MatrixChat_middlePanel">
                             {page_element}
                         </main>

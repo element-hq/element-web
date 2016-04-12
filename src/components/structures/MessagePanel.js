@@ -65,6 +65,9 @@ module.exports = React.createClass({
 
         // callback which is called when more content is needed.
         onFillRequest: React.PropTypes.func,
+
+        // opacity for dynamic UI fading effects
+        opacity: React.PropTypes.number,
     },
 
     componentWillMount: function() {
@@ -423,12 +426,15 @@ module.exports = React.createClass({
             bottomSpinner = <li key="_bottomSpinner"><Spinner /></li>;
         }
 
+        var style = this.props.hidden ? { display: 'none' } : {};
+        style.opacity = this.props.opacity;
+
         return (
-            <ScrollPanel ref="scrollPanel" className="mx_RoomView_messagePanel"
+            <ScrollPanel ref="scrollPanel" className="mx_RoomView_messagePanel mx_fadable"
                     onScroll={ this.props.onScroll } 
                     onResize={ this.onResize }
                     onFillRequest={ this.props.onFillRequest }
-                    style={ this.props.hidden ? { display: 'none' } : {} }
+                    style={ style }
                     stickyBottom={ this.props.stickyBottom }>
                 {topSpinner}
                 {this._getEventTiles()}
