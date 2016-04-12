@@ -35,7 +35,7 @@ module.exports = React.createClass({
                     <img src="img/scrollup.svg" width="24" height="24"
                         alt="Scroll to unread messages"
                         title="Scroll to unread messages"/>
-                    Unread messages
+                    Unread messages. <span style={{ textDecoration: 'underline' }} onClick={this.props.onCloseClick}>Mark all read</span>
                 </div>
                 <img className="mx_TopUnreadMessagesBar_close"
                     src="img/cancel.svg" width="18" height="18"
