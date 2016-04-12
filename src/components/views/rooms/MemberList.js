@@ -23,6 +23,7 @@ var Entities = require("../../../Entities");
 var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var rate_limited_func = require('../../../ratelimitedfunc');
+var CallHandler = require("../../../CallHandler");
 
 var INITIAL_LOAD_NUM_MEMBERS = 30;
 var SHARE_HISTORY_WARNING =
@@ -285,6 +286,7 @@ module.exports = React.createClass({
     roomMembers: function(limit) {
         var all_members = this.memberDict || {};
         var all_user_ids = Object.keys(all_members);
+        var ConferenceHandler = CallHandler.getConferenceHandler();
 
         if (this.memberSort) all_user_ids.sort(this.memberSort);
 
@@ -295,8 +297,10 @@ module.exports = React.createClass({
             var m = all_members[user_id];
 
             if (m.membership == 'join' || m.membership == 'invite') {
-                to_display.push(user_id);
-                ++count;
+                if ((ConferenceHandler && !ConferenceHandler.isConferenceUser(user_id)) || !ConferenceHandler) {
+                    to_display.push(user_id);
+                    ++count;
+                }
             }
         }
         return to_display;
@@ -340,7 +344,7 @@ module.exports = React.createClass({
 
         var lastActiveTsA = userA && userA.lastActiveAgo ? userA.lastPresenceTs - userA.lastActiveAgo : 0;
         var lastActiveTsB = userB && userB.lastActiveAgo ? userB.lastPresenceTs - userB.lastActiveAgo : 0;
-        
+
         return lastActiveTsB - lastActiveTsA;
     },
 
