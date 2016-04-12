@@ -89,7 +89,7 @@ var LeftPanel = React.createClass({
         var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
 
         var collapseButton;
-        var classes = "mx_LeftPanel";
+        var classes = "mx_LeftPanel mx_fadable";
         if (this.props.collapsed) {
             classes += " collapsed";
         }
@@ -109,7 +109,7 @@ var LeftPanel = React.createClass({
         }
 
         return (
-            <aside className={classes}>
+            <aside className={classes} style={{ opacity: this.props.opacity }}>
                 { collapseButton }
                 { callPreview }
                 <RoomList
