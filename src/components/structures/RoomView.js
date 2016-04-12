@@ -54,11 +54,15 @@ module.exports = React.createClass({
     propTypes: {
         ConferenceHandler: React.PropTypes.any,
 
-        roomId: React.PropTypes.string.isRequired,
-
-        // if we are referring to this room by a given alias (e.g. in the URL), track it.
-        // useful for joining rooms by alias correctly (and fixing https://github.com/vector-im/vector-web/issues/819)
-        roomAlias: React.PropTypes.string,
+        // the ID for this room (or, if we don't know it, an alias for it)
+        //
+        // XXX: if this is an alias, we will display a 'join' dialogue,
+        // regardless of whether we are already a member, or if the room is
+        // peekable. Currently there is a big mess, where at least four
+        // different components (RoomView, MatrixChat, RoomDirectory,
+        // SlashCommands) have logic for turning aliases into rooms, and each
+        // of them do it differently and have different edge cases.
+        roomAlias: React.PropTypes.string.isRequired,
 
         // An object representing a third party invite to join this room
         // Fields:
@@ -93,7 +97,7 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        var room = this.props.roomId ? MatrixClientPeg.get().getRoom(this.props.roomId) : null;
+        var room = MatrixClientPeg.get().getRoom(this.props.roomAlias);
         return {
             room: room,
             roomLoading: !room,
@@ -123,7 +127,6 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room", this.onRoom);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
-        MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         // xchat-style tab complete, add a colon if tab
@@ -146,9 +149,9 @@ module.exports = React.createClass({
         // We can /peek though. If it fails then we present the join UI. If it
         // succeeds then great, show the preview (but we still may be able to /join!).
         if (!this.state.room) {
-            console.log("Attempting to peek into room %s", this.props.roomId);
+            console.log("Attempting to peek into room %s", this.props.roomAlias);
 
-            MatrixClientPeg.get().peekInRoom(this.props.roomId).then((room) => {
+            MatrixClientPeg.get().peekInRoom(this.props.roomAlias).then((room) => {
                 this.setState({
                     room: room,
                     roomLoading: false,
@@ -200,7 +203,6 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
-            MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
@@ -233,7 +235,7 @@ module.exports = React.createClass({
                     return;
                 }
 
-                var call = CallHandler.getCallForRoom(payload.room_id);
+                var call = this._getCallForRoom();
                 var callState;
 
                 if (call) {
@@ -256,7 +258,7 @@ module.exports = React.createClass({
     },
 
     componentWillReceiveProps: function(newProps) {
-        if (newProps.roomId != this.props.roomId) {
+        if (newProps.roomAlias != this.props.roomAlias) {
             throw new Error("changing room on a RoomView is not supported");
         }
 
@@ -270,7 +272,7 @@ module.exports = React.createClass({
         if (this.unmounted) return;
 
         // ignore events for other rooms
-        if (room.roomId != this.props.roomId) return;
+        if (!this.state.room || room.roomId != this.state.room.roomId) return;
 
         // ignore anything but real-time updates at the end of the room:
         // updates from pagination will happen when the paginate completes.
@@ -321,30 +323,18 @@ module.exports = React.createClass({
         // set it in our state and start using it (ie. init the timeline)
         // This will happen if we start off viewing a room we're not joined,
         // then join it whilst RoomView is looking at that room.
-        if (room.roomId == this.props.roomId && !this.state.room) {
+        if (!this.state.room && room.roomId == this._joiningRoomId) {
+            this._joiningRoomId = undefined;
             this.setState({
-                room: room
+                room: room,
+                joining: false,
             });
             this._onRoomLoaded(room);
         }
     },
 
-    onRoomName: function(room) {
-        // NB don't set state.room here.
-        //
-        // When peeking, this event lands *before* the timeline is correctly
-        // synced; if we set state.room here, the TimelinePanel will be
-        // instantiated, and it will initialise its scroll state, with *no
-        // events*. In short, the scroll state will be all messed up.
-        //
-        // There's no need to set state.room here anyway.
-        if (room.roomId == this.props.roomId) { 
-            this.forceUpdate();
-        }
-    },
-
     updateTint: function() {
-        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        var room = this.state.room;
         if (!room) return;
 
         var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
@@ -367,28 +357,33 @@ module.exports = React.createClass({
     },
 
     onRoomStateMember: function(ev, state, member) {
-        if (member.roomId === this.props.roomId) {
-            // a member state changed in this room, refresh the tab complete list
-            this._updateTabCompleteList();
-
-            var room = MatrixClientPeg.get().getRoom(this.props.roomId);
-            if (!room) return;
-            var me = MatrixClientPeg.get().credentials.userId;
-            if (this.state.joining && room.hasMembershipState(me, "join")) {
-                this.setState({
-                    joining: false
-                });
-            }
-        }
-
-        if (!this.props.ConferenceHandler) {
+        // ignore if we don't have a room yet
+        if (!this.state.room) {
             return;
         }
-        if (member.roomId !== this.props.roomId ||
-                member.userId !== this.props.ConferenceHandler.getConferenceUserIdForRoom(member.roomId)) {
+
+        // ignore members in other rooms
+        if (member.roomId !== this.state.room.roomId) {
             return;
         }
-        this._updateConfCallNotification();
+
+        // a member state changed in this room, refresh the tab complete list
+        this._updateTabCompleteList();
+
+        // if we are now a member of the room, where we were not before, that
+        // means we have finished joining a room we were previously peeking
+        // into.
+        var me = MatrixClientPeg.get().credentials.userId;
+        if (this.state.joining && this.state.room.hasMembershipState(me, "join")) {
+            this.setState({
+                joining: false
+            });
+        }
+
+        if (this.props.ConferenceHandler &&
+            member.userId === this.props.ConferenceHandler.getConferenceUserIdForRoom(member.roomId)) {
+            this._updateConfCallNotification();
+        }
     },
 
     _hasUnsentMessages: function(room) {
@@ -403,12 +398,12 @@ module.exports = React.createClass({
     },
 
     _updateConfCallNotification: function() {
-        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        var room = this.state.room;
         if (!room || !this.props.ConferenceHandler) {
             return;
         }
         var confMember = room.getMember(
-            this.props.ConferenceHandler.getConferenceUserIdForRoom(this.props.roomId)
+            this.props.ConferenceHandler.getConferenceUserIdForRoom(room.roomId)
         );
 
         if (!confMember) {
@@ -427,7 +422,7 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        var call = CallHandler.getCallForRoom(this.props.roomId);
+        var call = this._getCallForRoom();
         var callState = call ? call.call_state : "ended";
         this.setState({
             callState: callState
@@ -559,25 +554,35 @@ module.exports = React.createClass({
 
         display_name_promise.then(() => {
             var sign_url = this.props.thirdPartyInvite ? this.props.thirdPartyInvite.inviteSignUrl : undefined;
-            return MatrixClientPeg.get().joinRoom(this.props.roomAlias || this.props.roomId,
+            return MatrixClientPeg.get().joinRoom(this.props.roomAlias,
                                                   { inviteSignUrl: sign_url } )
-        }).done(function() {
+        }).then(function(resp) {
+            var roomId = resp.roomId;
+
             // It is possible that there is no Room yet if state hasn't come down
             // from /sync - joinRoom will resolve when the HTTP request to join succeeds,
             // NOT when it comes down /sync. If there is no room, we'll keep the
-            // joining flag set until we see it. Likewise, if our state is not
-            // "join" we'll keep this flag set until it comes down /sync.
+            // joining flag set until we see it.
 
             // We'll need to initialise the timeline when joining, but due to
             // the above, we can't do it here: we do it in onRoom instead,
             // once we have a useable room object.
-            var room = MatrixClientPeg.get().getRoom(self.props.roomId);
-            var me = MatrixClientPeg.get().credentials.userId;
-            self.setState({
-                joining: room ? !room.hasMembershipState(me, "join") : true,
-                room: room
-            });
-        }, function(error) {
+            var room = MatrixClientPeg.get().getRoom(roomId);
+            if (!room) {
+                // wait for the room to turn up in onRoom.
+                self._joiningRoomId = roomId;
+            } else {
+                // we've got a valid room, but that might also just mean that
+                // it was peekable (so we had one before anyway).  If we are
+                // not yet a member of the room, we will need to wait for that
+                // to happen, in onRoomStateMember.
+                var me = MatrixClientPeg.get().credentials.userId;
+                self.setState({
+                    joining: !room.hasMembershipState(me, "join"),
+                    room: room
+                });
+            }
+        }).catch(function(error) {
             self.setState({
                 joining: false,
                 joinError: error
@@ -606,7 +611,8 @@ module.exports = React.createClass({
                     description: msg
                 });
             }
-        });
+        }).done();
+
         this.setState({
             joining: true
         });
@@ -661,7 +667,7 @@ module.exports = React.createClass({
     uploadFile: function(file) {
         var self = this;
         ContentMessages.sendContentToRoom(
-            file, this.props.roomId, MatrixClientPeg.get()
+            file, this.state.room.roomId, MatrixClientPeg.get()
         ).done(undefined, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
@@ -696,7 +702,7 @@ module.exports = React.createClass({
             filter = {
                 // XXX: it's unintuitive that the filter for searching doesn't have the same shape as the v2 filter API :(
                 rooms: [
-                    this.props.roomId
+                    this.state.room.roomId
                 ]
             };
         }
@@ -902,12 +908,12 @@ module.exports = React.createClass({
     onLeaveClick: function() {
         dis.dispatch({
             action: 'leave_room',
-            room_id: this.props.roomId,
+            room_id: this.state.room.roomId,
         });
     },
 
     onForgetClick: function() {
-        MatrixClientPeg.get().forget(this.props.roomId).done(function() {
+        MatrixClientPeg.get().forget(this.state.room.roomId).done(function() {
             dis.dispatch({ action: 'view_next_room' });
         }, function(err) {
             var errCode = err.errcode || "unknown error code";
@@ -924,7 +930,7 @@ module.exports = React.createClass({
         this.setState({
             rejecting: true
         });
-        MatrixClientPeg.get().leave(this.props.roomId).done(function() {
+        MatrixClientPeg.get().leave(this.props.roomAlias).done(function() {
             dis.dispatch({ action: 'view_next_room' });
             self.setState({
                 rejecting: false
@@ -1081,7 +1087,7 @@ module.exports = React.createClass({
     },
 
     onMuteAudioClick: function() {
-        var call = CallHandler.getCallForRoom(this.props.roomId);
+        var call = this._getCallForRoom();
         if (!call) {
             return;
         }
@@ -1093,7 +1099,7 @@ module.exports = React.createClass({
     },
 
     onMuteVideoClick: function() {
-        var call = CallHandler.getCallForRoom(this.props.roomId);
+        var call = this._getCallForRoom();
         if (!call) {
             return;
         }
@@ -1133,6 +1139,29 @@ module.exports = React.createClass({
         }
     },
 
+    /**
+     * Get the ID of the displayed room
+     *
+     * Returns null if the RoomView was instantiated on a room alias and
+     * we haven't yet joined the room.
+     */
+    getRoomId: function() {
+        if (!this.state.room) {
+            return null;
+        }
+        return this.state.room.roomId;
+    },
+
+    /**
+     * get any current call for this room
+     */
+    _getCallForRoom: function() {
+        if (!this.state.room) {
+            return null;
+        }
+        return CallHandler.getCallForRoom(this.state.room.roomId);
+    },
+
     // this has to be a proper method rather than an unnamed function,
     // otherwise react calls it with null on each update.
     _gatherTimelinePanelRef: function(r) {
@@ -1155,7 +1184,6 @@ module.exports = React.createClass({
         var TimelinePanel = sdk.getComponent("structures.TimelinePanel");
 
         if (!this.state.room) {
-            if (this.props.roomId) {
                 if (this.state.roomLoading) {
                     return (
                         <div className="mx_RoomView">
@@ -1192,12 +1220,6 @@ module.exports = React.createClass({
                         </div>
                     );                    
                 }
-            }
-            else {
-                return (
-                    <div />
-                );
-            }
         }
 
         var myUserId = MatrixClientPeg.get().credentials.userId;
@@ -1239,7 +1261,7 @@ module.exports = React.createClass({
         // We have successfully loaded this room, and are not previewing.
         // Display the "normal" room view.
 
-        var call = CallHandler.getCallForRoom(this.props.roomId);
+        var call = this._getCallForRoom();
         var inCall = false;
         if (call && (this.state.callState !== 'ended' && this.state.callState !== 'ringing')) {
             inCall = true;
