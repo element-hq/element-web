@@ -601,7 +601,7 @@ module.exports = React.createClass({
 
     _refreshFromServer: function() {
         var self = this;
-        MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).done(function(rulesets) {
+        var pushRulesPromise = MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).done(function(rulesets) {
             MatrixClientPeg.get().pushRules = rulesets;
 
             // Get homeserver default rules and triage them by categories
@@ -811,9 +811,19 @@ module.exports = React.createClass({
                     self.state.externalPushRules.push(rule);
                 }
             }
+        });
 
+        var pushersPromise = MatrixClientPeg.get().getPushers().then(function(resp) {
+            self.setState({pushers: resp.pushers});
+        });
+
+        q.all([pushRulesPromise, pushersPromise]).done(function() {
             self.setState({
                 phase: self.phases.DISPLAY
+            });
+        }, function(error) {
+            self.setState({
+                phase: self.phases.ERROR
             });
         });
     },
@@ -936,6 +946,28 @@ module.exports = React.createClass({
             externalRules.push(<li>Notifications on the following keywords follow rules which can’t be displayed here: { externalKeyWords }</li>);
         }
 
+        var devicesSection;
+        if (this.state.pushers === undefined) {
+            devicesSection = <div className="error">Unable to fetch device list</div>
+        } else if (this.state.pushers.length == 0) {
+            devicesSection = <div><i>No devices are push notifications</i></div>
+        } else {
+            var rows = [];
+            for (var i = 0; i < this.state.pushers.length; ++i) {
+                rows.push(<tr>
+                    <td>{this.state.pushers[i].app_display_name}</td>
+                    <td>{this.state.pushers[i].device_display_name}</td>
+                </tr>);
+            }
+            devicesSection = (<table className="mx_UserSettings_devicesTable">
+                <tr>
+                    <th>Application</th>
+                    <th>Device</th>
+                </tr>
+                {rows}
+            </table>);
+        }
+
         var advancedSettings;
         if (externalRules.length) {
             advancedSettings = (
@@ -1009,6 +1041,10 @@ module.exports = React.createClass({
                             </tbody>
                         </table>
                     </div>
+
+                    <h3>Devices</h3>
+
+                    { devicesSection }
 
                     { advancedSettings }
 
