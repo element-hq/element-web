@@ -1046,11 +1046,10 @@ module.exports = React.createClass({
                         </table>
                     </div>
 
-                    <h3>Devices</h3>
-
-                    { devicesSection }
-
                     { advancedSettings }
+
+                    <h3>Devices</h3>
+                    { devicesSection }
 
                 </div>
 
