@@ -1425,7 +1425,7 @@ module.exports = React.createClass({
         if (this.state.showTopUnreadMessagesBar) {
             var TopUnreadMessagesBar = sdk.getComponent('rooms.TopUnreadMessagesBar');
             topUnreadMessagesBar = (
-                <div className="mx_RoomView_topUnreadMessagesBar">
+                <div className="mx_RoomView_topUnreadMessagesBar" style={{ opacity: this.props.opacity }}>
                     <TopUnreadMessagesBar
                        onScrollUpClick={this.jumpToReadMarker}
                        onCloseClick={this.forgetReadMarker}
