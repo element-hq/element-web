@@ -26,7 +26,7 @@
     "start:prod": "parallelshell \"npm run start:js:prod\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
     "clean": "rimraf lib vector/bundle.css vector/bundle.js vector/bundle.js.map vector/webpack.css*",
     "prepublish": "npm run build:css && npm run build:compile",
-    "test": "karma start --single-run=true --browsers PhantomJS --colors=false",
+    "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
     "test:multi": "karma start"
   },
   "dependencies": {
