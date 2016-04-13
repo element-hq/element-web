@@ -99,15 +99,36 @@ module.exports = React.createClass({
         }
     },
 
-    _getInitialLetter: function() {
-        var name = this.props.name;
-        //For large characters (exceeding 2 bytes), this function will get the correct character.
-        //However, this does NOT get the second character correctly if a large character is before it.
-        var initial = String.fromCodePoint(name.codePointAt(0));
-        if ((initial === '@' || initial === '#') && name[1]) {
-            initial = String.fromCodePoint(name.codePointAt(1));
+    /**
+     * returns the first (non-sigil) character of 'name',
+     * converted to uppercase
+     */
+    _getInitialLetter: function(name) {
+        if (name.length < 1) {
+            return undefined;
         }
-        return initial.toUpperCase();
+
+        var idx = 0;
+        var initial = name[0];
+        if ((initial === '@' || initial === '#') && name[1]) {
+            idx++;
+        }
+
+        // string.codePointAt(0) would do this, but that isn't supported by
+        // some browsers (notably PhantomJS).
+        var chars = 1;
+        var first = name.charCodeAt(idx);
+
+        // check if it’s the start of a surrogate pair
+        if (first >= 0xD800 && first <= 0xDBFF && name[idx+1]) {
+            var second = name.charCodeAt(idx+1);
+            if (second >= 0xDC00 && second <= 0xDFFF) {
+                chars++;
+            }
+        }
+
+        var firstChar = name.substring(idx, idx+chars);
+        return firstChar.toUpperCase();
     },
 
     render: function() {
@@ -116,7 +137,7 @@ module.exports = React.createClass({
         var imageUrl = this.state.imageUrls[this.state.urlsIndex];
 
         if (imageUrl === this.state.defaultImageUrl) {
-            var initialLetter = this._getInitialLetter();
+            var initialLetter = this._getInitialLetter(this.props.name);
             return (
                 <span className="mx_BaseAvatar" {...this.props}>
                     <span className="mx_BaseAvatar_initial" aria-hidden="true"
