@@ -628,10 +628,13 @@ module.exports = React.createClass({
         if (!this.refs.roomView) {
             return;
         }
-
         var roomview = this.refs.roomView;
+        var roomId = this.refs.roomView.getRoomId();
+        if (!roomId) {
+            return;
+        }
         var state = roomview.getScrollState();
-        this.scrollStateMap[roomview.props.roomId] = state;
+        this.scrollStateMap[roomId] = state;
     },
 
     onLoggedIn: function(credentials) {
@@ -1066,8 +1069,7 @@ module.exports = React.createClass({
                     page_element = (
                         <RoomView
                             ref="roomView"
-                            roomId={this.state.currentRoom}
-                            roomAlias={this.state.currentRoomAlias}
+                            roomAddress={this.state.currentRoom || this.state.currentRoomAlias}
                             eventId={this.state.initialEventId}
                             thirdPartyInvite={this.state.thirdPartyInvite}
                             oobData={this.state.roomOobData}
