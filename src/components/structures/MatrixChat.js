@@ -185,6 +185,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        this._stopMatrixClient();
         dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
         window.removeEventListener("focus", this.onFocus);
@@ -260,12 +261,7 @@ module.exports = React.createClass({
                     window.localStorage.setItem("mx_hs_url", hsUrl);
                     window.localStorage.setItem("mx_is_url", isUrl);
                 }
-                Notifier.stop();
-                UserActivity.stop();
-                Presence.stop();
-                MatrixClientPeg.get().stopClient();
-                MatrixClientPeg.get().removeAllListeners();
-                MatrixClientPeg.unset();
+                this._stopMatrixClient();
                 this.notifyNewScreen('login');
                 this.replaceState({
                     logged_in: false,
@@ -728,6 +724,16 @@ module.exports = React.createClass({
             pendingEventOrdering: "detached",
             initialSyncLimit: this.props.config.sync_timeline_limit || 20,
         });
+    },
+
+    // stop all the background processes related to the current client
+    _stopMatrixClient: function() {
+        Notifier.stop();
+        UserActivity.stop();
+        Presence.stop();
+        MatrixClientPeg.get().stopClient();
+        MatrixClientPeg.get().removeAllListeners();
+        MatrixClientPeg.unset();
     },
 
     onKeyDown: function(ev) {
