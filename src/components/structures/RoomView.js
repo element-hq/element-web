@@ -62,7 +62,7 @@ module.exports = React.createClass({
         // different components (RoomView, MatrixChat, RoomDirectory,
         // SlashCommands) have logic for turning aliases into rooms, and each
         // of them do it differently and have different edge cases.
-        roomAlias: React.PropTypes.string.isRequired,
+        roomAddress: React.PropTypes.string.isRequired,
 
         // An object representing a third party invite to join this room
         // Fields:
@@ -97,7 +97,7 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        var room = MatrixClientPeg.get().getRoom(this.props.roomAlias);
+        var room = MatrixClientPeg.get().getRoom(this.props.roomAddress);
         return {
             room: room,
             roomLoading: !room,
@@ -149,9 +149,9 @@ module.exports = React.createClass({
         // We can /peek though. If it fails then we present the join UI. If it
         // succeeds then great, show the preview (but we still may be able to /join!).
         if (!this.state.room) {
-            console.log("Attempting to peek into room %s", this.props.roomAlias);
+            console.log("Attempting to peek into room %s", this.props.roomAddress);
 
-            MatrixClientPeg.get().peekInRoom(this.props.roomAlias).then((room) => {
+            MatrixClientPeg.get().peekInRoom(this.props.roomAddress).then((room) => {
                 this.setState({
                     room: room,
                     roomLoading: false,
@@ -258,7 +258,7 @@ module.exports = React.createClass({
     },
 
     componentWillReceiveProps: function(newProps) {
-        if (newProps.roomAlias != this.props.roomAlias) {
+        if (newProps.roomAddress != this.props.roomAddress) {
             throw new Error("changing room on a RoomView is not supported");
         }
 
@@ -554,7 +554,7 @@ module.exports = React.createClass({
 
         display_name_promise.then(() => {
             var sign_url = this.props.thirdPartyInvite ? this.props.thirdPartyInvite.inviteSignUrl : undefined;
-            return MatrixClientPeg.get().joinRoom(this.props.roomAlias,
+            return MatrixClientPeg.get().joinRoom(this.props.roomAddress,
                                                   { inviteSignUrl: sign_url } )
         }).then(function(resp) {
             var roomId = resp.roomId;
@@ -930,7 +930,7 @@ module.exports = React.createClass({
         this.setState({
             rejecting: true
         });
-        MatrixClientPeg.get().leave(this.props.roomAlias).done(function() {
+        MatrixClientPeg.get().leave(this.props.roomAddress).done(function() {
             dis.dispatch({ action: 'view_next_room' });
             self.setState({
                 rejecting: false

@@ -1055,7 +1055,7 @@ module.exports = React.createClass({
                     page_element = (
                         <RoomView
                             ref="roomView"
-                            roomAlias={this.state.currentRoom || this.state.currentRoomAlias}
+                            roomAddress={this.state.currentRoom || this.state.currentRoomAlias}
                             eventId={this.state.initialEventId}
                             thirdPartyInvite={this.state.thirdPartyInvite}
                             oobData={this.state.roomOobData}
