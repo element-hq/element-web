@@ -53,13 +53,16 @@ describe('joining a room', function () {
             httpBackend = new MockHttpBackend();
             jssdk.request(httpBackend.requestFn);
             parentDiv = document.createElement('div');
-            document.body.appendChild(parentDiv);
+
+            // uncomment this to actually add the div to the UI, to help with
+            // debugging (but slow things down)
+            // document.body.appendChild(parentDiv);
         });
 
         afterEach(function() {
             if (parentDiv) {
                 ReactDOM.unmountComponentAtNode(parentDiv);
-                document.body.removeChild(parentDiv);
+                parentDiv.remove();
                 parentDiv = null;
             }
             httpBackend.verifyNoOutstandingRequests();
