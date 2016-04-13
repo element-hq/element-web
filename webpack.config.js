@@ -42,6 +42,9 @@ module.exports = {
             // we tend to get the react source included twice when using npm link.
             react: path.resolve('./node_modules/react'),
 
+            // same goes for js-sdk
+            "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
+
             // matrix-js-sdk will use olm if it is available,
             // but does not explicitly depend on it. Pull it
             // in from node_modules if it's there.
