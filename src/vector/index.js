@@ -135,6 +135,7 @@ var lastLoadedScreen = null;
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
 var onNewScreen = function(screen) {
+    console.log("newscreen "+screen);
     if (!loaded) {
         lastLoadedScreen = screen;
     } else {
