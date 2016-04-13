@@ -79,6 +79,17 @@ module.exports = React.createClass({
         }
         var oob_data = {};
         if (room) {
+            if (MatrixClientPeg.get().isGuest()) {
+                if (!room.world_readable && !room.guest_can_join) {
+                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+                    Modal.createDialog(NeedToRegisterDialog, {
+                        title: "Failed to join the room",
+                        description: "This room is inaccessible to guests. You may be able to join if you register."
+                    });
+                    return;
+                }
+            }
+
             oob_data = {
                 avatarUrl: room.avatar_url,
                 // XXX: This logic is duplicated from the JS SDK which
