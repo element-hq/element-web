@@ -127,7 +127,7 @@ module.exports = React.createClass({
         var controls = [];
 
         controls.push(
-            <div className="mx_MessageComposer_avatar">
+            <div key="controls_avatar" className="mx_MessageComposer_avatar">
                 <MemberAvatar member={me} width={24} height={24} />
             </div>
         );
@@ -135,17 +135,17 @@ module.exports = React.createClass({
         var callButton, videoCallButton, hangupButton;
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
-                <div className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
+                <div key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
                     <img src="img/hangup.svg" alt="Hangup" title="Hangup" width="25" height="26"/>
                 </div>;
         }
         else {
             callButton =
-                <div className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
+                <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
                     <TintableSvg src="img/voice.svg" width="16" height="26"/>
                 </div>
             videoCallButton =
-                <div className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
+                <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
                     <TintableSvg src="img/call.svg" width="30" height="22"/>
                 </div>
         }
@@ -158,7 +158,7 @@ module.exports = React.createClass({
             // check separately for whether we can call, but this is slightly
             // complex because of conference calls.
             var uploadButton = (
-                <div className="mx_MessageComposer_upload"
+                <div key="controls_upload" className="mx_MessageComposer_upload"
                         onClick={this.onUploadClick} title="Upload file">
                     <TintableSvg src="img/upload.svg" width="19" height="24"/>
                     <input ref="uploadInput" type="file"
@@ -169,7 +169,7 @@ module.exports = React.createClass({
             );
 
             controls.push(
-                <MessageComposerInput tabComplete={this.props.tabComplete}
+                <MessageComposerInput key="controls_input" tabComplete={this.props.tabComplete}
                     onResize={this.props.onResize} room={this.props.room} />,
                 uploadButton,
                 hangupButton,
@@ -178,7 +178,7 @@ module.exports = React.createClass({
             );
         } else {
             controls.push(
-                <div className="mx_MessageComposer_noperm_error">
+                <div key="controls_error" className="mx_MessageComposer_noperm_error">
                     You do not have permission to post to this room
                 </div>
             );
