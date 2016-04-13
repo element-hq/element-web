@@ -986,7 +986,8 @@ module.exports = React.createClass({
     },
 
     // update the read marker to match the read-receipt
-    forgetReadMarker: function() {
+    forgetReadMarker: function(ev) {
+        ev.stopPropagation();
         this.refs.messagePanel.forgetReadMarker();
     },
 
