@@ -158,10 +158,15 @@ limitations under the License.
     margin-right: 10px;
 }
 
+.mx_EventTile_msgOption a {
+    text-decoration: none;
+}
+
 .mx_EventTile .mx_MessageTimestamp {
     display: block;
     visibility: hidden;
     text-align: right;
+    white-space: nowrap;
 }
 
 .mx_EventTile_last .mx_MessageTimestamp {

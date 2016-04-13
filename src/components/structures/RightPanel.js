@@ -158,13 +158,13 @@ module.exports = React.createClass({
 
         }
 
-        var classes = "mx_RightPanel";
+        var classes = "mx_RightPanel mx_fadable";
         if (this.props.collapsed) {
             classes += " collapsed";
         }
 
         return (
-            <aside className={classes}>
+            <aside className={classes} style={{ opacity: this.props.opacity }}>
                 <div className="mx_RightPanel_header">
                     { buttonGroup }
                 </div>

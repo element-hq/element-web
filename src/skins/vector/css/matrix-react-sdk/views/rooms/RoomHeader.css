@@ -53,6 +53,19 @@ limitations under the License.
     flex: 1;
 }
 
+.mx_RoomHeader_spinner {
+    height: 36px;
+
+    -webkit-box-ordinal-group: 2;
+    -moz-box-ordinal-group: 2;
+    -ms-flex-order: 2;
+    -webkit-order: 2;
+    order: 2;
+
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
 .mx_RoomHeader_textButton {
     height: 36px;
     background-color: #76cfa6;
