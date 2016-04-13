@@ -1,7 +1,6 @@
 // karma.conf.js - the config file for karma, which runs our tests.
 
 var path = require('path');
-var fs = require('fs');
 var webpack = require('webpack');
 
 /*
@@ -9,7 +8,7 @@ var webpack = require('webpack');
  * to build everything; however it's the easiest way to load our dependencies
  * from node_modules.
  *
- * If you run karma in multi-run mode (with `npm run test-multi`), it will watch
+ * If you run karma in multi-run mode (with `npm run test:multi`), it will watch
  * the tests for changes, and webpack will rebuild using a cache. This is much quicker
  * than a clean rebuild.
  */
