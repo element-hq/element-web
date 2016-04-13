@@ -65,7 +65,6 @@ describe('joining a room', function () {
                 parentDiv.remove();
                 parentDiv = null;
             }
-            httpBackend.verifyNoOutstandingRequests();
         });
         
         it('should not get stuck at a spinner', function(done) {
@@ -74,9 +73,6 @@ describe('joining a room', function () {
             
             httpBackend.when('PUT', '/presence/'+encodeURIComponent(USER_ID)+'/status')
                 .respond(200, {});
-            if (test_utils.browserSupportsWebRTC()) {
-                httpBackend.when('GET', '/voip/turnServer').respond(200, {});
-            }
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
             httpBackend.when('GET', '/sync').respond(200, {});
