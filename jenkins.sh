@@ -13,6 +13,9 @@ npm install
 # we may be using a dev branch of react-sdk, in which case we need to build it
 (cd node_modules/matrix-react-sdk && npm run build)
 
+# run the mocha tests
+npm run test
+
 # build our artifacts; dumps them in ./vector
 npm run build
 
