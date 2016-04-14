@@ -137,7 +137,7 @@ module.exports = React.createClass({
             mxEvent: this.props.mxEvent,
             left: x,
             top: y,
-            eventTileOps: this.refs.tile ? this.refs.tile.getEventTileOps() : undefined,
+            eventTileOps: this.refs.tile && this.refs.tile.getEventTileOps ? this.refs.tile.getEventTileOps() : undefined,
             onFinished: function() {
                 self.setState({menu: false});
             }
