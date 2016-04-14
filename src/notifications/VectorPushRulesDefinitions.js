@@ -16,17 +16,7 @@ limitations under the License.
 
 'use strict';
 
-var NotificationUtils = require('./NotificationUtils');
-
-var encodeActions = NotificationUtils.encodeActions;
-var decodeActions = NotificationUtils.decodeActions;
-
-const ACTION_NOTIFY = encodeActions({notify: true});
-const ACTION_NOTIFY_DEFAULT_SOUND = encodeActions({notify: true, sound: "default"});
-const ACTION_NOTIFY_RING_SOUND = encodeActions({notify: true, sound: "ring"});
-const ACTION_HIGHLIGHT_DEFAULT_SOUND = encodeActions({notify: true, sound: "default", highlight: true});
-const ACTION_DONT_NOTIFY = encodeActions({notify: false});
-const ACTION_DISABLED = null;
+var StandardActions = require('./StandardActions');
 
 /**
  * The descriptions of rules managed by the Vector UI.
@@ -38,9 +28,9 @@ module.exports = {
         kind: "underride",
         description: "Messages containing my name",
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
-            on: ACTION_NOTIFY,
-            loud: ACTION_HIGHLIGHT_DEFAULT_SOUND,
-            off: ACTION_DISABLED
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DISABLED
         }
     },
 
@@ -49,9 +39,9 @@ module.exports = {
         kind: "underride",
         description: "Messages in one-to-one chats",
         vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DONT_NOTIFY
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DONT_NOTIFY
         }
     },
 
@@ -62,9 +52,9 @@ module.exports = {
         kind: "underride",
         description: "Messages in group chats",
         vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DONT_NOTIFY
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DONT_NOTIFY
         }
     },
 
@@ -73,9 +63,9 @@ module.exports = {
         kind: "underride",
         description: "When I'm invited to a room",
         vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DISABLED
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DISABLED
         }
     },
 
@@ -84,9 +74,9 @@ module.exports = {
         kind: "underride",
         description: "Call invitation",
         vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_RING_SOUND,
-            off: ACTION_DISABLED
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_NOTIFY_RING_SOUND,
+            off: StandardActions.ACTION_DISABLED
         }
     },
 
@@ -96,9 +86,9 @@ module.exports = {
         description: "Messages sent by bot",
         vectorStateToActions: {
             // .m.rule.suppress_notices is a "negative" rule, we have to invert its enabled value for vector UI
-            on: ACTION_DISABLED,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DONT_NOTIFY,
+            on: StandardActions.ACTION_DISABLED,
+            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DONT_NOTIFY,
         }
     }
 };
