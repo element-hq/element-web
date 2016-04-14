@@ -58,7 +58,7 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
-    border-top: 1px solid rgba(0,0,0,0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
     margin-left: 20px;
     margin-right: 20px;
     -webkit-flex: 0 0 60px;
@@ -70,11 +70,23 @@ limitations under the License.
     width: 100%;
 }
 
+.mx_BottomLeftMenu_options object {
+    pointer-events: none;
+}
+
 .mx_LeftPanel .mx_BottomLeftMenu_createRoom,
 .mx_LeftPanel .mx_BottomLeftMenu_directory,
 .mx_LeftPanel .mx_BottomLeftMenu_settings {
     display: inline-block;
     cursor: pointer;
+}
+
+.collapsed .mx_BottomLeftMenu_createRoom,
+.collapsed .mx_BottomLeftMenu_directory,
+.collapsed .mx_BottomLeftMenu_settings {
+    margin-left: 0px ! important;
+    padding-top: 3px ! important;
+    padding-bottom: 3px ! important;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu_directory {
