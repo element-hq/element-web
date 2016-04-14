@@ -497,8 +497,8 @@ module.exports = React.createClass({
                     // Translate the rule actions and its enabled value into vector state
                     var vectorState;
                     if (rule) {
-                        for (var stateKey in PushRuleVectorState) {
-                            var state = PushRuleVectorState[stateKey];
+                        for (var stateKey in PushRuleVectorState.states) {
+                            var state = PushRuleVectorState.states[stateKey];
                             var vectorStateToActions = ruleDefinition.vectorStateToActions[state];
 
                             if (!vectorStateToActions) {

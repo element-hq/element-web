@@ -18,12 +18,7 @@ limitations under the License.
 
 var StandardActions = require('./StandardActions');
 
-/**
- * Enum for state of a push rule as defined by the Vector UI.
- * @readonly
- * @enum {string}
- */
-module.exports = {
+var states = {
     /** The push rule is disabled */
     OFF: "off",
 
@@ -33,6 +28,16 @@ module.exports = {
     /** The user will receive push notification for this rule with sound and
         highlight if this is legitimate */
     LOUD: "loud",
+};
+
+
+module.exports = {
+    /**
+     * Enum for state of a push rule as defined by the Vector UI.
+     * @readonly
+     * @enum {string}
+     */
+    states: states,
 
     /**
      * Convert a PushRuleVectorState to a list of actions
@@ -77,4 +82,8 @@ module.exports = {
         }
         return stateKind;
     },
+};
+
+for (var k in states) {
+    module.exports[k] = states[k];
 };
