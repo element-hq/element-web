@@ -20,4 +20,5 @@ module.exports = {
     NotificationUtils: require('./NotificationUtils'),
     PushRuleVectorState: require('./PushRuleVectorState'),
     VectorPushRulesDefinitions: require('./VectorPushRulesDefinitions'),
+    ContentRules: require('./ContentRules'),
 };
