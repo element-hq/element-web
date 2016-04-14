@@ -23,7 +23,7 @@ limitations under the License.
 .mx_RoomHeader_wrapper {
     max-width: 960px;
     margin: auto;
-    height: 83px;
+    height: 70px;
 
     -webkit-align-items: center;
     align-items: center;
@@ -118,7 +118,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_simpleHeader {
-    line-height: 83px;
+    line-height: 70px;
     color: #454545;
     font-size: 22px;
     font-weight: bold;

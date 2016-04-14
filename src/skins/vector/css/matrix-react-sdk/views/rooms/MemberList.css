@@ -79,8 +79,8 @@ limitations under the License.
 
 .mx_MemberList_bottom {
     order: 4;
-    flex: 0 0 72px;
-    -webkit-flex: 0 0 72px;
+    flex: 0 0 60px;
+    -webkit-flex: 0 0 60px;
 }
 
 .mx_MemberList_bottomRule {

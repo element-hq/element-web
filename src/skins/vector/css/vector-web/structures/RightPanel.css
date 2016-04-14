@@ -33,14 +33,14 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    -webkit-flex: 0 0 83px;
-    flex: 0 0 83px;
+    -webkit-flex: 0 0 70px;
+    flex: 0 0 70px;
 }
 
 /** Fixme - factor this out with the main header **/
 
 .mx_RightPanel_headerButtonGroup {
-    margin-top: 32px;
+    margin-top: 25px;
     float: left;
     background-color: #fff;
     margin-left: -4px;
