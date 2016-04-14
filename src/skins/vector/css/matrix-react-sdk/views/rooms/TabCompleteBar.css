@@ -21,6 +21,7 @@ limitations under the License.
 .mx_TabCompleteBar_item {
     display: inline-block;
     margin-right: 15px;
+    margin-bottom: 2px;
     cursor: pointer;
 }
 

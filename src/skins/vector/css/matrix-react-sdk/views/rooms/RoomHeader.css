@@ -24,7 +24,6 @@ limitations under the License.
     max-width: 960px;
     margin: auto;
     height: 83px;
-    border-bottom: 1px solid #eeeeee;
 
     -webkit-align-items: center;
     align-items: center;
@@ -34,10 +33,6 @@ limitations under the License.
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
-}
-
-.mx_RoomHeader_editing .mx_RoomHeader_wrapper {
-    border-bottom: 1px solid transparent;
 }
 
 .mx_RoomHeader_leftRow {

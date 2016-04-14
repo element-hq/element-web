@@ -32,10 +32,10 @@ limitations under the License.
 }
 
 .mx_RoomSubList_chevron {
-    padding-left: 5px;
+    padding-left: 4px;
     pointer-events: none;
 }
 
 .collapsed .mx_RoomSubList_chevron  {
-    padding-left: 13px;
+    padding-left: 12px;
 }

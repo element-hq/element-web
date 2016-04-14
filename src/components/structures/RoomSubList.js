@@ -278,7 +278,7 @@ var RoomSubList = React.createClass({
         return (
             <h2 onClick={ this.onClick } className="mx_RoomSubList_label">
                 { this.props.collapsed ? '' : this.props.label }
-                <TintableSvg className="mx_RoomSubList_chevron"
+                <img className="mx_RoomSubList_chevron"
                     src={ this.state.hidden ? "img/list-close.svg" : "img/list-open.svg" }
                     width="10" height="10" />
             </h2>

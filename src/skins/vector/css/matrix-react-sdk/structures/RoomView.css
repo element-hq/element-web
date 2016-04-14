@@ -89,7 +89,7 @@ limitations under the License.
     margin: auto;
 
     overflow: auto;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #e5e5e5;
 
     -webkit-flex: 0 0 auto;
     flex: 0 0 auto;
@@ -158,7 +158,7 @@ limitations under the License.
     margin-bottom: 8px;
     margin-left: 63px;
     padding-bottom: 6px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .mx_RoomView_invitePrompt {
@@ -212,7 +212,7 @@ hr.mx_RoomView_myReadMarker {
 
 .mx_RoomView_statusAreaBox_line {
     margin-left: 65px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #e5e5e5;
     height: 1px;
 }
 
