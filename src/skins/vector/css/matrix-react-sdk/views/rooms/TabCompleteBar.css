@@ -37,7 +37,7 @@ limitations under the License.
 
 .mx_TabCompleteBar_command .mx_TabCompleteBar_text {
     opacity: 1.0;
-    vertical-align: middle;
+    vertical-align: initial;
     color: #fff;
 }
 
@@ -48,5 +48,6 @@ limitations under the License.
 
 .mx_TabCompleteBar_text {
     color: #4a4a4a;
+    vertical-align: middle;
     opacity: 0.5;
 }
