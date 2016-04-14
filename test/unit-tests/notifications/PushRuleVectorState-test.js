@@ -23,8 +23,40 @@ var expect = require('expect');
 describe("PushRuleVectorState", function() {
     describe("contentRuleVectorStateKind", function() {
         it("should understand normal notifications", function () {
-            expect(prvs.contentRuleVectorStateKind(["notify"])).
+            var rule = {
+                actions: [
+                    "notify",
+                ],
+            };
+
+            expect(prvs.contentRuleVectorStateKind(rule)).
                 toEqual(prvs.ON);
+        });
+
+        it("should handle loud notifications", function () {
+            var rule = {
+                actions: [
+                    "notify",
+                    { set_tweak: "highlight", value: true },
+                    { set_tweak: "sound", value: "default" },
+                ]
+            };
+
+            expect(prvs.contentRuleVectorStateKind(rule)).
+                toEqual(prvs.LOUD);
+        });
+
+        it("should understand missing highlight.value", function () {
+            var rule = {
+                actions: [
+                    "notify",
+                    { set_tweak: "highlight" },
+                    { set_tweak: "sound", value: "default" },
+                ]
+            };
+
+            expect(prvs.contentRuleVectorStateKind(rule)).
+                toEqual(prvs.LOUD);
         });
     });
 });

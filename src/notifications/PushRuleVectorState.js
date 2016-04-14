@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var StandardActions = require('./StandardActions');
+var NotificationUtils = require('./NotificationUtils');
 
 var states = {
     /** The push rule is disabled */
@@ -58,20 +59,24 @@ module.exports = {
      *
      * Determines whether a content rule is in the PushRuleVectorState.ON
      * category or in PushRuleVectorState.LOUD, regardless of its enabled
-     * state. Returns undefined if it does not match these categories.
+     * state. Returns null if it does not match these categories.
      */
     contentRuleVectorStateKind: function(rule) {
-        var stateKind;
+        var decoded = NotificationUtils.decodeActions(rule.actions);
+
+        if (!decoded) {
+            return null;
+        }
 
         // Count tweaks to determine if it is a ON or LOUD rule
         var tweaks = 0;
-        for (var j in rule.actions) {
-            var action = rule.actions[j];
-            if (action.set_tweak === 'sound' ||
-                (action.set_tweak === 'highlight' && action.value)) {
-                tweaks++;
-            }
+        if (decoded.sound) {
+            tweaks++;
         }
+        if (decoded.highlight) {
+            tweaks++;
+        }
+        var stateKind = null;
         switch (tweaks) {
             case 0:
                 stateKind = this.ON;
