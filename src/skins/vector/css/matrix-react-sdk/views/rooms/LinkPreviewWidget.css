@@ -29,6 +29,7 @@ limitations under the License.
     flex: 0 0 100px;
     margin-left: 15px;
     text-align: center;
+    cursor: pointer;
 }
 
 .mx_LinkPreviewWidget_caption {
