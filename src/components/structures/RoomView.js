@@ -1282,13 +1282,6 @@ module.exports = React.createClass({
 
         var statusBar;
 
-        // for testing UI...
-        // this.state.upload = {
-        //     uploadedBytes: 123493,
-        //     totalBytes: 347534,
-        //     fileName: "testing_fooble.jpg",
-        // }
-
         if (ContentMessages.getCurrentUploads().length > 0) {
             var UploadBar = sdk.getComponent('structures.UploadBar');
             statusBar = <UploadBar room={this.state.room} />
