@@ -16,6 +16,8 @@ limitations under the License.
 
 'use strict';
 
+var StandardActions = require('./StandardActions');
+
 /**
  * Enum for state of a push rule as defined by the Vector UI.
  * @readonly
@@ -39,10 +41,10 @@ module.exports = {
      */
     actionsFor: function(pushRuleVectorState) {
         if (pushRuleVectorState === this.ON) {
-            return ACTION_NOTIFY;
+            return StandardActions.ACTION_NOTIFY;
         }
         else if (pushRuleVectorState === this.LOUD) {
-            return ACTION_HIGHLIGHT_DEFAULT_SOUND;
+            return StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND;
         }
     },
 
