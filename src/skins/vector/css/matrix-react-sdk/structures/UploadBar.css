@@ -3,14 +3,15 @@
 }
 
 .mx_UploadBar_uploadProgressOuter {
-    height: 4px;
+    height: 5px;
     margin-left: 63px;
     margin-top: -1px;
+    padding-bottom: 5px;
 }
 
 .mx_UploadBar_uploadProgressInner {
     background-color: #76cfa6;
-    height: 4px;
+    height: 5px;
 }
 
 .mx_UploadBar_uploadFilename {
@@ -22,7 +23,7 @@
 
 .mx_UploadBar_uploadIcon {
     float: left;
-    margin-top: 1px;
+    margin-top: 5px;
     margin-left: 14px;
 }
 

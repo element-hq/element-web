@@ -26,7 +26,7 @@ limitations under the License.
     padding-right: 8px;
     padding-top: 6px;
     padding-bottom: 6px;
-    padding-left: 18px;
+    padding-left: 20px;
     width: 24px;
     height: 24px;
     position: relative;
@@ -98,11 +98,13 @@ limitations under the License.
 
 .mx_RoomTile_badge {
     background-color: #ff0064;
-    width: 4px;
+    width: 8px;
+    height: 8px;
     position: absolute;
-    left: 0px;
-    top: 5px;
-    bottom: 5px;
+    left: 7px;
+    top: 50%;
+    margin-top: -4px;
+    border-radius: 4px;
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {

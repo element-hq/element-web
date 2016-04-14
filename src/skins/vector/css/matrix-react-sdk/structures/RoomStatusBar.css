@@ -1,7 +1,7 @@
 .mx_RoomStatusBar {
-    margin-top: 5px;
+    margin-top: 12px;
     margin-left: 65px;
-    min-height: 24px;
+    min-height: 37px;
 }
 
 /* position the indicator in the same place horizontally as .mx_EventTile_avatar. */
@@ -99,7 +99,7 @@
 .mx_RoomStatusBar_tabCompleteWrapper {
     display: flex;
     display: -webkit-flex;
-    height: 24px;
+    height: 26px;
 }
 
 .mx_RoomStatusBar_tabCompleteWrapper .mx_TabCompleteBar {
