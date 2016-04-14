@@ -17,7 +17,7 @@ npm install
 npm run test
 
 # build our artifacts; dumps them in ./vector
-npm run build
+npm run build:dev
 
 # gzip up ./vector
 rm vector-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
