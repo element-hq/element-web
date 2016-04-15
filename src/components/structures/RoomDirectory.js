@@ -43,6 +43,14 @@ module.exports = React.createClass({
         }
     },
 
+    componentWillMount: function() {
+        // dis.dispatch({
+        //     action: 'ui_opacity',
+        //     sideOpacity: 0.3,
+        //     middleOpacity: 0.3,
+        // });
+    },
+
     componentDidMount: function() {
         var self = this;
         MatrixClientPeg.get().publicRooms(function (err, data) {
@@ -63,6 +71,14 @@ module.exports = React.createClass({
                 self.forceUpdate();
             }
         });
+    },
+
+    componentWillUnmount: function() {
+        // dis.dispatch({
+        //     action: 'ui_opacity',
+        //     sideOpacity: 1.0,
+        //     middleOpacity: 1.0,
+        // });
     },
 
     showRoom: function(roomId) {
