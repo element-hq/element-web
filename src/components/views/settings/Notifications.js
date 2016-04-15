@@ -27,6 +27,9 @@ var notifications = require('../../../notifications');
 // TODO: this "view" component still has far to much application logic in it,
 // which should be factored out to other files.
 
+// TODO: this component also does a lot of direct poking into this.state, which
+// is VERY NAUGHTY.
+
 var NotificationUtils = notifications.NotificationUtils;
 var VectorPushRulesDefinitions = notifications.VectorPushRulesDefinitions;
 var PushRuleVectorState = notifications.PushRuleVectorState;
@@ -408,6 +411,7 @@ module.exports = React.createClass({
     _refreshFromServer: function() {
         var self = this;
         var pushRulesPromise = MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).done(function(rulesets) {
+            /// XXX seriously? wtf is this?
             MatrixClientPeg.get().pushRules = rulesets;
 
             // Get homeserver default rules and triage them by categories
@@ -466,6 +470,7 @@ module.exports = React.createClass({
 
             // Build the rules displayed in the Vector UI matrix table
             self.state.vectorPushRules = [];
+            self.state.externalPushRules = [];
 
             var vectorRuleIds = [
                 '.m.rule.contains_display_name',
@@ -479,7 +484,6 @@ module.exports = React.createClass({
             ];
             for (var i in vectorRuleIds) {
                 var vectorRuleId = vectorRuleIds[i];
-                var ruleDefinition = VectorPushRulesDefinitions[vectorRuleId];
 
                 if (vectorRuleId === '_keywords') {
                     // keywords needs a special handling
@@ -492,42 +496,10 @@ module.exports = React.createClass({
                     });
                 }
                 else {
+                    var ruleDefinition = VectorPushRulesDefinitions[vectorRuleId];
                     var rule = defaultRules.vector[vectorRuleId];
 
-                    // Translate the rule actions and its enabled value into vector state
-                    var vectorState;
-                    if (rule) {
-                        for (var stateKey in PushRuleVectorState.states) {
-                            var state = PushRuleVectorState.states[stateKey];
-                            var vectorStateToActions = ruleDefinition.vectorStateToActions[state];
-
-                            if (!vectorStateToActions) {
-                                // No defined actions means that this vector state expects a disabled default hs rule
-                                if (rule.enabled === false) {
-                                    vectorState = state;
-                                    break;
-                                }
-                            }
-                            else {
-                                // The actions must match to the ones expected by vector state
-                                if (JSON.stringify(rule.actions) === JSON.stringify(vectorStateToActions)) {
-                                    // And the rule must be enabled.
-                                    if (rule.enabled === true) {
-                                        vectorState = state;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (!vectorState) {
-                            console.error("Cannot translate rule actions into Vector rule state. Rule: " + rule);
-                            vectorState = PushRuleVectorState.OFF;
-                        }
-                    }
-                    else {
-                    	vectorState = PushRuleVectorState.OFF;
-                    }
+                    var vectorState = ruleDefinition.ruleToVectorState(rule);
 
                     self.state.vectorPushRules.push({
                         "vectorRuleId": vectorRuleId,
@@ -535,6 +507,12 @@ module.exports = React.createClass({
                         "rule": rule,
                         "vectorState": vectorState,
                     });
+
+                    // if there was a rule which we couldn't parse, add it to the external list
+                    if (rule && !vectorState) {
+                        rule.description = ruleDefinition.description;
+                        self.state.externalPushRules.push(rule);
+                    }
                 }
             }
 
@@ -544,7 +522,6 @@ module.exports = React.createClass({
                 '.m.rule.fallback': "Notify me for anything else"
             };
 
-            self.state.externalPushRules = [];
             for (var i in defaultRules.others) {
                 var rule = defaultRules.others[i];
                 var ruleDescription = otherRulesDescriptions[rule.rule_id];
