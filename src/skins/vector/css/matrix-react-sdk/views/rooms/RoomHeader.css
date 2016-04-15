@@ -210,8 +210,9 @@ limitations under the License.
     vertical-align: bottom;
     float: left;
     max-height: 42px;
-    color: #454545;
+    color: #A2A2A2;
     font-weight: 300;
+    font-size: 12px;
     margin-left: 19px;
     margin-right: 16px;
     overflow: hidden;
