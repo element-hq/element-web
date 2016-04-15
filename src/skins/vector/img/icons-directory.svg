@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: sketchtool 3.5.1 (25234) - http://www.bohemiancoding.com/sketch -->
+    <title>icons_directory</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="03-Input" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="03_4-Uploading" sketch:type="MSArtboardGroup" transform="translate(-54.000000, -726.000000)">
+            <g id="Room-list" sketch:type="MSLayerGroup">
+                <g id="Room-list/Footer" transform="translate(0.000000, 708.000000)" sketch:type="MSShapeGroup">
+                    <g id="icons_directory" transform="translate(54.000000, 18.000000)">
+                        <ellipse id="Oval-1-Copy-7" fill="#76CFA6" cx="12.48" cy="12" rx="11.52" ry="12"></ellipse>
+                        <path d="M10.919715,8.29307518 C10.8407601,8.29307518 10.7883135,8.12984737 10.7170546,7.88143019 C10.616152,7.53041266 10.4645131,7 9.9312114,7 L7.38327791,7 C7.02270784,7 6.73168646,7.30842284 6.72057007,7.70887507 L6.72,17.2758903 C6.72,17.6754098 7.01786223,18 7.38327791,18 L17.5770071,18 C17.9424228,18 18.24,17.6754098 18.24,17.2758903 L18.24,9.01687394 C18.24,8.61766535 17.9424228,8.29307518 17.5770071,8.29307518 L10.919715,8.29307518 Z M17.28,16.7470688 C17.28,16.8865013 17.1755713,17 17.0471522,17 L6.95341227,17 C6.82499318,17 6.72,16.8865013 6.72,16.7470688 L6.72056448,10 L17.28,10 L17.28,16.7470688 L17.28,16.7470688 Z M17.28,9 L6.72,9 L6.72,7.20209147 C6.72395157,7.0886985 6.82641007,7 6.95286024,7 L9.47593617,7 C9.67210328,7 9.74040895,7.13682752 9.84964157,7.44903616 C9.93826959,7.70177649 10.0596392,8.04800302 10.4547959,8.04800302 L17.0471398,8.04800302 C17.1755657,8.04800302 17.28,8.14148923 17.28,8.25664609 L17.28,9 L17.28,9 Z" id="Fill-137"></path>
+                        <path d="M18,17 C18,16.8865013 17.8912201,17 18,17 L7,17 C7.1093679,17 7,16.8865013 7,17 L7,10 L18,10 L18,17 L18,17 Z" id="Path-Copy-2" fill="#FFFFFF"></path>
+                        <path d="M7,9 L7,7 C7.00411622,7.0886985 7.11084382,7 7,7 L10,7 C10.0751076,7 10.1462593,7.13682752 10,7 C10.3523642,7.70177649 10.4787908,8.04800302 11,8 L18,8 C17.8912143,8.04800302 18,8.14148923 18,8 L18,9 L7,9 Z" id="Path-Copy" fill="#FFFFFF"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

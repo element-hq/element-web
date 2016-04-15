@@ -38,7 +38,7 @@ limitations under the License.
     width: 100%;
     vertical-align: middle;
     overflow: hidden;
-    text-overflow: ellipsis;
+    word-break: break-word;
     padding-right: 16px;
     color: rgba(69, 69, 69, 0.8);
 }
@@ -136,6 +136,7 @@ limitations under the License.
     position: relative;
     width: 100%;
     padding: 4px;
+    padding-right: 0px;
     margin-top: -4px;
     margin-bottom: -4px;
     border-radius: 2px;
