@@ -18,8 +18,8 @@ limitations under the License.
     height: 24px;
     margin-left: 20px;
     margin-right: 20px;
-    padding-top: 23px;
-    padding-bottom: 23px;
+    padding-top: 26px;
+    padding-bottom: 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
     display: flex;
@@ -33,13 +33,14 @@ limitations under the License.
 .mx_SearchBox_search {
     flex: 1;
     -webkit-flex: 1;
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
     font-size: 12px;
     height: 24px;
-    vertical-align: middle;
-}
-
-.mx_SearchBox_searchPlaceholder {
-    opacity: 0.5;
+    margin-top: -4px;
+    border: 0px ! important;
+    /* border-bottom: 1px solid rgba(0, 0, 0, 0.1) ! important; */
+    background-color: transparent;
+    border: 0px;
 }
 
 .mx_SearchBox_minimise,

@@ -169,6 +169,8 @@ module.exports = React.createClass({
                     { buttonGroup }
                 </div>
                 { panel }
+                <div className="mx_RightPanel_footer">
+                </div>
             </aside>
         );
     }

@@ -33,6 +33,9 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
+    border-bottom: 1px solid #e5e5e5;
+    margin-right: 20px;
+
     -webkit-flex: 0 0 70px;
     flex: 0 0 70px;
 }
@@ -89,4 +92,18 @@ limitations under the License.
     -ms-flex-order: 2;
     -webkit-order: 2;
     order: 2;
+}
+
+.mx_RightPanel_footer {
+    -webkit-box-ordinal-group: 3;
+    -moz-box-ordinal-group: 3;
+    -ms-flex-order: 3;
+    -webkit-order: 3;
+    order: 3;
+
+    border-top: 1px solid #e5e5e5;
+    margin-right: 20px;
+
+    -webkit-flex: 0 0 60px;
+    flex: 0 0 60px;
 }

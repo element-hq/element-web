@@ -17,6 +17,8 @@ limitations under the License.
 .mx_MemberList {
     height: 100%;
 
+    margin-top: 12px;
+
     -webkit-flex: 1;
     flex: 1;
 
@@ -76,17 +78,6 @@ limitations under the License.
     overflow-y: auto;
 }
 */
-
-.mx_MemberList_bottom {
-    order: 4;
-    flex: 0 0 60px;
-    -webkit-flex: 0 0 60px;
-}
-
-.mx_MemberList_bottomRule {
-    border-top: 1px solid #e5e5e5;
-    margin-right: 15px;
-}
 
 .mx_MemberList_invited h2 {
     text-transform: uppercase;

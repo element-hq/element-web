@@ -25,7 +25,6 @@ module.exports = React.createClass({
 
     render: function() {
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
-        var EditableText = sdk.getComponent("elements.EditableText");
 
         var toggleCollapse;
         if (this.props.collapsed) {
@@ -41,11 +40,9 @@ module.exports = React.createClass({
                     className="mx_SearchBox_searchButton"
                     src="img/search.svg" width="21" height="19"
                 />
-                <EditableText
+                <input
+                    type="text"
                     className="mx_SearchBox_search"
-                    placeholderClassName="mx_SearchBox_searchPlaceholder"
-                    blurToCancel={ false }
-                    editable={ true }
                     placeholder="Search Vector"
                 />
                 { toggleCollapse }
