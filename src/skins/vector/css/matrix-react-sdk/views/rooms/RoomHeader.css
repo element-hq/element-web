@@ -128,11 +128,8 @@ limitations under the License.
     width: 100%;
 }
 
-.mx_RoomHeader_simpleHeaderCancel {
+.mx_RoomHeader_simpleHeader .mx_RoomHeader_cancelButton {
     float: right;
-    margin-top: 8px;
-    padding: 24px;
-    cursor: pointer;
 }
 
 .mx_RoomHeader_name {
