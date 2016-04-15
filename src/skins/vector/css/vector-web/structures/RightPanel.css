@@ -86,7 +86,8 @@ limitations under the License.
 }
 
 .mx_RightPanel .mx_MemberList,
-.mx_RightPanel .mx_MemberInfo {
+.mx_RightPanel .mx_MemberInfo,
+.mx_RightPanel_blank {
     -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
