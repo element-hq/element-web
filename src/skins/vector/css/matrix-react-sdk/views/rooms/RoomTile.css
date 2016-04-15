@@ -121,6 +121,7 @@ limitations under the License.
 }
 
 .mx_RoomTile_selected .mx_RoomTile_name {
+    padding-right: 23px;
 }
 
 .mx_RoomTile_highlight .mx_RoomTile_name {
@@ -136,7 +137,6 @@ limitations under the License.
     position: relative;
     width: 100%;
     padding: 4px;
-    padding-right: 0px;
     margin-top: -4px;
     margin-bottom: -4px;
     border-radius: 2px;
