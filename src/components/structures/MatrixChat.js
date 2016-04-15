@@ -1025,6 +1025,7 @@ module.exports = React.createClass({
 
     onUserSettingsClose: function() {
         // XXX: use browser history instead to find the previous room?
+        // or maintain a this.state.pageHistory in _setPage()?
         if (this.state.currentRoom) {
             dis.dispatch({
                 action: 'view_room',

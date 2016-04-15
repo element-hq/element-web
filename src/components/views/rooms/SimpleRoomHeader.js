@@ -27,14 +27,21 @@ module.exports = React.createClass({
 
     propTypes: {
         title: React.PropTypes.string,
+        onCancelClick: React.PropTypes.func,
     },
 
     render: function() {
+        var cancelButton;
+        if (this.props.onCancelClick) {
+            cancelButton = <div className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>
+        }
+
         return (
             <div className="mx_RoomHeader" >
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_simpleHeader">
                         { this.props.title }
+                        { cancelButton }
                     </div>
                 </div>
             </div>
