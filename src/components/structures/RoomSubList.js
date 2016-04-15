@@ -65,16 +65,12 @@ var RoomSubList = React.createClass({
         selectedRoom: React.PropTypes.string.isRequired,
         startAsHidden: React.PropTypes.bool,
         showSpinner: React.PropTypes.bool, // true to show a spinner if 0 elements when expanded
-
-        // TODO: Fix the name of this. This is too easily confused with the
-        // "hidden" state which is the expanded (or not) view of the list of rooms.
-        // What this prop *really* does is control whether the room name is displayed
-        // so it should be named as such.
-        collapsed: React.PropTypes.bool.isRequired,
+        collapsed: React.PropTypes.bool.isRequired, // is LeftPanel collapsed?
         onHeaderClick: React.PropTypes.func,
         alwaysShowHeader: React.PropTypes.bool,
         incomingCall: React.PropTypes.object,
-        onShowMoreRooms: React.PropTypes.func
+        onShowMoreRooms: React.PropTypes.func,
+        searchFilter: React.PropTypes.string,
     },
 
     getInitialState: function() {
@@ -93,13 +89,20 @@ var RoomSubList = React.createClass({
     },
 
     componentWillMount: function() {
-        this.sortList(this.props.list, this.props.order);
+        this.sortList(this.applySearchFilter(this.props.list, this.props.searchFilter), this.props.order);
     },
 
     componentWillReceiveProps: function(newProps) {
         // order the room list appropriately before we re-render
         //if (debug) console.log("received new props, list = " + newProps.list);
-        this.sortList(newProps.list, newProps.order);
+        this.sortList(this.applySearchFilter(newProps.list, newProps.searchFilter), newProps.order);
+    },
+
+    applySearchFilter: function(list, filter) {
+        if (filter === "") return list;
+        return list.filter((room) => {
+            return room.name && room.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0
+        });
     },
 
     onClick: function(ev) {
@@ -278,7 +281,7 @@ var RoomSubList = React.createClass({
         return (
             <h2 onClick={ this.onClick } className="mx_RoomSubList_label">
                 { this.props.collapsed ? '' : this.props.label }
-                <TintableSvg className="mx_RoomSubList_chevron"
+                <img className="mx_RoomSubList_chevron"
                     src={ this.state.hidden ? "img/list-close.svg" : "img/list-open.svg" }
                     width="10" height="10" />
             </h2>

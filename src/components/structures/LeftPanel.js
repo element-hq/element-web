@@ -31,6 +31,7 @@ var LeftPanel = React.createClass({
     getInitialState: function() {
         return {
             showCallElement: null,
+            searchFilter: '',
         };
     },
 
@@ -84,9 +85,14 @@ var LeftPanel = React.createClass({
         }
     },
 
+    onSearch: function(term) {
+        this.setState({ searchFilter: term });
+    },
+
     render: function() {
         var RoomList = sdk.getComponent('rooms.RoomList');
         var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
+        var SearchBox = sdk.getComponent('structures.SearchBox');
 
         var collapseButton;
         var classes = "mx_LeftPanel mx_fadable";
@@ -110,11 +116,13 @@ var LeftPanel = React.createClass({
 
         return (
             <aside className={classes} style={{ opacity: this.props.opacity }}>
+                <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />
                 { collapseButton }
                 { callPreview }
                 <RoomList
                     selectedRoom={this.props.selectedRoom}
                     collapsed={this.props.collapsed}
+                    searchFilter={this.state.searchFilter}
                     ConferenceHandler={VectorConferenceHandler} />
                 <BottomLeftMenu collapsed={this.props.collapsed}/>
             </aside>

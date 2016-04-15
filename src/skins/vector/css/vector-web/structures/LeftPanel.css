@@ -58,23 +58,41 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
-    -webkit-flex: 0 0 140px;
-    flex: 0 0 140px;
-
-    background-color: rgba(118,207,166,0.2);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin-left: 20px;
+    margin-right: 20px;
+    -webkit-flex: 0 0 60px;
+    flex: 0 0 60px;
 }
 
-.mx_LeftPanel .mx_BottomLeftMenu .mx_RoomTile {
-    color: #454545;
-}
-
-.mx_LeftPanel .mx_BottomLeftMenu .mx_BottomLeftMenu_options {
-    margin-top: 15px;
+.mx_LeftPanel .mx_BottomLeftMenu_options {
+    margin-top: 18px;
     width: 100%;
 }
 
-.mx_LeftPanel .mx_BottomLeftMenu img {
-    border-radius: 0px;
-    background-color: transparent;
-    vertical-align: middle;
+.mx_BottomLeftMenu_options object {
+    pointer-events: none;
+}
+
+.mx_LeftPanel .mx_BottomLeftMenu_createRoom,
+.mx_LeftPanel .mx_BottomLeftMenu_directory,
+.mx_LeftPanel .mx_BottomLeftMenu_settings {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.collapsed .mx_BottomLeftMenu_createRoom,
+.collapsed .mx_BottomLeftMenu_directory,
+.collapsed .mx_BottomLeftMenu_settings {
+    margin-left: 0px ! important;
+    padding-top: 3px ! important;
+    padding-bottom: 3px ! important;
+}
+
+.mx_LeftPanel .mx_BottomLeftMenu_directory {
+    margin-left: 10px;
+}
+
+.mx_LeftPanel .mx_BottomLeftMenu_settings {
+    float: right;
 }
