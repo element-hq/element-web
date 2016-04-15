@@ -59,7 +59,7 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <object className={ "mx_TintableSvg " + this.props.className }
+            <object className={ "mx_TintableSvg " + (this.props.className ? this.props.className : "") }
                     type="image/svg+xml"
                     data={ this.props.src }
                     width={ this.props.width }

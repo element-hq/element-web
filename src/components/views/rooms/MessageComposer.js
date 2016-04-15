@@ -58,7 +58,7 @@ module.exports = React.createClass({
         var fileList = [];
         for(var i=0; i<files.length; i++) {
             fileList.push(<li>
-                <TintableSvg src="img/files.svg" width="16" height="16" /> {files[i].name}
+                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name}
             </li>);
         }
 

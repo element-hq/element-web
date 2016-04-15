@@ -51,7 +51,11 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        var self = this;
+        dis.dispatch({
+            action: 'ui_opacity',
+            sideOpacity: 0.3,
+            middleOpacity: 0.3,
+        });
         this._refreshFromServer();
     },
 
@@ -61,6 +65,11 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        dis.dispatch({
+            action: 'ui_opacity',
+            sideOpacity: 1.0,
+            middleOpacity: 1.0,
+        });
         dis.unregister(this.dispatcherRef);
     },
 
@@ -321,7 +330,7 @@ module.exports = React.createClass({
         var notification_area;
         if (!MatrixClientPeg.get().isGuest()) {
             notification_area = (<div>
-                <h2>Notifications</h2>
+                <h3>Notifications</h3>
 
                 <div className="mx_UserSettings_section">
                     <Notifications/>
@@ -335,7 +344,7 @@ module.exports = React.createClass({
 
                 <GeminiScrollbar className="mx_UserSettings_body" autoshow={true}>
 
-                <h2>Profile</h2>
+                <h3>Profile</h3>
 
                 <div className="mx_UserSettings_section">
                     <div className="mx_UserSettings_profileTable">
@@ -366,10 +375,10 @@ module.exports = React.createClass({
                     </div>
                 </div>
 
-                <h2>Account</h2>
+                <h3>Account</h3>
 
                 <div className="mx_UserSettings_section">
-                    
+
                     <div className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
                         Log out
                     </div>
@@ -379,7 +388,7 @@ module.exports = React.createClass({
 
                 {notification_area}
 
-                <h2>Advanced</h2>
+                <h3>Advanced</h3>
 
                 <div className="mx_UserSettings_section">
                     <div className="mx_UserSettings_advanced">

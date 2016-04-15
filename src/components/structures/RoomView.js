@@ -94,6 +94,9 @@ module.exports = React.createClass({
         // ID of an event to highlight. If undefined, no event will be highlighted.
         // Typically this will either be the same as 'eventId', or undefined.
         highlightedEventId: React.PropTypes.string,
+
+        // is the RightPanel collapsed?
+        rightPanelCollapsed: React.PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -1214,7 +1217,11 @@ module.exports = React.createClass({
                     // We've got to this room by following a link, possibly a third party invite.
                     return (
                         <div className="mx_RoomView">
-                            <RoomHeader ref="header" room={this.state.room} oobData={this.props.oobData} />
+                            <RoomHeader ref="header"
+                                room={this.state.room}
+                                oobData={this.props.oobData}
+                                rightPanelCollapsed={ this.props.rightPanelCollapsed }
+                            />
                             <div className="mx_RoomView_auxPanel">
                                 <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
                                                 onRejectClick={ this.onRejectThreepidInviteButtonClicked }
@@ -1227,7 +1234,7 @@ module.exports = React.createClass({
                             </div>
                             <div className="mx_RoomView_messagePanel"></div>
                         </div>
-                    );                    
+                    );
                 }
         }
 
@@ -1281,13 +1288,6 @@ module.exports = React.createClass({
         });
 
         var statusBar;
-
-        // for testing UI...
-        // this.state.upload = {
-        //     uploadedBytes: 123493,
-        //     totalBytes: 347534,
-        //     fileName: "testing_fooble.jpg",
-        // }
 
         if (ContentMessages.getCurrentUploads().length > 0) {
             var UploadBar = sdk.getComponent('structures.UploadBar');

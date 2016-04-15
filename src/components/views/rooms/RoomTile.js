@@ -104,7 +104,10 @@ module.exports = React.createClass({
         var label;
         if (!this.props.collapsed) {
             var className = 'mx_RoomTile_name' + (this.props.isInvite ? ' mx_RoomTile_invite' : '');
-            label = <div className={ className }>{name}</div>;
+            if (this.props.selected) {
+                name = <span>{ name }</span>;
+            }
+            label = <div className={ className }>{ name }</div>;
         }
         else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");

@@ -449,10 +449,6 @@ module.exports = React.createClass({
                         </TruncatedList>
                         {invitedSection}
                     </GeminiScrollbar>
-                    <div className="mx_MemberList_bottom">
-                        <div className="mx_MemberList_bottomRule">
-                        </div>
-                    </div>
             </div>
         );
     }
