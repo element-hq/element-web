@@ -19,32 +19,78 @@ limitations under the License.
 var React = require('react');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
+var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 
 module.exports = React.createClass({
     displayName: 'SearchBox',
+
+    propTypes: {
+        collapsed: React.PropTypes.bool,
+        onSearch: React.PropTypes.func,
+    },
+
+    onChange: new rate_limited_func(
+        function() {
+            if (this.refs.search) {
+                this.props.onSearch(this.refs.search.value);
+            }
+        },
+        100
+    ),
+
+    onToggleCollapse: function(show) {
+        if (show) {
+            dis.dispatch({
+                action: 'show_left_panel',
+            });
+        }
+        else {
+            dis.dispatch({
+                action: 'hide_left_panel',
+            });
+        }
+    },
 
     render: function() {
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
 
         var toggleCollapse;
         if (this.props.collapsed) {
-            toggleCollapse = <img className="mx_SearchBox_maximise" src="img/maximise.svg" width="10" height="16" alt="&lt;"/>;
+            toggleCollapse =
+                <div className="mx_SearchBox_maximise" onClick={ this.onToggleCollapse.bind(this, true) }>
+                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt="&lt;"/>
+                </div>
         }
         else {
-            toggleCollapse = <img className="mx_SearchBox_minimise" src="img/minimise.svg" width="10" height="16" alt="&lt;"/>;
+            toggleCollapse =
+                <div className="mx_SearchBox_minimise" onClick={ this.onToggleCollapse.bind(this, false) }>
+                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt="&lt;"/>
+                </div>
         }
 
+        var searchControls;
+        if (!this.props.collapsed) {
+            searchControls = [
+                    <TintableSvg
+                        key="button"
+                        className="mx_SearchBox_searchButton"
+                        src="img/search.svg" width="21" height="19"
+                    />,
+                    <input
+                        key="searchfield"
+                        type="text"
+                        ref="search"
+                        className="mx_SearchBox_search"
+                        onChange={ this.onChange }
+                        placeholder="Search room names"
+                    />
+                ];
+        }
+
+        var self = this;
         return (
             <div className="mx_SearchBox">
-                <TintableSvg
-                    className="mx_SearchBox_searchButton"
-                    src="img/search.svg" width="21" height="19"
-                />
-                <input
-                    type="text"
-                    className="mx_SearchBox_search"
-                    placeholder="Search Vector"
-                />
+                { searchControls }
                 { toggleCollapse }
             </div>
         );

@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 .mx_RoomStatusBar {
-    margin-top: 12px;
+    margin-top: 15px;
     margin-left: 65px;
-    min-height: 37px;
+    min-height: 34px;
 }
 
 /* position the indicator in the same place horizontally as .mx_EventTile_avatar. */
@@ -33,8 +33,9 @@ limitations under the License.
 .mx_RoomStatusBar_placeholderIndicator span {
     color: #4a4a4a;
     opacity: 0.5;
-/*    
     position: relative;
+    top: -4px;
+/*    
     animation-duration: 1s;
     animation-name: bounce;
     animation-direction: alternate;

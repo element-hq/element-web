@@ -45,5 +45,17 @@ limitations under the License.
 
 .mx_SearchBox_minimise,
 .mx_SearchBox_maximise {
+    cursor: pointer;
+}
+
+.mx_SearchBox_minimise {
     margin-left: 10px;
+}
+
+.mx_SearchBox_maximise {
+    margin-left: 6px;
+}
+
+.mx_SearchBox object {
+    pointer-events: none;
 }
