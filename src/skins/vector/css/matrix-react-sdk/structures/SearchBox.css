@@ -31,8 +31,9 @@ limitations under the License.
 }
 
 .mx_SearchBox_search {
-    flex: 1;
-    -webkit-flex: 1;
+    flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+    width: 0px;
     font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
     font-size: 12px;
     margin-top: -2px;
