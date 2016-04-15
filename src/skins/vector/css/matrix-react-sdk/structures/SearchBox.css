@@ -16,10 +16,10 @@ limitations under the License.
 
 .mx_SearchBox {
     height: 24px;
-    margin-left: 20px;
+    margin-left: 16px;
     margin-right: 20px;
     padding-top: 26px;
-    padding-bottom: 20px;
+    padding-bottom: 24px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
     display: flex;
@@ -35,8 +35,8 @@ limitations under the License.
     -webkit-flex: 1;
     font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
     font-size: 12px;
+    margin-top: -2px;
     height: 24px;
-    margin-top: -4px;
     border: 0px ! important;
     /* border-bottom: 1px solid rgba(0, 0, 0, 0.1) ! important; */
     background-color: transparent;
@@ -45,6 +45,7 @@ limitations under the License.
 
 .mx_SearchBox_minimise,
 .mx_SearchBox_maximise {
+    margin-top: 3px;
     cursor: pointer;
 }
 

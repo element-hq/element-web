@@ -74,7 +74,7 @@ module.exports = React.createClass({
                     <TintableSvg
                         key="button"
                         className="mx_SearchBox_searchButton"
-                        src="img/search.svg" width="21" height="19"
+                        src="img/right_search.svg" width="24" height="24"
                     />,
                     <input
                         key="searchfield"
