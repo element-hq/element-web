@@ -29,11 +29,21 @@ module.exports = React.createClass({
         onSearch: React.PropTypes.func,
     },
 
-    onChange: new rate_limited_func(
+    getInitialState: function() {
+        return {
+            searchTerm: "",
+        };
+    },
+
+    onChange: function() {
+        if (!this.refs.search) return;
+        this.setState({ searchTerm: this.refs.search.value });
+        this.onSearch();
+    },
+
+    onSearch: new rate_limited_func(
         function() {
-            if (this.refs.search) {
-                this.props.onSearch(this.refs.search.value);
-            }
+            this.props.onSearch(this.refs.search.value);
         },
         100
     ),
@@ -81,6 +91,7 @@ module.exports = React.createClass({
                         type="text"
                         ref="search"
                         className="mx_SearchBox_search"
+                        value={ this.state.searchTerm }
                         onChange={ this.onChange }
                         placeholder="Search room names"
                     />
