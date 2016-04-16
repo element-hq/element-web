@@ -53,11 +53,6 @@ var TintableSvg = React.createClass({
         ReactDOM.findDOMNode(this).removeEventListener('load', this.onLoad);
     },
 
-    shouldComponentUpdate: function(nextProps, nextState) {
-        // XXX: no dynamic TintableSvgs for now; speed above all else
-        return false;
-    },
-
     tint: function() {
         // TODO: only bother running this if the global tint settings have changed
         // since we loaded!
