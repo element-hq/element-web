@@ -212,7 +212,9 @@ module.exports = React.createClass({
 
         window.removeEventListener('resize', this.onResize);        
 
-        Tinter.tint(); // reset colourscheme
+        // no need to do this as Dir & Settings are now overlays. It just burnt CPU.
+        // console.log("Tinter.tint from RoomView.unmount");
+        // Tinter.tint(); // reset colourscheme
     },
 
     onAction: function(payload) {
@@ -345,7 +347,8 @@ module.exports = React.createClass({
         if (color_scheme_event) {
             color_scheme = color_scheme_event.getContent();
             // XXX: we should validate the event
-        }                
+        }
+        console.log("Tinter.tint from updateTint");
         Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
     },
 
@@ -354,6 +357,7 @@ module.exports = React.createClass({
             if (event.getType === "org.matrix.room.color_scheme") {
                 var color_scheme = event.getContent();
                 // XXX: we should validate the event
+                console.log("Tinter.tint from onRoomAccountData");
                 Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
         }
@@ -912,6 +916,7 @@ module.exports = React.createClass({
     },
 
     onCancelClick: function() {
+        console.log("updateTint from onCancelClick");
         this.updateTint();
         this.setState({editingRoomSettings: false});
     },
@@ -1179,6 +1184,7 @@ module.exports = React.createClass({
     _gatherTimelinePanelRef: function(r) {
         this.refs.messagePanel = r;
         if(r) {
+            console.log("updateTint from RoomView._gatherTimelinePanelRef");
             this.updateTint();
         }
     },
