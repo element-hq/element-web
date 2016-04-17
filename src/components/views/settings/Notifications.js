@@ -554,14 +554,14 @@ module.exports = React.createClass({
             });
         }).finally(() => {
             // actually explicitly update our state  having been deep-manipulating it
-            self.state({
+            self.setState({
                 masterPushRule: self.state.masterPushRule,
                 vectorContentRules: self.state.vectorContentRules,
                 vectorPushRules: self.state.vectorPushRules,
                 externalContentRules: self.state.externalContentRules,
                 externalPushRules: self.state.externalPushRules,
             });
-        });
+        }).done();
     },
 
     _updatePushRuleActions: function(rule, actions, enabled) {
