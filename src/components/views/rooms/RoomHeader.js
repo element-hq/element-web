@@ -53,6 +53,13 @@ module.exports = React.createClass({
     componentDidMount: function() {
         var cli = MatrixClientPeg.get();
         cli.on("RoomState.events", this._onRoomStateEvents);
+
+        // When a room name occurs, RoomState.events is fired *before*
+        // room.name is updated. So we have to listen to Room.name as well as
+        // RoomState.events.
+        if (this.props.room) {
+            this.props.room.on("Room.name", this._onRoomNameChange);
+        }
     },
 
     componentDidUpdate: function() {
@@ -62,6 +69,9 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        if (this.props.room) {
+            this.props.room.removeListener("Room.name", this._onRoomNameChange);
+        }
         var cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener("RoomState.events", this._onRoomStateEvents);
@@ -74,6 +84,10 @@ module.exports = React.createClass({
         }
 
         // redisplay the room name, topic, etc.
+        this.forceUpdate();
+    },
+
+    _onRoomNameChange: function(room) {
         this.forceUpdate();
     },
 
@@ -98,7 +112,7 @@ module.exports = React.createClass({
                 description: "Failed to set avatar. " + errMsg
             });
         }).done();
-    },    
+    },
 
     /**
      * After editing the settings, get the new name for the room
@@ -272,7 +286,7 @@ module.exports = React.createClass({
 
         var right_row;
         if (!this.props.editing) {
-            right_row = 
+            right_row =
                 <div className="mx_RoomHeader_rightRow">
                     { forget_button }
                     { leave_button }
