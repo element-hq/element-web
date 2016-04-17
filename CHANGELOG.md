@@ -1,3 +1,8 @@
+Changes in <unreleased version>
+===============================
+
+ * Upgrade to react 15.0
+
 Changes in [0.4.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.4.0) (2016-03-30)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.3.1...v0.4.0)
