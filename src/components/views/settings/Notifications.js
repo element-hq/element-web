@@ -581,7 +581,7 @@ module.exports = React.createClass({
 
     renderNotifRulesTableRow: function(title, className, pushRuleVectorState) {
         return (
-            <tr key = {className}>
+            <tr key={ className }>
                 <th>
                     {title}
                 </th>
@@ -692,17 +692,21 @@ module.exports = React.createClass({
             // and this wouldn't be hard to add.
             var rows = [];
             for (var i = 0; i < this.state.pushers.length; ++i) {
-                rows.push(<tr>
+                rows.push(<tr key={ i }>
                     <td>{this.state.pushers[i].app_display_name}</td>
                     <td>{this.state.pushers[i].device_display_name}</td>
                 </tr>);
             }
             devicesSection = (<table className="mx_UserSettings_devicesTable">
-                <tr>
-                    <th>Application</th>
-                    <th>Device</th>
-                </tr>
-                {rows}
+                <thead>
+                    <tr>
+                        <th>Application</th>
+                        <th>Device</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
             </table>);
         }
 
