@@ -103,6 +103,7 @@ module.exports = React.createClass({
     },
 
     onNotifStateButtonClicked: function(event) {
+        // FIXME: use .bind() rather than className metadata here surely
         var vectorRuleId = event.target.className.split("-")[0];
         var newPushRuleVectorState = event.target.className.split("-")[1];
 
@@ -410,7 +411,9 @@ module.exports = React.createClass({
 
     _refreshFromServer: function() {
         var self = this;
-        var pushRulesPromise = MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).done(function(rulesets) {
+        var pushRulesPromise = MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).then(function(rulesets) {
+            //console.log("resolving pushRulesPromise");
+
             /// XXX seriously? wtf is this?
             MatrixClientPeg.get().pushRules = rulesets;
 
@@ -501,6 +504,8 @@ module.exports = React.createClass({
 
                     var vectorState = ruleDefinition.ruleToVectorState(rule);
 
+                    //console.log("Refreshing vectorPushRules for " + vectorRuleId +", "+ ruleDefinition.description +", " + rule +", " + vectorState);
+
                     self.state.vectorPushRules.push({
                         "vectorRuleId": vectorRuleId,
                         "description" : ruleDefinition.description,
@@ -535,16 +540,26 @@ module.exports = React.createClass({
         });
 
         var pushersPromise = MatrixClientPeg.get().getPushers().then(function(resp) {
+            //console.log("resolving pushersPromise");
             self.setState({pushers: resp.pushers});
         });
 
-        q.all([pushRulesPromise, pushersPromise]).done(function() {
+        q.all([pushRulesPromise, pushersPromise]).then(function() {
             self.setState({
                 phase: self.phases.DISPLAY
             });
         }, function(error) {
             self.setState({
                 phase: self.phases.ERROR
+            });
+        }).finally(() => {
+            // actually explicitly update our state  having been deep-manipulating it
+            self.state({
+                masterPushRule: self.state.masterPushRule,
+                vectorContentRules: self.state.vectorContentRules,
+                vectorPushRules: self.state.vectorPushRules,
+                externalContentRules: self.state.externalContentRules,
+                externalPushRules: self.state.externalPushRules,
             });
         });
     },
@@ -599,6 +614,7 @@ module.exports = React.createClass({
         var rows = [];
         for (var i in this.state.vectorPushRules) {
             var rule = this.state.vectorPushRules[i];
+            //console.log("rendering: " + rule.description + ", " + rule.vectorRuleId + ", " + rule.vectorState);
             rows.push(this.renderNotifRulesTableRow(rule.description, rule.vectorRuleId, rule.vectorState));
         }
         return rows;
@@ -607,13 +623,10 @@ module.exports = React.createClass({
     render: function() {
         var self = this;
 
+        var spinner;
         if (this.state.phase === this.phases.LOADING) {
             var Loader = sdk.getComponent("elements.Spinner");
-            return (
-                <div className="mx_UserSettings_notifTable">
-                    <Loader />
-                </div>
-            );
+            spinner = <Loader />;
         }
 
         if (this.state.masterPushRule) {
@@ -714,6 +727,8 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_notifTable">
 
+                    { spinner }
+
                     <div className="mx_UserNotifSettings_tableRow">
                         <div className="mx_UserNotifSettings_inputCell">
                             <input id="enableDesktopNotifications"
@@ -756,7 +771,7 @@ module.exports = React.createClass({
                                     <th width="55%"></th>
                                     <th width="15%">Off</th>
                                     <th width="15%">On</th>
-                                    <th width="15%">Loud</th>
+                                    <th width="15%">Highlight<br/>&amp; sound</th>
                                 </tr>
                             </thead>
                             <tbody>

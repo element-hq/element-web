@@ -106,6 +106,10 @@ limitations under the License.
     display: table;
 }
 
+.mx_UserSettings_notifTable .mx_Spinner {
+    position: absolute;
+}
+
 .mx_UserSettings_profileTable
 {
     display: table;
