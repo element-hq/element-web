@@ -45,11 +45,11 @@
     "matrix-react-sdk": "matrix-org/matrix-react-sdk#develop",
     "modernizr": "^3.1.0",
     "q": "^1.4.1",
-    "react": "^0.14.8",
-    "react-dnd": "^2.0.2",
-    "react-dnd-html5-backend": "^2.0.0",
-    "react-dom": "^0.14.2",
-    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#869a86b",
+    "react": "^15.0.1",
+    "react-dnd": "^2.1.4",
+    "react-dnd-html5-backend": "^2.1.2",
+    "react-dom": "^15.0.1",
+    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#4707b88",
     "sanitize-html": "^1.11.1"
   },
   "devDependencies": {
@@ -72,7 +72,7 @@
     "mocha": "^2.4.5",
     "parallelshell": "^1.2.0",
     "phantomjs-prebuilt": "^2.1.7",
-    "react-addons-test-utils": "^0.14.8",
+    "react-addons-test-utils": "^15.0.1",
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.1.5",
     "webpack": "^1.12.14"
