@@ -41,6 +41,7 @@ module.exports = {
             // alias any requires to the react module to the one in our path, otherwise
             // we tend to get the react source included twice when using npm link.
             react: path.resolve('./node_modules/react'),
+            "react-addons-perf": path.resolve('./node_modules/react-addons-perf'),
 
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),

@@ -27,8 +27,15 @@ require('gemini-scrollbar/gemini-scrollbar.css');
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 
+
+ // add React and ReactPerf to the global namespace, to make them easier to
+ // access via the console
+global.React = require("react");
+if (process.env.NODE_ENV !== 'production') {
+    global.ReactPerf = require("react-addons-perf");
+}
+
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
-var React = require("react");
 var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
 sdk.loadSkin(require('../component-index'));
