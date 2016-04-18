@@ -64,15 +64,19 @@ module.exports = React.createClass({
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("RoomState.events", this.onRoomStateEvent);
         cli.on("Room", this.onRoom); // invites
+        cli.on("User.presence", this.onUserPresence);
+        // cli.on("Room.timeline", this.onRoomTimeline);
     },
 
     componentWillUnmount: function() {
-        if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("Room", this.onRoom);
-            MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
-            MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
-            MatrixClientPeg.get().removeListener("User.presence", this.userPresenceFn);
-            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvent);
+        var cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("RoomState.members", this.onRoomStateMember);
+            cli.removeListener("RoomMember.name", this.onRoomMemberName);
+            cli.removeListener("RoomState.events", this.onRoomStateEvent);
+            cli.removeListener("Room", this.onRoom);
+            cli.removeListener("User.presence", this.onUserPresence);
+            // cli.removeListener("Room.timeline", this.onRoomTimeline);
         }
     },
 
@@ -87,25 +91,45 @@ module.exports = React.createClass({
                 members: self.roomMembers()
             });
         }, 50);
+    },
 
+/*
+    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
+        // ignore anything but real-time updates at the end of the room:
+        // updates from pagination will happen when the paginate completes.
+        if (toStartOfTimeline || !data || !data.liveEvent) return;
+
+        // treat any activity from a user as implicit presence to update the
+        // ordering of the list whenever someone says something.
+        // Except right now we're not tiebreaking "active now" users in this way
+        // so don't bother for now.
+        if (ev.getSender()) {
+            // console.log("implicit presence from " + ev.getSender());
+
+            var tile = this.refs[ev.getSender()];
+            if (tile) {
+                // work around a race where you might have a room member object
+                // before the user object exists.  XXX: why does this ever happen?
+                var all_members = room.currentState.members;
+                var userId = ev.getSender();
+                if (all_members[userId].user === null) {
+                    all_members[userId].user = MatrixClientPeg.get().getUser(userId);
+                }
+                this._updateList(); // reorder the membership list
+            }
+        }
+    },
+*/
+
+    onUserPresence(event, user) {
         // Attach a SINGLE listener for global presence changes then locate the
         // member tile and re-render it. This is more efficient than every tile
         // evar attaching their own listener.
-        function updateUserState(event, user) {
-            // XXX: evil hack to track the age of this presence info.
-            // this should be removed once syjs-28 is resolved in the JS SDK itself.
-            user.lastPresenceTs = Date.now();
-
-            var tile = self.refs[user.userId];
-
-            if (tile) {
-                self._updateList(); // reorder the membership list
-            }
+        // console.log("explicit presence from " + user.userId);
+        var tile = this.refs[user.userId];
+        if (tile) {
+            this._updateList(); // reorder the membership list
         }
-        // FIXME: we should probably also reset 'lastActiveAgo' to zero whenever
-        // we see a typing notif from a user, as we don't get presence updates for those.
-        MatrixClientPeg.get().on("User.presence", updateUserState);
-        this.userPresenceFn = updateUserState;
     },
 
     onRoom: function(room) {
@@ -133,6 +157,7 @@ module.exports = React.createClass({
     },
 
     _updateList: new rate_limited_func(function() {
+        // console.log("Updating memberlist");
         this.memberDict = this.getMemberDict();
 
         var self = this;
@@ -266,7 +291,6 @@ module.exports = React.createClass({
 
         var all_members = room.currentState.members;
 
-        // XXX: evil hack until SYJS-28 is fixed
         Object.keys(all_members).map(function(userId) {
             // work around a race where you might have a room member object
             // before the user object exists.  This may or may not cause
@@ -275,9 +299,8 @@ module.exports = React.createClass({
                 all_members[userId].user = MatrixClientPeg.get().getUser(userId);
             }
 
-            if (all_members[userId].user && !all_members[userId].user.lastPresenceTs) {
-                all_members[userId].user.lastPresenceTs = Date.now();
-            }
+            // XXX: this user may have no lastPresenceTs value!
+            // the right solution here is to fix the race rather than leave it as 0
         });
 
         return all_members;
@@ -288,7 +311,7 @@ module.exports = React.createClass({
         var all_user_ids = Object.keys(all_members);
         var ConferenceHandler = CallHandler.getConferenceHandler();
 
-        if (this.memberSort) all_user_ids.sort(this.memberSort);
+        all_user_ids.sort(this.memberSort);
 
         var to_display = [];
         var count = 0;
@@ -325,27 +348,84 @@ module.exports = React.createClass({
         });
     },
 
-    memberSort: function(userIdA, userIdB) {
-        var userA = this.memberDict[userIdA].user;
-        var userB = this.memberDict[userIdB].user;
-
-        var presenceMap = {
-            online: 3,
-            unavailable: 2,
-            offline: 1
-        };
-
-        var presenceOrdA = userA ? presenceMap[userA.presence] : 0;
-        var presenceOrdB = userB ? presenceMap[userB.presence] : 0;
-
-        if (presenceOrdA != presenceOrdB) {
-            return presenceOrdB - presenceOrdA;
+    memberString: function(member) {
+        if (!member) {
+            return "(null)";
         }
+        else {
+            return "(" + member.name + ", " + member.powerLevel + ", " + member.user.lastActiveAgo + ", " + member.user.currentlyActive + ")";
+        }
+    },
 
-        var lastActiveTsA = userA && userA.lastActiveAgo ? userA.lastPresenceTs - userA.lastActiveAgo : 0;
-        var lastActiveTsB = userB && userB.lastActiveAgo ? userB.lastPresenceTs - userB.lastActiveAgo : 0;
+    // returns negative if a comes before b,
+    // returns 0 if a and b are equivalent in ordering
+    // returns positive if a comes after b.
+    memberSort: function(userIdA, userIdB) {
+            // order by last active, with "active now" first.
+            // ...and then by power
+            // ...and then alphabetically.
+            // We could tiebreak instead by "last recently spoken in this room" if we wanted to.
 
-        return lastActiveTsB - lastActiveTsA;
+            var memberA = this.memberDict[userIdA];
+            var memberB = this.memberDict[userIdB];
+            var userA = memberA.user;
+            var userB = memberB.user;
+
+            // if (!userA || !userB) {
+            //     console.log("comparing " + memberA.name + " user=" + memberA.user + " with " + memberB.name + " user=" + memberB.user);
+            // }
+
+            if (!userA && !userB) return 0;
+            if (userA && !userB) return -1;
+            if (!userA && userB) return 1;
+
+            // console.log("comparing " + this.memberString(memberA) + " and " + this.memberString(memberB));
+
+            if (userA.currentlyActive && userB.currentlyActive) {
+                // console.log(memberA.name + " and " + memberB.name + " are both active");
+                if (memberA.powerLevel === memberB.powerLevel) {
+                    // console.log(memberA + " and " + memberB + " have same power level");
+                    if (memberA.name && memberB.name) {
+                        // console.log("comparing names: " + memberA.name + " and " + memberB.name);
+                        return memberA.name.localeCompare(memberB.name);
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                else {
+                    // console.log("comparing power: " + memberA.powerLevel + " and " + memberB.powerLevel);
+                    return memberB.powerLevel - memberA.powerLevel;
+                }
+            }
+
+            if (userA.currentlyActive && !userB.currentlyActive) return -1;
+            if (!userA.currentlyActive && userB.currentlyActive) return 1;
+
+            // For now, let's just order things by timestamp. It's really annoying
+            // that a user disappears from sight just because they temporarily go offline
+    /*
+            var presenceMap = {
+                online: 3,
+                unavailable: 2,
+                offline: 1
+            };
+
+            var presenceOrdA = userA ? presenceMap[userA.presence] : 0;
+            var presenceOrdB = userB ? presenceMap[userB.presence] : 0;
+
+            if (presenceOrdA != presenceOrdB) {
+                return presenceOrdB - presenceOrdA;
+            }
+    */
+
+            var lastActiveTsA = userA && userA.lastActiveTs ? userA.lastActiveTs : 0;
+            var lastActiveTsB = userB && userB.lastActiveTs ? userB.lastActiveTs : 0;
+
+            // console.log("comparing ts: " + lastActiveTsA + " and " + lastActiveTsB);
+
+            return lastActiveTsB - lastActiveTsA;
+        }
     },
 
     onSearchQueryChanged: function(input) {

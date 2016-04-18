@@ -293,7 +293,7 @@ module.exports = React.createClass({
                 // no change
             }
             else {
-                this.setState((state, props) => { 
+                this.setState((state, props) => {
                     return {numUnreadMessages: state.numUnreadMessages + 1};
                 });
             }
