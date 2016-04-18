@@ -311,7 +311,7 @@ module.exports = React.createClass({
         var all_user_ids = Object.keys(all_members);
         var ConferenceHandler = CallHandler.getConferenceHandler();
 
-        all_user_ids.sort(this.memberSort(Date.now()));
+        all_user_ids.sort(this.memberSort);
 
         var to_display = [];
         var count = 0;
@@ -357,8 +357,10 @@ module.exports = React.createClass({
         }
     },
 
-    memberSort: function(now) {
-        return (userIdA, userIdB) => {
+    // returns -1 if a < b.
+    // 0 if a and b are equivalent
+    // 1 if a > b.
+    memberSort: function(userIdA, userIdB) {
             // order by last active, with "active now" first.
             // ...and then by power
             // ...and then alphabetically.
@@ -417,8 +419,8 @@ module.exports = React.createClass({
             }
     */
 
-            var lastActiveTsA = userA && userA.lastActiveAgo ? (now - (userA.lastPresenceTs - userA.lastActiveAgo)) : Number.MAX_SAFE_INTEGER;
-            var lastActiveTsB = userB && userB.lastActiveAgo ? (now - (userB.lastPresenceTs - userB.lastActiveAgo)) : Number.MAX_SAFE_INTEGER;
+            var lastActiveTsA = userA && userA.lastActiveAgo ? (userA.lastPresenceTs - userA.lastActiveAgo) : Number.MAX_SAFE_INTEGER;
+            var lastActiveTsB = userB && userB.lastActiveAgo ? (userB.lastPresenceTs - userB.lastActiveAgo) : Number.MAX_SAFE_INTEGER;
 
             // console.log("comparing ts: " + lastActiveTsA + " and " + lastActiveTsB);
 
