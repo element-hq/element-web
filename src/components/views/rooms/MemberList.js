@@ -357,9 +357,9 @@ module.exports = React.createClass({
         }
     },
 
-    // returns -1 if a < b.
-    // 0 if a and b are equivalent
-    // 1 if a > b.
+    // returns negative if a comes before b,
+    // returns 0 if a and b are equivalent in ordering
+    // returns positive if a comes after b.
     memberSort: function(userIdA, userIdB) {
             // order by last active, with "active now" first.
             // ...and then by power
@@ -419,12 +419,12 @@ module.exports = React.createClass({
             }
     */
 
-            var lastActiveTsA = userA && userA.lastActiveAgo ? (userA.lastPresenceTs - userA.lastActiveAgo) : Number.MAX_SAFE_INTEGER;
-            var lastActiveTsB = userB && userB.lastActiveAgo ? (userB.lastPresenceTs - userB.lastActiveAgo) : Number.MAX_SAFE_INTEGER;
+            var lastActiveTsA = userA && userA.lastActiveTs ? userA.lastActiveTs : 0;
+            var lastActiveTsB = userB && userB.lastActiveTs ? userB.lastActiveTs : 0;
 
             // console.log("comparing ts: " + lastActiveTsA + " and " + lastActiveTsB);
 
-            return lastActiveTsA - lastActiveTsB;
+            return lastActiveTsB - lastActiveTsA;
         }
     },
 
