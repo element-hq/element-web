@@ -104,7 +104,7 @@ module.exports = React.createClass({
         // Except right now we're not tiebreaking "active now" users in this way
         // so don't bother for now.
         if (ev.getSender()) {
-            console.log("implicit presence from " + ev.getSender());
+            // console.log("implicit presence from " + ev.getSender());
 
             var tile = this.refs[ev.getSender()];
             if (tile) {
@@ -125,7 +125,7 @@ module.exports = React.createClass({
         // Attach a SINGLE listener for global presence changes then locate the
         // member tile and re-render it. This is more efficient than every tile
         // evar attaching their own listener.
-        console.log("explicit presence from " + user.userId);
+        // console.log("explicit presence from " + user.userId);
         var tile = this.refs[user.userId];
         if (tile) {
             this._updateList(); // reorder the membership list
@@ -157,7 +157,7 @@ module.exports = React.createClass({
     },
 
     _updateList: new rate_limited_func(function() {
-        console.log("Updating memberlist");
+        // console.log("Updating memberlist");
         this.memberDict = this.getMemberDict();
 
         var self = this;
@@ -369,22 +369,22 @@ module.exports = React.createClass({
             var userA = memberA.user;
             var userB = memberB.user;
 
-            if (!userA || !userB) {
-                console.log("comparing " + memberA.name + " user=" + memberA.user + " with " + memberB.name + " user=" + memberB.user);
-            }
+            // if (!userA || !userB) {
+            //     console.log("comparing " + memberA.name + " user=" + memberA.user + " with " + memberB.name + " user=" + memberB.user);
+            // }
 
             if (!userA && !userB) return 0;
             if (userA && !userB) return -1;
             if (!userA && userB) return 1;
 
-            console.log("comparing " + this.memberString(memberA) + " and " + this.memberString(memberB));
+            // console.log("comparing " + this.memberString(memberA) + " and " + this.memberString(memberB));
 
             if (userA.currentlyActive && userB.currentlyActive) {
-                console.log(memberA.name + " and " + memberB.name + " are both active");
+                // console.log(memberA.name + " and " + memberB.name + " are both active");
                 if (memberA.powerLevel === memberB.powerLevel) {
-                    console.log(memberA + " and " + memberB + " have same power level");
+                    // console.log(memberA + " and " + memberB + " have same power level");
                     if (memberA.name && memberB.name) {
-                        console.log("comparing names: " + memberA.name + " and " + memberB.name);
+                        // console.log("comparing names: " + memberA.name + " and " + memberB.name);
                         return memberA.name.localeCompare(memberB.name);
                     }
                     else {
@@ -392,7 +392,7 @@ module.exports = React.createClass({
                     }
                 }
                 else {
-                    console.log("comparing power: " + memberA.powerLevel + " and " + memberB.powerLevel);
+                    // console.log("comparing power: " + memberA.powerLevel + " and " + memberB.powerLevel);
                     return memberB.powerLevel - memberA.powerLevel;
                 }
             }
@@ -420,7 +420,7 @@ module.exports = React.createClass({
             var lastActiveTsA = userA && userA.lastActiveAgo ? (now - (userA.lastPresenceTs - userA.lastActiveAgo)) : Number.MAX_SAFE_INTEGER;
             var lastActiveTsB = userB && userB.lastActiveAgo ? (now - (userB.lastPresenceTs - userB.lastActiveAgo)) : Number.MAX_SAFE_INTEGER;
 
-            console.log("comparing ts: " + lastActiveTsA + " and " + lastActiveTsB);
+            // console.log("comparing ts: " + lastActiveTsA + " and " + lastActiveTsB);
 
             return lastActiveTsA - lastActiveTsB;
         }
