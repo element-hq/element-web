@@ -29,6 +29,8 @@ var Velociraptor = require('../../../Velociraptor');
 require('../../../VelocityBounce');
 var dispatcher = require("../../../dispatcher");
 
+var ObjectUtils = require('../../../ObjectUtils');
+
 var bounce = false;
 try {
     if (global.localStorage) {
@@ -107,10 +109,65 @@ module.exports = React.createClass({
 
         /* callback called when dynamic content in events are loaded */
         onWidgetLoad: React.PropTypes.func,
+
+        /* a list of Room Members whose read-receipts we should show */
+        readReceipts: React.PropTypes.arrayOf(React.PropTypes.object),
+
+        /* the status of this event - ie, mxEvent.status. Denormalised to here so
+         * that we can tell when it changes. */
+        eventSendStatus: React.PropTypes.string,
     },
 
     getInitialState: function() {
         return {menu: false, allReadAvatars: false};
+    },
+
+    shouldComponentUpdate: function (nextProps, nextState) {
+        if (!ObjectUtils.shallowEqual(this.state, nextState)) {
+            return true;
+        }
+
+        if (!this._propsEqual(this.props, nextProps)) {
+            return true;
+        }
+
+        return false;
+    },
+
+    _propsEqual: function(objA, objB) {
+        var keysA = Object.keys(objA);
+        var keysB = Object.keys(objB);
+
+        if (keysA.length !== keysB.length) {
+            return false;
+        }
+
+        for (var i = 0; i < keysA.length; i++) {
+            var key = keysA[i];
+
+            if (!objB.hasOwnProperty(key)) {
+                return false;
+            }
+
+            // need to deep-compare readReceipts
+            if (key == 'readReceipts') {
+                var rA = objA[key];
+                var rB = objB[key];
+                if (rA.length !== rB.length) {
+                    return false;
+                }
+                for (var j = 0; j < rA.length; j++) {
+                    if (rA[j].userId !== rB[j].userId) {
+                        return false;
+                    }
+                }
+            } else {
+                if (objA[key] !== objB[key]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     },
 
     shouldHighlight: function() {
@@ -153,20 +210,6 @@ module.exports = React.createClass({
 
     getReadAvatars: function() {
         var avatars = [];
-
-        var room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-
-        if (!room) return [];
-
-        var myUserId = MatrixClientPeg.get().credentials.userId;
-
-        // get list of read receipts, sorted most recent first
-        var receipts = room.getReceiptsForEvent(this.props.mxEvent).filter(function(r) {
-            return r.type === "m.read" && r.userId != myUserId;
-        }).sort(function(r1, r2) {
-            return r2.data.ts - r1.data.ts;
-        });
-
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 
         var left = 0;
@@ -176,11 +219,9 @@ module.exports = React.createClass({
             easing: 'easeOut'
         };
 
+        var receipts = this.props.readReceipts || [];
         for (var i = 0; i < receipts.length; ++i) {
-            var member = room.getMember(receipts[i].userId);
-            if (!member) {
-                continue;
-            }
+            var member = receipts[i];
 
             // Using react refs here would mean both getting Velociraptor to expose
             // them and making them scoped to the whole RoomView. Not impossible, but
@@ -302,9 +343,9 @@ module.exports = React.createClass({
         var classes = classNames({
             mx_EventTile: true,
             mx_EventTile_sending: ['sending', 'queued'].indexOf(
-                this.props.mxEvent.status
+                this.props.eventSendStatus
             ) !== -1,
-            mx_EventTile_notSent: this.props.mxEvent.status == 'not_sent',
+            mx_EventTile_notSent: this.props.eventSendStatus == 'not_sent',
             mx_EventTile_highlight: this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent,
             mx_EventTile_continuation: this.props.continuation,
