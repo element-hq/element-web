@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -41,9 +41,9 @@
     "velocity-ui-pack": "^1.2.2"
   },
   "//babelversion": [
-      "brief experiments with babel6 seems to show that it generates source ",
-      "maps which confuse chrome and make setting breakpoints tricky. So ",
-      "let's stick with v5 for now."
+    "brief experiments with babel6 seems to show that it generates source ",
+    "maps which confuse chrome and make setting breakpoints tricky. So ",
+    "let's stick with v5 for now."
   ],
   "devDependencies": {
     "babel": "^5.8.23",
