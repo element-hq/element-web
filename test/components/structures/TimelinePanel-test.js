@@ -86,7 +86,8 @@ describe('TimelinePanel', function() {
         // this is https://github.com/vector-im/vector-web/issues/1367
 
         // enough events to allow us to scroll back
-        for (var i = 0; i < 40; i++) {
+        var N_EVENTS = 20;
+        for (var i = 0; i < N_EVENTS; i++) {
             timeline.addEvent(mkMessage());
         }
 
@@ -119,7 +120,7 @@ describe('TimelinePanel', function() {
         // happens
         awaitScroll().then(() => {
             expect(panel.state.canBackPaginate).toBe(false);
-            expect(scryEventTiles(panel).length).toEqual(40);
+            expect(scryEventTiles(panel).length).toEqual(N_EVENTS);
 
             // scroll up
             console.log("setting scrollTop = 0");
@@ -145,12 +146,12 @@ describe('TimelinePanel', function() {
             // that won't make much difference, because we don't paginate
             // unless we're at the bottom of the timeline, but a scroll event
             // should be enough to set off a pagination.
-            expect(scryEventTiles(panel).length).toEqual(40);
+            expect(scryEventTiles(panel).length).toEqual(N_EVENTS);
 
             scrollingDiv.scrollTop = 10;
         }).delay(0).then(awaitPaginationCompletion).then(() => {
-            expect(scryEventTiles(panel).length).toEqual(41);
-        }).done(done);
+            expect(scryEventTiles(panel).length).toEqual(N_EVENTS+1);
+        }).done(done, done);
     });
 
     it('should not paginate forever if there are no events', function(done) {
@@ -204,5 +205,3 @@ describe('TimelinePanel', function() {
         }, 0);
     });
 });
-
-

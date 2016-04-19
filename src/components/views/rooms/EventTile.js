@@ -153,6 +153,14 @@ module.exports = React.createClass({
             if (key == 'readReceipts') {
                 var rA = objA[key];
                 var rB = objB[key];
+                if (rA === rB) {
+                    continue;
+                }
+
+                if (!rA || !rB) {
+                    return false;
+                }
+
                 if (rA.length !== rB.length) {
                     return false;
                 }
