@@ -244,8 +244,8 @@ var TimelinePanel = React.createClass({
             this.setState({
                 [paginatingKey]: false,
                 [canPaginateKey]: r,
+                events: this._getEvents(),
             });
-            this._reloadEvents();
             return r;
         });
     },
@@ -296,19 +296,6 @@ var TimelinePanel = React.createClass({
             return;
         }
 
-        // when a new event arrives when the user is not watching the window, but the
-        // window is in its auto-scroll mode, make sure the read marker is visible.
-        //
-        // We ignore events we have sent ourselves; we don't want to see the
-        // read-marker when a remote echo of an event we have just sent takes
-        // more than the timeout on userCurrentlyActive.
-        //
-        var myUserId = MatrixClientPeg.get().credentials.userId;
-        var sender = ev.sender ? ev.sender.userId : null;
-        if (sender != myUserId && !UserActivity.userCurrentlyActive()) {
-            this.setState({readMarkerVisible: true});
-        }
-
         // tell the timeline window to try to advance itself, but not to make
         // an http request to do so.
         //
@@ -318,8 +305,43 @@ var TimelinePanel = React.createClass({
         // timeline window.
         //
         // see https://github.com/vector-im/vector-web/issues/1035
-        this._timelineWindow.paginate(EventTimeline.FORWARDS, 1, false)
-            .done(this._reloadEvents);
+        this._timelineWindow.paginate(EventTimeline.FORWARDS, 1, false).done(() => {
+            if (this.unmounted) { return; }
+
+            var events = this._timelineWindow.getEvents();
+            var lastEv = events[events.length-1];
+
+            // if we're at the end of the live timeline, append the pending events
+            if (!this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
+                events.push(... this.props.room.getPendingEvents());
+            }
+
+            var updatedState = {events: events};
+
+            // when a new event arrives when the user is not watching the
+            // window, but the window is in its auto-scroll mode, make sure the
+            // read marker is visible.
+            //
+            // We ignore events we have sent ourselves; we don't want to see the
+            // read-marker when a remote echo of an event we have just sent takes
+            // more than the timeout on userCurrentlyActive.
+            //
+            var myUserId = MatrixClientPeg.get().credentials.userId;
+            var sender = ev.sender ? ev.sender.userId : null;
+            var callback = null;
+            if (sender != myUserId && !UserActivity.userCurrentlyActive()) {
+                updatedState.readMarkerVisible = true;
+            } else if(lastEv && this.getReadMarkerPosition() === 0) {
+                // we know we're stuckAtBottom, so we can advance the RM
+                // immediately, to save a later render cycle
+                this._setReadMarker(lastEv.getId(), lastEv.getTs(), true);
+                updatedState.readMarkerVisible = false;
+                updatedState.readMarkerEventId = lastEv.getId();
+                callback = this.props.onReadMarkerUpdated;
+            }
+
+            this.setState(updatedState, callback);
+        });
     },
 
     onRoomTimelineReset: function(room) {
@@ -741,6 +763,13 @@ var TimelinePanel = React.createClass({
         // the results if so.
         if (this.unmounted) return;
 
+        this.setState({
+            events: this._getEvents(),
+        });
+    },
+
+    // get the list of events from the timeline window and the pending event list
+    _getEvents: function() {
         var events = this._timelineWindow.getEvents();
 
         // if we're at the end of the live timeline, append the pending events
@@ -748,9 +777,7 @@ var TimelinePanel = React.createClass({
             events.push(... this.props.room.getPendingEvents());
         }
 
-        this.setState({
-            events: events,
-        });
+        return events;
     },
 
     _indexForEventId: function(evId) {
@@ -816,7 +843,7 @@ var TimelinePanel = React.createClass({
         return this.props.room.getEventReadUpTo(myUserId, ignoreSynthesized);
     },
 
-    _setReadMarker: function(eventId, eventTs) {
+    _setReadMarker: function(eventId, eventTs, inhibitSetState) {
         if (TimelinePanel.roomReadMarkerMap[this.props.room.roomId] == eventId) {
             // don't update the state (and cause a re-render) if there is
             // no change to the RM.
@@ -830,6 +857,10 @@ var TimelinePanel = React.createClass({
         // in order to later figure out if the read marker is
         // above or below the visible timeline, we stash the timestamp.
         TimelinePanel.roomReadMarkerTsMap[this.props.room.roomId] = eventTs;
+
+        if (inhibitSetState) {
+            return;
+        }
 
         // run the render cycle before calling the callback, so that
         // getReadMarkerPosition() returns the right thing.
