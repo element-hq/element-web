@@ -73,6 +73,7 @@
     "parallelshell": "^1.2.0",
     "phantomjs-prebuilt": "^2.1.7",
     "react-addons-test-utils": "^15.0.1",
+    "react-addons-perf": "^15.0",
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.1.5",
     "webpack": "^1.12.14"
