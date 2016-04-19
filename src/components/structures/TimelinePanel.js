@@ -175,8 +175,27 @@ var TimelinePanel = React.createClass({
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
-        return (!ObjectUtils.shallowEqual(this.props, nextProps) ||
-                !ObjectUtils.shallowEqual(this.state, nextState));
+        if (!ObjectUtils.shallowEqual(this.props, nextProps)) {
+            if (DEBUG) {
+                console.group("Timeline.shouldComponentUpdate: props change");
+                console.log("props before:", this.props);
+                console.log("props after:", nextProps);
+                console.groupEnd();
+            }
+            return true;
+        }
+
+        if (!ObjectUtils.shallowEqual(this.state, nextState)) {
+            if (DEBUG) {
+                console.group("Timeline.shouldComponentUpdate: state change");
+                console.log("state before:", this.state);
+                console.log("state after:", nextState);
+                console.groupEnd();
+            }
+            return true;
+        }
+
+        return false;
     },
 
     componentWillUnmount: function() {
@@ -267,13 +286,15 @@ var TimelinePanel = React.createClass({
         // updates from pagination will happen when the paginate completes.
         if (toStartOfTimeline || !data || !data.liveEvent) return;
 
-        // even if we previously gave up forward-paginating, it's worth
-        // having another go now.
-        this.setState({canForwardPaginate: true});
-
         if (!this.refs.messagePanel) return;
 
-        if (!this.refs.messagePanel.getScrollState().stuckAtBottom) return;
+        if (!this.refs.messagePanel.getScrollState().stuckAtBottom) {
+            // we won't load this event now, because we don't want to push any
+            // events off the other end of the timeline. But we need to note
+            // that we can now paginate.
+            this.setState({canForwardPaginate: true});
+            return;
+        }
 
         // when a new event arrives when the user is not watching the window, but the
         // window is in its auto-scroll mode, make sure the read marker is visible.
@@ -294,7 +315,7 @@ var TimelinePanel = React.createClass({
         // we deliberately avoid going via the ScrollPanel for this call - the
         // ScrollPanel might already have an active pagination promise, which
         // will fail, but would stop us passing the pagination request to the
-        // timeline window. 
+        // timeline window.
         //
         // see https://github.com/vector-im/vector-web/issues/1035
         this._timelineWindow.paginate(EventTimeline.FORWARDS, 1, false)
