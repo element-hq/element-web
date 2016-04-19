@@ -1,6 +1,6 @@
-Changes in [0.5.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.5.0) (2016-04-19)
+Changes in [0.5.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.5.1) (2016-04-19)
 ===================================================================================================
-[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.4.0...v0.5.0)
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.4.0...v0.5.1)
 
  * Upgrade to react 15.0
  * Fix many thinkos in sorting the MemberList
@@ -45,6 +45,9 @@ Changes in [0.5.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v
    [\#256](https://github.com/matrix-org/matrix-react-sdk/pull/256)
  * Don't reload the DOM if we can jump straight to the RM
    [\#253](https://github.com/matrix-org/matrix-react-sdk/pull/253)
+
+[0.5.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.5.0) was
+incorrectly released.
 
 Changes in [0.4.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.4.0) (2016-03-30)
 ===================================================================================================
