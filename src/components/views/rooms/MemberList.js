@@ -425,7 +425,6 @@ module.exports = React.createClass({
             // console.log("comparing ts: " + lastActiveTsA + " and " + lastActiveTsB);
 
             return lastActiveTsB - lastActiveTsA;
-        }
     },
 
     onSearchQueryChanged: function(input) {
@@ -533,4 +532,3 @@ module.exports = React.createClass({
         );
     }
 });
-
