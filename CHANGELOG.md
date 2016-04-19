@@ -1,3 +1,27 @@
+Changes in [0.6.0](https://github.com/vector-im/vector-web/releases/tag/v0.6.0) (2016-04-19)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.5.0...v0.6.0)
+
+ * Matthew/design tweaks
+   [\#1402](https://github.com/vector-im/vector-web/pull/1402)
+ * Improve handling of notification rules we can't parse
+   [\#1399](https://github.com/vector-im/vector-web/pull/1399)
+ * Do less mangling of jenkins builds
+   [\#1391](https://github.com/vector-im/vector-web/pull/1391)
+ * Start Notifications component refactor
+   [\#1386](https://github.com/vector-im/vector-web/pull/1386)
+ * make the UI fadable to help with decluttering
+   [\#1376](https://github.com/vector-im/vector-web/pull/1376)
+ * Get and display a user's pushers in settings
+   [\#1374](https://github.com/vector-im/vector-web/pull/1374)
+ * URL previewing support
+   [\#1343](https://github.com/vector-im/vector-web/pull/1343)
+ * 😄 Emoji autocomplete and unicode emoji to image conversion using emojione.
+   [\#1332](https://github.com/vector-im/vector-web/pull/1332)
+ * Show full-size avatar on MemberInfo avatar click
+   [\#1340](https://github.com/vector-im/vector-web/pull/1340)
+ * Numerous other changes via [matrix-react-sdk 0.5.1](https://github.com/matrix-org/matrix-react-sdk/blob/v0.5.1/CHANGELOG.md)
+
 Changes in [0.5.0](https://github.com/vector-im/vector-web/releases/tag/v0.5.0) (2016-03-30)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.4.1...v0.5.0)
@@ -71,7 +95,7 @@ Changes in vector v0.1.2 (2015-10-28)
  * Better hover-over on member list
  * Support CAS auth
  * Many other bug fixes
- 
+
 Changes in vector v0.1.1 (2015-08-10)
 ======================================
 
