@@ -193,9 +193,9 @@ module.exports = React.createClass({
             var me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
 
-            // console.log("room = " + room.name + ", me.membership = " + me.membership + 
+            // console.log("room = " + room.name + ", me.membership = " + me.membership +
             //             ", sender = " + me.events.member.getSender() +
-            //             ", target = " + me.events.member.getStateKey() + 
+            //             ", target = " + me.events.member.getStateKey() +
             //             ", prevMembership = " + me.events.member.getPrevContent().membership);
 
             if (me.membership == "invite") {
@@ -232,7 +232,7 @@ module.exports = React.createClass({
                         }
                     }
                     else {
-                        s.lists["im.vector.fake.recent"].push(room); 
+                        s.lists["im.vector.fake.recent"].push(room);
                     }
                 }
             }
@@ -270,7 +270,7 @@ module.exports = React.createClass({
     _repositionTooltip: function(e) {
         if (this.tooltip && this.tooltip.parentElement) {
             var scroll = ReactDOM.findDOMNode(this);
-            this.tooltip.style.top = (70 + scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - this._getScrollNode().scrollTop) + "px"; 
+            this.tooltip.style.top = (70 + scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - this._getScrollNode().scrollTop) + "px";
         }
     },
 
@@ -324,7 +324,9 @@ module.exports = React.createClass({
         var self = this;
 
         return (
-            <GeminiScrollbar className="mx_RoomList_scrollbar" autoshow={true} onScroll={ self._repositionTooltips } ref="gemscroll">
+            <GeminiScrollbar className="mx_RoomList_scrollbar"
+                 relayoutOnUpdate={false}
+                 autoshow={true} onScroll={ self._repositionTooltips } ref="gemscroll">
             <div className="mx_RoomList">
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
                              label="Invites"
