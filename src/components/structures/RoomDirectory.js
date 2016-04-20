@@ -129,8 +129,8 @@ module.exports = React.createClass({
         var rooms = this.state.publicRooms.filter(function(a) {
             // FIXME: if incrementally typing, keep narrowing down the search set
             // incrementally rather than starting over each time.
-            return (((a.name && a.name.toLowerCase().search(filter.toLowerCase()) >= 0) || 
-                     (a.aliases && a.aliases[0].toLowerCase().search(filter.toLowerCase()) >= 0)) && 
+            return (((a.name && a.name.toLowerCase().search(filter.toLowerCase()) >= 0) ||
+                     (a.aliases && a.aliases[0].toLowerCase().search(filter.toLowerCase()) >= 0)) &&
                       a.num_joined_members > 0);
         }).sort(function(a,b) {
             return a.num_joined_members - b.num_joined_members;
@@ -213,7 +213,8 @@ module.exports = React.createClass({
                 <SimpleRoomHeader title="Directory" />
                 <div className="mx_RoomDirectory_list">
                     <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
-                    <GeminiScrollbar className="mx_RoomDirectory_tableWrapper">
+                    <GeminiScrollbar className="mx_RoomDirectory_tableWrapper"
+                                     relayoutOnUpdate={false} >
                         <table ref="directory_table" className="mx_RoomDirectory_table">
                             <tbody>
                                 { this.getRows(this.state.roomAlias) }
@@ -225,4 +226,3 @@ module.exports = React.createClass({
         );
     }
 });
-
