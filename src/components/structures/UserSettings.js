@@ -342,7 +342,9 @@ module.exports = React.createClass({
             <div className="mx_UserSettings">
                 <SimpleRoomHeader title="Settings" onCancelClick={ this.props.onClose }/>
 
-                <GeminiScrollbar className="mx_UserSettings_body" autoshow={true}>
+                <GeminiScrollbar className="mx_UserSettings_body"
+                                 relayoutOnUpdate={false}
+                                 autoshow={true}>
 
                 <h3>Profile</h3>
 
