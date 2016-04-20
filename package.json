@@ -49,7 +49,7 @@
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.0.1",
-    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#6f5336c",
+    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#c3d942e",
     "sanitize-html": "^1.11.1"
   },
   "devDependencies": {
