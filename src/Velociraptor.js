@@ -13,25 +13,24 @@ module.exports = React.createClass({
     displayName: 'Velociraptor',
 
     propTypes: {
-        children: React.PropTypes.array,
+        // either a list of child nodes, or a single child.
+        children: React.PropTypes.any,
+
+        // optional transition information for changing existing children
         transition: React.PropTypes.object,
-        container: React.PropTypes.string
     },
 
     componentWillMount: function() {
         this.children = {};
         this.nodes = {};
-        var self = this;
-        React.Children.map(this.props.children, function(c) {
-            self.children[c.key] = c;
-        });
+        this.componentWillReceiveProps(this.props);
     },
 
     componentWillReceiveProps: function(nextProps) {
         var self = this;
         var oldChildren = this.children;
         this.children = {};
-        React.Children.map(nextProps.children, function(c) {
+        React.Children.toArray(nextProps.children).forEach(function(c) {
             if (oldChildren[c.key]) {
                 var old = oldChildren[c.key];
                 var oldNode = ReactDom.findDOMNode(self.nodes[old.key]);
@@ -92,22 +91,23 @@ module.exports = React.createClass({
                 //console.log("start: "+JSON.stringify(startStyles[i]));
             }
             // and then we animate to the resting state
-            Velocity(domNode, node.props._restingStyle, transitionOpts[i-1]);
+            Velocity(domNode, node.props._restingStyle,
+                     transitionOpts[i-1])
+            .then(() => {
+                // once we've reached the resting state, hide the element if
+                // appropriate
+                domNode.style.visibility = node.props._restingStyle.visibility;
+            });
+
             //console.log("enter: "+JSON.stringify(node.props._restingStyle));
         }
         this.nodes[k] = node;
     },
 
     render: function() {
-        var self = this;
-        var childList = Object.keys(this.children).map(function(k) {
-            return React.cloneElement(self.children[k], {
-                ref: self.collectNode.bind(self, self.children[k].key)
-            });
-        });
         return (
             <span>
-                {childList}
+                {Object.values(this.children)}
             </span>
         );
     },
