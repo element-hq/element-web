@@ -89,8 +89,8 @@ module.exports = React.createClass({
                  node.getAttribute("href").startsWith("https://")))
             {
                 // as a random heuristic to avoid highlighting things like "foo.pl"
-                // we require the linked text to either include a / (either from http:// )
-                // or from a full foo.bar/baz style schemeless URL - or be a markdown-style
+                // we require the linked text to either include a / (either from http://
+                // or from a full foo.bar/baz style schemeless URL) - or be a markdown-style
                 // link, in which case we check the target text differs from the link value.
                 // TODO: make this configurable?
                 if (node.textContent.indexOf("/") > -1)
