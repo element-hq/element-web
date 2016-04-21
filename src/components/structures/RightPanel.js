@@ -155,7 +155,10 @@ module.exports = React.createClass({
                     panel = <MemberInfo roomId={this.props.roomId} member={this.state.member} key={this.props.roomId} />
                 }
             }
+        }
 
+        if (!panel) {
+            panel = <div className="mx_RightPanel_blank"></div>;
         }
 
         var classes = "mx_RightPanel mx_fadable";
@@ -169,6 +172,8 @@ module.exports = React.createClass({
                     { buttonGroup }
                 </div>
                 { panel }
+                <div className="mx_RightPanel_footer">
+                </div>
             </aside>
         );
     }

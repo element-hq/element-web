@@ -22,6 +22,8 @@ limitations under the License.
     margin-bottom: 12px;
     color: #4a4a4a;
 
+    border-top: 1px solid #c5c5c5;
+
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;

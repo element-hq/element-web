@@ -21,6 +21,7 @@ limitations under the License.
 .mx_TabCompleteBar_item {
     display: inline-block;
     margin-right: 15px;
+    margin-bottom: 2px;
     cursor: pointer;
 }
 
@@ -37,6 +38,7 @@ limitations under the License.
 
 .mx_TabCompleteBar_command .mx_TabCompleteBar_text {
     opacity: 1.0;
+    vertical-align: initial;
     color: #fff;
 }
 
@@ -47,5 +49,6 @@ limitations under the License.
 
 .mx_TabCompleteBar_text {
     color: #4a4a4a;
+    vertical-align: middle;
     opacity: 0.5;
 }

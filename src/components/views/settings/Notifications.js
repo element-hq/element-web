@@ -27,9 +27,13 @@ var notifications = require('../../../notifications');
 // TODO: this "view" component still has far to much application logic in it,
 // which should be factored out to other files.
 
+// TODO: this component also does a lot of direct poking into this.state, which
+// is VERY NAUGHTY.
+
 var NotificationUtils = notifications.NotificationUtils;
 var VectorPushRulesDefinitions = notifications.VectorPushRulesDefinitions;
 var PushRuleVectorState = notifications.PushRuleVectorState;
+var ContentRules = notifications.ContentRules;
 
 /**
  * Rules that Vector used to set in order to override the actions of default rules.
@@ -104,6 +108,7 @@ module.exports = React.createClass({
     },
 
     onNotifStateButtonClicked: function(event) {
+        // FIXME: use .bind() rather than className metadata here surely
         var vectorRuleId = event.target.className.split("-")[0];
         var newPushRuleVectorState = event.target.className.split("-")[1];
 
@@ -411,7 +416,10 @@ module.exports = React.createClass({
 
     _refreshFromServer: function() {
         var self = this;
-        var pushRulesPromise = MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).done(function(rulesets) {
+        var pushRulesPromise = MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).then(function(rulesets) {
+            //console.log("resolving pushRulesPromise");
+
+            /// XXX seriously? wtf is this?
             MatrixClientPeg.get().pushRules = rulesets;
 
             // Get homeserver default rules and triage them by categories
@@ -434,8 +442,6 @@ module.exports = React.createClass({
 
             // HS default rules
             var defaultRules = {master: [], vector: {}, others: []};
-            //  Content/keyword rules
-            var contentRules = {on: [], on_but_disabled:[], loud: [], loud_but_disabled: [], other: []};
 
             for (var kind in rulesets.global) {
                 for (var i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
@@ -454,75 +460,7 @@ module.exports = React.createClass({
                             defaultRules['others'].push(r);
                         }
                     }
-                    else if (kind === 'content') {
-                        switch (PushRuleVectorState.contentRuleVectorStateKind(r)) {
-                            case PushRuleVectorState.ON:
-                                if (r.enabled) {
-                                    contentRules.on.push(r);
-                                }
-                                else {
-                                    contentRules.on_but_disabled.push(r);
-                                }
-                                break;
-                            case PushRuleVectorState.LOUD:
-                                if (r.enabled) {
-                                    contentRules.loud.push(r);
-                                }
-                                else {
-                                    contentRules.loud_but_disabled.push(r);
-                                }
-                                break;
-                            default:
-                                contentRules.other.push(r);
-                                break;
-                        }
-                    }
                 }
-            }
-
-            // Decide which content rules to display in Vector UI.
-            // Vector displays a single global rule for a list of keywords
-            // whereas Matrix has a push rule per keyword.
-            // Vector can set the unique rule in ON, LOUD or OFF state.
-            // Matrix has enabled/disabled plus a combination of (highlight, sound) tweaks.
-
-            // The code below determines which set of user's content push rules can be
-            // displayed by the vector UI.
-            // Push rules that does not fit, ie defined by another Matrix client, ends
-            // in self.state.externalContentRules.
-            // There is priority in the determination of which set will be the displayed one.
-            // The set with rules that have LOUD tweaks is the first choice. Then, the ones
-            // with ON tweaks (no tweaks).
-            if (contentRules.loud.length) {
-                self.state.vectorContentRules = {
-                    vectorState: PushRuleVectorState.LOUD,
-                    rules: contentRules.loud
-                }
-               self.state.externalContentRules = [].concat(contentRules.loud_but_disabled, contentRules.on, contentRules.on_but_disabled, contentRules.other);
-            }
-            else if (contentRules.loud_but_disabled.length) {
-                self.state.vectorContentRules = {
-                    vectorState: PushRuleVectorState.OFF,
-                    rules: contentRules.loud_but_disabled
-                }
-               self.state.externalContentRules = [].concat(contentRules.on, contentRules.on_but_disabled, contentRules.other);
-            }
-            else if (contentRules.on.length) {
-                self.state.vectorContentRules = {
-                    vectorState: PushRuleVectorState.ON,
-                    rules: contentRules.on
-                }
-                self.state.externalContentRules = [].concat(contentRules.on_but_disabled, contentRules.other);
-            }
-            else if (contentRules.on_but_disabled.length) {
-                self.state.vectorContentRules = {
-                    vectorState: PushRuleVectorState.OFF,
-                    rules: contentRules.on_but_disabled
-                }
-                self.state.externalContentRules = contentRules.other;
-            }
-            else {
-                self.state.externalContentRules = contentRules.other;
             }
 
             // Get the master rule if any defined by the hs
@@ -530,8 +468,17 @@ module.exports = React.createClass({
                 self.state.masterPushRule = defaultRules.master[0];
             }
 
+            // parse the keyword rules into our state
+            var contentRules = ContentRules.parseContentRules(rulesets);
+            self.state.vectorContentRules = {
+                vectorState: contentRules.vectorState,
+                rules: contentRules.rules,
+            };
+            self.state.externalContentRules = contentRules.externalRules;
+
             // Build the rules displayed in the Vector UI matrix table
             self.state.vectorPushRules = [];
+            self.state.externalPushRules = [];
 
             var vectorRuleIds = [
                 '.m.rule.contains_display_name',
@@ -545,7 +492,6 @@ module.exports = React.createClass({
             ];
             for (var i in vectorRuleIds) {
                 var vectorRuleId = vectorRuleIds[i];
-                var ruleDefinition = VectorPushRulesDefinitions[vectorRuleId];
 
                 if (vectorRuleId === '_keywords') {
                     // keywords needs a special handling
@@ -558,42 +504,12 @@ module.exports = React.createClass({
                     });
                 }
                 else {
+                    var ruleDefinition = VectorPushRulesDefinitions[vectorRuleId];
                     var rule = defaultRules.vector[vectorRuleId];
 
-                    // Translate the rule actions and its enabled value into vector state
-                    var vectorState;
-                    if (rule) {
-                        for (var stateKey in PushRuleVectorState) {
-                            var state = PushRuleVectorState[stateKey];
-                            var vectorStateToActions = ruleDefinition.vectorStateToActions[state];
+                    var vectorState = ruleDefinition.ruleToVectorState(rule);
 
-                            if (!vectorStateToActions) {
-                                // No defined actions means that this vector state expects a disabled default hs rule
-                                if (rule.enabled === false) {
-                                    vectorState = state;
-                                    break;
-                                }
-                            }
-                            else {
-                                // The actions must match to the ones expected by vector state
-                                if (JSON.stringify(rule.actions) === JSON.stringify(vectorStateToActions)) {
-                                    // And the rule must be enabled.
-                                    if (rule.enabled === true) {
-                                        vectorState = state;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (!vectorState) {
-                            console.error("Cannot translate rule actions into Vector rule state. Rule: " + rule);
-                            vectorState = PushRuleVectorState.OFF;
-                        }
-                    }
-                    else {
-                    	vectorState = PushRuleVectorState.OFF;
-                    }
+                    //console.log("Refreshing vectorPushRules for " + vectorRuleId +", "+ ruleDefinition.description +", " + rule +", " + vectorState);
 
                     self.state.vectorPushRules.push({
                         "vectorRuleId": vectorRuleId,
@@ -601,6 +517,12 @@ module.exports = React.createClass({
                         "rule": rule,
                         "vectorState": vectorState,
                     });
+
+                    // if there was a rule which we couldn't parse, add it to the external list
+                    if (rule && !vectorState) {
+                        rule.description = ruleDefinition.description;
+                        self.state.externalPushRules.push(rule);
+                    }
                 }
             }
 
@@ -610,7 +532,6 @@ module.exports = React.createClass({
                 '.m.rule.fallback': "Notify me for anything else"
             };
 
-            self.state.externalPushRules = [];
             for (var i in defaultRules.others) {
                 var rule = defaultRules.others[i];
                 var ruleDescription = otherRulesDescriptions[rule.rule_id];
@@ -624,10 +545,11 @@ module.exports = React.createClass({
         });
 
         var pushersPromise = MatrixClientPeg.get().getPushers().then(function(resp) {
+            //console.log("resolving pushersPromise");
             self.setState({pushers: resp.pushers});
         });
 
-        q.all([pushRulesPromise, pushersPromise]).done(function() {
+        q.all([pushRulesPromise, pushersPromise]).then(function() {
             self.setState({
                 phase: self.phases.DISPLAY
             });
@@ -635,7 +557,16 @@ module.exports = React.createClass({
             self.setState({
                 phase: self.phases.ERROR
             });
-        });
+        }).finally(() => {
+            // actually explicitly update our state  having been deep-manipulating it
+            self.setState({
+                masterPushRule: self.state.masterPushRule,
+                vectorContentRules: self.state.vectorContentRules,
+                vectorPushRules: self.state.vectorPushRules,
+                externalContentRules: self.state.externalContentRules,
+                externalPushRules: self.state.externalPushRules,
+            });
+        }).done();
     },
 
     _updatePushRuleActions: function(rule, actions, enabled) {
@@ -655,7 +586,7 @@ module.exports = React.createClass({
 
     renderNotifRulesTableRow: function(title, className, pushRuleVectorState) {
         return (
-            <tr key = {className}>
+            <tr key={ className }>
                 <th>
                     {title}
                 </th>
@@ -688,6 +619,7 @@ module.exports = React.createClass({
         var rows = [];
         for (var i in this.state.vectorPushRules) {
             var rule = this.state.vectorPushRules[i];
+            //console.log("rendering: " + rule.description + ", " + rule.vectorRuleId + ", " + rule.vectorState);
             rows.push(this.renderNotifRulesTableRow(rule.description, rule.vectorRuleId, rule.vectorState));
         }
         return rows;
@@ -731,13 +663,10 @@ module.exports = React.createClass({
     render: function() {
         var self = this;
 
+        var spinner;
         if (this.state.phase === this.phases.LOADING) {
             var Loader = sdk.getComponent("elements.Spinner");
-            return (
-                <div className="mx_UserSettings_notifTable">
-                    <Loader />
-                </div>
-            );
+            spinner = <Loader />;
         }
 
         if (this.state.masterPushRule) {
@@ -820,19 +749,21 @@ module.exports = React.createClass({
             // and this wouldn't be hard to add.
             var rows = [];
             for (var i = 0; i < this.state.pushers.length; ++i) {
-                var p = this.state.pushers[i];
-
-                rows.push(<tr key={p.app_id+p.pushkey}>
-                    <td>{p.app_display_name}</td>
-                    <td>{p.device_display_name}</td>
+                rows.push(<tr key={ i }>
+                    <td>{this.state.pushers[i].app_display_name}</td>
+                    <td>{this.state.pushers[i].device_display_name}</td>
                 </tr>);
             }
-            devicesSection = (<table className="mx_UserSettings_devicesTable"><thead>
-                <tr>
-                    <th>Application</th>
-                    <th>Device</th>
-                </tr></thead>
-                <tbody>{rows}</tbody>
+            devicesSection = (<table className="mx_UserSettings_devicesTable">
+                <thead>
+                    <tr>
+                        <th>Application</th>
+                        <th>Device</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
             </table>);
         }
 
@@ -856,6 +787,8 @@ module.exports = React.createClass({
                 {masterPushRuleDiv}
 
                 <div className="mx_UserSettings_notifTable">
+
+                    { spinner }
 
                     <div className="mx_UserNotifSettings_tableRow">
                         <div className="mx_UserNotifSettings_inputCell">
@@ -901,7 +834,7 @@ module.exports = React.createClass({
                                     <th width="55%"></th>
                                     <th width="15%">Off</th>
                                     <th width="15%">On</th>
-                                    <th width="15%">Loud</th>
+                                    <th width="15%">Highlight<br/>&amp; sound</th>
                                 </tr>
                             </thead>
                             <tbody>

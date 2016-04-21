@@ -1,6 +1,6 @@
 {
   "name": "vector-web",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Vector webapp",
   "author": "matrix.org",
   "repository": {
@@ -16,7 +16,7 @@
     "build:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/components.css --no-watch",
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "NODE_ENV=production webpack -p lib/vector/index.js vector/bundle.js",
-    "build:bundle:dev": "webpack --optimize-occurence-order lib/vector/index.js vector/bundle.js",
+    "build:bundle:dev": "NODE_ENV=production webpack --optimize-occurence-order lib/vector/index.js vector/bundle.js",
     "build": "npm run build:css && npm run build:compile && npm run build:bundle",
     "build:dev": "npm run build:css && npm run build:compile && npm run build:bundle:dev",
     "package": "scripts/package.sh",
@@ -37,7 +37,7 @@
     "extract-text-webpack-plugin": "^0.9.1",
     "filesize": "^3.1.2",
     "flux": "~2.0.3",
-    "gemini-scrollbar": "matrix-org/gemini-scrollbar#7dc736d",
+    "gemini-scrollbar": "matrix-org/gemini-scrollbar#87ebaa7",
     "gfm.css": "^1.1.1",
     "highlight.js": "^9.0.0",
     "linkifyjs": "^2.0.0-beta.4",
@@ -45,11 +45,11 @@
     "matrix-react-sdk": "matrix-org/matrix-react-sdk#develop",
     "modernizr": "^3.1.0",
     "q": "^1.4.1",
-    "react": "^0.14.8",
-    "react-dnd": "^2.0.2",
-    "react-dnd-html5-backend": "^2.0.0",
-    "react-dom": "^0.14.2",
-    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#869a86b",
+    "react": "^15.0.1",
+    "react-dnd": "^2.1.4",
+    "react-dnd-html5-backend": "^2.1.2",
+    "react-dom": "^15.0.1",
+    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#c3d942e",
     "sanitize-html": "^1.11.1"
   },
   "devDependencies": {
@@ -72,7 +72,8 @@
     "mocha": "^2.4.5",
     "parallelshell": "^1.2.0",
     "phantomjs-prebuilt": "^2.1.7",
-    "react-addons-test-utils": "^0.14.8",
+    "react-addons-test-utils": "^15.0.1",
+    "react-addons-perf": "^15.0",
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.1.5",
     "webpack": "^1.12.14"

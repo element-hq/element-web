@@ -33,14 +33,17 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    -webkit-flex: 0 0 83px;
-    flex: 0 0 83px;
+    border-bottom: 1px solid #e5e5e5;
+    margin-right: 20px;
+
+    -webkit-flex: 0 0 70px;
+    flex: 0 0 70px;
 }
 
 /** Fixme - factor this out with the main header **/
 
 .mx_RightPanel_headerButtonGroup {
-    margin-top: 32px;
+    margin-top: 25px;
     float: left;
     background-color: #fff;
     margin-left: -4px;
@@ -83,10 +86,27 @@ limitations under the License.
 }
 
 .mx_RightPanel .mx_MemberList,
-.mx_RightPanel .mx_MemberInfo {
+.mx_RightPanel .mx_MemberInfo,
+.mx_RightPanel_blank {
     -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
     -webkit-order: 2;
     order: 2;
+    flex: 1;
+    -webkit-flex: 1;
+}
+
+.mx_RightPanel_footer {
+    -webkit-box-ordinal-group: 3;
+    -moz-box-ordinal-group: 3;
+    -ms-flex-order: 3;
+    -webkit-order: 3;
+    order: 3;
+
+    border-top: 1px solid #e5e5e5;
+    margin-right: 20px;
+
+    -webkit-flex: 0 0 60px;
+    flex: 0 0 60px;
 }

@@ -36,8 +36,8 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    -webkit-flex: 0 0 83px;
-    flex: 0 0 83px;
+    -webkit-flex: 0 0 70px;
+    flex: 0 0 70px;
 }
 
 .mx_UserSettings_body {
@@ -50,7 +50,23 @@ limitations under the License.
     -webkit-flex: 1 1 0;
     flex: 1 1 0;
 
+    margin-top: -20px;
     overflow-y: auto;
+}
+
+.mx_UserSettings h3 {
+    clear: both;
+    margin-left: 63px;
+    text-transform: uppercase;
+    color: #3d3b39;
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 26px;
+    margin-bottom: 10px;
+}
+
+.mx_UserSettings_section h3 {
+    margin-left: 0px;
 }
 
 .mx_UserSettings_spinner {
@@ -78,22 +94,6 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_UserSettings h2 {
-    clear: both;
-    margin-top: 32px;
-    margin-bottom: 8px;
-    margin-left: 63px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid #eee;
-}
-
-.mx_UserSettings h3 {
-    font-weight: bold;
-    font-size: 15px;
-    margin-top: 4px;
-    margin-bottom: 4px;
-}
-
 .mx_UserSettings_section {
     margin-left: 63px;
     margin-top: 28px;
@@ -104,6 +104,10 @@ limitations under the License.
 .mx_UserSettings_notifTable
 {
     display: table;
+}
+
+.mx_UserSettings_notifTable .mx_Spinner {
+    position: absolute;
 }
 
 .mx_UserSettings_profileTable

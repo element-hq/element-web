@@ -16,17 +16,47 @@ limitations under the License.
 
 'use strict';
 
-var NotificationUtils = require('./NotificationUtils');
+var StandardActions = require('./StandardActions');
+var PushRuleVectorState = require('./PushRuleVectorState');
 
-var encodeActions = NotificationUtils.encodeActions;
-var decodeActions = NotificationUtils.decodeActions;
+class VectorPushRuleDefinition {
+    constructor(opts) {
+        this.kind = opts.kind;
+        this.description = opts.description;
+        this.vectorStateToActions = opts.vectorStateToActions;
+    }
 
-const ACTION_NOTIFY = encodeActions({notify: true});
-const ACTION_NOTIFY_DEFAULT_SOUND = encodeActions({notify: true, sound: "default"});
-const ACTION_NOTIFY_RING_SOUND = encodeActions({notify: true, sound: "ring"});
-const ACTION_HIGHLIGHT_DEFAULT_SOUND = encodeActions({notify: true, sound: "default", highlight: true});
-const ACTION_DONT_NOTIFY = encodeActions({notify: false});
-const ACTION_DISABLED = null;
+    // Translate the rule actions and its enabled value into vector state
+    ruleToVectorState(rule) {
+        var enabled = false;
+        var actions = null;
+        if (rule) {
+            enabled = rule.enabled;
+            actions = rule.actions;
+        }
+
+        for (var stateKey in PushRuleVectorState.states) {
+            var state = PushRuleVectorState.states[stateKey];
+            var vectorStateToActions = this.vectorStateToActions[state];
+
+            if (!vectorStateToActions) {
+                // No defined actions means that this vector state expects a disabled (or absent) rule
+                if (!enabled) {
+                    return state;
+                }
+            } else {
+                // The actions must match to the ones expected by vector state
+                if (enabled && JSON.stringify(rule.actions) === JSON.stringify(vectorStateToActions)) {
+                    return state;
+                }
+            }
+        }
+
+        console.error("Cannot translate rule actions into Vector rule state. Rule: " +
+                      JSON.stringify(rule));
+        return undefined;
+    }
+};
 
 /**
  * The descriptions of rules managed by the Vector UI.
@@ -34,71 +64,71 @@ const ACTION_DISABLED = null;
 module.exports = {
     // Messages containing user's display name
     // (skip contains_user_name which is too geeky)
-    ".m.rule.contains_display_name": {
+    ".m.rule.contains_display_name": new VectorPushRuleDefinition({
         kind: "underride",
         description: "Messages containing my name",
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
-            on: ACTION_NOTIFY,
-            loud: ACTION_HIGHLIGHT_DEFAULT_SOUND,
-            off: ACTION_DISABLED
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DISABLED
         }
-    },
+    }),
 
     // Messages just sent to the user in a 1:1 room
-    ".m.rule.room_one_to_one": {
+    ".m.rule.room_one_to_one": new VectorPushRuleDefinition({
         kind: "underride",
         description: "Messages in one-to-one chats",
         vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DONT_NOTIFY
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DONT_NOTIFY
         }
-    },
+    }),
 
     // Messages just sent to a group chat room
     // 1:1 room messages are catched by the .m.rule.room_one_to_one rule if any defined
     // By opposition, all other room messages are from group chat rooms.
-    ".m.rule.message": {
+    ".m.rule.message": new VectorPushRuleDefinition({
         kind: "underride",
         description: "Messages in group chats",
         vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DONT_NOTIFY
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DONT_NOTIFY
         }
-    },
+    }),
 
     // Invitation for the user
-    ".m.rule.invite_for_me": {
+    ".m.rule.invite_for_me": new VectorPushRuleDefinition({
         kind: "underride",
         description: "When I'm invited to a room",
         vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DISABLED
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DISABLED
         }
-    },
+    }),
 
     // Incoming call
-    ".m.rule.call": {
+    ".m.rule.call": new VectorPushRuleDefinition({
         kind: "underride",
         description: "Call invitation",
         vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_RING_SOUND,
-            off: ACTION_DISABLED
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_NOTIFY_RING_SOUND,
+            off: StandardActions.ACTION_DISABLED
         }
-    },
+    }),
 
     // Notifications from bots
-    ".m.rule.suppress_notices": {
+    ".m.rule.suppress_notices": new VectorPushRuleDefinition({
         kind: "override",
         description: "Messages sent by bot",
         vectorStateToActions: {
             // .m.rule.suppress_notices is a "negative" rule, we have to invert its enabled value for vector UI
-            on: ACTION_DISABLED,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DONT_NOTIFY,
+            on: StandardActions.ACTION_DISABLED,
+            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DONT_NOTIFY,
         }
-    }
+    }),
 };

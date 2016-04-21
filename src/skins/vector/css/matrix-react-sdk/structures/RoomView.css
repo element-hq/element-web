@@ -36,8 +36,8 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    -webkit-flex: 0 0 83px;
-    flex: 0 0 83px;
+    -webkit-flex: 0 0 70px;
+    flex: 0 0 70px;
 }
 
 .mx_RoomView_fileDropTarget {
@@ -64,7 +64,7 @@ limitations under the License.
     border: 2px #e1dddd solid;
     border-bottom: none;
     position: absolute;
-    top: 83px;
+    top: 70px;
     bottom: 0px;
     z-index: 3000;
 }
@@ -89,7 +89,7 @@ limitations under the License.
     margin: auto;
 
     overflow: auto;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #e5e5e5;
 
     -webkit-flex: 0 0 auto;
     flex: 0 0 auto;
@@ -158,7 +158,7 @@ limitations under the License.
     margin-bottom: 8px;
     margin-left: 63px;
     padding-bottom: 6px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .mx_RoomView_invitePrompt {
@@ -207,11 +207,12 @@ hr.mx_RoomView_myReadMarker {
 .mx_RoomView_statusAreaBox {
     max-width: 960px;
     margin: auto;
-    min-height: 36px;
+    min-height: 60px;
 }
 
 .mx_RoomView_statusAreaBox_line {
-    border-top: 1px solid #eee;
+    margin-left: 65px;
+    border-top: 1px solid #e5e5e5;
     height: 1px;
 }
 

@@ -19,6 +19,9 @@ limitations under the License.
  * You can edit it you like, but your changes will be overwritten,
  * so you'd just be trying to swim upstream like a salmon.
  * You are not a salmon.
+ *
+ * To update it, run:
+ *    ./reskindex.js -h header
  */
 
 module.exports.components = require('matrix-react-sdk/lib/component-index').components;
@@ -29,6 +32,7 @@ module.exports.components['structures.LeftPanel'] = require('./components/struct
 module.exports.components['structures.RightPanel'] = require('./components/structures/RightPanel');
 module.exports.components['structures.RoomDirectory'] = require('./components/structures/RoomDirectory');
 module.exports.components['structures.RoomSubList'] = require('./components/structures/RoomSubList');
+module.exports.components['structures.SearchBox'] = require('./components/structures/SearchBox');
 module.exports.components['structures.ViewSource'] = require('./components/structures/ViewSource');
 module.exports.components['views.elements.ImageView'] = require('./components/views/elements/ImageView');
 module.exports.components['views.elements.Spinner'] = require('./components/views/elements/Spinner');

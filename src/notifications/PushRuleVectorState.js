@@ -16,12 +16,10 @@ limitations under the License.
 
 'use strict';
 
-/**
- * Enum for state of a push rule as defined by the Vector UI.
- * @readonly
- * @enum {string}
- */
-module.exports = {
+var StandardActions = require('./StandardActions');
+var NotificationUtils = require('./NotificationUtils');
+
+var states = {
     /** The push rule is disabled */
     OFF: "off",
 
@@ -31,6 +29,16 @@ module.exports = {
     /** The user will receive push notification for this rule with sound and
         highlight if this is legitimate */
     LOUD: "loud",
+};
+
+
+module.exports = {
+    /**
+     * Enum for state of a push rule as defined by the Vector UI.
+     * @readonly
+     * @enum {string}
+     */
+    states: states,
 
     /**
      * Convert a PushRuleVectorState to a list of actions
@@ -39,10 +47,10 @@ module.exports = {
      */
     actionsFor: function(pushRuleVectorState) {
         if (pushRuleVectorState === this.ON) {
-            return ACTION_NOTIFY;
+            return StandardActions.ACTION_NOTIFY;
         }
         else if (pushRuleVectorState === this.LOUD) {
-            return ACTION_HIGHLIGHT_DEFAULT_SOUND;
+            return StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND;
         }
     },
 
@@ -51,20 +59,24 @@ module.exports = {
      *
      * Determines whether a content rule is in the PushRuleVectorState.ON
      * category or in PushRuleVectorState.LOUD, regardless of its enabled
-     * state. Returns undefined if it does not match these categories.
+     * state. Returns null if it does not match these categories.
      */
     contentRuleVectorStateKind: function(rule) {
-        var stateKind;
+        var decoded = NotificationUtils.decodeActions(rule.actions);
+
+        if (!decoded) {
+            return null;
+        }
 
         // Count tweaks to determine if it is a ON or LOUD rule
         var tweaks = 0;
-        for (var j in rule.actions) {
-            var action = rule.actions[j];
-            if (action.set_tweak === 'sound' ||
-                (action.set_tweak === 'highlight' && action.value)) {
-                tweaks++;
-            }
+        if (decoded.sound) {
+            tweaks++;
         }
+        if (decoded.highlight) {
+            tweaks++;
+        }
+        var stateKind = null;
         switch (tweaks) {
             case 0:
                 stateKind = this.ON;
@@ -75,4 +87,8 @@ module.exports = {
         }
         return stateKind;
     },
+};
+
+for (var k in states) {
+    module.exports[k] = states[k];
 };

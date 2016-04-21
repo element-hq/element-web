@@ -47,12 +47,19 @@ module.exports = React.createClass({
 
     render: function() {
         var BottomLeftMenuTile = sdk.getComponent('rooms.BottomLeftMenuTile');
+        var TintableSvg = sdk.getComponent('elements.TintableSvg');
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
-                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/create-big.svg" label="Start chat" onClick={ this.onCreateRoomClick }/>
-                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/directory-big.svg" label="Directory" onClick={ this.onRoomDirectoryClick }/>
-                    <BottomLeftMenuTile collapsed={ this.props.collapsed } img="img/settings-big.svg" label="Settings" onClick={ this.onSettingsClick }/>
+                    <div className="mx_BottomLeftMenu_createRoom" title="Start chat" onClick={ this.onCreateRoomClick }>
+                        <TintableSvg src="img/icons-create-room.svg" width="24" height="24"/>
+                    </div>
+                    <div className="mx_BottomLeftMenu_directory" title="Room directory" onClick={ this.onRoomDirectoryClick }>
+                        <TintableSvg src="img/icons-directory.svg" width="24" height="24"/>
+                    </div>
+                    <div className="mx_BottomLeftMenu_settings" title="Settings" onClick={ this.onSettingsClick }>
+                        <TintableSvg src="img/icons-settings.svg" width="24" height="24"/>
+                    </div>
                 </div>
             </div>
         );

@@ -16,9 +16,15 @@ limitations under the License.
 
 'use strict';
 
+var NotificationUtils = require('./NotificationUtils');
+
+var encodeActions = NotificationUtils.encodeActions;
+
 module.exports = {
-    NotificationUtils: require('./NotificationUtils'),
-    PushRuleVectorState: require('./PushRuleVectorState'),
-    VectorPushRulesDefinitions: require('./VectorPushRulesDefinitions'),
-    ContentRules: require('./ContentRules'),
+    ACTION_NOTIFY: encodeActions({notify: true}),
+    ACTION_NOTIFY_DEFAULT_SOUND: encodeActions({notify: true, sound: "default"}),
+    ACTION_NOTIFY_RING_SOUND: encodeActions({notify: true, sound: "ring"}),
+    ACTION_HIGHLIGHT_DEFAULT_SOUND: encodeActions({notify: true, sound: "default", highlight: true}),
+    ACTION_DONT_NOTIFY: encodeActions({notify: false}),
+    ACTION_DISABLED: null,
 };
