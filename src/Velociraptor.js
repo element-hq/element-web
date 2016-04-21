@@ -21,16 +21,22 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this.children = {};
         this.nodes = {};
-        this.componentWillReceiveProps(this.props);
+        this._updateChildren(this.props.children);
     },
 
     componentWillReceiveProps: function(nextProps) {
+        this._updateChildren(nextProps.children);
+    },
+
+    /**
+     * update `this.children` according to the new list of children given
+     */
+    _updateChildren: function(newChildren) {
         var self = this;
-        var oldChildren = this.children;
+        var oldChildren = this.children || {};
         this.children = {};
-        React.Children.toArray(nextProps.children).forEach(function(c) {
+        React.Children.toArray(newChildren).forEach(function(c) {
             if (oldChildren[c.key]) {
                 var old = oldChildren[c.key];
                 var oldNode = ReactDom.findDOMNode(self.nodes[old.key]);
