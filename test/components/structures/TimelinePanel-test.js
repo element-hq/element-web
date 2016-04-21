@@ -205,4 +205,72 @@ describe('TimelinePanel', function() {
             }, 0);
         }, 0);
     });
+
+    it("should let you scroll down again after you've scrolled up", function(done) {
+        var N_EVENTS = 600;
+
+        // sadly, loading all those events takes a while
+        this.timeout(N_EVENTS * 20);
+
+        // client.getRoom is called a /lot/ in this test, so replace
+        // sinon's spy with a fast noop.
+        client.getRoom = function(id) { return null; };
+
+        // fill the timeline with lots of events
+        for (var i = 0; i < N_EVENTS; i++) {
+            timeline.addEvent(mkMessage());
+        }
+
+        var scrollDefer;
+        var panel = ReactDOM.render(
+            <TimelinePanel room={room} onScroll={()=>{scrollDefer.resolve()}} />,
+            parentDiv
+        );
+
+        var messagePanel = ReactTestUtils.findRenderedComponentWithType(
+            panel, sdk.getComponent('structures.MessagePanel'));
+        var scrollingDiv = ReactTestUtils.findRenderedDOMComponentWithClass(
+            panel, "gm-scroll-view");
+
+        // helper function which will return a promise which resolves when
+        // the TimelinePanel fires a scroll event
+        var awaitScroll = function() {
+            scrollDefer = q.defer();
+            return scrollDefer.promise;
+        };
+
+        function backPaginate() {
+            scrollingDiv.scrollTop = 0;
+            return awaitScroll().then(() => {
+                if(scrollingDiv.scrollTop > 0) {
+                    // need to go further
+                    return backPaginate();
+                }
+
+                // hopefully, we got to the start of the timeline
+                expect(messagePanel.props.backPaginating).toBe(false);
+            });
+        }
+
+        // let the first round of pagination finish off
+        awaitScroll().then(() => {
+            // we should now have loaded the first few events
+            expect(messagePanel.props.backPaginating).toBe(false);
+            expect(messagePanel.props.suppressFirstDateSeparator).toBe(true);
+
+            // back-paginate until we hit the start
+            return backPaginate();
+        }).then(() => {
+            expect(messagePanel.props.suppressFirstDateSeparator).toBe(false);
+            var events = scryEventTiles(panel);
+            expect(events[0].props.mxEvent).toBe(timeline.getEvents()[0])
+
+            // we should now be able to scroll down, and paginate in the other
+            // direction.
+            scrollingDiv.scrollTop = scrollingDiv.scrollHeight;
+            return awaitScroll();
+        }).then(() => {
+            console.log("done");
+        }).done(done, done);
+    });
 });
