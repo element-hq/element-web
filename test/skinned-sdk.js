@@ -5,6 +5,14 @@
  * application to provide
  */
 
+/* this is a convenient place to ensure we load the compatibility libraries we expect our
+ * app to provide
+ */
+
+// for ES6 stuff like startsWith() and Object.values() that babel doesn't do by
+// default
+require('babel-polyfill');
+
 var sdk = require("../src/index");
 
 var skin = require('../src/component-index.js');
