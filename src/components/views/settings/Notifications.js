@@ -22,174 +22,14 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
 var Modal = require('matrix-react-sdk/lib/Modal');
 
-/**
- * Enum for state of a push rule as defined by the Vector UI.
- * @readonly
- * @enum {string}
- */
-var PushRuleVectorState = {
-    /** The push rule is disabled */
-    OFF: "off",
-    /** The user will receive push notification for this rule */
-    ON: "on",
-    /** The user will receive push notification for this rule with sound and
-        highlight if this is legitimate */
-    LOUD: "loud",
-};
+var notifications = require('../../../notifications');
 
-// Encodes a dictionary of {
-//   "notify": true/false,
-//   "sound": string or undefined,
-//   "highlight: true/false,
-// }
-// to a list of push actions.
-function encodeActions(action) {
-    var notify = action.notify;
-    var sound = action.sound;
-    var highlight = action.highlight;
-    if (notify) {
-        var actions = ["notify"];
-        if (sound) {
-            actions.push({"set_tweak": "sound", "value": sound});
-        }
-        if (highlight) {
-            actions.push({"set_tweak": "highlight"});
-        } else {
-            actions.push({"set_tweak": "highlight", "value": false});
-        }
-        return actions;
-    } else {
-        return ["dont_notify"];
-    }
-}
+// TODO: this "view" component still has far to much application logic in it,
+// which should be factored out to other files.
 
-// Decode a list of actions to a dictionary of {
-//   "notify": true/false,
-//   "sound": string or undefined,
-//   "highlight: true/false,
-// }
-// If the actions couldn't be decoded then returns null.
-function decodeActions(actions) {
-    var notify = false;
-    var sound = null;
-    var highlight = false;
-
-    for (var i = 0; i < actions.length; ++i) {
-        var action = actions[i];
-        if (action === "notify") {
-            notify = true;
-        } else if (action === "dont_notify") {
-            notify = false;
-        } else if (typeof action === 'object') {
-            if (action.set_tweak === "sound") {
-                sound = action.value
-            } else if (action.set_tweak === "highlight") {
-                highlight = action.value;
-            } else {
-                // We don't understand this kind of tweak, so give up.
-                return null;
-            }
-        } else {
-            // We don't understand this kind of action, so give up.
-            return null;
-        }
-    }
-
-    if (highlight === undefined) {
-        // If a highlight tweak is missing a value then it defaults to true.
-        highlight = true;
-    }
-
-    var result = {notify: notify, highlight: highlight};
-    if (sound !== null) {
-        result.sound = sound;
-    }
-    return result;
-}
-
-var ACTION_NOTIFY = encodeActions({notify: true});
-var ACTION_NOTIFY_DEFAULT_SOUND = encodeActions({notify: true, sound: "default"});
-var ACTION_NOTIFY_RING_SOUND = encodeActions({notify: true, sound: "ring"});
-var ACTION_HIGHLIGHT_DEFAULT_SOUND = encodeActions({notify: true, sound: "default", highlight: true});
-var ACTION_DONT_NOTIFY = encodeActions({notify: false});
-var ACTION_DISABLED = null;
-
-
-/**
- * The descriptions of rules managed by the Vector UI.
- */
-var VectorPushRulesDefinitions = {
-
-     // Messages containing user's display name
-     // (skip contains_user_name which is too geeky)
-     ".m.rule.contains_display_name": {
-        kind: "underride",
-        description: "Messages containing my name",
-        vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
-            on: ACTION_NOTIFY,
-            loud: ACTION_HIGHLIGHT_DEFAULT_SOUND,
-            off: ACTION_DISABLED
-        }
-    },
-
-    // Messages just sent to the user in a 1:1 room
-    ".m.rule.room_one_to_one": {
-        kind: "underride",
-        description: "Messages in one-to-one chats",
-        vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DONT_NOTIFY
-        }
-    },
-
-    // Messages just sent to a group chat room
-    // 1:1 room messages are catched by the .m.rule.room_one_to_one rule if any defined
-    // By opposition, all other room messages are from group chat rooms.
-    ".m.rule.message": {
-        kind: "underride",
-        description: "Messages in group chats",
-        vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DONT_NOTIFY
-        }
-    },
-
-    // Invitation for the user
-    ".m.rule.invite_for_me": {
-        kind: "underride",
-        description: "When I'm invited to a room",
-        vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DISABLED
-        }
-    },
-
-    // Incoming call
-    ".m.rule.call": {
-        kind: "underride",
-        description: "Call invitation",
-        vectorStateToActions: {
-            on: ACTION_NOTIFY,
-            loud: ACTION_NOTIFY_RING_SOUND,
-            off: ACTION_DISABLED
-        }
-    },
-
-    // Notifications from bots
-    ".m.rule.suppress_notices": {
-        kind: "override",
-        description: "Messages sent by bot",
-        vectorStateToActions: {
-            // .m.rule.suppress_notices is a "negative" rule, we have to invert its enabled value for vector UI
-            on: ACTION_DISABLED,
-            loud: ACTION_NOTIFY_DEFAULT_SOUND,
-            off: ACTION_DONT_NOTIFY,
-        }
-    }
-};
+var NotificationUtils = notifications.NotificationUtils;
+var VectorPushRulesDefinitions = notifications.VectorPushRulesDefinitions;
+var PushRuleVectorState = notifications.PushRuleVectorState;
 
 /**
  * Rules that Vector used to set in order to override the actions of default rules.
@@ -206,16 +46,15 @@ var LEGACY_RULES = {
 };
 
 function portLegacyActions(actions) {
-    var decoded = decodeActions(actions);
+    var decoded = NotificationUtils.decodeActions(actions);
     if (decoded !== null) {
-        return encodeActions(decoded);
+        return NotificationUtils.encodeActions(decoded);
     } else {
         // We don't recognise one of the actions here, so we don't try to
         // canonicalise them.
         return actions;
     }
 }
-
 
 module.exports = React.createClass({
     displayName: 'Notififications',
@@ -335,40 +174,6 @@ module.exports = React.createClass({
         }
     },
 
-    _actionsFor: function(pushRuleVectorState) {
-        if (pushRuleVectorState === PushRuleVectorState.ON) {
-            return ACTION_NOTIFY;
-        }
-        else if (pushRuleVectorState === PushRuleVectorState.LOUD) {
-            return ACTION_HIGHLIGHT_DEFAULT_SOUND;
-        }
-    },
-
-    // Determine whether a content rule is in the PushRuleVectorState.ON category or in PushRuleVectorState.LOUD
-    // regardless of its enabled state. Returns undefined if it does not match these categories.
-    _contentRuleVectorStateKind: function(rule) {
-        var stateKind;
-
-        // Count tweaks to determine if it is a ON or LOUD rule
-        var tweaks = 0;
-        for (var j in rule.actions) {
-            var action = rule.actions[j];
-            if (action.set_tweak === 'sound' ||
-                (action.set_tweak === 'highlight' &&  action.value)) {
-                tweaks++;
-            }
-        }
-        switch (tweaks) {
-            case 0:
-                stateKind = PushRuleVectorState.ON;
-                break;
-            case 2:
-                stateKind = PushRuleVectorState.LOUD;
-                break;
-        }
-        return stateKind;
-    },
-
     _setPushRuleVectorState: function(rule, newPushRuleVectorState) {
         if (rule && rule.vectorState !== newPushRuleVectorState) {
 
@@ -384,7 +189,7 @@ module.exports = React.createClass({
             if (rule.rule) {
                 var actions = ruleDefinition.vectorStateToActions[newPushRuleVectorState];
 
-                if (actions === ACTION_DISABLED) {
+                if (!actions) {
                     // The new state corresponds to disabling the rule.
                     deferreds.push(cli.setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, false));
                 }
@@ -430,7 +235,7 @@ module.exports = React.createClass({
             switch (newPushRuleVectorState) {
                 case PushRuleVectorState.ON:
                     if (rule.actions.length !== 1) {
-                        actions = this._actionsFor(PushRuleVectorState.ON);
+                        actions = PushRuleVectorState.actionsFor(PushRuleVectorState.ON);
                     }
 
                     if (this.state.vectorContentRules.vectorState === PushRuleVectorState.OFF) {
@@ -440,7 +245,7 @@ module.exports = React.createClass({
 
                 case PushRuleVectorState.LOUD:
                     if (rule.actions.length !== 3) {
-                        actions = this._actionsFor(PushRuleVectorState.LOUD);
+                        actions = PushRuleVectorState.actionsFor(PushRuleVectorState.LOUD);
                     }
 
                     if (this.state.vectorContentRules.vectorState === PushRuleVectorState.OFF) {
@@ -526,7 +331,7 @@ module.exports = React.createClass({
                 // when creating the new rule.
                 // Thus, this new rule will join the 'vectorContentRules' set.
                 if (self.state.vectorContentRules.rules.length) {
-                    pushRuleVectorStateKind = self._contentRuleVectorStateKind(self.state.vectorContentRules.rules[0]);
+                    pushRuleVectorStateKind = PushRuleVectorState.contentRuleVectorStateKind(self.state.vectorContentRules.rules[0]);
                 }
                 else {
                     // ON is default
@@ -541,13 +346,13 @@ module.exports = React.createClass({
                     if (self.state.vectorContentRules.vectorState !== PushRuleVectorState.OFF) {
                         deferreds.push(cli.addPushRule
                         ('global', 'content', keyword, {
-                           actions: self._actionsFor(pushRuleVectorStateKind),
+                           actions: PushRuleVectorState.actionsFor(pushRuleVectorStateKind),
                            pattern: keyword
                         }));
                     }
                     else {
                         deferreds.push(self._addDisabledPushRule('global', 'content', keyword, {
-                           actions: self._actionsFor(pushRuleVectorStateKind),
+                           actions: PushRuleVectorState.actionsFor(pushRuleVectorStateKind),
                            pattern: keyword
                         }));
                     }
@@ -650,7 +455,7 @@ module.exports = React.createClass({
                         }
                     }
                     else if (kind === 'content') {
-                        switch (self._contentRuleVectorStateKind(r)) {
+                        switch (PushRuleVectorState.contentRuleVectorStateKind(r)) {
                             case PushRuleVectorState.ON:
                                 if (r.enabled) {
                                     contentRules.on.push(r);
@@ -762,7 +567,7 @@ module.exports = React.createClass({
                             var state = PushRuleVectorState[stateKey];
                             var vectorStateToActions = ruleDefinition.vectorStateToActions[state];
 
-                            if (vectorStateToActions === ACTION_DISABLED) {
+                            if (!vectorStateToActions) {
                                 // No defined actions means that this vector state expects a disabled default hs rule
                                 if (rule.enabled === false) {
                                     vectorState = state;
@@ -1107,11 +912,10 @@ module.exports = React.createClass({
                         </table>
                     </div>
 
-                    <h3>Devices</h3>
-
-                    { devicesSection }
-
                     { advancedSettings }
+
+                    <h3>Devices</h3>
+                    { devicesSection }
 
                 </div>
 

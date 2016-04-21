@@ -1,8 +1,9 @@
-node_modules
-vector/bundle.*
-lib
-.DS_Store
-key.pem
-cert.pem
-vector/components.css
-packages/
+/cert.pem
+/.DS_Store
+/karma-reports
+/key.pem
+/lib
+/node_modules
+/packages/
+/vector/bundle.*
+/vector/components.css

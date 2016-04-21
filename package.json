@@ -16,7 +16,9 @@
     "build:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/components.css --no-watch",
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "NODE_ENV=production webpack -p lib/vector/index.js vector/bundle.js",
+    "build:bundle:dev": "webpack --optimize-occurence-order lib/vector/index.js vector/bundle.js",
     "build": "npm run build:css && npm run build:compile && npm run build:bundle",
+    "build:dev": "npm run build:css && npm run build:compile && npm run build:bundle:dev",
     "package": "scripts/package.sh",
     "start:js": "webpack -w src/vector/index.js vector/bundle.js",
     "start:js:prod": "NODE_ENV=production webpack -w src/vector/index.js vector/bundle.js",
@@ -25,7 +27,9 @@
     "start": "parallelshell \"npm run start:js\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
     "start:prod": "parallelshell \"npm run start:js:prod\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
     "clean": "rimraf lib vector/bundle.css vector/bundle.js vector/bundle.js.map vector/webpack.css*",
-    "prepublish": "npm run build:css && npm run build:compile"
+    "prepublish": "npm run build:css && npm run build:compile",
+    "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
+    "test:multi": "karma start"
   },
   "dependencies": {
     "babel-polyfill": "^6.5.0",
@@ -41,7 +45,7 @@
     "matrix-react-sdk": "matrix-org/matrix-react-sdk#develop",
     "modernizr": "^3.1.0",
     "q": "^1.4.1",
-    "react": "^0.14.2",
+    "react": "^0.14.8",
     "react-dnd": "^2.0.2",
     "react-dnd-html5-backend": "^2.0.0",
     "react-dom": "^0.14.2",
@@ -54,11 +58,23 @@
     "babel-loader": "^5.3.2",
     "catw": "^1.0.1",
     "css-raw-loader": "^0.1.1",
+    "expect": "^1.16.0",
     "http-server": "^0.8.4",
     "json-loader": "^0.5.3",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^0.2.3",
+    "karma-cli": "^0.1.2",
+    "karma-junit-reporter": "^0.4.1",
+    "karma-mocha": "^0.2.2",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^1.7.0",
+    "mocha": "^2.4.5",
     "parallelshell": "^1.2.0",
+    "phantomjs-prebuilt": "^2.1.7",
+    "react-addons-test-utils": "^0.14.8",
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.1.5",
-    "webpack": "^1.12.13"
+    "webpack": "^1.12.14"
   }
 }

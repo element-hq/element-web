@@ -166,6 +166,7 @@ limitations under the License.
     display: block;
     visibility: hidden;
     text-align: right;
+    white-space: nowrap;
 }
 
 .mx_EventTile_last .mx_MessageTimestamp {

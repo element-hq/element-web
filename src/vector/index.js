@@ -104,6 +104,7 @@ function parseQs(location) {
 // Here, we do some crude URL analysis to allow
 // deep-linking.
 function routeUrl(location) {
+    console.log("Routing URL "+window.location);
     var params = parseQs(location);
     var loginToken = params.loginToken;
     if (loginToken) {
@@ -134,6 +135,7 @@ var lastLoadedScreen = null;
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
 var onNewScreen = function(screen) {
+    console.log("newscreen "+screen);
     if (!loaded) {
         lastLoadedScreen = screen;
     } else {
@@ -158,6 +160,7 @@ var makeRegistrationUrl = function() {
 
 window.addEventListener('hashchange', onHashChange);
 window.onload = function() {
+    console.log("window.onload");
     if (!validBrowser) {
         return;
     }
@@ -172,6 +175,7 @@ window.onload = function() {
 }
 
 function loadApp() {
+    console.log("Vector starting at "+window.location);
     if (validBrowser) {
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
         var fragParts = parseQsFromFragment(window.location);

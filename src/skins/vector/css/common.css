@@ -58,6 +58,15 @@ input[type=text]:focus, textarea:focus {
     box-shadow: none;
 }
 
+/* applied to side-panels and messagepanel when in RoomSettings */
+.mx_fadable {
+    opacity: 1;
+    -webkit-transition: opacity 0.2s ease-in-out;
+    -moz-transition: opacity 0.2s ease-in-out;
+    -ms-transition: opacity 0.2s ease-in-out;
+    -o-transition: opacity 0.2s ease-in-out;
+}
+
 /* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.
    Stop the scrollbar view from pushing out the container's overall sizing, which causes
    flexbox to adapt to the new size and cause the view to keep growing.
