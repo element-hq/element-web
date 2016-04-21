@@ -51,7 +51,16 @@ module.exports = function (config) {
         files: [
             testFile,
             gsCss,
+
+            // some images to reduce noise from the tests
+            {pattern: 'test/img/*', watched: false, included: false,
+             served: true, nocache: false},
         ],
+
+        // redirect img links to the karma server
+        proxies: {
+            "/img/": "/base/test/img/",
+        },
 
         // list of files to exclude
         //
