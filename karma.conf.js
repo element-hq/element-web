@@ -147,6 +147,11 @@ module.exports = function (config) {
             },
             resolve: {
                 alias: {
+                    // alias any requires to the react module to the one in our
+                    // path, otherwise we tend to get the react source included
+                    // twice when using npm link.
+                    react: path.resolve('./node_modules/react'),
+
                     'matrix-react-sdk': path.resolve('test/skinned-sdk.js'),
                     'sinon': 'sinon/pkg/sinon.js',
                 },

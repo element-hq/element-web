@@ -34,7 +34,8 @@ module.exports = React.createClass({
     propTypes: {
         ConferenceHandler: React.PropTypes.any,
         collapsed: React.PropTypes.bool,
-        currentRoom: React.PropTypes.string
+        currentRoom: React.PropTypes.string,
+        searchFilter: React.PropTypes.string,
     },
 
     getInitialState: function() {
@@ -82,7 +83,7 @@ module.exports = React.createClass({
                 else {
                     this.setState({
                         incomingCall: null
-                    });            
+                    });
                 }
                 break;
         }
@@ -192,9 +193,9 @@ module.exports = React.createClass({
             var me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
 
-            // console.log("room = " + room.name + ", me.membership = " + me.membership + 
+            // console.log("room = " + room.name + ", me.membership = " + me.membership +
             //             ", sender = " + me.events.member.getSender() +
-            //             ", target = " + me.events.member.getStateKey() + 
+            //             ", target = " + me.events.member.getStateKey() +
             //             ", prevMembership = " + me.events.member.getPrevContent().membership);
 
             if (me.membership == "invite") {
@@ -231,7 +232,7 @@ module.exports = React.createClass({
                         }
                     }
                     else {
-                        s.lists["im.vector.fake.recent"].push(room); 
+                        s.lists["im.vector.fake.recent"].push(room);
                     }
                 }
             }
@@ -269,7 +270,7 @@ module.exports = React.createClass({
     _repositionTooltip: function(e) {
         if (this.tooltip && this.tooltip.parentElement) {
             var scroll = ReactDOM.findDOMNode(this);
-            this.tooltip.style.top = (scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - this._getScrollNode().scrollTop) + "px"; 
+            this.tooltip.style.top = (70 + scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - this._getScrollNode().scrollTop) + "px";
         }
     },
 
@@ -312,12 +313,6 @@ module.exports = React.createClass({
         }
     },
 
-    onShowClick: function() {
-        dis.dispatch({
-            action: 'show_left_panel',
-        });
-    },
-
     onShowMoreRooms: function() {
         // kick gemini in the balls to get it to wake up
         // XXX: uuuuuuugh.
@@ -325,18 +320,14 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var expandButton = this.props.collapsed ? 
-                           <img className="mx_RoomList_expandButton" onClick={ this.onShowClick } src="img/menu.png" width="20" alt=">"/> :
-                           null;
-
         var RoomSubList = sdk.getComponent('structures.RoomSubList');
         var self = this;
 
         return (
-            <GeminiScrollbar className="mx_RoomList_scrollbar" autoshow={true} onScroll={ self._repositionTooltips } ref="gemscroll">
+            <GeminiScrollbar className="mx_RoomList_scrollbar"
+                 relayoutOnUpdate={false}
+                 autoshow={true} onScroll={ self._repositionTooltips } ref="gemscroll">
             <div className="mx_RoomList">
-                { expandButton }
-
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
                              label="Invites"
                              editable={ false }
@@ -344,7 +335,8 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
-                             onShowMoreRooms={ this.onShowMoreRooms } />
+                             searchFilter={ self.props.searchFilter }
+                             onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['m.favourite'] }
                              label="Favourites"
@@ -355,7 +347,8 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
-                             onShowMoreRooms={ this.onShowMoreRooms } />
+                             searchFilter={ self.props.searchFilter }
+                             onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
                              label="Rooms"
@@ -365,7 +358,8 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
-                             onShowMoreRooms={ this.onShowMoreRooms } />
+                             searchFilter={ self.props.searchFilter }
+                             onShowMoreRooms={ self.onShowMoreRooms } />
 
                 { Object.keys(self.state.lists).map(function(tagName) {
                     if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|archived))$/)) {
@@ -379,6 +373,7 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
+                             searchFilter={ self.props.searchFilter }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                     }
@@ -393,7 +388,8 @@ module.exports = React.createClass({
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
-                             onShowMoreRooms={ this.onShowMoreRooms } />
+                             searchFilter={ self.props.searchFilter }
+                             onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.archived'] }
                              label="Historical"
@@ -406,7 +402,8 @@ module.exports = React.createClass({
                              showSpinner={ self.state.isLoadingLeftRooms }
                              onHeaderClick= { self.onArchivedHeaderClick }
                              incomingCall={ self.state.incomingCall }
-                             onShowMoreRooms={ this.onShowMoreRooms } />
+                             searchFilter={ self.props.searchFilter }
+                             onShowMoreRooms={ self.onShowMoreRooms } />
             </div>
             </GeminiScrollbar>
         );

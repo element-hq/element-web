@@ -19,6 +19,8 @@ var ReactDOM = require("react-dom");
 var dis = require("../../dispatcher");
 var sdk = require('../../index');
 
+var MatrixClientPeg = require('../../MatrixClientPeg')
+
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
 module.exports = React.createClass({
@@ -65,6 +67,9 @@ module.exports = React.createClass({
 
         // callback which is called when more content is needed.
         onFillRequest: React.PropTypes.func,
+
+        // opacity for dynamic UI fading effects
+        opacity: React.PropTypes.number,
     },
 
     componentWillMount: function() {
@@ -147,7 +152,7 @@ module.exports = React.createClass({
             this.refs.scrollPanel.scrollToBottom();
         }
     },
-    
+
     /**
      * Page up/down.
      *
@@ -332,13 +337,17 @@ module.exports = React.createClass({
         // Local echos have a send "status".
         var scrollToken = mxEv.status ? undefined : eventId;
 
+        var readReceipts = this._getReadReceiptsForEvent(mxEv);
+
         ret.push(
                 <li key={eventId}
                         ref={this._collectEventNode.bind(this, eventId)}
                         data-scroll-token={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
                         onWidgetLoad={this._onWidgetLoad}
-                        last={last} isSelectedEvent={highlight} />
+                        readReceipts={readReceipts}
+                        eventSendStatus={mxEv.status}
+                        last={last} isSelectedEvent={highlight}/>
                 </li>
         );
 
@@ -354,6 +363,30 @@ module.exports = React.createClass({
 
         return (new Date(prevEvent.getTs()).toDateString()
                 !== new Date(nextEventTs).toDateString());
+    },
+
+    // get a list of the userids whose read receipts should
+    // be shown next to this event
+    _getReadReceiptsForEvent: function(event) {
+        var myUserId = MatrixClientPeg.get().credentials.userId;
+
+        // get list of read receipts, sorted most recent first
+        var room = MatrixClientPeg.get().getRoom(event.getRoomId());
+        if (!room) {
+            // huh.
+            return null;
+        }
+
+        return room.getReceiptsForEvent(event).filter(function(r) {
+            return r.type === "m.read" && r.userId != myUserId;
+        }).sort(function(r1, r2) {
+            return r2.data.ts - r1.data.ts;
+        }).map(function(r) {
+            return room.getMember(r.userId);
+        }).filter(function(m) {
+            // check that the user is a known room member
+            return m;
+        });
     },
 
     _getReadMarkerTile: function(visible) {
@@ -423,12 +456,15 @@ module.exports = React.createClass({
             bottomSpinner = <li key="_bottomSpinner"><Spinner /></li>;
         }
 
+        var style = this.props.hidden ? { display: 'none' } : {};
+        style.opacity = this.props.opacity;
+
         return (
-            <ScrollPanel ref="scrollPanel" className="mx_RoomView_messagePanel"
-                    onScroll={ this.props.onScroll } 
+            <ScrollPanel ref="scrollPanel" className="mx_RoomView_messagePanel mx_fadable"
+                    onScroll={ this.props.onScroll }
                     onResize={ this.onResize }
                     onFillRequest={ this.props.onFillRequest }
-                    style={ this.props.hidden ? { display: 'none' } : {} }
+                    style={ style }
                     stickyBottom={ this.props.stickyBottom }>
                 {topSpinner}
                 {this._getEventTiles()}

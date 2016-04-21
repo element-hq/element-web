@@ -57,7 +57,8 @@ module.exports = React.createClass({
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
-        MatrixClientPeg.get().kick(roomId, target).done(function() {
+        this.setState({ updating: this.state.updating + 1 });
+        MatrixClientPeg.get().kick(roomId, target).then(function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
                 console.log("Kick success");
@@ -67,7 +68,9 @@ module.exports = React.createClass({
                     description: err.message
                 });
             }
-        );
+        ).finally(()=>{
+            this.setState({ updating: this.state.updating - 1 });
+        });
         this.props.onFinished();
     },
 
@@ -75,7 +78,8 @@ module.exports = React.createClass({
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
-        MatrixClientPeg.get().ban(roomId, target).done(
+        this.setState({ updating: this.state.updating + 1 });
+        MatrixClientPeg.get().ban(roomId, target).then(
             function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
@@ -86,7 +90,9 @@ module.exports = React.createClass({
                     description: err.message
                 });
             }
-        );
+        ).finally(()=>{
+            this.setState({ updating: this.state.updating - 1 });
+        });
         this.props.onFinished();
     },
 
@@ -122,7 +128,8 @@ module.exports = React.createClass({
         level = parseInt(level);
 
         if (level !== NaN) {
-            MatrixClientPeg.get().setPowerLevel(roomId, target, level, powerLevelEvent).done(
+            this.setState({ updating: this.state.updating + 1 });
+            MatrixClientPeg.get().setPowerLevel(roomId, target, level, powerLevelEvent).then(
                 function() {
                     // NO-OP; rely on the m.room.member event coming down else we could
                     // get out of sync if we force setState here!
@@ -133,9 +140,11 @@ module.exports = React.createClass({
                         description: err.message
                     });
                 }
-            );
+            ).finally(()=>{
+                this.setState({ updating: this.state.updating - 1 });
+            });
         }
-        this.props.onFinished();        
+        this.props.onFinished();
     },
 
     onModToggle: function() {
@@ -164,7 +173,8 @@ module.exports = React.createClass({
         if (modLevel > 50 && defaultLevel < 50) modLevel = 50; // try to stick with the vector level defaults
         // toggle the level
         var newLevel = this.state.isTargetMod ? defaultLevel : modLevel;
-        MatrixClientPeg.get().setPowerLevel(roomId, target, parseInt(newLevel), powerLevelEvent).done(
+        this.setState({ updating: this.state.updating + 1 });
+        MatrixClientPeg.get().setPowerLevel(roomId, target, parseInt(newLevel), powerLevelEvent).then(
             function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
@@ -183,12 +193,15 @@ module.exports = React.createClass({
                     });
                 }
             }
-        );
-        this.props.onFinished();        
+        ).finally(()=>{
+            this.setState({ updating: this.state.updating - 1 });
+        });
+        this.props.onFinished();
     },
 
     _applyPowerChange: function(roomId, target, powerLevel, powerLevelEvent) {
-        MatrixClientPeg.get().setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).done(
+        this.setState({ updating: this.state.updating + 1 });
+        MatrixClientPeg.get().setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).then(
             function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
@@ -199,7 +212,9 @@ module.exports = React.createClass({
                     description: err.message
                 });
             }
-        );
+        ).finally(()=>{
+            this.setState({ updating: this.state.updating - 1 });
+        });
         this.props.onFinished();
     },
 
@@ -249,7 +264,7 @@ module.exports = React.createClass({
         else {
             this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
         }
-    },    
+    },
 
     onChatClick: function() {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -300,19 +315,17 @@ module.exports = React.createClass({
             this.props.onFinished();
         }
         else {
-            self.setState({ creatingRoom: true });
-
             if (MatrixClientPeg.get().isGuest()) {
-                self.setState({ creatingRoom: false });
                 var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
                 Modal.createDialog(NeedToRegisterDialog, {
                     title: "Please Register",
                     description: "Guest users can't create new rooms. Please register to create room and start a chat."
                 });
-                self.props.onFinished();                
+                self.props.onFinished();
                 return;
             }
 
+            self.setState({ updating: self.state.updating + 1 });
             MatrixClientPeg.get().createRoom({
                 // XXX: FIXME: deduplicate this with "view_create_room" in MatrixChat
                 invite: [this.props.member.userId],
@@ -328,24 +341,24 @@ module.exports = React.createClass({
                         type: 'm.room.guest_access',
                         state_key: '',
                     }
-                ],                
-            }).done(
+                ],
+            }).then(
                 function(res) {
-                    self.setState({ creatingRoom: false });
                     dis.dispatch({
                         action: 'view_room',
                         room_id: res.room_id
                     });
                     self.props.onFinished();
                 }, function(err) {
-                    self.setState({ creatingRoom: false });
                     Modal.createDialog(ErrorDialog, {
                         title: "Failure to start chat",
                         description: err.message
                     });
                     self.props.onFinished();
                 }
-            );
+            ).finally(()=>{
+                self.setState({ updating: self.state.updating - 1 });
+            });
         }
     },
 
@@ -367,7 +380,7 @@ module.exports = React.createClass({
             },
             muted: false,
             isTargetMod: false,
-            creatingRoom: false
+            updating: 0,
         }
     },
 
@@ -470,14 +483,14 @@ module.exports = React.createClass({
             startChat = <BottomLeftMenuTile collapsed={ false } img="img/create-big.svg" label="Start chat" onClick={ this.onChatClick }/>
         }
 
-        if (this.state.creatingRoom) {
+        if (this.state.updating) {
             var Loader = sdk.getComponent("elements.Spinner");
             spinner = <Loader imgClassName="mx_ContextualMenu_spinner"/>;
         }
 
         if (this.state.can.kick) {
             kickButton = <div className="mx_MemberInfo_field" onClick={this.onKick}>
-                Kick
+                { this.props.member.membership === "invite" ? "Disinvite" : "Kick" }
             </div>;
         }
         if (this.state.can.ban) {
@@ -503,7 +516,7 @@ module.exports = React.createClass({
 
         var adminTools;
         if (kickButton || banButton || muteButton || giveModButton) {
-            adminTools = 
+            adminTools =
                 <div>
                     <h3>Admin tools</h3>
 

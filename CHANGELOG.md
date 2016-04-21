@@ -1,3 +1,54 @@
+Changes in [0.5.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.5.1) (2016-04-19)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.4.0...v0.5.1)
+
+ * Upgrade to react 15.0
+ * Fix many thinkos in sorting the MemberList
+   [\#275](https://github.com/matrix-org/matrix-react-sdk/pull/275)
+ * Don't setState after unmounting a component
+   [\#276](https://github.com/matrix-org/matrix-react-sdk/pull/276)
+ * Drop workaround for object.onLoad
+   [\#274](https://github.com/matrix-org/matrix-react-sdk/pull/274)
+ * Make sure that we update the room name
+   [\#272](https://github.com/matrix-org/matrix-react-sdk/pull/272)
+ * Matthew/design tweaks
+   [\#273](https://github.com/matrix-org/matrix-react-sdk/pull/273)
+ * Hack around absence of String.codePointAt on PhantomJS
+   [\#271](https://github.com/matrix-org/matrix-react-sdk/pull/271)
+ * RoomView: Handle joining federated rooms
+   [\#270](https://github.com/matrix-org/matrix-react-sdk/pull/270)
+ * Stop the MatrixClient when the MatrixChat is unmounted
+   [\#269](https://github.com/matrix-org/matrix-react-sdk/pull/269)
+ * make the UI fadable to help with decluttering
+   [\#268](https://github.com/matrix-org/matrix-react-sdk/pull/268)
+ * URL previewing support
+   [\#260](https://github.com/matrix-org/matrix-react-sdk/pull/260)
+ * Remember to load new timeline events
+   [\#267](https://github.com/matrix-org/matrix-react-sdk/pull/267)
+ * Stop trying to paginate after we get a failure
+   [\#265](https://github.com/matrix-org/matrix-react-sdk/pull/265)
+ * Improvements to the react-sdk test framework
+   [\#264](https://github.com/matrix-org/matrix-react-sdk/pull/264)
+ * Fix password resetting
+   [\#263](https://github.com/matrix-org/matrix-react-sdk/pull/263)
+ * Catch pageup/down and ctrl-home/end at the top level
+   [\#262](https://github.com/matrix-org/matrix-react-sdk/pull/262)
+ * Fix an issue where the scroll stopped working.
+   [\#261](https://github.com/matrix-org/matrix-react-sdk/pull/261)
+ * Fix a bug where we tried to show two ghost read markers at once.
+   [\#254](https://github.com/matrix-org/matrix-react-sdk/pull/254)
+ * File upload improvements
+   [\#258](https://github.com/matrix-org/matrix-react-sdk/pull/258)
+ * Show full-size avatar on MemberInfo avatar click
+   [\#257](https://github.com/matrix-org/matrix-react-sdk/pull/257)
+ * Whitelist \<u> tag
+   [\#256](https://github.com/matrix-org/matrix-react-sdk/pull/256)
+ * Don't reload the DOM if we can jump straight to the RM
+   [\#253](https://github.com/matrix-org/matrix-react-sdk/pull/253)
+
+[0.5.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.5.0) was
+incorrectly released.
+
 Changes in [0.4.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.4.0) (2016-03-30)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.3.1...v0.4.0)

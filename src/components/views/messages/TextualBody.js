@@ -84,7 +84,10 @@ module.exports = React.createClass({
     findLink: function(nodes) {
         for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
-            if (node.tagName === "A" && node.getAttribute("href")) {
+            if (node.tagName === "A" && node.getAttribute("href") && 
+                (node.getAttribute("href").startsWith("http://") ||
+                 node.getAttribute("href").startsWith("https://")))
+            {
                 return node;
             }
             else if (node.children && node.children.length) {

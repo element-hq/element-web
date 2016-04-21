@@ -18,10 +18,9 @@ limitations under the License.
 
 var React = require('react');
 var ReactDOM = require("react-dom");
-var dis = require("../../../dispatcher");
 var Tinter = require("../../../Tinter");
 
-module.exports = React.createClass({
+var TintableSvg = React.createClass({
     displayName: 'TintableSvg',
 
     propTypes: {
@@ -31,39 +30,48 @@ module.exports = React.createClass({
         className: React.PropTypes.string,
     },
 
+    statics: {
+        // list of currently mounted TintableSvgs
+        mounts: {},
+        idSequence: 0,
+    },
+
     componentWillMount: function() {
         this.fixups = [];
-        this.dispatcherRef = dis.register(this.onAction);
     },
 
     componentDidMount: function() {
-        // we can't use onLoad on object due to https://github.com/facebook/react/pull/5781
-        // so handle it with pure DOM instead
-        ReactDOM.findDOMNode(this).addEventListener('load', this.onLoad);
+        this.id = TintableSvg.idSequence++;
+        TintableSvg.mounts[this.id] = this;
     },
 
     componentWillUnmount: function() {
-        ReactDOM.findDOMNode(this).removeEventListener('load', this.onLoad);
-        dis.unregister(this.dispatcherRef);
+        delete TintableSvg.mounts[this.id];
     },
 
-    onAction: function(payload) {
-        if (payload.action !== 'tint_update') return;
+    tint: function() {
+        // TODO: only bother running this if the global tint settings have changed
+        // since we loaded!
         Tinter.applySvgFixups(this.fixups);
     },
 
     onLoad: function(event) {
+        // console.log("TintableSvg.onLoad for " + this.props.src);
         this.fixups = Tinter.calcSvgFixups([event.target]);
         Tinter.applySvgFixups(this.fixups);
     },
 
     render: function() {
         return (
-            <object className={ "mx_TintableSvg " + this.props.className }
+            <object className={ "mx_TintableSvg " + (this.props.className ? this.props.className : "") }
                     type="image/svg+xml"
                     data={ this.props.src }
                     width={ this.props.width }
-                    height={ this.props.height }/>
+                    height={ this.props.height }
+                    onLoad={ this.onLoad }
+                />
         );
     }
 });
+
+module.exports = TintableSvg;

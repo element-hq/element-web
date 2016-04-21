@@ -37,7 +37,8 @@ module.exports = React.createClass({
         avatarJsx: React.PropTypes.any, // <BaseAvatar />
         className: React.PropTypes.string,
         presenceState: React.PropTypes.string,
-        presenceActiveAgo: React.PropTypes.number,
+        presenceLastActiveAgo: React.PropTypes.number,
+        presenceLastTs: React.PropTypes.number,
         presenceCurrentlyActive: React.PropTypes.bool,
         showInviteButton: React.PropTypes.bool,
         shouldComponentUpdate: React.PropTypes.func,
@@ -50,7 +51,8 @@ module.exports = React.createClass({
             shouldComponentUpdate: function(nextProps, nextState) { return true; },
             onClick: function() {},
             presenceState: "offline",
-            presenceActiveAgo: -1,
+            presenceLastActiveAgo: 0,
+            presenceLastTs: 0,
             showInviteButton: false,
             suppressOnHover: false
         };
@@ -82,13 +84,16 @@ module.exports = React.createClass({
         var nameEl;
 
         if (this.state.hover && !this.props.suppressOnHover) {
+            var activeAgo = this.props.presenceLastActiveAgo ?
+                (Date.now() - (this.props.presenceLastTs - this.props.presenceLastActiveAgo)) : -1;
+
             mainClassName += " mx_EntityTile_hover";
             var PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
             nameEl = (
                 <div className="mx_EntityTile_details">
                     <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
                     <div className="mx_EntityTile_name_hover">{ this.props.name }</div>
-                    <PresenceLabel activeAgo={this.props.presenceActiveAgo}
+                    <PresenceLabel activeAgo={ activeAgo }
                         currentlyActive={this.props.presenceCurrentlyActive}
                         presenceState={this.props.presenceState} />
                 </div>

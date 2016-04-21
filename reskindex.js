@@ -37,7 +37,7 @@ if (packageJson['matrix-react-parent']) {
     strm.write("module.exports.components = {};\n");
 }
 
-var files = glob.sync('**/*.js', {cwd: componentsDir});
+var files = glob.sync('**/*.js', {cwd: componentsDir}).sort();
 for (var i = 0; i < files.length; ++i) {
     var file = files[i].replace('.js', '');
 

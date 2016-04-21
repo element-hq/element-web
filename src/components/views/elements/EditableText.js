@@ -24,6 +24,7 @@ const KEY_WINDOWS = 91;
 
 module.exports = React.createClass({
     displayName: 'EditableText',
+
     propTypes: {
         onValueChanged: React.PropTypes.func,
         initialValue: React.PropTypes.string,

@@ -34,6 +34,8 @@ module.exports = React.createClass({
         room: React.PropTypes.object,
         oobData: React.PropTypes.object,
         editing: React.PropTypes.bool,
+        saving: React.PropTypes.bool,
+        rightPanelCollapsed: React.PropTypes.bool,
         onSettingsClick: React.PropTypes.func,
         onSaveClick: React.PropTypes.func,
         onSearchClick: React.PropTypes.func,
@@ -51,6 +53,13 @@ module.exports = React.createClass({
     componentDidMount: function() {
         var cli = MatrixClientPeg.get();
         cli.on("RoomState.events", this._onRoomStateEvents);
+
+        // When a room name occurs, RoomState.events is fired *before*
+        // room.name is updated. So we have to listen to Room.name as well as
+        // RoomState.events.
+        if (this.props.room) {
+            this.props.room.on("Room.name", this._onRoomNameChange);
+        }
     },
 
     componentDidUpdate: function() {
@@ -60,6 +69,9 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        if (this.props.room) {
+            this.props.room.removeListener("Room.name", this._onRoomNameChange);
+        }
         var cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener("RoomState.events", this._onRoomStateEvents);
@@ -72,6 +84,10 @@ module.exports = React.createClass({
         }
 
         // redisplay the room name, topic, etc.
+        this.forceUpdate();
+    },
+
+    _onRoomNameChange: function(room) {
         this.forceUpdate();
     },
 
@@ -96,7 +112,7 @@ module.exports = React.createClass({
                 description: "Failed to set avatar. " + errMsg
             });
         }).done();
-    },    
+    },
 
     /**
      * After editing the settings, get the new name for the room
@@ -134,6 +150,7 @@ module.exports = React.createClass({
         var searchStatus = null;
         var topic_el = null;
         var cancel_button = null;
+        var spinner = null;
         var save_button = null;
         var settings_button = null;
         if (this.props.editing) {
@@ -156,6 +173,11 @@ module.exports = React.createClass({
 
             save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</div>
             cancel_button = <div className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>
+        }
+
+        if (this.props.saving) {
+            var Spinner = sdk.getComponent("elements.Spinner");
+            spinner = <div className="mx_RoomHeader_spinner"><Spinner/></div>;
         }
 
         if (can_set_room_name) {
@@ -257,15 +279,21 @@ module.exports = React.createClass({
                 </div>;
         }
 
+        var rightPanel_buttons;
+        if (this.props.rightPanelCollapsed) {
+            // TODO: embed the RightPanel header in here if it's collapsed.
+        }
+
         var right_row;
         if (!this.props.editing) {
-            right_row = 
+            right_row =
                 <div className="mx_RoomHeader_rightRow">
                     { forget_button }
                     { leave_button }
                     <div className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
                         <TintableSvg src="img/search.svg" width="21" height="19"/>
                     </div>
+                    { rightPanel_buttons }
                 </div>;
         }
 
@@ -280,6 +308,7 @@ module.exports = React.createClass({
                         { topic_el }
                     </div>
                 </div>
+                {spinner}
                 {save_button}
                 {cancel_button}
                 {right_row}

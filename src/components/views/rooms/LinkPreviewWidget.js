@@ -45,14 +45,18 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this.unmounted = false;
         MatrixClientPeg.get().getUrlPreview(this.props.link, this.props.mxEvent.getTs()).then((res)=>{
+            if (this.unmounted) {
+                return;
+            }
             this.setState(
                 { preview: res },
                 this.props.onWidgetLoad
             );
         }, (error)=>{
             console.error("Failed to get preview for " + this.props.link + " " + error);
-        });
+        }).done();
     },
 
     componentDidMount: function() {
@@ -63,6 +67,10 @@ module.exports = React.createClass({
     componentDidUpdate: function() {
         if (this.refs.description)
             linkifyElement(this.refs.description, linkifyMatrix.options);
+    },
+
+    componentWillUnmount: function() {
+        this.unmounted = true;
     },
 
     onImageClick: function(ev) {

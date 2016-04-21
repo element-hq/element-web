@@ -43,7 +43,7 @@ module.exports = React.createClass({
     },
 
     getEventTileOps: function() {
-        return this.refs.body ? this.refs.body.getEventTileOps() : null;
+        return this.refs.body && this.refs.body.getEventTileOps ? this.refs.body.getEventTileOps() : null;
     },
 
     render: function() {
@@ -55,6 +55,7 @@ module.exports = React.createClass({
             'm.emote': sdk.getComponent('messages.TextualBody'),
             'm.image': sdk.getComponent('messages.MImageBody'),
             'm.file': sdk.getComponent('messages.MFileBody'),
+            'm.audio': sdk.getComponent('messages.MAudioBody'),
             'm.video': sdk.getComponent('messages.MVideoBody')
         };
 
@@ -63,6 +64,9 @@ module.exports = React.createClass({
         var BodyType = UnknownBody;
         if (msgtype && bodyTypes[msgtype]) {
             BodyType = bodyTypes[msgtype];
+        } else if (content.url) {
+            // Fallback to MFileBody if there's a content URL
+            BodyType = bodyTypes['m.file'];
         }
 
         return <BodyType ref="body" mxEvent={this.props.mxEvent} highlights={this.props.highlights}

@@ -20,6 +20,7 @@ var TestUtils = require('react-addons-test-utils');
 var expect = require('expect');
 
 var sdk = require('matrix-react-sdk');
+var MatrixClientPeg = require('MatrixClientPeg');
 
 var MessagePanel = sdk.getComponent('structures.MessagePanel');
 
@@ -35,6 +36,9 @@ describe('MessagePanel', function () {
     beforeEach(function() {
         test_utils.beforeEach(this);
         sandbox = test_utils.stubClient(sandbox);
+
+        var client = MatrixClientPeg.get();
+        client.credentials = {userId: '@me:here'};
     });
 
     afterEach(function () {
@@ -93,7 +97,7 @@ describe('MessagePanel', function () {
         // first render with the RM in one place
         var mp = ReactDOM.render(
                 <MessagePanel events={events} readMarkerEventId={events[4].getId()}
-                    readMarkerVisible={true} 
+                    readMarkerVisible={true}
                 />, parentDiv);
 
         var tiles = TestUtils.scryRenderedComponentsWithType(
@@ -109,13 +113,13 @@ describe('MessagePanel', function () {
         // now move the RM
         mp = ReactDOM.render(
                 <MessagePanel events={events} readMarkerEventId={events[6].getId()}
-                    readMarkerVisible={true} 
+                    readMarkerVisible={true}
                 />, parentDiv);
 
         // now there should be two RM containers
         var found = TestUtils.scryRenderedDOMComponentsWithClass(mp, 'mx_RoomView_myReadMarker_container');
         expect(found.length).toEqual(2);
-        
+
         // the first should be the ghost
         expect(found[0].previousSibling).toEqual(tileContainers[4]);
         var hr = found[0].children[0];
@@ -126,7 +130,7 @@ describe('MessagePanel', function () {
         // advance the clock, and then let the browser run an animation frame,
         // to let the animation start
         clock.tick(1500);
-        
+
         realSetTimeout(() => {
             // then advance it again to let it complete
             clock.tick(1000);

@@ -68,6 +68,7 @@ module.exports.components['views.messages.MFileBody'] = require('./components/vi
 module.exports.components['views.messages.MImageBody'] = require('./components/views/messages/MImageBody');
 module.exports.components['views.messages.MVideoBody'] = require('./components/views/messages/MVideoBody');
 module.exports.components['views.messages.MessageEvent'] = require('./components/views/messages/MessageEvent');
+module.exports.components['views.messages.MAudioBody'] = require('./components/views/messages/MAudioBody');
 module.exports.components['views.messages.TextualBody'] = require('./components/views/messages/TextualBody');
 module.exports.components['views.messages.TextualEvent'] = require('./components/views/messages/TextualEvent');
 module.exports.components['views.messages.UnknownBody'] = require('./components/views/messages/UnknownBody');

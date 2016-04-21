@@ -67,6 +67,8 @@ module.exports = React.createClass({
             collapse_rhs: false,
             ready: false,
             width: 10000,
+            sideOpacity: 1.0,
+            middleOpacity: 1.0,
         };
         if (s.logged_in) {
             if (MatrixClientPeg.get().getRooms().length) {
@@ -183,6 +185,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        this._stopMatrixClient();
         dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
         window.removeEventListener("focus", this.onFocus);
@@ -258,12 +261,7 @@ module.exports = React.createClass({
                     window.localStorage.setItem("mx_hs_url", hsUrl);
                     window.localStorage.setItem("mx_is_url", isUrl);
                 }
-                Notifier.stop();
-                UserActivity.stop();
-                Presence.stop();
-                MatrixClientPeg.get().stopClient();
-                MatrixClientPeg.get().removeAllListeners();
-                MatrixClientPeg.unset();
+                this._stopMatrixClient();
                 this.notifyNewScreen('login');
                 this.replaceState({
                     logged_in: false,
@@ -369,7 +367,7 @@ module.exports = React.createClass({
                     onFinished: function(should_leave) {
                         if (should_leave) {
                             var d = MatrixClientPeg.get().leave(roomId);
-                            
+
                             // FIXME: controller shouldn't be loading a view :(
                             var Loader = sdk.getComponent("elements.Spinner");
                             var modal = Modal.createDialog(Loader);
@@ -534,6 +532,12 @@ module.exports = React.createClass({
                     collapse_rhs: false,
                 });
                 break;
+            case 'ui_opacity':
+                this.setState({
+                    sideOpacity: payload.sideOpacity,
+                    middleOpacity: payload.middleOpacity,
+                });
+                break;
         }
     },
 
@@ -596,13 +600,15 @@ module.exports = React.createClass({
                 var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
                 if (theAlias) presentedId = theAlias;
 
-                var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
-                var color_scheme = {};
-                if (color_scheme_event) {
-                    color_scheme = color_scheme_event.getContent();
-                    // XXX: we should validate the event
-                }                
-                Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+                // No need to do this given RoomView triggers it itself...
+                // var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
+                // var color_scheme = {};
+                // if (color_scheme_event) {
+                //     color_scheme = color_scheme_event.getContent();
+                //     // XXX: we should validate the event
+                // }
+                // console.log("Tinter.tint from _viewRoom");
+                // Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
 
             if (eventId) {
@@ -624,10 +630,13 @@ module.exports = React.createClass({
         if (!this.refs.roomView) {
             return;
         }
-
         var roomview = this.refs.roomView;
+        var roomId = this.refs.roomView.getRoomId();
+        if (!roomId) {
+            return;
+        }
         var state = roomview.getScrollState();
-        this.scrollStateMap[roomview.props.roomId] = state;
+        this.scrollStateMap[roomId] = state;
     },
 
     onLoggedIn: function(credentials) {
@@ -720,6 +729,16 @@ module.exports = React.createClass({
             pendingEventOrdering: "detached",
             initialSyncLimit: this.props.config.sync_timeline_limit || 20,
         });
+    },
+
+    // stop all the background processes related to the current client
+    _stopMatrixClient: function() {
+        Notifier.stop();
+        UserActivity.stop();
+        Presence.stop();
+        MatrixClientPeg.get().stopClient();
+        MatrixClientPeg.get().removeAllListeners();
+        MatrixClientPeg.unset();
     },
 
     onKeyDown: function(ev) {
@@ -887,7 +906,7 @@ module.exports = React.createClass({
         dis.dispatch({
             action: 'view_user',
             member: member,
-        });        
+        });
     },
 
     onLogoutClick: function(event) {
@@ -1008,6 +1027,7 @@ module.exports = React.createClass({
 
     onUserSettingsClose: function() {
         // XXX: use browser history instead to find the previous room?
+        // or maintain a this.state.pageHistory in _setPage()?
         if (this.state.currentRoom) {
             dis.dispatch({
                 action: 'view_room',
@@ -1034,7 +1054,7 @@ module.exports = React.createClass({
         var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
 
-        // work out the HS URL prompts we should show for 
+        // work out the HS URL prompts we should show for
 
         // needs to be before normal PageTypes as you are logged in technically
         if (this.state.screen == 'post_registration') {
@@ -1052,29 +1072,29 @@ module.exports = React.createClass({
                     page_element = (
                         <RoomView
                             ref="roomView"
-                            roomId={this.state.currentRoom}
-                            roomAlias={this.state.currentRoomAlias}
+                            roomAddress={this.state.currentRoom || this.state.currentRoomAlias}
                             eventId={this.state.initialEventId}
                             thirdPartyInvite={this.state.thirdPartyInvite}
                             oobData={this.state.roomOobData}
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}
                             key={this.state.currentRoom}
+                            opacity={this.state.middleOpacity}
                             ConferenceHandler={this.props.ConferenceHandler} />
                     );
-                    right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} />
+                    right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity} />
                     break;
                 case this.PageTypes.UserSettings:
                     page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} />
-                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
                 case this.PageTypes.CreateRoom:
                     page_element = <CreateRoom onRoomCreated={this.onRoomCreated}/>
-                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
                 case this.PageTypes.RoomDirectory:
                     page_element = <RoomDirectory />
-                    right_panel = <RightPanel collapsed={this.state.collapse_rhs}/>
+                    right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
             }
 
@@ -1098,7 +1118,7 @@ module.exports = React.createClass({
                 <div className="mx_MatrixChat_wrapper">
                     {topBar}
                     <div className={bodyClasses}>
-                        <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} />
+                        <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} opacity={this.state.sideOpacity}/>
                         <main className="mx_MatrixChat_middlePanel">
                             {page_element}
                         </main>
