@@ -81,6 +81,10 @@ module.exports = React.createClass({
         // the event after which we are showing a disappearing read marker
         // animation
         this.currentGhostEventId = null;
+
+        // opaque readreceipt info for each userId; used by ReadReceiptMarker
+        // to manage its animations
+        this._readReceiptMap = {};
     },
 
     /* get the DOM node representing the given event */
@@ -346,6 +350,7 @@ module.exports = React.createClass({
                     <EventTile mxEvent={mxEv} continuation={continuation}
                         onWidgetLoad={this._onWidgetLoad}
                         readReceipts={readReceipts}
+                        readReceiptMap={this._readReceiptMap}
                         eventSendStatus={mxEv.status}
                         last={last} isSelectedEvent={highlight}/>
                 </li>
