@@ -84,11 +84,34 @@ module.exports = React.createClass({
     findLink: function(nodes) {
         for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
-            if (node.tagName === "A" && node.getAttribute("href") && 
+            if (node.tagName === "A" && node.getAttribute("href") &&
                 (node.getAttribute("href").startsWith("http://") ||
                  node.getAttribute("href").startsWith("https://")))
             {
-                return node;
+                // as a random heuristic to avoid highlighting things like "foo.pl"
+                // we require the linked text to either include a / (either from http:// )
+                // or from a full foo.bar/baz style schemeless URL - or be a markdown-style
+                // link, in which case we check the target text differs from the link value.
+                // TODO: make this configurable?
+                if (node.textContent.indexOf("/") > -1)
+                {
+                    return node;
+                }
+                else {
+                    var url = node.getAttribute("href");
+                    var host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
+                    if (node.textContent.trim().startsWith(host)) {
+                        // it's a "foo.pl" style link
+                        return;
+                    }
+                    else {
+                        // it's a [foo bar](http://foo.com) style link
+                        return node;
+                    }
+                }
+            }
+            else if (node.tagName === "PRE" || node.tagName === "CODE") {
+                return;
             }
             else if (node.children && node.children.length) {
                 return this.findLink(node.children)
