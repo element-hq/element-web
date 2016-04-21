@@ -37,6 +37,7 @@ module.exports.stubClient = function() {
         getRoom: sinon.stub(),
         loginFlows: sinon.stub(),
         on: sinon.stub(),
+        removeListener: sinon.stub(),
 
         paginateEventTimeline: sinon.stub().returns(q()),
         sendReadReceipt: sinon.stub().returns(q()),

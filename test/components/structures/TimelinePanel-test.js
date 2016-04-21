@@ -76,7 +76,8 @@ describe('TimelinePanel', function() {
 
     afterEach(function() {
         if (parentDiv) {
-            document.body.removeChild(parentDiv);
+            ReactDOM.unmountComponentAtNode(parentDiv);
+            parentDiv.remove();
             parentDiv = null;
         }
         sandbox.restore();
