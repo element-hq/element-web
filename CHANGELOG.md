@@ -1,6 +1,13 @@
-Changes in <unreleased>
-=======================
- * Update to react-sdk 0.5.2
+Changes in [0.6.1](https://github.com/vector-im/vector-web/releases/tag/v0.6.1) (2016-04-22)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.6.0...v0.6.1)
+
+ * Update to matrix-react-sdk 0.5.2 - see
+   [changelog](https://github.com/matrix-org/matrix-react-sdk/blob/v0.5.2/CHANGELOG.md)
+ * Don't relayout scrollpanels every time something changes
+   [\#1438](https://github.com/vector-im/vector-web/pull/1438)
+ * Include react-addons-perf for non-production builds
+   [\#1431](https://github.com/vector-im/vector-web/pull/1431)
 
 Changes in [0.6.0](https://github.com/vector-im/vector-web/releases/tag/v0.6.0) (2016-04-19)
 ============================================================================================
