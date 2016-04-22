@@ -1181,7 +1181,7 @@ module.exports = React.createClass({
                     defaultIsUrl={this.props.config.default_is_url}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
-                    onForgotPasswordClick={this.onForgotPasswordClick} 
+                    onForgotPasswordClick={this.onForgotPasswordClick}
                     onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest.bind(this, true) : undefined}
                     onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
                     />

@@ -210,7 +210,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
 
-        window.removeEventListener('resize', this.onResize);        
+        window.removeEventListener('resize', this.onResize);
 
         // no need to do this as Dir & Settings are now overlays. It just burnt CPU.
         // console.log("Tinter.tint from RoomView.unmount");
@@ -878,7 +878,7 @@ module.exports = React.createClass({
         this.setState({
             uploadingRoomSettings: true,
         });
-        
+
         var newName = this.refs.header.getEditedName();
         if (newName !== undefined) {
             this.refs.room_settings.setName(newName);
@@ -887,7 +887,7 @@ module.exports = React.createClass({
         if (newTopic !== undefined) {
             this.refs.room_settings.setTopic(newTopic);
         }
-        
+
         this.refs.room_settings.save().then((results) => {
             var fails = results.filter(function(result) { return result.state !== "fulfilled" });
             console.log("Settings saved with %s errors", fails.length);
@@ -1229,7 +1229,7 @@ module.exports = React.createClass({
                                 rightPanelCollapsed={ this.props.rightPanelCollapsed }
                             />
                             <div className="mx_RoomView_auxPanel">
-                                <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
+                                <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked }
                                                 onRejectClick={ this.onRejectThreepidInviteButtonClicked }
                                                 canJoin={ true } canPreview={ false }
                                                 spinner={this.state.joining}
@@ -1266,7 +1266,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomView">
                         <RoomHeader ref="header" room={this.state.room}/>
                         <div className="mx_RoomView_auxPanel">
-                            <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked } 
+                            <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked }
                                             onRejectClick={ this.onRejectButtonClicked }
                                             inviterName={ inviterName }
                                             canJoin={ true } canPreview={ false }
@@ -1402,8 +1402,8 @@ module.exports = React.createClass({
             }
             voiceMuteButton =
                 <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
-                    <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"} 
-                         alt={call.isMicrophoneMuted() ? "Click to unmute audio" : "Click to mute audio"} 
+                    <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"}
+                         alt={call.isMicrophoneMuted() ? "Click to unmute audio" : "Click to mute audio"}
                          width="21" height="26"/>
                 </div>
 
