@@ -1,3 +1,7 @@
+Changes in <unreleased>
+=======================
+ * Update to react-sdk 0.5.2
+
 Changes in [0.6.0](https://github.com/vector-im/vector-web/releases/tag/v0.6.0) (2016-04-19)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.5.0...v0.6.0)
