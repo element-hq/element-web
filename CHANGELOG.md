@@ -1,3 +1,7 @@
+Changes in <unreleased>
+=======================
+ * Reduce number of events shown in a room to 250, to improve responsiveness
+
 Changes in [0.5.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.5.1) (2016-04-19)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.4.0...v0.5.1)
