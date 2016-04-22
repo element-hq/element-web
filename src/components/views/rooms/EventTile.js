@@ -116,6 +116,12 @@ module.exports = React.createClass({
          */
         readReceiptMap: React.PropTypes.object,
 
+        /* A function which is used to check if the parent panel is being
+         * unmounted, to avoid unnecessary work. Should return true if we
+         * are being unmounted.
+         */
+        checkUnmounting: React.PropTypes.func,
+
         /* the status of this event - ie, mxEvent.status. Denormalised to here so
          * that we can tell when it changes. */
         eventSendStatus: React.PropTypes.string,
@@ -261,6 +267,7 @@ module.exports = React.createClass({
                 <ReadReceiptMarker key={userId} member={member}
                     leftOffset={left} hidden={hidden}
                     readReceiptInfo={readReceiptInfo}
+                    checkUnmounting={this.props.checkUnmounting}
                     suppressAnimation={this._suppressReadReceiptAnimation}
                     onClick={this.toggleAllReadAvatars}
                 />
