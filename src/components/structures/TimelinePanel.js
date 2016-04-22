@@ -31,7 +31,7 @@ var KeyCode = require('../../KeyCode');
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
-var TIMELINE_CAP = 500; // the most events to show in a timeline
+var TIMELINE_CAP = 250; // the most events to show in a timeline
 
 var DEBUG = false;
 
@@ -241,11 +241,25 @@ var TimelinePanel = React.createClass({
             if (this.unmounted) { return; }
 
             debuglog("TimelinePanel: paginate complete backwards:"+backwards+"; success:"+r);
-            this.setState({
+
+            var newState = {
                 [paginatingKey]: false,
                 [canPaginateKey]: r,
                 events: this._getEvents(),
-            });
+            };
+
+            // moving the window in this direction may mean that we can now
+            // paginate in the other where we previously could not.
+            var otherDirection = backwards ? EventTimeline.FORWARDS : EventTimeline.BACKWARDS;
+            var canPaginateOtherWayKey = backwards ? 'canForwardPaginate' : 'canBackPaginate';
+            if (!this.state[canPaginateOtherWayKey] &&
+                    this._timelineWindow.canPaginate(otherDirection)) {
+                debuglog('TimelinePanel: can now', otherDirection, 'paginate again');
+                newState[canPaginateOtherWayKey] = true;
+            }
+
+            this.setState(newState);
+
             return r;
         });
     },

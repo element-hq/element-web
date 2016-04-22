@@ -17,7 +17,6 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var ReactDom = require('react-dom');
 var classNames = require("classnames");
 
 var sdk = require('../../../index');
@@ -25,8 +24,6 @@ var MatrixClientPeg = require('../../../MatrixClientPeg')
 var TextForEvent = require('../../../TextForEvent');
 
 var ContextualMenu = require('../../../ContextualMenu');
-var Velociraptor = require('../../../Velociraptor');
-require('../../../VelocityBounce');
 var dispatcher = require("../../../dispatcher");
 
 var ObjectUtils = require('../../../ObjectUtils');
@@ -113,6 +110,12 @@ module.exports = React.createClass({
         /* a list of Room Members whose read-receipts we should show */
         readReceipts: React.PropTypes.arrayOf(React.PropTypes.object),
 
+        /* opaque readreceipt info for each userId; used by ReadReceiptMarker
+         * to manage its animations. Should be an empty object when the room
+         * first loads
+         */
+        readReceiptMap: React.PropTypes.object,
+
         /* the status of this event - ie, mxEvent.status. Denormalised to here so
          * that we can tell when it changes. */
         eventSendStatus: React.PropTypes.string,
@@ -120,6 +123,15 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {menu: false, allReadAvatars: false};
+    },
+
+    componentWillMount: function() {
+        // don't do RR animations until we are mounted
+        this._suppressReadReceiptAnimation = true;
+    },
+
+    componentDidMount: function() {
+        this._suppressReadReceiptAnimation = false;
     },
 
     shouldComponentUpdate: function (nextProps, nextState) {
@@ -217,80 +229,53 @@ module.exports = React.createClass({
     },
 
     getReadAvatars: function() {
+        var ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
         var avatars = [];
-        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 
         var left = 0;
-
-        var reorderTransitionOpts = {
-            duration: 100,
-            easing: 'easeOut'
-        };
 
         var receipts = this.props.readReceipts || [];
         for (var i = 0; i < receipts.length; ++i) {
             var member = receipts[i];
 
-            // Using react refs here would mean both getting Velociraptor to expose
-            // them and making them scoped to the whole RoomView. Not impossible, but
-            // getElementById seems simpler at least for a first cut.
-            var oldAvatarDomNode = document.getElementById('mx_readAvatar'+member.userId);
-            var startStyles = [];
-            var enterTransitionOpts = [];
-            var oldNodeTop = -15; // For avatars that weren't on screen, act as if they were just off the top
-            if (oldAvatarDomNode) {
-                oldNodeTop = oldAvatarDomNode.getBoundingClientRect().top;
+            var hidden = true;
+            if ((i < MAX_READ_AVATARS) || this.state.allReadAvatars) {
+                hidden = false;
             }
 
-            if (this.readAvatarNode) {
-                var topOffset = oldNodeTop - this.readAvatarNode.getBoundingClientRect().top;
+            var userId = member.userId;
+            var readReceiptInfo;
 
-                if (oldAvatarDomNode && oldAvatarDomNode.style.left !== '0px') {
-                    var leftOffset = oldAvatarDomNode.style.left;
-                    // start at the old height and in the old h pos
-                    startStyles.push({ top: topOffset, left: leftOffset });
-                    enterTransitionOpts.push(reorderTransitionOpts);
+            if (this.props.readReceiptMap) {
+                readReceiptInfo = this.props.readReceiptMap[userId];
+                if (!readReceiptInfo) {
+                    readReceiptInfo = {};
+                    this.props.readReceiptMap[userId] = readReceiptInfo;
                 }
-
-                // then shift to the rightmost column,
-                // and then it will drop down to its resting position
-                startStyles.push({ top: topOffset, left: '0px' });
-                enterTransitionOpts.push({
-                    duration: bounce ? Math.min(Math.log(Math.abs(topOffset)) * 200, 3000) : 300,
-                    easing: bounce ? 'easeOutBounce' : 'easeOutCubic',
-                });
             }
-
-            var style = {
-                left: left+'px',
-                top: '0px',
-                visibility: ((i < MAX_READ_AVATARS) || this.state.allReadAvatars) ? 'visible' : 'hidden'
-            };
 
             //console.log("i = " + i + ", MAX_READ_AVATARS = " + MAX_READ_AVATARS + ", allReadAvatars = " + this.state.allReadAvatars + " visibility = " + style.visibility);
 
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
-                <MemberAvatar key={member.userId} member={member}
-                    width={14} height={14} resizeMethod="crop"
-                    style={style}
-                    startStyle={startStyles}
-                    enterTransitionOpts={enterTransitionOpts}
-                    id={'mx_readAvatar'+member.userId}
+                <ReadReceiptMarker key={userId} member={member}
+                    leftOffset={left} hidden={hidden}
+                    readReceiptInfo={readReceiptInfo}
+                    suppressAnimation={this._suppressReadReceiptAnimation}
                     onClick={this.toggleAllReadAvatars}
                 />
             );
+
             // TODO: we keep the extra read avatars in the dom to make animation simpler
             // we could optimise this to reduce the dom size.
-            if (i < MAX_READ_AVATARS - 1 || this.state.allReadAvatars) { // XXX: where does this -1 come from? is it to make the max'th avatar animate properly?
+            if (!hidden) {
                 left -= 15;
             }
         }
         var editButton;
+        var remText;
         if (!this.state.allReadAvatars) {
             var remainder = receipts.length - MAX_READ_AVATARS;
-            var remText;
-            if (i >= MAX_READ_AVATARS - 1) left -= 15;
             if (remainder > 0) {
                 remText = <span className="mx_EventTile_readAvatarRemainder"
                     onClick={this.toggleAllReadAvatars}
@@ -305,17 +290,11 @@ module.exports = React.createClass({
             );
         }
 
-        return <span className="mx_EventTile_readAvatars" ref={this.collectReadAvatarNode}>
+        return <span className="mx_EventTile_readAvatars">
             { editButton }
             { remText }
-            <Velociraptor transition={ reorderTransitionOpts }>
-                { avatars }
-            </Velociraptor>
+            { avatars }
         </span>;
-    },
-
-    collectReadAvatarNode: function(node) {
-        this.readAvatarNode = ReactDom.findDOMNode(node);
     },
 
     onMemberAvatarClick: function(event) {

@@ -1,3 +1,29 @@
+Changes in [0.5.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.5.2) (2016-04-22)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.5.1...v0.5.2)
+
+Performance improvements:
+
+ * Reduce number of events shown in a room to 250
+   [afb301f](https://github.com/matrix-org/matrix-react-sdk/commit/afb301ffb78c019a50e40caa5d9042ad39c117fe)
+ * add heuristics to hide URL previews...
+   [\#284](https://github.com/matrix-org/matrix-react-sdk/pull/284)
+ * Fix bug which stopped us scrolling down after we scrolled up
+   [\#283](https://github.com/matrix-org/matrix-react-sdk/pull/283)
+ * Don't relayout scrollpanels every time something changes
+   [\#280](https://github.com/matrix-org/matrix-react-sdk/pull/280)
+ * Reduce number of renders on received events
+   [\#279](https://github.com/matrix-org/matrix-react-sdk/pull/279)
+ * Avoid rerendering EventTiles when not necessary
+   [\#278](https://github.com/matrix-org/matrix-react-sdk/pull/278)
+ * Speed up processing of TimelinePanel updates on new events
+   [\#277](https://github.com/matrix-org/matrix-react-sdk/pull/277)
+
+Other bug fixes:
+ * Fix read-receipt animation
+   [\#282](https://github.com/matrix-org/matrix-react-sdk/pull/282),
+   [\#281](https://github.com/matrix-org/matrix-react-sdk/pull/281)
+
 Changes in [0.5.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.5.1) (2016-04-19)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.4.0...v0.5.1)

@@ -37,13 +37,14 @@ module.exports.stubClient = function() {
         getRoom: sinon.stub(),
         loginFlows: sinon.stub(),
         on: sinon.stub(),
+        removeListener: sinon.stub(),
 
         paginateEventTimeline: sinon.stub().returns(q()),
         sendReadReceipt: sinon.stub().returns(q()),
     };
 
-    // create the peg
-
+    // stub out the methods in MatrixClientPeg
+    //
     // 'sandbox.restore()' doesn't work correctly on inherited methods,
     // so we do this for each method
     var methods = ['get', 'unset', 'replaceUsingUrls',
@@ -51,7 +52,9 @@ module.exports.stubClient = function() {
     for (var i = 0; i < methods.length; i++) {
         sandbox.stub(peg, methods[i]);
     }
-    peg.get.returns(client);
+    // MatrixClientPeg.get() is called a /lot/, so implement it with our own
+    // fast stub function rather than a sinon stub
+    peg.get = function() { return client; };
     return sandbox;
 }
 
