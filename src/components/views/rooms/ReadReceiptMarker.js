@@ -53,6 +53,11 @@ module.exports = React.createClass({
         // this room
         readReceiptInfo: React.PropTypes.object,
 
+        // A function which is used to check if the parent panel is being
+        // unmounted, to avoid unnecessary work. Should return true if we
+        // are being unmounted.
+        checkUnmounting: React.PropTypes.func,
+
         // callback for clicks on this RR
         onClick: React.PropTypes.func,
     },
@@ -78,6 +83,13 @@ module.exports = React.createClass({
         // it reappears, it can be animated from the right place.
         var rrInfo = this.props.readReceiptInfo;
         if (!rrInfo) {
+            return;
+        }
+
+        // checking the DOM properties can force a re-layout, which can be
+        // quite expensive; so if the parent messagepanel is being unmounted,
+        // then don't bother with this.
+        if (this.props.checkUnmounting && this.props.checkUnmounting()) {
             return;
         }
 
