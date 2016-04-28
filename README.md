@@ -25,9 +25,14 @@ You can use matrix-react-sdk directly, but to do this you would have to provide
 How to customise the SDK
 ========================
 
-The SDK uses the 'atomic' design pattern as seen at http://patternlab.io to
+The SDK formerly used the 'atomic' design pattern as seen at http://patternlab.io to
 encourage a very modular and reusable architecture, making it easy to
 customise and use UI widgets independently of the rest of the SDK and your app.
+
+So unfortunately at the moment this document does not describe how to customize your UI!
+
+###This is the old description for the atomic design pattern:
+
 In practice this means:
 
  * The UI of the app is strictly split up into a hierarchy of components.
