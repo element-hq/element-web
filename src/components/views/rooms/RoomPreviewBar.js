@@ -97,7 +97,7 @@ module.exports = React.createClass({
                             </div>
                             <div className="mx_RoomPreviewBar_warningText">
                                 This invitation was sent to <b><span className="email">{this.props.invitedEmail}</span></b>, which is not associated with this account.<br/>
-                                You may wish to login with a different account, or add this email to your this account.
+                                You may wish to login with a different account, or add this email to this account.
                             </div>
                         </div>
                 }
