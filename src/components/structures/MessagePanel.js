@@ -85,6 +85,12 @@ module.exports = React.createClass({
         // opaque readreceipt info for each userId; used by ReadReceiptMarker
         // to manage its animations
         this._readReceiptMap = {};
+
+        this._isMounted = true;
+    },
+
+    componentWillUnmount: function() {
+        this._isMounted = false;
     },
 
     /* get the DOM node representing the given event */
@@ -199,6 +205,10 @@ module.exports = React.createClass({
         if (this.refs.scrollPanel) {
             this.refs.scrollPanel.checkFillState();
         }
+    },
+
+    _isUnmounting: function() {
+        return !this._isMounted;
     },
 
     _getEventTiles: function() {
@@ -351,6 +361,7 @@ module.exports = React.createClass({
                         onWidgetLoad={this._onWidgetLoad}
                         readReceipts={readReceipts}
                         readReceiptMap={this._readReceiptMap}
+                        checkUnmounting={this._isUnmounting}
                         eventSendStatus={mxEv.status}
                         last={last} isSelectedEvent={highlight}/>
                 </li>
