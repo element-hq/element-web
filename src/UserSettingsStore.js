@@ -103,7 +103,7 @@ module.exports = {
             device_display_name: address,
             lang: navigator.language,
             data: {},
-            append: true,  // We always append for email pushers since the email is not a device that would 'logged out' from
+            append: true,  // We always append for email pushers since we don't want to stop other accounts notifying to the same email address
         });
     },
 };
