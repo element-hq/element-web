@@ -107,6 +107,26 @@ module.exports = React.createClass({
         UserSettingsStore.setEnableNotifications(event.target.checked);
     },
 
+    onEnableEmailNotificationsChange: function(address, event) {
+        var emailPusherPromise;
+        if (event.target.checked) {
+            emailPusherPromise = UserSettingsStore.addEmailPusher(address);
+        } else {
+            var emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
+            emailPusher.kind = null;
+            emailPusherPromise = MatrixClientPeg.get().setPusher(emailPusher);
+        }
+        emailPusherPromise.done(() => {
+            this._refreshFromServer();
+        }, (error) => {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error saving email notification preferences",
+                description: "Vector was unable to save your email notification preferences.",
+            });
+        });
+    },
+
     onNotifStateButtonClicked: function(event) {
         // FIXME: use .bind() rather than className metadata here surely
         var vectorRuleId = event.target.className.split("-")[0];
@@ -632,25 +652,8 @@ module.exports = React.createClass({
                     ref="enableEmailNotifications_{address}"
                     type="checkbox"
                     checked={ UserSettingsStore.hasEmailPusher(this.state.pushers, address) }
-                    onChange={ (e) => {
-                        var emailPusherPromise;
-                        if (e.target.checked) {
-                            emailPusherPromise = UserSettingsStore.addEmailPusher(address);
-                        } else {
-                            var emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
-                            emailPusher.kind = null;
-                            emailPusherPromise = MatrixClientPeg.get().setPusher(emailPusher);
-                        }
-                        emailPusherPromise.done(() => {
-                            this._refreshFromServer();
-                        }, (error) => {
-                            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                            Modal.createDialog(ErrorDialog, {
-                                title: "Error saving email notification preferences",
-                                description: "Vector was unable to save your email notification preferences.",
-                            });
-                        });
-                    }} />
+                    onChange={ this.onEnableEmailNotificationsChange.bind(this, address) }
+                />
             </div>
             <div className="mx_UserNotifSettings_labelCell">
                 <label htmlFor="enableEmailNotifications_{address}">
