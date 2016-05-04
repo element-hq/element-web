@@ -699,7 +699,7 @@ module.exports = React.createClass({
                     {masterPushRuleDiv}
 
                     <div className="mx_UserSettings_notifTable">
-                        All notifications are currently disabled for all devices.
+                        All notifications are currently disabled for all targets.
                     </div>
                 </div>
             );
@@ -742,13 +742,11 @@ module.exports = React.createClass({
 
         var devicesSection;
         if (this.state.pushers === undefined) {
-            devicesSection = <div className="error">Unable to fetch device list</div>
+            devicesSection = <div className="error">Unable to fetch notification target list</div>
         } else if (this.state.pushers.length == 0) {
-            devicesSection = <div className="mx_UserSettings_devicesTable_nodevices">
-                No devices are receiving push notifications
-            </div>
+            devicesSection = null;
         } else {
-            // It would be great to be able to delete pushers from here too,
+            // TODO: It would be great to be able to delete pushers from here too,
             // and this wouldn't be hard to add.
             var rows = [];
             for (var i = 0; i < this.state.pushers.length; ++i) {
@@ -758,16 +756,16 @@ module.exports = React.createClass({
                 </tr>);
             }
             devicesSection = (<table className="mx_UserSettings_devicesTable">
-                <thead>
-                    <tr>
-                        <th>Application</th>
-                        <th>Device</th>
-                    </tr>
-                </thead>
                 <tbody>
                     {rows}
                 </tbody>
             </table>);
+        }
+        if (devicesSection) {
+            devicesSection = (<div>
+                <h3>Notification targets</h3>
+                { devicesSection }
+            </div>);
         }
 
         var advancedSettings;
@@ -828,8 +826,6 @@ module.exports = React.createClass({
 
                     { emailNotificationsRow }
 
-                    <h3>General use</h3>
-
                     <div className="mx_UserNotifSettings_pushRulesTableWrapper">
                         <table className="mx_UserNotifSettings_pushRulesTable">
                             <thead>
@@ -850,7 +846,6 @@ module.exports = React.createClass({
 
                     { advancedSettings }
 
-                    <h3>Devices</h3>
                     { devicesSection }
 
                 </div>
