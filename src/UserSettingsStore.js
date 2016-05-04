@@ -78,6 +78,12 @@ module.exports = {
         return cli.setPassword(authDict, new_password);
     },
 
+    /**
+     * Returns the email pusher (pusher of type 'email') for a given
+     * email address. Email pushers all have the same app ID, so since
+     * pushers are unique over (app ID, pushkey), there will be at most
+     * one such pusher.
+     */
     getEmailPusher: function(pushers, address) {
         if (pushers === undefined) {
             return undefined;
