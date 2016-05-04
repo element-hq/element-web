@@ -52,6 +52,7 @@ limitations under the License.
     display: table-cell;
     vertical-align: middle;
     overflow: hidden;
+    font-size: 14px;
     text-overflow: ellipsis;
 }
 
