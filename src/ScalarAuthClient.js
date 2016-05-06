@@ -33,7 +33,7 @@ class ScalarAuthClient {
             if (err) {
                 defer.reject(err);
             } else {
-                defer.resolve(body);
+                defer.resolve(body.access_token);
             }
         });
 
