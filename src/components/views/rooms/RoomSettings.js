@@ -17,10 +17,12 @@ limitations under the License.
 var q = require("q");
 var React = require('react');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var SdkConfig = require('../../../SdkConfig');
 var sdk = require('../../../index');
 var Modal = require('../../../Modal');
 var ObjectUtils = require("../../../ObjectUtils");
 var dis = require("../../../dispatcher");
+var ScalarAuthClient = require("../../../ScalarAuthClient");
 
 module.exports = React.createClass({
     displayName: 'RoomSettings',
@@ -69,6 +71,10 @@ module.exports = React.createClass({
             this._originalIsRoomPublished = result.visibility === "public";
         }, (err) => {
             console.error("Failed to get room visibility: " + err);
+        });
+
+        this.getScalarToken().done((token) => {
+            this.setState({scalar_token: token});
         });
 
         dis.dispatch({
@@ -359,6 +365,28 @@ module.exports = React.createClass({
                 roomState.mayClientSendStateEvent("m.room.guest_access", cli))
     },
 
+    getScalarInterfaceUrl: function() {
+        var url = SdkConfig.get().integrations_ui_url;
+        url += "?token=" + this.state.scalar_token;
+        return url;
+    },
+
+    getScalarToken() {
+        var tok = window.localStorage.getItem("mx_scalar_token");
+        if (tok) return q(tok);
+
+        // No saved token, so do the dance to get one. First, we
+        // need an openid bearer token from the HS.
+        return MatrixClientPeg.get().getOpenIdToken().then((token_object) => {
+            // Now we can send that to scalar and exchange it for a scalar token
+            var scalar_auth_client = new ScalarAuthClient();
+            return scalar_auth_client.getScalarToken(token_object);
+        }).then((token_object) => {
+            window.localStorage.setItem("mx_scalar_token", token_object);
+            return token_object;
+        });
+    },
+
     render: function() {
         // TODO: go through greying out things you don't have permission to change
         // (or turning them into informative stuff)
@@ -367,6 +395,7 @@ module.exports = React.createClass({
         var ColorSettings = sdk.getComponent("room_settings.ColorSettings");
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
+        var Loader = sdk.getComponent("elements.Spinner")
 
         var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
         var events_levels = (power_levels ? power_levels.getContent().events : {}) || {};
@@ -533,6 +562,13 @@ module.exports = React.createClass({
                 </div>
         }
 
+        var integrations_section;
+        if (this.state.scalar_token) {
+            integrations_section = <iframe src={this.getScalarInterfaceUrl()} width={640} height={600}></iframe>;
+        } else {
+            integrations_section = <Loader />;
+        }
+
         return (
             <div className="mx_RoomSettings">
 
@@ -682,6 +718,8 @@ module.exports = React.createClass({
                     This room's internal ID is <code>{ this.props.room.roomId }</code>
                 </div>
 
+                <h3>Integrations</h3>
+                { integrations_section }
             </div>
         );
     }
