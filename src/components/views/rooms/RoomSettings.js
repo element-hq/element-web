@@ -367,7 +367,7 @@ module.exports = React.createClass({
 
     getScalarInterfaceUrl: function() {
         var url = SdkConfig.get().integrations_ui_url;
-        url += "?token=" + encodeURIComponent(this.state.scalar_token);
+        url += "?scalar_token=" + encodeURIComponent(this.state.scalar_token);
         url += "&room_id=" + encodeURIComponent(this.props.room.roomId);
         return url;
     },
