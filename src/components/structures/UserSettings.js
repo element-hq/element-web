@@ -328,12 +328,12 @@ module.exports = React.createClass({
             );
         }
         var notification_area;
-        if (!MatrixClientPeg.get().isGuest()) {
+        if (!MatrixClientPeg.get().isGuest() && this.state.threepids !== undefined) {
             notification_area = (<div>
                 <h3>Notifications</h3>
 
                 <div className="mx_UserSettings_section">
-                    <Notifications/>
+                    <Notifications threepids={this.state.threepids} />
                 </div>
             </div>);
         }

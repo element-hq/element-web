@@ -77,4 +77,39 @@ module.exports = {
 
         return cli.setPassword(authDict, new_password);
     },
+
+    /**
+     * Returns the email pusher (pusher of type 'email') for a given
+     * email address. Email pushers all have the same app ID, so since
+     * pushers are unique over (app ID, pushkey), there will be at most
+     * one such pusher.
+     */
+    getEmailPusher: function(pushers, address) {
+        if (pushers === undefined) {
+            return undefined;
+        }
+        for (var i = 0; i < pushers.length; ++i) {
+            if (pushers[i].kind == 'email' && pushers[i].pushkey == address) {
+                return pushers[i];
+            }
+        }
+        return undefined;
+    },
+
+    hasEmailPusher: function(pushers, address) {
+        return this.getEmailPusher(pushers, address) !== undefined;
+    },
+
+    addEmailPusher: function(address) {
+        return MatrixClientPeg.get().setPusher({
+            kind: 'email',
+            app_id: "m.email",
+            pushkey: address,
+            app_display_name: 'Email Notifications',
+            device_display_name: address,
+            lang: navigator.language,
+            data: {},
+            append: true,  // We always append for email pushers since we don't want to stop other accounts notifying to the same email address
+        });
+    },
 };
