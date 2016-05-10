@@ -69,6 +69,11 @@ module.exports = React.createClass({
         ERROR: "ERROR"      // There was an error
     },
 
+    propTypes: {
+        // The array of threepids from the JS SDK (required for email notifications)
+        threepids: React.PropTypes.array.isRequired,
+    },
+
     getInitialState: function() {
         return {
             phase: this.phases.LOADING,
@@ -100,6 +105,26 @@ module.exports = React.createClass({
 
     onEnableDesktopNotificationsChange: function(event) {
         UserSettingsStore.setEnableNotifications(event.target.checked);
+    },
+
+    onEnableEmailNotificationsChange: function(address, event) {
+        var emailPusherPromise;
+        if (event.target.checked) {
+            emailPusherPromise = UserSettingsStore.addEmailPusher(address);
+        } else {
+            var emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
+            emailPusher.kind = null;
+            emailPusherPromise = MatrixClientPeg.get().setPusher(emailPusher);
+        }
+        emailPusherPromise.done(() => {
+            this._refreshFromServer();
+        }, (error) => {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error saving email notification preferences",
+                description: "Vector was unable to save your email notification preferences.",
+            });
+        });
     },
 
     onNotifStateButtonClicked: function(event) {
@@ -620,6 +645,24 @@ module.exports = React.createClass({
         return rows;
     },
 
+    emailNotificationsRow: function(address, label) {
+        return (<div className="mx_UserNotifSettings_tableRow">
+            <div className="mx_UserNotifSettings_inputCell">
+                <input id="enableEmailNotifications_{address}"
+                    ref="enableEmailNotifications_{address}"
+                    type="checkbox"
+                    checked={ UserSettingsStore.hasEmailPusher(this.state.pushers, address) }
+                    onChange={ this.onEnableEmailNotificationsChange.bind(this, address) }
+                />
+            </div>
+            <div className="mx_UserNotifSettings_labelCell">
+                <label htmlFor="enableEmailNotifications_{address}">
+                    {label}
+                </label>
+            </div>
+        </div>);
+    },
+
     render: function() {
         var self = this;
 
@@ -656,9 +699,26 @@ module.exports = React.createClass({
                     {masterPushRuleDiv}
 
                     <div className="mx_UserSettings_notifTable">
-                        All notifications are currently disabled for all devices.
+                        All notifications are currently disabled for all targets.
                     </div>
                 </div>
+            );
+        }
+
+        var emailNotificationsRow;
+        if (this.props.threepids.filter(function(tp) {
+                if (tp.medium == "email") {
+                    return true;
+                }
+            }).length == 0) {
+            emailNotificationsRow = <div>
+                Add an email address above to configure email notifications
+            </div>;
+        } else {
+            // This only supports the first email address in your profile for now
+            emailNotificationsRow = this.emailNotificationsRow(
+                this.props.threepids[0].address,
+                "Enable email notifications ("+this.props.threepids[0].address+")"
             );
         }
 
@@ -682,13 +742,11 @@ module.exports = React.createClass({
 
         var devicesSection;
         if (this.state.pushers === undefined) {
-            devicesSection = <div className="error">Unable to fetch device list</div>
+            devicesSection = <div className="error">Unable to fetch notification target list</div>
         } else if (this.state.pushers.length == 0) {
-            devicesSection = <div className="mx_UserSettings_devicesTable_nodevices">
-                No devices are receiving push notifications
-            </div>
+            devicesSection = null;
         } else {
-            // It would be great to be able to delete pushers from here too,
+            // TODO: It would be great to be able to delete pushers from here too,
             // and this wouldn't be hard to add.
             var rows = [];
             for (var i = 0; i < this.state.pushers.length; ++i) {
@@ -698,16 +756,16 @@ module.exports = React.createClass({
                 </tr>);
             }
             devicesSection = (<table className="mx_UserSettings_devicesTable">
-                <thead>
-                    <tr>
-                        <th>Application</th>
-                        <th>Device</th>
-                    </tr>
-                </thead>
                 <tbody>
                     {rows}
                 </tbody>
             </table>);
+        }
+        if (devicesSection) {
+            devicesSection = (<div>
+                <h3>Notification targets</h3>
+                { devicesSection }
+            </div>);
         }
 
         var advancedSettings;
@@ -766,7 +824,7 @@ module.exports = React.createClass({
                         </div>
                     </div>
 
-                    <h3>General use</h3>
+                    { emailNotificationsRow }
 
                     <div className="mx_UserNotifSettings_pushRulesTableWrapper">
                         <table className="mx_UserNotifSettings_pushRulesTable">
@@ -788,7 +846,6 @@ module.exports = React.createClass({
 
                     { advancedSettings }
 
-                    <h3>Devices</h3>
                     { devicesSection }
 
                 </div>
