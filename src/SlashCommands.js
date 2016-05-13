@@ -335,8 +335,14 @@ module.exports = {
         input = input.replace(/\s+$/, "");
         if (input[0] === "/" && input[1] !== "/") {
             var bits = input.match(/^(\S+?)( +(.*))?$/);
-            var cmd = bits[1].substring(1).toLowerCase();
-            var args = bits[3];
+            var cmd, args;
+            if (bits) {
+                cmd = bits[1].substring(1).toLowerCase();
+                args = bits[3];
+            }
+            else {
+                cmd = input;
+            }
             if (cmd === "me") return null;
             if (aliases[cmd]) {
                 cmd = aliases[cmd];
