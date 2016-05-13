@@ -188,6 +188,12 @@ function loadApp() {
             return;
         }
     }
+    else if (/Android/.test(navigator.userAgent)) {
+        if (confirm("Vector works much better on Android as an app.  Switch to the app?")) {
+            window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
+            return;
+        }
+    }
 
     console.log("Vector starting at "+window.location);
     if (validBrowser) {
