@@ -182,6 +182,13 @@ window.onload = function() {
 }
 
 function loadApp() {
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+        if (confirm("Vector works much better on iOS as an app.  Switch to the app?")) {
+            window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
+            return;
+        }
+    }
+
     console.log("Vector starting at "+window.location);
     if (validBrowser) {
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
