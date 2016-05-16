@@ -74,6 +74,12 @@ module.exports = React.createClass({
         threepids: React.PropTypes.array.isRequired,
     },
 
+    getDefaultProps: function() {
+        return {
+            threepids: []
+        };
+    },
+
     getInitialState: function() {
         return {
             phase: this.phases.LOADING,
