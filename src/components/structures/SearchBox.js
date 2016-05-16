@@ -81,6 +81,16 @@ module.exports = React.createClass({
         var searchControls;
         if (!this.props.collapsed) {
             searchControls = [
+                    this.state.searchTerm.length > 0 ?
+                    <div key="button"
+                         className="mx_SearchBox_closeButton"
+                         onClick={ ()=>{ this.refs.search.value = ""; this.onChange(); } }>
+                        <TintableSvg
+                            className="mx_SearchBox_searchButton"
+                            src="img/icons-close.svg" width="24" height="24"
+                        />
+                    </div>
+                    :
                     <TintableSvg
                         key="button"
                         className="mx_SearchBox_searchButton"
