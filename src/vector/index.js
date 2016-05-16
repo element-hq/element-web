@@ -183,13 +183,13 @@ window.onload = function() {
 
 function loadApp() {
     if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-        if (confirm("Vector works much better on iOS as an app.  Switch to the app?")) {
+        if (confirm("Vector runs much better as an app on iOS. Get the app?")) {
             window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
             return;
         }
     }
     else if (/Android/.test(navigator.userAgent)) {
-        if (confirm("Vector works much better on Android as an app.  Switch to the app?")) {
+        if (confirm("Vector runs much better as an app on Vector. Get the app?")) {
             window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
             return;
         }
