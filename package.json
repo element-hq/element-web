@@ -22,6 +22,7 @@
     "test-multi": "karma start --single-run=false"
   },
   "dependencies": {
+    "browser-request": "^0.3.3",
     "classnames": "^2.1.2",
     "favico.js": "^0.3.10",
     "filesize": "^3.1.2",
