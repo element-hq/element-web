@@ -1001,9 +1001,12 @@ module.exports = React.createClass({
         var rooms = MatrixClientPeg.get().getRooms();
         for (var i = 0; i < rooms.length; ++i) {
             if (rooms[i].hasMembershipState(MatrixClientPeg.get().credentials.userId, 'invite')) {
-                ++notifCount;
+                notifCount++;
             } else if (rooms[i].getUnreadNotificationCount()) {
-                notifCount += rooms[i].getUnreadNotificationCount();
+                // if we were summing unread notifs:
+                // notifCount += rooms[i].getUnreadNotificationCount();
+                // instead, we just count the number of rooms with notifs.
+                notifCount++;
             }
         }
         try {
