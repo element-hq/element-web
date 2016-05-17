@@ -83,7 +83,7 @@ module.exports = React.createClass({
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
         var badge;
         if (this.props.highlight || notificationCount > 0) {
-            badge = <div className="mx_RoomTile_badge"/>;
+            badge = <div className="mx_RoomTile_badge">{ notificationCount ? notificationCount : '!' }</div>;
         }
         /*
         if (this.props.highlight) {
@@ -132,9 +132,9 @@ module.exports = React.createClass({
             <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className="mx_RoomTile_avatar">
                     <RoomAvatar room={this.props.room} width={24} height={24} />
-                    { badge }
                 </div>
                 { label }
+                { badge }
                 { incomingCallBox }
             </div>
         ));
