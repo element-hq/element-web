@@ -404,7 +404,7 @@ var TimelinePanel = React.createClass({
         if (this.getScrollState().stuckAtBottom) {
             this.props.room.setUnreadNotificationCount('total', 0);
             this.props.room.setUnreadNotificationCount('highlight', 0);
-            // XXX: i'm a bit surprised we don't have to emit an event or dispatch to make the echo picked up
+            // XXX: i'm a bit surprised we don't have to emit an event or dispatch to get this picked up
         }
 
         var currentReadUpToEventId = this._getCurrentReadReceipt(true);
