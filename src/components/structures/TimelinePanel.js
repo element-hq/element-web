@@ -401,7 +401,7 @@ var TimelinePanel = React.createClass({
 
         // if we are scrolled to the bottom, do a quick-reset of our unreadNotificationCount
         // to avoid having to wait from the remote echo from the homeserver.
-        if (this.getScrollState().stuckAtBottom) {
+        if (this.isAtEndOfLiveTimeline()) {
             this.props.room.setUnreadNotificationCount('total', 0);
             this.props.room.setUnreadNotificationCount('highlight', 0);
             // XXX: i'm a bit surprised we don't have to emit an event or dispatch to get this picked up
