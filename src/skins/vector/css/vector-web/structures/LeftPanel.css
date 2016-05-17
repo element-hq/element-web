@@ -59,8 +59,8 @@ limitations under the License.
     order: 3;
 
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 18px;
+    margin-right: 18px;
     -webkit-flex: 0 0 60px;
     flex: 0 0 60px;
 }

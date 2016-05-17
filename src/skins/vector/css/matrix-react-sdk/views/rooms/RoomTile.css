@@ -19,6 +19,7 @@ limitations under the License.
     /* This fixes wrapping of long room names, but breaks drag & drop previews */
     /* display: table-row; */
     font-size: 13px;
+    position: relative;
 }
 
 .mx_RoomTile_avatar {
@@ -26,7 +27,7 @@ limitations under the License.
     padding-right: 11px;
     padding-top: 6px;
     padding-bottom: 6px;
-    padding-left: 20px;
+    padding-left: 18px;
     width: 24px;
     height: 24px;
     position: relative;
@@ -57,58 +58,23 @@ limitations under the License.
     display: none;
 }
 
-/*
-.mx_RoomTile_nameBadge {
-    display: table;
-    width: 100%;
-    height: 50px;
-}
-
-.mx_RoomTile_badgeCell {
-    display: table-cell;
-    vertical-align: middle;
-    width: 26px;
-}
-
 .mx_RoomTile_badge {
-    background-color: #76cfa6;
-    color: #fff;
-    border-radius: 26px;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 28px;
-    width: 26px;
-    height: 26px;
-    text-align: center;
-}
-*/
-
-/*
-.mx_RoomTile_badge {
-    background-color: #ff0064;
-    border: 3px solid #fff;
-    border-radius: 16px;
-    width: 9px;
-    height: 9px;
+    min-width: 12px;
+    height: 16px;
     position: absolute;
-    right: 9px;
-    bottom: 3px;
-}
-*/
-
-.mx_RoomTile_badge {
-    background-color: #ff0064;
-    width: 8px;
-    height: 8px;
-    position: absolute;
-    left: 7px;
+    right: 16px;
     top: 50%;
-    margin-top: -4px;
-    border-radius: 4px;
+    margin-top: -8px;
+    border-radius: 3px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 11px;
+    text-align: center;
+    padding: 0px 2px 0px 2px;
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
-    background-color: #454545;
+    background-color: #76cfa6;
 }
 
 .mx_RoomTile_highlight .mx_RoomTile_badge {
@@ -120,13 +86,20 @@ limitations under the License.
     font-weight: bold;
 }
 
+.mx_RoomTile_unreadNotify .mx_RoomTile_name,
+.mx_RoomTile_highlight .mx_RoomTile_name {
+    padding-right: 36px;
+}
+
 .mx_RoomTile_selected .mx_RoomTile_name {
     padding-right: 23px;
 }
 
+/*
 .mx_RoomTile_highlight .mx_RoomTile_name {
     color: #ff0064 ! important;
 }
+*/
 
 .mx_RoomTile.mx_RoomTile_selected .mx_RoomTile_avatar {
     padding-right: 7px;
