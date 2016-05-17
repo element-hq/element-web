@@ -56,7 +56,7 @@ if (DEBUG_SCROLL) {
  *     offset.  We don't save the absolute scroll offset, because that would be
  *     affected by window width, zoom level, amount of scrollback, etc. Instead
  *     we save an identifier for the last fully-visible message, and the number
- *     of pixels the window was scrolled below it - which is hopefully be near
+ *     of pixels the window was scrolled below it - which is hopefully near
  *     enough.
  *
  * The 'stickyBottom' property controls the behaviour when we reach the bottom

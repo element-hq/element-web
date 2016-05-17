@@ -132,8 +132,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
-        // xchat-style tab complete, add a colon if tab
-        // completing at the start of the text
+
         this.tabComplete = new TabComplete({
             allowLooping: false,
             autoEnterTabComplete: true,
@@ -142,7 +141,6 @@ module.exports = React.createClass({
                 this.forceUpdate();
             }
         });
-
 
         // if this is an unknown room then we're in one of three states:
         // - This is a room we can peek into (search engine) (we can /peek)
