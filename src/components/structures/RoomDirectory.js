@@ -21,7 +21,7 @@ var React = require('react');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var ContentRepo = require("matrix-js-sdk").ContentRepo;
 var Modal = require('matrix-react-sdk/lib/Modal');
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 
