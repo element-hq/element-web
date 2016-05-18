@@ -397,6 +397,12 @@ module.exports = React.createClass({
                         Logged in as {this._me}
                     </div>
                     <div className="mx_UserSettings_advanced">
+                        Homeserver is { MatrixClientPeg.get().getHomeserverUrl() }
+                    </div>
+                    <div className="mx_UserSettings_advanced">
+                        Identity Server is { MatrixClientPeg.get().getIdentityServerUrl() }
+                    </div>
+                    <div className="mx_UserSettings_advanced">
                         Version {this.state.clientVersion}
                         <br />
                         {this.props.version}
