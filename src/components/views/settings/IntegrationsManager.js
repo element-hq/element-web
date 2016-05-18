@@ -48,8 +48,8 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_IntegrationManager">
-                <iframe src={ this.props.src } width={640} height={600}></iframe>;
+            <div className="mx_IntegrationsManager">
+                <iframe src={ this.props.src }></iframe>
             </div>
         );
     }
