@@ -388,6 +388,14 @@ module.exports = React.createClass({
         });
     },
 
+    onManageIntegrations(ev) {
+        ev.preventDefault();
+        var IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        Modal.createDialog(IntegrationsManager, {
+            src: this.state.scalar_token ? this.getScalarInterfaceUrl() : null
+        }, "");
+    },
+
     render: function() {
         // TODO: go through greying out things you don't have permission to change
         // (or turning them into informative stuff)
@@ -565,7 +573,11 @@ module.exports = React.createClass({
 
         var integrations_section;
         if (this.state.scalar_token) {
-            integrations_section = <iframe src={this.getScalarInterfaceUrl()} width={640} height={600}></iframe>;
+            integrations_section = (
+                <div className="mx_RoomSettings_settings">
+                    <a href="#" onClick={ this.onManageIntegrations }>Manage integrations</a>
+                </div>
+            );
         } else {
             integrations_section = <Loader />;
         }
@@ -658,6 +670,9 @@ module.exports = React.createClass({
                     <ColorSettings ref="color_settings" room={this.props.room} />
                 </div>
 
+                <h3>Integrations</h3>
+                { integrations_section }
+
                 <a id="addresses"/>
 
                 <AliasSettings ref="alias_settings"
@@ -718,9 +733,6 @@ module.exports = React.createClass({
                 <div className="mx_RoomSettings_settings">
                     This room's internal ID is <code>{ this.props.room.roomId }</code>
                 </div>
-
-                <h3>Integrations</h3>
-                { integrations_section }
             </div>
         );
     }
