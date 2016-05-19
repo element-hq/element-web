@@ -387,7 +387,9 @@ module.exports = React.createClass({
                     // console.log(memberA + " and " + memberB + " have same power level");
                     if (memberA.name && memberB.name) {
                         // console.log("comparing names: " + memberA.name + " and " + memberB.name);
-                        return memberA.name.localeCompare(memberB.name);
+                        var nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
+                        var nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
+                        return nameA.localeCompare(nameB);
                     }
                     else {
                         return 0;
