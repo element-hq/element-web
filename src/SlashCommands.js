@@ -330,7 +330,7 @@ module.exports = {
      * Returns null if the input didn't match a command.
      */
     processInput: function(roomId, input) {
-        // trim any trailing whitespace, as it can confuse the parser for 
+        // trim any trailing whitespace, as it can confuse the parser for
         // IRC-style commands
         input = input.replace(/\s+$/, "");
         if (input[0] === "/" && input[1] !== "/") {
