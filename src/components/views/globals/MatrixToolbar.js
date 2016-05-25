@@ -18,10 +18,14 @@ limitations under the License.
 
 var React = require('react');
 var Notifier = require("matrix-react-sdk/lib/Notifier");
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
 
 module.exports = React.createClass({
     displayName: 'MatrixToolbar',
+
+    getInitialState: function() {
+        return {showToolbar: Notifier.shouldShowToolbar()};
+    },
 
     hideToolbar: function() {
         Notifier.setToolbarHidden(true);
