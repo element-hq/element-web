@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.5.0",
+    "browser-request": "^0.3.3",
     "classnames": "^2.1.2",
     "extract-text-webpack-plugin": "^0.9.1",
     "filesize": "^3.1.2",
