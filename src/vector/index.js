@@ -146,6 +146,8 @@ var onNewScreen = function(screen) {
     if (!loaded) {
         lastLoadedScreen = screen;
     } else {
+        debugger;
+        console.log(screen);
         var hash = '#/' + screen;
         lastLocationHashSet = hash;
         window.location.hash = hash;
