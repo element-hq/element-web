@@ -107,7 +107,16 @@ module.exports = React.createClass({
 
             //console.log("enter: "+JSON.stringify(node.props._restingStyle));
         } else if (node === null) {
+            // Velocity stores data on elements using the jQuery .data()
+            // method, and assumes you'll be using jQuery's .remove() to
+            // remove the element, but we don't use jQuery, so we need to
+            // blow away the element's data explicitly otherwise it will leak.
+            // This uses Velocity's internal jQuery compatible wrapper.
+            // See the bug at
             // https://github.com/julianshapiro/velocity/issues/300
+            // and the FAQ entry, "Preventing memory leaks when
+            // creating/destroying large numbers of elements"
+            // (https://github.com/julianshapiro/velocity/issues/47)
             Velocity.Utilities.removeData(this.nodes[k]);
         }
         this.nodes[k] = node;
