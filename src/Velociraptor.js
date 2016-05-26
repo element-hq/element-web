@@ -25,6 +25,10 @@ module.exports = React.createClass({
         this._updateChildren(this.props.children);
     },
 
+    componentWillUnmount: function() {
+        this._updateChildren([]);
+    },
+
     componentWillReceiveProps: function(nextProps) {
         this._updateChildren(nextProps.children);
     },
@@ -106,6 +110,9 @@ module.exports = React.createClass({
             });
 
             //console.log("enter: "+JSON.stringify(node.props._restingStyle));
+        } else if (node === null) {
+            // https://github.com/julianshapiro/velocity/issues/300
+            Velocity.Utilities.removeData(this.nodes[k]);
         }
         this.nodes[k] = node;
     },
