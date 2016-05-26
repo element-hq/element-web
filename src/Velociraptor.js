@@ -25,10 +25,6 @@ module.exports = React.createClass({
         this._updateChildren(this.props.children);
     },
 
-    componentWillUnmount: function() {
-        this._updateChildren([]);
-    },
-
     componentWillReceiveProps: function(nextProps) {
         this._updateChildren(nextProps.children);
     },
