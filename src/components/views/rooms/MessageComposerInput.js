@@ -27,6 +27,9 @@ marked.setOptions({
     smartypants: false
 });
 
+import {Editor, EditorState, RichUtils} from 'draft-js';
+import {stateToHTML} from 'draft-js-export-html';
+
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
@@ -35,6 +38,8 @@ var sdk = require('../../../index');
 
 var dis = require("../../../dispatcher");
 var KeyCode = require("../../../KeyCode");
+
+import {contentStateToHTML} from '../../../RichText';
 
 var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
@@ -56,26 +61,18 @@ function mdownToHtml(mdown) {
 /*
  * The textInput part of the MessageComposer
  */
-module.exports = React.createClass({
-    displayName: 'MessageComposerInput',
+module.exports = class extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.onAction = this.onAction.bind(this);
+        this.onInputClick = this.onInputClick.bind(this);
 
-    statics: {
-        // the height we limit the composer to
-        MAX_HEIGHT: 100,
-    },
+        this.state = {
+            editorState: EditorState.createEmpty()
+        };
+    }
 
-    propTypes: {
-        tabComplete: React.PropTypes.any,
-
-        // a callback which is called when the height of the composer is
-        // changed due to a change in content.
-        onResize: React.PropTypes.func,
-
-        // js-sdk Room object
-        room: React.PropTypes.object.isRequired,
-    },
-
-    componentWillMount: function() {
+    componentWillMount() {
         this.oldScrollHeight = 0;
         this.markdownEnabled = MARKDOWN_ENABLED;
         var self = this;
@@ -157,21 +154,22 @@ module.exports = React.createClass({
                 // save the currently entered text in order to restore it later.
                 // NB: This isn't 'originalText' because we want to restore
                 // sent history items too!
-                var text = this.element.value;
-                window.sessionStorage.setItem("input_" + this.roomId, text);
+                console.error('fixme');
+                // window.sessionStorage.setItem("input_" + this.roomId, text);
             },
 
             setLastTextEntry: function() {
-                var text = window.sessionStorage.getItem("input_" + this.roomId);
-                if (text) {
-                    this.element.value = text;
-                    self.resizeInput();
-                }
+                console.error('fixme');
+                // var text = window.sessionStorage.getItem("input_" + this.roomId);
+                // if (text) {
+                //     this.element.value = text;
+                //     self.resizeInput();
+                // }
             }
         };
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         this.sentHistory.init(
             this.refs.textarea,
@@ -181,18 +179,19 @@ module.exports = React.createClass({
         if (this.props.tabComplete) {
             this.props.tabComplete.setTextArea(this.refs.textarea);
         }
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
         this.sentHistory.saveLastTextEntry();
-    },
+    }
 
-    onAction: function(payload) {
-        var textarea = this.refs.textarea;
+    onAction(payload) {
+        var editor = this.refs.editor;
         switch (payload.action) {
             case 'focus_composer':
-                textarea.focus();
+                console.error('fixme');
+                editor.focus();
                 break;
             case 'insert_displayname':
                 if (textarea.value.length) {
@@ -214,9 +213,9 @@ module.exports = React.createClass({
                 }
                 break;
         }
-    },
+    }
 
-    onKeyDown: function (ev) {
+    onKeyDown(ev) {
         if (ev.keyCode === KeyCode.ENTER && !ev.shiftKey) {
             var input = this.refs.textarea.value;
             if (input.length === 0) {
@@ -252,33 +251,34 @@ module.exports = React.createClass({
                 self.onFinishedTyping();
             }
         }, 10); // XXX: what is this 10ms setTimeout doing?  Looks hacky :(
-    },
+    }
 
-    resizeInput: function() {
+    resizeInput() {
+        console.error('fixme');
         // scrollHeight is at least equal to clientHeight, so we have to
         // temporarily crimp clientHeight to 0 to get an accurate scrollHeight value
-        this.refs.textarea.style.height = "20px"; // 20 hardcoded from CSS
-        var newHeight = Math.min(this.refs.textarea.scrollHeight,
-                                 this.constructor.MAX_HEIGHT);
-        this.refs.textarea.style.height = Math.ceil(newHeight) + "px";
-        this.oldScrollHeight = this.refs.textarea.scrollHeight;
+        // this.refs.textarea.style.height = "20px"; // 20 hardcoded from CSS
+        // var newHeight = Math.min(this.refs.textarea.scrollHeight,
+        //                          this.constructor.MAX_HEIGHT);
+        // this.refs.textarea.style.height = Math.ceil(newHeight) + "px";
+        // this.oldScrollHeight = this.refs.textarea.scrollHeight;
+        //
+        // if (this.props.onResize) {
+        //     // kick gemini-scrollbar to re-layout
+        //     this.props.onResize();
+        // }
+    }
 
-        if (this.props.onResize) {
-            // kick gemini-scrollbar to re-layout
-            this.props.onResize();
-        }
-    },
-
-    onKeyUp: function(ev) {
+    onKeyUp(ev) {
         if (this.refs.textarea.scrollHeight !== this.oldScrollHeight ||
             ev.keyCode === KeyCode.DELETE ||
             ev.keyCode === KeyCode.BACKSPACE)
         {
             this.resizeInput();
         }
-    },
+    }
 
-    onEnter: function(ev) {
+    onEnter(ev) {
         var contentText = this.refs.textarea.value;
 
         // bodge for now to set markdown state on/off. We probably want a separate
@@ -365,25 +365,25 @@ module.exports = React.createClass({
         this.refs.textarea.value = '';
         this.resizeInput();
         ev.preventDefault();
-    },
+    }
 
-    onTypingActivity: function() {
+    onTypingActivity() {
         this.isTyping = true;
         if (!this.userTypingTimer) {
             this.sendTyping(true);
         }
         this.startUserTypingTimer();
         this.startServerTypingTimer();
-    },
+    }
 
-    onFinishedTyping: function() {
+    onFinishedTyping() {
         this.isTyping = false;
         this.sendTyping(false);
         this.stopUserTypingTimer();
         this.stopServerTypingTimer();
-    },
+    }
 
-    startUserTypingTimer: function() {
+    startUserTypingTimer() {
         this.stopUserTypingTimer();
         var self = this;
         this.userTypingTimer = setTimeout(function() {
@@ -391,16 +391,16 @@ module.exports = React.createClass({
             self.sendTyping(self.isTyping);
             self.userTypingTimer = null;
         }, TYPING_USER_TIMEOUT);
-    },
+    }
 
-    stopUserTypingTimer: function() {
+    stopUserTypingTimer() {
         if (this.userTypingTimer) {
             clearTimeout(this.userTypingTimer);
             this.userTypingTimer = null;
         }
-    },
+    }
 
-    startServerTypingTimer: function() {
+    startServerTypingTimer() {
         if (!this.serverTypingTimer) {
             var self = this;
             this.serverTypingTimer = setTimeout(function() {
@@ -410,39 +410,90 @@ module.exports = React.createClass({
                 }
             }, TYPING_SERVER_TIMEOUT / 2);
         }
-    },
+    }
 
-    stopServerTypingTimer: function() {
+    stopServerTypingTimer() {
         if (this.serverTypingTimer) {
             clearTimeout(this.servrTypingTimer);
             this.serverTypingTimer = null;
         }
-    },
+    }
 
-    sendTyping: function(isTyping) {
+    sendTyping(isTyping) {
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
             this.isTyping, TYPING_SERVER_TIMEOUT
         ).done();
-    },
+    }
 
-    refreshTyping: function() {
+    refreshTyping() {
         if (this.typingTimeout) {
             clearTimeout(this.typingTimeout);
             this.typingTimeout = null;
         }
-    },
+    }
 
-    onInputClick: function(ev) {
-        this.refs.textarea.focus();
-    },
+    onInputClick(ev) {
+        this.refs.editor.focus();
+    }
 
-    render: function() {
+    onChange(editorState) {
+        this.setState({editorState});
+    }
+
+    handleKeyCommand(command) {
+        const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
+        if (newState) {
+            this.onChange(newState);
+            return true;
+        }
+        return false;
+    }
+
+    handleReturn(ev) {
+        if(ev.shiftKey)
+            return false;
+
+        const contentState = this.state.editorState.getCurrentContent();
+        if(!contentState.hasText())
+            return false;
+
+        const contentText = contentState.getPlainText(),
+            contentHTML = contentStateToHTML(contentState);
+
+        MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, contentHTML);
+
+        this.setState({
+            editorState: EditorState.createEmpty()
+        });
+
+        return true;
+    }
+
+    render() {
         return (
-            <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
-                <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
+            <div className="mx_MessageComposer_input" onClick={ this.onInputClick } style={{overflow: 'auto'}}>
+                <Editor ref="editor"
+                        editorState={this.state.editorState}
+                        onChange={(state) => this.onChange(state)}
+                        handleKeyCommand={(command) => this.handleKeyCommand(command)}
+                        handleReturn={ev => this.handleReturn(ev)} />
             </div>
         );
     }
-});
+};
+
+module.exports.propTypes = {
+    tabComplete: React.PropTypes.any,
+
+    // a callback which is called when the height of the composer is
+    // changed due to a change in content.
+    onResize: React.PropTypes.func,
+
+    // js-sdk Room object
+    room: React.PropTypes.object.isRequired
+};
+
+// the height we limit the composer to
+module.exports.MAX_HEIGHT = 100;
 
