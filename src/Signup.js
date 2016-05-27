@@ -293,8 +293,9 @@ class Register extends Signup {
 
 
 class Login extends Signup {
-    constructor(hsUrl, isUrl) {
+    constructor(hsUrl, isUrl, fallbackHsUrl) {
         super(hsUrl, isUrl);
+        this._fallbackHsUrl = fallbackHsUrl;
         this._currentFlowIndex = 0;
         this._flows = [];
     }
@@ -359,6 +360,30 @@ class Login extends Signup {
                 error.friendlyText = (
                     'Incorrect username and/or password.'
                 );
+                if (self._fallbackHsUrl) {
+                    // as per elsewhere, it would be much nicer to not replace the global
+                    // client just to try an alternate HS
+                    MatrixClientPeg.replaceUsingUrls(
+                        self._fallbackHsUrl,
+                        self._isUrl
+                    );
+                    return MatrixClientPeg.get().login('m.login.password', loginParams).then(function(data) {
+                        return q({
+                            homeserverUrl: self._fallbackHsUrl,
+                            identityServerUrl: self._isUrl,
+                            userId: data.user_id,
+                            accessToken: data.access_token
+                        });
+                    }, function(fallback_error) {
+                        // We also have to put the default back again if it fails...
+                        MatrixClientPeg.replaceUsingUrls(
+                            this._hsUrl,
+                            this._isUrl
+                        );
+                        // throw the original error
+                        throw error;
+                    });
+                }
             }
             else {
                 error.friendlyText = (
