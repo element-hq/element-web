@@ -103,6 +103,10 @@ module.exports = React.createClass({
         return "https://matrix.org";
     },
 
+    getFallbackHsUrl: function() {
+        return this.props.config.fallback_hs_url;
+    },
+
     getCurrentIsUrl: function() {
         if (this.state.register_is_url) {
             return this.state.register_is_url;
@@ -1183,6 +1187,7 @@ module.exports = React.createClass({
                     defaultIsUrl={this.props.config.default_is_url}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
+                    fallbackHsUrl={this.getFallbackHsUrl()}
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest.bind(this, true) : undefined}
                     onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
