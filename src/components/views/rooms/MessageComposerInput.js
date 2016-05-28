@@ -28,7 +28,6 @@ marked.setOptions({
 });
 
 import {Editor, EditorState, RichUtils} from 'draft-js';
-import {stateToHTML} from 'draft-js-export-html';
 
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
@@ -39,29 +38,16 @@ var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
 var KeyCode = require("../../../KeyCode");
 
-import {contentStateToHTML} from '../../../RichText';
+import {contentStateToHTML, HTMLtoContentState} from '../../../RichText';
 
 var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
 var MARKDOWN_ENABLED = true;
 
-function mdownToHtml(mdown) {
-    var html = marked(mdown) || "";
-    html = html.trim();
-    // strip start and end <p> tags else you get 'orrible spacing
-    if (html.indexOf("<p>") === 0) {
-        html = html.substring("<p>".length);
-    }
-    if (html.lastIndexOf("</p>") === (html.length - "</p>".length)) {
-        html = html.substring(0, html.length - "</p>".length);
-    }
-    return html;
-}
-
 /*
  * The textInput part of the MessageComposer
  */
-module.exports = class extends React.Component {
+export default class MessageComposerInput extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.onAction = this.onAction.bind(this);
@@ -75,7 +61,6 @@ module.exports = class extends React.Component {
     componentWillMount() {
         this.oldScrollHeight = 0;
         this.markdownEnabled = MARKDOWN_ENABLED;
-        var self = this;
         this.sentHistory = {
             // The list of typed messages. Index 0 is more recent
             data: [],
@@ -150,21 +135,23 @@ module.exports = class extends React.Component {
                 return true;
             },
 
-            saveLastTextEntry: function() {
+            saveLastTextEntry: () => {
                 // save the currently entered text in order to restore it later.
                 // NB: This isn't 'originalText' because we want to restore
                 // sent history items too!
                 console.error('fixme');
-                // window.sessionStorage.setItem("input_" + this.roomId, text);
+                const contentHTML = contentStateToHTML(this.state.editorState.getCurrentContent());
+                window.sessionStorage.setItem("input_" + this.roomId, contentHTML);
             },
 
-            setLastTextEntry: function() {
+            setLastTextEntry: () => {
                 console.error('fixme');
-                // var text = window.sessionStorage.getItem("input_" + this.roomId);
-                // if (text) {
-                //     this.element.value = text;
-                //     self.resizeInput();
-                // }
+                const contentHTML = window.sessionStorage.getItem("input_" + this.roomId);
+                if (contentHTML) {
+                    const content = HTMLtoContentState(contentHTML);
+                    this.state.editorState = EditorState.createWithContent(content);
+                    self.resizeInput();
+                }
             }
         };
     }
@@ -172,12 +159,12 @@ module.exports = class extends React.Component {
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         this.sentHistory.init(
-            this.refs.textarea,
+            this.refs.editor,
             this.props.room.roomId
         );
         this.resizeInput();
         if (this.props.tabComplete) {
-            this.props.tabComplete.setTextArea(this.refs.textarea);
+            this.props.tabComplete.setTextArea(this.refs.editor);
         }
     }
 
@@ -456,7 +443,7 @@ module.exports = class extends React.Component {
 
         const contentState = this.state.editorState.getCurrentContent();
         if(!contentState.hasText())
-            return false;
+            return true;
 
         const contentText = contentState.getPlainText(),
             contentHTML = contentStateToHTML(contentState);
@@ -471,9 +458,16 @@ module.exports = class extends React.Component {
     }
 
     render() {
+        const containerStyle = {
+            overflow: 'auto'
+        };
+
         return (
-            <div className="mx_MessageComposer_input" onClick={ this.onInputClick } style={{overflow: 'auto'}}>
+            <div className="mx_MessageComposer_input"
+                 onClick={ this.onInputClick }
+                 style={containerStyle}>
                 <Editor ref="editor"
+                        placeholder="Type a message…"
                         editorState={this.state.editorState}
                         onChange={(state) => this.onChange(state)}
                         handleKeyCommand={(command) => this.handleKeyCommand(command)}
@@ -483,7 +477,7 @@ module.exports = class extends React.Component {
     }
 };
 
-module.exports.propTypes = {
+MessageComposerInput.propTypes = {
     tabComplete: React.PropTypes.any,
 
     // a callback which is called when the height of the composer is
@@ -495,5 +489,4 @@ module.exports.propTypes = {
 };
 
 // the height we limit the composer to
-module.exports.MAX_HEIGHT = 100;
-
+MessageComposerInput.MAX_HEIGHT = 100;
