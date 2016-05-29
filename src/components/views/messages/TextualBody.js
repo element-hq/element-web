@@ -117,7 +117,7 @@ module.exports = React.createClass({
         else {
             var url = node.getAttribute("href");
             var host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
-            if (node.textContent.trim().startsWith(host)) {
+            if (node.textContent.toLowerCase().trim().startsWith(host.toLowerCase())) {
                 // it's a "foo.pl" style link
                 return;
             }

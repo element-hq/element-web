@@ -35,6 +35,10 @@ module.exports = React.createClass({displayName: 'Login',
         customIsUrl: React.PropTypes.string,
         defaultHsUrl: React.PropTypes.string,
         defaultIsUrl: React.PropTypes.string,
+        // Secondary HS which we try to log into if the user is using
+        // the default HS but login fails. Useful for migrating to a
+        // different home server without confusing users.
+        fallbackHsUrl: React.PropTypes.string,
 
         // login shouldn't know or care how registration is done.
         onRegisterClick: React.PropTypes.func.isRequired,
@@ -105,7 +109,9 @@ module.exports = React.createClass({displayName: 'Login',
         hsUrl = hsUrl || this.state.enteredHomeserverUrl;
         isUrl = isUrl || this.state.enteredIdentityServerUrl;
 
-        var loginLogic = new Signup.Login(hsUrl, isUrl);
+        var fallbackHsUrl = hsUrl == this.props.defaultHsUrl ? this.props.fallbackHsUrl : null;
+
+        var loginLogic = new Signup.Login(hsUrl, isUrl, fallbackHsUrl);
         this._loginLogic = loginLogic;
 
         loginLogic.getFlows().then(function(flows) {
