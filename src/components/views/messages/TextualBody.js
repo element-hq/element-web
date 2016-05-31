@@ -47,7 +47,7 @@ module.exports = React.createClass({
         return {
             // the URLs (if any) to be previewed with a LinkPreviewWidget
             // inside this TextualBody.
-            links: null,
+            links: [],
 
             // track whether the preview widget is hidden
             widgetHidden: false,
@@ -76,6 +76,7 @@ module.exports = React.createClass({
 
     shouldComponentUpdate: function(nextProps, nextState) {
         // exploit that events are immutable :)
+        // ...and that .links is only ever set in componentDidMount and never changes
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
                 nextProps.highlights !== this.props.highlights ||
                 nextProps.highlightLink !== this.props.highlightLink ||
@@ -167,7 +168,7 @@ module.exports = React.createClass({
 
 
         var widgets;
-        if (this.state.links && !this.state.widgetHidden) {
+        if (this.state.links.length && !this.state.widgetHidden) {
             var LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
             widgets = this.state.links.map((link)=>{
                 return <LinkPreviewWidget
