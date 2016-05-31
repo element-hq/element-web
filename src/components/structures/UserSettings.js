@@ -299,7 +299,7 @@ module.exports = React.createClass({
                             onValueChanged={ this.onAddThreepidClicked } />
                     </div>
                     <div className="mx_UserSettings_addThreepid">
-                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked }/>
+                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked.bind(this, undefined, true) }/>
                     </div>
                 </div>
             );
