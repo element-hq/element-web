@@ -73,6 +73,8 @@ module.exports = React.createClass({
 
         // js-sdk Room object
         room: React.PropTypes.object.isRequired,
+
+        onContentChanged: React.PropTypes.func
     },
 
     componentWillMount: function() {
@@ -276,6 +278,8 @@ module.exports = React.createClass({
         {
             this.resizeInput();
         }
+        
+        this.props.onContentChanged && this.props.onContentChanged(this.refs.textarea.value);
     },
 
     onEnter: function(ev) {

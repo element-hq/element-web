@@ -20,6 +20,7 @@ var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require('../../../Modal');
 var sdk = require('../../../index');
 var dis = require('../../../dispatcher');
+import Autocomplete from './Autocomplete';
 
 
 module.exports = React.createClass({
@@ -43,6 +44,12 @@ module.exports = React.createClass({
 
         // opacity for dynamic UI fading effects
         opacity: React.PropTypes.number,
+    },
+
+    getInitialState: function () {
+        return {
+            autocompleteQuery: ''
+        };
     },
 
     onUploadClick: function(ev) {
@@ -117,6 +124,12 @@ module.exports = React.createClass({
         });
     },
 
+    onInputContentChanged(content: String) {
+        this.setState({
+            autocompleteQuery: content
+        })
+    },
+
     render: function() {
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
@@ -170,7 +183,8 @@ module.exports = React.createClass({
 
             controls.push(
                 <MessageComposerInput key="controls_input" tabComplete={this.props.tabComplete}
-                    onResize={this.props.onResize} room={this.props.room} />,
+                    onResize={this.props.onResize} room={this.props.room}
+                                      onContentChanged={(content) => this.onInputContentChanged(content) } />,
                 uploadButton,
                 hangupButton,
                 callButton,
@@ -191,6 +205,8 @@ module.exports = React.createClass({
                         {controls}
                     </div>
                 </div>
+
+                <Autocomplete query={this.state.autocompleteQuery} pinSelector=".mx_RoomView_statusArea" pinTo={['top', 'left', 'width']} />
             </div>
         );
     }

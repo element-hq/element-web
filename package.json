@@ -26,6 +26,7 @@
     "favico.js": "^0.3.10",
     "filesize": "^3.1.2",
     "flux": "^2.0.3",
+    "fuse.js": "^2.2.0",
     "glob": "^5.0.14",
     "highlight.js": "^8.9.1",
     "linkifyjs": "^2.0.0-beta.4",
