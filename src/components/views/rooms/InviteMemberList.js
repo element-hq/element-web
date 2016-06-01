@@ -26,6 +26,7 @@ module.exports = React.createClass({
     propTypes: {
         roomId: React.PropTypes.string.isRequired,
         onInvite: React.PropTypes.func.isRequired, // fn(inputText)
+        onThirdPartyInvite: React.PropTypes.func.isRequired, // fn(inputText)
         onSearchQueryChanged: React.PropTypes.func // fn(inputText)
     },
 
@@ -49,8 +50,17 @@ module.exports = React.createClass({
         }
     },
 
+    componentDidMount: function() {
+        // initialise the email tile
+        this.onSearchQueryChanged('');
+    },
+
     onInvite: function(ev) {
         this.props.onInvite(this._input);
+    },
+
+    onThirdPartyInvite: function(ev) {
+        this.props.onThirdPartyInvite(this._input);
     },
 
     onSearchQueryChanged: function(input) {
@@ -68,9 +78,10 @@ module.exports = React.createClass({
 
         this._emailEntity = new Entities.newEntity(
             <EntityTile key="dynamic_invite_tile" suppressOnHover={true} showInviteButton={true}
-            avatarJsx={ <BaseAvatar name="@" width={36} height={36} /> }
-            className="mx_EntityTile_invitePlaceholder"
-            presenceState="online" onClick={this.onInvite} name={label} />,
+                avatarJsx={ <BaseAvatar name="@" width={36} height={36} /> }
+                className="mx_EntityTile_invitePlaceholder"
+                presenceState="online" onClick={this.onThirdPartyInvite} name={"Invite by email"} 
+            />,
             function(query) {
                 return true; // always show this
             }

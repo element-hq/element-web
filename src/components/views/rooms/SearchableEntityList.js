@@ -48,6 +48,7 @@ var SearchableEntityList = React.createClass({
     getInitialState: function() {
         return {
             query: "",
+            focused: false,
             truncateAt: this.props.truncateAt,
             results: this.getSearchResults("", this.props.entities)
         };
@@ -101,7 +102,7 @@ var SearchableEntityList = React.createClass({
 
     getSearchResults: function(query, entities) {
         if (!query || query.length === 0) {
-            return this.props.emptyQueryShowsAll ? entities : []
+            return this.props.emptyQueryShowsAll ? entities : [ entities[0] ]
         }
         return entities.filter(function(e) {
             return e.matches(query);
@@ -128,19 +129,21 @@ var SearchableEntityList = React.createClass({
 
     render: function() {
         var inputBox;
-
+        
         if (this.props.showInputBox) {
             inputBox = (
                 <form onSubmit={this.onQuerySubmit} autoComplete="off">
                     <input className="mx_SearchableEntityList_query" id="mx_SearchableEntityList_query" type="text"
                         onChange={this.onQueryChanged} value={this.state.query}
+                        onFocus={ ()=>{ this.setState({ focused: true }) } }
+                        onBlur={ ()=>{ this.setState({ focused: false }) } }
                         placeholder={this.props.searchPlaceholderText} />
                 </form>
             );
         }
 
         var list;
-        if (this.state.results.length) {
+        if (this.state.results.length > 1 || this.state.focused) {
             if (this.props.truncateAt) { // caller wants list truncated
                 var TruncatedList = sdk.getComponent("elements.TruncatedList");
                 list = (
@@ -172,10 +175,10 @@ var SearchableEntityList = React.createClass({
         }
 
         return (
-            <div className={ "mx_SearchableEntityList " + (this.state.query.length ? "mx_SearchableEntityList_expanded" : "") }>
+            <div className={ "mx_SearchableEntityList " + (list ? "mx_SearchableEntityList_expanded" : "") }>
                 { inputBox }
                 { list }
-                { this.state.query.length ? <div className="mx_SearchableEntityList_hrWrapper"><hr/></div> : '' }
+                { list ? <div className="mx_SearchableEntityList_hrWrapper"><hr/></div> : '' }
             </div>
         );
     }
