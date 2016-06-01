@@ -492,6 +492,7 @@ module.exports = React.createClass({
                             },
                             type: 'm.room.guest_access',
                             state_key: '',
+                            visibility: 'private',
                         }
                     ],
                 }).done(function(res) {
