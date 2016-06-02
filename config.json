@@ -1,7 +1,7 @@
 {
-    "default_hs_url": "http://127.0.0.1:8008",
+    "default_hs_url": "https://matrix.org",
     "default_is_url": "https://vector.im",
     "brand": "Vector",
-    "integrations_ui_url": "http://localhost:5051/",
+    "integrations_ui_url": "http://localhost:8081/",
     "integrations_rest_url": "http://localhost:5050"
 }
