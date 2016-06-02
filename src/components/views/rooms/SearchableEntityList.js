@@ -129,14 +129,26 @@ var SearchableEntityList = React.createClass({
 
     render: function() {
         var inputBox;
-        
+
         if (this.props.showInputBox) {
             inputBox = (
                 <form onSubmit={this.onQuerySubmit} autoComplete="off">
                     <input className="mx_SearchableEntityList_query" id="mx_SearchableEntityList_query" type="text"
                         onChange={this.onQueryChanged} value={this.state.query}
-                        onFocus={ ()=>{ this.setState({ focused: true }) } }
-                        onBlur={ ()=>{ this.setState({ focused: false }) } }
+                        onFocus={ ()=>{
+                            if (this._blurTimeout) {
+                                clearTimeout(this.blurTimeout);
+                            }
+                            this.setState({ focused: true });
+                        } }
+                        onBlur={ ()=>{
+                            // nasty setTimeout heuristic to avoid the 'invite by email' prompt disappearing
+                            // due to the onBlur before we can click on it
+                            this._blurTimeout = setTimeout(
+                                ()=>{ this.setState({ focused: false }) },
+                                300
+                            );
+                        } }
                         placeholder={this.props.searchPlaceholderText} />
                 </form>
             );
