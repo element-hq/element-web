@@ -1,3 +1,16 @@
+Changes in [0.7.0](https://github.com/vector-im/vector-web/releases/tag/v0.7.0) (2016-06-02)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.6.1...v0.7.0)
+
+ * Update to matrix-react-sdk 0.6.0 - see
+   [changelog](https://github.com/matrix-org/matrix-react-sdk/blob/v0.6.0/CHANGELOG.md)
+ * Style selection color.
+   [\#1557](https://github.com/vector-im/vector-web/pull/1557)
+ * Fix NPE when loading the Settings page which infini-spinnered
+   [\#1518](https://github.com/vector-im/vector-web/pull/1518)
+ * Add option to enable email notifications
+   [\#1469](https://github.com/vector-im/vector-web/pull/1469)
+
 Changes in [0.6.1](https://github.com/vector-im/vector-web/releases/tag/v0.6.1) (2016-04-22)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.6.0...v0.6.1)
