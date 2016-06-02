@@ -1,3 +1,9 @@
+Changes in [0.7.1](https://github.com/vector-im/vector-web/releases/tag/v0.7.1) (2016-06-02)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.0...v0.7.1)
+
+ * Fix accidentally committed local changes to the default config.json (doh!)
+
 Changes in [0.7.0](https://github.com/vector-im/vector-web/releases/tag/v0.7.0) (2016-06-02)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.6.1...v0.7.0)
