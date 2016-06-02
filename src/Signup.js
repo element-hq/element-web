@@ -51,6 +51,7 @@ class Register extends Signup {
         this.username = undefined; // desired
         this.email = undefined; // desired
         this.password = undefined; // desired
+        this.brand = undefined; // optional brand to let the HS brand its mail notifs
     }
 
     setClientSecret(secret) {
@@ -71,6 +72,10 @@ class Register extends Signup {
 
     setGuestAccessToken(token) {
         this.guestAccessToken = token;
+    }
+
+    setBrand(brand) {
+        this.brand = brand;
     }
 
     getStep() {
@@ -131,7 +136,7 @@ class Register extends Signup {
 
         return MatrixClientPeg.get().register(
             this.username, this.password, this.params.sessionId, authDict, bindEmail,
-            this.guestAccessToken
+            this.guestAccessToken, this.brand
         ).then(function(result) {
             self.credentials = result;
             self.setStep("COMPLETE");

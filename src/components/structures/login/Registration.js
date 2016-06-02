@@ -40,6 +40,7 @@ module.exports = React.createClass({
         customIsUrl: React.PropTypes.string,
         defaultHsUrl: React.PropTypes.string,
         defaultIsUrl: React.PropTypes.string,
+        brand: React.PropTypes.string,
         email: React.PropTypes.string,
         username: React.PropTypes.string,
         guestAccessToken: React.PropTypes.string,
@@ -66,6 +67,7 @@ module.exports = React.createClass({
         this.registerLogic.setRegistrationUrl(this.props.registrationUrl);
         this.registerLogic.setIdSid(this.props.idSid);
         this.registerLogic.setGuestAccessToken(this.props.guestAccessToken);
+        this.registerLogic.setBrand(this.props.brand);
         this.registerLogic.recheckState();
     },
 

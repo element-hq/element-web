@@ -1160,6 +1160,7 @@ module.exports = React.createClass({
                     guestAccessToken={this.state.guestAccessToken}
                     defaultHsUrl={this.props.config.default_hs_url}
                     defaultIsUrl={this.props.config.default_is_url}
+                    brand={this.props.config.brand}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     registrationUrl={this.props.registrationUrl}
