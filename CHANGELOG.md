@@ -1,3 +1,22 @@
+Changes in [0.6.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.6.0) (2016-06-02)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.5.2...v0.6.0)
+
+ * implement new UX for 3pid invites
+   [\#297](https://github.com/matrix-org/matrix-react-sdk/pull/297)
+ * multiple URL preview support
+   [\#290](https://github.com/matrix-org/matrix-react-sdk/pull/290)
+ * Add a fallback home server to log into
+   [\#293](https://github.com/matrix-org/matrix-react-sdk/pull/293)
+ * Hopefully fix memory leak with velocity
+   [\#291](https://github.com/matrix-org/matrix-react-sdk/pull/291)
+ * Support for enabling email notifications
+   [\#289](https://github.com/matrix-org/matrix-react-sdk/pull/289)
+ * Correct Readme instructions how to customize the UI
+   [\#286](https://github.com/matrix-org/matrix-react-sdk/pull/286)
+ * Avoid rerendering during Room unmount
+   [\#285](https://github.com/matrix-org/matrix-react-sdk/pull/285)
+
 Changes in [0.5.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.5.2) (2016-04-22)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.5.1...v0.5.2)
