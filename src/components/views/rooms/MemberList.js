@@ -170,12 +170,16 @@ module.exports = React.createClass({
         var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
         Modal.createDialog(TextInputDialog, {
             title: "Invite members by email",
-            description: "Please enter the email addresses to be invited (comma separated)",
+            description: "Please enter one or more email addresses",
             value: inputText,
             button: "Invite",
             onFinished: (should_invite, addresses)=>{
                 if (should_invite) {
-                    this.onInvite(addresses);
+                    // defer the actual invite to the next event loop to give this
+                    // Modal a chance to unmount in case onInvite() triggers a new one
+                    setTimeout(()=>{
+                        this.onInvite(addresses);
+                    }, 0);
                 }
             }
         });
