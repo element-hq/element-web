@@ -166,6 +166,21 @@ module.exports = React.createClass({
         });
     }, 500),
 
+    onThirdPartyInvite: function(inputText) {
+        var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
+        Modal.createDialog(TextInputDialog, {
+            title: "Invite members by email",
+            description: "Please enter the email addresses to be invited (comma separated)",
+            value: inputText,
+            button: "Invite",
+            onFinished: (should_invite, addresses)=>{
+                if (should_invite) {
+                    this.onInvite(addresses);
+                }
+            }
+        });
+    },
+
     onInvite: function(inputText) {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
@@ -514,6 +529,7 @@ module.exports = React.createClass({
             inviteMemberListSection = (
                 <InviteMemberList roomId={this.props.roomId}
                     onSearchQueryChanged={this.onSearchQueryChanged}
+                    onThirdPartyInvite={this.onThirdPartyInvite}
                     onInvite={this.onInvite} />
             );
         }

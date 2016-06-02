@@ -368,7 +368,7 @@ module.exports = React.createClass({
             action: 'leave_room',
             room_id: this.props.member.roomId,
         });
-        this.props.onFinished();        
+        this.props.onFinished();
     },
 
     getInitialState: function() {
