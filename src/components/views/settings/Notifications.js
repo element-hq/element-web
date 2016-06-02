@@ -21,6 +21,7 @@ var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
 var Modal = require('matrix-react-sdk/lib/Modal');
+var configJson = require("../../../../config.json");
 
 var notifications = require('../../../notifications');
 
@@ -116,7 +117,11 @@ module.exports = React.createClass({
     onEnableEmailNotificationsChange: function(address, event) {
         var emailPusherPromise;
         if (event.target.checked) {
-            emailPusherPromise = UserSettingsStore.addEmailPusher(address);
+            var data = {}
+            if (configJson.brand) {
+                data['brand'] = configJson.brand;
+            }
+            emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);
         } else {
             var emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
             emailPusher.kind = null;
