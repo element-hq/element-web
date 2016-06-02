@@ -403,9 +403,8 @@ module.exports = React.createClass({
                         Identity Server is { MatrixClientPeg.get().getIdentityServerUrl() }
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        Version {this.state.clientVersion}
-                        <br />
-                        {this.props.version}
+                        matrix-react-sdk version: {this.state.clientVersion}<br/>
+                        vector-web version: {this.props.version}<br/>
                     </div>
                 </div>
 
