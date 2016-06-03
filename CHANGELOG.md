@@ -1,3 +1,9 @@
+Changes in [0.7.3](https://github.com/vector-im/vector-web/releases/tag/v0.7.3) (2016-06-03)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.2...v0.7.3)
+
+* Update to react-sdk 0.6.3
+
 Changes in [0.7.2](https://github.com/vector-im/vector-web/releases/tag/v0.7.2) (2016-06-02)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.1...v0.7.2)
