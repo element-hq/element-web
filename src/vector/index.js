@@ -40,8 +40,9 @@ var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
-var configJson = require("../../config.json");
 var UpdateChecker = require("./updater");
+var q = require('q');
+var request = require('browser-request');
 
 var qs = require("querystring");
 
@@ -181,7 +182,24 @@ window.onload = function() {
     }
 }
 
-function loadApp() {
+function getConfig() {
+    let deferred = q.defer();
+    
+    request(
+        { method: "GET", url: "config.json", json: true },
+        (err, response, body) => {
+            if (err || response.status < 200 || response.status >= 300) {
+                throw "failed to load config.json";
+            }
+            
+            deferred.resolve(body);
+        }
+    );
+    
+    return deferred.promise;
+}
+
+async function loadApp() {
     if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
         if (confirm("Vector runs much better as an app on iOS. Get the app?")) {
             window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
@@ -194,7 +212,9 @@ function loadApp() {
             return;
         }
     }
-
+    
+    let configJson = await getConfig();
+    
     console.log("Vector starting at "+window.location);
     if (validBrowser) {
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
