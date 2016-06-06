@@ -60,6 +60,8 @@ module.exports = React.createClass({
             tags: tags,
             areNotifsMuted: areNotifsMuted,
             isRoomPublished: this._originalIsRoomPublished, // loaded async in componentWillMount
+            scalar_token: null,
+            scalar_error: null,
         };
     },
 
@@ -75,6 +77,8 @@ module.exports = React.createClass({
 
         this.getScalarToken().done((token) => {
             this.setState({scalar_token: token});
+        }, (err) => {
+            this.setState({scalar_error: err});
         });
 
         dis.dispatch({
@@ -578,6 +582,10 @@ module.exports = React.createClass({
                     <a href="#" onClick={ this.onManageIntegrations }>Manage integrations</a>
                 </div>
             );
+        } else if (this.state.scalar_error) {
+            integrations_section = <div className="error">
+                Unable to contact integrations server
+            </div>;
         } else {
             integrations_section = <Loader />;
         }

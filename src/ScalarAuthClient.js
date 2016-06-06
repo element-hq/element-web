@@ -32,6 +32,8 @@ class ScalarAuthClient {
         }, (err, response, body) => {
             if (err) {
                 defer.reject(err);
+            } else if (response.statusCode / 100 !== 2) {
+                defer.reject({statusCode: response.statusCode});
             } else {
                 defer.resolve(body.access_token);
             }
