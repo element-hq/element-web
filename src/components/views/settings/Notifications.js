@@ -21,7 +21,7 @@ var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
 var Modal = require('matrix-react-sdk/lib/Modal');
-var configJson = require("../../../../config.json");
+var SdkConfig = require("matrix-react-sdk/lib/SdkConfig");
 
 var notifications = require('../../../notifications');
 
@@ -118,8 +118,8 @@ module.exports = React.createClass({
         var emailPusherPromise;
         if (event.target.checked) {
             var data = {}
-            if (configJson.brand) {
-                data['brand'] = configJson.brand;
+            if (SdkConfig.get().brand) {
+                data['brand'] = SdkConfig.get().brand;
             }
             emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);
         } else {
