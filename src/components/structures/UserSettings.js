@@ -299,7 +299,7 @@ module.exports = React.createClass({
                             onValueChanged={ this.onAddThreepidClicked } />
                     </div>
                     <div className="mx_UserSettings_addThreepid">
-                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked }/>
+                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked.bind(this, undefined, true) }/>
                     </div>
                 </div>
             );
@@ -397,9 +397,14 @@ module.exports = React.createClass({
                         Logged in as {this._me}
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        Version {this.state.clientVersion}
-                        <br />
-                        {this.props.version}
+                        Homeserver is { MatrixClientPeg.get().getHomeserverUrl() }
+                    </div>
+                    <div className="mx_UserSettings_advanced">
+                        Identity Server is { MatrixClientPeg.get().getIdentityServerUrl() }
+                    </div>
+                    <div className="mx_UserSettings_advanced">
+                        matrix-react-sdk version: {this.state.clientVersion}<br/>
+                        vector-web version: {this.props.version}<br/>
                     </div>
                 </div>
 

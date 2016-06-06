@@ -100,7 +100,7 @@ module.exports = {
         return this.getEmailPusher(pushers, address) !== undefined;
     },
 
-    addEmailPusher: function(address) {
+    addEmailPusher: function(address, data) {
         return MatrixClientPeg.get().setPusher({
             kind: 'email',
             app_id: "m.email",
@@ -108,7 +108,7 @@ module.exports = {
             app_display_name: 'Email Notifications',
             device_display_name: address,
             lang: navigator.language,
-            data: {},
+            data: data,
             append: true,  // We always append for email pushers since we don't want to stop other accounts notifying to the same email address
         });
     },
