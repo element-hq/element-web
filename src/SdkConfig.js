@@ -26,8 +26,9 @@ class SdkConfig {
     static put(cfg) {
         var defaultKeys = Object.keys(DEFAULTS);
         for (var i = 0; i < defaultKeys.length; ++i) {
-            if (cfg[defaultKeys[i]] === undefined) {
-                cfg[defaultKeys[i]] = DEFAULTS[defaultKeys[i]];
+            var key = defaultKeys[i];
+            if (cfg[key] === undefined) {
+                cfg[key] = DEFAULTS[key];
             }
         }
         global.mxReactSdkConfig = cfg;
