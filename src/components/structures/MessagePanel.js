@@ -88,7 +88,7 @@ module.exports = React.createClass({
 
         // Remember the read marker ghost node so we can do the cleanup that
         // Velocity requires
-        this.readMarkerGhostNode = null;
+        this._readMarkerGhostNode = null;
 
         this._isMounted = true;
     },
@@ -426,10 +426,10 @@ module.exports = React.createClass({
     },
 
     _startAnimation: function(ghostNode) {
-        if (this.readMarkerGhostNode) {
-            Velocity.Utilities.removeData(this.readMarkerGhostNode);
+        if (this._readMarkerGhostNode) {
+            Velocity.Utilities.removeData(this._readMarkerGhostNode);
         }
-        this.readMarkerGhostNode = ghostNode;
+        this._readMarkerGhostNode = ghostNode;
 
         if (ghostNode) {
             Velocity(ghostNode, {opacity: '0', width: '10%'},
