@@ -184,18 +184,18 @@ window.onload = function() {
 
 function getConfig() {
     let deferred = q.defer();
-    
+
     request(
         { method: "GET", url: "config.json", json: true },
         (err, response, body) => {
             if (err || response.status < 200 || response.status >= 300) {
                 throw "failed to load config.json";
             }
-            
+
             deferred.resolve(body);
         }
     );
-    
+
     return deferred.promise;
 }
 
@@ -207,14 +207,14 @@ async function loadApp() {
         }
     }
     else if (/Android/.test(navigator.userAgent)) {
-        if (confirm("Vector runs much better as an app on Vector. Get the app?")) {
+        if (confirm("Vector runs much better as an app on Android. Get the app?")) {
             window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
             return;
         }
     }
-    
+
     let configJson = await getConfig();
-    
+
     console.log("Vector starting at "+window.location);
     if (validBrowser) {
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
