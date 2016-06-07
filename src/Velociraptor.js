@@ -1,6 +1,6 @@
 var React = require('react');
 var ReactDom = require('react-dom');
-var Velocity = require('velocity-animate');
+var Velocity = require('velocity-vector');
 
 /**
  * The Velociraptor contains components and animates transitions with velocity.
