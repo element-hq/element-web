@@ -17,6 +17,12 @@ limitations under the License.
 var DEFAULTS = {
 };
 
+/**
+ * Class that stores an instance of the SDK config dictionary
+ * as a singleton such that it can be accessed from SDK
+ * components without having to be passed deep though
+ * multiple levels of React components.
+ */
 class SdkConfig {
 
     static get() {
