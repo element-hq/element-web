@@ -19,6 +19,7 @@ var url = require('url');
 var Favico = require('favico.js');
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var SdkConfig = require("../../SdkConfig");
 var Notifier = require("../../Notifier");
 var ContextualMenu = require("../../ContextualMenu");
 var RoomListSorter = require("../../RoomListSorter");
@@ -123,6 +124,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        SdkConfig.put(this.props.config);
         this.favicon = new Favico({animation: 'none'});
     },
 
