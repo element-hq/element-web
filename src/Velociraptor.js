@@ -117,7 +117,8 @@ module.exports = React.createClass({
             // and the FAQ entry, "Preventing memory leaks when
             // creating/destroying large numbers of elements"
             // (https://github.com/julianshapiro/velocity/issues/47)
-            Velocity.Utilities.removeData(this.nodes[k]);
+            var domNode = ReactDom.findDOMNode(this.nodes[k]);
+            Velocity.Utilities.removeData(domNode);
         }
         this.nodes[k] = node;
     },
