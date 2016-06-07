@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var Velocity = require('velocity-animate');
-require('velocity-ui-pack');
+require('velocity-animate/velocity.ui');
 var sdk = require('../../../index');
 var Email = require('../../../email');
 var Modal = require("../../../Modal");
