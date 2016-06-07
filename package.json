@@ -37,7 +37,7 @@
     "react-dom": "^15.0.1",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#c3d942e",
     "sanitize-html": "^1.11.1",
-    "velocity-animate": "vector-im/velocity#a70ebc7"
+    "velocity-vector": "vector-im/velocity#a70ebc7"
   },
   "//babelversion": [
     "brief experiments with babel6 seems to show that it generates source ",
