@@ -41,7 +41,7 @@ module.exports = React.createClass({
     displayName: 'MatrixChat',
 
     propTypes: {
-        config: React.PropTypes.object.isRequired,
+        config: React.PropTypes.object,
         ConferenceHandler: React.PropTypes.any,
         onNewScreen: React.PropTypes.func,
         registrationUrl: React.PropTypes.string,
@@ -84,7 +84,8 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            startingQueryParams: {}
+            startingQueryParams: {},
+            config: {},
         };
     },
 
