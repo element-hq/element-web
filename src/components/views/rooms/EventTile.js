@@ -139,6 +139,7 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this._suppressReadReceiptAnimation = false;
+        this.dispatcherRef = dispatcher.register(this.onAction);
     },
 
     componentWillReceiveProps: function (nextProps) {
@@ -157,6 +158,20 @@ module.exports = React.createClass({
         }
 
         return false;
+    },
+
+    componentWillUnmount: function() {
+        dispatcher.unregister(this.dispatcherRef);
+    },
+
+    onAction: function(payload) {
+        switch (payload.action) {
+            case 'device_verified':
+                if (payload.params.userId == this.props.mxEvent.getSender()) {
+                    this._verifyEvent(this.props.mxEvent);
+                }
+                break;
+        }
     },
 
     _verifyEvent: function(mxEvent) {
