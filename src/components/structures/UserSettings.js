@@ -244,6 +244,23 @@ module.exports = React.createClass({
         });
     },
 
+    _renderDeviceInfo: function() {
+        var client = MatrixClientPeg.get();
+        var deviceId = client.deviceId;
+        var olmKey = client.getDeviceEd25519Key() || "<not supported>";
+        return (
+            <div>
+                <h3>Cryptography</h3>
+                <div className="mx_UserSettings_section">
+                    <ul>
+                        <li>Device ID: {deviceId}</li>
+                        <li>Device key: {olmKey}</li>
+                    </ul>
+                </div>
+            </div>
+        );
+    },
+
     render: function() {
         var self = this;
         var Loader = sdk.getComponent("elements.Spinner");
@@ -389,6 +406,8 @@ module.exports = React.createClass({
                 </div>
 
                 {notification_area}
+
+                {this._renderDeviceInfo()}
 
                 <h3>Advanced</h3>
 
