@@ -121,6 +121,8 @@ module.exports = React.createClass({
             var data = {}
             if (this.props.brand) {
                 data['brand'] = this.props.brand;
+            } else if (this.props.brand === undefined) {
+                data['brand'] = 'Vector';
             }
             emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);
         } else {
