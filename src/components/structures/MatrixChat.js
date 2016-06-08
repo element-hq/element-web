@@ -19,7 +19,6 @@ var url = require('url');
 var Favico = require('favico.js');
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
-var SdkConfig = require("../../SdkConfig");
 var Notifier = require("../../Notifier");
 var ContextualMenu = require("../../ContextualMenu");
 var RoomListSorter = require("../../RoomListSorter");
@@ -124,7 +123,6 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        SdkConfig.put(this.props.config);
         this.favicon = new Favico({animation: 'none'});
     },
 
@@ -1094,7 +1092,7 @@ module.exports = React.createClass({
                     right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity} />
                     break;
                 case this.PageTypes.UserSettings:
-                    page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} />
+                    page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} brand={this.props.config.brand} />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
                 case this.PageTypes.CreateRoom:

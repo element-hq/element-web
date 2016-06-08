@@ -31,7 +31,9 @@ module.exports = React.createClass({
 
     propTypes: {
         version: React.PropTypes.string,
-        onClose: React.PropTypes.func
+        onClose: React.PropTypes.func,
+        // The brand string given when creating email pushers
+        brand: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -333,7 +335,7 @@ module.exports = React.createClass({
                 <h3>Notifications</h3>
 
                 <div className="mx_UserSettings_section">
-                    <Notifications threepids={this.state.threepids} />
+                    <Notifications threepids={this.state.threepids} brand={this.props.brand} />
                 </div>
             </div>);
         }
