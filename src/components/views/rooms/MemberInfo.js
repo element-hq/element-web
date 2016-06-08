@@ -56,7 +56,8 @@ module.exports = React.createClass({
             muted: false,
             isTargetMod: false,
             updating: 0,
-            devices: null, // null means device list is loading
+            devicesLoading: true,
+            devices: null,
         }
     },
 
@@ -97,6 +98,7 @@ module.exports = React.createClass({
 
     _updateStateForNewMember: function(member) {
         var newState = this._calculateOpsPermissions(member);
+        newState.devicesLoading = true;
         newState.devices = null;
         this.setState(newState);
 
@@ -114,14 +116,18 @@ module.exports = React.createClass({
 
         var client = MatrixClientPeg.get();
         var self = this;
-        client.downloadKeys([member.userId], true).done(function() {
+        client.downloadKeys([member.userId], true).finally(function() {
+            self._cancelDeviceList = null;
+        }).done(function() {
             if (cancelled) {
                 // we got cancelled - presumably a different user now
                 return;
             }
-            self._cancelDeviceList = null;
             var devices = client.listDeviceKeys(member.userId);
-            self.setState({devices: devices});
+            self.setState({devicesLoading: false, devices: devices});
+        }, function(err) {
+            console.log("Error downloading devices", err);
+            self.setState({devicesLoading: false});
         });
     },
 
@@ -540,9 +546,13 @@ module.exports = React.createClass({
         var Spinner = sdk.getComponent("elements.Spinner");
 
         var devComponents;
-        if (devices === null) {
+        if (this.state.devicesLoading) {
             // still loading
             devComponents = <Spinner />;
+        } else if (devices === null) {
+            devComponents = "Unable to load device list";
+        } else if (devices.length === 0) {
+            devComponents = "No registered devices";
         } else {
             devComponents = [];
             for (var i = 0; i < devices.length; i++) {
