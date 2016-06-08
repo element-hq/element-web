@@ -67,7 +67,7 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this._updateStateForNewMember(this.props.member);
-        this.dispatcherRef = dis.register(this.onAction);
+        MatrixClientPeg.get().on("deviceVerified", this.onDeviceVerified);
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -77,28 +77,22 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        dis.unregister(this.dispatcherRef);
+        var client = MatrixClientPeg.get();
+        if (client) {
+            client.removeListener("deviceVerified", this.onDeviceVerified);
+        }
         if (this._cancelDeviceList) {
             this._cancelDeviceList();
         }
     },
 
-    onAction: function(payload) {
-        switch (payload.action) {
-            case 'device_verified':
-                if (payload.params.userId == this.props.member.userId) {
-                    this._onDeviceVerified();
-                }
-                break;
+    onDeviceVerified: function(userId, device) {
+        if (userId == this.props.member.userId) {
+            // no need to re-download the whole thing; just update our copy of
+            // the list.
+            var devices = MatrixClientPeg.get().listDeviceKeys(userId);
+            this.setState({devices: devices});
         }
-    },
-
-    _onDeviceVerified: function() {
-        // no need to re-download the whole thing; just update our copy of the
-        // list.
-        var devices = MatrixClientPeg.get().listDeviceKeys(
-            this.props.member.userId);
-        this.setState({devices: devices});
     },
 
     _updateStateForNewMember: function(member) {

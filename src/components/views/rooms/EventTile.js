@@ -139,7 +139,7 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this._suppressReadReceiptAnimation = false;
-        this.dispatcherRef = dispatcher.register(this.onAction);
+        MatrixClientPeg.get().on("deviceVerified", this.onDeviceVerified);
     },
 
     componentWillReceiveProps: function (nextProps) {
@@ -161,16 +161,15 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        dispatcher.unregister(this.dispatcherRef);
+        var client = MatrixClientPeg.get();
+        if (client) {
+            client.removeListener("deviceVerified", this.onDeviceVerified);
+        }
     },
 
-    onAction: function(payload) {
-        switch (payload.action) {
-            case 'device_verified':
-                if (payload.params.userId == this.props.mxEvent.getSender()) {
-                    this._verifyEvent(this.props.mxEvent);
-                }
-                break;
+    onDeviceVerified: function(userId, device) {
+        if (userId == this.props.mxEvent.getSender()) {
+            this._verifyEvent(this.props.mxEvent);
         }
     },
 

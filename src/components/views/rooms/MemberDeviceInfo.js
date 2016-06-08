@@ -17,8 +17,6 @@ limitations under the License.
 var React = require('react');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 
-var dis = require("../../../dispatcher");
-
 module.exports = React.createClass({
     displayName: 'MemberDeviceInfo',
     propTypes: {
@@ -29,14 +27,6 @@ module.exports = React.createClass({
     onVerifyClick: function() {
         MatrixClientPeg.get().setDeviceVerified(this.props.userId,
                                                 this.props.device.id);
-
-        dis.dispatch({
-            action: 'device_verified',
-            params: {
-                userId: this.props.userId,
-                deviceId: this.props.device.id,
-            },
-        });
     },
 
     render: function() {
