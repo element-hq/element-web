@@ -21,7 +21,6 @@ var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
 var Modal = require('matrix-react-sdk/lib/Modal');
-var SdkConfig = require("matrix-react-sdk/lib/SdkConfig");
 
 var notifications = require('../../../notifications');
 
@@ -73,6 +72,8 @@ module.exports = React.createClass({
     propTypes: {
         // The array of threepids from the JS SDK (required for email notifications)
         threepids: React.PropTypes.array.isRequired,
+        // The brand string set when creating an email pusher
+        brand: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -118,8 +119,8 @@ module.exports = React.createClass({
         var emailPusherPromise;
         if (event.target.checked) {
             var data = {}
-            if (SdkConfig.get().brand) {
-                data['brand'] = SdkConfig.get().brand;
+            if (this.props.brand) {
+                data['brand'] = this.props.brand;
             }
             emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);
         } else {
