@@ -41,7 +41,7 @@ module.exports = React.createClass({
     displayName: 'MatrixChat',
 
     propTypes: {
-        config: React.PropTypes.object.isRequired,
+        config: React.PropTypes.object,
         ConferenceHandler: React.PropTypes.any,
         onNewScreen: React.PropTypes.func,
         registrationUrl: React.PropTypes.string,
@@ -84,7 +84,8 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            startingQueryParams: {}
+            startingQueryParams: {},
+            config: {},
         };
     },
 
@@ -97,7 +98,7 @@ module.exports = React.createClass({
         else if (window.localStorage && window.localStorage.getItem("mx_hs_url")) {
             return window.localStorage.getItem("mx_hs_url");
         }
-        else if (this.props.config) {
+        else {
             return this.props.config.default_hs_url
         }
         return "https://matrix.org";
@@ -116,7 +117,7 @@ module.exports = React.createClass({
         else if (window.localStorage && window.localStorage.getItem("mx_is_url")) {
             return window.localStorage.getItem("mx_is_url");
         }
-        else if (this.props.config) {
+        else {
             return this.props.config.default_is_url
         }
         return "https://matrix.org";
