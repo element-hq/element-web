@@ -30,6 +30,7 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 var dis = require("../../../dispatcher");
 var Modal = require("../../../Modal");
 var sdk = require('../../../index');
+var createRoom = require('../../../createRoom');
 
 module.exports = React.createClass({
     displayName: 'MemberInfo',
@@ -393,51 +394,15 @@ module.exports = React.createClass({
             this.props.onFinished();
         }
         else {
-            if (MatrixClientPeg.get().isGuest()) {
-                var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                Modal.createDialog(NeedToRegisterDialog, {
-                    title: "Please Register",
-                    description: "Guest users can't create new rooms. Please register to create room and start a chat."
-                });
-                self.props.onFinished();
-                return;
-            }
-
             self.setState({ updating: self.state.updating + 1 });
-            MatrixClientPeg.get().createRoom({
-                // XXX: FIXME: deduplicate this with "view_create_room" in MatrixChat
-                invite: [this.props.member.userId],
-                preset: "private_chat",
-                // Allow guests by default since the room is private and they'd
-                // need an invite. This means clicking on a 3pid invite email can
-                // actually drop you right in to a chat.
-                initial_state: [
-                    {
-                        content: {
-                            guest_access: 'can_join'
-                        },
-                        type: 'm.room.guest_access',
-                        state_key: '',
-                        visibility: 'private',
-                    }
-                ],
-            }).then(
-                function(res) {
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: res.room_id
-                    });
-                    self.props.onFinished();
-                }, function(err) {
-                    Modal.createDialog(ErrorDialog, {
-                        title: "Failure to start chat",
-                        description: err.message
-                    });
-                    self.props.onFinished();
-                }
-            ).finally(()=>{
+            createRoom({
+                createOpts: {
+                    invite: [this.props.member.userId],
+                },
+            }).finally(function() {
+                self.props.onFinished();
                 self.setState({ updating: self.state.updating - 1 });
-            });
+            }).done();
         }
     },
 

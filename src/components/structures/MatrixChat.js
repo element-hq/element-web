@@ -37,6 +37,8 @@ var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
 var KeyCode = require('../../KeyCode');
 
+var createRoom = require("../../createRoom");
+
 module.exports = React.createClass({
     displayName: 'MatrixChat',
 
@@ -465,49 +467,7 @@ module.exports = React.createClass({
                 //this._setPage(this.PageTypes.CreateRoom);
                 //this.notifyNewScreen('new');
 
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                var Loader = sdk.getComponent("elements.Spinner");
-                var modal = Modal.createDialog(Loader);
-
-                if (MatrixClientPeg.get().isGuest()) {
-                    Modal.createDialog(NeedToRegisterDialog, {
-                        title: "Please Register",
-                        description: "Guest users can't create new rooms. Please register to create room and start a chat."
-                    });
-                    return;
-                }
-
-                // XXX: FIXME: deduplicate this with MemberInfo's 'start chat' impl
-                MatrixClientPeg.get().createRoom({
-                    preset: "private_chat",
-                    // Allow guests by default since the room is private and they'd
-                    // need an invite. This means clicking on a 3pid invite email can
-                    // actually drop you right in to a chat.
-                    initial_state: [
-                        {
-                            content: {
-                                guest_access: 'can_join'
-                            },
-                            type: 'm.room.guest_access',
-                            state_key: '',
-                            visibility: 'private',
-                        }
-                    ],
-                }).done(function(res) {
-                    modal.close();
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: res.room_id,
-                        // show_settings: true,
-                    });
-                }, function(err) {
-                    modal.close();
-                    Modal.createDialog(ErrorDialog, {
-                        title: "Failed to create room",
-                        description: err.toString()
-                    });
-                });
+                createRoom().done();
                 break;
             case 'view_room_directory':
                 this._setPage(this.PageTypes.RoomDirectory);
