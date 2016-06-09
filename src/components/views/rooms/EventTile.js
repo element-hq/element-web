@@ -128,16 +128,24 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return {menu: false, allReadAvatars: false};
+        return {menu: false, allReadAvatars: false, verified: null};
     },
 
     componentWillMount: function() {
         // don't do RR animations until we are mounted
         this._suppressReadReceiptAnimation = true;
+        this._verifyEvent(this.props.mxEvent);
     },
 
     componentDidMount: function() {
         this._suppressReadReceiptAnimation = false;
+        MatrixClientPeg.get().on("deviceVerified", this.onDeviceVerified);
+    },
+
+    componentWillReceiveProps: function (nextProps) {
+        if (nextProps.mxEvent !== this.props.mxEvent) {
+            this._verifyEvent(nextProps.mxEvent);
+        }
     },
 
     shouldComponentUpdate: function (nextProps, nextState) {
@@ -150,6 +158,31 @@ module.exports = React.createClass({
         }
 
         return false;
+    },
+
+    componentWillUnmount: function() {
+        var client = MatrixClientPeg.get();
+        if (client) {
+            client.removeListener("deviceVerified", this.onDeviceVerified);
+        }
+    },
+
+    onDeviceVerified: function(userId, device) {
+        if (userId == this.props.mxEvent.getSender()) {
+            this._verifyEvent(this.props.mxEvent);
+        }
+    },
+
+    _verifyEvent: function(mxEvent) {
+        var verified = null;
+
+        if (mxEvent.isEncrypted()) {
+            verified = MatrixClientPeg.get().isEventSenderVerified(mxEvent);
+        }
+
+        this.setState({
+            verified: verified
+        });
     },
 
     _propsEqual: function(objA, objB) {
@@ -346,6 +379,8 @@ module.exports = React.createClass({
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,
             menu: this.state.menu,
+            mx_EventTile_verified: this.state.verified == true,
+            mx_EventTile_unverified: this.state.verified == false,
         });
         var timestamp = <a href={ "#/room/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }>
                             <MessageTimestamp ts={this.props.mxEvent.getTs()} />

@@ -34,23 +34,95 @@ var sdk = require('../../../index');
 module.exports = React.createClass({
     displayName: 'MemberInfo',
 
+    propTypes: {
+        member: React.PropTypes.object.isRequired,
+        onFinished: React.PropTypes.func,
+    },
+
     getDefaultProps: function() {
         return {
             onFinished: function() {}
         };
     },
 
-    componentDidMount: function() {
-        // work out the current state
-        if (this.props.member) {
-            var memberState = this._calculateOpsPermissions(this.props.member);
-            this.setState(memberState);
+    getInitialState: function() {
+        return {
+            can: {
+                kick: false,
+                ban: false,
+                mute: false,
+                modifyLevel: false
+            },
+            muted: false,
+            isTargetMod: false,
+            updating: 0,
+            devices: null, // null means device list is loading
         }
     },
 
+
+    componentWillMount: function() {
+        this._cancelDeviceList = null;
+    },
+
+    componentDidMount: function() {
+        this._updateStateForNewMember(this.props.member);
+        MatrixClientPeg.get().on("deviceVerified", this.onDeviceVerified);
+    },
+
     componentWillReceiveProps: function(newProps) {
-        var memberState = this._calculateOpsPermissions(newProps.member);
-        this.setState(memberState);
+        if (this.props.member.userId != newProps.member.userId) {
+            this._updateStateForNewMember(newProps.member);
+        }
+    },
+
+    componentWillUnmount: function() {
+        var client = MatrixClientPeg.get();
+        if (client) {
+            client.removeListener("deviceVerified", this.onDeviceVerified);
+        }
+        if (this._cancelDeviceList) {
+            this._cancelDeviceList();
+        }
+    },
+
+    onDeviceVerified: function(userId, device) {
+        if (userId == this.props.member.userId) {
+            // no need to re-download the whole thing; just update our copy of
+            // the list.
+            var devices = MatrixClientPeg.get().listDeviceKeys(userId);
+            this.setState({devices: devices});
+        }
+    },
+
+    _updateStateForNewMember: function(member) {
+        var newState = this._calculateOpsPermissions(member);
+        newState.devices = null;
+        this.setState(newState);
+
+        if (this._cancelDeviceList) {
+            this._cancelDeviceList();
+            this._cancelDeviceList = null;
+        }
+
+        this._downloadDeviceList(member);
+    },
+
+    _downloadDeviceList: function(member) {
+        var cancelled = false;
+        this._cancelDeviceList = function() { cancelled = true; }
+
+        var client = MatrixClientPeg.get();
+        var self = this;
+        client.downloadKeys([member.userId], true).done(function() {
+            if (cancelled) {
+                // we got cancelled - presumably a different user now
+                return;
+            }
+            self._cancelDeviceList = null;
+            var devices = client.listDeviceKeys(member.userId);
+            self.setState({devices: devices});
+        });
     },
 
     onKick: function() {
@@ -371,20 +443,6 @@ module.exports = React.createClass({
         this.props.onFinished();
     },
 
-    getInitialState: function() {
-        return {
-            can: {
-                kick: false,
-                ban: false,
-                mute: false,
-                modifyLevel: false
-            },
-            muted: false,
-            isTargetMod: false,
-            updating: 0,
-        }
-    },
-
     _calculateOpsPermissions: function(member) {
         var defaultPerms = {
             can: {},
@@ -476,6 +534,32 @@ module.exports = React.createClass({
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
     },
 
+    _renderDevices: function() {
+        var devices = this.state.devices;
+        var MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
+        var Spinner = sdk.getComponent("elements.Spinner");
+
+        var devComponents;
+        if (devices === null) {
+            // still loading
+            devComponents = <Spinner />;
+        } else {
+            devComponents = [];
+            for (var i = 0; i < devices.length; i++) {
+                devComponents.push(<MemberDeviceInfo key={i}
+                                       userId={this.props.member.userId}
+                                       device={devices[i]}/>);
+            }
+        }
+
+        return (
+            <div>
+                <h3>Devices</h3>
+                {devComponents}
+            </div>
+        );
+    },
+
     render: function() {
         var startChat, kickButton, banButton, muteButton, giveModButton, spinner;
         if (this.props.member.userId !== MatrixClientPeg.get().credentials.userId) {
@@ -552,6 +636,8 @@ module.exports = React.createClass({
 
                 { startChat }
 
+                { this._renderDevices() }
+
                 { adminTools }
 
                 { spinner }
@@ -559,4 +645,3 @@ module.exports = React.createClass({
         );
     }
 });
-
