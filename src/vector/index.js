@@ -193,6 +193,7 @@ function getConfig() {
         (err, response, body) => {
             if (err || response.status < 200 || response.status >= 300) {
                 deferred.reject({err: err, response: response});
+                return;
             }
 
             deferred.resolve(body);
