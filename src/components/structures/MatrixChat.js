@@ -117,7 +117,7 @@ module.exports = React.createClass({
             return window.localStorage.getItem("mx_is_url");
         }
         else {
-            return this.props.config.default_is_url || "https://matrix.org"
+            return this.props.config.default_is_url || "https://vector.im"
         }
     },
 
