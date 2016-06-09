@@ -37,11 +37,13 @@ var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
 var KeyCode = require('../../KeyCode');
 
+var createRoom = require("../../createRoom");
+
 module.exports = React.createClass({
     displayName: 'MatrixChat',
 
     propTypes: {
-        config: React.PropTypes.object.isRequired,
+        config: React.PropTypes.object,
         ConferenceHandler: React.PropTypes.any,
         onNewScreen: React.PropTypes.func,
         registrationUrl: React.PropTypes.string,
@@ -84,7 +86,8 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            startingQueryParams: {}
+            startingQueryParams: {},
+            config: {},
         };
     },
 
@@ -97,10 +100,9 @@ module.exports = React.createClass({
         else if (window.localStorage && window.localStorage.getItem("mx_hs_url")) {
             return window.localStorage.getItem("mx_hs_url");
         }
-        else if (this.props.config) {
-            return this.props.config.default_hs_url
+        else {
+            return this.props.config.default_hs_url || "https://matrix.org";
         }
-        return "https://matrix.org";
     },
 
     getFallbackHsUrl: function() {
@@ -116,10 +118,9 @@ module.exports = React.createClass({
         else if (window.localStorage && window.localStorage.getItem("mx_is_url")) {
             return window.localStorage.getItem("mx_is_url");
         }
-        else if (this.props.config) {
-            return this.props.config.default_is_url
+        else {
+            return this.props.config.default_is_url || "https://vector.im"
         }
-        return "https://matrix.org";
     },
 
     componentWillMount: function() {
@@ -466,48 +467,7 @@ module.exports = React.createClass({
                 //this._setPage(this.PageTypes.CreateRoom);
                 //this.notifyNewScreen('new');
 
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                var Loader = sdk.getComponent("elements.Spinner");
-                var modal = Modal.createDialog(Loader);
-
-                if (MatrixClientPeg.get().isGuest()) {
-                    Modal.createDialog(NeedToRegisterDialog, {
-                        title: "Please Register",
-                        description: "Guest users can't create new rooms. Please register to create room and start a chat."
-                    });
-                    return;
-                }
-
-                // XXX: FIXME: deduplicate this with MemberInfo's 'start chat' impl
-                MatrixClientPeg.get().createRoom({
-                    preset: "private_chat",
-                    // Allow guests by default since the room is private and they'd
-                    // need an invite. This means clicking on a 3pid invite email can
-                    // actually drop you right in to a chat.
-                    initial_state: [
-                        {
-                            content: {
-                                guest_access: 'can_join'
-                            },
-                            type: 'm.room.guest_access',
-                            state_key: '',
-                        }
-                    ],
-                }).done(function(res) {
-                    modal.close();
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: res.room_id,
-                        // show_settings: true,
-                    });
-                }, function(err) {
-                    modal.close();
-                    Modal.createDialog(ErrorDialog, {
-                        title: "Failed to create room",
-                        description: err.toString()
-                    });
-                });
+                createRoom().done();
                 break;
             case 'view_room_directory':
                 this._setPage(this.PageTypes.RoomDirectory);
@@ -1091,7 +1051,7 @@ module.exports = React.createClass({
                     right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity} />
                     break;
                 case this.PageTypes.UserSettings:
-                    page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} />
+                    page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} brand={this.props.config.brand} />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
                 case this.PageTypes.CreateRoom:
@@ -1159,6 +1119,7 @@ module.exports = React.createClass({
                     guestAccessToken={this.state.guestAccessToken}
                     defaultHsUrl={this.props.config.default_hs_url}
                     defaultIsUrl={this.props.config.default_is_url}
+                    brand={this.props.config.brand}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     registrationUrl={this.props.registrationUrl}

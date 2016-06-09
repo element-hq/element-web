@@ -677,6 +677,16 @@ module.exports = React.createClass({
 
     uploadFile: function(file) {
         var self = this;
+
+        if (MatrixClientPeg.get().isGuest()) {
+            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+            Modal.createDialog(NeedToRegisterDialog, {
+                title: "Please Register",
+                description: "Guest users can't upload files. Please register to upload."
+            });
+            return;
+        }
+
         ContentMessages.sendContentToRoom(
             file, this.state.room.roomId, MatrixClientPeg.get()
         ).done(undefined, function(error) {

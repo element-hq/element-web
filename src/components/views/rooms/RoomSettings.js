@@ -34,7 +34,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         var tags = {};
         Object.keys(this.props.room.tags).forEach(function(tagName) {
-            tags[tagName] = {};
+            tags[tagName] = ['yep'];
         });
 
         var areNotifsMuted = false;
@@ -180,7 +180,7 @@ module.exports = React.createClass({
         // tags
         if (this.state.tags_changed) {
             var tagDiffs = ObjectUtils.getKeyValueArrayDiffs(originalState.tags, this.state.tags);
-            // [ {place: add, key: "m.favourite", val: "yep"} ]
+            // [ {place: add, key: "m.favourite", val: ["yep"]} ]
             tagDiffs.forEach(function(diff) {
                 switch (diff.place) {
                     case "add":

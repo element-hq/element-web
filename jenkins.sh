@@ -8,9 +8,6 @@ nvm use 4
 
 set -x
 
-# install the version of js-sdk provided to us by jenkins
-npm install ./node_modules/matrix-js-sdk-*.tgz
-
 # install the other dependencies
 npm install
 

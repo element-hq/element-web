@@ -46,6 +46,15 @@ module.exports = React.createClass({
     },
 
     onUploadClick: function(ev) {
+        if (MatrixClientPeg.get().isGuest()) {
+            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+            Modal.createDialog(NeedToRegisterDialog, {
+                title: "Please Register",
+                description: "Guest users can't upload files. Please register to upload."
+            });
+            return;
+        }
+
         this.refs.uploadInput.click();
     },
 
