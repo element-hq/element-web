@@ -224,7 +224,7 @@ async function loadApp() {
         // On 404 errors, carry on without a config,
         // but on other errors, fail, otherwise it will
         // lead to subtle errors where the app runs with
-        // the default config if fails to fetch config.json.
+        // the default config if it fails to fetch config.json.
         if (e.response.status != 404) {
             configError = e;
         }
