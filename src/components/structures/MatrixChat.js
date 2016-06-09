@@ -99,9 +99,8 @@ module.exports = React.createClass({
             return window.localStorage.getItem("mx_hs_url");
         }
         else {
-            return this.props.config.default_hs_url
+            return this.props.config.default_hs_url || "https://matrix.org";
         }
-        return "https://matrix.org";
     },
 
     getFallbackHsUrl: function() {
@@ -118,9 +117,8 @@ module.exports = React.createClass({
             return window.localStorage.getItem("mx_is_url");
         }
         else {
-            return this.props.config.default_is_url
+            return this.props.config.default_is_url || "https://matrix.org"
         }
-        return "https://matrix.org";
     },
 
     componentWillMount: function() {
