@@ -22,15 +22,16 @@ limitations under the License.
 }
 
 .mx_MessageComposer_row {
-    display: table-row;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     width: 100%;
 }
 
 .mx_MessageComposer .mx_MessageComposer_avatar {
-    display: table-cell;
+    /*display: table-cell;*/
     padding-left: 10px;
     padding-right: 28px;
-    vertical-align: middle;
 }
 
 .mx_MessageComposer .mx_MessageComposer_avatar .mx_BaseAvatar {
@@ -42,9 +43,8 @@ limitations under the License.
 }
 
 .mx_MessageComposer_noperm_error {
-    display: table-cell;
+    /*display: table-cell;*/
     width: 100%;
-    vertical-align: middle;
     height: 60px;
     text-align: center;
     font-style: italic;
@@ -52,10 +52,17 @@ limitations under the License.
 }
 
 .mx_MessageComposer_input {
-    display: table-cell;
-    width: 100%;
+    /*display: table-cell;*/
+    flex: 1;
     vertical-align: middle;
-    height: 60px;
+    min-height: 60px;
+    max-height: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.mx_MessageComposer_input .DraftEditor-root {
+    flex: 1;
 }
 
 .mx_MessageComposer_input textarea {
@@ -92,8 +99,8 @@ limitations under the License.
 .mx_MessageComposer_hangup,
 .mx_MessageComposer_voicecall,
 .mx_MessageComposer_videocall {
-    display: table-cell;
-    vertical-align: middle;
+    /*display: table-cell;*/
+    /*vertical-align: middle;*/
     padding-left: 10px;
     padding-right: 10px;
     cursor: pointer;
