@@ -150,7 +150,7 @@ export default class MessageComposerInput extends React.Component {
                 console.error(contentHTML);
                 if (contentHTML) {
                     const content = HTMLtoContentState(contentHTML);
-                    component.setState({editorState: EditorState.createWithContent(content, getScopedDecorator(this.props))});
+                    component.setState({editorState: EditorState.createWithContent(content, getScopedDecorator(component.props))});
                     component.resizeInput();
                 }
             }
