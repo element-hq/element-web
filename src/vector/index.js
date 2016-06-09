@@ -112,6 +112,8 @@ function parseQs(location) {
 // Here, we do some crude URL analysis to allow
 // deep-linking.
 function routeUrl(location) {
+    if (!window.matrixChat) return;
+
     console.log("Routing URL "+window.location);
     var params = parseQs(location);
     var loginToken = params.loginToken;
@@ -189,7 +191,8 @@ function getConfig() {
         { method: "GET", url: "config.json", json: true },
         (err, response, body) => {
             if (err || response.status < 200 || response.status >= 300) {
-                throw "failed to load config.json";
+                deferred.reject({err: err, response: response});
+                return;
             }
 
             deferred.resolve(body);
@@ -213,10 +216,26 @@ async function loadApp() {
         }
     }
 
-    let configJson = await getConfig();
+    let configJson;
+    let configError;
+    try {
+        configJson = await getConfig();
+    } catch (e) {
+        // On 404 errors, carry on without a config,
+        // but on other errors, fail, otherwise it will
+        // lead to subtle errors where the app runs with
+        // the default config if it fails to fetch config.json.
+        if (e.response.status != 404) {
+            configError = e;
+        }
+    }
 
     console.log("Vector starting at "+window.location);
-    if (validBrowser) {
+    if (configError) {
+        window.matrixChat = ReactDOM.render(<div className="error">
+            Unable to load config file: please refresh the page to try again.
+        </div>, document.getElementById('matrixchat'));
+    } else if (validBrowser) {
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
         var fragParts = parseQsFromFragment(window.location);
         window.matrixChat = ReactDOM.render(
