@@ -39,6 +39,7 @@ var dis = require("../../dispatcher");
 var Tinter = require("../../Tinter");
 var rate_limited_func = require('../../ratelimitedfunc');
 var ObjectUtils = require('../../ObjectUtils');
+var MatrixTools = require('../../MatrixTools');
 
 var DEBUG = false;
 
@@ -100,7 +101,14 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        var room = MatrixClientPeg.get().getRoom(this.props.roomAddress);
+        var room;
+        if (this.props.roomAddress[0] == '!') {
+            room = MatrixClientPeg.get().getRoom(this.props.roomAddress);
+        } else {
+            room = MatrixTools.getRoomForAlias(
+                MatrixClientPeg.get().getRooms(), this.props.roomAddress
+            );
+        }
         return {
             room: room,
             roomLoading: !room,

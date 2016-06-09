@@ -424,40 +424,10 @@ module.exports = React.createClass({
                 }
                 break;
             case 'view_room_alias':
-                if (!this.state.logged_in) {
-                    this.starting_room_alias_payload = payload;
-                    // Login is the default screen, so we'd do this anyway,
-                    // but this will set the URL bar appropriately.
-                    dis.dispatch({ action: 'start_login' });
-                    return;
-                }
-
-                var foundRoom = MatrixTools.getRoomForAlias(
-                    MatrixClientPeg.get().getRooms(), payload.room_alias
+                this._viewRoom(
+                    undefined, payload.room_alias, undefined, payload.event_id,
+                    payload.third_party_invite, payload.oob_data
                 );
-                if (foundRoom) {
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: foundRoom.roomId,
-                        room_alias: payload.room_alias,
-                        event_id: payload.event_id,
-                        third_party_invite: payload.third_party_invite,
-                        oob_data: payload.oob_data,
-                    });
-                    return;
-                }
-                // resolve the alias and *then* view it
-                MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(
-                function(result) {
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: result.room_id,
-                        room_alias: payload.room_alias,
-                        event_id: payload.event_id,
-                        third_party_invite: payload.third_party_invite,
-                        oob_data: payload.oob_data,
-                    });
-                });
                 break;
             case 'view_user_settings':
                 this._setPage(this.PageTypes.UserSettings);
@@ -818,22 +788,35 @@ module.exports = React.createClass({
                 inviterName: params.inviter_name,
             };
 
+            var payload;
             if (roomString[0] == '#') {
-                dis.dispatch({
+                payload = {
                     action: 'view_room_alias',
                     room_alias: roomString,
                     event_id: eventId,
                     third_party_invite: third_party_invite,
                     oob_data: oob_data,
-                });
+                };
             } else {
-                dis.dispatch({
+                payload = {
                     action: 'view_room',
                     room_id: roomString,
                     event_id: eventId,
                     third_party_invite: third_party_invite,
                     oob_data: oob_data,
-                });
+                };
+            }
+
+            // we can't view a room unless we're logged in
+            // (a guest account is fine)
+            if (!this.state.logged_in) {
+                this.starting_room_alias_payload = payload;
+                // Login is the default screen, so we'd do this anyway,
+                // but this will set the URL bar appropriately.
+                dis.dispatch({ action: 'start_login' });
+                return;
+            } else {
+                dis.dispatch(payload);
             }
         }
         else {
@@ -1044,7 +1027,7 @@ module.exports = React.createClass({
                             oobData={this.state.roomOobData}
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}
-                            key={this.state.currentRoom}
+                            key={this.state.currentRoom || this.state.currentRoomAlias}
                             opacity={this.state.middleOpacity}
                             ConferenceHandler={this.props.ConferenceHandler} />
                     );
