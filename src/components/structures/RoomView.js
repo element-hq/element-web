@@ -56,13 +56,6 @@ module.exports = React.createClass({
         ConferenceHandler: React.PropTypes.any,
 
         // the ID for this room (or, if we don't know it, an alias for it)
-        //
-        // XXX: if this is an alias, we will display a 'join' dialogue,
-        // regardless of whether we are already a member, or if the room is
-        // peekable. Currently there is a big mess, where at least four
-        // different components (RoomView, MatrixChat, RoomDirectory,
-        // SlashCommands) have logic for turning aliases into rooms, and each
-        // of them do it differently and have different edge cases.
         roomAddress: React.PropTypes.string.isRequired,
 
         // An object representing a third party invite to join this room
