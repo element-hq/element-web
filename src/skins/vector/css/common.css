@@ -228,3 +228,13 @@ input[type=text]:focus, textarea:focus {
     height: 1em;
     vertical-align: middle;
 }
+
+::-moz-selection {
+    background-color: #76CFA6;
+    color: white;
+}
+
+::selection {
+    background-color: #76CFA6;
+    color: white;
+}

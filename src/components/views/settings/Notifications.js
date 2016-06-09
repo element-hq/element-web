@@ -72,6 +72,8 @@ module.exports = React.createClass({
     propTypes: {
         // The array of threepids from the JS SDK (required for email notifications)
         threepids: React.PropTypes.array.isRequired,
+        // The brand string set when creating an email pusher
+        brand: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -116,7 +118,9 @@ module.exports = React.createClass({
     onEnableEmailNotificationsChange: function(address, event) {
         var emailPusherPromise;
         if (event.target.checked) {
-            emailPusherPromise = UserSettingsStore.addEmailPusher(address);
+            var data = {}
+            data['brand'] = this.props.brand || 'Vector';
+            emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);
         } else {
             var emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
             emailPusher.kind = null;
