@@ -81,20 +81,30 @@ module.exports = React.createClass({
         // });
     },
 
-    showRoom: function(roomId) {
+    showRoom: function(roomIdOrAlias) {
         // extract the metadata from the publicRooms structure to pass
         // as out-of-band data to view_room, because we get information
         // here that we can't get other than by joining the room in some
         // cases.
         var room;
-        for (var i = 0; i < this.state.publicRooms.length; ++i) {
-            if (this.state.publicRooms[i].room_id == roomId) {
-                room = this.state.publicRooms[i];
-                break;
+        if (roomIdOrAlias[0] == '!') {
+            for (var i = 0; i < this.state.publicRooms.length; ++i) {
+                if (this.state.publicRooms[i].room_id == roomIdOrAlias) {
+                    room = this.state.publicRooms[i];
+                    break;
+                }
             }
         }
         var oob_data = {};
         if (room) {
+            // pluck the alias out of the room data and use it to join the room, as we cannot
+            // really join rooms by ID (the HS has no way to get candidate servers). However,
+            // we still have to do this for room in the public room list that don't have an alias
+            // since this is currently the only choice.
+            // (Note we don't just pass the room alias to this function: we still want to be able to
+            // look up the oob data for which we need the room id).
+            var alias = room.canonical_alias || (room.aliases ? room.aliases[0] : undefined);
+            if (alias) roomIdOrAlias = alias;
             if (MatrixClientPeg.get().isGuest()) {
                 if (!room.world_readable && !room.guest_can_join) {
                     var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
@@ -114,9 +124,12 @@ module.exports = React.createClass({
             };
         }
 
+        // XXX: this interface needs to change to officially accept room IDs
+        // or aliases, rather than it happening to work if you pass an alias
+        // as room_id
         dis.dispatch({
             action: 'view_room',
-            room_id: roomId,
+            room_id: roomIdOrAlias,
             oob_data: oob_data,
         });
     },
