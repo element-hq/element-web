@@ -79,7 +79,6 @@ var validBrowser = checkBrowserFeatures([
     "displaytable", "flexbox", "es5object", "es5function", "localstorage",
     "objectfit"
 ]);
-var configError;
 
 // We want to support some name / value pairs in the fragment
 // so we're re-using query string like format
@@ -218,6 +217,7 @@ async function loadApp() {
     }
 
     let configJson;
+    let configError;
     try {
         configJson = await getConfig();
     } catch (e) {
