@@ -27,7 +27,7 @@ marked.setOptions({
     smartypants: false
 });
 
-import {Editor, EditorState, RichUtils} from 'draft-js';
+import {Editor, EditorState, RichUtils, CompositeDecorator} from 'draft-js';
 
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
@@ -38,7 +38,7 @@ var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
 var KeyCode = require("../../../KeyCode");
 
-import {contentStateToHTML, HTMLtoContentState} from '../../../RichText';
+import {contentStateToHTML, HTMLtoContentState, getScopedDecorator} from '../../../RichText';
 
 var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
@@ -54,13 +54,14 @@ export default class MessageComposerInput extends React.Component {
         this.onInputClick = this.onInputClick.bind(this);
 
         this.state = {
-            editorState: EditorState.createEmpty()
+            editorState: EditorState.createEmpty(getScopedDecorator(this.props))
         };
     }
 
     componentWillMount() {
         this.oldScrollHeight = 0;
         this.markdownEnabled = MARKDOWN_ENABLED;
+        const component = this;
         this.sentHistory = {
             // The list of typed messages. Index 0 is more recent
             data: [],
@@ -73,7 +74,7 @@ export default class MessageComposerInput extends React.Component {
             // The textarea element to set text to.
             element: null,
 
-            init: function(element, roomId) {
+            init: function (element, roomId) {
                 this.roomId = roomId;
                 this.element = element;
                 this.position = -1;
@@ -88,7 +89,7 @@ export default class MessageComposerInput extends React.Component {
                 }
             },
 
-            push: function(text) {
+            push: function (text) {
                 // store a message in the sent history
                 this.data.unshift(text);
                 window.sessionStorage.setItem(
@@ -101,7 +102,7 @@ export default class MessageComposerInput extends React.Component {
             },
 
             // move in the history. Returns true if we managed to move.
-            next: function(offset) {
+            next: function (offset) {
                 if (this.position === -1) {
                     // user is going into the history, save the current line.
                     this.originalText = this.element.value;
@@ -131,26 +132,26 @@ export default class MessageComposerInput extends React.Component {
                     this.element.value = this.originalText;
                 }
 
-                self.resizeInput();
+                component.resizeInput();
                 return true;
             },
 
-            saveLastTextEntry: () => {
+            saveLastTextEntry: function () {
                 // save the currently entered text in order to restore it later.
                 // NB: This isn't 'originalText' because we want to restore
                 // sent history items too!
-                console.error('fixme');
-                const contentHTML = contentStateToHTML(this.state.editorState.getCurrentContent());
+                const contentHTML = contentStateToHTML(component.state.editorState.getCurrentContent());
+                console.error(contentHTML);
                 window.sessionStorage.setItem("input_" + this.roomId, contentHTML);
             },
 
-            setLastTextEntry: () => {
-                console.error('fixme');
+            setLastTextEntry: function () {
                 const contentHTML = window.sessionStorage.getItem("input_" + this.roomId);
+                console.error(contentHTML);
                 if (contentHTML) {
                     const content = HTMLtoContentState(contentHTML);
-                    this.state.editorState = EditorState.createWithContent(content);
-                    self.resizeInput();
+                    component.setState({editorState: EditorState.createWithContent(content, getScopedDecorator(this.props))});
+                    component.resizeInput();
                 }
             }
         };
@@ -177,10 +178,10 @@ export default class MessageComposerInput extends React.Component {
         var editor = this.refs.editor;
         switch (payload.action) {
             case 'focus_composer':
-                console.error('fixme');
                 editor.focus();
                 break;
             case 'insert_displayname':
+                console.error('fixme');
                 if (textarea.value.length) {
                     var left = textarea.value.substring(0, textarea.selectionStart);
                     var right = textarea.value.substring(textarea.selectionEnd);
@@ -426,6 +427,12 @@ export default class MessageComposerInput extends React.Component {
 
     onChange(editorState) {
         this.setState({editorState});
+
+        if(editorState.getCurrentContent().hasText()) {
+            this.onTypingActivity()
+        } else {
+            this.onFinishedTyping();
+        }
     }
 
     handleKeyCommand(command) {
@@ -451,7 +458,7 @@ export default class MessageComposerInput extends React.Component {
         MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, contentHTML);
 
         this.setState({
-            editorState: EditorState.createEmpty()
+            editorState: EditorState.createEmpty(getScopedDecorator(this.props))
         });
 
         return true;
