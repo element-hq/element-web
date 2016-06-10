@@ -81,16 +81,18 @@ module.exports = React.createClass({
         // });
     },
 
-    showRoom: function(roomId) {
+    showRoom: function(roomId, roomAlias) {
         // extract the metadata from the publicRooms structure to pass
         // as out-of-band data to view_room, because we get information
         // here that we can't get other than by joining the room in some
         // cases.
         var room;
-        for (var i = 0; i < this.state.publicRooms.length; ++i) {
-            if (this.state.publicRooms[i].room_id == roomId) {
-                room = this.state.publicRooms[i];
-                break;
+        if (roomId) {
+            for (var i = 0; i < this.state.publicRooms.length; ++i) {
+                if (this.state.publicRooms[i].room_id == roomId) {
+                    room = this.state.publicRooms[i];
+                    break;
+                }
             }
         }
         var oob_data = {};
@@ -114,10 +116,15 @@ module.exports = React.createClass({
             };
         }
 
+        // It's not really possible to join Matrix rooms by ID because the HS has no way to know
+        // which servers to start querying. However, there's no other way to join rooms in
+        // this list without aliases at present, so if roomAlias isn't set here we'll rely
+        // on view_room falling back to using the ID
         dis.dispatch({
+            oob_data: oob_data,
             action: 'view_room',
             room_id: roomId,
-            oob_data: oob_data,
+            room_alias: roomAlias,
         });
     },
 
@@ -164,7 +171,7 @@ module.exports = React.createClass({
             topic = linkifyString(sanitizeHtml(topic));
 
             rows.unshift(
-                <tr key={ rooms[i].room_id } onClick={self.showRoom.bind(null, rooms[i].room_id)}>
+                <tr key={ rooms[i].room_id } onClick={self.showRoom.bind(null, rooms[i].room_id, alias)}>
                     <td className="mx_RoomDirectory_roomAvatar">
                         <BaseAvatar width={24} height={24} resizeMethod='crop'
                             name={ name } idName={ name }
@@ -193,7 +200,7 @@ module.exports = React.createClass({
         this.forceUpdate();
         this.setState({ roomAlias : this.refs.roomAlias.value })
         if (ev.key == "Enter") {
-            this.showRoom(this.refs.roomAlias.value);
+            this.showRoom(null, this.refs.roomAlias.value);
         }
     },
 
