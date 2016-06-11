@@ -12,3 +12,11 @@
     padding: 2px 8px;
     border-radius: 16px;
 }
+
+.mx_Markdown_BOLD {
+    font-weight: bold;
+}
+
+.mx_Markdown_ITALIC {
+    font-style: italic;
+}
