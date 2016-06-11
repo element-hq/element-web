@@ -130,15 +130,27 @@ function findWithRegex(regex, contentBlock: ContentBlock, callback: (start: numb
 /**
  * Passes rangeToReplace to modifyFn and replaces it in contentState with the result.
  */
-export function modifyText(contentState: ContentState, rangeToReplace: SelectionState, modifyFn: (text: string) => string, ...rest): ContentState {
-    let startKey = rangeToReplace.getStartKey(),
-        endKey = contentState.getKeyAfter(rangeToReplace.getEndKey()),
+export function modifyText(contentState: ContentState, rangeToReplace: SelectionState,
+                           modifyFn: (text: string) => string, ...rest): ContentState {
+    let getText = (key) => contentState.getBlockForKey(key).getText(),
+        startKey = rangeToReplace.getStartKey(),
+        startOffset = rangeToReplace.getStartOffset(),
+        endKey = rangeToReplace.getEndKey(),
+        endOffset = rangeToReplace.getEndOffset(),
         text = "";
 
-    for(let currentKey = startKey; currentKey && currentKey !== endKey; currentKey = contentState.getKeyAfter(currentKey)) {
-        let currentBlock = contentState.getBlockForKey(currentKey);
-        text += currentBlock.getText();
+
+    for(let currentKey = startKey;
+            currentKey && currentKey !== endKey;
+            currentKey = contentState.getKeyAfter(currentKey)) {
+        text += getText(currentKey).substring(startOffset, blockText.length);
+
+        // from now on, we'll take whole blocks
+        startOffset = 0;
     }
+
+    // add remaining part of last block
+    text += getText(endKey).substring(startOffset, endOffset);
 
     return Modifier.replaceText(contentState, rangeToReplace, modifyFn(text), ...rest);
 }
