@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require("react");
+import React from 'react';
 
 var marked = require("marked");
 marked.setOptions({
@@ -27,7 +27,11 @@ marked.setOptions({
     smartypants: false
 });
 
-import {Editor, EditorState, RichUtils, CompositeDecorator} from 'draft-js';
+import {Editor, EditorState, RichUtils, CompositeDecorator,
+    convertFromRaw, convertToRaw, Modifier, EditorChangeType,
+    getDefaultKeyBinding, KeyBindingUtil, ContentState} from 'draft-js';
+
+import {stateToMarkdown} from 'draft-js-export-markdown';
 
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
@@ -40,9 +44,20 @@ var KeyCode = require("../../../KeyCode");
 
 import {contentStateToHTML, HTMLtoContentState, getScopedDecorator} from '../../../RichText';
 
-var TYPING_USER_TIMEOUT = 10000;
-var TYPING_SERVER_TIMEOUT = 30000;
-var MARKDOWN_ENABLED = true;
+const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
+
+function mdownToHtml(mdown) {
+    var html = marked(mdown) || "";
+    html = html.trim();
+    // strip start and end <p> tags else you get 'orrible spacing
+    if (html.indexOf("<p>") === 0) {
+        html = html.substring("<p>".length);
+    }
+    if (html.lastIndexOf("</p>") === (html.length - "</p>".length)) {
+        html = html.substring(0, html.length - "</p>".length);
+    }
+    return html;
+}
 
 /*
  * The textInput part of the MessageComposer
@@ -54,13 +69,38 @@ export default class MessageComposerInput extends React.Component {
         this.onInputClick = this.onInputClick.bind(this);
 
         this.state = {
-            editorState: EditorState.createEmpty(getScopedDecorator(this.props))
+            isRichtextEnabled: true,
+            editorState: null
         };
+
+        // bit of a hack, but we need to do this here since createEditorState needs isRichtextEnabled
+        this.state.editorState = this.createEditorState();
+    }
+
+    static getKeyBinding(e: SyntheticKeyboardEvent): string {
+        // C-m => Toggles between rich text and markdown modes
+        if(e.keyCode == 77 && KeyBindingUtil.isCtrlKeyCommand(e)) {
+            return 'toggle-mode';
+        }
+
+        return getDefaultKeyBinding(e);
+    }
+
+    /**
+     * "Does the right thing" to create an EditorState, based on:
+     * - whether we've got rich text mode enabled
+     * - contentState was passed in
+     */
+    createEditorState(contentState: ?ContentState): EditorState {
+        let func = contentState ? EditorState.createWithContent : EditorState.createEmpty;
+        let args = contentState ? [contentState] : [];
+        if(this.state.isRichtextEnabled) {
+            args.push(getScopedDecorator(this.props));
+        }
+        return func.apply(null, args);
     }
 
     componentWillMount() {
-        this.oldScrollHeight = 0;
-        this.markdownEnabled = MARKDOWN_ENABLED;
         const component = this;
         this.sentHistory = {
             // The list of typed messages. Index 0 is more recent
@@ -132,7 +172,6 @@ export default class MessageComposerInput extends React.Component {
                     this.element.value = this.originalText;
                 }
 
-                component.resizeInput();
                 return true;
             },
 
@@ -140,18 +179,17 @@ export default class MessageComposerInput extends React.Component {
                 // save the currently entered text in order to restore it later.
                 // NB: This isn't 'originalText' because we want to restore
                 // sent history items too!
-                const contentHTML = contentStateToHTML(component.state.editorState.getCurrentContent());
-                console.error(contentHTML);
-                window.sessionStorage.setItem("input_" + this.roomId, contentHTML);
+                let contentJSON = JSON.stringify(convertToRaw(component.state.editorState.getCurrentContent()));
+                window.sessionStorage.setItem("input_" + this.roomId, contentJSON);
             },
 
             setLastTextEntry: function () {
-                const contentHTML = window.sessionStorage.getItem("input_" + this.roomId);
-                console.error(contentHTML);
-                if (contentHTML) {
-                    const content = HTMLtoContentState(contentHTML);
-                    component.setState({editorState: EditorState.createWithContent(content, getScopedDecorator(component.props))});
-                    component.resizeInput();
+                let contentJSON = window.sessionStorage.getItem("input_" + this.roomId);
+                if (contentJSON) {
+                    let content = convertFromRaw(JSON.parse(contentJSON));
+                    component.setState({
+                        editorState: component.createEditorState(content)
+                    });
                 }
             }
         };
@@ -163,10 +201,10 @@ export default class MessageComposerInput extends React.Component {
             this.refs.editor,
             this.props.room.roomId
         );
-        this.resizeInput();
-        if (this.props.tabComplete) {
-            this.props.tabComplete.setTextArea(this.refs.editor);
-        }
+        // this is disabled for now, since https://github.com/matrix-org/matrix-react-sdk/pull/296 will land soon
+        // if (this.props.tabComplete) {
+        //     this.props.tabComplete.setEditor(this.refs.editor);
+        // }
     }
 
     componentWillUnmount() {
@@ -176,44 +214,33 @@ export default class MessageComposerInput extends React.Component {
 
     onAction(payload) {
         var editor = this.refs.editor;
+
         switch (payload.action) {
             case 'focus_composer':
                 editor.focus();
                 break;
+
+            // TODO change this so we insert a complete user alias
+
             case 'insert_displayname':
-                console.error('fixme');
-                if (textarea.value.length) {
-                    var left = textarea.value.substring(0, textarea.selectionStart);
-                    var right = textarea.value.substring(textarea.selectionEnd);
-                    if (right.length) {
-                        left += payload.displayname;
-                    }
-                    else {
-                        left = left.replace(/( ?)$/, " " + payload.displayname);
-                    }
-                    textarea.value = left + right;
-                    textarea.focus();
-                    textarea.setSelectionRange(left.length, left.length);
-                }
-                else {
-                    textarea.value = payload.displayname + ": ";
-                    textarea.focus();
+                if (this.state.editorState.getCurrentContent().hasText()) {
+                    console.log(payload);
+                    let contentState = Modifier.replaceText(
+                        this.state.editorState.getCurrentContent(),
+                        this.state.editorState.getSelection(),
+                        payload.displayname
+                    );
+                    this.setState({
+                        editorState: EditorState.push(this.state.editorState, contentState, 'insert-characters')
+                    });
+                    editor.focus();
                 }
                 break;
         }
     }
 
     onKeyDown(ev) {
-        if (ev.keyCode === KeyCode.ENTER && !ev.shiftKey) {
-            var input = this.refs.textarea.value;
-            if (input.length === 0) {
-                ev.preventDefault();
-                return;
-            }
-            this.sentHistory.push(input);
-            this.onEnter(ev);
-        }
-        else if (ev.keyCode === KeyCode.UP || ev.keyCode === KeyCode.DOWN) {
+        if (ev.keyCode === KeyCode.UP || ev.keyCode === KeyCode.DOWN) {
             var oldSelectionStart = this.refs.textarea.selectionStart;
             // Remember the keyCode because React will recycle the synthetic event
             var keyCode = ev.keyCode;
@@ -222,47 +249,8 @@ export default class MessageComposerInput extends React.Component {
             setTimeout(() => {
                 if (this.refs.textarea.selectionStart == oldSelectionStart) {
                     this.sentHistory.next(keyCode === KeyCode.UP ? 1 : -1);
-                    this.resizeInput();
                 }
             }, 0);
-        }
-
-        if (this.props.tabComplete) {
-            this.props.tabComplete.onKeyDown(ev);
-        }
-
-        var self = this;
-        setTimeout(function() {
-            if (self.refs.textarea && self.refs.textarea.value != '') {
-                self.onTypingActivity();
-            } else {
-                self.onFinishedTyping();
-            }
-        }, 10); // XXX: what is this 10ms setTimeout doing?  Looks hacky :(
-    }
-
-    resizeInput() {
-        console.error('fixme');
-        // scrollHeight is at least equal to clientHeight, so we have to
-        // temporarily crimp clientHeight to 0 to get an accurate scrollHeight value
-        // this.refs.textarea.style.height = "20px"; // 20 hardcoded from CSS
-        // var newHeight = Math.min(this.refs.textarea.scrollHeight,
-        //                          this.constructor.MAX_HEIGHT);
-        // this.refs.textarea.style.height = Math.ceil(newHeight) + "px";
-        // this.oldScrollHeight = this.refs.textarea.scrollHeight;
-        //
-        // if (this.props.onResize) {
-        //     // kick gemini-scrollbar to re-layout
-        //     this.props.onResize();
-        // }
-    }
-
-    onKeyUp(ev) {
-        if (this.refs.textarea.scrollHeight !== this.oldScrollHeight ||
-            ev.keyCode === KeyCode.DELETE ||
-            ev.keyCode === KeyCode.BACKSPACE)
-        {
-            this.resizeInput();
         }
     }
 
@@ -271,24 +259,24 @@ export default class MessageComposerInput extends React.Component {
 
         // bodge for now to set markdown state on/off. We probably want a separate
         // area for "local" commands which don't hit out to the server.
-        if (contentText.indexOf("/markdown") === 0) {
-            ev.preventDefault();
-            this.refs.textarea.value = '';
-            if (contentText.indexOf("/markdown on") === 0) {
-                this.markdownEnabled = true;
-            }
-            else if (contentText.indexOf("/markdown off") === 0) {
-                this.markdownEnabled = false;
-            }
-            else {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Unknown command",
-                    description: "Usage: /markdown on|off"
-                });
-            }
-            return;
-        }
+        // if (contentText.indexOf("/markdown") === 0) {
+        //     ev.preventDefault();
+        //     this.refs.textarea.value = '';
+        //     if (contentText.indexOf("/markdown on") === 0) {
+        //         this.markdownEnabled = true;
+        //     }
+        //     else if (contentText.indexOf("/markdown off") === 0) {
+        //         this.markdownEnabled = false;
+        //     }
+        //     else {
+        //         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        //         Modal.createDialog(ErrorDialog, {
+        //             title: "Unknown command",
+        //             description: "Usage: /markdown on|off"
+        //         });
+        //     }
+        //     return;
+        // }
 
         var cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
         if (cmd) {
@@ -326,32 +314,23 @@ export default class MessageComposerInput extends React.Component {
             contentText = contentText.substring(4);
         }
         else if (contentText[0] === '/') {
-            contentText = contentText.substring(1);   
+            contentText = contentText.substring(1);
         }
 
         var htmlText;
         if (this.markdownEnabled && (htmlText = mdownToHtml(contentText)) !== contentText) {
-            sendMessagePromise = isEmote ? 
+            sendMessagePromise = isEmote ?
                 MatrixClientPeg.get().sendHtmlEmote(this.props.room.roomId, contentText, htmlText) :
                 MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, htmlText);
         }
         else {
-            sendMessagePromise = isEmote ? 
+            sendMessagePromise = isEmote ?
                 MatrixClientPeg.get().sendEmoteMessage(this.props.room.roomId, contentText) :
                 MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);
         }
 
-        sendMessagePromise.done(function() {
-            dis.dispatch({
-                action: 'message_sent'
-            });
-        }, function() {
-            dis.dispatch({
-                action: 'message_send_failed'
-            });
-        });
+
         this.refs.textarea.value = '';
-        this.resizeInput();
         ev.preventDefault();
     }
 
@@ -436,7 +415,28 @@ export default class MessageComposerInput extends React.Component {
     }
 
     handleKeyCommand(command) {
-        const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
+        if(command === 'toggle-mode') {
+            this.setState({
+                isRichtextEnabled: !this.state.isRichtextEnabled
+            });
+
+            if(!this.state.isRichtextEnabled) {
+                let html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
+                this.setState({
+                    editorState: this.createEditorState(HTMLtoContentState(html))
+                });
+            } else {
+                let markdown = stateToMarkdown(this.state.editorState.getCurrentContent());
+                let contentState = ContentState.createFromText(markdown);
+                this.setState({
+                    editorState: this.createEditorState(contentState)
+                });
+            }
+
+            return true;
+        }
+
+        let newState = RichUtils.handleKeyCommand(this.state.editorState, command);
         if (newState) {
             this.onChange(newState);
             return true;
@@ -452,31 +452,50 @@ export default class MessageComposerInput extends React.Component {
         if(!contentState.hasText())
             return true;
 
-        const contentText = contentState.getPlainText(),
-            contentHTML = contentStateToHTML(contentState);
+        let contentText = contentState.getPlainText(), contentHTML;
 
-        MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, contentHTML);
+        if(this.state.isRichtextEnabled) {
+            contentHTML = contentStateToHTML(contentState);
+        } else {
+            contentHTML = mdownToHtml(contentText);
+        }
+
+        this.sentHistory.push(contentHTML);
+        let sendMessagePromise = MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, contentHTML);
+
+        sendMessagePromise.done(() => {
+            dis.dispatch({
+                action: 'message_sent'
+            });
+        }, () => {
+            dis.dispatch({
+                action: 'message_send_failed'
+            });
+        });
 
         this.setState({
-            editorState: EditorState.createEmpty(getScopedDecorator(this.props))
+            editorState: this.createEditorState()
         });
 
         return true;
     }
 
     render() {
-        const containerStyle = {
-            overflow: 'auto'
-        };
+        let className = "mx_MessageComposer_input";
+
+        if(this.state.isRichtextEnabled) {
+            className += " mx_MessageComposer_input_rte"; // placeholder indicator for RTE mode
+        }
+
 
         return (
-            <div className="mx_MessageComposer_input"
-                 onClick={ this.onInputClick }
-                 style={containerStyle}>
+            <div className={className}
+                 onClick={ this.onInputClick }>
                 <Editor ref="editor"
                         placeholder="Type a message…"
                         editorState={this.state.editorState}
                         onChange={(state) => this.onChange(state)}
+                        keyBindingFn={MessageComposerInput.getKeyBinding}
                         handleKeyCommand={(command) => this.handleKeyCommand(command)}
                         handleReturn={ev => this.handleReturn(ev)} />
             </div>
@@ -494,6 +513,3 @@ MessageComposerInput.propTypes = {
     // js-sdk Room object
     room: React.PropTypes.object.isRequired
 };
-
-// the height we limit the composer to
-MessageComposerInput.MAX_HEIGHT = 100;

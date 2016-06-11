@@ -1,9 +1,8 @@
 import {Editor, ContentState, convertFromHTML, DefaultDraftBlockRenderMap, DefaultDraftInlineStyle, CompositeDecorator} from 'draft-js';
-const ReactDOM = require('react-dom');
-var sdk = require('./index');
+import * as sdk from  './index';
 
 const BLOCK_RENDER_MAP = DefaultDraftBlockRenderMap.set('unstyled', {
-    element: 'p' // draft uses <div> by default which we don't really like
+    element: 'p' // draft uses <div> by default which we don't really like, so we're using <p>
 });
 
 const styles = {
@@ -14,21 +13,19 @@ const styles = {
     UNDERLINE: 'u'
 };
 
-export function contentStateToHTML(contentState:ContentState): String {
-    const elem = contentState.getBlockMap().map((block) => {
-        const elem = BLOCK_RENDER_MAP.get(block.getType()).element;
-        const content = [];
-        block.findStyleRanges(() => true, (s, e) => {
-            const tags = block.getInlineStyleAt(s).map(style => styles[style]);
+export function contentStateToHTML(contentState: ContentState): string {
+    return contentState.getBlockMap().map((block) => {
+        let elem = BLOCK_RENDER_MAP.get(block.getType()).element;
+        let content = [];
+        block.findStyleRanges(() => true, (start, end) => {
+            const tags = block.getInlineStyleAt(start).map(style => styles[style]);
             const open = tags.map(tag => `<${tag}>`).join('');
             const close = tags.map(tag => `</${tag}>`).reverse().join('');
-            content.push(`${open}${block.getText().substring(s, e)}${close}`);
+            content.push(`${open}${block.getText().substring(start, end)}${close}`);
         });
 
         return (`<${elem}>${content.join('')}</${elem}>`);
     }).join('');
-
-    return elem;
 }
 
 export function HTMLtoContentState(html:String): ContentState {
@@ -38,6 +35,12 @@ export function HTMLtoContentState(html:String): ContentState {
 const USERNAME_REGEX = /@\S+:\S+/g;
 const ROOM_REGEX = /#\S+:\S+/g;
 
+/**
+ * Returns a composite decorator which has access to provided scope.
+ * 
+ * @param scope
+ * @returns {*}
+ */
 export function getScopedDecorator(scope) {
     const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 
@@ -46,17 +49,13 @@ export function getScopedDecorator(scope) {
             findWithRegex(USERNAME_REGEX, contentBlock, callback);
         },
         component: (props) => {
-            console.log(props.children);
-            console.log(props.children[0].props.text);
-            const member = scope.room.getMember(props.children[0].props.text);
-            console.log(scope);
-            window.scope = scope;
+            let member = scope.room.getMember(props.children[0].props.text);
             let name = null;
             if(!!member) {
                 name = member.name;
             }
             console.log(member);
-            const avatar = member ? <MemberAvatar member={member} width={16} height={16} /> : null;
+            let avatar = member ? <MemberAvatar member={member} width={16} height={16} /> : null;
             return <span className="mx_UserPill">{avatar} {props.children}</span>;
         }
     };
