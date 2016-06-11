@@ -21,6 +21,15 @@ const STYLES = {
     UNDERLINE: 'u'
 };
 
+const MARKDOWN_REGEX = {
+    LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
+    ITALIC: /([\*_])([\w\s]+?)\1/g,
+    BOLD: /([\*_])\1([\w\s]+?)\1\1/g
+};
+
+const USERNAME_REGEX = /@\S+:\S+/g;
+const ROOM_REGEX = /#\S+:\S+/g;
+
 export function contentStateToHTML(contentState: ContentState): string {
     return contentState.getBlockMap().map((block) => {
         let elem = BLOCK_RENDER_MAP.get(block.getType()).element;
@@ -46,13 +55,10 @@ export function HTMLtoContentState(html: string): ContentState {
     return ContentState.createFromBlockArray(convertFromHTML(html));
 }
 
-const USERNAME_REGEX = /@\S+:\S+/g;
-const ROOM_REGEX = /#\S+:\S+/g;
-
 /**
  * Returns a composite decorator which has access to provided scope.
  */
-export function getScopedDecorator(scope: any): CompositeDecorator {
+export function getScopedRTDecorators(scope: any): CompositeDecorator {
     let MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 
     let usernameDecorator = {
@@ -78,7 +84,34 @@ export function getScopedDecorator(scope: any): CompositeDecorator {
         }
     };
 
-    return new CompositeDecorator([usernameDecorator, roomDecorator]);
+    return [usernameDecorator, roomDecorator];
+}
+
+export function getScopedMDDecorators(scope: any): CompositeDecorator {
+    let markdownDecorators = ['BOLD', 'ITALIC'].map(
+        (style) => ({
+            strategy: (contentBlock, callback) => {
+                return findWithRegex(MARKDOWN_REGEX[style], contentBlock, callback);
+            },
+            component: (props) => (
+                <span className={"mx_MarkdownElement mx_Markdown_" + style}>
+                    {props.children}
+                </span>
+            )
+        }));
+
+    markdownDecorators.push({
+        strategy: (contentBlock, callback) => {
+            return findWithRegex(MARKDOWN_REGEX.LINK, contentBlock, callback);
+        },
+        component: (props) => (
+            <a href="#" className="mx_MarkdownElement mx_Markdown_LINK">
+                {props.children}
+            </a>
+        )
+    });
+
+    return markdownDecorators;
 }
 
 /**
@@ -97,15 +130,27 @@ function findWithRegex(regex, contentBlock: ContentBlock, callback: (start: numb
 /**
  * Passes rangeToReplace to modifyFn and replaces it in contentState with the result.
  */
-export function modifyText(contentState: ContentState, rangeToReplace: SelectionState, modifyFn: (text: string) => string, ...rest): ContentState {
-    let startKey = rangeToReplace.getStartKey(),
-        endKey = contentState.getKeyAfter(rangeToReplace.getEndKey()),
+export function modifyText(contentState: ContentState, rangeToReplace: SelectionState,
+                           modifyFn: (text: string) => string, ...rest): ContentState {
+    let getText = (key) => contentState.getBlockForKey(key).getText(),
+        startKey = rangeToReplace.getStartKey(),
+        startOffset = rangeToReplace.getStartOffset(),
+        endKey = rangeToReplace.getEndKey(),
+        endOffset = rangeToReplace.getEndOffset(),
         text = "";
 
-    for(let currentKey = startKey; currentKey && currentKey !== endKey; currentKey = contentState.getKeyAfter(currentKey)) {
-        let currentBlock = contentState.getBlockForKey(currentKey);
-        text += currentBlock.getText();
+
+    for(let currentKey = startKey;
+            currentKey && currentKey !== endKey;
+            currentKey = contentState.getKeyAfter(currentKey)) {
+        text += getText(currentKey).substring(startOffset, blockText.length);
+
+        // from now on, we'll take whole blocks
+        startOffset = 0;
     }
+
+    // add remaining part of last block
+    text += getText(endKey).substring(startOffset, endOffset);
 
     return Modifier.replaceText(contentState, rangeToReplace, modifyFn(text), ...rest);
 }

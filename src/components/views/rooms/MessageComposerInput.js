@@ -97,13 +97,16 @@ export default class MessageComposerInput extends React.Component {
      * - whether we've got rich text mode enabled
      * - contentState was passed in
      */
-    createEditorState(contentState: ?ContentState): EditorState {
-        let func = contentState ? EditorState.createWithContent : EditorState.createEmpty;
-        let args = contentState ? [contentState] : [];
-        if(this.state.isRichtextEnabled) {
-            args.push(RichText.getScopedDecorator(this.props));
+    createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
+        let decorators = richText ? RichText.getScopedRTDecorators(this.props) :
+                                    RichText.getScopedMDDecorators(this.props),
+            compositeDecorator = new CompositeDecorator(decorators);
+
+        if (contentState) {
+            return EditorState.createWithContent(contentState, compositeDecorator);
+        } else {
+            return EditorState.createEmpty(compositeDecorator);
         }
-        return func(...args);
     }
 
     componentWillMount() {
@@ -194,7 +197,7 @@ export default class MessageComposerInput extends React.Component {
                 if (contentJSON) {
                     let content = convertFromRaw(JSON.parse(contentJSON));
                     component.setState({
-                        editorState: component.createEditorState(content)
+                        editorState: component.createEditorState(this.state.isRichtextEnabled, content)
                     });
                 }
             }
@@ -341,22 +344,22 @@ export default class MessageComposerInput extends React.Component {
     }
 
     enableRichtext(enabled: boolean) {
+        if (enabled) {
+            let html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
+            this.setState({
+                editorState: this.createEditorState(enabled, RichText.HTMLtoContentState(html))
+            });
+        } else {
+            let markdown = stateToMarkdown(this.state.editorState.getCurrentContent()),
+                contentState = ContentState.createFromText(markdown);
+            this.setState({
+                editorState: this.createEditorState(enabled, contentState)
+            });
+        }
+
         this.setState({
             isRichtextEnabled: enabled
         });
-
-        if(!this.state.isRichtextEnabled) {
-            let html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
-            this.setState({
-                editorState: this.createEditorState(RichText.HTMLtoContentState(html))
-            });
-        } else {
-            let markdown = stateToMarkdown(this.state.editorState.getCurrentContent());
-            let contentState = ContentState.createFromText(markdown);
-            this.setState({
-                editorState: this.createEditorState(contentState)
-            });
-        }
     }
 
     handleKeyCommand(command: string): boolean {
