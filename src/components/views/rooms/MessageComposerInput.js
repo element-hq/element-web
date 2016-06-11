@@ -46,6 +46,7 @@ import * as RichText from '../../../RichText';
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
+// FIXME Breaks markdown with multiple paragraphs, since it only strips first and last <p>
 function mdownToHtml(mdown) {
     var html = marked(mdown) || "";
     html = html.trim();
@@ -67,14 +68,19 @@ export default class MessageComposerInput extends React.Component {
         super(props, context);
         this.onAction = this.onAction.bind(this);
         this.onInputClick = this.onInputClick.bind(this);
+        this.handleReturn = this.handleReturn.bind(this);
+        this.handleKeyCommand = this.handleKeyCommand.bind(this);
+        this.onChange = this.onChange.bind(this);
 
         this.state = {
-            isRichtextEnabled: false,
+            isRichtextEnabled: false, // TODO enable by default when RTE is mature enough
             editorState: null
         };
 
         // bit of a hack, but we need to do this here since createEditorState needs isRichtextEnabled
         this.state.editorState = this.createEditorState();
+
+        this.client = MatrixClientPeg.get();
     }
 
     static getKeyBinding(e: SyntheticKeyboardEvent): string {
@@ -97,7 +103,7 @@ export default class MessageComposerInput extends React.Component {
         if(this.state.isRichtextEnabled) {
             args.push(RichText.getScopedDecorator(this.props));
         }
-        return func.apply(null, args);
+        return func(...args);
     }
 
     componentWillMount() {
@@ -254,86 +260,6 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    onEnter(ev) {
-        var contentText = this.refs.textarea.value;
-
-        // bodge for now to set markdown state on/off. We probably want a separate
-        // area for "local" commands which don't hit out to the server.
-        // if (contentText.indexOf("/markdown") === 0) {
-        //     ev.preventDefault();
-        //     this.refs.textarea.value = '';
-        //     if (contentText.indexOf("/markdown on") === 0) {
-        //         this.markdownEnabled = true;
-        //     }
-        //     else if (contentText.indexOf("/markdown off") === 0) {
-        //         this.markdownEnabled = false;
-        //     }
-        //     else {
-        //         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        //         Modal.createDialog(ErrorDialog, {
-        //             title: "Unknown command",
-        //             description: "Usage: /markdown on|off"
-        //         });
-        //     }
-        //     return;
-        // }
-
-        var cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
-        if (cmd) {
-            ev.preventDefault();
-            if (!cmd.error) {
-                this.refs.textarea.value = '';
-            }
-            if (cmd.promise) {
-                cmd.promise.done(function() {
-                    console.log("Command success.");
-                }, function(err) {
-                    console.error("Command failure: %s", err);
-                    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createDialog(ErrorDialog, {
-                        title: "Server error",
-                        description: err.message
-                    });
-                });
-            }
-            else if (cmd.error) {
-                console.error(cmd.error);
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Command error",
-                    description: cmd.error
-                });
-            }
-            return;
-        }
-
-        var isEmote = /^\/me( |$)/i.test(contentText);
-        var sendMessagePromise;
-
-        if (isEmote) {
-            contentText = contentText.substring(4);
-        }
-        else if (contentText[0] === '/') {
-            contentText = contentText.substring(1);
-        }
-
-        var htmlText;
-        if (this.markdownEnabled && (htmlText = mdownToHtml(contentText)) !== contentText) {
-            sendMessagePromise = isEmote ?
-                MatrixClientPeg.get().sendHtmlEmote(this.props.room.roomId, contentText, htmlText) :
-                MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, htmlText);
-        }
-        else {
-            sendMessagePromise = isEmote ?
-                MatrixClientPeg.get().sendEmoteMessage(this.props.room.roomId, contentText) :
-                MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);
-        }
-
-
-        this.refs.textarea.value = '';
-        ev.preventDefault();
-    }
-
     onTypingActivity() {
         this.isTyping = true;
         if (!this.userTypingTimer) {
@@ -460,8 +386,6 @@ export default class MessageComposerInput extends React.Component {
                     'insert-characters'
                 );
             }
-            console.log(modifyFn);
-            console.log(newState);
         }
 
         if(newState == null)
@@ -484,14 +408,53 @@ export default class MessageComposerInput extends React.Component {
 
         let contentText = contentState.getPlainText(), contentHTML;
 
+        var cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
+        if (cmd) {
+            if (!cmd.error) {
+                this.setState({
+                    editorState: this.createEditorState()
+                });
+            }
+            if (cmd.promise) {
+                cmd.promise.done(function() {
+                    console.log("Command success.");
+                }, function(err) {
+                    console.error("Command failure: %s", err);
+                    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Server error",
+                        description: err.message
+                    });
+                });
+            }
+            else if (cmd.error) {
+                console.error(cmd.error);
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Command error",
+                    description: cmd.error
+                });
+            }
+            return true;
+        }
+
         if(this.state.isRichtextEnabled) {
             contentHTML = RichText.contentStateToHTML(contentState);
         } else {
             contentHTML = mdownToHtml(contentText);
         }
 
+        let sendFn = this.client.sendHtmlMessage;
+
+        if (contentText.startsWith('/me')) {
+            contentText = contentText.replace('/me', '');
+            // bit of a hack, but the alternative would be quite complicated
+            contentHTML = contentHTML.replace('/me', '');
+            sendFn = this.client.sendHtmlEmote;
+        }
+
         this.sentHistory.push(contentHTML);
-        let sendMessagePromise = MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, contentHTML);
+        let sendMessagePromise = sendFn.call(this.client, this.props.room.roomId, contentText, contentHTML);
 
         sendMessagePromise.done(() => {
             dis.dispatch({
@@ -517,17 +480,18 @@ export default class MessageComposerInput extends React.Component {
             className += " mx_MessageComposer_input_rte"; // placeholder indicator for RTE mode
         }
 
-
         return (
             <div className={className}
                  onClick={ this.onInputClick }>
                 <Editor ref="editor"
                         placeholder="Type a message…"
                         editorState={this.state.editorState}
-                        onChange={(state) => this.onChange(state)}
+                        onChange={this.onChange}
                         keyBindingFn={MessageComposerInput.getKeyBinding}
-                        handleKeyCommand={(command) => this.handleKeyCommand(command)}
-                        handleReturn={ev => this.handleReturn(ev)} />
+                        handleKeyCommand={this.handleKeyCommand}
+                        handleReturn={this.handleReturn}
+                        stripPastedStyles={!this.state.isRichtextEnabled}
+                        spellCheck={true} />
             </div>
         );
     }
