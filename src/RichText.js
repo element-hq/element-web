@@ -21,6 +21,15 @@ const STYLES = {
     UNDERLINE: 'u'
 };
 
+const MARKDOWN_REGEX = {
+    LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
+    ITALIC: /([\*_])([\w\s]+?)\1/g,
+    BOLD: /([\*_])\1([\w\s]+?)\1\1/g
+};
+
+const USERNAME_REGEX = /@\S+:\S+/g;
+const ROOM_REGEX = /#\S+:\S+/g;
+
 export function contentStateToHTML(contentState: ContentState): string {
     return contentState.getBlockMap().map((block) => {
         let elem = BLOCK_RENDER_MAP.get(block.getType()).element;
@@ -45,9 +54,6 @@ export function contentStateToHTML(contentState: ContentState): string {
 export function HTMLtoContentState(html: string): ContentState {
     return ContentState.createFromBlockArray(convertFromHTML(html));
 }
-
-const USERNAME_REGEX = /@\S+:\S+/g;
-const ROOM_REGEX = /#\S+:\S+/g;
 
 /**
  * Returns a composite decorator which has access to provided scope.
@@ -107,12 +113,6 @@ export function getScopedMDDecorators(scope: any): CompositeDecorator {
 
     return markdownDecorators;
 }
-
-const MARKDOWN_REGEX = {
-    LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
-    ITALIC: /([\*_])([\w\s]+?)\1/g,
-    BOLD: /([\*_])\1([\w\s]+?)\1\1/g
-};
 
 /**
  * Utility function that looks for regex matches within a ContentBlock and invokes {callback} with (start, end)
