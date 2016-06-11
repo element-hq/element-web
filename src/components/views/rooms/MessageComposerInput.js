@@ -99,10 +99,10 @@ export default class MessageComposerInput extends React.Component {
      */
     createEditorState(contentState: ?ContentState): EditorState {
         let func = contentState ? EditorState.createWithContent : EditorState.createEmpty;
+        const decoratorFunc = this.state.isRichtextEnabled ? RichText.getScopedRTDecorators :
+                              RichText.getScopedMDDecorators;
         let args = contentState ? [contentState] : [];
-        if(this.state.isRichtextEnabled) {
-            args.push(RichText.getScopedDecorator(this.props));
-        }
+        args.push(new CompositeDecorator(decoratorFunc(this.props)));
         return func(...args);
     }
 
@@ -341,11 +341,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     enableRichtext(enabled: boolean) {
-        this.setState({
-            isRichtextEnabled: enabled
-        });
-
-        if(!this.state.isRichtextEnabled) {
+        if(enabled) {
             let html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
             this.setState({
                 editorState: this.createEditorState(RichText.HTMLtoContentState(html))
@@ -357,6 +353,10 @@ export default class MessageComposerInput extends React.Component {
                 editorState: this.createEditorState(contentState)
             });
         }
+
+        this.setState({
+            isRichtextEnabled: enabled
+        });
     }
 
     handleKeyCommand(command: string): boolean {

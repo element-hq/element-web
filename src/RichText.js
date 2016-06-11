@@ -52,7 +52,7 @@ const ROOM_REGEX = /#\S+:\S+/g;
 /**
  * Returns a composite decorator which has access to provided scope.
  */
-export function getScopedDecorator(scope: any): CompositeDecorator {
+export function getScopedRTDecorators(scope: any): CompositeDecorator {
     let MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 
     let usernameDecorator = {
@@ -78,8 +78,41 @@ export function getScopedDecorator(scope: any): CompositeDecorator {
         }
     };
 
-    return new CompositeDecorator([usernameDecorator, roomDecorator]);
+    return [usernameDecorator, roomDecorator];
 }
+
+export function getScopedMDDecorators(scope: any): CompositeDecorator {
+    let markdownDecorators = ['BOLD', 'ITALIC'].map(
+        (style) => ({
+            strategy: (contentBlock, callback) => {
+                return findWithRegex(MARKDOWN_REGEX[style], contentBlock, callback);
+            },
+            component: (props) => (
+                <span className={"mx_MarkdownElement mx_Markdown_" + style}>
+                    {props.children}
+                </span>
+            )
+        }));
+
+    markdownDecorators.push({
+        strategy: (contentBlock, callback) => {
+            return findWithRegex(MARKDOWN_REGEX.LINK, contentBlock, callback);
+        },
+        component: (props) => (
+            <a href="#" className="mx_MarkdownElement mx_Markdown_LINK">
+                {props.children}
+            </a>
+        )
+    });
+
+    return markdownDecorators;
+}
+
+const MARKDOWN_REGEX = {
+    LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
+    ITALIC: /([\*_])([\w\s]+?)\1/g,
+    BOLD: /([\*_])\1([\w\s]+?)\1\1/g
+};
 
 /**
  * Utility function that looks for regex matches within a ContentBlock and invokes {callback} with (start, end)
