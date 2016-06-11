@@ -42,7 +42,7 @@ var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
 var KeyCode = require("../../../KeyCode");
 
-import {contentStateToHTML, HTMLtoContentState, getScopedDecorator} from '../../../RichText';
+import * as RichText from '../../../RichText';
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
@@ -69,7 +69,7 @@ export default class MessageComposerInput extends React.Component {
         this.onInputClick = this.onInputClick.bind(this);
 
         this.state = {
-            isRichtextEnabled: true,
+            isRichtextEnabled: false,
             editorState: null
         };
 
@@ -95,7 +95,7 @@ export default class MessageComposerInput extends React.Component {
         let func = contentState ? EditorState.createWithContent : EditorState.createEmpty;
         let args = contentState ? [contentState] : [];
         if(this.state.isRichtextEnabled) {
-            args.push(getScopedDecorator(this.props));
+            args.push(RichText.getScopedDecorator(this.props));
         }
         return func.apply(null, args);
     }
@@ -114,7 +114,7 @@ export default class MessageComposerInput extends React.Component {
             // The textarea element to set text to.
             element: null,
 
-            init: function (element, roomId) {
+            init: function(element, roomId) {
                 this.roomId = roomId;
                 this.element = element;
                 this.position = -1;
@@ -129,7 +129,7 @@ export default class MessageComposerInput extends React.Component {
                 }
             },
 
-            push: function (text) {
+            push: function(text) {
                 // store a message in the sent history
                 this.data.unshift(text);
                 window.sessionStorage.setItem(
@@ -142,7 +142,7 @@ export default class MessageComposerInput extends React.Component {
             },
 
             // move in the history. Returns true if we managed to move.
-            next: function (offset) {
+            next: function(offset) {
                 if (this.position === -1) {
                     // user is going into the history, save the current line.
                     this.originalText = this.element.value;
@@ -175,7 +175,7 @@ export default class MessageComposerInput extends React.Component {
                 return true;
             },
 
-            saveLastTextEntry: function () {
+            saveLastTextEntry: function() {
                 // save the currently entered text in order to restore it later.
                 // NB: This isn't 'originalText' because we want to restore
                 // sent history items too!
@@ -183,7 +183,7 @@ export default class MessageComposerInput extends React.Component {
                 window.sessionStorage.setItem("input_" + this.roomId, contentJSON);
             },
 
-            setLastTextEntry: function () {
+            setLastTextEntry: function() {
                 let contentJSON = window.sessionStorage.getItem("input_" + this.roomId);
                 if (contentJSON) {
                     let content = convertFromRaw(JSON.parse(contentJSON));
@@ -404,7 +404,7 @@ export default class MessageComposerInput extends React.Component {
         this.refs.editor.focus();
     }
 
-    onChange(editorState) {
+    onChange(editorState: EditorState) {
         this.setState({editorState});
 
         if(editorState.getCurrentContent().hasText()) {
@@ -414,30 +414,60 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    handleKeyCommand(command) {
-        if(command === 'toggle-mode') {
+    enableRichtext(enabled: boolean) {
+        this.setState({
+            isRichtextEnabled: enabled
+        });
+
+        if(!this.state.isRichtextEnabled) {
+            let html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
             this.setState({
-                isRichtextEnabled: !this.state.isRichtextEnabled
+                editorState: this.createEditorState(RichText.HTMLtoContentState(html))
             });
+        } else {
+            let markdown = stateToMarkdown(this.state.editorState.getCurrentContent());
+            let contentState = ContentState.createFromText(markdown);
+            this.setState({
+                editorState: this.createEditorState(contentState)
+            });
+        }
+    }
 
-            if(!this.state.isRichtextEnabled) {
-                let html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
-                this.setState({
-                    editorState: this.createEditorState(HTMLtoContentState(html))
-                });
-            } else {
-                let markdown = stateToMarkdown(this.state.editorState.getCurrentContent());
-                let contentState = ContentState.createFromText(markdown);
-                this.setState({
-                    editorState: this.createEditorState(contentState)
-                });
-            }
-
+    handleKeyCommand(command: string): boolean {
+        if(command === 'toggle-mode') {
+            this.enableRichtext(!this.state.isRichtextEnabled);
             return true;
         }
 
-        let newState = RichUtils.handleKeyCommand(this.state.editorState, command);
-        if (newState) {
+        let newState: ?EditorState = null;
+
+        // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
+        if(!this.state.isRichtextEnabled) {
+            let contentState = this.state.editorState.getCurrentContent(),
+                selection = this.state.editorState.getSelection();
+
+            let modifyFn = {
+                bold: text => `**${text}**`,
+                italic: text => `*${text}*`,
+                underline: text => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
+                code: text => `\`${text}\``
+            }[command];
+
+            if(modifyFn) {
+                newState = EditorState.push(
+                    this.state.editorState,
+                    RichText.modifyText(contentState, selection, modifyFn),
+                    'insert-characters'
+                );
+            }
+            console.log(modifyFn);
+            console.log(newState);
+        }
+
+        if(newState == null)
+            newState = RichUtils.handleKeyCommand(this.state.editorState, command);
+
+        if (newState != null) {
             this.onChange(newState);
             return true;
         }
@@ -455,7 +485,7 @@ export default class MessageComposerInput extends React.Component {
         let contentText = contentState.getPlainText(), contentHTML;
 
         if(this.state.isRichtextEnabled) {
-            contentHTML = contentStateToHTML(contentState);
+            contentHTML = RichText.contentStateToHTML(contentState);
         } else {
             contentHTML = mdownToHtml(contentText);
         }
