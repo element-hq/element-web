@@ -37,11 +37,13 @@ var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
 var KeyCode = require('../../KeyCode');
 
+var createRoom = require("../../createRoom");
+
 module.exports = React.createClass({
     displayName: 'MatrixChat',
 
     propTypes: {
-        config: React.PropTypes.object.isRequired,
+        config: React.PropTypes.object,
         ConferenceHandler: React.PropTypes.any,
         onNewScreen: React.PropTypes.func,
         registrationUrl: React.PropTypes.string,
@@ -84,7 +86,8 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            startingQueryParams: {}
+            startingQueryParams: {},
+            config: {},
         };
     },
 
@@ -97,10 +100,9 @@ module.exports = React.createClass({
         else if (window.localStorage && window.localStorage.getItem("mx_hs_url")) {
             return window.localStorage.getItem("mx_hs_url");
         }
-        else if (this.props.config) {
-            return this.props.config.default_hs_url
+        else {
+            return this.props.config.default_hs_url || "https://matrix.org";
         }
-        return "https://matrix.org";
     },
 
     getFallbackHsUrl: function() {
@@ -116,10 +118,9 @@ module.exports = React.createClass({
         else if (window.localStorage && window.localStorage.getItem("mx_is_url")) {
             return window.localStorage.getItem("mx_is_url");
         }
-        else if (this.props.config) {
-            return this.props.config.default_is_url
+        else {
+            return this.props.config.default_is_url || "https://vector.im"
         }
-        return "https://matrix.org";
     },
 
     componentWillMount: function() {
@@ -391,6 +392,10 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_room':
+                // Takes both room ID and room alias: if switching to a room the client is already
+                // know to be in (eg. user clicks on a room in the recents panel), supply only the
+                // ID. If the user is clicking on a room in the context of the alias being presented
+                // to them, supply the room alias and optionally the room ID.
                 this._viewRoom(
                     payload.room_id, payload.room_alias, payload.show_settings, payload.event_id,
                     payload.third_party_invite, payload.oob_data
@@ -422,42 +427,6 @@ module.exports = React.createClass({
                     this._viewRoom(allRooms[roomIndex].roomId);
                 }
                 break;
-            case 'view_room_alias':
-                if (!this.state.logged_in) {
-                    this.starting_room_alias_payload = payload;
-                    // Login is the default screen, so we'd do this anyway,
-                    // but this will set the URL bar appropriately.
-                    dis.dispatch({ action: 'start_login' });
-                    return;
-                }
-
-                var foundRoom = MatrixTools.getRoomForAlias(
-                    MatrixClientPeg.get().getRooms(), payload.room_alias
-                );
-                if (foundRoom) {
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: foundRoom.roomId,
-                        room_alias: payload.room_alias,
-                        event_id: payload.event_id,
-                        third_party_invite: payload.third_party_invite,
-                        oob_data: payload.oob_data,
-                    });
-                    return;
-                }
-                // resolve the alias and *then* view it
-                MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(
-                function(result) {
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: result.room_id,
-                        room_alias: payload.room_alias,
-                        event_id: payload.event_id,
-                        third_party_invite: payload.third_party_invite,
-                        oob_data: payload.oob_data,
-                    });
-                });
-                break;
             case 'view_user_settings':
                 this._setPage(this.PageTypes.UserSettings);
                 this.notifyNewScreen('settings');
@@ -466,48 +435,7 @@ module.exports = React.createClass({
                 //this._setPage(this.PageTypes.CreateRoom);
                 //this.notifyNewScreen('new');
 
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                var Loader = sdk.getComponent("elements.Spinner");
-                var modal = Modal.createDialog(Loader);
-
-                if (MatrixClientPeg.get().isGuest()) {
-                    Modal.createDialog(NeedToRegisterDialog, {
-                        title: "Please Register",
-                        description: "Guest users can't create new rooms. Please register to create room and start a chat."
-                    });
-                    return;
-                }
-
-                // XXX: FIXME: deduplicate this with MemberInfo's 'start chat' impl
-                MatrixClientPeg.get().createRoom({
-                    preset: "private_chat",
-                    // Allow guests by default since the room is private and they'd
-                    // need an invite. This means clicking on a 3pid invite email can
-                    // actually drop you right in to a chat.
-                    initial_state: [
-                        {
-                            content: {
-                                guest_access: 'can_join'
-                            },
-                            type: 'm.room.guest_access',
-                            state_key: '',
-                        }
-                    ],
-                }).done(function(res) {
-                    modal.close();
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: res.room_id,
-                        // show_settings: true,
-                    });
-                }, function(err) {
-                    modal.close();
-                    Modal.createDialog(ErrorDialog, {
-                        title: "Failed to create room",
-                        description: err.toString()
-                    });
-                });
+                createRoom().done();
                 break;
             case 'view_room_directory':
                 this._setPage(this.PageTypes.RoomDirectory);
@@ -572,8 +500,6 @@ module.exports = React.createClass({
         this.focusComposer = true;
 
         var newState = {
-            currentRoom: roomId,
-            currentRoomAlias: roomAlias,
             initialEventId: eventId,
             highlightedEventId: eventId,
             initialEventPixelOffset: undefined,
@@ -581,6 +507,18 @@ module.exports = React.createClass({
             thirdPartyInvite: thirdPartyInvite,
             roomOobData: oob_data,
         };
+
+        // If an alias has been provided, we use that and only that,
+        // since otherwise we'll prefer to pass in an ID to RoomView
+        // but if we're not in the room, we should join by alias rather
+        // than ID.
+        if (roomAlias) {
+            newState.currentRoomAlias = roomAlias;
+            newState.currentRoom = null;
+        } else {
+            newState.currentRoomAlias = null;
+            newState.currentRoom = roomId;
+        }
 
         // if we aren't given an explicit event id, look for one in the
         // scrollStateMap.
@@ -858,22 +796,28 @@ module.exports = React.createClass({
                 inviterName: params.inviter_name,
             };
 
+            var payload = {
+                action: 'view_room',
+                event_id: eventId,
+                third_party_invite: third_party_invite,
+                oob_data: oob_data,
+            };
             if (roomString[0] == '#') {
-                dis.dispatch({
-                    action: 'view_room_alias',
-                    room_alias: roomString,
-                    event_id: eventId,
-                    third_party_invite: third_party_invite,
-                    oob_data: oob_data,
-                });
+                payload.room_alias = roomString;
             } else {
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: roomString,
-                    event_id: eventId,
-                    third_party_invite: third_party_invite,
-                    oob_data: oob_data,
-                });
+                payload.room_id = roomString;
+            }
+
+            // we can't view a room unless we're logged in
+            // (a guest account is fine)
+            if (!this.state.logged_in) {
+                this.starting_room_alias_payload = payload;
+                // Login is the default screen, so we'd do this anyway,
+                // but this will set the URL bar appropriately.
+                dis.dispatch({ action: 'start_login' });
+                return;
+            } else {
+                dis.dispatch(payload);
             }
         }
         else {
@@ -889,7 +833,7 @@ module.exports = React.createClass({
 
     onAliasClick: function(event, alias) {
         event.preventDefault();
-        dis.dispatch({action: 'view_room_alias', room_alias: alias});
+        dis.dispatch({action: 'view_room', room_alias: alias});
     },
 
     onUserClick: function(event, userId) {
@@ -1084,14 +1028,14 @@ module.exports = React.createClass({
                             oobData={this.state.roomOobData}
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}
-                            key={this.state.currentRoom}
+                            key={this.state.currentRoom || this.state.currentRoomAlias}
                             opacity={this.state.middleOpacity}
                             ConferenceHandler={this.props.ConferenceHandler} />
                     );
                     right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity} />
                     break;
                 case this.PageTypes.UserSettings:
-                    page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} />
+                    page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} brand={this.props.config.brand} />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
                 case this.PageTypes.CreateRoom:
@@ -1159,6 +1103,7 @@ module.exports = React.createClass({
                     guestAccessToken={this.state.guestAccessToken}
                     defaultHsUrl={this.props.config.default_hs_url}
                     defaultIsUrl={this.props.config.default_is_url}
+                    brand={this.props.config.brand}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     registrationUrl={this.props.registrationUrl}

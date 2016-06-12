@@ -17,8 +17,8 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var Velocity = require('velocity-animate');
-require('velocity-ui-pack');
+var Velocity = require('velocity-vector');
+require('velocity-vector/velocity.ui');
 var sdk = require('../../../index');
 var Email = require('../../../email');
 var Modal = require("../../../Modal");

@@ -31,7 +31,9 @@ module.exports = React.createClass({
 
     propTypes: {
         version: React.PropTypes.string,
-        onClose: React.PropTypes.func
+        onClose: React.PropTypes.func,
+        // The brand string given when creating email pushers
+        brand: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -244,6 +246,23 @@ module.exports = React.createClass({
         });
     },
 
+    _renderDeviceInfo: function() {
+        var client = MatrixClientPeg.get();
+        var deviceId = client.deviceId;
+        var olmKey = client.getDeviceEd25519Key() || "<not supported>";
+        return (
+            <div>
+                <h3>Cryptography</h3>
+                <div className="mx_UserSettings_section">
+                    <ul>
+                        <li>Device ID: {deviceId}</li>
+                        <li>Device key: {olmKey}</li>
+                    </ul>
+                </div>
+            </div>
+        );
+    },
+
     render: function() {
         var self = this;
         var Loader = sdk.getComponent("elements.Spinner");
@@ -299,7 +318,7 @@ module.exports = React.createClass({
                             onValueChanged={ this.onAddThreepidClicked } />
                     </div>
                     <div className="mx_UserSettings_addThreepid">
-                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked }/>
+                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked.bind(this, undefined, true) }/>
                     </div>
                 </div>
             );
@@ -333,7 +352,7 @@ module.exports = React.createClass({
                 <h3>Notifications</h3>
 
                 <div className="mx_UserSettings_section">
-                    <Notifications threepids={this.state.threepids} />
+                    <Notifications threepids={this.state.threepids} brand={this.props.brand} />
                 </div>
             </div>);
         }
@@ -390,6 +409,8 @@ module.exports = React.createClass({
 
                 {notification_area}
 
+                {this._renderDeviceInfo()}
+
                 <h3>Advanced</h3>
 
                 <div className="mx_UserSettings_section">
@@ -403,9 +424,8 @@ module.exports = React.createClass({
                         Identity Server is { MatrixClientPeg.get().getIdentityServerUrl() }
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        Version {this.state.clientVersion}
-                        <br />
-                        {this.props.version}
+                        matrix-react-sdk version: {this.state.clientVersion}<br/>
+                        vector-web version: {this.props.version}<br/>
                     </div>
                 </div>
 

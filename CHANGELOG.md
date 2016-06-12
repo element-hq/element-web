@@ -1,3 +1,43 @@
+Changes in [0.6.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.6.3) (2016-06-03)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.6.2...v0.6.3)
+
+ * Change invite text field wording
+ * Fix bug with new email invite UX where the invite could get wedged
+ * Label app versions sensibly in UserSettings
+
+Changes in [0.6.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.6.2) (2016-06-02)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.6.1...v0.6.2)
+
+ * Correctly bump dep on matrix-js-sdk 0.5.4
+
+Changes in [0.6.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.6.1) (2016-06-02)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.6.0...v0.6.1)
+
+ * Fix focusing race in new UX for 3pid invites
+ * Fix jenkins.sh
+
+Changes in [0.6.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.6.0) (2016-06-02)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.5.2...v0.6.0)
+
+ * implement new UX for 3pid invites
+   [\#297](https://github.com/matrix-org/matrix-react-sdk/pull/297)
+ * multiple URL preview support
+   [\#290](https://github.com/matrix-org/matrix-react-sdk/pull/290)
+ * Add a fallback home server to log into
+   [\#293](https://github.com/matrix-org/matrix-react-sdk/pull/293)
+ * Hopefully fix memory leak with velocity
+   [\#291](https://github.com/matrix-org/matrix-react-sdk/pull/291)
+ * Support for enabling email notifications
+   [\#289](https://github.com/matrix-org/matrix-react-sdk/pull/289)
+ * Correct Readme instructions how to customize the UI
+   [\#286](https://github.com/matrix-org/matrix-react-sdk/pull/286)
+ * Avoid rerendering during Room unmount
+   [\#285](https://github.com/matrix-org/matrix-react-sdk/pull/285)
+
 Changes in [0.5.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.5.2) (2016-04-22)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.5.1...v0.5.2)

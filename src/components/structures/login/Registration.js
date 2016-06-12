@@ -22,6 +22,7 @@ var sdk = require('../../../index');
 var dis = require('../../../dispatcher');
 var Signup = require("../../../Signup");
 var ServerConfig = require("../../views/login/ServerConfig");
+var MatrixClientPeg = require("../../../MatrixClientPeg");
 var RegistrationForm = require("../../views/login/RegistrationForm");
 var CaptchaForm = require("../../views/login/CaptchaForm");
 
@@ -40,6 +41,7 @@ module.exports = React.createClass({
         customIsUrl: React.PropTypes.string,
         defaultHsUrl: React.PropTypes.string,
         defaultIsUrl: React.PropTypes.string,
+        brand: React.PropTypes.string,
         email: React.PropTypes.string,
         username: React.PropTypes.string,
         guestAccessToken: React.PropTypes.string,
@@ -145,6 +147,26 @@ module.exports = React.createClass({
                 identityServerUrl: self.registerLogic.getIdentityServerUrl(),
                 accessToken: response.access_token
             });
+
+            if (self.props.brand) {
+                MatrixClientPeg.get().getPushers().done((resp)=>{
+                    var pushers = resp.pushers;
+                    for (var i = 0; i < pushers.length; ++i) {
+                        if (pushers[i].kind == 'email') {
+                            var emailPusher = pushers[i];
+                            emailPusher.data = { brand: self.props.brand };
+                            MatrixClientPeg.get().setPusher(emailPusher).done(() => {
+                                console.log("Set email branding to " + self.props.brand);
+                            }, (error) => {
+                                console.error("Couldn't set email branding: " + error);
+                            });
+                        }
+                    }
+                }, (error) => {
+                    console.error("Couldn't get pushers: " + error);
+                });
+            }
+
         }, function(err) {
             if (err.message) {
                 self.setState({

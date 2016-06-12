@@ -166,6 +166,25 @@ module.exports = React.createClass({
         });
     }, 500),
 
+    onThirdPartyInvite: function(inputText) {
+        var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
+        Modal.createDialog(TextInputDialog, {
+            title: "Invite members by email",
+            description: "Please enter one or more email addresses",
+            value: inputText,
+            button: "Invite",
+            onFinished: (should_invite, addresses)=>{
+                if (should_invite) {
+                    // defer the actual invite to the next event loop to give this
+                    // Modal a chance to unmount in case onInvite() triggers a new one
+                    setTimeout(()=>{
+                        this.onInvite(addresses);
+                    }, 0);
+                }
+            }
+        });
+    },
+
     onInvite: function(inputText) {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
@@ -387,7 +406,9 @@ module.exports = React.createClass({
                     // console.log(memberA + " and " + memberB + " have same power level");
                     if (memberA.name && memberB.name) {
                         // console.log("comparing names: " + memberA.name + " and " + memberB.name);
-                        return memberA.name.localeCompare(memberB.name);
+                        var nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
+                        var nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
+                        return nameA.localeCompare(nameB);
                     }
                     else {
                         return 0;
@@ -512,6 +533,7 @@ module.exports = React.createClass({
             inviteMemberListSection = (
                 <InviteMemberList roomId={this.props.roomId}
                     onSearchQueryChanged={this.onSearchQueryChanged}
+                    onThirdPartyInvite={this.onThirdPartyInvite}
                     onInvite={this.onInvite} />
             );
         }

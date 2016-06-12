@@ -39,11 +39,11 @@ module.exports = React.createClass({
             focus: true
         };
     },
-    
+
     componentDidMount: function() {
         if (this.props.focus) {
-            // Set the cursor at the end of the text input 
-            this.refs.textinput.value = this.props.value;        
+            // Set the cursor at the end of the text input
+            this.refs.textinput.value = this.props.value;
         }
     },
 
@@ -83,12 +83,11 @@ module.exports = React.createClass({
                     </div>
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this.onOk}>
-                        {this.props.button}
-                    </button>
-
                     <button onClick={this.onCancel}>
                         Cancel
+                    </button>
+                    <button onClick={this.onOk}>
+                        {this.props.button}
                     </button>
                 </div>
             </div>
