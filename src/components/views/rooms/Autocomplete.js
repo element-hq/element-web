@@ -11,11 +11,28 @@ export default class Autocomplete extends React.Component {
     }
 
     componentWillReceiveProps(props, state) {
-        getCompletions(props.query)[0].then(completions => {
-            console.log(completions);
-            this.setState({
-                completions
-            });
+        getCompletions(props.query).map(completionResult => {
+            try {
+                completionResult.completions.then(completions => {
+                    let i = this.state.completions.findIndex(
+                        completion => completion.provider === completionResult.provider
+                    );
+
+                    i = i == -1 ? this.state.completions.length : i;
+                    console.log(completionResult);
+                    let newCompletions = Object.assign([], this.state.completions);
+                    completionResult.completions = completions;
+                    newCompletions[i] = completionResult;
+                    console.log(newCompletions);
+                    this.setState({
+                        completions: newCompletions
+                    });
+                }, err => {
+
+                });
+            } catch (e) {
+                // An error in one provider shouldn't mess up the rest.
+            }
         });
     }
 
@@ -33,18 +50,28 @@ export default class Autocomplete extends React.Component {
         };
 
         this.props.pinTo.forEach(direction => {
-            console.log(`${direction} = ${position[direction]}`);
             style[direction] = position[direction];
         });
 
-        const renderedCompletions = this.state.completions.map((completion, i) => {
-            return (
-                <div key={i} class="mx_Autocomplete_Completion">
-                    <strong>{completion.title}</strong>
-                    <em>{completion.subtitle}</em>
-                    <span style={{color: 'gray', float: 'right'}}>{completion.description}</span>
+        const renderedCompletions = this.state.completions.map((completionResult, i) => {
+            console.log(completionResult);
+            let completions = completionResult.completions.map((completion, i) => {
+                return (
+                    <div key={i} class="mx_Autocomplete_Completion">
+                        <strong>{completion.title}</strong>
+                        <em>{completion.subtitle}</em>
+                        <span style={{color: 'gray', float: 'right'}}>{completion.description}</span>
+                    </div>
+                );
+            });
+
+
+            return completions.length > 0 ? (
+                <div key={i} class="mx_Autocomplete_ProviderSection">
+                    <strong>{completionResult.provider.getName()}</strong>
+                    {completions}
                 </div>
-            );
+            ) : null;
         });
 
         return (

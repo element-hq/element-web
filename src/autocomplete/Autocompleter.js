@@ -1,7 +1,20 @@
 import CommandProvider from './CommandProvider';
+import DuckDuckGoProvider from './DuckDuckGoProvider';
+import RoomProvider from './RoomProvider';
+import UserProvider from './UserProvider';
 
-const COMPLETERS = [CommandProvider].map(completer => new completer());
+const PROVIDERS = [
+    CommandProvider,
+    DuckDuckGoProvider,
+    RoomProvider,
+    UserProvider
+].map(completer => new completer());
 
 export function getCompletions(query: String) {
-    return COMPLETERS.map(completer => completer.getCompletions(query));
+    return PROVIDERS.map(provider => {
+        return {
+            completions: provider.getCompletions(query),
+            provider
+        };
+    });
 }

@@ -20,7 +20,7 @@ limitations under the License.
 var Matrix = require("matrix-js-sdk");
 var GuestAccess = require("./GuestAccess");
 
-var matrixClient = null;
+let matrixClient: MatrixClient = null;
 
 var localStorage = window.localStorage;
 
@@ -82,7 +82,7 @@ class MatrixClient {
         this.guestAccess = guestAccess;
     }
 
-    get() {
+    get(): MatrixClient {
         return matrixClient;
     }
 

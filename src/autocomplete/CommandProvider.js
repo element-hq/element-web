@@ -62,4 +62,8 @@ export default class CommandProvider extends AutocompleteProvider {
         }
         return Q.when(completions);
     }
+
+    getName() {
+        return 'Commands';
+    }
 }
