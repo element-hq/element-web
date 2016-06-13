@@ -392,6 +392,10 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_room':
+                // Takes both room ID and room alias: if switching to a room the client is already
+                // know to be in (eg. user clicks on a room in the recents panel), supply only the
+                // ID. If the user is clicking on a room in the context of the alias being presented
+                // to them, supply the room alias and optionally the room ID.
                 this._viewRoom(
                     payload.room_id, payload.room_alias, payload.show_settings, payload.event_id,
                     payload.third_party_invite, payload.oob_data
@@ -422,42 +426,6 @@ module.exports = React.createClass({
                 if (allRooms[roomIndex]) {
                     this._viewRoom(allRooms[roomIndex].roomId);
                 }
-                break;
-            case 'view_room_alias':
-                if (!this.state.logged_in) {
-                    this.starting_room_alias_payload = payload;
-                    // Login is the default screen, so we'd do this anyway,
-                    // but this will set the URL bar appropriately.
-                    dis.dispatch({ action: 'start_login' });
-                    return;
-                }
-
-                var foundRoom = MatrixTools.getRoomForAlias(
-                    MatrixClientPeg.get().getRooms(), payload.room_alias
-                );
-                if (foundRoom) {
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: foundRoom.roomId,
-                        room_alias: payload.room_alias,
-                        event_id: payload.event_id,
-                        third_party_invite: payload.third_party_invite,
-                        oob_data: payload.oob_data,
-                    });
-                    return;
-                }
-                // resolve the alias and *then* view it
-                MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(
-                function(result) {
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: result.room_id,
-                        room_alias: payload.room_alias,
-                        event_id: payload.event_id,
-                        third_party_invite: payload.third_party_invite,
-                        oob_data: payload.oob_data,
-                    });
-                });
                 break;
             case 'view_user_settings':
                 this._setPage(this.PageTypes.UserSettings);
@@ -532,8 +500,6 @@ module.exports = React.createClass({
         this.focusComposer = true;
 
         var newState = {
-            currentRoom: roomId,
-            currentRoomAlias: roomAlias,
             initialEventId: eventId,
             highlightedEventId: eventId,
             initialEventPixelOffset: undefined,
@@ -541,6 +507,18 @@ module.exports = React.createClass({
             thirdPartyInvite: thirdPartyInvite,
             roomOobData: oob_data,
         };
+
+        // If an alias has been provided, we use that and only that,
+        // since otherwise we'll prefer to pass in an ID to RoomView
+        // but if we're not in the room, we should join by alias rather
+        // than ID.
+        if (roomAlias) {
+            newState.currentRoomAlias = roomAlias;
+            newState.currentRoom = null;
+        } else {
+            newState.currentRoomAlias = null;
+            newState.currentRoom = roomId;
+        }
 
         // if we aren't given an explicit event id, look for one in the
         // scrollStateMap.
@@ -818,22 +796,28 @@ module.exports = React.createClass({
                 inviterName: params.inviter_name,
             };
 
+            var payload = {
+                action: 'view_room',
+                event_id: eventId,
+                third_party_invite: third_party_invite,
+                oob_data: oob_data,
+            };
             if (roomString[0] == '#') {
-                dis.dispatch({
-                    action: 'view_room_alias',
-                    room_alias: roomString,
-                    event_id: eventId,
-                    third_party_invite: third_party_invite,
-                    oob_data: oob_data,
-                });
+                payload.room_alias = roomString;
             } else {
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: roomString,
-                    event_id: eventId,
-                    third_party_invite: third_party_invite,
-                    oob_data: oob_data,
-                });
+                payload.room_id = roomString;
+            }
+
+            // we can't view a room unless we're logged in
+            // (a guest account is fine)
+            if (!this.state.logged_in) {
+                this.starting_room_alias_payload = payload;
+                // Login is the default screen, so we'd do this anyway,
+                // but this will set the URL bar appropriately.
+                dis.dispatch({ action: 'start_login' });
+                return;
+            } else {
+                dis.dispatch(payload);
             }
         }
         else {
@@ -849,7 +833,7 @@ module.exports = React.createClass({
 
     onAliasClick: function(event, alias) {
         event.preventDefault();
-        dis.dispatch({action: 'view_room_alias', room_alias: alias});
+        dis.dispatch({action: 'view_room', room_alias: alias});
     },
 
     onUserClick: function(event, userId) {
@@ -1044,7 +1028,7 @@ module.exports = React.createClass({
                             oobData={this.state.roomOobData}
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}
-                            key={this.state.currentRoom}
+                            key={this.state.currentRoom || this.state.currentRoomAlias}
                             opacity={this.state.middleOpacity}
                             ConferenceHandler={this.props.ConferenceHandler} />
                     );
