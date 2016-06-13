@@ -364,8 +364,8 @@ module.exports = React.createClass({
 
         this._renderLabs = function () {
             let features = LABS_FEATURES.map(feature => (
-                <div>
-                    <input key={feature}
+                <div key={feature}>
+                    <input
                            type="checkbox"
                            id={feature}
                            name={feature}
