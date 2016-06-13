@@ -26,6 +26,11 @@ var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
 
+const LABS_FEATURES = [
+    'Rich Text Editor',
+    'End-to-End Encryption'
+];
+
 module.exports = React.createClass({
     displayName: 'UserSettings',
 
@@ -357,6 +362,32 @@ module.exports = React.createClass({
             </div>);
         }
 
+        this._renderLabs = function () {
+            let features = LABS_FEATURES.map(feature => (
+                <div>
+                    <input key={feature}
+                           type="checkbox"
+                           id={feature}
+                           name={feature}
+                           defaultChecked={UserSettingsStore.isFeatureEnabled(feature)}
+                           onChange={e => UserSettingsStore.setFeatureEnabled(feature, e.target.checked)} />
+                    <label htmlFor={feature}>{feature}</label>
+                </div>
+            ));
+            return (
+                <div>
+                    <h3>Labs</h3>
+
+                    <div className="mx_UserSettings_section">
+                        <p>These experimental features may change, break or disappear at any time. We make absolutely no guarantees about what may happen if you turn one of these experiments on, and your client may even spontaneously combust. Jokes aside, your client may delete all your data or your security and privacy could be compromised in unexpected ways. Please proceed with caution.</p>
+                        {features}
+                        <br />
+                        <div className="mx_UserSettings_button" onClick={() => window.location.reload()}>Restart Vector</div>
+                    </div>
+                </div>
+            )
+        };
+
         return (
             <div className="mx_UserSettings">
                 <SimpleRoomHeader title="Settings" onCancelClick={ this.props.onClose }/>
@@ -410,6 +441,8 @@ module.exports = React.createClass({
                 {notification_area}
 
                 {this._renderDeviceInfo()}
+
+                {this._renderLabs()}
 
                 <h3>Advanced</h3>
 
