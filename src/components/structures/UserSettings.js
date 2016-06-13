@@ -27,8 +27,14 @@ var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
 
 const LABS_FEATURES = [
-    'Rich Text Editor',
-    'End-to-End Encryption'
+    {
+        name: 'Rich Text Editor',
+        id: 'rich_text_editor'
+    },
+    {
+        name: 'End-to-End Encryption',
+        id: 'e2e_encryption'
+    }
 ];
 
 module.exports = React.createClass({
@@ -364,14 +370,14 @@ module.exports = React.createClass({
 
         this._renderLabs = function () {
             let features = LABS_FEATURES.map(feature => (
-                <div key={feature}>
+                <div key={feature.id}>
                     <input
                            type="checkbox"
-                           id={feature}
-                           name={feature}
-                           defaultChecked={UserSettingsStore.isFeatureEnabled(feature)}
-                           onChange={e => UserSettingsStore.setFeatureEnabled(feature, e.target.checked)} />
-                    <label htmlFor={feature}>{feature}</label>
+                           id={feature.id}
+                           name={feature.id}
+                           defaultChecked={UserSettingsStore.isFeatureEnabled(feature.id)}
+                           onChange={e => UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked)} />
+                    <label htmlFor={feature.id}>{feature.name}</label>
                 </div>
             ));
             return (
@@ -379,10 +385,8 @@ module.exports = React.createClass({
                     <h3>Labs</h3>
 
                     <div className="mx_UserSettings_section">
-                        <p>These experimental features may change, break or disappear at any time. We make absolutely no guarantees about what may happen if you turn one of these experiments on, and your client may even spontaneously combust. Jokes aside, your client may delete all your data or your security and privacy could be compromised in unexpected ways. Please proceed with caution.</p>
+                        <p>These are experimental features that may break in unexpected ways. Use with caution.</p>
                         {features}
-                        <br />
-                        <div className="mx_UserSettings_button" onClick={() => window.location.reload()}>Restart Vector</div>
                     </div>
                 </div>
             )

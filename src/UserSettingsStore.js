@@ -114,12 +114,10 @@ module.exports = {
     },
 
     isFeatureEnabled: function(feature: string): boolean {
-        feature = feature.match(/\w+/g).join('_').toLowerCase();
         return localStorage.getItem(`mx_labs_feature_${feature}`) === 'true';
     },
 
     setFeatureEnabled: function(feature: string, enabled: boolean) {
-        feature = feature.match(/\w+/g).join('_').toLowerCase();
         localStorage.setItem(`mx_labs_feature_${feature}`, enabled);
     }
 };
