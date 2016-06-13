@@ -26,6 +26,17 @@ var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
 
+const LABS_FEATURES = [
+    {
+        name: 'Rich Text Editor',
+        id: 'rich_text_editor'
+    },
+    {
+        name: 'End-to-End Encryption',
+        id: 'e2e_encryption'
+    }
+];
+
 module.exports = React.createClass({
     displayName: 'UserSettings',
 
@@ -357,6 +368,30 @@ module.exports = React.createClass({
             </div>);
         }
 
+        this._renderLabs = function () {
+            let features = LABS_FEATURES.map(feature => (
+                <div key={feature.id}>
+                    <input
+                           type="checkbox"
+                           id={feature.id}
+                           name={feature.id}
+                           defaultChecked={UserSettingsStore.isFeatureEnabled(feature.id)}
+                           onChange={e => UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked)} />
+                    <label htmlFor={feature.id}>{feature.name}</label>
+                </div>
+            ));
+            return (
+                <div>
+                    <h3>Labs</h3>
+
+                    <div className="mx_UserSettings_section">
+                        <p>These are experimental features that may break in unexpected ways. Use with caution.</p>
+                        {features}
+                    </div>
+                </div>
+            )
+        };
+
         return (
             <div className="mx_UserSettings">
                 <SimpleRoomHeader title="Settings" onCancelClick={ this.props.onClose }/>
@@ -410,6 +445,8 @@ module.exports = React.createClass({
                 {notification_area}
 
                 {this._renderDeviceInfo()}
+
+                {this._renderLabs()}
 
                 <h3>Advanced</h3>
 

@@ -112,4 +112,12 @@ module.exports = {
             append: true,  // We always append for email pushers since we don't want to stop other accounts notifying to the same email address
         });
     },
+
+    isFeatureEnabled: function(feature: string): boolean {
+        return localStorage.getItem(`mx_labs_feature_${feature}`) === 'true';
+    },
+
+    setFeatureEnabled: function(feature: string, enabled: boolean) {
+        localStorage.setItem(`mx_labs_feature_${feature}`, enabled);
+    }
 };
