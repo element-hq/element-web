@@ -409,7 +409,7 @@ module.exports = React.createClass({
                 );
                 var roomIndex = -1;
                 for (var i = 0; i < allRooms.length; ++i) {
-                    if (allRooms[i].roomId == this.state.currentRoom) {
+                    if (allRooms[i].roomId == this.state.currentRoomId) {
                         roomIndex = i;
                         break;
                     }
@@ -506,19 +506,9 @@ module.exports = React.createClass({
             page_type: this.PageTypes.RoomView,
             thirdPartyInvite: thirdPartyInvite,
             roomOobData: oob_data,
+            newState.currentRoomAlias: roomAlias,
+            newState.currentRoomId: roomId,
         };
-
-        // If an alias has been provided, we use that and only that,
-        // since otherwise we'll prefer to pass in an ID to RoomView
-        // but if we're not in the room, we should join by alias rather
-        // than ID.
-        if (roomAlias) {
-            newState.currentRoomAlias = roomAlias;
-            newState.currentRoom = null;
-        } else {
-            newState.currentRoomAlias = null;
-            newState.currentRoom = roomId;
-        }
 
         // if we aren't given an explicit event id, look for one in the
         // scrollStateMap.
@@ -612,13 +602,13 @@ module.exports = React.createClass({
                 dis.dispatch(self.starting_room_alias_payload);
                 delete self.starting_room_alias_payload;
             } else if (!self.state.page_type) {
-                if (!self.state.currentRoom) {
+                if (!self.state.currentRoomId) {
                     var firstRoom = null;
                     if (cli.getRooms() && cli.getRooms().length) {
                         firstRoom = RoomListSorter.mostRecentActivityFirst(
                             cli.getRooms()
                         )[0].roomId;
-                        self.setState({ready: true, currentRoom: firstRoom, page_type: self.PageTypes.RoomView});
+                        self.setState({ready: true, currentRoomId: firstRoom, page_type: self.PageTypes.RoomView});
                     } else {
                         self.setState({ready: true, page_type: self.PageTypes.RoomDirectory});
                     }
@@ -628,8 +618,8 @@ module.exports = React.createClass({
 
                 // we notifyNewScreen now because now the room will actually be displayed,
                 // and (mostly) now we can get the correct alias.
-                var presentedId = self.state.currentRoom;
-                var room = MatrixClientPeg.get().getRoom(self.state.currentRoom);
+                var presentedId = self.state.currentRoomId;
+                var room = MatrixClientPeg.get().getRoom(self.state.currentRoomId);
                 if (room) {
                     var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
                     if (theAlias) presentedId = theAlias;
@@ -979,10 +969,10 @@ module.exports = React.createClass({
     onUserSettingsClose: function() {
         // XXX: use browser history instead to find the previous room?
         // or maintain a this.state.pageHistory in _setPage()?
-        if (this.state.currentRoom) {
+        if (this.state.currentRoomId) {
             dis.dispatch({
                 action: 'view_room',
-                room_id: this.state.currentRoom,
+                room_id: this.state.currentRoomId,
             });
         }
         else {
@@ -1022,17 +1012,18 @@ module.exports = React.createClass({
                     page_element = (
                         <RoomView
                             ref="roomView"
-                            roomAddress={this.state.currentRoom || this.state.currentRoomAlias}
+                            roomId={this.state.currentRoomId}
+                            roomAlias={this.state.currentRoomAlias}
                             eventId={this.state.initialEventId}
                             thirdPartyInvite={this.state.thirdPartyInvite}
                             oobData={this.state.roomOobData}
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}
-                            key={this.state.currentRoom || this.state.currentRoomAlias}
+                            key={this.state.currentRoomId || this.state.currentRoomAlias}
                             opacity={this.state.middleOpacity}
                             ConferenceHandler={this.props.ConferenceHandler} />
                     );
-                    right_panel = <RightPanel roomId={this.state.currentRoom} collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity} />
+                    right_panel = <RightPanel roomId={this.state.currentRoomId} collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity} />
                     break;
                 case this.PageTypes.UserSettings:
                     page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} brand={this.props.config.brand} />
@@ -1068,7 +1059,7 @@ module.exports = React.createClass({
                 <div className="mx_MatrixChat_wrapper">
                     {topBar}
                     <div className={bodyClasses}>
-                        <LeftPanel selectedRoom={this.state.currentRoom} collapsed={this.state.collapse_lhs} opacity={this.state.sideOpacity}/>
+                        <LeftPanel selectedRoom={this.state.currentRoomId} collapsed={this.state.collapse_lhs} opacity={this.state.sideOpacity}/>
                         <main className="mx_MatrixChat_middlePanel">
                             {page_element}
                         </main>

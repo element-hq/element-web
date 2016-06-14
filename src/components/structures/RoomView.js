@@ -55,7 +55,10 @@ module.exports = React.createClass({
     propTypes: {
         ConferenceHandler: React.PropTypes.any,
 
-        // the ID for this room (or, if we don't know it, an alias for it)
+        // Either a room ID or room alias for the room to display.
+        // If the room is being displayed as a result of the user clicking
+        // on a room alias, the alias should be supplied. Otherwise, a room
+        // ID should be supplied.
         roomAddress: React.PropTypes.string.isRequired,
 
         // An object representing a third party invite to join this room
@@ -95,15 +98,14 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         var room;
+        var room_id;
         if (this.props.roomAddress[0] == '!') {
-            room = MatrixClientPeg.get().getRoom(this.props.roomAddress);
-        } else {
-            room = MatrixTools.getRoomForAlias(
-                MatrixClientPeg.get().getRooms(), this.props.roomAddress
-            );
+            room_id = this.props.roomAddress;
+            room = MatrixClientPeg.get().getRoom(room_id);
         }
         return {
             room: room,
+            roomId: room_id,
             roomLoading: !room,
             editingRoomSettings: false,
             uploadingRoomSettings: false,
@@ -143,6 +145,27 @@ module.exports = React.createClass({
             }
         });
 
+        if (this.props.roomAddress[0] == '#') {
+            // we always look up the alias from the directory server:
+            // we want the room that the given alias is pointing to
+            // right now. We may have joined that alias before but there's
+            // no guarantee the alias hasn't subsequently been remapped.
+            MatrixClientPeg.get().getRoomIdForAlias(this.props.roomAddress).done((result) => {
+                this.setState({
+                    roomId: result.room_id,
+                    roomLoading: false,
+                }, this.updatePeeking);
+            }, (err) => {
+                this.setState({
+                    roomLoading: false,
+                });
+            });
+        }
+
+        this.updatePeeking();
+    },
+
+    updatePeeking: function() {
         // if this is an unknown room then we're in one of three states:
         // - This is a room we can peek into (search engine) (we can /peek)
         // - This is a room we can publicly join or were invited to. (we can /join)
@@ -150,10 +173,13 @@ module.exports = React.createClass({
         // We can't try to /join because this may implicitly accept invites (!)
         // We can /peek though. If it fails then we present the join UI. If it
         // succeeds then great, show the preview (but we still may be able to /join!).
-        if (!this.state.room) {
-            console.log("Attempting to peek into room %s", this.props.roomAddress);
+        // Note that peeking works by room ID and room ID only, as opposed to joining
+        // which must be by alias or invite wherever possible (peeking currently does
+        // not work over federation).
+        if (!this.state.room && this.state.roomId) {
+            console.log("Attempting to peek into room %s", this.state.roomId);
 
-            MatrixClientPeg.get().peekInRoom(this.props.roomAddress).then((room) => {
+            MatrixClientPeg.get().peekInRoom(this.state.roomId).then((room) => {
                 this.setState({
                     room: room,
                     roomLoading: false,
@@ -172,7 +198,7 @@ module.exports = React.createClass({
                     throw err;
                 }
             }).done();
-        } else {
+        } else if (this.state.room) {
             MatrixClientPeg.get().stopPeeking();
             this._onRoomLoaded(this.state.room);
         }
