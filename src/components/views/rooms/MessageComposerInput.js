@@ -199,7 +199,7 @@ export default class MessageComposerInput extends React.Component {
                 if (contentJSON) {
                     let content = convertFromRaw(JSON.parse(contentJSON));
                     component.setState({
-                        editorState: component.createEditorState(this.state.isRichtextEnabled, content)
+                        editorState: component.createEditorState(component.state.isRichtextEnabled, content)
                     });
                 }
             }

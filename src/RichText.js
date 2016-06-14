@@ -141,7 +141,8 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
     for(let currentKey = startKey;
             currentKey && currentKey !== endKey;
             currentKey = contentState.getKeyAfter(currentKey)) {
-        text += getText(currentKey).substring(startOffset, blockText.length);
+        let blockText = getText(currentKey);
+        text += blockText.substring(startOffset, blockText.length);
 
         // from now on, we'll take whole blocks
         startOffset = 0;
