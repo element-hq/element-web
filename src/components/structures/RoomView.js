@@ -61,6 +61,11 @@ module.exports = React.createClass({
         // ID should be supplied.
         roomAddress: React.PropTypes.string.isRequired,
 
+        // If a room alias is passed to roomAddress, a function can be
+        // provided here that will be called with the ID of the room
+        // once it has been resolved.
+        onRoomIdResolved: React.PropTypes.func,
+
         // An object representing a third party invite to join this room
         // Fields:
         // * inviteSignUrl (string) The URL used to join this room from an email invite
@@ -151,9 +156,14 @@ module.exports = React.createClass({
             // right now. We may have joined that alias before but there's
             // no guarantee the alias hasn't subsequently been remapped.
             MatrixClientPeg.get().getRoomIdForAlias(this.props.roomAddress).done((result) => {
+                if (this.props.onRoomIdResolved) {
+                    this.props.onRoomIdResolved(result.room_id);
+                }
+                var room = MatrixClientPeg.get().getRoom(result.room_id);
                 this.setState({
+                    room: room,
                     roomId: result.room_id,
-                    roomLoading: false,
+                    roomLoading: !room,
                 }, this.updatePeeking);
             }, (err) => {
                 this.setState({

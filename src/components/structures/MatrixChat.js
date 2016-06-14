@@ -392,10 +392,10 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_room':
-                // Takes both room ID and room alias: if switching to a room the client is already
-                // know to be in (eg. user clicks on a room in the recents panel), supply only the
-                // ID. If the user is clicking on a room in the context of the alias being presented
-                // to them, supply the room alias and optionally the room ID.
+                // Takes either a room ID or room alias: if switching to a room the client is already
+                // known to be in (eg. user clicks on a room in the recents panel), supply the ID
+                // If the user is clicking on a room in the context of the alias being presented
+                // to them, supply the room alias. If both are supplied, the room ID will be ignored.
                 this._viewRoom(
                     payload.room_id, payload.room_alias, payload.show_settings, payload.event_id,
                     payload.third_party_invite, payload.oob_data
@@ -507,8 +507,11 @@ module.exports = React.createClass({
             thirdPartyInvite: thirdPartyInvite,
             roomOobData: oob_data,
             currentRoomAlias: roomAlias,
-            currentRoomId: roomId,
         };
+
+        if (!roomAlias) {
+            newState.currentRoomId = roomId;
+        }
 
         // if we aren't given an explicit event id, look for one in the
         // scrollStateMap.
@@ -982,6 +985,13 @@ module.exports = React.createClass({
         }
     },
 
+    onRoomIdResolved: function(room_id) {
+        // It's the RoomView's resposibility to look up room aliases, but we need the
+        // ID to pass into things like the Member List, so the Room View tells us when
+        // its done that resolution so we can display things that take a room ID.
+        this.setState({currentRoomId: room_id});
+    },
+
     render: function() {
         var LeftPanel = sdk.getComponent('structures.LeftPanel');
         var RoomView = sdk.getComponent('structures.RoomView');
@@ -1013,12 +1023,13 @@ module.exports = React.createClass({
                         <RoomView
                             ref="roomView"
                             roomAddress={this.state.currentRoomAlias || this.state.currentRoomId}
+                            onRoomIdResolved={this.onRoomIdResolved}
                             eventId={this.state.initialEventId}
                             thirdPartyInvite={this.state.thirdPartyInvite}
                             oobData={this.state.roomOobData}
                             highlightedEventId={this.state.highlightedEventId}
                             eventPixelOffset={this.state.initialEventPixelOffset}
-                            key={this.state.currentRoomId || this.state.currentRoomAlias}
+                            key={this.state.currentRoomAlias || this.state.currentRoomId}
                             opacity={this.state.middleOpacity}
                             ConferenceHandler={this.props.ConferenceHandler} />
                     );
