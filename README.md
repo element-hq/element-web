@@ -28,7 +28,8 @@ If you do wish to build vector from source:
 1. If you are using the `develop` branch of vector, you will probably need to
    rebuild one of the dependencies, due to https://github.com/npm/npm/issues/3055:
    `(cd node_modules/matrix-react-sdk && npm install)`
-1. Configure the app by modifying the `config.json` file (see below for details)
+1. Configure the app by copying `config.sample.json` to `config.json` and modifying
+   it (see below for details)
 1. `npm run package` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
    web server.
