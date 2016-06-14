@@ -106,10 +106,10 @@ Finally, build and start vector itself:
    disables caching, so do NOT use it in production.
 1. Open http://127.0.0.1:8080/ in your browser to see your newly built Vector.
 
-When you make changes to `matrix-js-sdk` or `matrix-react-sdk`, you will need
-to run `npm run build` in the relevant directory. You can do this automatically
-by instead running `npm start` in each directory, to start a development
-builder which will watch for changes to the files and rebuild automatically.
+When you make changes to `matrix-react-sdk`, you will need to run `npm run
+build` in the relevant directory. You can do this automatically by instead
+running `npm start` in the directory, to start a development builder which
+will watch for changes to the files and rebuild automatically.
 
 If you add or remove any components from the Vector skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.
