@@ -64,6 +64,13 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         var s = {
+            // If we are viewing a room by alias, this contains the alias
+            currentRoomAlias: null,
+
+            // The ID of the room we're viewing. This is either populated directly
+            // in the case where we view a room by ID or by RoomView when it resolves
+            // what ID an alias points at.
+            currentRoomId: null,
             logged_in: !!(MatrixClientPeg.get() && MatrixClientPeg.get().credentials),
             collapse_lhs: false,
             collapse_rhs: false,
