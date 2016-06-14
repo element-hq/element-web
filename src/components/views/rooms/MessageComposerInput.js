@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require("react");
+import React from 'react';
 
 var marked = require("marked");
 marked.setOptions({
@@ -27,6 +27,12 @@ marked.setOptions({
     smartypants: false
 });
 
+import {Editor, EditorState, RichUtils, CompositeDecorator,
+    convertFromRaw, convertToRaw, Modifier, EditorChangeType,
+    getDefaultKeyBinding, KeyBindingUtil, ContentState} from 'draft-js';
+
+import {stateToMarkdown} from 'draft-js-export-markdown';
+
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
@@ -36,10 +42,13 @@ var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
 var KeyCode = require("../../../KeyCode");
 
-var TYPING_USER_TIMEOUT = 10000;
-var TYPING_SERVER_TIMEOUT = 30000;
-var MARKDOWN_ENABLED = true;
+import * as RichText from '../../../RichText';
 
+const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
+
+const KEY_M = 77;
+
+// FIXME Breaks markdown with multiple paragraphs, since it only strips first and last <p>
 function mdownToHtml(mdown) {
     var html = marked(mdown) || "";
     html = html.trim();
@@ -56,29 +65,54 @@ function mdownToHtml(mdown) {
 /*
  * The textInput part of the MessageComposer
  */
-module.exports = React.createClass({
-    displayName: 'MessageComposerInput',
+export default class MessageComposerInput extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.onAction = this.onAction.bind(this);
+        this.onInputClick = this.onInputClick.bind(this);
+        this.handleReturn = this.handleReturn.bind(this);
+        this.handleKeyCommand = this.handleKeyCommand.bind(this);
+        this.onChange = this.onChange.bind(this);
 
-    statics: {
-        // the height we limit the composer to
-        MAX_HEIGHT: 100,
-    },
+        this.state = {
+            isRichtextEnabled: false, // TODO enable by default when RTE is mature enough
+            editorState: null
+        };
 
-    propTypes: {
-        tabComplete: React.PropTypes.any,
+        // bit of a hack, but we need to do this here since createEditorState needs isRichtextEnabled
+        this.state.editorState = this.createEditorState();
 
-        // a callback which is called when the height of the composer is
-        // changed due to a change in content.
-        onResize: React.PropTypes.func,
+        this.client = MatrixClientPeg.get();
+    }
 
-        // js-sdk Room object
-        room: React.PropTypes.object.isRequired,
-    },
+    static getKeyBinding(e: SyntheticKeyboardEvent): string {
+        // C-m => Toggles between rich text and markdown modes
+        if(e.keyCode == KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
+            return 'toggle-mode';
+        }
 
-    componentWillMount: function() {
-        this.oldScrollHeight = 0;
-        this.markdownEnabled = MARKDOWN_ENABLED;
-        var self = this;
+        return getDefaultKeyBinding(e);
+    }
+
+    /**
+     * "Does the right thing" to create an EditorState, based on:
+     * - whether we've got rich text mode enabled
+     * - contentState was passed in
+     */
+    createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
+        let decorators = richText ? RichText.getScopedRTDecorators(this.props) :
+                                    RichText.getScopedMDDecorators(this.props),
+            compositeDecorator = new CompositeDecorator(decorators);
+
+        if (contentState) {
+            return EditorState.createWithContent(contentState, compositeDecorator);
+        } else {
+            return EditorState.createEmpty(compositeDecorator);
+        }
+    }
+
+    componentWillMount() {
+        const component = this;
         this.sentHistory = {
             // The list of typed messages. Index 0 is more recent
             data: [],
@@ -149,7 +183,6 @@ module.exports = React.createClass({
                     this.element.value = this.originalText;
                 }
 
-                self.resizeInput();
                 return true;
             },
 
@@ -157,76 +190,68 @@ module.exports = React.createClass({
                 // save the currently entered text in order to restore it later.
                 // NB: This isn't 'originalText' because we want to restore
                 // sent history items too!
-                var text = this.element.value;
-                window.sessionStorage.setItem("input_" + this.roomId, text);
+                let contentJSON = JSON.stringify(convertToRaw(component.state.editorState.getCurrentContent()));
+                window.sessionStorage.setItem("input_" + this.roomId, contentJSON);
             },
 
             setLastTextEntry: function() {
-                var text = window.sessionStorage.getItem("input_" + this.roomId);
-                if (text) {
-                    this.element.value = text;
-                    self.resizeInput();
+                let contentJSON = window.sessionStorage.getItem("input_" + this.roomId);
+                if (contentJSON) {
+                    let content = convertFromRaw(JSON.parse(contentJSON));
+                    component.setState({
+                        editorState: component.createEditorState(component.state.isRichtextEnabled, content)
+                    });
                 }
             }
         };
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         this.sentHistory.init(
-            this.refs.textarea,
+            this.refs.editor,
             this.props.room.roomId
         );
-        this.resizeInput();
-        if (this.props.tabComplete) {
-            this.props.tabComplete.setTextArea(this.refs.textarea);
-        }
-    },
+        // this is disabled for now, since https://github.com/matrix-org/matrix-react-sdk/pull/296 will land soon
+        // if (this.props.tabComplete) {
+        //     this.props.tabComplete.setEditor(this.refs.editor);
+        // }
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
         this.sentHistory.saveLastTextEntry();
-    },
+    }
 
-    onAction: function(payload) {
-        var textarea = this.refs.textarea;
+    onAction(payload) {
+        var editor = this.refs.editor;
+
         switch (payload.action) {
             case 'focus_composer':
-                textarea.focus();
+                editor.focus();
                 break;
-            case 'insert_displayname':
-                if (textarea.value.length) {
-                    var left = textarea.value.substring(0, textarea.selectionStart);
-                    var right = textarea.value.substring(textarea.selectionEnd);
-                    if (right.length) {
-                        left += payload.displayname;
-                    }
-                    else {
-                        left = left.replace(/( ?)$/, " " + payload.displayname);
-                    }
-                    textarea.value = left + right;
-                    textarea.focus();
-                    textarea.setSelectionRange(left.length, left.length);
-                }
-                else {
-                    textarea.value = payload.displayname + ": ";
-                    textarea.focus();
-                }
-                break;
-        }
-    },
 
-    onKeyDown: function (ev) {
-        if (ev.keyCode === KeyCode.ENTER && !ev.shiftKey) {
-            var input = this.refs.textarea.value;
-            if (input.length === 0) {
-                ev.preventDefault();
-                return;
-            }
-            this.sentHistory.push(input);
-            this.onEnter(ev);
+            // TODO change this so we insert a complete user alias
+
+            case 'insert_displayname':
+                if (this.state.editorState.getCurrentContent().hasText()) {
+                    console.log(payload);
+                    let contentState = Modifier.replaceText(
+                        this.state.editorState.getCurrentContent(),
+                        this.state.editorState.getSelection(),
+                        payload.displayname
+                    );
+                    this.setState({
+                        editorState: EditorState.push(this.state.editorState, contentState, 'insert-characters')
+                    });
+                    editor.focus();
+                }
+                break;
         }
-        else if (ev.keyCode === KeyCode.UP || ev.keyCode === KeyCode.DOWN) {
+    }
+
+    onKeyDown(ev) {
+        if (ev.keyCode === KeyCode.UP || ev.keyCode === KeyCode.DOWN) {
             var oldSelectionStart = this.refs.textarea.selectionStart;
             // Remember the keyCode because React will recycle the synthetic event
             var keyCode = ev.keyCode;
@@ -235,78 +260,165 @@ module.exports = React.createClass({
             setTimeout(() => {
                 if (this.refs.textarea.selectionStart == oldSelectionStart) {
                     this.sentHistory.next(keyCode === KeyCode.UP ? 1 : -1);
-                    this.resizeInput();
                 }
             }, 0);
         }
+    }
 
-        if (this.props.tabComplete) {
-            this.props.tabComplete.onKeyDown(ev);
+    onTypingActivity() {
+        this.isTyping = true;
+        if (!this.userTypingTimer) {
+            this.sendTyping(true);
         }
+        this.startUserTypingTimer();
+        this.startServerTypingTimer();
+    }
 
+    onFinishedTyping() {
+        this.isTyping = false;
+        this.sendTyping(false);
+        this.stopUserTypingTimer();
+        this.stopServerTypingTimer();
+    }
+
+    startUserTypingTimer() {
+        this.stopUserTypingTimer();
         var self = this;
-        setTimeout(function() {
-            if (self.refs.textarea && self.refs.textarea.value != '') {
-                self.onTypingActivity();
-            } else {
-                self.onFinishedTyping();
-            }
-        }, 10); // XXX: what is this 10ms setTimeout doing?  Looks hacky :(
-    },
+        this.userTypingTimer = setTimeout(function() {
+            self.isTyping = false;
+            self.sendTyping(self.isTyping);
+            self.userTypingTimer = null;
+        }, TYPING_USER_TIMEOUT);
+    }
 
-    resizeInput: function() {
-        // scrollHeight is at least equal to clientHeight, so we have to
-        // temporarily crimp clientHeight to 0 to get an accurate scrollHeight value
-        this.refs.textarea.style.height = "20px"; // 20 hardcoded from CSS
-        var newHeight = Math.min(this.refs.textarea.scrollHeight,
-                                 this.constructor.MAX_HEIGHT);
-        this.refs.textarea.style.height = Math.ceil(newHeight) + "px";
-        this.oldScrollHeight = this.refs.textarea.scrollHeight;
-
-        if (this.props.onResize) {
-            // kick gemini-scrollbar to re-layout
-            this.props.onResize();
+    stopUserTypingTimer() {
+        if (this.userTypingTimer) {
+            clearTimeout(this.userTypingTimer);
+            this.userTypingTimer = null;
         }
-    },
+    }
 
-    onKeyUp: function(ev) {
-        if (this.refs.textarea.scrollHeight !== this.oldScrollHeight ||
-            ev.keyCode === KeyCode.DELETE ||
-            ev.keyCode === KeyCode.BACKSPACE)
-        {
-            this.resizeInput();
+    startServerTypingTimer() {
+        if (!this.serverTypingTimer) {
+            var self = this;
+            this.serverTypingTimer = setTimeout(function() {
+                if (self.isTyping) {
+                    self.sendTyping(self.isTyping);
+                    self.startServerTypingTimer();
+                }
+            }, TYPING_SERVER_TIMEOUT / 2);
         }
-    },
+    }
 
-    onEnter: function(ev) {
-        var contentText = this.refs.textarea.value;
-
-        // bodge for now to set markdown state on/off. We probably want a separate
-        // area for "local" commands which don't hit out to the server.
-        if (contentText.indexOf("/markdown") === 0) {
-            ev.preventDefault();
-            this.refs.textarea.value = '';
-            if (contentText.indexOf("/markdown on") === 0) {
-                this.markdownEnabled = true;
-            }
-            else if (contentText.indexOf("/markdown off") === 0) {
-                this.markdownEnabled = false;
-            }
-            else {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Unknown command",
-                    description: "Usage: /markdown on|off"
-                });
-            }
-            return;
+    stopServerTypingTimer() {
+        if (this.serverTypingTimer) {
+            clearTimeout(this.servrTypingTimer);
+            this.serverTypingTimer = null;
         }
+    }
+
+    sendTyping(isTyping) {
+        MatrixClientPeg.get().sendTyping(
+            this.props.room.roomId,
+            this.isTyping, TYPING_SERVER_TIMEOUT
+        ).done();
+    }
+
+    refreshTyping() {
+        if (this.typingTimeout) {
+            clearTimeout(this.typingTimeout);
+            this.typingTimeout = null;
+        }
+    }
+
+    onInputClick(ev) {
+        this.refs.editor.focus();
+    }
+
+    onChange(editorState: EditorState) {
+        this.setState({editorState});
+
+        if(editorState.getCurrentContent().hasText()) {
+            this.onTypingActivity()
+        } else {
+            this.onFinishedTyping();
+        }
+    }
+
+    enableRichtext(enabled: boolean) {
+        if (enabled) {
+            let html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
+            this.setState({
+                editorState: this.createEditorState(enabled, RichText.HTMLtoContentState(html))
+            });
+        } else {
+            let markdown = stateToMarkdown(this.state.editorState.getCurrentContent()),
+                contentState = ContentState.createFromText(markdown);
+            this.setState({
+                editorState: this.createEditorState(enabled, contentState)
+            });
+        }
+
+        this.setState({
+            isRichtextEnabled: enabled
+        });
+    }
+
+    handleKeyCommand(command: string): boolean {
+        if(command === 'toggle-mode') {
+            this.enableRichtext(!this.state.isRichtextEnabled);
+            return true;
+        }
+
+        let newState: ?EditorState = null;
+
+        // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
+        if(!this.state.isRichtextEnabled) {
+            let contentState = this.state.editorState.getCurrentContent(),
+                selection = this.state.editorState.getSelection();
+
+            let modifyFn = {
+                bold: text => `**${text}**`,
+                italic: text => `*${text}*`,
+                underline: text => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
+                code: text => `\`${text}\``
+            }[command];
+
+            if(modifyFn) {
+                newState = EditorState.push(
+                    this.state.editorState,
+                    RichText.modifyText(contentState, selection, modifyFn),
+                    'insert-characters'
+                );
+            }
+        }
+
+        if(newState == null)
+            newState = RichUtils.handleKeyCommand(this.state.editorState, command);
+
+        if (newState != null) {
+            this.onChange(newState);
+            return true;
+        }
+        return false;
+    }
+
+    handleReturn(ev) {
+        if(ev.shiftKey)
+            return false;
+
+        const contentState = this.state.editorState.getCurrentContent();
+        if(!contentState.hasText())
+            return true;
+
+        let contentText = contentState.getPlainText(), contentHTML;
 
         var cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
         if (cmd) {
-            ev.preventDefault();
             if (!cmd.error) {
-                this.refs.textarea.value = '';
+                this.setState({
+                    editorState: this.createEditorState()
+                });
             }
             if (cmd.promise) {
                 cmd.promise.done(function() {
@@ -328,121 +440,75 @@ module.exports = React.createClass({
                     description: cmd.error
                 });
             }
-            return;
+            return true;
         }
 
-        var isEmote = /^\/me( |$)/i.test(contentText);
-        var sendMessagePromise;
-
-        if (isEmote) {
-            contentText = contentText.substring(4);
-        }
-        else if (contentText[0] === '/') {
-            contentText = contentText.substring(1);   
+        if(this.state.isRichtextEnabled) {
+            contentHTML = RichText.contentStateToHTML(contentState);
+        } else {
+            contentHTML = mdownToHtml(contentText);
         }
 
-        var htmlText;
-        if (this.markdownEnabled && (htmlText = mdownToHtml(contentText)) !== contentText) {
-            sendMessagePromise = isEmote ? 
-                MatrixClientPeg.get().sendHtmlEmote(this.props.room.roomId, contentText, htmlText) :
-                MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, htmlText);
-        }
-        else {
-            sendMessagePromise = isEmote ? 
-                MatrixClientPeg.get().sendEmoteMessage(this.props.room.roomId, contentText) :
-                MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);
+        let sendFn = this.client.sendHtmlMessage;
+
+        if (contentText.startsWith('/me')) {
+            contentText = contentText.replace('/me', '');
+            // bit of a hack, but the alternative would be quite complicated
+            contentHTML = contentHTML.replace('/me', '');
+            sendFn = this.client.sendHtmlEmote;
         }
 
-        sendMessagePromise.done(function() {
+        this.sentHistory.push(contentHTML);
+        let sendMessagePromise = sendFn.call(this.client, this.props.room.roomId, contentText, contentHTML);
+
+        sendMessagePromise.done(() => {
             dis.dispatch({
                 action: 'message_sent'
             });
-        }, function() {
+        }, () => {
             dis.dispatch({
                 action: 'message_send_failed'
             });
         });
-        this.refs.textarea.value = '';
-        this.resizeInput();
-        ev.preventDefault();
-    },
 
-    onTypingActivity: function() {
-        this.isTyping = true;
-        if (!this.userTypingTimer) {
-            this.sendTyping(true);
+        this.setState({
+            editorState: this.createEditorState()
+        });
+
+        return true;
+    }
+
+    render() {
+        let className = "mx_MessageComposer_input";
+
+        if(this.state.isRichtextEnabled) {
+            className += " mx_MessageComposer_input_rte"; // placeholder indicator for RTE mode
         }
-        this.startUserTypingTimer();
-        this.startServerTypingTimer();
-    },
 
-    onFinishedTyping: function() {
-        this.isTyping = false;
-        this.sendTyping(false);
-        this.stopUserTypingTimer();
-        this.stopServerTypingTimer();
-    },
-
-    startUserTypingTimer: function() {
-        this.stopUserTypingTimer();
-        var self = this;
-        this.userTypingTimer = setTimeout(function() {
-            self.isTyping = false;
-            self.sendTyping(self.isTyping);
-            self.userTypingTimer = null;
-        }, TYPING_USER_TIMEOUT);
-    },
-
-    stopUserTypingTimer: function() {
-        if (this.userTypingTimer) {
-            clearTimeout(this.userTypingTimer);
-            this.userTypingTimer = null;
-        }
-    },
-
-    startServerTypingTimer: function() {
-        if (!this.serverTypingTimer) {
-            var self = this;
-            this.serverTypingTimer = setTimeout(function() {
-                if (self.isTyping) {
-                    self.sendTyping(self.isTyping);
-                    self.startServerTypingTimer();
-                }
-            }, TYPING_SERVER_TIMEOUT / 2);
-        }
-    },
-
-    stopServerTypingTimer: function() {
-        if (this.serverTypingTimer) {
-            clearTimeout(this.servrTypingTimer);
-            this.serverTypingTimer = null;
-        }
-    },
-
-    sendTyping: function(isTyping) {
-        MatrixClientPeg.get().sendTyping(
-            this.props.room.roomId,
-            this.isTyping, TYPING_SERVER_TIMEOUT
-        ).done();
-    },
-
-    refreshTyping: function() {
-        if (this.typingTimeout) {
-            clearTimeout(this.typingTimeout);
-            this.typingTimeout = null;
-        }
-    },
-
-    onInputClick: function(ev) {
-        this.refs.textarea.focus();
-    },
-
-    render: function() {
         return (
-            <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
-                <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
+            <div className={className}
+                 onClick={ this.onInputClick }>
+                <Editor ref="editor"
+                        placeholder="Type a message…"
+                        editorState={this.state.editorState}
+                        onChange={this.onChange}
+                        keyBindingFn={MessageComposerInput.getKeyBinding}
+                        handleKeyCommand={this.handleKeyCommand}
+                        handleReturn={this.handleReturn}
+                        stripPastedStyles={!this.state.isRichtextEnabled}
+                        spellCheck={true} />
             </div>
         );
     }
-});
+};
 
+MessageComposerInput.propTypes = {
+    tabComplete: React.PropTypes.any,
+
+    // a callback which is called when the height of the composer is
+    // changed due to a change in content.
+    onResize: React.PropTypes.func,
+
+    // js-sdk Room object
+    room: React.PropTypes.object.isRequired
+};
