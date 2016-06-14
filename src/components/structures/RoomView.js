@@ -159,7 +159,7 @@ module.exports = React.createClass({
                     roomId: result.room_id,
                     roomLoading: !room,
                     hasUnsentMessages: this._hasUnsentMessages(room),
-                }, this.updatePeeking);
+                }, this._updatePeeking);
             }, (err) => {
                 this.setState({
                     roomLoading: false,
@@ -172,11 +172,11 @@ module.exports = React.createClass({
                 room: room,
                 roomLoading: !room,
                 hasUnsentMessages: this._hasUnsentMessages(room),
-            }, this.updatePeeking);
+            }, this._updatePeeking);
         }
     },
 
-    updatePeeking: function() {
+    _updatePeeking: function() {
         // if this is an unknown room then we're in one of three states:
         // - This is a room we can peek into (search engine) (we can /peek)
         // - This is a room we can publicly join or were invited to. (we can /join)
