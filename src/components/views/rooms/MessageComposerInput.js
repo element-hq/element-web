@@ -46,6 +46,8 @@ import * as RichText from '../../../RichText';
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
+const KEY_M = 77;
+
 // FIXME Breaks markdown with multiple paragraphs, since it only strips first and last <p>
 function mdownToHtml(mdown) {
     var html = marked(mdown) || "";
@@ -85,7 +87,7 @@ export default class MessageComposerInput extends React.Component {
 
     static getKeyBinding(e: SyntheticKeyboardEvent): string {
         // C-m => Toggles between rich text and markdown modes
-        if(e.keyCode == 77 && KeyBindingUtil.isCtrlKeyCommand(e)) {
+        if(e.keyCode == KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
             return 'toggle-mode';
         }
 
