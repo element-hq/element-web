@@ -74,8 +74,14 @@ export default class MessageComposerInput extends React.Component {
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
         this.onChange = this.onChange.bind(this);
 
+        let isRichtextEnabled = window.localStorage.getItem('mx_editor_rte_enabled');
+        if(isRichtextEnabled == null) {
+            isRichtextEnabled = 'true';
+        }
+        isRichtextEnabled = isRichtextEnabled === 'true';
+
         this.state = {
-            isRichtextEnabled: false, // TODO enable by default when RTE is mature enough
+            isRichtextEnabled: isRichtextEnabled,
             editorState: null
         };
 
@@ -104,11 +110,14 @@ export default class MessageComposerInput extends React.Component {
                                     RichText.getScopedMDDecorators(this.props),
             compositeDecorator = new CompositeDecorator(decorators);
 
+        let editorState = null;
         if (contentState) {
-            return EditorState.createWithContent(contentState, compositeDecorator);
+            editorState = EditorState.createWithContent(contentState, compositeDecorator);
         } else {
-            return EditorState.createEmpty(compositeDecorator);
+            editorState = EditorState.createEmpty(compositeDecorator);
         }
+
+        return EditorState.moveFocusToEnd(editorState);
     }
 
     componentWillMount() {
@@ -358,6 +367,8 @@ export default class MessageComposerInput extends React.Component {
                 editorState: this.createEditorState(enabled, contentState)
             });
         }
+
+        window.localStorage.setItem('mx_editor_rte_enabled', enabled);
 
         this.setState({
             isRichtextEnabled: enabled
