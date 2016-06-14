@@ -38,7 +38,7 @@ export function contentStateToHTML(contentState: ContentState): string {
             () => true, // always return true => don't filter any ranges out
             (start, end) => {
                 // map style names to elements
-                let tags = block.getInlineStyleAt(start).map(style => STYLES[style]);
+                let tags = block.getInlineStyleAt(start).map(style => STYLES[style]).filter(style => !!style);
                 // combine them to get well-nested HTML
                 let open = tags.map(tag => `<${tag}>`).join('');
                 let close = tags.map(tag => `</${tag}>`).reverse().join('');
@@ -67,10 +67,8 @@ export function getScopedRTDecorators(scope: any): CompositeDecorator {
         },
         component: (props) => {
             let member = scope.room.getMember(props.children[0].props.text);
-            let name = null;
-            if (!!member) {
-                name = member.name; // unused until we make these decorators immutable (autocomplete needed)
-            }
+            // unused until we make these decorators immutable (autocomplete needed)
+            let name = member ? member.name : null;
             let avatar = member ? <MemberAvatar member={member} width={16} height={16}/> : null;
             return <span className="mx_UserPill">{avatar} {props.children}</span>;
         }
@@ -131,7 +129,7 @@ function findWithRegex(regex, contentBlock: ContentBlock, callback: (start: numb
  * Passes rangeToReplace to modifyFn and replaces it in contentState with the result.
  */
 export function modifyText(contentState: ContentState, rangeToReplace: SelectionState,
-                           modifyFn: (text: string) => string, ...rest): ContentState {
+                           modifyFn: (text: string) => string, inlineStyle, entityKey): ContentState {
     let getText = (key) => contentState.getBlockForKey(key).getText(),
         startKey = rangeToReplace.getStartKey(),
         startOffset = rangeToReplace.getStartOffset(),
@@ -152,5 +150,5 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
     // add remaining part of last block
     text += getText(endKey).substring(startOffset, endOffset);
 
-    return Modifier.replaceText(contentState, rangeToReplace, modifyFn(text), ...rest);
+    return Modifier.replaceText(contentState, rangeToReplace, modifyFn(text), inlineStyle, entityKey);
 }
