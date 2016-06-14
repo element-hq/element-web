@@ -27,6 +27,7 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
+            'node_modules/babel-polyfill/browser.js',
             testFile,
             {pattern: 'vector/img/*', watched: false, included: false, served: true, nocache: false},
         ],
