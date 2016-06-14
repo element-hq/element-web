@@ -506,8 +506,8 @@ module.exports = React.createClass({
             page_type: this.PageTypes.RoomView,
             thirdPartyInvite: thirdPartyInvite,
             roomOobData: oob_data,
-            newState.currentRoomAlias: roomAlias,
-            newState.currentRoomId: roomId,
+            currentRoomAlias: roomAlias,
+            currentRoomId: roomId,
         };
 
         // if we aren't given an explicit event id, look for one in the
@@ -1012,8 +1012,7 @@ module.exports = React.createClass({
                     page_element = (
                         <RoomView
                             ref="roomView"
-                            roomId={this.state.currentRoomId}
-                            roomAlias={this.state.currentRoomAlias}
+                            roomAddress={this.state.currentRoomAlias || this.state.currentRoomId}
                             eventId={this.state.initialEventId}
                             thirdPartyInvite={this.state.thirdPartyInvite}
                             oobData={this.state.roomOobData}
