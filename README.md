@@ -43,7 +43,7 @@ webserver to actually serve up the app, which is entirely static content.
 config.json
 ===========
 
-You can configure the app by modifying the `config.json` file:
+You can configure the app by copying the sample and modifying the `config.json` file:
 
 1. `default_hs_url` is the default home server url.
 1. `default_is_url` is the default identity server url (this is the server used
