@@ -102,23 +102,17 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        var room;
-        var room_id;
-        if (this.props.roomAddress[0] == '!') {
-            room_id = this.props.roomAddress;
-            room = MatrixClientPeg.get().getRoom(room_id);
-        }
         return {
-            room: room,
-            roomId: room_id,
-            roomLoading: !room,
+            room: null,
+            roomId: null,
+            roomLoading: true,
             editingRoomSettings: false,
             uploadingRoomSettings: false,
             numUnreadMessages: 0,
             draggingFile: false,
             searching: false,
             searchResults: null,
-            hasUnsentMessages: this._hasUnsentMessages(room),
+            hasUnsentMessages: false,
             callState: null,
             guestsCanJoin: false,
             canPeek: false,
@@ -164,15 +158,22 @@ module.exports = React.createClass({
                     room: room,
                     roomId: result.room_id,
                     roomLoading: !room,
+                    hasUnsentMessages: this._hasUnsentMessages(room),
                 }, this.updatePeeking);
             }, (err) => {
                 this.setState({
                     roomLoading: false,
                 });
             });
+        } else {
+            var room = MatrixClientPeg.get().getRoom(this.props.roomAddress);
+            this.setState({
+                roomId: this.props.roomAddress,
+                room: room,
+                roomLoading: !room,
+                hasUnsentMessages: this._hasUnsentMessages(room),
+            }, this.updatePeeking);
         }
-
-        this.updatePeeking();
     },
 
     updatePeeking: function() {
