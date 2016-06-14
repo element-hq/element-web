@@ -258,6 +258,10 @@ module.exports = React.createClass({
     },
 
     _renderDeviceInfo: function() {
+        if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
+            return null;
+        }
+
         var client = MatrixClientPeg.get();
         var deviceId = client.deviceId;
         var olmKey = client.getDeviceEd25519Key() || "<not supported>";
