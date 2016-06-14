@@ -26,6 +26,7 @@ require('../../vector/components.css');
 require('gemini-scrollbar/gemini-scrollbar.css');
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
+require('draft-js/dist/Draft.css');
 
 
  // add React and ReactPerf to the global namespace, to make them easier to
