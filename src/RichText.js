@@ -10,7 +10,12 @@ import {
 import * as sdk from  './index';
 
 const BLOCK_RENDER_MAP = DefaultDraftBlockRenderMap.set('unstyled', {
-    element: 'span' // draft uses <div> by default which we don't really like, so we're using <p>
+    element: 'span'
+    /*
+     draft uses <div> by default which we don't really like, so we're using <span>
+     this is probably not a good idea since <span> is not a block level element but
+     we're trying to fix things in contentStateToHTML below
+     */
 });
 
 const STYLES = {
