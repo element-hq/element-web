@@ -10,7 +10,7 @@ import {
 import * as sdk from  './index';
 
 const BLOCK_RENDER_MAP = DefaultDraftBlockRenderMap.set('unstyled', {
-    element: 'p' // draft uses <div> by default which we don't really like, so we're using <p>
+    element: 'span' // draft uses <div> by default which we don't really like, so we're using <p>
 });
 
 const STYLES = {
@@ -43,11 +43,21 @@ export function contentStateToHTML(contentState: ContentState): string {
                 let open = tags.map(tag => `<${tag}>`).join('');
                 let close = tags.map(tag => `</${tag}>`).reverse().join('');
                 // and get the HTML representation of this styled range (this .substring() should never fail)
-                content.push(`${open}${block.getText().substring(start, end)}${close}`);
+                let text = block.getText().substring(start, end);
+                // http://shebang.brandonmintern.com/foolproof-html-escaping-in-javascript/
+                let div = document.createElement('div');
+                div.appendChild(document.createTextNode(text));
+                let safeText = div.innerHTML;
+                content.push(`${open}${safeText}${close}`);
             }
         );
 
-        return (`<${elem}>${content.join('')}</${elem}>`);
+        let result = `<${elem}>${content.join('')}</${elem}>`;
+
+        // dirty hack because we don't want block level tags by default, but breaks
+        if(elem === 'span')
+            result += '<br />';
+        return result;
     }).join('');
 }
 
