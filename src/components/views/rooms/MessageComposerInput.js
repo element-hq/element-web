@@ -352,6 +352,10 @@ export default class MessageComposerInput extends React.Component {
         } else {
             this.onFinishedTyping();
         }
+
+        if(this.props.onContentChanged) {
+            this.props.onContentChanged(editorState.getCurrentContent().getPlainText());
+        }
     }
 
     enableRichtext(enabled: boolean) {
@@ -521,5 +525,8 @@ MessageComposerInput.propTypes = {
     onResize: React.PropTypes.func,
 
     // js-sdk Room object
-    room: React.PropTypes.object.isRequired
+    room: React.PropTypes.object.isRequired,
+
+    // called with current plaintext content (as a string) whenever it changes
+    onContentChanged: React.PropTypes.func
 };

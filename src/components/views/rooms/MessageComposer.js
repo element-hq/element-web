@@ -212,13 +212,14 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_MessageComposer mx_fadable" style={{ opacity: this.props.opacity }}>
+                <div className="mx_MessageComposer_autocomplete_wrapper">
+                    <Autocomplete query={this.state.autocompleteQuery} pinSelector=".mx_RoomView_statusArea" pinTo={['top', 'left', 'width']} />
+                </div>
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         {controls}
                     </div>
                 </div>
-
-                <Autocomplete query={this.state.autocompleteQuery} pinSelector=".mx_RoomView_statusArea" pinTo={['top', 'left', 'width']} />
             </div>
         );
     }

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import {getCompletions} from '../../../autocomplete/Autocompleter';
 
@@ -11,8 +12,11 @@ export default class Autocomplete extends React.Component {
     }
 
     componentWillReceiveProps(props, state) {
+        if(props.query == this.props.query) return;
+
         getCompletions(props.query).map(completionResult => {
             try {
+                console.log(`${completionResult.provider.getName()}: ${JSON.stringify(completionResult.completions)}`);
                 completionResult.completions.then(completions => {
                     let i = this.state.completions.findIndex(
                         completion => completion.provider === completionResult.provider
@@ -23,15 +27,16 @@ export default class Autocomplete extends React.Component {
                     let newCompletions = Object.assign([], this.state.completions);
                     completionResult.completions = completions;
                     newCompletions[i] = completionResult;
-                    console.log(newCompletions);
+                    // console.log(newCompletions);
                     this.setState({
                         completions: newCompletions
                     });
                 }, err => {
-
+                    console.error(err);
                 });
             } catch (e) {
                 // An error in one provider shouldn't mess up the rest.
+                console.error(e);
             }
         });
     }
@@ -42,23 +47,19 @@ export default class Autocomplete extends React.Component {
 
         const position = pinElement.getBoundingClientRect();
 
-        const style = {
-            position: 'fixed',
-            border: '1px solid gray',
-            background: 'white',
-            borderRadius: '4px'
-        };
 
-        this.props.pinTo.forEach(direction => {
-            style[direction] = position[direction];
-        });
 
         const renderedCompletions = this.state.completions.map((completionResult, i) => {
-            console.log(completionResult);
+            // console.log(completionResult);
             let completions = completionResult.completions.map((completion, i) => {
+                let Component = completion.component;
+                if(Component) {
+                    return Component;
+                }
+                
                 return (
-                    <div key={i} class="mx_Autocomplete_Completion">
-                        <strong>{completion.title}</strong>
+                    <div key={i} className="mx_Autocomplete_Completion">
+                        <span>{completion.title}</span>
                         <em>{completion.subtitle}</em>
                         <span style={{color: 'gray', float: 'right'}}>{completion.description}</span>
                     </div>
@@ -67,16 +68,20 @@ export default class Autocomplete extends React.Component {
 
 
             return completions.length > 0 ? (
-                <div key={i} class="mx_Autocomplete_ProviderSection">
-                    <strong>{completionResult.provider.getName()}</strong>
-                    {completions}
+                <div key={i} className="mx_Autocomplete_ProviderSection">
+                    <span className="mx_Autocomplete_provider_name">{completionResult.provider.getName()}</span>
+                    <ReactCSSTransitionGroup transitionName="autocomplete" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+                        {completions}
+                    </ReactCSSTransitionGroup>
                 </div>
             ) : null;
         });
 
         return (
-            <div className="mx_Autocomplete" style={style}>
-                {renderedCompletions}
+            <div className="mx_Autocomplete">
+                <ReactCSSTransitionGroup transitionName="autocomplete" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+                    {renderedCompletions}
+                </ReactCSSTransitionGroup>
             </div>
         );
     }
