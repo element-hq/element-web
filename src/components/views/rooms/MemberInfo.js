@@ -30,6 +30,7 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 var dis = require("../../../dispatcher");
 var Modal = require("../../../Modal");
 var sdk = require('../../../index');
+var UserSettingsStore = require('../../../UserSettingsStore');
 var createRoom = require('../../../createRoom');
 
 module.exports = React.createClass({
@@ -506,6 +507,10 @@ module.exports = React.createClass({
     },
 
     _renderDevices: function() {
+        if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
+            return null;
+        }
+
         var devices = this.state.devices;
         var MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
         var Spinner = sdk.getComponent("elements.Spinner");

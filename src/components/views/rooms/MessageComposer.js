@@ -22,6 +22,8 @@ var sdk = require('../../../index');
 var dis = require('../../../dispatcher');
 import Autocomplete from './Autocomplete';
 
+import UserSettingsStore from '../../../UserSettingsStore';
+
 
 module.exports = React.createClass({
     displayName: 'MessageComposer',
@@ -144,7 +146,8 @@ module.exports = React.createClass({
         var uploadInputStyle = {display: 'none'};
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
+        var MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput" +
+            (UserSettingsStore.isFeatureEnabled('rich_text_editor') ? "" : "Old"));
 
         var controls = [];
 
