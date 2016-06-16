@@ -139,7 +139,7 @@ export default class MessageComposerInput extends React.Component {
                 this.element = element;
                 this.position = -1;
                 var storedData = window.sessionStorage.getItem(
-                    "history_" + roomId
+                    "mx_messagecomposer_history_" + roomId
                 );
                 if (storedData) {
                     this.data = JSON.parse(storedData);
@@ -153,7 +153,7 @@ export default class MessageComposerInput extends React.Component {
                 // store a message in the sent history
                 this.data.unshift(text);
                 window.sessionStorage.setItem(
-                    "history_" + this.roomId,
+                    "mx_messagecomposer_history_" + this.roomId,
                     JSON.stringify(this.data)
                 );
                 // reset history position
@@ -200,11 +200,11 @@ export default class MessageComposerInput extends React.Component {
                 // NB: This isn't 'originalText' because we want to restore
                 // sent history items too!
                 let contentJSON = JSON.stringify(convertToRaw(component.state.editorState.getCurrentContent()));
-                window.sessionStorage.setItem("input_" + this.roomId, contentJSON);
+                window.sessionStorage.setItem("mx_messagecomposer_input_" + this.roomId, contentJSON);
             },
 
             setLastTextEntry: function() {
-                let contentJSON = window.sessionStorage.getItem("input_" + this.roomId);
+                let contentJSON = window.sessionStorage.getItem("mx_messagecomposer_input_" + this.roomId);
                 if (contentJSON) {
                     let content = convertFromRaw(JSON.parse(contentJSON));
                     component.setState({
