@@ -1,0 +1,42 @@
+.mx_Autocomplete {
+    position: absolute;
+    bottom: 0;
+    z-index: 1000;
+    width: 100%;
+    border: 1px solid #e5e5e5;
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+}
+
+.mx_Autocomplete_ProviderSection {
+    padding: 12px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.mx_Autocomplete_ProviderSection * {
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.mx_Autocomplete_provider_name {
+    color: #76cfa6;
+}
+
+.autocomplete-enter {
+    opacity: 0.01;
+}
+
+.autocomplete-enter.autocomplete-enter-active {
+    opacity: 1;
+    transition: opacity 300ms ease-in;
+}
+
+.autocomplete-leave {
+    opacity: 1;
+}
+
+.autocomplete-leave.autocomplete-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+}
