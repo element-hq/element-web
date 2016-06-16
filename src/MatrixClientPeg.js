@@ -50,6 +50,11 @@ function createClientForPeg(hs_url, is_url, user_id, access_token, guestAccess) 
     }
 
     matrixClient = Matrix.createClient(opts);
+
+    // we're going to add eventlisteners for each matrix event tile, so the
+    // potential number of event listeners is quite high.
+    matrixClient.setMaxListeners(500);
+
     if (guestAccess) {
         console.log("Guest: %s", guestAccess.isGuest());
         matrixClient.setGuest(guestAccess.isGuest());
@@ -91,7 +96,7 @@ class MatrixClient {
     }
 
     // FIXME, XXX: this all seems very convoluted :(
-    //   
+    //
     // if we replace the singleton using URLs we bypass our createClientForPeg()
     // global helper function... but if we replace it using
     // an access_token we don't?
