@@ -29,6 +29,7 @@ components['views.elements.Spinner'] = stubComponent({displayName: 'Spinner'});
 components['views.messages.DateSeparator'] = stubComponent({displayName: 'DateSeparator'});
 components['views.messages.MessageTimestamp'] = stubComponent({displayName: 'MessageTimestamp'});
 components['views.messages.SenderProfile'] = stubComponent({displayName: 'SenderProfile'});
+components['views.rooms.SearchBar'] = stubComponent();
 
 sdk.loadSkin(skin);
 

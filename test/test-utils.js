@@ -34,13 +34,16 @@ module.exports.stubClient = function() {
         getIdentityServerUrl: sinon.stub(),
 
         getPushActionsForEvent: sinon.stub(),
-        getRoom: sinon.stub(),
+        getRoom: sinon.stub().returns(this.mkStubRoom()),
+        getRooms: sinon.stub().returns([]),
         loginFlows: sinon.stub(),
         on: sinon.stub(),
         removeListener: sinon.stub(),
 
         paginateEventTimeline: sinon.stub().returns(q()),
         sendReadReceipt: sinon.stub().returns(q()),
+        getRoomIdForAlias: sinon.stub().returns(q()),
+        getProfileInfo: sinon.stub().returns(q({})),
     };
 
     // stub out the methods in MatrixClientPeg
@@ -169,3 +172,16 @@ module.exports.mkMessage = function(opts) {
     };
     return module.exports.mkEvent(opts);
 };
+
+module.exports.mkStubRoom = function() {
+    return {
+        getReceiptsForEvent: sinon.stub().returns([]),
+        getMember: sinon.stub().returns({}),
+        getJoinedMembers: sinon.stub().returns([]),
+        currentState: {
+            getStateEvents: sinon.stub(),
+            members: [],
+        },
+    };
+};
+
