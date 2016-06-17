@@ -15,9 +15,11 @@ var stubComponent = require('../../components/stub-component.js');
 
 describe('RoomView', function () {
     var sandbox;
+    var parentDiv;
 
     beforeEach(function() {
         sandbox = test_utils.stubClient();
+        parentDiv = document.createElement('div');
 
         this.oldTimelinePanel = Skinner.getComponent('structures.TimelinePanel');
         this.oldRoomHeader = Skinner.getComponent('views.rooms.RoomHeader');
@@ -29,6 +31,9 @@ describe('RoomView', function () {
 
     afterEach(function() {
         sandbox.restore();
+
+        ReactDOM.unmountComponentAtNode(parentDiv);
+
         Skinner.addComponent('structures.TimelinePanel', this.oldTimelinePanel);
         Skinner.addComponent('views.rooms.RoomHeader', this.oldRoomHeader);
     });
@@ -38,7 +43,6 @@ describe('RoomView', function () {
 
         var onRoomIdResolved = sinon.spy();
 
-        var parentDiv = document.createElement('div');
         ReactDOM.render(<RoomView roomAddress="#alias:ser.ver" onRoomIdResolved={onRoomIdResolved} />, parentDiv);
 
         process.nextTick(function() {
@@ -46,7 +50,6 @@ describe('RoomView', function () {
             // messages, but expect's toHaveBeenCalled only takes an expect spy object,
             // not a sinon spy object.
             expect(onRoomIdResolved.called).toExist();
-            ReactDOM.unmountComponentAtNode(parentDiv);
             done();
         });
     });
@@ -63,7 +66,6 @@ describe('RoomView', function () {
             roomView.onJoinButtonClicked();
             process.nextTick(function() {
                 expect(peg.get().joinRoom.calledWith('#alias:ser.ver')).toExist();
-                ReactDOM.unmountComponentAtNode(parentDiv);
                 done();
             });
         });
