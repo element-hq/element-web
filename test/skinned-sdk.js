@@ -22,6 +22,7 @@ var components = skin.components;
 components['structures.LeftPanel'] = stubComponent();
 components['structures.RightPanel'] = stubComponent();
 components['structures.RoomDirectory'] = stubComponent();
+components['rooms.SearchBar'] = stubComponent();
 components['views.globals.MatrixToolbar'] = stubComponent();
 components['views.globals.GuestWarningBar'] = stubComponent();
 components['views.globals.NewVersionBar'] = stubComponent();
