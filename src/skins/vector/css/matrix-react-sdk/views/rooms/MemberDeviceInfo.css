@@ -26,7 +26,6 @@ limitations under the License.
 
 .mx_MemberDeviceInfo_textButton {
     color: #fff;
-    background-color: #76cfa6;
     height: 20px;
     border-radius: 20px;
     text-align: center;
@@ -34,4 +33,12 @@ limitations under the License.
     padding-right: 1em;
 
     cursor: pointer;
+}
+
+.mx_MemberDeviceInfo_verify {
+    background-color: #76cfa6;
+}
+
+.mx_MemberDeviceInfo_unverify {
+    background-color: #e55e5e;
 }
