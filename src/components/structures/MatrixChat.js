@@ -33,7 +33,6 @@ var PostRegistration = require("./login/PostRegistration");
 var Modal = require("../../Modal");
 var Tinter = require("../../Tinter");
 var sdk = require('../../index');
-var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
 var KeyCode = require('../../KeyCode');
 
@@ -539,7 +538,7 @@ module.exports = React.createClass({
             var presentedId = roomAlias || roomId;
             var room = MatrixClientPeg.get().getRoom(roomId);
             if (room) {
-                var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
+                var theAlias = room.getCanonicalAlias();
                 if (theAlias) presentedId = theAlias;
 
                 // No need to do this given RoomView triggers it itself...
@@ -631,7 +630,7 @@ module.exports = React.createClass({
                 var presentedId = self.state.currentRoomId;
                 var room = MatrixClientPeg.get().getRoom(self.state.currentRoomId);
                 if (room) {
-                    var theAlias = MatrixTools.getCanonicalAliasForRoom(room);
+                    var theAlias = room.getCanonicalAlias();
                     if (theAlias) presentedId = theAlias;
                 }
 
