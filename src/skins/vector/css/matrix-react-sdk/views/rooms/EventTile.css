@@ -17,7 +17,7 @@ limitations under the License.
 .mx_EventTile {
     max-width: 100%;
     clear: both;
-    margin-top: 24px;
+    padding-top: 24px;
     margin-left: 65px;
 }
 
@@ -33,7 +33,7 @@ limitations under the License.
 }
 
 .mx_EventTile_continuation {
-    margin-top: 8px ! important;
+    padding-top: 8px ! important;
 }
 
 .mx_EventTile_verified {
