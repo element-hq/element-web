@@ -40,6 +40,9 @@ describe('RoomView', function () {
         ReactDOM.render(<RoomView roomAddress="#alias:ser.ver" onRoomIdResolved={onRoomIdResolved} />, parentDiv);
 
         process.nextTick(function() {
+            // These expect()s don't read very well and don't give very good failure
+            // messages, but expect's toHaveBeenCalled only takes an expect spy object,
+            // not a sinon spy object.
             expect(onRoomIdResolved.called).toExist();
             ReactDOM.unmountComponentAtNode(parentDiv);
             done();
