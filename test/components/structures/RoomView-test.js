@@ -20,6 +20,7 @@ describe('RoomView', function () {
         sandbox = test_utils.stubClient();
 
         this.oldTimelinePanel = Skinner.getComponent('structures.TimelinePanel');
+        this.oldRoomHeader = Skinner.getComponent('views.rooms.RoomHeader');
         Skinner.addComponent('structures.TimelinePanel', stubComponent());
         Skinner.addComponent('views.rooms.RoomHeader', stubComponent());
 
@@ -29,6 +30,7 @@ describe('RoomView', function () {
     afterEach(function() {
         sandbox.restore();
         Skinner.addComponent('structures.TimelinePanel', this.oldTimelinePanel);
+        Skinner.addComponent('views.rooms.RoomHeader', this.oldRoomHeader);
     });
 
     it('resolves a room alias to a room id', function (done) {
