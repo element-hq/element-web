@@ -77,6 +77,7 @@ describe('joining a room', function () {
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
             httpBackend.when('GET', '/sync').respond(200, {});
             httpBackend.when('GET', '/publicRooms').respond(200, {chunk: []});
+            httpBackend.when('GET', '/directory/room/'+encodeURIComponent(ROOM_ALIAS)).respond(200, { room_id: ROOM_ID });
 
             // start with a logged-in client
             peg.replaceUsingAccessToken(HS_URL, IS_URL, USER_ID, ACCESS_TOKEN);
@@ -102,7 +103,7 @@ describe('joining a room', function () {
 
                 // that should create a roomview which will start a peek; wait
                 // for the peek.
-                httpBackend.when('GET', '/rooms/'+encodeURIComponent(ROOM_ALIAS)+"/initialSync")
+                httpBackend.when('GET', '/rooms/'+encodeURIComponent(ROOM_ID)+"/initialSync")
                     .respond(401, {errcode: 'M_GUEST_ACCESS_FORBIDDEN'});
                 return httpBackend.flush();
             }).then(() => {
