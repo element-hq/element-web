@@ -26,6 +26,7 @@ require('../../vector/components.css');
 require('gemini-scrollbar/gemini-scrollbar.css');
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
+require('draft-js/dist/Draft.css');
 
 
  // add React and ReactPerf to the global namespace, to make them easier to
@@ -40,8 +41,9 @@ var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
-var configJson = require("../../config.json");
 var UpdateChecker = require("./updater");
+var q = require('q');
+var request = require('browser-request');
 
 var qs = require("querystring");
 
@@ -111,6 +113,8 @@ function parseQs(location) {
 // Here, we do some crude URL analysis to allow
 // deep-linking.
 function routeUrl(location) {
+    if (!window.matrixChat) return;
+
     console.log("Routing URL "+window.location);
     var params = parseQs(location);
     var loginToken = params.loginToken;
@@ -181,7 +185,25 @@ window.onload = function() {
     }
 }
 
-function loadApp() {
+function getConfig() {
+    let deferred = q.defer();
+
+    request(
+        { method: "GET", url: "config.json", json: true },
+        (err, response, body) => {
+            if (err || response.status < 200 || response.status >= 300) {
+                deferred.reject({err: err, response: response});
+                return;
+            }
+
+            deferred.resolve(body);
+        }
+    );
+
+    return deferred.promise;
+}
+
+async function loadApp() {
     if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
         if (confirm("Vector runs much better as an app on iOS. Get the app?")) {
             window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
@@ -189,14 +211,32 @@ function loadApp() {
         }
     }
     else if (/Android/.test(navigator.userAgent)) {
-        if (confirm("Vector runs much better as an app on Vector. Get the app?")) {
+        if (confirm("Vector runs much better as an app on Android. Get the app?")) {
             window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
             return;
         }
     }
 
+    let configJson;
+    let configError;
+    try {
+        configJson = await getConfig();
+    } catch (e) {
+        // On 404 errors, carry on without a config,
+        // but on other errors, fail, otherwise it will
+        // lead to subtle errors where the app runs with
+        // the default config if it fails to fetch config.json.
+        if (e.response.status != 404) {
+            configError = e;
+        }
+    }
+
     console.log("Vector starting at "+window.location);
-    if (validBrowser) {
+    if (configError) {
+        window.matrixChat = ReactDOM.render(<div className="error">
+            Unable to load config file: please refresh the page to try again.
+        </div>, document.getElementById('matrixchat'));
+    } else if (validBrowser) {
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
         var fragParts = parseQsFromFragment(window.location);
         window.matrixChat = ReactDOM.render(

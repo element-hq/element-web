@@ -27,6 +27,7 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
+            'node_modules/babel-polyfill/browser.js',
             testFile,
             {pattern: 'vector/img/*', watched: false, included: false, served: true, nocache: false},
         ],
@@ -35,7 +36,7 @@ module.exports = function (config) {
         proxies: {
             "/img/": "/base/vector/img/",
         },
-        
+
         // preprocess matching files before serving them to the browser
         // available preprocessors:
         // https://npmjs.org/browse/keyword/karma-preprocessor
@@ -122,7 +123,7 @@ module.exports = function (config) {
 
                     // same goes for js-sdk
                     "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
-                    
+
                     sinon: 'sinon/pkg/sinon.js',
                 },
                 root: [
@@ -130,6 +131,11 @@ module.exports = function (config) {
                     path.resolve('./test'),
                 ],
             },
+            plugins: [
+                // olm may not be installed, so avoid webpack warnings by
+                // ignoring it.
+                new webpack.IgnorePlugin(/^olm$/),
+            ],
             devtool: 'inline-source-map',
         },
     });
