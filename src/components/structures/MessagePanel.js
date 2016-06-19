@@ -86,6 +86,10 @@ module.exports = React.createClass({
         // to manage its animations
         this._readReceiptMap = {};
 
+        // Remember the read marker ghost node so we can do the cleanup that
+        // Velocity requires
+        this._readMarkerGhostNode = null;
+
         this._isMounted = true;
     },
 
@@ -422,9 +426,16 @@ module.exports = React.createClass({
     },
 
     _startAnimation: function(ghostNode) {
-        Velocity(ghostNode, {opacity: '0', width: '10%'},
-                 {duration: 400, easing: 'easeInSine',
-                  delay: 1000});
+        if (this._readMarkerGhostNode) {
+            Velocity.Utilities.removeData(this._readMarkerGhostNode);
+        }
+        this._readMarkerGhostNode = ghostNode;
+
+        if (ghostNode) {
+            Velocity(ghostNode, {opacity: '0', width: '10%'},
+                     {duration: 400, easing: 'easeInSine',
+                      delay: 1000});
+        }
     },
 
     _getReadMarkerGhostTile: function() {

@@ -24,6 +24,10 @@
   "dependencies": {
     "browser-request": "^0.3.3",
     "classnames": "^2.1.2",
+    "draft-js": "^0.7.0",
+    "draft-js-export-html": "^0.2.2",
+    "draft-js-export-markdown": "^0.2.0",
+    "draft-js-import-markdown": "^0.1.6",
     "favico.js": "^0.3.10",
     "filesize": "^3.1.2",
     "flux": "^2.0.3",
@@ -31,15 +35,14 @@
     "highlight.js": "^8.9.1",
     "linkifyjs": "^2.0.0-beta.4",
     "marked": "^0.3.5",
-    "matrix-js-sdk": "^0.5.4",
+    "matrix-js-sdk": "matrix-org/matrix-js-sdk#develop",
     "optimist": "^0.6.1",
     "q": "^1.4.1",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#c3d942e",
     "sanitize-html": "^1.11.1",
-    "velocity-animate": "^1.2.3",
-    "velocity-ui-pack": "^1.2.2"
+    "velocity-vector": "vector-im/velocity#059e3b2"
   },
   "//babelversion": [
     "brief experiments with babel6 seems to show that it generates source ",
