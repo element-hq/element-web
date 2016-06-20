@@ -25,36 +25,22 @@ import Autocomplete from './Autocomplete';
 import UserSettingsStore from '../../../UserSettingsStore';
 
 
-module.exports = React.createClass({
-    displayName: 'MessageComposer',
+export default class MessageComposer extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.onCallClick = this.onCallClick.bind(this);
+        this.onHangupClick = this.onHangupClick.bind(this);
+        this.onUploadClick = this.onUploadClick.bind(this);
+        this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
+        this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
+        this.onInputContentChanged = this.onInputContentChanged.bind(this);
 
-    propTypes: {
-        tabComplete: React.PropTypes.any,
-
-        // a callback which is called when the height of the composer is
-        // changed due to a change in content.
-        onResize: React.PropTypes.func,
-
-        // js-sdk Room object
-        room: React.PropTypes.object.isRequired,
-
-        // string representing the current voip call state
-        callState: React.PropTypes.string,
-
-        // callback when a file to upload is chosen
-        uploadFile: React.PropTypes.func.isRequired,
-
-        // opacity for dynamic UI fading effects
-        opacity: React.PropTypes.number,
-    },
-
-    getInitialState: function () {
-        return {
+        this.state = {
             autocompleteQuery: ''
         };
-    },
+    }
 
-    onUploadClick: function(ev) {
+    onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
@@ -65,9 +51,9 @@ module.exports = React.createClass({
         }
 
         this.refs.uploadInput.click();
-    },
+    }
 
-    onUploadFileSelected: function(ev) {
+    onUploadFileSelected(ev) {
         var files = ev.target.files;
 
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -103,9 +89,9 @@ module.exports = React.createClass({
                 this.refs.uploadInput.value = null;
             }
         });
-    },
+    }
 
-    onHangupClick: function() {
+    onHangupClick() {
         var call = CallHandler.getCallForRoom(this.props.room.roomId);
         //var call = CallHandler.getAnyActiveCall();
         if (!call) {
@@ -117,31 +103,32 @@ module.exports = React.createClass({
             // (e.g. conferences which will hangup the 1:1 room instead)
             room_id: call.roomId
         });
-    },
+    }
 
-    onCallClick: function(ev) {
+    onCallClick(ev) {
         dis.dispatch({
             action: 'place_call',
             type: ev.shiftKey ? "screensharing" : "video",
             room_id: this.props.room.roomId
         });
-    },
+    }
 
-    onVoiceCallClick: function(ev) {
+    onVoiceCallClick(ev) {
         dis.dispatch({
             action: 'place_call',
             type: 'voice',
             room_id: this.props.room.roomId
         });
-    },
+    }
 
-    onInputContentChanged(content: String) {
+    onInputContentChanged(content: string) {
         this.setState({
             autocompleteQuery: content
-        })
-    },
+        });
+        console.log(content);
+    }
 
-    render: function() {
+    render() {
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
@@ -196,7 +183,7 @@ module.exports = React.createClass({
             controls.push(
                 <MessageComposerInput key="controls_input" tabComplete={this.props.tabComplete}
                     onResize={this.props.onResize} room={this.props.room}
-                                      onContentChanged={(content) => this.onInputContentChanged(content) } />,
+                                      onContentChanged={this.onInputContentChanged} />,
                 uploadButton,
                 hangupButton,
                 callButton,
@@ -213,7 +200,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_MessageComposer mx_fadable" style={{ opacity: this.props.opacity }}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    <Autocomplete query={this.state.autocompleteQuery} pinSelector=".mx_RoomView_statusArea" pinTo={['top', 'left', 'width']} />
+                    <Autocomplete query={this.state.autocompleteQuery} />
                 </div>
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
@@ -223,5 +210,24 @@ module.exports = React.createClass({
             </div>
         );
     }
-});
+};
 
+MessageComposer.propTypes = {
+    tabComplete: React.PropTypes.any,
+
+    // a callback which is called when the height of the composer is
+    // changed due to a change in content.
+    onResize: React.PropTypes.func,
+
+    // js-sdk Room object
+    room: React.PropTypes.object.isRequired,
+
+    // string representing the current voip call state
+    callState: React.PropTypes.string,
+
+    // callback when a file to upload is chosen
+    uploadFile: React.PropTypes.func.isRequired,
+
+    // opacity for dynamic UI fading effects
+    opacity: React.PropTypes.number
+};

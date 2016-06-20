@@ -6,19 +6,19 @@ import Fuse from 'fuse.js';
 const EMOJI_REGEX = /:\w*:?/g;
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 
+let instance = null;
+
 export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super();
-        console.log(EMOJI_SHORTNAMES);
         this.fuse = new Fuse(EMOJI_SHORTNAMES);
     }
 
     getCompletions(query: String) {
         let completions = [];
-        const matches = query.match(EMOJI_REGEX);
-        console.log(matches);
-        if(!!matches) {
-            const command = matches[0];
+        let matches = query.match(EMOJI_REGEX);
+        let command = matches && matches[0];
+        if(command) {
             completions = this.fuse.search(command).map(result => {
                 let shortname = EMOJI_SHORTNAMES[result];
                 let imageHTML = shortnameToImage(shortname);
@@ -37,5 +37,11 @@ export default class EmojiProvider extends AutocompleteProvider {
 
     getName() {
         return 'Emoji';
+    }
+
+    static getInstance() {
+        if(instance == null)
+            instance = new EmojiProvider();
+        return instance;
     }
 }

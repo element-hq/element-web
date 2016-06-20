@@ -1,8 +1,11 @@
 import AutocompleteProvider from './AutocompleteProvider';
 import Q from 'q';
 import MatrixClientPeg from '../MatrixClientPeg';
+import Fuse from 'fuse.js';
 
 const ROOM_REGEX = /(?=#)[^\s]*/g;
+
+let instance = null;
 
 export default class RoomProvider extends AutocompleteProvider {
     constructor() {
@@ -13,8 +16,8 @@ export default class RoomProvider extends AutocompleteProvider {
         let client = MatrixClientPeg.get();
         let completions = [];
         const matches = query.match(ROOM_REGEX);
-        if(!!matches) {
-            const command = matches[0];
+        const command = matches && matches[0];
+        if(command) {
             completions = client.getRooms().map(room => {
                 return {
                     title: room.name,
@@ -27,5 +30,12 @@ export default class RoomProvider extends AutocompleteProvider {
 
     getName() {
         return 'Rooms';
+    }
+    
+    static getInstance() {
+        if(instance == null)
+            instance = new RoomProvider();
+        
+        return instance;
     }
 }

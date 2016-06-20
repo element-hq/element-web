@@ -72,7 +72,7 @@ export default class MessageComposerInput extends React.Component {
         this.onInputClick = this.onInputClick.bind(this);
         this.handleReturn = this.handleReturn.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
-        this.onChange = this.onChange.bind(this);
+        this.setEditorState = this.setEditorState.bind(this);
 
         let isRichtextEnabled = window.localStorage.getItem('mx_editor_rte_enabled');
         if(isRichtextEnabled == null) {
@@ -207,9 +207,7 @@ export default class MessageComposerInput extends React.Component {
                 let contentJSON = window.sessionStorage.getItem("mx_messagecomposer_input_" + this.roomId);
                 if (contentJSON) {
                     let content = convertFromRaw(JSON.parse(contentJSON));
-                    component.setState({
-                        editorState: component.createEditorState(component.state.isRichtextEnabled, content)
-                    });
+                    component.setEditorState(component.createEditorState(component.state.isRichtextEnabled, content));
                 }
             }
         };
@@ -344,7 +342,7 @@ export default class MessageComposerInput extends React.Component {
         this.refs.editor.focus();
     }
 
-    onChange(editorState: EditorState) {
+    setEditorState(editorState: EditorState) {
         this.setState({editorState});
 
         if(editorState.getCurrentContent().hasText()) {
@@ -361,15 +359,11 @@ export default class MessageComposerInput extends React.Component {
     enableRichtext(enabled: boolean) {
         if (enabled) {
             let html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
-            this.setState({
-                editorState: this.createEditorState(enabled, RichText.HTMLtoContentState(html))
-            });
+            this.setEditorState(this.createEditorState(enabled, RichText.HTMLtoContentState(html)));
         } else {
             let markdown = stateToMarkdown(this.state.editorState.getCurrentContent()),
                 contentState = ContentState.createFromText(markdown);
-            this.setState({
-                editorState: this.createEditorState(enabled, contentState)
-            });
+            this.setEditorState(this.createEditorState(enabled, contentState));
         }
 
         window.localStorage.setItem('mx_editor_rte_enabled', enabled);
@@ -412,7 +406,7 @@ export default class MessageComposerInput extends React.Component {
             newState = RichUtils.handleKeyCommand(this.state.editorState, command);
 
         if (newState != null) {
-            this.onChange(newState);
+            this.setEditorState(newState);
             return true;
         }
         return false;
@@ -506,7 +500,7 @@ export default class MessageComposerInput extends React.Component {
                 <Editor ref="editor"
                         placeholder="Type a message…"
                         editorState={this.state.editorState}
-                        onChange={this.onChange}
+                        onChange={this.setEditorState}
                         keyBindingFn={MessageComposerInput.getKeyBinding}
                         handleKeyCommand={this.handleKeyCommand}
                         handleReturn={this.handleReturn}

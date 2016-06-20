@@ -5,6 +5,8 @@ import 'whatwg-fetch';
 const DDG_REGEX = /\/ddg\s+(.+)$/;
 const REFERER = 'vector';
 
+let instance = null;
+
 export default class DuckDuckGoProvider extends AutocompleteProvider {
     static getQueryUri(query: String) {
         return `http://api.duckduckgo.com/?q=${encodeURIComponent(query)}`
@@ -50,5 +52,12 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
 
     getName() {
         return 'Results from DuckDuckGo';
+    }
+
+    static getInstance(): DuckDuckGoProvider {
+        if(instance == null)
+            instance = new DuckDuckGoProvider();
+
+        return instance;
     }
 }

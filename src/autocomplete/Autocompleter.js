@@ -5,12 +5,12 @@ import UserProvider from './UserProvider';
 import EmojiProvider from './EmojiProvider';
 
 const PROVIDERS = [
+    UserProvider,
     CommandProvider,
     DuckDuckGoProvider,
     RoomProvider,
-    UserProvider,
     EmojiProvider
-].map(completer => new completer());
+].map(completer => completer.getInstance());
 
 export function getCompletions(query: String) {
     return PROVIDERS.map(provider => {

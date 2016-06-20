@@ -16,14 +16,14 @@ export default class Autocomplete extends React.Component {
 
         getCompletions(props.query).map(completionResult => {
             try {
-                console.log(`${completionResult.provider.getName()}: ${JSON.stringify(completionResult.completions)}`);
+                // console.log(`${completionResult.provider.getName()}: ${JSON.stringify(completionResult.completions)}`);
                 completionResult.completions.then(completions => {
                     let i = this.state.completions.findIndex(
                         completion => completion.provider === completionResult.provider
                     );
 
                     i = i == -1 ? this.state.completions.length : i;
-                    console.log(completionResult);
+                    // console.log(completionResult);
                     let newCompletions = Object.assign([], this.state.completions);
                     completionResult.completions = completions;
                     newCompletions[i] = completionResult;
@@ -42,13 +42,6 @@ export default class Autocomplete extends React.Component {
     }
 
     render() {
-        const pinElement = document.querySelector(this.props.pinSelector);
-        if(!pinElement) return null;
-
-        const position = pinElement.getBoundingClientRect();
-
-
-
         const renderedCompletions = this.state.completions.map((completionResult, i) => {
             // console.log(completionResult);
             let completions = completionResult.completions.map((completion, i) => {
@@ -58,10 +51,11 @@ export default class Autocomplete extends React.Component {
                 }
                 
                 return (
-                    <div key={i} className="mx_Autocomplete_Completion">
-                        <span>{completion.title}</span>
-                        <em>{completion.subtitle}</em>
-                        <span style={{color: 'gray', float: 'right'}}>{completion.description}</span>
+                    <div key={i} className="mx_Autocomplete_Completion" tabIndex={0}>
+                        <span style={{fontWeight: 600}}>{completion.title}</span>
+                        <span>{completion.subtitle}</span>
+                        <span style={{flex: 1}} />
+                        <span style={{color: 'gray'}}>{completion.description}</span>
                     </div>
                 );
             });
@@ -70,7 +64,7 @@ export default class Autocomplete extends React.Component {
             return completions.length > 0 ? (
                 <div key={i} className="mx_Autocomplete_ProviderSection">
                     <span className="mx_Autocomplete_provider_name">{completionResult.provider.getName()}</span>
-                    <ReactCSSTransitionGroup transitionName="autocomplete" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+                    <ReactCSSTransitionGroup component="div" transitionName="autocomplete" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
                         {completions}
                     </ReactCSSTransitionGroup>
                 </div>
@@ -79,7 +73,7 @@ export default class Autocomplete extends React.Component {
 
         return (
             <div className="mx_Autocomplete">
-                <ReactCSSTransitionGroup transitionName="autocomplete" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+                <ReactCSSTransitionGroup component="div" transitionName="autocomplete" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
                     {renderedCompletions}
                 </ReactCSSTransitionGroup>
             </div>
@@ -89,11 +83,5 @@ export default class Autocomplete extends React.Component {
 
 Autocomplete.propTypes = {
     // the query string for which to show autocomplete suggestions
-    query: React.PropTypes.string.isRequired,
-    
-    // CSS selector indicating which element to pin the autocomplete to
-    pinSelector: React.PropTypes.string.isRequired,
-
-    // attributes on which the autocomplete should match the pinElement
-    pinTo: React.PropTypes.array.isRequired
+    query: React.PropTypes.string.isRequired
 };

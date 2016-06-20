@@ -39,6 +39,8 @@ const COMMANDS = [
     }
 ];
 
+let instance = null;
+
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
         super();
@@ -49,7 +51,7 @@ export default class CommandProvider extends AutocompleteProvider {
 
     getCompletions(query: String) {
         let completions = [];
-        const matches = query.match(/(^\/\w+)/);
+        const matches = query.match(/(^\/\w*)/);
         if(!!matches) {
             const command = matches[0];
             completions = this.fuse.search(command).map(result => {
@@ -65,5 +67,12 @@ export default class CommandProvider extends AutocompleteProvider {
 
     getName() {
         return 'Commands';
+    }
+
+    static getInstance(): CommandProvider {
+        if(instance == null)
+            instance = new CommandProvider();
+
+        return instance;
     }
 }
