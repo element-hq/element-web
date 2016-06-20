@@ -22,7 +22,7 @@ Building From Source
 If you do wish to build vector from source:
 
 1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
-1. Clone the repo: `git clone https://github.com/vector-im/vector-web.git` 
+1. Clone the repo: `git clone https://github.com/vector-im/vector-web.git`
 1. Switch to the vector directory: `cd vector-web`
 1. Install the prerequisites: `npm install`
 1. If you are using the `develop` branch of vector, you will probably need to
@@ -59,8 +59,6 @@ Much of the functionality in Vector is actually in the `matrix-react-sdk` and
 `matrix-js-sdk` modules. It is possible to set these up in a way that makes it
 easy to track the `develop` branches in git and to make local changes without
 having to manually rebuild each time.
-
-[Be aware that there may be problems with this process under npm version 3.]
 
 First clone and build `matrix-js-sdk`:
 
@@ -123,10 +121,7 @@ day-to-day use; it is experimental and should be considered only as a
 proof-of-concept. See https://matrix.org/jira/browse/SPEC-162 for an overview
 of the current progress.
 
-To build a version of vector with support for end-to-end encryption, install
-the olm module with `npm i https://matrix.org/packages/npm/olm/olm-0.1.0.tgz`
-before running `npm start`. The olm library will be detected and used if
-available.
+Vector is built with support for end-to-end encryption by default.
 
 To enable encryption for a room, type
 
@@ -142,4 +137,4 @@ Note that historical encrypted messages cannot currently be decoded - history
 is therefore lost when the page is reloaded.
 
 There is currently no visual indication of whether encryption is enabled for a
-room, or whether a particular message was encrypted.
+room.
