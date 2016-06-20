@@ -7,6 +7,8 @@
     background: rgba(255, 255, 255, 0.9);
     border-bottom: none;
     border-radius: 4px 4px 0 0;
+    max-height: 50vh;
+    overflow: auto
 }
 
 .mx_Autocomplete_ProviderSection {
@@ -15,12 +17,31 @@
 }
 
 .mx_Autocomplete_ProviderSection * {
-    padding: 4px;
+    padding: 2px;
     border-radius: 4px;
+}
+
+.mx_Autocomplete_Completion {
+    user-select: none;
+    cursor: pointer;
+    transition: 0.3s all ease;
+    display: flex;
+    align-items: center;
+}
+
+.mx_Autocomplete_Completion:focus {
+    background: #76cfa6;
+    color: white;
+    outline: none;
+}
+
+.mx_Autocomplete_Completion:focus * {
+    color: white !important;
 }
 
 .mx_Autocomplete_provider_name {
     color: #76cfa6;
+    font-weight: 600;
 }
 
 .autocomplete-enter {
