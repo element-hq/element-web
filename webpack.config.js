@@ -2,8 +2,6 @@ var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-var olm_path = path.resolve('./node_modules/olm');
-
 module.exports = {
     module: {
         preLoaders: [
@@ -45,11 +43,6 @@ module.exports = {
 
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
-
-            // matrix-js-sdk will use olm if it is available,
-            // but does not explicitly depend on it. Pull it
-            // in from node_modules if it's there.
-            olm: olm_path,
         },
     },
     plugins: [
@@ -65,20 +58,17 @@ module.exports = {
 
         // olm.js includes "require 'fs'", which is never
         // executed in the browser. Ignore it.
-        new webpack.IgnorePlugin(/^fs$/, /node_modules\/olm$/)
+        new webpack.IgnorePlugin(/^fs$/, /\/olm$/)
     ],
     devtool: 'source-map'
 };
 
-// ignore olm.js if it's not installed.
-(function() {
-    var fs = require('fs');
-    try {
-        fs.lstatSync(olm_path);
-        console.log("Olm is installed; including it in webpack bundle");
-    } catch (e) {
-        module.exports.plugins.push(
-            new webpack.IgnorePlugin(/^olm$/)
-        );
-    }
-}) ();
+// ignore olm.js if it's not installed, to avoid a scary-looking error.
+try {
+    require('olm');
+    console.log("Olm is installed; including it in webpack bundle");
+} catch (e) {
+    module.exports.plugins.push(
+        new webpack.IgnorePlugin(/^olm$/)
+    );
+}
