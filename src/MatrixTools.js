@@ -16,21 +16,13 @@ limitations under the License.
 
 module.exports = {
     /**
-     * Given a room object, return the canonical alias for it
-     * if there is one. Otherwise return null;
+     * Given a room object, return the alias we should use for it,
+     * if any. This could be the canonical alias if one exists, otherwise
+     * an alias selected arbitrarily but deterministically from the list
+     * of aliases. Otherwise return null;
      */
-    getCanonicalAliasForRoom: function(room) {
-        var aliasEvents = room.currentState.getStateEvents(
-            "m.room.aliases"
-        );
-        // Canonical aliases aren't implemented yet, so just return the first
-        for (var j = 0; j < aliasEvents.length; j++) {
-            var aliases = aliasEvents[j].getContent().aliases;
-            if (aliases && aliases.length) {
-                return aliases[0];
-            }
-        }
-        return null;
+    getDisplayAliasForRoom: function(room) {
+        return room.getCanonicalAlias() || room.getAliases()[0];
     },
 
     /**

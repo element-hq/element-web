@@ -25,8 +25,15 @@ module.exports = React.createClass({
     },
 
     onVerifyClick: function() {
-        MatrixClientPeg.get().setDeviceVerified(this.props.userId,
-                                                this.props.device.id);
+        MatrixClientPeg.get().setDeviceVerified(
+            this.props.userId, this.props.device.id, true
+        );
+    },
+
+    onUnverifyClick: function() {
+        MatrixClientPeg.get().setDeviceVerified(
+            this.props.userId, this.props.device.id, false
+        );
     },
 
     render: function() {
@@ -35,9 +42,15 @@ module.exports = React.createClass({
             indicator = (
                 <div className="mx_MemberDeviceInfo_verified">&#x2714;</div>
             );
+            button = (
+                <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unverify"
+                  onClick={this.onUnverifyClick}>
+                    Unverify
+                </div>
+            );
         } else {
             button = (
-                <div className="mx_MemberDeviceInfo_textButton"
+                <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_verify"
                   onClick={this.onVerifyClick}>
                     Verify
                 </div>

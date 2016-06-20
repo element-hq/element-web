@@ -20,7 +20,7 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 var Modal = require('../../Modal');
 var dis = require("../../dispatcher");
 var q = require('q');
-var version = require('../../../package.json').version;
+var package_json = require('../../../package.json');
 var UserSettingsStore = require('../../UserSettingsStore');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
@@ -36,6 +36,11 @@ const LABS_FEATURES = [
         id: 'e2e_encryption'
     }
 ];
+
+// if this looks like a release, use the 'version' from package.json; else use
+// the git sha.
+const REACT_SDK_VERSION =
+      'dist' in package_json ? package_json.version : package_json.gitHead || "<local>";
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
@@ -57,7 +62,6 @@ module.exports = React.createClass({
         return {
             avatarUrl: null,
             threePids: [],
-            clientVersion: version,
             phase: "UserSettings.LOADING", // LOADING, DISPLAY
             email_add_pending: false,
         };
@@ -465,7 +469,7 @@ module.exports = React.createClass({
                         Identity Server is { MatrixClientPeg.get().getIdentityServerUrl() }
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        matrix-react-sdk version: {this.state.clientVersion}<br/>
+                        matrix-react-sdk version: {REACT_SDK_VERSION}<br/>
                         vector-web version: {this.props.version}<br/>
                     </div>
                 </div>
