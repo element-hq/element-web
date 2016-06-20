@@ -3,29 +3,48 @@ Vector/Web
 
 Vector is a Matrix web client built using the Matrix React SDK (https://github.com/matrix-org/matrix-react-sdk).
 
-Getting started
+Getting Started
 ===============
+Vector is a modular webapp built with modern ES6 and requires and npm build system to build.
+Instructions for building are below, but building from source shouldn't be necessary
+for simple deployments.
+
+1. Download the latest version from https://vector.im/packages/
+1. Untar the tarball on your web server
+1. Move (or symlink) the vector-x.x.x directory to an appropriate name
+1. If desired, copy `config.sample.json` to `config.json` and edit it
+   as desired. See below for details.
+1. Enter the URL into your browser and log into vector!
+
+Building From Source
+====================
+
+If you do wish to build vector from source:
 
 1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
-1. Clone the repo: `git clone https://github.com/vector-im/vector-web.git` 
+1. Clone the repo: `git clone https://github.com/vector-im/vector-web.git`
 1. Switch to the vector directory: `cd vector-web`
 1. Install the prerequisites: `npm install`
 1. If you are using the `develop` branch of vector, you will probably need to
    rebuild one of the dependencies, due to https://github.com/npm/npm/issues/3055:
    `(cd node_modules/matrix-react-sdk && npm install)`
-1. Start the development builder and a testing server: `npm start`
-1. Wait a few seconds for the initial build to finish (the command won't
-   terminate: it's running a web server for you).
-1. Open http://127.0.0.1:8080/ in your browser to see your newly built Vector.
+1. Configure the app by copying `config.sample.json` to `config.json` and modifying
+   it (see below for details)
+1. `npm run package` to build a tarball to deploy. Untaring this file will give
+   a version-specific directory containing all the files that need to go on your
+   web server.
 
-With `npm start`, any changes you make to the source files will cause a rebuild so
-your changes will show up when you refresh. This development server also disables
-caching, so do NOT use it in production.
+Note that `npm run package` is not supported on Windows, so Windows users can run `npm
+run build`, which will build all the necessary files into the `vector`
+directory. The version of Vector will not appear in Settings without
+using the package script. You can then mount the vector directory on your
+webserver to actually serve up the app, which is entirely static content.
 
-Configuring
+config.json
 ===========
 
-Configure the app by modifying the `config.json` file:
+You can configure the app by copying `vector/config.sample.json` to
+`vector/config.json` and customising it:
 
 1. `default_hs_url` is the default home server url.
 1. `default_is_url` is the default identity server url (this is the server used
@@ -33,33 +52,13 @@ Configure the app by modifying the `config.json` file:
    registering with an email address or adding an email address to your account
    will not work.
 
-You will need to re-run `npm run build` after editing `config.json`.
-
-Deployment
-==========
-
-On a Unix-based OS, run `npm run package` to build a tarball package.  Untaring
-this file will give a version-specific directory containing all the files that
-need to go on your web server.
-
-The package script is not supported on Windows, so Windows users can run `npm
-run build`, which will build all the necessary files into the `vector`
-directory. Note that the version of Vector will not appear in Settings without
-using the package script. You can then mount the vector directory on your
-webserver to actually serve up the app, which is entirely static content.
-
 Development
 ===========
 
-For simple tweaks, you can work on any of the source files within Vector with
-the setup above, and your changes will cause an instant rebuild.
-
-However, much of the functionality in Vector is actually in the
-`matrix-react-sdk` and `matrix-js-sdk` modules. It is possible to set these up
-in a way that makes it easy to track the `develop` branches in git and to make
-local changes without having to manually rebuild each time.
-
-[Be aware that there may be problems with this process under npm version 3.]
+Much of the functionality in Vector is actually in the `matrix-react-sdk` and
+`matrix-js-sdk` modules. It is possible to set these up in a way that makes it
+easy to track the `develop` branches in git and to make local changes without
+having to manually rebuild each time.
 
 First clone and build `matrix-js-sdk`:
 
@@ -102,13 +101,14 @@ Finally, build and start vector itself:
         + 1013 hidden modules
     ```
    Remember, the command will not terminate since it runs the web server
-   and rebuilds source files when they change.
+   and rebuilds source files when they change. This development server also
+   disables caching, so do NOT use it in production.
 1. Open http://127.0.0.1:8080/ in your browser to see your newly built Vector.
 
-When you make changes to `matrix-js-sdk` or `matrix-react-sdk`, you will need
-to run `npm run build` in the relevant directory. You can do this automatically
-by instead running `npm start` in each directory, to start a development
-builder which will watch for changes to the files and rebuild automatically.
+When you make changes to `matrix-react-sdk`, you will need to run `npm run
+build` in the relevant directory. You can do this automatically by instead
+running `npm start` in the directory, to start a development builder which
+will watch for changes to the files and rebuild automatically.
 
 If you add or remove any components from the Vector skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.
@@ -121,10 +121,7 @@ day-to-day use; it is experimental and should be considered only as a
 proof-of-concept. See https://matrix.org/jira/browse/SPEC-162 for an overview
 of the current progress.
 
-To build a version of vector with support for end-to-end encryption, install
-the olm module with `npm i https://matrix.org/packages/npm/olm/olm-0.1.0.tgz`
-before running `npm start`. The olm library will be detected and used if
-available.
+Vector is built with support for end-to-end encryption by default.
 
 To enable encryption for a room, type
 
@@ -140,4 +137,4 @@ Note that historical encrypted messages cannot currently be decoded - history
 is therefore lost when the page is reloaded.
 
 There is currently no visual indication of whether encryption is enabled for a
-room, or whether a particular message was encrypted.
+room.

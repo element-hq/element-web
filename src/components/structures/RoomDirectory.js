@@ -116,16 +116,20 @@ module.exports = React.createClass({
             };
         }
 
-        // It's not really possible to join Matrix rooms by ID because the HS has no way to know
-        // which servers to start querying. However, there's no other way to join rooms in
-        // this list without aliases at present, so if roomAlias isn't set here we'll rely
-        // on view_room falling back to using the ID
-        dis.dispatch({
+        var payload = {
             oob_data: oob_data,
             action: 'view_room',
-            room_id: roomId,
-            room_alias: roomAlias,
-        });
+        };
+        // It's not really possible to join Matrix rooms by ID because the HS has no way to know
+        // which servers to start querying. However, there's no other way to join rooms in
+        // this list without aliases at present, so if roomAlias isn't set here we have no
+        // choice but to supply the ID.
+        if (roomAlias) {
+            payload.room_alias = roomAlias;
+        } else {
+            payload.room_id = roomId;
+        }
+        dis.dispatch(payload);
     },
 
     getRows: function(filter) {
