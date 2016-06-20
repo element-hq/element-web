@@ -3,13 +3,16 @@ import Q from 'q';
 import MatrixClientPeg from '../MatrixClientPeg';
 import Fuse from 'fuse.js';
 
-const ROOM_REGEX = /(?=#)[^\s]*/g;
+const ROOM_REGEX = /(?=#)([^\s]*)/g;
 
 let instance = null;
 
 export default class RoomProvider extends AutocompleteProvider {
     constructor() {
         super();
+        this.fuse = new Fuse([], {
+           keys: ['name', 'roomId', 'aliases']
+        });
     }
 
     getCompletions(query: String) {
@@ -18,12 +21,20 @@ export default class RoomProvider extends AutocompleteProvider {
         const matches = query.match(ROOM_REGEX);
         const command = matches && matches[0];
         if(command) {
-            completions = client.getRooms().map(room => {
+            // the only reason we need to do this is because Fuse only matches on properties
+            this.fuse.set(client.getRooms().filter(room => !!room).map(room => {
+                return {
+                    name: room.name,
+                    roomId: room.roomId,
+                    aliases: room.getAliases()
+                };
+            }));
+            completions = this.fuse.search(command).map(room => {
                 return {
                     title: room.name,
                     subtitle: room.roomId
                 };
-            });
+            }).slice(0, 4);;
         }
         return Q.when(completions);
     }

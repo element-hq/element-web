@@ -1,6 +1,6 @@
 import AutocompleteProvider from './AutocompleteProvider';
 import Q from 'q';
-import MatrixClientPeg from '../MatrixClientPeg';
+import Fuse from 'fuse.js';
 
 const ROOM_REGEX = /@[^\s]*/g;
 
@@ -10,19 +10,23 @@ export default class UserProvider extends AutocompleteProvider {
     constructor() {
         super();
         this.users = [];
+        this.fuse = new Fuse([], {
+            keys: ['displayName', 'userId']
+        })
     }
 
     getCompletions(query: String) {
         let completions = [];
-        const matches = query.match(ROOM_REGEX);
-        if(!!matches) {
-            const command = matches[0];
-            completions = this.users.map(user => {
+        let matches = query.match(ROOM_REGEX);
+        let command = matches && matches[0];
+        if(command) {
+            this.fuse.set(this.users);
+            completions = this.fuse.search(command).map(user => {
                 return {
                     title: user.displayName || user.userId,
                     description: user.userId
                 };
-            });
+            }).slice(0, 4);
         }
         return Q.when(completions);
     }
@@ -32,7 +36,6 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     setUserList(users) {
-        console.log('setUserList');
         this.users = users;
     }
 
