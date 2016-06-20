@@ -420,7 +420,7 @@ module.exports = React.createClass({
                 }
                 roomIndex = (roomIndex + roomIndexDelta) % allRooms.length;
                 if (roomIndex < 0) roomIndex = allRooms.length - 1;
-                this._viewRoom({ room_id: allRooms[roomIndex].room_id });
+                this._viewRoom({ room_id: allRooms[roomIndex].roomId });
                 break;
             case 'view_indexed_room':
                 var allRooms = RoomListSorter.mostRecentActivityFirst(
