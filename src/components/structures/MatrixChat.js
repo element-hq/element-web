@@ -489,17 +489,17 @@ module.exports = React.createClass({
     // switch view to the given room
     //
     // @param {Object} room_info Object containing data about the room to be joined
-    // @param {string} room_info.room_id ID of the room to join. One of room_id or room_alias must be given.
-    // @param {string} room_info.room_alias Alias of the room to join. One of room_id or room_alias must be given.
-    // @param {boolean} room_info.auto_join If true, automatically attempt to join the room if not already a member.
-    // @param {string} room_info.show_settings ??
-    // @param {string} room_info.event_id ID of the event in this room to show: this will cause a switch to the
-    //                                    context of that particular event. Optional.
-    // @param {Object} room_info.third_party_invite Object containing data about the third party
+    // @param {string=} room_info.room_id ID of the room to join. One of room_id or room_alias must be given.
+    // @param {string=} room_info.room_alias Alias of the room to join. One of room_id or room_alias must be given.
+    // @param {boolean=} room_info.auto_join If true, automatically attempt to join the room if not already a member.
+    // @param {boolean=} room_info.show_settings Makes RoomView show the room settings dialog.
+    // @param {string=} room_info.event_id ID of the event in this room to show: this will cause a switch to the
+    //                                    context of that particular event.
+    // @param {Object=} room_info.third_party_invite Object containing data about the third party
     //                                    we received to join the room, if any.
-    // @param {string} room_info.third_party_invite.inviteSignUrl 3pid invite sign URL
-    // @param {string} room_info.third_party_invite.invitedwithEmail The email address the invite was sent to
-    // @param {Object} room_info.oob_data Object of additional data about the room
+    // @param {string=} room_info.third_party_invite.inviteSignUrl 3pid invite sign URL
+    // @param {string=} room_info.third_party_invite.invitedEmail The email address the invite was sent to
+    // @param {Object=} room_info.oob_data Object of additional data about the room
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
     _viewRoom: function(room_info) {
@@ -557,7 +557,7 @@ module.exports = React.createClass({
             }
 
             if (room_info.event_id) {
-                presentedId += "/"+event_id;
+                presentedId += "/"+room_info.event_id;
             }
             this.notifyNewScreen('room/'+presentedId);
             newState.ready = true;

@@ -191,8 +191,12 @@ module.exports = React.createClass({
         // NB. We peek if we are not in the room, although if we try to peek into
         // a room in which we have a member event (ie. we've left) synapse will just
         // send us the same data as we get in the sync (ie. the last events we saw).
-        var my_member = this.state.room ? this.state.room.getMember(MatrixClientPeg.get().credentials.userId) : null;
-        var user_is_in_room = my_member ? my_member.membership == 'join' : false;
+        var user_is_in_room = null;
+        if (this.state.room) {
+            user_is_in_room = this.state.room.hasMembershipState(
+                MatrixClientPeg.get().credentials.userId, 'join'
+            );
+        }
 
         if (!user_is_in_room && this.state.roomId) {
             if (this.props.autoJoin) {
@@ -1003,7 +1007,7 @@ module.exports = React.createClass({
         this.setState({
             rejecting: true
         });
-        MatrixClientPeg.get().leave(this.props.roomId).done(function() {
+        MatrixClientPeg.get().leave(this.state.roomId).done(function() {
             dis.dispatch({ action: 'view_next_room' });
             self.setState({
                 rejecting: false
