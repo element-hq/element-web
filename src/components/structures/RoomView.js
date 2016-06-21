@@ -159,7 +159,7 @@ module.exports = React.createClass({
                     roomId: result.room_id,
                     roomLoading: !room,
                     hasUnsentMessages: this._hasUnsentMessages(room),
-                }, this._updatePeeking);
+                }, this._onHaveRoom);
             }, (err) => {
                 this.setState({
                     roomLoading: false,
@@ -172,11 +172,11 @@ module.exports = React.createClass({
                 room: room,
                 roomLoading: !room,
                 hasUnsentMessages: this._hasUnsentMessages(room),
-            }, this._updatePeeking);
+            }, this._onHaveRoom);
         }
     },
 
-    _updatePeeking: function() {
+    _onHaveRoom: function() {
         // if this is an unknown room then we're in one of three states:
         // - This is a room we can peek into (search engine) (we can /peek)
         // - This is a room we can publicly join or were invited to. (we can /join)
@@ -187,29 +187,44 @@ module.exports = React.createClass({
         // Note that peeking works by room ID and room ID only, as opposed to joining
         // which must be by alias or invite wherever possible (peeking currently does
         // not work over federation).
-        if (!this.state.room && this.state.roomId) {
-            console.log("Attempting to peek into room %s", this.state.roomId);
 
-            MatrixClientPeg.get().peekInRoom(this.state.roomId).then((room) => {
-                this.setState({
-                    room: room,
-                    roomLoading: false,
-                });
-                this._onRoomLoaded(room);
-            }, (err) => {
-                // This won't necessarily be a MatrixError, but we duck-type
-                // here and say if it's got an 'errcode' key with the right value,
-                // it means we can't peek.
-                if (err.errcode == "M_GUEST_ACCESS_FORBIDDEN") {
-                    // This is fine: the room just isn't peekable (we assume).
+        // NB. We peek if we are not in the room, although if we try to peek into
+        // a room in which we have a member event (ie. we've left) synapse will just
+        // send us the same data as we get in the sync (ie. the last events we saw).
+        var user_is_in_room = null;
+        if (this.state.room) {
+            user_is_in_room = this.state.room.hasMembershipState(
+                MatrixClientPeg.get().credentials.userId, 'join'
+            );
+        }
+
+        if (!user_is_in_room && this.state.roomId) {
+            if (this.props.autoJoin) {
+                this.onJoinButtonClicked();
+            } else if (this.state.roomId) {
+                console.log("Attempting to peek into room %s", this.state.roomId);
+
+                MatrixClientPeg.get().peekInRoom(this.state.roomId).then((room) => {
                     this.setState({
+                        room: room,
                         roomLoading: false,
                     });
-                } else {
-                    throw err;
-                }
-            }).done();
-        } else if (this.state.room) {
+                    this._onRoomLoaded(room);
+                }, (err) => {
+                    // This won't necessarily be a MatrixError, but we duck-type
+                    // here and say if it's got an 'errcode' key with the right value,
+                    // it means we can't peek.
+                    if (err.errcode == "M_GUEST_ACCESS_FORBIDDEN") {
+                        // This is fine: the room just isn't peekable (we assume).
+                        this.setState({
+                            roomLoading: false,
+                        });
+                    } else {
+                        throw err;
+                    }
+                }).done();
+            }
+        } else if (user_is_in_room) {
             MatrixClientPeg.get().stopPeeking();
             this._onRoomLoaded(this.state.room);
         }
@@ -992,7 +1007,7 @@ module.exports = React.createClass({
         this.setState({
             rejecting: true
         });
-        MatrixClientPeg.get().leave(this.props.roomAddress).done(function() {
+        MatrixClientPeg.get().leave(this.state.roomId).done(function() {
             dis.dispatch({ action: 'view_next_room' });
             self.setState({
                 rejecting: false
