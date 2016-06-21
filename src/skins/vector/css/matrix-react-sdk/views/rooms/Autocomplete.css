@@ -29,13 +29,17 @@
     align-items: center;
 }
 
-.mx_Autocomplete_Completion:focus {
+.mx_Autocomplete_Completion.selected * {
+    transition: 0.3s all ease;
+}
+
+.mx_Autocomplete_Completion.selected {
     background: #76cfa6;
     color: white;
     outline: none;
 }
 
-.mx_Autocomplete_Completion:focus * {
+.mx_Autocomplete_Completion.selected * {
     color: white !important;
 }
 
