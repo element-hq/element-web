@@ -52,6 +52,18 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
+        this.getPublicRooms();
+    },
+
+    componentWillUnmount: function() {
+        // dis.dispatch({
+        //     action: 'ui_opacity',
+        //     sideOpacity: 1.0,
+        //     middleOpacity: 1.0,
+        // });
+    },
+
+    getPublicRooms: function() {
         var self = this;
         MatrixClientPeg.get().publicRooms(function (err, data) {
             if (err) {
@@ -68,20 +80,43 @@ module.exports = React.createClass({
                     publicRooms: data.chunk,
                     loading: false,
                 });
-                self.forceUpdate();
             }
         });
     },
 
-    componentWillUnmount: function() {
-        // dis.dispatch({
-        //     action: 'ui_opacity',
-        //     sideOpacity: 1.0,
-        //     middleOpacity: 1.0,
-        // });
+    deleteAliasClicked: function(roomAlias) {
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createDialog(QuestionDialog, {
+            title: "Delete Alias",
+            description: `Are you sure you want to remove the alias '${roomAlias}'?`,
+            onFinished: (should_delete) => {
+                if (should_delete) {
+                    var Loader = sdk.getComponent("elements.Spinner");
+                    var modal = Modal.createDialog(Loader);
+
+                    MatrixClientPeg.get().deleteAlias(roomAlias).done(() => {
+                        modal.close();
+                        this.getPublicRooms();
+                    }, function(err) {
+                        modal.close();
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Failed to delete alias",
+                            description: err.toString()
+                        });
+                    });
+                }
+            }
+        });
     },
 
-    showRoom: function(roomId, roomAlias) {
+    showRoom: function(roomId, roomAlias, ev) {
+        if (ev.shiftKey) {
+            ev.preventDefault();
+            this.deleteAliasClicked(roomAlias);
+            return;
+        }
+
         // extract the metadata from the publicRooms structure to pass
         // as out-of-band data to view_room, because we get information
         // here that we can't get other than by joining the room in some
@@ -175,7 +210,11 @@ module.exports = React.createClass({
             topic = linkifyString(sanitizeHtml(topic));
 
             rows.unshift(
-                <tr key={ rooms[i].room_id } onClick={self.showRoom.bind(null, rooms[i].room_id, alias)}>
+                <tr key={ rooms[i].room_id }
+                    onClick={self.showRoom.bind(null, rooms[i].room_id, alias)}
+                    // cancel onMouseDown otherwise shift-clicking highlights text
+                    onMouseDown={(ev) => {ev.preventDefault();}}
+                >
                     <td className="mx_RoomDirectory_roomAvatar">
                         <BaseAvatar width={24} height={24} resizeMethod='crop'
                             name={ name } idName={ name }
