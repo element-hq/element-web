@@ -1150,7 +1150,7 @@ module.exports = React.createClass({
                     customIsUrl={this.getCurrentIsUrl()}
                     fallbackHsUrl={this.getFallbackHsUrl()}
                     onForgotPasswordClick={this.onForgotPasswordClick}
-                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.getDefaultHsUrl() ? this._registerAsGuest.bind(this, true) : undefined}
+                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this._registerAsGuest.bind(this, true)}
                     onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
                     />
             );
