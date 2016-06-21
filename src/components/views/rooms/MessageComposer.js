@@ -34,6 +34,9 @@ export default class MessageComposer extends React.Component {
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
         this.onInputContentChanged = this.onInputContentChanged.bind(this);
+        this.onUpArrow = this.onUpArrow.bind(this);
+        this.onDownArrow = this.onDownArrow.bind(this);
+        this.onTab = this.onTab.bind(this);
 
         this.state = {
             autocompleteQuery: '',
@@ -129,6 +132,18 @@ export default class MessageComposer extends React.Component {
         });
     }
 
+    onUpArrow() {
+       return this.refs.autocomplete.onUpArrow();
+    }
+
+    onDownArrow() {
+        return this.refs.autocomplete.onDownArrow();
+    }
+
+    onTab() {
+        return this.refs.autocomplete.onTab();
+    }
+
     render() {
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
@@ -182,9 +197,14 @@ export default class MessageComposer extends React.Component {
             );
 
             controls.push(
-                <MessageComposerInput key="controls_input" tabComplete={this.props.tabComplete}
-                    onResize={this.props.onResize} room={this.props.room}
-                                      onContentChanged={this.onInputContentChanged} />,
+                <MessageComposerInput
+                    key="controls_input"
+                    onResize={this.props.onResize}
+                    room={this.props.room}
+                    onUpArrow={this.onUpArrow}
+                    onDownArrow={this.onDownArrow}
+                    onTab={this.onTab}
+                    onContentChanged={this.onInputContentChanged} />,
                 uploadButton,
                 hangupButton,
                 callButton,
@@ -201,7 +221,10 @@ export default class MessageComposer extends React.Component {
         return (
             <div className="mx_MessageComposer mx_fadable" style={{ opacity: this.props.opacity }}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    <Autocomplete query={this.state.autocompleteQuery} selection={this.state.selection} />
+                    <Autocomplete
+                        ref="autocomplete"
+                        query={this.state.autocompleteQuery}
+                        selection={this.state.selection} />
                 </div>
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">

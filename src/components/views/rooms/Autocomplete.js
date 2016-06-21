@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import classNames from 'classnames';
 
 import {getCompletions} from '../../../autocomplete/Autocompleter';
 
@@ -41,16 +42,34 @@ export default class Autocomplete extends React.Component {
         });
     }
 
+    onUpArrow() {
+        this.setState({selectionOffset: this.state.selectionOffset - 1});
+        return true;
+    }
+
+    onDownArrow() {
+        this.setState({selectionOffset: this.state.selectionOffset + 1});
+        return true;
+    }
+
     render() {
+        let position = 0;
         let renderedCompletions = this.state.completions.map((completionResult, i) => {
             let completions = completionResult.completions.map((completion, i) => {
                 let Component = completion.component;
+                let className = classNames('mx_Autocomplete_Completion', {
+                    'selected': position == this.state.selectionOffset
+                });
+                let componentPosition = position;
+                position++;
                 if(Component) {
                     return Component;
                 }
                 
                 return (
-                    <div key={i} className="mx_Autocomplete_Completion" tabIndex={0}>
+                    <div key={i}
+                         className={className}
+                         onMouseOver={() => this.setState({selectionOffset: componentPosition})}>
                         <span style={{fontWeight: 600}}>{completion.title}</span>
                         <span>{completion.subtitle}</span>
                         <span style={{flex: 1}} />

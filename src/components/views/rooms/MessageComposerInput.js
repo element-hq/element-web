@@ -73,6 +73,9 @@ export default class MessageComposerInput extends React.Component {
         this.handleReturn = this.handleReturn.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
         this.setEditorState = this.setEditorState.bind(this);
+        this.onUpArrow = this.onUpArrow.bind(this);
+        this.onDownArrow = this.onDownArrow.bind(this);
+        this.onTab = this.onTab.bind(this);
 
         let isRichtextEnabled = window.localStorage.getItem('mx_editor_rte_enabled');
         if(isRichtextEnabled == null) {
@@ -489,6 +492,30 @@ export default class MessageComposerInput extends React.Component {
         return true;
     }
 
+    onUpArrow(e) {
+        if(this.props.onUpArrow) {
+            if(this.props.onUpArrow()) {
+                e.preventDefault();
+            }
+        }
+    }
+
+    onDownArrow(e) {
+        if(this.props.onDownArrow) {
+            if(this.props.onDownArrow()) {
+                e.preventDefault();
+            }
+        }
+    }
+
+    onTab(e) {
+        if(this.props.onTab) {
+            if(this.props.onTab()) {
+                e.preventDefault();
+            }
+        }
+    }
+
     render() {
         let className = "mx_MessageComposer_input";
 
@@ -507,6 +534,9 @@ export default class MessageComposerInput extends React.Component {
                         handleKeyCommand={this.handleKeyCommand}
                         handleReturn={this.handleReturn}
                         stripPastedStyles={!this.state.isRichtextEnabled}
+                        onTab={this.onTab}
+                        onUpArrow={this.onUpArrow}
+                        onDownArrow={this.onDownArrow}
                         spellCheck={true} />
             </div>
         );
@@ -524,5 +554,11 @@ MessageComposerInput.propTypes = {
     room: React.PropTypes.object.isRequired,
 
     // called with current plaintext content (as a string) whenever it changes
-    onContentChanged: React.PropTypes.func
+    onContentChanged: React.PropTypes.func,
+
+    onUpArrow: React.PropTypes.func,
+
+    onDownArrow: React.PropTypes.func,
+
+    onTab: React.PropTypes.func
 };
