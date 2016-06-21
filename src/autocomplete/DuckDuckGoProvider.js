@@ -2,23 +2,27 @@ import AutocompleteProvider from './AutocompleteProvider';
 import Q from 'q';
 import 'whatwg-fetch';
 
-const DDG_REGEX = /\/ddg\s+(.+)$/;
+const DDG_REGEX = /\/ddg\s+(.+)$/g;
 const REFERER = 'vector';
 
 let instance = null;
 
 export default class DuckDuckGoProvider extends AutocompleteProvider {
+    constructor() {
+        super(DDG_REGEX);
+    }
+    
     static getQueryUri(query: String) {
         return `http://api.duckduckgo.com/?q=${encodeURIComponent(query)}`
          + `&format=json&no_redirect=1&no_html=1&t=${encodeURIComponent(REFERER)}`;
     }
 
-    getCompletions(query: String) {
-        let match = DDG_REGEX.exec(query);
-        if(!query || !match)
+    getCompletions(query: string, selection: {start: number, end: number}) {
+        let command = this.getCurrentCommand(query, selection);
+        if(!query || !command)
             return Q.when([]);
 
-        return fetch(DuckDuckGoProvider.getQueryUri(match[1]), {
+        return fetch(DuckDuckGoProvider.getQueryUri(command[1]), {
             method: 'GET'
         })
             .then(response => response.json())

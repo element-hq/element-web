@@ -39,22 +39,23 @@ const COMMANDS = [
     }
 ];
 
+let COMMAND_RE = /(^\/\w*)/g;
+
 let instance = null;
 
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
-        super();
+        super(COMMAND_RE);
         this.fuse = new Fuse(COMMANDS, {
            keys: ['command', 'args', 'description']
         });
     }
 
-    getCompletions(query: String) {
+    getCompletions(query: string, selection: {start: number, end: number}) {
         let completions = [];
-        const matches = query.match(/(^\/\w*)/);
-        if(!!matches) {
-            const command = matches[0];
-            completions = this.fuse.search(command).map(result => {
+        const command = this.getCurrentCommand(query, selection);
+        if(command) {
+            completions = this.fuse.search(command[0]).map(result => {
                 return {
                     title: result.command,
                     subtitle: result.args,

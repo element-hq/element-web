@@ -9,17 +9,18 @@ let instance = null;
 
 export default class RoomProvider extends AutocompleteProvider {
     constructor() {
-        super();
+        super(ROOM_REGEX, {
+            keys: ['displayName', 'userId']
+        });
         this.fuse = new Fuse([], {
            keys: ['name', 'roomId', 'aliases']
         });
     }
 
-    getCompletions(query: String) {
+    getCompletions(query: string, selection: {start: number, end: number}) {
         let client = MatrixClientPeg.get();
         let completions = [];
-        const matches = query.match(ROOM_REGEX);
-        const command = matches && matches[0];
+        const command = this.getCurrentCommand(query, selection);
         if(command) {
             // the only reason we need to do this is because Fuse only matches on properties
             this.fuse.set(client.getRooms().filter(room => !!room).map(room => {
@@ -29,7 +30,7 @@ export default class RoomProvider extends AutocompleteProvider {
                     aliases: room.getAliases()
                 };
             }));
-            completions = this.fuse.search(command).map(room => {
+            completions = this.fuse.search(command[0]).map(room => {
                 return {
                     title: room.name,
                     subtitle: room.roomId

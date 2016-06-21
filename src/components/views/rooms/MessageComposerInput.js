@@ -352,7 +352,9 @@ export default class MessageComposerInput extends React.Component {
         }
 
         if(this.props.onContentChanged) {
-            this.props.onContentChanged(editorState.getCurrentContent().getPlainText());
+            this.props.onContentChanged(editorState.getCurrentContent().getPlainText(),
+                RichText.getTextSelectionOffsets(editorState.getSelection(),
+                    editorState.getCurrentContent().getBlocksAsArray()));
         }
     }
 

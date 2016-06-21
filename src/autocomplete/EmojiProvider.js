@@ -10,16 +10,15 @@ let instance = null;
 
 export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
-        super();
+        super(EMOJI_REGEX);
         this.fuse = new Fuse(EMOJI_SHORTNAMES);
     }
 
-    getCompletions(query: String) {
+    getCompletions(query: string, selection: {start: number, end: number}) {
         let completions = [];
-        let matches = query.match(EMOJI_REGEX);
-        let command = matches && matches[0];
+        let command = this.getCurrentCommand(query, selection);
         if(command) {
-            completions = this.fuse.search(command).map(result => {
+            completions = this.fuse.search(command[0]).map(result => {
                 let shortname = EMOJI_SHORTNAMES[result];
                 let imageHTML = shortnameToImage(shortname);
                 return {

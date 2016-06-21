@@ -36,7 +36,8 @@ export default class MessageComposer extends React.Component {
         this.onInputContentChanged = this.onInputContentChanged.bind(this);
 
         this.state = {
-            autocompleteQuery: ''
+            autocompleteQuery: '',
+            selection: null
         };
     }
 
@@ -121,11 +122,11 @@ export default class MessageComposer extends React.Component {
         });
     }
 
-    onInputContentChanged(content: string) {
+    onInputContentChanged(content: string, selection: {start: number, end: number}) {
         this.setState({
-            autocompleteQuery: content
+            autocompleteQuery: content,
+            selection
         });
-        console.log(content);
     }
 
     render() {
@@ -200,7 +201,7 @@ export default class MessageComposer extends React.Component {
         return (
             <div className="mx_MessageComposer mx_fadable" style={{ opacity: this.props.opacity }}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    <Autocomplete query={this.state.autocompleteQuery} />
+                    <Autocomplete query={this.state.autocompleteQuery} selection={this.state.selection} />
                 </div>
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">

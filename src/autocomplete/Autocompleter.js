@@ -12,10 +12,10 @@ const PROVIDERS = [
     EmojiProvider
 ].map(completer => completer.getInstance());
 
-export function getCompletions(query: String) {
+export function getCompletions(query: string, selection: {start: number, end: number}) {
     return PROVIDERS.map(provider => {
         return {
-            completions: provider.getCompletions(query),
+            completions: provider.getCompletions(query, selection),
             provider
         };
     });

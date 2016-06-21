@@ -5,7 +5,8 @@ import {
     convertFromHTML,
     DefaultDraftBlockRenderMap,
     DefaultDraftInlineStyle,
-    CompositeDecorator
+    CompositeDecorator,
+    SelectionState
 } from 'draft-js';
 import * as sdk from  './index';
 
@@ -167,4 +168,29 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
     text += getText(endKey).substring(startOffset, endOffset);
 
     return Modifier.replaceText(contentState, rangeToReplace, modifyFn(text), inlineStyle, entityKey);
+}
+
+/**
+ * Computes the plaintext offsets of the given SelectionState.
+ * Note that this inherently means we make assumptions about what that means (no separator between ContentBlocks, etc)
+ * Used by autocomplete to show completions when the current selection lies within, or at the edges of a command.
+ */
+export function getTextSelectionOffsets(selectionState: SelectionState,
+                                        contentBlocks: Array<ContentBlock>): {start: number, end: number} {
+    let offset = 0, start = 0, end = 0;
+    for(let block of contentBlocks) {
+        if (selectionState.getStartKey() == block.getKey()) {
+            start = offset + selectionState.getStartOffset();
+        }
+        if (selectionState.getEndKey() == block.getKey()) {
+            end = offset + selectionState.getEndOffset();
+            break;
+        }
+        offset += block.getLength();
+    }
+
+    return {
+        start,
+        end
+    }
 }

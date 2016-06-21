@@ -7,27 +7,27 @@ export default class Autocomplete extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            completions: []
+            completions: [],
+
+            // how far down the completion list we are
+            selectionOffset: 0
         };
     }
 
     componentWillReceiveProps(props, state) {
         if(props.query == this.props.query) return;
 
-        getCompletions(props.query).map(completionResult => {
+        getCompletions(props.query, props.selection).map(completionResult => {
             try {
-                // console.log(`${completionResult.provider.getName()}: ${JSON.stringify(completionResult.completions)}`);
                 completionResult.completions.then(completions => {
                     let i = this.state.completions.findIndex(
                         completion => completion.provider === completionResult.provider
                     );
 
                     i = i == -1 ? this.state.completions.length : i;
-                    // console.log(completionResult);
                     let newCompletions = Object.assign([], this.state.completions);
                     completionResult.completions = completions;
                     newCompletions[i] = completionResult;
-                    // console.log(newCompletions);
                     this.setState({
                         completions: newCompletions
                     });
@@ -42,8 +42,7 @@ export default class Autocomplete extends React.Component {
     }
 
     render() {
-        const renderedCompletions = this.state.completions.map((completionResult, i) => {
-            // console.log(completionResult);
+        let renderedCompletions = this.state.completions.map((completionResult, i) => {
             let completions = completionResult.completions.map((completion, i) => {
                 let Component = completion.component;
                 if(Component) {
