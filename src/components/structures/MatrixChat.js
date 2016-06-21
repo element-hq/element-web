@@ -108,8 +108,12 @@ module.exports = React.createClass({
             return window.localStorage.getItem("mx_hs_url");
         }
         else {
-            return this.props.config.default_hs_url || "https://matrix.org";
+            return this.getDefaultHsUrl();
         }
+    },
+
+    getDefaultHsUrl() {
+        return this.props.config.default_hs_url || "https://matrix.org";
     },
 
     getFallbackHsUrl: function() {
@@ -126,8 +130,12 @@ module.exports = React.createClass({
             return window.localStorage.getItem("mx_is_url");
         }
         else {
-            return this.props.config.default_is_url || "https://vector.im"
+            return this.getDefaultIsUrl();
         }
+    },
+
+    getDefaultIsUrl() {
+        return this.props.config.default_is_url || "https://vector.im";
     },
 
     componentWillMount: function() {
@@ -151,8 +159,8 @@ module.exports = React.createClass({
                 this.onLoggedIn({
                     userId: this.props.startingQueryParams.guest_user_id,
                     accessToken: this.props.startingQueryParams.guest_access_token,
-                    homeserverUrl: this.props.config.default_hs_url,
-                    identityServerUrl: this.props.config.default_is_url,
+                    homeserverUrl: this.getDefaultHsUrl(),
+                    identityServerUrl: this.getDefaultIsUrl(),
                     guest: true
                 });
             }
@@ -1113,8 +1121,8 @@ module.exports = React.createClass({
                     email={this.props.startingQueryParams.email}
                     username={this.state.upgradeUsername}
                     guestAccessToken={this.state.guestAccessToken}
-                    defaultHsUrl={this.props.config.default_hs_url}
-                    defaultIsUrl={this.props.config.default_is_url}
+                    defaultHsUrl={this.getDefaultHsUrl()}
+                    defaultIsUrl={this.getDefaultIsUrl()}
                     brand={this.props.config.brand}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
@@ -1128,8 +1136,8 @@ module.exports = React.createClass({
         } else if (this.state.screen == 'forgot_password') {
             return (
                 <ForgotPassword
-                    defaultHsUrl={this.props.config.default_hs_url}
-                    defaultIsUrl={this.props.config.default_is_url}
+                    defaultHsUrl={this.getDefaultHsUrl()}
+                    defaultIsUrl={this.getDefaultIsUrl()}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     onComplete={this.onLoginClick}
@@ -1140,13 +1148,13 @@ module.exports = React.createClass({
                 <Login
                     onLoggedIn={this.onLoggedIn}
                     onRegisterClick={this.onRegisterClick}
-                    defaultHsUrl={this.props.config.default_hs_url}
-                    defaultIsUrl={this.props.config.default_is_url}
+                    defaultHsUrl={this.getDefaultHsUrl()}
+                    defaultIsUrl={this.getDefaultIsUrl()}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     fallbackHsUrl={this.getFallbackHsUrl()}
                     onForgotPasswordClick={this.onForgotPasswordClick}
-                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest.bind(this, true) : undefined}
+                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this._registerAsGuest.bind(this, true)}
                     onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
                     />
             );
