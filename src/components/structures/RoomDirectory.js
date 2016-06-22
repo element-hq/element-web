@@ -98,11 +98,9 @@ module.exports = React.createClass({
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
-        var room_alias = get_display_alias_for_room(room);
-
         Modal.createDialog(QuestionDialog, {
             title: "Remove from Directory",
-            description: `Delete the room alias '${room_alias}' and remove '${name}' from the directory?`,
+            description: `Delete the room alias '${alias}' and remove '${name}' from the directory?`,
             onFinished: (should_delete) => {
                 if (!should_delete) return;
 
@@ -112,12 +110,13 @@ module.exports = React.createClass({
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
                     step = 'delete the alias.';
-                    MatrixClientPeg.get().deleteAlias(room_alias);
+                    return MatrixClientPeg.get().deleteAlias(alias);
                 }).done(() => {
                     modal.close();
                     this.getPublicRooms();
                 }, function(err) {
                     modal.close();
+                    this.getPublicRooms();
                     Modal.createDialog(ErrorDialog, {
                         title: "Failed to "+step,
                         description: err.toString()
