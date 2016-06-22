@@ -52,6 +52,18 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
+        this.getPublicRooms();
+    },
+
+    componentWillUnmount: function() {
+        // dis.dispatch({
+        //     action: 'ui_opacity',
+        //     sideOpacity: 1.0,
+        //     middleOpacity: 1.0,
+        // });
+    },
+
+    getPublicRooms: function() {
         var self = this;
         MatrixClientPeg.get().publicRooms(function (err, data) {
             if (err) {
@@ -68,53 +80,79 @@ module.exports = React.createClass({
                     publicRooms: data.chunk,
                     loading: false,
                 });
-                self.forceUpdate();
             }
         });
     },
 
-    componentWillUnmount: function() {
-        // dis.dispatch({
-        //     action: 'ui_opacity',
-        //     sideOpacity: 1.0,
-        //     middleOpacity: 1.0,
-        // });
+    /**
+     * A limited interface for removing rooms from the directory.
+     * Will set the room to not be publicly visible and delete the
+     * default alias. In the long term, it would be better to allow
+     * HS admins to do this through the RoomSettings interface, but
+     * this needs SPEC-417.
+     */
+    removeFromDirectory: function(room) {
+        var alias = get_display_alias_for_room(room);
+        var name = room.name || alias || "Unnamed room";
+
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+        Modal.createDialog(QuestionDialog, {
+            title: "Remove from Directory",
+            description: `Delete the room alias '${alias}' and remove '${name}' from the directory?`,
+            onFinished: (should_delete) => {
+                if (!should_delete) return;
+
+                var Loader = sdk.getComponent("elements.Spinner");
+                var modal = Modal.createDialog(Loader);
+                var step = `remove '${name}' from the directory.`;
+
+                MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
+                    step = 'delete the alias.';
+                    return MatrixClientPeg.get().deleteAlias(alias);
+                }).done(() => {
+                    modal.close();
+                    this.getPublicRooms();
+                }, function(err) {
+                    modal.close();
+                    this.getPublicRooms();
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Failed to "+step,
+                        description: err.toString()
+                    });
+                });
+            }
+        });
     },
 
-    showRoom: function(roomId, roomAlias) {
-        // extract the metadata from the publicRooms structure to pass
-        // as out-of-band data to view_room, because we get information
-        // here that we can't get other than by joining the room in some
-        // cases.
-        var room;
-        if (roomId) {
-            for (var i = 0; i < this.state.publicRooms.length; ++i) {
-                if (this.state.publicRooms[i].room_id == roomId) {
-                    room = this.state.publicRooms[i];
-                    break;
-                }
-            }
+    showRoom: function(room, ev) {
+        if (ev.shiftKey) {
+            ev.preventDefault();
+            this.removeFromDirectory(room);
+            return;
         }
-        var oob_data = {};
-        if (room) {
-            if (MatrixClientPeg.get().isGuest()) {
-                if (!room.world_readable && !room.guest_can_join) {
-                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                    Modal.createDialog(NeedToRegisterDialog, {
-                        title: "Failed to join the room",
-                        description: "This room is inaccessible to guests. You may be able to join if you register."
-                    });
-                    return;
-                }
-            }
 
-            oob_data = {
-                avatarUrl: room.avatar_url,
-                // XXX: This logic is duplicated from the JS SDK which
-                // would normally decide what the name is.
-                name: room.name || room.canonical_alias || (room.aliases ? room.aliases[0] : "Unnamed room"),
-            };
+        var oob_data = {};
+        if (MatrixClientPeg.get().isGuest()) {
+            if (!room.world_readable && !room.guest_can_join) {
+                var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+                Modal.createDialog(NeedToRegisterDialog, {
+                    title: "Failed to join the room",
+                    description: "This room is inaccessible to guests. You may be able to join if you register."
+                });
+                return;
+            }
         }
+
+        var room_alias = get_display_alias_for_room(room);
+
+        oob_data = {
+            avatarUrl: room.avatar_url,
+            // XXX: This logic is duplicated from the JS SDK which
+            // would normally decide what the name is.
+            name: room.name || room_alias || "Unnamed room",
+        };
 
         var payload = {
             oob_data: oob_data,
@@ -124,10 +162,10 @@ module.exports = React.createClass({
         // which servers to start querying. However, there's no other way to join rooms in
         // this list without aliases at present, so if roomAlias isn't set here we have no
         // choice but to supply the ID.
-        if (roomAlias) {
-            payload.room_alias = roomAlias;
+        if (room_alias) {
+            payload.room_alias = room_alias;
         } else {
-            payload.room_id = roomId;
+            payload.room_id = room.room_id;
         }
         dis.dispatch(payload);
     },
@@ -150,8 +188,7 @@ module.exports = React.createClass({
         var self = this;
         var guestRead, guestJoin, perms;
         for (var i = 0; i < rooms.length; i++) {
-            var alias = rooms[i].canonical_alias || (rooms[i].aliases ? rooms[i].aliases[0] : "");
-            var name = rooms[i].name || alias || "Unnamed room";
+            var name = rooms[i].name || get_display_alias_for_room(rooms[i]) || "Unnamed room";
             guestRead = null;
             guestJoin = null;
 
@@ -175,7 +212,11 @@ module.exports = React.createClass({
             topic = linkifyString(sanitizeHtml(topic));
 
             rows.unshift(
-                <tr key={ rooms[i].room_id } onClick={self.showRoom.bind(null, rooms[i].room_id, alias)}>
+                <tr key={ rooms[i].room_id }
+                    onClick={self.showRoom.bind(null, rooms[i])}
+                    // cancel onMouseDown otherwise shift-clicking highlights text
+                    onMouseDown={(ev) => {ev.preventDefault();}}
+                >
                     <td className="mx_RoomDirectory_roomAvatar">
                         <BaseAvatar width={24} height={24} resizeMethod='crop'
                             name={ name } idName={ name }
@@ -189,7 +230,7 @@ module.exports = React.createClass({
                         <div className="mx_RoomDirectory_topic"
                              onClick={ function(e) { e.stopPropagation() } }
                              dangerouslySetInnerHTML={{ __html: topic }}/>
-                        <div className="mx_RoomDirectory_alias">{ alias }</div>
+                        <div className="mx_RoomDirectory_alias">{ get_display_alias_for_room(rooms[i]) }</div>
                     </td>
                     <td className="mx_RoomDirectory_roomMemberCount">
                         { rooms[i].num_joined_members }
@@ -237,3 +278,9 @@ module.exports = React.createClass({
         );
     }
 });
+
+// Similar to matrix-react-sdk's MatrixTools.getDisplayAliasForRoom
+// but works with the objects we get from the public room list
+function get_display_alias_for_room(room) {
+    return  room.canonical_alias || (room.aliases ? room.aliases[0] : "");
+}
