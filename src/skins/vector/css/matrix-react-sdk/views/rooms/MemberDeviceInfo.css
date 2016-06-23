@@ -16,18 +16,18 @@ limitations under the License.
 
 .mx_MemberDeviceInfo {
     font-size: 12px;
-    margin-top: 5px;
+    display: table-row;
+    height: 17px;
 }
 
 .mx_MemberDeviceInfo div {
-    display: inline;
-    margin-right: 5px;
+    display: table-cell;
 }
 
 .mx_MemberDeviceInfo_textButton {
     color: #fff;
-    height: 20px;
-    border-radius: 20px;
+    background-color: #76cfa6;
+    border-radius: 17px;
     text-align: center;
     padding-left: 1em;
     padding-right: 1em;
@@ -35,10 +35,23 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_MemberDeviceInfo_verify {
+.mx_MemberDeviceInfo div.mx_MemberDeviceInfo_verified,
+.mx_MemberDeviceInfo div.mx_MemberDeviceInfo_unverified,
+.mx_MemberDeviceInfo div.mx_MemberDeviceInfo_blocked {
+    color: #fff;
+    width: 17px;
+    border-radius: 17px;
+    text-align: center;
+}
+
+.mx_MemberDeviceInfo div.mx_MemberDeviceInfo_verified {
     background-color: #76cfa6;
 }
 
-.mx_MemberDeviceInfo_unverify {
+.mx_MemberDeviceInfo div.mx_MemberDeviceInfo_unverified {
+    background-color: #eca46f;
+}
+
+.mx_MemberDeviceInfo div.mx_MemberDeviceInfo_blocked {
     background-color: #e55e5e;
 }
