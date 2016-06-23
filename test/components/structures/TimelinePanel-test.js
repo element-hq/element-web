@@ -220,12 +220,14 @@ describe('TimelinePanel', function() {
         for (var i = 0; i < N_EVENTS; i++) {
             timeline.addEvent(mkMessage());
         }
+        console.log("added events to timeline");
 
         var scrollDefer;
         var panel = ReactDOM.render(
             <TimelinePanel room={room} onScroll={()=>{scrollDefer.resolve()}} />,
             parentDiv
         );
+        console.log("TimelinePanel rendered");
 
         var messagePanel = ReactTestUtils.findRenderedComponentWithType(
             panel, sdk.getComponent('structures.MessagePanel'));
@@ -246,6 +248,7 @@ describe('TimelinePanel', function() {
                     // need to go further
                     return backPaginate();
                 }
+                console.log("paginated to end.");
 
                 // hopefully, we got to the start of the timeline
                 expect(messagePanel.props.backPaginating).toBe(false);
@@ -259,6 +262,7 @@ describe('TimelinePanel', function() {
             expect(messagePanel.props.suppressFirstDateSeparator).toBe(true);
 
             // back-paginate until we hit the start
+            console.log("back paginating...");
             return backPaginate();
         }).then(() => {
             expect(messagePanel.props.suppressFirstDateSeparator).toBe(false);
