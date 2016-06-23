@@ -126,38 +126,48 @@ module.exports = React.createClass({
         });
     },
 
-    showRoom: function(room, ev) {
+    onRoomClicked: function(room, ev) {
         if (ev.shiftKey) {
             ev.preventDefault();
             this.removeFromDirectory(room);
-            return;
+        } else {
+            this.showRoom(room);
         }
+    },
 
+    showRoomAlias: function(alias) {
+        this.showRoom(null, alias);
+    },
+
+    showRoom: function(room, room_alias) {
         var oob_data = {};
-        if (MatrixClientPeg.get().isGuest()) {
-            if (!room.world_readable && !room.guest_can_join) {
-                var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                Modal.createDialog(NeedToRegisterDialog, {
-                    title: "Failed to join the room",
-                    description: "This room is inaccessible to guests. You may be able to join if you register."
-                });
-                return;
+        var payload = {action: 'view_room'};
+        if (room) {
+            // Don't let the user view a room they won't be able to either
+            // peek or join: fail earlier so they don't have to click back
+            // to the directory.
+            if (MatrixClientPeg.get().isGuest()) {
+                if (!room.world_readable && !room.guest_can_join) {
+                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+                    Modal.createDialog(NeedToRegisterDialog, {
+                        title: "Failed to join the room",
+                        description: "This room is inaccessible to guests. You may be able to join if you register."
+                    });
+                    return;
+                }
             }
+
+            if (!room_alias) {
+                room_alias = get_display_alias_for_room(room);
+            }
+
+            payload.oob_data = {
+                avatarUrl: room.avatar_url,
+                // XXX: This logic is duplicated from the JS SDK which
+                // would normally decide what the name is.
+                name: room.name || room_alias || "Unnamed room",
+            };
         }
-
-        var room_alias = get_display_alias_for_room(room);
-
-        oob_data = {
-            avatarUrl: room.avatar_url,
-            // XXX: This logic is duplicated from the JS SDK which
-            // would normally decide what the name is.
-            name: room.name || room_alias || "Unnamed room",
-        };
-
-        var payload = {
-            oob_data: oob_data,
-            action: 'view_room',
-        };
         // It's not really possible to join Matrix rooms by ID because the HS has no way to know
         // which servers to start querying. However, there's no other way to join rooms in
         // this list without aliases at present, so if roomAlias isn't set here we have no
@@ -213,7 +223,7 @@ module.exports = React.createClass({
 
             rows.unshift(
                 <tr key={ rooms[i].room_id }
-                    onClick={self.showRoom.bind(null, rooms[i])}
+                    onClick={self.onRoomClicked.bind(self, rooms[i])}
                     // cancel onMouseDown otherwise shift-clicking highlights text
                     onMouseDown={(ev) => {ev.preventDefault();}}
                 >
@@ -245,7 +255,7 @@ module.exports = React.createClass({
         this.forceUpdate();
         this.setState({ roomAlias : this.refs.roomAlias.value })
         if (ev.key == "Enter") {
-            this.showRoom(null, this.refs.roomAlias.value);
+            this.showRoomAlias(this.refs.roomAlias.value);
         }
     },
 
