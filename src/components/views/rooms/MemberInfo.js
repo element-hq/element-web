@@ -70,7 +70,7 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this._updateStateForNewMember(this.props.member);
-        MatrixClientPeg.get().on("deviceVerified", this.onDeviceVerified);
+        MatrixClientPeg.get().on("deviceVerificationChanged", this.onDeviceVerificationChanged);
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -82,14 +82,14 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         var client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener("deviceVerified", this.onDeviceVerified);
+            client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         }
         if (this._cancelDeviceList) {
             this._cancelDeviceList();
         }
     },
 
-    onDeviceVerified: function(userId, device) {
+    onDeviceVerificationChanged: function(userId, device) {
         if (userId == this.props.member.userId) {
             // no need to re-download the whole thing; just update our copy of
             // the list.
@@ -535,7 +535,9 @@ module.exports = React.createClass({
         return (
             <div>
                 <h3>Devices</h3>
-                {devComponents}
+                <div className="mx_MemberInfo_devices">
+                    {devComponents}
+                </div>
             </div>
         );
     },
