@@ -1,5 +1,5 @@
 {
-    "default_hs_url": "https://matrix.org",
+    "default_hs_url": "https://sf.pyng.at",
     "default_is_url": "https://vector.im",
     "brand": "Vector",
     "integrations_ui_url": "http://localhost:8081/",
