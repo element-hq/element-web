@@ -21,6 +21,7 @@ var sdk = require('../../../index');
 var Modal = require('../../../Modal');
 var ObjectUtils = require("../../../ObjectUtils");
 var dis = require("../../../dispatcher");
+var UserSettingsStore = require('../../../UserSettingsStore');
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
 // as an integer, return a default.
@@ -206,11 +207,14 @@ module.exports = React.createClass({
                 }
             });
         }
-        console.log("Performing %s operations", promises.length);
 
         // color scheme
         promises.push(this.saveColor());
 
+        // encryption
+        promises.push(this.saveEncryption());
+
+        console.log("Performing %s operations", promises.length);
         return q.allSettled(promises);
     },
 
@@ -222,6 +226,19 @@ module.exports = React.createClass({
     saveColor: function() {
         if (!this.refs.color_settings) { return q(); }
         return this.refs.color_settings.saveSettings();
+    },
+
+    saveEncryption: function () {
+        if (!this.refs.encrypt) { return q(); }
+
+        var encrypt = this.refs.encrypt.checked;
+        if (!encrypt) { return q(); }
+
+        var roomId = this.props.room.roomId;
+        return MatrixClientPeg.get().sendStateEvent(
+            roomId, "m.room.encryption",
+            { algorithm: "m.olm.v1.curve25519-aes-sha2" }
+        );
     },
 
     _hasDiff: function(strA, strB) {
@@ -365,6 +382,39 @@ module.exports = React.createClass({
         return (roomState.mayClientSendStateEvent("m.room.join_rules", cli) &&
                 roomState.mayClientSendStateEvent("m.room.guest_access", cli))
     },
+
+    _renderEncryptionSection: function() {
+        if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
+            return null;
+        }
+
+        var cli = MatrixClientPeg.get();
+        var roomState = this.props.room.currentState;
+        var isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
+
+        var text = "Encryption is " + (isEncrypted ? "" : "not ") +
+            "enabled in this room.";
+
+        var button;
+        if (!isEncrypted &&
+                roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
+            button = (
+                <label>
+                    <input type="checkbox" ref="encrypt" />
+                    Enable encryption (warning: cannot be disabled again!)
+                </label>
+            );
+        }
+
+        return (
+            <div className="mx_RoomSettings_toggles">
+                <h3>Encryption</h3>
+                <label>{text}</label>
+                {button}
+            </div>
+        );
+    },
+
 
     render: function() {
         // TODO: go through greying out things you don't have permission to change
@@ -587,10 +637,6 @@ module.exports = React.createClass({
                             Members only (since they joined)
                         </label>
                     </div>
-                    <label className="mx_RoomSettings_encrypt">
-                        <input type="checkbox" />
-                        Encrypt room
-                    </label>
                 </div>
 
 
@@ -654,6 +700,8 @@ module.exports = React.createClass({
                 { userLevelsSection }
 
                 { bannedUsersSection }
+
+                { this._renderEncryptionSection() }
 
                 <h3>Advanced</h3>
                 <div className="mx_RoomSettings_settings">
