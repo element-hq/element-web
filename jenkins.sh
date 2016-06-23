@@ -2,6 +2,7 @@
 
 set -e
 
+export KARMAFLAGS="--no-colors"
 export NVM_DIR="/home/jenkins/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 nvm use 4
