@@ -140,7 +140,6 @@ module.exports = React.createClass({
     },
 
     showRoom: function(room, room_alias) {
-        var oob_data = {};
         var payload = {action: 'view_room'};
         if (room) {
             // Don't let the user view a room they won't be able to either
