@@ -17,7 +17,6 @@ limitations under the License.
 var MatrixClientPeg = require("./MatrixClientPeg");
 var MatrixTools = require("./MatrixTools");
 var dis = require("./dispatcher");
-var encryption = require("./encryption");
 var Tinter = require("./Tinter");
 
 
@@ -82,28 +81,9 @@ var commands = {
                 return success(
                     MatrixClientPeg.get().setRoomAccountData(
                         room_id, "org.matrix.room.color_scheme", colorScheme
-                    )                    
+                    )
                 );
             }
-        }
-        return reject(this.getUsage());
-    }),
-
-    encrypt: new Command("encrypt", "<on|off>", function(room_id, args) {
-        if (args == "on") {
-            var client = MatrixClientPeg.get();
-            var members = client.getRoom(room_id).currentState.members;
-            var user_ids = Object.keys(members);
-            return success(
-                encryption.enableEncryption(client, room_id, user_ids)
-            );
-        }
-        if (args == "off") {
-            var client = MatrixClientPeg.get();
-            return success(
-                encryption.disableEncryption(client, room_id)
-            );
-
         }
         return reject(this.getUsage());
     }),
