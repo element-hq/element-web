@@ -98,9 +98,16 @@ module.exports = React.createClass({
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
+        var desc;
+        if (alias) {
+            desc = `Delete the room alias '${alias}' and remove '${name}' from the directory?`;
+        } else {
+            desc = `Remove '${name}' from the directory?`;
+        }
+
         Modal.createDialog(QuestionDialog, {
             title: "Remove from Directory",
-            description: `Delete the room alias '${alias}' and remove '${name}' from the directory?`,
+            description: desc,
             onFinished: (should_delete) => {
                 if (!should_delete) return;
 
@@ -109,6 +116,7 @@ module.exports = React.createClass({
                 var step = `remove '${name}' from the directory.`;
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
+                    if (!alias) return;
                     step = 'delete the alias.';
                     return MatrixClientPeg.get().deleteAlias(alias);
                 }).done(() => {
