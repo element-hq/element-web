@@ -64,7 +64,7 @@ module.exports = React.createClass({
             tags_changed: false,
             tags: tags,
             areNotifsMuted: areNotifsMuted,
-            isRoomPublished: this._originalIsRoomPublished, // loaded async in componentWillMount
+            isRoomPublished: false, // loaded async in componentWillMount
         };
     },
 

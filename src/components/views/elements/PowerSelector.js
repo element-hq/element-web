@@ -34,10 +34,15 @@ module.exports = React.createClass({
 
     propTypes: {
         value: React.PropTypes.number.isRequired,
+
         // if true, the <select/> should be a 'controlled' form element and updated by React
         // to reflect the current value, rather than left freeform.
         // MemberInfo uses controlled; RoomSettings uses non-controlled.
-        controlled: React.PropTypes.bool.isRequired,
+        //
+        // ignored if disabled is truthy. false by default.
+        controlled: React.PropTypes.bool,
+
+        // should the user be able to change the value? false by default.
         disabled: React.PropTypes.bool,
         onChange: React.PropTypes.func,
     },
