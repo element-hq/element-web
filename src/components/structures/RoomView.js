@@ -116,6 +116,7 @@ module.exports = React.createClass({
             callState: null,
             guestsCanJoin: false,
             canPeek: false,
+            roomLoadError: null,
 
             // this is true if we are fully scrolled-down, and are looking at
             // the end of the live timeline. It has the effect of hiding the
@@ -163,6 +164,7 @@ module.exports = React.createClass({
             }, (err) => {
                 this.setState({
                     roomLoading: false,
+                    roomLoadError: err,
                 });
             });
         } else {
@@ -1282,6 +1284,7 @@ module.exports = React.createClass({
 
                     // We have no room object for this room, only the ID.
                     // We've got to this room by following a link, possibly a third party invite.
+                    var room_alias = this.props.roomAddress[0] == '#' ? this.props.roomAddress : null;
                     return (
                         <div className="mx_RoomView">
                             <RoomHeader ref="header"
@@ -1292,7 +1295,8 @@ module.exports = React.createClass({
                             <div className="mx_RoomView_auxPanel">
                                 <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked }
                                                 onRejectClick={ this.onRejectThreepidInviteButtonClicked }
-                                                canJoin={ true } canPreview={ false }
+                                                canPreview={ false } error={ this.state.roomLoadError }
+                                                roomAlias={room_alias}
                                                 spinner={this.state.joining}
                                                 inviterName={inviterName}
                                                 invitedEmail={invitedEmail}
@@ -1330,7 +1334,7 @@ module.exports = React.createClass({
                             <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked }
                                             onRejectClick={ this.onRejectButtonClicked }
                                             inviterName={ inviterName }
-                                            canJoin={ true } canPreview={ false }
+                                            canPreview={ false }
                                             spinner={this.state.joining}
                                             room={this.state.room}
                             />
@@ -1400,7 +1404,7 @@ module.exports = React.createClass({
                 invitedEmail = this.props.thirdPartyInvite.invitedEmail;
             }
             aux = (
-                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked} canJoin={true}
+                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
                                 spinner={this.state.joining}
                                 inviterName={inviterName}
