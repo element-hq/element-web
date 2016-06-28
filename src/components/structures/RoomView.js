@@ -116,6 +116,10 @@ module.exports = React.createClass({
             callState: null,
             guestsCanJoin: false,
             canPeek: false,
+
+            // error object, as from the matrix client/server API
+            // If we failed to load information about the room,
+            // store the error here.
             roomLoadError: null,
 
             // this is true if we are fully scrolled-down, and are looking at
