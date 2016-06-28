@@ -33,16 +33,24 @@ module.exports = React.createClass({
 
         // If invited by 3rd party invite, the email address the invite was sent to
         invitedEmail: React.PropTypes.string,
-        canJoin: React.PropTypes.bool,
+
+        // A standard client/server API error object. If supplied, indicates that the
+        // caller was unable to fetch details about the room for the given reason.
+        error: React.PropTypes.object,
+
         canPreview: React.PropTypes.bool,
         spinner: React.PropTypes.bool,
         room: React.PropTypes.object,
+
+        // The alias that was used to access this room, if appropriate
+        // If given, this will be how the room is referred to (eg.
+        // in error messages).
+        roomAlias: React.PropTypes.object,
     },
 
     getDefaultProps: function() {
         return {
             onJoinClick: function() {},
-            canJoin: false,
             canPreview: true,
         };
     },
@@ -115,8 +123,24 @@ module.exports = React.createClass({
             );
 
         }
-        else if (this.props.canJoin) {
-            var name = this.props.room ? this.props.room.name : "";
+        else if (this.props.error) {
+            var name = this.props.roomAlias || "This room";
+            var error;
+            if (this.props.error.errcode == 'M_NOT_FOUND') {
+                error = name + " does not exist";
+            } else {
+                error = name + " is not accessible at this time";
+            }
+            joinBlock = (
+                <div>
+                    <div className="mx_RoomPreviewBar_join_text">
+                        { error }
+                    </div>
+                </div>
+            );
+        }
+        else {
+            var name = this.props.room ? this.props.room.name : (this.props.room_alias || "");
             name = name ? <b>{ name }</b> : "a room";
             joinBlock = (
                 <div>
