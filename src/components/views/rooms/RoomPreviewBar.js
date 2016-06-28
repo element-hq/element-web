@@ -41,6 +41,9 @@ module.exports = React.createClass({
         canPreview: React.PropTypes.bool,
         spinner: React.PropTypes.bool,
         room: React.PropTypes.object,
+
+        // The alias that was used to access this room, if appropriate
+        roomAlias: React.PropTypes.object,
     },
 
     getDefaultProps: function() {

@@ -116,6 +116,9 @@ module.exports = React.createClass({
             callState: null,
             guestsCanJoin: false,
             canPeek: false,
+
+            // If we failed to load information about the room,
+            // store the error here.
             roomLoadError: null,
 
             // this is true if we are fully scrolled-down, and are looking at
