@@ -358,10 +358,15 @@ module.exports = React.createClass({
         ];
         var existingRoomId;
 
-        var currentRoom = MatrixClientPeg.get().getRoom(this.props.member.roomId);
-        var currentMembers = currentRoom.getJoinedMembers();
+        // roomId can be null here because of a hack in MatrixChat.onUserClick where we
+        // abuse this to view users rather than room members.
+        var currentMembers;
+        if (this.props.member.roomId) {
+            var currentRoom = MatrixClientPeg.get().getRoom(this.props.member.roomId);
+            currentMembers = currentRoom.getJoinedMembers();
+        }
         // if we're currently in a 1:1 with this user, start a new chat
-        if (currentMembers.length === 2 &&
+        if (currentMembers && currentMembers.length === 2 &&
             userIds.indexOf(currentMembers[0].userId) !== -1 &&
             userIds.indexOf(currentMembers[1].userId) !== -1)
         {
