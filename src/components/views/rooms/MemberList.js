@@ -423,9 +423,9 @@ module.exports = React.createClass({
             if (userA.currentlyActive && !userB.currentlyActive) return -1;
             if (!userA.currentlyActive && userB.currentlyActive) return 1;
 
-            var lastActiveTsA = userA && userA.lastActiveAgo ? userA.lastActiveAgo : 0;
-            var lastActiveTsB = userB && userB.lastActiveAgo ? userB.lastActiveAgo : 0;
-            return lastActiveTsB - lastActiveTsA;
+            var lastActiveTsA = userA && userA.lastActiveAgo ? userA.lastActiveAgo : 9999999999;
+            var lastActiveTsB = userB && userB.lastActiveAgo ? userB.lastActiveAgo : 9999999999;
+            return lastActiveTsA - lastActiveTsB;
     },
 
     onSearchQueryChanged: function(input) {
