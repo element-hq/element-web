@@ -445,6 +445,8 @@ module.exports = React.createClass({
 
             // console.log("comparing ts: " + lastActiveTsA + " and " + lastActiveTsB);
 
+            var lastActiveTsA = userA && userA.lastActiveAgo ? userA.lastActiveAgo : 0;
+            var lastActiveTsB = userB && userB.lastActiveAgo ? userB.lastActiveAgo : 0;
             return lastActiveTsB - lastActiveTsA;
     },
 
