@@ -423,28 +423,6 @@ module.exports = React.createClass({
             if (userA.currentlyActive && !userB.currentlyActive) return -1;
             if (!userA.currentlyActive && userB.currentlyActive) return 1;
 
-            // For now, let's just order things by timestamp. It's really annoying
-            // that a user disappears from sight just because they temporarily go offline
-    /*
-            var presenceMap = {
-                online: 3,
-                unavailable: 2,
-                offline: 1
-            };
-
-            var presenceOrdA = userA ? presenceMap[userA.presence] : 0;
-            var presenceOrdB = userB ? presenceMap[userB.presence] : 0;
-
-            if (presenceOrdA != presenceOrdB) {
-                return presenceOrdB - presenceOrdA;
-            }
-    */
-
-            var lastActiveTsA = userA && userA.lastActiveTs ? userA.lastActiveTs : 0;
-            var lastActiveTsB = userB && userB.lastActiveTs ? userB.lastActiveTs : 0;
-
-            // console.log("comparing ts: " + lastActiveTsA + " and " + lastActiveTsB);
-
             var lastActiveTsA = userA && userA.lastActiveAgo ? userA.lastActiveAgo : 0;
             var lastActiveTsB = userB && userB.lastActiveAgo ? userB.lastActiveAgo : 0;
             return lastActiveTsB - lastActiveTsA;
