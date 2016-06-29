@@ -425,9 +425,7 @@ module.exports = React.createClass({
 
             // For now, let's just order things by timestamp. It's really annoying
             // that a user disappears from sight just because they temporarily go offline
-            var lastActiveTsA = userA && userA.lastActiveAgo ? userA.lastActiveAgo : 9999999999;
-            var lastActiveTsB = userB && userB.lastActiveAgo ? userB.lastActiveAgo : 9999999999;
-            return lastActiveTsA - lastActiveTsB;
+            return userB.getLastActiveTs() - userA.getLastActiveTs();
     },
 
     onSearchQueryChanged: function(input) {
