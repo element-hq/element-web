@@ -108,8 +108,12 @@ module.exports = React.createClass({
             return window.localStorage.getItem("mx_hs_url");
         }
         else {
-            return this.props.config.default_hs_url || "https://matrix.org";
+            return this.getDefaultHsUrl();
         }
+    },
+
+    getDefaultHsUrl() {
+        return this.props.config.default_hs_url || "https://matrix.org";
     },
 
     getFallbackHsUrl: function() {
@@ -126,8 +130,12 @@ module.exports = React.createClass({
             return window.localStorage.getItem("mx_is_url");
         }
         else {
-            return this.props.config.default_is_url || "https://vector.im"
+            return this.getDefaultIsUrl();
         }
+    },
+
+    getDefaultIsUrl() {
+        return this.props.config.default_is_url || "https://vector.im";
     },
 
     componentWillMount: function() {
@@ -151,8 +159,8 @@ module.exports = React.createClass({
                 this.onLoggedIn({
                     userId: this.props.startingQueryParams.guest_user_id,
                     accessToken: this.props.startingQueryParams.guest_access_token,
-                    homeserverUrl: this.props.config.default_hs_url,
-                    identityServerUrl: this.props.config.default_is_url,
+                    homeserverUrl: this.getDefaultHsUrl(),
+                    identityServerUrl: this.getDefaultIsUrl(),
                     guest: true
                 });
             }
@@ -403,10 +411,7 @@ module.exports = React.createClass({
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID
                 // If the user is clicking on a room in the context of the alias being presented
                 // to them, supply the room alias. If both are supplied, the room ID will be ignored.
-                this._viewRoom(
-                    payload.room_id, payload.room_alias, payload.show_settings, payload.event_id,
-                    payload.third_party_invite, payload.oob_data
-                );
+                this._viewRoom(payload);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -423,7 +428,7 @@ module.exports = React.createClass({
                 }
                 roomIndex = (roomIndex + roomIndexDelta) % allRooms.length;
                 if (roomIndex < 0) roomIndex = allRooms.length - 1;
-                this._viewRoom(allRooms[roomIndex].roomId);
+                this._viewRoom({ room_id: allRooms[roomIndex].roomId });
                 break;
             case 'view_indexed_room':
                 var allRooms = RoomListSorter.mostRecentActivityFirst(
@@ -431,7 +436,7 @@ module.exports = React.createClass({
                 );
                 var roomIndex = payload.roomIndex;
                 if (allRooms[roomIndex]) {
-                    this._viewRoom(allRooms[roomIndex].roomId);
+                    this._viewRoom({ room_id: allRooms[roomIndex].roomId });
                 }
                 break;
             case 'view_user_settings':
@@ -491,39 +496,45 @@ module.exports = React.createClass({
 
     // switch view to the given room
     //
-    // eventId is optional and will cause a switch to the context of that
-    // particular event.
-    // @param {Object} thirdPartyInvite Object containing data about the third party
+    // @param {Object} room_info Object containing data about the room to be joined
+    // @param {string=} room_info.room_id ID of the room to join. One of room_id or room_alias must be given.
+    // @param {string=} room_info.room_alias Alias of the room to join. One of room_id or room_alias must be given.
+    // @param {boolean=} room_info.auto_join If true, automatically attempt to join the room if not already a member.
+    // @param {boolean=} room_info.show_settings Makes RoomView show the room settings dialog.
+    // @param {string=} room_info.event_id ID of the event in this room to show: this will cause a switch to the
+    //                                    context of that particular event.
+    // @param {Object=} room_info.third_party_invite Object containing data about the third party
     //                                    we received to join the room, if any.
-    // @param {string} thirdPartyInvite.inviteSignUrl 3pid invite sign URL
-    // @param {string} thirdPartyInvite.invitedwithEmail The email address the invite was sent to
-    // @param {Object} oob_data Object of additional data about the room
+    // @param {string=} room_info.third_party_invite.inviteSignUrl 3pid invite sign URL
+    // @param {string=} room_info.third_party_invite.invitedEmail The email address the invite was sent to
+    // @param {Object=} room_info.oob_data Object of additional data about the room
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
-    _viewRoom: function(roomId, roomAlias, showSettings, eventId, thirdPartyInvite, oob_data) {
+    _viewRoom: function(room_info) {
         // before we switch room, record the scroll state of the current room
         this._updateScrollMap();
 
         this.focusComposer = true;
 
         var newState = {
-            initialEventId: eventId,
-            highlightedEventId: eventId,
+            initialEventId: room_info.event_id,
+            highlightedEventId: room_info.event_id,
             initialEventPixelOffset: undefined,
             page_type: this.PageTypes.RoomView,
-            thirdPartyInvite: thirdPartyInvite,
-            roomOobData: oob_data,
-            currentRoomAlias: roomAlias,
+            thirdPartyInvite: room_info.third_party_invite,
+            roomOobData: room_info.oob_data,
+            currentRoomAlias: room_info.room_alias,
+            autoJoin: room_info.auto_join,
         };
 
-        if (!roomAlias) {
-            newState.currentRoomId = roomId;
+        if (!room_info.room_alias) {
+            newState.currentRoomId = room_info.room_id;
         }
 
         // if we aren't given an explicit event id, look for one in the
         // scrollStateMap.
-        if (!eventId) {
-            var scrollState = this.scrollStateMap[roomId];
+        if (!room_info.event_id) {
+            var scrollState = this.scrollStateMap[room_info.room_id];
             if (scrollState) {
                 newState.initialEventId = scrollState.focussedEvent;
                 newState.initialEventPixelOffset = scrollState.pixelOffset;
@@ -536,8 +547,8 @@ module.exports = React.createClass({
             // the new screen yet (we won't be showing it yet)
             // The normal case where this happens is navigating
             // to the room in the URL bar on page load.
-            var presentedId = roomAlias || roomId;
-            var room = MatrixClientPeg.get().getRoom(roomId);
+            var presentedId = room_info.room_alias || room_info.room_id;
+            var room = MatrixClientPeg.get().getRoom(room_info.room_id);
             if (room) {
                 var theAlias = MatrixTools.getDisplayAliasForRoom(room);
                 if (theAlias) presentedId = theAlias;
@@ -553,15 +564,15 @@ module.exports = React.createClass({
                 // Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
 
-            if (eventId) {
-                presentedId += "/"+eventId;
+            if (room_info.event_id) {
+                presentedId += "/"+room_info.event_id;
             }
             this.notifyNewScreen('room/'+presentedId);
             newState.ready = true;
         }
         this.setState(newState);
 
-        if (this.refs.roomView && showSettings) {
+        if (this.refs.roomView && room_info.showSettings) {
             this.refs.roomView.showSettings(true);
         }
     },
@@ -1030,6 +1041,7 @@ module.exports = React.createClass({
                         <RoomView
                             ref="roomView"
                             roomAddress={this.state.currentRoomAlias || this.state.currentRoomId}
+                            autoJoin={this.state.autoJoin}
                             onRoomIdResolved={this.onRoomIdResolved}
                             eventId={this.state.initialEventId}
                             thirdPartyInvite={this.state.thirdPartyInvite}
@@ -1109,8 +1121,8 @@ module.exports = React.createClass({
                     email={this.props.startingQueryParams.email}
                     username={this.state.upgradeUsername}
                     guestAccessToken={this.state.guestAccessToken}
-                    defaultHsUrl={this.props.config.default_hs_url}
-                    defaultIsUrl={this.props.config.default_is_url}
+                    defaultHsUrl={this.getDefaultHsUrl()}
+                    defaultIsUrl={this.getDefaultIsUrl()}
                     brand={this.props.config.brand}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
@@ -1124,8 +1136,8 @@ module.exports = React.createClass({
         } else if (this.state.screen == 'forgot_password') {
             return (
                 <ForgotPassword
-                    defaultHsUrl={this.props.config.default_hs_url}
-                    defaultIsUrl={this.props.config.default_is_url}
+                    defaultHsUrl={this.getDefaultHsUrl()}
+                    defaultIsUrl={this.getDefaultIsUrl()}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     onComplete={this.onLoginClick}
@@ -1136,13 +1148,13 @@ module.exports = React.createClass({
                 <Login
                     onLoggedIn={this.onLoggedIn}
                     onRegisterClick={this.onRegisterClick}
-                    defaultHsUrl={this.props.config.default_hs_url}
-                    defaultIsUrl={this.props.config.default_is_url}
+                    defaultHsUrl={this.getDefaultHsUrl()}
+                    defaultIsUrl={this.getDefaultIsUrl()}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     fallbackHsUrl={this.getFallbackHsUrl()}
                     onForgotPasswordClick={this.onForgotPasswordClick}
-                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest.bind(this, true) : undefined}
+                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this._registerAsGuest.bind(this, true)}
                     onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
                     />
             );

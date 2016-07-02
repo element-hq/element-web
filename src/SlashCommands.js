@@ -17,7 +17,6 @@ limitations under the License.
 var MatrixClientPeg = require("./MatrixClientPeg");
 var MatrixTools = require("./MatrixTools");
 var dis = require("./dispatcher");
-var encryption = require("./encryption");
 var Tinter = require("./Tinter");
 
 
@@ -82,28 +81,9 @@ var commands = {
                 return success(
                     MatrixClientPeg.get().setRoomAccountData(
                         room_id, "org.matrix.room.color_scheme", colorScheme
-                    )                    
+                    )
                 );
             }
-        }
-        return reject(this.getUsage());
-    }),
-
-    encrypt: new Command("encrypt", "<on|off>", function(room_id, args) {
-        if (args == "on") {
-            var client = MatrixClientPeg.get();
-            var members = client.getRoom(room_id).currentState.members;
-            var user_ids = Object.keys(members);
-            return success(
-                encryption.enableEncryption(client, room_id, user_ids)
-            );
-        }
-        if (args == "off") {
-            var client = MatrixClientPeg.get();
-            return success(
-                encryption.disableEncryption(client, room_id)
-            );
-
         }
         return reject(this.getUsage());
     }),
@@ -132,46 +112,25 @@ var commands = {
     }),
 
     // Join a room
-    join: new Command("join", "<room_alias>", function(room_id, args) {
+    join: new Command("join", "#alias:domain", function(room_id, args) {
         if (args) {
             var matches = args.match(/^(\S+)$/);
             if (matches) {
                 var room_alias = matches[1];
                 if (room_alias[0] !== '#') {
-                    return reject("Usage: /join #alias:domain");
+                    return reject(this.getUsage());
                 }
                 if (!room_alias.match(/:/)) {
                     room_alias += ':' + MatrixClientPeg.get().getDomain();
                 }
 
-                // Try to find a room with this alias
-                // XXX: do we need to do this? Doesn't the JS SDK suppress duplicate attempts to join the same room?
-                var foundRoom = MatrixTools.getRoomForAlias(
-                    MatrixClientPeg.get().getRooms(),
-                    room_alias
-                );
+                dis.dispatch({
+                    action: 'view_room',
+                    room_alias: room_alias,
+                    auto_join: true,
+                });
 
-                if (foundRoom) { // we've already joined this room, view it if it's not archived.
-                    var me = foundRoom.getMember(MatrixClientPeg.get().credentials.userId);
-                    if (me && me.membership !== "leave") {
-                        dis.dispatch({
-                            action: 'view_room',
-                            room_id: foundRoom.roomId
-                        });
-                        return success();                        
-                    }
-                }
-
-                // otherwise attempt to join this alias.
-                return success(
-                    MatrixClientPeg.get().joinRoom(room_alias).then(
-                    function(room) {
-                        dis.dispatch({
-                            action: 'view_room',
-                            room_id: room.roomId
-                        });
-                    })
-                );
+                return success();
             }
         }
         return reject(this.getUsage());

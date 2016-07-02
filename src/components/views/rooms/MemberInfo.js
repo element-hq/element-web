@@ -70,7 +70,7 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this._updateStateForNewMember(this.props.member);
-        MatrixClientPeg.get().on("deviceVerified", this.onDeviceVerified);
+        MatrixClientPeg.get().on("deviceVerificationChanged", this.onDeviceVerificationChanged);
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -82,14 +82,14 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         var client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener("deviceVerified", this.onDeviceVerified);
+            client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         }
         if (this._cancelDeviceList) {
             this._cancelDeviceList();
         }
     },
 
-    onDeviceVerified: function(userId, device) {
+    onDeviceVerificationChanged: function(userId, device) {
         if (userId == this.props.member.userId) {
             // no need to re-download the whole thing; just update our copy of
             // the list.
@@ -358,10 +358,15 @@ module.exports = React.createClass({
         ];
         var existingRoomId;
 
-        var currentRoom = MatrixClientPeg.get().getRoom(this.props.member.roomId);
-        var currentMembers = currentRoom.getJoinedMembers();
+        // roomId can be null here because of a hack in MatrixChat.onUserClick where we
+        // abuse this to view users rather than room members.
+        var currentMembers;
+        if (this.props.member.roomId) {
+            var currentRoom = MatrixClientPeg.get().getRoom(this.props.member.roomId);
+            currentMembers = currentRoom.getJoinedMembers();
+        }
         // if we're currently in a 1:1 with this user, start a new chat
-        if (currentMembers.length === 2 &&
+        if (currentMembers && currentMembers.length === 2 &&
             userIds.indexOf(currentMembers[0].userId) !== -1 &&
             userIds.indexOf(currentMembers[1].userId) !== -1)
         {
@@ -535,7 +540,9 @@ module.exports = React.createClass({
         return (
             <div>
                 <h3>Devices</h3>
-                {devComponents}
+                <div className="mx_MemberInfo_devices">
+                    {devComponents}
+                </div>
             </div>
         );
     },
