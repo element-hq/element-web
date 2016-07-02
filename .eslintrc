@@ -36,7 +36,12 @@
     "no-new-wrappers": ["error"],
     "no-invalid-regexp": ["error"],
     "no-extra-bind": ["error"],
-    "no-magic-numbers": ["error"],
+    "no-magic-numbers": ["error", {
+      "ignore": [-1, 0, 1], // usually used in array/string indexing
+      "ignoreArrayIndexes": true,
+      "enforceConst": true,
+      "detectObjects": true
+    }],
     "consistent-return": ["error"],
     "valid-jsdoc": ["error"],
     "no-use-before-define": ["error"],

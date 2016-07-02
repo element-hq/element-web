@@ -9,6 +9,7 @@ import {
     SelectionState
 } from 'draft-js';
 import * as sdk from  './index';
+import * as emojione from 'emojione';
 
 const BLOCK_RENDER_MAP = DefaultDraftBlockRenderMap.set('unstyled', {
     element: 'span'
@@ -35,6 +36,8 @@ const MARKDOWN_REGEX = {
 
 const USERNAME_REGEX = /@\S+:\S+/g;
 const ROOM_REGEX = /#\S+:\S+/g;
+let EMOJI_REGEX = null;
+window.EMOJI_REGEX = EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
 
 export function contentStateToHTML(contentState: ContentState): string {
     return contentState.getBlockMap().map((block) => {
@@ -89,12 +92,23 @@ export function getScopedRTDecorators(scope: any): CompositeDecorator {
             return <span className="mx_UserPill">{avatar} {props.children}</span>;
         }
     };
+    
     let roomDecorator = {
         strategy: (contentBlock, callback) => {
             findWithRegex(ROOM_REGEX, contentBlock, callback);
         },
         component: (props) => {
             return <span className="mx_RoomPill">{props.children}</span>;
+        }
+    };
+
+    // Unused for now, due to https://github.com/facebook/draft-js/issues/414
+    let emojiDecorator = {
+        strategy: (contentBlock, callback) => {
+            findWithRegex(EMOJI_REGEX, contentBlock, callback);
+        },
+        component: (props) => {
+            return <span dangerouslySetInnerHTML={{__html: ' ' + emojione.unicodeToImage(props.children[0].props.text)}}/>
         }
     };
 
