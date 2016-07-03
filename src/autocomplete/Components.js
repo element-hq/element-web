@@ -1,13 +1,19 @@
-export function TextualCompletion(props: {
+import React from 'react';
+
+export function TextualCompletion({
+    title,
+    subtitle,
+    description,
+}: {
     title: ?string,
     subtitle: ?string,
     description: ?string
 }) {
     return (
         <div className="mx_Autocomplete_Completion">
-            <span>{completion.title}</span>
-            <em>{completion.subtitle}</em>
-            <span style={{color: 'gray', float: 'right'}}>{completion.description}</span>
+            <span>{title}</span>
+            <em>{subtitle}</em>
+            <span style={{color: 'gray', float: 'right'}}>{description}</span>
         </div>
     );
 }

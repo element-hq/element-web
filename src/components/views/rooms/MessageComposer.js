@@ -40,16 +40,17 @@ export default class MessageComposer extends React.Component {
 
         this.state = {
             autocompleteQuery: '',
-            selection: null
+            selection: null,
         };
+
     }
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+            let NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
                 title: "Please Register",
-                description: "Guest users can't upload files. Please register to upload."
+                description: "Guest users can't upload files. Please register to upload.",
             });
             return;
         }
@@ -58,13 +59,13 @@ export default class MessageComposer extends React.Component {
     }
 
     onUploadFileSelected(ev) {
-        var files = ev.target.files;
+        let files = ev.target.files;
 
-        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        let TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        var fileList = [];
-        for(var i=0; i<files.length; i++) {
+        let fileList = [];
+        for (let i=0; i<files.length; i++) {
             fileList.push(<li>
                 <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name}
             </li>);
@@ -91,7 +92,7 @@ export default class MessageComposer extends React.Component {
                 }
 
                 this.refs.uploadInput.value = null;
-            }
+            },
         });
     }
 
@@ -105,7 +106,7 @@ export default class MessageComposer extends React.Component {
             action: 'hangup',
             // hangup the call for this room, which may not be the room in props
             // (e.g. conferences which will hangup the 1:1 room instead)
-            room_id: call.roomId
+            room_id: call.roomId,
         });
     }
 
@@ -113,7 +114,7 @@ export default class MessageComposer extends React.Component {
         dis.dispatch({
             action: 'place_call',
             type: ev.shiftKey ? "screensharing" : "video",
-            room_id: this.props.room.roomId
+            room_id: this.props.room.roomId,
         });
     }
 
@@ -121,14 +122,14 @@ export default class MessageComposer extends React.Component {
         dis.dispatch({
             action: 'place_call',
             type: 'voice',
-            room_id: this.props.room.roomId
+            room_id: this.props.room.roomId,
         });
     }
 
     onInputContentChanged(content: string, selection: {start: number, end: number}) {
         this.setState({
             autocompleteQuery: content,
-            selection
+            selection,
         });
     }
 
@@ -171,11 +172,11 @@ export default class MessageComposer extends React.Component {
             callButton =
                 <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
                     <TintableSvg src="img/voice.svg" width="16" height="26"/>
-                </div>
+                </div>;
             videoCallButton =
                 <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
                     <TintableSvg src="img/call.svg" width="30" height="22"/>
-                </div>
+                </div>;
         }
 
         var canSendMessages = this.props.room.currentState.maySendMessage(
@@ -198,9 +199,11 @@ export default class MessageComposer extends React.Component {
 
             controls.push(
                 <MessageComposerInput
+                    ref={c => this.messageComposerInput = c}
                     key="controls_input"
                     onResize={this.props.onResize}
                     room={this.props.room}
+                    tryComplete={this.refs.autocomplete && this.refs.autocomplete.onConfirm}
                     onUpArrow={this.onUpArrow}
                     onDownArrow={this.onDownArrow}
                     onTab={this.onTab}
@@ -223,6 +226,7 @@ export default class MessageComposer extends React.Component {
                 <div className="mx_MessageComposer_autocomplete_wrapper">
                     <Autocomplete
                         ref="autocomplete"
+                        onConfirm={this.messageComposerInput && this.messageComposerInput.onConfirmAutocompletion}
                         query={this.state.autocompleteQuery}
                         selection={this.state.selection} />
                 </div>

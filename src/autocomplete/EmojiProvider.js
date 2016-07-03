@@ -1,6 +1,7 @@
+import React from 'react';
 import AutocompleteProvider from './AutocompleteProvider';
 import Q from 'q';
-import {emojioneList, shortnameToImage} from 'emojione';
+import {emojioneList, shortnameToImage, shortnameToUnicode} from 'emojione';
 import Fuse from 'fuse.js';
 
 const EMOJI_REGEX = /:\w*:?/g;
@@ -16,18 +17,19 @@ export default class EmojiProvider extends AutocompleteProvider {
 
     getCompletions(query: string, selection: {start: number, end: number}) {
         let completions = [];
-        let command = this.getCurrentCommand(query, selection);
-        if(command) {
+        let {command, range} = this.getCurrentCommand(query, selection);
+        if (command) {
             completions = this.fuse.search(command[0]).map(result => {
                 let shortname = EMOJI_SHORTNAMES[result];
                 let imageHTML = shortnameToImage(shortname);
                 return {
-                    title: shortname,
+                    completion: shortnameToUnicode(shortname),
                     component: (
                         <div className="mx_Autocomplete_Completion">
                             <span dangerouslySetInnerHTML={{__html: imageHTML}}></span> {shortname}
                         </div>
-                    )
+                    ),
+                    range,
                 };
             }).slice(0, 4);
         }
@@ -39,7 +41,7 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     static getInstance() {
-        if(instance == null)
+        if (instance == null)
             instance = new EmojiProvider();
         return instance;
     }

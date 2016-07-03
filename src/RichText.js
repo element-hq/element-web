@@ -1,12 +1,14 @@
+import React from 'react';
 import {
     Editor,
     Modifier,
     ContentState,
+    ContentBlock,
     convertFromHTML,
     DefaultDraftBlockRenderMap,
     DefaultDraftInlineStyle,
     CompositeDecorator,
-    SelectionState
+    SelectionState,
 } from 'draft-js';
 import * as sdk from  './index';
 import * as emojione from 'emojione';
@@ -25,7 +27,7 @@ const STYLES = {
     CODE: 'code',
     ITALIC: 'em',
     STRIKETHROUGH: 's',
-    UNDERLINE: 'u'
+    UNDERLINE: 'u',
 };
 
 const MARKDOWN_REGEX = {
@@ -168,7 +170,7 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
         text = "";
 
 
-    for(let currentKey = startKey;
+    for (let currentKey = startKey;
             currentKey && currentKey !== endKey;
             currentKey = contentState.getKeyAfter(currentKey)) {
         let blockText = getText(currentKey);
@@ -189,14 +191,14 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
  * Note that this inherently means we make assumptions about what that means (no separator between ContentBlocks, etc)
  * Used by autocomplete to show completions when the current selection lies within, or at the edges of a command.
  */
-export function getTextSelectionOffsets(selectionState: SelectionState,
-                                        contentBlocks: Array<ContentBlock>): {start: number, end: number} {
+export function selectionStateToTextOffsets(selectionState: SelectionState,
+                                            contentBlocks: Array<ContentBlock>): {start: number, end: number} {
     let offset = 0, start = 0, end = 0;
     for(let block of contentBlocks) {
-        if (selectionState.getStartKey() == block.getKey()) {
+        if (selectionState.getStartKey() === block.getKey()) {
             start = offset + selectionState.getStartOffset();
         }
-        if (selectionState.getEndKey() == block.getKey()) {
+        if (selectionState.getEndKey() === block.getKey()) {
             end = offset + selectionState.getEndOffset();
             break;
         }
@@ -205,6 +207,37 @@ export function getTextSelectionOffsets(selectionState: SelectionState,
 
     return {
         start,
-        end
+        end,
+    };
+}
+
+export function textOffsetsToSelectionState({start, end}: {start: number, end: number},
+                                            contentBlocks: Array<ContentBlock>): SelectionState {
+    let selectionState = SelectionState.createEmpty();
+
+    for (let block of contentBlocks) {
+        let blockLength = block.getLength();
+
+        if (start !== -1 && start < blockLength) {
+            selectionState = selectionState.merge({
+                anchorKey: block.getKey(),
+                anchorOffset: start,
+            });
+            start = -1;
+        } else {
+            start -= blockLength;
+        }
+
+        if (end !== -1 && end <= blockLength) {
+            selectionState = selectionState.merge({
+                focusKey: block.getKey(),
+                focusOffset: end,
+            });
+            end = -1;
+        } else {
+            end -= blockLength;
+        }
     }
+
+    return selectionState;
 }

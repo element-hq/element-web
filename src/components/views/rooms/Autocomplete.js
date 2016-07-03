@@ -1,14 +1,22 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 import {getCompletions} from '../../../autocomplete/Autocompleter';
 
 export default class Autocomplete extends React.Component {
     constructor(props) {
         super(props);
+
+        this.onConfirm = this.onConfirm.bind(this);
+
         this.state = {
+            // list of completionResults, each containing completions
             completions: [],
+
+            // array of completions, so we can look up current selection by offset quickly
+            completionList: [],
 
             // how far down the completion list we are
             selectionOffset: 0,
@@ -31,8 +39,10 @@ export default class Autocomplete extends React.Component {
                     let newCompletions = Object.assign([], this.state.completions);
                     completionResult.completions = completions;
                     newCompletions[i] = completionResult;
+
                     this.setState({
                         completions: newCompletions,
+                        completionList: _.flatMap(newCompletions, provider => provider.completions),
                     });
                 }, err => {
                     console.error(err);
@@ -54,7 +64,7 @@ export default class Autocomplete extends React.Component {
     onUpArrow(): boolean {
         let completionCount = this.countCompletions(),
             selectionOffset = (completionCount + this.state.selectionOffset - 1) % completionCount;
-        this.setState({selectionOffset});
+        this.setSelection(selectionOffset);
         return true;
     }
 
@@ -62,34 +72,49 @@ export default class Autocomplete extends React.Component {
     onDownArrow(): boolean {
         let completionCount = this.countCompletions(),
             selectionOffset = (this.state.selectionOffset + 1) % completionCount;
-        this.setState({selectionOffset});
+        this.setSelection(selectionOffset);
         return true;
+    }
+
+    /** called from MessageComposerInput
+     * @returns {boolean} whether confirmation was handled
+     */
+    onConfirm(): boolean {
+        if (this.countCompletions() === 0)
+            return false;
+
+        let selectedCompletion = this.state.completionList[this.state.selectionOffset];
+        this.props.onConfirm(selectedCompletion.range, selectedCompletion.completion);
+
+        return true;
+    }
+
+    setSelection(selectionOffset: number) {
+        this.setState({selectionOffset});
     }
 
     render() {
         let position = 0;
         let renderedCompletions = this.state.completions.map((completionResult, i) => {
             let completions = completionResult.completions.map((completion, i) => {
-                let Component = completion.component;
                 let className = classNames('mx_Autocomplete_Completion', {
                     'selected': position === this.state.selectionOffset,
                 });
                 let componentPosition = position;
                 position++;
-                if (Component) {
-                    return Component;
-                }
 
-                let onMouseOver = () => this.setState({selectionOffset: componentPosition});
-                
+                let onMouseOver = () => this.setSelection(componentPosition),
+                    onClick = () => {
+                        this.setSelection(componentPosition);
+                        this.onConfirm();
+                    };
+
                 return (
                     <div key={i}
                          className={className}
-                         onMouseOver={onMouseOver}>
-                        <span style={{fontWeight: 600}}>{completion.title}</span>
-                        <span>{completion.subtitle}</span>
-                        <span style={{flex: 1}} />
-                        <span style={{color: 'gray'}}>{completion.description}</span>
+                         onMouseOver={onMouseOver}
+                         onClick={onClick}>
+                        {completion.component}
                     </div>
                 );
             });

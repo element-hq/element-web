@@ -1,7 +1,9 @@
+import React from 'react';
 import AutocompleteProvider from './AutocompleteProvider';
 import Q from 'q';
 import MatrixClientPeg from '../MatrixClientPeg';
 import Fuse from 'fuse.js';
+import {TextualCompletion} from './Components';
 
 const ROOM_REGEX = /(?=#)([^\s]*)/g;
 
@@ -10,32 +12,35 @@ let instance = null;
 export default class RoomProvider extends AutocompleteProvider {
     constructor() {
         super(ROOM_REGEX, {
-            keys: ['displayName', 'userId']
+            keys: ['displayName', 'userId'],
         });
         this.fuse = new Fuse([], {
-           keys: ['name', 'roomId', 'aliases']
+           keys: ['name', 'roomId', 'aliases'],
         });
     }
 
     getCompletions(query: string, selection: {start: number, end: number}) {
         let client = MatrixClientPeg.get();
         let completions = [];
-        const command = this.getCurrentCommand(query, selection);
-        if(command) {
+        const {command, range} = this.getCurrentCommand(query, selection);
+        if (command) {
             // the only reason we need to do this is because Fuse only matches on properties
             this.fuse.set(client.getRooms().filter(room => !!room).map(room => {
                 return {
                     name: room.name,
                     roomId: room.roomId,
-                    aliases: room.getAliases()
+                    aliases: room.getAliases(),
                 };
             }));
             completions = this.fuse.search(command[0]).map(room => {
                 return {
-                    title: room.name,
-                    subtitle: room.roomId
+                    completion: room.roomId,
+                    component: (
+                        <TextualCompletion title={room.name} subtitle={room.roomId} />
+                    ),
+                    range,
                 };
-            }).slice(0, 4);;
+            }).slice(0, 4);
         }
         return Q.when(completions);
     }
@@ -45,8 +50,9 @@ export default class RoomProvider extends AutocompleteProvider {
     }
     
     static getInstance() {
-        if(instance == null)
+        if (instance == null) {
             instance = new RoomProvider();
+        }
         
         return instance;
     }

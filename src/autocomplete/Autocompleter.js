@@ -9,14 +9,14 @@ const PROVIDERS = [
     CommandProvider,
     DuckDuckGoProvider,
     RoomProvider,
-    EmojiProvider
+    EmojiProvider,
 ].map(completer => completer.getInstance());
 
 export function getCompletions(query: string, selection: {start: number, end: number}) {
     return PROVIDERS.map(provider => {
         return {
             completions: provider.getCompletions(query, selection),
-            provider
+            provider,
         };
     });
 }

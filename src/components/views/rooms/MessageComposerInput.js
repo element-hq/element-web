@@ -76,6 +76,7 @@ export default class MessageComposerInput extends React.Component {
         this.onUpArrow = this.onUpArrow.bind(this);
         this.onDownArrow = this.onDownArrow.bind(this);
         this.onTab = this.onTab.bind(this);
+        this.onConfirmAutocompletion = this.onConfirmAutocompletion.bind(this);
 
         let isRichtextEnabled = window.localStorage.getItem('mx_editor_rte_enabled');
         if(isRichtextEnabled == null) {
@@ -85,7 +86,7 @@ export default class MessageComposerInput extends React.Component {
 
         this.state = {
             isRichtextEnabled: isRichtextEnabled,
-            editorState: null
+            editorState: null,
         };
 
         // bit of a hack, but we need to do this here since createEditorState needs isRichtextEnabled
@@ -96,7 +97,7 @@ export default class MessageComposerInput extends React.Component {
 
     static getKeyBinding(e: SyntheticKeyboardEvent): string {
         // C-m => Toggles between rich text and markdown modes
-        if(e.keyCode == KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
+        if (e.keyCode === KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
             return 'toggle-mode';
         }
 
@@ -212,7 +213,7 @@ export default class MessageComposerInput extends React.Component {
                     let content = convertFromRaw(JSON.parse(contentJSON));
                     component.setEditorState(component.createEditorState(component.state.isRichtextEnabled, content));
                 }
-            }
+            },
         };
     }
 
@@ -234,7 +235,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onAction(payload) {
-        var editor = this.refs.editor;
+        let editor = this.refs.editor;
 
         switch (payload.action) {
             case 'focus_composer':
@@ -252,7 +253,7 @@ export default class MessageComposerInput extends React.Component {
                         payload.displayname
                     );
                     this.setState({
-                        editorState: EditorState.push(this.state.editorState, contentState, 'insert-characters')
+                        editorState: EditorState.push(this.state.editorState, contentState, 'insert-characters'),
                     });
                     editor.focus();
                 }
@@ -356,7 +357,7 @@ export default class MessageComposerInput extends React.Component {
 
         if(this.props.onContentChanged) {
             this.props.onContentChanged(editorState.getCurrentContent().getPlainText(),
-                RichText.getTextSelectionOffsets(editorState.getSelection(),
+                RichText.selectionStateToTextOffsets(editorState.getSelection(),
                     editorState.getCurrentContent().getBlocksAsArray()));
         }
     }
@@ -418,12 +419,21 @@ export default class MessageComposerInput extends React.Component {
     }
 
     handleReturn(ev) {
-        if(ev.shiftKey)
+        if (ev.shiftKey) {
             return false;
+        }
+        
+        if(this.props.tryComplete) {
+            if(this.props.tryComplete()) {
+                return true;
+            }
+        }
 
         const contentState = this.state.editorState.getCurrentContent();
-        if(!contentState.hasText())
+        if (!contentState.hasText()) {
             return true;
+        }
+            
 
         let contentText = contentState.getPlainText(), contentHTML;
 
@@ -509,17 +519,32 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onTab(e) {
-        if(this.props.onTab) {
-            if(this.props.onTab()) {
+        if (this.props.onTab) {
+            if (this.props.onTab()) {
                 e.preventDefault();
             }
         }
     }
 
+    onConfirmAutocompletion(range, content: string) {
+        let contentState = Modifier.replaceText(
+            this.state.editorState.getCurrentContent(),
+            RichText.textOffsetsToSelectionState(range, this.state.editorState.getCurrentContent().getBlocksAsArray()),
+            content
+        );
+
+        this.setState({
+            editorState: EditorState.push(this.state.editorState, contentState, 'insert-characters'),
+        });
+
+        // for some reason, doing this right away does not update the editor :(
+        setTimeout(() => this.refs.editor.focus(), 50);
+    }
+
     render() {
         let className = "mx_MessageComposer_input";
 
-        if(this.state.isRichtextEnabled) {
+        if (this.state.isRichtextEnabled) {
             className += " mx_MessageComposer_input_rte"; // placeholder indicator for RTE mode
         }
 

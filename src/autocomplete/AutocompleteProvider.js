@@ -14,25 +14,36 @@ export default class AutocompleteProvider {
      * Of the matched commands in the query, returns the first that contains or is contained by the selection, or null.
      */
     getCurrentCommand(query: string, selection: {start: number, end: number}): ?Array<string> {
-        if(this.commandRegex == null)
+        if (this.commandRegex == null) {
             return null;
+        }
 
-        let match = null;
-        while((match = this.commandRegex.exec(query)) != null) {
+        let match;
+        while ((match = this.commandRegex.exec(query)) != null) {
             let matchStart = match.index,
                 matchEnd = matchStart + match[0].length;
-
-            console.log(match);
             
-            if(selection.start <= matchEnd && selection.end >= matchStart) {
-                return match;
+            if (selection.start <= matchEnd && selection.end >= matchStart) {
+                return {
+                    command: match,
+                    range: {
+                        start: matchStart,
+                        end: matchEnd,
+                    },
+                };
             }
         }
         this.commandRegex.lastIndex = 0;
-        return null;
+        return {
+            command: null,
+            range: {
+                start: -1,
+                end: -1,
+            },
+        };
     }
 
-    getCompletions(query: String, selection: {start: number, end: number}) {
+    getCompletions(query: string, selection: {start: number, end: number}) {
         return Q.when([]);
     }
 
