@@ -18,6 +18,8 @@ export default class AutocompleteProvider {
             return null;
         }
 
+        this.commandRegex.lastIndex = 0;
+        
         let match;
         while ((match = this.commandRegex.exec(query)) != null) {
             let matchStart = match.index,
@@ -33,7 +35,6 @@ export default class AutocompleteProvider {
                 };
             }
         }
-        this.commandRegex.lastIndex = 0;
         return {
             command: null,
             range: {

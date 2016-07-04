@@ -80,8 +80,9 @@ export default class Autocomplete extends React.Component {
      * @returns {boolean} whether confirmation was handled
      */
     onConfirm(): boolean {
-        if (this.countCompletions() === 0)
+        if (this.countCompletions() === 0) {
             return false;
+        }
 
         let selectedCompletion = this.state.completionList[this.state.selectionOffset];
         this.props.onConfirm(selectedCompletion.range, selectedCompletion.completion);
@@ -103,11 +104,11 @@ export default class Autocomplete extends React.Component {
                 let componentPosition = position;
                 position++;
 
-                let onMouseOver = () => this.setSelection(componentPosition),
-                    onClick = () => {
-                        this.setSelection(componentPosition);
-                        this.onConfirm();
-                    };
+                let onMouseOver = () => this.setSelection(componentPosition);
+                let onClick = () => {
+                    this.setSelection(componentPosition);
+                    this.onConfirm();
+                };
 
                 return (
                     <div key={i}
@@ -151,4 +152,7 @@ export default class Autocomplete extends React.Component {
 Autocomplete.propTypes = {
     // the query string for which to show autocomplete suggestions
     query: React.PropTypes.string.isRequired,
+
+    // method invoked with range and text content when completion is confirmed
+    onConfirm: React.PropTypes.func.isRequired,
 };

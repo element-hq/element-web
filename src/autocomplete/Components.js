@@ -10,10 +10,10 @@ export function TextualCompletion({
     description: ?string
 }) {
     return (
-        <div className="mx_Autocomplete_Completion">
+        <div style={{width: '100%'}}>
             <span>{title}</span>
             <em>{subtitle}</em>
-            <span style={{color: 'gray', float: 'right'}}>{description}</span>
+            <span style={{color: 'gray'}}>{description}</span>
         </div>
     );
 }

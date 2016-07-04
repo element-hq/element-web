@@ -520,9 +520,6 @@ module.exports = React.createClass({
 
     _updateTabCompleteList: function() {
         var cli = MatrixClientPeg.get();
-        console.log('_updateTabCompleteList');
-        console.log(this.state.room);
-        console.trace();
 
         if (!this.state.room) {
             return;

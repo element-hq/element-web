@@ -33,13 +33,12 @@ const STYLES = {
 const MARKDOWN_REGEX = {
     LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
     ITALIC: /([\*_])([\w\s]+?)\1/g,
-    BOLD: /([\*_])\1([\w\s]+?)\1\1/g
+    BOLD: /([\*_])\1([\w\s]+?)\1\1/g,
 };
 
 const USERNAME_REGEX = /@\S+:\S+/g;
 const ROOM_REGEX = /#\S+:\S+/g;
-let EMOJI_REGEX = null;
-window.EMOJI_REGEX = EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
+const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
 
 export function contentStateToHTML(contentState: ContentState): string {
     return contentState.getBlockMap().map((block) => {
