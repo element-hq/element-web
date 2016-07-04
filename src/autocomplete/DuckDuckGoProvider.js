@@ -16,7 +16,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
     }
     
     static getQueryUri(query: String) {
-        return `http://api.duckduckgo.com/?q=${encodeURIComponent(query)}`
+        return `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}`
          + `&format=json&no_redirect=1&no_html=1&t=${encodeURIComponent(REFERRER)}`;
     }
 

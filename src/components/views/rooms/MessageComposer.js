@@ -207,6 +207,7 @@ export default class MessageComposer extends React.Component {
                     onUpArrow={this.onUpArrow}
                     onDownArrow={this.onDownArrow}
                     onTab={this.onTab}
+                    tabComplete={this.props.tabComplete} // used for old messagecomposerinput/tabcomplete
                     onContentChanged={this.onInputContentChanged} />,
                 uploadButton,
                 hangupButton,
