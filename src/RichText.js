@@ -1,13 +1,17 @@
+import React from 'react';
 import {
     Editor,
     Modifier,
     ContentState,
+    ContentBlock,
     convertFromHTML,
     DefaultDraftBlockRenderMap,
     DefaultDraftInlineStyle,
-    CompositeDecorator
+    CompositeDecorator,
+    SelectionState,
 } from 'draft-js';
 import * as sdk from  './index';
+import * as emojione from 'emojione';
 
 const BLOCK_RENDER_MAP = DefaultDraftBlockRenderMap.set('unstyled', {
     element: 'span'
@@ -23,17 +27,18 @@ const STYLES = {
     CODE: 'code',
     ITALIC: 'em',
     STRIKETHROUGH: 's',
-    UNDERLINE: 'u'
+    UNDERLINE: 'u',
 };
 
 const MARKDOWN_REGEX = {
     LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
     ITALIC: /([\*_])([\w\s]+?)\1/g,
-    BOLD: /([\*_])\1([\w\s]+?)\1\1/g
+    BOLD: /([\*_])\1([\w\s]+?)\1\1/g,
 };
 
 const USERNAME_REGEX = /@\S+:\S+/g;
 const ROOM_REGEX = /#\S+:\S+/g;
+const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
 
 export function contentStateToHTML(contentState: ContentState): string {
     return contentState.getBlockMap().map((block) => {
@@ -88,12 +93,23 @@ export function getScopedRTDecorators(scope: any): CompositeDecorator {
             return <span className="mx_UserPill">{avatar} {props.children}</span>;
         }
     };
+    
     let roomDecorator = {
         strategy: (contentBlock, callback) => {
             findWithRegex(ROOM_REGEX, contentBlock, callback);
         },
         component: (props) => {
             return <span className="mx_RoomPill">{props.children}</span>;
+        }
+    };
+
+    // Unused for now, due to https://github.com/facebook/draft-js/issues/414
+    let emojiDecorator = {
+        strategy: (contentBlock, callback) => {
+            findWithRegex(EMOJI_REGEX, contentBlock, callback);
+        },
+        component: (props) => {
+            return <span dangerouslySetInnerHTML={{__html: ' ' + emojione.unicodeToImage(props.children[0].props.text)}}/>
         }
     };
 
@@ -153,7 +169,7 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
         text = "";
 
 
-    for(let currentKey = startKey;
+    for (let currentKey = startKey;
             currentKey && currentKey !== endKey;
             currentKey = contentState.getKeyAfter(currentKey)) {
         let blockText = getText(currentKey);
@@ -167,4 +183,60 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
     text += getText(endKey).substring(startOffset, endOffset);
 
     return Modifier.replaceText(contentState, rangeToReplace, modifyFn(text), inlineStyle, entityKey);
+}
+
+/**
+ * Computes the plaintext offsets of the given SelectionState.
+ * Note that this inherently means we make assumptions about what that means (no separator between ContentBlocks, etc)
+ * Used by autocomplete to show completions when the current selection lies within, or at the edges of a command.
+ */
+export function selectionStateToTextOffsets(selectionState: SelectionState,
+                                            contentBlocks: Array<ContentBlock>): {start: number, end: number} {
+    let offset = 0, start = 0, end = 0;
+    for(let block of contentBlocks) {
+        if (selectionState.getStartKey() === block.getKey()) {
+            start = offset + selectionState.getStartOffset();
+        }
+        if (selectionState.getEndKey() === block.getKey()) {
+            end = offset + selectionState.getEndOffset();
+            break;
+        }
+        offset += block.getLength();
+    }
+
+    return {
+        start,
+        end,
+    };
+}
+
+export function textOffsetsToSelectionState({start, end}: {start: number, end: number},
+                                            contentBlocks: Array<ContentBlock>): SelectionState {
+    let selectionState = SelectionState.createEmpty();
+
+    for (let block of contentBlocks) {
+        let blockLength = block.getLength();
+
+        if (start !== -1 && start < blockLength) {
+            selectionState = selectionState.merge({
+                anchorKey: block.getKey(),
+                anchorOffset: start,
+            });
+            start = -1;
+        } else {
+            start -= blockLength;
+        }
+
+        if (end !== -1 && end <= blockLength) {
+            selectionState = selectionState.merge({
+                focusKey: block.getKey(),
+                focusOffset: end,
+            });
+            end = -1;
+        } else {
+            end -= blockLength;
+        }
+    }
+
+    return selectionState;
 }

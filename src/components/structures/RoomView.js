@@ -41,6 +41,8 @@ var rate_limited_func = require('../../ratelimitedfunc');
 var ObjectUtils = require('../../ObjectUtils');
 var MatrixTools = require('../../MatrixTools');
 
+import UserProvider from '../../autocomplete/UserProvider';
+
 var DEBUG = false;
 
 if (DEBUG) {
@@ -516,21 +518,23 @@ module.exports = React.createClass({
         }
     },
 
-    _updateTabCompleteList: new rate_limited_func(function() {
+    _updateTabCompleteList: function() {
         var cli = MatrixClientPeg.get();
 
-        if (!this.state.room || !this.tabComplete) {
+        if (!this.state.room) {
             return;
         }
         var members = this.state.room.getJoinedMembers().filter(function(member) {
             if (member.userId !== cli.credentials.userId) return true;
         });
+
+        UserProvider.getInstance().setUserList(members);
         this.tabComplete.setCompletionList(
             MemberEntry.fromMemberList(members).concat(
                 CommandEntry.fromCommands(SlashCommands.getCommandList())
             )
         );
-    }, 500),
+    },
 
     componentDidUpdate: function() {
         if (this.refs.roomView) {
