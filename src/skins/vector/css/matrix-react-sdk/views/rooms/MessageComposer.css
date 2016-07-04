@@ -21,6 +21,11 @@ limitations under the License.
     border-top: 1px solid #e5e5e5;
 }
 
+.mx_MessageComposer_autocomplete_wrapper {
+    position: relative;
+    height: 0;
+}
+
 .mx_MessageComposer_row {
     display: flex;
     flex-direction: row;
