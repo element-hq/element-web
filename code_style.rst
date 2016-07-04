@@ -1,0 +1,116 @@
+Matrix JavaScript/ECMAScript Style Guide
+========================================
+
+The intention of this guide is to make Matrix's JavaScript codebase clean,
+consistent with other popular JavaScript styles and consistent with the rest of
+the Matrix codebase. For reference, the Matrix Python style guide can be found
+at https://github.com/matrix-org/synapse/blob/master/docs/code_style.rst
+
+General Style
+-------------
+
+- 4 spaces to indent, for consistency with Matrix Python.
+- Max line width: 79 chars (with flexibility to overflow by a "few chars" if
+  the overflowing content is not semantically significant and avoids an
+  explosion of vertical whitespace).
+- No trailing whitespace at end of lines.
+- Don't indent empty lines.
+- One newline at the end of the file.
+- Unix newlines, never `\r`
+- Indent similar to our python code: break up long lines at logical boundaries,
+  more than one argument on a line is OK
+- Use semicolons, for consistency with node.
+- UpperCamelCase for class and type names
+- lowerCamelCase for functions and variables.
+- Single line ternary operators are fine.
+- UPPER_CAMEL_CASE for constants
+- Single quotes for strings, for consistency with most JavaScript styles::
+  "bad" // Bad
+  'good' // Good
+- Use parentheses instead of '\\' for line continuation where ever possible
+- Open braces on the same line (consistent with Node)::
+  if (x) {
+      console.log("I am a fish"); // Good
+  }
+
+  if (x)
+  {
+      console.log("I am a fish"); // Bad
+  }
+- Spaces after `if`, `for`, `else` etc, no space around the condition::
+  if (x) {
+      console.log("I am a fish"); // Good
+  }
+
+  if(x) {
+      console.log("I am a fish"); // Bad
+  }
+
+  if ( x ) {
+      console.log("I am a fish"); // Bad
+  }
+- Declare one variable per var statement (consistent with Node). Unless they
+  are simple and closely related. If you put the next declaration on a new line,
+  treat yourself to another `var`::
+  var key = "foo",
+      comparator = function(x, y) {
+          return x - y;
+      }; // Bad
+
+  var key = "foo";
+  var comparator = function(x, y) {
+      return x - y;
+  }; // Good
+
+  var x = 0, y = 0; // Fine
+
+  var x = 0;
+  var y = 0; // Also fine
+- A single line `if` is fine, all others have braces. This prevents errors when adding to the code.::
+  if (x) return true; // Fine
+
+  if (x) {
+      return true; // Also fine
+  }
+
+  if (x)
+      return true; // Not fine
+- Terminate all multi-line lists with commas::
+  var mascots = [
+      "Patrick",
+      "Shirley",
+      "Colin",
+      "Susan",
+      "Sir Arthur David" // Bad
+  ];
+
+  var mascots = [
+      "Patrick",
+      "Shirley",
+      "Colin",
+      "Susan",
+      "Sir Arthur David", // Good
+  ];
+- Use `null`, `undefined` etc consistently with node:
+  Boolean variables and functions should always be either true or false. Don't set it to 0 unless it's supposed to be a number.
+  When something is intentionally missing or removed, set it to null.
+  Don't set things to undefined. Reserve that value to mean "not yet set to anything."
+  Boolean objects are verboten.
+- Use JSDoc
+
+ECMAScript
+----------
+- Use `let` for variables and `const` for constants. This sounds obvious, but it isn't: the ES6 `const` keyword
+  could be used for assign-once variables, however this guide advises against doing so on the grounds that it
+  confuses them with constants.
+- Be careful migrating files to newer syntax.
+  - Don't mix `require` and `import` in the same file. Either stick to the old style or change them all.
+  - Likewise, don't mix things like class properties and `MyClass.prototype.MY_CONSTANT = 42;`
+  - Be careful mixing arrow functions and regular functions, eg. if one function in a promise chain is an
+    arrow function, they probably all should be.
+- Apart from that, newer ES features should be used whenever the author deems them to be appropriate.
+- Flow annotations are welcome and encouraged.
+
+React
+-----
+- Use ES6 classes, although bear in mind a lot of code uses createClass.
