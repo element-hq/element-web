@@ -21,7 +21,10 @@ var sanitizeHtml = require('sanitize-html');
 var highlight = require('highlight.js');
 var linkifyMatrix = require('./linkify-matrix');
 import escape from 'lodash/escape';
-import {unicodeToImage} from 'emojione';
+import {unicodeToImage, unicodeRegexp} from 'emojione';
+import classNames from 'classnames';
+
+const EMOJI_REGEX = new RegExp(unicodeRegexp+"+", "gi");
 
 var sanitizeHtmlParams = {
     allowedTags: [
@@ -211,7 +214,15 @@ module.exports = {
         finally {
             delete sanitizeHtmlParams.textFilter;
         }
-        return <span className="markdown-body" dangerouslySetInnerHTML={{ __html: safeBody }} />;
+
+        EMOJI_REGEX.lastIndex = 0;
+        let match = EMOJI_REGEX.exec(body);
+        let emojiBody = match && match[0] && match[0].length === body.length;
+
+        let className = classNames('markdown-body', {
+            'emoji-body': emojiBody,
+        });
+        return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} />;
     },
 
     highlightDom: function(element) {
