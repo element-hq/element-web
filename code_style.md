@@ -8,7 +8,6 @@ at https://github.com/matrix-org/synapse/blob/master/docs/code_style.rst
 
 General Style
 -------------
-
 - 4 spaces to indent, for consistency with Matrix Python.
 - Max line width: 79 chars (with flexibility to overflow by a "few chars" if
   the overflowing content is not semantically significant and avoids an
@@ -28,7 +27,8 @@ General Style
   "bad" // Bad
   'good' // Good
 - Use parentheses instead of '\\' for line continuation where ever possible
-- Open braces on the same line (consistent with Node)::
+- Open braces on the same line (consistent with Node):
+  ```
   if (x) {
       console.log("I am a fish"); // Good
   }
@@ -37,7 +37,9 @@ General Style
   {
       console.log("I am a fish"); // Bad
   }
-- Spaces after `if`, `for`, `else` etc, no space around the condition::
+  ```
+- Spaces after `if`, `for`, `else` etc, no space around the condition:
+  ```
   if (x) {
       console.log("I am a fish"); // Good
   }
@@ -49,9 +51,11 @@ General Style
   if ( x ) {
       console.log("I am a fish"); // Bad
   }
+  ```
 - Declare one variable per var statement (consistent with Node). Unless they
   are simple and closely related. If you put the next declaration on a new line,
-  treat yourself to another `var`::
+  treat yourself to another `var`:
+  ```
   var key = "foo",
       comparator = function(x, y) {
           return x - y;
@@ -66,7 +70,9 @@ General Style
 
   var x = 0;
   var y = 0; // Also fine
-- A single line `if` is fine, all others have braces. This prevents errors when adding to the code.::
+  ```
+- A single line `if` is fine, all others have braces. This prevents errors when adding to the code.:
+  ```
   if (x) return true; // Fine
 
   if (x) {
@@ -75,7 +81,9 @@ General Style
 
   if (x)
       return true; // Not fine
-- Terminate all multi-line lists with commas::
+  ```
+- Terminate all multi-line lists with commas:
+  ```
   var mascots = [
       "Patrick",
       "Shirley",
@@ -91,6 +99,7 @@ General Style
       "Susan",
       "Sir Arthur David", // Good
   ];
+  ```
 - Use `null`, `undefined` etc consistently with node:
   Boolean variables and functions should always be either true or false. Don't set it to 0 unless it's supposed to be a number.
   When something is intentionally missing or removed, set it to null.
