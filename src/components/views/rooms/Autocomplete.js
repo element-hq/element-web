@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import classNames from 'classnames';
-import _ from 'lodash';
+import flatMap from 'lodash/flatMap';
 
 import {getCompletions} from '../../../autocomplete/Autocompleter';
 
@@ -42,7 +42,7 @@ export default class Autocomplete extends React.Component {
 
                     this.setState({
                         completions: newCompletions,
-                        completionList: _.flatMap(newCompletions, provider => provider.completions),
+                        completionList: flatMap(newCompletions, provider => provider.completions),
                     });
                 }, err => {
                     console.error(err);
