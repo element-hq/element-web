@@ -20,6 +20,8 @@ var React = require('react');
 var sanitizeHtml = require('sanitize-html');
 var highlight = require('highlight.js');
 var linkifyMatrix = require('./linkify-matrix');
+import escape from 'lodash/escape';
+import {unicodeToImage} from 'emojione';
 
 var sanitizeHtmlParams = {
     allowedTags: [
@@ -185,40 +187,31 @@ module.exports = {
         opts = opts || {};
 
         var isHtml = (content.format === "org.matrix.custom.html");
+        let body = isHtml ? content.formatted_body : escape(content.body);
 
         var safeBody;
-        if (isHtml) {
-            // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
-            // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
-            // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
-            // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
-            try {
-                if (highlights && highlights.length > 0) {
-                    var highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
-                    var safeHighlights = highlights.map(function(highlight) {
-                        return sanitizeHtml(highlight, sanitizeHtmlParams);
-                    });
-                    // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
-                    sanitizeHtmlParams.textFilter = function(safeText) {
-                        return highlighter.applyHighlights(safeText, safeHighlights).join('');
-                    };
-                }
-                safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
-            }
-            finally {
-                delete sanitizeHtmlParams.textFilter;
-            }
-            return <span className="markdown-body" dangerouslySetInnerHTML={{ __html: safeBody }} />;
-        } else {
-            safeBody = content.body;
+        // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
+        // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
+        // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
+        // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
+        try {
             if (highlights && highlights.length > 0) {
-                var highlighter = new TextHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
-                return highlighter.applyHighlights(safeBody, highlights);
+                var highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
+                var safeHighlights = highlights.map(function(highlight) {
+                    return sanitizeHtml(highlight, sanitizeHtmlParams);
+                });
+                // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
+                sanitizeHtmlParams.textFilter = function(safeText) {
+                    return highlighter.applyHighlights(safeText, safeHighlights).join('');
+                };
             }
-            else {
-                return safeBody;
-            }
+            safeBody = sanitizeHtml(body, sanitizeHtmlParams);
+            safeBody = unicodeToImage(safeBody);
         }
+        finally {
+            delete sanitizeHtmlParams.textFilter;
+        }
+        return <span className="markdown-body" dangerouslySetInnerHTML={{ __html: safeBody }} />;
     },
 
     highlightDom: function(element) {
