@@ -32,6 +32,7 @@ export default class UserProvider extends AutocompleteProvider {
                             title={user.displayName || user.userId}
                             description={user.userId} />
                     ),
+                    range
                 };
             }).slice(0, 4);
         }
