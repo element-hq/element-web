@@ -13,7 +13,7 @@ export function TextualCompletion({
         <div style={{width: '100%'}}>
             <span>{title}</span>
             <em>{subtitle}</em>
-            <span style={{color: 'gray'}}>{description}</span>
+            <span style={{color: 'gray', float: 'right'}}>{description}</span>
         </div>
     );
 }

@@ -4,6 +4,7 @@ import Q from 'q';
 import MatrixClientPeg from '../MatrixClientPeg';
 import Fuse from 'fuse.js';
 import {TextualCompletion} from './Components';
+import {getDisplayAliasForRoom} from '../MatrixTools';
 
 const ROOM_REGEX = /(?=#)([^\s]*)/g;
 
@@ -27,16 +28,18 @@ export default class RoomProvider extends AutocompleteProvider {
             // the only reason we need to do this is because Fuse only matches on properties
             this.fuse.set(client.getRooms().filter(room => !!room).map(room => {
                 return {
+                    room: room,
                     name: room.name,
                     roomId: room.roomId,
                     aliases: room.getAliases(),
                 };
             }));
             completions = this.fuse.search(command[0]).map(room => {
+                let displayAlias = getDisplayAliasForRoom(room.room) || room.roomId;
                 return {
-                    completion: room.roomId,
+                    completion: displayAlias,
                     component: (
-                        <TextualCompletion title={room.name} subtitle={room.roomId} />
+                        <TextualCompletion title={room.name} description={displayAlias} />
                     ),
                     range,
                 };
