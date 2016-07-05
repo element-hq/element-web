@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var AvatarLogic = require("../../../Avatar");
+import {emojifyText} from '../../../HtmlUtils';
 
 module.exports = React.createClass({
     displayName: 'BaseAvatar',
@@ -137,14 +138,14 @@ module.exports = React.createClass({
         var imageUrl = this.state.imageUrls[this.state.urlsIndex];
 
         if (imageUrl === this.state.defaultImageUrl) {
-            var initialLetter = this._getInitialLetter(this.props.name);
+            var initialLetter = emojifyText(this._getInitialLetter(this.props.name));
             return (
                 <span className="mx_BaseAvatar" {...this.props}>
                     <span className="mx_BaseAvatar_initial" aria-hidden="true"
                             style={{ fontSize: (this.props.width * 0.65) + "px",
                                     width: this.props.width + "px",
-                                    lineHeight: this.props.height + "px" }}>
-                        { initialLetter }
+                                    lineHeight: this.props.height + "px" }}
+                            dangerouslySetInnerHTML={initialLetter}>
                     </span>
                     <img className="mx_BaseAvatar_image" src={imageUrl}
                         alt="" title={this.props.title} onError={this.onError}

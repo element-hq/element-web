@@ -233,5 +233,11 @@ module.exports = {
         }
     },
 
-}
+    emojifyText: function(text) {
+        emojione.imageType = 'svg';
+        return {
+            __html: emojione.unicodeToImage(escape(text)),
+        };
+    },
+};
 
