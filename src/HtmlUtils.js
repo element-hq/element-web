@@ -217,8 +217,9 @@ module.exports = {
         }
 
         EMOJI_REGEX.lastIndex = 0;
-        let match = EMOJI_REGEX.exec(body);
-        let emojiBody = match && match[0] && match[0].length === body.length;
+        let contentBodyTrimmed = content.body.trim();
+        let match = EMOJI_REGEX.exec(contentBodyTrimmed);
+        let emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
 
         let className = classNames('markdown-body', {
             'emoji-body': emojiBody,
