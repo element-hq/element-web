@@ -21,10 +21,10 @@ var sanitizeHtml = require('sanitize-html');
 var highlight = require('highlight.js');
 var linkifyMatrix = require('./linkify-matrix');
 import escape from 'lodash/escape';
-import {unicodeToImage, unicodeRegexp} from 'emojione';
+import emojione from 'emojione';
 import classNames from 'classnames';
 
-const EMOJI_REGEX = new RegExp(unicodeRegexp+"+", "gi");
+const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
 
 var sanitizeHtmlParams = {
     allowedTags: [
@@ -209,7 +209,8 @@ module.exports = {
                 };
             }
             safeBody = sanitizeHtml(body, sanitizeHtmlParams);
-            safeBody = unicodeToImage(safeBody);
+            emojione.imageType = 'svg';
+            safeBody = emojione.unicodeToImage(safeBody);
         }
         finally {
             delete sanitizeHtmlParams.textFilter;
