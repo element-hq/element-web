@@ -210,7 +210,7 @@ describe('TimelinePanel', function() {
         var N_EVENTS = 600;
 
         // sadly, loading all those events takes a while
-        this.timeout(N_EVENTS * 40);
+        this.timeout(N_EVENTS * 20);
 
         // client.getRoom is called a /lot/ in this test, so replace
         // sinon's spy with a fast noop.
