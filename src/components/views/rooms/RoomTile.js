@@ -21,6 +21,7 @@ var classNames = require('classnames');
 var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
+import {emojifyText} from '../../../HtmlUtils';
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -104,10 +105,13 @@ module.exports = React.createClass({
         var label;
         if (!this.props.collapsed) {
             var className = 'mx_RoomTile_name' + (this.props.isInvite ? ' mx_RoomTile_invite' : '');
+            let nameHTML = emojifyText(name);
             if (this.props.selected) {
-                name = <span>{ name }</span>;
+                name = <span dangerouslySetInnerHTML={nameHTML}></span>;
+                label = <div className={ className }>{ name }</div>;
+            } else {
+                label = <div className={ className } dangerouslySetInnerHTML={nameHTML}></div>;
             }
-            label = <div className={ className }>{ name }</div>;
         }
         else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");

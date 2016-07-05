@@ -20,6 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
+import {emojifyText} from '../../../HtmlUtils';
 
 
 var PRESENCE_CLASS = {
@@ -82,6 +83,7 @@ module.exports = React.createClass({
         var mainClassName = "mx_EntityTile ";
         mainClassName += presenceClass + (this.props.className ? (" " + this.props.className) : "");
         var nameEl;
+        let nameHTML = emojifyText(this.props.name);
 
         if (this.state.hover && !this.props.suppressOnHover) {
             var activeAgo = this.props.presenceLastActiveAgo ?
@@ -92,7 +94,7 @@ module.exports = React.createClass({
             nameEl = (
                 <div className="mx_EntityTile_details">
                     <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
-                    <div className="mx_EntityTile_name_hover">{ this.props.name }</div>
+                    <div className="mx_EntityTile_name_hover" dangerouslySetInnerHTML={nameHTML}></div>
                     <PresenceLabel activeAgo={ activeAgo }
                         currentlyActive={this.props.presenceCurrentlyActive}
                         presenceState={this.props.presenceState} />
@@ -101,8 +103,7 @@ module.exports = React.createClass({
         }
         else {
             nameEl = (
-                <div className="mx_EntityTile_name">
-                    { this.props.name }
+                <div className="mx_EntityTile_name" dangerouslySetInnerHTML={nameHTML}>
                 </div>
             );
         }

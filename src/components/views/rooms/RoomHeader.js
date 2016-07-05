@@ -24,6 +24,7 @@ var Modal = require("../../../Modal");
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
 var linkifyMatrix = require('../../../linkify-matrix');
+import {emojifyText} from '../../../HtmlUtils';
 
 linkifyMatrix(linkify);
 
@@ -211,9 +212,11 @@ module.exports = React.createClass({
                 roomName = this.props.room.name;
             }
 
+            let roomNameHTML = emojifyText(roomName);
+
             name =
                 <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                    <div className={ "mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "") } title={ roomName }>{ roomName }</div>
+                    <div className={ "mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "") } title={ roomName } dangerouslySetInnerHTML={roomNameHTML}></div>
                     { searchStatus }
                     <div className="mx_RoomHeader_settingsButton" title="Settings">
                         <TintableSvg src="img/settings.svg" width="12" height="12"/>
