@@ -54,6 +54,9 @@ module.exports = React.createClass({
         return {
             busy: false,
             errorText: null,
+            formVals: {
+                email: this.props.email,
+            },
         };
     },
 
@@ -108,7 +111,8 @@ module.exports = React.createClass({
         var self = this;
         this.setState({
             errorText: "",
-            busy: true
+            busy: true,
+            formVals: formVals,
         });
 
         if (formVals.username !== this.props.username) {
@@ -228,11 +232,15 @@ module.exports = React.createClass({
                 break; // NOP
             case "Register.START":
             case "Register.STEP_m.login.dummy":
+                // NB. Our 'username' prop is specifically for upgrading
+                // a guest account
                 registerStep = (
                     <RegistrationForm
                         showEmail={true}
-                        defaultUsername={this.props.username}
-                        defaultEmail={this.props.email}
+                        defaultUsername={this.state.formVals.username}
+                        defaultEmail={this.state.formVals.email}
+                        defaultPassword={this.state.formVals.password}
+                        guestUsername={this.props.username}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit} />

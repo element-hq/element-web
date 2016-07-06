@@ -170,7 +170,7 @@ class EmailIdentityStage extends Stage {
                        encodeURIComponent(this.signupInstance.getServerData().session);
 
         var self = this;
-        return this.client.requestEmailToken(
+        return this.client.requestRegisterEmailToken(
             this.signupInstance.email,
             this.clientSecret,
             1, // TODO: Multiple send attempts?
@@ -186,8 +186,8 @@ class EmailIdentityStage extends Stage {
             var e = {
                 isFatal: true
             };
-            if (error.errcode == 'THREEPID_IN_USE') {
-                e.message = "Email in use";
+            if (error.errcode == 'M_THREEPID_IN_USE') {
+                e.message = "This email address is already registered";
             } else {
                 e.message = 'Unable to contact the given identity server';
             }

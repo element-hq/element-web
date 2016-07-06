@@ -37,6 +37,8 @@ module.exports = React.createClass({
     propTypes: {
         defaultEmail: React.PropTypes.string,
         defaultUsername: React.PropTypes.string,
+        defaultPassword: React.PropTypes.string,
+        guestUsername: React.PropTypes.string,
         showEmail: React.PropTypes.bool,
         minPasswordLength: React.PropTypes.number,
         onError: React.PropTypes.func,
@@ -55,10 +57,6 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            email: this.props.defaultEmail,
-            username: null,
-            password: null,
-            passwordConfirm: null,
             fieldValid: {}
         };
     },
@@ -103,7 +101,7 @@ module.exports = React.createClass({
 
     _doSubmit: function() {
         var promise = this.props.onRegisterClick({
-            username: this.refs.username.value.trim() || this.props.defaultUsername,
+            username: this.refs.username.value.trim() || this.props.guestUsername,
             password: this.refs.password.value.trim(),
             email: this.refs.email.value.trim()
         });
@@ -144,7 +142,7 @@ module.exports = React.createClass({
                 break;
             case FIELD_USERNAME:
                 // XXX: SPEC-1
-                var username = this.refs.username.value.trim() || this.props.defaultUsername;
+                var username = this.refs.username.value.trim() || this.props.guestUsername;
                 if (encodeURIComponent(username) != username) {
                     this.markFieldValid(
                         field_id,
@@ -225,7 +223,7 @@ module.exports = React.createClass({
             emailSection = (
                 <input className="mx_Login_field" type="text" ref="email"
                     autoFocus={true} placeholder="Email address (optional)"
-                    defaultValue={this.state.email}
+                    defaultValue={this.props.defaultEmail}
                     style={this._styleField(FIELD_EMAIL)}
                     onBlur={function() {self.validateField(FIELD_EMAIL)}} />
             );
@@ -237,8 +235,8 @@ module.exports = React.createClass({
         }
 
         var placeholderUserName = "User name";
-        if (this.props.defaultUsername) {
-            placeholderUserName += " (default: " + this.props.defaultUsername + ")"
+        if (this.props.guestUsername) {
+            placeholderUserName += " (default: " + this.props.guestUsername + ")"
         }
 
         return (
@@ -247,23 +245,23 @@ module.exports = React.createClass({
                     {emailSection}
                     <br />
                     <input className="mx_Login_field" type="text" ref="username"
-                        placeholder={ placeholderUserName } defaultValue={this.state.username}
+                        placeholder={ placeholderUserName } defaultValue={this.props.defaultUsername}
                         style={this._styleField(FIELD_USERNAME)}
                         onBlur={function() {self.validateField(FIELD_USERNAME)}} />
                     <br />
-                    { this.props.defaultUsername ?
+                    { this.props.guestUsername ?
                         <div className="mx_Login_fieldLabel">Setting a user name will create a fresh account</div> : null
                     }
                     <input className="mx_Login_field" type="password" ref="password"
                         style={this._styleField(FIELD_PASSWORD)}
                         onBlur={function() {self.validateField(FIELD_PASSWORD)}}
-                        placeholder="Password" defaultValue={this.state.password} />
+                        placeholder="Password" defaultValue={this.props.defaultPassword} />
                     <br />
                     <input className="mx_Login_field" type="password" ref="passwordConfirm"
                         placeholder="Confirm password"
                         style={this._styleField(FIELD_PASSWORD_CONFIRM)}
                         onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM)}}
-                        defaultValue={this.state.passwordConfirm} />
+                        defaultValue={this.props.defaultPassword} />
                     <br />
                     {registerButton}
                 </form>
