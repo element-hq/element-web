@@ -6,6 +6,19 @@ consistent with other popular JavaScript styles and consistent with the rest of
 the Matrix codebase. For reference, the Matrix Python style guide can be found
 at https://github.com/matrix-org/synapse/blob/master/docs/code_style.rst
 
+This document reflects how we would like Matrix JavaScript code to look, with
+acknowledgement that a significant amount of code is written to older
+standards.
+
+Write applications in modern ECMAScript and use a transpiler where necessary to
+target older platforms. When writing library code, consider carefully whether
+to write in ES5 to allow all JavaScript application to use the code directly or
+writing in modern ECMAScript and using a transpile step to generate the file
+that applications can then include. There are significant benefits in being
+able to use modern ECMAScript, although the tooling for doing so can be awkward
+for library code, especially with regard to translating source maps and line
+number throgh from the original code to the final application.
+
 General Style
 -------------
 - 4 spaces to indent, for consistency with Matrix Python.
@@ -23,10 +36,12 @@ General Style
 - lowerCamelCase for functions and variables.
 - Single line ternary operators are fine.
 - UPPER_CAMEL_CASE for constants
-- Single quotes for strings, for consistency with most JavaScript styles::
+- Single quotes for strings by default, for consistency with most JavaScript styles:
+  ```
   "bad" // Bad
   'good' // Good
-- Use parentheses instead of '\\' for line continuation where ever possible
+  ```
+- Use parentheses or `\`` instead of '\\' for line continuation where ever possible
 - Open braces on the same line (consistent with Node):
   ```
   if (x) {
@@ -82,7 +97,7 @@ General Style
   if (x)
       return true; // Not fine
   ```
-- Terminate all multi-line lists with commas:
+- Terminate all multi-line lists with commas (if using a transpiler):
   ```
   var mascots = [
       "Patrick",
@@ -103,6 +118,14 @@ General Style
 - Use `null`, `undefined` etc consistently with node:
   Boolean variables and functions should always be either true or false. Don't set it to 0 unless it's supposed to be a number.
   When something is intentionally missing or removed, set it to null.
+  If returning a boolean, type coerce:
+  ```
+  function hasThings() {
+      return !!length; // bad
+      return new Boolean(length); // REALLY bad
+      return Boolean(length); // good
+  }
+  ```
   Don't set things to undefined. Reserve that value to mean "not yet set to anything."
   Boolean objects are verboten.
 - Use JSDoc
@@ -123,3 +146,12 @@ ECMAScript
 React
 -----
 - Use ES6 classes, although bear in mind a lot of code uses createClass.
+- Pull out functions in props to the class, generally as specific event handlers:
+  ```
+  <Foo onClick={function(ev) {doStuff();}}> // Bad
+  <Foo onClick={(ev) => {doStuff();}}> // Equally bad
+  <Foo onClick={this.doStuff}> // Better
+  <Foo onClick={this.onClick}> // Best
+  ```
+- Think about whether your component really needs state: are you duplicating
+  information in component state that could be derived from the model?
