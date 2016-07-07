@@ -54,6 +54,16 @@ module.exports = React.createClass({
         return {
             busy: false,
             errorText: null,
+            // We remember the values entered by the user because
+            // the registration form will be unmounted during the
+            // course of registration, but if there's an error we
+            // want to bring back the registration form with the
+            // values the user entered still in it. We can keep
+            // them in this component's state since this component
+            // persist for the duration of the registration process.
+            formVals: {
+                email: this.props.email,
+            },
         };
     },
 
@@ -108,7 +118,8 @@ module.exports = React.createClass({
         var self = this;
         this.setState({
             errorText: "",
-            busy: true
+            busy: true,
+            formVals: formVals,
         });
 
         if (formVals.username !== this.props.username) {
@@ -228,11 +239,15 @@ module.exports = React.createClass({
                 break; // NOP
             case "Register.START":
             case "Register.STEP_m.login.dummy":
+                // NB. Our 'username' prop is specifically for upgrading
+                // a guest account
                 registerStep = (
                     <RegistrationForm
                         showEmail={true}
-                        defaultUsername={this.props.username}
-                        defaultEmail={this.props.email}
+                        defaultUsername={this.state.formVals.username}
+                        defaultEmail={this.state.formVals.email}
+                        defaultPassword={this.state.formVals.password}
+                        guestUsername={this.props.username}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit} />
