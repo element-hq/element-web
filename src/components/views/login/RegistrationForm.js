@@ -35,10 +35,16 @@ module.exports = React.createClass({
     displayName: 'RegistrationForm',
 
     propTypes: {
+        // Values pre-filled in the input boxes when the component loads
         defaultEmail: React.PropTypes.string,
         defaultUsername: React.PropTypes.string,
         defaultPassword: React.PropTypes.string,
+
+        // A username that will be used if no username is enetered.
+        // Specifying this param will also warn the user that enetering
+        // a different username will cause a fresh account to be generated.
         guestUsername: React.PropTypes.string,
+
         showEmail: React.PropTypes.bool,
         minPasswordLength: React.PropTypes.number,
         onError: React.PropTypes.func,
