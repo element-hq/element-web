@@ -58,7 +58,7 @@ module.exports = React.createClass({
             // the registration form will be unmounted during the
             // course of registration, but if there's an error we
             // want to bring back the registration form with the
-            // values the user enetered still in it. We can keep
+            // values the user entered still in it. We can keep
             // them in this component's state since this component
             // persist for the duration of the registration process.
             formVals: {

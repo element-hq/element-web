@@ -40,8 +40,8 @@ module.exports = React.createClass({
         defaultUsername: React.PropTypes.string,
         defaultPassword: React.PropTypes.string,
 
-        // A username that will be used if no username is enetered.
-        // Specifying this param will also warn the user that enetering
+        // A username that will be used if no username is entered.
+        // Specifying this param will also warn the user that entering
         // a different username will cause a fresh account to be generated.
         guestUsername: React.PropTypes.string,
 
