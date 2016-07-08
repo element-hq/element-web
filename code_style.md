@@ -147,7 +147,7 @@ React
 -----
 - Use ES6 classes, although bear in mind a lot of code uses createClass.
 - Pull out functions in props to the class, generally as specific event handlers:
-  ```
+  ```jsx
   <Foo onClick={function(ev) {doStuff();}}> // Bad
   <Foo onClick={(ev) => {doStuff();}}> // Equally bad
   <Foo onClick={this.doStuff}> // Better
