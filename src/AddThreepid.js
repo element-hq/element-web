@@ -38,7 +38,7 @@ class AddThreepid {
      */
     addEmailAddress(emailAddress, bind) {
         this.bind = bind;
-        return MatrixClientPeg.get().request3pidAddEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
+        return MatrixClientPeg.get().requestAdd3pidEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
             this.sessionId = res.sid;
             return res;
         }, function(err) {
