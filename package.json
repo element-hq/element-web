@@ -14,8 +14,8 @@
   },
   "scripts": {
     "reskindex": "reskindex -h header",
-    "build": "babel src -d lib --source-maps",
-    "start": "babel src -w -d lib --source-maps",
+    "build": "babel src -d lib --source-maps --stage 1",
+    "start": "babel src -w -d lib --source-maps --stage 1",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
     "clean": "rimraf lib",
