@@ -97,7 +97,7 @@ General Style
   if (x)
       return true; // Not fine
   ```
-- Terminate all multi-line lists with commas (if using a transpiler):
+- Terminate all multi-line lists, object literals, imports and ideally function calls with commas (if using a transpiler). Note that trailing function commas require explicit configuration in babel at time of writing:
   ```
   var mascots = [
       "Patrick",
