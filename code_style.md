@@ -151,7 +151,7 @@ React
   <Foo onClick={function(ev) {doStuff();}}> // Bad
   <Foo onClick={(ev) => {doStuff();}}> // Equally bad
   <Foo onClick={this.doStuff}> // Better
-  <Foo onClick={this.onClick}> // Best
+  <Foo onClick={this.onFooClick}> // Best, if onFooClick would do anything other than directly calling doStuff
   ```
 - Think about whether your component really needs state: are you duplicating
   information in component state that could be derived from the model?
