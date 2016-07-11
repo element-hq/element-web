@@ -22,9 +22,8 @@ number throgh from the original code to the final application.
 General Style
 -------------
 - 4 spaces to indent, for consistency with Matrix Python.
-- Max line width: 79 chars (with flexibility to overflow by a "few chars" if
-  the overflowing content is not semantically significant and avoids an
-  explosion of vertical whitespace).
+- 120 columns per line, but try to keep JavaScript code around the 80 column mark.
+  Inline JSX in particular can be nicer with more columns per line.
 - No trailing whitespace at end of lines.
 - Don't indent empty lines.
 - One newline at the end of the file.
