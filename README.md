@@ -5,6 +5,7 @@ Vector is a Matrix web client built using the Matrix React SDK (https://github.c
 
 Getting Started
 ===============
+
 Vector is a modular webapp built with modern ES6 and requires and npm build system to build.
 Instructions for building are below, but building from source shouldn't be necessary
 for simple deployments.
@@ -54,6 +55,35 @@ You can configure the app by copying `vector/config.sample.json` to
 
 Development
 ===========
+
+Before attempting to develop on Vector you **must** read the developer guide
+for `matrix-react-sdk` at https://github.com/matrix-org/matrix-react-sdk, which
+also defines the design, architecture and style for Vector too.
+
+The idea of Vector is to be a relatively lightweight "skin" of customisations on
+top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
+higher and lower level React components useful for building Matrix communication
+apps using React.
+
+After creating a new component you must run `npm run reskindex` to regenerate
+the `component-index.js` for the app (used in future for skinning)
+
+**However, as of July 2016 this layering abstraction is broken due to rapid
+development on Vector forcing `matrix-react-sdk` to move fast at the expense of
+maintaining a clear abstraction between the two.**  Hacking on Vector inevitably
+means hacking equally on `matrix-react-sdk`, and there are bits of
+`matrix-react-sdk` behaviour incorrectly residing in the `vector-web` project
+(e.g. matrix-react-sdk specific CSS), and a bunch of Vector specific behaviour
+in the `matrix-react-sdk` (grep for Vector).  This separation problem will be
+solved asap once development on Vector (and thus matrix-react-sdk) has
+stabilised.  Until then, the two projects should basically be considered as a
+single unit.  In particular, `matrix-react-sdk` issues are currently filed
+against `vector-web` in github.
+
+<What code should go where?>
+
+Setting up a dev environment
+============================
 
 Much of the functionality in Vector is actually in the `matrix-react-sdk` and
 `matrix-js-sdk` modules. It is possible to set these up in a way that makes it
@@ -112,6 +142,37 @@ will watch for changes to the files and rebuild automatically.
 
 If you add or remove any components from the Vector skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.
+
+Filing issues
+=============
+
+All issues for Vector-web and Matrix-react-sdk should be filed at
+https://github.com/matrix-org/matrix-react-sdk/issues
+
+Triaging issues
+===============
+
+Issues will be triaged by the core team using the following primary set of tags:
+
+priority:
+    P1: top priority; typically blocks releases.
+    P2: one below that
+    P3: non-urgent
+    P4/P5: bluesky some day, who knows.
+
+bug or feature:
+  bug severity:
+     * cosmetic - feature works functionally but UI/UX is broken.
+     * critical - whole app doesn't work
+     * major - entire feature doesn't work
+     * minor - partially broken feature (but still usable)
+
+     * release blocker
+
+     * ui/ux (think of this as cosmetic)
+
+     * network (specific to network conditions)
+     * platform (platform specific)
 
 Enabling encryption
 ===================
