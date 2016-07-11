@@ -132,9 +132,7 @@ General Style
 
 ECMAScript
 ----------
-- Use `let` for variables and `const` for constants. This sounds obvious, but it isn't: the ES6 `const` keyword
-  could be used for assign-once variables, however this guide advises against doing so on the grounds that it
-  confuses them with constants.
+- Use `const` unless you need a re-assignable variable. This ensures things you don't want to be re-assigned can't be.
 - Be careful migrating files to newer syntax.
   - Don't mix `require` and `import` in the same file. Either stick to the old style or change them all.
   - Likewise, don't mix things like class properties and `MyClass.prototype.MY_CONSTANT = 42;`
