@@ -37,14 +37,14 @@ General Style
 - UPPER_CAMEL_CASE for constants
 - Single quotes for strings by default, for consistency with most JavaScript styles:
 
-  ```
+  ```javascript
   "bad" // Bad
   'good' // Good
   ```
 - Use parentheses or `\`` instead of '\\' for line continuation where ever possible
 - Open braces on the same line (consistent with Node):
 
-  ```
+  ```javascript
   if (x) {
       console.log("I am a fish"); // Good
   }
@@ -56,7 +56,7 @@ General Style
   ```
 - Spaces after `if`, `for`, `else` etc, no space around the condition:
 
-  ```
+  ```javascript
   if (x) {
       console.log("I am a fish"); // Good
   }
@@ -73,7 +73,7 @@ General Style
   are simple and closely related. If you put the next declaration on a new line,
   treat yourself to another `var`:
 
-  ```
+  ```javascript
   var key = "foo",
       comparator = function(x, y) {
           return x - y;
@@ -91,7 +91,7 @@ General Style
   ```
 - A single line `if` is fine, all others have braces. This prevents errors when adding to the code.:
 
-  ```
+  ```javascript
   if (x) return true; // Fine
 
   if (x) {
@@ -103,7 +103,7 @@ General Style
   ```
 - Terminate all multi-line lists, object literals, imports and ideally function calls with commas (if using a transpiler). Note that trailing function commas require explicit configuration in babel at time of writing:
 
-  ```
+  ```javascript
   var mascots = [
       "Patrick",
       "Shirley",
@@ -125,7 +125,7 @@ General Style
   When something is intentionally missing or removed, set it to null.
   If returning a boolean, type coerce:
 
-  ```
+  ```javascript
   function hasThings() {
       return !!length; // bad
       return new Boolean(length); // REALLY bad
