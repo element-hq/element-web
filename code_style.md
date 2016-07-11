@@ -37,6 +37,7 @@ General Style
 - Single line ternary operators are fine.
 - UPPER_CAMEL_CASE for constants
 - Single quotes for strings by default, for consistency with most JavaScript styles:
+
   ```
   "bad" // Bad
   'good' // Good
