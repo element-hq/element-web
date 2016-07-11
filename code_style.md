@@ -44,6 +44,7 @@ General Style
   ```
 - Use parentheses or `\`` instead of '\\' for line continuation where ever possible
 - Open braces on the same line (consistent with Node):
+
   ```
   if (x) {
       console.log("I am a fish"); // Good
@@ -55,6 +56,7 @@ General Style
   }
   ```
 - Spaces after `if`, `for`, `else` etc, no space around the condition:
+
   ```
   if (x) {
       console.log("I am a fish"); // Good
@@ -71,6 +73,7 @@ General Style
 - Declare one variable per var statement (consistent with Node). Unless they
   are simple and closely related. If you put the next declaration on a new line,
   treat yourself to another `var`:
+
   ```
   var key = "foo",
       comparator = function(x, y) {
@@ -88,6 +91,7 @@ General Style
   var y = 0; // Also fine
   ```
 - A single line `if` is fine, all others have braces. This prevents errors when adding to the code.:
+
   ```
   if (x) return true; // Fine
 
@@ -99,6 +103,7 @@ General Style
       return true; // Not fine
   ```
 - Terminate all multi-line lists, object literals, imports and ideally function calls with commas (if using a transpiler). Note that trailing function commas require explicit configuration in babel at time of writing:
+
   ```
   var mascots = [
       "Patrick",
@@ -120,6 +125,7 @@ General Style
   Boolean variables and functions should always be either true or false. Don't set it to 0 unless it's supposed to be a number.
   When something is intentionally missing or removed, set it to null.
   If returning a boolean, type coerce:
+
   ```
   function hasThings() {
       return !!length; // bad
@@ -146,6 +152,7 @@ React
 -----
 - Use ES6 classes, although bear in mind a lot of code uses createClass.
 - Pull out functions in props to the class, generally as specific event handlers:
+
   ```jsx
   <Foo onClick={function(ev) {doStuff();}}> // Bad
   <Foo onClick={(ev) => {doStuff();}}> // Equally bad
