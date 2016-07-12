@@ -204,6 +204,9 @@ module.exports = React.createClass({
             user_is_in_room = this.state.room.hasMembershipState(
                 MatrixClientPeg.get().credentials.userId, 'join'
             );
+
+            // update the tab complete list now we have a room
+            this._updateTabCompleteList();
         }
 
         if (!user_is_in_room && this.state.roomId) {
