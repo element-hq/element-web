@@ -116,7 +116,7 @@ limitations under the License.
 /* end of overrides */
 
 .mx_EventTile_content .emoji-body {
-    font-size: 64px;
+    font-size: 48px;
 }
 
 /* this is used for the tile for the event which is selected via the URL.
