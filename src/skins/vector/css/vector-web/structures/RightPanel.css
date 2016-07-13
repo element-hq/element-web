@@ -43,7 +43,7 @@ limitations under the License.
 /** Fixme - factor this out with the main header **/
 
 .mx_RightPanel_headerButtonGroup {
-    margin-top: 25px;
+    margin-top: 10px;
     float: left;
     background-color: #fff;
     margin-left: -4px;
@@ -55,34 +55,27 @@ limitations under the License.
     vertical-align: middle;
     padding-left: 15px;
     padding-right: 15px;
+    text-align: center;
     position: relative;
 }
 
 .mx_RightPanel_headerButton object {
     pointer-events: none;
+    padding-bottom: 2px;
 }
 
 .mx_RightPanel_headerButton_highlight {
-    position: absolute;
-    bottom: -2px;
-    left: 10px;
     width: 25px;
-    height: 4px;
-    background-color: #76cfa6;
+    height: 5px;
+    border-radius: 5px;
+    background-color: rgba(118, 207, 166, 0.2);
 }
 
 .mx_RightPanel_headerButton_badge {
-    position: absolute;
-    top: 4px;
-    left: 28px;
-    font-size: 12px;
-    background-color: #76cfa6;
-    color: #fff;
+    font-size: 11px;
+    color: #76cfa6;
     font-weight: bold;
-    border-radius: 20px;
-    padding-left: 4px;
-    padding-right: 4px;
-    padding-top: 0px;
+    padding-bottom: 2px;
 }
 
 .mx_RightPanel .mx_MemberList,
