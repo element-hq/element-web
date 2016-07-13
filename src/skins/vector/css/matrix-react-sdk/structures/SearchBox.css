@@ -34,6 +34,7 @@ limitations under the License.
 
 .mx_SearchBox_closeButton {
     cursor: pointer;
+    margin-top: -5px;
 }
 
 .mx_SearchBox_search {
