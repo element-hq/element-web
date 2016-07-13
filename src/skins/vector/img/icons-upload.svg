@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="35px" height="35px" viewBox="0 0 35 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 3.8.2 (29753) - http://www.bohemiancoding.com/sketch -->
+    <title>2082AA27-EC81-4C61-8CD9-75C54E9D8FE2</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <path d="M0,4.00955791 C0,1.79514022 1.78186122,0 4.00417171,0 L8.40206186,0 C8.40206186,0 15,6.49234232 15,6.49234232 L15,18.0063928 C15,20.2120012 13.2055487,22 10.9999798,22 L4.00002024,22 C1.79087006,22 0,20.1996477 0,17.9904421 L0,4.00955791 Z" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="15" height="22" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <path d="M15,7 L10.1573486,7 C8.96587786,7 8,6.03402932 8,4.84265141 L8,0" id="path-3"></path>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="7" height="7" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Room-footer" transform="translate(-654.000000, -13.000000)">
+            <g id="icons_upload" transform="translate(654.000000, 13.000000)">
+                <path d="M17.5,35 C27.1649831,35 35,27.1649831 35,17.5 C35,7.83501688 27.1649831,0 17.5,0 C7.83501688,0 0,7.83501688 0,17.5 C0,27.1649831 7.83501688,35 17.5,35 Z" id="Oval-109-Copy" fill="#EAF5F0"></path>
+                <g id="file" transform="translate(10.000000, 6.000000)" stroke="#76CFA6" stroke-width="2">
+                    <use id="Rectangle-5" mask="url(#mask-2)" xlink:href="#path-1"></use>
+                    <use id="Rectangle-6" mask="url(#mask-4)" xlink:href="#path-3"></use>
+                </g>
+                <path d="M21.4788601,19.0662095 C21.6122719,19.0662095 21.7456837,19.0149896 21.8478272,18.9118482 C22.0507243,18.7062669 22.0507243,18.3736884 21.8478272,18.1681072 L17.8711824,14.1540105 C17.6682853,13.9484293 17.33823,13.9491309 17.134638,14.1533089 L13.1531293,18.1617924 C12.9495373,18.3673736 12.9488424,18.7006538 13.1517396,18.9062351 C13.3546367,19.1125179 13.684692,19.1125179 13.8882839,18.9076383 L16.9866343,15.7881359 L16.988024,24.4737681 C16.988024,24.7642481 17.2221895,25 17.5091639,25 C17.7975279,25 18.0303038,24.7642481 18.0303038,24.4737681 L18.0289141,15.8014671 L21.1105879,18.9118482 C21.2120365,19.0149896 21.3454483,19.0662095 21.4788601,19.0662095 L21.4788601,19.0662095 Z" id="Fill-75" fill="#76CFA6"></path>
+            </g>
+        </g>
+    </g>
+</svg>

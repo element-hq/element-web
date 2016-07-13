@@ -164,7 +164,7 @@ limitations under the License.
 .mx_RoomHeader_settingsButton {
     display: inline-block;
     position: relative;
-    bottom: 10px;
+    bottom: -1px;
     left: 4px;
 }
 
