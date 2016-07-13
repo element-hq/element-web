@@ -442,9 +442,16 @@ module.exports = React.createClass({
 
         var memberList = self.state.members.filter(function(userId) {
             var m = self.memberDict[userId];
-            if (query && m.name.toLowerCase().indexOf(query) === -1) {
-                return false;
+
+            if (query) {
+                const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
+                const matchesId = m.userId.toLowerCase().indexOf(query) !== -1;
+
+                if (!matchesName && !matchesId) {
+                    return false;
+                }
             }
+
             return m.membership == membership;
         }).map(function(userId) {
             var m = self.memberDict[userId];
