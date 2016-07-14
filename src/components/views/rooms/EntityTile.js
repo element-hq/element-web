@@ -30,17 +30,17 @@ var PRESENCE_CLASS = {
 };
 
 
-function presenceClassForMember(presence_state, last_active_ago) {
+function presenceClassForMember(presenceState, lastActiveAgo) {
     // offline is split into two categories depending on whether we have
     // a last_active_ago for them.
-    if (presence_state == 'offline') {
-        if (last_active_ago) {
+    if (presenceState == 'offline') {
+        if (lastActiveAgo) {
             return PRESENCE_CLASS['offline'] + '_beenactive';
         } else {
             return PRESENCE_CLASS['offline'] + '_neveractive';
         }
-    } else if (presence_state) {
-        return PRESENCE_CLASS[presence_state];
+    } else if (presenceState) {
+        return PRESENCE_CLASS[presenceState];
     } else {
         return PRESENCE_CLASS['offline'] + '_neveractive';
     }
