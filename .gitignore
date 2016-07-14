@@ -7,3 +7,4 @@
 /vector/bundle.*
 /vector/components.css
 /vector/config.json
+.DS_Store
