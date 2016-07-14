@@ -120,7 +120,7 @@ MemberEntry.fromMemberList = function(room, members) {
     const timelineEvents = room.getLiveTimeline().getEvents();
     for (var i = timelineEvents.length - 1; i >= 0; --i) {
         const ev = timelineEvents[i];
-        lastSpoke[ev.sender.userId] = ev.getTs();
+        lastSpoke[ev.getSender()] = ev.getTs();
     }
 
     return members.sort(function(a, b) {
