@@ -266,7 +266,7 @@ module.exports = React.createClass({
         var settings_button;
         if (this.props.onSettingsClick) {
             settings_button =
-                <div className="mx_RoomHeader_button mx_RoomHeader_settingsButton" onClick={this.props.onSettingsClick} title="Settings">
+                <div className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title="Settings">
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
                 </div>;
         }
