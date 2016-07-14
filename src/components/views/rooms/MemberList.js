@@ -315,7 +315,7 @@ module.exports = React.createClass({
         return all_members;
     },
 
-    roomMembers: function(limit) {
+    roomMembers: function() {
         var all_members = this.memberDict || {};
         var all_user_ids = Object.keys(all_members);
         var ConferenceHandler = CallHandler.getConferenceHandler();
@@ -324,7 +324,7 @@ module.exports = React.createClass({
 
         var to_display = [];
         var count = 0;
-        for (var i = 0; i < all_user_ids.length && (limit === undefined || count < limit); ++i) {
+        for (var i = 0; i < all_user_ids.length; ++i) {
             var user_id = all_user_ids[i];
             var m = all_members[user_id];
 
