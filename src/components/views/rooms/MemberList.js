@@ -64,7 +64,10 @@ module.exports = React.createClass({
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("RoomState.events", this.onRoomStateEvent);
         cli.on("Room", this.onRoom); // invites
-        cli.on("User.presence", this.onUserPresence);
+        // We listen for changes to the lastPresenceTs which is essentially
+        // listening for all presence events (we display most of not all of
+        // the information contained in presence events).
+        cli.on("User.lastPresenceTs", this.onUserLastPresenceTs);
         // cli.on("Room.timeline", this.onRoomTimeline);
     },
 
@@ -75,7 +78,7 @@ module.exports = React.createClass({
             cli.removeListener("RoomMember.name", this.onRoomMemberName);
             cli.removeListener("RoomState.events", this.onRoomStateEvent);
             cli.removeListener("Room", this.onRoom);
-            cli.removeListener("User.presence", this.onUserPresence);
+            cli.removeListener("User.lastPresenceTs", this.onUserLastPresenceTs);
             // cli.removeListener("Room.timeline", this.onRoomTimeline);
         }
     },
@@ -121,7 +124,7 @@ module.exports = React.createClass({
     },
 */
 
-    onUserPresence(event, user) {
+    onUserLastPresenceTs(event, user) {
         // Attach a SINGLE listener for global presence changes then locate the
         // member tile and re-render it. This is more efficient than every tile
         // evar attaching their own listener.
