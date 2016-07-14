@@ -103,7 +103,8 @@ limitations under the License.
 .mx_RoomHeader_rightRow {
     margin-top: 4px;
     background-color: #fff;
-
+    display: flex;
+    align-items: center;
     -webkit-box-ordinal-group: 3;
     -moz-box-ordinal-group: 3;
     -ms-flex-order: 3;
@@ -159,12 +160,6 @@ limitations under the License.
     display: inline-block;
     font-weight: normal;
     opacity: 0.6;
-}
-
-.mx_RoomHeader_settingsButton {
-    display: inline-block;
-    position: relative;
-    left: 8px;
 }
 
 .mx_RoomHeader_settingsButton object {
@@ -238,12 +233,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_button {
-    display: table-cell;
-    vertical-align: middle;
-    /* padding-left: 8px; */
-    /* padding-right: 8px; */
-    width: 35px;
-    text-align: center;
+    margin-left: 8px;
     cursor: pointer;
 }
 
