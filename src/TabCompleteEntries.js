@@ -113,8 +113,26 @@ class MemberEntry extends Entry {
     }
 }
 
-MemberEntry.fromMemberList = function(members) {
+MemberEntry.fromMemberList = function(room, members) {
+    // build up a dict of when, in the history we have cached,
+    // each member last spoke
+    const lastSpoke = {};
+    const timelineEvents = room.getLiveTimeline().getEvents();
+    for (var i = timelineEvents.length - 1; i >= 0; --i) {
+        const ev = timelineEvents[i];
+        lastSpoke[ev.sender.userId] = ev.getTs();
+    }
+
     return members.sort(function(a, b) {
+        const lastSpokeA = lastSpoke[a.userId] || 0;
+        const lastSpokeB = lastSpoke[b.userId] || 0;
+
+        if (lastSpokeA != lastSpokeB) {
+            // B - A here because the highest value
+            // is most recent
+            return lastSpokeB - lastSpokeA;
+        }
+
         var userA = a.user;
         var userB = b.user;
         if (userA && !userB) {

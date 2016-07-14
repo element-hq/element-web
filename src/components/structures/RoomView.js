@@ -533,7 +533,7 @@ module.exports = React.createClass({
 
         UserProvider.getInstance().setUserList(members);
         this.tabComplete.setCompletionList(
-            MemberEntry.fromMemberList(members).concat(
+            MemberEntry.fromMemberList(this.state.room, members).concat(
                 CommandEntry.fromCommands(SlashCommands.getCommandList())
             )
         );
