@@ -43,6 +43,10 @@ module.exports = {
 
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
+
+            // make sure we use the version of olm from vector-web rather than
+            // js-sdk.
+            "olm": path.resolve('./node_modules/olm'),
         },
     },
     plugins: [
