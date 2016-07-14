@@ -42,7 +42,7 @@ function presenceClassForMember(presence_state, last_active_ago) {
     } else if (presence_state) {
         return PRESENCE_CLASS[presence_state];
     } else {
-        return PRESENCE_CLASS['offline'];
+        return PRESENCE_CLASS['offline'] + '_neveractive';
     }
 }
 
