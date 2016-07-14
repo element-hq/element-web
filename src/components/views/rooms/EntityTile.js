@@ -30,7 +30,7 @@ var PRESENCE_CLASS = {
 };
 
 
-function presence_class_for_member(presence_state, last_active_ago) {
+function presenceClassForMember(presence_state, last_active_ago) {
     // offline is split into two categories depending on whether we have
     // a last_active_ago for them.
     if (presence_state == 'offline') {
@@ -96,7 +96,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const presenceClass = presence_class_for_member(
+        const presenceClass = presenceClassForMember(
             this.props.presenceState, this.props.presenceLastActiveAgo
         );
 
