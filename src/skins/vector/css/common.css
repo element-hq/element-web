@@ -194,15 +194,35 @@ input[type=text]:focus, textarea:focus {
 .mx_Dialog button, .mx_Dialog input[type="submit"] {
     border: 0px;
     height: 36px;
-    border-radius: 36px;
+    border-radius: 40px;
+    border: solid 1px #76cfa6;
     font-weight: 400;
     font-size: 15px;
-    color: #fff;
-    background-color: #76cfa6;
     margin-left: 0px;
     margin-right: 8px;
     padding-left: 1.5em;
     padding-right: 1.5em;
+
+    color: #76cfa6;
+    background-color: #fff;
+    outline: none;
+}
+
+/* The first button in a dialog is the primary */
+.mx_Dialog button:first-child, .mx_Dialog input[type="submit"]:first-child {
+    border: 0px;
+    height: 36px;
+    border-radius: 40px;
+    border: solid 1px #76cfa6;
+    font-weight: 400;
+    font-size: 15px;
+    margin-left: 0px;
+    margin-right: 8px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+
+    color: #fff;
+    background-color: #76cfa6;
     outline: none;
 }
 
