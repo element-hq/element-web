@@ -118,8 +118,7 @@ MemberEntry.fromMemberList = function(room, members) {
     // each member last spoke
     const lastSpoke = {};
     const timelineEvents = room.getLiveTimeline().getEvents();
-    for (var i = timelineEvents.length - 1; i >= 0; --i) {
-        const ev = timelineEvents[i];
+    for (const ev of room.getLiveTimeline().getEvents()) {
         lastSpoke[ev.getSender()] = ev.getTs();
     }
 

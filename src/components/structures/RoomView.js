@@ -360,6 +360,10 @@ module.exports = React.createClass({
                 });
             }
         }
+
+        // update ther tab complete list as it depends on who most recently spoke,
+        // and that has probably just changed
+        this._updateTabCompleteList();
     },
 
     // called when state.room is first initialised (either at initial load,
