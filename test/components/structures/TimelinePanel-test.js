@@ -271,6 +271,8 @@ describe('TimelinePanel', function() {
 
             // we should now be able to scroll down, and paginate in the other
             // direction.
+            console.log("scrollingDiv.scrollTop is " + scrollingDiv.scrollTop);
+            console.log("Going to set it to " + scrollingDiv.scrollHeight);
             scrollingDiv.scrollTop = scrollingDiv.scrollHeight;
             return awaitScroll();
         }).then(() => {
