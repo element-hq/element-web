@@ -73,36 +73,13 @@ module.exports = React.createClass({
         this.unmounted = true;
     },
 
-    onImageClick: function(ev) {
-        var p = this.state.preview;
-        if (ev.button != 0 || ev.metaKey) return;
-        ev.preventDefault();
-        var ImageView = sdk.getComponent("elements.ImageView");
-
-        var src = p["og:image"];
-        if (src && src.startsWith("mxc://")) {
-            src = MatrixClientPeg.get().mxcUrlToHttp(src);
-        }
-
-        var params = {
-            src: src,
-            width: p["og:image:width"],
-            height: p["og:image:height"],
-            name: p["og:title"] || p["og:description"] || this.props.link,
-            fileSize: p["matrix:image:size"],
-            link: this.props.link,
-        };
-
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-    },
-
     render: function() {
         var p = this.state.preview;
         if (!p) return <div/>;
 
         // FIXME: do we want to factor out all image displaying between this and MImageBody - especially for lightboxing?
         var image = p["og:image"];
-        var imageMaxWidth = 100, imageMaxHeight = 100;
+        var imageMaxWidth = 600, imageMaxHeight = 400;
         if (image && image.startsWith("mxc://")) {
             image = MatrixClientPeg.get().mxcUrlToHttp(image, imageMaxWidth, imageMaxHeight);
         }
@@ -114,23 +91,24 @@ module.exports = React.createClass({
 
         var img;
         if (image) {
-            img = <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
-                    <img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={ image } onClick={ this.onImageClick }/>
-                  </div>
+            img = (
+                <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
+                    <a href={ this.props.link } target="_blank">
+                        <img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={ image } />
+                    </a>
+                </div>
+            );
         }
 
         return (
             <div className="mx_LinkPreviewWidget" >
-                { img }
                 <div className="mx_LinkPreviewWidget_caption">
                     <div className="mx_LinkPreviewWidget_title"><a href={ this.props.link } target="_blank">{ p["og:title"] }</a></div>
-                    <div className="mx_LinkPreviewWidget_siteName">{ p["og:site_name"] ? (" - " + p["og:site_name"]) : null }</div>
-                    <div className="mx_LinkPreviewWidget_description" ref="description">
-                        { p["og:description"] }
-                    </div>
+                    <div className="mx_LinkPreviewWidget_siteName">{ p["og:site_name"] ? ("from " + p["og:site_name"]) : null }</div>
                 </div>
-                <img className="mx_LinkPreviewWidget_cancel" src="img/cancel.svg" width="18" height="18"
-                     onClick={ this.props.onCancelClick }/>
+                { img }
+                <div className="mx_LinkPreviewWidget_description" ref="description">{ p["og:description"] } <a href={ this.props.link } target="_blank">Read more</a></div>
+                <img className="mx_LinkPreviewWidget_indicator" src="img/icon-link.svg" width="13" height="16" />
             </div>
         );
     }
