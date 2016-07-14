@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="35px" height="35px" viewBox="0 0 35 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 3.8.3 (29802) - http://www.bohemiancoding.com/sketch -->
+    <title>C47A699C-B829-4BF8-AA39-721EFDB3AA24</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <circle id="path-1" cx="15.4" cy="15.4" r="7"></circle>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="14" height="14" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Room-header/Vector-Design" transform="translate(-694.000000, -18.000000)">
+            <g id="icons_search" transform="translate(694.000000, 18.000000)">
+                <path d="M17.5,35 C27.1649831,35 35,27.1649831 35,17.5 C35,7.83501688 27.1649831,0 17.5,0 C7.83501688,0 0,7.83501688 0,17.5 C0,27.1649831 7.83501688,35 17.5,35 Z" id="Oval-1-Copy-7" fill="#EAF5F0"></path>
+                <use id="Oval-29" stroke="#76CFA6" mask="url(#mask-2)" stroke-width="2" xlink:href="#path-1"></use>
+                <path d="M20.3,20.3 L25.2497475,25.2497475" id="Line" stroke="#76CFA6" stroke-linecap="round" opacity="0.7"></path>
+            </g>
+        </g>
+    </g>
+</svg>

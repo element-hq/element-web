@@ -164,8 +164,7 @@ limitations under the License.
 .mx_RoomHeader_settingsButton {
     display: inline-block;
     position: relative;
-    bottom: -1px;
-    left: 4px;
+    left: 8px;
 }
 
 .mx_RoomHeader_settingsButton object {
@@ -181,10 +180,6 @@ limitations under the License.
 
 .mx_RoomHeader_name:hover div:not(.mx_RoomHeader_editable) {
     color: #76cfa6;
-}
-
-.mx_RoomHeader_leaveButton {
-    margin-top: -1px;
 }
 
 .mx_RoomHeader_placeholder {
@@ -244,9 +239,11 @@ limitations under the License.
 
 .mx_RoomHeader_button {
     display: table-cell;
-    vertical-align: top;
-    padding-left: 8px;
-    padding-right: 8px;
+    vertical-align: middle;
+    /* padding-left: 8px; */
+    /* padding-right: 8px; */
+    width: 35px;
+    text-align: center;
     cursor: pointer;
 }
 
