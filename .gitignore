@@ -1,5 +1,5 @@
 /cert.pem
-/.DS_Store
+.DS_Store
 /karma-reports
 /key.pem
 /lib
