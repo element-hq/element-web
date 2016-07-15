@@ -173,6 +173,7 @@ input[type=text]:focus, textarea:focus {
 
 .mx_Dialog_lightbox .mx_Dialog_background {
     opacity: 0.85;
+    background-color: #000;
 }
 
 .mx_Dialog_lightbox .mx_Dialog {
