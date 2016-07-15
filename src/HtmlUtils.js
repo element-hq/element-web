@@ -223,8 +223,10 @@ module.exports = {
         let match = EMOJI_REGEX.exec(contentBodyTrimmed);
         let emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
 
-        let className = classNames('markdown-body', {
-            'emoji-body': emojiBody,
+        const className = classNames({
+            'mx_EventTile_body': true,
+            'mx_EventTile_bigEmoji': emojiBody,
+            'markdown-body': isHtml,
         });
         return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} />;
     },
