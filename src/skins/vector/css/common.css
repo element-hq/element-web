@@ -58,6 +58,11 @@ input[type=text]:focus, textarea:focus {
     box-shadow: none;
 }
 
+/* Prevent ugly dotted highlight around selected elements in Firefox */
+::-moz-focus-inner {
+    border: 0;
+}
+
 /* applied to side-panels and messagepanel when in RoomSettings */
 .mx_fadable {
     opacity: 1;
@@ -202,28 +207,15 @@ input[type=text]:focus, textarea:focus {
     margin-right: 8px;
     padding-left: 1.5em;
     padding-right: 1.5em;
+    outline: none;
 
     color: #76cfa6;
     background-color: #fff;
-    outline: none;
 }
 
-/* The first button in a dialog is the primary */
-.mx_Dialog button:first-child, .mx_Dialog input[type="submit"]:first-child {
-    border: 0px;
-    height: 36px;
-    border-radius: 40px;
-    border: solid 1px #76cfa6;
-    font-weight: 400;
-    font-size: 15px;
-    margin-left: 0px;
-    margin-right: 8px;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-
+.mx_Dialog .mx_Dialog_primary {
     color: #fff;
     background-color: #76cfa6;
-    outline: none;
 }
 
 .mx_Dialog_title {
