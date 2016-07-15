@@ -213,7 +213,7 @@ input[type=text]:focus, textarea:focus {
     background-color: #fff;
 }
 
-.mx_Dialog .mx_Dialog_primary {
+.mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
     color: #fff;
     background-color: #76cfa6;
 }
