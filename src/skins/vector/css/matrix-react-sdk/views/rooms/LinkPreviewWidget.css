@@ -15,47 +15,51 @@ limitations under the License.
 */
 
 .mx_LinkPreviewWidget {
-    position: relative;
     margin-top: 15px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    display: -webkit-flex;
+    display: flex;
+    border-left: 4px solid #ddd;
+    color: #888;
 }
 
-.mx_LinkPreviewWidget:before {
-    position: absolute;
-    z-index: 1;
-    content: '\0020';
-    top: 0;
-    left: -15px;
-    width: 1px;
-    height: 100%;
-    background-color: #dddddd;
-}
-
-.mx_LinkPreviewWidget_indicator {
-    position: absolute;
-    z-index: 1;
-    top: 2px;
-    left: -40px;
+.mx_LinkPreviewWidget_image {
+    -webkit-flex: 0 0 100px;
+    flex: 0 0 100px;
+    margin-left: 15px;
+    text-align: center;
+    cursor: pointer;
 }
 
 .mx_LinkPreviewWidget_caption {
-    margin-bottom: 10px;
+    margin-left: 15px;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 
 .mx_LinkPreviewWidget_title {
+    display: inline;
     font-weight: bold;
 }
 
 .mx_LinkPreviewWidget_siteName {
-    opacity: 0.5;
-    font-size: 13px;
-    line-height: 18px;
+    display: inline;
 }
 
-.mx_LinkPreviewWidget_image {
-    margin-top: 10px;
-    margin-bottom: 10px;
+.mx_LinkPreviewWidget_description {
+    margin-top: 8px;
+    white-space: normal;
+    word-break: break-word;
 }
 
-.mx_LinkPreviewWidget_image img {
+.mx_LinkPreviewWidget_cancel {
+    visibility: hidden;
     cursor: pointer;
+    -webkit-flex: 0 0 40px;
+    flex: 0 0 40px;
+}
+
+.mx_LinkPreviewWidget:hover .mx_LinkPreviewWidget_cancel {
+    visibility: visible;
 }
