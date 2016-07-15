@@ -48,7 +48,12 @@ class TabComplete {
         this.isFirstWord = false; // true if you tab-complete on the first word
         this.enterTabCompleteTimerId = null;
         this.inPassiveMode = false;
+
+        // Map tracking ordering of the room members.
+        // userId: integer, highest comes first.
         this.memberTabOrder = {};
+
+        // monotonically increasing counter used for tracking ordering of members
         this.memberOrderSeq = 0;
     }
 

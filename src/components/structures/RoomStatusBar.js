@@ -28,7 +28,7 @@ module.exports = React.createClass({
         room: React.PropTypes.object.isRequired,
 
         // a TabComplete object
-        tabComplete: React.PropTypes.object,
+        tabComplete: React.PropTypes.object.isRequired,
 
         // the number of messages which have arrived since we've been scrolled up
         numUnreadMessages: React.PropTypes.number,
