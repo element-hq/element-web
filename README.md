@@ -80,7 +80,10 @@ stabilised.  Until then, the two projects should basically be considered as a
 single unit.  In particular, `matrix-react-sdk` issues are currently filed
 against `vector-web` in github.
 
-<What code should go where?>
+Please note that Vector is intended to run correctly without access to the public
+internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
+hosted by external CDNs or servers but instead please package all dependencies
+into Vector itself.
 
 Setting up a dev environment
 ============================
