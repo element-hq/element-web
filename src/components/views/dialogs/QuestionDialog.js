@@ -56,7 +56,7 @@ module.exports = React.createClass({
                     {this.props.description}
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this.onOk} autoFocus={this.props.focus}>
+                    <button className="mx_Dialog_primary" onClick={this.onOk} autoFocus={this.props.focus}>
                         {this.props.button}
                     </button>
 
