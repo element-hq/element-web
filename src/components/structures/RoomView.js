@@ -358,7 +358,7 @@ module.exports = React.createClass({
             }
         }
 
-        // update ther tab complete list as it depends on who most recently spoke,
+        // update the tab complete list as it depends on who most recently spoke,
         // and that has probably just changed
         if (ev.sender) {
             this.tabComplete.onMemberSpoke(ev.sender);
