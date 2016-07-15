@@ -72,6 +72,11 @@ limitations under the License.
     display: block;
 }
 
+/* De-zalgoing */
+.mx_EventTile_body {
+    overflow-y: hidden;
+}
+
 /* Various markdown overrides */
 
 .mx_EventTile_content .markdown-body {
@@ -111,7 +116,7 @@ limitations under the License.
 
 /* end of overrides */
 
-.mx_EventTile_content .emoji-body {
+.mx_EventTile_bigEmoji {
     font-size: 48px;
 }
 
