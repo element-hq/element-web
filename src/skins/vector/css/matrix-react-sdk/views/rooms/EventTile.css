@@ -70,8 +70,6 @@ limitations under the License.
 */
 .mx_EventTile_content {
     display: block;
-    /*overflow-y: hidden;
-    overflow-x: hidden;*/
 }
 
 /* Various markdown overrides */
