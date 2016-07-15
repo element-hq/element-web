@@ -133,6 +133,12 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+        MatrixClientPeg.get().on("Room", this.onRoom);
+        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
+        MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
+        MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
+
         this.tabComplete = new TabComplete({
             allowLooping: false,
             autoEnterTabComplete: true,
@@ -141,12 +147,6 @@ module.exports = React.createClass({
                 this.forceUpdate();
             }
         });
-
-        this.dispatcherRef = dis.register(this.onAction);
-        MatrixClientPeg.get().on("Room", this.onRoom);
-        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
-        MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
-        MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
 
         if (this.props.roomAddress[0] == '#') {
             // we always look up the alias from the directory server:
