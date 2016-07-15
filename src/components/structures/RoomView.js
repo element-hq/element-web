@@ -31,10 +31,7 @@ var Modal = require("../../Modal");
 var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
 var TabComplete = require("../../TabComplete");
-var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
-var CommandEntry = require("../../TabCompleteEntries").CommandEntry;
 var Resend = require("../../Resend");
-var SlashCommands = require("../../SlashCommands");
 var dis = require("../../dispatcher");
 var Tinter = require("../../Tinter");
 var rate_limited_func = require('../../ratelimitedfunc');
@@ -136,12 +133,6 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this.dispatcherRef = dis.register(this.onAction);
-        MatrixClientPeg.get().on("Room", this.onRoom);
-        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
-        MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
-        MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
-
         this.tabComplete = new TabComplete({
             allowLooping: false,
             autoEnterTabComplete: true,
@@ -150,6 +141,12 @@ module.exports = React.createClass({
                 this.forceUpdate();
             }
         });
+
+        this.dispatcherRef = dis.register(this.onAction);
+        MatrixClientPeg.get().on("Room", this.onRoom);
+        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
+        MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
+        MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
 
         if (this.props.roomAddress[0] == '#') {
             // we always look up the alias from the directory server:
@@ -205,8 +202,13 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().credentials.userId, 'join'
             );
 
-            // update the tab complete list now we have a room
-            this._updateTabCompleteList();
+            this.tabComplete.loadEntries(this.state.room);
+
+            const myUserId = MatrixClientPeg.get().credentials.userId;
+            const members = this.state.room.getJoinedMembers().filter(function(member) {
+                if (member.userId !== myUserId) return true;
+            });
+            UserProvider.getInstance().setUserList(members);
         }
 
         if (!user_is_in_room && this.state.roomId) {
@@ -363,7 +365,15 @@ module.exports = React.createClass({
 
         // update ther tab complete list as it depends on who most recently spoke,
         // and that has probably just changed
-        this._updateTabCompleteList();
+        if (ev.sender) {
+            this.tabComplete.onMemberSpoke(ev.sender);
+
+            const myUserId = MatrixClientPeg.get().credentials.userId;
+            const members = this.state.room.getJoinedMembers().filter(function(member) {
+                if (member.userId !== myUserId) return true;
+            });
+            UserProvider.getInstance().setUserList(members);
+        }
     },
 
     // called when state.room is first initialised (either at initial load,
@@ -441,7 +451,13 @@ module.exports = React.createClass({
         }
 
         // a member state changed in this room, refresh the tab complete list
-        this._updateTabCompleteList();
+        this.tabComplete.loadEntries(this.state.room);
+
+        const myUserId = MatrixClientPeg.get().credentials.userId;
+        const members = this.state.room.getJoinedMembers().filter(function(member) {
+            if (member.userId !== myUserId) return true;
+        });
+        UserProvider.getInstance().setUserList(members);
 
         // if we are now a member of the room, where we were not before, that
         // means we have finished joining a room we were previously peeking
@@ -506,8 +522,6 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.onResize);
         this.onResize();
 
-        this._updateTabCompleteList();
-
         // XXX: EVIL HACK to autofocus inviting on empty rooms.
         // We use the setTimeout to avoid racing with focus_composer.
         if (this.state.room &&
@@ -523,24 +537,6 @@ module.exports = React.createClass({
                 }
             }, 50);
         }
-    },
-
-    _updateTabCompleteList: function() {
-        var cli = MatrixClientPeg.get();
-
-        if (!this.state.room) {
-            return;
-        }
-        var members = this.state.room.getJoinedMembers().filter(function(member) {
-            if (member.userId !== cli.credentials.userId) return true;
-        });
-
-        UserProvider.getInstance().setUserList(members);
-        this.tabComplete.setCompletionList(
-            MemberEntry.fromMemberList(this.state.room, members).concat(
-                CommandEntry.fromCommands(SlashCommands.getCommandList())
-            )
-        );
     },
 
     componentDidUpdate: function() {
@@ -1380,12 +1376,10 @@ module.exports = React.createClass({
             statusBar = <UploadBar room={this.state.room} />
         } else if (!this.state.searchResults) {
             var RoomStatusBar = sdk.getComponent('structures.RoomStatusBar');
-            var tabEntries = this.tabComplete.isTabCompleting() ?
-                this.tabComplete.peek(6) : null;
 
             statusBar = <RoomStatusBar
                 room={this.state.room}
-                tabCompleteEntries={tabEntries}
+                tabComplete={this.tabComplete}
                 numUnreadMessages={this.state.numUnreadMessages}
                 hasUnsentMessages={this.state.hasUnsentMessages}
                 atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
