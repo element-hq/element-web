@@ -64,7 +64,8 @@ module.exports = React.createClass({
         // Load the complete user list for inviting new users
         if (this._room) {
             this._userList = MatrixClientPeg.get().getUsers().filter((u) => {
-                return !this._room.hasMembershipState(u.userId, "join");
+                return (!this._room.hasMembershipState(u.userId, "join") &&
+                        !this._room.hasMembershipState(u.userId, "invite"));
             });
         }
     },
