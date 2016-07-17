@@ -64,7 +64,7 @@ function createRoom(opts) {
         }
     ];
 
-    var modal = Modal.createDialog(Loader);
+    var modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
     return client.createRoom(createOpts).finally(function() {
         modal.close();
