@@ -64,18 +64,19 @@ limitations under the License.
 }
 
 .mx_RoomTile_badge {
-    min-width: 12px;
-    height: 16px;
+    min-width: 15px;
+    height: 18px;
     position: absolute;
     right: 16px;
     top: 50%;
     margin-top: -8px;
-    border-radius: 16px;
+    border-radius: 18px;
     color: #fff;
     font-weight: bold;
     font-size: 11px;
     text-align: center;
-    padding: 0px 4px 0px 4px;
+    padding: 2px 6px 0px 5px;
+    z-index: 200;
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
