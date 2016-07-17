@@ -366,7 +366,7 @@ module.exports = React.createClass({
             var currentRoom = MatrixClientPeg.get().getRoom(this.props.member.roomId);
             currentMembers = currentRoom.getJoinedMembers();
         }
-        // if we're currently not in a 1:1 with this user, start a new chat
+        // if our current room is a 1:1 with the target user, start a new chat rather than NOOPing
         if (currentMembers && currentMembers.length === 2 &&
             userIds.indexOf(currentMembers[0].userId) !== -1 &&
             userIds.indexOf(currentMembers[1].userId) !== -1)
