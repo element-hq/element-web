@@ -148,6 +148,12 @@ input[type=text]:focus, textarea:focus {
     justify-content: center;
 }
 
+.mx_Dialog_wrapper.mx_Dialog_spinner .mx_Dialog {
+    width: auto;
+    border-radius: 8px;
+    padding-left: 0px;
+}
+
 .mx_Dialog {
     background-color: #fff;
     color: #747474;
