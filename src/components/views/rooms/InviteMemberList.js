@@ -37,12 +37,31 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this._room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        var cli = MatrixClientPeg.get();
+        cli.on("RoomState.members", this.onRoomStateMember);
+
         this._emailEntity = null;
+
+        // we have to update the list whenever membership changes
+        // particularly to avoid bug https://github.com/vector-im/vector-web/issues/1813
+        this._updateList();
+    },
+
+    componentDidMount: function() {
+        // initialise the email tile
+        this.onSearchQueryChanged('');
+    },
+
+    componentWillUnmount: function() {
+        var cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("RoomState.members", this.onRoomStateMember);
+        }
+    },
+
+    _updateList: function() {
+        this._room = MatrixClientPeg.get().getRoom(this.props.roomId);
         // Load the complete user list for inviting new users
-        // TODO: Keep this list bleeding-edge up-to-date. Practically speaking,
-        // it will do for now not being updated as random new users join different
-        // rooms as this list will be reloaded every room swap.
         if (this._room) {
             this._userList = MatrixClientPeg.get().getUsers().filter((u) => {
                 return !this._room.hasMembershipState(u.userId, "join");
@@ -50,9 +69,8 @@ module.exports = React.createClass({
         }
     },
 
-    componentDidMount: function() {
-        // initialise the email tile
-        this.onSearchQueryChanged('');
+    onRoomStateMember: function(ev, state, member) {
+        this._updateList();
     },
 
     onInvite: function(ev) {
