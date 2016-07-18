@@ -79,6 +79,8 @@ limitations under the License.
 	border-right: 10px solid transparent;
 }
 
+/* Because the specificity of this and the above ".mx_RoomTile_highlight .mx_RoomTile_badge:after"
+style are the same, this style needs to be AFTER it to take effect when matched */
 .collapsed .mx_RoomTile_badge:after {
     display: none;
 }
