@@ -69,7 +69,7 @@ module.exports = React.createClass({
             // inits, the saved value will always be undefined, however getInitialState()
             // is also called from the saving code so we must return the correct value here
             // if we have it (although this could race if the user saves before we load whether
-            // the room is oublisherd or not.
+            // the room is published or not).
             isRoomPublished: this._originalIsRoomPublished,
         };
     },
