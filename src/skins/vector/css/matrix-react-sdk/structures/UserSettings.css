@@ -102,8 +102,8 @@ limitations under the License.
 
 .mx_UserSettings_toggle input {
     width: 16px;
-    padding-right: 8px;
-    padding-bottom: 21px;
+    margin-right: 8px;
+    margin-bottom: 8px;
 }
 
 .mx_UserSettings_toggle label {
