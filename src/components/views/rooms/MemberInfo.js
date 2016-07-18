@@ -61,12 +61,16 @@ module.exports = React.createClass({
             updating: 0,
             devicesLoading: true,
             devices: null,
+            existingOneToOneRoomId: null,
         }
     },
 
-
     componentWillMount: function() {
         this._cancelDeviceList = null;
+
+        this.setState({
+            existingOneToOneRoomId: this.getExistingOneToOneRoomId()
+        });
     },
 
     componentDidMount: function() {
@@ -88,6 +92,44 @@ module.exports = React.createClass({
         if (this._cancelDeviceList) {
             this._cancelDeviceList();
         }
+    },
+
+    getExistingOneToOneRoomId: function() {
+        var self = this;
+        var rooms = MatrixClientPeg.get().getRooms();
+        var userIds = [
+            this.props.member.userId,
+            MatrixClientPeg.get().credentials.userId
+        ];
+        var existingRoomId;
+
+        // roomId can be null here because of a hack in MatrixChat.onUserClick where we
+        // abuse this to view users rather than room members.
+        var currentMembers;
+        if (this.props.member.roomId) {
+            var currentRoom = MatrixClientPeg.get().getRoom(this.props.member.roomId);
+            currentMembers = currentRoom.getJoinedMembers();
+        }
+
+        // reuse the first private 1:1 we find
+        existingRoomId = null;
+
+        for (var i = 0; i < rooms.length; i++) {
+            // don't try to reuse public 1:1 rooms
+            var join_rules = rooms[i].currentState.getStateEvents("m.room.join_rules", '');
+            if (join_rules && join_rules.getContent().join_rule === 'public') continue;
+
+            var members = rooms[i].getJoinedMembers();
+            if (members.length === 2 &&
+                userIds.indexOf(members[0].userId) !== -1 &&
+                userIds.indexOf(members[1].userId) !== -1)
+            {
+                existingRoomId = rooms[i].roomId;
+                break;
+            }
+        }
+
+        return existingRoomId;
     },
 
     onDeviceVerificationChanged: function(userId, device) {
@@ -349,54 +391,17 @@ module.exports = React.createClass({
 
     onChatClick: function() {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+        // TODO: keep existingOneToOneRoomId updated if we see any room member changes anywhere
+
+        var useExistingOneToOneRoom = this.state.existingOneToOneRoomId && (this.state.existingOneToOneRoomId !== this.props.member.roomId);
+
         // check if there are any existing rooms with just us and them (1:1)
         // If so, just view that room. If not, create a private room with them.
-        var self = this;
-        var rooms = MatrixClientPeg.get().getRooms();
-        var userIds = [
-            this.props.member.userId,
-            MatrixClientPeg.get().credentials.userId
-        ];
-        var existingRoomId;
-
-        // roomId can be null here because of a hack in MatrixChat.onUserClick where we
-        // abuse this to view users rather than room members.
-        var currentMembers;
-        if (this.props.member.roomId) {
-            var currentRoom = MatrixClientPeg.get().getRoom(this.props.member.roomId);
-            currentMembers = currentRoom.getJoinedMembers();
-        }
-        // if our current room is a 1:1 with the target user, start a new chat rather than NOOPing
-        if (currentMembers && currentMembers.length === 2 &&
-            userIds.indexOf(currentMembers[0].userId) !== -1 &&
-            userIds.indexOf(currentMembers[1].userId) !== -1)
-        {
-            existingRoomId = null;
-        }
-        // otherwise reuse the first private 1:1 we find
-        else {
-            existingRoomId = null;
-
-            for (var i = 0; i < rooms.length; i++) {
-                // don't try to reuse public 1:1 rooms
-                var join_rules = rooms[i].currentState.getStateEvents("m.room.join_rules", '');
-                if (join_rules && join_rules.getContent().join_rule === 'public') continue;
-
-                var members = rooms[i].getJoinedMembers();
-                if (members.length === 2 &&
-                    userIds.indexOf(members[0].userId) !== -1 &&
-                    userIds.indexOf(members[1].userId) !== -1)
-                {
-                    existingRoomId = rooms[i].roomId;
-                    break;
-                }
-            }
-        }
-
-        if (existingRoomId) {
+        if (this.state.existingOneToOneRoomId) {
             dis.dispatch({
                 action: 'view_room',
-                room_id: existingRoomId
+                room_id: this.state.existingOneToOneRoomId,
             });
             this.props.onFinished();
         }
@@ -553,7 +558,22 @@ module.exports = React.createClass({
         if (this.props.member.userId !== MatrixClientPeg.get().credentials.userId) {
             // FIXME: we're referring to a vector component from react-sdk
             var BottomLeftMenuTile = sdk.getComponent('rooms.BottomLeftMenuTile');
-            startChat = <BottomLeftMenuTile collapsed={ false } img="img/create-big.svg" label="Start chat" onClick={ this.onChatClick }/>
+
+            var label;
+            if (this.state.existingOneToOneRoomId) {
+                if (this.state.existingOneToOneRoomId == this.props.member.roomId) {
+                    label = "Start new direct chat";
+                }
+                else {
+                    label = "Go to direct chat";
+                }
+            }
+            else {
+                label = "Start direct chat";
+            }
+
+            startChat = <BottomLeftMenuTile collapsed={ false } img="img/create-big.svg"
+                                            label={ label } onClick={ this.onChatClick }/>
         }
 
         if (this.state.updating) {
