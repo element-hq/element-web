@@ -240,7 +240,7 @@ module.exports = React.createClass({
             this._onRoomLoaded(this.state.room);
         }
 
-        _updatePreviewUrlVisibility(this.state.room);
+        this._updatePreviewUrlVisibility(this.state.room);
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -343,8 +343,8 @@ module.exports = React.createClass({
         // ignore events for other rooms
         if (!this.state.room || room.roomId != this.state.room.roomId) return;
 
-        if (event.getType() === "org.matrix.room.preview_urls") {
-            _updatePreviewUrlVisibility(room);
+        if (ev.getType() === "org.matrix.room.preview_urls") {
+            this._updatePreviewUrlVisibility(room);
         }
 
         // ignore anything but real-time updates at the end of the room:
