@@ -68,6 +68,21 @@ limitations under the License.
     z-index: 200;
 }
 
+.mx_RoomTile_highlight .mx_RoomTile_badge:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 0;
+	height: 0;
+    margin-left: 8px;
+	border-top: 8px solid #ff0064;
+	border-right: 10px solid transparent;
+}
+
+.collapsed .mx_RoomTile_badge:after {
+    display: none;
+}
+
 .mx_RoomTile_badge {
     min-width: 15px;
     height: 18px;
