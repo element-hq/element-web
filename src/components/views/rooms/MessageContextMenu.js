@@ -47,7 +47,7 @@ module.exports = React.createClass({
         var ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createDialog(ViewSource, {
             mxEvent: this.props.mxEvent
-        });
+        }, 'mx_Dialog_viewsource');
         if (this.props.onFinished) this.props.onFinished();
     },
 

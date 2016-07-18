@@ -1,5 +1,4 @@
 /cert.pem
-/.DS_Store
 /karma-reports
 /key.pem
 /lib
@@ -7,3 +6,5 @@
 /packages/
 /vector/bundle.*
 /vector/components.css
+/vector/config.json
+.DS_Store

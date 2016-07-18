@@ -17,7 +17,7 @@ limitations under the License.
 .mx_EventTile {
     max-width: 100%;
     clear: both;
-    margin-top: 24px;
+    padding-top: 24px;
     margin-left: 65px;
 }
 
@@ -33,7 +33,15 @@ limitations under the License.
 }
 
 .mx_EventTile_continuation {
-    margin-top: 8px ! important;
+    padding-top: 8px ! important;
+}
+
+.mx_EventTile_verified {
+    background-color: #eaf5f0;
+}
+
+.mx_EventTile_unverified {
+    background-color: #ffa0a0;
 }
 
 .mx_EventTile .mx_SenderProfile {
@@ -66,6 +74,11 @@ limitations under the License.
     display: block;
     overflow-y: hidden;
     overflow-x: hidden;
+}
+
+/* De-zalgoing */
+.mx_EventTile_body {
+    overflow-y: hidden;
 }
 
 /* Various markdown overrides */
@@ -106,6 +119,10 @@ limitations under the License.
 }
 
 /* end of overrides */
+
+.mx_EventTile_bigEmoji {
+    font-size: 48px ! important;
+}
 
 /* this is used for the tile for the event which is selected via the URL.
  * TODO: ultimately we probably want some transition on here.

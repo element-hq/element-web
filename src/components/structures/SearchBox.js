@@ -103,7 +103,7 @@ module.exports = React.createClass({
                         className="mx_SearchBox_search"
                         value={ this.state.searchTerm }
                         onChange={ this.onChange }
-                        placeholder="Search room names"
+                        placeholder="Filter room names"
                     />
                 ];
         }
