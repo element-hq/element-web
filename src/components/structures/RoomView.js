@@ -239,6 +239,8 @@ module.exports = React.createClass({
             MatrixClientPeg.get().stopPeeking();
             this._onRoomLoaded(this.state.room);
         }
+
+        _updatePreviewUrlVisibility(this.state.room);
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -341,6 +343,10 @@ module.exports = React.createClass({
         // ignore events for other rooms
         if (!this.state.room || room.roomId != this.state.room.roomId) return;
 
+        if (event.getType() === "org.matrix.room.preview_urls") {
+            _updatePreviewUrlVisibility(room);
+        }
+
         // ignore anything but real-time updates at the end of the room:
         // updates from pagination will happen when the paginate completes.
         if (toStartOfTimeline || !data || !data.liveEvent) return;
@@ -384,6 +390,40 @@ module.exports = React.createClass({
         }
     },
 
+    _updatePreviewUrlVisibility: function(room) {
+        // check our per-room overrides
+        var roomPreviewUrls = room.getAccountData("org.matrix.room.preview_urls");
+        if (roomPreviewUrls && roomPreviewUrls.disabled !== undefined) {
+            this.setState({
+                showUrlPreview: !roomPreviewUrls.disabled
+            });
+            return;
+        }
+
+        // check our global disable override
+        var userRoomPreviewUrls = MatrixClientPeg().get().getAccountData("org.matrix.preview_urls");
+        if (userRoomPreviewUrls && userRoomPreviewUrls.disabled) {
+            this.setState({
+                showUrlPreview: false
+            });
+            return;
+        }
+
+        // check the room state event
+        var roomStatePreviewUrls = room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
+        if (roomStatePreviewUrls && roomStatePreviewUrls.disabled) {
+            this.setState({
+                showUrlPreview: false;
+            });
+            return;
+        }
+
+        // otherwise, we assume they're on.
+        this.setState({
+            showUrlPreview: true;
+        });
+    },
+
     onRoom: function(room) {
         // This event is fired when the room is 'stored' by the JS SDK, which
         // means it's now a fully-fledged room object ready to be used, so
@@ -416,11 +456,14 @@ module.exports = React.createClass({
 
     onRoomAccountData: function(room, event) {
         if (room.roomId == this.props.roomId) {
-            if (event.getType === "org.matrix.room.color_scheme") {
+            if (event.getType() === "org.matrix.room.color_scheme") {
                 var color_scheme = event.getContent();
                 // XXX: we should validate the event
                 console.log("Tinter.tint from onRoomAccountData");
                 Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+            }
+            else if (event.getType() === "org.matrix.room.preview_urls") {
+                _updatePreviewUrlVisibility(room);
             }
         }
     },
@@ -1523,6 +1566,7 @@ module.exports = React.createClass({
                 eventPixelOffset={this.props.eventPixelOffset}
                 onScroll={ this.onMessageListScroll }
                 onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
+                showUrlPreview = { this.state.showUrlPreview }
                 opacity={ this.props.opacity }
             />);
 

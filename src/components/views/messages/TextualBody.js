@@ -39,6 +39,9 @@ module.exports = React.createClass({
         /* link URL for the highlights */
         highlightLink: React.PropTypes.string,
 
+        /* should show URL previews for this event */
+        showUrlPreview: React.PropTypes.bool,
+
         /* callback for when our widget has loaded */
         onWidgetLoad: React.PropTypes.func,
     },
@@ -57,16 +60,18 @@ module.exports = React.createClass({
     componentDidMount: function() {
         linkifyElement(this.refs.content, linkifyMatrix.options);
 
-        var links = this.findLinks(this.refs.content.children);
-        if (links.length) {
-            this.setState({ links: links.map((link)=>{
-                return link.getAttribute("href");
-            })});
+        if (this.props.showUrlPreview) {
+            var links = this.findLinks(this.refs.content.children);
+            if (links.length) {
+                this.setState({ links: links.map((link)=>{
+                    return link.getAttribute("href");
+                })});
 
-            // lazy-load the hidden state of the preview widget from localstorage
-            if (global.localStorage) {
-                var hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
-                this.setState({ widgetHidden: hidden });
+                // lazy-load the hidden state of the preview widget from localstorage
+                if (global.localStorage) {
+                    var hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
+                    this.setState({ widgetHidden: hidden });
+                }
             }
         }
 
@@ -163,9 +168,11 @@ module.exports = React.createClass({
     render: function() {
         var mxEvent = this.props.mxEvent;
         var content = mxEvent.getContent();
-        var body = HtmlUtils.bodyToHtml(content, this.props.highlights,
-                                       {highlightLink: this.props.highlightLink});
+        var body = HtmlUtils.bodyToHtml(content, this.props.highlights, {});
 
+        if (this.props.highlightLink) {
+            body = <a href={ this.props.highlightLink }>{ body }</a>;
+        }
 
         var widgets;
         if (this.state.links.length && !this.state.widgetHidden) {

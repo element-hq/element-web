@@ -57,7 +57,7 @@ module.exports = React.createClass({
         data.primary_color = scheme.primary_color;
         data.secondary_color = scheme.secondary_color;
         data.index = this._getColorIndex(data);
-        
+
         if (data.index === -1) {
             // append the unrecognised colours to our palette
             data.index = ROOM_COLORS.length;

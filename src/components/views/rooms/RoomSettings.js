@@ -422,6 +422,7 @@ module.exports = React.createClass({
 
         var AliasSettings = sdk.getComponent("room_settings.AliasSettings");
         var ColorSettings = sdk.getComponent("room_settings.ColorSettings");
+        var UrlPreviewSettings = sdk.getComponent("room_settings.UrlPreviewSettings");
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
 
@@ -653,6 +654,8 @@ module.exports = React.createClass({
                     canSetAliases={ roomState.mayClientSendStateEvent("m.room.aliases", cli) }
                     canonicalAliasEvent={this.props.room.currentState.getStateEvents('m.room.canonical_alias', '')}
                     aliasEvents={this.props.room.currentState.getStateEvents('m.room.aliases')} />
+
+                <UrlPreviewSettings ref="url_preview_settings" room={this.props.room} />
 
                 <h3>Permissions</h3>
                 <div className="mx_RoomSettings_powerLevels mx_RoomSettings_settings">

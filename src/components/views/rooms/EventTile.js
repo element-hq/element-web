@@ -101,6 +101,9 @@ module.exports = React.createClass({
         /* link URL for the highlights */
         highlightLink: React.PropTypes.string,
 
+        /* should show URL previews for this event */
+        showUrlPreview: React.PropTypes.bool,
+
         /* is this the focused event */
         isSelectedEvent: React.PropTypes.bool,
 
@@ -420,6 +423,7 @@ module.exports = React.createClass({
                 <div className="mx_EventTile_line">
                     <EventTileType ref="tile" mxEvent={this.props.mxEvent} highlights={this.props.highlights}
                           highlightLink={this.props.highlightLink}
+                          showUrlPreview={this.props.showUrlPreview}
                           onWidgetLoad={this.props.onWidgetLoad} />
                 </div>
             </div>

@@ -44,6 +44,9 @@ module.exports = React.createClass({
         // ID of an event to highlight. If undefined, no event will be highlighted.
         highlightedEventId: React.PropTypes.string,
 
+        // Should we show URL Previews
+        showUrlPreview: React.PropTypes.bool,
+
         // event after which we should show a read marker
         readMarkerEventId: React.PropTypes.string,
 
@@ -365,6 +368,7 @@ module.exports = React.createClass({
                         onWidgetLoad={this._onWidgetLoad}
                         readReceipts={readReceipts}
                         readReceiptMap={this._readReceiptMap}
+                        showUrlPreview={this.props.showUrlPreview}
                         checkUnmounting={this._isUnmounting}
                         eventSendStatus={mxEv.status}
                         last={last} isSelectedEvent={highlight}/>

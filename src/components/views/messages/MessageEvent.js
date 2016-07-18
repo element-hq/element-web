@@ -38,6 +38,9 @@ module.exports = React.createClass({
         /* link URL for the highlights */
         highlightLink: React.PropTypes.string,
 
+        /* should show URL previews for this event */
+        showUrlPreview: React.PropTypes.bool,
+
         /* callback called when dynamic content in events are loaded */
         onWidgetLoad: React.PropTypes.func,
     },
@@ -71,6 +74,7 @@ module.exports = React.createClass({
 
         return <BodyType ref="body" mxEvent={this.props.mxEvent} highlights={this.props.highlights}
                     highlightLink={this.props.highlightLink}
+                    showUrlPreview={this.props.showUrlPreview}
                     onWidgetLoad={this.props.onWidgetLoad} />;
     },
 });
