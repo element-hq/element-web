@@ -413,14 +413,14 @@ module.exports = React.createClass({
         var roomStatePreviewUrls = room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
         if (roomStatePreviewUrls && roomStatePreviewUrls.disabled) {
             this.setState({
-                showUrlPreview: false;
+                showUrlPreview: false
             });
             return;
         }
 
         // otherwise, we assume they're on.
         this.setState({
-            showUrlPreview: true;
+            showUrlPreview: true
         });
     },
 
