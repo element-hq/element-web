@@ -65,7 +65,12 @@ module.exports = React.createClass({
             tags_changed: false,
             tags: tags,
             areNotifsMuted: areNotifsMuted,
-            isRoomPublished: false, // loaded async in componentWillMount
+            // isRoomPublished is loaded async in componentWillMount so when the component
+            // inits, the saved value will always be undefined, however getInitialState()
+            // is also called from the saving code so we must return the correct value here
+            // if we have it (although this could race if the user saves before we load whether
+            // the room is published or not).
+            isRoomPublished: this._originalIsRoomPublished,
         };
     },
 
