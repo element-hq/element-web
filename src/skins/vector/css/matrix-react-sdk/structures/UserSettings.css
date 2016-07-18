@@ -100,6 +100,16 @@ limitations under the License.
     margin-bottom: 28px;
 }
 
+.mx_UserSettings_toggle input {
+    width: 16px;
+    padding-right: 8px;
+    padding-bottom: 21px;
+}
+
+.mx_UserSettings_toggle label {
+    padding-bottom: 21px;
+}
+
 .mx_UserSettings_accountTable
 .mx_UserSettings_notifTable
 {
