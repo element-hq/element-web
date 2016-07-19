@@ -1,22 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="13px" height="13px" viewBox="0 0 13 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: sketchtool 3.8.3 (29802) - http://www.bohemiancoding.com/sketch -->
-    <title>1C068C28-66A7-48CD-BAA3-6E96EAC39CEF</title>
-    <desc>Created with sketchtool.</desc>
-    <defs>
-        <circle id="path-1" cx="5" cy="5" r="5"></circle>
-        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="10" height="10" fill="white">
-            <use xlink:href="#path-1"></use>
-        </mask>
-    </defs>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Room-list-Copy-3" transform="translate(-21.000000, -50.000000)" stroke="#76CFA6">
-            <g id="Room-list/Header">
-                <g id="icons_search-copy" transform="translate(21.000000, 50.000000)">
-                    <use id="Oval-29" mask="url(#mask-2)" stroke-width="2" xlink:href="#path-1"></use>
-                    <path d="M8.5,8.5 L12.0355339,12.0355339" id="Line" stroke-linecap="round" opacity="0.7"></path>
-                </g>
-            </g>
-        </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="13" height="13" viewBox="0, 0, 13, 13">
+  <g id="Symbols">
+    <g>
+      <path d="M10.463,5.781 C10.463,8.367 8.367,10.463 5.781,10.463 C3.196,10.463 1.099,8.367 1.099,5.781 C1.099,3.196 3.196,1.099 5.781,1.099 C8.367,1.099 10.463,3.196 10.463,5.781 z" fill-opacity="0" stroke="#76CFA6" stroke-width="2" id="path-1"/>
+      <path d="M9.059,9.059 L12.369,12.369" fill-opacity="0" stroke="#76CFA6" stroke-width="1" stroke-linecap="round" id="Line" opacity="0.7"/>
     </g>
+  </g>
 </svg>
