@@ -26,9 +26,9 @@ module.exports = React.createClass({
     propTypes: {
         // the room this statusbar is representing.
         room: React.PropTypes.object.isRequired,
-        
-        // a list of TabCompleteEntries.Entry objects
-        tabCompleteEntries: React.PropTypes.array,
+
+        // a TabComplete object
+        tabComplete: React.PropTypes.object.isRequired,
 
         // the number of messages which have arrived since we've been scrolled up
         numUnreadMessages: React.PropTypes.number,
@@ -208,11 +208,11 @@ module.exports = React.createClass({
             );
         }
 
-        if (this.props.tabCompleteEntries) {
+        if (this.props.tabComplete.isTabCompleting()) {
             return (
                 <div className="mx_RoomStatusBar_tabCompleteBar">
                     <div className="mx_RoomStatusBar_tabCompleteWrapper">
-                        <TabCompleteBar entries={this.props.tabCompleteEntries} />
+                        <TabCompleteBar tabComplete={this.props.tabComplete} />
                         <div className="mx_RoomStatusBar_tabCompleteEol" title="->|">
                             <TintableSvg src="img/eol.svg" width="22" height="16"/>
                             Auto-complete
@@ -233,7 +233,7 @@ module.exports = React.createClass({
                         <a className="mx_RoomStatusBar_resend_link"
                           onClick={ this.props.onResendAllClick }>
                             Resend all
-                        </a> or <a 
+                        </a> or <a
                           className="mx_RoomStatusBar_resend_link"
                           onClick={ this.props.onCancelAllClick }>
                             cancel all
@@ -247,7 +247,7 @@ module.exports = React.createClass({
         // unread count trumps who is typing since the unread count is only
         // set when you've scrolled up
         if (this.props.numUnreadMessages) {
-            var unreadMsgs = this.props.numUnreadMessages + " new message" + 
+            var unreadMsgs = this.props.numUnreadMessages + " new message" +
                 (this.props.numUnreadMessages > 1 ? "s" : "");
 
             return (
@@ -291,5 +291,5 @@ module.exports = React.createClass({
                 {content}
             </div>
         );
-    },  
+    },
 });

@@ -69,6 +69,7 @@ class Entry {
 class CommandEntry extends Entry {
     constructor(cmd, cmdWithArgs) {
         super(cmdWithArgs);
+        this.kind = 'command';
         this.cmd = cmd;
     }
 
@@ -95,6 +96,7 @@ class MemberEntry extends Entry {
     constructor(member) {
         super(member.name || member.userId);
         this.member = member;
+        this.kind = 'member';
     }
 
     getImageJsx() {
@@ -114,24 +116,7 @@ class MemberEntry extends Entry {
 }
 
 MemberEntry.fromMemberList = function(members) {
-    return members.sort(function(a, b) {
-        var userA = a.user;
-        var userB = b.user;
-        if (userA && !userB) {
-            return -1; // a comes first
-        }
-        else if (!userA && userB) {
-            return 1; // b comes first
-        }
-        else if (!userA && !userB) {
-            return 0; // don't care
-        }
-        else { // both User objects exist
-            var lastActiveAgoA = userA.lastActiveAgo || Number.MAX_SAFE_INTEGER;
-            var lastActiveAgoB = userB.lastActiveAgo || Number.MAX_SAFE_INTEGER;
-            return lastActiveAgoA - lastActiveAgoB;
-        }
-    }).map(function(m) {
+    return members.map(function(m) {
         return new MemberEntry(m);
     });
 }
