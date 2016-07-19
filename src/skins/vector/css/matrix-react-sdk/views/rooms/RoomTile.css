@@ -75,8 +75,8 @@ limitations under the License.
     width: 0;
     height: 0;
     margin-left: 7px;
-	border-top: 8px solid #ff0064;
-	border-right: 10px solid transparent;
+    border-top: 8px solid #ff0064;
+    border-right: 10px solid transparent;
 }
 
 /* Because the specificity of this and the above ".mx_RoomTile_highlight .mx_RoomTile_badge:after"
