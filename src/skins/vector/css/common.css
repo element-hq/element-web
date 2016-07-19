@@ -189,7 +189,7 @@ input[type=text]:focus, textarea:focus {
 .mx_Dialog_content {
     margin: 24px 58px 68px 0;
     font-size: 14px;
-	color: #4a4a4a;
+    color: #4a4a4a;
     word-wrap: break-word;
 }
 

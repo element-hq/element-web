@@ -61,21 +61,43 @@ limitations under the License.
 .collapsed .mx_RoomTile_badge {
     margin-top: -15px;
     right: 7px;
+    min-width: 12px;
+    height: 16px;
+    border-radius: 16px;
+    padding: 0px 4px 0px 4px;
+    z-index: 200;
+}
+
+.mx_RoomTile_highlight .mx_RoomTile_badge:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    margin-left: 7px;
+    border-top: 8px solid #ff0064;
+    border-right: 10px solid transparent;
+}
+
+/* Because the specificity of this and the above ".mx_RoomTile_highlight .mx_RoomTile_badge:after"
+style are the same, this style needs to be AFTER it to take effect when matched */
+.collapsed .mx_RoomTile_badge:after {
+    display: none;
 }
 
 .mx_RoomTile_badge {
-    min-width: 12px;
-    height: 16px;
+    min-width: 15px;
+    height: 18px;
     position: absolute;
     right: 16px;
     top: 50%;
     margin-top: -8px;
-    border-radius: 16px;
+    border-radius: 18px;
     color: #fff;
     font-weight: bold;
     font-size: 11px;
     text-align: center;
-    padding: 0px 4px 0px 4px;
+    padding: 2px 6px 0px 5px;
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
