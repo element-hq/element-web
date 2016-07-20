@@ -48,11 +48,13 @@ class PasswordReset {
      */
     resetPassword(emailAddress, newPassword) {
         this.password = newPassword;
-        return this.client.requestEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
+        return this.client.requestPasswordEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
             this.sessionId = res.sid;
             return res;
         }, function(err) {
-            if (err.httpStatus) {
+            if (err.errcode == 'M_THREEPID_NOT_FOUND') {
+                 err.message = "This email address was not found";
+            } else if (err.httpStatus) {
                 err.message = err.message + ` (Status ${err.httpStatus})`;
             }
             throw err;
