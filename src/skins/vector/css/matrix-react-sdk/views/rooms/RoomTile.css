@@ -38,7 +38,7 @@ limitations under the License.
     vertical-align: middle;
     overflow: hidden;
     word-break: break-word;
-    padding-left: 15px;
+    padding-left: 11px;
     padding-right: 15px;
     color: rgba(69, 69, 69, 0.8);
 }
@@ -57,8 +57,12 @@ limitations under the License.
     display: none;
 }
 
+.collapsed .mx_RoomTile {
+    height: 36px;
+}
+
 .collapsed .mx_RoomTile_badge {
-    bottom: 40px;
+    top: -40px;
     left: 30px;
     min-width: 12px;
     height: 16px;
@@ -87,19 +91,24 @@ style are the same, this style needs to be AFTER it to take effect when matched 
 
 .mx_RoomTile_badge {
     display: inline-block;
-    min-width: 12px;
+    min-width: 14px;
     height: 18px;
     position: relative;
-    right: 4px;
-    top: 50%;
+    left: 8px;
+    top: 2px;
     border-radius: 18px;
     color: #fff;
     font-weight: bold;
     font-size: 11px;
     text-align: center;
     padding-top: 2px;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.mx_RoomTile_badge:hover {
+    letter-spacing: 0.1em;
+    opacity: 1;
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
@@ -110,8 +119,9 @@ style are the same, this style needs to be AFTER it to take effect when matched 
     background-color: #ff0064;
 }
 
-.mx_RoomTile_badge.mx_RoomTile_badge_no_unread {
-    background-color: rgba(74, 73, 74, 0.2);
+.mx_RoomTile_badge_no_unread {
+    background-color: rgb(214, 214, 214);
+    opacity: 0;
 }
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
