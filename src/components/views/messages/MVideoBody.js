@@ -34,7 +34,7 @@ module.exports = React.createClass({
         }
         if (fullWidth < thumbWidth && fullHeight < thumbHeight) {
             // no scaling needs to be applied
-            return fullHeight;
+            return 1;
         }
         var widthMulti = thumbWidth / fullWidth;
         var heightMulti = thumbHeight / fullHeight;
