@@ -19,27 +19,26 @@ limitations under the License.
     /* This fixes wrapping of long room names, but breaks drag & drop previews */
     /* display: table-row; */
     font-size: 13px;
-    position: relative;
+    display: block;
 }
 
 .mx_RoomTile_avatar {
-    display: table-cell;
-    padding-right: 11px;
+    display: inline-block;
     padding-top: 6px;
     padding-bottom: 6px;
     padding-left: 18px;
     width: 24px;
     height: 24px;
-    position: relative;
     vertical-align: middle;
 }
 
 .mx_RoomTile_name {
-    display: table-cell;
-    width: 100%;
+    display: inline-block;
+    width: 100px;
     vertical-align: middle;
     overflow: hidden;
     word-break: break-word;
+    padding-left: 15px;
     padding-right: 15px;
     color: rgba(69, 69, 69, 0.8);
 }
@@ -59,8 +58,8 @@ limitations under the License.
 }
 
 .collapsed .mx_RoomTile_badge {
-    margin-top: -15px;
-    right: 7px;
+    bottom: 40px;
+    left: 30px;
     min-width: 12px;
     height: 16px;
     border-radius: 16px;
@@ -68,13 +67,14 @@ limitations under the License.
     z-index: 200;
 }
 
+/* This is the bottom of the speech bubble */
 .mx_RoomTile_highlight .mx_RoomTile_badge:after {
     content: "";
     position: absolute;
     display: block;
     width: 0;
     height: 0;
-    margin-left: 7px;
+    margin-left: 4px;
     border-top: 8px solid #ff0064;
     border-right: 10px solid transparent;
 }
@@ -86,18 +86,20 @@ style are the same, this style needs to be AFTER it to take effect when matched 
 }
 
 .mx_RoomTile_badge {
-    min-width: 15px;
+    display: inline-block;
+    min-width: 12px;
     height: 18px;
-    position: absolute;
-    right: 16px;
+    position: relative;
+    right: 4px;
     top: 50%;
-    margin-top: -8px;
     border-radius: 18px;
     color: #fff;
     font-weight: bold;
     font-size: 11px;
     text-align: center;
-    padding: 2px 6px 0px 5px;
+    padding-top: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
@@ -108,24 +110,12 @@ style are the same, this style needs to be AFTER it to take effect when matched 
     background-color: #ff0064;
 }
 
-.mx_RoomTile_unread,
-.mx_RoomTile_highlight {
+.mx_RoomTile_badge.mx_RoomTile_badge_no_unread {
+    background-color: rgba(74, 73, 74, 0.2);
+}
+
+.mx_RoomTile_unread, .mx_RoomTile_highlight {
     font-weight: bold;
-}
-
-/* the inner highlight span has 4px of padding on it, so we shrink the _avatar by 4px and grow the _name by 4px to fit it in */
-.mx_RoomTile_selected .mx_RoomTile_name {
-    padding-right: 19px;
-}
-.mx_RoomTile_selected .mx_RoomTile_avatar {
-    padding-right: 7px;
-}
-
-/* leave room for the badge, if present.
-   N.B. this has to come after the above _selected width tweaks */
-.mx_RoomTile_unreadNotify .mx_RoomTile_name,
-.mx_RoomTile_highlight .mx_RoomTile_name {
-    padding-right: 40px;
 }
 
 .mx_RoomTile_selected .mx_RoomTile_name span {
@@ -137,12 +127,6 @@ style are the same, this style needs to be AFTER it to take effect when matched 
     margin-bottom: -4px;
     border-radius: 2px;
     background-color: rgba(118,207,166,0.2);
-}
-
-/* stop the span from overlapping with the badge */
-.mx_RoomTile_unreadNotify.mx_RoomTile_selected .mx_RoomTile_name span,
-.mx_RoomTile_highlight.mx_RoomTile_selected .mx_RoomTile_name span {
-    padding-right: 22px;
 }
 
 .mx_RoomTile_arrow {
