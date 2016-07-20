@@ -120,7 +120,7 @@ module.exports = {
 
     setUrlPreviewsDisabled: function(disabled) {
         // FIXME: handle errors
-        MatrixClientPeg.get().setAccountData("org.matrix.preview_urls", {
+        return MatrixClientPeg.get().setAccountData("org.matrix.preview_urls", {
             disable: disabled
         });
     },
@@ -139,7 +139,7 @@ module.exports = {
         var settings = this.getSyncedSettings();
         settings[type] = value;
         // FIXME: handle errors
-        MatrixClientPeg.get().setAccountData("im.vector.web.settings", settings);
+        return MatrixClientPeg.get().setAccountData("im.vector.web.settings", settings);
     },
 
     isFeatureEnabled: function(feature: string): boolean {

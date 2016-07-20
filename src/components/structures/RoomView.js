@@ -138,6 +138,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
+        MatrixClientPeg.get().on("accountData", this.onAccountData);
 
         this.tabComplete = new TabComplete({
             allowLooping: false,
@@ -458,6 +459,12 @@ module.exports = React.createClass({
         }
         console.log("Tinter.tint from updateTint");
         Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+    },
+
+    onAccountData: function(event) {
+        if (event.getType() === "org.matrix.preview_urls" && this.state.room) {
+            this._updatePreviewUrlVisibility(this.state.room);
+        }
     },
 
     onRoomAccountData: function(event, room) {
