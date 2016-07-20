@@ -214,9 +214,10 @@ module.exports = React.createClass({
                 onFinished: this.onEmailDialogFinished,
             });
         }, (err) => {
+            this.setState({email_add_pending: false});
             Modal.createDialog(ErrorDialog, {
                 title: "Unable to add email address",
-                description: err.toString()
+                description: err.message
             });
         });
         ReactDOM.findDOMNode(this.refs.add_threepid_input).blur();

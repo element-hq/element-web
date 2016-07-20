@@ -38,11 +38,13 @@ class AddThreepid {
      */
     addEmailAddress(emailAddress, bind) {
         this.bind = bind;
-        return MatrixClientPeg.get().requestEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
+        return MatrixClientPeg.get().requestAdd3pidEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
             this.sessionId = res.sid;
             return res;
         }, function(err) {
-            if (err.httpStatus) {
+            if (err.errcode == 'M_THREEPID_IN_USE') {
+                err.message = "This email address is already in use";
+            } else if (err.httpStatus) {
                 err.message = err.message + ` (Status ${err.httpStatus})`;
             }
             throw err;
