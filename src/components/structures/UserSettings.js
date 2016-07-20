@@ -262,6 +262,63 @@ module.exports = React.createClass({
         });
     },
 
+    _renderUserInterfaceSettings: function() {
+        var client = MatrixClientPeg.get();
+
+        var settingsLabels = [
+        /*
+            {
+                id: 'alwaysShowTimestamps',
+                label: 'Always show message timestamps',
+            },
+            {
+                id: 'showTwelveHourTimestamps',
+                label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
+            },
+            {
+                id: 'useCompactLayout',
+                label: 'Use compact timeline layout',
+            },
+            {
+                id: 'useFixedWidthFont',
+                label: 'Use fixed width font',
+            },
+        */
+        ];
+
+        var syncedSettings = UserSettingsStore.getSyncedSettings();
+
+        return (
+            <div>
+                <h3>User Interface</h3>
+                <div className="mx_UserSettings_section">
+                    <div className="mx_UserSettings_toggle">
+                        <input id="urlPreviewsDisabled"
+                               type="checkbox"
+                               defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
+                               onChange={ e => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
+                        />
+                        <label htmlFor="urlPreviewsDisabled">
+                            Disable inline URL previews by default
+                        </label>
+                    </div>
+                </div>
+                { settingsLabels.forEach( setting => {
+                    <div className="mx_UserSettings_toggle">
+                        <input id={ setting.id }
+                               type="checkbox"
+                               defaultChecked={ syncedSettings[setting.id] }
+                               onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
+                        />
+                        <label htmlFor={ setting.id }>
+                            { settings.label }
+                        </label>
+                    </div>
+                })}
+            </div>
+        );
+    },
+
     _renderDeviceInfo: function() {
         if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
             return null;
@@ -379,7 +436,7 @@ module.exports = React.createClass({
 
         this._renderLabs = function () {
             let features = LABS_FEATURES.map(feature => (
-                <div key={feature.id}>
+                <div key={feature.id} className="mx_UserSettings_toggle">
                     <input
                            type="checkbox"
                            id={feature.id}
@@ -452,6 +509,8 @@ module.exports = React.createClass({
                 </div>
 
                 {notification_area}
+
+                {this._renderUserInterfaceSettings()}
 
                 {this._renderDeviceInfo()}
 

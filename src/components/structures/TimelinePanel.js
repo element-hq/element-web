@@ -71,6 +71,9 @@ var TimelinePanel = React.createClass({
         // half way down the viewport.
         eventPixelOffset: React.PropTypes.number,
 
+        // Should we show URL Previews
+        showUrlPreview: React.PropTypes.bool,
+
         // callback which is called when the panel is scrolled.
         onScroll: React.PropTypes.func,
 
@@ -934,6 +937,7 @@ var TimelinePanel = React.createClass({
                     readMarkerEventId={ this.state.readMarkerEventId }
                     readMarkerVisible={ this.state.readMarkerVisible }
                     suppressFirstDateSeparator={ this.state.canBackPaginate }
+                    showUrlPreview = { this.props.showUrlPreview }
                     ourUserId={ MatrixClientPeg.get().credentials.userId }
                     stickyBottom={ stickyBottom }
                     onScroll={ this.onMessageListScroll }

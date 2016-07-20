@@ -186,7 +186,7 @@ module.exports = {
      *
      * highlights: optional list of words to highlight, ordered by longest word first
      *
-     * opts.highlightLink: optional href to add to highlights
+     * opts.highlightLink: optional href to add to highlighted words
      */
     bodyToHtml: function(content, highlights, opts) {
         opts = opts || {};
