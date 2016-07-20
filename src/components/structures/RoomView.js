@@ -396,7 +396,7 @@ module.exports = React.createClass({
     },
 
     _updatePreviewUrlVisibility: function(room) {
-        console.log("_updatePreviewUrlVisibility");
+        // console.log("_updatePreviewUrlVisibility");
 
         // check our per-room overrides
         var roomPreviewUrls = room.getAccountData("org.matrix.room.preview_urls");
