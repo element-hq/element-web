@@ -98,7 +98,7 @@ module.exports = React.createClass({
         var badgeClasses;
 
         if (this.state.badgeHover) {
-            badgeContent = "\u00B7 \u00B7 \u00B7";
+            badgeContent = "\u00B7\u00B7\u00B7";
         } else if (this.props.highlight || notificationCount > 0) {
             badgeContent = notificationCount ? notificationCount : '!';
         } else {
@@ -106,7 +106,7 @@ module.exports = React.createClass({
         }
 
         if (this.props.highlight || notificationCount > 0) {
-            badgeClasses = "mx_RoomTile_badge"
+            badgeClasses = "mx_RoomTile_badge";
         } else {
             badgeClasses = "mx_RoomTile_badge mx_RoomTile_badge_no_unread";
         }
