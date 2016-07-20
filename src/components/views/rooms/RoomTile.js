@@ -95,14 +95,24 @@ module.exports = React.createClass({
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
         var badge;
         var badgeContent;
-        if (this.props.highlight || notificationCount > 0) {
-            if (this.state.badgeHover) {
-                badgeContent = "\u00B7 \u00B7 \u00B7";
-            } else {
-                badgeContent = notificationCount ? notificationCount : '!';
-            }
-            badge = <div className="mx_RoomTile_badge" onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
+        var badgeClasses;
+
+        if (this.state.badgeHover) {
+            badgeContent = "\u00B7\u00B7\u00B7";
+        } else if (this.props.highlight || notificationCount > 0) {
+            badgeContent = notificationCount ? notificationCount : '!';
+        } else {
+            badgeContent = '\u200B';
         }
+
+        if (this.props.highlight || notificationCount > 0) {
+            badgeClasses = "mx_RoomTile_badge";
+        } else {
+            badgeClasses = "mx_RoomTile_badge mx_RoomTile_badge_no_unread";
+        }
+
+        badge = <div className={ badgeClasses } onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
+
         /*
         if (this.props.highlight) {
             badge = <div className="mx_RoomTile_badge">!</div>;
