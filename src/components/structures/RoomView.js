@@ -1557,7 +1557,7 @@ module.exports = React.createClass({
             hideMessagePanel = true;
         }
 
-        console.log("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
+        // console.log("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
 
         var messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
