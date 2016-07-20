@@ -59,8 +59,32 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         linkifyElement(this.refs.content, linkifyMatrix.options);
+        this.calculateUrlPreview();
 
-        if (this.props.showUrlPreview) {
+        if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
+            HtmlUtils.highlightDom(ReactDOM.findDOMNode(this));
+    },
+
+    componentDidUpdate: function() {
+        this.calculateUrlPreview();
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+        //console.log("shouldComponentUpdate: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
+
+        // exploit that events are immutable :)
+        return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
+                nextProps.highlights !== this.props.highlights ||
+                nextProps.highlightLink !== this.props.highlightLink ||
+                nextProps.showUrlPreview !== this.props.showUrlPreview ||
+                nextState.links !== this.state.links ||
+                nextState.widgetHidden !== this.state.widgetHidden);
+    },
+
+    calculateUrlPreview: function() {
+        //console.log("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
+
+        if (this.props.showUrlPreview && !this.state.links.length) {
             var links = this.findLinks(this.refs.content.children);
             if (links.length) {
                 this.setState({ links: links.map((link)=>{
@@ -74,19 +98,6 @@ module.exports = React.createClass({
                 }
             }
         }
-
-        if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
-            HtmlUtils.highlightDom(ReactDOM.findDOMNode(this));
-    },
-
-    shouldComponentUpdate: function(nextProps, nextState) {
-        // exploit that events are immutable :)
-        // ...and that .links is only ever set in componentDidMount and never changes
-        return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
-                nextProps.highlights !== this.props.highlights ||
-                nextProps.highlightLink !== this.props.highlightLink ||
-                nextState.links !== this.state.links ||
-                nextState.widgetHidden !== this.state.widgetHidden);
     },
 
     findLinks: function(nodes) {
@@ -175,7 +186,7 @@ module.exports = React.createClass({
         }
 
         var widgets;
-        if (this.state.links.length && !this.state.widgetHidden) {
+        if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
             var LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
             widgets = this.state.links.map((link)=>{
                 return <LinkPreviewWidget

@@ -211,10 +211,13 @@ module.exports = React.createClass({
         // color scheme
         promises.push(this.saveColor());
 
+        // url preview settings
+        promises.push(this.saveUrlPreviewSettings());
+
         // encryption
         promises.push(this.saveEncryption());
 
-        console.log("Performing %s operations", promises.length);
+        console.log("Performing %s operations: %s", promises.length, JSON.stringify(promises));
         return q.allSettled(promises);
     },
 
@@ -226,6 +229,11 @@ module.exports = React.createClass({
     saveColor: function() {
         if (!this.refs.color_settings) { return q(); }
         return this.refs.color_settings.saveSettings();
+    },
+
+    saveUrlPreviewSettings: function() {
+        if (!this.refs.url_preview_settings) { return q(); }
+        return this.refs.url_preview_settings.saveSettings();
     },
 
     saveEncryption: function () {

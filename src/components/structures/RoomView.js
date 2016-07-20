@@ -239,8 +239,6 @@ module.exports = React.createClass({
             MatrixClientPeg.get().stopPeeking();
             this._onRoomLoaded(this.state.room);
         }
-
-        this._updatePreviewUrlVisibility(this.state.room);
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -372,6 +370,7 @@ module.exports = React.createClass({
     // after a successful peek, or after we join the room).
     _onRoomLoaded: function(room) {
         this._calculatePeekRules(room);
+        this._updatePreviewUrlVisibility(room);
     },
 
     _calculatePeekRules: function(room) {
@@ -391,18 +390,20 @@ module.exports = React.createClass({
     },
 
     _updatePreviewUrlVisibility: function(room) {
+        console.log("_updatePreviewUrlVisibility");
+
         // check our per-room overrides
         var roomPreviewUrls = room.getAccountData("org.matrix.room.preview_urls");
-        if (roomPreviewUrls && roomPreviewUrls.disabled !== undefined) {
+        if (roomPreviewUrls && roomPreviewUrls.getContent().disable !== undefined) {
             this.setState({
-                showUrlPreview: !roomPreviewUrls.disabled
+                showUrlPreview: !roomPreviewUrls.getContent().disable
             });
             return;
         }
 
         // check our global disable override
-        var userRoomPreviewUrls = MatrixClientPeg().get().getAccountData("org.matrix.preview_urls");
-        if (userRoomPreviewUrls && userRoomPreviewUrls.disabled) {
+        var userRoomPreviewUrls = MatrixClientPeg.get().getAccountData("org.matrix.preview_urls");
+        if (userRoomPreviewUrls && userRoomPreviewUrls.getContent().disable) {
             this.setState({
                 showUrlPreview: false
             });
@@ -411,7 +412,7 @@ module.exports = React.createClass({
 
         // check the room state event
         var roomStatePreviewUrls = room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
-        if (roomStatePreviewUrls && roomStatePreviewUrls.disabled) {
+        if (roomStatePreviewUrls && roomStatePreviewUrls.getContent().disable) {
             this.setState({
                 showUrlPreview: false
             });
@@ -454,8 +455,8 @@ module.exports = React.createClass({
         Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
     },
 
-    onRoomAccountData: function(room, event) {
-        if (room.roomId == this.props.roomId) {
+    onRoomAccountData: function(event, room) {
+        if (room.roomId == this.state.roomId) {
             if (event.getType() === "org.matrix.room.color_scheme") {
                 var color_scheme = event.getContent();
                 // XXX: we should validate the event
@@ -463,7 +464,7 @@ module.exports = React.createClass({
                 Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
             else if (event.getType() === "org.matrix.room.preview_urls") {
-                _updatePreviewUrlVisibility(room);
+                this._updatePreviewUrlVisibility(room);
             }
         }
     },
@@ -1556,6 +1557,8 @@ module.exports = React.createClass({
             );
             hideMessagePanel = true;
         }
+
+        console.log("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
 
         var messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}

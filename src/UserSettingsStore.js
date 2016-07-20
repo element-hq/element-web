@@ -115,7 +115,7 @@ module.exports = {
 
     getUrlPreviewsDisabled: function() {
         var event = MatrixClientPeg.get().getAccountData("org.matrix.preview_urls");
-        return (event && event.disable);
+        return (event && event.getContent().disable);
     },
 
     setUrlPreviewsDisabled: function(disabled) {
@@ -126,7 +126,8 @@ module.exports = {
     },
 
     getSyncedSettings: function() {
-        return MatrixClientPeg.get().getAccountData("im.vector.web.settings") || {};
+        var event = MatrixClientPeg.get().getAccountData("im.vector.web.settings");
+        return event ? event.getContent() : {};
     },
 
     getSyncedSetting: function(type) {
