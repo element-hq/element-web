@@ -108,7 +108,7 @@ limitations under the License.
     padding-right: 4px;
 }
 
-.mx_RoomTile .mx_RoomTile_badge:hover {
+.mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton {
     letter-spacing: 0.1em;
     opacity: 1;
 }
