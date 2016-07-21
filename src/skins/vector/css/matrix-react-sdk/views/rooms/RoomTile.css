@@ -27,6 +27,7 @@ limitations under the License.
     padding-top: 6px;
     padding-bottom: 6px;
     padding-left: 18px;
+    padding-right: 6px;
     width: 24px;
     height: 24px;
     vertical-align: middle;
@@ -38,8 +39,10 @@ limitations under the License.
     vertical-align: middle;
     overflow: hidden;
     word-break: break-word;
-    padding-left: 11px;
+    padding-left: 5px;
     padding-right: 15px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     color: rgba(69, 69, 69, 0.8);
 }
 
@@ -128,14 +131,7 @@ style are the same, this style needs to be AFTER it to take effect when matched 
     font-weight: bold;
 }
 
-.mx_RoomTile_selected .mx_RoomTile_name span {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding: 4px;
-    margin-top: -4px;
-    margin-bottom: -4px;
-    border-radius: 2px;
+.mx_RoomTile_selected .mx_RoomTile_name {
     background-color: rgba(118,207,166,0.2);
 }
 
