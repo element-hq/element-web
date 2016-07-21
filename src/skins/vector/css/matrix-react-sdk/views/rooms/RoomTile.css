@@ -94,16 +94,16 @@ limitations under the License.
 .mx_RoomTile_badge {
     display: inline-block;
     min-width: 14px;
-    height: 18px;
+    height: 17px;
     position: relative;
     left: 8px;
     top: 2px;
-    border-radius: 18px;
+    border-radius: 14px;
     color: #fff;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 11px;
     text-align: center;
-    padding-top: 2px;
+    padding-top: 1px;
     padding-left: 4px;
     padding-right: 4px;
 }
