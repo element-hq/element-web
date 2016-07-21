@@ -21,6 +21,7 @@ var classNames = require('classnames');
 var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
+var ContextualMenu = require('../../../ContextualMenu');
 import {emojifyText} from '../../../HtmlUtils';
 
 module.exports = React.createClass({
@@ -46,6 +47,7 @@ module.exports = React.createClass({
         return({
             hover : false,
             badgeHover : false,
+            menu: false,
         });
     },
 
@@ -70,6 +72,22 @@ module.exports = React.createClass({
 
     badgeOnMouseLeave: function() {
         this.setState( { badgeHover : false } );
+    },
+
+    onBadgeClicked: function(e) {
+        var Label = sdk.getComponent('elements.Label');
+        var elementRect = e.target.getBoundingClientRect();
+        var x = elementRect.right;
+        var y = elementRect.height + (elementRect.height / 2);
+        var self = this;
+        ContextualMenu.createMenu(Label, {
+            left: x,
+            top: y,
+            onFinished: function() {
+                self.setState({menu: false});
+            }
+        });
+        this.setState({menu: true});
     },
 
     render: function() {
@@ -111,7 +129,7 @@ module.exports = React.createClass({
             badgeClasses = "mx_RoomTile_badge mx_RoomTile_badge_no_unread";
         }
 
-        badge = <div className={ badgeClasses } onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
+        badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
 
         /*
         if (this.props.highlight) {
@@ -160,9 +178,9 @@ module.exports = React.createClass({
         var connectDropTarget = this.props.connectDropTarget;
 
         return connectDragSource(connectDropTarget(
-            <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <div className={classes} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className="mx_RoomTile_avatar">
-                    <RoomAvatar room={this.props.room} width={24} height={24} />
+                    <RoomAvatar onClick={this.onClick} room={this.props.room} width={24} height={24} />
                 </div>
                 { label }
                 { badge }
