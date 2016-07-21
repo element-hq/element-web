@@ -341,7 +341,12 @@ class TabComplete {
             }
 
             if (a.kind == 'member') {
-                return this.memberTabOrder[b.member.userId] - this.memberTabOrder[a.member.userId];
+                let orderA = this.memberTabOrder[a.member.userId];
+                let orderB = this.memberTabOrder[b.member.userId];
+                if (orderA === undefined) orderA = -1;
+                if (orderB === undefined) orderB = -1;
+
+                return orderB - orderA;
             }
 
             // anything else we have no ordering for
