@@ -56,12 +56,12 @@ limitations under the License.
 */
 }
 
-.collapsed .mx_RoomTile_name {
-    display: none;
-}
-
 .collapsed .mx_RoomTile {
     height: 36px;
+}
+
+.collapsed .mx_RoomTile_name {
+    display: none;
 }
 
 .collapsed .mx_RoomTile_badge {
@@ -74,6 +74,11 @@ limitations under the License.
     z-index: 200;
 }
 
+/* Hide the bottom of speech bubble */
+.collapsed .mx_RoomTile_highlight .mx_RoomTile_badge:after {
+    display: none;
+}
+
 /* This is the bottom of the speech bubble */
 .mx_RoomTile_highlight .mx_RoomTile_badge:after {
     content: "";
@@ -84,12 +89,6 @@ limitations under the License.
     margin-left: 4px;
     border-top: 8px solid #ff0064;
     border-right: 10px solid transparent;
-}
-
-/* Because the specificity of this and the above ".mx_RoomTile_highlight .mx_RoomTile_badge:after"
-style are the same, this style needs to be AFTER it to take effect when matched */
-.collapsed .mx_RoomTile_badge:after {
-    display: none;
 }
 
 .mx_RoomTile_badge {
@@ -109,7 +108,7 @@ style are the same, this style needs to be AFTER it to take effect when matched 
     padding-right: 4px;
 }
 
-.mx_RoomTile_badge:hover {
+.mx_RoomTile .mx_RoomTile_badge:hover {
     letter-spacing: 0.1em;
     opacity: 1;
 }
@@ -122,7 +121,7 @@ style are the same, this style needs to be AFTER it to take effect when matched 
     background-color: #ff0064;
 }
 
-.mx_RoomTile_badge_no_unread {
+.mx_RoomTile_read .mx_RoomTile_badge {
     background-color: rgb(214, 214, 214);
     opacity: 0;
 }
