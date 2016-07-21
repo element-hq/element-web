@@ -84,6 +84,7 @@ module.exports = React.createClass({
             'mx_RoomTile_selected': this.props.selected,
             'mx_RoomTile_unread': this.props.unread,
             'mx_RoomTile_unreadNotify': notificationCount > 0,
+            'mx_RoomTile_read': !(this.props.highlight || notificationCount > 0),
             'mx_RoomTile_highlight': this.props.highlight,
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
         });
@@ -91,11 +92,10 @@ module.exports = React.createClass({
         // XXX: We should never display raw room IDs, but sometimes the
         // room name js sdk gives is undefined (cannot repro this -- k)
         var name = this.props.room.name || this.props.room.roomId;
-
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
+
         var badge;
         var badgeContent;
-        var badgeClasses;
 
         if (this.state.badgeHover) {
             badgeContent = "\u00B7\u00B7\u00B7";
@@ -105,29 +105,7 @@ module.exports = React.createClass({
             badgeContent = '\u200B';
         }
 
-        if (this.props.highlight || notificationCount > 0) {
-            badgeClasses = "mx_RoomTile_badge";
-        } else {
-            badgeClasses = "mx_RoomTile_badge mx_RoomTile_badge_no_unread";
-        }
-
-        badge = <div className={ badgeClasses } onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
-
-        /*
-        if (this.props.highlight) {
-            badge = <div className="mx_RoomTile_badge">!</div>;
-        }
-        else if (this.props.unread) {
-            badge = <div className="mx_RoomTile_badge">1</div>;
-        }
-        var nameCell;
-        if (badge) {
-            nameCell = <div className="mx_RoomTile_nameBadge"><div className="mx_RoomTile_name">{name}</div><div className="mx_RoomTile_badgeCell">{badge}</div></div>;
-        }
-        else {
-            nameCell = <div className="mx_RoomTile_name">{name}</div>;
-        }
-        */
+        badge = <div className="mx_RoomTile_badge" onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
 
         var label;
         if (!this.props.collapsed) {
