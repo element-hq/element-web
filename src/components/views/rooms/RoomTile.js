@@ -97,6 +97,11 @@ module.exports = React.createClass({
         var badge;
         var badgeContent;
 
+        var badgeClasses = classNames({
+            'mx_RoomTile_badge': true,
+            'mx_RoomTile_badgeButton': this.state.badgeHover,
+        });
+
         if (this.state.badgeHover) {
             badgeContent = "\u00B7\u00B7\u00B7";
         } else if (this.props.highlight || notificationCount > 0) {
@@ -105,7 +110,7 @@ module.exports = React.createClass({
             badgeContent = '\u200B';
         }
 
-        badge = <div className="mx_RoomTile_badge" onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
+        badge = <div className={ badgeClasses } onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
 
         var label;
         if (!this.props.collapsed) {
@@ -113,9 +118,9 @@ module.exports = React.createClass({
             let nameHTML = emojifyText(name);
             if (this.props.selected) {
                 name = <span dangerouslySetInnerHTML={nameHTML}></span>;
-                label = <div className={ className }>{ name }</div>;
+                label = <div onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className }>{ name }</div>;
             } else {
-                label = <div className={ className } dangerouslySetInnerHTML={nameHTML}></div>;
+                label = <div onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className } dangerouslySetInnerHTML={nameHTML}></div>;
             }
         }
         else if (this.state.hover) {
@@ -138,9 +143,9 @@ module.exports = React.createClass({
         var connectDropTarget = this.props.connectDropTarget;
 
         return connectDragSource(connectDropTarget(
-            <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <div className={classes} onClick={this.onClick}>
                 <div className="mx_RoomTile_avatar">
-                    <RoomAvatar room={this.props.room} width={24} height={24} />
+                    <RoomAvatar room={this.props.room} width={24} height={24} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}/>
                 </div>
                 { label }
                 { badge }
