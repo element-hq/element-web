@@ -35,6 +35,7 @@ module.exports.components['structures.RoomSubList'] = require('./components/stru
 module.exports.components['structures.SearchBox'] = require('./components/structures/SearchBox');
 module.exports.components['structures.ViewSource'] = require('./components/structures/ViewSource');
 module.exports.components['views.elements.ImageView'] = require('./components/views/elements/ImageView');
+module.exports.components['views.elements.Label'] = require('./components/views/elements/Label');
 module.exports.components['views.elements.Spinner'] = require('./components/views/elements/Spinner');
 module.exports.components['views.globals.GuestWarningBar'] = require('./components/views/globals/GuestWarningBar');
 module.exports.components['views.globals.MatrixToolbar'] = require('./components/views/globals/MatrixToolbar');
