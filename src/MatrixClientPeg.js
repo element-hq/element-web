@@ -17,7 +17,6 @@ limitations under the License.
 'use strict';
 
 import Matrix from 'matrix-js-sdk';
-import GuestAccess from './GuestAccess';
 
 const localStorage = window.localStorage;
 
@@ -32,12 +31,15 @@ function deviceId() {
     return id;
 }
 
-// A thing that holds your Matrix Client
-// Also magically works across sessions through the power of localstorage
+/**
+ * Wrapper object for handling the js-sdk Matrix Client object in the react-sdk
+ * Handles the creation/initialisation of client objects.
+ * This module provides a singleton instance of this class so the 'current'
+ * Matrix Client object is available easily.
+ */
 class MatrixClientPeg {
-    constructor(guestAccess) {
+    constructor() {
         this.matrixClient = null;
-        this.guestAccess = guestAccess;
     }
 
     get(): MatrixClient {
@@ -48,15 +50,19 @@ class MatrixClientPeg {
         this.matrixClient = null;
     }
 
+    /**
+     * Replace this MatrixClientPeg's client with a client instance that has
+     * Home Server / Identity Server URLs but no credentials
+     */
     replaceUsingUrls(hs_url, is_url) {
-        this.replaceClient(hs_url, is_url);
+        this.replaceUsingAccessToken(hs_url, is_url);
     }
 
+    /**
+     * Replace this MatrixClientPeg's client with a client instance that has
+     * Home Server / Identity Server URLs and active credentials
+     */
     replaceUsingAccessToken(hs_url, is_url, user_id, access_token, isGuest) {
-        this.replaceClient(hs_url, is_url, user_id, access_token, isGuest);
-    }
-
-    replaceClient(hs_url, is_url, user_id, access_token, isGuest) {
         if (localStorage) {
             try {
                 localStorage.clear();
@@ -64,15 +70,20 @@ class MatrixClientPeg {
                 console.warn("Error clearing local storage", e);
             }
         }
-        this.guestAccess.markAsGuest(Boolean(isGuest));
         this._createClient(hs_url, is_url, user_id, access_token);
+        this.matrixClient.setGuest(Boolean(isGuest));
+
         if (localStorage) {
             try {
                 localStorage.setItem("mx_hs_url", hs_url);
                 localStorage.setItem("mx_is_url", is_url);
-                localStorage.setItem("mx_user_id", user_id);
-                localStorage.setItem("mx_access_token", access_token);
-                console.log("Session persisted for %s", user_id);
+
+                if (user_id !== undefined && access_token !== undefined) {
+                    localStorage.setItem("mx_user_id", user_id);
+                    localStorage.setItem("mx_access_token", access_token);
+                    localStorage.setItem("mx_is_guest", JSON.stringify(isGuest));
+                    console.log("Session persisted for %s", user_id);
+                }
             } catch (e) {
                 console.warn("Error using local storage: can't persist session!", e);
             }
@@ -87,7 +98,7 @@ class MatrixClientPeg {
             this.matrixClient.idBaseUrl,
             this.matrixClient.credentials.userId,
             this.matrixClient.getAccessToken(),
-            this.guestAccess.isGuest(),
+            this.matrixClient.isGuest(),
         ];
     }
 
@@ -97,10 +108,19 @@ class MatrixClientPeg {
             const is_url = localStorage.getItem("mx_is_url") || 'https://matrix.org';
             const access_token = localStorage.getItem("mx_access_token");
             const user_id = localStorage.getItem("mx_user_id");
-            const guestAccess = new GuestAccess(localStorage);
+
+            let is_guest;
+            if (localStorage.getItem("mx_is_guest") !== null) {
+                is_guest = localStorage.getItem("mx_is_guest") === "true";
+            } else {
+                // legacy key name
+                is_guest = localStorage.getItem("matrix-is-guest") === "true";
+            }
+
             if (access_token && user_id && hs_url) {
                 console.log("Restoring session for %s", user_id);
                 this._createClient(hs_url, is_url, user_id, access_token);
+                this.matrixClient.setGuest(is_guest);
             } else {
                 console.log("Session not found.");
             }
@@ -126,21 +146,11 @@ class MatrixClientPeg {
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.
         this.matrixClient.setMaxListeners(500);
-
-        if (this.guestAccess) {
-            console.log("Guest: %s", this.guestAccess.isGuest());
-            this.matrixClient.setGuest(this.guestAccess.isGuest());
-            var peekedRoomId = this.guestAccess.getPeekedRoom();
-            if (peekedRoomId) {
-                console.log("Peeking in room %s", peekedRoomId);
-                this.matrixClient.peekInRoom(peekedRoomId);
-            }
-        }
     }
 }
 
 if (!global.mxMatrixClientPeg) {
-    global.mxMatrixClientPeg = new MatrixClientPeg(new GuestAccess(localStorage));
+    global.mxMatrixClientPeg = new MatrixClientPeg();
     global.mxMatrixClientPeg.tryRestore();
 }
 module.exports = global.mxMatrixClientPeg;
