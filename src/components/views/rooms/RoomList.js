@@ -270,7 +270,7 @@ module.exports = React.createClass({
     _repositionTooltip: function(e) {
         if (this.tooltip && this.tooltip.parentElement) {
             var scroll = ReactDOM.findDOMNode(this);
-            this.tooltip.style.top = (70 + scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - this._getScrollNode().scrollTop) + "px";
+            this.tooltip.style.top = (3 + scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - this._getScrollNode().scrollTop) + "px";
         }
     },
 
