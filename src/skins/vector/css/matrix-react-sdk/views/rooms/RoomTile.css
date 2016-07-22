@@ -35,15 +35,28 @@ limitations under the License.
 
 .mx_RoomTile_name {
     display: inline-block;
+    position: relative;
     width: 100px;
     vertical-align: middle;
     overflow: hidden;
-    word-break: break-word;
+    /* word-break: break-word; */
+    white-space: nowrap;
     padding-left: 5px;
     padding-right: 15px;
     padding-top: 2px;
     padding-bottom: 2px;
     color: rgba(69, 69, 69, 0.8);
+}
+
+.mx_RoomTile_name:before {
+    content:'';
+    width:100px;
+    height:22px;
+    top: 0px;
+    left: 0px;
+    position:absolute;
+    padding-left: 20px;
+    background:linear-gradient(to right, rgba(234,245,240,0) 80%, #eaf5f0 99%);
 }
 
 .mx_RoomTile_ellipsis .mx_RoomTile_name {

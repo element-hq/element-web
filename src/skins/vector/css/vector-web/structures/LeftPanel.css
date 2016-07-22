@@ -63,6 +63,7 @@ limitations under the License.
     margin-right: 18px;
     -webkit-flex: 0 0 60px;
     flex: 0 0 60px;
+    z-index: 1;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu_options {
