@@ -45,7 +45,7 @@
     "react": "^15.0.1",
     "react-addons-css-transition-group": "^15.1.0",
     "react-dom": "^15.0.1",
-    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#c3d942e",
+    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#dbf0abf",
     "sanitize-html": "^1.11.1",
     "velocity-vector": "vector-im/velocity#059e3b2",
     "whatwg-fetch": "^1.0.0"
