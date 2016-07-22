@@ -100,7 +100,7 @@ class MatrixClientPeg {
             const guestAccess = new GuestAccess(localStorage);
             if (access_token && user_id && hs_url) {
                 console.log("Restoring session for %s", user_id);
-                this._createClient(hs_url, is_url, user_id, access_token, guestAccess);
+                this._createClient(hs_url, is_url, user_id, access_token);
             } else {
                 console.log("Session not found.");
             }
