@@ -78,7 +78,7 @@ module.exports = React.createClass({
         var Label = sdk.getComponent('elements.Label');
         var elementRect = e.target.getBoundingClientRect();
         var x = elementRect.right;
-        var y = elementRect.height + (elementRect.height / 2);
+        var y = elementRect.top + (elementRect.height / 2);
         var self = this;
         ContextualMenu.createMenu(Label, {
             left: x,
