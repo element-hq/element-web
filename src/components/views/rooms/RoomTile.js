@@ -75,7 +75,7 @@ module.exports = React.createClass({
     },
 
     onBadgeClicked: function(e) {
-        var Label = sdk.getComponent('elements.Label');
+        var Label = sdk.getComponent('rooms.NotificationStateContextMenu');
         var elementRect = e.target.getBoundingClientRect();
         var x = elementRect.right;
         var y = elementRect.top + (elementRect.height / 2);
@@ -83,6 +83,7 @@ module.exports = React.createClass({
         ContextualMenu.createMenu(Label, {
             left: x,
             top: y,
+            room: this.props.room,
             onFinished: function() {
                 self.setState({menu: false});
             }
