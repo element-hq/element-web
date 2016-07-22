@@ -153,9 +153,9 @@ module.exports = React.createClass({
             let nameHTML = emojifyText(name);
             if (this.props.selected) {
                 name = <span dangerouslySetInnerHTML={nameHTML}></span>;
-                label = <div className={ className }>{ name }</div>;
+                label = <div onClick={this.onClick} className={ className }>{ name }</div>;
             } else {
-                label = <div className={ className } dangerouslySetInnerHTML={nameHTML}></div>;
+                label = <div onClick={this.onClick} className={ className } dangerouslySetInnerHTML={nameHTML}></div>;
             }
         }
         else if (this.state.hover) {
