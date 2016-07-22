@@ -114,6 +114,7 @@ module.exports = React.createClass({
         badge = <div className={ badgeClasses } onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
 
         var label;
+        var tooltip;
         if (!this.props.collapsed) {
             var className = 'mx_RoomTile_name' + (this.props.isInvite ? ' mx_RoomTile_invite' : '');
             let nameHTML = emojifyText(name);
@@ -122,6 +123,11 @@ module.exports = React.createClass({
                 label = <div onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className }>{ name }</div>;
             } else {
                 label = <div onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className } dangerouslySetInnerHTML={nameHTML}></div>;
+            }
+
+            if (this.state.hover) {
+                var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
+                tooltip = <RoomTooltip room={this.props.room}/>;
             }
         }
         else if (this.state.hover) {
@@ -151,6 +157,7 @@ module.exports = React.createClass({
                 { label }
                 { badge }
                 { incomingCallBox }
+                { tooltip }
             </div>
         ));
     }
