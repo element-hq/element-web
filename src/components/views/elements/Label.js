@@ -29,10 +29,16 @@ module.exports = React.createClass({
         return({ label : "LABEL" });
     },
 
+    onLabelClick: function() {
+        if (this.props.onFinished) this.props.onFinished();
+    },
+
     render: function() {
         return (
             <div>
-                { this.props.label }
+                <div className="mx_ContextualMenu_field" onClick={ this.onLabelClick }>
+                    LABEL
+                </div>
             </div>
         );
     }
