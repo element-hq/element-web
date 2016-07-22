@@ -120,15 +120,17 @@ module.exports = React.createClass({
             let nameHTML = emojifyText(name);
             if (this.props.selected) {
                 name = <span dangerouslySetInnerHTML={nameHTML}></span>;
-                label = <div onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className }>{ name }</div>;
+                label = <div title={ name } onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className }>{ name }</div>;
             } else {
-                label = <div onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className } dangerouslySetInnerHTML={nameHTML}></div>;
+                label = <div title={ name } onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className } dangerouslySetInnerHTML={nameHTML}></div>;
             }
 
+            /*
             if (this.state.hover) {
                 var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
                 tooltip = <RoomTooltip room={this.props.room}/>;
             }
+            */
         }
         else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
