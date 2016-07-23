@@ -86,7 +86,7 @@ module.exports = React.createClass({
                     <button onClick={this.onCancel}>
                         Cancel
                     </button>
-                    <button onClick={this.onOk}>
+                    <button className="mx_Dialog_primary" onClick={this.onOk}>
                         {this.props.button}
                     </button>
                 </div>

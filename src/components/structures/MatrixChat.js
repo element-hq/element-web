@@ -390,7 +390,7 @@ module.exports = React.createClass({
 
                             // FIXME: controller shouldn't be loading a view :(
                             var Loader = sdk.getComponent("elements.Spinner");
-                            var modal = Modal.createDialog(Loader);
+                            var modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
                             d.then(function() {
                                 modal.close();

@@ -29,6 +29,23 @@ var PRESENCE_CLASS = {
     "unavailable": "mx_EntityTile_unavailable"
 };
 
+
+function presenceClassForMember(presenceState, lastActiveAgo) {
+    // offline is split into two categories depending on whether we have
+    // a last_active_ago for them.
+    if (presenceState == 'offline') {
+        if (lastActiveAgo) {
+            return PRESENCE_CLASS['offline'] + '_beenactive';
+        } else {
+            return PRESENCE_CLASS['offline'] + '_neveractive';
+        }
+    } else if (presenceState) {
+        return PRESENCE_CLASS[presenceState];
+    } else {
+        return PRESENCE_CLASS['offline'] + '_neveractive';
+    }
+}
+
 module.exports = React.createClass({
     displayName: 'EntityTile',
 
@@ -79,7 +96,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var presenceClass = PRESENCE_CLASS[this.props.presenceState] || "mx_EntityTile_offline";
+        const presenceClass = presenceClassForMember(
+            this.props.presenceState, this.props.presenceLastActiveAgo
+        );
+
         var mainClassName = "mx_EntityTile ";
         mainClassName += presenceClass + (this.props.className ? (" " + this.props.className) : "");
         var nameEl;

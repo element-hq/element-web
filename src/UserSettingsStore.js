@@ -113,6 +113,35 @@ module.exports = {
         });
     },
 
+    getUrlPreviewsDisabled: function() {
+        var event = MatrixClientPeg.get().getAccountData("org.matrix.preview_urls");
+        return (event && event.getContent().disable);
+    },
+
+    setUrlPreviewsDisabled: function(disabled) {
+        // FIXME: handle errors
+        return MatrixClientPeg.get().setAccountData("org.matrix.preview_urls", {
+            disable: disabled
+        });
+    },
+
+    getSyncedSettings: function() {
+        var event = MatrixClientPeg.get().getAccountData("im.vector.web.settings");
+        return event ? event.getContent() : {};
+    },
+
+    getSyncedSetting: function(type) {
+        var settings = this.getSyncedSettings();
+        return settings[type];
+    },
+
+    setSyncedSetting: function(type, value) {
+        var settings = this.getSyncedSettings();
+        settings[type] = value;
+        // FIXME: handle errors
+        return MatrixClientPeg.get().setAccountData("im.vector.web.settings", settings);
+    },
+
     isFeatureEnabled: function(feature: string): boolean {
         return localStorage.getItem(`mx_labs_feature_${feature}`) === 'true';
     },

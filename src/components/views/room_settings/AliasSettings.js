@@ -83,13 +83,11 @@ module.exports = React.createClass({
                         alias: this.state.canonicalAlias
                     }, ""
                 )
-            );            
+            );
         }
-
 
         // save new aliases for m.room.aliases
         var aliasOperations = this.getAliasOperations();
-        var promises = [];
         for (var i = 0; i < aliasOperations.length; i++) {
             var alias_operation = aliasOperations[i];
             console.log("alias %s %s", alias_operation.place, alias_operation.val);
@@ -301,7 +299,7 @@ module.exports = React.createClass({
                             <div className="mx_RoomSettings_addAlias">
                                  <img src="img/plus.svg" width="14" height="14" alt="Add"
                                       onClick={ self.onAliasAdded.bind(self, undefined) }/>
-                            </div>                        
+                            </div>
                         </div> : ""
                     }
                 </div>

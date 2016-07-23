@@ -13,7 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var Entry = require("./TabCompleteEntries").Entry;
+
+import { Entry, MemberEntry, CommandEntry } from './TabCompleteEntries';
+import SlashCommands from './SlashCommands';
+import MatrixClientPeg from './MatrixClientPeg';
 
 const DELAY_TIME_MS = 1000;
 const KEY_TAB = 9;
@@ -45,21 +48,37 @@ class TabComplete {
         this.isFirstWord = false; // true if you tab-complete on the first word
         this.enterTabCompleteTimerId = null;
         this.inPassiveMode = false;
+
+        // Map tracking ordering of the room members.
+        // userId: integer, highest comes first.
+        this.memberTabOrder = {};
+
+        // monotonically increasing counter used for tracking ordering of members
+        this.memberOrderSeq = 0;
     }
 
     /**
-     * @param {Entry[]} completeList
+     * Call this when a a UI element representing a tab complete entry has been clicked
+     * @param {entry} The entry that was clicked
      */
-    setCompletionList(completeList) {
-        this.list = completeList;
+    onEntryClick(entry) {
         if (this.opts.onClickCompletes) {
-            // assign onClick listeners for each entry to complete the text
-            this.list.forEach((l) => {
-                l.onClick = () => {
-                    this.completeTo(l);
-                }
-            });
+            this.completeTo(entry);
         }
+    }
+
+    loadEntries(room) {
+        this._makeEntries(room);
+        this._initSorting(room);
+        this._sortEntries();
+    }
+
+    onMemberSpoke(member) {
+        if (this.memberTabOrder[member.userId] === undefined) {
+            this.list.push(new MemberEntry(member));
+        }
+        this.memberTabOrder[member.userId] = this.memberOrderSeq++;
+        this._sortEntries();
     }
 
     /**
@@ -305,6 +324,54 @@ class TabComplete {
     _notifyStateChange() {
         if (this.opts.onStateChange) {
             this.opts.onStateChange(this.completing);
+        }
+    }
+
+    _sortEntries() {
+        // largest comes first
+        const KIND_ORDER = {
+            command: 1,
+            member: 2,
+        };
+
+        this.list.sort((a, b) => {
+            const kindOrderDifference = KIND_ORDER[b.kind] - KIND_ORDER[a.kind];
+            if (kindOrderDifference != 0) {
+                return kindOrderDifference;
+            }
+
+            if (a.kind == 'member') {
+                let orderA = this.memberTabOrder[a.member.userId];
+                let orderB = this.memberTabOrder[b.member.userId];
+                if (orderA === undefined) orderA = -1;
+                if (orderB === undefined) orderB = -1;
+
+                return orderB - orderA;
+            }
+
+            // anything else we have no ordering for
+            return 0;
+        });
+    }
+
+    _makeEntries(room) {
+        const myUserId = MatrixClientPeg.get().credentials.userId;
+
+        const members = room.getJoinedMembers().filter(function(member) {
+            if (member.userId !== myUserId) return true;
+        });
+
+        this.list = MemberEntry.fromMemberList(members).concat(
+            CommandEntry.fromCommands(SlashCommands.getCommandList())
+        );
+    }
+
+    _initSorting(room) {
+        this.memberTabOrder = {};
+        this.memberOrderSeq = 0;
+
+        for (const ev of room.getLiveTimeline().getEvents()) {
+            this.memberTabOrder[ev.getSender()] = this.memberOrderSeq++;
         }
     }
 };

@@ -186,7 +186,7 @@ module.exports = {
      *
      * highlights: optional list of words to highlight, ordered by longest word first
      *
-     * opts.highlightLink: optional href to add to highlights
+     * opts.highlightLink: optional href to add to highlighted words
      */
     bodyToHtml: function(content, highlights, opts) {
         opts = opts || {};
@@ -223,8 +223,10 @@ module.exports = {
         let match = EMOJI_REGEX.exec(contentBodyTrimmed);
         let emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
 
-        let className = classNames('markdown-body', {
-            'emoji-body': emojiBody,
+        const className = classNames({
+            'mx_EventTile_body': true,
+            'mx_EventTile_bigEmoji': emojiBody,
+            'markdown-body': isHtml,
         });
         return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} />;
     },

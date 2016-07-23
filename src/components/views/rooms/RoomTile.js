@@ -43,7 +43,10 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return( { hover : false });
+        return({
+            hover : false,
+            badgeHover : false,
+        });
     },
 
     onClick: function() {
@@ -59,6 +62,14 @@ module.exports = React.createClass({
 
     onMouseLeave: function() {
         this.setState( { hover : false });
+    },
+
+    badgeOnMouseEnter: function() {
+        this.setState( { badgeHover : true } );
+    },
+
+    badgeOnMouseLeave: function() {
+        this.setState( { badgeHover : false } );
     },
 
     render: function() {
@@ -83,9 +94,25 @@ module.exports = React.createClass({
 
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
         var badge;
-        if (this.props.highlight || notificationCount > 0) {
-            badge = <div className="mx_RoomTile_badge">{ notificationCount ? notificationCount : '!' }</div>;
+        var badgeContent;
+        var badgeClasses;
+
+        if (this.state.badgeHover) {
+            badgeContent = "\u00B7\u00B7\u00B7";
+        } else if (this.props.highlight || notificationCount > 0) {
+            badgeContent = notificationCount ? notificationCount : '!';
+        } else {
+            badgeContent = '\u200B';
         }
+
+        if (this.props.highlight || notificationCount > 0) {
+            badgeClasses = "mx_RoomTile_badge";
+        } else {
+            badgeClasses = "mx_RoomTile_badge mx_RoomTile_badge_no_unread";
+        }
+
+        badge = <div className={ badgeClasses } onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
+
         /*
         if (this.props.highlight) {
             badge = <div className="mx_RoomTile_badge">!</div>;

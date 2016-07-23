@@ -31,10 +31,7 @@ var Modal = require("../../Modal");
 var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
 var TabComplete = require("../../TabComplete");
-var MemberEntry = require("../../TabCompleteEntries").MemberEntry;
-var CommandEntry = require("../../TabCompleteEntries").CommandEntry;
 var Resend = require("../../Resend");
-var SlashCommands = require("../../SlashCommands");
 var dis = require("../../dispatcher");
 var Tinter = require("../../Tinter");
 var rate_limited_func = require('../../ratelimitedfunc');
@@ -141,6 +138,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
+        MatrixClientPeg.get().on("accountData", this.onAccountData);
 
         this.tabComplete = new TabComplete({
             allowLooping: false,
@@ -204,6 +202,9 @@ module.exports = React.createClass({
             user_is_in_room = this.state.room.hasMembershipState(
                 MatrixClientPeg.get().credentials.userId, 'join'
             );
+
+            this._updateAutoComplete();
+            this.tabComplete.loadEntries(this.state.room);
         }
 
         if (!user_is_in_room && this.state.roomId) {
@@ -267,6 +268,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
+            MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
         }
 
         window.removeEventListener('resize', this.onResize);
@@ -338,6 +340,10 @@ module.exports = React.createClass({
         // ignore events for other rooms
         if (!this.state.room || room.roomId != this.state.room.roomId) return;
 
+        if (ev.getType() === "org.matrix.room.preview_urls") {
+            this._updatePreviewUrlVisibility(room);
+        }
+
         // ignore anything but real-time updates at the end of the room:
         // updates from pagination will happen when the paginate completes.
         if (toStartOfTimeline || !data || !data.liveEvent) return;
@@ -357,12 +363,21 @@ module.exports = React.createClass({
                 });
             }
         }
+
+        // update the tab complete list as it depends on who most recently spoke,
+        // and that has probably just changed
+        if (ev.sender) {
+            this.tabComplete.onMemberSpoke(ev.sender);
+            // nb. we don't need to update the new autocomplete here since
+            // its results are currently ordered purely by search score.
+        }
     },
 
     // called when state.room is first initialised (either at initial load,
     // after a successful peek, or after we join the room).
     _onRoomLoaded: function(room) {
         this._calculatePeekRules(room);
+        this._updatePreviewUrlVisibility(room);
     },
 
     _calculatePeekRules: function(room) {
@@ -379,6 +394,42 @@ module.exports = React.createClass({
                 canPeek: true
             });
         }
+    },
+
+    _updatePreviewUrlVisibility: function(room) {
+        // console.log("_updatePreviewUrlVisibility");
+
+        // check our per-room overrides
+        var roomPreviewUrls = room.getAccountData("org.matrix.room.preview_urls");
+        if (roomPreviewUrls && roomPreviewUrls.getContent().disable !== undefined) {
+            this.setState({
+                showUrlPreview: !roomPreviewUrls.getContent().disable
+            });
+            return;
+        }
+
+        // check our global disable override
+        var userRoomPreviewUrls = MatrixClientPeg.get().getAccountData("org.matrix.preview_urls");
+        if (userRoomPreviewUrls && userRoomPreviewUrls.getContent().disable) {
+            this.setState({
+                showUrlPreview: false
+            });
+            return;
+        }
+
+        // check the room state event
+        var roomStatePreviewUrls = room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
+        if (roomStatePreviewUrls && roomStatePreviewUrls.getContent().disable) {
+            this.setState({
+                showUrlPreview: false
+            });
+            return;
+        }
+
+        // otherwise, we assume they're on.
+        this.setState({
+            showUrlPreview: true
+        });
     },
 
     onRoom: function(room) {
@@ -411,13 +462,22 @@ module.exports = React.createClass({
         Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
     },
 
-    onRoomAccountData: function(room, event) {
-        if (room.roomId == this.props.roomId) {
-            if (event.getType === "org.matrix.room.color_scheme") {
+    onAccountData: function(event) {
+        if (event.getType() === "org.matrix.preview_urls" && this.state.room) {
+            this._updatePreviewUrlVisibility(this.state.room);
+        }
+    },
+
+    onRoomAccountData: function(event, room) {
+        if (room.roomId == this.state.roomId) {
+            if (event.getType() === "org.matrix.room.color_scheme") {
                 var color_scheme = event.getContent();
                 // XXX: we should validate the event
                 console.log("Tinter.tint from onRoomAccountData");
                 Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+            }
+            else if (event.getType() === "org.matrix.room.preview_urls") {
+                this._updatePreviewUrlVisibility(room);
             }
         }
     },
@@ -434,7 +494,8 @@ module.exports = React.createClass({
         }
 
         // a member state changed in this room, refresh the tab complete list
-        this._updateTabCompleteList();
+        this.tabComplete.loadEntries(this.state.room);
+        this._updateAutoComplete();
 
         // if we are now a member of the room, where we were not before, that
         // means we have finished joining a room we were previously peeking
@@ -499,8 +560,6 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.onResize);
         this.onResize();
 
-        this._updateTabCompleteList();
-
         // XXX: EVIL HACK to autofocus inviting on empty rooms.
         // We use the setTimeout to avoid racing with focus_composer.
         if (this.state.room &&
@@ -516,24 +575,6 @@ module.exports = React.createClass({
                 }
             }, 50);
         }
-    },
-
-    _updateTabCompleteList: function() {
-        var cli = MatrixClientPeg.get();
-
-        if (!this.state.room) {
-            return;
-        }
-        var members = this.state.room.getJoinedMembers().filter(function(member) {
-            if (member.userId !== cli.credentials.userId) return true;
-        });
-
-        UserProvider.getInstance().setUserList(members);
-        this.tabComplete.setCompletionList(
-            MemberEntry.fromMemberList(members).concat(
-                CommandEntry.fromCommands(SlashCommands.getCommandList())
-            )
-        );
     },
 
     componentDidUpdate: function() {
@@ -1260,6 +1301,14 @@ module.exports = React.createClass({
         }
     },
 
+    _updateAutoComplete: function() {
+        const myUserId = MatrixClientPeg.get().credentials.userId;
+        const members = this.state.room.getJoinedMembers().filter(function(member) {
+            if (member.userId !== myUserId) return true;
+        });
+        UserProvider.getInstance().setUserList(members);
+    },
+
     render: function() {
         var RoomHeader = sdk.getComponent('rooms.RoomHeader');
         var MessageComposer = sdk.getComponent('rooms.MessageComposer');
@@ -1373,12 +1422,10 @@ module.exports = React.createClass({
             statusBar = <UploadBar room={this.state.room} />
         } else if (!this.state.searchResults) {
             var RoomStatusBar = sdk.getComponent('structures.RoomStatusBar');
-            var tabEntries = this.tabComplete.isTabCompleting() ?
-                this.tabComplete.peek(6) : null;
 
             statusBar = <RoomStatusBar
                 room={this.state.room}
-                tabCompleteEntries={tabEntries}
+                tabComplete={this.tabComplete}
                 numUnreadMessages={this.state.numUnreadMessages}
                 hasUnsentMessages={this.state.hasUnsentMessages}
                 atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
@@ -1511,6 +1558,8 @@ module.exports = React.createClass({
             hideMessagePanel = true;
         }
 
+        // console.log("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
+
         var messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
                 room={this.state.room}
@@ -1520,6 +1569,7 @@ module.exports = React.createClass({
                 eventPixelOffset={this.props.eventPixelOffset}
                 onScroll={ this.onMessageListScroll }
                 onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
+                showUrlPreview = { this.state.showUrlPreview }
                 opacity={ this.props.opacity }
             />);
 

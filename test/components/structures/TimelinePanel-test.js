@@ -210,7 +210,7 @@ describe('TimelinePanel', function() {
         var N_EVENTS = 600;
 
         // sadly, loading all those events takes a while
-        this.timeout(N_EVENTS * 20);
+        this.timeout(N_EVENTS * 30);
 
         // client.getRoom is called a /lot/ in this test, so replace
         // sinon's spy with a fast noop.
@@ -271,6 +271,8 @@ describe('TimelinePanel', function() {
 
             // we should now be able to scroll down, and paginate in the other
             // direction.
+            console.log("scrollingDiv.scrollTop is " + scrollingDiv.scrollTop);
+            console.log("Going to set it to " + scrollingDiv.scrollHeight);
             scrollingDiv.scrollTop = scrollingDiv.scrollHeight;
             return awaitScroll();
         }).then(() => {
