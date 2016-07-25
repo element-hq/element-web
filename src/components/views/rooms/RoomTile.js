@@ -75,20 +75,27 @@ module.exports = React.createClass({
     },
 
     onBadgeClicked: function(e) {
-        var Label = sdk.getComponent('rooms.NotificationStateContextMenu');
+        console.log("DEBUG: MENU FALSE");
+        var Menu = sdk.getComponent('rooms.NotificationStateContextMenu');
         var elementRect = e.target.getBoundingClientRect();
         var x = elementRect.right;
         var y = elementRect.top + (elementRect.height / 2);
         var self = this;
-        ContextualMenu.createMenu(Label, {
+        ContextualMenu.createMenu(Menu, {
             left: x,
             top: y,
             room: this.props.room,
             onFinished: function() {
-                self.setState({menu: false});
+                self.setState({
+                    menu: false,
+                    badgeHover: false,
+                });
             }
         });
-        this.setState({menu: true});
+        this.setState({
+            menu: true,
+            badgeHover: true,
+        });
     },
 
     render: function() {
