@@ -43,7 +43,7 @@ limitations under the License.
 /** Fixme - factor this out with the main header **/
 
 .mx_RightPanel_headerButtonGroup {
-    margin-top: 10px;
+    margin-top: 6px;
     float: left;
     background-color: #fff;
     margin-left: -4px;
@@ -61,7 +61,7 @@ limitations under the License.
 
 .mx_RightPanel_headerButton object {
     pointer-events: none;
-    padding-bottom: 2px;
+    padding-bottom: 3px;
 }
 
 .mx_RightPanel_headerButton_highlight {
