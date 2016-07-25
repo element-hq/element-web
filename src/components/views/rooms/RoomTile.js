@@ -110,6 +110,7 @@ module.exports = React.createClass({
             'mx_RoomTile_selected': this.props.selected,
             'mx_RoomTile_unread': this.props.unread,
             'mx_RoomTile_unreadNotify': notificationCount > 0,
+            'mx_RoomTile_read': !(this.props.highlight || notificationCount > 0),
             'mx_RoomTile_highlight': this.props.highlight,
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
         });
@@ -117,53 +118,38 @@ module.exports = React.createClass({
         // XXX: We should never display raw room IDs, but sometimes the
         // room name js sdk gives is undefined (cannot repro this -- k)
         var name = this.props.room.name || this.props.room.roomId;
-
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
+
         var badge;
         var badgeContent;
-        var badgeClasses;
+
+        var badgeClasses = classNames({
+            'mx_RoomTile_badge': true,
+            'mx_RoomTile_badgeButton': this.state.badgeHover,
+        });
 
         if (this.state.badgeHover) {
             badgeContent = "\u00B7\u00B7\u00B7";
         } else if (this.props.highlight || notificationCount > 0) {
-            badgeContent = notificationCount ? notificationCount : '!';
+            var limitedCount = (notificationCount > 99) ? '99+' : notificationCount;
+            badgeContent = notificationCount ? limitedCount : '!';
         } else {
             badgeContent = '\u200B';
         }
 
-        if (this.props.highlight || notificationCount > 0) {
-            badgeClasses = "mx_RoomTile_badge";
-        } else {
-            badgeClasses = "mx_RoomTile_badge mx_RoomTile_badge_no_unread";
-        }
-
         badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
 
-        /*
-        if (this.props.highlight) {
-            badge = <div className="mx_RoomTile_badge">!</div>;
-        }
-        else if (this.props.unread) {
-            badge = <div className="mx_RoomTile_badge">1</div>;
-        }
-        var nameCell;
-        if (badge) {
-            nameCell = <div className="mx_RoomTile_nameBadge"><div className="mx_RoomTile_name">{name}</div><div className="mx_RoomTile_badgeCell">{badge}</div></div>;
-        }
-        else {
-            nameCell = <div className="mx_RoomTile_name">{name}</div>;
-        }
-        */
-
         var label;
+        var tooltip;
         if (!this.props.collapsed) {
             var className = 'mx_RoomTile_name' + (this.props.isInvite ? ' mx_RoomTile_invite' : '');
             let nameHTML = emojifyText(name);
             if (this.props.selected) {
                 name = <span dangerouslySetInnerHTML={nameHTML}></span>;
-                label = <div onClick={this.onClick} className={ className }>{ name }</div>;
+
+                label = <div title={ name } onClick={this.onClick} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className }>{ name }</div>;
             } else {
-                label = <div onClick={this.onClick} className={ className } dangerouslySetInnerHTML={nameHTML}></div>;
+                label = <div title={ name } onClick={this.onClick} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className } dangerouslySetInnerHTML={nameHTML}></div>;
             }
         }
         else if (this.state.hover) {
@@ -193,6 +179,7 @@ module.exports = React.createClass({
                 { label }
                 { badge }
                 { incomingCallBox }
+                { tooltip }
             </div>
         ));
     }
