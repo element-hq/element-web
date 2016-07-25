@@ -54,10 +54,10 @@ module.exports = {
 
         var chevron = null;
         if (props.left) {
-            chevron = <img className="mx_ContextualMenu_chevron_left" src="img/chevron-left.png" width="9" height="16" />
+            chevron = <div className="mx_ContextualMenu_chevron_left" />
             position.left = props.left + 8;
         } else {
-            chevron = <img className="mx_ContextualMenu_chevron_right" src="img/chevron-right.png" width="9" height="16" />
+            chevron = <div className="mx_ContextualMenu_chevron_right" />
             position.right = props.right + 8;
         }
 
