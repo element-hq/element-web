@@ -71,7 +71,6 @@ class MatrixClientPeg {
             }
         }
         this._createClient(hs_url, is_url, user_id, access_token);
-        this.matrixClient.setGuest(Boolean(isGuest));
 
         if (localStorage) {
             try {
@@ -146,6 +145,8 @@ class MatrixClientPeg {
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.
         this.matrixClient.setMaxListeners(500);
+
+        this.matrixClient.setGuest(Boolean(isGuest));
     }
 }
 
