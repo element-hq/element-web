@@ -86,16 +86,10 @@ module.exports = React.createClass({
             top: y,
             room: this.props.room,
             onFinished: function() {
-                self.setState({
-                    menu: false,
-                    badgeHover: false,
-                });
+                self.setState({ menu: false });
             }
         });
-        this.setState({
-            menu: true,
-            badgeHover: true,
-        });
+        this.setState({ menu: true });
     },
 
     render: function() {
@@ -113,6 +107,7 @@ module.exports = React.createClass({
             'mx_RoomTile_read': !(this.props.highlight || notificationCount > 0),
             'mx_RoomTile_highlight': this.props.highlight,
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
+            'mx_RoomTile_menu': this.state.menu,
         });
 
         // XXX: We should never display raw room IDs, but sometimes the
@@ -128,7 +123,7 @@ module.exports = React.createClass({
             'mx_RoomTile_badgeButton': this.state.badgeHover,
         });
 
-        if (this.state.badgeHover) {
+        if (this.state.badgeHover || this.state.menu) {
             badgeContent = "\u00B7\u00B7\u00B7";
         } else if (this.props.highlight || notificationCount > 0) {
             var limitedCount = (notificationCount > 99) ? '99+' : notificationCount;
