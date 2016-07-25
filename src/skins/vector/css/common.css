@@ -96,27 +96,59 @@ input[type=text]:focus, textarea:focus {
 }
 
 .mx_ContextualMenu {
-    border: 1px solid #a4a4a4;
-    border-radius: 8px;
-    background-color: #fff;
-    color: #747474;
+    border: solid 1px rgba(187, 187, 187, 0.5);
+    border-radius: 4px;
+    background-color: #f6f6f6;
+    color: #4a4a4a;
     position: fixed;
     z-index: 2001;
     padding: 6px;
 }
 
 .mx_ContextualMenu_chevron_right {
-    padding: 12px;
     position: absolute;
-    right: -21px;
-    top: 0px;
+    right: -8px;
+    top: 10px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-left: 8px solid rgba(187, 187, 187, 0.5);
+    border-bottom: 8px solid transparent;
+}
+
+.mx_ContextualMenu_chevron_right:after{
+    content:'';
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-left: 7px solid #f6f6f6;
+    border-bottom: 7px solid transparent;
+    position:absolute;
+    top: -7px;
+    right: 1px;
 }
 
 .mx_ContextualMenu_chevron_left {
-    padding: 12px;
     position: absolute;
-    left: -21px;
-    top: 0px;
+    left: -8px;
+    top: 10px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-right: 8px solid rgba(187, 187, 187, 0.5);
+    border-bottom: 8px solid transparent;
+}
+
+.mx_ContextualMenu_chevron_left:after{
+    content:'';
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-right: 7px solid #f6f6f6;
+    border-bottom: 7px solid transparent;
+    position:absolute;
+    top: -7px;
+    left: 1px;
 }
 
 .mx_ContextualMenu_field {
