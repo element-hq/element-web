@@ -105,7 +105,7 @@ module.exports = React.createClass({
         if (this.state.badgeHover) {
             badgeContent = "\u00B7\u00B7\u00B7";
         } else if (this.props.highlight || notificationCount > 0) {
-            var limitedCount = (notificationCount > 99) ? '+99' : notificationCount;
+            var limitedCount = (notificationCount > 99) ? '99+' : notificationCount;
             badgeContent = notificationCount ? limitedCount : '!';
         } else {
             badgeContent = '\u200B';
