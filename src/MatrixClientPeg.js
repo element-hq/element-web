@@ -55,7 +55,7 @@ class MatrixClientPeg {
      * Home Server / Identity Server URLs but no credentials
      */
     replaceUsingUrls(hs_url, is_url) {
-        this.replaceUsingAccessToken(hs_url, is_url);
+        this._replaceClient(hs_url, is_url);
     }
 
     /**
@@ -63,6 +63,10 @@ class MatrixClientPeg {
      * Home Server / Identity Server URLs and active credentials
      */
     replaceUsingAccessToken(hs_url, is_url, user_id, access_token, isGuest) {
+        this._replaceClient(hs_url, is_url, user_id, access_token, isGuest);
+    }
+
+    _replaceClient(hs_url, is_url, user_id, access_token, isGuest) {
         if (localStorage) {
             try {
                 localStorage.clear();
@@ -70,7 +74,7 @@ class MatrixClientPeg {
                 console.warn("Error clearing local storage", e);
             }
         }
-        this._createClient(hs_url, is_url, user_id, access_token);
+        this._createClient(hs_url, is_url, user_id, access_token, isGuest);
 
         if (localStorage) {
             try {
@@ -126,7 +130,7 @@ class MatrixClientPeg {
         }
     }
 
-    _createClient(hs_url, is_url, user_id, access_token) {
+    _createClient(hs_url, is_url, user_id, access_token, isGuest) {
         var opts = {
             baseUrl: hs_url,
             idBaseUrl: is_url,
