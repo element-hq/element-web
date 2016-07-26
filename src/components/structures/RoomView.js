@@ -482,7 +482,9 @@ module.exports = React.createClass({
         }
     },
 
-    onRoomStateMember: function(ev, state, member) {
+    // rate limited because a power level change will emit an event for every
+    // member in the room.
+    onRoomStateMember: new rate_limited_func(function(ev, state, member) {
         // ignore if we don't have a room yet
         if (!this.state.room) {
             return;
@@ -511,7 +513,7 @@ module.exports = React.createClass({
             member.userId === this.props.ConferenceHandler.getConferenceUserIdForRoom(member.roomId)) {
             this._updateConfCallNotification();
         }
-    },
+    }, 500),
 
     _hasUnsentMessages: function(room) {
         return this._getUnsentMessages(room).length > 0;

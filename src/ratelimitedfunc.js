@@ -23,13 +23,13 @@ module.exports = function(f, minIntervalMs) {
         var now = Date.now();
 
         if (self.lastCall < now - minIntervalMs) {
-            f.apply(this);
+            f.apply(this, arguments);
             self.lastCall = now;
         } else if (self.scheduledCall === undefined) {
             self.scheduledCall = setTimeout(
                 () => {
                     self.scheduledCall = undefined;
-                    f.apply(this);
+                    f.apply(this, arguments);
                     self.lastCall = now;
                 },
                 (self.lastCall + minIntervalMs) - now
