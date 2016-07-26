@@ -75,7 +75,6 @@ module.exports = React.createClass({
     },
 
     onBadgeClicked: function(e) {
-        console.log("DEBUG: MENU FALSE");
         var Menu = sdk.getComponent('rooms.NotificationStateContextMenu');
         var elementRect = e.target.getBoundingClientRect();
         var x = elementRect.right;
