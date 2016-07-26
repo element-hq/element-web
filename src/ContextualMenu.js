@@ -45,7 +45,9 @@ module.exports = {
         var closeMenu = function() {
             ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
 
-            if (props && props.onFinished) props.onFinished.apply(null, arguments);
+            if (props && props.onFinished) {
+                props.onFinished.apply(null, arguments);
+            }
         };
 
         var position = {
@@ -54,10 +56,10 @@ module.exports = {
 
         var chevron = null;
         if (props.left) {
-            chevron = <div className="mx_ContextualMenu_chevron_left" />
+            chevron = <div className="mx_ContextualMenu_chevron_left"></div>
             position.left = props.left + 8;
         } else {
-            chevron = <div className="mx_ContextualMenu_chevron_right" />
+            chevron = <div className="mx_ContextualMenu_chevron_right"></div>
             position.right = props.right + 8;
         }
 
