@@ -46,22 +46,6 @@ module.exports = React.createClass({
         };
     },
 
-    onAllClick: function() {
-        if (this.props.onFinished) {
-            this.setState({areNotifsMuted: false});
-            this._save(false);
-            this.props.onFinished();
-        }
-    },
-
-    onMuteClick: function() {
-        if (this.props.onFinished) {
-            this.setState({areNotifsMuted: true});
-            this._save(true);
-            this.props.onFinished();
-        }
-    },
-
     _save: function( isMuted ) {
         const roomId = this.props.room.roomId;
         /*
@@ -71,35 +55,43 @@ module.exports = React.createClass({
             ));
         }
         */
-        MatrixClientPeg.get().setRoomMutePushRule(
-            "global", roomId, isMuted
-        );
+        var cli = MatrixClientPeg.get();
+        this.setState({areNotifsMuted: isMuted});
+        if (!cli.isGuest()) {
+            cli.setRoomMutePushRule(
+                "global", roomId, isMuted
+            );
+        }
     },
 
-    _onToggle: function(keyName, checkedValue, uncheckedValue, ev) {
-        console.log("Checkbox toggle: %s %s", keyName, ev.target.checked);
-        var state = {};
-        state[keyName] = ev.target.checked ? checkedValue : uncheckedValue;
-        this.setState(state);
+    _onToggle: function(ev) {
+        switch (ev.target.value) {
+            case "all":
+                if (this.props.onFinished) {
+                    this._save(false);
+                    this.props.onFinished();
+                }
+                break;
+            case "mute":
+                if (this.props.onFinished) {
+                    this._save(true);
+                    this.props.onFinished();
+                }
+                break;
+        }
     },
 
     render: function() {
         var cli = MatrixClientPeg.get();
         return (
             <div>
-                {/*
-                <div className="mx_ContextualMenu_field">
-                    <input type="checkbox" disabled={ cli.isGuest() }
-                           onChange={this._onToggle.bind(this, "areNotifsMuted", true, false)}
-                           defaultChecked={this.state.areNotifsMuted}/>
-                    Mute notifications for this room
+                <div className="mx_ContextualMenu_field" >
+                    <input disabled={cli.isGuest()} type="radio" name="notification_state" value="all" onChange={this._onToggle} checked={!this.state.areNotifsMuted}/>
+                    All notifications
                 </div>
-                */}
-                <div className="mx_ContextualMenu_field" onClick={ this.onAllClick }>
-                    All notifications - { this.state.areNotifsMuted ? "OFF" : "ON" }
-                </div>
-                <div className="mx_ContextualMenu_field" onClick={ this.onMuteClick }>
-                    Mute - { this.state.areNotifsMuted ? "ON" : "OFF" }
+                <div className="mx_ContextualMenu_field" >
+                    <input disabled={cli.isGuest()} type="radio" name="notification_state" value="mute" onChange={this._onToggle} checked={this.state.areNotifsMuted}/>
+                    Mute
                 </div>
             </div>
         );
