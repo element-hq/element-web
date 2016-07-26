@@ -18,6 +18,7 @@ limitations under the License.
 
 var q = require("q");
 var React = require('react');
+var classNames = require('classnames');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 module.exports = React.createClass({
@@ -67,31 +68,52 @@ module.exports = React.createClass({
     _onToggle: function(ev) {
         switch (ev.target.value) {
             case "all":
-                if (this.props.onFinished) {
-                    this._save(false);
-                    this.props.onFinished();
-                }
+                this._save(false);
                 break;
             case "mute":
-                if (this.props.onFinished) {
-                    this._save(true);
-                    this.props.onFinished();
-                }
+                this._save(true);
                 break;
         }
+
+        if (this.props.onFinished) {
+            this.props.onFinished();
+        };
+    },
+
+    _onClickAllNotifs: function() {
+        this._save(false);
+        if (this.props.onFinished) {
+            this.props.onFinished();
+        };
+    },
+
+    _onClickMute: function() {
+        this._save(true);
+        if (this.props.onFinished) {
+            this.props.onFinished();
+        };
     },
 
     render: function() {
         var cli = MatrixClientPeg.get();
+
+        var allNotifsClasses = classNames({
+            'mx_ContextualMenu_field': true,
+            'mx_ContextualMenu_fieldSet': !this.state.areNotifsMuted,
+        });
+
+        var muteNotifsClasses = classNames({
+            'mx_ContextualMenu_field': true,
+            'mx_ContextualMenu_fieldSet': this.state.areNotifsMuted,
+        });
+
         return (
             <div>
-                <div className="mx_ContextualMenu_field" >
-                    <input disabled={cli.isGuest()} type="radio" name="notification_state" value="all" onChange={this._onToggle} checked={!this.state.areNotifsMuted}/>
-                    All notifications
+                <div className={ allNotifsClasses } onClick={this._onClickAllNotifs} >
+                    { !this.state.areNotifsMuted ? "ON" : "OFF" } - All notifications
                 </div>
-                <div className="mx_ContextualMenu_field" >
-                    <input disabled={cli.isGuest()} type="radio" name="notification_state" value="mute" onChange={this._onToggle} checked={this.state.areNotifsMuted}/>
-                    Mute
+                <div className={ muteNotifsClasses } onClick={this._onClickMute} >
+                    { this.state.areNotifsMuted ? "ON" : "OFF" } - Mute
                 </div>
             </div>
         );

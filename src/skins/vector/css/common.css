@@ -103,6 +103,7 @@ input[type=text]:focus, textarea:focus {
     position: fixed;
     z-index: 2001;
     padding: 6px;
+	font-size: 14px;
 }
 
 .mx_ContextualMenu_chevron_right {
@@ -154,6 +155,10 @@ input[type=text]:focus, textarea:focus {
 .mx_ContextualMenu_field {
     padding: 3px 6px 3px 6px;
     cursor: pointer;
+}
+
+.mx_ContextualMenu_field.mx_ContextualMenu_fieldSet {
+    font-weight: bold;
 }
 
 .mx_ContextualMenu_spinner {
