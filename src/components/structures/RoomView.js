@@ -482,9 +482,7 @@ module.exports = React.createClass({
         }
     },
 
-    // rate limited because a power level change will emit an event for every
-    // member in the room.
-    onRoomStateMember: new rate_limited_func(function(ev, state, member) {
+    onRoomStateMember: function(ev, state, member) {
         // ignore if we don't have a room yet
         if (!this.state.room) {
             return;
@@ -495,6 +493,15 @@ module.exports = React.createClass({
             return;
         }
 
+        if (this.props.ConferenceHandler &&
+            member.userId === this.props.ConferenceHandler.getConferenceUserIdForRoom(member.roomId)) {
+            this._updateConfCallNotification();
+        }
+
+        this._updateRoomMembers();
+    },
+
+    _updateRoomMembers: new rate_limited_func(function() {
         // a member state changed in this room, refresh the tab complete list
         this.tabComplete.loadEntries(this.state.room);
         this._updateAutoComplete();
@@ -507,11 +514,6 @@ module.exports = React.createClass({
             this.setState({
                 joining: false
             });
-        }
-
-        if (this.props.ConferenceHandler &&
-            member.userId === this.props.ConferenceHandler.getConferenceUserIdForRoom(member.roomId)) {
-            this._updateConfCallNotification();
         }
     }, 500),
 

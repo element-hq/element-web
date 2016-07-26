@@ -14,6 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/**
+ * 'debounces' a function to only execute every n milliseconds.
+ * Useful when react-sdk gets many, many events but only wants
+ * to update the interface once for all of them.
+ *
+ * Note that the function must not take arguments, since the args
+ * could be different for each invocarion of the function.
+ */
 module.exports = function(f, minIntervalMs) {
     this.lastCall = 0;
     this.scheduledCall = undefined;
@@ -23,13 +31,13 @@ module.exports = function(f, minIntervalMs) {
         var now = Date.now();
 
         if (self.lastCall < now - minIntervalMs) {
-            f.apply(this, arguments);
+            f.apply(this);
             self.lastCall = now;
         } else if (self.scheduledCall === undefined) {
             self.scheduledCall = setTimeout(
                 () => {
                     self.scheduledCall = undefined;
-                    f.apply(this, arguments);
+                    f.apply(this);
                     self.lastCall = now;
                 },
                 (self.lastCall + minIntervalMs) - now
