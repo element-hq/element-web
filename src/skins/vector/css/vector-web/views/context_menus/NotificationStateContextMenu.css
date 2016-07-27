@@ -40,6 +40,10 @@ limitations under the License.
     color: rgba(0, 0, 0, 0.2);
 }
 
+.mx_NotificationStateContextMenu_icon {
+    padding-right: 2px;
+}
+
 .mx_NotificationStateContextMenu_activeIcon {
     display: none;
     position: relative;
