@@ -133,32 +133,34 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var name = this.props.name;
-
         var imageUrl = this.state.imageUrls[this.state.urlsIndex];
 
+        const {name, idName, title, url, urls, width, height, resizeMethod,
+               defaultToInitialLetter,
+               ...otherProps} = this.props;
+
         if (imageUrl === this.state.defaultImageUrl) {
-            var initialLetter = emojifyText(this._getInitialLetter(this.props.name));
+            var initialLetter = emojifyText(this._getInitialLetter(name));
             return (
-                <span className="mx_BaseAvatar" {...this.props}>
+                <span className="mx_BaseAvatar" {...otherProps}>
                     <span className="mx_BaseAvatar_initial" aria-hidden="true"
-                            style={{ fontSize: (this.props.width * 0.65) + "px",
-                                    width: this.props.width + "px",
-                                    lineHeight: this.props.height + "px" }}
+                            style={{ fontSize: (width * 0.65) + "px",
+                                    width: width + "px",
+                                    lineHeight: height + "px" }}
                             dangerouslySetInnerHTML={initialLetter}>
                     </span>
                     <img className="mx_BaseAvatar_image" src={imageUrl}
-                        alt="" title={this.props.title} onError={this.onError}
-                        width={this.props.width} height={this.props.height} />
+                        alt="" title={title} onError={this.onError}
+                        width={width} height={height} />
                 </span>
             );
         }
         return (
             <img className="mx_BaseAvatar mx_BaseAvatar_image" src={imageUrl}
                 onError={this.onError}
-                width={this.props.width} height={this.props.height}
-                title={this.props.title} alt=""
-                {...this.props} />
+                width={width} height={height}
+                title={title} alt=""
+                {...otherProps} />
         );
     }
 });
