@@ -98,13 +98,13 @@ module.exports = React.createClass({
         var cli = MatrixClientPeg.get();
 
         var allNotifsClasses = classNames({
-            'mx_ContextualMenu_field': true,
-            'mx_ContextualMenu_fieldSet': !this.state.areNotifsMuted,
+            'mx_NotificationStateContextMenu_field': true,
+            'mx_NotificationStateContextMenu_fieldSet': !this.state.areNotifsMuted,
         });
 
         var muteNotifsClasses = classNames({
-            'mx_ContextualMenu_field': true,
-            'mx_ContextualMenu_fieldSet': this.state.areNotifsMuted,
+            'mx_NotificationStateContextMenu_field': true,
+            'mx_NotificationStateContextMenu_fieldSet': this.state.areNotifsMuted,
         });
 
         return (
