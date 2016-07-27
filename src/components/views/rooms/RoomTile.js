@@ -67,7 +67,10 @@ module.exports = React.createClass({
     },
 
     badgeOnMouseEnter: function() {
-        this.setState( { badgeHover : true } );
+        // Only allow none guests to access the context menu
+        if (!MatrixClientPeg.get().isGuest()) {
+            this.setState( { badgeHover : true } );
+        }
     },
 
     badgeOnMouseLeave: function() {
@@ -75,21 +78,24 @@ module.exports = React.createClass({
     },
 
     onBadgeClicked: function(e) {
-        var Menu = sdk.getComponent('context_menus.NotificationStateContextMenu');
-        var elementRect = e.target.getBoundingClientRect();
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        var x = elementRect.right + window.pageXOffset;
-        var y = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
-        var self = this;
-        ContextualMenu.createMenu(Menu, {
-            left: x,
-            top: y,
-            room: this.props.room,
-            onFinished: function() {
-                self.setState({ menu: false });
-            }
-        });
-        this.setState({ menu: true });
+        // Only allow none guests to access the context menu
+        if (!MatrixClientPeg.get().isGuest()) {
+            var Menu = sdk.getComponent('context_menus.NotificationStateContextMenu');
+            var elementRect = e.target.getBoundingClientRect();
+            // The window X and Y offsets are to adjust position when zoomed in to page
+            var x = elementRect.right + window.pageXOffset;
+            var y = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
+            var self = this;
+            ContextualMenu.createMenu(Menu, {
+                left: x,
+                top: y,
+                room: this.props.room,
+                onFinished: function() {
+                    self.setState({ menu: false });
+                }
+            });
+            this.setState({ menu: true });
+        }
     },
 
     render: function() {
