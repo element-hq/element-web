@@ -89,7 +89,7 @@ module.exports = React.createClass({
             ContextualMenu.createMenu(Menu, {
                 menuWidth: 188,
                 menuHeight: 126,
-                chevronOffset: 35,
+                chevronOffset: 45,
                 left: x,
                 top: y,
                 room: this.props.room,
