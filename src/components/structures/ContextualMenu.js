@@ -17,6 +17,7 @@ limitations under the License.
 
 'use strict';
 
+var classNames = require('classnames');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
@@ -51,25 +52,31 @@ module.exports = {
         };
 
         var position = {
-            top: props.top - 20,
+            top: props.top,
         };
 
         var chevron = null;
         if (props.left) {
-            chevron = <div className="mx_ContextualMenu_chevron_left"></div>
-            position.left = props.left + 8;
+            chevron = <div style={ {top: props.chevronOffset} } className="mx_ContextualMenu_chevron_left"></div>
+            position.left = props.left;
         } else {
             chevron = <div className="mx_ContextualMenu_chevron_right"></div>
-            position.right = props.right + 8;
+            position.right = props.right;
         }
 
         var className = 'mx_ContextualMenu_wrapper';
 
+        var menuClasses = classNames({
+            'mx_ContextualMenu': true,
+            'mx_ContextualMenu_left': props.left,
+            'mx_ContextualMenu_right': !props.left,
+        });
+
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
         var menu = (
-            <div className={className}>
-                <div className="mx_ContextualMenu" style={position}>
+            <div className={className} style={position}>
+                <div className={menuClasses}>
                     {chevron}
                     <Element {...props} onFinished={closeMenu}/>
                 </div>

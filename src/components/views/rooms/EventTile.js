@@ -254,9 +254,10 @@ module.exports = React.createClass({
 
         // The window X and Y offsets are to adjust position when zoomed in to page
         var x = buttonRect.right + window.pageXOffset;
-        var y = buttonRect.top + (e.target.height / 2) + window.pageYOffset;
+        var y = (buttonRect.top + (e.target.height / 2) + window.pageYOffset) - 19;
         var self = this;
         ContextualMenu.createMenu(MessageContextMenu, {
+            chevronOffset: 10,
             mxEvent: this.props.mxEvent,
             left: x,
             top: y,
