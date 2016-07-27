@@ -110,10 +110,14 @@ module.exports = React.createClass({
         return (
             <div>
                 <div className={ allNotifsClasses } onClick={this._onClickAllNotifs} >
-                    { !this.state.areNotifsMuted ? "ON" : "OFF" } - All notifications
+                    { !this.state.areNotifsMuted ? "ON" : "OFF" }
+                    <img src="img/icon-context-mute-off.svg" width="15" height="10" />
+                    All notifications
                 </div>
                 <div className={ muteNotifsClasses } onClick={this._onClickMute} >
-                    { this.state.areNotifsMuted ? "ON" : "OFF" } - Mute
+                    { this.state.areNotifsMuted ? "ON" : "OFF" }
+                    <img src="img/icon-context-mute.svg" width="15" height="10" />
+                    Mute
                 </div>
             </div>
         );
