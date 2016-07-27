@@ -77,8 +77,9 @@ module.exports = React.createClass({
     onBadgeClicked: function(e) {
         var Menu = sdk.getComponent('rooms.NotificationStateContextMenu');
         var elementRect = e.target.getBoundingClientRect();
-        var x = elementRect.right;
-        var y = elementRect.top + (elementRect.height / 2);
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        var x = elementRect.right + window.pageXOffset;
+        var y = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
         var self = this;
         ContextualMenu.createMenu(Menu, {
             left: x,
