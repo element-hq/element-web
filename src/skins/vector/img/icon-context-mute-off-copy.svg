@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="16" height="12" viewBox="0, 0, 16, 12">
+  <g id="Screens-revised" opacity="0.2">
+    <path d="M1,4 L3.661,4 L7,1 L7,11 L3.672,8 L1,8 z" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" id="path-1"/>
+    <path d="M9.878,7.667 C10.82,7.667 11.584,6.92 11.584,6 C11.584,5.08 10.82,4.333 9.878,4.333" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-linecap="round" id="Oval-50"/>
+    <path d="M10.055,9.333 C11.939,9.333 13.466,7.841 13.466,6 C13.466,4.159 11.939,2.667 10.055,2.667" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-linecap="round" id="Oval-50-Copy"/>
+    <path d="M10.055,11 C12.881,11 15.172,8.761 15.172,6 C15.172,3.239 12.881,1 10.055,1" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-linecap="round" id="Oval-50-Copy-2"/>
+  </g>
+</svg>

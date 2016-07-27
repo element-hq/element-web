@@ -65,19 +65,8 @@ module.exports = React.createClass({
         }
     },
 
-    _onToggle: function(ev) {
-        switch (ev.target.value) {
-            case "all":
-                this._save(false);
-                break;
-            case "mute":
-                this._save(true);
-                break;
-        }
-
-        if (this.props.onFinished) {
-            this.props.onFinished();
-        };
+    _onClickAlertMe: function() {
+        // Placeholder
     },
 
     _onClickAllNotifs: function() {
@@ -85,6 +74,10 @@ module.exports = React.createClass({
         if (this.props.onFinished) {
             this.props.onFinished();
         };
+    },
+
+    _onClickMentions: function() {
+        // Placeholder
     },
 
     _onClickMute: function() {
@@ -97,9 +90,19 @@ module.exports = React.createClass({
     render: function() {
         var cli = MatrixClientPeg.get();
 
+        var alertMeClasses = classNames({
+            'mx_NotificationStateContextMenu_field': true,
+            'mx_NotificationStateContextMenu_fieldDisabled': true,
+        });
+
         var allNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
             'mx_NotificationStateContextMenu_fieldSet': !this.state.areNotifsMuted,
+        });
+
+        var mentionsClasses = classNames({
+            'mx_NotificationStateContextMenu_field': true,
+            'mx_NotificationStateContextMenu_fieldDisabled': true,
         });
 
         var muteNotifsClasses = classNames({
@@ -109,10 +112,18 @@ module.exports = React.createClass({
 
         return (
             <div>
+                <div className={ alertMeClasses } onClick={this._onClickAlertMe} >
+                    <img src="img/icon-context-mute-off-copy.svg" width="15" height="10" />
+                    Alert me
+                </div>
                 <div className={ allNotifsClasses } onClick={this._onClickAllNotifs} >
                     { !this.state.areNotifsMuted ? "ON" : "OFF" }
                     <img src="img/icon-context-mute-off.svg" width="15" height="10" />
                     All notifications
+                </div>
+                <div className={ mentionsClasses } onClick={this._onClickMentions} >
+                    <img src="img/icon-context-mute-mentions.svg" width="15" height="10" />
+                    Mentions only
                 </div>
                 <div className={ muteNotifsClasses } onClick={this._onClickMute} >
                     { this.state.areNotifsMuted ? "ON" : "OFF" }

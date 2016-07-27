@@ -22,3 +22,7 @@ limitations under the License.
 .mx_NotificationStateContextMenu_field.mx_NotificationStateContextMenu_fieldSet {
     font-weight: bold;
 }
+
+.mx_NotificationStateContextMenu_field.mx_NotificationStateContextMenu_fieldDisabled {
+    color: rgba(0, 0, 0, 0.2);
+}
