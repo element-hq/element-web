@@ -135,9 +135,11 @@ module.exports = React.createClass({
     render: function() {
         var imageUrl = this.state.imageUrls[this.state.urlsIndex];
 
-        const {name, idName, title, url, urls, width, height, resizeMethod,
-               defaultToInitialLetter,
-               ...otherProps} = this.props;
+        const {
+            name, idName, title, url, urls, width, height, resizeMethod,
+            defaultToInitialLetter,
+            ...otherProps
+        } = this.props;
 
         if (imageUrl === this.state.defaultImageUrl) {
             var initialLetter = emojifyText(this._getInitialLetter(name));
