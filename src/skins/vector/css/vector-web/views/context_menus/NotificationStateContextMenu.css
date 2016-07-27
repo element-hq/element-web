@@ -17,13 +17,14 @@ limitations under the License.
 .mx_NotificationStateContextMenu_picker {
     position: absolute;
     top: 16px;
+    left: 5px;
 }
 
 .mx_NotificationStateContextMenu_field {
     padding-top: 4px;
     padding-right: 6px;
     padding-bottom: 10px;
-    padding-left: 26px;
+    padding-left: 20px;
     cursor: pointer;
     white-space: nowrap;
     display: flex;
@@ -32,7 +33,7 @@ limitations under the License.
 
 .mx_NotificationStateContextMenu_field.mx_NotificationStateContextMenu_fieldSet {
     font-weight: bold;
-    padding-left: 14px;
+    padding-left: 8px;
 }
 
 .mx_NotificationStateContextMenu_field.mx_NotificationStateContextMenu_fieldDisabled {
@@ -42,7 +43,7 @@ limitations under the License.
 .mx_NotificationStateContextMenu_activeIcon {
     display: none;
     position: relative;
-    left: -9px;
+    left: -5px;
 }
 
 .mx_NotificationStateContextMenu_fieldSet .mx_NotificationStateContextMenu_activeIcon {
