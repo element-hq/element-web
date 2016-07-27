@@ -112,22 +112,25 @@ module.exports = React.createClass({
 
         return (
             <div>
+                <div className="mx_NotificationStateContextMenu_picker" >
+                    <img src="img/notif-slider.svg" width="20" height="107" />
+                </div>
                 <div className={ alertMeClasses } onClick={this._onClickAlertMe} >
-                    <img src="img/icon-context-mute-off-copy.svg" width="15" height="10" />
+                    <img src="img/icon-context-mute-off-copy.svg" width="20" height="12" />
                     Alert me
                 </div>
                 <div className={ allNotifsClasses } onClick={this._onClickAllNotifs} >
-                    { !this.state.areNotifsMuted ? "ON" : "OFF" }
-                    <img src="img/icon-context-mute-off.svg" width="15" height="10" />
+                    <img className="mx_NotificationStateContextMenu_activeIcon" src="img/notif-active.svg" width="12" height="12" />
+                    <img src="img/icon-context-mute-off.svg" width="20" height="12" />
                     All notifications
                 </div>
                 <div className={ mentionsClasses } onClick={this._onClickMentions} >
-                    <img src="img/icon-context-mute-mentions.svg" width="15" height="10" />
+                    <img src="img/icon-context-mute-mentions.svg" width="20" height="12" />
                     Mentions only
                 </div>
                 <div className={ muteNotifsClasses } onClick={this._onClickMute} >
-                    { this.state.areNotifsMuted ? "ON" : "OFF" }
-                    <img src="img/icon-context-mute.svg" width="15" height="10" />
+                    <img className="mx_NotificationStateContextMenu_activeIcon" src="img/notif-active.svg" width="12" height="12" />
+                    <img src="img/icon-context-mute.svg" width="20" height="12" />
                     Mute
                 </div>
             </div>

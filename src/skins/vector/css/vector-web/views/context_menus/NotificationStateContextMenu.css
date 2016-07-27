@@ -14,16 +14,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_NotificationStateContextMenu_picker {
+    position: absolute;
+    top: 16px;
+}
+
 .mx_NotificationStateContextMenu_field {
-    padding: 3px 6px 3px 6px;
+    padding-top: 4px;
+    padding-right: 6px;
+    padding-bottom: 10px;
+    padding-left: 26px;
     cursor: pointer;
-    width: 174px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
 }
 
 .mx_NotificationStateContextMenu_field.mx_NotificationStateContextMenu_fieldSet {
     font-weight: bold;
+    padding-left: 14px;
 }
 
 .mx_NotificationStateContextMenu_field.mx_NotificationStateContextMenu_fieldDisabled {
     color: rgba(0, 0, 0, 0.2);
+}
+
+.mx_NotificationStateContextMenu_activeIcon {
+    display: none;
+    position: relative;
+    left: -9px;
+}
+
+.mx_NotificationStateContextMenu_fieldSet .mx_NotificationStateContextMenu_activeIcon {
+    display: inline-block;
 }
