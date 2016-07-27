@@ -72,11 +72,20 @@ module.exports = {
             'mx_ContextualMenu_right': !props.left,
         });
 
+        var menuSize = {};
+        if (props.menuWidth) {
+            menuSize.width = props.menuWidth;
+        }
+
+        if (props.menuHeight) {
+            menuSize.height = props.menuHeight;
+        }
+
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
         var menu = (
             <div className={className} style={position}>
-                <div className={menuClasses}>
+                <div className={menuClasses} style={menuSize}>
                     {chevron}
                     <Element {...props} onFinished={closeMenu}/>
                 </div>

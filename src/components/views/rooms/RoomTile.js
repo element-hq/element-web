@@ -87,6 +87,8 @@ module.exports = React.createClass({
             var y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset) - 43;
             var self = this;
             ContextualMenu.createMenu(Menu, {
+                menuWidth: 188,
+                menuHeight: 126,
                 chevronOffset: 35,
                 left: x,
                 top: y,
