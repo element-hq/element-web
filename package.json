@@ -13,7 +13,7 @@
     "reskindex": "./reskindex.js"
   },
   "scripts": {
-    "reskindex": "reskindex -h header",
+    "reskindex": "./reskindex.js -h header",
     "build": "babel src -d lib --source-maps --stage 1",
     "start": "babel src -w -d lib --source-maps --stage 1",
     "lint": "eslint src/",
