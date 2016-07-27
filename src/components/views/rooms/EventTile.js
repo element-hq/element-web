@@ -249,7 +249,7 @@ module.exports = React.createClass({
     },
 
     onEditClicked: function(e) {
-        var MessageContextMenu = sdk.getComponent('rooms.MessageContextMenu');
+        var MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
         var buttonRect = e.target.getBoundingClientRect()
 
         // The window X and Y offsets are to adjust position when zoomed in to page
