@@ -406,14 +406,14 @@ module.exports = React.createClass({
             this.props.onFinished();
         }
         else {
-            self.setState({ updating: self.state.updating + 1 });
+            this.setState({ updating: this.state.updating + 1 });
             createRoom({
                 createOpts: {
                     invite: [this.props.member.userId],
                 },
-            }).finally(function() {
-                self.props.onFinished();
-                self.setState({ updating: self.state.updating - 1 });
+            }).finally(() => {
+                this.props.onFinished();
+                this.setState({ updating: this.state.updating - 1 });
             }).done();
         }
     },
