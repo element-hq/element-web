@@ -14,6 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_ContextualMenu_wrapper {
+    position: fixed;
+    z-index: 2000;
+}
+
 .mx_ContextualMenu_background {
     position: fixed;
     top: 0;
@@ -29,16 +34,19 @@ limitations under the License.
     border-radius: 4px;
     background-color: #f6f6f6;
     color: #4a4a4a;
-    position: fixed;
-    z-index: 2001;
+    position: absolute;
     padding: 6px;
 	font-size: 14px;
+}
+
+.mx_ContextualMenu.mx_ContextualMenu_right {
+    right: 8px;
 }
 
 .mx_ContextualMenu_chevron_right {
     position: absolute;
     right: -8px;
-    top: 10px;
+    top: 0px;
     width: 0;
     height: 0;
     border-top: 8px solid transparent;
@@ -58,10 +66,14 @@ limitations under the License.
     right: 1px;
 }
 
+.mx_ContextualMenu.mx_ContextualMenu_left {
+    left: 8px;
+}
+
 .mx_ContextualMenu_chevron_left {
     position: absolute;
     left: -8px;
-    top: 10px;
+    top: 0px;
     width: 0;
     height: 0;
     border-top: 8px solid transparent;
@@ -84,6 +96,7 @@ limitations under the License.
 .mx_ContextualMenu_field {
     padding: 3px 6px 3px 6px;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .mx_ContextualMenu_spinner {

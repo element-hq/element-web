@@ -17,6 +17,7 @@ limitations under the License.
 .mx_NotificationStateContextMenu_field {
     padding: 3px 6px 3px 6px;
     cursor: pointer;
+    width: 174px;
 }
 
 .mx_NotificationStateContextMenu_field.mx_NotificationStateContextMenu_fieldSet {
