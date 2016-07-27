@@ -325,7 +325,6 @@ module.exports = React.createClass({
 
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
-                 relayoutOnUpdate={false}
                  autoshow={true} onScroll={ self._repositionTooltips } ref="gemscroll">
             <div className="mx_RoomList">
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }

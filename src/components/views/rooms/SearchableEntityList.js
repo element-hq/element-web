@@ -179,7 +179,6 @@ var SearchableEntityList = React.createClass({
             }
             list = (
                 <GeminiScrollbar autoshow={true}
-                                 relayoutOnUpdate={false}
                                  className="mx_SearchableEntityList_listWrapper">
                     { list }
                 </GeminiScrollbar>
