@@ -126,11 +126,13 @@ module.exports = React.createClass({
     render: function() {
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        var roomName = this.props.room ? this.props.room.name : this.props.oobData.name;
+        var {room, oobData, ...otherProps} = this.props;
+
+        var roomName = room ? room.name : oobData.name;
 
         return (
-            <BaseAvatar {...this.props} name={roomName}
-                idName={this.props.room ? this.props.room.roomId : null}
+            <BaseAvatar {...otherProps} name={roomName}
+                idName={room ? room.roomId : null}
                 urls={this.state.urls} />
         );
     }
