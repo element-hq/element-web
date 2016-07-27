@@ -23,7 +23,7 @@ var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg')
 var TextForEvent = require('../../../TextForEvent');
 
-var ContextualMenu = require('../../../ContextualMenu');
+var ContextualMenu = require('../../structures/ContextualMenu');
 var dispatcher = require("../../../dispatcher");
 
 var ObjectUtils = require('../../../ObjectUtils');

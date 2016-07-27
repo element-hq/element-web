@@ -21,7 +21,7 @@ var classNames = require('classnames');
 var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
-var ContextualMenu = require('../../../ContextualMenu');
+var ContextualMenu = require('../../structures/ContextualMenu');
 import {emojifyText} from '../../../HtmlUtils';
 
 module.exports = React.createClass({
