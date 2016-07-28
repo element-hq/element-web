@@ -56,7 +56,6 @@ module.exports = React.createClass({
             cli.setRoomMutePushRule(
                 "global", roomId, isMuted
             ).then(function() {
-                console.log("DEBUG: then");
                 self.setState({areNotifsMuted: isMuted});
 
                 // delay slightly so that the user can see their state change
@@ -66,8 +65,8 @@ module.exports = React.createClass({
                     };
                 });
             }).fail(function(error) {
-                console.log("DEBUG: fail");
-                console.log(error);
+                // TODO: some form of error notification to the user
+                // to inform them that their state change failed.
             });
         }
     },
