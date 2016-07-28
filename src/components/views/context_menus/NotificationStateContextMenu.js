@@ -48,20 +48,27 @@ module.exports = React.createClass({
     },
 
     _save: function( isMuted ) {
+        var self = this;
         const roomId = this.props.room.roomId;
-        /*
-        if (this.state.areNotifsMuted !== originalState.areNotifsMuted) {
-            promises.push(MatrixClientPeg.get().setRoomMutePushRule(
-                "global", roomId, this.state.areNotifsMuted
-            ));
-        }
-        */
         var cli = MatrixClientPeg.get();
-        this.setState({areNotifsMuted: isMuted});
+
         if (!cli.isGuest()) {
             cli.setRoomMutePushRule(
                 "global", roomId, isMuted
-            );
+            ).then(function() {
+                console.log("DEBUG: then");
+                self.setState({areNotifsMuted: isMuted});
+
+                // delay slightly so that the user can see their state change
+                q.delay(500).then(function() {
+                    if (self.props.onFinished) {
+                        self.props.onFinished();
+                    };
+                });
+            }).fail(function(error) {
+                console.log("DEBUG: fail");
+                console.log(error);
+            });
         }
     },
 
@@ -71,9 +78,6 @@ module.exports = React.createClass({
 
     _onClickAllNotifs: function() {
         this._save(false);
-        if (this.props.onFinished) {
-            this.props.onFinished();
-        };
     },
 
     _onClickMentions: function() {
@@ -82,9 +86,6 @@ module.exports = React.createClass({
 
     _onClickMute: function() {
         this._save(true);
-        if (this.props.onFinished) {
-            this.props.onFinished();
-        };
     },
 
     render: function() {
