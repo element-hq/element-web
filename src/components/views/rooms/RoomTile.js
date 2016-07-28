@@ -44,17 +44,48 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
+        var areNotifsMuted = false;
+        var cli = MatrixClientPeg.get();
+        if (!cli.isGuest()) {
+            var roomPushRule = cli.getRoomPushRule("global", this.props.room.roomId);
+            if (roomPushRule) {
+                if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
+                    areNotifsMuted = true;
+                }
+            }
+        }
+
         return({
             hover : false,
             badgeHover : false,
             menu: false,
+            areNotifsMuted: areNotifsMuted,
         });
+    },
+
+    onAction: function(payload) {
+        switch (payload.action) {
+            case 'notification_change':
+                // Is the notificaion about this room
+                if (payload.roomId === this.props.room.roomId) {
+                    this.setState( { areNotifsMuted : payload.isMuted });
+                }
+                break;
+        }
+    },
+
+    componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+    },
+
+    componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
     },
 
     onClick: function() {
         dis.dispatch({
             action: 'view_room',
-            room_id: this.props.room.roomId
+            room_id: this.props.room.roomId,
         });
     },
 
@@ -119,6 +150,17 @@ module.exports = React.createClass({
             'mx_RoomTile_menu': this.state.menu,
         });
 
+        var avatarClasses = classNames({
+            'mx_RoomTile_avatar': true,
+            'mx_RoomTile_mute': this.state.areNotifsMuted,
+        });
+
+        var badgeClasses = classNames({
+            'mx_RoomTile_badge': true,
+            'mx_RoomTile_badgeButton': this.state.badgeHover || this.state.menu,
+            'mx_RoomTile_badgeMute': this.state.areNotifsMuted,
+        });
+
         // XXX: We should never display raw room IDs, but sometimes the
         // room name js sdk gives is undefined (cannot repro this -- k)
         var name = this.props.room.name || this.props.room.roomId;
@@ -126,11 +168,6 @@ module.exports = React.createClass({
 
         var badge;
         var badgeContent;
-
-        var badgeClasses = classNames({
-            'mx_RoomTile_badge': true,
-            'mx_RoomTile_badgeButton': this.state.badgeHover,
-        });
 
         if (this.state.badgeHover || this.state.menu) {
             badgeContent = "\u00B7\u00B7\u00B7";
@@ -141,19 +178,28 @@ module.exports = React.createClass({
             badgeContent = '\u200B';
         }
 
-        badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
+        if (this.state.areNotifsMuted && !(this.state.badgeHover || this.state.menu)) {
+            badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}><img className="mx_RoomTile_badgeIcon" src="img/icon-context-mute.svg" width="16" height="12" /></div>;
+        } else {
+            badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
+        }
 
         var label;
         var tooltip;
         if (!this.props.collapsed) {
-            var className = 'mx_RoomTile_name' + (this.props.isInvite ? ' mx_RoomTile_invite' : '');
+            var nameClasses = classNames({
+                'mx_RoomTile_name': true,
+                'mx_RoomTile_invite': this.props.isInvite,
+                'mx_RoomTile_mute': this.state.areNotifsMuted,
+            });
+
             let nameHTML = emojifyText(name);
             if (this.props.selected) {
                 name = <span dangerouslySetInnerHTML={nameHTML}></span>;
 
-                label = <div title={ name } onClick={this.onClick} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className }>{ name }</div>;
+                label = <div title={ name } onClick={this.onClick} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ nameClasses }>{ name }</div>;
             } else {
-                label = <div title={ name } onClick={this.onClick} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ className } dangerouslySetInnerHTML={nameHTML}></div>;
+                label = <div title={ name } onClick={this.onClick} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ nameClasses } dangerouslySetInnerHTML={nameHTML}></div>;
             }
         }
         else if (this.state.hover) {
@@ -177,7 +223,7 @@ module.exports = React.createClass({
 
         return connectDragSource(connectDropTarget(
             <div className={classes} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-                <div className="mx_RoomTile_avatar">
+                <div className={avatarClasses}>
                     <RoomAvatar onClick={this.onClick} room={this.props.room} width={24} height={24} />
                 </div>
                 { label }
