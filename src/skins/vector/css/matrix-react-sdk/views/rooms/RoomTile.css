@@ -97,7 +97,7 @@ limitations under the License.
 }
 
 /* This is the bottom of the speech bubble */
-.mx_RoomTile_highlight .mx_RoomTile_badge:after {
+.mx_RoomTile_highlight .mx_RoomTile_badge:not(.mx_RoomTile_badgeMute):after {
     content: "";
     position: absolute;
     display: block;
@@ -126,6 +126,11 @@ limitations under the License.
 }
 
 .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton, .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute, .mx_RoomTile.mx_RoomTile_menu .mx_RoomTile_badge, .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute {
+    letter-spacing: 0.1em;
+    opacity: 1;
+}
+
+.mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute, .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute {
     background-color: rgb(214, 214, 214);
     letter-spacing: 0.1em;
     opacity: 1;
