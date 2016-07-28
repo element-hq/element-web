@@ -125,7 +125,7 @@ limitations under the License.
     padding-right: 4px;
 }
 
-.mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton, .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute, .mx_RoomTile.mx_RoomTile_menu .mx_RoomTile_badge, .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute {
+.mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton, .mx_RoomTile.mx_RoomTile_menu .mx_RoomTile_badge, .mx_RoomTile {
     letter-spacing: 0.1em;
     opacity: 1;
 }
@@ -134,6 +134,7 @@ limitations under the License.
     background-color: rgb(214, 214, 214);
     letter-spacing: 0.1em;
     opacity: 1;
+    top: 2px;
 }
 
 .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeMute {
