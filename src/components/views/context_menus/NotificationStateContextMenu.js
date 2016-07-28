@@ -20,6 +20,7 @@ var q = require("q");
 var React = require('react');
 var classNames = require('classnames');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var dis = require('matrix-react-sdk/lib/dispatcher');
 
 module.exports = React.createClass({
     displayName: 'NotificationStateContextMenu',
@@ -59,7 +60,17 @@ module.exports = React.createClass({
                 self.setState({areNotifsMuted: isMuted});
 
                 // delay slightly so that the user can see their state change
+                // before closing the menu
                 q.delay(500).then(function() {
+                    // tell everyone that wants to know of the change in
+                    // notification state
+                    dis.dispatch({
+                        action: 'notification_change',
+                        roomId: self.props.room.roomId,
+                        isMuted: isMuted,
+                    });
+
+                    // Close the context menu
                     if (self.props.onFinished) {
                         self.props.onFinished();
                     };
