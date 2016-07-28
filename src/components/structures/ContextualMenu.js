@@ -62,7 +62,7 @@ module.exports = {
         };
 
         var chevronOffset = {
-            top: props.cheveronOffset,
+            top: props.chevronOffset,
         }
 
         var chevron = null;
