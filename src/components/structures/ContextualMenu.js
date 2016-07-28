@@ -28,6 +28,12 @@ var ReactDOM = require('react-dom');
 module.exports = {
     ContextualMenuContainerId: "mx_ContextualMenu_Container",
 
+     propTypes: {
+        menuWidth: React.PropTypes.number,
+        menuHeight: React.PropTypes.number,
+        chevronOffset: React.PropTypes.number,
+    },
+
     getOrCreateContainer: function() {
         var container = document.getElementById(this.ContextualMenuContainerId);
 
@@ -55,12 +61,16 @@ module.exports = {
             top: props.top,
         };
 
+        var chevronOffset = {
+            top: props.cheveronOffset,
+        }
+
         var chevron = null;
         if (props.left) {
-            chevron = <div style={ {top: props.chevronOffset} } className="mx_ContextualMenu_chevron_left"></div>
+            chevron = <div style={chevronOffset} className="mx_ContextualMenu_chevron_left"></div>
             position.left = props.left;
         } else {
-            chevron = <div className="mx_ContextualMenu_chevron_right"></div>
+            chevron = <div style={chevronOffset} className="mx_ContextualMenu_chevron_right"></div>
             position.right = props.right;
         }
 
