@@ -175,7 +175,7 @@ limitations under the License.
 }
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .mx_RoomTile_selected .mx_RoomTile_name {
