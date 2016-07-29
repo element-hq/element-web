@@ -91,7 +91,7 @@ limitations under the License.
     z-index: 200;
 }
 
-/* Position mute icon when collapsed - invisiible at the moment */
+/* Position mute icon when room muted and collapsed - invisible at the moment */
 .collapsed .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeMute {
     background-color: rgba(0,0,0,0);
     opacity: 0;
@@ -112,7 +112,7 @@ limitations under the License.
     display: none;
 }
 
-/* This is the bottom of the speech bubble */
+/* This is the bottom of the speech bubble - not drawn when room muted */
 .mx_RoomTile_highlight .mx_RoomTile_badge:not(.mx_RoomTile_badgeMute):after {
     content: "";
     position: absolute;
@@ -146,7 +146,7 @@ limitations under the License.
     opacity: 1;
 }
 
-/* Position menu icon when room muted and collapsed */
+/* Position menu icon when room muted */
 .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute, .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute {
     background-color: rgb(214, 214, 214);
     letter-spacing: 0.1em;
@@ -154,7 +154,7 @@ limitations under the License.
     top: 2px;
 }
 
-/* Position mute icon when collapsed */
+/* Position mute icon when room muted */
 .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeMute {
     background-color: rgba(0,0,0,0);
     opacity: 1;
