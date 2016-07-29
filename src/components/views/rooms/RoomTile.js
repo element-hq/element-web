@@ -229,15 +229,11 @@ module.exports = React.createClass({
 
         return connectDragSource(connectDropTarget(
             <div className={classes} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-                <div className="mx_RoomTile_avatarWrapper">
-                    <div className={avatarClasses}>
-                        <RoomAvatar onClick={this.onClick} room={this.props.room} width={24} height={24} />
-                    </div>
+                <div className={avatarClasses}>
+                    <RoomAvatar onClick={this.onClick} room={this.props.room} width={24} height={24} />
                 </div>
                 { label }
-                <div className="mx_RoomTile_badgeWrapper">
-                    { badge }
-                </div>
+                { badge }
                 { incomingCallBox }
                 { tooltip }
             </div>
