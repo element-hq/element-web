@@ -111,6 +111,12 @@ module.exports = React.createClass({
     onBadgeClicked: function(e) {
         // Only allow none guests to access the context menu
         if (!MatrixClientPeg.get().isGuest()) {
+
+            // If the badge is clicked, then no longer show tooltip
+            if (this.props.collapsed) {
+                this.setState({ hover: false });
+            }
+
             var Menu = sdk.getComponent('context_menus.NotificationStateContextMenu');
             var elementRect = e.target.getBoundingClientRect();
             // The window X and Y offsets are to adjust position when zoomed in to page
