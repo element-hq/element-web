@@ -51,6 +51,7 @@ module.exports.components['views.dialogs.QuestionDialog'] = require('./component
 module.exports.components['views.dialogs.SetDisplayNameDialog'] = require('./components/views/dialogs/SetDisplayNameDialog');
 module.exports.components['views.dialogs.TextInputDialog'] = require('./components/views/dialogs/TextInputDialog');
 module.exports.components['views.elements.EditableText'] = require('./components/views/elements/EditableText');
+module.exports.components['views.elements.EditableTextContainer'] = require('./components/views/elements/EditableTextContainer');
 module.exports.components['views.elements.PowerSelector'] = require('./components/views/elements/PowerSelector');
 module.exports.components['views.elements.ProgressBar'] = require('./components/views/elements/ProgressBar');
 module.exports.components['views.elements.TintableSvg'] = require('./components/views/elements/TintableSvg');

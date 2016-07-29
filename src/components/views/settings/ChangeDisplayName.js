@@ -21,29 +21,10 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 
 module.exports = React.createClass({
     displayName: 'ChangeDisplayName',
-    propTypes: {
-        onFinished: React.PropTypes.func
-    },
 
-    getDefaultProps: function() {
-        return {
-            onFinished: function() {},
-        };
-    },
-
-    getInitialState: function() {
-        return {
-            busy: false,
-            errorString: null
-        }
-    },
-
-    componentWillMount: function() {
+    _getDisplayName: function() {
         var cli = MatrixClientPeg.get();
-        this.setState({busy: true});
-        var self = this;
-        cli.getProfileInfo(cli.credentials.userId).done(function(result) {
-
+        return cli.getProfileInfo(cli.credentials.userId).then(function(result) {
             var displayname = result.displayname;
             if (!displayname) {
                 if (MatrixClientPeg.get().isGuest()) {
@@ -53,68 +34,26 @@ module.exports = React.createClass({
                     displayname = MatrixClientPeg.get().getUserIdLocalpart();
                 }
             }
-
-            self.setState({
-                displayName: displayname,
-                busy: false
-            });
+            return displayname;
         }, function(error) {
-            self.setState({
-                errorString: "Failed to fetch display name",
-                busy: false
-            });
+            throw new Error("Failed to fetch display name");
         });
     },
 
-    changeDisplayname: function(new_displayname) {
-        this.setState({
-            busy: true,
-            errorString: null,
-        })
-
-        var self = this;
-        MatrixClientPeg.get().setDisplayName(new_displayname).then(function() {
-            self.setState({
-                busy: false,
-                displayName: new_displayname
-            });
-        }, function(error) {
-            self.setState({
-                busy: false,
-                errorString: "Failed to set display name"
-            });
+    _changeDisplayName: function(new_displayname) {
+        var cli = MatrixClientPeg.get();
+        return cli.setDisplayName(new_displayname).catch(function(e) {
+            throw new Error("Failed to set display name");
         });
-    },
-
-    edit: function() {
-        this.refs.displayname_edit.edit()
-    },
-
-    onValueChanged: function(new_value, shouldSubmit) {
-        if (shouldSubmit) {
-            this.changeDisplayname(new_value);
-        }
     },
 
     render: function() {
-        if (this.state.busy) {
-            var Loader = sdk.getComponent("elements.Spinner");
-            return (
-                <Loader />
-            );
-        } else if (this.state.errorString) {
-            return (
-                <div className="error">{this.state.errorString}</div>
-            );
-        } else {
-            var EditableText = sdk.getComponent('elements.EditableText');
-            return (
-                <EditableText ref="displayname_edit" initialValue={this.state.displayName}
-                    className="mx_EditableText"
-                    placeholderClassName="mx_EditableText_placeholder"
-                    placeholder="No display name"
-                    onValueChanged={this.onValueChanged} />
-            );
-        }
+        var EditableTextContainer = sdk.getComponent('elements.EditableTextContainer');
+        return (
+            <EditableTextContainer
+                getInitialValue={this._getDisplayName}
+                placeholder="No display name"
+                onSubmit={this._changeDisplayName} />
+        );
     }
 });

@@ -49,6 +49,8 @@ module.exports = React.createClass({
             label: '',
             placeholder: '',
             editable: true,
+            className: "mx_EditableText",
+            placeholderClassName: "mx_EditableText_placeholder",
         };
     },
 
@@ -92,7 +94,7 @@ module.exports = React.createClass({
             this.refs.editable_div.textContent = this.value;
             this.refs.editable_div.setAttribute("class", this.props.className);
             this.placeholder = false;
-        }            
+        }
     },
 
     getValue: function() {
@@ -101,7 +103,7 @@ module.exports = React.createClass({
 
     setValue: function(value) {
         this.value = value;
-        this.showPlaceholder(!this.value);        
+        this.showPlaceholder(!this.value);
     },
 
     edit: function() {
@@ -125,7 +127,7 @@ module.exports = React.createClass({
 
     onKeyDown: function(ev) {
         // console.log("keyDown: textContent=" + ev.target.textContent + ", value=" + this.value + ", placeholder=" + this.placeholder);
-        
+
         if (this.placeholder) {
             this.showPlaceholder(false);
         }
@@ -173,7 +175,7 @@ module.exports = React.createClass({
             var range = document.createRange();
             range.setStart(node, 0);
             range.setEnd(node, node.length);
-            
+
             var sel = window.getSelection();
             sel.removeAllRanges();
             sel.addRange(range);
