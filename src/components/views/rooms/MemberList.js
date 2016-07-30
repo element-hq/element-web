@@ -521,7 +521,6 @@ module.exports = React.createClass({
             <div className="mx_MemberList">
                     {inviteMemberListSection}
                     <GeminiScrollbar autoshow={true}
-                                     relayoutOnUpdate={false}
                                      className="mx_MemberList_joined mx_MemberList_outerWrapper">
                         <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
                                 createOverflowElement={this._createOverflowTile}>
