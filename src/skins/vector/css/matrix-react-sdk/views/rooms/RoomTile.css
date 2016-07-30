@@ -40,7 +40,7 @@ limitations under the License.
 .mx_RoomTile_name {
     display: inline-block;
     position: relative;
-    width: 100px;
+    width: 103px;
     vertical-align: middle;
     overflow: hidden;
     /* word-break: break-word; */
@@ -54,7 +54,7 @@ limitations under the License.
 
 .mx_RoomTile_name:before {
     content:'';
-    width:100px;
+    width:103px;
     height:22px;
     top: 0px;
     left: 0px;
@@ -83,7 +83,7 @@ limitations under the License.
 
 .collapsed .mx_RoomTile_badge {
     top: -40px;
-    left: 30px;
+    left: 31px;
     min-width: 12px;
     height: 16px;
     border-radius: 16px;
