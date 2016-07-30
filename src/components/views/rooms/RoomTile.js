@@ -201,9 +201,9 @@ module.exports = React.createClass({
 
             let nameHTML = emojifyText(name);
             if (this.props.selected) {
-                name = <span dangerouslySetInnerHTML={nameHTML}></span>;
+                let nameSelected = <span dangerouslySetInnerHTML={nameHTML}></span>;
 
-                label = <div title={ name } onClick={this.onClick} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ nameClasses }>{ name }</div>;
+                label = <div title={ name } onClick={this.onClick} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ nameClasses }>{ nameSelected }</div>;
             } else {
                 label = <div title={ name } onClick={this.onClick} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ nameClasses } dangerouslySetInnerHTML={nameHTML}></div>;
             }
