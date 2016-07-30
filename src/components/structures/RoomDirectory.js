@@ -282,8 +282,7 @@ module.exports = React.createClass({
                 <SimpleRoomHeader title="Directory" />
                 <div className="mx_RoomDirectory_list">
                     <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
-                    <GeminiScrollbar className="mx_RoomDirectory_tableWrapper"
-                                     relayoutOnUpdate={false} >
+                    <GeminiScrollbar className="mx_RoomDirectory_tableWrapper">
                         <table ref="directory_table" className="mx_RoomDirectory_table">
                             <tbody>
                                 { this.getRows(this.state.roomAlias) }
