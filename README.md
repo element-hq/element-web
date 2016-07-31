@@ -53,8 +53,12 @@ You can configure the app by copying `vector/config.sample.json` to
 1. `default_hs_url` is the default home server url.
 1. `default_is_url` is the default identity server url (this is the server used
    for verifying third party identifiers like email addresses). If this is blank,
-   registering with an email address or adding an email address to your account
-   will not work.
+   registering with an email address, adding an email address to your account,
+   or inviting users via email address will not work.  Matrix identity servers are
+   very simple web services which map third party identifiers (currently only email 
+   addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
+   for more details.  Currently the only public matrix identity servers are https://matrix.org
+   and https://vector.im.  In future identity servers will be decentralised.
 
 
 Running as a Desktop app
