@@ -82,5 +82,6 @@
   },
   "optionalDependencies": {
     "olm": "https://matrix.org/packages/npm/olm/olm-1.0.0.tgz"
-  }
+  },
+  "main": "vector/electron-entry.js"
 }
