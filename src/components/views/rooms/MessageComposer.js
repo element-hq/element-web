@@ -189,7 +189,7 @@ export default class MessageComposer extends React.Component {
             var uploadButton = (
                 <div key="controls_upload" className="mx_MessageComposer_upload"
                         onClick={this.onUploadClick} title="Upload file">
-                    <TintableSvg src="img/upload.svg" width="19" height="24"/>
+                    <TintableSvg src="img/icons-upload.svg" width="35" height="35"/>
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
                         multiple
