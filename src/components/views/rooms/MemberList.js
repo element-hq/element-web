@@ -492,7 +492,7 @@ module.exports = React.createClass({
             invitedSection = (
                 <div className="mx_MemberList_invited">
                     <h2>Invited</h2>
-                    <div autoshow={true} className="mx_MemberList_wrapper">
+                    <div className="mx_MemberList_wrapper">
                         {invitedMemberTiles}
                     </div>
                 </div>

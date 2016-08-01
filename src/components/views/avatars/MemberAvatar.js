@@ -59,9 +59,12 @@ module.exports = React.createClass({
 
     render: function() {
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+
+        var {member, ...otherProps} = this.props;
+
         return (
-            <BaseAvatar {...this.props} name={this.state.name} title={this.state.title}
-                idName={this.props.member.userId} url={this.state.imageUrl} />
+            <BaseAvatar {...otherProps} name={this.state.name} title={this.state.title}
+                idName={member.userId} url={this.state.imageUrl} />
         );
     }
 });
