@@ -51,6 +51,10 @@ limitations under the License.
     overflow-y: auto;
 }
 
+.mx_LeftPanel.collapsed .mx_BottomLeftMenu {
+   flex: 0 0 120px;
+}
+
 .mx_LeftPanel .mx_BottomLeftMenu {
     -webkit-box-ordinal-group: 3;
     -moz-box-ordinal-group: 3;
