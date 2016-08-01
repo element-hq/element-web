@@ -18,6 +18,19 @@ module.exports = React.createClass({
 
         // optional transition information for changing existing children
         transition: React.PropTypes.object,
+
+        // a list of state objects to apply to each child node in turn
+        startStyles: React.PropTypes.array,
+
+        // a list of transition options from the corresponding startStyle
+        enterTransitionOpts: React.PropTypes.array,
+    },
+
+    getDefaultProps: function() {
+        return {
+            startStyles: [],
+            enterTransitionOpts: [],
+        };
     },
 
     componentWillMount: function() {
@@ -56,56 +69,71 @@ module.exports = React.createClass({
                 }
                 self.children[c.key] = old;
             } else {
-                // new element. If it has a startStyle, use that as the style and go through
+                // new element. If we have a startStyle, use that as the style and go through
                 // the enter animations
-                var newProps = {
-                    ref: self.collectNode.bind(self, c.key)
-                };
-                if (c.props.startStyle && Object.keys(c.props.startStyle).length) {
-                    var startStyle = c.props.startStyle;
-                    if (Array.isArray(startStyle)) {
-                        startStyle = startStyle[0];
-                    }
-                    newProps._restingStyle = c.props.style;
+                var newProps = {};
+                var restingStyle = c.props.style;
+
+                var startStyles = self.props.startStyles;
+                if (startStyles.length > 0) {
+                    var startStyle = startStyles[0]
                     newProps.style = startStyle;
-                    //console.log("mounted@startstyle0: "+JSON.stringify(startStyle));
-                    // apply the enter animations once it's mounted
+                    // console.log("mounted@startstyle0: "+JSON.stringify(startStyle));
                 }
+
+                newProps.ref = (n => self._collectNode(
+                    c.key, n, restingStyle
+                ));
+
                 self.children[c.key] = React.cloneElement(c, newProps);
             }
         });
     },
 
-    collectNode: function(k, node) {
+    /**
+     * called when a child element is mounted/unmounted
+     *
+     * @param {string}     k              key of the child
+     * @param {null|Object} node          On mount: React node. On unmount: null
+     * @param {Object}     restingStyle   final style
+     */
+    _collectNode: function(k, node, restingStyle) {
         if (
             node &&
             this.nodes[k] === undefined &&
-            node.props.startStyle &&
-            Object.keys(node.props.startStyle).length
+            this.props.startStyles.length > 0
         ) {
+            var startStyles = this.props.startStyles;
+            var transitionOpts = this.props.enterTransitionOpts;
             var domNode = ReactDom.findDOMNode(node);
-            var startStyles = node.props.startStyle;
-            var transitionOpts = node.props.enterTransitionOpts;
-            if (!Array.isArray(startStyles)) {
-                startStyles = [ startStyles ];
-                transitionOpts = [ transitionOpts ];
-            }
             // start from startStyle 1: 0 is the one we gave it
             // to start with, so now we animate 1 etc.
             for (var i = 1; i < startStyles.length; ++i) {
                 Velocity(domNode, startStyles[i], transitionOpts[i-1]);
-                //console.log("start: "+JSON.stringify(startStyles[i]));
+                /*
+                console.log("start:",
+                            JSON.stringify(transitionOpts[i-1]),
+                            "->",
+                            JSON.stringify(startStyles[i]),
+                            );
+                */
             }
+
             // and then we animate to the resting state
-            Velocity(domNode, node.props._restingStyle,
+            Velocity(domNode, restingStyle,
                      transitionOpts[i-1])
             .then(() => {
                 // once we've reached the resting state, hide the element if
                 // appropriate
-                domNode.style.visibility = node.props._restingStyle.visibility;
+                domNode.style.visibility = restingStyle.visibility;
             });
 
-            //console.log("enter: "+JSON.stringify(node.props._restingStyle));
+            /*
+            console.log("enter:",
+                        JSON.stringify(transitionOpts[i-1]),
+                        "->",
+                        JSON.stringify(restingStyle));
+            */
         } else if (node === null) {
             // Velocity stores data on elements using the jQuery .data()
             // method, and assumes you'll be using jQuery's .remove() to
