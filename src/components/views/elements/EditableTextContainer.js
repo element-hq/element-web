@@ -39,7 +39,7 @@ export default class EditableTextContainer extends React.Component {
             errorString: null,
             value: props.initialValue,
         };
-        this._onValueChanged=this._onValueChanged.bind(this);
+        this._onValueChanged = this._onValueChanged.bind(this);
     }
 
     componentWillMount() {
