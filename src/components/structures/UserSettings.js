@@ -319,7 +319,7 @@ module.exports = React.createClass({
         );
     },
 
-    _renderDeviceInfo: function() {
+    _renderCryptoInfo: function() {
         if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
             return null;
         }
@@ -338,6 +338,45 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
+    },
+
+    _renderDevicesPanel: function() {
+        if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
+            return null;
+        }
+        var DevicesPanel = sdk.getComponent('settings.DevicesPanel');
+        return (
+            <div>
+                <h3>Devices</h3>
+                <DevicesPanel className="mx_UserSettings_section" />
+            </div>
+        );
+    },
+
+    _renderLabs: function () {
+        let features = LABS_FEATURES.map(feature => (
+            <div key={feature.id} className="mx_UserSettings_toggle">
+                <input
+                    type="checkbox"
+                    id={feature.id}
+                    name={feature.id}
+                    defaultChecked={UserSettingsStore.isFeatureEnabled(feature.id)}
+                    onChange={e => {
+                        UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
+                        this.forceUpdate();
+                    }}/>
+                <label htmlFor={feature.id}>{feature.name}</label>
+            </div>
+        ));
+        return (
+            <div>
+                <h3>Labs</h3>
+                <div className="mx_UserSettings_section">
+                    <p>These are experimental features that may break in unexpected ways. Use with caution.</p>
+                    {features}
+                </div>
+            </div>
+        )
     },
 
     render: function() {
@@ -360,6 +399,7 @@ module.exports = React.createClass({
         var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
         var Notifications = sdk.getComponent("settings.Notifications");
         var EditableText = sdk.getComponent('elements.EditableText');
+
         var avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
         );
@@ -434,30 +474,6 @@ module.exports = React.createClass({
             </div>);
         }
 
-        this._renderLabs = function () {
-            let features = LABS_FEATURES.map(feature => (
-                <div key={feature.id} className="mx_UserSettings_toggle">
-                    <input
-                           type="checkbox"
-                           id={feature.id}
-                           name={feature.id}
-                           defaultChecked={UserSettingsStore.isFeatureEnabled(feature.id)}
-                           onChange={e => UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked)} />
-                    <label htmlFor={feature.id}>{feature.name}</label>
-                </div>
-            ));
-            return (
-                <div>
-                    <h3>Labs</h3>
-
-                    <div className="mx_UserSettings_section">
-                        <p>These are experimental features that may break in unexpected ways. Use with caution.</p>
-                        {features}
-                    </div>
-                </div>
-            )
-        };
-
         return (
             <div className="mx_UserSettings">
                 <SimpleRoomHeader title="Settings" onCancelClick={ this.props.onClose }/>
@@ -510,10 +526,9 @@ module.exports = React.createClass({
                 {notification_area}
 
                 {this._renderUserInterfaceSettings()}
-
-                {this._renderDeviceInfo()}
-
                 {this._renderLabs()}
+                {this._renderDevicesPanel()}
+                {this._renderCryptoInfo()}
 
                 <h3>Advanced</h3>
 
