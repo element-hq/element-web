@@ -270,3 +270,15 @@ input[type=text]:focus, textarea:focus {
     background-color: #76CFA6;
     color: white;
 }
+
+/** green button with rounded corners */
+.textButton {
+    color: #fff;
+    background-color: #76cfa6;
+    border-radius: 17px;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    cursor: pointer;
+    display: inline;
+}
