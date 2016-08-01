@@ -171,11 +171,11 @@ export default class MessageComposer extends React.Component {
         else {
             callButton =
                 <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
-                    <TintableSvg src="img/voice.svg" width="16" height="26"/>
+                    <TintableSvg src="img/icon-call.svg" width="35" height="35"/>
                 </div>;
             videoCallButton =
                 <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
-                    <TintableSvg src="img/call.svg" width="30" height="22"/>
+                    <TintableSvg src="img/icons-video.svg" width="35" height="35"/>
                 </div>;
         }
 
