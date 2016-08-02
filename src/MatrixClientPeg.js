@@ -40,6 +40,14 @@ function deviceId() {
 class MatrixClientPeg {
     constructor() {
         this.matrixClient = null;
+
+        // These are the default options used when Lifecycle.js
+        // starts the client. These can be altered when the
+        // 'will_start_client' event is dispatched.
+        this.opts = {
+            pendingEventOrdering: "detached",
+            initialSyncLimit: 20,
+        };
     }
 
     get(): MatrixClient {
@@ -96,13 +104,13 @@ class MatrixClientPeg {
     }
 
     getCredentials() {
-        return [
-            this.matrixClient.baseUrl,
-            this.matrixClient.idBaseUrl,
-            this.matrixClient.credentials.userId,
-            this.matrixClient.getAccessToken(),
-            this.matrixClient.isGuest(),
-        ];
+        return {
+            homeserverUrl: this.matrixClient.baseUrl,
+            identityServerUrl: this.matrixClient.idBaseUrl,
+            userId: this.matrixClient.credentials.userId,
+            accessToken: this.matrixClient.getAccessToken(),
+            guest: this.matrixClient.isGuest(),
+        };
     }
 
     tryRestore() {
