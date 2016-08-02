@@ -37,6 +37,8 @@ export default class MessageComposer extends React.Component {
         this.onUpArrow = this.onUpArrow.bind(this);
         this.onDownArrow = this.onDownArrow.bind(this);
         this.onTab = this.onTab.bind(this);
+        this._tryComplete = this._tryComplete.bind(this);
+        this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
 
         this.state = {
             autocompleteQuery: '',
@@ -142,7 +144,22 @@ export default class MessageComposer extends React.Component {
     }
 
     onTab() {
-        return this.refs.autocomplete.onTab();
+        // FIXME Autocomplete doesn't have an onTab - what is this supposed to do?
+        // return this.refs.autocomplete.onTab();
+        return false;
+    }
+
+    _tryComplete(): boolean {
+        if (this.refs.autocomplete) {
+            return this.refs.autocomplete.onConfirm();
+        }
+        return false;
+    }
+
+    _onAutocompleteConfirm(range, completion) {
+        if (this.messageComposerInput) {
+            this.messageComposerInput.onConfirmAutocompletion(range, completion);
+        }
     }
 
     render() {
@@ -203,7 +220,7 @@ export default class MessageComposer extends React.Component {
                     key="controls_input"
                     onResize={this.props.onResize}
                     room={this.props.room}
-                    tryComplete={this.refs.autocomplete && this.refs.autocomplete.onConfirm}
+                    tryComplete={this._tryComplete}
                     onUpArrow={this.onUpArrow}
                     onDownArrow={this.onDownArrow}
                     onTab={this.onTab}
@@ -227,7 +244,7 @@ export default class MessageComposer extends React.Component {
                 <div className="mx_MessageComposer_autocomplete_wrapper">
                     <Autocomplete
                         ref="autocomplete"
-                        onConfirm={this.messageComposerInput && this.messageComposerInput.onConfirmAutocompletion}
+                        onConfirm={this._onAutocompleteConfirm}
                         query={this.state.autocompleteQuery}
                         selection={this.state.selection} />
                 </div>
