@@ -11,11 +11,11 @@ let instance = null;
 export default class UserProvider extends AutocompleteProvider {
     constructor() {
         super(USER_REGEX, {
-            keys: ['displayName', 'userId'],
+            keys: ['name', 'userId'],
         });
         this.users = [];
         this.fuse = new Fuse([], {
-            keys: ['displayName', 'userId'],
+            keys: ['name', 'userId'],
         });
     }
 
@@ -25,11 +25,12 @@ export default class UserProvider extends AutocompleteProvider {
         if (command) {
             this.fuse.set(this.users);
             completions = this.fuse.search(command[0]).map(user => {
+                const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 return {
                     completion: user.userId,
                     component: (
                         <TextualCompletion
-                            title={user.displayName || user.userId}
+                            title={displayName}
                             description={user.userId} />
                     ),
                     range
