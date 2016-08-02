@@ -132,8 +132,8 @@ module.exports = React.createClass({
             if (members.length === 1 &&
                 invited.length === 1 &&
                 userIds.indexOf(members[0].userId) !== -1 &&
-                userIds.indexOf(invited[0].userId) !== -1) &&
-                invitedRoomId === null
+                userIds.indexOf(invited[0].userId) !== -1 &&
+                invitedRoomId === null)
             {
                 invitedRoomId = rooms[i].roomId;
                 // keep looking: we'll use this one if there's nothing better
