@@ -20,7 +20,15 @@ import UserActivity from './UserActivity';
 import Presence from './Presence';
 import dis from './dispatcher';
 
-function setLoggedIn(credentials, options) {
+/**
+ * Transitions to a logged-in state using the given credentials
+ * @param {string} credentials.homeserverUrl The base HS URL
+ * @param {string} credentials.identityServerUrl The base IS URL
+ * @param {string} credentials.userId The full Matrix User ID
+ * @param {string} credentials.accessToken The session access token
+ * @param {boolean} credentials.guest True if the session is a guest session
+ */
+function setLoggedIn(credentials) {
     credentials.guest = Boolean(credentials.guest);
     console.log("onLoggedIn => %s (guest=%s)", credentials.userId, credentials.guest);
     MatrixClientPeg.replaceUsingAccessToken(
@@ -30,7 +38,7 @@ function setLoggedIn(credentials, options) {
 
     dis.dispatch({action: 'on_logged_in'});
 
-    startMatrixClient(options);
+    startMatrixClient();
 }
 
 function logout() {
@@ -54,7 +62,7 @@ function logout() {
     );
 }
 
-function startMatrixClient(options) {
+function startMatrixClient() {
     // dispatch this before starting the matrix client: it's used
     // to add listeners for the 'sync' event so otherwise we'd have
     // a race condition (and we need to dispatch synchronously for this
