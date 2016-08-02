@@ -45,7 +45,6 @@ class MatrixClientPeg {
         // starts the client. These can be altered when the
         // 'will_start_client' event is dispatched.
         this.opts = {
-            pendingEventOrdering: "detached",
             initialSyncLimit: 20,
         };
     }

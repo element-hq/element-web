@@ -79,6 +79,11 @@ function startMatrixClient() {
     Notifier.start();
     UserActivity.start();
     Presence.start();
+
+    // the react sdk doesn't work without this, so don't allow
+    // it to be overridden (and modify the global object so at
+    // at least the app can see we've changed it)
+    MatrixClientPeg.opts.pendingEventOrdering = "detached";
     MatrixClientPeg.get().startClient(MatrixClientPeg.opts);
 }
 
