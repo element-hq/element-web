@@ -262,6 +262,11 @@ module.exports = React.createClass({
         });
     },
 
+    _onDeactivateAccountClicked: function() {
+        const DeactivateAccountDialog = sdk.getComponent("dialogs.DeactivateAccountDialog");
+        Modal.createDialog(DeactivateAccountDialog, {});
+    },
+
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
 
@@ -377,6 +382,17 @@ module.exports = React.createClass({
                 </div>
             </div>
         )
+    },
+
+    _renderDeactivateAccount: function() {
+        return <div>
+            <h3>Labs</h3>
+                <div className="mx_UserSettings_section">
+                    <button className="mx_UserSettings_button danger"
+                        onClick={this._onDeactivateAccountClicked}>Deactivate my account
+                    </button>
+                </div>
+        </div>;
     },
 
     render: function() {
@@ -547,6 +563,8 @@ module.exports = React.createClass({
                         vector-web version: {this.props.version}<br/>
                     </div>
                 </div>
+
+                {this._renderDeactivateAccount()}
 
                 </GeminiScrollbar>
             </div>
