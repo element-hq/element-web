@@ -386,7 +386,7 @@ module.exports = React.createClass({
 
     _renderDeactivateAccount: function() {
         return <div>
-            <h3>Labs</h3>
+            <h3>Deactivate Account</h3>
                 <div className="mx_UserSettings_section">
                     <button className="mx_UserSettings_button danger"
                         onClick={this._onDeactivateAccountClicked}>Deactivate my account
