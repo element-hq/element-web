@@ -99,7 +99,8 @@ module.exports = React.createClass({
 
     badgeOnMouseEnter: function() {
         // Only allow none guests to access the context menu
-        if (!MatrixClientPeg.get().isGuest()) {
+        // and only change it if it needs to change
+        if (!MatrixClientPeg.get().isGuest() && !this.state.badgeHover) {
             this.setState( { badgeHover : true } );
         }
     },
@@ -185,9 +186,9 @@ module.exports = React.createClass({
         }
 
         if (this.state.areNotifsMuted && !(this.state.badgeHover || this.state.menu)) {
-            badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}><img className="mx_RoomTile_badgeIcon" src="img/icon-context-mute.svg" width="16" height="12" /></div>;
+            badge = <div className={ badgeClasses } onClick={this.onBadgeClicked}><img className="mx_RoomTile_badgeIcon" src="img/icon-context-mute.svg" width="16" height="12" /></div>;
         } else {
-            badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
+            badge = <div className={ badgeClasses } onClick={this.onBadgeClicked}>{ badgeContent }</div>;
         }
 
         var label;
@@ -197,15 +198,16 @@ module.exports = React.createClass({
                 'mx_RoomTile_name': true,
                 'mx_RoomTile_invite': this.props.isInvite,
                 'mx_RoomTile_mute': this.state.areNotifsMuted,
+                'mx_RoomTile_badgeShown': this.props.highlight || notificationCount > 0 || this.state.badgeHover || this.state.menu || this.state.areNotifsMuted,
             });
 
             let nameHTML = emojifyText(name);
             if (this.props.selected) {
                 let nameSelected = <span dangerouslySetInnerHTML={nameHTML}></span>;
 
-                label = <div title={ name } onClick={this.onClick} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ nameClasses }>{ nameSelected }</div>;
+                label = <div title={ name } onClick={this.onClick} className={ nameClasses }>{ nameSelected }</div>;
             } else {
-                label = <div title={ name } onClick={this.onClick} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave} className={ nameClasses } dangerouslySetInnerHTML={nameHTML}></div>;
+                label = <div title={ name } onClick={this.onClick} className={ nameClasses } dangerouslySetInnerHTML={nameHTML}></div>;
             }
         }
         else if (this.state.hover) {
@@ -232,8 +234,10 @@ module.exports = React.createClass({
                 <div className={avatarClasses}>
                     <RoomAvatar onClick={this.onClick} room={this.props.room} width={24} height={24} />
                 </div>
-                { label }
-                { badge }
+                <div className="mx_RoomTile_nameContainer" onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>
+                    { label }
+                    { badge }
+                </div>
                 { incomingCallBox }
                 { tooltip }
             </div>
