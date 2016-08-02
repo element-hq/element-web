@@ -394,11 +394,11 @@ module.exports = React.createClass({
 
         // TODO: keep existingOneToOneRoomId updated if we see any room member changes anywhere
 
-        var useExistingOneToOneRoom = this.state.existingOneToOneRoomId && (this.state.existingOneToOneRoomId !== this.props.member.roomId);
+        const useExistingOneToOneRoom = this.state.existingOneToOneRoomId && (this.state.existingOneToOneRoomId !== this.props.member.roomId);
 
         // check if there are any existing rooms with just us and them (1:1)
         // If so, just view that room. If not, create a private room with them.
-        if (this.state.existingOneToOneRoomId) {
+        if (useExistingOneToOneRoom) {
             dis.dispatch({
                 action: 'view_room',
                 room_id: this.state.existingOneToOneRoomId,
