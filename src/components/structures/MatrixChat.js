@@ -162,7 +162,7 @@ module.exports = React.createClass({
                 this.props.startingQueryParams.guest_access_token)
             {
                 this._autoRegisterAsGuest = false;
-                this._onHaveCredentials({
+                Lifecycle.setLoggedIn({
                     userId: this.props.startingQueryParams.guest_user_id,
                     accessToken: this.props.startingQueryParams.guest_access_token,
                     homeserverUrl: this.getDefaultHsUrl(),
@@ -235,7 +235,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().registerGuest().done(function(creds) {
             console.log("Registered as guest: %s", creds.user_id);
             self._setAutoRegisterAsGuest(false);
-            self._onHaveCredentials({
+            Lifecycle.setLoggedIn({
                 userId: creds.user_id,
                 accessToken: creds.access_token,
                 homeserverUrl: hsUrl,
@@ -577,11 +577,6 @@ module.exports = React.createClass({
         this.scrollStateMap[roomId] = state;
     },
 
-    _onHaveCredentials: function(credentials) {
-        credentials.guest = Boolean(credentials.guest);
-        Lifecycle.setLoggedIn(credentials);
-    },
-
     _onLoggedIn: function(credentials) {
         this.guestCreds = null;
         this.setState({
@@ -909,13 +904,13 @@ module.exports = React.createClass({
     onReturnToGuestClick: function() {
         // reanimate our guest login
         if (this.guestCreds) {
-            this._onHaveCredentials(this.guestCreds);
+            Lifecycle.setLoggedIn(this.guestCreds);
             this.guestCreds = null;
         }
     },
 
     onRegistered: function(credentials) {
-        this._onHaveCredentials(credentials);
+        Lifecycle.setLoggedIn(credentials);
         // do post-registration stuff
         // This now goes straight to user settings
         // We use _setPage since if we wait for
@@ -1137,7 +1132,7 @@ module.exports = React.createClass({
         } else {
             return (
                 <Login
-                    onLoggedIn={this._onHaveCredentials}
+                    onLoggedIn={Lifecycle.setLoggedIn}
                     onRegisterClick={this.onRegisterClick}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
