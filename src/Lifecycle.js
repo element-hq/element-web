@@ -41,6 +41,9 @@ function setLoggedIn(credentials) {
     startMatrixClient();
 }
 
+/**
+ * Logs the current session out and transitions to the logged-out state
+ */
 function logout() {
     if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions
