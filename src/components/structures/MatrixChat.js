@@ -577,6 +577,9 @@ module.exports = React.createClass({
         this.scrollStateMap[roomId] = state;
     },
 
+    /**
+     * Called when a new logged in session has started
+     */
     _onLoggedIn: function(credentials) {
         this.guestCreds = null;
         this.setState({
@@ -585,6 +588,9 @@ module.exports = React.createClass({
         });
     },
 
+    /**
+     * Called when the session is logged out
+     */
     _onLoggedOut: function() {
         this.notifyNewScreen('login');
         this.replaceState({
@@ -593,6 +599,10 @@ module.exports = React.createClass({
         });
     },
 
+    /**
+     * Called just before the matrix client is started
+     * (useful for setting options and listeners)
+     */
     _onWillStartClient() {
         var cli = MatrixClientPeg.get();
 
