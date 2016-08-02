@@ -577,12 +577,6 @@ module.exports = React.createClass({
         this.scrollStateMap[roomId] = state;
     },
 
-    _doLogin(creds) {
-        Lifecycle.setLoggedIn(creds, {
-            syncTimelineLimit: this.props.config.sync_timeline_limit,
-        });
-    },
-
     _onHaveCredentials: function(credentials) {
         credentials.guest = Boolean(credentials.guest);
         Lifecycle.setLoggedIn(credentials);
