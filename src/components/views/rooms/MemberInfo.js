@@ -95,31 +95,31 @@ module.exports = React.createClass({
     },
 
     getExistingOneToOneRoomId: function() {
-        var self = this;
-        var rooms = MatrixClientPeg.get().getRooms();
-        var userIds = [
+        const rooms = MatrixClientPeg.get().getRooms();
+        const userIds = [
             this.props.member.userId,
             MatrixClientPeg.get().credentials.userId
         ];
-        var existingRoomId;
+        let existingRoomId = null;
+        let invitedRoomId = null;
 
         // roomId can be null here because of a hack in MatrixChat.onUserClick where we
         // abuse this to view users rather than room members.
-        var currentMembers;
+        let currentMembers;
         if (this.props.member.roomId) {
-            var currentRoom = MatrixClientPeg.get().getRoom(this.props.member.roomId);
+            const currentRoom = MatrixClientPeg.get().getRoom(this.props.member.roomId);
             currentMembers = currentRoom.getJoinedMembers();
         }
 
         // reuse the first private 1:1 we find
         existingRoomId = null;
 
-        for (var i = 0; i < rooms.length; i++) {
+        for (let i = 0; i < rooms.length; i++) {
             // don't try to reuse public 1:1 rooms
-            var join_rules = rooms[i].currentState.getStateEvents("m.room.join_rules", '');
+            const join_rules = rooms[i].currentState.getStateEvents("m.room.join_rules", '');
             if (join_rules && join_rules.getContent().join_rule === 'public') continue;
 
-            var members = rooms[i].getJoinedMembers();
+            const members = rooms[i].getJoinedMembers();
             if (members.length === 2 &&
                 userIds.indexOf(members[0].userId) !== -1 &&
                 userIds.indexOf(members[1].userId) !== -1)
@@ -127,6 +127,21 @@ module.exports = React.createClass({
                 existingRoomId = rooms[i].roomId;
                 break;
             }
+
+            const invited = rooms[i].getMembersWithMembership('invite');
+            if (members.length === 1 &&
+                invited.length === 1 &&
+                userIds.indexOf(members[0].userId) !== -1 &&
+                userIds.indexOf(invited[0].userId) !== -1 &&
+                invitedRoomId === null)
+            {
+                invitedRoomId = rooms[i].roomId;
+                // keep looking: we'll use this one if there's nothing better
+            }
+        }
+
+        if (existingRoomId === null) {
+            existingRoomId = invitedRoomId;
         }
 
         return existingRoomId;
