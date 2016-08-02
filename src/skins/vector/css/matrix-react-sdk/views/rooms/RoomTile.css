@@ -59,19 +59,6 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
-/*
-.mx_RoomTile_name:before {
-    content:'';
-    width:103px;
-    height:22px;
-    top: 0px;
-    left: 0px;
-    position:absolute;
-    padding-left: 20px;
-    background:linear-gradient(to right, rgba(234,245,240,0) 80%, #eaf5f0 99%);
-}
-*/
-
 .mx_RoomTile_ellipsis .mx_RoomTile_name {
     font-style: italic;
     color: #454545;
@@ -84,6 +71,10 @@ limitations under the License.
 
 .collapsed .mx_RoomTile {
     height: 36px;
+}
+
+.collapsed .mx_RoomTile_nameContainer {
+    height: 0;
 }
 
 .collapsed .mx_RoomTile_name {
