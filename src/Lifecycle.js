@@ -65,6 +65,10 @@ function logout() {
     );
 }
 
+/**
+ * Starts the matrix client and all other react-sdk services that
+ * listen for events while a session is logged in.
+ */
 function startMatrixClient() {
     // dispatch this before starting the matrix client: it's used
     // to add listeners for the 'sync' event so otherwise we'd have
