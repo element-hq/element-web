@@ -580,14 +580,14 @@ module.exports = React.createClass({
     },
 
     _doLogin(creds) {
-        Lifecycle.login(creds, {
+        Lifecycle.setLoggedIn(creds, {
             syncTimelineLimit: this.props.config.sync_timeline_limit,
         });
     },
 
     _onHaveCredentials: function(credentials) {
         credentials.guest = Boolean(credentials.guest);
-        Lifecycle.login(credentials);
+        Lifecycle.setLoggedIn(credentials);
     },
 
     _onLoggedIn: function(credentials) {

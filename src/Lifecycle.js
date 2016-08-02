@@ -20,7 +20,7 @@ import UserActivity from './UserActivity';
 import Presence from './Presence';
 import dis from './dispatcher';
 
-function login(credentials, options) {
+function setLoggedIn(credentials, options) {
     credentials.guest = Boolean(credentials.guest);
     console.log("onLoggedIn => %s (guest=%s)", credentials.userId, credentials.guest);
     MatrixClientPeg.replaceUsingAccessToken(
@@ -94,5 +94,5 @@ function _stopMatrixClient() {
 }
 
 module.exports = {
-    login, logout, startMatrixClient
+    setLoggedIn, logout, startMatrixClient
 };
