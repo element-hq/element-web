@@ -305,9 +305,7 @@ module.exports = React.createClass({
                 break;
             case 'start_upgrade_registration':
                 // stash our guest creds so we can backout if needed
-                if (MatrixClientPeg.get().isGuest()) {
-                    this.guestCreds = MatrixClientPeg.getCredentials();
-                }
+                this.guestCreds = MatrixClientPeg.getCredentials();
                 this.replaceState({
                     screen: "register",
                     upgradeUsername: MatrixClientPeg.get().getUserIdLocalpart(),
