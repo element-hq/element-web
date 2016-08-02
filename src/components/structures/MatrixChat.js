@@ -141,6 +141,10 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this.favicon = new Favico({animation: 'none'});
+
+        // Stashed guest credentials if the user logs out
+        // whilst logged in as a guest user (so they can change
+        // their mind & log back in)
         this.guestCreds = null;
     },
 
