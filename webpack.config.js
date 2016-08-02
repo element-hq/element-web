@@ -43,11 +43,15 @@ module.exports = {
 
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
-
-            // make sure we use the version of olm from vector-web rather than
-            // js-sdk.
-            "olm": path.resolve('./node_modules/olm'),
         },
+    },
+    externals: {
+        // olm takes ages for webpack to process, and it's already heavily
+        // optimised, so there is little to gain by us uglifying it. We
+        // therefore use it via a separate <script/> tag in index.html (which
+        // loads it into the browser global `Olm`), and reference it as an
+        // external here.
+        "olm": "Olm",
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -59,20 +63,6 @@ module.exports = {
         new ExtractTextPlugin("bundle.css", {
             allChunks: true
         }),
-
-        // olm.js includes "require 'fs'", which is never
-        // executed in the browser. Ignore it.
-        new webpack.IgnorePlugin(/^fs$/, /\/olm$/)
     ],
     devtool: 'source-map'
 };
-
-// ignore olm.js if it's not installed, to avoid a scary-looking error.
-try {
-    require('olm');
-    console.log("Olm is installed; including it in webpack bundle");
-} catch (e) {
-    module.exports.plugins.push(
-        new webpack.IgnorePlugin(/^olm$/)
-    );
-}
