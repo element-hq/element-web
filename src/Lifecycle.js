@@ -19,6 +19,7 @@ import Notifier from './Notifier'
 import UserActivity from './UserActivity';
 import Presence from './Presence';
 import dis from './dispatcher';
+import utils from 'matrix-js-sdk/lib/utils';
 
 /**
  * Transitions to a logged-in state using the given credentials
@@ -80,11 +81,9 @@ function startMatrixClient() {
     UserActivity.start();
     Presence.start();
 
-    // the react sdk doesn't work without this, so don't allow
-    // it to be overridden (and modify the global object so at
-    // at least the app can see we've changed it)
-    MatrixClientPeg.opts.pendingEventOrdering = "detached";
-    MatrixClientPeg.get().startClient(MatrixClientPeg.opts);
+    let opts = utils.deepCopy(MatrixClientPeg.opts);
+    opts.pendingEventOrdering = "detached";
+    MatrixClientPeg.get().startClient(opts);
 }
 
 function _onLoggedOut() {
