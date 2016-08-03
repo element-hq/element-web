@@ -497,18 +497,14 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onUpArrow(e) {
-        if(this.props.onUpArrow) {
-            if(this.props.onUpArrow()) {
-                e.preventDefault();
-            }
+        if (this.props.onUpArrow && this.props.onUpArrow()) {
+            e.preventDefault();
         }
     }
 
     onDownArrow(e) {
-        if(this.props.onDownArrow) {
-            if(this.props.onDownArrow()) {
-                e.preventDefault();
-            }
+        if (this.props.onDownArrow && this.props.onDownArrow()) {
+            e.preventDefault();
         }
     }
 

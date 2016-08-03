@@ -64,6 +64,9 @@ export default class Autocomplete extends React.Component {
     onUpArrow(): boolean {
         let completionCount = this.countCompletions(),
             selectionOffset = (completionCount + this.state.selectionOffset - 1) % completionCount;
+        if (!completionCount) {
+            return false;
+        }
         this.setSelection(selectionOffset);
         return true;
     }
@@ -72,6 +75,9 @@ export default class Autocomplete extends React.Component {
     onDownArrow(): boolean {
         let completionCount = this.countCompletions(),
             selectionOffset = (this.state.selectionOffset + 1) % completionCount;
+        if (!completionCount) {
+            return false;
+        }
         this.setSelection(selectionOffset);
         return true;
     }
