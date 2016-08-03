@@ -69,6 +69,7 @@ limitations under the License.
 .mx_ImageView_labelWrapper {
     position: absolute;
     top: 0px;
+    right: 0px;
     height: 100%;
     overflow: auto;
     pointer-events: all;
