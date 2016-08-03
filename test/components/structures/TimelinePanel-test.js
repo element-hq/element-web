@@ -224,7 +224,7 @@ describe('TimelinePanel', function() {
 
         var scrollDefer;
         var panel = ReactDOM.render(
-            <TimelinePanel room={room} onScroll={()=>{scrollDefer.resolve()}} />,
+            <TimelinePanel room={room} onScroll={() => {scrollDefer.resolve()}} />,
             parentDiv
         );
         console.log("TimelinePanel rendered");
@@ -238,17 +238,29 @@ describe('TimelinePanel', function() {
         // the TimelinePanel fires a scroll event
         var awaitScroll = function() {
             scrollDefer = q.defer();
-            return scrollDefer.promise;
+            return scrollDefer.promise.then(() => {
+                console.log("got scroll event; scrollTop now " +
+                            scrollingDiv.scrollTop);
+            });
         };
 
+        function setScrollTop(scrollTop) {
+            const before = scrollingDiv.scrollTop;
+            scrollingDiv.scrollTop = scrollTop;
+            console.log("setScrollTop: before update: " + before +
+                        "; assigned: " + scrollTop +
+                        "; after update: " + scrollingDiv.scrollTop);
+        }
+
         function backPaginate() {
-            scrollingDiv.scrollTop = 0;
+            console.log("back paginating...");
+            setScrollTop(0);
             return awaitScroll().then(() => {
                 if(scrollingDiv.scrollTop > 0) {
                     // need to go further
                     return backPaginate();
                 }
-                console.log("paginated to end.");
+                console.log("paginated to start.");
 
                 // hopefully, we got to the start of the timeline
                 expect(messagePanel.props.backPaginating).toBe(false);
@@ -262,7 +274,6 @@ describe('TimelinePanel', function() {
             expect(messagePanel.props.suppressFirstDateSeparator).toBe(true);
 
             // back-paginate until we hit the start
-            console.log("back paginating...");
             return backPaginate();
         }).then(() => {
             expect(messagePanel.props.suppressFirstDateSeparator).toBe(false);
@@ -271,8 +282,7 @@ describe('TimelinePanel', function() {
 
             // we should now be able to scroll down, and paginate in the other
             // direction.
-            console.log("scrollingDiv.scrollTop is " + scrollingDiv.scrollTop);
-            console.log("Going to set it to " + scrollingDiv.scrollHeight);
+            setScrollTop(scrollingDiv.scrollHeight);
             scrollingDiv.scrollTop = scrollingDiv.scrollHeight;
             return awaitScroll();
         }).then(() => {
