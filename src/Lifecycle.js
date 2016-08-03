@@ -31,10 +31,7 @@ import dis from './dispatcher';
 function setLoggedIn(credentials) {
     credentials.guest = Boolean(credentials.guest);
     console.log("onLoggedIn => %s (guest=%s)", credentials.userId, credentials.guest);
-    MatrixClientPeg.replaceUsingAccessToken(
-        credentials.homeserverUrl, credentials.identityServerUrl,
-        credentials.userId, credentials.accessToken, credentials.guest
-    );
+    MatrixClientPeg.replaceUsingCreds(credentials);
 
     dis.dispatch({action: 'on_logged_in'});
 

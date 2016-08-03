@@ -340,10 +340,13 @@ module.exports = React.createClass({
 
                 var client = MatrixClientPeg.get();
                 client.loginWithToken(payload.params.loginToken).done(function(data) {
-                    MatrixClientPeg.replaceUsingAccessToken(
-                        client.getHomeserverUrl(), client.getIdentityServerUrl(),
-                        data.user_id, data.access_token
-                    );
+                    MatrixClientPeg.replaceUsingCreds({
+                        homeserverUrl: client.getHomeserverUrl(),
+                        identityServerUrl: client.getIdentityServerUrl(),
+                        userId: data.user_id,
+                        accessToken: data.access_token,
+                        guest: false,
+                    });
                     self.setState({
                         screen: undefined,
                         logged_in: true
