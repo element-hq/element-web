@@ -85,50 +85,6 @@ input[type=text]:focus, textarea:focus {
     border-left: 6px solid transparent;
 }
 
-.mx_ContextualMenu_background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 1.0;
-    z-index: 2000;
-}
-
-.mx_ContextualMenu {
-    border: 1px solid #a4a4a4;
-    border-radius: 8px;
-    background-color: #fff;
-    color: #747474;
-    position: fixed;
-    z-index: 2001;
-    padding: 6px;
-}
-
-.mx_ContextualMenu_chevron_right {
-    padding: 12px;
-    position: absolute;
-    right: -21px;
-    top: 0px;
-}
-
-.mx_ContextualMenu_chevron_left {
-    padding: 12px;
-    position: absolute;
-    left: -21px;
-    top: 0px;
-}
-
-.mx_ContextualMenu_field {
-    padding: 3px 6px 3px 6px;
-    cursor: pointer;
-}
-
-.mx_ContextualMenu_spinner {
-    display: block;
-    margin: 0 auto;
-}
-
 .mx_Dialog_wrapper {
     position: fixed;
     z-index: 4000;
