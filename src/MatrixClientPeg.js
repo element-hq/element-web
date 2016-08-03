@@ -92,7 +92,7 @@ class MatrixClientPeg {
         const opts = utils.deepCopy(MatrixClientPeg.opts);
         opts.pendingEventOrdering = "detached";
         this.get().startClient(opts);
-    },
+    }
 
     _replaceClient(hs_url, is_url, user_id, access_token, isGuest) {
         if (localStorage) {
