@@ -52,6 +52,7 @@ module.exports = React.createClass({displayName: 'Login',
     getInitialState: function() {
         return {
             busy: false,
+            error: null, // The error as-is from the login request
             errorText: null,
             enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
             enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
@@ -62,18 +63,22 @@ module.exports = React.createClass({displayName: 'Login',
     },
 
     componentWillMount: function() {
+        this._passwordLogin = null;
         this._initLoginLogic();
     },
 
     onPasswordLogin: function(username, password) {
         var self = this;
         self.setState({
-            busy: true
+            busy: true,
+            error: null,
+            errorText: null,
         });
 
         this._loginLogic.loginViaPassword(username, password).then(function(data) {
             self.props.onLoggedIn(data);
         }, function(error) {
+            self.setState({error: error});
             self._setErrorTextFromError(error);
         }).finally(function() {
             self.setState({
@@ -100,7 +105,7 @@ module.exports = React.createClass({displayName: 'Login',
         this.setState({
             enteredIdentityServerUrl: newIsUrl
         }, function() {
-            self._initLoginLogic(null, newIsUrl);            
+            self._initLoginLogic(null, newIsUrl);
         });
     },
 
@@ -157,7 +162,7 @@ module.exports = React.createClass({displayName: 'Login',
 
         if (err.cors === 'rejected') {
             if (window.location.protocol === 'https:' &&
-                (this.state.enteredHomeserverUrl.startsWith("http:") || 
+                (this.state.enteredHomeserverUrl.startsWith("http:") ||
                  !this.state.enteredHomeserverUrl.startsWith("http")))
             {
                 errorText = <span>
@@ -181,12 +186,20 @@ module.exports = React.createClass({displayName: 'Login',
     componentForStep: function(step) {
         switch (step) {
             case 'm.login.password':
+                // https://matrix.org/jira/browse/SYN-744
+                const loginIncorrect = (
+                    this.state.error &&
+                    (this.state.error.httpStatus == 401 || this.state.error.httpStatus == 403)
+                );
                 return (
                     <PasswordLogin
                         onSubmit={this.onPasswordLogin}
                         initialUsername={this.state.username}
                         onUsernameChanged={this.onUsernameChanged}
-                        onForgotPasswordClick={this.props.onForgotPasswordClick} />
+                        onForgotPasswordClick={this.props.onForgotPasswordClick}
+                        ref={(e) => {this._passwordLogin = e;}}
+                        loginIncorrect={loginIncorrect}
+                    />
                 );
             case 'm.login.cas':
                 return (
@@ -221,7 +234,7 @@ module.exports = React.createClass({displayName: 'Login',
 
         var returnToAppJsx;
         if (this.props.onCancelClick) {
-            returnToAppJsx = 
+            returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
                     Return to app
                 </a>

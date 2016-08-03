@@ -14,8 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import classNames from 'classnames';
+import {field_input_incorrect} from '../../../UiEffects';
+
 
 /**
  * A pure UI component which displays a username/password form.
@@ -28,6 +31,7 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
         initialPassword: React.PropTypes.string,
         onUsernameChanged: React.PropTypes.func,
         onPasswordChanged: React.PropTypes.func,
+        loginIncorrect: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -36,6 +40,7 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
             onPasswordChanged: function() {},
             initialUsername: "",
             initialPassword: "",
+            loginIncorrect: false,
         };
     },
 
@@ -44,6 +49,16 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
             username: this.props.initialUsername,
             password: this.props.initialPassword,
         };
+    },
+
+    componentWillMount: function() {
+        this._passwordField = null;
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        if (!this.props.loginIncorrect && nextProps.loginIncorrect) {
+            field_input_incorrect(this._passwordField);
+        }
     },
 
     onSubmitForm: function(ev) {
@@ -72,14 +87,19 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
             );
         }
 
+        const pwFieldClass = classNames({
+            mx_Login_field: true,
+            error: this.props.loginIncorrect,
+        });
+
         return (
             <div>
                 <form onSubmit={this.onSubmitForm}>
-                <input className="mx_Login_field" ref="user" type="text"
+                <input className="mx_Login_field" type="text"
                     value={this.state.username} onChange={this.onUsernameChanged}
                     placeholder="Email or user name" autoFocus />
                 <br />
-                <input className="mx_Login_field" ref="pass" type="password"
+                <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
                     value={this.state.password} onChange={this.onPasswordChanged}
                     placeholder="Password" />
                 <br />
