@@ -31,6 +31,14 @@ function deviceId() {
     return id;
 }
 
+interface MatrixClientCreds {
+    homeserverUrl: string,
+    identityServerUrl: string,
+    userId: string,
+    accessToken: string,
+    guest: boolean,
+}
+
 /**
  * Wrapper object for handling the js-sdk Matrix Client object in the react-sdk
  * Handles the creation/initialisation of client objects.
@@ -40,6 +48,14 @@ function deviceId() {
 class MatrixClientPeg {
     constructor() {
         this.matrixClient = null;
+
+        // These are the default options used when Lifecycle.js
+        // starts the client. These can be altered at any
+        // time up to after the 'will_start_client' event is
+        // finished processing.
+        this.opts = {
+            initialSyncLimit: 20,
+        };
     }
 
     get(): MatrixClient {
@@ -62,8 +78,14 @@ class MatrixClientPeg {
      * Replace this MatrixClientPeg's client with a client instance that has
      * Home Server / Identity Server URLs and active credentials
      */
-    replaceUsingAccessToken(hs_url, is_url, user_id, access_token, isGuest) {
-        this._replaceClient(hs_url, is_url, user_id, access_token, isGuest);
+    replaceUsingCreds(creds: MatrixClientCreds) {
+        this._replaceClient(
+            creds.homeserverUrl,
+            creds.identityServerUrl,
+            creds.userId,
+            creds.accessToken,
+            creds.guest,
+        );
     }
 
     _replaceClient(hs_url, is_url, user_id, access_token, isGuest) {
@@ -95,14 +117,14 @@ class MatrixClientPeg {
         }
     }
 
-    getCredentials() {
-        return [
-            this.matrixClient.baseUrl,
-            this.matrixClient.idBaseUrl,
-            this.matrixClient.credentials.userId,
-            this.matrixClient.getAccessToken(),
-            this.matrixClient.isGuest(),
-        ];
+    getCredentials(): MatrixClientCreds {
+        return {
+            homeserverUrl: this.matrixClient.baseUrl,
+            identityServerUrl: this.matrixClient.idBaseUrl,
+            userId: this.matrixClient.credentials.userId,
+            accessToken: this.matrixClient.getAccessToken(),
+            guest: this.matrixClient.isGuest(),
+        };
     }
 
     tryRestore() {
