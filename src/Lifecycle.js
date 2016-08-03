@@ -77,9 +77,7 @@ function startMatrixClient() {
     UserActivity.start();
     Presence.start();
 
-    let opts = utils.deepCopy(MatrixClientPeg.opts);
-    opts.pendingEventOrdering = "detached";
-    MatrixClientPeg.get().startClient(opts);
+    MatrixClientPeg.start();
 }
 
 function _onLoggedOut() {
