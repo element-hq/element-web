@@ -111,7 +111,9 @@ export default class DevicesPanelEntry extends React.Component {
             <div className="mx_DevicesPanel_device">
                 <div className="mx_DevicesPanel_deviceName">
                     <EditableTextContainer initialValue={device.display_name}
-                        onSubmit={this._onDisplayNameChanged} />
+                        onSubmit={this._onDisplayNameChanged}
+                        placeholder={device.device_id}
+                    />
                 </div>
                 <div className="mx_DevicesPanel_lastSeen">
                     {lastSeen}
