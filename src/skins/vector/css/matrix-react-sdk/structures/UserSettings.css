@@ -94,6 +94,10 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_UserSettings_button.danger {
+    background-color: #ff0064;
+}
+
 .mx_UserSettings_section {
     margin-left: 63px;
     margin-top: 28px;

@@ -52,6 +52,10 @@ a:visited {
     color: #76cfa6;
 }
 
+input[type=text].error, input[type=password].error {
+    border: 1px solid red;
+}
+
 input[type=text]:focus, textarea:focus {
     border: 1px solid #76CFA6;
     outline: none;
@@ -233,6 +237,17 @@ input[type=text]:focus, textarea:focus {
     background-color: #76cfa6;
 }
 
+.mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger {
+    background-color: #ff0064;
+    border: solid 1px #ff0064;
+}
+
+.mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled {
+    background-color: #777777;
+    border: solid 1px #777777;
+    opacity: 0.7;
+}
+
 .mx_Dialog_title {
     min-height: 16px;
     padding-top: 40px;
@@ -240,6 +255,10 @@ input[type=text]:focus, textarea:focus {
     font-size: 22px;
     line-height: 1.4;
     color: #454545;
+}
+
+.mx_Dialog_title.danger {
+    color: #ff0064;
 }
 
 .mx_TextInputDialog_label {
