@@ -54,14 +54,17 @@ function logout() {
     }
 
     return MatrixClientPeg.get().logout().then(_onLoggedOut,
-        // Just throwing an error here is going to be very unhelpful
-        // if you're trying to log out because your server's down and
-        // you want to log into a different server, so just forget the
-        // access token. It's annoying that this will leave the access
-        // token still valid, but we should fix this by having access
-        // tokens expire (and if you really think you've been compromised,
-        // change your password).
-        _onLoggedOut
+        (err) => {
+            // Just throwing an error here is going to be very unhelpful
+            // if you're trying to log out because your server's down and
+            // you want to log into a different server, so just forget the
+            // access token. It's annoying that this will leave the access
+            // token still valid, but we should fix this by having access
+            // tokens expire (and if you really think you've been compromised,
+            // change your password).
+            console.log("Failed to call logout API: token will not be invalidated");
+            _onLoggedOut();
+        }
     );
 }
 
