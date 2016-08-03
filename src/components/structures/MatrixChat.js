@@ -153,6 +153,8 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
+        let clientStarted = false;
+
         this._autoRegisterAsGuest = false;
         if (this.props.enableGuest) {
             if (!this.getCurrentHsUrl()) {
@@ -173,6 +175,7 @@ module.exports = React.createClass({
                     identityServerUrl: this.getDefaultIsUrl(),
                     guest: true
                 });
+                clientStarted = true;
             }
             else {
                 this._autoRegisterAsGuest = true;
@@ -184,7 +187,9 @@ module.exports = React.createClass({
             // Don't auto-register as a guest. This applies if you refresh the page on a
             // logged in client THEN hit the Sign Out button.
             this._autoRegisterAsGuest = false;
-            Lifecycle.startMatrixClient();
+            if (!clientStarted) {
+                Lifecycle.startMatrixClient();
+            }
         }
         this.focusComposer = false;
         // scrollStateMap is a map from room id to the scroll state returned by
