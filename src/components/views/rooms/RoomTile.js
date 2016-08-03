@@ -66,7 +66,7 @@ module.exports = React.createClass({
     onAction: function(payload) {
         switch (payload.action) {
             case 'notification_change':
-                // Is the notificaion about this room
+                // Is the notification about this room?
                 if (payload.roomId === this.props.room.roomId) {
                     this.setState( { areNotifsMuted : payload.isMuted });
                 }
