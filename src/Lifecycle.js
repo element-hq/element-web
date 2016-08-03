@@ -46,11 +46,11 @@ function logout() {
         // logout doesn't work for guest sessions
         // Also we sometimes want to re-log in a guest session
         // if we abort the login
-        _onLoggedOut();
+        onLoggedOut();
         return;
     }
 
-    return MatrixClientPeg.get().logout().then(_onLoggedOut,
+    return MatrixClientPeg.get().logout().then(onLoggedOut,
         (err) => {
             // Just throwing an error here is going to be very unhelpful
             // if you're trying to log out because your server's down and
@@ -60,7 +60,7 @@ function logout() {
             // tokens expire (and if you really think you've been compromised,
             // change your password).
             console.log("Failed to call logout API: token will not be invalidated");
-            _onLoggedOut();
+            onLoggedOut();
         }
     );
 }
@@ -87,7 +87,7 @@ function startMatrixClient() {
     MatrixClientPeg.get().startClient(MatrixClientPeg.opts);
 }
 
-function _onLoggedOut() {
+function onLoggedOut() {
     if (window.localStorage) {
         const hsUrl = window.localStorage.getItem("mx_hs_url");
         const isUrl = window.localStorage.getItem("mx_is_url");
@@ -114,5 +114,5 @@ function _stopMatrixClient() {
 }
 
 module.exports = {
-    setLoggedIn, logout, startMatrixClient
+    setLoggedIn, logout, startMatrixClient, onLoggedOut
 };

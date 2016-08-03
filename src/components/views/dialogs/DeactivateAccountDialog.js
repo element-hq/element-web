@@ -53,8 +53,8 @@ export default class DeactivateAccountDialog extends React.Component {
             user: MatrixClientPeg.get().credentials.userId,
             password: this._passwordField.value,
         }).done(() => {
-
-            // XXX blocked behind PR
+            Lifecycle.onLoggedOut();
+            this.props.onFinished(false);
         }, (err) => {
             let errStr = 'Unknown error';
             // https://matrix.org/jira/browse/SYN-744
