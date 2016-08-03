@@ -385,6 +385,9 @@ module.exports = React.createClass({
     },
 
     _renderDeactivateAccount: function() {
+        // We can't deactivate a guest account.
+        if (MatrixClientPeg.get().isGuest()) return null;
+
         return <div>
             <h3>Deactivate Account</h3>
                 <div className="mx_UserSettings_section">
