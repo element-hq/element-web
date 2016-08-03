@@ -50,10 +50,10 @@ class MatrixClientPeg {
     constructor() {
         this.matrixClient = null;
 
-        // These are the default options used when Lifecycle.js
-        // starts the client. These can be altered at any
-        // time up to after the 'will_start_client' event is
-        // finished processing.
+        // These are the default options used when when the
+        // client is started in 'start'. These can be altered
+        // at any time up to after the 'will_start_client'
+        // event is finished processing.
         this.opts = {
             initialSyncLimit: 20,
         };
@@ -91,6 +91,7 @@ class MatrixClientPeg {
 
     start() {
         const opts = utils.deepCopy(this.opts);
+        // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
         this.get().startClient(opts);
     }
