@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     Editor,
+    EditorState,
     Modifier,
     ContentState,
     ContentBlock,
@@ -9,12 +10,13 @@ import {
     DefaultDraftInlineStyle,
     CompositeDecorator,
     SelectionState,
+    Entity,
 } from 'draft-js';
 import * as sdk from  './index';
 import * as emojione from 'emojione';
 
 const BLOCK_RENDER_MAP = DefaultDraftBlockRenderMap.set('unstyled', {
-    element: 'span'
+    element: 'span',
     /*
      draft uses <div> by default which we don't really like, so we're using <span>
      this is probably not a good idea since <span> is not a block level element but
@@ -65,7 +67,7 @@ export function contentStateToHTML(contentState: ContentState): string {
         let result = `<${elem}>${content.join('')}</${elem}>`;
 
         // dirty hack because we don't want block level tags by default, but breaks
-        if(elem === 'span')
+        if (elem === 'span')
             result += '<br />';
         return result;
     }).join('');
@@ -74,6 +76,48 @@ export function contentStateToHTML(contentState: ContentState): string {
 export function HTMLtoContentState(html: string): ContentState {
     return ContentState.createFromBlockArray(convertFromHTML(html));
 }
+
+function unicodeToEmojiUri(str) {
+    let replaceWith, unicode, alt;
+    if ((!emojione.unicodeAlt) || (emojione.sprites)) {
+        // if we are using the shortname as the alt tag then we need a reversed array to map unicode code point to shortnames
+        let mappedUnicode = emojione.mapUnicodeToShort();
+    }
+
+    str = str.replace(emojione.regUnicode, function(unicodeChar) {
+        if ( (typeof unicodeChar === 'undefined') || (unicodeChar === '') || (!(unicodeChar in emojione.jsEscapeMap)) ) {
+            // if the unicodeChar doesnt exist just return the entire match
+            return unicodeChar;
+        } else {
+            // get the unicode codepoint from the actual char
+            unicode = emojione.jsEscapeMap[unicodeChar];
+            return emojione.imagePathSVG+unicode+'.svg'+emojione.cacheBustParam;
+        }
+    });
+
+    return str;
+}
+
+// Workaround for https://github.com/facebook/draft-js/issues/414
+let emojiDecorator = {
+    strategy: (contentBlock, callback) => {
+        findWithRegex(EMOJI_REGEX, contentBlock, callback);
+    },
+    component: (props) => {
+        let uri = unicodeToEmojiUri(props.children[0].props.text);
+        let shortname = emojione.toShort(props.children[0].props.text);
+        let style = {
+            display: 'inline-block',
+            width: '1em',
+            maxHeight: '1em',
+            background: `url(${uri})`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center center',
+            overflow: 'hidden',
+        };
+        return (<span title={shortname} style={style}><span style={{opacity: 0}}>{props.children}</span></span>);
+    },
+};
 
 /**
  * Returns a composite decorator which has access to provided scope.
@@ -90,7 +134,7 @@ export function getScopedRTDecorators(scope: any): CompositeDecorator {
             // unused until we make these decorators immutable (autocomplete needed)
             let name = member ? member.name : null;
             let avatar = member ? <MemberAvatar member={member} width={16} height={16}/> : null;
-            return <span className="mx_UserPill">{avatar} {props.children}</span>;
+            return <span className="mx_UserPill">{avatar}{props.children}</span>;
         }
     };
     
@@ -103,17 +147,7 @@ export function getScopedRTDecorators(scope: any): CompositeDecorator {
         }
     };
 
-    // Unused for now, due to https://github.com/facebook/draft-js/issues/414
-    let emojiDecorator = {
-        strategy: (contentBlock, callback) => {
-            findWithRegex(EMOJI_REGEX, contentBlock, callback);
-        },
-        component: (props) => {
-            return <span dangerouslySetInnerHTML={{__html: ' ' + emojione.unicodeToImage(props.children[0].props.text)}}/>
-        }
-    };
-
-    return [usernameDecorator, roomDecorator];
+    return [usernameDecorator, roomDecorator, emojiDecorator];
 }
 
 export function getScopedMDDecorators(scope: any): CompositeDecorator {
@@ -139,6 +173,7 @@ export function getScopedMDDecorators(scope: any): CompositeDecorator {
             </a>
         )
     });
+    markdownDecorators.push(emojiDecorator);
 
     return markdownDecorators;
 }
@@ -193,7 +228,7 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
 export function selectionStateToTextOffsets(selectionState: SelectionState,
                                             contentBlocks: Array<ContentBlock>): {start: number, end: number} {
     let offset = 0, start = 0, end = 0;
-    for(let block of contentBlocks) {
+    for (let block of contentBlocks) {
         if (selectionState.getStartKey() === block.getKey()) {
             start = offset + selectionState.getStartOffset();
         }
@@ -239,4 +274,51 @@ export function textOffsetsToSelectionState({start, end}: {start: number, end: n
     }
 
     return selectionState;
+}
+
+// modified version of https://github.com/draft-js-plugins/draft-js-plugins/blob/master/draft-js-emoji-plugin/src/modifiers/attachImmutableEntitiesToEmojis.js
+export function attachImmutableEntitiesToEmoji(editorState: EditorState): EditorState {
+    const contentState = editorState.getCurrentContent();
+    const blocks = contentState.getBlockMap();
+    let newContentState = contentState;
+
+    blocks.forEach((block) => {
+        const plainText = block.getText();
+
+        const addEntityToEmoji = (start, end) => {
+            const existingEntityKey = block.getEntityAt(start);
+            if (existingEntityKey) {
+                // avoid manipulation in case the emoji already has an entity
+                const entity = Entity.get(existingEntityKey);
+                if (entity && entity.get('type') === 'emoji') {
+                    return;
+                }
+            }
+
+            const selection = SelectionState.createEmpty(block.getKey())
+                .set('anchorOffset', start)
+                .set('focusOffset', end);
+            const emojiText = plainText.substring(start, end);
+            const entityKey = Entity.create('emoji', 'IMMUTABLE', { emojiUnicode: emojiText });
+            newContentState = Modifier.replaceText(
+                newContentState,
+                selection,
+                emojiText,
+                null,
+                entityKey,
+            );
+        };
+
+        findWithRegex(EMOJI_REGEX, block, addEntityToEmoji);
+    });
+
+    if (!newContentState.equals(contentState)) {
+        return EditorState.push(
+            editorState,
+            newContentState,
+            'convert-to-immutable-emojis',
+        );
+    }
+
+    return editorState;
 }
