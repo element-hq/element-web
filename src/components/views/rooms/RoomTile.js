@@ -186,9 +186,9 @@ module.exports = React.createClass({
         }
 
         if (this.state.areNotifsMuted && !(this.state.badgeHover || this.state.menu)) {
-            badge = <div className={ badgeClasses } onClick={this.onBadgeClicked}><img className="mx_RoomTile_badgeIcon" src="img/icon-context-mute.svg" width="16" height="12" /></div>;
+            badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}><img className="mx_RoomTile_badgeIcon" src="img/icon-context-mute.svg" width="16" height="12" /></div>;
         } else {
-            badge = <div className={ badgeClasses } onClick={this.onBadgeClicked}>{ badgeContent }</div>;
+            badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
         }
 
         var label;
@@ -234,7 +234,7 @@ module.exports = React.createClass({
                 <div className={avatarClasses}>
                     <RoomAvatar onClick={this.onClick} room={this.props.room} width={24} height={24} />
                 </div>
-                <div className="mx_RoomTile_nameContainer" onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>
+                <div className="mx_RoomTile_nameContainer">
                     { label }
                     { badge }
                 </div>
