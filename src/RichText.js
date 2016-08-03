@@ -98,7 +98,7 @@ function unicodeToEmojiUri(str) {
     return str;
 }
 
-// Unused for now, due to https://github.com/facebook/draft-js/issues/414
+// Workaround for https://github.com/facebook/draft-js/issues/414
 let emojiDecorator = {
     strategy: (contentBlock, callback) => {
         findWithRegex(EMOJI_REGEX, contentBlock, callback);
@@ -115,7 +115,7 @@ let emojiDecorator = {
             backgroundPosition: 'center center',
             overflow: 'hidden',
         };
-        return (<span title={shortname} style={style}><span style={{color: 'transparent'}}>{props.children}</span></span>);
+        return (<span title={shortname} style={style}><span style={{opacity: 0}}>{props.children}</span></span>);
     },
 };
 
