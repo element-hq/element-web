@@ -20,7 +20,7 @@ var Favico = require('favico.js');
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var Notifier = require("../../Notifier");
-var ContextualMenu = require("../../ContextualMenu");
+var ContextualMenu = require("./ContextualMenu");
 var RoomListSorter = require("../../RoomListSorter");
 var UserActivity = require("../../UserActivity");
 var Presence = require("../../Presence");

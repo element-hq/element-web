@@ -97,9 +97,11 @@ module.exports = React.createClass({
             );
         }
 
+        var deviceName = this.props.device.display_name || this.props.device.id;
+
         return (
             <div className="mx_MemberDeviceInfo">
-                <div className="mx_MemberDeviceInfo_deviceId">{this.props.device.id}</div>
+                <div className="mx_MemberDeviceInfo_deviceId">{deviceName}</div>
                 {indicator}
                 {verifyButton}
                 {blockButton}

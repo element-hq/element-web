@@ -104,19 +104,25 @@ class ContentMessages {
         var def = q.defer();
         if (file.type.indexOf('image/') == 0) {
             content.msgtype = 'm.image';
-            infoForImageFile(file).then(function (imageInfo) {
+            infoForImageFile(file).then(imageInfo=>{
                 extend(content.info, imageInfo);
+                def.resolve();
+            }, error=>{
+                content.msgtype = 'm.file';
                 def.resolve();
             });
         } else if (file.type.indexOf('audio/') == 0) {
             content.msgtype = 'm.audio';
             def.resolve();
         } else if (file.type.indexOf('video/') == 0) {
-          content.msgtype = 'm.video';
-          infoForVideoFile(file).then(function (videoInfo) {
-              extend(content.info, videoInfo);
-              def.resolve();
-          });
+            content.msgtype = 'm.video';
+            infoForVideoFile(file).then(videoInfo=>{
+                extend(content.info, videoInfo);
+                def.resolve();
+            }, error=>{
+                content.msgtype = 'm.file';
+                def.resolve();
+            });
         } else {
             content.msgtype = 'm.file';
             def.resolve();
