@@ -121,7 +121,7 @@ limitations under the License.
 
 .mx_RoomTile_badge {
     display: inline-block;
-    min-width: 14px;
+    min-width: 19px;
     height: 17px;
     position: absolute;
     right: 8px; /*gutter */
