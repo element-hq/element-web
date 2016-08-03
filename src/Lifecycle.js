@@ -22,11 +22,7 @@ import dis from './dispatcher';
 
 /**
  * Transitions to a logged-in state using the given credentials
- * @param {string} credentials.homeserverUrl The base HS URL
- * @param {string} credentials.identityServerUrl The base IS URL
- * @param {string} credentials.userId The full Matrix User ID
- * @param {string} credentials.accessToken The session access token
- * @param {boolean} credentials.guest True if the session is a guest session
+ * @param {MatrixClientCreds} credentials The credentials to use
  */
 function setLoggedIn(credentials) {
     credentials.guest = Boolean(credentials.guest);
@@ -80,11 +76,7 @@ function startMatrixClient() {
     UserActivity.start();
     Presence.start();
 
-    // the react sdk doesn't work without this, so don't allow
-    // it to be overridden (and modify the global object so at
-    // at least the app can see we've changed it)
-    MatrixClientPeg.opts.pendingEventOrdering = "detached";
-    MatrixClientPeg.get().startClient(MatrixClientPeg.opts);
+    MatrixClientPeg.start();
 }
 
 function onLoggedOut() {
