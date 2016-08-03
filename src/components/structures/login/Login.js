@@ -52,8 +52,8 @@ module.exports = React.createClass({displayName: 'Login',
     getInitialState: function() {
         return {
             busy: false,
-            error: null, // The error as-is from the login request
             errorText: null,
+            loginIncorrect: false,
             enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
             enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
 
@@ -70,15 +70,14 @@ module.exports = React.createClass({displayName: 'Login',
         var self = this;
         self.setState({
             busy: true,
-            error: null,
             errorText: null,
+            loginIncorrect: false,
         });
 
         this._loginLogic.loginViaPassword(username, password).then(function(data) {
             self.props.onLoggedIn(data);
         }, function(error) {
-            self.setState({error: error});
-            self._setErrorTextFromError(error);
+            self._setStateFromError(error);
         }).finally(function() {
             self.setState({
                 busy: false
@@ -124,7 +123,7 @@ module.exports = React.createClass({displayName: 'Login',
             // logins so let's skip that for now).
             loginLogic.chooseFlow(0);
         }, function(err) {
-            self._setErrorTextFromError(err);
+            self._setStateFromError(err);
         }).finally(function() {
             self.setState({
                 busy: false
@@ -135,7 +134,8 @@ module.exports = React.createClass({displayName: 'Login',
             enteredHomeserverUrl: hsUrl,
             enteredIdentityServerUrl: isUrl,
             busy: true,
-            errorText: null // reset err messages
+            errorText: null, // reset err messages
+            loginIncorrect: false,
         });
     },
 
@@ -143,20 +143,25 @@ module.exports = React.createClass({displayName: 'Login',
         return this._loginLogic ? this._loginLogic.getCurrentFlowStep() : null
     },
 
-    _setErrorTextFromError: function(err) {
+    _setStateFromError: function(err) {
+        this.setState({
+            errorText: this._errorTextFromError(err),
+            // https://matrix.org/jira/browse/SYN-744
+            loginIncorrect: err.httpStatus == 401 || err.httpStatus == 403
+        });
+    },
+
+    _errorTextFromError(err) {
         if (err.friendlyText) {
-            this.setState({
-                errorText: err.friendlyText
-            });
-            return;
+            return err.friendlyText;
         }
 
-        var errCode = err.errcode;
+        let errCode = err.errcode;
         if (!errCode && err.httpStatus) {
             errCode = "HTTP " + err.httpStatus;
         }
 
-        var errorText = "Error: Problem communicating with the given homeserver " +
+        let errorText = "Error: Problem communicating with the given homeserver " +
                 (errCode ? "(" + errCode + ")" : "")
 
         if (err.cors === 'rejected') {
@@ -177,26 +182,19 @@ module.exports = React.createClass({displayName: 'Login',
             }
         }
 
-        this.setState({
-            errorText: errorText
-        });
+        return errorText;
     },
 
     componentForStep: function(step) {
         switch (step) {
             case 'm.login.password':
-                // https://matrix.org/jira/browse/SYN-744
-                const loginIncorrect = (
-                    this.state.error &&
-                    (this.state.error.httpStatus == 401 || this.state.error.httpStatus == 403)
-                );
                 return (
                     <PasswordLogin
                         onSubmit={this.onPasswordLogin}
                         initialUsername={this.state.username}
                         onUsernameChanged={this.onUsernameChanged}
                         onForgotPasswordClick={this.props.onForgotPasswordClick}
-                        loginIncorrect={loginIncorrect}
+                        loginIncorrect={this.state.loginIncorrect}
                     />
                 );
             case 'm.login.cas':
