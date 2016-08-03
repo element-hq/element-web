@@ -19,7 +19,6 @@ import Notifier from './Notifier'
 import UserActivity from './UserActivity';
 import Presence from './Presence';
 import dis from './dispatcher';
-import utils from 'matrix-js-sdk/lib/utils';
 
 /**
  * Transitions to a logged-in state using the given credentials

@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import Matrix from 'matrix-js-sdk';
+import utils from 'matrix-js-sdk/lib/utils';
 
 const localStorage = window.localStorage;
 
@@ -89,7 +90,7 @@ class MatrixClientPeg {
     }
 
     start() {
-        const opts = utils.deepCopy(MatrixClientPeg.opts);
+        const opts = utils.deepCopy(this.opts);
         opts.pendingEventOrdering = "detached";
         this.get().startClient(opts);
     }
