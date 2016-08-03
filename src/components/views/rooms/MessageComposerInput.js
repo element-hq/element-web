@@ -422,12 +422,6 @@ export default class MessageComposerInput extends React.Component {
         if (ev.shiftKey) {
             return false;
         }
-        
-        if(this.props.tryComplete) {
-            if(this.props.tryComplete()) {
-                return true;
-            }
-        }
 
         const contentState = this.state.editorState.getCurrentContent();
         if (!contentState.hasText()) {
@@ -519,8 +513,8 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onTab(e) {
-        if (this.props.onTab) {
-            if (this.props.onTab()) {
+        if (this.props.tryComplete) {
+            if (this.props.tryComplete()) {
                 e.preventDefault();
             }
         }
@@ -585,5 +579,6 @@ MessageComposerInput.propTypes = {
 
     onDownArrow: React.PropTypes.func,
 
-    onTab: React.PropTypes.func
+    // attempts to confirm currently selected completion, returns whether actually confirmed
+    tryComplete: React.PropTypes.func,
 };
