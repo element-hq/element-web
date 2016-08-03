@@ -128,12 +128,12 @@ module.exports = React.createClass({
                 </div>
                 <div className={ alertMeClasses } onClick={this._onClickAlertMe} >
                     <img className="mx_NotificationStateContextMenu_icon" src="img/icon-context-mute-off-copy.svg" width="16" height="12" />
-                    Alert me
+                    All messages (loud)
                 </div>
                 <div className={ allNotifsClasses } onClick={this._onClickAllNotifs} >
                     <img className="mx_NotificationStateContextMenu_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_NotificationStateContextMenu_icon" src="img/icon-context-mute-off.svg" width="16" height="12" />
-                    All notifications
+                    All messages
                 </div>
                 <div className={ mentionsClasses } onClick={this._onClickMentions} >
                     <img className="mx_NotificationStateContextMenu_icon" src="img/icon-context-mute-mentions.svg" width="16" height="12" />
