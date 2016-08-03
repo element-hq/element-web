@@ -36,7 +36,6 @@ export default class MessageComposer extends React.Component {
         this.onInputContentChanged = this.onInputContentChanged.bind(this);
         this.onUpArrow = this.onUpArrow.bind(this);
         this.onDownArrow = this.onDownArrow.bind(this);
-        this.onTab = this.onTab.bind(this);
         this._tryComplete = this._tryComplete.bind(this);
         this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
 
@@ -143,12 +142,6 @@ export default class MessageComposer extends React.Component {
         return this.refs.autocomplete.onDownArrow();
     }
 
-    onTab() {
-        // FIXME Autocomplete doesn't have an onTab - what is this supposed to do?
-        // return this.refs.autocomplete.onTab();
-        return false;
-    }
-
     _tryComplete(): boolean {
         if (this.refs.autocomplete) {
             return this.refs.autocomplete.onConfirm();
@@ -223,7 +216,6 @@ export default class MessageComposer extends React.Component {
                     tryComplete={this._tryComplete}
                     onUpArrow={this.onUpArrow}
                     onDownArrow={this.onDownArrow}
-                    onTab={this.onTab}
                     tabComplete={this.props.tabComplete} // used for old messagecomposerinput/tabcomplete
                     onContentChanged={this.onInputContentChanged} />,
                 uploadButton,
