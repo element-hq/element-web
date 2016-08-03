@@ -23,7 +23,7 @@ var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg')
 var TextForEvent = require('../../../TextForEvent');
 
-var ContextualMenu = require('../../../ContextualMenu');
+var ContextualMenu = require('../../structures/ContextualMenu');
 var dispatcher = require("../../../dispatcher");
 
 var ObjectUtils = require('../../../ObjectUtils');
@@ -249,12 +249,15 @@ module.exports = React.createClass({
     },
 
     onEditClicked: function(e) {
-        var MessageContextMenu = sdk.getComponent('rooms.MessageContextMenu');
+        var MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
         var buttonRect = e.target.getBoundingClientRect()
-        var x = buttonRect.right;
-        var y = buttonRect.top + (e.target.height / 2);
+
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        var x = buttonRect.right + window.pageXOffset;
+        var y = (buttonRect.top + (e.target.height / 2) + window.pageYOffset) - 19;
         var self = this;
         ContextualMenu.createMenu(MessageContextMenu, {
+            chevronOffset: 10,
             mxEvent: this.props.mxEvent,
             left: x,
             top: y,
