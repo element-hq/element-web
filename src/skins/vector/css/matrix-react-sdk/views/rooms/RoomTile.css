@@ -17,10 +17,9 @@ limitations under the License.
 .mx_RoomTile {
     position: relative;
     cursor: pointer;
-    /* This fixes wrapping of long room names, but breaks drag & drop previews */
-    /* display: table-row; */
     font-size: 13px;
     display: block;
+    height: 34px;
 }
 
 .mx_RoomTile .mx_RoomTile_mute {
@@ -29,14 +28,14 @@ limitations under the License.
 
 .mx_RoomTile_nameContainer {
     display: inline-block;
-    width: 170px;
+    width: 180px;
     height: 24px;
 }
 
 .mx_RoomTile_avatar {
     display: inline-block;
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     padding-left: 18px;
     padding-right: 6px;
     width: 24px;
@@ -47,7 +46,7 @@ limitations under the License.
 .mx_RoomTile_name {
     display: inline-block;
     position: relative;
-    width: 157px;
+    width: 165px;
     vertical-align: middle;
     padding-left: 6px;
     padding-right: 6px;
@@ -67,10 +66,6 @@ limitations under the License.
 .mx_RoomTile_invite {
 /*    color: rgba(69, 69, 69, 0.5);
 */
-}
-
-.collapsed .mx_RoomTile {
-    height: 36px;
 }
 
 .collapsed .mx_RoomTile_nameContainer {
@@ -129,7 +124,7 @@ limitations under the License.
     min-width: 14px;
     height: 17px;
     position: absolute;
-    right: 9px;
+    right: 8px; /*gutter */
     top: 9px;
     border-radius: 14px;
     color: #fff;
@@ -154,6 +149,7 @@ limitations under the License.
     letter-spacing: 0.1em;
     opacity: 1;
     top: 9px;
+    right: 8px; /* gutter */
 }
 
 /* Position mute icon when room muted */
@@ -161,6 +157,7 @@ limitations under the License.
     background-color: rgba(0,0,0,0);
     opacity: 1;
     top: 11px;
+    right: 6px;
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
@@ -180,16 +177,12 @@ limitations under the License.
     font-weight: 600;
 }
 
-.mx_RoomTile_selected .mx_RoomTile_name {
+.mx_RoomTile_selected {
     background-color: rgba(118,207,166,0.2);
 }
 
 .mx_RoomTile .mx_RoomTile_name.mx_RoomTile_badgeShown {
     width: 144px;
-}
-
-.mx_RoomTile.mx_RoomTile_selected .mx_RoomTile_name.mx_RoomTile_badgeShown {
-    width: 136px;
 }
 
 .mx_RoomTile_arrow {

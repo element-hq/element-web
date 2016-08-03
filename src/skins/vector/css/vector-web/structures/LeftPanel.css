@@ -63,8 +63,8 @@ limitations under the License.
     order: 3;
 
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-    margin-left: 18px;
-    margin-right: 18px;
+    margin-left: 16px; /* gutter */
+    margin-right: 16px; /* gutter */
     -webkit-flex: 0 0 60px;
     flex: 0 0 60px;
     z-index: 1;
@@ -99,4 +99,8 @@ limitations under the License.
 
 .mx_LeftPanel .mx_BottomLeftMenu_settings {
     float: right;
+}
+
+.mx_LeftPanel.collapsed .mx_BottomLeftMenu_settings {
+    float: none;
 }
