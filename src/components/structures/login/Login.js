@@ -63,7 +63,6 @@ module.exports = React.createClass({displayName: 'Login',
     },
 
     componentWillMount: function() {
-        this._passwordLogin = null;
         this._initLoginLogic();
     },
 
@@ -197,7 +196,6 @@ module.exports = React.createClass({displayName: 'Login',
                         initialUsername={this.state.username}
                         onUsernameChanged={this.onUsernameChanged}
                         onForgotPasswordClick={this.props.onForgotPasswordClick}
-                        ref={(e) => {this._passwordLogin = e;}}
                         loginIncorrect={loginIncorrect}
                     />
                 );
