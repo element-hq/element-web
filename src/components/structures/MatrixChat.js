@@ -146,6 +146,10 @@ module.exports = React.createClass({
         // whilst logged in as a guest user (so they can change
         // their mind & log back in)
         this.guestCreds = null;
+
+        if (this.props.config.sync_timeline_limit) {
+            MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
+        }
     },
 
     componentDidMount: function() {
@@ -601,14 +605,10 @@ module.exports = React.createClass({
 
     /**
      * Called just before the matrix client is started
-     * (useful for setting options and listeners)
+     * (useful for setting listeners)
      */
     _onWillStartClient() {
         var cli = MatrixClientPeg.get();
-
-        if (this.props.config.sync_timeline_limit) {
-            MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
-        }
 
         var self = this;
         cli.on('sync', function(state, prevState) {
