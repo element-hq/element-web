@@ -250,12 +250,24 @@ function _onAction(payload) {
                 });
             }
             else {
-                ConferenceHandler.createNewMatrixCall(
-                    MatrixClientPeg.get(), payload.room_id
-                ).done(function(call) {
-                    placeCall(call);
-                }, function(err) {
-                    console.error("Failed to setup conference call: %s", err);
+                var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                Modal.createDialog(QuestionDialog, {
+                    title: "Warning!",
+                    description: "Conference calling in Vector is in development and may not be reliable.",
+                    onFinished: confirm=>{
+                        if (confirm) {
+                            ConferenceHandler.createNewMatrixCall(
+                                MatrixClientPeg.get(), payload.room_id
+                            ).done(function(call) {
+                                placeCall(call);
+                            }, function(err) {
+                                Modal.createDialog(ErrorDialog, {
+                                    title: "Failed to set up conference call",
+                                    description: "Conference call failed: " + err,
+                                });
+                            });
+                        }
+                    },
                 });
             }
             break;
