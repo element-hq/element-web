@@ -586,6 +586,7 @@ module.exports = React.createClass({
      */
     _onLoggedIn: function(credentials) {
         this.guestCreds = null;
+        this.notifyNewScreen('');
         this.setState({
             screen: undefined,
             logged_in: true,
