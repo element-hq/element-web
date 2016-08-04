@@ -70,7 +70,9 @@ module.exports = React.createClass({
             // is also called from the saving code so we must return the correct value here
             // if we have it (although this could race if the user saves before we load whether
             // the room is published or not).
-            isRoomPublished: this._originalIsRoomPublished,
+            // Default to false if it's undefined, otherwise react complains about changing
+            // components from uncontrolled to controlled
+            isRoomPublished: this._originalIsRoomPublished || false,
         };
     },
 
