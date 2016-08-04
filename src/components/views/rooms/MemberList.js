@@ -54,7 +54,7 @@ module.exports = React.createClass({
 
         this.memberDict = this.getMemberDict();
 
-        state.members = this.roomMembers(INITIAL_LOAD_NUM_MEMBERS);
+        state.members = this.roomMembers();
         return state;
     },
 
@@ -64,7 +64,10 @@ module.exports = React.createClass({
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("RoomState.events", this.onRoomStateEvent);
         cli.on("Room", this.onRoom); // invites
-        cli.on("User.presence", this.onUserPresence);
+        // We listen for changes to the lastPresenceTs which is essentially
+        // listening for all presence events (we display most of not all of
+        // the information contained in presence events).
+        cli.on("User.lastPresenceTs", this.onUserLastPresenceTs);
         // cli.on("Room.timeline", this.onRoomTimeline);
     },
 
@@ -75,22 +78,9 @@ module.exports = React.createClass({
             cli.removeListener("RoomMember.name", this.onRoomMemberName);
             cli.removeListener("RoomState.events", this.onRoomStateEvent);
             cli.removeListener("Room", this.onRoom);
-            cli.removeListener("User.presence", this.onUserPresence);
+            cli.removeListener("User.lastPresenceTs", this.onUserLastPresenceTs);
             // cli.removeListener("Room.timeline", this.onRoomTimeline);
         }
-    },
-
-    componentDidMount: function() {
-        var self = this;
-
-        // Lazy-load in more than the first N members
-        setTimeout(function() {
-            if (!self.isMounted()) return;
-            // lazy load to prevent it blocking the first render
-            self.setState({
-                members: self.roomMembers()
-            });
-        }, 50);
     },
 
 /*
@@ -121,7 +111,7 @@ module.exports = React.createClass({
     },
 */
 
-    onUserPresence(event, user) {
+    onUserLastPresenceTs(event, user) {
         // Attach a SINGLE listener for global presence changes then locate the
         // member tile and re-render it. This is more efficient than every tile
         // evar attaching their own listener.
@@ -325,7 +315,7 @@ module.exports = React.createClass({
         return all_members;
     },
 
-    roomMembers: function(limit) {
+    roomMembers: function() {
         var all_members = this.memberDict || {};
         var all_user_ids = Object.keys(all_members);
         var ConferenceHandler = CallHandler.getConferenceHandler();
@@ -334,7 +324,7 @@ module.exports = React.createClass({
 
         var to_display = [];
         var count = 0;
-        for (var i = 0; i < all_user_ids.length && (limit === undefined || count < limit); ++i) {
+        for (var i = 0; i < all_user_ids.length; ++i) {
             var user_id = all_user_ids[i];
             var m = all_members[user_id];
 
@@ -425,27 +415,7 @@ module.exports = React.createClass({
 
             // For now, let's just order things by timestamp. It's really annoying
             // that a user disappears from sight just because they temporarily go offline
-    /*
-            var presenceMap = {
-                online: 3,
-                unavailable: 2,
-                offline: 1
-            };
-
-            var presenceOrdA = userA ? presenceMap[userA.presence] : 0;
-            var presenceOrdB = userB ? presenceMap[userB.presence] : 0;
-
-            if (presenceOrdA != presenceOrdB) {
-                return presenceOrdB - presenceOrdA;
-            }
-    */
-
-            var lastActiveTsA = userA && userA.lastActiveTs ? userA.lastActiveTs : 0;
-            var lastActiveTsB = userB && userB.lastActiveTs ? userB.lastActiveTs : 0;
-
-            // console.log("comparing ts: " + lastActiveTsA + " and " + lastActiveTsB);
-
-            return lastActiveTsB - lastActiveTsA;
+            return userB.getLastActiveTs() - userA.getLastActiveTs();
     },
 
     onSearchQueryChanged: function(input) {
@@ -462,9 +432,16 @@ module.exports = React.createClass({
 
         var memberList = self.state.members.filter(function(userId) {
             var m = self.memberDict[userId];
-            if (query && m.name.toLowerCase().indexOf(query) === -1) {
-                return false;
+
+            if (query) {
+                const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
+                const matchesId = m.userId.toLowerCase().indexOf(query) !== -1;
+
+                if (!matchesName && !matchesId) {
+                    return false;
+                }
             }
+
             return m.membership == membership;
         }).map(function(userId) {
             var m = self.memberDict[userId];
@@ -515,7 +492,7 @@ module.exports = React.createClass({
             invitedSection = (
                 <div className="mx_MemberList_invited">
                     <h2>Invited</h2>
-                    <div autoshow={true} className="mx_MemberList_wrapper">
+                    <div className="mx_MemberList_wrapper">
                         {invitedMemberTiles}
                     </div>
                 </div>
@@ -544,7 +521,6 @@ module.exports = React.createClass({
             <div className="mx_MemberList">
                     {inviteMemberListSection}
                     <GeminiScrollbar autoshow={true}
-                                     relayoutOnUpdate={false}
                                      className="mx_MemberList_joined mx_MemberList_outerWrapper">
                         <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
                                 createOverflowElement={this._createOverflowTile}>

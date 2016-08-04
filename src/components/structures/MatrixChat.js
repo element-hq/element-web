@@ -21,7 +21,7 @@ var Favico = require('favico.js');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var SdkConfig = require("../../SdkConfig");
 var Notifier = require("../../Notifier");
-var ContextualMenu = require("../../ContextualMenu");
+var ContextualMenu = require("./ContextualMenu");
 var RoomListSorter = require("../../RoomListSorter");
 var UserActivity = require("../../UserActivity");
 var Presence = require("../../Presence");
@@ -37,6 +37,7 @@ var sdk = require('../../index');
 var MatrixTools = require('../../MatrixTools');
 var linkifyMatrix = require("../../linkify-matrix");
 var KeyCode = require('../../KeyCode');
+var Lifecycle = require('../../Lifecycle');
 
 var createRoom = require("../../createRoom");
 
@@ -109,8 +110,12 @@ module.exports = React.createClass({
             return window.localStorage.getItem("mx_hs_url");
         }
         else {
-            return this.props.config.default_hs_url || "https://matrix.org";
+            return this.getDefaultHsUrl();
         }
+    },
+
+    getDefaultHsUrl() {
+        return this.props.config.default_hs_url || "https://matrix.org";
     },
 
     getFallbackHsUrl: function() {
@@ -127,16 +132,31 @@ module.exports = React.createClass({
             return window.localStorage.getItem("mx_is_url");
         }
         else {
-            return this.props.config.default_is_url || "https://vector.im"
+            return this.getDefaultIsUrl();
         }
+    },
+
+    getDefaultIsUrl() {
+        return this.props.config.default_is_url || "https://vector.im";
     },
 
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
         this.favicon = new Favico({animation: 'none'});
+
+        // Stashed guest credentials if the user logs out
+        // whilst logged in as a guest user (so they can change
+        // their mind & log back in)
+        this.guestCreds = null;
+
+        if (this.props.config.sync_timeline_limit) {
+            MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
+        }
     },
 
     componentDidMount: function() {
+        let clientStarted = false;
+
         this._autoRegisterAsGuest = false;
         if (this.props.enableGuest) {
             if (!this.getCurrentHsUrl()) {
@@ -150,13 +170,14 @@ module.exports = React.createClass({
                 this.props.startingQueryParams.guest_access_token)
             {
                 this._autoRegisterAsGuest = false;
-                this.onLoggedIn({
+                Lifecycle.setLoggedIn({
                     userId: this.props.startingQueryParams.guest_user_id,
                     accessToken: this.props.startingQueryParams.guest_access_token,
-                    homeserverUrl: this.props.config.default_hs_url,
-                    identityServerUrl: this.props.config.default_is_url,
+                    homeserverUrl: this.getDefaultHsUrl(),
+                    identityServerUrl: this.getDefaultIsUrl(),
                     guest: true
                 });
+                clientStarted = true;
             }
             else {
                 this._autoRegisterAsGuest = true;
@@ -168,7 +189,9 @@ module.exports = React.createClass({
             // Don't auto-register as a guest. This applies if you refresh the page on a
             // logged in client THEN hit the Sign Out button.
             this._autoRegisterAsGuest = false;
-            this.startMatrixClient();
+            if (!clientStarted) {
+                Lifecycle.startMatrixClient();
+            }
         }
         this.focusComposer = false;
         // scrollStateMap is a map from room id to the scroll state returned by
@@ -223,7 +246,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().registerGuest().done(function(creds) {
             console.log("Registered as guest: %s", creds.user_id);
             self._setAutoRegisterAsGuest(false);
-            self.onLoggedIn({
+            Lifecycle.setLoggedIn({
                 userId: creds.user_id,
                 accessToken: creds.access_token,
                 homeserverUrl: hsUrl,
@@ -254,34 +277,10 @@ module.exports = React.createClass({
         var self = this;
         switch (payload.action) {
             case 'logout':
-                var guestCreds;
                 if (MatrixClientPeg.get().isGuest()) {
-                    guestCreds = { // stash our guest creds so we can backout if needed
-                        userId: MatrixClientPeg.get().credentials.userId,
-                        accessToken: MatrixClientPeg.get().getAccessToken(),
-                        homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
-                        identityServerUrl: MatrixClientPeg.get().getIdentityServerUrl(),
-                        guest: true
-                    }
+                    this.guestCreds = MatrixClientPeg.getCredentials();
                 }
-
-                if (window.localStorage) {
-                    var hsUrl = this.getCurrentHsUrl();
-                    var isUrl = this.getCurrentIsUrl();
-                    window.localStorage.clear();
-                    // preserve our HS & IS URLs for convenience
-                    // N.B. we cache them in hsUrl/isUrl and can't really inline them
-                    // as getCurrentHsUrl() may call through to localStorage.
-                    window.localStorage.setItem("mx_hs_url", hsUrl);
-                    window.localStorage.setItem("mx_is_url", isUrl);
-                }
-                this._stopMatrixClient();
-                this.notifyNewScreen('login');
-                this.replaceState({
-                    logged_in: false,
-                    ready: false,
-                    guestCreds: guestCreds,
-                });
+                Lifecycle.logout();
                 break;
             case 'start_registration':
                 var newState = payload.params || {};
@@ -307,7 +306,6 @@ module.exports = React.createClass({
                 if (this.state.logged_in) return;
                 this.replaceState({
                     screen: 'login',
-                    guestCreds: this.state.guestCreds,
                 });
                 this.notifyNewScreen('login');
                 break;
@@ -317,17 +315,12 @@ module.exports = React.createClass({
                 });
                 break;
             case 'start_upgrade_registration':
+                // stash our guest creds so we can backout if needed
+                this.guestCreds = MatrixClientPeg.getCredentials();
                 this.replaceState({
                     screen: "register",
                     upgradeUsername: MatrixClientPeg.get().getUserIdLocalpart(),
                     guestAccessToken: MatrixClientPeg.get().getAccessToken(),
-                    guestCreds: { // stash our guest creds so we can backout if needed
-                        userId: MatrixClientPeg.get().credentials.userId,
-                        accessToken: MatrixClientPeg.get().getAccessToken(),
-                        homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
-                        identityServerUrl: MatrixClientPeg.get().getIdentityServerUrl(),
-                        guest: true
-                    }
                 });
                 this.notifyNewScreen('register');
                 break;
@@ -349,10 +342,13 @@ module.exports = React.createClass({
 
                 var client = MatrixClientPeg.get();
                 client.loginWithToken(payload.params.loginToken).done(function(data) {
-                    MatrixClientPeg.replaceUsingAccessToken(
-                        client.getHomeserverUrl(), client.getIdentityServerUrl(),
-                        data.user_id, data.access_token
-                    );
+                    MatrixClientPeg.replaceUsingCreds({
+                        homeserverUrl: client.getHomeserverUrl(),
+                        identityServerUrl: client.getIdentityServerUrl(),
+                        userId: data.user_id,
+                        accessToken: data.access_token,
+                        guest: false,
+                    });
                     self.setState({
                         screen: undefined,
                         logged_in: true
@@ -384,7 +380,7 @@ module.exports = React.createClass({
 
                             // FIXME: controller shouldn't be loading a view :(
                             var Loader = sdk.getComponent("elements.Spinner");
-                            var modal = Modal.createDialog(Loader);
+                            var modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
                             d.then(function() {
                                 modal.close();
@@ -405,10 +401,7 @@ module.exports = React.createClass({
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID
                 // If the user is clicking on a room in the context of the alias being presented
                 // to them, supply the room alias. If both are supplied, the room ID will be ignored.
-                this._viewRoom(
-                    payload.room_id, payload.room_alias, payload.show_settings, payload.event_id,
-                    payload.third_party_invite, payload.oob_data
-                );
+                this._viewRoom(payload);
                 break;
             case 'view_prev_room':
                 roomIndexDelta = -1;
@@ -425,7 +418,7 @@ module.exports = React.createClass({
                 }
                 roomIndex = (roomIndex + roomIndexDelta) % allRooms.length;
                 if (roomIndex < 0) roomIndex = allRooms.length - 1;
-                this._viewRoom(allRooms[roomIndex].roomId);
+                this._viewRoom({ room_id: allRooms[roomIndex].roomId });
                 break;
             case 'view_indexed_room':
                 var allRooms = RoomListSorter.mostRecentActivityFirst(
@@ -433,7 +426,7 @@ module.exports = React.createClass({
                 );
                 var roomIndex = payload.roomIndex;
                 if (allRooms[roomIndex]) {
-                    this._viewRoom(allRooms[roomIndex].roomId);
+                    this._viewRoom({ room_id: allRooms[roomIndex].roomId });
                 }
                 break;
             case 'view_user_settings':
@@ -479,6 +472,15 @@ module.exports = React.createClass({
                     middleOpacity: payload.middleOpacity,
                 });
                 break;
+            case 'on_logged_in':
+                this._onLoggedIn();
+                break;
+            case 'on_logged_out':
+                this._onLoggedOut();
+                break;
+            case 'will_start_client':
+                this._onWillStartClient();
+                break;
         }
     },
 
@@ -493,39 +495,45 @@ module.exports = React.createClass({
 
     // switch view to the given room
     //
-    // eventId is optional and will cause a switch to the context of that
-    // particular event.
-    // @param {Object} thirdPartyInvite Object containing data about the third party
+    // @param {Object} room_info Object containing data about the room to be joined
+    // @param {string=} room_info.room_id ID of the room to join. One of room_id or room_alias must be given.
+    // @param {string=} room_info.room_alias Alias of the room to join. One of room_id or room_alias must be given.
+    // @param {boolean=} room_info.auto_join If true, automatically attempt to join the room if not already a member.
+    // @param {boolean=} room_info.show_settings Makes RoomView show the room settings dialog.
+    // @param {string=} room_info.event_id ID of the event in this room to show: this will cause a switch to the
+    //                                    context of that particular event.
+    // @param {Object=} room_info.third_party_invite Object containing data about the third party
     //                                    we received to join the room, if any.
-    // @param {string} thirdPartyInvite.inviteSignUrl 3pid invite sign URL
-    // @param {string} thirdPartyInvite.invitedwithEmail The email address the invite was sent to
-    // @param {Object} oob_data Object of additional data about the room
+    // @param {string=} room_info.third_party_invite.inviteSignUrl 3pid invite sign URL
+    // @param {string=} room_info.third_party_invite.invitedEmail The email address the invite was sent to
+    // @param {Object=} room_info.oob_data Object of additional data about the room
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
-    _viewRoom: function(roomId, roomAlias, showSettings, eventId, thirdPartyInvite, oob_data) {
+    _viewRoom: function(room_info) {
         // before we switch room, record the scroll state of the current room
         this._updateScrollMap();
 
         this.focusComposer = true;
 
         var newState = {
-            initialEventId: eventId,
-            highlightedEventId: eventId,
+            initialEventId: room_info.event_id,
+            highlightedEventId: room_info.event_id,
             initialEventPixelOffset: undefined,
             page_type: this.PageTypes.RoomView,
-            thirdPartyInvite: thirdPartyInvite,
-            roomOobData: oob_data,
-            currentRoomAlias: roomAlias,
+            thirdPartyInvite: room_info.third_party_invite,
+            roomOobData: room_info.oob_data,
+            currentRoomAlias: room_info.room_alias,
+            autoJoin: room_info.auto_join,
         };
 
-        if (!roomAlias) {
-            newState.currentRoomId = roomId;
+        if (!room_info.room_alias) {
+            newState.currentRoomId = room_info.room_id;
         }
 
         // if we aren't given an explicit event id, look for one in the
         // scrollStateMap.
-        if (!eventId) {
-            var scrollState = this.scrollStateMap[roomId];
+        if (!room_info.event_id) {
+            var scrollState = this.scrollStateMap[room_info.room_id];
             if (scrollState) {
                 newState.initialEventId = scrollState.focussedEvent;
                 newState.initialEventPixelOffset = scrollState.pixelOffset;
@@ -538,8 +546,8 @@ module.exports = React.createClass({
             // the new screen yet (we won't be showing it yet)
             // The normal case where this happens is navigating
             // to the room in the URL bar on page load.
-            var presentedId = roomAlias || roomId;
-            var room = MatrixClientPeg.get().getRoom(roomId);
+            var presentedId = room_info.room_alias || room_info.room_id;
+            var room = MatrixClientPeg.get().getRoom(room_info.room_id);
             if (room) {
                 var theAlias = MatrixTools.getDisplayAliasForRoom(room);
                 if (theAlias) presentedId = theAlias;
@@ -555,15 +563,15 @@ module.exports = React.createClass({
                 // Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
 
-            if (eventId) {
-                presentedId += "/"+eventId;
+            if (room_info.event_id) {
+                presentedId += "/"+room_info.event_id;
             }
             this.notifyNewScreen('room/'+presentedId);
             newState.ready = true;
         }
         this.setState(newState);
 
-        if (this.refs.roomView && showSettings) {
+        if (this.refs.roomView && room_info.showSettings) {
             this.refs.roomView.showSettings(true);
         }
     },
@@ -583,23 +591,36 @@ module.exports = React.createClass({
         this.scrollStateMap[roomId] = state;
     },
 
-    onLoggedIn: function(credentials) {
-        credentials.guest = Boolean(credentials.guest);
-        console.log("onLoggedIn => %s (guest=%s)", credentials.userId, credentials.guest);
-        MatrixClientPeg.replaceUsingAccessToken(
-            credentials.homeserverUrl, credentials.identityServerUrl,
-            credentials.userId, credentials.accessToken, credentials.guest
-        );
+    /**
+     * Called when a new logged in session has started
+     */
+    _onLoggedIn: function(credentials) {
+        this.guestCreds = null;
+        this.notifyNewScreen('');
         this.setState({
             screen: undefined,
-            logged_in: true
+            logged_in: true,
         });
-        this.startMatrixClient();
-        this.notifyNewScreen('');
     },
 
-    startMatrixClient: function() {
+    /**
+     * Called when the session is logged out
+     */
+    _onLoggedOut: function() {
+        this.notifyNewScreen('login');
+        this.replaceState({
+            logged_in: false,
+            ready: false,
+        });
+    },
+
+    /**
+     * Called just before the matrix client is started
+     * (useful for setting listeners)
+     */
+    _onWillStartClient() {
         var cli = MatrixClientPeg.get();
+
         var self = this;
         cli.on('sync', function(state, prevState) {
             self.updateFavicon(state, prevState);
@@ -665,13 +686,6 @@ module.exports = React.createClass({
             dis.dispatch({
                 action: 'logout'
             });
-        });
-        Notifier.start();
-        UserActivity.start();
-        Presence.start();
-        cli.startClient({
-            pendingEventOrdering: "detached",
-            initialSyncLimit: this.props.config.sync_timeline_limit || 20,
         });
     },
 
@@ -910,12 +924,14 @@ module.exports = React.createClass({
 
     onReturnToGuestClick: function() {
         // reanimate our guest login
-        this.onLoggedIn(this.state.guestCreds);
-        this.setState({ guestCreds: null });
+        if (this.guestCreds) {
+            Lifecycle.setLoggedIn(this.guestCreds);
+            this.guestCreds = null;
+        }
     },
 
     onRegistered: function(credentials) {
-        this.onLoggedIn(credentials);
+        Lifecycle.setLoggedIn(credentials);
         // do post-registration stuff
         // This now goes straight to user settings
         // We use _setPage since if we wait for
@@ -1032,6 +1048,7 @@ module.exports = React.createClass({
                         <RoomView
                             ref="roomView"
                             roomAddress={this.state.currentRoomAlias || this.state.currentRoomId}
+                            autoJoin={this.state.autoJoin}
                             onRoomIdResolved={this.onRoomIdResolved}
                             eventId={this.state.initialEventId}
                             thirdPartyInvite={this.state.thirdPartyInvite}
@@ -1111,8 +1128,8 @@ module.exports = React.createClass({
                     email={this.props.startingQueryParams.email}
                     username={this.state.upgradeUsername}
                     guestAccessToken={this.state.guestAccessToken}
-                    defaultHsUrl={this.props.config.default_hs_url}
-                    defaultIsUrl={this.props.config.default_is_url}
+                    defaultHsUrl={this.getDefaultHsUrl()}
+                    defaultIsUrl={this.getDefaultIsUrl()}
                     brand={this.props.config.brand}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
@@ -1120,14 +1137,14 @@ module.exports = React.createClass({
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
                     onRegisterClick={this.onRegisterClick}
-                    onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
+                    onCancelClick={this.guestCreds ? this.onReturnToGuestClick : null}
                     />
             );
         } else if (this.state.screen == 'forgot_password') {
             return (
                 <ForgotPassword
-                    defaultHsUrl={this.props.config.default_hs_url}
-                    defaultIsUrl={this.props.config.default_is_url}
+                    defaultHsUrl={this.getDefaultHsUrl()}
+                    defaultIsUrl={this.getDefaultIsUrl()}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     onComplete={this.onLoginClick}
@@ -1136,16 +1153,16 @@ module.exports = React.createClass({
         } else {
             return (
                 <Login
-                    onLoggedIn={this.onLoggedIn}
+                    onLoggedIn={Lifecycle.setLoggedIn}
                     onRegisterClick={this.onRegisterClick}
-                    defaultHsUrl={this.props.config.default_hs_url}
-                    defaultIsUrl={this.props.config.default_is_url}
+                    defaultHsUrl={this.getDefaultHsUrl()}
+                    defaultIsUrl={this.getDefaultIsUrl()}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     fallbackHsUrl={this.getFallbackHsUrl()}
                     onForgotPasswordClick={this.onForgotPasswordClick}
-                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this.props.config.default_hs_url ? this._registerAsGuest.bind(this, true) : undefined}
-                    onCancelClick={ this.state.guestCreds ? this.onReturnToGuestClick : null }
+                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this._registerAsGuest.bind(this, true)}
+                    onCancelClick={this.guestCreds ? this.onReturnToGuestClick : null}
                     />
             );
         }

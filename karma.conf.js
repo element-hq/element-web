@@ -171,5 +171,6 @@ module.exports = function (config) {
             },
             devtool: 'inline-source-map',
         },
+        browserNoActivityTimeout: 15000,
     });
 };

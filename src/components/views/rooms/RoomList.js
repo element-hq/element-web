@@ -268,9 +268,11 @@ module.exports = React.createClass({
     },
 
     _repositionTooltip: function(e) {
-        if (this.tooltip && this.tooltip.parentElement) {
+        // We access the parent of the parent, as the tooltip is inside a container
+        // Needs refactoring into a better multipurpose tooltip
+        if (this.tooltip && this.tooltip.parentElement && this.tooltip.parentElement.parentElement) {
             var scroll = ReactDOM.findDOMNode(this);
-            this.tooltip.style.top = (70 + scroll.parentElement.offsetTop + this.tooltip.parentElement.offsetTop - this._getScrollNode().scrollTop) + "px";
+            this.tooltip.style.top = (3 + scroll.parentElement.offsetTop + this.tooltip.parentElement.parentElement.offsetTop - this._getScrollNode().scrollTop) + "px";
         }
     },
 
@@ -325,7 +327,6 @@ module.exports = React.createClass({
 
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
-                 relayoutOnUpdate={false}
                  autoshow={true} onScroll={ self._repositionTooltips } ref="gemscroll">
             <div className="mx_RoomList">
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }

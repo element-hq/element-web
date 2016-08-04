@@ -20,54 +20,53 @@ var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require('../../../Modal');
 var sdk = require('../../../index');
 var dis = require('../../../dispatcher');
+import Autocomplete from './Autocomplete';
 
 import UserSettingsStore from '../../../UserSettingsStore';
 
 
-module.exports = React.createClass({
-    displayName: 'MessageComposer',
+export default class MessageComposer extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.onCallClick = this.onCallClick.bind(this);
+        this.onHangupClick = this.onHangupClick.bind(this);
+        this.onUploadClick = this.onUploadClick.bind(this);
+        this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
+        this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
+        this.onInputContentChanged = this.onInputContentChanged.bind(this);
+        this.onUpArrow = this.onUpArrow.bind(this);
+        this.onDownArrow = this.onDownArrow.bind(this);
+        this._tryComplete = this._tryComplete.bind(this);
+        this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
 
-    propTypes: {
-        tabComplete: React.PropTypes.any,
+        this.state = {
+            autocompleteQuery: '',
+            selection: null,
+        };
 
-        // a callback which is called when the height of the composer is
-        // changed due to a change in content.
-        onResize: React.PropTypes.func,
+    }
 
-        // js-sdk Room object
-        room: React.PropTypes.object.isRequired,
-
-        // string representing the current voip call state
-        callState: React.PropTypes.string,
-
-        // callback when a file to upload is chosen
-        uploadFile: React.PropTypes.func.isRequired,
-
-        // opacity for dynamic UI fading effects
-        opacity: React.PropTypes.number,
-    },
-
-    onUploadClick: function(ev) {
+    onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+            let NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
                 title: "Please Register",
-                description: "Guest users can't upload files. Please register to upload."
+                description: "Guest users can't upload files. Please register to upload.",
             });
             return;
         }
 
         this.refs.uploadInput.click();
-    },
+    }
 
-    onUploadFileSelected: function(ev) {
-        var files = ev.target.files;
+    onUploadFileSelected(ev) {
+        let files = ev.target.files;
 
-        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        let TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        var fileList = [];
-        for(var i=0; i<files.length; i++) {
+        let fileList = [];
+        for (let i=0; i<files.length; i++) {
             fileList.push(<li>
                 <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name}
             </li>);
@@ -94,11 +93,11 @@ module.exports = React.createClass({
                 }
 
                 this.refs.uploadInput.value = null;
-            }
+            },
         });
-    },
+    }
 
-    onHangupClick: function() {
+    onHangupClick() {
         var call = CallHandler.getCallForRoom(this.props.room.roomId);
         //var call = CallHandler.getAnyActiveCall();
         if (!call) {
@@ -108,27 +107,55 @@ module.exports = React.createClass({
             action: 'hangup',
             // hangup the call for this room, which may not be the room in props
             // (e.g. conferences which will hangup the 1:1 room instead)
-            room_id: call.roomId
+            room_id: call.roomId,
         });
-    },
+    }
 
-    onCallClick: function(ev) {
+    onCallClick(ev) {
         dis.dispatch({
             action: 'place_call',
             type: ev.shiftKey ? "screensharing" : "video",
-            room_id: this.props.room.roomId
+            room_id: this.props.room.roomId,
         });
-    },
+    }
 
-    onVoiceCallClick: function(ev) {
+    onVoiceCallClick(ev) {
         dis.dispatch({
             action: 'place_call',
             type: 'voice',
-            room_id: this.props.room.roomId
+            room_id: this.props.room.roomId,
         });
-    },
+    }
 
-    render: function() {
+    onInputContentChanged(content: string, selection: {start: number, end: number}) {
+        this.setState({
+            autocompleteQuery: content,
+            selection,
+        });
+    }
+
+    onUpArrow() {
+       return this.refs.autocomplete.onUpArrow();
+    }
+
+    onDownArrow() {
+        return this.refs.autocomplete.onDownArrow();
+    }
+
+    _tryComplete(): boolean {
+        if (this.refs.autocomplete) {
+            return this.refs.autocomplete.onConfirm();
+        }
+        return false;
+    }
+
+    _onAutocompleteConfirm(range, completion) {
+        if (this.messageComposerInput) {
+            this.messageComposerInput.onConfirmAutocompletion(range, completion);
+        }
+    }
+
+    render() {
         var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         var uploadInputStyle = {display: 'none'};
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
@@ -154,12 +181,12 @@ module.exports = React.createClass({
         else {
             callButton =
                 <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
-                    <TintableSvg src="img/voice.svg" width="16" height="26"/>
-                </div>
+                    <TintableSvg src="img/icon-call.svg" width="35" height="35"/>
+                </div>;
             videoCallButton =
                 <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
-                    <TintableSvg src="img/call.svg" width="30" height="22"/>
-                </div>
+                    <TintableSvg src="img/icons-video.svg" width="35" height="35"/>
+                </div>;
         }
 
         var canSendMessages = this.props.room.currentState.maySendMessage(
@@ -172,7 +199,7 @@ module.exports = React.createClass({
             var uploadButton = (
                 <div key="controls_upload" className="mx_MessageComposer_upload"
                         onClick={this.onUploadClick} title="Upload file">
-                    <TintableSvg src="img/upload.svg" width="19" height="24"/>
+                    <TintableSvg src="img/icons-upload.svg" width="35" height="35"/>
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
                         multiple
@@ -181,8 +208,16 @@ module.exports = React.createClass({
             );
 
             controls.push(
-                <MessageComposerInput key="controls_input" tabComplete={this.props.tabComplete}
-                    onResize={this.props.onResize} room={this.props.room} />,
+                <MessageComposerInput
+                    ref={c => this.messageComposerInput = c}
+                    key="controls_input"
+                    onResize={this.props.onResize}
+                    room={this.props.room}
+                    tryComplete={this._tryComplete}
+                    onUpArrow={this.onUpArrow}
+                    onDownArrow={this.onDownArrow}
+                    tabComplete={this.props.tabComplete} // used for old messagecomposerinput/tabcomplete
+                    onContentChanged={this.onInputContentChanged} />,
                 uploadButton,
                 hangupButton,
                 callButton,
@@ -198,6 +233,13 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_MessageComposer mx_fadable" style={{ opacity: this.props.opacity }}>
+                <div className="mx_MessageComposer_autocomplete_wrapper">
+                    <Autocomplete
+                        ref="autocomplete"
+                        onConfirm={this._onAutocompleteConfirm}
+                        query={this.state.autocompleteQuery}
+                        selection={this.state.selection} />
+                </div>
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         {controls}
@@ -206,5 +248,24 @@ module.exports = React.createClass({
             </div>
         );
     }
-});
+};
 
+MessageComposer.propTypes = {
+    tabComplete: React.PropTypes.any,
+
+    // a callback which is called when the height of the composer is
+    // changed due to a change in content.
+    onResize: React.PropTypes.func,
+
+    // js-sdk Room object
+    room: React.PropTypes.object.isRequired,
+
+    // string representing the current voip call state
+    callState: React.PropTypes.string,
+
+    // callback when a file to upload is chosen
+    uploadFile: React.PropTypes.func.isRequired,
+
+    // opacity for dynamic UI fading effects
+    opacity: React.PropTypes.number
+};

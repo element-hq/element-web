@@ -232,7 +232,9 @@ module.exports = React.createClass({displayName: 'Login',
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div>
-                        <h2>Sign in</h2>
+                        <h2>Sign in
+                            { loader }
+                        </h2>
                         { this.componentForStep(this._getCurrentFlowStep()) }
                         <ServerConfig ref="serverConfig"
                             withToggleButton={true}
@@ -244,7 +246,6 @@ module.exports = React.createClass({displayName: 'Login',
                             onIsUrlChanged={this.onIsUrlChanged}
                             delayTimeMs={1000}/>
                         <div className="mx_Login_error">
-                                { loader }
                                 { this.state.errorText }
                         </div>
                         <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">

@@ -24,17 +24,17 @@ module.exports = React.createClass({
     displayName: 'TabCompleteBar',
 
     propTypes: {
-        entries: React.PropTypes.array.isRequired
+        tabComplete: React.PropTypes.object.isRequired
     },
 
     render: function() {
         return (
             <div className="mx_TabCompleteBar">
-            {this.props.entries.map(function(entry, i) {
+            {this.props.tabComplete.peek(6).map((entry, i) => {
                 return (
                     <div key={entry.getKey() || i + ""}
-                         className={ "mx_TabCompleteBar_item " + (entry instanceof CommandEntry ? "mx_TabCompleteBar_command" : "") } 
-                         onClick={entry.onClick.bind(entry)} >
+                         className={ "mx_TabCompleteBar_item " + (entry instanceof CommandEntry ? "mx_TabCompleteBar_command" : "") }
+                         onClick={this.props.tabComplete.onEntryClick.bind(this.props.tabComplete, entry)} >
                         {entry.getImageJsx()}
                         <span className="mx_TabCompleteBar_text">
                             {entry.getText()}

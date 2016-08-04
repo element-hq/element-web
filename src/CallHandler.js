@@ -181,11 +181,11 @@ function _onAction(payload) {
             console.error("Unknown conf call type: %s", payload.type);
         }
     }
-    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
     switch (payload.action) {
         case 'place_call':
             if (module.exports.getAnyActiveCall()) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Existing Call",
                     description: "You are already in a call."
@@ -195,6 +195,7 @@ function _onAction(payload) {
 
             // if the runtime env doesn't do VoIP, whine.
             if (!MatrixClientPeg.get().supportsVoip()) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "VoIP is unsupported",
                     description: "You cannot place VoIP calls in this browser."
@@ -210,7 +211,7 @@ function _onAction(payload) {
 
             var members = room.getJoinedMembers();
             if (members.length <= 1) {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     description: "You cannot place a call with yourself."
                 });
@@ -236,23 +237,37 @@ function _onAction(payload) {
         case 'place_conference_call':
             console.log("Place conference call in %s", payload.room_id);
             if (!ConferenceHandler) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     description: "Conference calls are not supported in this client"
                 });
             }
             else if (!MatrixClientPeg.get().supportsVoip()) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "VoIP is unsupported",
                     description: "You cannot place VoIP calls in this browser."
                 });
             }
             else {
-                ConferenceHandler.createNewMatrixCall(
-                    MatrixClientPeg.get(), payload.room_id
-                ).done(function(call) {
-                    placeCall(call);
-                }, function(err) {
-                    console.error("Failed to setup conference call: %s", err);
+                var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                Modal.createDialog(QuestionDialog, {
+                    title: "Warning!",
+                    description: "Conference calling in Vector is in development and may not be reliable.",
+                    onFinished: confirm=>{
+                        if (confirm) {
+                            ConferenceHandler.createNewMatrixCall(
+                                MatrixClientPeg.get(), payload.room_id
+                            ).done(function(call) {
+                                placeCall(call);
+                            }, function(err) {
+                                Modal.createDialog(ErrorDialog, {
+                                    title: "Failed to set up conference call",
+                                    description: "Conference call failed: " + err,
+                                });
+                            });
+                        }
+                    },
                 });
             }
             break;

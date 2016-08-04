@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
-
-var marked = require("marked");
+import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
+import marked from 'marked';
 marked.setOptions({
     renderer: new marked.Renderer(),
     gfm: true,
@@ -24,7 +24,7 @@ marked.setOptions({
     pedantic: false,
     sanitize: true,
     smartLists: true,
-    smartypants: false
+    smartypants: false,
 });
 
 import {Editor, EditorState, RichUtils, CompositeDecorator,
@@ -33,14 +33,14 @@ import {Editor, EditorState, RichUtils, CompositeDecorator,
 
 import {stateToMarkdown} from 'draft-js-export-markdown';
 
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var SlashCommands = require("../../../SlashCommands");
-var Modal = require("../../../Modal");
-var MemberEntry = require("../../../TabCompleteEntries").MemberEntry;
-var sdk = require('../../../index');
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
+import SlashCommands from '../../../SlashCommands';
+import Modal from '../../../Modal';
+import sdk from '../../../index';
 
-var dis = require("../../../dispatcher");
-var KeyCode = require("../../../KeyCode");
+import dis from '../../../dispatcher';
+import KeyCode from '../../../KeyCode';
 
 import * as RichText from '../../../RichText';
 
@@ -49,8 +49,8 @@ const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 const KEY_M = 77;
 
 // FIXME Breaks markdown with multiple paragraphs, since it only strips first and last <p>
-function mdownToHtml(mdown) {
-    var html = marked(mdown) || "";
+function mdownToHtml(mdown: string): string {
+    let html = marked(mdown) || "";
     html = html.trim();
     // strip start and end <p> tags else you get 'orrible spacing
     if (html.indexOf("<p>") === 0) {
@@ -66,38 +66,44 @@ function mdownToHtml(mdown) {
  * The textInput part of the MessageComposer
  */
 export default class MessageComposerInput extends React.Component {
+    static getKeyBinding(e: SyntheticKeyboardEvent): string {
+        // C-m => Toggles between rich text and markdown modes
+        if (e.keyCode === KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
+            return 'toggle-mode';
+        }
+
+        return getDefaultKeyBinding(e);
+    }
+
+    client: MatrixClient;
+
     constructor(props, context) {
         super(props, context);
         this.onAction = this.onAction.bind(this);
         this.onInputClick = this.onInputClick.bind(this);
         this.handleReturn = this.handleReturn.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
-        this.onChange = this.onChange.bind(this);
+        this.setEditorState = this.setEditorState.bind(this);
+        this.onUpArrow = this.onUpArrow.bind(this);
+        this.onDownArrow = this.onDownArrow.bind(this);
+        this.onTab = this.onTab.bind(this);
+        this.onConfirmAutocompletion = this.onConfirmAutocompletion.bind(this);
 
         let isRichtextEnabled = window.localStorage.getItem('mx_editor_rte_enabled');
-        if(isRichtextEnabled == null) {
+        if (isRichtextEnabled == null) {
             isRichtextEnabled = 'true';
         }
         isRichtextEnabled = isRichtextEnabled === 'true';
 
         this.state = {
             isRichtextEnabled: isRichtextEnabled,
-            editorState: null
+            editorState: null,
         };
 
         // bit of a hack, but we need to do this here since createEditorState needs isRichtextEnabled
         this.state.editorState = this.createEditorState();
 
         this.client = MatrixClientPeg.get();
-    }
-
-    static getKeyBinding(e: SyntheticKeyboardEvent): string {
-        // C-m => Toggles between rich text and markdown modes
-        if(e.keyCode == KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
-            return 'toggle-mode';
-        }
-
-        return getDefaultKeyBinding(e);
     }
 
     /**
@@ -207,11 +213,9 @@ export default class MessageComposerInput extends React.Component {
                 let contentJSON = window.sessionStorage.getItem("mx_messagecomposer_input_" + this.roomId);
                 if (contentJSON) {
                     let content = convertFromRaw(JSON.parse(contentJSON));
-                    component.setState({
-                        editorState: component.createEditorState(component.state.isRichtextEnabled, content)
-                    });
+                    component.setEditorState(component.createEditorState(component.state.isRichtextEnabled, content));
                 }
-            }
+            },
         };
     }
 
@@ -233,7 +237,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onAction(payload) {
-        var editor = this.refs.editor;
+        let editor = this.refs.editor;
 
         switch (payload.action) {
             case 'focus_composer':
@@ -251,7 +255,7 @@ export default class MessageComposerInput extends React.Component {
                         payload.displayname
                     );
                     this.setState({
-                        editorState: EditorState.push(this.state.editorState, contentState, 'insert-characters')
+                        editorState: EditorState.push(this.state.editorState, contentState, 'insert-characters'),
                     });
                     editor.focus();
                 }
@@ -344,28 +348,31 @@ export default class MessageComposerInput extends React.Component {
         this.refs.editor.focus();
     }
 
-    onChange(editorState: EditorState) {
+    setEditorState(editorState: EditorState) {
+        editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
         this.setState({editorState});
 
-        if(editorState.getCurrentContent().hasText()) {
-            this.onTypingActivity()
+        if (editorState.getCurrentContent().hasText()) {
+            this.onTypingActivity();
         } else {
             this.onFinishedTyping();
+        }
+
+        if (this.props.onContentChanged) {
+            this.props.onContentChanged(editorState.getCurrentContent().getPlainText(),
+                RichText.selectionStateToTextOffsets(editorState.getSelection(),
+                    editorState.getCurrentContent().getBlocksAsArray()));
         }
     }
 
     enableRichtext(enabled: boolean) {
         if (enabled) {
             let html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
-            this.setState({
-                editorState: this.createEditorState(enabled, RichText.HTMLtoContentState(html))
-            });
+            this.setEditorState(this.createEditorState(enabled, RichText.HTMLtoContentState(html)));
         } else {
             let markdown = stateToMarkdown(this.state.editorState.getCurrentContent()),
                 contentState = ContentState.createFromText(markdown);
-            this.setState({
-                editorState: this.createEditorState(enabled, contentState)
-            });
+            this.setEditorState(this.createEditorState(enabled, contentState));
         }
 
         window.localStorage.setItem('mx_editor_rte_enabled', enabled);
@@ -376,7 +383,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     handleKeyCommand(command: string): boolean {
-        if(command === 'toggle-mode') {
+        if (command === 'toggle-mode') {
             this.enableRichtext(!this.state.isRichtextEnabled);
             return true;
         }
@@ -384,7 +391,7 @@ export default class MessageComposerInput extends React.Component {
         let newState: ?EditorState = null;
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
-        if(!this.state.isRichtextEnabled) {
+        if (!this.state.isRichtextEnabled) {
             let contentState = this.state.editorState.getCurrentContent(),
                 selection = this.state.editorState.getSelection();
 
@@ -392,10 +399,10 @@ export default class MessageComposerInput extends React.Component {
                 bold: text => `**${text}**`,
                 italic: text => `*${text}*`,
                 underline: text => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
-                code: text => `\`${text}\``
+                code: text => `\`${text}\``,
             }[command];
 
-            if(modifyFn) {
+            if (modifyFn) {
                 newState = EditorState.push(
                     this.state.editorState,
                     RichText.modifyText(contentState, selection, modifyFn),
@@ -404,23 +411,26 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
-        if(newState == null)
+        if (newState == null)
             newState = RichUtils.handleKeyCommand(this.state.editorState, command);
 
         if (newState != null) {
-            this.onChange(newState);
+            this.setEditorState(newState);
             return true;
         }
         return false;
     }
 
     handleReturn(ev) {
-        if(ev.shiftKey)
+        if (ev.shiftKey) {
             return false;
+        }
 
         const contentState = this.state.editorState.getCurrentContent();
-        if(!contentState.hasText())
+        if (!contentState.hasText()) {
             return true;
+        }
+            
 
         let contentText = contentState.getPlainText(), contentHTML;
 
@@ -489,10 +499,47 @@ export default class MessageComposerInput extends React.Component {
         return true;
     }
 
+    onUpArrow(e) {
+        if (this.props.onUpArrow && this.props.onUpArrow()) {
+            e.preventDefault();
+        }
+    }
+
+    onDownArrow(e) {
+        if (this.props.onDownArrow && this.props.onDownArrow()) {
+            e.preventDefault();
+        }
+    }
+
+    onTab(e) {
+        if (this.props.tryComplete) {
+            if (this.props.tryComplete()) {
+                e.preventDefault();
+            }
+        }
+    }
+
+    onConfirmAutocompletion(range, content: string) {
+        let contentState = Modifier.replaceText(
+            this.state.editorState.getCurrentContent(),
+            RichText.textOffsetsToSelectionState(range, this.state.editorState.getCurrentContent().getBlocksAsArray()),
+            content
+        );
+
+        let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
+
+        editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
+
+        this.setEditorState(editorState);
+
+        // for some reason, doing this right away does not update the editor :(
+        setTimeout(() => this.refs.editor.focus(), 50);
+    }
+
     render() {
         let className = "mx_MessageComposer_input";
 
-        if(this.state.isRichtextEnabled) {
+        if (this.state.isRichtextEnabled) {
             className += " mx_MessageComposer_input_rte"; // placeholder indicator for RTE mode
         }
 
@@ -502,11 +549,14 @@ export default class MessageComposerInput extends React.Component {
                 <Editor ref="editor"
                         placeholder="Type a message…"
                         editorState={this.state.editorState}
-                        onChange={this.onChange}
+                        onChange={this.setEditorState}
                         keyBindingFn={MessageComposerInput.getKeyBinding}
                         handleKeyCommand={this.handleKeyCommand}
                         handleReturn={this.handleReturn}
                         stripPastedStyles={!this.state.isRichtextEnabled}
+                        onTab={this.onTab}
+                        onUpArrow={this.onUpArrow}
+                        onDownArrow={this.onDownArrow}
                         spellCheck={true} />
             </div>
         );
@@ -521,5 +571,15 @@ MessageComposerInput.propTypes = {
     onResize: React.PropTypes.func,
 
     // js-sdk Room object
-    room: React.PropTypes.object.isRequired
+    room: React.PropTypes.object.isRequired,
+
+    // called with current plaintext content (as a string) whenever it changes
+    onContentChanged: React.PropTypes.func,
+
+    onUpArrow: React.PropTypes.func,
+
+    onDownArrow: React.PropTypes.func,
+
+    // attempts to confirm currently selected completion, returns whether actually confirmed
+    tryComplete: React.PropTypes.func,
 };

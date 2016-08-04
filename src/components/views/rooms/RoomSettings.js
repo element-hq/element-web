@@ -23,6 +23,14 @@ var Modal = require('../../../Modal');
 var ObjectUtils = require("../../../ObjectUtils");
 var dis = require("../../../dispatcher");
 var ScalarAuthClient = require("../../../ScalarAuthClient");
+var UserSettingsStore = require('../../../UserSettingsStore');
+
+// parse a string as an integer; if the input is undefined, or cannot be parsed
+// as an integer, return a default.
+function parseIntWithDefault(val, def) {
+    var res = parseInt(val);
+    return isNaN(res) ? def : res;
+}
 
 module.exports = React.createClass({
     displayName: 'RoomSettings',
@@ -59,9 +67,18 @@ module.exports = React.createClass({
             tags_changed: false,
             tags: tags,
             areNotifsMuted: areNotifsMuted,
+<<<<<<< HEAD
             isRoomPublished: this._originalIsRoomPublished, // loaded async in componentWillMount
             scalar_token: null,
             scalar_error: null,
+=======
+            // isRoomPublished is loaded async in componentWillMount so when the component
+            // inits, the saved value will always be undefined, however getInitialState()
+            // is also called from the saving code so we must return the correct value here
+            // if we have it (although this could race if the user saves before we load whether
+            // the room is published or not).
+            isRoomPublished: this._originalIsRoomPublished,
+>>>>>>> develop
         };
     },
 
@@ -209,11 +226,17 @@ module.exports = React.createClass({
                 }
             });
         }
-        console.log("Performing %s operations", promises.length);
 
         // color scheme
         promises.push(this.saveColor());
 
+        // url preview settings
+        promises.push(this.saveUrlPreviewSettings());
+
+        // encryption
+        promises.push(this.saveEncryption());
+
+        console.log("Performing %s operations: %s", promises.length, JSON.stringify(promises));
         return q.allSettled(promises);
     },
 
@@ -225,6 +248,24 @@ module.exports = React.createClass({
     saveColor: function() {
         if (!this.refs.color_settings) { return q(); }
         return this.refs.color_settings.saveSettings();
+    },
+
+    saveUrlPreviewSettings: function() {
+        if (!this.refs.url_preview_settings) { return q(); }
+        return this.refs.url_preview_settings.saveSettings();
+    },
+
+    saveEncryption: function () {
+        if (!this.refs.encrypt) { return q(); }
+
+        var encrypt = this.refs.encrypt.checked;
+        if (!encrypt) { return q(); }
+
+        var roomId = this.props.room.roomId;
+        return MatrixClientPeg.get().sendStateEvent(
+            roomId, "m.room.encryption",
+            { algorithm: "m.olm.v1.curve25519-aes-sha2" }
+        );
     },
 
     _hasDiff: function(strA, strB) {
@@ -261,7 +302,7 @@ module.exports = React.createClass({
             power_levels_changed: true
         });
     },
-    
+
     _yankValueFromEvent: function(stateEventType, keyName, defaultValue) {
         // E.g.("m.room.name","name") would yank the "name" content key from "m.room.name"
         var event = this.props.room.currentState.getStateEvents(stateEventType, '');
@@ -296,7 +337,7 @@ module.exports = React.createClass({
             },
         });
     },
-    
+
     _onRoomAccessRadioToggle: function(ev) {
 
         //                         join_rule
@@ -400,68 +441,72 @@ module.exports = React.createClass({
         }, "");
     },
 
+    _renderEncryptionSection: function() {
+        if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
+            return null;
+        }
+
+        var cli = MatrixClientPeg.get();
+        var roomState = this.props.room.currentState;
+        var isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
+
+        var text = "Encryption is " + (isEncrypted ? "" : "not ") +
+            "enabled in this room.";
+
+        var button;
+        if (!isEncrypted &&
+                roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
+            button = (
+                <label>
+                    <input type="checkbox" ref="encrypt" />
+                    Enable encryption (warning: cannot be disabled again!)
+                </label>
+            );
+        }
+
+        return (
+            <div className="mx_RoomSettings_toggles">
+                <h3>Encryption</h3>
+                <label>{text}</label>
+                {button}
+            </div>
+        );
+    },
+
     render: function() {
         // TODO: go through greying out things you don't have permission to change
         // (or turning them into informative stuff)
 
         var AliasSettings = sdk.getComponent("room_settings.AliasSettings");
         var ColorSettings = sdk.getComponent("room_settings.ColorSettings");
+        var UrlPreviewSettings = sdk.getComponent("room_settings.UrlPreviewSettings");
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
         var Loader = sdk.getComponent("elements.Spinner")
 
-        var power_levels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
-        var events_levels = (power_levels ? power_levels.getContent().events : {}) || {};
         var cli = MatrixClientPeg.get();
         var roomState = this.props.room.currentState;
         var user_id = cli.credentials.userId;
 
-        if (power_levels) {
-            power_levels = power_levels.getContent();
+        var power_level_event = roomState.getStateEvents('m.room.power_levels', '');
+        var power_levels = power_level_event ? power_level_event.getContent() : {};
+        var events_levels = power_levels.events || {};
+        var user_levels = power_levels.users || {};
 
-            var ban_level = parseInt(power_levels.ban);
-            var kick_level = parseInt(power_levels.kick);
-            var redact_level = parseInt(power_levels.redact);
-            var invite_level = parseInt(power_levels.invite || 0);
-            var send_level = parseInt(power_levels.events_default || 0);
-            var state_level = parseInt(power_levels.state_default || 50);
-            var default_user_level = parseInt(power_levels.users_default || 0);
+        var ban_level = parseIntWithDefault(power_levels.ban, 50);
+        var kick_level = parseIntWithDefault(power_levels.kick, 50);
+        var redact_level = parseIntWithDefault(power_levels.redact, 50);
+        var invite_level = parseIntWithDefault(power_levels.invite, 50);
+        var send_level = parseIntWithDefault(power_levels.events_default, 0);
+        var state_level = power_level_event ? parseIntWithDefault(power_levels.state_default, 50) : 0;
+        var default_user_level = parseIntWithDefault(power_levels.users_default, 0);
 
-            if (power_levels.ban == undefined) ban_level = 50;
-            if (power_levels.kick == undefined) kick_level = 50;
-            if (power_levels.redact == undefined) redact_level = 50;
-
-            var user_levels = power_levels.users || {};
-
-            var current_user_level = user_levels[user_id];
-            if (current_user_level == undefined) current_user_level = default_user_level;
-
-            var power_level_level = events_levels["m.room.power_levels"];
-            if (power_level_level == undefined) {
-                power_level_level = state_level;
-            }
-
-            var can_change_levels = current_user_level >= power_level_level;
-        } else {
-            var ban_level = 50;
-            var kick_level = 50;
-            var redact_level = 50;
-            var invite_level = 0;
-            var send_level = 0;
-            var state_level = 0;
-            var default_user_level = 0;
-
-            var user_levels = [];
-            var events_levels = [];
-
-            var current_user_level = 0;
-
-            var power_level_level = 0;
-
-            var can_change_levels = false;
+        var current_user_level = user_levels[user_id];
+        if (current_user_level === undefined) {
+            current_user_level = default_user_level;
         }
 
-        var state_default = (parseInt(power_levels ? power_levels.state_default : 0) || 0);
+        var can_change_levels = roomState.mayClientSendStateEvent("m.room.power_levels", cli);
 
         var canSetTag = !cli.isGuest();
 
@@ -530,7 +575,7 @@ module.exports = React.createClass({
 
         var tagsSection = null;
         if (canSetTag || self.state.tags) {
-            var tagsSection = 
+            var tagsSection =
                 <div className="mx_RoomSettings_tags">
                     Tagged as: { canSetTag ?
                         (tags.map(function(tag, i) {
@@ -666,10 +711,6 @@ module.exports = React.createClass({
                             Members only (since they joined)
                         </label>
                     </div>
-                    <label className="mx_RoomSettings_encrypt">
-                        <input type="checkbox" />
-                        Encrypt room
-                    </label>
                 </div>
 
 
@@ -689,6 +730,8 @@ module.exports = React.createClass({
                     canSetAliases={ roomState.mayClientSendStateEvent("m.room.aliases", cli) }
                     canonicalAliasEvent={this.props.room.currentState.getStateEvents('m.room.canonical_alias', '')}
                     aliasEvents={this.props.room.currentState.getStateEvents('m.room.aliases')} />
+
+                <UrlPreviewSettings ref="url_preview_settings" room={this.props.room} />
 
                 <h3>Permissions</h3>
                 <div className="mx_RoomSettings_powerLevels mx_RoomSettings_settings">
@@ -736,6 +779,8 @@ module.exports = React.createClass({
                 { userLevelsSection }
 
                 { bannedUsersSection }
+
+                { this._renderEncryptionSection() }
 
                 <h3>Advanced</h3>
                 <div className="mx_RoomSettings_settings">

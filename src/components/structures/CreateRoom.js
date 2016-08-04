@@ -24,7 +24,6 @@ var PresetValues = {
     Custom: "custom",
 };
 var q = require('q');
-var encryption = require("../../encryption");
 var sdk = require('../../index');
 
 module.exports = React.createClass({
@@ -108,17 +107,8 @@ module.exports = React.createClass({
 
         var deferred = cli.createRoom(options);
 
-        var response;
-
         if (this.state.encrypt) {
-            deferred = deferred.then(function(res) {
-                response = res;
-                return encryption.enableEncryption(
-                    cli, response.room_id, options.invite
-                );
-            }).then(function() {
-                return q(response) }
-            );
+            // TODO
         }
 
         this.setState({

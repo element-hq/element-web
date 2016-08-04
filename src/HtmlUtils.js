@@ -20,6 +20,11 @@ var React = require('react');
 var sanitizeHtml = require('sanitize-html');
 var highlight = require('highlight.js');
 var linkifyMatrix = require('./linkify-matrix');
+import escape from 'lodash/escape';
+import emojione from 'emojione';
+import classNames from 'classnames';
+
+const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
 
 var sanitizeHtmlParams = {
     allowedTags: [
@@ -28,7 +33,7 @@ var sanitizeHtmlParams = {
         // deliberately no h1/h2 to stop people shouting.
         'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
         'nl', 'li', 'b', 'i', 'u', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
-        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre'
+        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'img',
     ],
     allowedAttributes: {
         // custom ones first:
@@ -42,7 +47,9 @@ var sanitizeHtmlParams = {
     selfClosing: [ 'img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta' ],
     // URL schemes we permit
     allowedSchemes: [ 'http', 'https', 'ftp', 'mailto' ],
-    allowedSchemesByTag: {},
+    allowedSchemesByTag: {
+        img: [ 'data' ],
+    },
     
     transformTags: { // custom to matrix
         // add blank targets to all hyperlinks except vector URLs
@@ -179,46 +186,49 @@ module.exports = {
      *
      * highlights: optional list of words to highlight, ordered by longest word first
      *
-     * opts.highlightLink: optional href to add to highlights
+     * opts.highlightLink: optional href to add to highlighted words
      */
     bodyToHtml: function(content, highlights, opts) {
         opts = opts || {};
 
         var isHtml = (content.format === "org.matrix.custom.html");
+        let body = isHtml ? content.formatted_body : escape(content.body);
 
         var safeBody;
-        if (isHtml) {
-            // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
-            // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
-            // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
-            // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
-            try {
-                if (highlights && highlights.length > 0) {
-                    var highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
-                    var safeHighlights = highlights.map(function(highlight) {
-                        return sanitizeHtml(highlight, sanitizeHtmlParams);
-                    });
-                    // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
-                    sanitizeHtmlParams.textFilter = function(safeText) {
-                        return highlighter.applyHighlights(safeText, safeHighlights).join('');
-                    };
-                }
-                safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
-            }
-            finally {
-                delete sanitizeHtmlParams.textFilter;
-            }
-            return <span className="markdown-body" dangerouslySetInnerHTML={{ __html: safeBody }} />;
-        } else {
-            safeBody = content.body;
+        // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
+        // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
+        // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
+        // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
+        try {
             if (highlights && highlights.length > 0) {
-                var highlighter = new TextHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
-                return highlighter.applyHighlights(safeBody, highlights);
+                var highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
+                var safeHighlights = highlights.map(function(highlight) {
+                    return sanitizeHtml(highlight, sanitizeHtmlParams);
+                });
+                // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
+                sanitizeHtmlParams.textFilter = function(safeText) {
+                    return highlighter.applyHighlights(safeText, safeHighlights).join('');
+                };
             }
-            else {
-                return safeBody;
-            }
+            safeBody = sanitizeHtml(body, sanitizeHtmlParams);
+            emojione.imageType = 'svg';
+            safeBody = emojione.unicodeToImage(safeBody);
         }
+        finally {
+            delete sanitizeHtmlParams.textFilter;
+        }
+
+        EMOJI_REGEX.lastIndex = 0;
+        let contentBodyTrimmed = content.body.trim();
+        let match = EMOJI_REGEX.exec(contentBodyTrimmed);
+        let emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
+
+        const className = classNames({
+            'mx_EventTile_body': true,
+            'mx_EventTile_bigEmoji': emojiBody,
+            'markdown-body': isHtml,
+        });
+        return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} />;
     },
 
     highlightDom: function(element) {
@@ -228,5 +238,11 @@ module.exports = {
         }
     },
 
-}
+    emojifyText: function(text) {
+        emojione.imageType = 'svg';
+        return {
+            __html: emojione.unicodeToImage(escape(text)),
+        };
+    },
+};
 

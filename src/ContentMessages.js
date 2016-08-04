@@ -52,6 +52,36 @@ function infoForImageFile(imageFile) {
     return deferred.promise;
 }
 
+function infoForVideoFile(videoFile) {
+    var deferred = q.defer();
+
+    // Load the file into an html element
+    var video = document.createElement("video");
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        video.src = e.target.result;
+
+        // Once ready, returns its size
+        video.onloadedmetadata = function() {
+            deferred.resolve({
+                w: video.videoWidth,
+                h: video.videoHeight
+            });
+        };
+        video.onerror = function(e) {
+            deferred.reject(e);
+        };
+    };
+    reader.onerror = function(e) {
+        deferred.reject(e);
+    };
+    reader.readAsDataURL(videoFile);
+
+    return deferred.promise;
+}
+
+
 class ContentMessages {
     constructor() {
         this.inprogress = [];
@@ -74,13 +104,25 @@ class ContentMessages {
         var def = q.defer();
         if (file.type.indexOf('image/') == 0) {
             content.msgtype = 'm.image';
-            infoForImageFile(file).then(function (imageInfo) {
+            infoForImageFile(file).then(imageInfo=>{
                 extend(content.info, imageInfo);
+                def.resolve();
+            }, error=>{
+                content.msgtype = 'm.file';
                 def.resolve();
             });
         } else if (file.type.indexOf('audio/') == 0) {
             content.msgtype = 'm.audio';
             def.resolve();
+        } else if (file.type.indexOf('video/') == 0) {
+            content.msgtype = 'm.video';
+            infoForVideoFile(file).then(videoInfo=>{
+                extend(content.info, videoInfo);
+                def.resolve();
+            }, error=>{
+                content.msgtype = 'm.file';
+                def.resolve();
+            });
         } else {
             content.msgtype = 'm.file';
             def.resolve();

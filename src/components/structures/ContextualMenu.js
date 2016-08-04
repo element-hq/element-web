@@ -17,6 +17,7 @@ limitations under the License.
 
 'use strict';
 
+var classNames = require('classnames');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
@@ -26,6 +27,12 @@ var ReactDOM = require('react-dom');
 
 module.exports = {
     ContextualMenuContainerId: "mx_ContextualMenu_Container",
+
+     propTypes: {
+        menuWidth: React.PropTypes.number,
+        menuHeight: React.PropTypes.number,
+        chevronOffset: React.PropTypes.number,
+    },
 
     getOrCreateContainer: function() {
         var container = document.getElementById(this.ContextualMenuContainerId);
@@ -45,29 +52,50 @@ module.exports = {
         var closeMenu = function() {
             ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
 
-            if (props && props.onFinished) props.onFinished.apply(null, arguments);
+            if (props && props.onFinished) {
+                props.onFinished.apply(null, arguments);
+            }
         };
 
         var position = {
-            top: props.top - 20,
+            top: props.top,
         };
+
+        var chevronOffset = {
+            top: props.chevronOffset,
+        }
 
         var chevron = null;
         if (props.left) {
-            chevron = <img className="mx_ContextualMenu_chevron_left" src="img/chevron-left.png" width="9" height="16" />
-            position.left = props.left + 8;
+            chevron = <div style={chevronOffset} className="mx_ContextualMenu_chevron_left"></div>
+            position.left = props.left;
         } else {
-            chevron = <img className="mx_ContextualMenu_chevron_right" src="img/chevron-right.png" width="9" height="16" />
-            position.right = props.right + 8;
+            chevron = <div style={chevronOffset} className="mx_ContextualMenu_chevron_right"></div>
+            position.right = props.right;
         }
 
         var className = 'mx_ContextualMenu_wrapper';
 
+        var menuClasses = classNames({
+            'mx_ContextualMenu': true,
+            'mx_ContextualMenu_left': props.left,
+            'mx_ContextualMenu_right': !props.left,
+        });
+
+        var menuSize = {};
+        if (props.menuWidth) {
+            menuSize.width = props.menuWidth;
+        }
+
+        if (props.menuHeight) {
+            menuSize.height = props.menuHeight;
+        }
+
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
         var menu = (
-            <div className={className}>
-                <div className="mx_ContextualMenu" style={position}>
+            <div className={className} style={position}>
+                <div className={menuClasses} style={menuSize}>
                     {chevron}
                     <Element {...props} onFinished={closeMenu}/>
                 </div>

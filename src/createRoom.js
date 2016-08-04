@@ -64,11 +64,15 @@ function createRoom(opts) {
         }
     ];
 
-    var modal = Modal.createDialog(Loader);
+    var modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
     return client.createRoom(createOpts).finally(function() {
         modal.close();
     }).then(function(res) {
+        // NB createRoom doesn't block on the client seeing the echo that the
+        // room has been created, so we race here with the client knowing that
+        // the room exists, causing things like
+        // https://github.com/vector-im/vector-web/issues/1813
         dis.dispatch({
             action: 'view_room',
             room_id: res.room_id

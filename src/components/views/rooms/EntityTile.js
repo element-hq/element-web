@@ -20,6 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
+import {emojifyText} from '../../../HtmlUtils';
 
 
 var PRESENCE_CLASS = {
@@ -27,6 +28,23 @@ var PRESENCE_CLASS = {
     "online": "mx_EntityTile_online",
     "unavailable": "mx_EntityTile_unavailable"
 };
+
+
+function presenceClassForMember(presenceState, lastActiveAgo) {
+    // offline is split into two categories depending on whether we have
+    // a last_active_ago for them.
+    if (presenceState == 'offline') {
+        if (lastActiveAgo) {
+            return PRESENCE_CLASS['offline'] + '_beenactive';
+        } else {
+            return PRESENCE_CLASS['offline'] + '_neveractive';
+        }
+    } else if (presenceState) {
+        return PRESENCE_CLASS[presenceState];
+    } else {
+        return PRESENCE_CLASS['offline'] + '_neveractive';
+    }
+}
 
 module.exports = React.createClass({
     displayName: 'EntityTile',
@@ -78,10 +96,14 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var presenceClass = PRESENCE_CLASS[this.props.presenceState] || "mx_EntityTile_offline";
+        const presenceClass = presenceClassForMember(
+            this.props.presenceState, this.props.presenceLastActiveAgo
+        );
+
         var mainClassName = "mx_EntityTile ";
         mainClassName += presenceClass + (this.props.className ? (" " + this.props.className) : "");
         var nameEl;
+        let nameHTML = emojifyText(this.props.name);
 
         if (this.state.hover && !this.props.suppressOnHover) {
             var activeAgo = this.props.presenceLastActiveAgo ?
@@ -92,7 +114,7 @@ module.exports = React.createClass({
             nameEl = (
                 <div className="mx_EntityTile_details">
                     <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
-                    <div className="mx_EntityTile_name_hover">{ this.props.name }</div>
+                    <div className="mx_EntityTile_name_hover" dangerouslySetInnerHTML={nameHTML}></div>
                     <PresenceLabel activeAgo={ activeAgo }
                         currentlyActive={this.props.presenceCurrentlyActive}
                         presenceState={this.props.presenceState} />
@@ -101,8 +123,7 @@ module.exports = React.createClass({
         }
         else {
             nameEl = (
-                <div className="mx_EntityTile_name">
-                    { this.props.name }
+                <div className="mx_EntityTile_name" dangerouslySetInnerHTML={nameHTML}>
                 </div>
             );
         }

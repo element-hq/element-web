@@ -36,32 +36,75 @@ module.exports = React.createClass({
         );
     },
 
+    onBlockClick: function() {
+        MatrixClientPeg.get().setDeviceBlocked(
+            this.props.userId, this.props.device.id, true
+        );
+    },
+
+    onUnblockClick: function() {
+        MatrixClientPeg.get().setDeviceBlocked(
+            this.props.userId, this.props.device.id, false
+        );
+    },
+
     render: function() {
-        var indicator = null, button = null;
-        if (this.props.device.verified) {
-            indicator = (
-                <div className="mx_MemberDeviceInfo_verified">&#x2714;</div>
+        var indicator = null, blockButton = null, verifyButton = null;
+        if (this.props.device.blocked) {
+            blockButton = (
+                <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unblock"
+                  onClick={this.onUnblockClick}>
+                    Unblock
+                </div>
             );
-            button = (
+        } else {
+            blockButton = (
+                <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_block"
+                  onClick={this.onBlockClick}>
+                    Block
+                </div>
+            );
+        }
+
+        if (this.props.device.verified) {
+            verifyButton = (
                 <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unverify"
                   onClick={this.onUnverifyClick}>
                     Unverify
                 </div>
             );
         } else {
-            button = (
+            verifyButton = (
                 <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_verify"
                   onClick={this.onVerifyClick}>
                     Verify
                 </div>
             );
         }
+
+        if (this.props.device.blocked) {
+            indicator = (
+                <div className="mx_MemberDeviceInfo_blocked">&#x2716;</div>
+            );
+        } else if (this.props.device.verified) {
+            indicator = (
+                    <div className="mx_MemberDeviceInfo_verified">&#x2714;</div>
+            );
+
+        } else {
+            indicator = (
+                <div className="mx_MemberDeviceInfo_unverified">?</div>
+            );
+        }
+
+        var deviceName = this.props.device.display_name || this.props.device.id;
+
         return (
             <div className="mx_MemberDeviceInfo">
-                <div className="mx_MemberDeviceInfo_deviceId">{this.props.device.id}</div>
-                <div className="mx_MemberDeviceInfo_deviceKey">{this.props.device.key}</div>
+                <div className="mx_MemberDeviceInfo_deviceId">{deviceName}</div>
                 {indicator}
-                {button}
+                {verifyButton}
+                {blockButton}
             </div>
         );
     },

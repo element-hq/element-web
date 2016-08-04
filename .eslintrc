@@ -1,0 +1,109 @@
+{
+  "parser": "babel-eslint",
+  "plugins": [
+    "react",
+    "flowtype"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "impliedStrict": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "amd": true,
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "rules": {
+    "no-undef": ["warn"],
+    "global-strict": ["off"],
+    "no-extra-semi": ["warn"],
+    "no-underscore-dangle": ["off"],
+    "no-console": ["off"],
+    "no-unused-vars": ["off"],
+    "no-trailing-spaces": ["warn", {
+      "skipBlankLines": true
+    }],
+    "no-unreachable": ["warn"],
+    "no-spaced-func": ["warn"],
+    "no-new-func": ["error"],
+    "no-new-wrappers": ["error"],
+    "no-invalid-regexp": ["error"],
+    "no-extra-bind": ["error"],
+    "no-magic-numbers": ["error", {
+      "ignore": [-1, 0, 1], // usually used in array/string indexing
+      "ignoreArrayIndexes": true,
+      "enforceConst": true,
+      "detectObjects": true
+    }],
+    "consistent-return": ["error"],
+    "valid-jsdoc": ["error"],
+    "no-use-before-define": ["error"],
+    "camelcase": ["warn"],
+    "array-callback-return": ["error"],
+    "dot-location": ["warn", "property"],
+    "guard-for-in": ["error"],
+    "no-useless-call": ["warn"],
+    "no-useless-escape": ["warn"],
+    "no-useless-concat": ["warn"],
+    "brace-style": ["warn", "1tbs"],
+    "comma-style": ["warn", "last"],
+    "space-before-function-paren": ["warn", "never"],
+    "space-before-blocks": ["warn", "always"],
+    "keyword-spacing": ["warn", {
+      "before": true,
+      "after": true
+    }],
+
+    // dangling commas required, but only for multiline objects/arrays
+    "comma-dangle": ["warn", "always-multiline"],
+    // always === instead of ==, unless dealing with null/undefined
+    "eqeqeq": ["error", "smart"],
+    // always use curly braces, even with single statements
+    "curly": ["error", "all"],
+    // phasing out var in favour of let/const is a good idea
+    "no-var": ["warn"],
+    // always require semicolons
+    "semi": ["error", "always"],
+    // prefer rest and spread over the Old Ways
+    "prefer-spread": ["warn"],
+    "prefer-rest-params": ["warn"],
+
+    /** react **/
+
+    // bind or arrow function in props causes performance issues
+    "react/jsx-no-bind": ["error"],
+    "react/jsx-key": ["error"],
+    "react/prefer-stateless-function": ["warn"],
+    "react/sort-comp": ["warn"],
+
+    /** flowtype **/
+    "flowtype/require-parameter-type": 1,
+    "flowtype/require-return-type": [
+      1,
+      "always",
+      {
+        "annotateUndefined": "never"
+      }
+    ],
+    "flowtype/space-after-type-colon": [
+      1,
+      "always"
+    ],
+    "flowtype/space-before-type-colon": [
+      1,
+      "never"
+    ]
+  },
+  "settings": {
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": true
+    }
+  }
+}

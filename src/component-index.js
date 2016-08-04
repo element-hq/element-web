@@ -25,6 +25,7 @@ limitations under the License.
  */
 
 module.exports.components = {};
+module.exports.components['structures.ContextualMenu'] = require('./components/structures/ContextualMenu');
 module.exports.components['structures.CreateRoom'] = require('./components/structures/CreateRoom');
 module.exports.components['structures.MatrixChat'] = require('./components/structures/MatrixChat');
 module.exports.components['structures.MessagePanel'] = require('./components/structures/MessagePanel');
@@ -51,6 +52,7 @@ module.exports.components['views.dialogs.QuestionDialog'] = require('./component
 module.exports.components['views.dialogs.SetDisplayNameDialog'] = require('./components/views/dialogs/SetDisplayNameDialog');
 module.exports.components['views.dialogs.TextInputDialog'] = require('./components/views/dialogs/TextInputDialog');
 module.exports.components['views.elements.EditableText'] = require('./components/views/elements/EditableText');
+module.exports.components['views.elements.EditableTextContainer'] = require('./components/views/elements/EditableTextContainer');
 module.exports.components['views.elements.PowerSelector'] = require('./components/views/elements/PowerSelector');
 module.exports.components['views.elements.ProgressBar'] = require('./components/views/elements/ProgressBar');
 module.exports.components['views.elements.TintableSvg'] = require('./components/views/elements/TintableSvg');
@@ -74,6 +76,8 @@ module.exports.components['views.messages.TextualEvent'] = require('./components
 module.exports.components['views.messages.UnknownBody'] = require('./components/views/messages/UnknownBody');
 module.exports.components['views.room_settings.AliasSettings'] = require('./components/views/room_settings/AliasSettings');
 module.exports.components['views.room_settings.ColorSettings'] = require('./components/views/room_settings/ColorSettings');
+module.exports.components['views.room_settings.UrlPreviewSettings'] = require('./components/views/room_settings/UrlPreviewSettings');
+module.exports.components['views.rooms.Autocomplete'] = require('./components/views/rooms/Autocomplete');
 module.exports.components['views.rooms.AuxPanel'] = require('./components/views/rooms/AuxPanel');
 module.exports.components['views.rooms.EntityTile'] = require('./components/views/rooms/EntityTile');
 module.exports.components['views.rooms.EventTile'] = require('./components/views/rooms/EventTile');
@@ -104,6 +108,8 @@ module.exports.components['views.rooms.UserTile'] = require('./components/views/
 module.exports.components['views.settings.ChangeAvatar'] = require('./components/views/settings/ChangeAvatar');
 module.exports.components['views.settings.ChangeDisplayName'] = require('./components/views/settings/ChangeDisplayName');
 module.exports.components['views.settings.ChangePassword'] = require('./components/views/settings/ChangePassword');
+module.exports.components['views.settings.DevicesPanel'] = require('./components/views/settings/DevicesPanel');
+module.exports.components['views.settings.DevicesPanelEntry'] = require('./components/views/settings/DevicesPanelEntry');
 module.exports.components['views.settings.EnableNotificationsButton'] = require('./components/views/settings/EnableNotificationsButton');
 module.exports.components['views.voip.CallView'] = require('./components/views/voip/CallView');
 module.exports.components['views.voip.IncomingCallBox'] = require('./components/views/voip/IncomingCallBox');

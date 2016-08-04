@@ -39,6 +39,9 @@ module.exports = React.createClass({
         /* link URL for the highlights */
         highlightLink: React.PropTypes.string,
 
+        /* should show URL previews for this event */
+        showUrlPreview: React.PropTypes.bool,
+
         /* callback for when our widget has loaded */
         onWidgetLoad: React.PropTypes.func,
     },
@@ -56,32 +59,45 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         linkifyElement(this.refs.content, linkifyMatrix.options);
-
-        var links = this.findLinks(this.refs.content.children);
-        if (links.length) {
-            this.setState({ links: links.map((link)=>{
-                return link.getAttribute("href");
-            })});
-
-            // lazy-load the hidden state of the preview widget from localstorage
-            if (global.localStorage) {
-                var hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
-                this.setState({ widgetHidden: hidden });
-            }
-        }
+        this.calculateUrlPreview();
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
             HtmlUtils.highlightDom(ReactDOM.findDOMNode(this));
     },
 
+    componentDidUpdate: function() {
+        this.calculateUrlPreview();
+    },
+
     shouldComponentUpdate: function(nextProps, nextState) {
+        //console.log("shouldComponentUpdate: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
+
         // exploit that events are immutable :)
-        // ...and that .links is only ever set in componentDidMount and never changes
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
                 nextProps.highlights !== this.props.highlights ||
                 nextProps.highlightLink !== this.props.highlightLink ||
+                nextProps.showUrlPreview !== this.props.showUrlPreview ||
                 nextState.links !== this.state.links ||
                 nextState.widgetHidden !== this.state.widgetHidden);
+    },
+
+    calculateUrlPreview: function() {
+        //console.log("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
+
+        if (this.props.showUrlPreview && !this.state.links.length) {
+            var links = this.findLinks(this.refs.content.children);
+            if (links.length) {
+                this.setState({ links: links.map((link)=>{
+                    return link.getAttribute("href");
+                })});
+
+                // lazy-load the hidden state of the preview widget from localstorage
+                if (global.localStorage) {
+                    var hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
+                    this.setState({ widgetHidden: hidden });
+                }
+            }
+        }
     },
 
     findLinks: function(nodes) {
@@ -163,12 +179,14 @@ module.exports = React.createClass({
     render: function() {
         var mxEvent = this.props.mxEvent;
         var content = mxEvent.getContent();
-        var body = HtmlUtils.bodyToHtml(content, this.props.highlights,
-                                       {highlightLink: this.props.highlightLink});
+        var body = HtmlUtils.bodyToHtml(content, this.props.highlights, {});
 
+        if (this.props.highlightLink) {
+            body = <a href={ this.props.highlightLink }>{ body }</a>;
+        }
 
         var widgets;
-        if (this.state.links.length && !this.state.widgetHidden) {
+        if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
             var LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
             widgets = this.state.links.map((link)=>{
                 return <LinkPreviewWidget

@@ -76,7 +76,7 @@ module.exports = React.createClass({
                         />
                     </div>
                     <div className="mx_Dialog_buttons">
-                        <input type="submit" value="Set" />
+                        <input className="mx_Dialog_primary" type="submit" value="Set" />
                     </div>
                 </form>
             </div>

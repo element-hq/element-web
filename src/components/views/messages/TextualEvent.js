@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 
 var TextForEvent = require('../../../TextForEvent');
+import {emojifyText} from '../../../HtmlUtils';
 
 module.exports = React.createClass({
     displayName: 'TextualEvent',
@@ -31,11 +32,11 @@ module.exports = React.createClass({
 
     render: function() {
         var text = TextForEvent.textForEvent(this.props.mxEvent);
-        if (text == null || text.length == 0) return null;
+        if (text == null || text.length === 0) return null;
+        let textHTML = emojifyText(TextForEvent.textForEvent(this.props.mxEvent));
 
         return (
-            <div className="mx_TextualEvent">
-                {TextForEvent.textForEvent(this.props.mxEvent)}
+            <div className="mx_TextualEvent" dangerouslySetInnerHTML={textHTML}>
             </div>
         );
     },

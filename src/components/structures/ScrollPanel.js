@@ -540,7 +540,6 @@ module.exports = React.createClass({
         // it's not obvious why we have a separate div and ol anyway.
         return (<GeminiScrollbar autoshow={true} ref="geminiPanel"
                 onScroll={this.onScroll} onResize={this.onResize}
-                relayoutOnUpdate={false}
                 className={this.props.className} style={this.props.style}>
                     <div className="mx_RoomView_messageListWrapper">
                         <ol ref="itemlist" className="mx_RoomView_MessageList" aria-live="polite">

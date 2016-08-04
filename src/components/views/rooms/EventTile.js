@@ -23,7 +23,7 @@ var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg')
 var TextForEvent = require('../../../TextForEvent');
 
-var ContextualMenu = require('../../../ContextualMenu');
+var ContextualMenu = require('../../structures/ContextualMenu');
 var dispatcher = require("../../../dispatcher");
 
 var ObjectUtils = require('../../../ObjectUtils');
@@ -101,6 +101,9 @@ module.exports = React.createClass({
         /* link URL for the highlights */
         highlightLink: React.PropTypes.string,
 
+        /* should show URL previews for this event */
+        showUrlPreview: React.PropTypes.bool,
+
         /* is this the focused event */
         isSelectedEvent: React.PropTypes.bool,
 
@@ -139,7 +142,8 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this._suppressReadReceiptAnimation = false;
-        MatrixClientPeg.get().on("deviceVerified", this.onDeviceVerified);
+        MatrixClientPeg.get().on("deviceVerificationChanged",
+                                 this.onDeviceVerificationChanged);
     },
 
     componentWillReceiveProps: function (nextProps) {
@@ -163,11 +167,12 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         var client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener("deviceVerified", this.onDeviceVerified);
+            client.removeListener("deviceVerificationChanged",
+                                  this.onDeviceVerificationChanged);
         }
     },
 
-    onDeviceVerified: function(userId, device) {
+    onDeviceVerificationChanged: function(userId, device) {
         if (userId == this.props.mxEvent.getSender()) {
             this._verifyEvent(this.props.mxEvent);
         }
@@ -244,12 +249,15 @@ module.exports = React.createClass({
     },
 
     onEditClicked: function(e) {
-        var MessageContextMenu = sdk.getComponent('rooms.MessageContextMenu');
+        var MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
         var buttonRect = e.target.getBoundingClientRect()
-        var x = buttonRect.right;
-        var y = buttonRect.top + (e.target.height / 2);
+
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        var x = buttonRect.right + window.pageXOffset;
+        var y = (buttonRect.top + (e.target.height / 2) + window.pageYOffset) - 19;
         var self = this;
         ContextualMenu.createMenu(MessageContextMenu, {
+            chevronOffset: 10,
             mxEvent: this.props.mxEvent,
             left: x,
             top: y,
@@ -357,6 +365,8 @@ module.exports = React.createClass({
         var SenderProfile = sdk.getComponent('messages.SenderProfile');
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 
+        //console.log("EventTile showUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
+
         var content = this.props.mxEvent.getContent();
         var msgtype = content.msgtype;
 
@@ -418,6 +428,7 @@ module.exports = React.createClass({
                 <div className="mx_EventTile_line">
                     <EventTileType ref="tile" mxEvent={this.props.mxEvent} highlights={this.props.highlights}
                           highlightLink={this.props.highlightLink}
+                          showUrlPreview={this.props.showUrlPreview}
                           onWidgetLoad={this.props.onWidgetLoad} />
                 </div>
             </div>
