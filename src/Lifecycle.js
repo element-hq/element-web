@@ -79,6 +79,10 @@ function startMatrixClient() {
     MatrixClientPeg.start();
 }
 
+/*
+ * Stops a running client and all related services, used after
+ * a session has been logged out / ended.
+ */
 function onLoggedOut() {
     if (window.localStorage) {
         const hsUrl = window.localStorage.getItem("mx_hs_url");
@@ -95,7 +99,9 @@ function onLoggedOut() {
     dis.dispatch({action: 'on_logged_out'});
 }
 
-// stop all the background processes related to the current client
+/**
+ * Stop all the background processes related to the current client
+ */
 function _stopMatrixClient() {
     Notifier.stop();
     UserActivity.stop();
