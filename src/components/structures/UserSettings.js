@@ -34,7 +34,11 @@ const LABS_FEATURES = [
     {
         name: 'End-to-End Encryption',
         id: 'e2e_encryption'
-    }
+    },
+    {
+        name: 'Integration Management',
+        id: 'integration_management'
+    },
 ];
 
 // if this looks like a release, use the 'version' from package.json; else use
