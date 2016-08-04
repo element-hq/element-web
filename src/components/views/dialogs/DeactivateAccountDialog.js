@@ -25,7 +25,7 @@ export default class DeactivateAccountDialog extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        this._passwordField;
+        this._passwordField = null;
 
         this._onOk = this._onOk.bind(this);
         this._onCancel = this._onCancel.bind(this);
@@ -85,8 +85,6 @@ export default class DeactivateAccountDialog extends React.Component {
             passwordBoxClass = 'error';
         }
 
-        // I would use a spinner here but that causes the button to be rendered
-        // slightly higher than the other one
         const okLabel = this.state.busy ? <Loader /> : 'Deactivate Account';
         const okEnabled = this.state.confirmButtonEnabled && !this.state.busy;
 
