@@ -61,8 +61,12 @@ var RoomSubList = React.createClass({
         label: React.PropTypes.string.isRequired,
         tagName: React.PropTypes.string,
         editable: React.PropTypes.bool,
+
         order: React.PropTypes.string.isRequired,
-        selectedRoom: React.PropTypes.string.isRequired,
+
+        // undefined if no room is selected (eg we are showing settings)
+        selectedRoom: React.PropTypes.string,
+
         startAsHidden: React.PropTypes.bool,
         showSpinner: React.PropTypes.bool, // true to show a spinner if 0 elements when expanded
         collapsed: React.PropTypes.bool.isRequired, // is LeftPanel collapsed?

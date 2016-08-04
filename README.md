@@ -5,9 +5,13 @@ Vector is a Matrix web client built using the Matrix React SDK (https://github.c
 
 Getting Started
 ===============
-Vector is a modular webapp built with modern ES6 and requires and npm build system to build.
-Instructions for building are below, but building from source shouldn't be necessary
-for simple deployments.
+
+The easiest way to test Vector is to just use the hosted copy at https://vector.im/beta.
+The develop branch is continuously deployed by Jenkins at https://vector.im/develop for
+those who like living dangerously. 
+
+To host your own copy of Vector, the quickest bet is to use a pre-built released version
+of Vector:
 
 1. Download the latest version from https://vector.im/packages/
 1. Untar the tarball on your web server
@@ -19,10 +23,10 @@ for simple deployments.
 Building From Source
 ====================
 
-If you do wish to build vector from source:
+Vector is a modular webapp built with modern ES6 and requires a npm build system to build.
 
 1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
-1. Clone the repo: `git clone https://github.com/vector-im/vector-web.git` 
+1. Clone the repo: `git clone https://github.com/vector-im/vector-web.git`
 1. Switch to the vector directory: `cd vector-web`
 1. Install the prerequisites: `npm install`
 1. If you are using the `develop` branch of vector, you will probably need to
@@ -49,18 +53,72 @@ You can configure the app by copying `vector/config.sample.json` to
 1. `default_hs_url` is the default home server url.
 1. `default_is_url` is the default identity server url (this is the server used
    for verifying third party identifiers like email addresses). If this is blank,
-   registering with an email address or adding an email address to your account
-   will not work.
+   registering with an email address, adding an email address to your account,
+   or inviting users via email address will not work.  Matrix identity servers are
+   very simple web services which map third party identifiers (currently only email 
+   addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
+   for more details.  Currently the only public matrix identity servers are https://matrix.org
+   and https://vector.im.  In future identity servers will be decentralised.
+
+
+Running as a Desktop app
+========================
+
+In future we'll do an official distribution of Vector as an desktop app.  Meanwhile,
+there are a few options:
+
+@asdf:matrix.org points out that you can use nativefier and it just works(tm):
+
+```
+sudo npm install nativefier -g
+nativefier https://vector.im/beta/
+```
+
+krisa has a dedicated electron project at https://github.com/krisak/vector-electron-desktop
+(although you should swap out the 'vector' folder for the latest vector tarball you want to run)
+
+There's also a (much) older electron distribution at https://github.com/stevenhammerton/vector-desktop
+
 
 Development
 ===========
+
+Before attempting to develop on Vector you **must** read the developer guide
+for `matrix-react-sdk` at https://github.com/matrix-org/matrix-react-sdk, which
+also defines the design, architecture and style for Vector too.
+
+The idea of Vector is to be a relatively lightweight "skin" of customisations on
+top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
+higher and lower level React components useful for building Matrix communication
+apps using React.
+
+After creating a new component you must run `npm run reskindex` to regenerate
+the `component-index.js` for the app (used in future for skinning)
+
+**However, as of July 2016 this layering abstraction is broken due to rapid
+development on Vector forcing `matrix-react-sdk` to move fast at the expense of
+maintaining a clear abstraction between the two.**  Hacking on Vector inevitably
+means hacking equally on `matrix-react-sdk`, and there are bits of
+`matrix-react-sdk` behaviour incorrectly residing in the `vector-web` project
+(e.g. matrix-react-sdk specific CSS), and a bunch of Vector specific behaviour
+in the `matrix-react-sdk` (grep for Vector).  This separation problem will be
+solved asap once development on Vector (and thus matrix-react-sdk) has
+stabilised.  Until then, the two projects should basically be considered as a
+single unit.  In particular, `matrix-react-sdk` issues are currently filed
+against `vector-web` in github.
+
+Please note that Vector is intended to run correctly without access to the public
+internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
+hosted by external CDNs or servers but instead please package all dependencies
+into Vector itself.
+
+Setting up a dev environment
+============================
 
 Much of the functionality in Vector is actually in the `matrix-react-sdk` and
 `matrix-js-sdk` modules. It is possible to set these up in a way that makes it
 easy to track the `develop` branches in git and to make local changes without
 having to manually rebuild each time.
-
-[Be aware that there may be problems with this process under npm version 3.]
 
 First clone and build `matrix-js-sdk`:
 
@@ -115,6 +173,37 @@ will watch for changes to the files and rebuild automatically.
 If you add or remove any components from the Vector skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.
 
+Filing issues
+=============
+
+All issues for Vector-web and Matrix-react-sdk should be filed at
+https://github.com/matrix-org/matrix-react-sdk/issues
+
+Triaging issues
+===============
+
+Issues will be triaged by the core team using the following primary set of tags:
+
+priority:
+    P1: top priority; typically blocks releases.
+    P2: one below that
+    P3: non-urgent
+    P4/P5: bluesky some day, who knows.
+
+bug or feature:
+  bug severity:
+     * cosmetic - feature works functionally but UI/UX is broken.
+     * critical - whole app doesn't work
+     * major - entire feature doesn't work
+     * minor - partially broken feature (but still usable)
+
+     * release blocker
+
+     * ui/ux (think of this as cosmetic)
+
+     * network (specific to network conditions)
+     * platform (platform specific)
+
 Enabling encryption
 ===================
 
@@ -123,10 +212,7 @@ day-to-day use; it is experimental and should be considered only as a
 proof-of-concept. See https://matrix.org/jira/browse/SPEC-162 for an overview
 of the current progress.
 
-To build a version of vector with support for end-to-end encryption, install
-the olm module with `npm i https://matrix.org/packages/npm/olm/olm-0.1.0.tgz`
-before running `npm start`. The olm library will be detected and used if
-available.
+Vector is built with support for end-to-end encryption by default.
 
 To enable encryption for a room, type
 
@@ -142,4 +228,4 @@ Note that historical encrypted messages cannot currently be decoded - history
 is therefore lost when the page is reloaded.
 
 There is currently no visual indication of whether encryption is enabled for a
-room, or whether a particular message was encrypted.
+room.

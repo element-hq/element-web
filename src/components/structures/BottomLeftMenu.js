@@ -52,13 +52,13 @@ module.exports = React.createClass({
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
                     <div className="mx_BottomLeftMenu_createRoom" title="Start chat" onClick={ this.onCreateRoomClick }>
-                        <TintableSvg src="img/icons-create-room.svg" width="24" height="24"/>
+                        <TintableSvg src="img/icons-create-room.svg" width="25" height="25"/>
                     </div>
                     <div className="mx_BottomLeftMenu_directory" title="Room directory" onClick={ this.onRoomDirectoryClick }>
-                        <TintableSvg src="img/icons-directory.svg" width="24" height="24"/>
+                        <TintableSvg src="img/icons-directory.svg" width="25" height="25"/>
                     </div>
                     <div className="mx_BottomLeftMenu_settings" title="Settings" onClick={ this.onSettingsClick }>
-                        <TintableSvg src="img/icons-settings.svg" width="24" height="24"/>
+                        <TintableSvg src="img/icons-settings.svg" width="25" height="25"/>
                     </div>
                 </div>
             </div>

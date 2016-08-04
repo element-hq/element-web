@@ -25,8 +25,8 @@ limitations under the License.
     color: #3d3b39;
     font-weight: 600;
     font-size: 13px;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 16px; /* gutter */
+    padding-right: 16px; /* gutter */
     margin-top: 8px;
     margin-bottom: 4px;
     cursor: pointer;

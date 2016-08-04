@@ -24,7 +24,7 @@ var Modal = require('matrix-react-sdk/lib/Modal');
 
 var notifications = require('../../../notifications');
 
-// TODO: this "view" component still has far to much application logic in it,
+// TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
 
 // TODO: this component also does a lot of direct poking into this.state, which

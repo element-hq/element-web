@@ -131,9 +131,19 @@ limitations under the License.
 }
 
 .mx_Login_loader {
-    position: absolute;
-    left: 50%;
-    margin-top: 12px;
+    display: inline;
+    position: relative;
+    top: 2px;
+    left: 8px;
+}
+
+.mx_Login_loader .mx_Spinner {
+    display: inline;
+}
+
+.mx_Login_loader .mx_Spinner img {
+    width: 16px;
+    height: 16px;
 }
 
 .mx_Login_error {

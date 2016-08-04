@@ -33,6 +33,11 @@ limitations under the License.
     margin-top: -2px;
 }
 
+.mx_MatrixToolbar_content {
+    -webkit-flex: 1;
+    flex: 1;
+}
+
 .mx_MatrixToolbar_link
 {
     color: #fff ! important;
@@ -41,10 +46,7 @@ limitations under the License.
 }
 
 .mx_MatrixToolbar_close {
-    -webkit-flex: 1;
-    flex: 1;
     cursor: pointer;
-    text-align: right;
 }
 
 .mx_MatrixToolbar_close img {

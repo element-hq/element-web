@@ -103,7 +103,8 @@ limitations under the License.
 .mx_RoomHeader_rightRow {
     margin-top: 4px;
     background-color: #fff;
-
+    display: flex;
+    align-items: center;
     -webkit-box-ordinal-group: 3;
     -moz-box-ordinal-group: 3;
     -ms-flex-order: 3;
@@ -161,13 +162,6 @@ limitations under the License.
     opacity: 0.6;
 }
 
-.mx_RoomHeader_settingsButton {
-    display: inline-block;
-    position: relative;
-    bottom: 10px;
-    left: 4px;
-}
-
 .mx_RoomHeader_settingsButton object {
     pointer-events: none;
 }
@@ -181,10 +175,6 @@ limitations under the License.
 
 .mx_RoomHeader_name:hover div:not(.mx_RoomHeader_editable) {
     color: #76cfa6;
-}
-
-.mx_RoomHeader_leaveButton {
-    margin-top: -1px;
 }
 
 .mx_RoomHeader_placeholder {
@@ -243,10 +233,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_button {
-    display: table-cell;
-    vertical-align: top;
-    padding-left: 8px;
-    padding-right: 8px;
+    margin-left: 8px;
     cursor: pointer;
 }
 

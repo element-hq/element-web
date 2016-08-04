@@ -76,6 +76,11 @@ limitations under the License.
     overflow-x: hidden;
 }
 
+/* De-zalgoing */
+.mx_EventTile_body {
+    overflow-y: hidden;
+}
+
 /* Various markdown overrides */
 
 .mx_EventTile_content .markdown-body {
@@ -114,6 +119,10 @@ limitations under the License.
 }
 
 /* end of overrides */
+
+.mx_EventTile_bigEmoji {
+    font-size: 48px ! important;
+}
 
 /* this is used for the tile for the event which is selected via the URL.
  * TODO: ultimately we probably want some transition on here.

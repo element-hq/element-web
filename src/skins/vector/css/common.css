@@ -58,6 +58,11 @@ input[type=text]:focus, textarea:focus {
     box-shadow: none;
 }
 
+/* Prevent ugly dotted highlight around selected elements in Firefox */
+::-moz-focus-inner {
+    border: 0;
+}
+
 /* applied to side-panels and messagepanel when in RoomSettings */
 .mx_fadable {
     opacity: 1;
@@ -80,50 +85,6 @@ input[type=text]:focus, textarea:focus {
     border-left: 6px solid transparent;
 }
 
-.mx_ContextualMenu_background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 1.0;
-    z-index: 2000;
-}
-
-.mx_ContextualMenu {
-    border: 1px solid #a4a4a4;
-    border-radius: 8px;
-    background-color: #fff;
-    color: #747474;
-    position: fixed;
-    z-index: 2001;
-    padding: 6px;
-}
-
-.mx_ContextualMenu_chevron_right {
-    padding: 12px;
-    position: absolute;
-    right: -21px;
-    top: 0px;
-}
-
-.mx_ContextualMenu_chevron_left {
-    padding: 12px;
-    position: absolute;
-    left: -21px;
-    top: 0px;
-}
-
-.mx_ContextualMenu_field {
-    padding: 3px 6px 3px 6px;
-    cursor: pointer;
-}
-
-.mx_ContextualMenu_spinner {
-    display: block;
-    margin: 0 auto;
-}
-
 .mx_Dialog_wrapper {
     position: fixed;
     z-index: 4000;
@@ -143,16 +104,31 @@ input[type=text]:focus, textarea:focus {
     justify-content: center;
 }
 
+/* Spinner Dialog overide */
+.mx_Dialog_wrapper.mx_Dialog_spinner .mx_Dialog {
+    width: auto;
+    border-radius: 8px;
+    padding-left: 0px;
+    box-shadow: none;
+}
+
+/* View Source Dialog overide */
+.mx_Dialog_wrapper.mx_Dialog_viewsource .mx_Dialog {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .mx_Dialog {
     background-color: #fff;
     color: #747474;
-    text-align: center;
     z-index: 4010;
     font-weight: 300;
     font-size: 15px;
     position: relative;
-    border-radius: 8px;
-    max-width: 80%;
+    padding-left: 58px;
+    width: 60%;
+    max-width: 704px;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
 }
 
 .mx_Dialog_background {
@@ -161,12 +137,13 @@ input[type=text]:focus, textarea:focus {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #000;
-    opacity: 0.2;
+    background-color: #e9e9e9;
+    opacity: 0.8;
 }
 
 .mx_Dialog_lightbox .mx_Dialog_background {
     opacity: 0.85;
+    background-color: #000;
 }
 
 .mx_Dialog_lightbox .mx_Dialog {
@@ -180,34 +157,45 @@ input[type=text]:focus, textarea:focus {
 }
 
 .mx_Dialog_content {
-    margin: 24px;
+    margin: 24px 58px 68px 0;
+    font-size: 14px;
+    color: #4a4a4a;
+    word-wrap: break-word;
 }
 
 .mx_Dialog_buttons {
-    padding-bottom: 24px;
+    padding-bottom: 36px;
 }
 
 .mx_Dialog button, .mx_Dialog input[type="submit"] {
     border: 0px;
     height: 36px;
-    border-radius: 36px;
+    border-radius: 40px;
+    border: solid 1px #76cfa6;
     font-weight: 400;
     font-size: 15px;
+    margin-left: 0px;
+    margin-right: 8px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    outline: none;
+
+    color: #76cfa6;
+    background-color: #fff;
+}
+
+.mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
     color: #fff;
     background-color: #76cfa6;
-    margin-left: 8px;
-    margin-right: 8px;
-    padding-left: 1em;
-    padding-right: 1em;
 }
 
 .mx_Dialog_title {
     min-height: 16px;
-    padding: 12px;
-    border-bottom: 1px solid #a4a4a4;
+    padding-top: 40px;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 22px;
     line-height: 1.4;
+    color: #454545;
 }
 
 .mx_TextInputDialog_label {
@@ -237,4 +225,16 @@ input[type=text]:focus, textarea:focus {
 ::selection {
     background-color: #76CFA6;
     color: white;
+}
+
+/** green button with rounded corners */
+.textButton {
+    color: #fff;
+    background-color: #76cfa6;
+    border-radius: 17px;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    cursor: pointer;
+    display: inline;
 }
