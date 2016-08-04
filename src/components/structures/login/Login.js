@@ -77,7 +77,7 @@ module.exports = React.createClass({displayName: 'Login',
         this._loginLogic.loginViaPassword(username, password).then(function(data) {
             self.props.onLoggedIn(data);
         }, function(error) {
-            self._setStateFromError(error);
+            self._setStateFromError(error, true);
         }).finally(function() {
             self.setState({
                 busy: false
@@ -123,7 +123,7 @@ module.exports = React.createClass({displayName: 'Login',
             // logins so let's skip that for now).
             loginLogic.chooseFlow(0);
         }, function(err) {
-            self._setStateFromError(err);
+            self._setStateFromError(err, false);
         }).finally(function() {
             self.setState({
                 busy: false
@@ -143,11 +143,11 @@ module.exports = React.createClass({displayName: 'Login',
         return this._loginLogic ? this._loginLogic.getCurrentFlowStep() : null
     },
 
-    _setStateFromError: function(err) {
+    _setStateFromError: function(err, isLoginAttempt) {
         this.setState({
             errorText: this._errorTextFromError(err),
             // https://matrix.org/jira/browse/SYN-744
-            loginIncorrect: err.httpStatus == 401 || err.httpStatus == 403
+            loginIncorrect: isLoginAttempt && (err.httpStatus == 401 || err.httpStatus == 403)
         });
     },
 
