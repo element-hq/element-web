@@ -137,6 +137,8 @@ module.exports = React.createClass({
             });
             this.setState({ menu: true });
         }
+        // Prevent the RoomTile onClick event firing as well
+        e.stopPropagation();
     },
 
     render: function() {
