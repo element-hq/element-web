@@ -101,13 +101,13 @@ export default class DeactivateAccountDialog extends React.Component {
                     Deactivate Account
                 </div>
                 <div className="mx_Dialog_content">
-                    This will make your account permanently unusable. You will not be able to re-register the same user ID.<br />
-                    <br />
-                    This action is irreversible.<br />
-                    <br />
-                    To continue, please enter your password.<br />
-                    <br />
-                    Password:<br />
+                    <p>This will make your account permanently unusable. You will not be able to re-register the same user ID.</p>
+
+                    <p>This action is irreversible.</p>
+
+                    <p>To continue, please enter your password.</p>
+
+                    <p>Password:</p>
                     <input
                         type="password"
                         onChange={this._onPasswordFieldChange}
