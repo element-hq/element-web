@@ -30,7 +30,7 @@
     "draft-js-export-html": "^0.2.2",
     "draft-js-export-markdown": "^0.2.0",
     "draft-js-import-markdown": "^0.1.6",
-    "emojione": "^2.2.2",
+    "emojione": "2.2.3",
     "favico.js": "^0.3.10",
     "filesize": "^3.1.2",
     "flux": "^2.0.3",
