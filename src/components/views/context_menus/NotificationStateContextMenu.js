@@ -48,26 +48,27 @@ module.exports = React.createClass({
         };
     },
 
-    _save: function( isMuted ) {
+    _save: function( areNotifsMuted ) {
         var self = this;
         const roomId = this.props.room.roomId;
         var cli = MatrixClientPeg.get();
 
         if (!cli.isGuest()) {
-            cli.setRoomMutePushRule(
-                "global", roomId, isMuted
-            ).then(function() {
-                self.setState({areNotifsMuted: isMuted});
+            // Wrapping this in a q promise, as setRoomMutePushRule can return
+            // a promise or a value
+            q(cli.setRoomMutePushRule("global", roomId, areNotifsMuted))
+            .then(function(s) {
+                self.setState({areNotifsMuted: areNotifsMuted});
 
                 // delay slightly so that the user can see their state change
                 // before closing the menu
-                q.delay(500).then(function() {
+                return q.delay(500).then(function() {
                     // tell everyone that wants to know of the change in
                     // notification state
                     dis.dispatch({
                         action: 'notification_change',
                         roomId: self.props.room.roomId,
-                        isMuted: isMuted,
+                        areNotifsMuted: areNotifsMuted,
                     });
 
                     // Close the context menu
@@ -91,11 +92,11 @@ module.exports = React.createClass({
     },
 
     _onClickMentions: function() {
-        // Placeholder
+        this._save(true);
     },
 
     _onClickMute: function() {
-        this._save(true);
+        // Placeholder
     },
 
     render: function() {
@@ -113,12 +114,12 @@ module.exports = React.createClass({
 
         var mentionsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldDisabled': true,
+            'mx_NotificationStateContextMenu_fieldSet': this.state.areNotifsMuted,
         });
 
         var muteNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': this.state.areNotifsMuted,
+            'mx_NotificationStateContextMenu_fieldDisabled': true,
         });
 
         return (
@@ -127,6 +128,7 @@ module.exports = React.createClass({
                     <img src="img/notif-slider.svg" width="20" height="107" />
                 </div>
                 <div className={ alertMeClasses } onClick={this._onClickAlertMe} >
+                    <img className="mx_NotificationStateContextMenu_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_NotificationStateContextMenu_icon" src="img/icon-context-mute-off-copy.svg" width="16" height="12" />
                     All messages (loud)
                 </div>
@@ -136,6 +138,7 @@ module.exports = React.createClass({
                     All messages
                 </div>
                 <div className={ mentionsClasses } onClick={this._onClickMentions} >
+                    <img className="mx_NotificationStateContextMenu_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_NotificationStateContextMenu_icon" src="img/icon-context-mute-mentions.svg" width="16" height="12" />
                     Mentions only
                 </div>
