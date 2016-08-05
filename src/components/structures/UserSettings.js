@@ -363,6 +363,7 @@ module.exports = React.createClass({
     },
 
     _renderLabs: function () {
+        // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
 
         let features = LABS_FEATURES.map(feature => (
