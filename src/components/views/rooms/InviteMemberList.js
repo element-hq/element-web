@@ -13,10 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react');
-var sdk = require("../../../index");
-var Entities = require("../../../Entities");
-var MatrixClientPeg = require("../../../MatrixClientPeg");
+import React from 'react';
+import sdk from '../../../index';
+import Entities from '../../../Entities';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import rate_limited_func from '../../../ratelimitedfunc';
 
 const INITIAL_SEARCH_RESULTS_COUNT = 10;
 
@@ -59,7 +60,7 @@ module.exports = React.createClass({
         }
     },
 
-    _updateList: function() {
+    _updateList: new rate_limited_func(function() {
         this._room = MatrixClientPeg.get().getRoom(this.props.roomId);
         // Load the complete user list for inviting new users
         if (this._room) {
@@ -68,7 +69,7 @@ module.exports = React.createClass({
                         !this._room.hasMembershipState(u.userId, "invite"));
             });
         }
-    },
+    }, 500),
 
     onRoomStateMember: function(ev, state, member) {
         this._updateList();
