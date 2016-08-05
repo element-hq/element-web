@@ -24,6 +24,7 @@
     "test-multi": "karma start $KARMAFLAGS --single-run=false"
   },
   "dependencies": {
+    "browser-request": "^0.3.3",
     "classnames": "^2.1.2",
     "draft-js": "^0.7.0",
     "draft-js-export-html": "^0.2.2",

@@ -17,10 +17,12 @@ limitations under the License.
 var q = require("q");
 var React = require('react');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var SdkConfig = require('../../../SdkConfig');
 var sdk = require('../../../index');
 var Modal = require('../../../Modal');
 var ObjectUtils = require("../../../ObjectUtils");
 var dis = require("../../../dispatcher");
+var ScalarAuthClient = require("../../../ScalarAuthClient");
 var UserSettingsStore = require('../../../UserSettingsStore');
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -73,6 +75,8 @@ module.exports = React.createClass({
             // Default to false if it's undefined, otherwise react complains about changing
             // components from uncontrolled to controlled
             isRoomPublished: this._originalIsRoomPublished || false,
+            scalar_token: null,
+            scalar_error: null,
         };
     },
 
@@ -84,6 +88,12 @@ module.exports = React.createClass({
             this._originalIsRoomPublished = result.visibility === "public";
         }, (err) => {
             console.error("Failed to get room visibility: " + err);
+        });
+
+        this.getScalarToken().done((token) => {
+            this.setState({scalar_token: token});
+        }, (err) => {
+            this.setState({scalar_error: err});
         });
 
         dis.dispatch({
@@ -398,6 +408,37 @@ module.exports = React.createClass({
                 roomState.mayClientSendStateEvent("m.room.guest_access", cli))
     },
 
+    getScalarInterfaceUrl: function() {
+        var url = SdkConfig.get().integrations_ui_url;
+        url += "?scalar_token=" + encodeURIComponent(this.state.scalar_token);
+        url += "&room_id=" + encodeURIComponent(this.props.room.roomId);
+        return url;
+    },
+
+    getScalarToken() {
+        var tok = window.localStorage.getItem("mx_scalar_token");
+        if (tok) return q(tok);
+
+        // No saved token, so do the dance to get one. First, we
+        // need an openid bearer token from the HS.
+        return MatrixClientPeg.get().getOpenIdToken().then((token_object) => {
+            // Now we can send that to scalar and exchange it for a scalar token
+            var scalar_auth_client = new ScalarAuthClient();
+            return scalar_auth_client.getScalarToken(token_object);
+        }).then((token_object) => {
+            window.localStorage.setItem("mx_scalar_token", token_object);
+            return token_object;
+        });
+    },
+
+    onManageIntegrations(ev) {
+        ev.preventDefault();
+        var IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        Modal.createDialog(IntegrationsManager, {
+            src: this.state.scalar_token ? this.getScalarInterfaceUrl() : null
+        }, "");
+    },
+
     _renderEncryptionSection: function() {
         if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
             return null;
@@ -430,7 +471,6 @@ module.exports = React.createClass({
         );
     },
 
-
     render: function() {
         // TODO: go through greying out things you don't have permission to change
         // (or turning them into informative stuff)
@@ -440,6 +480,7 @@ module.exports = React.createClass({
         var UrlPreviewSettings = sdk.getComponent("room_settings.UrlPreviewSettings");
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
+        var Loader = sdk.getComponent("elements.Spinner")
 
         var cli = MatrixClientPeg.get();
         var roomState = this.props.room.currentState;
@@ -577,6 +618,23 @@ module.exports = React.createClass({
                 </div>
         }
 
+        var integrations_section;
+        if (UserSettingsStore.isFeatureEnabled("integration_management")) {
+            if (this.state.scalar_token) {
+                integrations_section = (
+                    <div className="mx_RoomSettings_settings">
+                        <a href="#" onClick={ this.onManageIntegrations }>Manage integrations</a>
+                    </div>
+                );
+            } else if (this.state.scalar_error) {
+                integrations_section = <div className="error">
+                    Unable to contact integrations server
+                </div>;
+            } else {
+                integrations_section = <Loader />;
+            }
+        }
+
         return (
             <div className="mx_RoomSettings">
 
@@ -661,6 +719,9 @@ module.exports = React.createClass({
                     <ColorSettings ref="color_settings" room={this.props.room} />
                 </div>
 
+                <h3>Integrations</h3>
+                { integrations_section }
+
                 <a id="addresses"/>
 
                 <AliasSettings ref="alias_settings"
@@ -725,7 +786,6 @@ module.exports = React.createClass({
                 <div className="mx_RoomSettings_settings">
                     This room's internal ID is <code>{ this.props.room.roomId }</code>
                 </div>
-
             </div>
         );
     }

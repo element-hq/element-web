@@ -16,11 +16,9 @@ limitations under the License.
 
 var DEFAULTS = {
     // URL to a page we show in an iframe to configure integrations
-    //integrations_ui_url: "https://scalar.vector.im/",
-    integrations_ui_url: "http://127.0.0.1:5051/",
+    integrations_ui_url: "https://scalar.vector.im/",
     // Base URL to the REST interface of the integrations server
-    //integrations_rest_url: "https://scalar.vector.im/api",
-    integrations_rest_url: "http://127.0.0.1:5050",
+    integrations_rest_url: "https://scalar.vector.im/api",
 };
 
 class SdkConfig {
