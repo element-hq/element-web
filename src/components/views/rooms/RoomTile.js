@@ -139,6 +139,34 @@ module.exports = React.createClass({
         }
     },
 
+    onAvatarClicked: function(e) {
+        // Only allow none guests to access the context menu
+        if (!MatrixClientPeg.get().isGuest()) {
+
+            // If the badge is clicked, then no longer show tooltip
+            if (this.props.collapsed) {
+                this.setState({ hover: false });
+            }
+
+            var Menu = sdk.getComponent('context_menus.RoomTagContextMenu');
+            var elementRect = e.target.getBoundingClientRect();
+            // The window X and Y offsets are to adjust position when zoomed in to page
+            var x = elementRect.right + window.pageXOffset + 3;
+            var y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset) - 53;
+            var self = this;
+            ContextualMenu.createMenu(Menu, {wmwragg
+                chevronOffset: 10,
+                left: x,
+                top: y,
+                room: this.props.room,
+                onFinished: function() {
+                    self.setState({ menu: false });
+                }
+            });
+            this.setState({ menu: true });
+        }
+    },
+
     render: function() {
         var myUserId = MatrixClientPeg.get().credentials.userId;
         var me = this.props.room.currentState.members[myUserId];
