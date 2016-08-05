@@ -17,8 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var Velocity = require('velocity-vector');
-require('velocity-vector/velocity.ui');
+var UiEffects = require('../../../UiEffects');
 var sdk = require('../../../index');
 var Email = require('../../../email');
 var Modal = require("../../../Modal");
@@ -117,7 +116,7 @@ module.exports = React.createClass({
             promise.finally(function() {
                 ev.target.disabled = false;
             });
-        }        
+        }
     },
 
     /**
@@ -196,7 +195,7 @@ module.exports = React.createClass({
         fieldValid[field_id] = val;
         this.setState({fieldValid: fieldValid});
         if (!val) {
-            Velocity(this.fieldElementById(field_id), "callout.shake", 300);
+            UiEffects.field_input_incorrect(this.fieldElementById(field_id));
             this.props.onError(error_code);
         }
     },
@@ -214,12 +213,13 @@ module.exports = React.createClass({
         }
     },
 
-    _styleField: function(field_id, baseStyle) {
-        var style = baseStyle || {};
+    _classForField: function(field_id, baseClass) {
+        let cls = baseClass || '';
         if (this.state.fieldValid[field_id] === false) {
-            style['borderColor'] = 'red';
+            if (cls) cls += ' ';
+            cls += 'error';
         }
-        return style;
+        return cls;
     },
 
     render: function() {
@@ -227,10 +227,10 @@ module.exports = React.createClass({
         var emailSection, registerButton;
         if (this.props.showEmail) {
             emailSection = (
-                <input className="mx_Login_field" type="text" ref="email"
+                <input type="text" ref="email"
                     autoFocus={true} placeholder="Email address (optional)"
                     defaultValue={this.props.defaultEmail}
-                    style={this._styleField(FIELD_EMAIL)}
+                    className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
                     onBlur={function() {self.validateField(FIELD_EMAIL)}} />
             );
         }
@@ -250,22 +250,22 @@ module.exports = React.createClass({
                 <form onSubmit={this.onSubmit}>
                     {emailSection}
                     <br />
-                    <input className="mx_Login_field" type="text" ref="username"
+                    <input type="text" ref="username"
                         placeholder={ placeholderUserName } defaultValue={this.props.defaultUsername}
-                        style={this._styleField(FIELD_USERNAME)}
+                        className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
                         onBlur={function() {self.validateField(FIELD_USERNAME)}} />
                     <br />
                     { this.props.guestUsername ?
                         <div className="mx_Login_fieldLabel">Setting a user name will create a fresh account</div> : null
                     }
-                    <input className="mx_Login_field" type="password" ref="password"
-                        style={this._styleField(FIELD_PASSWORD)}
+                    <input type="password" ref="password"
+                        className={this._classForField(FIELD_PASSWORD, 'mx_Login_field')}
                         onBlur={function() {self.validateField(FIELD_PASSWORD)}}
                         placeholder="Password" defaultValue={this.props.defaultPassword} />
                     <br />
-                    <input className="mx_Login_field" type="password" ref="passwordConfirm"
+                    <input type="password" ref="passwordConfirm"
                         placeholder="Confirm password"
-                        style={this._styleField(FIELD_PASSWORD_CONFIRM)}
+                        className={this._classForField(FIELD_PASSWORD_CONFIRM, 'mx_Login_field')}
                         onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM)}}
                         defaultValue={this.props.defaultPassword} />
                     <br />
