@@ -16,9 +16,8 @@ limitations under the License.
 
 .mx_RoomTagContextMenu_field {
     padding-top: 4px;
-    padding-right: 6px;
+    padding-right: 20px;
     padding-bottom: 10px;
-    padding-left: 20px;
     cursor: pointer;
     white-space: nowrap;
     display: flex;
@@ -27,7 +26,6 @@ limitations under the License.
 
 .mx_RoomTagContextMenu_field.mx_RoomTagContextMenu_fieldSet {
     font-weight: bold;
-    padding-left: 8px;
 }
 
 .mx_RoomTagContextMenu_field.mx_RoomTagContextMenu_fieldDisabled {
@@ -35,10 +33,22 @@ limitations under the License.
 }
 
 .mx_RoomTagContextMenu_icon {
-    padding-right: 4px;
+    padding-right: 8px;
     padding-left: 4px;
 }
 
-.mx_RoomTagContextMenu_fieldSet .mx_RoomTagContextMenu_icon {
+.mx_RoomTagContextMenu_separator {
+    margin-top: 0;
+    margin-bottom: 0;
+    border-bottom-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-color: #bbbbbb;
+    opacity: 0.4;
+}
 
+.mx_RoomTagContextMenu_fieldSet .mx_RoomTagContextMenu_icon {
+    /* Something to indicate that the icon is the set tag */
 }

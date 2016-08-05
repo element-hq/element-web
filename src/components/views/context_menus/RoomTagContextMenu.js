@@ -100,17 +100,20 @@ module.exports = React.createClass({
 
         var favouriteClasses = classNames({
             'mx_RoomTagContextMenu_field': true,
-            'mx_RoomTagContextMenu_fieldDisabled': true,
+            'mx_RoomTagContextMenu_fieldSet': false,
+            'mx_RoomTagContextMenu_fieldDisabled': false,
         });
 
         var lowPriorityClasses = classNames({
             'mx_RoomTagContextMenu_field': true,
-            'mx_RoomTagContextMenu_fieldSet': true,
+            'mx_RoomTagContextMenu_fieldSet': false,
+            'mx_RoomTagContextMenu_fieldDisabled': false,
         });
 
         var leaveClasses = classNames({
             'mx_RoomTagContextMenu_field': true,
-            'mx_RoomTagContextMenu_fieldDisabled': true,
+            'mx_RoomTagContextMenu_fieldSet': false,
+            'mx_RoomTagContextMenu_fieldDisabled': false,
         });
 
         return (
@@ -123,6 +126,7 @@ module.exports = React.createClass({
                     <img className="mx_RoomTagContextMenu_icon" src="img/icon-context-fave.svg" width="13" height="13" />
                     Low Priority
                 </div>
+                <hr className="mx_RoomTagContextMenu_separator" />
                 <div className={ leaveClasses } onClick={this._onClickLeave} >
                     <img className="mx_RoomTagContextMenu_icon" src="img/icon-context-fave.svg" width="13" height="13" />
                     Leave
