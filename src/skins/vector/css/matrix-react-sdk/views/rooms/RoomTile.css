@@ -22,10 +22,6 @@ limitations under the License.
     height: 34px;
 }
 
-.mx_RoomTile .mx_RoomTile_mute {
-    opacity: 0.4;
-}
-
 .mx_RoomTile_nameContainer {
     display: inline-block;
     width: 180px;
@@ -85,30 +81,13 @@ limitations under the License.
     z-index: 200;
 }
 
-/* Position mute icon when room muted and collapsed - invisible at the moment */
-.collapsed .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeMute {
-    background-color: rgba(0,0,0,0);
-    opacity: 0;
-    top: -2px;
-}
-
-/* Position menu icon when room muted and collapsed */
-.collapsed .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute,
-.collapsed .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute {
-    display: inline-block;
-    background-color: rgb(214, 214, 214);
-    letter-spacing: 0.1em;
-    opacity: 1;
-    top: -2px;
-}
-
 /* Hide the bottom of speech bubble */
-.collapsed .mx_RoomTile_highlight .mx_RoomTile_badge:not(.mx_RoomTile_badgeMute):after {
+.collapsed .mx_RoomTile_highlight .mx_RoomTile_badge:after {
     display: none;
 }
 
-/* This is the bottom of the speech bubble - not drawn when room muted */
-.mx_RoomTile_highlight .mx_RoomTile_badge:not(.mx_RoomTile_badgeMute):after {
+/* This is the bottom of the speech bubble */
+.mx_RoomTile_highlight .mx_RoomTile_badge:after {
     content: "";
     position: absolute;
     display: block;
@@ -142,22 +121,9 @@ limitations under the License.
     opacity: 1;
 }
 
-/* Position menu icon when room muted */
-.mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute,
-.mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton.mx_RoomTile_badgeMute {
+.mx_RoomTile.mx_RoomTile_noBadges .mx_RoomTile_badge.mx_RoomTile_badgeButton,
+.mx_RoomTile.mx_RoomTile_menu.mx_RoomTile_noBadges .mx_RoomTile_badge {
     background-color: rgb(214, 214, 214);
-    letter-spacing: 0.1em;
-    opacity: 1;
-    top: 9px;
-    right: 8px; /* gutter */
-}
-
-/* Position mute icon when room muted */
-.mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeMute {
-    background-color: rgba(0,0,0,0);
-    opacity: 1;
-    top: 11px;
-    right: 6px;
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
@@ -166,11 +132,6 @@ limitations under the License.
 
 .mx_RoomTile_highlight .mx_RoomTile_badge {
     background-color: #ff0064;
-}
-
-.mx_RoomTile_read .mx_RoomTile_badge {
-    background-color: rgb(214, 214, 214);
-    opacity: 0;
 }
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
@@ -182,7 +143,7 @@ limitations under the License.
 }
 
 .mx_RoomTile .mx_RoomTile_name.mx_RoomTile_badgeShown {
-    width: 144px;
+    width: 140px;
 }
 
 .mx_RoomTile_arrow {
