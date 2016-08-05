@@ -52,4 +52,5 @@ module.exports.components['views.rooms.RoomDNDView'] = require('./components/vie
 module.exports.components['views.rooms.RoomDropTarget'] = require('./components/views/rooms/RoomDropTarget');
 module.exports.components['views.rooms.RoomTooltip'] = require('./components/views/rooms/RoomTooltip');
 module.exports.components['views.rooms.SearchBar'] = require('./components/views/rooms/SearchBar');
+module.exports.components['views.settings.IntegrationsManager'] = require('./components/views/settings/IntegrationsManager');
 module.exports.components['views.settings.Notifications'] = require('./components/views/settings/Notifications');
