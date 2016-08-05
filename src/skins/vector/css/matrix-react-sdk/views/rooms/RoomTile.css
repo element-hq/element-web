@@ -116,13 +116,13 @@ limitations under the License.
 }
 
 .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton,
-.mx_RoomTile.mx_RoomTile_menu .mx_RoomTile_badge {
+.mx_RoomTile.mx_RoomTile_notificationStateMenu .mx_RoomTile_badge {
     letter-spacing: 0.1em;
     opacity: 1;
 }
 
 .mx_RoomTile.mx_RoomTile_noBadges .mx_RoomTile_badge.mx_RoomTile_badgeButton,
-.mx_RoomTile.mx_RoomTile_menu.mx_RoomTile_noBadges .mx_RoomTile_badge {
+.mx_RoomTile.mx_RoomTile_notificationStateMenu.mx_RoomTile_noBadges .mx_RoomTile_badge {
     background-color: rgb(214, 214, 214);
 }
 

@@ -46,6 +46,7 @@ module.exports = React.createClass({
 //        return {
 //            areNotifsMuted: areNotifsMuted,
 //        };
+        return null;
     },
 
 //    _save: function( isMuted ) {
@@ -104,7 +105,7 @@ module.exports = React.createClass({
 
         var lowPriorityClasses = classNames({
             'mx_RoomTagContextMenu_field': true,
-            'mx_RoomTagContextMenu_fieldSet': !this.state.areNotifsMuted,
+            'mx_RoomTagContextMenu_fieldSet': true,
         });
 
         var leaveClasses = classNames({
