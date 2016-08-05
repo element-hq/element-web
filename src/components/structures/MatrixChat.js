@@ -1062,7 +1062,12 @@ module.exports = React.createClass({
                     right_panel = <RightPanel roomId={this.state.currentRoomId} collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity} />
                     break;
                 case this.PageTypes.UserSettings:
-                    page_element = <UserSettings onClose={this.onUserSettingsClose} version={this.state.version} brand={this.props.config.brand} />
+                    page_element = <UserSettings
+                        onClose={this.onUserSettingsClose}
+                        version={this.state.version}
+                        brand={this.props.config.brand}
+                        enableLabs={this.props.config.enableLabs}
+                    />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
                 case this.PageTypes.CreateRoom:
