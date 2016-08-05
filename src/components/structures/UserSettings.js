@@ -50,11 +50,15 @@ module.exports = React.createClass({
         onClose: React.PropTypes.func,
         // The brand string given when creating email pushers
         brand: React.PropTypes.string,
+
+        // True to show the 'labs' section of experimental features
+        enableLabs: React.PropTypes.boolean,
     },
 
     getDefaultProps: function() {
         return {
-            onClose: function() {}
+            onClose: function() {},
+            enableLabs: true,
         };
     },
 
@@ -359,6 +363,8 @@ module.exports = React.createClass({
     },
 
     _renderLabs: function () {
+        if (!this.props.enableLabs) return false;
+
         let features = LABS_FEATURES.map(feature => (
             <div key={feature.id} className="mx_UserSettings_toggle">
                 <input
