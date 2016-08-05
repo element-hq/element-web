@@ -587,7 +587,7 @@ module.exports = React.createClass({
                         <input type="checkbox" disabled={ cli.isGuest() }
                                onChange={this._onToggle.bind(this, "areNotifsMuted", true, false)}
                                defaultChecked={this.state.areNotifsMuted}/>
-                        Mute notifications for this room
+                        'Mention only' notifications for this room
                     </label>
                     <div className="mx_RoomSettings_settings">
                         <h3>Who can access this room?</h3>
