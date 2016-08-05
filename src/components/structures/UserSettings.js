@@ -52,7 +52,7 @@ module.exports = React.createClass({
         brand: React.PropTypes.string,
 
         // True to show the 'labs' section of experimental features
-        enableLabs: React.PropTypes.boolean,
+        enableLabs: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -363,7 +363,7 @@ module.exports = React.createClass({
     },
 
     _renderLabs: function () {
-        if (!this.props.enableLabs) return false;
+        if (this.props.enableLabs === false) return null;
 
         let features = LABS_FEATURES.map(feature => (
             <div key={feature.id} className="mx_UserSettings_toggle">

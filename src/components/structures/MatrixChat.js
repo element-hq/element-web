@@ -139,10 +139,6 @@ module.exports = React.createClass({
         return this.props.config.default_is_url || "https://vector.im";
     },
 
-    getEnableLabs() {
-        return this.props.config.enableLabs === undefined ? true : this.props.config.enableLabs;
-    },
-
     componentWillMount: function() {
         this.favicon = new Favico({animation: 'none'});
 
@@ -1068,7 +1064,7 @@ module.exports = React.createClass({
                         onClose={this.onUserSettingsClose}
                         version={this.state.version}
                         brand={this.props.config.brand}
-                        enableLabs={this.getEnableLabs()}
+                        enableLabs={this.props.config.enableLabs}
                     />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
