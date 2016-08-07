@@ -84,9 +84,27 @@ input[type=text]:focus, textarea:focus {
     position: absolute;
 }
 
-/* hack to avoid accidental click-throughs if you miss the narrow scrollbar */
+/* Expand thumbs on hoverover */
+.gm-scrollbar {
+    border-radius: 5px ! important;
+}
 .gm-scrollbar.-vertical {
-    border-left: 6px solid transparent;
+    width: 6px;
+    transition: width 120ms ease-out ! important;
+}
+.gm-scrollbar.-vertical:hover,
+.gm-scrollbar.-vertical:active {
+    width: 8px;
+    transition: width 120ms ease-out ! important;
+}
+.gm-scrollbar.-horizontal {
+    height: 6px;
+    transition: height 120ms ease-out ! important;
+}
+.gm-scrollbar.-horizontal:hover,
+.gm-scrollbar.-horizontal:active {
+    height: 8px;
+    transition: height 120ms ease-out ! important;
 }
 
 .mx_Dialog_wrapper {
