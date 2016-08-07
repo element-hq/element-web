@@ -17,6 +17,7 @@ limitations under the License.
 .mx_MemberInfo {
     margin-top: 20px;
     height: 100%;
+    overflow-y: auto;
 }
 
 .mx_MemberInfo h2 {
