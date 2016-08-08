@@ -31,7 +31,7 @@ limitations under the License.
     overflow: auto;
 }
 
-.mx_Login h2 {
+.mx_Login .header h1 {
     color: #4a4a4a;
     font-weight: 300;
     margin-top: 32px;

@@ -14,5 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MessageTimestamp {
+.mx_MessageTimestamp,
+a.mx_MessageTimestamp {
+    color: #a5a5a5;
 }

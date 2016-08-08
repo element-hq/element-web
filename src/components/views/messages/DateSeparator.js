@@ -50,7 +50,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <h2>{ label }</h2>
+            <div className="mx_DateSeperator">{label}</div>
         );
     }
 });

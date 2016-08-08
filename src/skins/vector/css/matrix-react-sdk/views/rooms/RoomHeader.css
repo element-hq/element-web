@@ -140,7 +140,7 @@ limitations under the License.
     color: #454545;
     font-weight: bold;
     font-size: 22px;
-    padding-left: 19px;
+    padding-left: 20px;
     padding-right: 16px;
     /* why isn't text-overflow working? */
     text-overflow: ellipsis;

@@ -80,7 +80,7 @@ limitations under the License.
 }
 */
 
-.mx_MemberList_invited h2 {
+.mx_MemberList_invited .header h1 {
     text-transform: uppercase;
     color: #3d3b39;
     font-weight: 600;

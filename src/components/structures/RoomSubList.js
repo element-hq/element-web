@@ -279,12 +279,12 @@ var RoomSubList = React.createClass({
     _getHeaderJsx: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         return (
-            <h2 onClick={ this.onClick } className="mx_RoomSubList_label">
+            <div onClick={ this.onClick } className="mx_RoomSubList_label">
                 { this.props.collapsed ? '' : this.props.label }
                 <img className="mx_RoomSubList_chevron"
                     src={ this.state.hidden ? "img/list-close.svg" : "img/list-open.svg" }
                     width="10" height="10" />
-            </h2>
+            </div>
         );
     },
 

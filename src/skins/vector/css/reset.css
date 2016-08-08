@@ -1,0 +1,125 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+* {
+    padding: 0;
+    border: 0;
+    margin: 0;
+    outline: none;
+    -webkit-border-radius: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+html,
+body {
+    width: 100%;
+}
+
+body {
+    position: relative;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
+}
+
+address,
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+input,
+textarea,
+select,
+label {
+    display: block;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 1em;
+    font-weight: normal;
+}
+
+h1:empty,
+h2:empty,
+h3:empty,
+h4:empty,
+h5:empty,
+h6:empty,
+p:empty,
+li:empty,
+blockquote:empty {
+  display: none;
+}
+
+cite {
+    font-style: normal;
+}
+
+address {
+    font-style: normal;
+}
+
+a img {
+    border: none;
+}
+
+input,
+textarea {
+    background-color: transparent;
+    -webkit-user-select: auto;
+}
+
+input[type="submit"] {
+    cursor: pointer;
+}
+
+textarea {
+    resize: none;
+}
+
+select {
+    background-color: transparent;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+/* Prevent ugly dotted highlight around selected elements in Firefox */
+::-moz-focus-inner {
+    border: 0;
+}
