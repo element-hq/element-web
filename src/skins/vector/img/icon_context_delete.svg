@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-miterlimit:10;">
+    <g transform="matrix(1,0,0,1,-0,-80)">
+        <g id="icon_context_delete" transform="matrix(0.600982,0,0,0.600982,0,80)">
+            <clipPath id="_clip1">
+                <rect x="0" y="0" width="25" height="25"/>
+            </clipPath>
+            <g clip-path="url(#_clip1)">
+                <g transform="matrix(1.66394,0,0,1.66394,3.32789,5.01225)">
+                    <path d="M1.45,0.45L9.55,8.55" style="fill:none;stroke-width:1px;stroke:rgb(255,0,100);"/>
+                </g>
+                <g transform="matrix(1.66394,0,0,1.66394,3.32789,5.01225)">
+                    <path d="M9.55,0.45L1.45,8.55" style="fill:none;stroke-width:1px;stroke:rgb(255,0,100);"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
