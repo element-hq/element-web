@@ -136,8 +136,8 @@ module.exports = React.createClass({
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
                         <div className="mx_RightPanel_headerButton" title="Members" onClick={ this.onMemberListButtonClick }>
-                            <TintableSvg src="img/members.svg" width="17" height="22"/>
                             { membersBadge }
+                            <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
                             { membersHighlight }
                         </div>
                         <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton" title="Files">

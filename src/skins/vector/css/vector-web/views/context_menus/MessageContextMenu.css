@@ -14,29 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomSubList {
-    display: table;
-    table-layout: fixed;
-    width: 100%;
-}
-
-.mx_RoomSubList_label {
-    text-transform: uppercase;
-    color: #3d3b39;
-    font-weight: 600;
-    font-size: 13px;
-    padding-left: 16px; /* gutter */
-    padding-right: 16px; /* gutter */
-    margin-top: 8px;
-    margin-bottom: 4px;
+.mx_MessageContextMenu_field {
+    padding: 3px 6px 3px 6px;
     cursor: pointer;
+    white-space: nowrap;
 }
 
-.mx_RoomSubList_chevron {
-    padding-left: 4px;
-    pointer-events: none;
-}
-
-.collapsed .mx_RoomSubList_chevron  {
-    padding-left: 12px;
+.mx_MessageContextMenu_field.mx_MessageContextMenu_fieldSet {
+    font-weight: bold;
 }

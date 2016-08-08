@@ -14,43 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MatrixToolbar {
-    background-color: #76cfa6;
-    color: #fff;
-
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
+.mx_IntegrationsManager {
     display: -webkit-flex;
     display: flex;
+    width: 100%;
+    height: 100%;
     -webkit-align-items: center;
     align-items: center;
+    justify-content: center;
+    -webkit-justify-content: center;
 }
 
-.mx_MatrixToolbar_warning {
-    margin-left: 16px;
-    margin-right: 8px;
-    margin-top: -2px;
-}
-
-.mx_MatrixToolbar_content {
-    -webkit-flex: 1;
-    flex: 1;
-}
-
-.mx_MatrixToolbar_link
-{
-    color: #fff ! important;
-    text-decoration: underline ! important;
-    cursor: pointer;
-}
-
-.mx_MatrixToolbar_close {
-    cursor: pointer;
-}
-
-.mx_MatrixToolbar_close img {
-    display: block;
-    float: right;
-    margin-right: 10px;
+.mx_IntegrationsManager iframe {
+    background-color: #fff;
+    border: 0px;
+    width: 720px;
+    height: 512px;
 }

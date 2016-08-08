@@ -80,7 +80,13 @@ describe('joining a room', function () {
             httpBackend.when('GET', '/directory/room/'+encodeURIComponent(ROOM_ALIAS)).respond(200, { room_id: ROOM_ID });
 
             // start with a logged-in client
-            peg.replaceUsingAccessToken(HS_URL, IS_URL, USER_ID, ACCESS_TOKEN);
+            peg.replaceUsingCreds({
+                homeserverUrl: HS_URL,
+                identityServerUrl: IS_URL,
+                userId: USER_ID,
+                accessToken: ACCESS_TOKEN,
+                guest: false,
+            });
             
             var mc = <MatrixChat config={{}}/>;
             matrixChat = ReactDOM.render(mc, parentDiv);

@@ -47,7 +47,7 @@ module.exports = React.createClass({
         var ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createDialog(ViewSource, {
             mxEvent: this.props.mxEvent
-        });
+        }, 'mx_Dialog_viewsource');
         if (this.props.onFinished) this.props.onFinished();
     },
 
@@ -95,7 +95,7 @@ module.exports = React.createClass({
 
         if (eventStatus === 'not_sent') {
             resendButton = (
-                <div className="mx_ContextualMenu_field" onClick={this.onResendClick}>
+                <div className="mx_MessageContextMenu_field" onClick={this.onResendClick}>
                     Resend
                 </div>
             );
@@ -103,7 +103,7 @@ module.exports = React.createClass({
 
         if (!eventStatus) { // sent
             redactButton = (
-                <div className="mx_ContextualMenu_field" onClick={this.onRedactClick}>
+                <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
                     Redact
                 </div>
             );
@@ -111,14 +111,14 @@ module.exports = React.createClass({
 
         if (eventStatus === "queued" || eventStatus === "not_sent") {
             cancelButton = (
-                <div className="mx_ContextualMenu_field" onClick={this.onCancelSendClick}>
+                <div className="mx_MessageContextMenu_field" onClick={this.onCancelSendClick}>
                     Cancel Sending
                 </div>
             );
         }
 
         viewSourceButton = (
-            <div className="mx_ContextualMenu_field" onClick={this.onViewSourceClick}>
+            <div className="mx_MessageContextMenu_field" onClick={this.onViewSourceClick}>
                 View Source
             </div>
         );
@@ -126,7 +126,7 @@ module.exports = React.createClass({
         if (this.props.eventTileOps) {
             if (this.props.eventTileOps.isWidgetHidden()) {
                 unhidePreviewButton = (
-                    <div className="mx_ContextualMenu_field" onClick={this.onUnhidePreviewClick}>
+                    <div className="mx_MessageContextMenu_field" onClick={this.onUnhidePreviewClick}>
                         Unhide Preview
                     </div>
                 )
@@ -136,7 +136,7 @@ module.exports = React.createClass({
         // XXX: this should be https://matrix.to.
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         permalinkButton = (
-            <div className="mx_ContextualMenu_field">
+            <div className="mx_MessageContextMenu_field">
                 <a href={ "#/room/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }
                    onClick={ this.onPermalinkClick }>Permalink</a>
             </div>

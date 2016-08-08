@@ -94,10 +94,24 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_UserSettings_button.danger {
+    background-color: #ff0064;
+}
+
 .mx_UserSettings_section {
     margin-left: 63px;
     margin-top: 28px;
     margin-bottom: 28px;
+}
+
+.mx_UserSettings_toggle input {
+    width: 16px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.mx_UserSettings_toggle label {
+    padding-bottom: 21px;
 }
 
 .mx_UserSettings_accountTable

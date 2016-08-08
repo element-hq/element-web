@@ -16,8 +16,8 @@ limitations under the License.
 
 .mx_SearchBox {
     height: 24px;
-    margin-left: 16px;
-    margin-right: 20px;
+    margin-left: 18px;
+    margin-right: 18px;
     padding-top: 24px;
     padding-bottom: 22px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -28,11 +28,13 @@ limitations under the License.
 
 .mx_SearchBox_searchButton {
     margin-right: 10px;
+    margin-top: 5px;
     pointer-events: none;
 }
 
 .mx_SearchBox_closeButton {
     cursor: pointer;
+    margin-top: -5px;
 }
 
 .mx_SearchBox_search {

@@ -21,7 +21,7 @@ var React = require('react');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var ContentRepo = require("matrix-js-sdk").ContentRepo;
 var Modal = require('matrix-react-sdk/lib/Modal');
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 
@@ -282,8 +282,7 @@ module.exports = React.createClass({
                 <SimpleRoomHeader title="Directory" />
                 <div className="mx_RoomDirectory_list">
                     <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
-                    <GeminiScrollbar className="mx_RoomDirectory_tableWrapper"
-                                     relayoutOnUpdate={false} >
+                    <GeminiScrollbar className="mx_RoomDirectory_tableWrapper">
                         <table ref="directory_table" className="mx_RoomDirectory_table">
                             <tbody>
                                 { this.getRows(this.state.roomAlias) }
