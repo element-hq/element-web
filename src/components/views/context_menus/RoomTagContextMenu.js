@@ -32,63 +32,85 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-//        var areNotifsMuted = false;
-//        var cli = MatrixClientPeg.get();
-//        if (!cli.isGuest()) {
-//            var roomPushRule = cli.getRoomPushRule("global", this.props.room.roomId);
-//            if (roomPushRule) {
-//                if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
-//                    areNotifsMuted = true;
-//                }
-//            }
-//        }
-//
-//        return {
-//            areNotifsMuted: areNotifsMuted,
-//        };
-        return null;
+        return {
+            isFavourite: this.props.room.tags.hasOwnProperty("m.favourite"),
+            isLowPriority: this.props.room.tags.hasOwnProperty("m.lowpriority"),
+        };
     },
 
-//    _save: function( isMuted ) {
-//        var self = this;
-//        const roomId = this.props.room.roomId;
-//        var cli = MatrixClientPeg.get();
-//
-//        if (!cli.isGuest()) {
-//            cli.setRoomMutePushRule(
-//                "global", roomId, isMuted
-//            ).then(function() {
-//                self.setState({areNotifsMuted: isMuted});
-//
-//                // delay slightly so that the user can see their state change
-//                // before closing the menu
-//                q.delay(500).then(function() {
-//                    // tell everyone that wants to know of the change in
-//                    // notification state
-//                    dis.dispatch({
-//                        action: 'notification_change',
-//                        roomId: self.props.room.roomId,
-//                        isMuted: isMuted,
-//                    });
-//
-//                    // Close the context menu
-//                    if (self.props.onFinished) {
-//                        self.props.onFinished();
-//                    };
-//                });
-//            }).fail(function(error) {
-//                // TODO: some form of error notification to the user
-//                // to inform them that their state change failed.
-//            });
-//        }
-//    },
+    _toggleTag: function(tagNameOn, tagNameOff) {
+        console.log("DEBUG: _toggleTag");
+        console.log("tagNameOn: " + tagNameOn + " tagNameOff: " + tagNameOff);
+        var self = this;
+        const roomId = this.props.room.roomId;
+        var cli = MatrixClientPeg.get();
+        if (!cli.isGuest()) {
+            q.delay(500).then(function() {
+                if (tagNameOff !== null && tagNameOff !== undefined) {
+                    cli.deleteRoomTag(roomId, tagNameOff).finally(function() {
+                        // Close the context menu
+                        if (self.props.onFinished) {
+                            self.props.onFinished();
+                        };
+                    }).fail(function(err) {
+                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Failed to remove tag " + tagNameOff + " from room",
+                            description: err.toString()
+                        });
+                    });
+                }
+
+                if (tagNameOn !== null && tagNameOn !== undefined) {
+                    cli.setRoomTag(roomId, tagNameOn, {}).finally(function() {
+                        // Close the context menu
+                        if (self.props.onFinished) {
+                            self.props.onFinished();
+                        };
+                    }).fail(function(err) {
+                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Failed to add tag " + tagNameOn + " to room",
+                            description: err.toString()
+                        });
+                    });
+                }
+            });
+        }
+    },
 
     _onClickFavourite: function() {
         // Tag room as 'Favourite'
+        if (!this.state.isFavourite && this.state.isLowPriority) {
+            this.setState({
+                isFavourite: true,
+                isLowPriority: false,
+            });
+            this._toggleTag("m.favourite", "m.lowpriority");
+        } else if (this.state.isFavourite) {
+            this.setState({isFavourite: false});
+            this._toggleTag(null, "m.favourite");
+        } else if (!this.state.isFavourite) {
+            this.setState({isFavourite: true});
+            this._toggleTag("m.favourite");
+        }
     },
 
     _onClickLowPriority: function() {
         // Tag room as 'Low Priority'
+        if (!this.state.isLowPriority && this.state.isFavourite) {
+            this.setState({
+                isFavourite: false,
+                isLowPriority: true,
+            });
+            this._toggleTag("m.lowpriority", "m.favourite");
+        } else if (this.state.isLowPriority) {
+            this.setState({isLowPriority: false});
+            this._toggleTag(null, "m.lowpriority");
+        } else if (!this.state.isLowPriority) {
+            this.setState({isLowPriority: true});
+            this._toggleTag("m.lowpriority");
+        }
     },
 
     _onClickLeave: function() {
@@ -100,13 +122,13 @@ module.exports = React.createClass({
 
         var favouriteClasses = classNames({
             'mx_RoomTagContextMenu_field': true,
-            'mx_RoomTagContextMenu_fieldSet': false,
+            'mx_RoomTagContextMenu_fieldSet': this.state.isFavourite,
             'mx_RoomTagContextMenu_fieldDisabled': false,
         });
 
         var lowPriorityClasses = classNames({
             'mx_RoomTagContextMenu_field': true,
-            'mx_RoomTagContextMenu_fieldSet': false,
+            'mx_RoomTagContextMenu_fieldSet': this.state.isLowPriority,
             'mx_RoomTagContextMenu_fieldDisabled': false,
         });
 
@@ -119,16 +141,16 @@ module.exports = React.createClass({
         return (
             <div>
                 <div className={ favouriteClasses } onClick={this._onClickFavourite} >
-                    <img className="mx_RoomTagContextMenu_icon" src="img/icon-context-fave.svg" width="13" height="13" />
+                    <img className="mx_RoomTagContextMenu_icon" src="img/icon-context-fave.svg" width="15" height="15" />
                     Favourite
                 </div>
                 <div className={ lowPriorityClasses } onClick={this._onClickLowPriority} >
-                    <img className="mx_RoomTagContextMenu_icon" src="img/icon-context-fave.svg" width="13" height="13" />
+                    <img className="mx_RoomTagContextMenu_icon" src="img/icon-context-low.svg" width="15" height="15" />
                     Low Priority
                 </div>
                 <hr className="mx_RoomTagContextMenu_separator" />
                 <div className={ leaveClasses } onClick={this._onClickLeave} >
-                    <img className="mx_RoomTagContextMenu_icon" src="img/icon-context-fave.svg" width="13" height="13" />
+                    <img className="mx_RoomTagContextMenu_icon" src="img/icon-context-delete.svg" width="15" height="15" />
                     Leave
                 </div>
             </div>

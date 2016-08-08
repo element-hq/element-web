@@ -15,13 +15,21 @@ limitations under the License.
 */
 
 .mx_RoomTagContextMenu_field {
-    padding-top: 4px;
+    padding-top: 8px;
     padding-right: 20px;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
     cursor: pointer;
     white-space: nowrap;
     display: flex;
     align-items: center;
+}
+
+.mx_RoomTagContextMenu_field:first-child {
+    padding-top: 4px;
+}
+
+.mx_RoomTagContextMenu_field:last-child {
+    padding-bottom: 4px;
 }
 
 .mx_RoomTagContextMenu_field.mx_RoomTagContextMenu_fieldSet {
