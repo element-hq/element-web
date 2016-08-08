@@ -161,8 +161,6 @@ limitations under the License.
  * Modifier: Big-emoji
  */
 .mx_EventTile_bigEmoji .emojione {
-    display: inline-block;
-    vertical-align: top;
     height: 42px; /* $leading-base * 2 */
 }
 

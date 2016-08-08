@@ -141,9 +141,3 @@ limitations under the License.
     margin: 6px 0; /* $y-unit */
     overflow-y: auto;
 }
-
-.emojione {
-    display: inline-block;
-    vertical-align: top;
-    height: 21px; /* $leading-base */
-}
