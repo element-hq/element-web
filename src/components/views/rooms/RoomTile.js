@@ -163,10 +163,10 @@ module.exports = React.createClass({
                 top: y,
                 room: this.props.room,
                 onFinished: function() {
-                    self.setState({ roomTagMenu: false });
+                    //self.setState({ roomTagMenu: false });
                 }
             });
-            this.setState({ roomTagMenu: true });
+            //this.setState({ roomTagMenu: true });
         }
         // Prevent the RoomTile onClick event firing as well
         e.stopPropagation();
