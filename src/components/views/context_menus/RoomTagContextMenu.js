@@ -39,8 +39,6 @@ module.exports = React.createClass({
     },
 
     _toggleTag: function(tagNameOn, tagNameOff) {
-        console.log("DEBUG: _toggleTag");
-        console.log("tagNameOn: " + tagNameOn + " tagNameOff: " + tagNameOff);
         var self = this;
         const roomId = this.props.room.roomId;
         var cli = MatrixClientPeg.get();
@@ -62,6 +60,8 @@ module.exports = React.createClass({
                 }
 
                 if (tagNameOn !== null && tagNameOn !== undefined) {
+                    // If the tag ordering meta data is required, it is added by
+                    // the RoomSubList when it sorts its rooms
                     cli.setRoomTag(roomId, tagNameOn, {}).finally(function() {
                         // Close the context menu
                         if (self.props.onFinished) {

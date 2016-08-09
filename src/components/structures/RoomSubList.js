@@ -149,11 +149,33 @@ var RoomSubList = React.createClass({
         return this.tsOfNewestEvent(roomB) - this.tsOfNewestEvent(roomA);
     },
 
-    manualComparator: function(roomA, roomB) {
-        if (!roomA.tags[this.props.tagName] || !roomB.tags[this.props.tagName]) return 0;
-        var a = roomA.tags[this.props.tagName].order;
-        var b = roomB.tags[this.props.tagName].order;
-        return a == b ? this.recentsComparator(roomA, roomB) : ( a > b  ? 1 : -1);
+    lexicographicalComparator: function(roomA, roomB) {
+        return roomA.name > roomB.name ? 1 : -1;
+    },
+
+    // Generates the manual comparator using the given list
+    manualComparator: function(list) {
+        var self = this;
+        var roomList = list;
+
+        return function(roomA, roomB) {
+            if (!roomA.tags[self.props.tagName] || !roomB.tags[self.props.tagName]) return 0;
+
+            // Make sure the room tag has an order element, if not set it to be the bottom
+            var a = roomA.tags[self.props.tagName].order;
+            var b = roomB.tags[self.props.tagName].order;
+
+            if (a === undefined) {
+                a = (self._getHighestOrder(roomList) + 1.0) / 2.0;
+                roomA.tags[self.props.tagName].order = a;
+            };
+            if (b === undefined) {
+                b = (self._getHighestOrder(roomList) + 1.0) / 2.0;
+                roomB.tags[self.props.tagName].order = b;
+            };
+
+            return a == b ? self.lexicographicalComparator(roomA, roomB) : ( a > b  ? 1 : -1);
+        }
     },
 
     sortList: function(list, order) {
@@ -161,11 +183,28 @@ var RoomSubList = React.createClass({
         if (order === undefined) order = this.props.order;
         var comparator;
         list = list || [];
-        if (order === "manual") comparator = this.manualComparator;
+        if (order === "manual") comparator = this.manualComparator(list);
         if (order === "recent") comparator = this.recentsComparator;
 
         //if (debug) console.log("sorting list for sublist " + this.props.label + " with length " + list.length + ", this.props.list = " + this.props.list);
         this.setState({ sortedList: list.sort(comparator) });
+    },
+
+    // Finds the highest (lowest position) order of a room in a manual ordered list
+    //     room.tag[tagname].order
+    _getHighestOrder: function(list) {
+        var order = 0.0;
+        if (this.props.order === "manual") {
+            var self = this;
+            list.forEach(function(room) {
+                if (room.tags.hasOwnProperty(self.props.tagName)) {
+                    if (order < room.tags[self.props.tagName].order) {
+                        order = room.tags[self.props.tagName].order;
+                    }
+                }
+            })
+        }
+        return order;
     },
 
     moveRoomTile: function(room, atIndex) {
