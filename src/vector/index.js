@@ -45,7 +45,7 @@ var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
 
-var qs = require("querystring");
+import {parseQs, parseQsFromFragment} from './url_utils';
 
 var lastLocationHashSet = null;
 
@@ -81,41 +81,12 @@ var validBrowser = checkBrowserFeatures([
     "objectfit"
 ]);
 
-// We want to support some name / value pairs in the fragment
-// so we're re-using query string like format
-//
-// returns {location, params}
-function parseQsFromFragment(location) {
-    // if we have a fragment, it will start with '#', which we need to drop.
-    // (if we don't, this will return '').
-    var fragment = location.hash.substring(1);
-
-    // our fragment may contain a query-param-like section. we need to fish
-    // this out *before* URI-decoding because the params may contain ? and &
-    // characters which are only URI-encoded once.
-    var hashparts = fragment.split('?');
-
-    var result = {
-        location: decodeURIComponent(hashparts[0]),
-        params: {}
-    };
-
-    if (hashparts.length > 1) {
-        result.params = qs.parse(hashparts[1]);
-    }
-    return result;
-}
-
-function parseQs(location) {
-    return qs.parse(location.search.substring(1));
-}
-
 // Here, we do some crude URL analysis to allow
 // deep-linking.
 function routeUrl(location) {
     if (!window.matrixChat) return;
 
-    console.log("Routing URL "+window.location);
+    console.log("Routing URL "+location);
     var params = parseQs(location);
     var loginToken = params.loginToken;
     if (loginToken) {
