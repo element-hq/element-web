@@ -26,7 +26,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                     completion: shortnameToUnicode(shortname),
                     component: (
                         <div className="mx_Autocomplete_Completion">
-                            <span dangerouslySetInnerHTML={{__html: imageHTML}}></span> {shortname}
+                            <span style={{maxWidth: '1em'}} dangerouslySetInnerHTML={{__html: imageHTML}}></span>&nbsp;&nbsp;{shortname}
                         </div>
                     ),
                     range,
