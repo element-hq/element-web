@@ -47,6 +47,13 @@ limitations under the License.
     list-style: none;
 }
 
+/* Preserve whitespace in regular paragraphs
+ * Don't include lists as the white-space between line breaks goes crazy
+ */
+.markdown-body p {
+    white-space: pre-wrap;
+}
+
 .markdown-body ul ol,
 .markdown-body ul ul,
 .markdown-body ol ul,
@@ -126,7 +133,7 @@ limitations under the License.
     box-shadow: inset 0 0 0 1px #dddddd;
     border-radius: 4px;
     background-color: #fcfcfc;
-    color: #454545;
+    color: #666666;
 }
 
 /* Github overrides for inline code */
