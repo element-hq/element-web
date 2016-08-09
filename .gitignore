@@ -7,4 +7,5 @@
 /vector/bundle.*
 /vector/components.css
 /vector/config.json
+/vector/olm.js
 .DS_Store
