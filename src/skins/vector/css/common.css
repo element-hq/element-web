@@ -21,6 +21,12 @@ html {
     overflow: hidden;
 }
 
+/* Open Sans lacks combining diacritics, so these will fall through
+   to the next font.  Helevetica's diacritics however do not combine
+   nicely with Open Sans (on OSX, at least) and result in a huge
+   horizontal mess.  Arial empirically gets it right, hence prioritising
+   Arial here.
+*/
 body {
     font-family: 'Open Sans', Arial, Helvetica, sans-serif;
     font-size: 14px;
