@@ -24,7 +24,7 @@ var Modal = require("../../../Modal");
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
 var linkifyMatrix = require('../../../linkify-matrix');
-import {emojifyText} from '../../../HtmlUtils';
+import EmojiText from '../elements/EmojiText';
 
 linkifyMatrix(linkify);
 
@@ -212,13 +212,12 @@ module.exports = React.createClass({
                 roomName = this.props.room.name;
             }
 
-            let roomNameHTML = emojifyText(roomName);
 
             name =
                 <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                    <div className={ "mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "") } title={ roomName } dangerouslySetInnerHTML={roomNameHTML}></div>
+                    <EmojiText element="div" className={ "mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "") } title={ roomName }>{roomName}</EmojiText>
                     { searchStatus }
-                </div>
+                </div>;
         }
 
         if (can_set_room_topic) {

@@ -17,7 +17,7 @@
 'use strict';
 
 import React from 'react';
-import {emojifyText} from '../../../HtmlUtils';
+import EmojiText from '../elements/EmojiText';
 
 export default function SenderProfile(props) {
     const {mxEvent} = props;
@@ -29,10 +29,8 @@ export default function SenderProfile(props) {
     }
 
     return (
-        <span className="mx_SenderProfile"
-              dangerouslySetInnerHTML={emojifyText(`${name || ''} ${props.aux || ''}`)}
-              onClick={props.onClick}>
-        </span>
+        <EmojiText className="mx_SenderProfile"
+              onClick={props.onClick}>{`${name || ''} ${props.aux || ''}`}</EmojiText>
     );
 }
 

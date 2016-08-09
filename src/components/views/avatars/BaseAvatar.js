@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var AvatarLogic = require("../../../Avatar");
-import {emojifyText} from '../../../HtmlUtils';
+import EmojiText from '../../views/elements/EmojiText';
 
 module.exports = React.createClass({
     displayName: 'BaseAvatar',
@@ -142,15 +142,13 @@ module.exports = React.createClass({
         } = this.props;
 
         if (imageUrl === this.state.defaultImageUrl) {
-            var initialLetter = emojifyText(this._getInitialLetter(name));
+            const initialLetter = this._getInitialLetter(name);
             return (
                 <span className="mx_BaseAvatar" {...otherProps}>
-                    <span className="mx_BaseAvatar_initial" aria-hidden="true"
+                    <EmojiText className="mx_BaseAvatar_initial" aria-hidden="true"
                             style={{ fontSize: (width * 0.65) + "px",
                                     width: width + "px",
-                                    lineHeight: height + "px" }}
-                            dangerouslySetInnerHTML={initialLetter}>
-                    </span>
+                                    lineHeight: height + "px" }}>{initialLetter}</EmojiText>
                     <img className="mx_BaseAvatar_image" src={imageUrl}
                         alt="" title={title} onError={this.onError}
                         width={width} height={height} />

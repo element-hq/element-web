@@ -19,7 +19,7 @@ var sdk = require('../../index');
 var dis = require("../../dispatcher");
 var WhoIsTyping = require("../../WhoIsTyping");
 var MatrixClientPeg = require("../../MatrixClientPeg");
-import {emojifyText} from '../../HtmlUtils';
+import EmojiText from '../views/elements/EmojiText';
 
 module.exports = React.createClass({
     displayName: 'RoomStatusBar',
@@ -260,11 +260,10 @@ module.exports = React.createClass({
         }
 
         var typingString = this.state.whoisTypingString;
-        const typingHtml = emojifyText(typingString);
         if (typingString) {
             return (
                 <div className="mx_RoomStatusBar_typingBar">
-                    <span dangerouslySetInnerHTML={typingHtml} />
+                    <EmojiText>{typingString}</EmojiText>
                 </div>
             );
         }

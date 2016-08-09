@@ -32,7 +32,7 @@ var Modal = require("../../../Modal");
 var sdk = require('../../../index');
 var UserSettingsStore = require('../../../UserSettingsStore');
 var createRoom = require('../../../createRoom');
-import {emojifyText} from '../../../HtmlUtils';
+import EmojiText from '../elements/EmojiText';
 
 module.exports = React.createClass({
     displayName: 'MemberInfo',
@@ -637,7 +637,7 @@ module.exports = React.createClass({
                 </div>
         }
 
-        let memberNameHTML = emojifyText(this.props.member.name);
+        const memberName = this.props.member.name;
 
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
@@ -648,7 +648,7 @@ module.exports = React.createClass({
                     <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
                 </div>
 
-                <h2 dangerouslySetInnerHTML={memberNameHTML}></h2>
+                <EmojiText element="h2">{memberNameHTML}</EmojiText>
 
                 <div className="mx_MemberInfo_profile">
                     <div className="mx_MemberInfo_profileField">

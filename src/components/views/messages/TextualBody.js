@@ -23,7 +23,7 @@ var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
 var linkifyMatrix = require('../../../linkify-matrix');
 var sdk = require('../../../index');
-import {emojifyText} from '../../../HtmlUtils';
+import EmojiText from '../../views/elements/EmojiText';
 
 linkifyMatrix(linkify);
 
@@ -202,10 +202,9 @@ module.exports = React.createClass({
         switch (content.msgtype) {
             case "m.emote":
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
-                const nameHtml = emojifyText(name);
                 return (
                     <span ref="content" className="mx_MEmoteBody mx_EventTile_content">
-                        * <span dangerouslySetInnerHTML={nameHtml} /> { body }
+                        * <EmojiText>{name}</EmojiText> { body }
                         { widgets }
                     </span>
                 );
