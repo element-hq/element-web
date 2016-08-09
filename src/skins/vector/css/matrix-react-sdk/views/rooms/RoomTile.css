@@ -15,18 +15,25 @@ limitations under the License.
 */
 
 .mx_RoomTile {
+    position: relative;
     cursor: pointer;
-    /* This fixes wrapping of long room names, but breaks drag & drop previews */
-    /* display: table-row; */
     font-size: 13px;
     display: block;
+    height: 34px;
+}
+
+.mx_RoomTile_nameContainer {
+    display: inline-block;
+    width: 180px;
+    height: 24px;
 }
 
 .mx_RoomTile_avatar {
     display: inline-block;
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     padding-left: 18px;
+    padding-right: 6px;
     width: 24px;
     height: 24px;
     vertical-align: middle;
@@ -34,13 +41,17 @@ limitations under the License.
 
 .mx_RoomTile_name {
     display: inline-block;
-    width: 100px;
+    position: relative;
+    width: 165px;
     vertical-align: middle;
-    overflow: hidden;
-    word-break: break-word;
-    padding-left: 11px;
-    padding-right: 15px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 2px;
+    padding-bottom: 3px;
     color: rgba(69, 69, 69, 0.8);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .mx_RoomTile_ellipsis .mx_RoomTile_name {
@@ -53,22 +64,26 @@ limitations under the License.
 */
 }
 
+.collapsed .mx_RoomTile_nameContainer {
+    height: 0;
+}
+
 .collapsed .mx_RoomTile_name {
     display: none;
 }
 
-.collapsed .mx_RoomTile {
-    height: 36px;
-}
-
 .collapsed .mx_RoomTile_badge {
-    top: -40px;
-    left: 30px;
+    top: -2px;
     min-width: 12px;
     height: 16px;
     border-radius: 16px;
     padding: 0px 4px 0px 4px;
     z-index: 200;
+}
+
+/* Hide the bottom of speech bubble */
+.collapsed .mx_RoomTile_highlight .mx_RoomTile_badge:after {
+    display: none;
 }
 
 /* This is the bottom of the speech bubble */
@@ -78,37 +93,37 @@ limitations under the License.
     display: block;
     width: 0;
     height: 0;
-    margin-left: 4px;
+    margin-left: 6px;
     border-top: 8px solid #ff0064;
     border-right: 10px solid transparent;
 }
 
-/* Because the specificity of this and the above ".mx_RoomTile_highlight .mx_RoomTile_badge:after"
-style are the same, this style needs to be AFTER it to take effect when matched */
-.collapsed .mx_RoomTile_badge:after {
-    display: none;
-}
-
 .mx_RoomTile_badge {
     display: inline-block;
-    min-width: 14px;
-    height: 18px;
-    position: relative;
-    left: 8px;
-    top: 2px;
-    border-radius: 18px;
+    min-width: 19px;
+    height: 17px;
+    position: absolute;
+    right: 8px; /*gutter */
+    top: 9px;
+    border-radius: 14px;
     color: #fff;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 11px;
     text-align: center;
-    padding-top: 2px;
+    padding-top: 1px;
     padding-left: 4px;
     padding-right: 4px;
 }
 
-.mx_RoomTile_badge:hover {
+.mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton,
+.mx_RoomTile.mx_RoomTile_menu .mx_RoomTile_badge {
     letter-spacing: 0.1em;
     opacity: 1;
+}
+
+.mx_RoomTile.mx_RoomTile_noBadges .mx_RoomTile_badge.mx_RoomTile_badgeButton,
+.mx_RoomTile.mx_RoomTile_menu.mx_RoomTile_noBadges .mx_RoomTile_badge {
+    background-color: rgb(214, 214, 214);
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
@@ -119,24 +134,16 @@ style are the same, this style needs to be AFTER it to take effect when matched 
     background-color: #ff0064;
 }
 
-.mx_RoomTile_badge_no_unread {
-    background-color: rgb(214, 214, 214);
-    opacity: 0;
-}
-
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
-    font-weight: bold;
+    font-weight: 800;
 }
 
-.mx_RoomTile_selected .mx_RoomTile_name span {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding: 4px;
-    margin-top: -4px;
-    margin-bottom: -4px;
-    border-radius: 2px;
+.mx_RoomTile_selected {
     background-color: rgba(118,207,166,0.2);
+}
+
+.mx_RoomTile .mx_RoomTile_name.mx_RoomTile_badgeShown {
+    width: 140px;
 }
 
 .mx_RoomTile_arrow {

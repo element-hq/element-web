@@ -52,6 +52,10 @@ a:visited {
     color: #76cfa6;
 }
 
+input[type=text].error, input[type=password].error {
+    border: 1px solid red;
+}
+
 input[type=text]:focus, textarea:focus {
     border: 1px solid #76CFA6;
     outline: none;
@@ -80,53 +84,27 @@ input[type=text]:focus, textarea:focus {
     position: absolute;
 }
 
-/* hack to avoid accidental click-throughs if you miss the narrow scrollbar */
+/* Expand thumbs on hoverover */
+.gm-scrollbar {
+    border-radius: 5px ! important;
+}
 .gm-scrollbar.-vertical {
-    border-left: 6px solid transparent;
+    width: 6px;
+    transition: width 120ms ease-out ! important;
 }
-
-.mx_ContextualMenu_background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 1.0;
-    z-index: 2000;
+.gm-scrollbar.-vertical:hover,
+.gm-scrollbar.-vertical:active {
+    width: 8px;
+    transition: width 120ms ease-out ! important;
 }
-
-.mx_ContextualMenu {
-    border: 1px solid #a4a4a4;
-    border-radius: 8px;
-    background-color: #fff;
-    color: #747474;
-    position: fixed;
-    z-index: 2001;
-    padding: 6px;
+.gm-scrollbar.-horizontal {
+    height: 6px;
+    transition: height 120ms ease-out ! important;
 }
-
-.mx_ContextualMenu_chevron_right {
-    padding: 12px;
-    position: absolute;
-    right: -21px;
-    top: 0px;
-}
-
-.mx_ContextualMenu_chevron_left {
-    padding: 12px;
-    position: absolute;
-    left: -21px;
-    top: 0px;
-}
-
-.mx_ContextualMenu_field {
-    padding: 3px 6px 3px 6px;
-    cursor: pointer;
-}
-
-.mx_ContextualMenu_spinner {
-    display: block;
-    margin: 0 auto;
+.gm-scrollbar.-horizontal:hover,
+.gm-scrollbar.-horizontal:active {
+    height: 8px;
+    transition: height 120ms ease-out ! important;
 }
 
 .mx_Dialog_wrapper {
@@ -233,6 +211,17 @@ input[type=text]:focus, textarea:focus {
     background-color: #76cfa6;
 }
 
+.mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger {
+    background-color: #ff0064;
+    border: solid 1px #ff0064;
+}
+
+.mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled {
+    background-color: #777777;
+    border: solid 1px #777777;
+    opacity: 0.7;
+}
+
 .mx_Dialog_title {
     min-height: 16px;
     padding-top: 40px;
@@ -240,6 +229,10 @@ input[type=text]:focus, textarea:focus {
     font-size: 22px;
     line-height: 1.4;
     color: #454545;
+}
+
+.mx_Dialog_title.danger {
+    color: #ff0064;
 }
 
 .mx_TextInputDialog_label {
@@ -269,4 +262,16 @@ input[type=text]:focus, textarea:focus {
 ::selection {
     background-color: #76CFA6;
     color: white;
+}
+
+/** green button with rounded corners */
+.textButton {
+    color: #fff;
+    background-color: #76cfa6;
+    border-radius: 17px;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    cursor: pointer;
+    display: inline;
 }

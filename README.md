@@ -6,9 +6,12 @@ Vector is a Matrix web client built using the Matrix React SDK (https://github.c
 Getting Started
 ===============
 
-Vector is a modular webapp built with modern ES6 and requires and npm build system to build.
-Instructions for building are below, but building from source shouldn't be necessary
-for simple deployments.
+The easiest way to test Vector is to just use the hosted copy at https://vector.im/beta.
+The develop branch is continuously deployed by Jenkins at https://vector.im/develop for
+those who like living dangerously. 
+
+To host your own copy of Vector, the quickest bet is to use a pre-built released version
+of Vector:
 
 1. Download the latest version from https://vector.im/packages/
 1. Untar the tarball on your web server
@@ -20,7 +23,7 @@ for simple deployments.
 Building From Source
 ====================
 
-If you do wish to build vector from source:
+Vector is a modular webapp built with modern ES6 and requires a npm build system to build.
 
 1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
 1. Clone the repo: `git clone https://github.com/vector-im/vector-web.git`
@@ -50,8 +53,32 @@ You can configure the app by copying `vector/config.sample.json` to
 1. `default_hs_url` is the default home server url.
 1. `default_is_url` is the default identity server url (this is the server used
    for verifying third party identifiers like email addresses). If this is blank,
-   registering with an email address or adding an email address to your account
-   will not work.
+   registering with an email address, adding an email address to your account,
+   or inviting users via email address will not work.  Matrix identity servers are
+   very simple web services which map third party identifiers (currently only email 
+   addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
+   for more details.  Currently the only public matrix identity servers are https://matrix.org
+   and https://vector.im.  In future identity servers will be decentralised.
+
+
+Running as a Desktop app
+========================
+
+In future we'll do an official distribution of Vector as an desktop app.  Meanwhile,
+there are a few options:
+
+@asdf:matrix.org points out that you can use nativefier and it just works(tm):
+
+```
+sudo npm install nativefier -g
+nativefier https://vector.im/beta/
+```
+
+krisa has a dedicated electron project at https://github.com/krisak/vector-electron-desktop
+(although you should swap out the 'vector' folder for the latest vector tarball you want to run)
+
+There's also a (much) older electron distribution at https://github.com/stevenhammerton/vector-desktop
+
 
 Development
 ===========

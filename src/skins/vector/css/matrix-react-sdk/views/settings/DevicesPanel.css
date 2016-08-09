@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,29 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomSubList {
+.mx_DevicesPanel {
     display: table;
     table-layout: fixed;
-    width: 100%;
+    width: 880px;
+    border-spacing: 2px;
 }
 
-.mx_RoomSubList_label {
-    text-transform: uppercase;
-    color: #3d3b39;
-    font-weight: 600;
-    font-size: 13px;
-    padding-left: 16px; /* gutter */
-    padding-right: 16px; /* gutter */
-    margin-top: 8px;
-    margin-bottom: 4px;
-    cursor: pointer;
+.mx_DevicesPanel_header {
+    display: table-header-group;
+    font-weight: bold;
 }
 
-.mx_RoomSubList_chevron {
-    padding-left: 4px;
-    pointer-events: none;
+.mx_DevicesPanel_header > div {
+    display: table-cell;
 }
 
-.collapsed .mx_RoomSubList_chevron  {
-    padding-left: 12px;
+.mx_DevicesPanel_header .mx_DevicesPanel_deviceLastSeen {
+    width: 30%;
+}
+
+.mx_DevicesPanel_header .mx_DevicesPanel_deviceButtons {
+    width: 20%;
+}
+
+.mx_DevicesPanel_device {
+    display: table-row;
+}
+
+.mx_DevicesPanel_device > div {
+    display: table-cell;
 }
