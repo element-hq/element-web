@@ -6,5 +6,6 @@
 /packages/
 /vector/bundle.*
 /vector/components.css
+/vector/emojione/
 /vector/config.json
 .DS_Store

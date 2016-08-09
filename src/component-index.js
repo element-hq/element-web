@@ -44,7 +44,6 @@ module.exports.components['views.login.VectorLoginFooter'] = require('./componen
 module.exports.components['views.login.VectorLoginHeader'] = require('./components/views/login/VectorLoginHeader');
 module.exports.components['views.messages.DateSeparator'] = require('./components/views/messages/DateSeparator');
 module.exports.components['views.messages.MessageTimestamp'] = require('./components/views/messages/MessageTimestamp');
-module.exports.components['views.messages.SenderProfile'] = require('./components/views/messages/SenderProfile');
 module.exports.components['views.rooms.BottomLeftMenuTile'] = require('./components/views/rooms/BottomLeftMenuTile');
 module.exports.components['views.rooms.MessageContextMenu'] = require('./components/views/rooms/MessageContextMenu');
 module.exports.components['views.rooms.RoomDNDView'] = require('./components/views/rooms/RoomDNDView');
