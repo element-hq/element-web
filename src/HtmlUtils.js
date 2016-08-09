@@ -24,7 +24,38 @@ import escape from 'lodash/escape';
 import emojione from 'emojione';
 import classNames from 'classnames';
 
+emojione.imagePathSVG = 'emojione/svg/';
+emojione.imageType = 'svg';
+
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
+
+/* modified from https://github.com/Ranks/emojione/blob/master/lib/js/emojione.js
+ * because we want to include emoji shortnames in title text
+ */
+export function unicodeToImage(str) {
+    let replaceWith, unicode, alt;
+    const mappedUnicode = emojione.mapUnicodeToShort();
+
+    str = str.replace(emojione.regUnicode, function(unicodeChar) {
+        if ( (typeof unicodeChar === 'undefined') || (unicodeChar === '') || (!(unicodeChar in emojione.jsEscapeMap)) ) {
+            // if the unicodeChar doesnt exist just return the entire match
+            return unicodeChar;
+        }
+        else {
+            // get the unicode codepoint from the actual char
+            unicode = emojione.jsEscapeMap[unicodeChar];
+
+            // depending on the settings, we'll either add the native unicode as the alt tag, otherwise the shortname
+            alt = (emojione.unicodeAlt) ? emojione.convert(unicode.toUpperCase()) : mappedUnicode[unicode];
+            const title = mappedUnicode[unicode];
+
+            replaceWith = `<img class="emojione" title="${title}" alt="${alt}" src="${emojione.imagePathSVG}${unicode}.svg${emojione.cacheBustParam}"/>`;
+            return replaceWith;
+        }
+    });
+
+    return str;
+};
 
 var sanitizeHtmlParams = {
     allowedTags: [
@@ -211,8 +242,7 @@ module.exports = {
                 };
             }
             safeBody = sanitizeHtml(body, sanitizeHtmlParams);
-            emojione.imageType = 'svg';
-            safeBody = emojione.unicodeToImage(safeBody);
+            safeBody = unicodeToImage(safeBody);
         }
         finally {
             delete sanitizeHtmlParams.textFilter;
@@ -239,7 +269,6 @@ module.exports = {
     },
 
     emojifyText: function(text) {
-        emojione.imageType = 'svg';
         return {
             __html: emojione.unicodeToImage(escape(text)),
         };
