@@ -26,6 +26,7 @@ var UserActivity = require("../../UserActivity");
 var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
 
+var SessionLoader = require("./login/SessionLoader");
 var Login = require("./login/Login");
 var Registration = require("./login/Registration");
 var PostRegistration = require("./login/PostRegistration");
@@ -65,6 +66,9 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         var s = {
+            loading: true,
+            screen: undefined,
+
             // If we are viewing a room by alias, this contains the alias
             currentRoomAlias: null,
 
@@ -72,7 +76,7 @@ module.exports = React.createClass({
             // in the case where we view a room by ID or by RoomView when it resolves
             // what ID an alias points at.
             currentRoomId: null,
-            logged_in: !!(MatrixClientPeg.get() && MatrixClientPeg.get().credentials),
+            logged_in: false,
             collapse_lhs: false,
             collapse_rhs: false,
             ready: false,
@@ -80,15 +84,6 @@ module.exports = React.createClass({
             sideOpacity: 1.0,
             middleOpacity: 1.0,
         };
-        if (s.logged_in) {
-            if (MatrixClientPeg.get().getRooms().length) {
-                s.page_type = this.PageTypes.RoomView;
-            } else {
-                // we don't need to default to the directoy here
-                // as we'll go there anyway after syncing
-                // s.page_type = this.PageTypes.RoomDirectory;
-            }
-        }
         return s;
     },
 
@@ -150,61 +145,20 @@ module.exports = React.createClass({
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
+
+        // register our dispatcher listener here rather than in
+        // componentDidMount so that we hear about any actions raised during
+        // the loading process.
+        this.dispatcherRef = dis.register(this.onAction);
     },
 
     componentDidMount: function() {
-        let clientStarted = false;
-
-        this._autoRegisterAsGuest = false;
-        if (this.props.enableGuest) {
-            if (!this.getCurrentHsUrl()) {
-                console.error("Cannot enable guest access: can't determine HS URL to use");
-            }
-            else if (this.props.startingQueryParams.client_secret && this.props.startingQueryParams.sid) {
-                console.log("Not registering as guest; registration.");
-                this._autoRegisterAsGuest = false;
-            }
-            else if (this.props.startingQueryParams.guest_user_id &&
-                this.props.startingQueryParams.guest_access_token)
-            {
-                this._autoRegisterAsGuest = false;
-                Lifecycle.setLoggedIn({
-                    userId: this.props.startingQueryParams.guest_user_id,
-                    accessToken: this.props.startingQueryParams.guest_access_token,
-                    homeserverUrl: this.getDefaultHsUrl(),
-                    identityServerUrl: this.getDefaultIsUrl(),
-                    guest: true
-                });
-                clientStarted = true;
-            }
-            else {
-                this._autoRegisterAsGuest = true;
-            }
-        }
-
-        this.dispatcherRef = dis.register(this.onAction);
-        if (this.state.logged_in) {
-            // Don't auto-register as a guest. This applies if you refresh the page on a
-            // logged in client THEN hit the Sign Out button.
-            this._autoRegisterAsGuest = false;
-            if (!clientStarted) {
-                Lifecycle.startMatrixClient();
-            }
-        }
         this.focusComposer = false;
         // scrollStateMap is a map from room id to the scroll state returned by
         // RoomView.getScrollState()
         this.scrollStateMap = {};
         document.addEventListener("keydown", this.onKeyDown);
         window.addEventListener("focus", this.onFocus);
-
-        if (this.state.logged_in) {
-            this.notifyNewScreen('');
-        } else if (this._autoRegisterAsGuest) {
-            this._registerAsGuest();
-        } else {
-            this.notifyNewScreen('login');
-        }
 
         // this can technically be done anywhere but doing this here keeps all
         // the routing url path logic together.
@@ -243,7 +197,6 @@ module.exports = React.createClass({
         MatrixClientPeg.replaceUsingUrls(hsUrl, isUrl);
         MatrixClientPeg.get().registerGuest().done(function(creds) {
             console.log("Registered as guest: %s", creds.user_id);
-            self._setAutoRegisterAsGuest(false);
             Lifecycle.setLoggedIn({
                 userId: creds.user_id,
                 accessToken: creds.access_token,
@@ -260,13 +213,7 @@ module.exports = React.createClass({
                 });
             }
             console.error("Failed to register as guest: " + err + " " + err.data);
-            self._setAutoRegisterAsGuest(false);
         });
-    },
-
-    _setAutoRegisterAsGuest: function(shouldAutoRegister) {
-        this._autoRegisterAsGuest = shouldAutoRegister;
-        this.forceUpdate();
     },
 
     onAction: function(payload) {
@@ -479,6 +426,9 @@ module.exports = React.createClass({
             case 'will_start_client':
                 this._onWillStartClient();
                 break;
+            case 'load_completed':
+                this._onLoadCompleted();
+                break;
         }
     },
 
@@ -587,6 +537,13 @@ module.exports = React.createClass({
         }
         var state = roomview.getScrollState();
         this.scrollStateMap[roomId] = state;
+    },
+
+    /**
+     * Called when the sessionloader has finished
+     */
+    _onLoadCompleted: function() {
+        this.setState({loading: false});
     },
 
     /**
@@ -1029,8 +986,26 @@ module.exports = React.createClass({
 
         // work out the HS URL prompts we should show for
 
+        // console.log("rendering; loading="+this.state.loading+"; screen="+this.state.screen +
+        //             "; logged_in="+this.state.logged_in+"; ready="+this.state.ready);
+
+        if (this.state.loading) {
+            return (
+                <SessionLoader
+                    queryParams={this.props.startingQueryParams}
+                    enableGuest={this.props.enableGuest}
+                    hsUrl={this.getCurrentHsUrl()}
+                    isUrl={this.getCurrentIsUrl()}
+                    onLoggedIn={Lifecycle.setLoggedIn}
+
+                    // stuff this through the dispatcher so that it happens
+                    // after the on_logged_in action.
+                    onComplete={()=>{dis.dispatch({action: 'load_completed'});}}
+                />
+            );
+        }
         // needs to be before normal PageTypes as you are logged in technically
-        if (this.state.screen == 'post_registration') {
+        else if (this.state.screen == 'post_registration') {
             return (
                 <PostRegistration
                     onComplete={this.onFinishPostRegistration} />
@@ -1101,20 +1076,15 @@ module.exports = React.createClass({
                     </div>
                 </div>
             );
-        } else if (this.state.logged_in || (!this.state.logged_in && this._autoRegisterAsGuest)) {
+        } else if (this.state.logged_in) {
+            // we think we are logged in, but are still waiting for the /sync to complete
             var Spinner = sdk.getComponent('elements.Spinner');
-            var logoutLink;
-            if (this.state.logged_in) {
-                logoutLink = (
-                    <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>
-                    Logout
-                    </a>
-                );
-            }
             return (
                 <div className="mx_MatrixChat_splash">
                     <Spinner />
-                    {logoutLink}
+                    <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>
+                    Logout
+                    </a>
                 </div>
             );
         } else if (this.state.screen == 'register') {

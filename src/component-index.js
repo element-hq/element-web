@@ -39,6 +39,7 @@ module.exports.components['structures.login.ForgotPassword'] = require('./compon
 module.exports.components['structures.login.Login'] = require('./components/structures/login/Login');
 module.exports.components['structures.login.PostRegistration'] = require('./components/structures/login/PostRegistration');
 module.exports.components['structures.login.Registration'] = require('./components/structures/login/Registration');
+module.exports.components['structures.login.SessionLoader'] = require('./components/structures/login/SessionLoader');
 module.exports.components['views.avatars.BaseAvatar'] = require('./components/views/avatars/BaseAvatar');
 module.exports.components['views.avatars.MemberAvatar'] = require('./components/views/avatars/MemberAvatar');
 module.exports.components['views.avatars.RoomAvatar'] = require('./components/views/avatars/RoomAvatar');
