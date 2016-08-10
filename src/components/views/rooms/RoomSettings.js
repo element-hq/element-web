@@ -620,19 +620,25 @@ module.exports = React.createClass({
 
         var integrations_section;
         if (UserSettingsStore.isFeatureEnabled("integration_management")) {
+            let integrations_body;
+
             if (this.state.scalar_token) {
-                integrations_section = (
+                integrations_body = (
                     <div className="mx_RoomSettings_settings">
                         <a href="#" onClick={ this.onManageIntegrations }>Manage integrations</a>
                     </div>
                 );
             } else if (this.state.scalar_error) {
-                integrations_section = <div className="error">
+                integrations_body = <div className="error">
                     Unable to contact integrations server
                 </div>;
             } else {
-                integrations_section = <Loader />;
+                integrations_body = <Loader />;
             }
+            integrations_section = <div>
+                <h3>Integrations</h3>
+                {integrations_body}
+            </div>;
         }
 
         return (
@@ -719,7 +725,6 @@ module.exports = React.createClass({
                     <ColorSettings ref="color_settings" room={this.props.room} />
                 </div>
 
-                <h3>Integrations</h3>
                 { integrations_section }
 
                 <a id="addresses"/>
