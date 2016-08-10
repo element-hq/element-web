@@ -144,7 +144,7 @@ module.exports = React.createClass({
 
     onAvatarClicked: function(e) {
         // Only allow none guests to access the context menu
-        if (!MatrixClientPeg.get().isGuest()) {
+        if (!MatrixClientPeg.get().isGuest() && !this.props.collapsed) {
 
             // If the badge is clicked, then no longer show tooltip
             if (this.props.collapsed) {
@@ -163,13 +163,13 @@ module.exports = React.createClass({
                 top: y,
                 room: this.props.room,
                 onFinished: function() {
-                    //self.setState({ roomTagMenu: false });
+                    self.setState({ roomTagMenu: false });
                 }
             });
-            //this.setState({ roomTagMenu: true });
+            this.setState({ roomTagMenu: true });
+            // Prevent the RoomTile onClick event firing as well
+            e.stopPropagation();
         }
-        // Prevent the RoomTile onClick event firing as well
-        e.stopPropagation();
     },
 
     render: function() {
@@ -193,6 +193,11 @@ module.exports = React.createClass({
         var avatarClasses = classNames({
             'mx_RoomTile_avatar': true,
         });
+
+        var avatarContainerClasses = classNames({
+            'mx_RoomTile_avatar_container': true,
+            'mx_RoomTile_avatar_roomTagMenu': this.state.roomTagMenu,
+        })
 
         var badgeClasses = classNames({
             'mx_RoomTile_badge': true,
@@ -258,7 +263,11 @@ module.exports = React.createClass({
         return connectDragSource(connectDropTarget(
             <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className={avatarClasses}>
-                    <RoomAvatar room={this.props.room} onClick={this.onAvatarClicked} width={24} height={24} />
+                    <div className="mx_RoomTile_avatar_menu" onClick={this.onAvatarClicked}>
+                        <div className={avatarContainerClasses}>
+                            <RoomAvatar room={this.props.room} width={24} height={24} />
+                        </div>
+                    </div>
                 </div>
                 <div className="mx_RoomTile_nameContainer">
                     { label }
