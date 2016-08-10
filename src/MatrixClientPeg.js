@@ -97,32 +97,7 @@ class MatrixClientPeg {
     }
 
     _replaceClient(hs_url, is_url, user_id, access_token, isGuest) {
-        if (localStorage) {
-            try {
-                localStorage.clear();
-            } catch (e) {
-                console.warn("Error clearing local storage", e);
-            }
-        }
         this._createClient(hs_url, is_url, user_id, access_token, isGuest);
-
-        if (localStorage) {
-            try {
-                localStorage.setItem("mx_hs_url", hs_url);
-                localStorage.setItem("mx_is_url", is_url);
-
-                if (user_id !== undefined && access_token !== undefined) {
-                    localStorage.setItem("mx_user_id", user_id);
-                    localStorage.setItem("mx_access_token", access_token);
-                    localStorage.setItem("mx_is_guest", JSON.stringify(isGuest));
-                    console.log("Session persisted for %s", user_id);
-                }
-            } catch (e) {
-                console.warn("Error using local storage: can't persist session!", e);
-            }
-        } else {
-            console.warn("No local storage available: can't persist session!");
-        }
     }
 
     getCredentials(): MatrixClientCreds {
