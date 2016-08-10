@@ -791,11 +791,10 @@ module.exports = React.createClass({
             // we can't view a room unless we're logged in
             // (a guest account is fine)
             if (!this.state.logged_in) {
+                // we may still be loading (ie, trying to register a guest
+                // session); otherwise we're (probably) already showing a login
+                // screen. Either way, we'll show the room once the client starts.
                 this.starting_room_alias_payload = payload;
-                // Login is the default screen, so we'd do this anyway,
-                // but this will set the URL bar appropriately.
-                dis.dispatch({ action: 'start_login' });
-                return;
             } else {
                 dis.dispatch(payload);
             }
