@@ -114,11 +114,21 @@ module.exports = React.createClass({
     },
 
     _onClickLeave: function() {
-        // Leave room - tag room as 'Archive'?
+        // Leave room
+        dis.dispatch({
+            action: 'leave_room',
+            room_id: this.props.room.roomId,
+        });
+
+        // Close the context menu
+        if (this.props.onFinished) {
+            this.props.onFinished();
+        };
     },
 
     render: function() {
-        var cli = MatrixClientPeg.get();
+        var myUserId = MatrixClientPeg.get().credentials.userId;
+        var myMember = this.props.room.getMember(myUserId);
 
         var favouriteClasses = classNames({
             'mx_RoomTagContextMenu_field': true,
@@ -151,7 +161,7 @@ module.exports = React.createClass({
                     Low Priority
                 </div>
                 <hr className="mx_RoomTagContextMenu_separator" />
-                <div className={ leaveClasses } onClick={this._onClickLeave} >
+                <div className={ leaveClasses } onClick={(myMember && myMember.membership === "join") ? this._onClickLeave : null} >
                     <img className="mx_RoomTagContextMenu_icon" src="img/icon_context_delete.svg" width="15" height="15" />
                     Leave
                 </div>

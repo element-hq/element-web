@@ -19,23 +19,23 @@ limitations under the License.
     cursor: pointer;
     font-size: 13px;
     display: block;
-    height: 34px;
+    height: 35px;
 }
 
 .mx_RoomTile_nameContainer {
     display: inline-block;
     width: 180px;
-    height: 24px;
+    height: 25px;
 }
 
 .mx_RoomTile_avatar {
     display: inline-block;
     padding-top: 5px;
     padding-bottom: 5px;
-    padding-left: 18px;
+    padding-left: 16px;
     padding-right: 6px;
-    width: 24px;
-    height: 24px;
+    width: 25px;
+    height: 25px;
     vertical-align: middle;
 }
 
@@ -47,9 +47,9 @@ limitations under the License.
     border-radius: 40px;
     background-image: url("img/icons_ellipsis.svg");
     background-size: 25px;
-    left: 17px;
-    width: 24px;
-    height: 24px;
+    left: 16px;
+    width: 25px;
+    height: 25px;
     z-index: 4;
 }
 
@@ -61,8 +61,8 @@ limitations under the License.
     border-radius: 40px;
     background: #4A4A4A;
     top: 5px;
-    width: 24px;
-    height: 24px;
+    width: 25px;
+    height: 25px;
     opacity: 0.6;
     z-index: 2;
 }
