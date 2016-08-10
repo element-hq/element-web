@@ -165,15 +165,13 @@ export function setLoggedIn(credentials) {
     // persist the session
     if (localStorage) {
         try {
-            localStorage.setItem("mx_hs_url", hs_url);
-            localStorage.setItem("mx_is_url", is_url);
+            localStorage.setItem("mx_hs_url", credentials.homseserverUrl);
+            localStorage.setItem("mx_is_url", credentials.identityServerUrl);
 
-            if (user_id !== undefined && access_token !== undefined) {
-                localStorage.setItem("mx_user_id", user_id);
-                localStorage.setItem("mx_access_token", access_token);
-                localStorage.setItem("mx_is_guest", JSON.stringify(isGuest));
-                console.log("Session persisted for %s", user_id);
-            }
+            localStorage.setItem("mx_user_id", credentials.userId);
+            localStorage.setItem("mx_access_token", credentials.accessToken);
+            localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
+            console.log("Session persisted for %s", credentials.userId);
         } catch (e) {
             console.warn("Error using local storage: can't persist session!", e);
         }
