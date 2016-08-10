@@ -271,13 +271,13 @@ module.exports = React.createClass({
                 </div>;
         }
 
-        var leave_button;
-        if (this.props.onLeaveClick) {
-            leave_button =
-                <div className="mx_RoomHeader_button" onClick={this.props.onLeaveClick} title="Leave room">
-                    <TintableSvg src="img/leave.svg" width="26" height="20"/>
-                </div>;
-        }
+//        var leave_button;
+//        if (this.props.onLeaveClick) {
+//            leave_button =
+//                <div className="mx_RoomHeader_button" onClick={this.props.onLeaveClick} title="Leave room">
+//                    <TintableSvg src="img/leave.svg" width="26" height="20"/>
+//                </div>;
+//        }
 
         var forget_button;
         if (this.props.onForgetClick) {
@@ -298,7 +298,6 @@ module.exports = React.createClass({
                 <div className="mx_RoomHeader_rightRow">
                     { settings_button }
                     { forget_button }
-                    { leave_button }
                     <div className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
                         <TintableSvg src="img/icons-search.svg" width="35" height="35"/>
                     </div>
