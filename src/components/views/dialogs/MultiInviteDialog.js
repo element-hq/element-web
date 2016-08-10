@@ -28,8 +28,8 @@ export default class MultiInviteDialog extends React.Component {
 
         this.state = {
             busy: false,
-            completionStates: [], // State of each address (invited or error)
-            errorTexts: [], // Textual error per address
+            completionStates: {}, // State of each address (invited or error)
+            errorTexts: {}, // Textual error per address
             done: false,
         };
         for (let i = 0; i < this.props.inputs.length; ++i) {
@@ -114,16 +114,19 @@ export default class MultiInviteDialog extends React.Component {
     }
 
     _getProgressIndicator() {
-        const numErrors = this.state.completionStates.filter((s) => {
-            return s == 'error';
-        }).length;
+        let numErrors = 0;
+        for (const k of Object.keys(this.state.completionStates)) {
+            if (this.state.completionStates[k] == 'error') {
+                ++numErrors;
+            }
+        }
         let errorText;
         if (numErrors > 0) {
             const plural = numErrors > 1 ? 's' : '';
             errorText = <span className="error">({numErrors} error{plural})</span>
         }
         return <span>
-            {this.state.completionStates.length} / {this.props.inputs.length} {errorText}
+            {Object.keys(this.state.completionStates).length} / {this.props.inputs.length} {errorText}
         </span>;
     }
 
