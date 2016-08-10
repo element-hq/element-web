@@ -24,6 +24,7 @@ var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var rate_limited_func = require('../../../ratelimitedfunc');
 var CallHandler = require("../../../CallHandler");
+var Invite = require("../../../Invite");
 
 var INITIAL_LOAD_NUM_MEMBERS = 30;
 var SHARE_HISTORY_WARNING =
@@ -191,22 +192,20 @@ module.exports = React.createClass({
 
         // email addresses and user IDs do not allow space, comma, semicolon so split
         // on them for bulk inviting.
-        var separators =[ ";", " ", "," ];
-        for (var i = 0; i < separators.length; i++) {
-            if (inputText.indexOf(separators[i]) >= 0) {
-                var inputs = inputText.split(separators[i]);
-                inputs.forEach(function(input) {
-                    self.onInvite(input);
-                });
-                return;
+        // '+' here will treat multiple consecutive separators as one separator, so
+        // ', ' separators will also do the right thing.
+        const inputs = inputText.split(/[, ;]+/).filter((x) => {
+            return x.trim().length > 0;
+        });
+
+        let validInputs = 0;
+        for (const input of inputs) {
+            if (Invite.getAddressType(input) != null) {
+                ++validInputs;
             }
         }
 
-        var isEmailAddress = /^\S+@\S+\.\S+$/.test(inputText);
-
-        // sanity check the input for user IDs
-        if (!isEmailAddress && (inputText[0] !== '@' || inputText.indexOf(":") === -1)) {
-            console.error("Bad ID to invite: %s", inputText);
+        if (validInputs == 0) {
             Modal.createDialog(ErrorDialog, {
                 title: "Invite Error",
                 description: "Malformed ID. Should be an email address or a Matrix ID like '@localpart:domain'"
@@ -243,53 +242,55 @@ module.exports = React.createClass({
             inviteWarningDefer.resolve();
         }
 
-        var promise = inviteWarningDefer.promise;
-        if (isEmailAddress) {
-            promise = promise.then(function() {
-                 return MatrixClientPeg.get().inviteByEmail(self.props.roomId, inputText);
-            });
-        }
-        else {
-            promise = promise.then(function() {
-                return MatrixClientPeg.get().invite(self.props.roomId, inputText);
-            });
-        }
+        const promise = inviteWarningDefer.promise;
 
-        self.setState({
-            inviting: true
-        });
-        console.log(
-            "Invite %s to %s - isEmail=%s", inputText, this.props.roomId, isEmailAddress
-        );
-        promise.then(function(res) {
-            console.log("Invited %s", inputText);
-        }, function(err) {
-            if (err !== null) {
-                console.error("Failed to invite: %s", JSON.stringify(err));
-                if (err.errcode == 'M_FORBIDDEN') {
-                    Modal.createDialog(ErrorDialog, {
-                        title: "Unable to Invite",
-                        description: "You do not have permission to invite people to this room."
-                    });
-                } else {
-                    Modal.createDialog(ErrorDialog, {
-                        title: "Server error whilst inviting",
-                        description: err.message
-                    });
+        if (inputs.length == 1) {
+            // for a single address, we just send the invite
+            promise.then(() => {
+                return Invite.inviteToRoom(self.props.roomId, inputs[0]);
+            }).catch((err) => {
+                if (err !== null) {
+                    console.error("Failed to invite: %s", JSON.stringify(err));
+                    if (err.errcode == 'M_FORBIDDEN') {
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Unable to Invite",
+                            description: "You do not have permission to invite people to this room."
+                        });
+                    } else {
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Server error whilst inviting",
+                            description: err.message
+                        });
+                    }
                 }
-            }
-        }).finally(function() {
+                self.setState({
+                    inviting: false
+                });
+            }).finally(() => {
+                self.setState({
+                    inviting: false
+                });
+                // XXX: hacky focus on the invite box
+                setTimeout(function() {
+                    var inviteBox = document.getElementById("mx_SearchableEntityList_query");
+                    if (inviteBox) {
+                        inviteBox.focus();
+                    }
+                }, 0);
+            }).done();
             self.setState({
-                inviting: false
+                inviting: true
             });
-            // XXX: hacky focus on the invite box
-            setTimeout(function() {
-                var inviteBox = document.getElementById("mx_SearchableEntityList_query");
-                if (inviteBox) {
-                    inviteBox.focus();
-                }
-            }, 0);
-        });
+        } else {
+            // if there are several, display the confirmation/progress dialog
+            promise.done(() => {
+                const MultiInviteDialog = sdk.getComponent('views.dialogs.MultiInviteDialog');
+                Modal.createDialog(MultiInviteDialog, {
+                    roomId: this.props.roomId,
+                    inputs: inputs,
+                });
+            });
+        }
     },
 
     getMemberDict: function() {
