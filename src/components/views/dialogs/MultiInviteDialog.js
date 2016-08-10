@@ -25,6 +25,7 @@ export default class MultiInviteDialog extends React.Component {
 
         this._onCancel = this._onCancel.bind(this);
         this._startInviting = this._startInviting.bind(this);
+        this._canceled = false;
 
         this.state = {
             busy: false,
@@ -41,7 +42,12 @@ export default class MultiInviteDialog extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        this._unmounted = true;
+    }
+
     _onCancel() {
+        this._canceled = true;
         this.props.onFinished(false);
     }
 
@@ -54,6 +60,10 @@ export default class MultiInviteDialog extends React.Component {
     }
 
     _inviteMore(nextIndex) {
+        if (this._canceled) {
+            return;
+        }
+
         if (nextIndex == this.props.inputs.length) {
             this.setState({
                 busy: false,
@@ -80,12 +90,16 @@ export default class MultiInviteDialog extends React.Component {
         }
 
         inviteToRoom(this.props.roomId, input).then(() => {
+            if (this._unmounted) { return; }
+
             this.setState((s) => {
                 s.completionStates[nextIndex] = 'invited'
                 return s;
             });
             this._inviteMore(nextIndex + 1);
         }, (err) => {
+            if (this._unmounted) { return; }
+
             let errorText;
             let fatal = false;
             if (err.errcode == 'M_FORBIDDEN') {
@@ -155,6 +169,7 @@ export default class MultiInviteDialog extends React.Component {
         let controls = [];
         if (this.state.busy) {
             controls.push(<Spinner key="spinner" />);
+            controls.push(<button key="cancel" onClick={this._onCancel}>Cancel</button>);
             controls.push(<span key="progr">{this._getProgressIndicator()}</span>);
         } else if (this.state.done) {
             controls.push(
