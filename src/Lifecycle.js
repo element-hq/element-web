@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import q from 'q';
+
 import MatrixClientPeg from './MatrixClientPeg';
 import Notifier from './Notifier'
 import UserActivity from './UserActivity';
@@ -21,12 +23,111 @@ import Presence from './Presence';
 import dis from './dispatcher';
 
 /**
+ * Called at startup, to attempt to build a logged-in Matrix session. It tries
+ * a number of things:
+ *
+ * 0. if it looks like we are in the middle of a registration process, it does
+ *    nothing.
+ *
+ * 1. if we have a guest access token in the query params, it uses that.
+ *
+ * 2. if an access token is stored in local storage (from a previous session),
+ *    it uses that.
+ *
+ * 3. it attempts to auto-register as a guest user.
+ *
+ * If any of steps 1-3 are successful, it will call {setLoggedIn}, which in
+ * turn will raise on_logged_in and will_start_client events.
+ *
+ * It returns a promise which resolves when the above process completes.
+ *
+ * @param {object} opts.queryParams: string->string map of the query-parameters
+ *     extracted from the #-fragment of the starting URI.
+ *
+ * @param {boolean} opts.enableGuest: set to true to enable guest access tokens
+ *     and auto-guest registrations.
+ *
+ * @params {string} opts.hsUrl: homeserver URL. Only used if enableGuest is
+ *     true; defines the HS to register against.
+ *
+ * @params {string} opts.isUrl: homeserver URL. Only used if enableGuest is
+ *     true; defines the IS to use.
+ *
+ */
+export function loadSession(opts) {
+    const queryParams = opts.queryParams || {};
+    let enableGuest = opts.enableGuest || false;
+    const hsUrl = opts.hsUrl;
+    const isUrl = opts.isUrl;
+
+    if (queryParams.client_secret && queryParams.sid) {
+        // this happens during email validation: the email contains a link to the
+        // IS, which in turn redirects back to vector. We let MatrixChat create a
+        // Registration component which completes the next stage of registration.
+        console.log("Not registering as guest: registration already in progress.");
+        return q();
+    }
+
+    if (!hsUrl) {
+        console.warn("Cannot enable guest access: can't determine HS URL to use");
+        enableGuest = false;
+    }
+
+    if (enableGuest &&
+        queryParams.guest_user_id &&
+        queryParams.guest_access_token
+       ) {
+        console.log("Using guest access credentials");
+        setLoggedIn({
+            userId: queryParams.guest_user_id,
+            accessToken: queryParams.guest_access_token,
+            homeserverUrl: hsUrl,
+            identityServerUrl: isUrl,
+            guest: true,
+        });
+        return q();
+    }
+
+    if (MatrixClientPeg.get() && MatrixClientPeg.get().credentials) {
+        console.log("Using existing credentials");
+        setLoggedIn(MatrixClientPeg.getCredentials());
+        return q();
+    }
+
+    if (enableGuest) {
+        return _registerAsGuest(hsUrl, isUrl);
+    }
+
+    // fall back to login screen
+    return q();
+}
+
+function _registerAsGuest(hsUrl, isUrl) {
+    console.log("Doing guest login on %s", hsUrl);
+
+    MatrixClientPeg.replaceUsingUrls(hsUrl, isUrl);
+    return MatrixClientPeg.get().registerGuest().then((creds) => {
+        console.log("Registered as guest: %s", creds.user_id);
+        setLoggedIn({
+            userId: creds.user_id,
+            accessToken: creds.access_token,
+            homeserverUrl: hsUrl,
+            identityServerUrl: isUrl,
+            guest: true,
+        });
+    }, (err) => {
+        console.error("Failed to register as guest: " + err + " " + err.data);
+    });
+}
+
+
+/**
  * Transitions to a logged-in state using the given credentials
  * @param {MatrixClientCreds} credentials The credentials to use
  */
-function setLoggedIn(credentials) {
+export function setLoggedIn(credentials) {
     credentials.guest = Boolean(credentials.guest);
-    console.log("onLoggedIn => %s (guest=%s) hs=%s",
+    console.log("setLoggedIn => %s (guest=%s) hs=%s",
                 credentials.userId, credentials.guest,
                 credentials.homeserverUrl);
     MatrixClientPeg.replaceUsingCreds(credentials);
@@ -39,7 +140,7 @@ function setLoggedIn(credentials) {
 /**
  * Logs the current session out and transitions to the logged-out state
  */
-function logout() {
+export function logout() {
     if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions
         // Also we sometimes want to re-log in a guest session
@@ -67,7 +168,7 @@ function logout() {
  * Starts the matrix client and all other react-sdk services that
  * listen for events while a session is logged in.
  */
-function startMatrixClient() {
+export function startMatrixClient() {
     // dispatch this before starting the matrix client: it's used
     // to add listeners for the 'sync' event so otherwise we'd have
     // a race condition (and we need to dispatch synchronously for this
@@ -85,7 +186,7 @@ function startMatrixClient() {
  * Stops a running client and all related services, used after
  * a session has been logged out / ended.
  */
-function onLoggedOut() {
+export function onLoggedOut() {
     if (window.localStorage) {
         const hsUrl = window.localStorage.getItem("mx_hs_url");
         const isUrl = window.localStorage.getItem("mx_is_url");
@@ -112,7 +213,3 @@ function _stopMatrixClient() {
     MatrixClientPeg.get().removeAllListeners();
     MatrixClientPeg.unset();
 }
-
-module.exports = {
-    setLoggedIn, logout, startMatrixClient, onLoggedOut
-};

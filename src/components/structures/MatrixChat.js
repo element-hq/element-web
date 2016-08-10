@@ -26,7 +26,6 @@ var UserActivity = require("../../UserActivity");
 var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
 
-var SessionLoader = require("./login/SessionLoader");
 var Login = require("./login/Login");
 var Registration = require("./login/Registration");
 var PostRegistration = require("./login/PostRegistration");
@@ -145,14 +144,11 @@ module.exports = React.createClass({
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
-
-        // register our dispatcher listener here rather than in
-        // componentDidMount so that we hear about any actions raised during
-        // the loading process.
-        this.dispatcherRef = dis.register(this.onAction);
     },
 
     componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+
         this.focusComposer = false;
         // scrollStateMap is a map from room id to the scroll state returned by
         // RoomView.getScrollState()
@@ -171,6 +167,17 @@ module.exports = React.createClass({
 
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
+
+        Lifecycle.loadSession({
+            queryParams: this.props.startingQueryParams,
+            enableGuest: this.props.enableGuest,
+            hsUrl: this.getDefaultHsUrl(),
+            isUrl: this.getDefaultIsUrl(),
+        }).done(()=>{
+            // stuff this through the dispatcher so that it happens
+            // after the on_logged_in action.
+            dis.dispatch({action: 'load_completed'});
+        });
     },
 
     componentWillUnmount: function() {
@@ -990,18 +997,11 @@ module.exports = React.createClass({
         //             "; logged_in="+this.state.logged_in+"; ready="+this.state.ready);
 
         if (this.state.loading) {
+            var Spinner = sdk.getComponent('elements.Spinner');
             return (
-                <SessionLoader
-                    queryParams={this.props.startingQueryParams}
-                    enableGuest={this.props.enableGuest}
-                    hsUrl={this.getCurrentHsUrl()}
-                    isUrl={this.getCurrentIsUrl()}
-                    onLoggedIn={Lifecycle.setLoggedIn}
-
-                    // stuff this through the dispatcher so that it happens
-                    // after the on_logged_in action.
-                    onComplete={()=>{dis.dispatch({action: 'load_completed'});}}
-                />
+                <div className="mx_MatrixChat_splash">
+                    <Spinner />
+                </div>
             );
         }
         // needs to be before normal PageTypes as you are logged in technically
