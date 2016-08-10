@@ -142,10 +142,12 @@ module.exports = React.createClass({
             <div>
                 <div className={ favouriteClasses } onClick={this._onClickFavourite} >
                     <img className="mx_RoomTagContextMenu_icon" src="img/icon_context_fave.svg" width="15" height="15" />
+                    <img className="mx_RoomTagContextMenu_icon_set" src="img/icon_context_fave_on.svg" width="15" height="15" />
                     Favourite
                 </div>
                 <div className={ lowPriorityClasses } onClick={this._onClickLowPriority} >
                     <img className="mx_RoomTagContextMenu_icon" src="img/icon_context_low.svg" width="15" height="15" />
+                    <img className="mx_RoomTagContextMenu_icon_set" src="img/icon_context_low_on.svg" width="15" height="15" />
                     Low Priority
                 </div>
                 <hr className="mx_RoomTagContextMenu_separator" />

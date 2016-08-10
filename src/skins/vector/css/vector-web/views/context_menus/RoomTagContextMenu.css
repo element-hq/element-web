@@ -33,8 +33,18 @@ limitations under the License.
     color: #ff0064;
 }
 
+
+
 .mx_RoomTagContextMenu_field.mx_RoomTagContextMenu_fieldSet {
     font-weight: bold;
+}
+
+.mx_RoomTagContextMenu_field.mx_RoomTagContextMenu_fieldSet .mx_RoomTagContextMenu_icon {
+    display: none;
+}
+
+.mx_RoomTagContextMenu_field.mx_RoomTagContextMenu_fieldSet .mx_RoomTagContextMenu_icon_set {
+    display: inline-block;
 }
 
 .mx_RoomTagContextMenu_field.mx_RoomTagContextMenu_fieldDisabled {
@@ -44,6 +54,13 @@ limitations under the License.
 .mx_RoomTagContextMenu_icon {
     padding-right: 8px;
     padding-left: 4px;
+    display: inline-block
+}
+
+.mx_RoomTagContextMenu_icon_set {
+    padding-right: 8px;
+    padding-left: 4px;
+    display: none;
 }
 
 .mx_RoomTagContextMenu_separator {
