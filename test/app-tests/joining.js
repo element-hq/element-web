@@ -47,7 +47,7 @@ describe('joining a room', function () {
         var parentDiv;
         var httpBackend;
         var matrixChat;
-        
+
         beforeEach(function() {
             test_utils.beforeEach(this);
             httpBackend = new MockHttpBackend();
@@ -66,11 +66,11 @@ describe('joining a room', function () {
                 parentDiv = null;
             }
         });
-        
+
         it('should not get stuck at a spinner', function(done) {
             var ROOM_ALIAS = '#alias:localhost';
             var ROOM_ID = '!id:localhost';
-            
+
             httpBackend.when('PUT', '/presence/'+encodeURIComponent(USER_ID)+'/status')
                 .respond(200, {});
             httpBackend.when('GET', '/pushrules').respond(200, {});
@@ -80,14 +80,11 @@ describe('joining a room', function () {
             httpBackend.when('GET', '/directory/room/'+encodeURIComponent(ROOM_ALIAS)).respond(200, { room_id: ROOM_ID });
 
             // start with a logged-in client
-            peg.replaceUsingCreds({
-                homeserverUrl: HS_URL,
-                identityServerUrl: IS_URL,
-                userId: USER_ID,
-                accessToken: ACCESS_TOKEN,
-                guest: false,
-            });
-            
+            localStorage.setItem("mx_hs_url", HS_URL );
+            localStorage.setItem("mx_is_url", IS_URL );
+            localStorage.setItem("mx_access_token", ACCESS_TOKEN );
+            localStorage.setItem("mx_user_id", USER_ID);
+
             var mc = <MatrixChat config={{}}/>;
             matrixChat = ReactDOM.render(mc, parentDiv);
 
