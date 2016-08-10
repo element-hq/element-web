@@ -176,6 +176,39 @@ module.exports = React.createClass({
         });
     },
 
+    _doInvite(address) {
+        Invite.inviteToRoom(self.props.roomId, address).catch((err) => {
+            if (err !== null) {
+                console.error("Failed to invite: %s", JSON.stringify(err));
+                if (err.errcode == 'M_FORBIDDEN') {
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Unable to Invite",
+                        description: "You do not have permission to invite people to this room."
+                    });
+                } else {
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Server error whilst inviting",
+                        description: err.message
+                    });
+                }
+            }
+        }).finally(() => {
+            self.setState({
+                inviting: false
+            });
+            // XXX: hacky focus on the invite box
+            setTimeout(function() {
+                var inviteBox = document.getElementById("mx_SearchableEntityList_query");
+                if (inviteBox) {
+                    inviteBox.focus();
+                }
+            }, 0);
+        }).done();
+        self.setState({
+            inviting: true
+        });
+    }
+
     onInvite: function(inputText) {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
@@ -247,36 +280,7 @@ module.exports = React.createClass({
         if (inputs.length == 1) {
             // for a single address, we just send the invite
             promise.then(() => {
-                return Invite.inviteToRoom(self.props.roomId, inputs[0]);
-            }).catch((err) => {
-                if (err !== null) {
-                    console.error("Failed to invite: %s", JSON.stringify(err));
-                    if (err.errcode == 'M_FORBIDDEN') {
-                        Modal.createDialog(ErrorDialog, {
-                            title: "Unable to Invite",
-                            description: "You do not have permission to invite people to this room."
-                        });
-                    } else {
-                        Modal.createDialog(ErrorDialog, {
-                            title: "Server error whilst inviting",
-                            description: err.message
-                        });
-                    }
-                }
-            }).finally(() => {
-                self.setState({
-                    inviting: false
-                });
-                // XXX: hacky focus on the invite box
-                setTimeout(function() {
-                    var inviteBox = document.getElementById("mx_SearchableEntityList_query");
-                    if (inviteBox) {
-                        inviteBox.focus();
-                    }
-                }, 0);
-            }).done();
-            self.setState({
-                inviting: true
+                this.doInvite(inputs[0]);
             });
         } else {
             // if there are several, display the confirmation/progress dialog
