@@ -32,6 +32,8 @@ body {
     color: #454545;
     border: 0px;
     margin: 0px;
+    /* This should render the fonts the same accross browsers */
+    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 div.error {
