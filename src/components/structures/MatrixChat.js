@@ -1100,7 +1100,7 @@ module.exports = React.createClass({
                 <div className="mx_MatrixChat_wrapper">
                     {topBar}
                     <div className={bodyClasses}>
-                        <LeftPanel selectedRoom={this.state.currentRoomId} collapsed={this.state.collapse_lhs} opacity={this.state.sideOpacity}/>
+                        <LeftPanel selectedRoom={this.state.currentRoomId} collapsed={this.state.collapse_lhs || false} opacity={this.state.sideOpacity}/>
                         <main className="mx_MatrixChat_middlePanel">
                             {page_element}
                         </main>
