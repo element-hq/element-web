@@ -81,6 +81,9 @@ module.exports = React.createClass({
             cli.removeListener("User.lastPresenceTs", this.onUserLastPresenceTs);
             // cli.removeListener("Room.timeline", this.onRoomTimeline);
         }
+
+        // cancel any pending calls to the rate_limited_funcs
+        this._updateList.cancelPendingCall();
     },
 
 /*

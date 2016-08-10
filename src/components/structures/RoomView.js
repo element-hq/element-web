@@ -273,6 +273,9 @@ module.exports = React.createClass({
 
         window.removeEventListener('resize', this.onResize);
 
+        // cancel any pending calls to the rate_limited_funcs
+        this._updateRoomMembers.cancelPendingCall();
+
         // no need to do this as Dir & Settings are now overlays. It just burnt CPU.
         // console.log("Tinter.tint from RoomView.unmount");
         // Tinter.tint(); // reset colourscheme

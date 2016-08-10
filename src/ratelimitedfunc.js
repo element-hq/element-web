@@ -21,13 +21,16 @@ limitations under the License.
  *
  * Note that the function must not take arguments, since the args
  * could be different for each invocarion of the function.
+ *
+ * The returned function has a 'cancelPendingCall' property which can be called
+ * on unmount or similar to cancel any pending update.
  */
 module.exports = function(f, minIntervalMs) {
     this.lastCall = 0;
     this.scheduledCall = undefined;
 
     var self = this;
-    return function() {
+    var wrapper = function() {
         var now = Date.now();
 
         if (self.lastCall < now - minIntervalMs) {
@@ -44,5 +47,23 @@ module.exports = function(f, minIntervalMs) {
             );
         }
     };
-};
 
+    // add the cancelPendingCall property
+    wrapper.cancelPendingCall = function() {
+        if (self.scheduledCall) {
+            clearTimeout(self.scheduledCall);
+            self.scheduledCall = undefined;
+        }
+    };
+
+    // make sure that cancelPendingCall is copied when react rebinds the
+    // wrapper
+    var _bind = wrapper.bind;
+    wrapper.bind = function() {
+        var rebound = _bind.apply(this, arguments);
+        rebound.cancelPendingCall = wrapper.cancelPendingCall;
+        return rebound;
+    };
+
+    return wrapper;
+};
