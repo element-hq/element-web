@@ -66,7 +66,7 @@ export default class MultiInviteDialog extends React.Component {
 
         // don't try to invite it if it's an invalid address
         // (it will already be marked as an error though,
-        // so no need top do so again
+        // so no need to do so again)
         if (getAddressType(input) === null) {
             this._inviteMore(nextIndex + 1);
             return;
