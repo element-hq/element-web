@@ -165,7 +165,7 @@ export function setLoggedIn(credentials) {
     // persist the session
     if (localStorage) {
         try {
-            localStorage.setItem("mx_hs_url", credentials.homseserverUrl);
+            localStorage.setItem("mx_hs_url", credentials.homeserverUrl);
             localStorage.setItem("mx_is_url", credentials.identityServerUrl);
 
             localStorage.setItem("mx_user_id", credentials.userId);
