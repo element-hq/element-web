@@ -47,7 +47,6 @@ export default class MultiInviteDialog extends React.Component {
 
     _startInviting() {
         this.setState({
-            completionStates: [],
             busy: true,
             done: false,
         });
