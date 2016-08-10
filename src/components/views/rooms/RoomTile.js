@@ -266,7 +266,7 @@ module.exports = React.createClass({
                 <div className={avatarClasses}>
                     <div className="mx_RoomTile_avatar_menu" onClick={this.onAvatarClicked}>
                         <div className={avatarContainerClasses}>
-                            <RoomAvatar room={this.props.room} width={25} height={25} />
+                            <RoomAvatar room={this.props.room} width={24} height={24} />
                         </div>
                     </div>
                 </div>
