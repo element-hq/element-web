@@ -58,6 +58,8 @@ module.exports = React.createClass({
         if (cli) {
             cli.removeListener("RoomState.members", this.onRoomStateMember);
         }
+        // cancel any pending calls to the rate_limited_funcs
+        this._updateList.cancelPendingCall();
     },
 
     _updateList: new rate_limited_func(function() {
@@ -100,7 +102,7 @@ module.exports = React.createClass({
             <EntityTile key="dynamic_invite_tile" suppressOnHover={true} showInviteButton={true}
                 avatarJsx={ <BaseAvatar name="@" width={36} height={36} /> }
                 className="mx_EntityTile_invitePlaceholder"
-                presenceState="online" onClick={this.onThirdPartyInvite} name={"Invite by email"} 
+                presenceState="online" onClick={this.onThirdPartyInvite} name={"Invite by email"}
             />,
             function(query) {
                 return true; // always show this

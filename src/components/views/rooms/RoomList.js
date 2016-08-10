@@ -101,6 +101,8 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
         }
+        // cancel any pending calls to the rate_limited_funcs
+        this._delayedRefreshRoomList.cancelPendingCall();
     },
 
     onRoom: function(room) {
