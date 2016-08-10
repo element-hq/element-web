@@ -135,31 +135,6 @@ class MatrixClientPeg {
         };
     }
 
-    tryRestore() {
-        if (localStorage) {
-            const hs_url = localStorage.getItem("mx_hs_url");
-            const is_url = localStorage.getItem("mx_is_url") || 'https://matrix.org';
-            const access_token = localStorage.getItem("mx_access_token");
-            const user_id = localStorage.getItem("mx_user_id");
-
-            let is_guest;
-            if (localStorage.getItem("mx_is_guest") !== null) {
-                is_guest = localStorage.getItem("mx_is_guest") === "true";
-            } else {
-                // legacy key name
-                is_guest = localStorage.getItem("matrix-is-guest") === "true";
-            }
-
-            if (access_token && user_id && hs_url) {
-                console.log("Restoring session for %s", user_id);
-                this._createClient(hs_url, is_url, user_id, access_token);
-                this.matrixClient.setGuest(is_guest);
-            } else {
-                console.log("Session not found.");
-            }
-        }
-    }
-
     _createClient(hs_url, is_url, user_id, access_token, isGuest) {
         var opts = {
             baseUrl: hs_url,
@@ -186,6 +161,5 @@ class MatrixClientPeg {
 
 if (!global.mxMatrixClientPeg) {
     global.mxMatrixClientPeg = new MatrixClientPeg();
-    global.mxMatrixClientPeg.tryRestore();
 }
 module.exports = global.mxMatrixClientPeg;
