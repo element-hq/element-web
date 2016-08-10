@@ -20,7 +20,7 @@ limitations under the License.
     overflow-y: auto;
 }
 
-.mx_MemberInfo h2 {
+.mx_MemberInfo .header h1 {
     margin-top: 6px;
 }
 

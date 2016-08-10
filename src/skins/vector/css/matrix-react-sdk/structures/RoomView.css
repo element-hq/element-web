@@ -146,13 +146,14 @@ limitations under the License.
     width: 100%;
     list-style-type: none;
     padding: 0px;
+    overflow: hidden;
 }
 
 .mx_RoomView_MessageList li {
     clear: both;
 }
 
-.mx_RoomView_MessageList h2 {
+.mx_RoomView_MessageList .header h1 {
     clear: both;
     margin-top: 32px;
     margin-bottom: 8px;
@@ -177,19 +178,21 @@ limitations under the License.
     margin-bottom: 12px;
 }
 
-li.mx_RoomView_myReadMarker_container {
-    height: 0px;
-    margin: 0px;
-    padding: 0px;
-    border: 0px;
+.mx_RoomView_myReadMarker {
+    position: relative;
+    z-index: 2;
 }
 
-hr.mx_RoomView_myReadMarker {
-    border-top: solid 1px #76cfa6;
-    border-bottom: solid 1px #76cfa6;
-    margin-top: 0px;
-    position: relative;
-    top: 5px;
+/* Decorative pseudo-element: Divider border */
+.mx_RoomView_myReadMarker:after {
+    position: absolute;
+    content: '\0020';
+    top: -3px; /* $y-unit / -2 */
+    left: 66px; /* $stream-gutter-left */
+    right: 0;
+    height: 1px;
+    background-color: #ff2a63; /* $color-accent */
+    opacity: 0.5;
 }
 
 .mx_RoomView_statusArea {

@@ -1,0 +1,143 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.markdown-body {
+    white-space: normal;
+}
+
+.markdown-body h1:not(:last-child),
+.markdown-body h2:not(:last-child),
+.markdown-body h3:not(:last-child),
+.markdown-body h4:not(:last-child),
+.markdown-body h5:not(:last-child),
+.markdown-body h6:not(:last-child),
+.markdown-body p:not(:last-child),
+.markdown-body ul:not(:last-child),
+.markdown-body ol:not(:last-child),
+.markdown-body blockquote:not(:last-child),
+.markdown-body table:not(:last-child),
+.markdown-body pre:not(:last-child) {
+    margin-bottom: 6px; /* $y-unit */
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+    font-weight: 600;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+    list-style: none;
+}
+
+.markdown-body ul ol,
+.markdown-body ul ul,
+.markdown-body ol ul,
+.markdown-body ol ol {
+    margin-top: 3px; /* $y-unit / 2 */
+    margin-left: 18px; /* $x-unit * 3 */
+}
+
+.markdown-body li {
+    position: relative;
+}
+
+.markdown-body li:before {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    padding-right: 0.6em;
+    font-weight: 600;
+    color: #a5a5a5; /* $color-base-light */
+}
+
+.markdown-body li:not(:last-child) {
+    margin-bottom: 3px; /* $y-unit / 2 */
+}
+
+.markdown-body ul li:before {
+    content: "•";
+}
+
+.markdown-body ol {
+    counter-reset: numbers;
+}
+
+.markdown-body ol li {
+    counter-increment: numbers;
+}
+
+.markdown-body ol li:before {
+    content: counter(numbers);
+}
+
+.markdown-body blockquote {
+    position: relative;
+    margin-left: 24px; /* $x-unit * 4 */
+    font-style: italic;
+}
+
+.markdown-body blockquote p:first-child {
+    position: relative;
+}
+
+.markdown-body blockquote p:first-child:before {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    content: "\201C";
+    padding-top: 0.225em;
+    padding-right: 9px; /* $x-unit * 1.5 */
+    font-size: 2.2em;
+    font-weight: 600;
+    font-family: Baskerville, serif;
+    font-style: normal;
+    color: #a5a5a5; /* $color-base-light */
+}
+
+.markdown-body pre {
+    white-space: pre-wrap;
+}
+
+.markdown-body code {
+    font-family: "Roboto Mono", monospace;
+    font-size: 1em;
+}
+
+/* Github overrides */
+.markdown-body code.hljs {
+    box-shadow: inset 0 0 0 1px #dddddd;
+    border-radius: 4px;
+    background-color: #fcfcfc;
+}
+
+/* Github overrides for inline code */
+.markdown-body > code.hljs {
+    display: inline;
+    padding: 0.1em 0.4em;
+}
+
+/* Github overrides for block code */
+.markdown-body pre code.hljs {
+    max-height: 210px; /* ($base-leading * 10) + ($y-unit * 2) */
+    padding: 12px; /* $y-unit * 2 */
+    margin: 6px 0; /* $y-unit */
+    overflow-y: auto;
+}

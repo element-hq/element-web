@@ -21,6 +21,11 @@ limitations under the License.
 .mx_BaseAvatar_initial {
     position: absolute;
     z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 100%;
     color: #fff;
     text-align: center;
     speak: none;
@@ -29,6 +34,10 @@ limitations under the License.
 }
 
 .mx_BaseAvatar_image {
-    border-radius: 40px;
-    vertical-align: top;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
 }

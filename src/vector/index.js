@@ -24,7 +24,7 @@ require('babel-polyfill');
 // refactored soon anyway
 require('../../vector/components.css');
 require('gemini-scrollbar/gemini-scrollbar.css');
-require('gfm.css/gfm.css');
+//require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
 

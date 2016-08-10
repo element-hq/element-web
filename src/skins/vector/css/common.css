@@ -21,29 +21,30 @@ html {
     overflow: hidden;
 }
 
+/* Open Sans lacks combining diacritics, so these will fall through
+   to the next font.  Helevetica's diacritics however do not combine
+   nicely with Open Sans (on OSX, at least) and result in a huge
+   horizontal mess.  Arial empirically gets it right, hence prioritising
+   Arial here.
+*/
 body {
-    /* Open Sans lacks combining diacritics, so these will fall through
-       to the next font.  Helevetica's diacritics however do not combine
-       nicely with Open Sans (on OSX, at least) and result in a huge
-       horizontal mess.  Arial empirically gets it right, hence prioritising
-       Arial here. */
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
-    font-size: 15px;
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    font-size: 14px;
     color: #454545;
-    border: 0px;
-    margin: 0px;
 }
 
 div.error {
     color: red;
 }
 
-h2 {
-    color: #454545;
-    font-weight: 400;
+.header {
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
+
+.header h1 {
     font-size: 18px;
-    margin-top: 16px;
-    margin-bottom: 16px;
+    color: #454545;
 }
 
 a:hover,
@@ -62,11 +63,6 @@ input[type=text]:focus, textarea:focus {
     box-shadow: none;
 }
 
-/* Prevent ugly dotted highlight around selected elements in Firefox */
-::-moz-focus-inner {
-    border: 0;
-}
-
 /* applied to side-panels and messagepanel when in RoomSettings */
 .mx_fadable {
     opacity: 1;
@@ -74,6 +70,7 @@ input[type=text]:focus, textarea:focus {
     -moz-transition: opacity 0.2s ease-in-out;
     -ms-transition: opacity 0.2s ease-in-out;
     -o-transition: opacity 0.2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 }
 
 /* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.
@@ -249,11 +246,6 @@ input[type=text]:focus, textarea:focus {
     background-color: #fff;
 }
 
-.emojione {
-    height: 1em;
-    vertical-align: middle;
-}
-
 ::-moz-selection {
     background-color: #76CFA6;
     color: white;
@@ -262,6 +254,12 @@ input[type=text]:focus, textarea:focus {
 ::selection {
     background-color: #76CFA6;
     color: white;
+}
+
+.emojione {
+    display: inline-block;
+    vertical-align: top;
+    height: 21px; /* $leading-base */
 }
 
 /** green button with rounded corners */

@@ -14,28 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MImageBody {
-    display: block;
+.mx_DateSeperator {
+    position: relative;
+    margin-left: 66px; /* $stream-gutter-left */
+    margin-top: 36px; /* $y-unit * 6 */
+    margin-bottom: 24px; /* $y-unit * 4 */
+    font-weight: 600;
+    font-size: 18px; /* $size-2 */
 }
 
-.mx_MImageBody_thumbnail {
-    max-width: 100%;
-}
-
-.mx_MImageBody_download {
-    color: #76cfa6;
-    cursor: pointer;
-}
-
-.mx_MImageBody_download a {
-    color: #76cfa6;
-    text-decoration: none;
-}
-
-.mx_MImageBody_download object {
-    margin-left: -16px;
-    padding-right: 4px;
-    margin-top: -4px;
-    vertical-align: middle;
-    pointer-events: none;
+.mx_DateSeperator:after {
+    position: absolute;
+    content: '\0020';
+    bottom: -6px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #dddddd;
 }
