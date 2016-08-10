@@ -161,6 +161,26 @@ export function setLoggedIn(credentials) {
     console.log("setLoggedIn => %s (guest=%s) hs=%s",
                 credentials.userId, credentials.guest,
                 credentials.homeserverUrl);
+
+    // persist the session
+    if (localStorage) {
+        try {
+            localStorage.setItem("mx_hs_url", hs_url);
+            localStorage.setItem("mx_is_url", is_url);
+
+            if (user_id !== undefined && access_token !== undefined) {
+                localStorage.setItem("mx_user_id", user_id);
+                localStorage.setItem("mx_access_token", access_token);
+                localStorage.setItem("mx_is_guest", JSON.stringify(isGuest));
+                console.log("Session persisted for %s", user_id);
+            }
+        } catch (e) {
+            console.warn("Error using local storage: can't persist session!", e);
+        }
+    } else {
+        console.warn("No local storage available: can't persist session!");
+    }
+
     MatrixClientPeg.replaceUsingCreds(credentials);
 
     dis.dispatch({action: 'on_logged_in'});
@@ -225,6 +245,7 @@ export function onLoggedOut() {
         // preserve our HS & IS URLs for convenience
         // N.B. we cache them in hsUrl/isUrl and can't really inline them
         // as getCurrentHsUrl() may call through to localStorage.
+        // NB. We do clear the device ID (as well as all the settings)
         if (hsUrl) window.localStorage.setItem("mx_hs_url", hsUrl);
         if (isUrl) window.localStorage.setItem("mx_is_url", isUrl);
     }
