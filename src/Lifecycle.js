@@ -88,9 +88,7 @@ export function loadSession(opts) {
         return q();
     }
 
-    if (MatrixClientPeg.get() && MatrixClientPeg.get().credentials) {
-        console.log("Using existing credentials");
-        setLoggedIn(MatrixClientPeg.getCredentials());
+    if (_restoreFromLocalStorage()) {
         return q();
     }
 
@@ -120,6 +118,39 @@ function _registerAsGuest(hsUrl, isUrl) {
     });
 }
 
+// returns true if a session is found in localstorage
+function _restoreFromLocalStorage() {
+    if (!localStorage) {
+        return false;
+    }
+    const hs_url = localStorage.getItem("mx_hs_url");
+    const is_url = localStorage.getItem("mx_is_url") || 'https://matrix.org';
+    const access_token = localStorage.getItem("mx_access_token");
+    const user_id = localStorage.getItem("mx_user_id");
+
+    let is_guest;
+    if (localStorage.getItem("mx_is_guest") !== null) {
+        is_guest = localStorage.getItem("mx_is_guest") === "true";
+    } else {
+        // legacy key name
+        is_guest = localStorage.getItem("matrix-is-guest") === "true";
+    }
+
+    if (access_token && user_id && hs_url) {
+        console.log("Restoring session for %s", user_id);
+        setLoggedIn({
+            userId: user_id,
+            accessToken: access_token,
+            homeserverUrl: hs_url,
+            identityServerUrl: is_url,
+            guest: is_guest,
+        });
+        return true;
+    } else {
+        console.log("No previous session found.");
+        return false;
+    }
+}
 
 /**
  * Transitions to a logged-in state using the given credentials
