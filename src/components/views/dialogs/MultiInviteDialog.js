@@ -196,4 +196,6 @@ export default class MultiInviteDialog extends React.Component {
 
 MultiInviteDialog.propTypes = {
     onFinished: React.PropTypes.func.isRequired,
+    inputs: React.PropTypes.array.isRequired,
+    roomId: React.PropTypes.string.isRequired,
 };
