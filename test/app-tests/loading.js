@@ -50,6 +50,8 @@ describe('loading:', function () {
         // document.body.appendChild(parentDiv);
 
         windowLocation = null;
+
+        window.localStorage.clear();
     });
 
     afterEach(function() {
@@ -131,8 +133,7 @@ describe('loading:', function () {
             q.delay(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('elements.Spinner'));
+                assertAtLoadingSpinner(matrixChat);
 
                 httpBackend.when('POST', '/register').check(function(req) {
                     expect(req.queryParams.kind).toEqual('guest');
@@ -153,8 +154,7 @@ describe('loading:', function () {
             q.delay(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('elements.Spinner'));
+                assertAtLoadingSpinner(matrixChat);
 
                 httpBackend.when('POST', '/register').check(function(req) {
                     expect(req.queryParams.kind).toEqual('guest');
@@ -193,14 +193,10 @@ describe('loading:', function () {
 
     describe("MatrixClient rehydrated from stored credentials:", function() {
         beforeEach(function() {
-            // start with a logged-in client
-            MatrixClientPeg.replaceUsingCreds({
-                homeserverUrl: 'http://localhost',
-                identityServerUrl: 'http://localhost',
-                userId: '@me:localhost',
-                accessToken: 'access_token',
-                guest: false,
-            });
+            localStorage.setItem("mx_hs_url", "http://localhost" );
+            localStorage.setItem("mx_is_url", "http://localhost" );
+            localStorage.setItem("mx_access_token", "access_token");
+            localStorage.setItem("mx_user_id", "@me:localhost");
         });
 
         it('shows a directory by default if we have no joined rooms', function(done) {
@@ -212,8 +208,8 @@ describe('loading:', function () {
 
             q.delay(1).then(() => {
                 // we expect a spinner
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('elements.Spinner'));
+                assertAtSyncingSpinner(matrixChat);
+
                 return httpBackend.flush();
             }).then(() => {
                 // once the sync completes, we should have a directory
@@ -233,8 +229,8 @@ describe('loading:', function () {
 
             q.delay(1).then(() => {
                 // we expect a spinner
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('elements.Spinner'));
+                assertAtSyncingSpinner(matrixChat);
+
                 return httpBackend.flush();
             }).then(() => {
                 // once the sync completes, we should have a room view
@@ -246,4 +242,89 @@ describe('loading:', function () {
 
         });
     });
+
+    describe('Guest auto-registration:', function() {
+        it('shows a directory by default', function (done) {
+            let matrixChat = loadApp("");
+
+            q.delay(1).then(() => {
+                // at this point, we're trying to do a guest registration;
+                // we expect a spinner
+                assertAtLoadingSpinner(matrixChat);
+
+                httpBackend.when('POST', '/register').check(function(req) {
+                    expect(req.queryParams.kind).toEqual('guest');
+                }).respond(200, {
+                    user_id: "@guest:localhost",
+                    access_token: "secret_token",
+                });
+
+                return httpBackend.flush();
+            }).then(() => {
+                // now we should have a spinner with a logout link
+                assertAtSyncingSpinner(matrixChat);
+
+                httpBackend.when('GET', '/sync').respond(200, {});
+                return httpBackend.flush();
+            }).then(() => {
+                // once the sync completes, we should have a directory
+                httpBackend.verifyNoOutstandingExpectation();
+                ReactTestUtils.findRenderedComponentWithType(
+                    matrixChat, sdk.getComponent('structures.RoomDirectory'));
+                expect(windowLocation.hash).toEqual("#/directory");
+            }).done(done, done);
+        });
+
+        it('shows a room view if we followed a room link', function(done) {
+            let matrixChat = loadApp("#/room/!room:id");
+            q.delay(10).then(() => {
+                // at this point, we're trying to do a guest registration;
+                // we expect a spinner
+                assertAtLoadingSpinner(matrixChat);
+
+                httpBackend.when('POST', '/register').check(function(req) {
+                    expect(req.queryParams.kind).toEqual('guest');
+                }).respond(200, {
+                    user_id: "@guest:localhost",
+                    access_token: "secret_token",
+                });
+
+                return httpBackend.flush();
+            }).then(() => {
+                // now we should have a spinner with a logout link
+                assertAtSyncingSpinner(matrixChat);
+
+                httpBackend.when('GET', '/sync').respond(200, {});
+                return httpBackend.flush();
+            }).then(() => {
+                // once the sync completes, we should have a room view
+                httpBackend.verifyNoOutstandingExpectation();
+                ReactTestUtils.findRenderedComponentWithType(
+                    matrixChat, sdk.getComponent('structures.RoomView'));
+                expect(windowLocation.hash).toEqual("#/room/!room:id");
+            }).done(done, done);
+        });
+    });
 });
+
+// assert that we are on the loading page
+function assertAtLoadingSpinner(matrixChat) {
+    var domComponent = ReactDOM.findDOMNode(matrixChat);
+    expect(domComponent.className).toEqual("mx_MatrixChat_splash");
+
+    // just the spinner
+    expect(domComponent.children.length).toEqual(1);
+}
+
+// we've got login creds, and are waiting for the sync to finish.
+// the page includes a logout link.
+function assertAtSyncingSpinner(matrixChat) {
+    var domComponent = ReactDOM.findDOMNode(matrixChat);
+    expect(domComponent.className).toEqual("mx_MatrixChat_splash");
+
+    ReactTestUtils.findRenderedComponentWithType(
+        matrixChat, sdk.getComponent('elements.Spinner'));
+    var logoutLink = ReactTestUtils.findRenderedDOMComponentWithTag(
+        matrixChat, 'a');
+    expect(logoutLink.text).toEqual("Logout");
+}
