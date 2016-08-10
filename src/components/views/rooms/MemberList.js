@@ -263,9 +263,6 @@ module.exports = React.createClass({
                         });
                     }
                 }
-                self.setState({
-                    inviting: false
-                });
             }).finally(() => {
                 self.setState({
                     inviting: false
