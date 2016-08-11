@@ -330,6 +330,7 @@ class Login extends Signup {
         return client.registerGuest().then((creds) => {
             return {
                 userId: creds.user_id,
+                deviceId: creds.device_id,
                 accessToken: creds.access_token,
                 homeserverUrl: this._hsUrl,
                 identityServerUrl: this._isUrl,
@@ -364,6 +365,7 @@ class Login extends Signup {
                 homeserverUrl: self._hsUrl,
                 identityServerUrl: self._isUrl,
                 userId: data.user_id,
+                deviceId: data.device_id,
                 accessToken: data.access_token
             });
         }, function(error) {
@@ -387,6 +389,7 @@ class Login extends Signup {
                             homeserverUrl: self._fallbackHsUrl,
                             identityServerUrl: self._isUrl,
                             userId: data.user_id,
+                            deviceId: data.device_id,
                             accessToken: data.access_token
                         });
                     }, function(fallback_error) {

@@ -154,6 +154,7 @@ module.exports = React.createClass({
             }
             self.props.onLoggedIn({
                 userId: response.user_id,
+                deviceId: response.device_id,
                 homeserverUrl: self.registerLogic.getHomeserverUrl(),
                 identityServerUrl: self.registerLogic.getIdentityServerUrl(),
                 accessToken: response.access_token
@@ -279,7 +280,7 @@ module.exports = React.createClass({
 
         var returnToAppJsx;
         if (this.props.onCancelClick) {
-            returnToAppJsx = 
+            returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
                     Return to app
                 </a>

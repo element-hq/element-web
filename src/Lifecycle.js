@@ -128,6 +128,7 @@ function _loginWithToken(queryParams) {
         console.log("Logged in with token");
         setLoggedIn({
             userId: data.user_id,
+            deviceId: data.device_id,
             accessToken: data.access_token,
             homeserverUrl: queryParams.homeserver,
             identityServerUrl: queryParams.identityServer,
@@ -151,6 +152,7 @@ function _registerAsGuest(hsUrl, isUrl) {
         console.log("Registered as guest: %s", creds.user_id);
         setLoggedIn({
             userId: creds.user_id,
+            deviceId: creds.device_id,
             accessToken: creds.access_token,
             homeserverUrl: hsUrl,
             identityServerUrl: isUrl,
@@ -170,6 +172,7 @@ function _restoreFromLocalStorage() {
     const is_url = localStorage.getItem("mx_is_url") || 'https://matrix.org';
     const access_token = localStorage.getItem("mx_access_token");
     const user_id = localStorage.getItem("mx_user_id");
+    const device_id = localStorage.getItem("mx_device_id");
 
     let is_guest;
     if (localStorage.getItem("mx_is_guest") !== null) {
@@ -183,6 +186,7 @@ function _restoreFromLocalStorage() {
         console.log("Restoring session for %s", user_id);
         setLoggedIn({
             userId: user_id,
+            deviceId: device_id,
             accessToken: access_token,
             homeserverUrl: hs_url,
             identityServerUrl: is_url,
@@ -212,6 +216,7 @@ export function setLoggedIn(credentials) {
             localStorage.setItem("mx_is_url", credentials.identityServerUrl);
 
             localStorage.setItem("mx_user_id", credentials.userId);
+            localStorage.setItem("mx_device_id", credentials.deviceId);
             localStorage.setItem("mx_access_token", credentials.accessToken);
             localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
             console.log("Session persisted for %s", credentials.userId);
