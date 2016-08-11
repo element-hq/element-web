@@ -1,3 +1,116 @@
+Changes in [0.7.4](https://github.com/vector-im/vector-web/releases/tag/v0.7.4) (2016-08-11)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.3...v0.7.4)
+
+ * Don't show border on composer when not in RTE mode
+   [\#1954](https://github.com/vector-im/vector-web/pull/1954)
+ * Wmwragg/room tag menu
+   [\#1941](https://github.com/vector-im/vector-web/pull/1941)
+ * Don't redirect to mobile app if verifying 3pid
+   [\#1951](https://github.com/vector-im/vector-web/pull/1951)
+ * Make sure that we clear localstorage before *all* tests
+   [\#1950](https://github.com/vector-im/vector-web/pull/1950)
+ * Basic CSS for multi-invite dialog
+   [\#1942](https://github.com/vector-im/vector-web/pull/1942)
+ * More tests for the loading process:
+   [\#1947](https://github.com/vector-im/vector-web/pull/1947)
+ * Support for refactored login token handling
+   [\#1946](https://github.com/vector-im/vector-web/pull/1946)
+ * Various fixes and improvements to emojification.
+   [\#1935](https://github.com/vector-im/vector-web/pull/1935)
+ * More app-loading tests
+   [\#1938](https://github.com/vector-im/vector-web/pull/1938)
+ * Some tests of the application load process
+   [\#1936](https://github.com/vector-im/vector-web/pull/1936)
+ * Add 'enable labs' setting to sample config
+   [\#1930](https://github.com/vector-im/vector-web/pull/1930)
+ * Matthew/scalar
+   [\#1928](https://github.com/vector-im/vector-web/pull/1928)
+ * Fix unit tests
+   [\#1929](https://github.com/vector-im/vector-web/pull/1929)
+ * Wmwragg/mute mention state fix
+   [\#1926](https://github.com/vector-im/vector-web/pull/1926)
+ * CSS for deactivate account dialog
+   [\#1919](https://github.com/vector-im/vector-web/pull/1919)
+ * Wmwragg/mention state menu
+   [\#1900](https://github.com/vector-im/vector-web/pull/1900)
+ * Fix UnknownBody styling for #1901
+   [\#1913](https://github.com/vector-im/vector-web/pull/1913)
+ * Exclude olm from the webpack
+   [\#1914](https://github.com/vector-im/vector-web/pull/1914)
+ * Wmwragg/button updates
+   [\#1912](https://github.com/vector-im/vector-web/pull/1912)
+ * Wmwragg/button updates
+   [\#1828](https://github.com/vector-im/vector-web/pull/1828)
+ * CSS for device management UI
+   [\#1909](https://github.com/vector-im/vector-web/pull/1909)
+ * Fix a warning from RoomSubList
+   [\#1908](https://github.com/vector-im/vector-web/pull/1908)
+ * Fix notifications warning layout
+   [\#1907](https://github.com/vector-im/vector-web/pull/1907)
+ * Remove relayoutOnUpdate prop on gemini-scrollbar
+   [\#1883](https://github.com/vector-im/vector-web/pull/1883)
+ * Bump dependency versions
+   [\#1842](https://github.com/vector-im/vector-web/pull/1842)
+ * Wmwragg/mention state indicator round 2
+   [\#1835](https://github.com/vector-im/vector-web/pull/1835)
+ * Wmwragg/spinner fix
+   [\#1822](https://github.com/vector-im/vector-web/pull/1822)
+ * Wmwragg/mention state indicator
+   [\#1823](https://github.com/vector-im/vector-web/pull/1823)
+ * Revert "Presentation for inline link"
+   [\#1809](https://github.com/vector-im/vector-web/pull/1809)
+ * Wmwragg/modal restyle
+   [\#1806](https://github.com/vector-im/vector-web/pull/1806)
+ * Presentation for inline link
+   [\#1799](https://github.com/vector-im/vector-web/pull/1799)
+ * CSS for offline user colours
+   [\#1798](https://github.com/vector-im/vector-web/pull/1798)
+ * Wmwragg/typography updates
+   [\#1776](https://github.com/vector-im/vector-web/pull/1776)
+ * webpack: always use the olm from vector-web
+   [\#1766](https://github.com/vector-im/vector-web/pull/1766)
+ * feat: large emoji support
+   [\#1718](https://github.com/vector-im/vector-web/pull/1718)
+ * Autocomplete
+   [\#1717](https://github.com/vector-im/vector-web/pull/1717)
+ * #1664 Set a maximum height for codeblocks
+   [\#1670](https://github.com/vector-im/vector-web/pull/1670)
+ * CSS for device blocking
+   [\#1688](https://github.com/vector-im/vector-web/pull/1688)
+ * Fix joining rooms by typing the alias
+   [\#1685](https://github.com/vector-im/vector-web/pull/1685)
+ * Add ability to delete an alias from room directory
+   [\#1680](https://github.com/vector-im/vector-web/pull/1680)
+ * package.json: add olm as optionalDependency
+   [\#1678](https://github.com/vector-im/vector-web/pull/1678)
+ * Another go at enabling olm on vector.im/develop
+   [\#1675](https://github.com/vector-im/vector-web/pull/1675)
+ * CSS for unverify button
+   [\#1661](https://github.com/vector-im/vector-web/pull/1661)
+ * CSS fix for rooms with crypto enabled
+   [\#1660](https://github.com/vector-im/vector-web/pull/1660)
+ * Karma: fix warning by ignoring olm
+   [\#1652](https://github.com/vector-im/vector-web/pull/1652)
+ * Update for react-sdk dbkr/fix_peeking branch
+   [\#1639](https://github.com/vector-im/vector-web/pull/1639)
+ * Update README.md
+   [\#1641](https://github.com/vector-im/vector-web/pull/1641)
+ * Fix karma tests
+   [\#1643](https://github.com/vector-im/vector-web/pull/1643)
+ * Rich Text Editor
+   [\#1553](https://github.com/vector-im/vector-web/pull/1553)
+ * Fix RoomDirectory to join by alias whenever possible.
+   [\#1615](https://github.com/vector-im/vector-web/pull/1615)
+ * Make the config optional
+   [\#1612](https://github.com/vector-im/vector-web/pull/1612)
+ * CSS support for device verification
+   [\#1610](https://github.com/vector-im/vector-web/pull/1610)
+ * Don't use SdkConfig
+   [\#1609](https://github.com/vector-im/vector-web/pull/1609)
+ * serve config.json statically instead of bundling it
+   [\#1516](https://github.com/vector-im/vector-web/pull/1516)
+
 Changes in [0.7.3](https://github.com/vector-im/vector-web/releases/tag/v0.7.3) (2016-06-03)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.2...v0.7.3)
