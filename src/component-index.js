@@ -48,6 +48,7 @@ module.exports.components['views.create_room.RoomAlias'] = require('./components
 module.exports.components['views.dialogs.DeactivateAccountDialog'] = require('./components/views/dialogs/DeactivateAccountDialog');
 module.exports.components['views.dialogs.ErrorDialog'] = require('./components/views/dialogs/ErrorDialog');
 module.exports.components['views.dialogs.LogoutPrompt'] = require('./components/views/dialogs/LogoutPrompt');
+module.exports.components['views.dialogs.MultiInviteDialog'] = require('./components/views/dialogs/MultiInviteDialog');
 module.exports.components['views.dialogs.NeedToRegisterDialog'] = require('./components/views/dialogs/NeedToRegisterDialog');
 module.exports.components['views.dialogs.QuestionDialog'] = require('./components/views/dialogs/QuestionDialog');
 module.exports.components['views.dialogs.SetDisplayNameDialog'] = require('./components/views/dialogs/SetDisplayNameDialog');
