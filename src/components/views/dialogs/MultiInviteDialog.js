@@ -43,7 +43,7 @@ export default class MultiInviteDialog extends React.Component {
     }
 
     componentWillUnmount() {
-        this._unmounted = true;
+        this._canceled = true;
     }
 
     _onCancel() {
@@ -90,7 +90,7 @@ export default class MultiInviteDialog extends React.Component {
         }
 
         inviteToRoom(this.props.roomId, input).then(() => {
-            if (this._unmounted) { return; }
+            if (this._canceled) { return; }
 
             this.setState((s) => {
                 s.completionStates[nextIndex] = 'invited'
@@ -98,7 +98,7 @@ export default class MultiInviteDialog extends React.Component {
             });
             this._inviteMore(nextIndex + 1);
         }, (err) => {
-            if (this._unmounted) { return; }
+            if (this._canceled) { return; }
 
             let errorText;
             let fatal = false;
