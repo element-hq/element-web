@@ -108,7 +108,7 @@ module.exports = {
         }
 
         if (props.menuColour) {
-            menuStyle["background-color"] = props.menuColour;
+            menuStyle["backgroundColor"] = props.menuColour;
         }
 
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
