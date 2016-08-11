@@ -184,16 +184,25 @@ function onLoadCompleted() {
 
 
 async function loadApp() {
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-        if (confirm("Vector is not supported on mobile web. Install the app?")) {
-            window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
-            return;
+    const fragparts = parseQsFromFragment(window.location);
+    const params = parseQs(window.location);
+
+    // don't try to redirect to the native apps if we're
+    // verifying an 3pid
+    const preventRedirect = Boolean(fragparts.params.client_secret);
+
+    if (!preventRedirect) {
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+            if (confirm("Vector is not supported on mobile web. Install the app?")) {
+                window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
+                return;
+            }
         }
-    }
-    else if (/Android/.test(navigator.userAgent)) {
-        if (confirm("Vector is not supported on mobile web. Install the app?")) {
-            window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
-            return;
+        else if (/Android/.test(navigator.userAgent)) {
+            if (confirm("Vector is not supported on mobile web. Install the app?")) {
+                window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
+                return;
+            }
         }
     }
 
@@ -218,9 +227,6 @@ async function loadApp() {
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser) {
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
-
-        var fragparts = parseQsFromFragment(window.location);
-        var params = parseQs(window.location);
 
         window.matrixChat = ReactDOM.render(
             <MatrixChat
