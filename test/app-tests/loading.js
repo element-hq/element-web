@@ -59,8 +59,6 @@ describe('loading:', function () {
 
         windowLocation = null;
         matrixChat = null;
-
-        window.localStorage.clear();
     });
 
     afterEach(function() {
