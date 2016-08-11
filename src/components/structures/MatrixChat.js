@@ -207,34 +207,6 @@ module.exports = React.createClass({
         }
     },
 
-    _registerAsGuest: function(showWarning) {
-        var self = this;
-        console.log("Doing guest login on %s", this.getCurrentHsUrl());
-        var hsUrl = this.getCurrentHsUrl();
-        var isUrl = this.getCurrentIsUrl();
-
-        MatrixClientPeg.replaceUsingUrls(hsUrl, isUrl);
-        MatrixClientPeg.get().registerGuest().done(function(creds) {
-            console.log("Registered as guest: %s", creds.user_id);
-            Lifecycle.setLoggedIn({
-                userId: creds.user_id,
-                accessToken: creds.access_token,
-                homeserverUrl: hsUrl,
-                identityServerUrl: isUrl,
-                guest: true
-            });
-        }, function(err) {
-            if (showWarning) {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Failed to login as guest",
-                    description: err.data
-                });
-            }
-            console.error("Failed to register as guest: " + err + " " + err.data);
-        });
-    },
-
     onAction: function(payload) {
         var roomIndexDelta = 1;
 
@@ -1106,7 +1078,7 @@ module.exports = React.createClass({
                     customIsUrl={this.getCurrentIsUrl()}
                     fallbackHsUrl={this.getFallbackHsUrl()}
                     onForgotPasswordClick={this.onForgotPasswordClick}
-                    onLoginAsGuestClick={this.props.enableGuest && this.props.config && this._registerAsGuest.bind(this, true)}
+                    enableGuest={this.props.enableGuest}
                     onCancelClick={this.guestCreds ? this.onReturnToGuestClick : null}
                     />
             );
