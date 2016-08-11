@@ -177,6 +177,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const EmojiText = sdk.getComponent('elements.EmojiText');
         var mxEvent = this.props.mxEvent;
         var content = mxEvent.getContent();
         var body = HtmlUtils.bodyToHtml(content, this.props.highlights, {});
@@ -200,10 +201,10 @@ module.exports = React.createClass({
 
         switch (content.msgtype) {
             case "m.emote":
-                var name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+                const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 return (
                     <span ref="content" className="mx_MEmoteBody mx_EventTile_content">
-                        * { name } { body }
+                        * <EmojiText>{name}</EmojiText> { body }
                         { widgets }
                     </span>
                 );

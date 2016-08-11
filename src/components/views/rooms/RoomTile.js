@@ -22,7 +22,6 @@ var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
 var ContextualMenu = require('../../structures/ContextualMenu');
-import {emojifyText} from '../../../HtmlUtils';
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -187,6 +186,7 @@ module.exports = React.createClass({
 
         badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
 
+        const EmojiText = sdk.getComponent('elements.EmojiText');
         var label;
         var tooltip;
         if (!this.props.collapsed) {
@@ -196,13 +196,12 @@ module.exports = React.createClass({
                 'mx_RoomTile_badgeShown': this.props.highlight || (notificationCount > 0 && !this.state.areNotifsMuted) || this.state.badgeHover || this.state.menu,
             });
 
-            let nameHTML = emojifyText(name);
             if (this.props.selected) {
-                let nameSelected = <span dangerouslySetInnerHTML={nameHTML}></span>;
+                let nameSelected = <EmojiText>{name}</EmojiText>;
 
                 label = <div title={ name } className={ nameClasses }>{ nameSelected }</div>;
             } else {
-                label = <div title={ name } className={ nameClasses } dangerouslySetInnerHTML={nameHTML}></div>;
+                label = <EmojiText element="div" title={ name } className={ nameClasses }>{name}</EmojiText>;
             }
         }
         else if (this.state.hover) {
