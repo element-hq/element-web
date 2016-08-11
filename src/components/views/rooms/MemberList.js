@@ -279,7 +279,7 @@ module.exports = React.createClass({
 
         if (inputs.length == 1) {
             // for a single address, we just send the invite
-            promise.then(() => {
+            promise.done(() => {
                 this.doInvite(inputs[0]);
             });
         } else {
