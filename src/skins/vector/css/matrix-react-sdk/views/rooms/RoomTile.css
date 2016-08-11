@@ -32,11 +32,47 @@ limitations under the License.
     display: inline-block;
     padding-top: 5px;
     padding-bottom: 5px;
-    padding-left: 18px;
+    padding-left: 16px;
     padding-right: 6px;
     width: 24px;
     height: 24px;
     vertical-align: middle;
+}
+
+.mx_RoomTile_avatar_container:hover:before,
+.mx_RoomTile_avatar_container.mx_RoomTile_avatar_roomTagMenu:before {
+    display: block;
+    position: absolute;
+    content: "";
+    border-radius: 40px;
+    background-image: url("img/icons_ellipsis.svg");
+    background-size: 25px;
+    left: 15px;
+    width: 24px;
+    height: 24px;
+    z-index: 4;
+}
+
+.mx_RoomTile_avatar_container:hover:after,
+.mx_RoomTile_avatar_container.mx_RoomTile_avatar_roomTagMenu:after {
+    display: block;
+    position: absolute;
+    content: "";
+    border-radius: 40px;
+    background: #4A4A4A;
+    top: 5px;
+    width: 24px;
+    height: 24px;
+    opacity: 0.6;
+    z-index: 2;
+}
+
+.collapsed .mx_RoomTile_avatar_container:hover:before {
+    display: none;
+}
+
+.collapsed .mx_RoomTile_avatar_container:hover:after {
+    display: none;
 }
 
 .mx_RoomTile_name {
@@ -116,13 +152,13 @@ limitations under the License.
 }
 
 .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton,
-.mx_RoomTile.mx_RoomTile_menu .mx_RoomTile_badge {
+.mx_RoomTile.mx_RoomTile_notificationStateMenu .mx_RoomTile_badge {
     letter-spacing: 0.1em;
     opacity: 1;
 }
 
 .mx_RoomTile.mx_RoomTile_noBadges .mx_RoomTile_badge.mx_RoomTile_badgeButton,
-.mx_RoomTile.mx_RoomTile_menu.mx_RoomTile_noBadges .mx_RoomTile_badge {
+.mx_RoomTile.mx_RoomTile_notificationStateMenu.mx_RoomTile_noBadges .mx_RoomTile_badge {
     background-color: rgb(214, 214, 214);
 }
 

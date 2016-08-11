@@ -55,7 +55,7 @@ limitations under the License.
     border-bottom: 8px solid transparent;
 }
 
-.mx_ContextualMenu_chevron_right:after{
+.mx_ContextualMenu_chevron_right:after {
     content:'';
     width: 0;
     height: 0;

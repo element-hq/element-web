@@ -57,7 +57,7 @@ module.exports = React.createClass({
             // Wrapping this in a q promise, as setRoomMutePushRule can return
             // a promise or a value
             q(cli.setRoomMutePushRule("global", roomId, areNotifsMuted))
-            .then(function(s) {
+            .then(function() {
                 self.setState({areNotifsMuted: areNotifsMuted});
 
                 // delay slightly so that the user can see their state change

@@ -149,11 +149,26 @@ var RoomSubList = React.createClass({
         return this.tsOfNewestEvent(roomB) - this.tsOfNewestEvent(roomA);
     },
 
+    lexicographicalComparator: function(roomA, roomB) {
+        return roomA.name > roomB.name ? 1 : -1;
+    },
+
+    // Generates the manual comparator using the given list
     manualComparator: function(roomA, roomB) {
         if (!roomA.tags[this.props.tagName] || !roomB.tags[this.props.tagName]) return 0;
+
+        // Make sure the room tag has an order element, if not set it to be the bottom
         var a = roomA.tags[this.props.tagName].order;
         var b = roomB.tags[this.props.tagName].order;
-        return a == b ? this.recentsComparator(roomA, roomB) : ( a > b  ? 1 : -1);
+
+        // Order undefined room tag orders to the bottom
+        if (a === undefined && b !== undefined) {
+            return 1;
+        } else if (a !== undefined && b === undefined) {
+            return -1;
+        }
+
+        return a == b ? this.lexicographicalComparator(roomA, roomB) : ( a > b  ? 1 : -1);
     },
 
     sortList: function(list, order) {
@@ -163,6 +178,9 @@ var RoomSubList = React.createClass({
         list = list || [];
         if (order === "manual") comparator = this.manualComparator;
         if (order === "recent") comparator = this.recentsComparator;
+
+        // Fix undefined orders here, and make sure the backend gets updated as well
+        this._fixUndefinedOrder(list);
 
         //if (debug) console.log("sorting list for sublist " + this.props.label + " with length " + list.length + ", this.props.list = " + this.props.list);
         this.setState({ sortedList: list.sort(comparator) });
@@ -310,6 +328,46 @@ var RoomSubList = React.createClass({
             truncateAt: -1
         });
         this.props.onShowMoreRooms();
+    },
+
+    // Fix any undefined order elements of a room in a manual ordered list
+    //     room.tag[tagname].order
+    _fixUndefinedOrder: function(list) {
+        if (this.props.order === "manual") {
+            var order = 0.0;
+            var self = this;
+
+            // Find the highest (lowest position) order of a room in a manual ordered list
+            list.forEach(function(room) {
+                if (room.tags.hasOwnProperty(self.props.tagName)) {
+                    if (order < room.tags[self.props.tagName].order) {
+                        order = room.tags[self.props.tagName].order;
+                    }
+                }
+            });
+
+            // Fix any undefined order elements of a room in a manual ordered list
+            // Do this one at a time, as each time a rooms tag data is updated the RoomList
+            // gets triggered and another list is passed in. Doing it one at a time means that
+            // we always correctly calculate the highest order for the list - stops multiple
+            // rooms getting the same order. This is only really relevant for the first time this
+            // is run with historical room tag data, after that there should only be undefined
+            // in the list at a time anyway.
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].tags[self.props.tagName].order === undefined) {
+                    MatrixClientPeg.get().setRoomTag(list[i].roomId, self.props.tagName, {order: (order + 1.0) / 2.0}).finally(function() {
+                        // Do any final stuff here
+                    }).fail(function(err) {
+                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Failed to add tag " + self.props.tagName + " to room",
+                            description: err.toString()
+                        });
+                    });
+                    break;
+                };
+            };
+        }
     },
 
     render: function() {
