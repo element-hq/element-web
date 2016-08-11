@@ -44,6 +44,7 @@ var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
+import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
 
@@ -87,13 +88,6 @@ function routeUrl(location) {
     if (!window.matrixChat) return;
 
     console.log("Routing URL "+location);
-    var params = parseQs(location);
-    var loginToken = params.loginToken;
-    if (loginToken) {
-        window.matrixChat.showScreen('token_login', params);
-        return;
-    }
-
     var fragparts = parseQsFromFragment(location);
     window.matrixChat.showScreen(fragparts.location.substring(1),
                                  fragparts.params);
@@ -174,6 +168,21 @@ function getConfig() {
     return deferred.promise;
 }
 
+function onLoadCompleted() {
+    // if we did a token login, we're now left with the token, hs and is
+    // url as query params in the url; a little nasty but let's redirect to
+    // clear them.
+    if (window.location.search) {
+        var parsedUrl = url.parse(window.location.href);
+        parsedUrl.search = "";
+        var formatted = url.format(parsedUrl);
+        console.log("Redirecting to " + formatted + " to drop loginToken " +
+                    "from queryparams");
+        window.location.href = formatted;
+    }
+}
+
+
 async function loadApp() {
     if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
         if (confirm("Vector is not supported on mobile web. Install the app?")) {
@@ -209,15 +218,21 @@ async function loadApp() {
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser) {
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
-        var fragParts = parseQsFromFragment(window.location);
+
+        var fragparts = parseQsFromFragment(window.location);
+        var params = parseQs(window.location);
+
         window.matrixChat = ReactDOM.render(
             <MatrixChat
                 onNewScreen={onNewScreen}
                 registrationUrl={makeRegistrationUrl()}
                 ConferenceHandler={VectorConferenceHandler}
                 config={configJson}
-                startingQueryParams={fragParts.params}
-                enableGuest={true} />,
+                realQueryParams={params}
+                startingFragmentQueryParams={fragparts.params}
+                enableGuest={true}
+                onLoadCompleted={onLoadCompleted}
+            />,
             document.getElementById('matrixchat')
         );
     }
