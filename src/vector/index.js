@@ -188,7 +188,7 @@ async function loadApp() {
     const params = parseQs(window.location);
 
     // don't try to redirect to the native apps if we're
-    // verifying an 3pid
+    // verifying a 3pid
     const preventRedirect = Boolean(fragparts.params.client_secret);
 
     if (!preventRedirect) {
