@@ -12,6 +12,10 @@ module.exports.beforeEach = function(context) {
     console.log();
     console.log(desc);
     console.log(new Array(1 + desc.length).join("="));
+
+    // some tests store things in localstorage. Improve independence of tests
+    // by making sure that they don't inherit any old state.
+    window.localStorage.clear();
 };
 
 /**
