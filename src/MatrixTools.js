@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+var CallHandler = require('./CallHandler');
 
 module.exports = {
     /**
@@ -23,6 +24,35 @@ module.exports = {
      */
     getDisplayAliasForRoom: function(room) {
         return room.getCanonicalAlias() || room.getAliases()[0];
+    },
+
+    isDirectMessageRoom: function(room, me, ConferenceHandler, hideConferenceChans) {
+        if (me.membership == "join" || me.membership === "ban" ||
+            (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
+        {
+            // Used to split rooms via tags
+            var tagNames = Object.keys(room.tags);
+            // Used for 1:1 direct chats
+            var joinedMembers = room.getJoinedMembers();
+
+            // Show 1:1 chats in seperate "Direct Messages" section as long as they haven't
+            // been moved to a different tag section
+            if (joinedMembers.length === 2 && !tagNames.length) {
+                var otherMember = joinedMembers.filter(function(m) {
+                    return m.userId !== me.userId
+                })[0];
+
+                if (ConferenceHandler && ConferenceHandler.isConferenceUser(otherMember.userId)) {
+                    // console.log("Hiding conference 1:1 room %s", room.roomId);
+                    if (!hideConferenceChans) {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
+            }
+        }
+        return false;
     },
 }
 

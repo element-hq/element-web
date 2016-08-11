@@ -25,6 +25,7 @@ var Unread = require('../../../Unread');
 var dis = require("../../../dispatcher");
 var sdk = require('../../../index');
 var rate_limited_func = require('../../../ratelimitedfunc');
+var MatrixTools = require('../../../MatrixTools');
 
 var HIDE_CONFERENCE_CHANS = true;
 
@@ -204,31 +205,17 @@ module.exports = React.createClass({
             if (me.membership == "invite") {
                 s.lists["im.vector.fake.invite"].push(room);
             }
+            else if (MatrixTools.isDirectMessageRoom(room, me, self.props.ConferenceHandler, HIDE_CONFERENCE_CHANS)) {
+                // "Direct Message" rooms
+                s.lists["im.vector.fake.direct"].push(room);
+            }
             else if (me.membership == "join" || me.membership === "ban" ||
                      (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
             {
                 // Used to split rooms via tags
                 var tagNames = Object.keys(room.tags);
-                // Used for 1:1 direct chats
-                var joinedMembers = room.getJoinedMembers();
 
-                // Show 1:1 chats in seperate "Direct Messages" section as long as they haven't
-                // been moved to a different tag section
-                if (joinedMembers.length === 2 && !tagNames.length) {
-                    var otherMember = joinedMembers.filter(function(m) {
-                        return m.userId !== me.userId
-                    })[0];
-
-                    var ConfHandler = self.props.ConferenceHandler;
-                    if (ConfHandler && ConfHandler.isConferenceUser(otherMember.userId)) {
-                        // console.log("Hiding conference 1:1 room %s", room.roomId);
-                        if (!HIDE_CONFERENCE_CHANS) {
-                            s.lists["im.vector.fake.direct"].push(room);
-                        }
-                    } else {
-                        s.lists["im.vector.fake.direct"].push(room);
-                    }
-                } else if (tagNames.length) {
+                if (tagNames.length) {
                     for (var i = 0; i < tagNames.length; i++) {
                         var tagName = tagNames[i];
                         s.lists[tagName] = s.lists[tagName] || [];
