@@ -28,10 +28,11 @@ var ReactDOM = require('react-dom');
 module.exports = {
     ContextualMenuContainerId: "mx_ContextualMenu_Container",
 
-     propTypes: {
+    propTypes: {
         menuWidth: React.PropTypes.number,
         menuHeight: React.PropTypes.number,
         chevronOffset: React.PropTypes.number,
+        menuColour: React.PropTypes.string,
     },
 
     getOrCreateContainer: function() {
@@ -61,8 +62,23 @@ module.exports = {
             top: props.top,
         };
 
-        var chevronOffset = {
-            top: props.chevronOffset,
+        var chevronOffset = {};
+        if (props.chevronOffset) {
+            chevronOffset.top = props.chevronOffset;
+        }
+
+        // To overide the deafult chevron colour, if it's been set
+        var chevronCSS = "";
+        if (props.menuColour) {
+            chevronCSS = `
+                .mx_ContextualMenu_chevron_left:after {
+                    border-right-color: ${props.menuColour};
+                }
+
+                .mx_ContextualMenu_chevron_right:after {
+                    border-left-color: ${props.menuColour};
+                }
+            `
         }
 
         var chevron = null;
@@ -82,24 +98,29 @@ module.exports = {
             'mx_ContextualMenu_right': !props.left,
         });
 
-        var menuSize = {};
+        var menuStyle = {};
         if (props.menuWidth) {
-            menuSize.width = props.menuWidth;
+            menuStyle.width = props.menuWidth;
         }
 
         if (props.menuHeight) {
-            menuSize.height = props.menuHeight;
+            menuStyle.height = props.menuHeight;
+        }
+
+        if (props.menuColour) {
+            menuStyle["background-color"] = props.menuColour;
         }
 
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
         var menu = (
             <div className={className} style={position}>
-                <div className={menuClasses} style={menuSize}>
+                <div className={menuClasses} style={menuStyle}>
                     {chevron}
                     <Element {...props} onFinished={closeMenu}/>
                 </div>
                 <div className="mx_ContextualMenu_background" onClick={closeMenu}></div>
+                <style>{chevronCSS}</style>
             </div>
         );
 
