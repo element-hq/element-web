@@ -283,7 +283,7 @@ module.exports = React.createClass({
         if (inputs.length == 1) {
             // for a single address, we just send the invite
             promise.done(() => {
-                this.doInvite(inputs[0]);
+                this._doInvite(inputs[0]);
             });
         } else {
             // if there are several, display the confirmation/progress dialog
