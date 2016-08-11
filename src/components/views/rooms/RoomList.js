@@ -188,6 +188,7 @@ module.exports = React.createClass({
         s.lists["im.vector.fake.invite"] = [];
         s.lists["m.favourite"] = [];
         s.lists["im.vector.fake.recent"] = [];
+        s.lists["im.vector.fake.direct"] = [];
         s.lists["m.lowpriority"] = [];
         s.lists["im.vector.fake.archived"] = [];
 
@@ -206,36 +207,36 @@ module.exports = React.createClass({
             else if (me.membership == "join" || me.membership === "ban" ||
                      (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
             {
-                var shouldShowRoom = true;
+                // Used to split rooms via tags
+                var tagNames = Object.keys(room.tags);
+                // Used for 1:1 direct chats
+                var joinedMembers = room.getJoinedMembers();
 
-                // hiding conf rooms only ever toggles shouldShowRoom to false
-                if (HIDE_CONFERENCE_CHANS) {
-                    // we want to hide the 1:1 conf<->user room and not the group chat
-                    var joinedMembers = room.getJoinedMembers();
-                    if (joinedMembers.length === 2) {
-                        var otherMember = joinedMembers.filter(function(m) {
-                            return m.userId !== me.userId
-                        })[0];
-                        var ConfHandler = self.props.ConferenceHandler;
-                        if (ConfHandler && ConfHandler.isConferenceUser(otherMember.userId)) {
-                            // console.log("Hiding conference 1:1 room %s", room.roomId);
-                            shouldShowRoom = false;
+                // Show 1:1 chats in seperate "Direct Messages" section as long as they haven't
+                // been moved to a different tag section
+                if (joinedMembers.length === 2 && !tagNames.length) {
+                    var otherMember = joinedMembers.filter(function(m) {
+                        return m.userId !== me.userId
+                    })[0];
+
+                    var ConfHandler = self.props.ConferenceHandler;
+                    if (ConfHandler && ConfHandler.isConferenceUser(otherMember.userId)) {
+                        // console.log("Hiding conference 1:1 room %s", room.roomId);
+                        if (!HIDE_CONFERENCE_CHANS) {
+                            s.lists["im.vector.fake.direct"].push(room);
                         }
+                    } else {
+                        s.lists["im.vector.fake.direct"].push(room);
+                    }
+                } else if (tagNames.length) {
+                    for (var i = 0; i < tagNames.length; i++) {
+                        var tagName = tagNames[i];
+                        s.lists[tagName] = s.lists[tagName] || [];
+                        s.lists[tagNames[i]].push(room);
                     }
                 }
-
-                if (shouldShowRoom) {
-                    var tagNames = Object.keys(room.tags);
-                    if (tagNames.length) {
-                        for (var i = 0; i < tagNames.length; i++) {
-                            var tagName = tagNames[i];
-                            s.lists[tagName] = s.lists[tagName] || [];
-                            s.lists[tagNames[i]].push(room);
-                        }
-                    }
-                    else {
-                        s.lists["im.vector.fake.recent"].push(room);
-                    }
+                else {
+                    s.lists["im.vector.fake.recent"].push(room);
                 }
             }
             else if (me.membership === "leave") {
@@ -364,8 +365,18 @@ module.exports = React.createClass({
                              searchFilter={ self.props.searchFilter }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
+                <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
+                             label="Direct Messages"
+                             editable={ false }
+                             order="recent"
+                             selectedRoom={ self.props.selectedRoom }
+                             incomingCall={ self.state.incomingCall }
+                             collapsed={ self.props.collapsed }
+                             searchFilter={ self.props.searchFilter }
+                             onShowMoreRooms={ self.onShowMoreRooms } />
+
                 { Object.keys(self.state.lists).map(function(tagName) {
-                    if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|archived))$/)) {
+                    if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
                         return <RoomSubList list={ self.state.lists[tagName] }
                              key={ tagName }
                              label={ tagName }
