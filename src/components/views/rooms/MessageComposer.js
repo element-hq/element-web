@@ -231,15 +231,20 @@ export default class MessageComposer extends React.Component {
             );
         }
 
+        let autoComplete;
+        if (UserSettingsStore.isFeatureEnabled('rich_text_editor')) {
+            autoComplete = <div className="mx_MessageComposer_autocomplete_wrapper">
+                <Autocomplete
+                    ref="autocomplete"
+                    onConfirm={this._onAutocompleteConfirm}
+                    query={this.state.autocompleteQuery}
+                    selection={this.state.selection} />
+            </div>;
+        }
+
         return (
             <div className="mx_MessageComposer mx_fadable" style={{ opacity: this.props.opacity }}>
-                <div className="mx_MessageComposer_autocomplete_wrapper">
-                    <Autocomplete
-                        ref="autocomplete"
-                        onConfirm={this._onAutocompleteConfirm}
-                        query={this.state.autocompleteQuery}
-                        selection={this.state.selection} />
-                </div>
+                {autoComplete}
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         {controls}
