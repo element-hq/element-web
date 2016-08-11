@@ -15,7 +15,6 @@ limitations under the License.
 */
 var React = require('react');
 var Matrix = require("matrix-js-sdk");
-var url = require('url');
 var Favico = require('favico.js');
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
@@ -50,7 +49,15 @@ module.exports = React.createClass({
         onNewScreen: React.PropTypes.func,
         registrationUrl: React.PropTypes.string,
         enableGuest: React.PropTypes.bool,
-        startingQueryParams: React.PropTypes.object
+
+        // the queryParams extracted from the [real] query-string of the URI
+        realQueryParams: React.PropTypes.object,
+
+        // the initial queryParams extracted from the hash-fragment of the URI
+        startingFragmentQueryParams: React.PropTypes.object,
+
+        // called when the session load completes
+        onLoadCompleted: React.PropTypes.func,
     },
 
     PageTypes: {
@@ -89,8 +96,10 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            startingQueryParams: {},
+            realQueryParams: {},
+            startingFragmentQueryParams: {},
             config: {},
+            onLoadCompleted: () => {},
         };
     },
 
@@ -171,7 +180,8 @@ module.exports = React.createClass({
         this.handleResize();
 
         Lifecycle.loadSession({
-            queryParams: this.props.startingQueryParams,
+            realQueryParams: this.props.realQueryParams,
+            fragmentQueryParams: this.props.startingFragmentQueryParams,
             enableGuest: this.props.enableGuest,
             guestHsUrl: this.getCurrentHsUrl(),
             guestIsUrl: this.getCurrentIsUrl(),
@@ -284,41 +294,6 @@ module.exports = React.createClass({
                     screen: 'forgot_password'
                 });
                 this.notifyNewScreen('forgot_password');
-                break;
-            case 'token_login':
-                if (this.state.logged_in) return;
-
-                var self = this;
-                MatrixClientPeg.replaceUsingUrls(
-                    payload.params.homeserver,
-                    payload.params.identityServer
-                );
-
-                var client = MatrixClientPeg.get();
-                client.loginWithToken(payload.params.loginToken).done(function(data) {
-                    MatrixClientPeg.replaceUsingCreds({
-                        homeserverUrl: client.getHomeserverUrl(),
-                        identityServerUrl: client.getIdentityServerUrl(),
-                        userId: data.user_id,
-                        accessToken: data.access_token,
-                        guest: false,
-                    });
-                    self.setState({
-                        screen: undefined,
-                        logged_in: true
-                    });
-
-                    // We're left with the login token, hs and is url as query params
-                    // in the url, a little nasty but let's redirect to clear them
-                    var parsedUrl = url.parse(window.location.href);
-                    parsedUrl.search = "";
-                    window.location.href = url.format(parsedUrl);
-
-                }, function(error) {
-                    self.notifyNewScreen('login');
-                    self.setState({errorText: 'Login failed.'});
-                });
-
                 break;
             case 'leave_room':
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -552,6 +527,7 @@ module.exports = React.createClass({
      * Called when the sessionloader has finished
      */
     _onLoadCompleted: function() {
+        this.props.onLoadCompleted();
         this.setState({loading: false});
     },
 
@@ -732,11 +708,6 @@ module.exports = React.createClass({
         } else if (screen == 'login') {
             dis.dispatch({
                 action: 'start_login',
-                params: params
-            });
-        } else if (screen == 'token_login') {
-            dis.dispatch({
-                action: 'token_login',
                 params: params
             });
         } else if (screen == 'forgot_password') {
@@ -994,8 +965,8 @@ module.exports = React.createClass({
 
         // work out the HS URL prompts we should show for
 
-        // console.log("rendering; loading="+this.state.loading+"; screen="+this.state.screen +
-        //             "; logged_in="+this.state.logged_in+"; ready="+this.state.ready);
+        console.log("rendering; loading="+this.state.loading+"; screen="+this.state.screen +
+                    "; logged_in="+this.state.logged_in+"; ready="+this.state.ready);
 
         if (this.state.loading) {
             var Spinner = sdk.getComponent('elements.Spinner');
@@ -1099,7 +1070,7 @@ module.exports = React.createClass({
                     clientSecret={this.state.register_client_secret}
                     sessionId={this.state.register_session_id}
                     idSid={this.state.register_id_sid}
-                    email={this.props.startingQueryParams.email}
+                    email={this.props.startingFragmentQueryParams.email}
                     username={this.state.upgradeUsername}
                     guestAccessToken={this.state.guestAccessToken}
                     defaultHsUrl={this.getDefaultHsUrl()}

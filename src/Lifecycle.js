@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import q from 'q';
+import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
 import Notifier from './Notifier'
@@ -29,20 +30,28 @@ import dis from './dispatcher';
  * 0. if it looks like we are in the middle of a registration process, it does
  *    nothing.
  *
- * 1. if we have a guest access token in the query params, it uses that.
+ * 1. if we have a loginToken in the (real) query params, it uses that to log
+ *    in.
  *
- * 2. if an access token is stored in local storage (from a previous session),
+ * 2. if we have a guest access token in the fragment query params, it uses
+ *    that.
+ *
+ * 3. if an access token is stored in local storage (from a previous session),
  *    it uses that.
  *
- * 3. it attempts to auto-register as a guest user.
+ * 4. it attempts to auto-register as a guest user.
  *
- * If any of steps 1-3 are successful, it will call {setLoggedIn}, which in
+ * If any of steps 1-4 are successful, it will call {setLoggedIn}, which in
  * turn will raise on_logged_in and will_start_client events.
  *
  * It returns a promise which resolves when the above process completes.
  *
- * @param {object} opts.queryParams: string->string map of the query-parameters
- *     extracted from the #-fragment of the starting URI.
+ * @param {object} opts.realQueryParams: string->string map of the
+ *     query-parameters extracted from the real query-string of the starting
+ *     URI.
+ *
+ * @param {object} opts.fragmentQueryParams: string->string map of the
+ *     query-parameters extracted from the #-fragment of the starting URI.
  *
  * @param {boolean} opts.enableGuest: set to true to enable guest access tokens
  *     and auto-guest registrations.
@@ -55,12 +64,13 @@ import dis from './dispatcher';
  *
  */
 export function loadSession(opts) {
-    const queryParams = opts.queryParams || {};
+    const realQueryParams = opts.realQueryParams || {};
+    const fragmentQueryParams = opts.fragmentQueryParams || {};
     let enableGuest = opts.enableGuest || false;
     const guestHsUrl = opts.guestHsUrl;
     const guestIsUrl = opts.guestIsUrl;
 
-    if (queryParams.client_secret && queryParams.sid) {
+    if (fragmentQueryParams.client_secret && fragmentQueryParams.sid) {
         // this happens during email validation: the email contains a link to the
         // IS, which in turn redirects back to vector. We let MatrixChat create a
         // Registration component which completes the next stage of registration.
@@ -73,14 +83,22 @@ export function loadSession(opts) {
         enableGuest = false;
     }
 
+    if (realQueryParams.loginToken) {
+        if (!realQueryParams.homeserver) {
+            console.warn("Cannot log in with token: can't determine HS URL to use");
+        } else {
+            return _loginWithToken(realQueryParams);
+        }
+    }
+
     if (enableGuest &&
-        queryParams.guest_user_id &&
-        queryParams.guest_access_token
+        fragmentQueryParams.guest_user_id &&
+        fragmentQueryParams.guest_access_token
        ) {
         console.log("Using guest access credentials");
         setLoggedIn({
-            userId: queryParams.guest_user_id,
-            accessToken: queryParams.guest_access_token,
+            userId: fragmentQueryParams.guest_user_id,
+            accessToken: fragmentQueryParams.guest_access_token,
             homeserverUrl: guestHsUrl,
             identityServerUrl: guestIsUrl,
             guest: true,
@@ -98,6 +116,27 @@ export function loadSession(opts) {
 
     // fall back to login screen
     return q();
+}
+
+function _loginWithToken(queryParams) {
+    // create a temporary MatrixClient to do the login
+    var client = Matrix.createClient({
+        baseUrl: queryParams.homeserver,
+    });
+
+    return client.loginWithToken(queryParams.loginToken).then(function(data) {
+        console.log("Logged in with token");
+        setLoggedIn({
+            userId: data.user_id,
+            accessToken: data.access_token,
+            homeserverUrl: queryParams.homeserver,
+            identityServerUrl: queryParams.identityServer,
+            guest: false,
+        })
+    }, (err) => {
+        console.error("Failed to log in with login token: " + err + " " +
+                      err.data);
+    });
 }
 
 function _registerAsGuest(hsUrl, isUrl) {
