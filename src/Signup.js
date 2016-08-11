@@ -14,9 +14,10 @@ const EMAIL_STAGE_TYPE = "m.login.email.identity";
  * storage of HS/IS URLs.
  */
 class Signup {
-    constructor(hsUrl, isUrl) {
+    constructor(hsUrl, isUrl, opts) {
         this._hsUrl = hsUrl;
         this._isUrl = isUrl;
+        this._defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
     }
 
     getHomeserverUrl() {
@@ -51,8 +52,8 @@ class Signup {
  * Registration logic class
  */
 class Register extends Signup {
-    constructor(hsUrl, isUrl) {
-        super(hsUrl, isUrl);
+    constructor(hsUrl, isUrl, opts) {
+        super(hsUrl, isUrl, opts);
         this.setStep("START");
         this.data = null; // from the server
         // random other stuff (e.g. query params, NOT params from the server)
@@ -135,6 +136,7 @@ class Register extends Signup {
             bindEmail = true;
         }
 
+        // TODO need to figure out how to send the device display name to /register.
         return client.register(
             this.username, this.password, this.params.sessionId, authDict, bindEmail,
             this.guestAccessToken
@@ -295,8 +297,8 @@ class Register extends Signup {
 
 
 class Login extends Signup {
-    constructor(hsUrl, isUrl, fallbackHsUrl) {
-        super(hsUrl, isUrl);
+    constructor(hsUrl, isUrl, fallbackHsUrl, opts) {
+        super(hsUrl, isUrl, opts);
         this._fallbackHsUrl = fallbackHsUrl;
         this._currentFlowIndex = 0;
         this._flows = [];
@@ -327,7 +329,11 @@ class Login extends Signup {
 
     loginAsGuest() {
         var client = this._createTemporaryClient();
-        return client.registerGuest().then((creds) => {
+        return client.registerGuest({
+            body: {
+                initial_device_display_name: this._defaultDeviceDisplayName,
+            },
+        }).then((creds) => {
             return {
                 userId: creds.user_id,
                 accessToken: creds.access_token,
@@ -349,7 +355,8 @@ class Login extends Signup {
         var self = this;
         var isEmail = username.indexOf("@") > 0;
         var loginParams = {
-            password: pass
+            password: pass,
+            initial_device_display_name: this._defaultDeviceDisplayName,
         };
         if (isEmail) {
             loginParams.medium = 'email';

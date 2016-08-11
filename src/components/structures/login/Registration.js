@@ -45,6 +45,9 @@ module.exports = React.createClass({
         email: React.PropTypes.string,
         username: React.PropTypes.string,
         guestAccessToken: React.PropTypes.string,
+
+        defaultDeviceDisplayName: React.PropTypes.string,
+
         // registration shouldn't know or care how login is done.
         onLoginClick: React.PropTypes.func.isRequired,
         onCancelClick: React.PropTypes.func
@@ -71,7 +74,9 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         // attach this to the instance rather than this.state since it isn't UI
         this.registerLogic = new Signup.Register(
-            this.props.customHsUrl, this.props.customIsUrl
+            this.props.customHsUrl, this.props.customIsUrl, {
+                defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
+            }
         );
         this.registerLogic.setClientSecret(this.props.clientSecret);
         this.registerLogic.setSessionId(this.props.sessionId);

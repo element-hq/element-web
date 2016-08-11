@@ -44,6 +44,8 @@ module.exports = React.createClass({
         // different home server without confusing users.
         fallbackHsUrl: React.PropTypes.string,
 
+        defaultDeviceDisplayName: React.PropTypes.string,
+
         // login shouldn't know or care how registration is done.
         onRegisterClick: React.PropTypes.func.isRequired,
 
@@ -136,7 +138,9 @@ module.exports = React.createClass({
 
         var fallbackHsUrl = hsUrl == this.props.defaultHsUrl ? this.props.fallbackHsUrl : null;
 
-        var loginLogic = new Signup.Login(hsUrl, isUrl, fallbackHsUrl);
+        var loginLogic = new Signup.Login(hsUrl, isUrl, fallbackHsUrl, {
+            defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
+        });
         this._loginLogic = loginLogic;
 
         loginLogic.getFlows().then(function(flows) {
