@@ -648,7 +648,7 @@ module.exports = React.createClass({
                     <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
                 </div>
 
-                <EmojiText element="h2">{memberNameHTML}</EmojiText>
+                <EmojiText element="h2">{memberName}</EmojiText>
 
                 <div className="mx_MemberInfo_profile">
                     <div className="mx_MemberInfo_profileField">
