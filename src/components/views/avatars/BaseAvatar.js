@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var AvatarLogic = require("../../../Avatar");
-import EmojiText from '../../views/elements/EmojiText';
+import sdk from '../../../index';
 
 module.exports = React.createClass({
     displayName: 'BaseAvatar',
@@ -133,6 +133,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const EmojiText = sdk.getComponent('elements.EmojiText');
         var imageUrl = this.state.imageUrls[this.state.urlsIndex];
 
         const {

@@ -22,7 +22,6 @@ var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
 var ContextualMenu = require('../../structures/ContextualMenu');
-import EmojiText from '../elements/EmojiText';
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -187,6 +186,7 @@ module.exports = React.createClass({
 
         badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
 
+        const EmojiText = sdk.getComponent('elements.EmojiText');
         var label;
         var tooltip;
         if (!this.props.collapsed) {

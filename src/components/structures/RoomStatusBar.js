@@ -19,7 +19,6 @@ var sdk = require('../../index');
 var dis = require("../../dispatcher");
 var WhoIsTyping = require("../../WhoIsTyping");
 var MatrixClientPeg = require("../../MatrixClientPeg");
-import EmojiText from '../views/elements/EmojiText';
 
 module.exports = React.createClass({
     displayName: 'RoomStatusBar',
@@ -190,6 +189,7 @@ module.exports = React.createClass({
     _getContent: function() {
         var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const EmojiText = sdk.getComponent('elements.EmojiText');
 
         // no conn bar trumps unread count since you can't get unread messages
         // without a connection! (technically may already have some but meh)

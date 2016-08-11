@@ -17,9 +17,10 @@
 'use strict';
 
 import React from 'react';
-import EmojiText from '../elements/EmojiText';
+import sdk from '../../../index';
 
 export default function SenderProfile(props) {
+    const EmojiText = sdk.getComponent('elements.EmojiText');
     const {mxEvent} = props;
     const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
     const {msgtype} = mxEvent.getContent();

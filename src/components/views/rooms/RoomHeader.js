@@ -24,7 +24,6 @@ var Modal = require("../../../Modal");
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
 var linkifyMatrix = require('../../../linkify-matrix');
-import EmojiText from '../elements/EmojiText';
 
 linkifyMatrix(linkify);
 
@@ -145,6 +144,7 @@ module.exports = React.createClass({
         var RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
         var ChangeAvatar = sdk.getComponent("settings.ChangeAvatar");
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const EmojiText = sdk.getComponent('elements.EmojiText');
 
         var header;
         var name = null;

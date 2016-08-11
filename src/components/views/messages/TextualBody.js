@@ -23,7 +23,6 @@ var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
 var linkifyMatrix = require('../../../linkify-matrix');
 var sdk = require('../../../index');
-import EmojiText from '../../views/elements/EmojiText';
 
 linkifyMatrix(linkify);
 
@@ -178,6 +177,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const EmojiText = sdk.getComponent('elements.EmojiText');
         var mxEvent = this.props.mxEvent;
         var content = mxEvent.getContent();
         var body = HtmlUtils.bodyToHtml(content, this.props.highlights, {});

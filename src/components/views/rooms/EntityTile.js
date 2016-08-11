@@ -20,7 +20,6 @@ var React = require('react');
 
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
-import EmojiText from '../elements/EmojiText';
 
 
 var PRESENCE_CLASS = {
@@ -105,6 +104,7 @@ module.exports = React.createClass({
         var nameEl;
         const {name} = this.props;
 
+        const EmojiText = sdk.getComponent('elements.EmojiText');
         if (this.state.hover && !this.props.suppressOnHover) {
             var activeAgo = this.props.presenceLastActiveAgo ?
                 (Date.now() - (this.props.presenceLastTs - this.props.presenceLastActiveAgo)) : -1;

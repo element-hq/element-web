@@ -32,7 +32,6 @@ var Modal = require("../../../Modal");
 var sdk = require('../../../index');
 var UserSettingsStore = require('../../../UserSettingsStore');
 var createRoom = require('../../../createRoom');
-import EmojiText from '../elements/EmojiText';
 
 module.exports = React.createClass({
     displayName: 'MemberInfo',
@@ -641,6 +640,7 @@ module.exports = React.createClass({
 
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
+        const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
                 <img className="mx_MemberInfo_cancel" src="img/cancel.svg" width="18" height="18" onClick={this.onCancel}/>

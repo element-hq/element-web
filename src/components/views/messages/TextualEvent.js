@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 
 var TextForEvent = require('../../../TextForEvent');
-import EmojiText from '../elements/EmojiText';
+import sdk from '../../../index';
 
 module.exports = React.createClass({
     displayName: 'TextualEvent',
@@ -31,6 +31,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const EmojiText = sdk.getComponent('elements.EmojiText');
         var text = TextForEvent.textForEvent(this.props.mxEvent);
         if (text == null || text.length === 0) return null;
         return (
