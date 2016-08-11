@@ -27,9 +27,13 @@ var ServerConfig = require("../../views/login/ServerConfig");
 /**
  * A wire component which glues together login UI components and Signup logic
  */
-module.exports = React.createClass({displayName: 'Login',
+module.exports = React.createClass({
+    displayName: 'Login',
+
     propTypes: {
         onLoggedIn: React.PropTypes.func.isRequired,
+
+        enableGuest: React.PropTypes.bool,
 
         customHsUrl: React.PropTypes.string,
         customIsUrl: React.PropTypes.string,
@@ -45,7 +49,6 @@ module.exports = React.createClass({displayName: 'Login',
 
         // login shouldn't care how password recovery is done.
         onForgotPasswordClick: React.PropTypes.func,
-        onLoginAsGuestClick: React.PropTypes.func,
         onCancelClick: React.PropTypes.func,
     },
 
@@ -82,7 +85,26 @@ module.exports = React.createClass({displayName: 'Login',
             self.setState({
                 busy: false
             });
+        }).done();
+    },
+
+    _onLoginAsGuestClick: function() {
+        var self = this;
+        self.setState({
+            busy: true,
+            errorText: null,
+            loginIncorrect: false,
         });
+
+        this._loginLogic.loginAsGuest().then(function(data) {
+            self.props.onLoggedIn(data);
+        }, function(error) {
+            self._setStateFromError(error, true);
+        }).finally(function() {
+            self.setState({
+                busy: false
+            });
+        }).done();
     },
 
     onUsernameChanged: function(username) {
@@ -221,9 +243,9 @@ module.exports = React.createClass({displayName: 'Login',
         var loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
         var loginAsGuestJsx;
-        if (this.props.onLoginAsGuestClick) {
+        if (this.props.enableGuest) {
             loginAsGuestJsx =
-                <a className="mx_Login_create" onClick={this.props.onLoginAsGuestClick} href="#">
+                <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
                     Login as guest
                 </a>
         }

@@ -333,6 +333,26 @@ class Login extends Signup {
         return flowStep ? flowStep.type : null;
     }
 
+    loginAsGuest() {
+        MatrixClientPeg.replaceUsingUrls(this._hsUrl, this._isUrl);
+        return MatrixClientPeg.get().registerGuest().then((creds) => {
+            return {
+                userId: creds.user_id,
+                accessToken: creds.access_token,
+                homeserverUrl: this._hsUrl,
+                identityServerUrl: this._isUrl,
+                guest: true
+            };
+        }, (error) => {
+            if (error.httpStatus === 403) {
+                error.friendlyText = "Guest access is disabled on this Home Server.";
+            } else {
+                error.friendlyText = "Failed to register as guest: " + error.data;
+            }
+            throw error;
+        });
+    }
+
     loginViaPassword(username, pass) {
         var self = this;
         var isEmail = username.indexOf("@") > 0;
