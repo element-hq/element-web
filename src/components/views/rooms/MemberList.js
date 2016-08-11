@@ -207,7 +207,7 @@ module.exports = React.createClass({
         self.setState({
             inviting: true
         });
-    }
+    },
 
     onInvite: function(inputText) {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
