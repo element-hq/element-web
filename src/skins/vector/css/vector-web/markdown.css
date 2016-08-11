@@ -127,12 +127,16 @@ limitations under the License.
     border-radius: 4px;
     background-color: #fcfcfc;
     color: #666666;
+    font-size: 0.9em;
 }
 
 /* Github overrides for inline code */
 .markdown-body > code.hljs {
     display: inline;
-    padding: 0.1em 0.3em;
+    padding-top: 0.15em;
+    padding-right: 0.35em;
+    padding-bottom: 0.1em;
+    padding-left: 0.35em;
 }
 
 /* Github overrides for block code */
