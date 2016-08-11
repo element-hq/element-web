@@ -109,6 +109,9 @@ export default class DevicesPanelEntry extends React.Component {
 
         return (
             <div className="mx_DevicesPanel_device">
+                <div className="mx_DevicesPanel_deviceId">
+                    {device.device_id}
+                </div>
                 <div className="mx_DevicesPanel_deviceName">
                     <EditableTextContainer initialValue={device.display_name}
                         onSubmit={this._onDisplayNameChanged}
