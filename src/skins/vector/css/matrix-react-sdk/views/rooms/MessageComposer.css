@@ -62,8 +62,6 @@ limitations under the License.
     display: flex;
     align-items: center;
     overflow: auto;
-    transition: 0.6s border-top ease;
-    border-top: 2px solid rgba(255, 255, 255, 0);
 }
 .mx_MessageComposer_input_rte {
     border-top: 2px solid #76cfa6; /* placeholder RTE indicator */
