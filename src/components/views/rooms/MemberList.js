@@ -180,6 +180,7 @@ module.exports = React.createClass({
     },
 
     _doInvite(address) {
+        var self = this;
         Invite.inviteToRoom(self.props.roomId, address).catch((err) => {
             if (err !== null) {
                 console.error("Failed to invite: %s", JSON.stringify(err));
