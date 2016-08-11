@@ -173,8 +173,8 @@ module.exports = React.createClass({
         Lifecycle.loadSession({
             queryParams: this.props.startingQueryParams,
             enableGuest: this.props.enableGuest,
-            hsUrl: this.getDefaultHsUrl(),
-            isUrl: this.getDefaultIsUrl(),
+            guestHsUrl: this.getCurrentHsUrl(),
+            guestIsUrl: this.getCurrentIsUrl(),
         }).done(()=>{
             // stuff this through the dispatcher so that it happens
             // after the on_logged_in action.

@@ -47,18 +47,18 @@ import dis from './dispatcher';
  * @param {boolean} opts.enableGuest: set to true to enable guest access tokens
  *     and auto-guest registrations.
  *
- * @params {string} opts.hsUrl: homeserver URL. Only used if enableGuest is
+ * @params {string} opts.guestHsUrl: homeserver URL. Only used if enableGuest is
  *     true; defines the HS to register against.
  *
- * @params {string} opts.isUrl: homeserver URL. Only used if enableGuest is
+ * @params {string} opts.guestIsUrl: homeserver URL. Only used if enableGuest is
  *     true; defines the IS to use.
  *
  */
 export function loadSession(opts) {
     const queryParams = opts.queryParams || {};
     let enableGuest = opts.enableGuest || false;
-    const hsUrl = opts.hsUrl;
-    const isUrl = opts.isUrl;
+    const guestHsUrl = opts.guestHsUrl;
+    const guestIsUrl = opts.guestIsUrl;
 
     if (queryParams.client_secret && queryParams.sid) {
         // this happens during email validation: the email contains a link to the
@@ -68,7 +68,7 @@ export function loadSession(opts) {
         return q();
     }
 
-    if (!hsUrl) {
+    if (!guestHsUrl) {
         console.warn("Cannot enable guest access: can't determine HS URL to use");
         enableGuest = false;
     }
@@ -81,8 +81,8 @@ export function loadSession(opts) {
         setLoggedIn({
             userId: queryParams.guest_user_id,
             accessToken: queryParams.guest_access_token,
-            homeserverUrl: hsUrl,
-            identityServerUrl: isUrl,
+            homeserverUrl: guestHsUrl,
+            identityServerUrl: guestIsUrl,
             guest: true,
         });
         return q();
@@ -93,7 +93,7 @@ export function loadSession(opts) {
     }
 
     if (enableGuest) {
-        return _registerAsGuest(hsUrl, isUrl);
+        return _registerAsGuest(guestHsUrl, guestIsUrl);
     }
 
     // fall back to login screen
