@@ -214,11 +214,19 @@ export function setLoggedIn(credentials) {
         try {
             localStorage.setItem("mx_hs_url", credentials.homeserverUrl);
             localStorage.setItem("mx_is_url", credentials.identityServerUrl);
-
             localStorage.setItem("mx_user_id", credentials.userId);
-            localStorage.setItem("mx_device_id", credentials.deviceId);
             localStorage.setItem("mx_access_token", credentials.accessToken);
             localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
+
+            // if we didn't get a deviceId from the login, leave mx_device_id unset,
+            // rather than setting it to "undefined".
+            //
+            // (in this case MatrixClient doesn't bother with the crypto stuff
+            // - that's fine for us).
+            if (credentials.deviceId) {
+                localStorage.setItem("mx_device_id", credentials.deviceId);
+            }
+
             console.log("Session persisted for %s", credentials.userId);
         } catch (e) {
             console.warn("Error using local storage: can't persist session!", e);
