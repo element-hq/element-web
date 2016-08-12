@@ -58,6 +58,10 @@ module.exports = React.createClass({
 
         // called when the session load completes
         onLoadCompleted: React.PropTypes.func,
+
+        // displayname, if any, to set on the device when logging
+        // in/registering.
+        defaultDeviceDisplayName: React.PropTypes.string,
     },
 
     PageTypes: {
@@ -185,7 +189,7 @@ module.exports = React.createClass({
             enableGuest: this.props.enableGuest,
             guestHsUrl: this.getCurrentHsUrl(),
             guestIsUrl: this.getCurrentIsUrl(),
-            defaultDisplayName: this.props.config.default_device_name,
+            defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
         }).done(()=>{
             // stuff this through the dispatcher so that it happens
             // after the on_logged_in action.
@@ -1040,7 +1044,7 @@ module.exports = React.createClass({
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     registrationUrl={this.props.registrationUrl}
-                    defaultDeviceDisplayName={this.props.config.default_device_name}
+                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
                     onRegisterClick={this.onRegisterClick}
@@ -1067,7 +1071,7 @@ module.exports = React.createClass({
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     fallbackHsUrl={this.getFallbackHsUrl()}
-                    defaultDeviceDisplayName={this.props.config.default_device_name}
+                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     enableGuest={this.props.enableGuest}
                     onCancelClick={this.guestCreds ? this.onReturnToGuestClick : null}
