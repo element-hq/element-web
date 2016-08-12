@@ -47,7 +47,7 @@
     "highlight.js": "^9.0.0",
     "linkifyjs": "^2.0.0-beta.4",
     "matrix-js-sdk": "0.5.5",
-    "matrix-react-sdk": "0.6.4",
+    "matrix-react-sdk": "0.6.4-r1",
     "modernizr": "^3.1.0",
     "q": "^1.4.1",
     "react": "^15.2.1",
