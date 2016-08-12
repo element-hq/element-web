@@ -1,3 +1,9 @@
+Changes in [0.7.4-r1](https://github.com/vector-im/vector-web/releases/tag/v0.7.4-r1) (2016-08-12)
+==================================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.4...v0.7.4-r1)
+ * Update to matrix-react-sdk 0.6.4-r1 to fix inviting multiple people
+
+
 Changes in [0.7.4](https://github.com/vector-im/vector-web/releases/tag/v0.7.4) (2016-08-11)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.3...v0.7.4)
