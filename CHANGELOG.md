@@ -1,3 +1,7 @@
+Changes in [?.?.?]
+==================
+ * Fix inviting multiple people
+
 Changes in [0.6.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.6.4) (2016-08-11)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.6.3...v0.6.4)
