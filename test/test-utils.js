@@ -50,8 +50,7 @@ module.exports.stubClient = function() {
     //
     // 'sandbox.restore()' doesn't work correctly on inherited methods,
     // so we do this for each method
-    var methods = ['get', 'unset', 'replaceUsingUrls',
-                   'replaceUsingCreds'];
+    var methods = ['get', 'unset', 'replaceUsingCreds'];
     for (var i = 0; i < methods.length; i++) {
         sandbox.stub(peg, methods[i]);
     }
@@ -184,4 +183,3 @@ module.exports.mkStubRoom = function() {
         },
     };
 };
-

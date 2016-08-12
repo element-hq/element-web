@@ -142,8 +142,12 @@ function _loginWithToken(queryParams) {
 function _registerAsGuest(hsUrl, isUrl) {
     console.log("Doing guest login on %s", hsUrl);
 
-    MatrixClientPeg.replaceUsingUrls(hsUrl, isUrl);
-    return MatrixClientPeg.get().registerGuest().then((creds) => {
+    // create a temporary MatrixClient to do the login
+    var client = Matrix.createClient({
+        baseUrl: hsUrl,
+    });
+
+    return client.registerGuest().then((creds) => {
         console.log("Registered as guest: %s", creds.user_id);
         setLoggedIn({
             userId: creds.user_id,
@@ -286,7 +290,7 @@ export function onLoggedOut() {
         if (hsUrl) window.localStorage.setItem("mx_hs_url", hsUrl);
         if (isUrl) window.localStorage.setItem("mx_is_url", isUrl);
     }
-    _stopMatrixClient();
+    stopMatrixClient();
 
     dis.dispatch({action: 'on_logged_out'});
 }
@@ -294,11 +298,14 @@ export function onLoggedOut() {
 /**
  * Stop all the background processes related to the current client
  */
-function _stopMatrixClient() {
+export function stopMatrixClient() {
     Notifier.stop();
     UserActivity.stop();
     Presence.stop();
-    MatrixClientPeg.get().stopClient();
-    MatrixClientPeg.get().removeAllListeners();
-    MatrixClientPeg.unset();
+    var cli = MatrixClientPeg.get();
+    if (cli) {
+        cli.stopClient();
+        cli.removeAllListeners();
+        MatrixClientPeg.unset();
+    }
 }

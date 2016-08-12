@@ -193,7 +193,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        this._stopMatrixClient();
+        Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
         window.removeEventListener("focus", this.onFocus);
@@ -601,16 +601,6 @@ module.exports = React.createClass({
         });
     },
 
-    // stop all the background processes related to the current client
-    _stopMatrixClient: function() {
-        Notifier.stop();
-        UserActivity.stop();
-        Presence.stop();
-        MatrixClientPeg.get().stopClient();
-        MatrixClientPeg.get().removeAllListeners();
-        MatrixClientPeg.unset();
-    },
-
     onKeyDown: function(ev) {
             /*
             // Remove this for now as ctrl+alt = alt-gr so this breaks keyboards which rely on alt-gr for numbers
@@ -935,10 +925,8 @@ module.exports = React.createClass({
         var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
 
-        // work out the HS URL prompts we should show for
-
-        console.log("rendering; loading="+this.state.loading+"; screen="+this.state.screen +
-                    "; logged_in="+this.state.logged_in+"; ready="+this.state.ready);
+        // console.log("rendering; loading="+this.state.loading+"; screen="+this.state.screen +
+        //             "; logged_in="+this.state.logged_in+"; ready="+this.state.ready);
 
         if (this.state.loading) {
             var Spinner = sdk.getComponent('elements.Spinner');

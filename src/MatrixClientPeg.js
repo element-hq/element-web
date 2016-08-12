@@ -69,24 +69,10 @@ class MatrixClientPeg {
 
     /**
      * Replace this MatrixClientPeg's client with a client instance that has
-     * Home Server / Identity Server URLs but no credentials
-     */
-    replaceUsingUrls(hs_url, is_url) {
-        this._replaceClient(hs_url, is_url);
-    }
-
-    /**
-     * Replace this MatrixClientPeg's client with a client instance that has
      * Home Server / Identity Server URLs and active credentials
      */
     replaceUsingCreds(creds: MatrixClientCreds) {
-        this._replaceClient(
-            creds.homeserverUrl,
-            creds.identityServerUrl,
-            creds.userId,
-            creds.accessToken,
-            creds.guest,
-        );
+        this._createClient(creds);
     }
 
     start() {
@@ -94,10 +80,6 @@ class MatrixClientPeg {
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
         this.get().startClient(opts);
-    }
-
-    _replaceClient(hs_url, is_url, user_id, access_token, isGuest) {
-        this._createClient(hs_url, is_url, user_id, access_token, isGuest);
     }
 
     getCredentials(): MatrixClientCreds {
@@ -110,12 +92,12 @@ class MatrixClientPeg {
         };
     }
 
-    _createClient(hs_url, is_url, user_id, access_token, isGuest) {
+    _createClient(creds: MatrixClientCreds) {
         var opts = {
-            baseUrl: hs_url,
-            idBaseUrl: is_url,
-            accessToken: access_token,
-            userId: user_id,
+            baseUrl: creds.homeserverUrl,
+            idBaseUrl: creds.identityServerUrl,
+            accessToken: creds.accessToken,
+            userId: creds.userId,
             timelineSupport: true,
         };
 
@@ -130,7 +112,7 @@ class MatrixClientPeg {
         // potential number of event listeners is quite high.
         this.matrixClient.setMaxListeners(500);
 
-        this.matrixClient.setGuest(Boolean(isGuest));
+        this.matrixClient.setGuest(Boolean(creds.guest));
     }
 }
 
