@@ -21,6 +21,7 @@ var React = require('react');
 var classNames = require('classnames');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
+var RoomNotifs = require('../../../notifications/RoomNotifs');
 
 module.exports = React.createClass({
     displayName: 'NotificationStateContextMenu',
@@ -29,23 +30,6 @@ module.exports = React.createClass({
         room: React.PropTypes.object.isRequired,
         /* callback called when the menu is dismissed */
         onFinished: React.PropTypes.func,
-    },
-
-    getInitialState: function() {
-        var areNotifsMuted = false;
-        var cli = MatrixClientPeg.get();
-        if (!cli.isGuest()) {
-            var roomPushRule = cli.getRoomPushRule("global", this.props.room.roomId);
-            if (roomPushRule) {
-                if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
-                    areNotifsMuted = true;
-                }
-            }
-        }
-
-        return {
-            areNotifsMuted: areNotifsMuted,
-        };
     },
 
     _save: function( areNotifsMuted ) {
@@ -100,26 +84,26 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var cli = MatrixClientPeg.get();
+        const vectorRoomNotifState = RoomNotifs.getVectorRoomNotifsState(this.props.room.roomId);
 
         var alertMeClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldDisabled': true,
+            'mx_NotificationStateContextMenu_fieldSet': vectorRoomNotifState == 'all_messages_loud',
         });
 
         var allNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': !this.state.areNotifsMuted,
+            'mx_NotificationStateContextMenu_fieldSet': vectorRoomNotifState == 'all_messages',
         });
 
         var mentionsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': this.state.areNotifsMuted,
+            'mx_NotificationStateContextMenu_fieldSet': vectorRoomNotifState == 'mentions_only',
         });
 
         var muteNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldDisabled': true,
+            'mx_NotificationStateContextMenu_fieldDisabled': vectorRoomNotifState == 'mute',
         });
 
         return (
