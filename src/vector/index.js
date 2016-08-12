@@ -137,7 +137,7 @@ var makeRegistrationUrl = function() {
 }
 
 
-function getDefaultDeviceName() {
+function getDefaultDeviceDisplayName() {
     // strip query-string and fragment from uri
     let u = url.parse(window.location.href);
     u.search = "";
@@ -253,7 +253,7 @@ async function loadApp() {
                 startingFragmentQueryParams={fragparts.params}
                 enableGuest={true}
                 onLoadCompleted={onLoadCompleted}
-                default_device_name={getDefaultDeviceName()}
+                defaultDeviceDisplayName={getDefaultDeviceDisplayName()}
             />,
             document.getElementById('matrixchat')
         );
