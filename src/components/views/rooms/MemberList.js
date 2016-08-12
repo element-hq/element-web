@@ -180,8 +180,7 @@ module.exports = React.createClass({
     },
 
     _doInvite(address) {
-        var self = this;
-        Invite.inviteToRoom(self.props.roomId, address).catch((err) => {
+        Invite.inviteToRoom(this.props.roomId, address).catch((err) => {
             if (err !== null) {
                 console.error("Failed to invite: %s", JSON.stringify(err));
                 if (err.errcode == 'M_FORBIDDEN') {
@@ -197,7 +196,7 @@ module.exports = React.createClass({
                 }
             }
         }).finally(() => {
-            self.setState({
+            this.setState({
                 inviting: false
             });
             // XXX: hacky focus on the invite box
@@ -208,7 +207,7 @@ module.exports = React.createClass({
                 }
             }, 0);
         }).done();
-        self.setState({
+        this.setState({
             inviting: true
         });
     },
