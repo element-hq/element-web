@@ -69,6 +69,7 @@ export function loadSession(opts) {
     let enableGuest = opts.enableGuest || false;
     const guestHsUrl = opts.guestHsUrl;
     const guestIsUrl = opts.guestIsUrl;
+    const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
 
     if (fragmentQueryParams.client_secret && fragmentQueryParams.sid) {
         // this happens during email validation: the email contains a link to the
@@ -87,7 +88,7 @@ export function loadSession(opts) {
         if (!realQueryParams.homeserver) {
             console.warn("Cannot log in with token: can't determine HS URL to use");
         } else {
-            return _loginWithToken(realQueryParams);
+            return _loginWithToken(realQueryParams, defaultDeviceDisplayName);
         }
     }
 
@@ -111,20 +112,25 @@ export function loadSession(opts) {
     }
 
     if (enableGuest) {
-        return _registerAsGuest(guestHsUrl, guestIsUrl);
+        return _registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
     }
 
     // fall back to login screen
     return q();
 }
 
-function _loginWithToken(queryParams) {
+function _loginWithToken(queryParams, defaultDeviceDisplayName) {
     // create a temporary MatrixClient to do the login
     var client = Matrix.createClient({
         baseUrl: queryParams.homeserver,
     });
 
-    return client.loginWithToken(queryParams.loginToken).then(function(data) {
+    return client.login(
+        "m.login.token", {
+            token: queryParams.loginToken,
+            initial_device_display_name: defaultDeviceDisplayName,
+        },
+    ).then(function(data) {
         console.log("Logged in with token");
         setLoggedIn({
             userId: data.user_id,
@@ -139,15 +145,22 @@ function _loginWithToken(queryParams) {
     });
 }
 
-function _registerAsGuest(hsUrl, isUrl) {
+function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     console.log("Doing guest login on %s", hsUrl);
+
+    // TODO: we should probably de-duplicate this and Signup.Login.loginAsGuest.
+    // Not really sure where the right home for it is.
 
     // create a temporary MatrixClient to do the login
     var client = Matrix.createClient({
         baseUrl: hsUrl,
     });
 
-    return client.registerGuest().then((creds) => {
+    return client.registerGuest({
+        body: {
+            initial_device_display_name: defaultDeviceDisplayName,
+        },
+    }).then((creds) => {
         console.log("Registered as guest: %s", creds.user_id);
         setLoggedIn({
             userId: creds.user_id,

@@ -185,6 +185,7 @@ module.exports = React.createClass({
             enableGuest: this.props.enableGuest,
             guestHsUrl: this.getCurrentHsUrl(),
             guestIsUrl: this.getCurrentIsUrl(),
+            defaultDisplayName: this.props.config.default_device_name,
         }).done(()=>{
             // stuff this through the dispatcher so that it happens
             // after the on_logged_in action.
@@ -1039,6 +1040,7 @@ module.exports = React.createClass({
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     registrationUrl={this.props.registrationUrl}
+                    defaultDeviceDisplayName={this.props.config.default_device_name}
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
                     onRegisterClick={this.onRegisterClick}
@@ -1065,6 +1067,7 @@ module.exports = React.createClass({
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     fallbackHsUrl={this.getFallbackHsUrl()}
+                    defaultDeviceDisplayName={this.props.config.default_device_name}
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     enableGuest={this.props.enableGuest}
                     onCancelClick={this.guestCreds ? this.onReturnToGuestClick : null}
