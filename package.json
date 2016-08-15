@@ -58,7 +58,8 @@
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "sanitize-html": "^1.11.1",
     "ua-parser-js": "^0.7.10",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
     "babel": "^5.8.23",

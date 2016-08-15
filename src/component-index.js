@@ -37,6 +37,7 @@ module.exports.components['structures.ViewSource'] = require('./components/struc
 module.exports.components['views.context_menus.MessageContextMenu'] = require('./components/views/context_menus/MessageContextMenu');
 module.exports.components['views.context_menus.NotificationStateContextMenu'] = require('./components/views/context_menus/NotificationStateContextMenu');
 module.exports.components['views.context_menus.RoomTagContextMenu'] = require('./components/views/context_menus/RoomTagContextMenu');
+module.exports.components['views.dialogs.ChangelogDialog'] = require('./components/views/dialogs/ChangelogDialog');
 module.exports.components['views.elements.ImageView'] = require('./components/views/elements/ImageView');
 module.exports.components['views.elements.Spinner'] = require('./components/views/elements/Spinner');
 module.exports.components['views.globals.GuestWarningBar'] = require('./components/views/globals/GuestWarningBar');
