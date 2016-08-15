@@ -69,7 +69,7 @@ var sanitizeHtmlParams = {
     allowedAttributes: {
         // custom ones first:
         font: [ 'color' ], // custom to matrix
-        a: [ 'href', 'name', 'target' ], // remote target: custom to matrix
+        a: [ 'href', 'name', 'target', 'rel' ], // remote target: custom to matrix
         // We don't currently allow img itself by default, but this
         // would make sense if we did
         img: [ 'src' ],
@@ -81,7 +81,7 @@ var sanitizeHtmlParams = {
     allowedSchemesByTag: {
         img: [ 'data' ],
     },
-    
+
     transformTags: { // custom to matrix
         // add blank targets to all hyperlinks except vector URLs
         'a': function(tagName, attribs) {
@@ -92,6 +92,7 @@ var sanitizeHtmlParams = {
             else {
                 attribs.target = '_blank';
             }
+            attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
             return { tagName: tagName, attribs : attribs };
         },
     },
