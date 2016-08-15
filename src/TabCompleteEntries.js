@@ -94,7 +94,7 @@ CommandEntry.fromCommands = function(commandArray) {
 
 class MemberEntry extends Entry {
     constructor(member) {
-        super(member.name || member.userId);
+        super((member.name || member.userId).replace(' (IRC)', ''));
         this.member = member;
         this.kind = 'member';
     }
