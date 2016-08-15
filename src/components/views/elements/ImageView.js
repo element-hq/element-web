@@ -80,7 +80,7 @@ module.exports = React.createClass({
     getName: function () {
         var name = this.props.name;
         if (name && this.props.link) {
-            name = <a href={ this.props.link } target="_blank">{ name }</a>;
+            name = <a href={ this.props.link } target="_blank" rel="noopener">{ name }</a>;
         }
         return name;
     },
@@ -169,7 +169,7 @@ module.exports = React.createClass({
                                 { this.getName() }
                             </div>
                             { eventMeta }
-                            <a className="mx_ImageView_link" href={ this.props.src } target="_blank">
+                            <a className="mx_ImageView_link" href={ this.props.src } target="_blank" rel="noopener">
                                 <div className="mx_ImageView_download">
                                         Download this file<br/>
                                          <span className="mx_ImageView_size">{ size_res }</span>
