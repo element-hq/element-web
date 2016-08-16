@@ -156,6 +156,7 @@ limitations under the License.
     position: absolute;
     display: inline-block;
     visibility: hidden;
+    cursor: pointer;
     top: 6px;
     right: 6px;
 }
