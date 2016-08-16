@@ -34,7 +34,7 @@ limitations under the License.
 }
 
 .mx_EventTile_continuation {
-    padding-top: 8px ! important;
+    padding-top: 0px ! important;
 }
 
 .mx_EventTile_verified {
