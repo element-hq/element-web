@@ -18,19 +18,18 @@ limitations under the License.
     max-width: 100%;
     clear: both;
     padding-top: 24px;
-    margin-left: 65px;
     font-size: 14px;
 }
 
 .mx_EventTile_avatar {
-    padding-left: 18px;
-    padding-right: 12px;
-    margin-left: -73px;
-    margin-top: -2px;
+    padding-left: 11px;
+    padding-right: 24px;
+    margin-top: -6px;
     float: left;
     position: relative;
     top: 0px;
     cursor: pointer;
+    z-index: 2;
 }
 
 .mx_EventTile_continuation {
@@ -49,7 +48,7 @@ limitations under the License.
     color: #454545;
     opacity: 0.5;
     display: inline-block;
-    font-size: 13px;
+    font-size: 14px;
     overflow-y: hidden;
     cursor: pointer;
 }
@@ -60,7 +59,7 @@ limitations under the License.
     white-space: nowrap;
     color: #acacac;
     font-size: 11px;
-    left: -57px;
+    left: 12px;
     top: 8px;
     position: absolute;
 }
@@ -68,66 +67,12 @@ limitations under the License.
 .mx_EventTile_line {
     position: relative;
     /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
-    margin-right: 125px;
+    margin-right: 110px;
+    padding-left: 65px;
     padding-top: 5px;
     padding-bottom: 7px;
+    border-radius: 4px;
 }
-
-/* all the overflow-y: hidden; are to trap Zalgos -
-   but they introduce an implicit overflow-x: auto.
-   so make that explicitly hidden too to avoid random
-   horizontal scrollbars occasionally appearing, like in
-   https://github.com/vector-im/vector-web/issues/1154
-    */
-.mx_EventTile_content {
-    display: block;
-    overflow-y: hidden;
-    overflow-x: hidden;
-}
-
-/* De-zalgoing */
-.mx_EventTile_body {
-    overflow-y: hidden;
-}
-
-/* Various markdown overrides */
-
-.mx_EventTile_content .markdown-body {
-    font-family: inherit ! important;
-    white-space: normal ! important;
-    line-height: inherit ! important;
-    color: inherit;
-    font-size: 15px;
-}
-
-/* have to use overlay rather than auto otherwise Linux and Windows
-   Chrome gets very confused about vertical spacing:
-   https://github.com/vector-im/vector-web/issues/754
-*/
-.mx_EventTile_content .markdown-body pre {
-    overflow-x: overlay;
-    overflow-y: visible;
-}
-
-.mx_EventTile_content .markdown-body h1,
-.mx_EventTile_content .markdown-body h2,
-.mx_EventTile_content .markdown-body h3,
-.mx_EventTile_content .markdown-body h4,
-.mx_EventTile_content .markdown-body h5,
-.mx_EventTile_content .markdown-body h6
-{
-    font-family: inherit ! important;
-}
-
-.mx_EventTile_content .markdown-body a {
-    color: #76cfa6;
-}
-
-.mx_EventTile_content .markdown-body .hljs {
-    display: inline ! important;
-}
-
-/* end of overrides */
 
 /* HACK to override line-height which is already marked important elsewhere */
 .mx_EventTile_bigEmoji.mx_EventTile_bigEmoji {
@@ -206,8 +151,8 @@ limitations under the License.
     position: absolute;
     display: inline-block;
     visibility: hidden;
-    top: 5px;
-    right: -20px;
+    top: 6px;
+    right: 6px;
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton {
@@ -227,7 +172,7 @@ limitations under the License.
     display: inline-block;
     width: 14px;
     height: 14px;
-    top: 25px;
+    top: 28px;
 }
 
 .mx_EventTile_continuation .mx_EventTile_readAvatars {
@@ -244,3 +189,60 @@ limitations under the License.
     font-size: 11px;
     position: absolute;
 }
+
+/* all the overflow-y: hidden; are to trap Zalgos -
+   but they introduce an implicit overflow-x: auto.
+   so make that explicitly hidden too to avoid random
+   horizontal scrollbars occasionally appearing, like in
+   https://github.com/vector-im/vector-web/issues/1154
+    */
+.mx_EventTile_content {
+    display: block;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    margin-right: 34px;
+}
+
+/* De-zalgoing */
+.mx_EventTile_body {
+    overflow-y: hidden;
+}
+
+/* Various markdown overrides */
+
+.mx_EventTile_content .markdown-body {
+    font-family: inherit ! important;
+    white-space: normal ! important;
+    line-height: inherit ! important;
+    color: inherit;
+    font-size: 14px;
+}
+
+/* have to use overlay rather than auto otherwise Linux and Windows
+   Chrome gets very confused about vertical spacing:
+   https://github.com/vector-im/vector-web/issues/754
+*/
+.mx_EventTile_content .markdown-body pre {
+    overflow-x: overlay;
+    overflow-y: visible;
+}
+
+.mx_EventTile_content .markdown-body h1,
+.mx_EventTile_content .markdown-body h2,
+.mx_EventTile_content .markdown-body h3,
+.mx_EventTile_content .markdown-body h4,
+.mx_EventTile_content .markdown-body h5,
+.mx_EventTile_content .markdown-body h6
+{
+    font-family: inherit ! important;
+}
+
+.mx_EventTile_content .markdown-body a {
+    color: #76cfa6;
+}
+
+.mx_EventTile_content .markdown-body .hljs {
+    display: inline ! important;
+}
+
+/* end of overrides */
