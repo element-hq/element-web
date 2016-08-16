@@ -61,14 +61,16 @@ limitations under the License.
     color: #acacac;
     font-size: 11px;
     left: -57px;
-    top: 3px;
+    top: 8px;
     position: absolute;
 }
 
 .mx_EventTile_line {
     position: relative;
     /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
-    margin-right: 95px;
+    margin-right: 125px;
+    padding-top: 5px;
+    padding-bottom: 7px;
 }
 
 /* all the overflow-y: hidden; are to trap Zalgos -
@@ -188,6 +190,10 @@ limitations under the License.
     text-decoration: none;
 }
 
+.mx_EventTile:hover .mx_EventTile_line {
+    background-color: #f7f7f7;
+}
+
 .mx_EventTile_last .mx_MessageTimestamp {
     visibility: visible;
 }
@@ -200,6 +206,8 @@ limitations under the License.
     position: absolute;
     display: inline-block;
     visibility: hidden;
+    top: 5px;
+    right: -20px;
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton {
@@ -219,11 +227,11 @@ limitations under the License.
     display: inline-block;
     width: 14px;
     height: 14px;
-    top: 20px;
+    top: 25px;
 }
 
 .mx_EventTile_continuation .mx_EventTile_readAvatars {
-    top: 1px;
+    top: 7px;
 }
 
 .mx_EventTile_readAvatars .mx_BaseAvatar {
