@@ -219,6 +219,11 @@ limitations under the License.
     display: inline-block;
     width: 14px;
     height: 14px;
+    top: 20px;
+}
+
+.mx_EventTile_continuation .mx_EventTile_readAvatars {
+    top: 1px;
 }
 
 .mx_EventTile_readAvatars .mx_BaseAvatar {
