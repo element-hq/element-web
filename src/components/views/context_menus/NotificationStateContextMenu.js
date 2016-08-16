@@ -32,78 +32,86 @@ module.exports = React.createClass({
         onFinished: React.PropTypes.func,
     },
 
-    _save: function( areNotifsMuted ) {
-        var self = this;
+    getInitialState() {
+        return {
+            vectorRoomNotifState: RoomNotifs.getVectorRoomNotifsState(this.props.room.roomId),
+        }
+    },
+
+    _save: function(newState) {
+        const oldState = this.state.vectorRoomNotifState;
         const roomId = this.props.room.roomId;
         var cli = MatrixClientPeg.get();
 
         if (!cli.isGuest()) {
             // Wrapping this in a q promise, as setRoomMutePushRule can return
             // a promise or a value
-            q(cli.setRoomMutePushRule("global", roomId, areNotifsMuted))
-            .then(function() {
-                self.setState({areNotifsMuted: areNotifsMuted});
-
+            this.setState({
+                vectorRoomNotifState: newState,
+            });
+            RoomNotifs.setVectorRoomNotifsState(this.props.room.roomId, newState).done(() => {
                 // delay slightly so that the user can see their state change
                 // before closing the menu
-                return q.delay(500).then(function() {
+                return q.delay(500).then(() => {
                     // tell everyone that wants to know of the change in
                     // notification state
                     dis.dispatch({
                         action: 'notification_change',
-                        roomId: self.props.room.roomId,
-                        areNotifsMuted: areNotifsMuted,
+                        roomId: this.props.room.roomId,
+                        //areNotifsMuted: areNotifsMuted,
                     });
 
                     // Close the context menu
-                    if (self.props.onFinished) {
-                        self.props.onFinished();
+                    if (this.props.onFinished) {
+                        this.props.onFinished();
                     };
                 });
-            }).fail(function(error) {
+            }, (error) => {
                 // TODO: some form of error notification to the user
                 // to inform them that their state change failed.
+                // For now we at least set the state back
+                this.setState({
+                    vectorRoomNotifState: oldState,
+                });
             });
         }
     },
 
     _onClickAlertMe: function() {
-        // Placeholder
+        this._save('all_messages_loud');
     },
 
     _onClickAllNotifs: function() {
-        this._save(false);
+        this._save('all_messages');
     },
 
     _onClickMentions: function() {
-        this._save(true);
+        this._save('mentions_only');
     },
 
     _onClickMute: function() {
-        // Placeholder
+        this._save('mute');
     },
 
     render: function() {
-        const vectorRoomNotifState = RoomNotifs.getVectorRoomNotifsState(this.props.room.roomId);
-
         var alertMeClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': vectorRoomNotifState == 'all_messages_loud',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.vectorRoomNotifState == 'all_messages_loud',
         });
 
         var allNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': vectorRoomNotifState == 'all_messages',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.vectorRoomNotifState == 'all_messages',
         });
 
         var mentionsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': vectorRoomNotifState == 'mentions_only',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.vectorRoomNotifState == 'mentions_only',
         });
 
         var muteNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldDisabled': vectorRoomNotifState == 'mute',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.vectorRoomNotifState == 'mute',
         });
 
         return (
