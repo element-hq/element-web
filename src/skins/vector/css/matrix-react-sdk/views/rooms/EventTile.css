@@ -83,10 +83,14 @@ limitations under the License.
 /* this is used for the tile for the event which is selected via the URL.
  * TODO: ultimately we probably want some transition on here.
  */
-.mx_EventTile_selected {
+.mx_EventTile_selected .mx_EventTile_line {
     border-left: #76cfa6 5px solid;
-    margin-left: 53px;
-    padding-left: 7px;
+    padding-left: 60px;
+    background-color: #f7f7f7;
+}
+
+.mx_EventTile:hover .mx_EventTile_line {
+    background-color: #f7f7f7;
 }
 
 .mx_EventTile_searchHighlight {
@@ -133,10 +137,6 @@ limitations under the License.
 
 .mx_EventTile_msgOption a {
     text-decoration: none;
-}
-
-.mx_EventTile:hover .mx_EventTile_line {
-    background-color: #f7f7f7;
 }
 
 .mx_EventTile_last .mx_MessageTimestamp {
