@@ -412,7 +412,7 @@ module.exports = React.createClass({
         }
 
         var editButton = (
-            <input type="image" src="img/icon_context_message.svg" alt="Options" title="Options" width="19" height="19" className="mx_EventTile_editButton" onClick={this.onEditClicked} />
+            <img className="mx_EventTile_editButton" src="img/icon_context_message.svg" width="19" height="19" alt="Options" title="Options" onClick={this.onEditClicked} />
         );
 
         return (
