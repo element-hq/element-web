@@ -19,6 +19,7 @@ limitations under the License.
     clear: both;
     padding-top: 24px;
     margin-left: 65px;
+    font-size: 14px;
 }
 
 .mx_EventTile_avatar {
@@ -54,8 +55,14 @@ limitations under the License.
 }
 
 .mx_EventTile .mx_MessageTimestamp {
+    display: block;
+    visibility: hidden;
+    white-space: nowrap;
     color: #acacac;
     font-size: 11px;
+    left: -57px;
+    top: 3px;
+    position: absolute;
 }
 
 .mx_EventTile_line {
@@ -179,13 +186,6 @@ limitations under the License.
 
 .mx_EventTile_msgOption a {
     text-decoration: none;
-}
-
-.mx_EventTile .mx_MessageTimestamp {
-    display: block;
-    visibility: hidden;
-    text-align: right;
-    white-space: nowrap;
 }
 
 .mx_EventTile_last .mx_MessageTimestamp {
