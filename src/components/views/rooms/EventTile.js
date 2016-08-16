@@ -420,16 +420,18 @@ module.exports = React.createClass({
         return (
             <div className={classes}>
                 <div className="mx_EventTile_msgOption">
-                    { timestamp }
                     { readAvatars }
                 </div>
                 { avatar }
                 { sender }
                 <div className="mx_EventTile_line">
-                    <EventTileType ref="tile" mxEvent={this.props.mxEvent} highlights={this.props.highlights}
-                          highlightLink={this.props.highlightLink}
-                          showUrlPreview={this.props.showUrlPreview}
-                          onWidgetLoad={this.props.onWidgetLoad} />
+                    { timestamp }
+                    <EventTileType ref="tile"
+                        mxEvent={this.props.mxEvent}
+                        highlights={this.props.highlights}
+                        highlightLink={this.props.highlightLink}
+                        showUrlPreview={this.props.showUrlPreview}
+                        onWidgetLoad={this.props.onWidgetLoad} />
                 </div>
             </div>
         );
