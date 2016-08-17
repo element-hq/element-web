@@ -67,17 +67,17 @@ module.exports = React.createClass({
     componentWillMount: function() {
         this._cancelDeviceList = null;
 
+        // only display the devices list if our client supports E2E *and* the
+        // feature is enabled in the user settings
+        this._enableDevices = MatrixClientPeg.get().isCryptoEnabled() &&
+            UserSettingsStore.isFeatureEnabled("e2e_encryption");
+
         this.setState({
             existingOneToOneRoomId: this.getExistingOneToOneRoomId()
         });
     },
 
     componentDidMount: function() {
-        // only display the devices list if our client supports E2E *and* the
-        // feature is enabled in the user settings
-        this._enableDevices = MatrixClientPeg.get().isCryptoEnabled() &&
-            UserSettingsStore.isFeatureEnabled("e2e_encryption");
-
         this._updateStateForNewMember(this.props.member);
         MatrixClientPeg.get().on("deviceVerificationChanged", this.onDeviceVerificationChanged);
     },
