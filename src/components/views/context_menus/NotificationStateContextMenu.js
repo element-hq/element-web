@@ -19,9 +19,8 @@ limitations under the License.
 var q = require("q");
 var React = require('react');
 var classNames = require('classnames');
+var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var RoomNotifs = require('../../../notifications/RoomNotifs');
 
 module.exports = React.createClass({
     displayName: 'NotificationStateContextMenu',
@@ -34,12 +33,12 @@ module.exports = React.createClass({
 
     getInitialState() {
         return {
-            vectorRoomNotifState: RoomNotifs.getVectorRoomNotifsState(this.props.room.roomId),
+            roomNotifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
         }
     },
 
     _save: function(newState) {
-        const oldState = this.state.vectorRoomNotifState;
+        const oldState = this.state.roomNotifState;
         const roomId = this.props.room.roomId;
         var cli = MatrixClientPeg.get();
 
@@ -47,20 +46,12 @@ module.exports = React.createClass({
             // Wrapping this in a q promise, as setRoomMutePushRule can return
             // a promise or a value
             this.setState({
-                vectorRoomNotifState: newState,
+                roomNotifState: newState,
             });
-            RoomNotifs.setVectorRoomNotifsState(this.props.room.roomId, newState).done(() => {
+            RoomNotifs.setRoomNotifsState(this.props.room.roomId, newState).done(() => {
                 // delay slightly so that the user can see their state change
                 // before closing the menu
                 return q.delay(500).then(() => {
-                    // tell everyone that wants to know of the change in
-                    // notification state
-                    dis.dispatch({
-                        action: 'notification_change',
-                        roomId: this.props.room.roomId,
-                        //areNotifsMuted: areNotifsMuted,
-                    });
-
                     // Close the context menu
                     if (this.props.onFinished) {
                         this.props.onFinished();
@@ -71,7 +62,7 @@ module.exports = React.createClass({
                 // to inform them that their state change failed.
                 // For now we at least set the state back
                 this.setState({
-                    vectorRoomNotifState: oldState,
+                    roomNotifState: oldState,
                 });
             });
         }
@@ -96,22 +87,22 @@ module.exports = React.createClass({
     render: function() {
         var alertMeClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': this.state.vectorRoomNotifState == 'all_messages_loud',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == 'all_messages_loud',
         });
 
         var allNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': this.state.vectorRoomNotifState == 'all_messages',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == 'all_messages',
         });
 
         var mentionsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': this.state.vectorRoomNotifState == 'mentions_only',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == 'mentions_only',
         });
 
         var muteNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': this.state.vectorRoomNotifState == 'mute',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == 'mute',
         });
 
         return (
