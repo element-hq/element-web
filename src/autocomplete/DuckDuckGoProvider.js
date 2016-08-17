@@ -78,7 +78,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
     }
 
     getName() {
-        return 'Results from DuckDuckGo';
+        return '🔍 Results from DuckDuckGo';
     }
 
     static getInstance(): DuckDuckGoProvider {

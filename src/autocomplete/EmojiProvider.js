@@ -3,6 +3,8 @@ import AutocompleteProvider from './AutocompleteProvider';
 import Q from 'q';
 import {emojioneList, shortnameToImage, shortnameToUnicode} from 'emojione';
 import Fuse from 'fuse.js';
+import sdk from '../index';
+import {PillCompletion} from './Components';
 
 const EMOJI_REGEX = /:\w*:?/g;
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
@@ -16,33 +18,39 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     getCompletions(query: string, selection: {start: number, end: number}) {
+        const EmojiText = sdk.getComponent('views.elements.EmojiText');
+
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
             completions = this.fuse.search(command[0]).map(result => {
-                let shortname = EMOJI_SHORTNAMES[result];
-                let imageHTML = shortnameToImage(shortname);
+                const shortname = EMOJI_SHORTNAMES[result];
+                const unicode = shortnameToUnicode(shortname);
                 return {
-                    completion: shortnameToUnicode(shortname),
+                    completion: unicode,
                     component: (
-                        <div className="mx_Autocomplete_Completion">
-                            <span style={{maxWidth: '1em'}} dangerouslySetInnerHTML={{__html: imageHTML}}></span>&nbsp;&nbsp;{shortname}
-                        </div>
+                        <PillCompletion title={shortname} initialComponent={<EmojiText style={{maxWidth: '1em'}}>{unicode}</EmojiText>} />
                     ),
                     range,
                 };
-            }).slice(0, 4);
+            }).slice(0, 8);
         }
         return Q.when(completions);
     }
 
     getName() {
-        return 'Emoji';
+        return '😃 Emoji';
     }
 
     static getInstance() {
         if (instance == null)
             instance = new EmojiProvider();
         return instance;
+    }
+
+    renderCompletions(completions: [React.Component]): ?React.Component {
+        return React.cloneElement(super.renderCompletions(completions), {
+            className: 'mx_Autocomplete_Completion_container_pill',
+        });
     }
 }

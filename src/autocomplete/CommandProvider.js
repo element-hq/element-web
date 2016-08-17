@@ -74,7 +74,7 @@ export default class CommandProvider extends AutocompleteProvider {
     }
 
     getName() {
-        return 'Commands';
+        return '*️⃣ Commands';
     }
 
     static getInstance(): CommandProvider {
@@ -82,5 +82,11 @@ export default class CommandProvider extends AutocompleteProvider {
             instance = new CommandProvider();
 
         return instance;
+    }
+
+    renderCompletions(completions: [React.Component]): ?React.Component {
+        return React.cloneElement(super.renderCompletions(completions), {
+            className: 'mx_Autocomplete_Completion_container_block',
+        });
     }
 }

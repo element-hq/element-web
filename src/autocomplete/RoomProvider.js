@@ -3,8 +3,9 @@ import AutocompleteProvider from './AutocompleteProvider';
 import Q from 'q';
 import MatrixClientPeg from '../MatrixClientPeg';
 import Fuse from 'fuse.js';
-import {TextualCompletion} from './Components';
+import {PillCompletion} from './Components';
 import {getDisplayAliasForRoom} from '../MatrixTools';
+import sdk from '../index';
 
 const ROOM_REGEX = /(?=#)([^\s]*)/g;
 
@@ -21,6 +22,8 @@ export default class RoomProvider extends AutocompleteProvider {
     }
 
     getCompletions(query: string, selection: {start: number, end: number}) {
+        const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
+
         let client = MatrixClientPeg.get();
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection);
@@ -39,7 +42,7 @@ export default class RoomProvider extends AutocompleteProvider {
                 return {
                     completion: displayAlias,
                     component: (
-                        <TextualCompletion title={room.name} description={displayAlias} />
+                        <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={room.room} />} title={room.name} description={displayAlias} />
                     ),
                     range,
                 };
@@ -49,7 +52,7 @@ export default class RoomProvider extends AutocompleteProvider {
     }
 
     getName() {
-        return 'Rooms';
+        return '💬 Rooms';
     }
     
     static getInstance() {
@@ -58,5 +61,11 @@ export default class RoomProvider extends AutocompleteProvider {
         }
         
         return instance;
+    }
+
+    renderCompletions(completions: [React.Component]): ?React.Component {
+        return React.cloneElement(super.renderCompletions(completions), {
+            className: 'mx_Autocomplete_Completion_container_pill',
+        });
     }
 }

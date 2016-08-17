@@ -1,7 +1,8 @@
 import React from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import flatMap from 'lodash/flatMap';
+import sdk from '../../../index';
 
 import {getCompletions} from '../../../autocomplete/Autocompleter';
 
@@ -100,11 +101,26 @@ export default class Autocomplete extends React.Component {
         this.setState({selectionOffset});
     }
 
+    componentDidUpdate() {
+        // this is the selected completion, so scroll it into view if needed
+        const selectedCompletion = this.refs[`completion${this.state.selectionOffset}`];
+        if (selectedCompletion && this.container) {
+            const {offsetTop} = ReactDOM.findDOMNode(selectedCompletion);
+            if (offsetTop > this.container.scrollTop + this.container.offsetHeight ||
+                offsetTop < this.container.scrollTop) {
+                this.container.scrollTop = offsetTop - this.container.offsetTop;
+            }
+        }
+    }
+
     render() {
+        const EmojiText = sdk.getComponent('views.elements.EmojiText');
+
         let position = 0;
         let renderedCompletions = this.state.completions.map((completionResult, i) => {
             let completions = completionResult.completions.map((completion, i) => {
-                let className = classNames('mx_Autocomplete_Completion', {
+
+                const className = classNames('mx_Autocomplete_Completion', {
                     'selected': position === this.state.selectionOffset,
                 });
                 let componentPosition = position;
@@ -116,40 +132,27 @@ export default class Autocomplete extends React.Component {
                     this.onConfirm();
                 };
 
-                return (
-                    <div key={i}
-                         className={className}
-                         onMouseOver={onMouseOver}
-                         onClick={onClick}>
-                        {completion.component}
-                    </div>
-                );
+                return React.cloneElement(completion.component, {
+                    key: i,
+                    ref: `completion${i}`,
+                    className,
+                    onMouseOver,
+                    onClick,
+                });
             });
 
 
             return completions.length > 0 ? (
                 <div key={i} className="mx_Autocomplete_ProviderSection">
-                    <span className="mx_Autocomplete_provider_name">{completionResult.provider.getName()}</span>
-                    <ReactCSSTransitionGroup
-                        component="div"
-                        transitionName="autocomplete"
-                        transitionEnterTimeout={300}
-                        transitionLeaveTimeout={300}>
-                        {completions}
-                    </ReactCSSTransitionGroup>
+                    <EmojiText element="div" className="mx_Autocomplete_provider_name">{completionResult.provider.getName()}</EmojiText>
+                    {completionResult.provider.renderCompletions(completions)}
                 </div>
             ) : null;
         });
 
         return (
-            <div className="mx_Autocomplete">
-                <ReactCSSTransitionGroup
-                    component="div"
-                    transitionName="autocomplete"
-                    transitionEnterTimeout={300}
-                    transitionLeaveTimeout={300}>
-                    {renderedCompletions}
-                </ReactCSSTransitionGroup>
+            <div className="mx_Autocomplete" ref={(e) => this.container = e}>
+                {renderedCompletions}
             </div>
         );
     }

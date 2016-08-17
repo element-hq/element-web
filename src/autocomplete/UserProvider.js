@@ -2,7 +2,8 @@ import React from 'react';
 import AutocompleteProvider from './AutocompleteProvider';
 import Q from 'q';
 import Fuse from 'fuse.js';
-import {TextualCompletion} from './Components';
+import {PillCompletion} from './Components';
+import sdk from '../index';
 
 const USER_REGEX = /@[^\s]*/g;
 
@@ -20,6 +21,8 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     getCompletions(query: string, selection: {start: number, end: number}) {
+        const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
+
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
@@ -29,7 +32,8 @@ export default class UserProvider extends AutocompleteProvider {
                 return {
                     completion: user.userId,
                     component: (
-                        <TextualCompletion
+                        <PillCompletion
+                            initialComponent={<MemberAvatar member={user} width={24} height={24}/>}
                             title={displayName}
                             description={user.userId} />
                     ),
@@ -41,7 +45,7 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     getName() {
-        return 'Users';
+        return '👥 Users';
     }
 
     setUserList(users) {
@@ -53,5 +57,11 @@ export default class UserProvider extends AutocompleteProvider {
             instance = new UserProvider();
         }
         return instance;
+    }
+
+    renderCompletions(completions: [React.Component]): ?React.Component {
+        return React.cloneElement(super.renderCompletions(completions), {
+            className: 'mx_Autocomplete_Completion_container_pill',
+        });
     }
 }
