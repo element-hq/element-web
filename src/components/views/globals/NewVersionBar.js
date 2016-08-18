@@ -23,7 +23,7 @@ import Modal from 'matrix-react-sdk/lib/Modal';
 export default function NewVersionBar(props) {
     const onChangelogClicked = () => {
         const ChangelogDialog = sdk.getComponent('dialogs.ChangelogDialog');
-        console.log(props);
+
         Modal.createDialog(ChangelogDialog, {
             version: props.version,
             newVersion: props.newVersion,
@@ -38,10 +38,10 @@ export default function NewVersionBar(props) {
     return (
         <div className="mx_MatrixToolbar">
             <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
-            <div style={{flex: 1}}>
+            <div className="mx_MatrixToolbar_content">
                 A new version of Vector is available. Refresh your browser.
             </div>
-            <button style={{marginRight: 16}} onClick={onChangelogClicked}>Changelog</button>
+            <button className="mx_MatrixToolbar_action" onClick={onChangelogClicked}>Changelog</button>
         </div>
     );
 }

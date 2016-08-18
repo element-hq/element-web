@@ -17,6 +17,7 @@
 import React from 'react';
 import sdk from 'matrix-react-sdk';
 import 'whatwg-fetch';
+import request from 'browser-request';
 
 const REPOS = ['vector-im/vector-web', 'matrix-org/matrix-react-sdk', 'matrix-org/matrix-js-sdk'];
 
@@ -28,17 +29,16 @@ export default class ChangelogDialog extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props);
-        const version = this.props.newVersion;
-        const version2 = this.props.version;
+        const version = this.props.newVersion.split('-');
+        const version2 = this.props.version.split('-');
         if(version == null || version2 == null) return;
         for(let i=0; i<REPOS.length; i++) {
             const oldVersion = version2[2*i+1];
             const newVersion = version[2*i+1];
-            fetch(`https://api.github.com/repos/${REPOS[i]}/compare/${oldVersion}...${newVersion}`)
-                .then(response => response.json())
-                .then(json => this.setState({[REPOS[i]]: json.commits}));
-
+            request(`https://api.github.com/repos/${REPOS[i]}/compare/${oldVersion}...${newVersion}`, (a, b, body) => {
+                if(body == null) return;
+                this.setState({[REPOS[i]]: JSON.parse(body).commits});
+            });
         }
     }
 
