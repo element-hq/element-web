@@ -52,7 +52,7 @@ export function getRoomNotifsState(roomId) {
 }
 
 export function setRoomNotifsState(roomId, newState) {
-    if (newState == 'mute') {
+    if (newState == MUTE) {
         return setRoomNotifsStateMuted(roomId);
     } else {
         return setRoomNotifsStateUnmuted(roomId, newState);
