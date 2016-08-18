@@ -100,7 +100,10 @@ function setRoomNotifsStateUnmuted(roomId, newState) {
     }
 
     if (newState == 'all_messages') {
-        promises.push(cli.deletePushRule('global', 'room', roomId));
+        const roomRule = cli.getRoomPushRule('global', roomId);
+        if (roomRule) {
+            promises.push(cli.deletePushRule('global', 'room', roomRule.rule_id));
+        }
     } else if (newState == 'mentions_only') {
         promises.push(cli.addPushRule('global', 'room', roomId, {
             actions: [
