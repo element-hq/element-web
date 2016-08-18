@@ -54,18 +54,18 @@ module.exports = React.createClass({
     },
 
     _getNotifState: function() {
-        if (MatrixClientPeg.get().isGuest()) return 'all_messages';
+        if (MatrixClientPeg.get().isGuest()) return RoomNotifs.ALL_MESSAGES;
         return RoomNotifs.getRoomNotifsState(this.props.room.roomId);
     },
 
     _shouldShowNotifBadge: function() {
-        const showBadgeInStates = ['all_messages', 'all_messages_loud'];
+        const showBadgeInStates = [RoomNotifs.ALL_MESSAGES, RoomNotifs.ALL_MESSAGES_LOUD];
         const currentState = this._getNotifState();
         return showBadgeInStates.indexOf(currentState) > -1;
     },
 
     _shouldShowMentionBadge: function() {
-        return this._getNotifState() != 'mute';
+        return this._getNotifState() != RoomNotifs.MUTE;
     },
 
     onAccountData: function(accountDataEvent) {
@@ -184,8 +184,9 @@ module.exports = React.createClass({
         var notificationCount = this.props.room.getUnreadNotificationCount();
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
 
-        var badges = notificationCount > 0 && this._shouldShowNotifBadge();
-        badges |= this.props.highlight && this._shouldShowMentionBadge();
+        const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge();
+        const mentionBadges = this.props.highlight && this._shouldShowMentionBadge();
+        const badges = notifBadges || mentionBadges;
 
         var classes = classNames({
             'mx_RoomTile': true,

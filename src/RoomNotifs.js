@@ -18,12 +18,17 @@ import MatrixClientPeg from './MatrixClientPeg';
 import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
 import q from 'q';
 
+export const ALL_MESSAGES_LOUD = 'all_messages_loud';
+export const ALL_MESSAGES = 'all_messages';
+export const MENTIONS_ONLY = 'mentions_only';
+export const MUTE = 'mute';
+
 export function getRoomNotifsState(roomId) {
     // look through the override rules for a rule affecting this room:
     // if one exists, it will take precedence.
     const muteRule = findOverrideMuteRule(roomId);
     if (muteRule && muteRule.enabled) {
-        return 'mute';
+        return MUTE;
     }
 
     // for everything else, look at the room rule.
@@ -32,14 +37,14 @@ export function getRoomNotifsState(roomId) {
     // XXX: We have to assume the default is to notify for all messages
     // (in particular this will be 'wrong' for one to one rooms because
     // they will notify loudly for all messages)
-    if (!roomRule || !roomRule.enabled) return 'all_messages';
+    if (!roomRule || !roomRule.enabled) return ALL_MESSAGES;
 
     // a mute at the room level will still allow mentions
     // to notify
-    if (isMuteRule(roomRule)) return 'mentions_only';
+    if (isMuteRule(roomRule)) return MENTIONS_ONLY;
 
     const actionsObject = PushProcessor.actionListToActionsObject(roomRule.actions);
-    if (actionsObject.tweaks.sound) return 'all_messages_loud';
+    if (actionsObject.tweaks.sound) return ALL_MESSAGES_LOUD;
 
     return null;
 }
