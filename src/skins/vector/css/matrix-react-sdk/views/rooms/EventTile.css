@@ -19,15 +19,14 @@ limitations under the License.
     clear: both;
     padding-top: 24px;
     font-size: 14px;
+    position: relative;
+    line-height: 1.4;
 }
 
 .mx_EventTile_avatar {
-    padding-left: 7px;
-    padding-right: 28px;
-    margin-top: -6px;
-    float: left;
-    position: relative;
-    top: 0px;
+    position: absolute;
+    top: 16px;
+    left: 8px;
     cursor: pointer;
     z-index: 2;
 }
@@ -51,6 +50,11 @@ limitations under the License.
     font-size: 14px;
     overflow-y: hidden;
     cursor: pointer;
+    line-height: 16px;
+    padding-left: 65px; /* left gutter */
+    padding-bottom: 0px;
+    padding-top: 0px;
+    margin: 0px;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
@@ -68,7 +72,7 @@ limitations under the License.
     position: relative;
     /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
     margin-right: 110px;
-    padding-left: 65px;
+    padding-left: 65px; /* left gutter */
     padding-top: 5px;
     padding-bottom: 7px;
     border-radius: 4px;
