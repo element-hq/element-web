@@ -77,40 +77,40 @@ module.exports = React.createClass({
     },
 
     _onClickAlertMe: function() {
-        this._save('all_messages_loud');
+        this._save(RoomNotifs.ALL_MESSAGES_LOUD);
     },
 
     _onClickAllNotifs: function() {
-        this._save('all_messages');
+        this._save(RoomNotifs.ALL_MESSAGES);
     },
 
     _onClickMentions: function() {
-        this._save('mentions_only');
+        this._save(RoomNotifs.MENTIONS_ONLY);
     },
 
     _onClickMute: function() {
-        this._save('mute');
+        this._save(RoomNotifs.MUTE);
     },
 
     render: function() {
         var alertMeClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == 'all_messages_loud',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == RoomNotifs.ALL_MESSAGES_LOUD,
         });
 
         var allNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == 'all_messages',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == RoomNotifs.ALL_MESSAGES,
         });
 
         var mentionsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == 'mentions_only',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == RoomNotifs.MENTIONS_ONLY,
         });
 
         var muteNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == 'mute',
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == RoomNotifs.MUTE,
         });
 
         return (
