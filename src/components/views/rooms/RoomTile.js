@@ -49,22 +49,29 @@ module.exports = React.createClass({
             badgeHover : false,
             notificationTagMenu: false,
             roomTagMenu: false,
-            showBadge: this._shouldShowBadge(),
+            notifState: this._getNotifState(),
         });
     },
 
-    _shouldShowBadge: function() {
-        if (MatrixClientPeg.get().isGuest()) return true;
+    _getNotifState: function() {
+        if (MatrixClientPeg.get().isGuest()) return 'all_messages';
+        return RoomNotifs.getRoomNotifsState(this.props.room.roomId);
+    },
 
+    _shouldShowNotifBadge: function() {
         const showBadgeInStates = ['all_messages', 'all_messages_loud'];
-        const currentState = RoomNotifs.getRoomNotifsState(this.props.room.roomId);
+        const currentState = this._getNotifState();
         return showBadgeInStates.indexOf(currentState) > -1;
+    },
+
+    _shouldShowMentionBadge: function() {
+        return this._getNotifState() != 'mute';
     },
 
     onAccountData: function(accountDataEvent) {
         if (accountDataEvent.getType() == 'm.push_rules') {
             this.setState({
-                showBadge: this._shouldShowBadge(),
+                notifState: this._getNotifState(),
             });
         }
     },
@@ -177,15 +184,18 @@ module.exports = React.createClass({
         var notificationCount = this.props.room.getUnreadNotificationCount();
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
 
+        var badges = notificationCount > 0 && this._shouldShowNotifBadge();
+        badges |= this.props.highlight && this._shouldShowMentionBadge();
+
         var classes = classNames({
             'mx_RoomTile': true,
             'mx_RoomTile_selected': this.props.selected,
             'mx_RoomTile_unread': this.props.unread,
-            'mx_RoomTile_unreadNotify': notificationCount > 0 && this.state.showBadge,
-            'mx_RoomTile_highlight': this.props.highlight,
+            'mx_RoomTile_unreadNotify': notificationCount > 0 && this._shouldShowNotifBadge(),
+            'mx_RoomTile_highlight': this.props.highlight && badges,
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
             'mx_RoomTile_notificationTagMenu': this.state.notificationTagMenu,
-            'mx_RoomTile_noBadges': !(this.props.highlight || (notificationCount > 0 && this.state.showBadge))
+            'mx_RoomTile_noBadges': !badges,
         });
 
         var avatarClasses = classNames({
@@ -212,7 +222,7 @@ module.exports = React.createClass({
 
         if (this.state.badgeHover || this.state.notificationTagMenu) {
             badgeContent = "\u00B7\u00B7\u00B7";
-        } else if (this.props.highlight || (notificationCount > 0 && this.state.showBadge)) {
+        } else if (badges) {
             var limitedCount = (notificationCount > 99) ? '99+' : notificationCount;
             badgeContent = notificationCount ? limitedCount : '!';
         } else {
@@ -228,7 +238,7 @@ module.exports = React.createClass({
             var nameClasses = classNames({
                 'mx_RoomTile_name': true,
                 'mx_RoomTile_invite': this.props.isInvite,
-                'mx_RoomTile_badgeShown': this.props.highlight || (notificationCount > 0 && this.state.showBadge) || this.state.badgeHover || this.state.notificationTagMenu,
+                'mx_RoomTile_badgeShown': badges || this.state.badgeHover || this.state.notificationTagMenu,
             });
 
             if (this.props.selected) {
