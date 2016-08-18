@@ -24,10 +24,12 @@ export const MENTIONS_ONLY = 'mentions_only';
 export const MUTE = 'mute';
 
 export function getRoomNotifsState(roomId) {
+    if (MatrixClientPeg.get().isGuest()) return RoomNotifs.ALL_MESSAGES;
+
     // look through the override rules for a rule affecting this room:
     // if one exists, it will take precedence.
     const muteRule = findOverrideMuteRule(roomId);
-    if (muteRule && muteRule.enabled) {
+    if (muteRule) {
         return MUTE;
     }
 
@@ -50,58 +52,71 @@ export function getRoomNotifsState(roomId) {
 }
 
 export function setRoomNotifsState(roomId, newState) {
+    if (newState == 'mute') {
+        return setRoomNotifsStateMuted(roomId);
+    } else {
+        return setRoomNotifsStateUnmuted(roomId, newState);
+    }
+}
+
+function setRoomNotifsStateMuted(roomId) {
     const cli = MatrixClientPeg.get();
     const promises = [];
 
-    if (newState == 'mute') {
-        // delete the room rule
-        const roomRule = MatrixClientPeg.get().getRoomPushRule('global', roomId);
-        if (roomRule) {
-            promises.push(cli.deletePushRule('global', 'room', roomRule.rule_id));
-        }
+    // delete the room rule
+    const roomRule = cli.getRoomPushRule('global', roomId);
+    if (roomRule) {
+        promises.push(cli.deletePushRule('global', 'room', roomRule.rule_id));
+    }
 
-        // add an override rule to squelch everything in this room
-        promises.push(cli.addPushRule('global', 'override', roomId, {
-            conditions: [
-                {
-                    kind: 'event_match',
-                    key: 'room_id',
-                    pattern: roomId,
-                }
-            ],
+    // add an override rule to squelch everything in this room
+    promises.push(cli.addPushRule('global', 'override', roomId, {
+        conditions: [
+            {
+                kind: 'event_match',
+                key: 'room_id',
+                pattern: roomId,
+            }
+        ],
+        actions: [
+            'dont_notify',
+        ]
+    }));
+
+    return q.all(promises);
+}
+
+function setRoomNotifsStateUnmuted(roomId, newState) {
+    const cli = MatrixClientPeg.get();
+    const promises = [];
+
+    const overrideMuteRule = findOverrideMuteRule(roomId);
+    if (overrideMuteRule) {
+        promises.push(cli.deletePushRule('global', 'override', overrideMuteRule.rule_id));
+    }
+
+    if (newState == 'all_messages') {
+        promises.push(cli.deletePushRule('global', 'room', roomId));
+    } else if (newState == 'mentions_only') {
+        promises.push(cli.addPushRule('global', 'room', roomId, {
             actions: [
                 'dont_notify',
             ]
         }));
-    } else {
-        const overrideMuteRule = findOverrideMuteRule(roomId);
-        if (overrideMuteRule) {
-            promises.push(cli.deletePushRule('global', 'override', overrideMuteRule.rule_id));
-        }
-
-        if (newState == 'all_messages') {
-            promises.push(cli.deletePushRule('global', 'room', roomId));
-        } else if (newState == 'mentions_only') {
-            promises.push(cli.addPushRule('global', 'room', roomId, {
-                actions: [
-                    'dont_notify',
-                ]
-            }));
-            // https://matrix.org/jira/browse/SPEC-400
-            promises.push(cli.setPushRuleEnabled('global', 'room', roomId, true));
-        } else if ('all_messages_loud') {
-            promises.push(cli.addPushRule('global', 'room', roomId, {
-                actions: [
-                    'notify',
-                    {
-                        set_tweak: 'sound',
-                        value: 'default',
-                    }
-                ]
-            }));
-            // https://matrix.org/jira/browse/SPEC-400
-            promises.push(cli.setPushRuleEnabled('global', 'room', roomId, true));
-        }
+        // https://matrix.org/jira/browse/SPEC-400
+        promises.push(cli.setPushRuleEnabled('global', 'room', roomId, true));
+    } else if ('all_messages_loud') {
+        promises.push(cli.addPushRule('global', 'room', roomId, {
+            actions: [
+                'notify',
+                {
+                    set_tweak: 'sound',
+                    value: 'default',
+                }
+            ]
+        }));
+        // https://matrix.org/jira/browse/SPEC-400
+        promises.push(cli.setPushRuleEnabled('global', 'room', roomId, true));
     }
 
     return q.all(promises);
@@ -110,7 +125,7 @@ export function setRoomNotifsState(roomId, newState) {
 function findOverrideMuteRule(roomId) {
     for (const rule of MatrixClientPeg.get().pushRules['global'].override) {
         if (isRuleForRoom(roomId, rule)) {
-            if (isMuteRule(rule)) {
+            if (isMuteRule(rule) && rule.enabled) {
                 return rule;
             }
         }

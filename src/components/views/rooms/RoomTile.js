@@ -49,29 +49,23 @@ module.exports = React.createClass({
             badgeHover : false,
             notificationTagMenu: false,
             roomTagMenu: false,
-            notifState: this._getNotifState(),
+            notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
         });
-    },
-
-    _getNotifState: function() {
-        if (MatrixClientPeg.get().isGuest()) return RoomNotifs.ALL_MESSAGES;
-        return RoomNotifs.getRoomNotifsState(this.props.room.roomId);
     },
 
     _shouldShowNotifBadge: function() {
         const showBadgeInStates = [RoomNotifs.ALL_MESSAGES, RoomNotifs.ALL_MESSAGES_LOUD];
-        const currentState = this._getNotifState();
-        return showBadgeInStates.indexOf(currentState) > -1;
+        return showBadgeInStates.indexOf(this.state.notifState) > -1;
     },
 
     _shouldShowMentionBadge: function() {
-        return this._getNotifState() != RoomNotifs.MUTE;
+        return this.state.notifState != RoomNotifs.MUTE;
     },
 
     onAccountData: function(accountDataEvent) {
         if (accountDataEvent.getType() == 'm.push_rules') {
             this.setState({
-                notifState: this._getNotifState(),
+                notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
             });
         }
     },
@@ -193,7 +187,7 @@ module.exports = React.createClass({
             'mx_RoomTile_selected': this.props.selected,
             'mx_RoomTile_unread': this.props.unread,
             'mx_RoomTile_unreadNotify': notificationCount > 0 && this._shouldShowNotifBadge(),
-            'mx_RoomTile_highlight': this.props.highlight && badges,
+            'mx_RoomTile_highlight': this.props.highlight && this._shouldShowMentionBadge(),
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
             'mx_RoomTile_notificationTagMenu': this.state.notificationTagMenu,
             'mx_RoomTile_noBadges': !badges,
