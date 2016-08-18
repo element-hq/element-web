@@ -37,35 +37,43 @@ module.exports = React.createClass({
         }
     },
 
+    componentWillMount: function() {
+        this._unmounted = false;
+    },
+
+    componentWillUnmount: function() {
+        this._unmounted = true;
+    },
+
     _save: function(newState) {
         const oldState = this.state.roomNotifState;
         const roomId = this.props.room.roomId;
         var cli = MatrixClientPeg.get();
 
-        if (!cli.isGuest()) {
-            // Wrapping this in a q promise, as setRoomMutePushRule can return
-            // a promise or a value
+        if (cli.isGuest()) return;
+
+        this.setState({
+            roomNotifState: newState,
+        });
+        RoomNotifs.setRoomNotifsState(this.props.room.roomId, newState).done(() => {
+            // delay slightly so that the user can see their state change
+            // before closing the menu
+            return q.delay(500).then(() => {
+                if (this._unmounted) return;
+                // Close the context menu
+                if (this.props.onFinished) {
+                    this.props.onFinished();
+                };
+            });
+        }, (error) => {
+            // TODO: some form of error notification to the user
+            // to inform them that their state change failed.
+            // For now we at least set the state back
+            if (this._unmounted) return;
             this.setState({
-                roomNotifState: newState,
+                roomNotifState: oldState,
             });
-            RoomNotifs.setRoomNotifsState(this.props.room.roomId, newState).done(() => {
-                // delay slightly so that the user can see their state change
-                // before closing the menu
-                return q.delay(500).then(() => {
-                    // Close the context menu
-                    if (this.props.onFinished) {
-                        this.props.onFinished();
-                    };
-                });
-            }, (error) => {
-                // TODO: some form of error notification to the user
-                // to inform them that their state change failed.
-                // For now we at least set the state back
-                this.setState({
-                    roomNotifState: oldState,
-                });
-            });
-        }
+        });
     },
 
     _onClickAlertMe: function() {
