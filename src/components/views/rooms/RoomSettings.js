@@ -47,16 +47,6 @@ module.exports = React.createClass({
             tags[tagName] = ['yep'];
         });
 
-        var areNotifsMuted = false;
-        if (!MatrixClientPeg.get().isGuest()) {
-            var roomPushRule = MatrixClientPeg.get().getRoomPushRule("global", this.props.room.roomId);
-            if (roomPushRule) {
-                if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
-                    areNotifsMuted = true;
-                }
-            }
-        }
-
         return {
             name: this._yankValueFromEvent("m.room.name", "name"),
             topic: this._yankValueFromEvent("m.room.topic", "topic"),
@@ -66,7 +56,6 @@ module.exports = React.createClass({
             power_levels_changed: false,
             tags_changed: false,
             tags: tags,
-            areNotifsMuted: areNotifsMuted,
             // isRoomPublished is loaded async in componentWillMount so when the component
             // inits, the saved value will always be undefined, however getInitialState()
             // is also called from the saving code so we must return the correct value here
@@ -187,12 +176,6 @@ module.exports = React.createClass({
             ));
         }
 
-
-        if (this.state.areNotifsMuted !== originalState.areNotifsMuted) {
-            promises.push(MatrixClientPeg.get().setRoomMutePushRule(
-                "global", roomId, this.state.areNotifsMuted
-            ));
-        }
 
         // power levels
         var powerLevels = this._getPowerLevels();
@@ -647,12 +630,6 @@ module.exports = React.createClass({
                 { tagsSection }
 
                 <div className="mx_RoomSettings_toggles">
-                    <label>
-                        <input type="checkbox" disabled={ cli.isGuest() }
-                               onChange={this._onToggle.bind(this, "areNotifsMuted", true, false)}
-                               defaultChecked={this.state.areNotifsMuted}/>
-                        'Mention only' notifications for this room
-                    </label>
                     <div className="mx_RoomSettings_settings">
                         <h3>Who can access this room?</h3>
                         { inviteGuestWarning }
