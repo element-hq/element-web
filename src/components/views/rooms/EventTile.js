@@ -363,6 +363,9 @@ module.exports = React.createClass({
         var content = this.props.mxEvent.getContent();
         var msgtype = content.msgtype;
         var eventType = this.props.mxEvent.getType();
+
+        // Info messages are basically information about commands processed on a
+        // room, or emote messages
         var isInfoMessage = (msgtype === 'm.emote' || eventType !== 'm.room.message');
 
         var EventTileType = sdk.getComponent(eventTileTypes[this.props.mxEvent.getType()]);
