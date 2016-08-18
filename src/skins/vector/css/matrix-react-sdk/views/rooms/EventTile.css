@@ -78,19 +78,8 @@ limitations under the License.
     /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
     margin-right: 110px;
     padding-left: 65px; /* left gutter */
-/*
-    padding-top: 5px;
-    padding-bottom: 7px;
-*/
     border-radius: 4px;
     line-height: 30px;
-}
-
-.mx_EventTile_info .mx_EventTile_contentContainer {
-    display: inline-block;
-    margin: 0;
-    padding: 0;
-    border: 0;
 }
 
 /* HACK to override line-height which is already marked important elsewhere */
@@ -198,7 +187,9 @@ limitations under the License.
     top: 28px;
 }
 
-.mx_EventTile_continuation .mx_EventTile_readAvatars {
+.mx_EventTile_continuation .mx_EventTile_readAvatars,
+.mx_EventTile_info .mx_EventTile_readAvatars
+{
     top: 7px;
 }
 
