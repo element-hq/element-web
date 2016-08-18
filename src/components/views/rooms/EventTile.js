@@ -362,6 +362,8 @@ module.exports = React.createClass({
 
         var content = this.props.mxEvent.getContent();
         var msgtype = content.msgtype;
+        var eventType = this.props.mxEvent.getType();
+        var isInfoMessage = (msgtype === 'm.emote' || eventType !== 'm.room.message');
 
         var EventTileType = sdk.getComponent(eventTileTypes[this.props.mxEvent.getType()]);
         // This shouldn't happen: the caller should check we support this type
@@ -372,6 +374,7 @@ module.exports = React.createClass({
 
         var classes = classNames({
             mx_EventTile: true,
+            mx_EventTile_info: isInfoMessage,
             mx_EventTile_sending: ['sending', 'queued'].indexOf(
                 this.props.eventSendStatus
             ) !== -1,
@@ -397,12 +400,17 @@ module.exports = React.createClass({
         var readAvatars = this.getReadAvatars();
 
         var avatar, sender;
-        if (!this.props.continuation) {
+        if (isInfoMessage) {
+            avatar = (
+                <div className="mx_EventTile_avatar">
+                    <MemberAvatar member={this.props.mxEvent.sender} width={14} height={14} onClick={ this.onMemberAvatarClick } />
+                </div>
+            );
+        } else if (!this.props.continuation) {
             if (this.props.mxEvent.sender) {
                 avatar = (
                     <div className="mx_EventTile_avatar">
-                        <MemberAvatar member={this.props.mxEvent.sender} width={30} height={30}
-                         onClick={ this.onMemberAvatarClick } />
+                        <MemberAvatar member={this.props.mxEvent.sender} width={30} height={30} onClick={ this.onMemberAvatarClick } />
                     </div>
                 );
             }
