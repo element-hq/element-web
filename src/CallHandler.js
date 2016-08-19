@@ -273,8 +273,11 @@ function _onAction(payload) {
             break;
         case 'incoming_call':
             if (module.exports.getAnyActiveCall()) {
-                payload.call.hangup("busy");
-                return; // don't allow >1 call to be received, hangup newer one.
+                // ignore multiple incoming calls. in future, we may want a line-1/line-2 setup.
+                // we avoid rejecting with "busy" in case the user wants to answer it on a different device.
+                // in future we could signal a "local busy" as a warning to the caller.
+                // see https://github.com/vector-im/vector-web/issues/1964
+                return;
             }
 
             // if the runtime env doesn't do VoIP, stop here.

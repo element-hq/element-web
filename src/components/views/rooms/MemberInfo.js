@@ -67,6 +67,11 @@ module.exports = React.createClass({
     componentWillMount: function() {
         this._cancelDeviceList = null;
 
+        // only display the devices list if our client supports E2E *and* the
+        // feature is enabled in the user settings
+        this._enableDevices = MatrixClientPeg.get().isCryptoEnabled() &&
+            UserSettingsStore.isFeatureEnabled("e2e_encryption");
+
         this.setState({
             existingOneToOneRoomId: this.getExistingOneToOneRoomId()
         });
@@ -147,6 +152,10 @@ module.exports = React.createClass({
     },
 
     onDeviceVerificationChanged: function(userId, device) {
+        if (!this._enableDevices) {
+            return;
+        }
+
         if (userId == this.props.member.userId) {
             // no need to re-download the whole thing; just update our copy of
             // the list.
@@ -170,6 +179,10 @@ module.exports = React.createClass({
     },
 
     _downloadDeviceList: function(member) {
+        if (!this._enableDevices) {
+            return;
+        }
+
         var cancelled = false;
         this._cancelDeviceList = function() { cancelled = true; }
 
@@ -532,7 +545,7 @@ module.exports = React.createClass({
     },
 
     _renderDevices: function() {
-        if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
+        if (!this._enableDevices) {
             return null;
         }
 

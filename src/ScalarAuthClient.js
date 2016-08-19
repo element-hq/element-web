@@ -34,8 +34,10 @@ class ScalarAuthClient {
                 defer.reject(err);
             } else if (response.statusCode / 100 !== 2) {
                 defer.reject({statusCode: response.statusCode});
+            } else if (!body || !body.scalar_token) {
+                defer.reject(new Error("Missing scalar_token in response"));
             } else {
-                defer.resolve(body.access_token);
+                defer.resolve(body.scalar_token);
             }
         });
 

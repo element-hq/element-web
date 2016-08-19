@@ -134,7 +134,7 @@ module.exports = React.createClass({
                             onMouseLeave={this.onImageLeave} />
                     </a>
                     <div className="mx_MImageBody_download">
-                        <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
+                        <a href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
                             <TintableSvg src="img/download.svg" width="12" height="14"/>
                             Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
                         </a>

@@ -60,7 +60,7 @@ module.exports = React.createClass({
             return (
                 <span className="mx_MFileBody">
                     <div className="mx_MImageBody_download">
-                        <a href={cli.mxcUrlToHttp(content.url)} target="_blank">
+                        <a href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
                             <TintableSvg src="img/download.svg" width="12" height="14"/>
                             Download {text}
                         </a>
