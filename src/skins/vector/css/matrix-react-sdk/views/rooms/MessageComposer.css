@@ -86,6 +86,7 @@ limitations under the License.
     box-shadow: none;
     color: #454545;
     background-color: #fff;
+    font-size: 14px;
 
     /* needed for FF */
     font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
