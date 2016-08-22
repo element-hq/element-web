@@ -328,7 +328,7 @@ var RoomSubList = React.createClass({
 
     _getHeaderJsx: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var classes = classNames({
+        var chevronClasses = classNames({
             'mx_RoomSubList_chevron': true,
             'mx_RoomSubList_chevronUp': this.state.hidden,
             'mx_RoomSubList_chevronRight': !this.state.hidden && this.state.capTruncate,
@@ -337,7 +337,8 @@ var RoomSubList = React.createClass({
         return (
             <div onClick={ this.onClick } className="mx_RoomSubList_label">
                 { this.props.collapsed ? '' : this.props.label }
-                <div className={classes}></div>
+                <div className="mx_RoomSubList_roomCount">{this.props.list.length > 0 ? this.props.list.length : ''}</div>
+                <div className={chevronClasses}></div>
             </div>
         );
     },

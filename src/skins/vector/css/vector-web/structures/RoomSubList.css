@@ -38,6 +38,14 @@ limitations under the License.
     height: 16px;
 }
 
+.mx_RoomSubList_roomCount {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    color: #76cfa6;
+    padding-left: 5px;
+}
+
 .mx_RoomSubList_chevron {
     pointer-events: none;
     position: absolute;
