@@ -109,9 +109,8 @@ limitations under the License.
 }
 
 .collapsed .mx_RoomTile_badge {
-    top: -2px;
+    top: 0px;
     min-width: 12px;
-    height: 16px;
     border-radius: 16px;
     padding: 0px 4px 0px 4px;
     z-index: 200;
@@ -129,22 +128,22 @@ limitations under the License.
     display: block;
     width: 0;
     height: 0;
-    margin-left: 6px;
-    border-top: 8px solid #ff0064;
-    border-right: 10px solid transparent;
+    margin-left: 5px;
+    border-top: 5px solid #ff0064;
+    border-right: 7px solid transparent;
 }
 
 .mx_RoomTile_badge {
     display: inline-block;
-    min-width: 19px;
-    height: 17px;
+    min-width: 15px;
+    height: 15px;
     position: absolute;
     right: 8px; /*gutter */
     top: 9px;
-    border-radius: 14px;
+    border-radius: 8px;
     color: #fff;
     font-weight: 600;
-    font-size: 11px;
+    font-size: 10px;
     text-align: center;
     padding-top: 1px;
     padding-left: 4px;
@@ -175,7 +174,7 @@ limitations under the License.
 }
 
 .mx_RoomTile_selected {
-    background-color: rgba(118,207,166,0.2);
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .mx_RoomTile .mx_RoomTile_name.mx_RoomTile_badgeShown {
@@ -187,5 +186,3 @@ limitations under the License.
     right: 0px;
 }
 
-.mx_RoomTile:hover {
-}

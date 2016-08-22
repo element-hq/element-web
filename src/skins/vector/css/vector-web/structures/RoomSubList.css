@@ -21,22 +21,50 @@ limitations under the License.
 }
 
 .mx_RoomSubList_label {
+    position: relative;
     text-transform: uppercase;
     color: #3d3b39;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 12px;
     padding-left: 16px; /* gutter */
     padding-right: 16px; /* gutter */
-    margin-top: 8px;
-    margin-bottom: 4px;
+    padding-top: 6px;
+    padding-bottom: 6px;
     cursor: pointer;
+    background-color: rgba(118, 207, 166, 0.2);
+}
+
+.collapsed .mx_RoomSubList_label {
+    height: 16px;
 }
 
 .mx_RoomSubList_chevron {
-    padding-left: 4px;
     pointer-events: none;
+    position: absolute;
+    right: 41px;
+    top: 11px;
 }
 
-.collapsed .mx_RoomSubList_chevron  {
-    padding-left: 12px;
+.mx_RoomSubList_chevronDown {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #76cfa6;
+}
+
+.mx_RoomSubList_chevronUp {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 6px solid #76cfa6;
+}
+
+.mx_RoomSubList_chevronRight {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-left: 6px solid #76cfa6;
+    border-bottom: 5px solid transparent;
 }

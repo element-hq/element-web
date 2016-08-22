@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var classNames = require('classnames');
 var DropTarget = require('react-dnd').DropTarget;
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
@@ -300,13 +301,16 @@ var RoomSubList = React.createClass({
 
     _getHeaderJsx: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        var classes = classNames({
+            'mx_RoomSubList_chevron': true,
+            'mx_RoomSubList_chevronUp': this.state.hidden,
+            'mx_RoomSubList_chevronDown': !this.state.hidden,
+        });
         return (
-            <h2 onClick={ this.onClick } className="mx_RoomSubList_label">
+            <div onClick={ this.onClick } className="mx_RoomSubList_label">
                 { this.props.collapsed ? '' : this.props.label }
-                <img className="mx_RoomSubList_chevron"
-                    src={ this.state.hidden ? "img/list-close.svg" : "img/list-open.svg" }
-                    width="10" height="10" />
-            </h2>
+                <div className={classes}></div>
+            </div>
         );
     },
 
