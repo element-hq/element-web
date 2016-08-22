@@ -137,6 +137,13 @@ var RoomSubList = React.createClass({
             this.setState({ capTruncate : true });
             // Truncated list
             this.setState({ truncateAt : TRUNCATE_AT });
+        } else {
+            // Catch any weird states the system gets into
+            isHidden = false;
+            this.setState({ hidden : isHidden });
+            this.setState({ capTruncate : true });
+            // Show truncated list
+            this.setState({ truncateAt : TRUNCATE_AT });
         }
 
         this.props.onShowMoreRooms();
