@@ -67,3 +67,13 @@
     font-weight: 400;
     opacity: 0.4;
 }
+
+/* styling for common completion elements */
+.mx_Autocomplete_Completion_subtitle {
+    font-style: italic;
+    flex: 1;
+}
+
+.mx_Autocomplete_Completion_description {
+    color: gray;
+}
