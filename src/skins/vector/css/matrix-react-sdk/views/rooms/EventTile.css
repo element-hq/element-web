@@ -17,7 +17,7 @@ limitations under the License.
 .mx_EventTile {
     max-width: 100%;
     clear: both;
-    padding-top: 24px;
+    padding-top: 18px;
     font-size: 14px;
     position: relative;
 }
@@ -28,7 +28,7 @@ limitations under the License.
 
 .mx_EventTile_avatar {
     position: absolute;
-    top: 16px;
+    top: 14px;
     left: 8px;
     cursor: pointer;
     z-index: 2;
@@ -56,6 +56,7 @@ limitations under the License.
     padding-bottom: 0px;
     padding-top: 0px;
     margin: 0px;
+    line-height: 22px;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
