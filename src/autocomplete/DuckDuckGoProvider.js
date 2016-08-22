@@ -87,4 +87,10 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
         }
         return instance;
     }
+
+    renderCompletions(completions: [React.Component]): ?React.Component {
+        return <div className="mx_Autocomplete_Completion_container_block">
+            {completions}
+        </div>;
+    }
 }

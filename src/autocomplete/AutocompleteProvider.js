@@ -54,10 +54,7 @@ export default class AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return (
-            <div>
-                {completions}
-            </div>
-        );
+        console.error('stub; should be implemented in subclasses');
+        return null;
     }
 }

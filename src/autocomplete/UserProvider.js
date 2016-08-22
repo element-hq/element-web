@@ -60,8 +60,8 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return React.cloneElement(super.renderCompletions(completions), {
-            className: 'mx_Autocomplete_Completion_container_pill',
-        });
+        return <div className="mx_Autocomplete_Completion_container_pill">
+            {completions}
+        </div>;
     }
 }
