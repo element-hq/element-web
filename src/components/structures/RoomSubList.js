@@ -27,6 +27,8 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 // turn this on for drop & drag console debugging galore
 var debug = false;
 
+const TRUNCATE_AT = 6;
+
 var roomListTarget = {
     canDrop: function() {
         return true;
@@ -81,7 +83,8 @@ var RoomSubList = React.createClass({
     getInitialState: function() {
         return {
             hidden: this.props.startAsHidden || false,
-            truncateAt: 20,
+            capTruncate: this.props.list.length > TRUNCATE_AT,
+            truncateAt: this.props.list.length > TRUNCATE_AT ? TRUNCATE_AT : -1,
             sortedList: [],
         };
     },
@@ -111,15 +114,32 @@ var RoomSubList = React.createClass({
     },
 
     onClick: function(ev) {
-        var isHidden = !this.state.hidden;
-        this.setState({ hidden : isHidden });
+        // Collapse and truncation logic
+        var isHidden = false;
+        var isTruncatable = this.props.list.length > TRUNCATE_AT;
 
-        if (isHidden) {
-            // as good a way as any to reset the truncate state
-            this.setState({ truncateAt : 20 });
-            this.props.onShowMoreRooms();
+        if (this.state.hidden && (this.state.capTruncate && isTruncatable)) {
+            isHidden = false;
+            this.setState({ hidden : isHidden });
+            this.setState({ capTruncate : true });
+            // Show truncated list
+            this.setState({ truncateAt : TRUNCATE_AT });
+        } else if ((!this.state.hidden && this.state.capTruncate) ||
+                   (this.state.hidden && (this.state.capTruncate && !isTruncatable))) {
+            isHidden = false;
+            this.setState({ hidden : isHidden });
+            this.setState({ capTruncate : false });
+            // Show full list
+            this.setState({ truncateAt : -1 });
+        } else if (!this.state.hidden && !this.state.capTruncate) {
+            isHidden = true;
+            this.setState({ hidden : isHidden });
+            this.setState({ capTruncate : true });
+            // Truncated list
+            this.setState({ truncateAt : TRUNCATE_AT });
         }
 
+        this.props.onShowMoreRooms();
         this.props.onHeaderClick(isHidden);
     },
 
@@ -304,7 +324,8 @@ var RoomSubList = React.createClass({
         var classes = classNames({
             'mx_RoomSubList_chevron': true,
             'mx_RoomSubList_chevronUp': this.state.hidden,
-            'mx_RoomSubList_chevronDown': !this.state.hidden,
+            'mx_RoomSubList_chevronRight': !this.state.hidden && this.state.capTruncate,
+            'mx_RoomSubList_chevronDown': !this.state.hidden && !this.state.capTruncate,
         });
         return (
             <div onClick={ this.onClick } className="mx_RoomSubList_label">
@@ -314,25 +335,7 @@ var RoomSubList = React.createClass({
         );
     },
 
-    _createOverflowTile: function(overflowCount, totalCount) {
-        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        // XXX: this is duplicated from RoomTile - factor it out
-        return (
-            <div className="mx_RoomTile mx_RoomTile_ellipsis" onClick={this._showFullMemberList}>
-                <div className="mx_RoomTile_avatar">
-                    <BaseAvatar url="img/ellipsis.svg" name="..." width={24} height={24} />
-                </div>
-                <div className="mx_RoomTile_name">and { overflowCount } others...</div>
-            </div>
-        );
-    },
-
-    _showFullMemberList: function() {
-        this.setState({
-            truncateAt: -1
-        });
-        this.props.onShowMoreRooms();
-    },
+    _createOverflowTile: function() {}, // NOP
 
     // Fix any undefined order elements of a room in a manual ordered list
     //     room.tag[tagname].order
