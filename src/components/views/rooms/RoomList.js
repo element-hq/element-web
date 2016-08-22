@@ -341,10 +341,9 @@ module.exports = React.createClass({
                              searchFilter={ self.props.searchFilter }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
-                <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
-                             label="Rooms"
-                             editable={ true }
-                             verb="restore"
+                <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
+                             label="Direct Messages"
+                             editable={ false }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
@@ -352,9 +351,10 @@ module.exports = React.createClass({
                              searchFilter={ self.props.searchFilter }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
-                <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
-                             label="Direct Messages"
-                             editable={ false }
+                <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
+                             label="Rooms"
+                             editable={ true }
+                             verb="restore"
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
