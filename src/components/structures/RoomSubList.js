@@ -328,16 +328,24 @@ var RoomSubList = React.createClass({
 
     _getHeaderJsx: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
+
         var chevronClasses = classNames({
             'mx_RoomSubList_chevron': true,
             'mx_RoomSubList_chevronUp': this.state.hidden,
             'mx_RoomSubList_chevronRight': !this.state.hidden && this.state.capTruncate,
             'mx_RoomSubList_chevronDown': !this.state.hidden && !this.state.capTruncate,
         });
+
+        var roomCount = this.props.list.length > 0 ? this.props.list.length : '';
+        var isTruncatable = this.props.list.length > TRUNCATE_AT;
+        if (!this.state.hidden && this.state.capTruncate && isTruncatable) {
+            roomCount = TRUNCATE_AT + " of " + roomCount;
+        }
+
         return (
             <div onClick={ this.onClick } className="mx_RoomSubList_label">
                 { this.props.collapsed ? '' : this.props.label }
-                <div className="mx_RoomSubList_roomCount">{this.props.list.length > 0 ? this.props.list.length : ''}</div>
+                <div className="mx_RoomSubList_roomCount">{roomCount}</div>
                 <div className={chevronClasses}></div>
                 <div className="mx_RoomSubList_badge">0</div>
             </div>
