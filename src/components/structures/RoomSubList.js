@@ -339,6 +339,7 @@ var RoomSubList = React.createClass({
                 { this.props.collapsed ? '' : this.props.label }
                 <div className="mx_RoomSubList_roomCount">{this.props.list.length > 0 ? this.props.list.length : ''}</div>
                 <div className={chevronClasses}></div>
+                <div className="mx_RoomSubList_badge">0</div>
             </div>
         );
     },
