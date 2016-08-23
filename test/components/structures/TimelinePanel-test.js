@@ -87,7 +87,7 @@ describe('TimelinePanel', function() {
         // this is https://github.com/vector-im/vector-web/issues/1367
 
         // enough events to allow us to scroll back
-        var N_EVENTS = 20;
+        var N_EVENTS = 30;
         for (var i = 0; i < N_EVENTS; i++) {
             timeline.addEvent(mkMessage());
         }
