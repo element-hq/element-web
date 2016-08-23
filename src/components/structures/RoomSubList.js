@@ -215,6 +215,15 @@ var RoomSubList = React.createClass({
         this.setState({ sortedList: list.sort(comparator) });
     },
 
+    _shouldShowNotifBadge: function(roomNotifState) {
+        const showBadgeInStates = [RoomNotifs.ALL_MESSAGES, RoomNotifs.ALL_MESSAGES_LOUD];
+        return showBadgeInStates.indexOf(roomNotifState) > -1;
+    },
+
+    _shouldShowMentionBadge: function(roomNotifState) {
+        return roomNotifState != RoomNotifs.MUTE;
+    },
+
     roomNotificationCount: function() {
         var self = this;
         var subListCount = 0;
@@ -226,15 +235,14 @@ var RoomSubList = React.createClass({
             var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites';
             var notificationCount = room.getUnreadNotificationCount();
 
-            if (notificationCount > 0 && roomNotifState !== RoomNotifs.MUTE) {
-                if (roomNotifState === RoomNotifs.ALL_MESSAGES_LOUD
-                    || roomNotifState === RoomNotifs.ALL_MESSAGES
-                    || (roomNotifState === RoomNotifs.MENTIONS_ONLY && highlight))
-                {
-                    subListCount += notificationCount;
-                    if (highlight) {
-                        subListHighlight = true;
-                    }
+            const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
+            const mentionBadges = highlight && self._shouldShowMentionBadge(roomNotifState);
+            const badges = notifBadges || mentionBadges;
+
+            if (badges) {
+                subListCount += notificationCount;
+                if (highlight) {
+                    subListHighlight = true;
                 }
             }
         });
@@ -379,12 +387,17 @@ var RoomSubList = React.createClass({
             'mx_RoomSubList_badgeHighlight': subListNotificationsHighlight,
         });
 
+        var badge;
+        if (subListNotificationsCount > 0) {
+            badge = <div className={badgeClasses}>{subListNotificationsCount}</div>;
+        }
+
         return (
             <div onClick={ this.onClick } className="mx_RoomSubList_label">
                 { this.props.collapsed ? '' : this.props.label }
                 <div className="mx_RoomSubList_roomCount">{roomCount}</div>
                 <div className={chevronClasses}></div>
-                <div className={badgeClasses}>{subListNotificationsCount}</div>
+                {badge}
             </div>
         );
     },
