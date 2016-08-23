@@ -337,6 +337,18 @@ module.exports = React.createClass({
             continuation = true;
         }
 
+        // Work out if this is still a continuation, as we are now showing commands
+        // and /me messages with their own little avatar. The case of a change of
+        // event type (commands) is handled above, but we need to handle the /me
+        // messages seperately as they have a msgtype of 'm.emote' but are classed
+        // as normal messages
+        if (prevEvent !== null && prevEvent.sender && mxEv.sender
+                && mxEv.sender.userId === prevEvent.sender.userId
+                && mxEv.getType() == prevEvent.getType()
+                && prevEvent.getContent().msgtype === 'm.emote') {
+            continuation = false;
+        }
+
         // local echoes have a fake date, which could even be yesterday. Treat them
         // as 'today' for the date separators.
         var ts1 = mxEv.getTs();

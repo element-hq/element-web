@@ -320,7 +320,6 @@ module.exports = React.createClass({
                 left -= 15;
             }
         }
-        var editButton;
         var remText;
         if (!this.state.allReadAvatars) {
             var remainder = receipts.length - MAX_READ_AVATARS;
@@ -331,15 +330,9 @@ module.exports = React.createClass({
                 </span>;
                 left -= 15;
             }
-            editButton = (
-                <input style={{ left: left }}
-                    type="image" src="img/edit.png" alt="Options" title="Options" width="14" height="14"
-                    className="mx_EventTile_editButton" onClick={this.onEditClicked} />
-            );
         }
 
         return <span className="mx_EventTile_readAvatars">
-            { editButton }
             { remText }
             { avatars }
         </span>;
@@ -369,6 +362,11 @@ module.exports = React.createClass({
 
         var content = this.props.mxEvent.getContent();
         var msgtype = content.msgtype;
+        var eventType = this.props.mxEvent.getType();
+
+        // Info messages are basically information about commands processed on a
+        // room, or emote messages
+        var isInfoMessage = (msgtype === 'm.emote' || eventType !== 'm.room.message');
 
         var EventTileType = sdk.getComponent(eventTileTypes[this.props.mxEvent.getType()]);
         // This shouldn't happen: the caller should check we support this type
@@ -379,6 +377,7 @@ module.exports = React.createClass({
 
         var classes = classNames({
             mx_EventTile: true,
+            mx_EventTile_info: isInfoMessage,
             mx_EventTile_sending: ['sending', 'queued'].indexOf(
                 this.props.eventSendStatus
             ) !== -1,
@@ -404,12 +403,11 @@ module.exports = React.createClass({
         var readAvatars = this.getReadAvatars();
 
         var avatar, sender;
-        if (!this.props.continuation) {
+        if (!this.props.continuation && !isInfoMessage) {
             if (this.props.mxEvent.sender) {
                 avatar = (
                     <div className="mx_EventTile_avatar">
-                        <MemberAvatar member={this.props.mxEvent.sender} width={24} height={24}
-                         onClick={ this.onMemberAvatarClick } />
+                        <MemberAvatar member={this.props.mxEvent.sender} width={30} height={30} onClick={ this.onMemberAvatarClick } />
                     </div>
                 );
             }
@@ -417,19 +415,27 @@ module.exports = React.createClass({
                 sender = <SenderProfile onClick={ this.onSenderProfileClick } mxEvent={this.props.mxEvent} aux={aux} />;
             }
         }
+
+        var editButton = (
+            <img className="mx_EventTile_editButton" src="img/icon_context_message.svg" width="19" height="19" alt="Options" title="Options" onClick={this.onEditClicked} />
+        );
+
         return (
             <div className={classes}>
                 <div className="mx_EventTile_msgOption">
-                    { timestamp }
                     { readAvatars }
                 </div>
                 { avatar }
                 { sender }
                 <div className="mx_EventTile_line">
-                    <EventTileType ref="tile" mxEvent={this.props.mxEvent} highlights={this.props.highlights}
-                          highlightLink={this.props.highlightLink}
-                          showUrlPreview={this.props.showUrlPreview}
-                          onWidgetLoad={this.props.onWidgetLoad} />
+                    { timestamp }
+                    <EventTileType ref="tile"
+                        mxEvent={this.props.mxEvent}
+                        highlights={this.props.highlights}
+                        highlightLink={this.props.highlightLink}
+                        showUrlPreview={this.props.showUrlPreview}
+                        onWidgetLoad={this.props.onWidgetLoad} />
+                    { editButton }
                 </div>
             </div>
         );
