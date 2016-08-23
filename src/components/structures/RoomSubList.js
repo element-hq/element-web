@@ -23,6 +23,7 @@ var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Unread = require('matrix-react-sdk/lib/Unread');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 
 // turn this on for drop & drag console debugging galore
 var debug = false;
@@ -221,24 +222,19 @@ var RoomSubList = React.createClass({
         var cli = MatrixClientPeg.get();
 
         this.state.sortedList.map(function(room) {
-            var notifsMuted = false;
-            if (!cli.isGuest()) {
-                var roomPushRule = cli.getRoomPushRule("global", room.roomId);
-                if (roomPushRule) {
-                    if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
-                        notifsMuted = true;
-                    }
-                }
-            }
-
+            var roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
             var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites';
-
             var notificationCount = room.getUnreadNotificationCount();
 
-            if (notificationCount > 0 && (!notifsMuted || (notifsMuted && highlight))) {
-                subListCount += notificationCount;
-                if (highlight) {
-                    subListHighlight = true;
+            if (notificationCount > 0 && roomNotifState !== RoomNotifs.MUTE) {
+                if (roomNotifState === RoomNotifs.ALL_MESSAGES_LOUD
+                    || roomNotifState === RoomNotifs.ALL_MESSAGES
+                    || (roomNotifState === RoomNotifs.MENTIONS_ONLY && highlight))
+                {
+                    subListCount += notificationCount;
+                    if (highlight) {
+                        subListHighlight = true;
+                    }
                 }
             }
         });
