@@ -54,6 +54,96 @@ The response object for "invite" looks like:
 const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require("./MatrixClientPeg");
 
+function sendResponse(event, res) {
+    const data = JSON.parse(JSON.stringify(event.data));
+    data.response = res;
+    event.source.postMessage(data, event.origin);
+}
+
+function sendError(event, msg, nestedError) {
+    console.error("Action:" + event.data.action + " failed with message: " + msg);
+    const data = event.data;
+    data.response = {
+        error: {
+            message: msg,
+        },
+    };
+    if (nestedError) {
+        data.response.error._error = nestedError;
+    }
+    event.source.postMessage(data, event.origin);
+}
+
+function inviteUser(event) {
+    const roomId = event.data.room_id;
+    const userId = event.data.user_id;
+    if (!userId) {
+        sendError(event, "Missing user_id in request");
+        return;
+    }
+    if (!roomId) {
+        sendError(event, "Missing room_id in request");
+        return;
+    }
+    console.log(`Received request to invite ${userId} into room ${roomId}`);
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, "You need to be logged in.");
+        return;
+    }
+    const room = client.getRoom(roomId);
+    if (room) {
+        // if they are already invited we can resolve immediately.
+        const member = room.getMember(userId);
+        if (member && member.membership === "invite") {
+            sendResponse(event, {
+                invite: true,
+            });
+            return;
+        }
+    }
+
+    client.invite(roomId, userId).then(function() {
+        sendResponse(event, {
+            invite: true,
+        });
+    }, function(err) {
+        sendError(event, "You need to be able to invite users to do that.", err);
+    });
+}
+
+function getMembershipState(event) {
+    const roomId = event.data.room_id;
+    const userId = event.data.user_id;
+    if (!userId) {
+        sendError(event, "Missing user_id in request");
+        return;
+    }
+    if (!roomId) {
+        sendError(event, "Missing room_id in request");
+        return;
+    }
+    console.log(`membership_state of ${userId} in room ${roomId} requested.`);
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, "You need to be logged in.");
+        return;
+    }
+    const room = client.getRoom(roomId);
+    if (!room) {
+        sendError(event, "This room is not recognised.");
+        return;
+    }
+    let membershipState = "leave";
+    const member = room.getMember(userId);
+    if (member) {
+        membershipState = member.membership;
+    }
+    sendResponse(event, {
+        membership_state: membershipState,
+    });
+}
+
 const onMessage = function(event) {
     if (!event.origin) { // stupid chrome
         event.origin = event.originalEvent.origin;
@@ -70,95 +160,17 @@ const onMessage = function(event) {
     }
 
     switch (event.data.action) {
-        case "membership_state": {
-            const roomId = event.data.room_id;
-            const userId = event.data.user_id;
-            if (!userId) {
-                return sendError(event, "Missing user_id in request");
-            }
-            if (!roomId) {
-                return sendError(event, "Missing room_id in request");
-            }
-            console.log(`membership_state of ${userId} in room ${roomId} requested.`);
-            const client = MatrixClientPeg.get();
-            if (!client) {
-                return sendError(event, "You need to be logged in.");
-            }
-            const room = client.getRoom(roomId);
-            if (!room) {
-                return sendError(event, "This room is not recognised.");
-            }
-            let membershipState = "leave";
-            const member = room.getMember(userId);
-            if (member) {
-                membershipState = member.membership;
-            }
-            sendResponse(event, {
-                membership_state: membershipState
-            });
-        }
+        case "membership_state":
+            getMembershipState(event);
             break;
-        case "invite": {
-            const roomId = event.data.room_id;
-            const userId = event.data.user_id;
-            if (!userId) {
-                return sendError(event, "Missing user_id in request");
-            }
-            if (!roomId) {
-                return sendError(event, "Missing room_id in request");
-            }
-            console.log(`Received request to invite ${userId} into room ${roomId}`);
-            const client = MatrixClientPeg.get();
-            if (!client) {
-                return sendError(event, "You need to be logged in.");
-            }
-            const room = client.getRoom(roomId);
-            if (room) {
-                // if they are already invited we can resolve immediately.
-                const member = room.getMember(userId);
-                if (member && member.membership === "invite") {
-                    sendResponse(event, {
-                        invite: true
-                    });
-                    return;
-                }
-            }
-
-            client.invite(roomId, userId).then(function() {
-                sendResponse(event, {
-                    invite: true
-                });
-            }, function(err) {
-                sendError(event, "You need to be able to invite users to do that.", err);
-            });
-        }
+        case "invite":
+            inviteUser(event);
             break;
         default:
             console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
             break;
     }
 };
-
-function sendResponse(event, res) {
-    console.log("Action:" + event.data.action + " succeeded with response: " + JSON.stringify(res));
-    const data = event.data;
-    data.response = res;
-    event.source.postMessage(data, event.origin)
-}
-
-function sendError(event, msg, nestedError) {
-    console.error("Action:" + event.data.action + " failed with message: " + msg);
-    const data = event.data;
-    data.response = {
-        error: {
-            message: msg,
-        }
-    };
-    if (nestedError) {
-        data.response.error._error = nestedError;
-    }
-    event.source.postMessage(data, event.origin);
-}
 
 module.exports = {
     startListening: function() {
@@ -167,5 +179,5 @@ module.exports = {
 
     stopListening: function() {
         window.removeEventListener("message", onMessage);
-    }
+    },
 };
