@@ -17,23 +17,25 @@ limitations under the License.
 .mx_EventTile {
     max-width: 100%;
     clear: both;
-    padding-top: 24px;
-    margin-left: 65px;
+    padding-top: 18px;
+    font-size: 14px;
+    position: relative;
+}
+
+.mx_EventTile.mx_EventTile_info {
+    padding-top: 0px;
 }
 
 .mx_EventTile_avatar {
-    padding-left: 18px;
-    padding-right: 12px;
-    margin-left: -73px;
-    margin-top: -2px;
-    float: left;
-    position: relative;
-    top: 0px;
+    position: absolute;
+    top: 14px;
+    left: 8px;
     cursor: pointer;
+    z-index: 2;
 }
 
 .mx_EventTile_continuation {
-    padding-top: 8px ! important;
+    padding-top: 0px ! important;
 }
 
 .mx_EventTile_verified {
@@ -47,78 +49,37 @@ limitations under the License.
 .mx_EventTile .mx_SenderProfile {
     color: #454545;
     opacity: 0.5;
-    display: inline-block;
-    font-size: 13px;
+    font-size: 14px;
     overflow-y: hidden;
     cursor: pointer;
+    padding-left: 65px; /* left gutter */
+    padding-bottom: 0px;
+    padding-top: 0px;
+    margin: 0px;
+    line-height: 22px;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
+    display: block;
+    visibility: hidden;
+    white-space: nowrap;
     color: #acacac;
     font-size: 11px;
+    left: 8px;
+    position: absolute;
 }
 
 .mx_EventTile_line {
     position: relative;
     /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
-    margin-right: 95px;
+    margin-right: 110px;
+    padding-left: 65px; /* left gutter */
+    padding-top: 4px;
+    padding-bottom: 2px;
+    border-radius: 4px;
+    min-height: 24px;
+    line-height: 22px;
 }
-
-/* all the overflow-y: hidden; are to trap Zalgos -
-   but they introduce an implicit overflow-x: auto.
-   so make that explicitly hidden too to avoid random
-   horizontal scrollbars occasionally appearing, like in
-   https://github.com/vector-im/vector-web/issues/1154
-    */
-.mx_EventTile_content {
-    display: block;
-    overflow-y: hidden;
-    overflow-x: hidden;
-}
-
-/* De-zalgoing */
-.mx_EventTile_body {
-    overflow-y: hidden;
-}
-
-/* Various markdown overrides */
-
-.mx_EventTile_content .markdown-body {
-    font-family: inherit ! important;
-    white-space: normal ! important;
-    line-height: inherit ! important;
-    color: inherit;
-    font-size: 15px;
-}
-
-/* have to use overlay rather than auto otherwise Linux and Windows
-   Chrome gets very confused about vertical spacing:
-   https://github.com/vector-im/vector-web/issues/754
-*/
-.mx_EventTile_content .markdown-body pre {
-    overflow-x: overlay;
-    overflow-y: visible;
-}
-
-.mx_EventTile_content .markdown-body h1,
-.mx_EventTile_content .markdown-body h2,
-.mx_EventTile_content .markdown-body h3,
-.mx_EventTile_content .markdown-body h4,
-.mx_EventTile_content .markdown-body h5,
-.mx_EventTile_content .markdown-body h6
-{
-    font-family: inherit ! important;
-}
-
-.mx_EventTile_content .markdown-body a {
-    color: #76cfa6;
-}
-
-.mx_EventTile_content .markdown-body .hljs {
-    display: inline ! important;
-}
-
-/* end of overrides */
 
 /* HACK to override line-height which is already marked important elsewhere */
 .mx_EventTile_bigEmoji.mx_EventTile_bigEmoji {
@@ -129,10 +90,16 @@ limitations under the License.
 /* this is used for the tile for the event which is selected via the URL.
  * TODO: ultimately we probably want some transition on here.
  */
-.mx_EventTile_selected {
+.mx_EventTile_selected .mx_EventTile_line {
     border-left: #76cfa6 5px solid;
-    margin-left: 53px;
-    padding-left: 7px;
+    padding-left: 60px;
+    background-color: #f7f7f7;
+}
+
+.mx_EventTile:hover .mx_EventTile_line,
+.mx_EventTile.menu .mx_EventTile_line
+{
+    background-color: #f7f7f7;
 }
 
 .mx_EventTile_searchHighlight {
@@ -181,32 +148,29 @@ limitations under the License.
     text-decoration: none;
 }
 
-.mx_EventTile .mx_MessageTimestamp {
-    display: block;
-    visibility: hidden;
-    text-align: right;
-    white-space: nowrap;
-}
-
-.mx_EventTile_last .mx_MessageTimestamp {
+.mx_EventTile_last .mx_MessageTimestamp,
+.mx_EventTile:hover .mx_MessageTimestamp,
+.mx_EventTile.menu .mx_MessageTimestamp
+{
     visibility: visible;
 }
 
-.mx_EventTile:hover .mx_MessageTimestamp {
-    visibility: visible;
+.mx_EventTile_selected .mx_MessageTimestamp {
+    left: 3px;
 }
 
 .mx_EventTile_editButton {
     position: absolute;
     display: inline-block;
     visibility: hidden;
+    cursor: pointer;
+    top: 6px;
+    right: 6px;
 }
 
-.mx_EventTile:hover .mx_EventTile_editButton {
-    visibility: visible;
-}
-
-.mx_EventTile.menu .mx_EventTile_editButton {
+.mx_EventTile:hover .mx_EventTile_editButton,
+.mx_EventTile.menu .mx_EventTile_editButton
+{
     visibility: visible;
 }
 
@@ -219,6 +183,13 @@ limitations under the License.
     display: inline-block;
     width: 14px;
     height: 14px;
+    top: 29px;
+}
+
+.mx_EventTile_continuation .mx_EventTile_readAvatars,
+.mx_EventTile_info .mx_EventTile_readAvatars
+{
+    top: 7px;
 }
 
 .mx_EventTile_readAvatars .mx_BaseAvatar {
@@ -231,3 +202,60 @@ limitations under the License.
     font-size: 11px;
     position: absolute;
 }
+
+/* all the overflow-y: hidden; are to trap Zalgos -
+   but they introduce an implicit overflow-x: auto.
+   so make that explicitly hidden too to avoid random
+   horizontal scrollbars occasionally appearing, like in
+   https://github.com/vector-im/vector-web/issues/1154
+    */
+.mx_EventTile_content {
+    display: block;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    margin-right: 34px;
+}
+
+/* De-zalgoing */
+.mx_EventTile_body {
+    overflow-y: hidden;
+}
+
+/* Various markdown overrides */
+
+.mx_EventTile_content .markdown-body {
+    font-family: inherit ! important;
+    white-space: normal ! important;
+    line-height: inherit ! important;
+    color: inherit;
+    font-size: 14px;
+}
+
+/* have to use overlay rather than auto otherwise Linux and Windows
+   Chrome gets very confused about vertical spacing:
+   https://github.com/vector-im/vector-web/issues/754
+*/
+.mx_EventTile_content .markdown-body pre {
+    overflow-x: overlay;
+    overflow-y: visible;
+}
+
+.mx_EventTile_content .markdown-body h1,
+.mx_EventTile_content .markdown-body h2,
+.mx_EventTile_content .markdown-body h3,
+.mx_EventTile_content .markdown-body h4,
+.mx_EventTile_content .markdown-body h5,
+.mx_EventTile_content .markdown-body h6
+{
+    font-family: inherit ! important;
+}
+
+.mx_EventTile_content .markdown-body a {
+    color: #76cfa6;
+}
+
+.mx_EventTile_content .markdown-body .hljs {
+    display: inline ! important;
+}
+
+/* end of overrides */
