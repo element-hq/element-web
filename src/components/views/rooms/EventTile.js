@@ -403,7 +403,13 @@ module.exports = React.createClass({
         var readAvatars = this.getReadAvatars();
 
         var avatar, sender;
-        if (!this.props.continuation && !isInfoMessage) {
+        if (isInfoMessage) {
+            avatar = (
+               <div className="mx_EventTile_avatar">
+                   <MemberAvatar member={this.props.mxEvent.sender} width={14} height={14} onClick={ this.onMemberAvatarClick } />
+               </div>
+            );
+        } else if (!this.props.continuation) {
             if (this.props.mxEvent.sender) {
                 avatar = (
                     <div className="mx_EventTile_avatar">
