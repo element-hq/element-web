@@ -19,8 +19,8 @@ limitations under the License.
 var q = require("q");
 var React = require('react');
 var classNames = require('classnames');
+var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var dis = require('matrix-react-sdk/lib/dispatcher');
 
 module.exports = React.createClass({
     displayName: 'NotificationStateContextMenu',
@@ -31,95 +31,86 @@ module.exports = React.createClass({
         onFinished: React.PropTypes.func,
     },
 
-    getInitialState: function() {
-        var areNotifsMuted = false;
-        var cli = MatrixClientPeg.get();
-        if (!cli.isGuest()) {
-            var roomPushRule = cli.getRoomPushRule("global", this.props.room.roomId);
-            if (roomPushRule) {
-                if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
-                    areNotifsMuted = true;
-                }
-            }
-        }
-
+    getInitialState() {
         return {
-            areNotifsMuted: areNotifsMuted,
-        };
+            roomNotifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
+        }
     },
 
-    _save: function( areNotifsMuted ) {
-        var self = this;
+    componentWillMount: function() {
+        this._unmounted = false;
+    },
+
+    componentWillUnmount: function() {
+        this._unmounted = true;
+    },
+
+    _save: function(newState) {
+        const oldState = this.state.roomNotifState;
         const roomId = this.props.room.roomId;
         var cli = MatrixClientPeg.get();
 
-        if (!cli.isGuest()) {
-            // Wrapping this in a q promise, as setRoomMutePushRule can return
-            // a promise or a value
-            q(cli.setRoomMutePushRule("global", roomId, areNotifsMuted))
-            .then(function() {
-                self.setState({areNotifsMuted: areNotifsMuted});
+        if (cli.isGuest()) return;
 
-                // delay slightly so that the user can see their state change
-                // before closing the menu
-                return q.delay(500).then(function() {
-                    // tell everyone that wants to know of the change in
-                    // notification state
-                    dis.dispatch({
-                        action: 'notification_change',
-                        roomId: self.props.room.roomId,
-                        areNotifsMuted: areNotifsMuted,
-                    });
-
-                    // Close the context menu
-                    if (self.props.onFinished) {
-                        self.props.onFinished();
-                    };
-                });
-            }).fail(function(error) {
-                // TODO: some form of error notification to the user
-                // to inform them that their state change failed.
+        this.setState({
+            roomNotifState: newState,
+        });
+        RoomNotifs.setRoomNotifsState(this.props.room.roomId, newState).done(() => {
+            // delay slightly so that the user can see their state change
+            // before closing the menu
+            return q.delay(500).then(() => {
+                if (this._unmounted) return;
+                // Close the context menu
+                if (this.props.onFinished) {
+                    this.props.onFinished();
+                };
             });
-        }
+        }, (error) => {
+            // TODO: some form of error notification to the user
+            // to inform them that their state change failed.
+            // For now we at least set the state back
+            if (this._unmounted) return;
+            this.setState({
+                roomNotifState: oldState,
+            });
+        });
     },
 
     _onClickAlertMe: function() {
-        // Placeholder
+        this._save(RoomNotifs.ALL_MESSAGES_LOUD);
     },
 
     _onClickAllNotifs: function() {
-        this._save(false);
+        this._save(RoomNotifs.ALL_MESSAGES);
     },
 
     _onClickMentions: function() {
-        this._save(true);
+        this._save(RoomNotifs.MENTIONS_ONLY);
     },
 
     _onClickMute: function() {
-        // Placeholder
+        this._save(RoomNotifs.MUTE);
     },
 
     render: function() {
-        var cli = MatrixClientPeg.get();
-
         var alertMeClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldDisabled': true,
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == RoomNotifs.ALL_MESSAGES_LOUD,
         });
 
         var allNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': !this.state.areNotifsMuted,
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == RoomNotifs.ALL_MESSAGES,
         });
 
         var mentionsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldSet': this.state.areNotifsMuted,
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == RoomNotifs.MENTIONS_ONLY,
         });
 
         var muteNotifsClasses = classNames({
             'mx_NotificationStateContextMenu_field': true,
-            'mx_NotificationStateContextMenu_fieldDisabled': true,
+            'mx_NotificationStateContextMenu_fieldSet': this.state.roomNotifState == RoomNotifs.MUTE,
         });
 
         return (

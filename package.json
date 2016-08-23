@@ -1,6 +1,6 @@
 {
   "name": "vector-web",
-  "version": "0.7.3",
+  "version": "0.7.4-r1",
   "description": "Vector webapp",
   "author": "matrix.org",
   "repository": {
@@ -18,7 +18,7 @@
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "NODE_ENV=production webpack -p lib/vector/index.js vector/bundle.js",
     "build:bundle:dev": "NODE_ENV=production webpack --optimize-occurence-order lib/vector/index.js vector/bundle.js",
-    "build:staticfiles": "scripts/staticfiles.js",
+    "build:staticfiles": "cpx -v node_modules/olm/olm.js vector/",
     "build": "npm run build:staticfiles && npm run build:emojione && npm run build:css && npm run build:compile && npm run build:bundle",
     "build:dev": "npm run build:staticfiles && npm run build:emojione && npm run build:css && npm run build:compile && npm run build:bundle:dev",
     "package": "scripts/package.sh",
@@ -26,9 +26,10 @@
     "start:js": "webpack -w src/vector/index.js vector/bundle.js",
     "start:js:prod": "NODE_ENV=production webpack -w src/vector/index.js vector/bundle.js",
     "start:skins:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/components.css",
+    "start:staticfiles": "cpx -Lwv node_modules/olm/olm.js vector/",
     "//cache": "Note the -c 1 below due to https://code.google.com/p/chromium/issues/detail?id=508270",
-    "start": "parallelshell \"npm run build:staticfiles\" \"npm run start:emojione\" \"npm run start:js\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
-    "start:prod": "parallelshell \"npm run build:staticfiles\" \"npm run start:emojione\" \"npm run start:js:prod\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
+    "start": "parallelshell \"npm run start:staticfiles\" \"npm run start:emojione\" \"npm run start:js\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
+    "start:prod": "parallelshell \"npm run start:staticfiles\" \"npm run start:emojione\" \"npm run start:js:prod\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
     "clean": "rimraf lib vector/olm.js vector/bundle.css vector/bundle.js vector/bundle.js.map vector/webpack.css* vector/emojione",
     "prepublish": "npm run build:css && npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
@@ -55,7 +56,9 @@
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.2.1",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
-    "sanitize-html": "^1.11.1"
+    "sanitize-html": "^1.11.1",
+    "ua-parser-js": "^0.7.10",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "babel": "^5.8.23",

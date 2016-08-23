@@ -173,6 +173,10 @@ will watch for changes to the files and rebuild automatically.
 If you add or remove any components from the Vector skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.
 
+If any of these steps error with, `file table overflow`, you are probably on a mac
+which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
+You'll need to do this in each new terminal you open before building vector.
+
 Filing issues
 =============
 
