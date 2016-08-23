@@ -34,6 +34,11 @@ limitations under the License.
     z-index: 2;
 }
 
+.mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
+    top: 8px;
+    left: 44px;
+}
+
 .mx_EventTile_continuation {
     padding-top: 0px ! important;
 }
