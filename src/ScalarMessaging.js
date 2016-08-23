@@ -62,7 +62,7 @@ function sendResponse(event, res) {
 
 function sendError(event, msg, nestedError) {
     console.error("Action:" + event.data.action + " failed with message: " + msg);
-    const data = event.data;
+    const data = JSON.parse(JSON.stringify(event.data);
     data.response = {
         error: {
             message: msg,
