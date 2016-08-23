@@ -28,6 +28,7 @@ module.exports = React.createClass({
     Phase : {
         MemberList: 'MemberList',
         FileList: 'FileList',
+        NotificationPanel: 'NotificationPanel',
         MemberInfo: 'MemberInfo',
     },
 
@@ -108,18 +109,23 @@ module.exports = React.createClass({
 
     render: function() {
         var MemberList = sdk.getComponent('rooms.MemberList');
+        var NotificationPanel = sdk.getComponent('structures.NotificationPanel');
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var buttonGroup;
         var panel;
 
         var filesHighlight;
         var membersHighlight;
+        var notificationsHighlight;
         if (!this.props.collapsed) {
             if (this.state.phase == this.Phase.MemberList || this.state.phase === this.Phase.MemberInfo) {
                 membersHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
             }
             else if (this.state.phase == this.Phase.FileList) {
                 filesHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
+            }
+            else if (this.state.phase == this.Phase.NotificationPanel) {
+                notificationsHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
             }
         }
 
@@ -144,15 +150,22 @@ module.exports = React.createClass({
                             <TintableSvg src="img/files.svg" width="17" height="22"/>
                             { filesHighlight }
                         </div>
+                        <div className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton" title="Notifications">
+                            <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
+                            { notificationsHighlight }
+                        </div>
                     </div>;
 
             if (!this.props.collapsed) {
-                if(this.state.phase == this.Phase.MemberList) {
+                if (this.state.phase == this.Phase.MemberList) {
                     panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
                 }
-                else if(this.state.phase == this.Phase.MemberInfo) {
+                else if (this.state.phase == this.Phase.MemberInfo) {
                     var MemberInfo = sdk.getComponent('rooms.MemberInfo');
                     panel = <MemberInfo roomId={this.props.roomId} member={this.state.member} key={this.props.roomId} />
+                }
+                else if (this.state.phase == this.Phase.NotificationPanel) {
+                    panel = <NotificationPanel />
                 }
             }
         }
