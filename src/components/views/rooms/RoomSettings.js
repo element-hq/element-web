@@ -23,6 +23,7 @@ var Modal = require('../../../Modal');
 var ObjectUtils = require("../../../ObjectUtils");
 var dis = require("../../../dispatcher");
 var ScalarAuthClient = require("../../../ScalarAuthClient");
+var ScalarMessaging = require('../../../ScalarMessaging');
 var UserSettingsStore = require('../../../UserSettingsStore');
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -70,6 +71,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        ScalarMessaging.startListening();
         MatrixClientPeg.get().getRoomDirectoryVisibility(
             this.props.room.roomId
         ).done((result) => {
@@ -93,6 +95,8 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        ScalarMessaging.stopListening();
+
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 1.0,
