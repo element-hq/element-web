@@ -180,7 +180,7 @@ module.exports = React.createClass({
     },
 
     _doInvite(address) {
-        Invite.inviteToRoom(self.props.roomId, address).catch((err) => {
+        Invite.inviteToRoom(this.props.roomId, address).catch((err) => {
             if (err !== null) {
                 console.error("Failed to invite: %s", JSON.stringify(err));
                 if (err.errcode == 'M_FORBIDDEN') {
@@ -196,7 +196,7 @@ module.exports = React.createClass({
                 }
             }
         }).finally(() => {
-            self.setState({
+            this.setState({
                 inviting: false
             });
             // XXX: hacky focus on the invite box
@@ -207,7 +207,7 @@ module.exports = React.createClass({
                 }
             }, 0);
         }).done();
-        self.setState({
+        this.setState({
             inviting: true
         });
     },
@@ -283,7 +283,7 @@ module.exports = React.createClass({
         if (inputs.length == 1) {
             // for a single address, we just send the invite
             promise.done(() => {
-                this.doInvite(inputs[0]);
+                this._doInvite(inputs[0]);
             });
         } else {
             // if there are several, display the confirmation/progress dialog

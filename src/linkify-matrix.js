@@ -137,6 +137,10 @@ matrixLinkify.options = {
         }
     },
 
+    linkAttributes: {
+        rel: 'noopener',
+    },
+
     target: function(href, type) {
         if (type === 'url') {
             if (href.match(matrixLinkify.VECTOR_URL_PATTERN)) {

@@ -21,21 +21,11 @@ import utils from 'matrix-js-sdk/lib/utils';
 
 const localStorage = window.localStorage;
 
-function deviceId() {
-    // XXX: is Math.random()'s deterministicity a problem here?
-    var id = Math.floor(Math.random()*16777215).toString(16);
-    id = "W" + "000000".substring(id.length) + id;
-    if (localStorage) {
-        id = localStorage.getItem("mx_device_id") || id;
-        localStorage.setItem("mx_device_id", id);
-    }
-    return id;
-}
-
 interface MatrixClientCreds {
     homeserverUrl: string,
     identityServerUrl: string,
     userId: string,
+    deviceId: string,
     accessToken: string,
     guest: boolean,
 }
@@ -69,24 +59,10 @@ class MatrixClientPeg {
 
     /**
      * Replace this MatrixClientPeg's client with a client instance that has
-     * Home Server / Identity Server URLs but no credentials
-     */
-    replaceUsingUrls(hs_url, is_url) {
-        this._replaceClient(hs_url, is_url);
-    }
-
-    /**
-     * Replace this MatrixClientPeg's client with a client instance that has
      * Home Server / Identity Server URLs and active credentials
      */
     replaceUsingCreds(creds: MatrixClientCreds) {
-        this._replaceClient(
-            creds.homeserverUrl,
-            creds.identityServerUrl,
-            creds.userId,
-            creds.accessToken,
-            creds.guest,
-        );
+        this._createClient(creds);
     }
 
     start() {
@@ -96,32 +72,29 @@ class MatrixClientPeg {
         this.get().startClient(opts);
     }
 
-    _replaceClient(hs_url, is_url, user_id, access_token, isGuest) {
-        this._createClient(hs_url, is_url, user_id, access_token, isGuest);
-    }
-
     getCredentials(): MatrixClientCreds {
         return {
             homeserverUrl: this.matrixClient.baseUrl,
             identityServerUrl: this.matrixClient.idBaseUrl,
             userId: this.matrixClient.credentials.userId,
+            deviceId: this.matrixClient.getDeviceId(),
             accessToken: this.matrixClient.getAccessToken(),
             guest: this.matrixClient.isGuest(),
         };
     }
 
-    _createClient(hs_url, is_url, user_id, access_token, isGuest) {
+    _createClient(creds: MatrixClientCreds) {
         var opts = {
-            baseUrl: hs_url,
-            idBaseUrl: is_url,
-            accessToken: access_token,
-            userId: user_id,
+            baseUrl: creds.homeserverUrl,
+            idBaseUrl: creds.identityServerUrl,
+            accessToken: creds.accessToken,
+            userId: creds.userId,
+            deviceId: creds.deviceId,
             timelineSupport: true,
         };
 
         if (localStorage) {
             opts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
-            opts.deviceId = deviceId();
         }
 
         this.matrixClient = Matrix.createClient(opts);
@@ -130,7 +103,7 @@ class MatrixClientPeg {
         // potential number of event listeners is quite high.
         this.matrixClient.setMaxListeners(500);
 
-        this.matrixClient.setGuest(Boolean(isGuest));
+        this.matrixClient.setGuest(Boolean(creds.guest));
     }
 }
 

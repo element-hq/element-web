@@ -1,4 +1,7 @@
 "use strict";
+
+import Matrix from "matrix-js-sdk";
+
 var MatrixClientPeg = require("./MatrixClientPeg");
 var SignupStages = require("./SignupStages");
 var dis = require("./dispatcher");
@@ -11,9 +14,10 @@ const EMAIL_STAGE_TYPE = "m.login.email.identity";
  * storage of HS/IS URLs.
  */
 class Signup {
-    constructor(hsUrl, isUrl) {
+    constructor(hsUrl, isUrl, opts) {
         this._hsUrl = hsUrl;
         this._isUrl = isUrl;
+        this._defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
     }
 
     getHomeserverUrl() {
@@ -31,14 +35,25 @@ class Signup {
     setIdentityServerUrl(isUrl) {
         this._isUrl = isUrl;
     }
+
+    /**
+     * Get a temporary MatrixClient, which can be used for login or register
+     * requests.
+     */
+    _createTemporaryClient() {
+        return Matrix.createClient({
+            baseUrl: this._hsUrl,
+            idBaseUrl: this._isUrl,
+        });
+    }
 }
 
 /**
  * Registration logic class
  */
 class Register extends Signup {
-    constructor(hsUrl, isUrl) {
-        super(hsUrl, isUrl);
+    constructor(hsUrl, isUrl, opts) {
+        super(hsUrl, isUrl, opts);
         this.setStep("START");
         this.data = null; // from the server
         // random other stuff (e.g. query params, NOT params from the server)
@@ -106,19 +121,11 @@ class Register extends Signup {
         this.email = email;
         this.username = username;
         this.password = password;
-
-        // feels a bit wrong to be clobbering the global client for something we
-        // don't even know if it'll work, but we'll leave this here for now to
-        // not complicate matters further. It would be nicer to isolate this
-        // logic entirely from the rest of the app though.
-        MatrixClientPeg.replaceUsingUrls(
-            this._hsUrl,
-            this._isUrl
-        );
-        return this._tryRegister();
+        const client = this._createTemporaryClient();
+        return this._tryRegister(client);
     }
 
-    _tryRegister(authDict, poll_for_success) {
+    _tryRegister(client, authDict, poll_for_success) {
         var self = this;
 
         var bindEmail;
@@ -129,7 +136,8 @@ class Register extends Signup {
             bindEmail = true;
         }
 
-        return MatrixClientPeg.get().register(
+        // TODO need to figure out how to send the device display name to /register.
+        return client.register(
             this.username, this.password, this.params.sessionId, authDict, bindEmail,
             this.guestAccessToken
         ).then(function(result) {
@@ -152,7 +160,7 @@ class Register extends Signup {
                         console.log("Active flow => %s", JSON.stringify(flow));
                         var flowStage = self.firstUncompletedStage(flow);
                         if (flowStage != self.activeStage) {
-                            return self.startStage(flowStage).catch(function(err) {
+                            return self._startStage(client, flowStage).catch(function(err) {
                                 self.setStep('START');
                                 throw err;
                             });
@@ -161,7 +169,7 @@ class Register extends Signup {
                 }
                 if (poll_for_success) {
                     return q.delay(5000).then(function() {
-                        return self._tryRegister(authDict, poll_for_success);
+                        return self._tryRegister(client, authDict, poll_for_success);
                     });
                 } else {
                     throw new Error("Authorisation failed!");
@@ -201,7 +209,7 @@ class Register extends Signup {
         return completed.indexOf(stageType) !== -1;
     }
 
-    startStage(stageName) {
+    _startStage(client, stageName) {
         var self = this;
         this.setStep(`STEP_${stageName}`);
         var StageClass = SignupStages[stageName];
@@ -210,12 +218,12 @@ class Register extends Signup {
             throw new Error("Unknown stage: " + stageName);
         }
 
-        var stage = new StageClass(MatrixClientPeg.get(), this);
+        var stage = new StageClass(client, this);
         this.activeStage = stage;
         return stage.complete().then(function(request) {
             if (request.auth) {
                 console.log("Stage %s is returning an auth dict", stageName);
-                return self._tryRegister(request.auth, request.poll_for_success);
+                return self._tryRegister(client, request.auth, request.poll_for_success);
             }
             else {
                 // never resolve the promise chain. This is for things like email auth
@@ -263,14 +271,6 @@ class Register extends Signup {
     }
 
     recheckState() {
-        // feels a bit wrong to be clobbering the global client for something we
-        // don't even know if it'll work, but we'll leave this here for now to
-        // not complicate matters further. It would be nicer to isolate this
-        // logic entirely from the rest of the app though.
-        MatrixClientPeg.replaceUsingUrls(
-            this._hsUrl,
-            this._isUrl
-        );
         // We've been given a bunch of data from a previous register step,
         // this only happens for email auth currently. It's kinda ming we need
         // to know this though. A better solution would be to ask the stages if
@@ -281,7 +281,8 @@ class Register extends Signup {
         );
 
         if (this.params.hasEmailInfo) {
-            this.registrationPromise = this.startStage(EMAIL_STAGE_TYPE);
+            const client = this._createTemporaryClient();
+            this.registrationPromise = this._startStage(client, EMAIL_STAGE_TYPE);
         }
         return this.registrationPromise;
     }
@@ -296,8 +297,8 @@ class Register extends Signup {
 
 
 class Login extends Signup {
-    constructor(hsUrl, isUrl, fallbackHsUrl) {
-        super(hsUrl, isUrl);
+    constructor(hsUrl, isUrl, fallbackHsUrl, opts) {
+        super(hsUrl, isUrl, opts);
         this._fallbackHsUrl = fallbackHsUrl;
         this._currentFlowIndex = 0;
         this._flows = [];
@@ -305,15 +306,8 @@ class Login extends Signup {
 
     getFlows() {
         var self = this;
-        // feels a bit wrong to be clobbering the global client for something we
-        // don't even know if it'll work, but we'll leave this here for now to
-        // not complicate matters further. It would be nicer to isolate this
-        // logic entirely from the rest of the app though.
-        MatrixClientPeg.replaceUsingUrls(
-            this._hsUrl,
-            this._isUrl
-        );
-        return MatrixClientPeg.get().loginFlows().then(function(result) {
+        var client = this._createTemporaryClient();
+        return client.loginFlows().then(function(result) {
             self._flows = result.flows;
             self._currentFlowIndex = 0;
             // technically the UI should display options for all flows for the
@@ -334,10 +328,15 @@ class Login extends Signup {
     }
 
     loginAsGuest() {
-        MatrixClientPeg.replaceUsingUrls(this._hsUrl, this._isUrl);
-        return MatrixClientPeg.get().registerGuest().then((creds) => {
+        var client = this._createTemporaryClient();
+        return client.registerGuest({
+            body: {
+                initial_device_display_name: this._defaultDeviceDisplayName,
+            },
+        }).then((creds) => {
             return {
                 userId: creds.user_id,
+                deviceId: creds.device_id,
                 accessToken: creds.access_token,
                 homeserverUrl: this._hsUrl,
                 identityServerUrl: this._isUrl,
@@ -357,7 +356,8 @@ class Login extends Signup {
         var self = this;
         var isEmail = username.indexOf("@") > 0;
         var loginParams = {
-            password: pass
+            password: pass,
+            initial_device_display_name: this._defaultDeviceDisplayName,
         };
         if (isEmail) {
             loginParams.medium = 'email';
@@ -366,11 +366,13 @@ class Login extends Signup {
             loginParams.user = username;
         }
 
-        return MatrixClientPeg.get().login('m.login.password', loginParams).then(function(data) {
+        var client = this._createTemporaryClient();
+        return client.login('m.login.password', loginParams).then(function(data) {
             return q({
                 homeserverUrl: self._hsUrl,
                 identityServerUrl: self._isUrl,
                 userId: data.user_id,
+                deviceId: data.device_id,
                 accessToken: data.access_token
             });
         }, function(error) {
@@ -384,25 +386,20 @@ class Login extends Signup {
                     'Incorrect username and/or password.'
                 );
                 if (self._fallbackHsUrl) {
-                    // as per elsewhere, it would be much nicer to not replace the global
-                    // client just to try an alternate HS
-                    MatrixClientPeg.replaceUsingUrls(
-                        self._fallbackHsUrl,
-                        self._isUrl
-                    );
-                    return MatrixClientPeg.get().login('m.login.password', loginParams).then(function(data) {
+                    var fbClient = Matrix.createClient({
+                        baseUrl: self._fallbackHsUrl,
+                        idBaseUrl: this._isUrl,
+                    });
+
+                    return fbClient.login('m.login.password', loginParams).then(function(data) {
                         return q({
                             homeserverUrl: self._fallbackHsUrl,
                             identityServerUrl: self._isUrl,
                             userId: data.user_id,
+                            deviceId: data.device_id,
                             accessToken: data.access_token
                         });
                     }, function(fallback_error) {
-                        // We also have to put the default back again if it fails...
-                        MatrixClientPeg.replaceUsingUrls(
-                            this._hsUrl,
-                            this._isUrl
-                        );
                         // throw the original error
                         throw error;
                     });

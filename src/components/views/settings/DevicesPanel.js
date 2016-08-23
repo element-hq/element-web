@@ -52,7 +52,7 @@ export default class DevicesPanel extends React.Component {
             (error) => {
                 if (this._unmounted) { return; }
                 var errtxt;
-                if (err.httpStatus == 404) {
+                if (error.httpStatus == 404) {
                     // 404 probably means the HS doesn't yet support the API.
                     errtxt = "Your home server does not support device management.";
                 } else {
@@ -127,6 +127,7 @@ export default class DevicesPanel extends React.Component {
         return (
             <div className={classes}>
                 <div className="mx_DevicesPanel_header">
+                    <div className="mx_DevicesPanel_deviceId">ID</div>
                     <div className="mx_DevicesPanel_deviceName">Name</div>
                     <div className="mx_DevicesPanel_deviceLastSeen">Last seen</div>
                     <div className="mx_DevicesPanel_deviceButtons"></div>

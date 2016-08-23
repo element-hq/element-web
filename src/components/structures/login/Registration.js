@@ -45,6 +45,9 @@ module.exports = React.createClass({
         email: React.PropTypes.string,
         username: React.PropTypes.string,
         guestAccessToken: React.PropTypes.string,
+
+        defaultDeviceDisplayName: React.PropTypes.string,
+
         // registration shouldn't know or care how login is done.
         onLoginClick: React.PropTypes.func.isRequired,
         onCancelClick: React.PropTypes.func
@@ -71,7 +74,9 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         // attach this to the instance rather than this.state since it isn't UI
         this.registerLogic = new Signup.Register(
-            this.props.customHsUrl, this.props.customIsUrl
+            this.props.customHsUrl, this.props.customIsUrl, {
+                defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
+            }
         );
         this.registerLogic.setClientSecret(this.props.clientSecret);
         this.registerLogic.setSessionId(this.props.sessionId);
@@ -154,6 +159,7 @@ module.exports = React.createClass({
             }
             self.props.onLoggedIn({
                 userId: response.user_id,
+                deviceId: response.device_id,
                 homeserverUrl: self.registerLogic.getHomeserverUrl(),
                 identityServerUrl: self.registerLogic.getIdentityServerUrl(),
                 accessToken: response.access_token
@@ -279,7 +285,7 @@ module.exports = React.createClass({
 
         var returnToAppJsx;
         if (this.props.onCancelClick) {
-            returnToAppJsx = 
+            returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
                     Return to app
                 </a>
