@@ -66,10 +66,31 @@ limitations under the License.
     padding-top: 1px;
     padding-left: 4px;
     padding-right: 4px;
-    background-color: #76cfa6; /* Temporary */
+    background-color: #76cfa6;
 }
 
 .collapsed .mx_RoomSubList_badge {
+    display: none;
+}
+
+.mx_RoomSubList_badgeHighlight {
+    background-color: #ff0064;
+}
+
+/* This is the bottom of the speech bubble */
+.mx_RoomSubList_badgeHighlight:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    margin-left: 5px;
+    border-top: 5px solid #ff0064;
+    border-right: 7px solid transparent;
+}
+
+/* Hide the bottom of speech bubble */
+.collapsed .mx_RoomSubList_badgeHighlight:after {
     display: none;
 }
 

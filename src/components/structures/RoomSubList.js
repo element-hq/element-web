@@ -214,6 +214,38 @@ var RoomSubList = React.createClass({
         this.setState({ sortedList: list.sort(comparator) });
     },
 
+    roomNotificationCount: function() {
+        var self = this;
+        var subListCount = 0;
+        var subListHighlight = false;
+        var cli = MatrixClientPeg.get();
+
+        this.state.sortedList.map(function(room) {
+            var notifsMuted = false;
+            if (!cli.isGuest()) {
+                var roomPushRule = cli.getRoomPushRule("global", room.roomId);
+                if (roomPushRule) {
+                    if (0 <= roomPushRule.actions.indexOf("dont_notify")) {
+                        notifsMuted = true;
+                    }
+                }
+            }
+
+            var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites';
+
+            var notificationCount = room.getUnreadNotificationCount();
+
+            if (notificationCount > 0 && (!notifsMuted || (notifsMuted && highlight))) {
+                subListCount += notificationCount;
+                if (highlight) {
+                    subListHighlight = true;
+                }
+            }
+        });
+
+        return [subListCount, subListHighlight];
+    },
+
     moveRoomTile: function(room, atIndex) {
         if (debug) console.log("moveRoomTile: id " + room.roomId + ", atIndex " + atIndex);
         //console.log("moveRoomTile before: " + JSON.stringify(this.state.rooms));
@@ -329,12 +361,9 @@ var RoomSubList = React.createClass({
     _getHeaderJsx: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        var chevronClasses = classNames({
-            'mx_RoomSubList_chevron': true,
-            'mx_RoomSubList_chevronUp': this.state.hidden,
-            'mx_RoomSubList_chevronRight': !this.state.hidden && this.state.capTruncate,
-            'mx_RoomSubList_chevronDown': !this.state.hidden && !this.state.capTruncate,
-        });
+        var subListNotifications = this.roomNotificationCount();
+        var subListNotificationsCount = subListNotifications[0];
+        var subListNotificationsHighlight = subListNotifications[1];
 
         var roomCount = this.props.list.length > 0 ? this.props.list.length : '';
         var isTruncatable = this.props.list.length > TRUNCATE_AT;
@@ -342,12 +371,24 @@ var RoomSubList = React.createClass({
             roomCount = TRUNCATE_AT + " of " + roomCount;
         }
 
+        var chevronClasses = classNames({
+            'mx_RoomSubList_chevron': true,
+            'mx_RoomSubList_chevronUp': this.state.hidden,
+            'mx_RoomSubList_chevronRight': !this.state.hidden && this.state.capTruncate,
+            'mx_RoomSubList_chevronDown': !this.state.hidden && !this.state.capTruncate,
+        });
+
+        var badgeClasses = classNames({
+            'mx_RoomSubList_badge': true,
+            'mx_RoomSubList_badgeHighlight': subListNotificationsHighlight,
+        });
+
         return (
             <div onClick={ this.onClick } className="mx_RoomSubList_label">
                 { this.props.collapsed ? '' : this.props.label }
                 <div className="mx_RoomSubList_roomCount">{roomCount}</div>
                 <div className={chevronClasses}></div>
-                <div className="mx_RoomSubList_badge">0</div>
+                <div className={badgeClasses}>{subListNotificationsCount}</div>
             </div>
         );
     },
