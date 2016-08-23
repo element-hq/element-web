@@ -82,15 +82,11 @@ var RoomSubList = React.createClass({
     },
 
     getInitialState: function() {
-        var subListNotifications = this.roomNotificationCount();
-
         return {
             hidden: this.props.startAsHidden || false,
             capTruncate: this.props.list.length > TRUNCATE_AT,
             truncateAt: this.props.list.length > TRUNCATE_AT ? TRUNCATE_AT : -1,
             sortedList: [],
-            subListNotifCount: subListNotifications[0],
-            subListNotifHighlight: subListNotifications[1],
         };
     },
 
@@ -260,11 +256,10 @@ var RoomSubList = React.createClass({
     },
 
     _updateSubListCount: function() {
-        var subListNotifications = this.roomNotificationCount();
-        this.setState({
-            subListNotifCount: subListNotifications[0],
-            subListNotifHighlight: subListNotifications[1]
-        });
+        // Force an update by setting the state to the current state
+        // Doing it this way rather than using forceUpdate(), so that the shouldComponentUpdate()
+        // method is honoured
+        this.setState(this.state);
     },
 
     moveRoomTile: function(room, atIndex) {
@@ -383,6 +378,10 @@ var RoomSubList = React.createClass({
     _getHeaderJsx: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
+        var subListNotifications = this.roomNotificationCount();
+        var subListNotifCount = subListNotifications[0];
+        var subListNotifHighlight = subListNotifications[1];
+
         var roomCount = this.props.list.length > 0 ? this.props.list.length : '';
         var isTruncatable = this.props.list.length > TRUNCATE_AT;
         if (!this.state.hidden && this.state.capTruncate && isTruncatable) {
@@ -398,12 +397,12 @@ var RoomSubList = React.createClass({
 
         var badgeClasses = classNames({
             'mx_RoomSubList_badge': true,
-            'mx_RoomSubList_badgeHighlight': this.state.subListNotifHighlight,
+            'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
         });
 
         var badge;
-        if (this.state.subListNotifCount > 0) {
-            badge = <div className={badgeClasses}>{this.state.subListNotifCount}</div>;
+        if (subListNotifCount > 0) {
+            badge = <div className={badgeClasses}>{subListNotifCount}</div>;
         }
 
         return (
