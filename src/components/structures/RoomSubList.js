@@ -82,11 +82,15 @@ var RoomSubList = React.createClass({
     },
 
     getInitialState: function() {
+        var subListNotifications = this.roomNotificationCount();
+
         return {
             hidden: this.props.startAsHidden || false,
             capTruncate: this.props.list.length > TRUNCATE_AT,
             truncateAt: this.props.list.length > TRUNCATE_AT ? TRUNCATE_AT : -1,
             sortedList: [],
+            subListNotifCount: subListNotifications[0],
+            subListNotifHighlight: subListNotifications[1],
         };
     },
 
@@ -121,30 +125,35 @@ var RoomSubList = React.createClass({
 
         if (this.state.hidden && (this.state.capTruncate && isTruncatable)) {
             isHidden = false;
-            this.setState({ hidden : isHidden });
-            this.setState({ capTruncate : true });
-            // Show truncated list
-            this.setState({ truncateAt : TRUNCATE_AT });
-        } else if ((!this.state.hidden && this.state.capTruncate) ||
-                   (this.state.hidden && (this.state.capTruncate && !isTruncatable))) {
+            this.setState({
+                hidden : isHidden,
+                capTruncate : true,
+                truncateAt : TRUNCATE_AT
+            });
+        } else if ((!this.state.hidden && this.state.capTruncate)
+                    || (this.state.hidden && (this.state.capTruncate && !isTruncatable)))
+        {
             isHidden = false;
-            this.setState({ hidden : isHidden });
-            this.setState({ capTruncate : false });
-            // Show full list
-            this.setState({ truncateAt : -1 });
+            this.setState({
+                hidden : isHidden,
+                capTruncate : false,
+                truncateAt : -1
+            });
         } else if (!this.state.hidden && !this.state.capTruncate) {
             isHidden = true;
-            this.setState({ hidden : isHidden });
-            this.setState({ capTruncate : true });
-            // Truncated list
-            this.setState({ truncateAt : TRUNCATE_AT });
+            this.setState({
+                hidden : isHidden,
+                capTruncate : true,
+                truncateAt : TRUNCATE_AT
+            });
         } else {
             // Catch any weird states the system gets into
             isHidden = false;
-            this.setState({ hidden : isHidden });
-            this.setState({ capTruncate : true });
-            // Show truncated list
-            this.setState({ truncateAt : TRUNCATE_AT });
+            this.setState({
+                hidden : isHidden,
+                capTruncate : true,
+                truncateAt : TRUNCATE_AT
+            });
         }
 
         this.props.onShowMoreRooms();
@@ -230,7 +239,7 @@ var RoomSubList = React.createClass({
         var subListHighlight = false;
         var cli = MatrixClientPeg.get();
 
-        this.state.sortedList.map(function(room) {
+        this.props.list.map(function(room) {
             var roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
             var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites';
             var notificationCount = room.getUnreadNotificationCount();
@@ -248,6 +257,14 @@ var RoomSubList = React.createClass({
         });
 
         return [subListCount, subListHighlight];
+    },
+
+    _updateSubListCount: function() {
+        var subListNotifications = this.roomNotificationCount();
+        this.setState({
+            subListNotifCount: subListNotifications[0],
+            subListNotifHighlight: subListNotifications[1]
+        });
     },
 
     moveRoomTile: function(room, atIndex) {
@@ -357,6 +374,7 @@ var RoomSubList = React.createClass({
                     unread={ Unread.doesRoomHaveUnreadMessages(room) }
                     highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites' }
                     isInvite={ self.props.label === 'Invites' }
+                    refreshSubList={ self._updateSubListCount }
                     incomingCall={ self.props.incomingCall && (self.props.incomingCall.roomId === room.roomId) ? self.props.incomingCall : null } />
             );
         });
@@ -364,10 +382,6 @@ var RoomSubList = React.createClass({
 
     _getHeaderJsx: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
-
-        var subListNotifications = this.roomNotificationCount();
-        var subListNotificationsCount = subListNotifications[0];
-        var subListNotificationsHighlight = subListNotifications[1];
 
         var roomCount = this.props.list.length > 0 ? this.props.list.length : '';
         var isTruncatable = this.props.list.length > TRUNCATE_AT;
@@ -384,12 +398,12 @@ var RoomSubList = React.createClass({
 
         var badgeClasses = classNames({
             'mx_RoomSubList_badge': true,
-            'mx_RoomSubList_badgeHighlight': subListNotificationsHighlight,
+            'mx_RoomSubList_badgeHighlight': this.state.subListNotifHighlight,
         });
 
         var badge;
-        if (subListNotificationsCount > 0) {
-            badge = <div className={badgeClasses}>{subListNotificationsCount}</div>;
+        if (this.state.subListNotifCount > 0) {
+            badge = <div className={badgeClasses}>{this.state.subListNotifCount}</div>;
         }
 
         return (
