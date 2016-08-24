@@ -31,7 +31,6 @@ var KeyCode = require('../../KeyCode');
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
-var TIMELINE_CAP = 250; // the most events to show in a timeline
 
 var DEBUG = false;
 
@@ -82,6 +81,9 @@ var TimelinePanel = React.createClass({
 
         // opacity for dynamic UI fading effects
         opacity: React.PropTypes.number,
+
+        // maximum number of events to show in a timeline
+        timelineCap: React.PropTypes.number,
     },
 
     statics: {
@@ -90,6 +92,12 @@ var TimelinePanel = React.createClass({
 
         // a map from room id to read marker event timestamp
         roomReadMarkerTsMap: {},
+    },
+
+    getDefaultProps: function() {
+        return {
+            timelineCap: 250,
+        };
     },
 
     getInitialState: function() {
@@ -684,7 +692,7 @@ var TimelinePanel = React.createClass({
     _loadTimeline: function(eventId, pixelOffset, offsetBase) {
         this._timelineWindow = new Matrix.TimelineWindow(
             MatrixClientPeg.get(), this.props.room,
-            {windowLimit: TIMELINE_CAP});
+            {windowLimit: this.props.timelineCap});
 
         var onLoaded = () => {
             this._reloadEvents();
