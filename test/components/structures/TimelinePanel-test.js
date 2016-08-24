@@ -296,11 +296,12 @@ describe('TimelinePanel', function() {
             // direction.
             setScrollTop(scrollingDiv.scrollHeight);
             scrollingDiv.scrollTop = scrollingDiv.scrollHeight;
-            return awaitScroll();
-        }).then(() => {
-            expect(messagePanel.props.backPaginating).toBe(false);
-            expect(messagePanel.props.forwardPaginating).toBe(true);
-            return awaitScroll();
+
+            // the delay() below is a heinous hack to deal with the fact that,
+            // without it, we may or may not get control back before the
+            // forward pagination completes. The delay means that it should
+            // have completed.
+            return awaitScroll().delay(0);
         }).then(() => {
             expect(messagePanel.props.backPaginating).toBe(false);
             expect(messagePanel.props.forwardPaginating).toBe(false);
