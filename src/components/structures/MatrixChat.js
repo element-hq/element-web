@@ -94,6 +94,9 @@ module.exports = React.createClass({
             width: 10000,
             sideOpacity: 1.0,
             middleOpacity: 1.0,
+
+            version: null,
+            newVersion: null,
         };
         return s;
     },
@@ -856,6 +859,7 @@ module.exports = React.createClass({
     onVersion: function(current, latest) {
         this.setState({
             version: current,
+            newVersion: latest,
             hasNewVersion: current !== latest
         });
     },
@@ -992,7 +996,7 @@ module.exports = React.createClass({
 
             var topBar;
             if (this.state.hasNewVersion) {
-                topBar = <NewVersionBar />;
+                topBar = <NewVersionBar version={this.state.version} newVersion={this.state.newVersion} />;
             }
             else if (MatrixClientPeg.get().isGuest()) {
                 topBar = <GuestWarningBar />;
