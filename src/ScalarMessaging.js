@@ -213,6 +213,7 @@ function returnStateEvent(event, roomId, eventType, stateKey) {
     const stateEvent = room.currentState.getStateEvents(eventType, stateKey);
     if (!stateEvent) {
         sendResponse(event, null);
+        return;
     }
     sendResponse(event, stateEvent.getContent());
 }
