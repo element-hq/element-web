@@ -163,7 +163,7 @@ function inviteUser(event, roomId, userId) {
         }
     }
 
-    client.invite(roomId, userId).then(function() {
+    client.invite(roomId, userId).done(function() {
         sendResponse(event, {
             success: true,
         });
@@ -179,7 +179,7 @@ function setBotOptions(event, roomId, userId) {
         sendError(event, "You need to be logged in.");
         return;
     }
-    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, userId).then(() => {
+    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, userId).done(() => {
         sendResponse(event, {
             success: true,
         });
