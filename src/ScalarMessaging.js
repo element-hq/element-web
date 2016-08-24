@@ -17,20 +17,24 @@ limitations under the License.
 /*
 Listens for incoming postMessage requests from the integrations UI URL. The following API is exposed:
 {
-    action: "invite" | "membership_state",
+    action: "invite" | "membership_state" | "bot_options" | "set_bot_options",
     room_id: $ROOM_ID,
     user_id: $USER_ID
+    // additional request fields
 }
 
 The complete request object is returned to the caller with an additional "response" key like so:
 {
-    action: "invite" | "membership_state",
+    action: "invite" | "membership_state" | "bot_options" | "set_bot_options",
     room_id: $ROOM_ID,
     user_id: $USER_ID,
+    // additional request fields
     response: { ... }
 }
 
-"response" objects can consist of a sole "error" key to indicate an error. These look like:
+The "action" determines the format of the request and response. All actions can return an error response.
+An error response is a "response" object which consists of a sole "error" key to indicate an error.
+They look like:
 {
     error: {
         message: "Unable to invite user into room.",
@@ -39,16 +43,82 @@ The complete request object is returned to the caller with an additional "respon
 }
 The "message" key should be a human-friendly string.
 
-The response object for "membership_state" looks like:
+ACTIONS
+=======
+All actions can return an error response instead of the response outlined below.
+
+invite
+------
+Invites a user into a room.
+
+Request:
+ - room_id is the room to invite the user into.
+ - user_id is the user ID to invite.
+ - No additional fields.
+Response:
 {
-    membership_state: "join" | "leave" | "invite" | "ban"
+    success: true
+}
+Example:
+{
+    action: "invite",
+    room_id: "!foo:bar",
+    user_id: "@invitee:bar",
+    response: {
+        success: true
+    }
 }
 
-The response object for "invite" looks like:
+set_bot_options
+---------------
+Set the m.room.bot.options state event for a bot user.
+
+Request:
+ - room_id is the room to send the state event into.
+ - user_id is the user ID of the bot who you're setting options for.
+ - "content" is an object consisting of the content you wish to set.
+Response:
 {
-    invite: true
+    success: true
+}
+Example:
+{
+    action: "set_bot_options",
+    room_id: "!foo:bar",
+    user_id: "@bot:bar",
+    content: {
+        default_option: "alpha"
+    },
+    response: {
+        success: true
+    }
 }
 
+membership_state AND bot_options
+--------------------------------
+Get the content of the "m.room.member" or "m.room.bot.options" state event respectively.
+
+NB: Whilst this API is basically equivalent to getStateEvent, we specifically do not
+    want external entities to be able to query any state event for any room, hence the
+    restrictive API outlined here.
+
+Request:
+ - room_id is the room which has the state event.
+ - user_id is the state_key parameter which in both cases is a user ID (the member or the bot).
+ - No additional fields.
+Response:
+ - The event content. If there is no state event, the "response" key should be null.
+Example:
+{
+    action: "membership_state",
+    room_id: "!foo:bar",
+    user_id: "@somemember:bar",
+    response: {
+        membership: "join",
+        displayname: "Bob",
+        avatar_url: null
+    }
+}
 */
 
 const SdkConfig = require('./SdkConfig');
@@ -74,17 +144,7 @@ function sendError(event, msg, nestedError) {
     event.source.postMessage(data, event.origin);
 }
 
-function inviteUser(event) {
-    const roomId = event.data.room_id;
-    const userId = event.data.user_id;
-    if (!userId) {
-        sendError(event, "Missing user_id in request");
-        return;
-    }
-    if (!roomId) {
-        sendError(event, "Missing room_id in request");
-        return;
-    }
+function inviteUser(event, roomId, userId) {
     console.log(`Received request to invite ${userId} into room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
@@ -97,7 +157,7 @@ function inviteUser(event) {
         const member = room.getMember(userId);
         if (member && member.membership === "invite") {
             sendResponse(event, {
-                invite: true,
+                success: true,
             });
             return;
         }
@@ -105,25 +165,41 @@ function inviteUser(event) {
 
     client.invite(roomId, userId).then(function() {
         sendResponse(event, {
-            invite: true,
+            success: true,
         });
     }, function(err) {
         sendError(event, "You need to be able to invite users to do that.", err);
     });
 }
 
-function getMembershipState(event) {
-    const roomId = event.data.room_id;
-    const userId = event.data.user_id;
-    if (!userId) {
-        sendError(event, "Missing user_id in request");
+function setBotOptions(event, roomId, userId) {
+    console.log(`Received request to set options for bot ${userId} in room ${roomId}`);
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, "You need to be logged in.");
         return;
     }
-    if (!roomId) {
-        sendError(event, "Missing room_id in request");
-        return;
-    }
+    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, userId).then(() => {
+        sendResponse(event, {
+            success: true,
+        });
+    }, (err) => {
+        sendError(event, "Failed to send request.", err);
+    });
+}
+
+function getMembershipState(event, roomId, userId) {
     console.log(`membership_state of ${userId} in room ${roomId} requested.`);
+    returnStateEvent(event, roomId, "m.room.member", userId);
+}
+
+function botOptions(event, roomId, userId) {
+    console.log(`bot_options of ${userId} in room ${roomId} requested.`);
+    returnStateEvent(event, roomId, "m.room.bot.options", userId);
+}
+
+
+function returnStateEvent(event, roomId, eventType, stateKey) {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, "You need to be logged in.");
@@ -134,14 +210,11 @@ function getMembershipState(event) {
         sendError(event, "This room is not recognised.");
         return;
     }
-    let membershipState = "leave";
-    const member = room.getMember(userId);
-    if (member) {
-        membershipState = member.membership;
+    const stateEvent = room.currentState.getStateEvents(eventType, stateKey);
+    if (!stateEvent) {
+        sendResponse(event, null);
     }
-    sendResponse(event, {
-        membership_state: membershipState,
-    });
+    sendResponse(event, stateEvent.getContent());
 }
 
 const onMessage = function(event) {
@@ -159,12 +232,28 @@ const onMessage = function(event) {
         return;
     }
 
+    const roomId = event.data.room_id;
+    const userId = event.data.user_id;
+    if (!userId) {
+        sendError(event, "Missing user_id in request");
+        return;
+    }
+    if (!roomId) {
+        sendError(event, "Missing room_id in request");
+        return;
+    }
     switch (event.data.action) {
         case "membership_state":
-            getMembershipState(event);
+            getMembershipState(event, roomId, userId);
             break;
         case "invite":
-            inviteUser(event);
+            inviteUser(event, roomId, userId);
+            break;
+        case "bot_options":
+            botOptions(event, roomId, userId);
+            break;
+        case "set_bot_options":
+            setBotOptions(event, roomId, userId);
             break;
         default:
             console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
