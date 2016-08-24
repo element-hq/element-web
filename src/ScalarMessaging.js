@@ -179,12 +179,12 @@ function setBotOptions(event, roomId, userId) {
         sendError(event, "You need to be logged in.");
         return;
     }
-    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, userId).done(() => {
+    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, "_" + userId).done(() => {
         sendResponse(event, {
             success: true,
         });
     }, (err) => {
-        sendError(event, "Failed to send request.", err);
+        sendError(event, err.message ? err.message : "Failed to send request.", err);
     });
 }
 
@@ -195,7 +195,7 @@ function getMembershipState(event, roomId, userId) {
 
 function botOptions(event, roomId, userId) {
     console.log(`bot_options of ${userId} in room ${roomId} requested.`);
-    returnStateEvent(event, roomId, "m.room.bot.options", userId);
+    returnStateEvent(event, roomId, "m.room.bot.options", "_" + userId);
 }
 
 
