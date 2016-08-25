@@ -62,7 +62,7 @@ var MAX_READ_AVATARS = 5;
 // '----------------------------------------------------------'
 
 module.exports = React.createClass({
-    displayName: 'Event',
+    displayName: 'EventTile',
 
     statics: {
         haveTileForEvent: function(e) {
@@ -368,7 +368,7 @@ module.exports = React.createClass({
         // room, or emote messages
         var isInfoMessage = (msgtype === 'm.emote' || eventType !== 'm.room.message');
 
-        var EventTileType = sdk.getComponent(eventTileTypes[this.props.mxEvent.getType()]);
+        var EventTileType = sdk.getComponent(eventTileTypes[eventType]);
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!EventTileType) {
@@ -395,31 +395,44 @@ module.exports = React.createClass({
                             <MessageTimestamp ts={this.props.mxEvent.getTs()} />
                         </a>
 
-        var aux = null;
-        if (msgtype === 'm.image') aux = "sent an image";
-        else if (msgtype === 'm.video') aux = "sent a video";
-        else if (msgtype === 'm.file') aux = "uploaded a file";
-
         var readAvatars = this.getReadAvatars();
 
         var avatar, sender;
+        let avatarSize;
+        let needsSenderProfile;
+
         if (isInfoMessage) {
+            // a small avatar, with no sender profile, for emotes and
+            // joins/parts/etc
+            avatarSize = 14;
+            needsSenderProfile = false;
+        } else if (this.props.continuation) {
+            // no avatar or sender profile for continuation messages
+            avatarSize = 0;
+            needsSenderProfile = false;
+        } else {
+            avatarSize = 30;
+            needsSenderProfile = true;
+        }
+
+        if (this.props.mxEvent.sender && avatarSize) {
             avatar = (
-               <div className="mx_EventTile_avatar">
-                   <MemberAvatar member={this.props.mxEvent.sender} width={14} height={14} onClick={ this.onMemberAvatarClick } />
-               </div>
-            );
-        } else if (!this.props.continuation) {
-            if (this.props.mxEvent.sender) {
-                avatar = (
                     <div className="mx_EventTile_avatar">
-                        <MemberAvatar member={this.props.mxEvent.sender} width={30} height={30} onClick={ this.onMemberAvatarClick } />
+                        <MemberAvatar member={this.props.mxEvent.sender}
+                            width={avatarSize} height={avatarSize}
+                            onClick={ this.onMemberAvatarClick }
+                        />
                     </div>
-                );
-            }
-            if (EventTileType.needsSenderProfile()) {
-                sender = <SenderProfile onClick={ this.onSenderProfileClick } mxEvent={this.props.mxEvent} aux={aux} />;
-            }
+            );
+        }
+
+        if (needsSenderProfile) {
+            let aux = null;
+            if (msgtype === 'm.image') aux = "sent an image";
+            else if (msgtype === 'm.video') aux = "sent a video";
+            else if (msgtype === 'm.file') aux = "uploaded a file";
+
+            sender = <SenderProfile onClick={ this.onSenderProfileClick } mxEvent={this.props.mxEvent} aux={aux} />;
         }
 
         var editButton = (

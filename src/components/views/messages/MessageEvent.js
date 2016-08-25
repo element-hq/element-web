@@ -22,12 +22,6 @@ var sdk = require('../../../index');
 module.exports = React.createClass({
     displayName: 'MessageEvent',
 
-    statics: {
-        needsSenderProfile: function() {
-            return true;
-        }
-    },
-
     propTypes: {
         /* the MatrixEvent to show */
         mxEvent: React.PropTypes.object.isRequired,
