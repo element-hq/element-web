@@ -16,7 +16,6 @@
 
 import React from 'react';
 import sdk from 'matrix-react-sdk';
-import 'whatwg-fetch';
 import request from 'browser-request';
 
 const REPOS = ['vector-im/vector-web', 'matrix-org/matrix-react-sdk', 'matrix-org/matrix-js-sdk'];
