@@ -79,6 +79,7 @@ var RoomSubList = React.createClass({
         incomingCall: React.PropTypes.object,
         onShowMoreRooms: React.PropTypes.func,
         searchFilter: React.PropTypes.string,
+        headerStack: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -406,11 +407,13 @@ var RoomSubList = React.createClass({
         }
 
         return (
-            <div onClick={ this.onClick } className="mx_RoomSubList_label">
-                { this.props.collapsed ? '' : this.props.label }
-                <div className="mx_RoomSubList_roomCount">{roomCount}</div>
-                <div className={chevronClasses}></div>
-                {badge}
+            <div className="mx_RoomSubList_stickyContainer">
+                <div onClick={ this.onClick } className="mx_RoomSubList_label">
+                    { this.props.collapsed ? '' : this.props.label }
+                    <div className="mx_RoomSubList_roomCount">{roomCount}</div>
+                    <div className={chevronClasses}></div>
+                    {badge}
+                </div>
             </div>
         );
     },
