@@ -66,6 +66,11 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
     },
 
+    componentDidUpdate: function() {
+        // Reinitilaise the stickyHeaders when the component is created or updated
+        this._updateStickyHeaders(undefined, true);
+    },
+
     onAction: function(payload) {
         switch (payload.action) {
             case 'view_tooltip':
@@ -252,9 +257,10 @@ module.exports = React.createClass({
         }
     },
 
-    _repositionTooltips: function(e) {
+    _whenScrolling: function(e) {
         this._repositionTooltip(e);
         this._repositionIncomingCallBox(e, false);
+        this._updateStickyHeaders(e, false);
     },
 
     _repositionTooltip: function(e) {
@@ -305,6 +311,96 @@ module.exports = React.createClass({
         }
     },
 
+    _initAndPositionStickyHeaders: function(e, firstTime) {
+        // Do the sticky header stuf here, both the initilaisation (firstTime === true)
+        // and the updating when scrolling (firstTime === false)
+        // use direct DOM access as done in _repositionIncomingCallBox
+
+        var self = this;
+
+        var stickies = document.getElementsByClassName("mx_RoomSubList_stickyContainer");
+        var scrollArea = self._getScrollNode();
+        var scrollAreaHeight = scrollArea.getBoundingClientRect().height;
+
+//        console.log(scrollArea);
+//        console.log("scrollAreaHeight: " + scrollAreaHeight);
+
+        if (firstTime) {
+            if (typeof stickies === "object" && stickies.length > 0) {
+                // Initialise the sticky headers
+                self.stickyWrappers = Array.prototype.map.call(stickies, function(sticky, i) {
+                    sticky.dataset.originalPosition = sticky.offsetTop - scrollArea.offsetTop;
+                    var originalHeight = sticky.getBoundingClientRect().height;
+                    sticky.dataset.originalHeight = originalHeight;
+                    sticky.style.height = originalHeight;
+
+                    return sticky;
+                });
+            }
+        }
+
+        Array.prototype.forEach.call(self.stickyWrappers, function(sticky, i, stickyWrappers) {
+            var stickyPosition = sticky.dataset.originalPosition;
+            var stickyHeight = sticky.dataset.originalHeight;
+            var stickyHeader = sticky.childNodes[0];
+            var topStuckHeight = stickyHeight * i;
+            var bottomStuckHeight = stickyHeight * (stickyWrappers.length - i)
+
+//            console.log("i: " + i);
+//            console.log("scrollArea.scrollTop: " + scrollArea.scrollTop);
+//            console.log("scrollArea.offsetTop: " + scrollArea.offsetTop);
+//            console.log("stickyPosition: " + stickyPosition);
+//            console.log("stickyHeight: " + stickyHeight);
+            //console.log(stickyHeader);
+//            console.log("topStuckHeight: " + topStuckHeight);
+//            console.log("bottomStuckHeight: " + bottomStuckHeight);
+
+            if (stickyPosition <= (scrollArea.scrollTop + topStuckHeight)) {
+                // Top stickies
+               // console.log("Top stickies");
+                stickyHeader.classList.add("mx_RoomSubList_fixed");
+                //sticky.style.height = stickyHeight + "px";
+                stickyHeader.style.top = scrollArea.offsetTop + topStuckHeight + "px";
+            } else if (stickyPosition >= ((scrollArea.scrollTop + scrollAreaHeight) - bottomStuckHeight)) {
+                /// Bottom stickies
+                //console.log("Bottom stickies");
+                stickyHeader.classList.add("mx_RoomSubList_fixed");
+                //sticky.style.height = stickyHeight + "px";
+                stickyHeader.style.top = (scrollArea.offsetTop + scrollAreaHeight) - bottomStuckHeight + "px";
+            } else {
+                // Not sticky
+                //console.log("Not sticky");
+                stickyHeader.classList.remove("mx_RoomSubList_fixed");
+                //sticky.style.height = null;
+                stickyHeader.style.top = null;
+            }
+        });
+    },
+
+    _stickyWrappers: [],
+
+    _updateStickyHeaders: function(e, firstTime) {
+        // Do the sticky header stuff here, both the initilaisation (firstTime === true)
+        // and the updating when scrolling (firstTime === false)
+        // use direct DOM access as done in _repositionIncomingCallBox
+
+        var self = this;
+
+        if (firstTime) {
+            // Useing requestAnimationFrame to ensure that the code is run after the painting
+            // of the newly rendered object
+            window.requestAnimationFrame(function() {
+                //console.log("### D E B U G  requestAnimationFrame  S T A R T ###");
+                self._initAndPositionStickyHeaders(e, firstTime);
+                //console.log("### D E B U G  requestAnimationFrame  F I N I S H ###");
+            });
+        } else {
+            //console.log("### D E B U G   S T A R T ###");
+            this._initAndPositionStickyHeaders(e, firstTime);
+            //console.log("### D E B U G   F I N I S H ###");
+        }
+    },
+
     onShowMoreRooms: function() {
         // kick gemini in the balls to get it to wake up
         // XXX: uuuuuuugh.
@@ -317,7 +413,7 @@ module.exports = React.createClass({
 
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
-                 autoshow={true} onScroll={ self._repositionTooltips } ref="gemscroll">
+                 autoshow={true} onScroll={ self._whenScrolling } ref="gemscroll">
             <div className="mx_RoomList">
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
                              label="Invites"
