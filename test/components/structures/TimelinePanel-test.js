@@ -220,7 +220,7 @@ describe('TimelinePanel', function() {
 
         // fill the timeline with lots of events
         for (var i = 0; i < N_EVENTS; i++) {
-            timeline.addEvent(mkMessage({msg: ""+i}));
+            timeline.addEvent(mkMessage({msg: "Event "+i}));
         }
         console.log("added events to timeline");
 
