@@ -4,7 +4,7 @@ set -e
 
 export NVM_DIR="/home/jenkins/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-nvm use 4
+nvm use 6
 
 set -x
 
