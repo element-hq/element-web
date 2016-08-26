@@ -115,6 +115,7 @@ var RoomSubList = React.createClass({
         });
     },
 
+    // The dataset elements are added in the RoomList _initAndPositionStickyHeaders method
     isHeaderStuck: function() {
         var stuck = this.refs.header.dataset.stuck;
         return stuck !== undefined && (stuck === "top" || stuck === "bottom");
@@ -122,7 +123,7 @@ var RoomSubList = React.createClass({
 
     onClick: function(ev) {
         if (!this.isHeaderStuck()) {
-            // Collapse and truncation logic
+            // The header is not stuck, so the click is to be interpreted as collapse and truncation logic
             var isHidden = false;
             var isTruncatable = this.props.list.length > TRUNCATE_AT;
 
@@ -162,6 +163,7 @@ var RoomSubList = React.createClass({
             this.props.onShowMoreRooms();
             this.props.onHeaderClick(isHidden);
         } else {
+            // The header is stuck, so the click is to be interpreted as a scroll to the header
             this.props.onHeaderClick(isHidden, this.refs.header.dataset.originalPosition);
         }
     },
