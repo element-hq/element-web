@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var classNames = require('classnames');
 var DropTarget = require('react-dnd').DropTarget;
 var sdk = require('matrix-react-sdk')
@@ -114,46 +115,54 @@ var RoomSubList = React.createClass({
         });
     },
 
+    isHeaderStuck: function() {
+        var stuck = this.refs.header.dataset.stuck;
+        return stuck !== undefined && (stuck === "top" || stuck === "bottom");
+    },
+
     onClick: function(ev) {
-        // Collapse and truncation logic
-        var isHidden = false;
-        var isTruncatable = this.props.list.length > TRUNCATE_AT;
+        if (!this.isHeaderStuck()) {
+            // Collapse and truncation logic
+            var isHidden = false;
+            var isTruncatable = this.props.list.length > TRUNCATE_AT;
 
-        if (this.state.hidden && (this.state.capTruncate && isTruncatable)) {
-            isHidden = false;
-            this.setState({
-                hidden : isHidden,
-                capTruncate : true,
-                truncateAt : TRUNCATE_AT
-            });
-        } else if ((!this.state.hidden && this.state.capTruncate)
-                    || (this.state.hidden && (this.state.capTruncate && !isTruncatable)))
-        {
-            isHidden = false;
-            this.setState({
-                hidden : isHidden,
-                capTruncate : false,
-                truncateAt : -1
-            });
-        } else if (!this.state.hidden && !this.state.capTruncate) {
-            isHidden = true;
-            this.setState({
-                hidden : isHidden,
-                capTruncate : true,
-                truncateAt : TRUNCATE_AT
-            });
-        } else {
-            // Catch any weird states the system gets into
-            isHidden = false;
-            this.setState({
-                hidden : isHidden,
-                capTruncate : true,
-                truncateAt : TRUNCATE_AT
-            });
+            if (this.state.hidden && (this.state.capTruncate && isTruncatable)) {
+                isHidden = false;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : true,
+                    truncateAt : TRUNCATE_AT
+                });
+            } else if ((!this.state.hidden && this.state.capTruncate)
+                        || (this.state.hidden && (this.state.capTruncate && !isTruncatable)))
+            {
+                isHidden = false;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : false,
+                    truncateAt : -1
+                });
+            } else if (!this.state.hidden && !this.state.capTruncate) {
+                isHidden = true;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : true,
+                    truncateAt : TRUNCATE_AT
+                });
+            } else {
+                // Catch any weird states the system gets into
+                isHidden = false;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : true,
+                    truncateAt : TRUNCATE_AT
+                });
+            }
+
+            this.props.onShowMoreRooms();
         }
-
-        this.props.onShowMoreRooms();
-        this.props.onHeaderClick(isHidden);
+        ev.persist();
+        this.props.onHeaderClick(ev, isHidden);
     },
 
     tsOfNewestEvent: function(room) {
@@ -406,7 +415,7 @@ var RoomSubList = React.createClass({
         }
 
         return (
-            <div className="mx_RoomSubList_labelContainer">
+            <div className="mx_RoomSubList_labelContainer" ref="header">
                 <div onClick={ this.onClick } className="mx_RoomSubList_label">
                     { this.props.collapsed ? '' : this.props.label }
                     <div className="mx_RoomSubList_roomCount">{roomCount}</div>
