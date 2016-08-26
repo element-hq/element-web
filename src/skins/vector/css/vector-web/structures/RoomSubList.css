@@ -20,7 +20,7 @@ limitations under the License.
     width: 100%;
 }
 
-.mx_RoomSubList_stickyContainer {
+.mx_RoomSubList_labelContainer {
     height: 29px;
     position: relative;
 }
