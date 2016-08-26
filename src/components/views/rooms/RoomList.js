@@ -64,10 +64,12 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        // Initilaise the stickyHeaders when the component is created
+        this._updateStickyHeaders(undefined, true);
     },
 
     componentDidUpdate: function() {
-        // Reinitilaise the stickyHeaders when the component is created or updated
+        // Reinitilaise the stickyHeaders when the component is updated
         this._updateStickyHeaders(undefined, true);
     },
 
@@ -317,92 +319,65 @@ module.exports = React.createClass({
     },
 
     _initAndPositionStickyHeaders: function(e, initialise) {
-        // Do the sticky header stuf here, both the initilaisation (initialise === true)
-        // and the updating when scrolling (initialise === false)
-        // use direct DOM access as done in _repositionIncomingCallBox
-
-        var self = this;
-
-        var scrollArea = self._getScrollNode();
+        var scrollArea = this._getScrollNode();
         var scrollAreaHeight = scrollArea.getBoundingClientRect().height;
-
-//        console.log(scrollArea);
-//        console.log("scrollAreaHeight: " + scrollAreaHeight);
 
         if (initialise) {
             var stickies = document.getElementsByClassName("mx_RoomSubList_labelContainer");
-            if (typeof stickies === "object" && stickies.length > 0) {
-                // Initialise the sticky headers
-                self.stickyWrappers = Array.prototype.map.call(stickies, function(sticky, i) {
-                    sticky.dataset.originalPosition = sticky.offsetTop - scrollArea.offsetTop;
-                    var originalHeight = sticky.getBoundingClientRect().height;
-                    sticky.dataset.originalHeight = originalHeight;
-                    sticky.style.height = originalHeight;
 
-                    return sticky;
-                });
+            this.scrollAreaSufficient = (120 + (stickies[0].getBoundingClientRect().height * stickies.length)) < scrollAreaHeight;
+
+            if (this.scrollAreaSufficient) {
+                if (typeof stickies === "object" && stickies.length > 0) {
+                    // Initialise the sticky headers
+                    this.stickyWrappers = Array.prototype.map.call(stickies, function(sticky, i) {
+                        sticky.dataset.originalPosition = sticky.offsetTop - scrollArea.offsetTop;
+                        var originalHeight = sticky.getBoundingClientRect().height;
+                        sticky.dataset.originalHeight = originalHeight;
+                        sticky.style.height = originalHeight;
+
+                        return sticky;
+                    });
+                }
             }
         }
 
-        Array.prototype.forEach.call(self.stickyWrappers, function(sticky, i, stickyWrappers) {
+        var self = this;
+        Array.prototype.forEach.call(this.stickyWrappers, function(sticky, i, stickyWrappers) {
             var stickyPosition = sticky.dataset.originalPosition;
             var stickyHeight = sticky.dataset.originalHeight;
             var stickyHeader = sticky.childNodes[0];
             var topStuckHeight = stickyHeight * i;
             var bottomStuckHeight = stickyHeight * (stickyWrappers.length - i)
 
-//            console.log("i: " + i);
-//            console.log("scrollArea.scrollTop: " + scrollArea.scrollTop);
-//            console.log("scrollArea.offsetTop: " + scrollArea.offsetTop);
-//            console.log("stickyPosition: " + stickyPosition);
-//            console.log("stickyHeight: " + stickyHeight);
-            //console.log(stickyHeader);
-//            console.log("topStuckHeight: " + topStuckHeight);
-//            console.log("bottomStuckHeight: " + bottomStuckHeight);
-
-            if (stickyPosition <= (scrollArea.scrollTop + topStuckHeight)) {
+            if (self.scrollAreaSufficient && stickyPosition <= (scrollArea.scrollTop + topStuckHeight)) {
                 // Top stickies
-               // console.log("Top stickies");
                 stickyHeader.classList.add("mx_RoomSubList_fixed");
-                //sticky.style.height = stickyHeight + "px";
                 stickyHeader.style.top = scrollArea.offsetTop + topStuckHeight + "px";
-            } else if (stickyPosition >= ((scrollArea.scrollTop + scrollAreaHeight) - bottomStuckHeight)) {
+            } else if (self.scrollAreaSufficient && stickyPosition >= ((scrollArea.scrollTop + scrollAreaHeight) - bottomStuckHeight)) {
                 /// Bottom stickies
-                //console.log("Bottom stickies");
                 stickyHeader.classList.add("mx_RoomSubList_fixed");
-                //sticky.style.height = stickyHeight + "px";
                 stickyHeader.style.top = (scrollArea.offsetTop + scrollAreaHeight) - bottomStuckHeight + "px";
             } else {
                 // Not sticky
-                //console.log("Not sticky");
                 stickyHeader.classList.remove("mx_RoomSubList_fixed");
-                //sticky.style.height = null;
                 stickyHeader.style.top = null;
             }
         });
     },
 
-    _stickyWrappers: [],
-
     _updateStickyHeaders: function(e, initialise) {
-        // Do the sticky header stuff here, both the initilaisation (initialise === true)
-        // and the updating when scrolling (initialise === false)
-        // use direct DOM access as done in _repositionIncomingCallBox
-
         var self = this;
 
         if (initialise) {
-            // Useing requestAnimationFrame to ensure that the code is run after the painting
-            // of the newly rendered object
-            window.requestAnimationFrame(function() {
-                //console.log("### D E B U G  requestAnimationFrame  S T A R T ###");
+            // Useing setTimeout to ensure that the code is run after the painting
+            // of the newly rendered object as using requestAnimationFrame caused
+            // artefacts to appear on screen briefly
+            window.setTimeout(function() {
                 self._initAndPositionStickyHeaders(e, initialise);
-                //console.log("### D E B U G  requestAnimationFrame  F I N I S H ###");
             });
         } else {
-            //console.log("### D E B U G   S T A R T ###");
             this._initAndPositionStickyHeaders(e, initialise);
-            //console.log("### D E B U G   F I N I S H ###");
         }
     },
 
