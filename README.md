@@ -20,6 +20,19 @@ of Vector:
    as desired. See below for details.
 1. Enter the URL into your browser and log into vector!
 
+Important Security Note
+=======================
+
+We do not recommend running Vector from the same domain name as your Matrix
+homeserver.  The reason is the risk of XSS (cross-site-scripting) vulnerabilities
+that could occur if someone caused Vector to load and render malicious user generated
+content from a Matrix API which then had trusted access to Vector due
+to sharing the same domain.
+
+We have put some coarse mitigations into place to try to protect against this situation,
+but it's still not good practice to do it in the first place.
+See https://github.com/vector-im/vector-web/issues/1977 for more details.
+
 Building From Source
 ====================
 
