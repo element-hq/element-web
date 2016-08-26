@@ -54,6 +54,10 @@ limitations under the License.
     width: 28px; /* collapsed LHS Panel width */
 }
 
+.collapsed .mx_RoomSubList_labelContainer {
+    width: 28px; /* collapsed LHS Panel width */
+}
+
 .mx_RoomSubList_roomCount {
     display: inline-block;
     font-size: 12px;
