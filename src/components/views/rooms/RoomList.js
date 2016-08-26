@@ -134,6 +134,11 @@ module.exports = React.createClass({
         }
     },
 
+    onSubListHeaderClick: function(isHidden) {
+        // The scroll area has expanded or contracted, so re-calculate sticky headers positions
+        this._updateStickyHeaders(undefined, true);
+    },
+
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
         if (toStartOfTimeline) return;
         this._delayedRefreshRoomList();
@@ -311,21 +316,21 @@ module.exports = React.createClass({
         }
     },
 
-    _initAndPositionStickyHeaders: function(e, firstTime) {
-        // Do the sticky header stuf here, both the initilaisation (firstTime === true)
-        // and the updating when scrolling (firstTime === false)
+    _initAndPositionStickyHeaders: function(e, initialise) {
+        // Do the sticky header stuf here, both the initilaisation (initialise === true)
+        // and the updating when scrolling (initialise === false)
         // use direct DOM access as done in _repositionIncomingCallBox
 
         var self = this;
 
-        var stickies = document.getElementsByClassName("mx_RoomSubList_stickyContainer");
         var scrollArea = self._getScrollNode();
         var scrollAreaHeight = scrollArea.getBoundingClientRect().height;
 
 //        console.log(scrollArea);
 //        console.log("scrollAreaHeight: " + scrollAreaHeight);
 
-        if (firstTime) {
+        if (initialise) {
+            var stickies = document.getElementsByClassName("mx_RoomSubList_labelContainer");
             if (typeof stickies === "object" && stickies.length > 0) {
                 // Initialise the sticky headers
                 self.stickyWrappers = Array.prototype.map.call(stickies, function(sticky, i) {
@@ -379,24 +384,24 @@ module.exports = React.createClass({
 
     _stickyWrappers: [],
 
-    _updateStickyHeaders: function(e, firstTime) {
-        // Do the sticky header stuff here, both the initilaisation (firstTime === true)
-        // and the updating when scrolling (firstTime === false)
+    _updateStickyHeaders: function(e, initialise) {
+        // Do the sticky header stuff here, both the initilaisation (initialise === true)
+        // and the updating when scrolling (initialise === false)
         // use direct DOM access as done in _repositionIncomingCallBox
 
         var self = this;
 
-        if (firstTime) {
+        if (initialise) {
             // Useing requestAnimationFrame to ensure that the code is run after the painting
             // of the newly rendered object
             window.requestAnimationFrame(function() {
                 //console.log("### D E B U G  requestAnimationFrame  S T A R T ###");
-                self._initAndPositionStickyHeaders(e, firstTime);
+                self._initAndPositionStickyHeaders(e, initialise);
                 //console.log("### D E B U G  requestAnimationFrame  F I N I S H ###");
             });
         } else {
             //console.log("### D E B U G   S T A R T ###");
-            this._initAndPositionStickyHeaders(e, firstTime);
+            this._initAndPositionStickyHeaders(e, initialise);
             //console.log("### D E B U G   F I N I S H ###");
         }
     },
@@ -423,6 +428,7 @@ module.exports = React.createClass({
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['m.favourite'] }
@@ -435,6 +441,7 @@ module.exports = React.createClass({
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
@@ -445,6 +452,7 @@ module.exports = React.createClass({
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
@@ -456,6 +464,7 @@ module.exports = React.createClass({
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 { Object.keys(self.state.lists).map(function(tagName) {
@@ -471,6 +480,7 @@ module.exports = React.createClass({
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                     }
@@ -486,6 +496,7 @@ module.exports = React.createClass({
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.archived'] }
