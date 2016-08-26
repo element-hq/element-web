@@ -354,15 +354,14 @@ module.exports = React.createClass({
             var topStuckHeight = stickyHeight * i;
             var bottomStuckHeight = stickyHeight * (stickyWrappers.length - i)
 
-            if (scrollToPosition !== undefined && stickyPosition === scrollToPosition) {
-                scrollStuckOffset = topStuckHeight;
-            }
-
             if (self.scrollAreaSufficient && stickyPosition <= (scrollArea.scrollTop + topStuckHeight)) {
                 // Top stickies
                 sticky.dataset.stuck = "top";
                 stickyHeader.classList.add("mx_RoomSubList_fixed");
                 stickyHeader.style.top = scrollArea.offsetTop + topStuckHeight + "px";
+                if (scrollToPosition !== undefined && stickyPosition === scrollToPosition) {
+                    scrollStuckOffset = topStuckHeight;
+                }
             } else if (self.scrollAreaSufficient && stickyPosition >= ((scrollArea.scrollTop + scrollAreaHeight) - bottomStuckHeight)) {
                 /// Bottom stickies
                 sticky.dataset.stuck = "bottom";
