@@ -320,6 +320,7 @@ module.exports = React.createClass({
 
     _initAndPositionStickyHeaders: function(initialise, scrollToPosition) {
         var scrollArea = this._getScrollNode();
+        var scrollAreaOffset = scrollArea.getBoundingClientRect().top;
         var scrollAreaHeight = scrollArea.getBoundingClientRect().height;
 
         if (initialise) {
@@ -334,7 +335,7 @@ module.exports = React.createClass({
                 if (typeof stickies === "object" && stickies.length > 0) {
                     // Initialise the sticky headers
                     this.stickyWrappers = Array.prototype.map.call(stickies, function(sticky, i) {
-                        sticky.dataset.originalPosition = sticky.offsetTop - scrollArea.offsetTop;
+                        sticky.dataset.originalPosition = sticky.offsetTop - scrollAreaOffset;
                         var originalHeight = sticky.getBoundingClientRect().height;
                         sticky.dataset.originalHeight = originalHeight;
                         sticky.style.height = originalHeight;
@@ -363,7 +364,7 @@ module.exports = React.createClass({
                 // Top stickies
                 sticky.dataset.stuck = "top";
                 stickyHeader.classList.add("mx_RoomSubList_fixed");
-                stickyHeader.style.top = scrollArea.offsetTop + topStuckHeight + "px";
+                stickyHeader.style.top = scrollAreaOffset + topStuckHeight + "px";
                 // If stuck at top adjust the scroll back down to take account of all the stuck headers
                 if (scrollToPosition !== undefined && stickyPosition === scrollToPosition) {
                     scrollStuckOffset = topStuckHeight;
@@ -372,7 +373,7 @@ module.exports = React.createClass({
                 /// Bottom stickies
                 sticky.dataset.stuck = "bottom";
                 stickyHeader.classList.add("mx_RoomSubList_fixed");
-                stickyHeader.style.top = (scrollArea.offsetTop + scrollAreaHeight) - bottomStuckHeight + "px";
+                stickyHeader.style.top = (scrollAreaOffset + scrollAreaHeight) - bottomStuckHeight + "px";
             } else {
                 // Not sticky
                 sticky.dataset.stuck = "none";
