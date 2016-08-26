@@ -354,7 +354,7 @@ var RoomSubList = React.createClass({
             // is run with historical room tag data, after that there should only be undefined
             // in the list at a time anyway.
             for (let i = 0; i < list.length; i++) {
-                if (list[i].tags[self.props.tagName].order === undefined) {
+                if (list[i].tags[self.props.tagName] && list[i].tags[self.props.tagName].order === undefined) {
                     MatrixClientPeg.get().setRoomTag(list[i].roomId, self.props.tagName, {order: (order + 1.0) / 2.0}).finally(function() {
                         // Do any final stuff here
                     }).fail(function(err) {
