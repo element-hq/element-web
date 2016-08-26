@@ -121,7 +121,7 @@ module.exports = React.createClass({
         this._delayedRefreshRoomList();
     },
 
-    onArchivedHeaderClick: function(isHidden) {
+    onArchivedHeaderClick: function(ev, isHidden) {
         if (!isHidden) {
             var self = this;
             this.setState({ isLoadingLeftRooms: true });
@@ -136,9 +136,9 @@ module.exports = React.createClass({
         }
     },
 
-    onSubListHeaderClick: function(isHidden) {
+    onSubListHeaderClick: function(ev, isHidden) {
         // The scroll area has expanded or contracted, so re-calculate sticky headers positions
-        this._updateStickyHeaders(undefined, true);
+        this._updateStickyHeaders(ev, true);
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
@@ -343,6 +343,14 @@ module.exports = React.createClass({
         }
 
         var self = this;
+        if (e !== undefined && e.type === "click") {
+            console.log("### D E B U G ###");
+//            var clickedElement = e.target;
+//            console.log(clickedElement.offsetTop);
+//            scrollArea.scrollTop = clickedElement.offsetTop;
+            //e.target.scrollIntoView();
+            //scrollArea.scrollTop = e.target.parentNode.dataset.originalPosition;
+        }
         Array.prototype.forEach.call(this.stickyWrappers, function(sticky, i, stickyWrappers) {
             var stickyPosition = sticky.dataset.originalPosition;
             var stickyHeight = sticky.dataset.originalHeight;
@@ -352,14 +360,17 @@ module.exports = React.createClass({
 
             if (self.scrollAreaSufficient && stickyPosition <= (scrollArea.scrollTop + topStuckHeight)) {
                 // Top stickies
+                sticky.dataset.stuck = "top";
                 stickyHeader.classList.add("mx_RoomSubList_fixed");
                 stickyHeader.style.top = scrollArea.offsetTop + topStuckHeight + "px";
             } else if (self.scrollAreaSufficient && stickyPosition >= ((scrollArea.scrollTop + scrollAreaHeight) - bottomStuckHeight)) {
                 /// Bottom stickies
+                sticky.dataset.stuck = "bottom";
                 stickyHeader.classList.add("mx_RoomSubList_fixed");
                 stickyHeader.style.top = (scrollArea.offsetTop + scrollAreaHeight) - bottomStuckHeight + "px";
             } else {
                 // Not sticky
+                sticky.dataset.stuck = "none";
                 stickyHeader.classList.remove("mx_RoomSubList_fixed");
                 stickyHeader.style.top = null;
             }
