@@ -160,9 +160,10 @@ var RoomSubList = React.createClass({
             }
 
             this.props.onShowMoreRooms();
+            this.props.onHeaderClick(isHidden);
+        } else {
+            this.props.onHeaderClick(isHidden, this.refs.header.dataset.originalPosition);
         }
-        ev.persist();
-        this.props.onHeaderClick(ev, isHidden);
     },
 
     tsOfNewestEvent: function(room) {
