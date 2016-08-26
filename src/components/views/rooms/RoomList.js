@@ -323,10 +323,13 @@ module.exports = React.createClass({
         var scrollAreaHeight = scrollArea.getBoundingClientRect().height;
 
         if (initialise) {
+            // Get a collection of sticky header containers
             var stickies = document.getElementsByClassName("mx_RoomSubList_labelContainer");
 
+            // Make sure there is sufficient space to do sticky headers
             this.scrollAreaSufficient = (120 + (stickies[0].getBoundingClientRect().height * stickies.length)) < scrollAreaHeight;
 
+            // Initialise the sticky headers
             if (this.scrollAreaSufficient) {
                 if (typeof stickies === "object" && stickies.length > 0) {
                     // Initialise the sticky headers
@@ -344,9 +347,11 @@ module.exports = React.createClass({
 
         var self = this;
         var scrollStuckOffset = 0;
+        // Scroll to the passed in position
         if (scrollToPosition !== undefined) {
             scrollArea.scrollTop = scrollToPosition;
         }
+        // Stick headers to top and bottom, or free them
         Array.prototype.forEach.call(this.stickyWrappers, function(sticky, i, stickyWrappers) {
             var stickyPosition = sticky.dataset.originalPosition;
             var stickyHeight = sticky.dataset.originalHeight;
@@ -354,11 +359,12 @@ module.exports = React.createClass({
             var topStuckHeight = stickyHeight * i;
             var bottomStuckHeight = stickyHeight * (stickyWrappers.length - i)
 
-            if (self.scrollAreaSufficient && stickyPosition <= (scrollArea.scrollTop + topStuckHeight)) {
+            if (self.scrollAreaSufficient && stickyPosition < (scrollArea.scrollTop + topStuckHeight)) {
                 // Top stickies
                 sticky.dataset.stuck = "top";
                 stickyHeader.classList.add("mx_RoomSubList_fixed");
                 stickyHeader.style.top = scrollArea.offsetTop + topStuckHeight + "px";
+                // If stuck at top adjust the scroll back down to take account of all the stuck headers
                 if (scrollToPosition !== undefined && stickyPosition === scrollToPosition) {
                     scrollStuckOffset = topStuckHeight;
                 }
@@ -374,7 +380,7 @@ module.exports = React.createClass({
                 stickyHeader.style.top = null;
             }
         });
-        // Adjust the scroll to take account of stuck headers
+        // Adjust the scroll to take account of top stuck headers
         if (scrollToPosition !== undefined) {
             scrollArea.scrollTop -= scrollStuckOffset;
         }
