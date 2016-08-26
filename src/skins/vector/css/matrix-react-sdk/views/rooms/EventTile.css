@@ -50,6 +50,7 @@ limitations under the License.
     color: #454545;
     opacity: 0.5;
     font-size: 14px;
+    display: block; /* anti-zalgo, with overflow hidden */
     overflow-y: hidden;
     cursor: pointer;
     padding-left: 65px; /* left gutter */
