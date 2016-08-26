@@ -65,12 +65,12 @@ module.exports = React.createClass({
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         // Initilaise the stickyHeaders when the component is created
-        this._updateStickyHeaders(undefined, true);
+        this._updateStickyHeaders(true);
     },
 
     componentDidUpdate: function() {
         // Reinitilaise the stickyHeaders when the component is updated
-        this._updateStickyHeaders(undefined, true);
+        this._updateStickyHeaders(true);
     },
 
     onAction: function(payload) {
@@ -121,7 +121,7 @@ module.exports = React.createClass({
         this._delayedRefreshRoomList();
     },
 
-    onArchivedHeaderClick: function(ev, isHidden) {
+    onArchivedHeaderClick: function(isHidden) {
         if (!isHidden) {
             var self = this;
             this.setState({ isLoadingLeftRooms: true });
@@ -136,9 +136,9 @@ module.exports = React.createClass({
         }
     },
 
-    onSubListHeaderClick: function(ev, isHidden) {
+    onSubListHeaderClick: function(isHidden, scrollToPosition) {
         // The scroll area has expanded or contracted, so re-calculate sticky headers positions
-        this._updateStickyHeaders(ev, true);
+        this._updateStickyHeaders(true, scrollToPosition);
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
@@ -267,7 +267,7 @@ module.exports = React.createClass({
     _whenScrolling: function(e) {
         this._repositionTooltip(e);
         this._repositionIncomingCallBox(e, false);
-        this._updateStickyHeaders(e, false);
+        this._updateStickyHeaders(false);
     },
 
     _repositionTooltip: function(e) {
@@ -318,7 +318,7 @@ module.exports = React.createClass({
         }
     },
 
-    _initAndPositionStickyHeaders: function(e, initialise) {
+    _initAndPositionStickyHeaders: function(initialise, scrollToPosition) {
         var scrollArea = this._getScrollNode();
         var scrollAreaHeight = scrollArea.getBoundingClientRect().height;
 
@@ -343,13 +343,9 @@ module.exports = React.createClass({
         }
 
         var self = this;
-        if (e !== undefined && e.type === "click") {
-            console.log("### D E B U G ###");
-//            var clickedElement = e.target;
-//            console.log(clickedElement.offsetTop);
-//            scrollArea.scrollTop = clickedElement.offsetTop;
-            //e.target.scrollIntoView();
-            //scrollArea.scrollTop = e.target.parentNode.dataset.originalPosition;
+        var scrollStuckOffset = 0;
+        if (scrollToPosition !== undefined) {
+            scrollArea.scrollTop = scrollToPosition;
         }
         Array.prototype.forEach.call(this.stickyWrappers, function(sticky, i, stickyWrappers) {
             var stickyPosition = sticky.dataset.originalPosition;
@@ -357,6 +353,10 @@ module.exports = React.createClass({
             var stickyHeader = sticky.childNodes[0];
             var topStuckHeight = stickyHeight * i;
             var bottomStuckHeight = stickyHeight * (stickyWrappers.length - i)
+
+            if (scrollToPosition !== undefined && stickyPosition === scrollToPosition) {
+                scrollStuckOffset = topStuckHeight;
+            }
 
             if (self.scrollAreaSufficient && stickyPosition <= (scrollArea.scrollTop + topStuckHeight)) {
                 // Top stickies
@@ -375,9 +375,13 @@ module.exports = React.createClass({
                 stickyHeader.style.top = null;
             }
         });
+        // Adjust the scroll to take account of stuck headers
+        if (scrollToPosition !== undefined) {
+            scrollArea.scrollTop -= scrollStuckOffset;
+        }
     },
 
-    _updateStickyHeaders: function(e, initialise) {
+    _updateStickyHeaders: function(initialise, scrollToPosition) {
         var self = this;
 
         if (initialise) {
@@ -385,10 +389,10 @@ module.exports = React.createClass({
             // of the newly rendered object as using requestAnimationFrame caused
             // artefacts to appear on screen briefly
             window.setTimeout(function() {
-                self._initAndPositionStickyHeaders(e, initialise);
+                self._initAndPositionStickyHeaders(initialise, scrollToPosition);
             });
         } else {
-            this._initAndPositionStickyHeaders(e, initialise);
+            this._initAndPositionStickyHeaders(initialise, scrollToPosition);
         }
     },
 
