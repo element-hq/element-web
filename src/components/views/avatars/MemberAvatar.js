@@ -47,6 +47,9 @@ module.exports = React.createClass({
     },
 
     _getState: function(props) {
+        if (!props.member) {
+            console.error("MemberAvatar called somehow with null member");
+        }
         return {
             name: props.member.name,
             title: props.member.userId,
