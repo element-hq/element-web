@@ -88,7 +88,9 @@ nativefier https://vector.im/beta/
 ```
 
 krisa has a dedicated electron project at https://github.com/krisak/vector-electron-desktop
-(although you should swap out the 'vector' folder for the latest vector tarball you want to run)
+(although you should swap out the 'vector' folder for the latest vector tarball you want to run.
+Get a tarball from https://vector.im/packages or build your own - see Building From Source
+above).
 
 There's also a (much) older electron distribution at https://github.com/stevenhammerton/vector-desktop
 
