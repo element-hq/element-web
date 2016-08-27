@@ -426,6 +426,27 @@ module.exports = React.createClass({
         }, "");
     },
 
+    onLeaveClick() {
+        dis.dispatch({
+            action: 'leave_room',
+            room_id: this.props.room.roomId,
+        });
+    },
+
+    onForgetClick() {
+        // FIXME: duplicated with RoomTagContextualMenu (and dead code in RoomView)
+        MatrixClientPeg.get().forget(this.props.room.roomId).done(function() {
+            dis.dispatch({ action: 'view_next_room' });
+        }, function(err) {
+            var errCode = err.errcode || "unknown error code";
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: `Failed to forget room (${errCode})`
+            });
+        });
+    },
+
     _renderEncryptionSection: function() {
         if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
             return null;
@@ -544,6 +565,25 @@ module.exports = React.createClass({
             );
         }
 
+        var leaveButton = null;
+        var myMember = this.props.room.getMember(user_id);
+        if (myMember) {
+            if (myMember.membership === "join") {
+                leaveButton = (
+                    <div className="mx_RoomSettings_leaveButton" onClick={ this.onLeaveClick }>
+                        Leave room
+                    </div>
+                );
+            }
+            else if (myMember.membership === "leave") {
+                leaveButton = (
+                    <div className="mx_RoomSettings_leaveButton" onClick={ this.onForgetClick }>
+                        Forget room
+                    </div>
+                );
+            }
+        }
+
         // TODO: support editing custom events_levels
         // TODO: support editing custom user_levels
 
@@ -630,6 +670,8 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_RoomSettings">
+
+                { leaveButton }
 
                 { tagsSection }
 
