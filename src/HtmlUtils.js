@@ -49,7 +49,7 @@ export function unicodeToImage(str) {
             alt = (emojione.unicodeAlt) ? emojione.convert(unicode.toUpperCase()) : mappedUnicode[unicode];
             const title = mappedUnicode[unicode];
 
-            replaceWith = `<img class="emojione" title="${title}" alt="${alt}" src="${emojione.imagePathSVG}${unicode}.svg${emojione.cacheBustParam}"/>`;
+            replaceWith = `<img class="mx_emojione" title="${title}" alt="${alt}" src="${emojione.imagePathSVG}${unicode}.svg${emojione.cacheBustParam}"/>`;
             return replaceWith;
         }
     });
