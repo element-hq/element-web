@@ -100,7 +100,7 @@ export default class DevicesPanelEntry extends React.Component {
             deleteButton = <div className="error">{this.state.deleteError}</div>
         } else {
             deleteButton = (
-                <div className="textButton"
+                <div className="mx_textButton"
                   onClick={this._onDeleteClick}>
                     Delete
                 </div>
