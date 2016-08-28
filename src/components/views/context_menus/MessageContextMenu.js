@@ -133,12 +133,11 @@ module.exports = React.createClass({
             }
         }
 
-        // XXX: this should be https://matrix.to.
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         permalinkButton = (
             <div className="mx_MessageContextMenu_field">
-                <a href={ "#/room/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }
-                   onClick={ this.onPermalinkClick }>Permalink</a>
+                <a href={ "https://matrix.to/#/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }
+                   target="_blank" onClick={ this.onPermalinkClick }>Permalink</a>
             </div>
         );
 
