@@ -69,6 +69,7 @@ module.exports = React.createClass({
         UserSettings: "user_settings",
         CreateRoom: "create_room",
         RoomDirectory: "room_directory",
+        UserView: "user_view",
     },
 
     AuxPanel: {
@@ -87,6 +88,10 @@ module.exports = React.createClass({
             // in the case where we view a room by ID or by RoomView when it resolves
             // what ID an alias points at.
             currentRoomId: null,
+
+            // If we're trying to just view a user ID (i.e. /user URL), this is it
+            viewUserId: null,
+
             logged_in: false,
             collapse_lhs: false,
             collapse_rhs: false,
@@ -741,9 +746,11 @@ module.exports = React.createClass({
             }
         } else if (screen.indexOf('user/') == 0) {
             var userId = screen.substring(5);
+            this.setState({ viewUserId: userId });
+            this._setPage(this.PageTypes.UserView);
+            this.notifyNewScreen('user/' + userId);
             var member = new Matrix.RoomMember(null, userId);
             if (member) {
-                // FIXME: this doesn't work yet
                 dis.dispatch({
                     action: 'view_user',
                     member: member,
@@ -999,6 +1006,10 @@ module.exports = React.createClass({
                 case this.PageTypes.RoomDirectory:
                     page_element = <RoomDirectory />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
+                    break;
+                case this.PageTypes.UserView:
+                    page_element = null; // deliberately null for now
+                    right_panel = <RightPanel userId={this.state.viewUserId} collapsed={false} opacity={this.state.sideOpacity} />
                     break;
             }
 
