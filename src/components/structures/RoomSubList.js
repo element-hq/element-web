@@ -414,7 +414,7 @@ var RoomSubList = React.createClass({
 
         var badge;
         if (subListNotifCount > 0) {
-            badge = <div className={badgeClasses}>{subListNotifCount}</div>;
+            badge = <div className={badgeClasses}>{subListNotifCount > 99 ? "99+" : subListNotifCount}</div>;
         }
 
         return (
