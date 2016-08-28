@@ -287,7 +287,7 @@ module.exports = {
 
     emojifyText: function(text) {
         return {
-            __html: emojione.unicodeToImage(escape(text)),
+            __html: unicodeToImage(escape(text)),
         };
     },
 };
