@@ -323,6 +323,8 @@ module.exports = React.createClass({
         // Use the offset of the top of the scroll area from the window
         // as this is used to calculate the CSS fixed top position for the stickies
         var scrollAreaOffset = scrollArea.getBoundingClientRect().top;
+        // Use the offset of the top of the componet from the window
+        // as this is used to calculate the CSS fixed top position for the stickies
         var scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;
 
         if (initialise) {
@@ -352,7 +354,8 @@ module.exports = React.createClass({
 
         var self = this;
         var scrollStuckOffset = 0;
-        // Scroll to the passed in position
+        // Scroll to the passed in position, i.e. a header was clicked and in a scroll to state
+        // rather than a collapsable one (see RoomSubList.isCollapsableOnClick method for details)
         if (scrollToPosition !== undefined) {
             scrollArea.scrollTop = scrollToPosition;
         }
@@ -373,7 +376,7 @@ module.exports = React.createClass({
                 if (scrollToPosition !== undefined && stickyPosition === scrollToPosition) {
                     scrollStuckOffset = topStuckHeight;
                 }
-            } else if (self.scrollAreaSufficient && stickyPosition >= ((scrollArea.scrollTop + scrollAreaHeight) - bottomStuckHeight)) {
+            } else if (self.scrollAreaSufficient && stickyPosition > ((scrollArea.scrollTop + scrollAreaHeight) - bottomStuckHeight)) {
                 /// Bottom stickies
                 sticky.dataset.stuck = "bottom";
                 stickyHeader.classList.add("mx_RoomSubList_fixed");
