@@ -100,9 +100,9 @@ var sanitizeHtmlParams = {
                 if (m) {
                     var entity = m[1];
                     if (entity[0] === '@') {
-                        attribs.href = '#'; // TODO
+                        attribs.href = '#/user/' + entity;
                     }
-                    else if (entity[0] === '#') {
+                    else if (entity[0] === '#' || entity[0] === '!') {
                         attribs.href = '#/room/' + entity;
                     }
                     delete attribs.target;

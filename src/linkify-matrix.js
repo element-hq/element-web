@@ -96,8 +96,8 @@ function matrixLinkify(linkify) {
 }
 
 // stubs, overwritten in MatrixChat's componentDidMount
-// matrixLinkify.onUserClick = function(e, userId) { e.preventDefault(); };
-// matrixLinkify.onAliasClick = function(e, roomAlias) { e.preventDefault(); };
+matrixLinkify.onUserClick = function(e, userId) { e.preventDefault(); };
+matrixLinkify.onAliasClick = function(e, roomAlias) { e.preventDefault(); };
 
 var escapeRegExp = function(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -113,7 +113,6 @@ matrixLinkify.VECTOR_URL_PATTERN = "^(?:https?:\/\/)?(?:"
 matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/((#|@).*)";
 
 matrixLinkify.options = {
-/*
     events: function (href, type) {
         switch (type) {
             case "userid":
@@ -130,7 +129,7 @@ matrixLinkify.options = {
                 };
         }
     },
-*/
+
     formatHref: function (href, type) {
         switch (type) {
             case 'roomalias':
@@ -148,9 +147,9 @@ matrixLinkify.options = {
                 if (m) {
                     var entity = m[1];
                     if (entity[0] === '@') {
-                        return '#'; // TODO
+                        return '#/user/' + entity;
                     }
-                    else if (entity[0] === '#') {
+                    else if (entity[0] === '#' || entity[0] === '!') {
                         return '#/room/' + entity;
                     }
                 }
