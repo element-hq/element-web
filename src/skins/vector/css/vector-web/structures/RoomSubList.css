@@ -21,7 +21,7 @@ limitations under the License.
 }
 
 .mx_RoomSubList_labelContainer {
-    height: 29px;
+    height: 31px; /* mx_RoomSubList_label height including border */
     width: 235px; /* LHS Panel width */
     position: relative;
 }
