@@ -176,12 +176,12 @@ module.exports = React.createClass({
 
         // this can technically be done anywhere but doing this here keeps all
         // the routing url path logic together.
-        if (this.onAliasClick) {
-            linkifyMatrix.onAliasClick = this.onAliasClick;
-        }
-        if (this.onUserClick) {
-            linkifyMatrix.onUserClick = this.onUserClick;
-        }
+        // if (this.onAliasClick) {
+        //     linkifyMatrix.onAliasClick = this.onAliasClick;
+        // }
+        // if (this.onUserClick) {
+        //     linkifyMatrix.onUserClick = this.onUserClick;
+        // }
 
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
@@ -739,6 +739,16 @@ module.exports = React.createClass({
             } else {
                 dis.dispatch(payload);
             }
+        } else if (screen.indexOf('user/') == 0) {
+            var userId = screen.substring(5);
+            var member = new Matrix.RoomMember(null, userId);
+            if (member) {
+                // FIXME: this doesn't work yet
+                dis.dispatch({
+                    action: 'view_user',
+                    member: member,
+                });
+            }
         }
         else {
             console.info("Ignoring showScreen for '%s'", screen);
@@ -751,31 +761,29 @@ module.exports = React.createClass({
         }
     },
 
-    onAliasClick: function(event, alias) {
-        event.preventDefault();
-        dis.dispatch({action: 'view_room', room_alias: alias});
-    },
+    // onAliasClick: function(event, alias) {
+    //     event.preventDefault();
+    //     dis.dispatch({action: 'view_room', room_alias: alias});
+    // },
 
-    onUserClick: function(event, userId) {
-        event.preventDefault();
+    // onUserClick: function(event, userId) {
+    //     event.preventDefault();
 
-        /*
-        var MemberInfo = sdk.getComponent('rooms.MemberInfo');
-        var member = new Matrix.RoomMember(null, userId);
-        ContextualMenu.createMenu(MemberInfo, {
-            member: member,
-            right: window.innerWidth - event.pageX,
-            top: event.pageY
-        });
-        */
+    //     // var MemberInfo = sdk.getComponent('rooms.MemberInfo');
+    //     // var member = new Matrix.RoomMember(null, userId);
+    //     // ContextualMenu.createMenu(MemberInfo, {
+    //     //     member: member,
+    //     //     right: window.innerWidth - event.pageX,
+    //     //     top: event.pageY
+    //     // });
 
-        var member = new Matrix.RoomMember(null, userId);
-        if (!member) { return; }
-        dis.dispatch({
-            action: 'view_user',
-            member: member,
-        });
-    },
+    //     var member = new Matrix.RoomMember(null, userId);
+    //     if (!member) { return; }
+    //     dis.dispatch({
+    //         action: 'view_user',
+    //         member: member,
+    //     });
+    // },
 
     onLogoutClick: function(event) {
         dis.dispatch({

@@ -85,12 +85,28 @@ var sanitizeHtmlParams = {
     transformTags: { // custom to matrix
         // add blank targets to all hyperlinks except vector URLs
         'a': function(tagName, attribs) {
-            var m = attribs.href ? attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN) : null;
-            if (m) {
-                delete attribs.target;
-            }
-            else {
-                attribs.target = '_blank';
+            if (attribs.href) {
+                attribs.target = '_blank'; // by default
+
+                var m;
+                // FIXME: horrible duplication with linkify-matrix
+                m = attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN);
+                if (m) {
+                    attribs.href = m[1];
+                    delete attribs.target;
+                }
+
+                m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
+                if (m) {
+                    var entity = m[1];
+                    if (entity[0] === '@') {
+                        attribs.href = '#'; // TODO
+                    }
+                    else if (entity[0] === '#') {
+                        attribs.href = '#/room/' + entity;
+                    }
+                    delete attribs.target;
+                }
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
             return { tagName: tagName, attribs : attribs };
