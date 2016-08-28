@@ -333,22 +333,20 @@ module.exports = React.createClass({
             this.scrollAreaSufficient = (120 + (stickies[0].getBoundingClientRect().height * stickies.length)) < scrollAreaHeight;
 
             // Initialise the sticky headers
-            if (this.scrollAreaSufficient) {
-                if (typeof stickies === "object" && stickies.length > 0) {
-                    // Initialise the sticky headers
-                    this.stickyWrappers = Array.prototype.map.call(stickies, function(sticky, i) {
-                        // Save the positions of all the stickies within scroll area.
-                        // These positions are relative to the LHS Panel top
-                        sticky.dataset.originalPosition = sticky.offsetTop - scrollArea.offsetTop;
+            if (typeof stickies === "object" && stickies.length > 0) {
+                // Initialise the sticky headers
+                this.stickyWrappers = Array.prototype.map.call(stickies, function(sticky, i) {
+                    // Save the positions of all the stickies within scroll area.
+                    // These positions are relative to the LHS Panel top
+                    sticky.dataset.originalPosition = sticky.offsetTop - scrollArea.offsetTop;
 
-                        // Save and set the sticky heights
-                        var originalHeight = sticky.getBoundingClientRect().height;
-                        sticky.dataset.originalHeight = originalHeight;
-                        sticky.style.height = originalHeight;
+                    // Save and set the sticky heights
+                    var originalHeight = sticky.getBoundingClientRect().height;
+                    sticky.dataset.originalHeight = originalHeight;
+                    sticky.style.height = originalHeight;
 
-                        return sticky;
-                    });
-                }
+                    return sticky;
+                });
             }
         }
 
