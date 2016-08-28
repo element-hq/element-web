@@ -63,7 +63,7 @@ limitations under the License.
     -webkit-order: 3;
     order: 3;
 
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(118, 207, 166, 0.2);
     margin-left: 16px; /* gutter */
     margin-right: 16px; /* gutter */
     -webkit-flex: 0 0 60px;
