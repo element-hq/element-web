@@ -16,6 +16,7 @@ limitations under the License.
 
 .mx_MImageBody {
     display: block;
+    margin-right: 34px;
 }
 
 .mx_MImageBody_thumbnail {

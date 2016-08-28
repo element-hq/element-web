@@ -8,7 +8,7 @@ Getting Started
 
 The easiest way to test Vector is to just use the hosted copy at https://vector.im/beta.
 The develop branch is continuously deployed by Jenkins at https://vector.im/develop for
-those who like living dangerously. 
+those who like living dangerously.
 
 To host your own copy of Vector, the quickest bet is to use a pre-built released version
 of Vector:
@@ -19,6 +19,19 @@ of Vector:
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See below for details.
 1. Enter the URL into your browser and log into vector!
+
+Important Security Note
+=======================
+
+We do not recommend running Vector from the same domain name as your Matrix
+homeserver.  The reason is the risk of XSS (cross-site-scripting) vulnerabilities
+that could occur if someone caused Vector to load and render malicious user generated
+content from a Matrix API which then had trusted access to Vector (or other apps) due
+to sharing the same domain.
+
+We have put some coarse mitigations into place to try to protect against this situation,
+but it's still not good practice to do it in the first place.
+See https://github.com/vector-im/vector-web/issues/1977 for more details.
 
 Building From Source
 ====================
@@ -55,7 +68,7 @@ You can configure the app by copying `vector/config.sample.json` to
    for verifying third party identifiers like email addresses). If this is blank,
    registering with an email address, adding an email address to your account,
    or inviting users via email address will not work.  Matrix identity servers are
-   very simple web services which map third party identifiers (currently only email 
+   very simple web services which map third party identifiers (currently only email
    addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
    for more details.  Currently the only public matrix identity servers are https://matrix.org
    and https://vector.im.  In future identity servers will be decentralised.
@@ -75,7 +88,9 @@ nativefier https://vector.im/beta/
 ```
 
 krisa has a dedicated electron project at https://github.com/krisak/vector-electron-desktop
-(although you should swap out the 'vector' folder for the latest vector tarball you want to run)
+(although you should swap out the 'vector' folder for the latest vector tarball you want to run.
+Get a tarball from https://vector.im/packages or build your own - see Building From Source
+above).
 
 There's also a (much) older electron distribution at https://github.com/stevenhammerton/vector-desktop
 
@@ -216,20 +231,13 @@ day-to-day use; it is experimental and should be considered only as a
 proof-of-concept. See https://matrix.org/jira/browse/SPEC-162 for an overview
 of the current progress.
 
-Vector is built with support for end-to-end encryption by default.
-
-To enable encryption for a room, type
-
-```
-/encrypt on
-```
-
-in the message bar in that room. Vector will then generate a set of keys, and
-encrypt all outgoing messages in that room. (Note that other people in that
-room will send messages in the clear unless they also `/encrypt on`.)
+To enable the (very experimental) support, check the 'End-to-End Encryption'
+box in the 'Labs' section of the user settings (note that the labs are disabled
+on http://vector.im/beta: you will need to use http://vector.im/develop or your
+own deployment of vector). The Room Settings dialog will then show an
+'Encryption' setting; rooms for which you are an administrator will offer you
+the option of enabling encryption. Any messages sent in that room will then be
+encrypted.
 
 Note that historical encrypted messages cannot currently be decoded - history
 is therefore lost when the page is reloaded.
-
-There is currently no visual indication of whether encryption is enabled for a
-room.

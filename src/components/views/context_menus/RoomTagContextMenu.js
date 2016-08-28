@@ -126,6 +126,25 @@ module.exports = React.createClass({
         };
     },
 
+    _onClickForget: function() {
+        // FIXME: duplicated with RoomSettings (and dead code in RoomView)
+        MatrixClientPeg.get().forget(this.props.room.roomId).done(function() {
+            dis.dispatch({ action: 'view_next_room' });
+        }, function(err) {
+            var errCode = err.errcode || "unknown error code";
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: `Failed to forget room (${errCode})`
+            });
+        });
+
+        // Close the context menu
+        if (this.props.onFinished) {
+            this.props.onFinished();
+        };
+    },
+
     render: function() {
         var myUserId = MatrixClientPeg.get().credentials.userId;
         var myMember = this.props.room.getMember(myUserId);
@@ -147,6 +166,17 @@ module.exports = React.createClass({
             'mx_RoomTagContextMenu_fieldSet': false,
             'mx_RoomTagContextMenu_fieldDisabled': false,
         });
+
+        if (myMember && myMember.membership === "leave") {
+            return (
+                <div>
+                    <div className={ leaveClasses } onClick={ this._onClickForget } >
+                        <img className="mx_RoomTagContextMenu_icon" src="img/icon_context_delete.svg" width="15" height="15" />
+                        Forget
+                    </div>
+                </div>
+            );
+        }
 
         return (
             <div>

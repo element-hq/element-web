@@ -62,6 +62,8 @@ limitations under the License.
     display: flex;
     align-items: center;
     overflow: auto;
+    font-size: 14px;
+    margin-right: 6px;
 }
 .mx_MessageComposer_input_rte {
     border-top: 2px solid #76cfa6; /* placeholder RTE indicator */
@@ -73,7 +75,6 @@ limitations under the License.
 
 .mx_MessageComposer_input textarea {
     display: block;
-    font-size: 15px;
     width: 100%;
     padding: 0px;
     margin-top: 6px;
@@ -86,6 +87,7 @@ limitations under the License.
     box-shadow: none;
     color: #454545;
     background-color: #fff;
+    font-size: 14px;
 
     /* needed for FF */
     font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
