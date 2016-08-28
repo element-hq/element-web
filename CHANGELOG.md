@@ -1,3 +1,9 @@
+Changes in [0.7.5-r1](https://github.com/vector-im/vector-web/releases/tag/v0.7.5-r1) (2016-08-28)
+==================================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.5...v0.7.5-r1)
+
+ * Correctly pin deps :(
+
 Changes in [0.7.5](https://github.com/vector-im/vector-web/releases/tag/v0.7.5) (2016-08-28)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.4-r1...v0.7.5)
