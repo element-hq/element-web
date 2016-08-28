@@ -110,7 +110,7 @@ matrixLinkify.VECTOR_URL_PATTERN = "^(?:https?:\/\/)?(?:"
     + "(?:www\\.)?vector\\.im/(?:beta|staging|develop)/"
     + ")(#.*)";
 
-matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/((#|@).*)";
+matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/((#|@|!).*)";
 
 matrixLinkify.options = {
     events: function (href, type) {
