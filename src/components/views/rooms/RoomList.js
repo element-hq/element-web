@@ -337,6 +337,8 @@ module.exports = React.createClass({
             // Get a collection of sticky header containers references
             this.stickies = document.getElementsByClassName("mx_RoomSubList_labelContainer");
 
+            if (!this.stickies.length) return;
+
             // Make sure there is sufficient space to do sticky headers: 120px plus all the sticky headers
             this.scrollAreaSufficient = (120 + (this.stickies[0].getBoundingClientRect().height * this.stickies.length)) < scrollAreaHeight;
 
