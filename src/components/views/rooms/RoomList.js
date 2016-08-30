@@ -121,10 +121,14 @@ module.exports = React.createClass({
         this._delayedRefreshRoomList();
     },
 
-    onArchivedHeaderClick: function(isHidden) {
+    onArchivedHeaderClick: function(isHidden, scrollToPosition) {
         if (!isHidden) {
             var self = this;
             this.setState({ isLoadingLeftRooms: true });
+
+            // Try scrolling to position
+            this._updateStickyHeaders(true, scrollToPosition);
+
             // we don't care about the response since it comes down via "Room"
             // events.
             MatrixClientPeg.get().syncLeftRooms().catch(function(err) {
