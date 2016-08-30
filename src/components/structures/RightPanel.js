@@ -17,7 +17,8 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
+var Matrix = require("matrix-js-sdk");
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
 var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
@@ -45,8 +46,17 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return {
-            phase : this.Phase.MemberList
+        if (this.props.userId) {
+            var member = new Matrix.RoomMember(null, this.props.userId);
+            return {
+                phase: this.Phase.MemberInfo,
+                member: member,
+            }
+        }
+        else {
+            return {
+                phase: this.Phase.MemberList
+            }
         }
     },
 
@@ -97,7 +107,7 @@ module.exports = React.createClass({
                 });
             }
         }
-        if (payload.action === "view_room") {
+        else if (payload.action === "view_room") {
             if (this.state.phase === this.Phase.MemberInfo) {
                 this.setState({
                     phase: this.Phase.MemberList
@@ -145,15 +155,15 @@ module.exports = React.createClass({
                             { filesHighlight }
                         </div>
                     </div>;
+        }
 
-            if (!this.props.collapsed) {
-                if(this.state.phase == this.Phase.MemberList) {
-                    panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
-                }
-                else if(this.state.phase == this.Phase.MemberInfo) {
-                    var MemberInfo = sdk.getComponent('rooms.MemberInfo');
-                    panel = <MemberInfo roomId={this.props.roomId} member={this.state.member} key={this.props.roomId} />
-                }
+        if (!this.props.collapsed) {
+            if(this.props.roomId && this.state.phase == this.Phase.MemberList) {
+                panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
+            }
+            else if(this.state.phase == this.Phase.MemberInfo) {
+                var MemberInfo = sdk.getComponent('rooms.MemberInfo');
+                panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.props.userId} />
             }
         }
 

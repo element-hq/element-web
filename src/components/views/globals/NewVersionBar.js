@@ -17,20 +17,36 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
+import Modal from 'matrix-react-sdk/lib/Modal';
 
-module.exports = React.createClass({
-    displayName: 'NewVersionBar',
+export default function NewVersionBar(props) {
+    const onChangelogClicked = () => {
+        const ChangelogDialog = sdk.getComponent('dialogs.ChangelogDialog');
 
-    render: function() {
-        return (
-            <div className="mx_MatrixToolbar">
-                <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
-                <div>
-                    A new version of Vector is available. Refresh your browser.
-                </div>
+        Modal.createDialog(ChangelogDialog, {
+            version: props.version,
+            newVersion: props.newVersion,
+            onFinished: (update) => {
+                if(update) {
+                    window.location.reload();
+                }
+            }
+        });
+    };
+
+    return (
+        <div className="mx_MatrixToolbar">
+            <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
+            <div className="mx_MatrixToolbar_content">
+                A new version of Vector is available. Refresh your browser.
             </div>
-        );
-    }
-});
+            <button className="mx_MatrixToolbar_action" onClick={onChangelogClicked}>Changelog</button>
+        </div>
+    );
+}
 
+NewVersionBar.propTypes = {
+    version: React.PropTypes.string.isRequired,
+    newVersion: React.PropTypes.string.isRequired,
+};

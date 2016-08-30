@@ -54,3 +54,7 @@ limitations under the License.
     float: right;
     margin-right: 10px;
 }
+
+.mx_MatrixToolbar_action {
+    margin-right: 16px;
+}

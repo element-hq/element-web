@@ -1,3 +1,40 @@
+Changes in [0.7.5-r1](https://github.com/vector-im/vector-web/releases/tag/v0.7.5-r1) (2016-08-28)
+==================================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.5...v0.7.5-r1)
+
+ * Correctly pin deps :(
+
+Changes in [0.7.5](https://github.com/vector-im/vector-web/releases/tag/v0.7.5) (2016-08-28)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.4-r1...v0.7.5)
+
+ * re-add leave button in RoomSettings
+ * add /user URLs
+ * recognise matrix.to links and other vector links
+ * fix linkify dependency
+ * fix avatar clicking in MemberInfo
+ * fix RoomTagContextMenu so it works on historical rooms
+ * warn people to put their Matrix HS on a separate domain to Vector
+ * fix zalgos again
+ * Add .travis.yml
+   [\#2007](https://github.com/vector-im/vector-web/pull/2007)
+ * add fancy changelog dialog
+   [\#1972](https://github.com/vector-im/vector-web/pull/1972)
+ * Update autocomplete design
+   [\#1978](https://github.com/vector-im/vector-web/pull/1978)
+ * Update encryption info in README
+   [\#2001](https://github.com/vector-im/vector-web/pull/2001)
+ * Added event/info message avatars back in
+   [\#2000](https://github.com/vector-im/vector-web/pull/2000)
+ * Wmwragg/chat message presentation
+   [\#1987](https://github.com/vector-im/vector-web/pull/1987)
+ * Make the notification slider work
+   [\#1982](https://github.com/vector-im/vector-web/pull/1982)
+ * Use cpx to copy olm.js, and add watcher
+   [\#1966](https://github.com/vector-im/vector-web/pull/1966)
+ * Make up a device display name
+   [\#1959](https://github.com/vector-im/vector-web/pull/1959)
+
 Changes in [0.7.4-r1](https://github.com/vector-im/vector-web/releases/tag/v0.7.4-r1) (2016-08-12)
 ==================================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.4...v0.7.4-r1)

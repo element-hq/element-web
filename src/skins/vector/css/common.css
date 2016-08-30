@@ -251,7 +251,7 @@ input[type=text]:focus, textarea:focus {
     background-color: #fff;
 }
 
-.emojione {
+.mx_emojione {
     height: 1em;
     vertical-align: middle;
 }
@@ -267,7 +267,7 @@ input[type=text]:focus, textarea:focus {
 }
 
 /** green button with rounded corners */
-.textButton {
+.mx_textButton {
     color: #fff;
     background-color: #76cfa6;
     border-radius: 17px;

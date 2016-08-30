@@ -4,7 +4,7 @@
     z-index: 1000;
     width: 100%;
     border: 1px solid #e5e5e5;
-    background: rgba(255, 255, 255, 0.9);
+    background: white;
     border-bottom: none;
     border-radius: 4px 4px 0 0;
     max-height: 50vh;
@@ -12,56 +12,68 @@
 }
 
 .mx_Autocomplete_ProviderSection {
-    padding: 12px;
     border-bottom: 1px solid #e5e5e5;
 }
 
-.mx_Autocomplete_ProviderSection * {
-    padding: 2px;
-    border-radius: 4px;
+.mx_Autocomplete_Completion_container_pill {
+    margin: 12px;
+    display: flex;
 }
 
-.mx_Autocomplete_Completion {
+/* a "block" completion takes up a whole line */
+.mx_Autocomplete_Completion_block {
+    height: 34px;
+    display: flex;
+    padding: 0 12px;
     user-select: none;
     cursor: pointer;
-    transition: 0.3s all ease;
-    display: flex;
     align-items: center;
+    color: #4a4a4a;
 }
 
-.mx_Autocomplete_Completion.selected * {
-    transition: 0.3s all ease;
+.mx_Autocomplete_Completion_block * {
+     margin: 0 3px;
+}
+
+.mx_Autocomplete_Completion_pill {
+    border-radius: 17px;
+    height: 34px;
+    display: flex;
+    user-select: none;
+    cursor: pointer;
+    align-items: center;
+    color: #4a4a4a;
+}
+
+.mx_Autocomplete_Completion_pill * {
+    margin: 0 3px;
+}
+
+/* container for pill-style completions */
+.mx_Autocomplete_Completion_container_pill {
+    margin: 12px;
+    display: flex;
+    flex-flow: wrap;
 }
 
 .mx_Autocomplete_Completion.selected {
-    background: #76cfa6;
-    color: white;
+    background: #f6f6f6;
     outline: none;
 }
 
-.mx_Autocomplete_Completion.selected * {
-    color: white !important;
-}
-
 .mx_Autocomplete_provider_name {
-    color: #76cfa6;
-    font-weight: 600;
+    margin: 12px;
+    color: #454545;
+    font-weight: 400;
+    opacity: 0.4;
 }
 
-.autocomplete-enter {
-    opacity: 0.01;
+/* styling for common completion elements */
+.mx_Autocomplete_Completion_subtitle {
+    font-style: italic;
+    flex: 1;
 }
 
-.autocomplete-enter.autocomplete-enter-active {
-    opacity: 1;
-    transition: opacity 300ms ease-in;
-}
-
-.autocomplete-leave {
-    opacity: 1;
-}
-
-.autocomplete-leave.autocomplete-leave-active {
-    opacity: 0.01;
-    transition: opacity 300ms ease-in;
+.mx_Autocomplete_Completion_description {
+    color: gray;
 }

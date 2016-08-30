@@ -63,6 +63,7 @@ limitations under the License.
     align-items: center;
     overflow: auto;
     font-size: 14px;
+    margin-right: 6px;
 }
 .mx_MessageComposer_input_rte {
     border-top: 2px solid #76cfa6; /* placeholder RTE indicator */
