@@ -169,7 +169,7 @@ var RoomSubList = React.createClass({
             this.props.onHeaderClick(isHidden);
         } else {
             // The header is stuck, so the click is to be interpreted as a scroll to the header
-            this.props.onHeaderClick(isHidden, this.refs.header.dataset.originalPosition);
+            this.props.onHeaderClick(this.state.hidden, this.refs.header.dataset.originalPosition);
         }
     },
 
