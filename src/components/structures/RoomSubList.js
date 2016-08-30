@@ -119,7 +119,6 @@ var RoomSubList = React.createClass({
     // The dataset elements are added in the RoomList _initAndPositionStickyHeaders method
     isCollapsableOnClick: function() {
         var stuck = this.refs.header.dataset.stuck;
-        var topBottomSticky = this.refs.header.dataset.topBottomSticky;
         if (this.state.hidden || stuck === undefined || stuck === "none") {
             return true;
         } else {
@@ -249,11 +248,8 @@ var RoomSubList = React.createClass({
 
     roomNotificationCount: function() {
         var self = this;
-        var subListCount = 0;
-        var subListHighlight = false;
-        var cli = MatrixClientPeg.get();
 
-        this.props.list.map(function(room) {
+        return this.props.list.reduce(function(result, room) {
             var roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
             var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites';
             var notificationCount = room.getUnreadNotificationCount();
@@ -263,14 +259,13 @@ var RoomSubList = React.createClass({
             const badges = notifBadges || mentionBadges;
 
             if (badges) {
-                subListCount += notificationCount;
+                result[0] += notificationCount;
                 if (highlight) {
-                    subListHighlight = true;
+                    result[1] = true;
                 }
             }
-        });
-
-        return [subListCount, subListHighlight];
+            return result;
+        }, [0, false]);
     },
 
     _updateSubListCount: function() {

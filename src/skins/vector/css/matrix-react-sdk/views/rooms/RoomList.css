@@ -35,5 +35,5 @@ limitations under the License.
 
 /* Make sure the scrollbar is above the sticky headers from RoomList */
 .mx_RoomList_scrollbar .gm-scrollbar.-vertical {
-    z-index: 3;
+    z-index: 5;
 }

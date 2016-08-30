@@ -49,6 +49,7 @@ limitations under the License.
     flex: 1 1 0;
 
     overflow-y: auto;
+    z-index: 5;
 }
 
 .mx_LeftPanel.collapsed .mx_BottomLeftMenu {
