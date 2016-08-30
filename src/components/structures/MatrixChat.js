@@ -69,6 +69,7 @@ module.exports = React.createClass({
         UserSettings: "user_settings",
         CreateRoom: "create_room",
         RoomDirectory: "room_directory",
+        UserView: "user_view",
     },
 
     AuxPanel: {
@@ -87,6 +88,10 @@ module.exports = React.createClass({
             // in the case where we view a room by ID or by RoomView when it resolves
             // what ID an alias points at.
             currentRoomId: null,
+
+            // If we're trying to just view a user ID (i.e. /user URL), this is it
+            viewUserId: null,
+
             logged_in: false,
             collapse_lhs: false,
             collapse_rhs: false,
@@ -94,6 +99,9 @@ module.exports = React.createClass({
             width: 10000,
             sideOpacity: 1.0,
             middleOpacity: 1.0,
+
+            version: null,
+            newVersion: null,
         };
         return s;
     },
@@ -736,6 +744,18 @@ module.exports = React.createClass({
             } else {
                 dis.dispatch(payload);
             }
+        } else if (screen.indexOf('user/') == 0) {
+            var userId = screen.substring(5);
+            this.setState({ viewUserId: userId });
+            this._setPage(this.PageTypes.UserView);
+            this.notifyNewScreen('user/' + userId);
+            var member = new Matrix.RoomMember(null, userId);
+            if (member) {
+                dis.dispatch({
+                    action: 'view_user',
+                    member: member,
+                });
+            }
         }
         else {
             console.info("Ignoring showScreen for '%s'", screen);
@@ -756,15 +776,13 @@ module.exports = React.createClass({
     onUserClick: function(event, userId) {
         event.preventDefault();
 
-        /*
-        var MemberInfo = sdk.getComponent('rooms.MemberInfo');
-        var member = new Matrix.RoomMember(null, userId);
-        ContextualMenu.createMenu(MemberInfo, {
-            member: member,
-            right: window.innerWidth - event.pageX,
-            top: event.pageY
-        });
-        */
+        // var MemberInfo = sdk.getComponent('rooms.MemberInfo');
+        // var member = new Matrix.RoomMember(null, userId);
+        // ContextualMenu.createMenu(MemberInfo, {
+        //     member: member,
+        //     right: window.innerWidth - event.pageX,
+        //     top: event.pageY
+        // });
 
         var member = new Matrix.RoomMember(null, userId);
         if (!member) { return; }
@@ -856,6 +874,7 @@ module.exports = React.createClass({
     onVersion: function(current, latest) {
         this.setState({
             version: current,
+            newVersion: latest,
             hasNewVersion: current !== latest
         });
     },
@@ -988,11 +1007,15 @@ module.exports = React.createClass({
                     page_element = <RoomDirectory />
                     right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
                     break;
+                case this.PageTypes.UserView:
+                    page_element = null; // deliberately null for now
+                    right_panel = <RightPanel userId={this.state.viewUserId} collapsed={false} opacity={this.state.sideOpacity} />
+                    break;
             }
 
             var topBar;
             if (this.state.hasNewVersion) {
-                topBar = <NewVersionBar />;
+                topBar = <NewVersionBar version={this.state.version} newVersion={this.state.newVersion} />;
             }
             else if (MatrixClientPeg.get().isGuest()) {
                 topBar = <GuestWarningBar />;

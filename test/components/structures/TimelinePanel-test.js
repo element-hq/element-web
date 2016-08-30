@@ -40,11 +40,12 @@ describe('TimelinePanel', function() {
     var timeline;
     var parentDiv;
 
-    function mkMessage() {
+    function mkMessage(opts) {
         return test_utils.mkMessage(
             {
                 event: true, room: ROOM_ID, user: USER_ID,
                 ts: Date.now(),
+                ... opts,
             });
     }
 
@@ -87,7 +88,7 @@ describe('TimelinePanel', function() {
         // this is https://github.com/vector-im/vector-web/issues/1367
 
         // enough events to allow us to scroll back
-        var N_EVENTS = 20;
+        var N_EVENTS = 30;
         for (var i = 0; i < N_EVENTS; i++) {
             timeline.addEvent(mkMessage());
         }
@@ -207,10 +208,11 @@ describe('TimelinePanel', function() {
     });
 
     it("should let you scroll down again after you've scrolled up", function(done) {
-        var N_EVENTS = 600;
+        var TIMELINE_CAP = 100; // needs to be more than we can fit in the div
+        var N_EVENTS = 120;     // needs to be more than TIMELINE_CAP
 
         // sadly, loading all those events takes a while
-        this.timeout(N_EVENTS * 30);
+        this.timeout(N_EVENTS * 50);
 
         // client.getRoom is called a /lot/ in this test, so replace
         // sinon's spy with a fast noop.
@@ -218,13 +220,15 @@ describe('TimelinePanel', function() {
 
         // fill the timeline with lots of events
         for (var i = 0; i < N_EVENTS; i++) {
-            timeline.addEvent(mkMessage());
+            timeline.addEvent(mkMessage({msg: "Event "+i}));
         }
         console.log("added events to timeline");
 
         var scrollDefer;
         var panel = ReactDOM.render(
-            <TimelinePanel room={room} onScroll={() => {scrollDefer.resolve()}} />,
+            <TimelinePanel room={room} onScroll={() => {scrollDefer.resolve()}}
+                timelineCap={TIMELINE_CAP}
+            />,
             parentDiv
         );
         console.log("TimelinePanel rendered");
@@ -256,14 +260,18 @@ describe('TimelinePanel', function() {
             console.log("back paginating...");
             setScrollTop(0);
             return awaitScroll().then(() => {
+                let eventTiles = scryEventTiles(panel);
+                let firstEvent = eventTiles[0].props.mxEvent;
+
+                console.log("TimelinePanel contains " + eventTiles.length +
+                            " events; first is " +
+                            firstEvent.getContent().body);
+
                 if(scrollingDiv.scrollTop > 0) {
                     // need to go further
                     return backPaginate();
                 }
                 console.log("paginated to start.");
-
-                // hopefully, we got to the start of the timeline
-                expect(messagePanel.props.backPaginating).toBe(false);
             });
         }
 
@@ -276,16 +284,38 @@ describe('TimelinePanel', function() {
             // back-paginate until we hit the start
             return backPaginate();
         }).then(() => {
+            // hopefully, we got to the start of the timeline
+            expect(messagePanel.props.backPaginating).toBe(false);
+
             expect(messagePanel.props.suppressFirstDateSeparator).toBe(false);
             var events = scryEventTiles(panel);
-            expect(events[0].props.mxEvent).toBe(timeline.getEvents()[0])
+            expect(events[0].props.mxEvent).toBe(timeline.getEvents()[0]);
+            expect(events.length).toEqual(TIMELINE_CAP);
 
             // we should now be able to scroll down, and paginate in the other
             // direction.
             setScrollTop(scrollingDiv.scrollHeight);
             scrollingDiv.scrollTop = scrollingDiv.scrollHeight;
-            return awaitScroll();
+
+            // the delay() below is a heinous hack to deal with the fact that,
+            // without it, we may or may not get control back before the
+            // forward pagination completes. The delay means that it should
+            // have completed.
+            return awaitScroll().delay(0);
         }).then(() => {
+            expect(messagePanel.props.backPaginating).toBe(false);
+            expect(messagePanel.props.forwardPaginating).toBe(false);
+            expect(messagePanel.props.suppressFirstDateSeparator).toBe(true);
+
+            var events = scryEventTiles(panel);
+            expect(events.length).toEqual(TIMELINE_CAP);
+
+            // we don't really know what the first event tile will be, since that
+            // depends on how much the timelinepanel decides to paginate.
+            //
+            // just check that the first tile isn't event 0.
+            expect(events[0].props.mxEvent).toNotBe(timeline.getEvents()[0]);
+
             console.log("done");
         }).done(done, done);
     });

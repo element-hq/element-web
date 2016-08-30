@@ -23,6 +23,7 @@ var Modal = require('../../../Modal');
 var ObjectUtils = require("../../../ObjectUtils");
 var dis = require("../../../dispatcher");
 var ScalarAuthClient = require("../../../ScalarAuthClient");
+var ScalarMessaging = require('../../../ScalarMessaging');
 var UserSettingsStore = require('../../../UserSettingsStore');
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -70,6 +71,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        ScalarMessaging.startListening();
         MatrixClientPeg.get().getRoomDirectoryVisibility(
             this.props.room.roomId
         ).done((result) => {
@@ -93,6 +95,8 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        ScalarMessaging.stopListening();
+
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 1.0,
@@ -422,6 +426,27 @@ module.exports = React.createClass({
         }, "");
     },
 
+    onLeaveClick() {
+        dis.dispatch({
+            action: 'leave_room',
+            room_id: this.props.room.roomId,
+        });
+    },
+
+    onForgetClick() {
+        // FIXME: duplicated with RoomTagContextualMenu (and dead code in RoomView)
+        MatrixClientPeg.get().forget(this.props.room.roomId).done(function() {
+            dis.dispatch({ action: 'view_next_room' });
+        }, function(err) {
+            var errCode = err.errcode || "unknown error code";
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Error",
+                description: `Failed to forget room (${errCode})`
+            });
+        });
+    },
+
     _renderEncryptionSection: function() {
         if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
             return null;
@@ -540,6 +565,25 @@ module.exports = React.createClass({
             );
         }
 
+        var leaveButton = null;
+        var myMember = this.props.room.getMember(user_id);
+        if (myMember) {
+            if (myMember.membership === "join") {
+                leaveButton = (
+                    <div className="mx_RoomSettings_leaveButton" onClick={ this.onLeaveClick }>
+                        Leave room
+                    </div>
+                );
+            }
+            else if (myMember.membership === "leave") {
+                leaveButton = (
+                    <div className="mx_RoomSettings_leaveButton" onClick={ this.onForgetClick }>
+                        Forget room
+                    </div>
+                );
+            }
+        }
+
         // TODO: support editing custom events_levels
         // TODO: support editing custom user_levels
 
@@ -626,6 +670,8 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_RoomSettings">
+
+                { leaveButton }
 
                 { tagsSection }
 

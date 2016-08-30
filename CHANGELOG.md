@@ -1,3 +1,57 @@
+Changes in [0.6.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.6.5) (2016-08-28)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.6.4-r1...v0.6.5)
+
+ * re-add leave button in RoomSettings
+ * add /user URLs
+ * recognise matrix.to links and other vector links
+ * fix linkify dependency
+ * fix avatar clicking in MemberInfo
+ * fix emojione sizing
+   [\#431](https://github.com/matrix-org/matrix-react-sdk/pull/431)
+ * Fix NPE when we don't know the sender of an event
+   [\#430](https://github.com/matrix-org/matrix-react-sdk/pull/430)
+ * Update annoying TimelinePanel test
+   [\#429](https://github.com/matrix-org/matrix-react-sdk/pull/429)
+ * add fancy changelog dialog
+   [\#416](https://github.com/matrix-org/matrix-react-sdk/pull/416)
+ * Send bot options with leading underscore on the state key
+   [\#428](https://github.com/matrix-org/matrix-react-sdk/pull/428)
+ * Update autocomplete design and scroll it correctly
+   [\#419](https://github.com/matrix-org/matrix-react-sdk/pull/419)
+ * Add ability to query and set bot options
+   [\#427](https://github.com/matrix-org/matrix-react-sdk/pull/427)
+ * Add .travis.yml
+   [\#425](https://github.com/matrix-org/matrix-react-sdk/pull/425)
+ * Added event/info message avatars back in
+   [\#426](https://github.com/matrix-org/matrix-react-sdk/pull/426)
+ * Add postMessage API required for integration provisioning
+   [\#423](https://github.com/matrix-org/matrix-react-sdk/pull/423)
+ * Fix TimelinePanel test
+   [\#424](https://github.com/matrix-org/matrix-react-sdk/pull/424)
+ * Wmwragg/chat message presentation
+   [\#422](https://github.com/matrix-org/matrix-react-sdk/pull/422)
+ * Only try to delete room rule if it exists
+   [\#421](https://github.com/matrix-org/matrix-react-sdk/pull/421)
+ * Make the notification slider work
+   [\#420](https://github.com/matrix-org/matrix-react-sdk/pull/420)
+ * Don't download E2E devices if feature disabled
+   [\#418](https://github.com/matrix-org/matrix-react-sdk/pull/418)
+ * strip (IRC) suffix from tabcomplete entries
+   [\#417](https://github.com/matrix-org/matrix-react-sdk/pull/417)
+ * ignore local busy
+   [\#415](https://github.com/matrix-org/matrix-react-sdk/pull/415)
+ * defaultDeviceDisplayName should be a prop
+   [\#414](https://github.com/matrix-org/matrix-react-sdk/pull/414)
+ * Use server-generated deviceId
+   [\#410](https://github.com/matrix-org/matrix-react-sdk/pull/410)
+ * Set initial_device_display_name on login and register
+   [\#413](https://github.com/matrix-org/matrix-react-sdk/pull/413)
+ * Add device_id to devices display
+   [\#409](https://github.com/matrix-org/matrix-react-sdk/pull/409)
+ * Don't use MatrixClientPeg for temporary clients
+   [\#408](https://github.com/matrix-org/matrix-react-sdk/pull/408)
+
 Changes in [0.6.4-r1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.6.4-r1) (2016-08-12)
 =========================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.6.4...v0.6.4-r1)

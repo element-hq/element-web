@@ -95,6 +95,7 @@ function matrixLinkify(linkify) {
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_USERID);
 }
 
+// stubs, overwritten in MatrixChat's componentDidMount
 matrixLinkify.onUserClick = function(e, userId) { e.preventDefault(); };
 matrixLinkify.onAliasClick = function(e, roomAlias) { e.preventDefault(); };
 
@@ -102,11 +103,14 @@ var escapeRegExp = function(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 };
 
-// we only recognise URLs which match our current URL as being the same app
-// as if someone explicitly links to vector.im/develop and we're on vector.im/beta
-// they may well be trying to get us to explicitly go to develop.
-// FIXME: intercept matrix.to URLs as well.
-matrixLinkify.VECTOR_URL_PATTERN = "^(https?:\/\/)?" + escapeRegExp(window.location.host + window.location.pathname);
+// Recognise URLs from both our local vector and official vector as vector.
+// anyone else really should be using matrix.to.
+matrixLinkify.VECTOR_URL_PATTERN = "^(?:https?:\/\/)?(?:"
+    + escapeRegExp(window.location.host + window.location.pathname) + "|"
+    + "(?:www\\.)?vector\\.im/(?:beta|staging|develop)/"
+    + ")(#.*)";
+
+matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/((#|@|!).*)";
 
 matrixLinkify.options = {
     events: function (href, type) {
@@ -131,8 +135,25 @@ matrixLinkify.options = {
             case 'roomalias':
                 return '#/room/' + href;
             case 'userid':
-                return '#';
+                return '#/user/' + href;
             default:
+                var m;
+                // FIXME: horrible duplication with HtmlUtils' transform tags
+                m = href.match(matrixLinkify.VECTOR_URL_PATTERN);
+                if (m) {
+                    return m[1];
+                }
+                m = href.match(matrixLinkify.MATRIXTO_URL_PATTERN);
+                if (m) {
+                    var entity = m[1];
+                    if (entity[0] === '@') {
+                        return '#/user/' + entity;
+                    }
+                    else if (entity[0] === '#' || entity[0] === '!') {
+                        return '#/room/' + entity;
+                    }
+                }
+
                 return href;
         }
     },
@@ -143,7 +164,9 @@ matrixLinkify.options = {
 
     target: function(href, type) {
         if (type === 'url') {
-            if (href.match(matrixLinkify.VECTOR_URL_PATTERN)) {
+            if (href.match(matrixLinkify.VECTOR_URL_PATTERN) ||
+                href.match(matrixLinkify.MATRIXTO_URL_PATTERN))
+            {
                 return null;
             }
             else {

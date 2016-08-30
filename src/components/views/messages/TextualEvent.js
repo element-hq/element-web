@@ -24,12 +24,6 @@ import sdk from '../../../index';
 module.exports = React.createClass({
     displayName: 'TextualEvent',
 
-    statics: {
-        needsSenderProfile: function() {
-            return false;
-        }
-    },
-
     render: function() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
         var text = TextForEvent.textForEvent(this.props.mxEvent);
@@ -39,4 +33,3 @@ module.exports = React.createClass({
         );
     },
 });
-

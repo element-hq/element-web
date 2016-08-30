@@ -49,7 +49,7 @@ export function unicodeToImage(str) {
             alt = (emojione.unicodeAlt) ? emojione.convert(unicode.toUpperCase()) : mappedUnicode[unicode];
             const title = mappedUnicode[unicode];
 
-            replaceWith = `<img class="emojione" title="${title}" alt="${alt}" src="${emojione.imagePathSVG}${unicode}.svg${emojione.cacheBustParam}"/>`;
+            replaceWith = `<img class="mx_emojione" title="${title}" alt="${alt}" src="${emojione.imagePathSVG}${unicode}.svg${emojione.cacheBustParam}"/>`;
             return replaceWith;
         }
     });
@@ -85,12 +85,28 @@ var sanitizeHtmlParams = {
     transformTags: { // custom to matrix
         // add blank targets to all hyperlinks except vector URLs
         'a': function(tagName, attribs) {
-            var m = attribs.href ? attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN) : null;
-            if (m) {
-                delete attribs.target;
-            }
-            else {
-                attribs.target = '_blank';
+            if (attribs.href) {
+                attribs.target = '_blank'; // by default
+
+                var m;
+                // FIXME: horrible duplication with linkify-matrix
+                m = attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN);
+                if (m) {
+                    attribs.href = m[1];
+                    delete attribs.target;
+                }
+
+                m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
+                if (m) {
+                    var entity = m[1];
+                    if (entity[0] === '@') {
+                        attribs.href = '#/user/' + entity;
+                    }
+                    else if (entity[0] === '#' || entity[0] === '!') {
+                        attribs.href = '#/room/' + entity;
+                    }
+                    delete attribs.target;
+                }
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
             return { tagName: tagName, attribs : attribs };
@@ -271,7 +287,7 @@ module.exports = {
 
     emojifyText: function(text) {
         return {
-            __html: emojione.unicodeToImage(escape(text)),
+            __html: unicodeToImage(escape(text)),
         };
     },
 };

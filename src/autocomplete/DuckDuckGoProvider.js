@@ -78,7 +78,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
     }
 
     getName() {
-        return 'Results from DuckDuckGo';
+        return '🔍 Results from DuckDuckGo';
     }
 
     static getInstance(): DuckDuckGoProvider {
@@ -86,5 +86,11 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
             instance = new DuckDuckGoProvider();
         }
         return instance;
+    }
+
+    renderCompletions(completions: [React.Component]): ?React.Component {
+        return <div className="mx_Autocomplete_Completion_container_block">
+            {completions}
+        </div>;
     }
 }

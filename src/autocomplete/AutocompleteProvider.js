@@ -1,4 +1,5 @@
 import Q from 'q';
+import React from 'react';
 
 export default class AutocompleteProvider {
     constructor(commandRegex?: RegExp, fuseOpts?: any) {
@@ -50,5 +51,10 @@ export default class AutocompleteProvider {
 
     getName(): string {
         return 'Default Provider';
+    }
+
+    renderCompletions(completions: [React.Component]): ?React.Component {
+        console.error('stub; should be implemented in subclasses');
+        return null;
     }
 }
