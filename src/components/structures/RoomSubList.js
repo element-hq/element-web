@@ -29,7 +29,7 @@ var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 // turn this on for drop & drag console debugging galore
 var debug = false;
 
-const TRUNCATE_AT = 6;
+const TRUNCATE_AT = 10;
 
 var roomListTarget = {
     canDrop: function() {
