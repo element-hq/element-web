@@ -318,6 +318,8 @@ module.exports = React.createClass({
         }
     },
 
+    // Doing the stckiy headers as raw DOM, for speed, as it gets very stuttery if done
+    // properly through React
     _initAndPositionStickyHeaders: function(initialise, scrollToPosition) {
         var scrollArea = this._getScrollNode();
         // Use the offset of the top of the scroll area from the window
@@ -328,16 +330,16 @@ module.exports = React.createClass({
         var scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;
 
         if (initialise) {
-            // Get a collection of sticky header containers
-            var stickies = document.getElementsByClassName("mx_RoomSubList_labelContainer");
+            // Get a collection of sticky header containers references
+            this.stickies = document.getElementsByClassName("mx_RoomSubList_labelContainer");
 
             // Make sure there is sufficient space to do sticky headers
-            this.scrollAreaSufficient = (120 + (stickies[0].getBoundingClientRect().height * stickies.length)) < scrollAreaHeight;
+            this.scrollAreaSufficient = (120 + (this.stickies[0].getBoundingClientRect().height * this.stickies.length)) < scrollAreaHeight;
 
             // Initialise the sticky headers
-            if (typeof stickies === "object" && stickies.length > 0) {
+            if (typeof this.stickies === "object" && this.stickies.length > 0) {
                 // Initialise the sticky headers
-                this.stickyWrappers = Array.prototype.map.call(stickies, function(sticky, i) {
+                Array.prototype.forEach.call(this.stickies, function(sticky, i) {
                     // Save the positions of all the stickies within scroll area.
                     // These positions are relative to the LHS Panel top
                     sticky.dataset.originalPosition = sticky.offsetTop - scrollArea.offsetTop;
@@ -360,7 +362,7 @@ module.exports = React.createClass({
             scrollArea.scrollTop = scrollToPosition;
         }
         // Stick headers to top and bottom, or free them
-        Array.prototype.forEach.call(this.stickyWrappers, function(sticky, i, stickyWrappers) {
+        Array.prototype.forEach.call(this.stickies, function(sticky, i, stickyWrappers) {
             var stickyPosition = sticky.dataset.originalPosition;
             var stickyHeight = sticky.dataset.originalHeight;
             var stickyHeader = sticky.childNodes[0];
