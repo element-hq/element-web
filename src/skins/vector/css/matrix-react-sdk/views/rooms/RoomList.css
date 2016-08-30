@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 .mx_RoomList {
-    padding-top: 8px;
     padding-bottom: 12px;
     min-height: 400px;
 }
@@ -32,4 +31,9 @@ limitations under the License.
 .mx_RoomList_scrollbar .gm-scroll-view {
     overflow-x: hidden ! important;
     overflow-y: scroll ! important;
+}
+
+/* Make sure the scrollbar is above the sticky headers from RoomList */
+.mx_RoomList_scrollbar .gm-scrollbar.-vertical {
+    z-index: 5;
 }

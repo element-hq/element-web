@@ -17,14 +17,19 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
+var classNames = require('classnames');
 var DropTarget = require('react-dnd').DropTarget;
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Unread = require('matrix-react-sdk/lib/Unread');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 
 // turn this on for drop & drag console debugging galore
 var debug = false;
+
+const TRUNCATE_AT = 10;
 
 var roomListTarget = {
     canDrop: function() {
@@ -80,7 +85,8 @@ var RoomSubList = React.createClass({
     getInitialState: function() {
         return {
             hidden: this.props.startAsHidden || false,
-            truncateAt: 20,
+            capTruncate: this.props.list.length > TRUNCATE_AT,
+            truncateAt: this.props.list.length > TRUNCATE_AT ? TRUNCATE_AT : -1,
             sortedList: [],
         };
     },
@@ -109,17 +115,62 @@ var RoomSubList = React.createClass({
         });
     },
 
-    onClick: function(ev) {
-        var isHidden = !this.state.hidden;
-        this.setState({ hidden : isHidden });
-
-        if (isHidden) {
-            // as good a way as any to reset the truncate state
-            this.setState({ truncateAt : 20 });
-            this.props.onShowMoreRooms();
+    // The header is collapsable if it is hidden or not stuck
+    // The dataset elements are added in the RoomList _initAndPositionStickyHeaders method
+    isCollapsableOnClick: function() {
+        var stuck = this.refs.header.dataset.stuck;
+        if (this.state.hidden || stuck === undefined || stuck === "none") {
+            return true;
+        } else {
+            return false;
         }
+    },
 
-        this.props.onHeaderClick(isHidden);
+    onClick: function(ev) {
+        if (this.isCollapsableOnClick()) {
+            // The header iscCollapsable, so the click is to be interpreted as collapse and truncation logic
+            var isHidden = false;
+            var isTruncatable = this.props.list.length > TRUNCATE_AT;
+
+            if (this.state.hidden && (this.state.capTruncate && isTruncatable)) {
+                isHidden = false;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : true,
+                    truncateAt : TRUNCATE_AT
+                });
+            } else if ((!this.state.hidden && this.state.capTruncate)
+                        || (this.state.hidden && (this.state.capTruncate && !isTruncatable)))
+            {
+                isHidden = false;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : false,
+                    truncateAt : -1
+                });
+            } else if (!this.state.hidden && !this.state.capTruncate) {
+                isHidden = true;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : true,
+                    truncateAt : TRUNCATE_AT
+                });
+            } else {
+                // Catch any weird states the system gets into
+                isHidden = false;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : true,
+                    truncateAt : TRUNCATE_AT
+                });
+            }
+
+            this.props.onShowMoreRooms();
+            this.props.onHeaderClick(isHidden);
+        } else {
+            // The header is stuck, so the click is to be interpreted as a scroll to the header
+            this.props.onHeaderClick(this.state.hidden, this.refs.header.dataset.originalPosition);
+        }
     },
 
     tsOfNewestEvent: function(room) {
@@ -184,6 +235,44 @@ var RoomSubList = React.createClass({
 
         //if (debug) console.log("sorting list for sublist " + this.props.label + " with length " + list.length + ", this.props.list = " + this.props.list);
         this.setState({ sortedList: list.sort(comparator) });
+    },
+
+    _shouldShowNotifBadge: function(roomNotifState) {
+        const showBadgeInStates = [RoomNotifs.ALL_MESSAGES, RoomNotifs.ALL_MESSAGES_LOUD];
+        return showBadgeInStates.indexOf(roomNotifState) > -1;
+    },
+
+    _shouldShowMentionBadge: function(roomNotifState) {
+        return roomNotifState != RoomNotifs.MUTE;
+    },
+
+    roomNotificationCount: function() {
+        var self = this;
+
+        return this.props.list.reduce(function(result, room) {
+            var roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
+            var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites';
+            var notificationCount = room.getUnreadNotificationCount();
+
+            const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
+            const mentionBadges = highlight && self._shouldShowMentionBadge(roomNotifState);
+            const badges = notifBadges || mentionBadges;
+
+            if (badges) {
+                result[0] += notificationCount;
+                if (highlight) {
+                    result[1] = true;
+                }
+            }
+            return result;
+        }, [0, false]);
+    },
+
+    _updateSubListCount: function() {
+        // Force an update by setting the state to the current state
+        // Doing it this way rather than using forceUpdate(), so that the shouldComponentUpdate()
+        // method is honoured
+        this.setState(this.state);
     },
 
     moveRoomTile: function(room, atIndex) {
@@ -293,6 +382,7 @@ var RoomSubList = React.createClass({
                     unread={ Unread.doesRoomHaveUnreadMessages(room) }
                     highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites' }
                     isInvite={ self.props.label === 'Invites' }
+                    refreshSubList={ self._updateSubListCount }
                     incomingCall={ self.props.incomingCall && (self.props.incomingCall.roomId === room.roomId) ? self.props.incomingCall : null } />
             );
         });
@@ -300,35 +390,47 @@ var RoomSubList = React.createClass({
 
     _getHeaderJsx: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        return (
-            <h2 onClick={ this.onClick } className="mx_RoomSubList_label">
-                { this.props.collapsed ? '' : this.props.label }
-                <img className="mx_RoomSubList_chevron"
-                    src={ this.state.hidden ? "img/list-close.svg" : "img/list-open.svg" }
-                    width="10" height="10" />
-            </h2>
-        );
-    },
 
-    _createOverflowTile: function(overflowCount, totalCount) {
-        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        // XXX: this is duplicated from RoomTile - factor it out
+        var subListNotifications = this.roomNotificationCount();
+        var subListNotifCount = subListNotifications[0];
+        var subListNotifHighlight = subListNotifications[1];
+
+        var roomCount = this.props.list.length > 0 ? this.props.list.length : '';
+        var isTruncatable = this.props.list.length > TRUNCATE_AT;
+        if (!this.state.hidden && this.state.capTruncate && isTruncatable) {
+            roomCount = TRUNCATE_AT + " of " + roomCount;
+        }
+
+        var chevronClasses = classNames({
+            'mx_RoomSubList_chevron': true,
+            'mx_RoomSubList_chevronUp': this.state.hidden,
+            'mx_RoomSubList_chevronRight': !this.state.hidden && this.state.capTruncate,
+            'mx_RoomSubList_chevronDown': !this.state.hidden && !this.state.capTruncate,
+        });
+
+        var badgeClasses = classNames({
+            'mx_RoomSubList_badge': true,
+            'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
+        });
+
+        var badge;
+        if (subListNotifCount > 0) {
+            badge = <div className={badgeClasses}>{subListNotifCount > 99 ? "99+" : subListNotifCount}</div>;
+        }
+
         return (
-            <div className="mx_RoomTile mx_RoomTile_ellipsis" onClick={this._showFullMemberList}>
-                <div className="mx_RoomTile_avatar">
-                    <BaseAvatar url="img/ellipsis.svg" name="..." width={24} height={24} />
+            <div className="mx_RoomSubList_labelContainer" ref="header">
+                <div onClick={ this.onClick } className="mx_RoomSubList_label">
+                    { this.props.collapsed ? '' : this.props.label }
+                    <div className="mx_RoomSubList_roomCount">{roomCount}</div>
+                    <div className={chevronClasses}></div>
+                    {badge}
                 </div>
-                <div className="mx_RoomTile_name">and { overflowCount } others...</div>
             </div>
         );
     },
 
-    _showFullMemberList: function() {
-        this.setState({
-            truncateAt: -1
-        });
-        this.props.onShowMoreRooms();
-    },
+    _createOverflowTile: function() {}, // NOP
 
     // Fix any undefined order elements of a room in a manual ordered list
     //     room.tag[tagname].order
