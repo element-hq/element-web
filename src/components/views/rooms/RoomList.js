@@ -64,12 +64,12 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        // Initilaise the stickyHeaders when the component is created
+        // Initialise the stickyHeaders when the component is created
         this._updateStickyHeaders(true);
     },
 
     componentDidUpdate: function() {
-        // Reinitilaise the stickyHeaders when the component is updated
+        // Reinitialise the stickyHeaders when the component is updated
         this._updateStickyHeaders(true);
     },
 
@@ -322,7 +322,7 @@ module.exports = React.createClass({
         }
     },
 
-    // Doing the stckiy headers as raw DOM, for speed, as it gets very stuttery if done
+    // Doing the sticky headers as raw DOM, for speed, as it gets very stuttery if done
     // properly through React
     _initAndPositionStickyHeaders: function(initialise, scrollToPosition) {
         var scrollArea = this._getScrollNode();
@@ -337,7 +337,7 @@ module.exports = React.createClass({
             // Get a collection of sticky header containers references
             this.stickies = document.getElementsByClassName("mx_RoomSubList_labelContainer");
 
-            // Make sure there is sufficient space to do sticky headers
+            // Make sure there is sufficient space to do sticky headers: 120px plus all the sticky headers
             this.scrollAreaSufficient = (120 + (this.stickies[0].getBoundingClientRect().height * this.stickies.length)) < scrollAreaHeight;
 
             // Initialise the sticky headers
