@@ -40,6 +40,7 @@ module.exports = React.createClass({
         highlight: React.PropTypes.bool.isRequired,
         isInvite: React.PropTypes.bool.isRequired,
         roomSubList: React.PropTypes.object.isRequired,
+        refreshSubList: React.PropTypes.func.isRequired,
         incomingCall: React.PropTypes.object,
     },
 
@@ -132,6 +133,7 @@ module.exports = React.createClass({
                 room: this.props.room,
                 onFinished: function() {
                     self.setState({ notificationTagMenu: false });
+                    self.props.refreshSubList();
                 }
             });
             this.setState({ notificationTagMenu: true });

@@ -25,6 +25,7 @@ var Unread = require('../../../Unread');
 var dis = require("../../../dispatcher");
 var sdk = require('../../../index');
 var rate_limited_func = require('../../../ratelimitedfunc');
+var MatrixTools = require('../../../MatrixTools');
 
 var HIDE_CONFERENCE_CHANS = true;
 
@@ -63,6 +64,13 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        // Initialise the stickyHeaders when the component is created
+        this._updateStickyHeaders(true);
+    },
+
+    componentDidUpdate: function() {
+        // Reinitialise the stickyHeaders when the component is updated
+        this._updateStickyHeaders(true);
     },
 
     onAction: function(payload) {
@@ -113,10 +121,14 @@ module.exports = React.createClass({
         this._delayedRefreshRoomList();
     },
 
-    onArchivedHeaderClick: function(isHidden) {
+    onArchivedHeaderClick: function(isHidden, scrollToPosition) {
         if (!isHidden) {
             var self = this;
             this.setState({ isLoadingLeftRooms: true });
+
+            // Try scrolling to position
+            this._updateStickyHeaders(true, scrollToPosition);
+
             // we don't care about the response since it comes down via "Room"
             // events.
             MatrixClientPeg.get().syncLeftRooms().catch(function(err) {
@@ -126,6 +138,11 @@ module.exports = React.createClass({
                 self.setState({ isLoadingLeftRooms: false });
             });
         }
+    },
+
+    onSubListHeaderClick: function(isHidden, scrollToPosition) {
+        // The scroll area has expanded or contracted, so re-calculate sticky headers positions
+        this._updateStickyHeaders(true, scrollToPosition);
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline) {
@@ -188,6 +205,7 @@ module.exports = React.createClass({
         s.lists["im.vector.fake.invite"] = [];
         s.lists["m.favourite"] = [];
         s.lists["im.vector.fake.recent"] = [];
+        s.lists["im.vector.fake.direct"] = [];
         s.lists["m.lowpriority"] = [];
         s.lists["im.vector.fake.archived"] = [];
 
@@ -203,39 +221,25 @@ module.exports = React.createClass({
             if (me.membership == "invite") {
                 s.lists["im.vector.fake.invite"].push(room);
             }
+            else if (MatrixTools.isDirectMessageRoom(room, me, self.props.ConferenceHandler, HIDE_CONFERENCE_CHANS)) {
+                // "Direct Message" rooms
+                s.lists["im.vector.fake.direct"].push(room);
+            }
             else if (me.membership == "join" || me.membership === "ban" ||
                      (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
             {
-                var shouldShowRoom = true;
+                // Used to split rooms via tags
+                var tagNames = Object.keys(room.tags);
 
-                // hiding conf rooms only ever toggles shouldShowRoom to false
-                if (HIDE_CONFERENCE_CHANS) {
-                    // we want to hide the 1:1 conf<->user room and not the group chat
-                    var joinedMembers = room.getJoinedMembers();
-                    if (joinedMembers.length === 2) {
-                        var otherMember = joinedMembers.filter(function(m) {
-                            return m.userId !== me.userId
-                        })[0];
-                        var ConfHandler = self.props.ConferenceHandler;
-                        if (ConfHandler && ConfHandler.isConferenceUser(otherMember.userId)) {
-                            // console.log("Hiding conference 1:1 room %s", room.roomId);
-                            shouldShowRoom = false;
-                        }
+                if (tagNames.length) {
+                    for (var i = 0; i < tagNames.length; i++) {
+                        var tagName = tagNames[i];
+                        s.lists[tagName] = s.lists[tagName] || [];
+                        s.lists[tagNames[i]].push(room);
                     }
                 }
-
-                if (shouldShowRoom) {
-                    var tagNames = Object.keys(room.tags);
-                    if (tagNames.length) {
-                        for (var i = 0; i < tagNames.length; i++) {
-                            var tagName = tagNames[i];
-                            s.lists[tagName] = s.lists[tagName] || [];
-                            s.lists[tagNames[i]].push(room);
-                        }
-                    }
-                    else {
-                        s.lists["im.vector.fake.recent"].push(room);
-                    }
+                else {
+                    s.lists["im.vector.fake.recent"].push(room);
                 }
             }
             else if (me.membership === "leave") {
@@ -264,9 +268,10 @@ module.exports = React.createClass({
         }
     },
 
-    _repositionTooltips: function(e) {
+    _whenScrolling: function(e) {
         this._repositionTooltip(e);
         this._repositionIncomingCallBox(e, false);
+        this._updateStickyHeaders(false);
     },
 
     _repositionTooltip: function(e) {
@@ -317,6 +322,99 @@ module.exports = React.createClass({
         }
     },
 
+    // Doing the sticky headers as raw DOM, for speed, as it gets very stuttery if done
+    // properly through React
+    _initAndPositionStickyHeaders: function(initialise, scrollToPosition) {
+        var scrollArea = this._getScrollNode();
+        // Use the offset of the top of the scroll area from the window
+        // as this is used to calculate the CSS fixed top position for the stickies
+        var scrollAreaOffset = scrollArea.getBoundingClientRect().top;
+        // Use the offset of the top of the componet from the window
+        // as this is used to calculate the CSS fixed top position for the stickies
+        var scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;
+
+        if (initialise) {
+            // Get a collection of sticky header containers references
+            this.stickies = document.getElementsByClassName("mx_RoomSubList_labelContainer");
+
+            // Make sure there is sufficient space to do sticky headers: 120px plus all the sticky headers
+            this.scrollAreaSufficient = (120 + (this.stickies[0].getBoundingClientRect().height * this.stickies.length)) < scrollAreaHeight;
+
+            // Initialise the sticky headers
+            if (typeof this.stickies === "object" && this.stickies.length > 0) {
+                // Initialise the sticky headers
+                Array.prototype.forEach.call(this.stickies, function(sticky, i) {
+                    // Save the positions of all the stickies within scroll area.
+                    // These positions are relative to the LHS Panel top
+                    sticky.dataset.originalPosition = sticky.offsetTop - scrollArea.offsetTop;
+
+                    // Save and set the sticky heights
+                    var originalHeight = sticky.getBoundingClientRect().height;
+                    sticky.dataset.originalHeight = originalHeight;
+                    sticky.style.height = originalHeight;
+
+                    return sticky;
+                });
+            }
+        }
+
+        var self = this;
+        var scrollStuckOffset = 0;
+        // Scroll to the passed in position, i.e. a header was clicked and in a scroll to state
+        // rather than a collapsable one (see RoomSubList.isCollapsableOnClick method for details)
+        if (scrollToPosition !== undefined) {
+            scrollArea.scrollTop = scrollToPosition;
+        }
+        // Stick headers to top and bottom, or free them
+        Array.prototype.forEach.call(this.stickies, function(sticky, i, stickyWrappers) {
+            var stickyPosition = sticky.dataset.originalPosition;
+            var stickyHeight = sticky.dataset.originalHeight;
+            var stickyHeader = sticky.childNodes[0];
+            var topStuckHeight = stickyHeight * i;
+            var bottomStuckHeight = stickyHeight * (stickyWrappers.length - i)
+
+            if (self.scrollAreaSufficient && stickyPosition < (scrollArea.scrollTop + topStuckHeight)) {
+                // Top stickies
+                sticky.dataset.stuck = "top";
+                stickyHeader.classList.add("mx_RoomSubList_fixed");
+                stickyHeader.style.top = scrollAreaOffset + topStuckHeight + "px";
+                // If stuck at top adjust the scroll back down to take account of all the stuck headers
+                if (scrollToPosition !== undefined && stickyPosition === scrollToPosition) {
+                    scrollStuckOffset = topStuckHeight;
+                }
+            } else if (self.scrollAreaSufficient && stickyPosition > ((scrollArea.scrollTop + scrollAreaHeight) - bottomStuckHeight)) {
+                /// Bottom stickies
+                sticky.dataset.stuck = "bottom";
+                stickyHeader.classList.add("mx_RoomSubList_fixed");
+                stickyHeader.style.top = (scrollAreaOffset + scrollAreaHeight) - bottomStuckHeight + "px";
+            } else {
+                // Not sticky
+                sticky.dataset.stuck = "none";
+                stickyHeader.classList.remove("mx_RoomSubList_fixed");
+                stickyHeader.style.top = null;
+            }
+        });
+        // Adjust the scroll to take account of top stuck headers
+        if (scrollToPosition !== undefined) {
+            scrollArea.scrollTop -= scrollStuckOffset;
+        }
+    },
+
+    _updateStickyHeaders: function(initialise, scrollToPosition) {
+        var self = this;
+
+        if (initialise) {
+            // Useing setTimeout to ensure that the code is run after the painting
+            // of the newly rendered object as using requestAnimationFrame caused
+            // artefacts to appear on screen briefly
+            window.setTimeout(function() {
+                self._initAndPositionStickyHeaders(initialise, scrollToPosition);
+            });
+        } else {
+            this._initAndPositionStickyHeaders(initialise, scrollToPosition);
+        }
+    },
+
     onShowMoreRooms: function() {
         // kick gemini in the balls to get it to wake up
         // XXX: uuuuuuugh.
@@ -329,7 +427,7 @@ module.exports = React.createClass({
 
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
-                 autoshow={true} onScroll={ self._repositionTooltips } ref="gemscroll">
+                 autoshow={true} onScroll={ self._whenScrolling } ref="gemscroll">
             <div className="mx_RoomList">
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
                              label="Invites"
@@ -339,6 +437,7 @@ module.exports = React.createClass({
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['m.favourite'] }
@@ -351,6 +450,18 @@ module.exports = React.createClass({
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
+                             onShowMoreRooms={ self.onShowMoreRooms } />
+
+                <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
+                             label="Direct Messages"
+                             editable={ false }
+                             order="recent"
+                             selectedRoom={ self.props.selectedRoom }
+                             incomingCall={ self.state.incomingCall }
+                             collapsed={ self.props.collapsed }
+                             searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
@@ -362,10 +473,11 @@ module.exports = React.createClass({
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 { Object.keys(self.state.lists).map(function(tagName) {
-                    if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|archived))$/)) {
+                    if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
                         return <RoomSubList list={ self.state.lists[tagName] }
                              key={ tagName }
                              label={ tagName }
@@ -377,6 +489,7 @@ module.exports = React.createClass({
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                     }
@@ -392,6 +505,7 @@ module.exports = React.createClass({
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
+                             onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.archived'] }
