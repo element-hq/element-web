@@ -241,3 +241,4 @@ encrypted.
 
 Note that historical encrypted messages cannot currently be decoded - history
 is therefore lost when the page is reloaded.
+
