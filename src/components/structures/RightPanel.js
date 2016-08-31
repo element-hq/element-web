@@ -28,7 +28,7 @@ module.exports = React.createClass({
 
     Phase : {
         MemberList: 'MemberList',
-        FileList: 'FileList',
+        FilePanel: 'FilePanel',
         NotificationPanel: 'NotificationPanel',
         MemberInfo: 'MemberInfo',
     },
@@ -131,7 +131,7 @@ module.exports = React.createClass({
             if (this.state.phase == this.Phase.MemberList || this.state.phase === this.Phase.MemberInfo) {
                 membersHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
             }
-            else if (this.state.phase == this.Phase.FileList) {
+            else if (this.state.phase == this.Phase.FilePanel) {
                 filesHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
             }
             else if (this.state.phase == this.Phase.NotificationPanel) {
@@ -177,6 +177,9 @@ module.exports = React.createClass({
             }
             else if (this.state.phase == this.Phase.NotificationPanel) {
                 panel = <NotificationPanel />
+            }
+            else if (this.state.phase == this.Phase.FilePanel) {
+                panel = <FilesPanel roomId={this.props.roomId} />
             }
         }
 
