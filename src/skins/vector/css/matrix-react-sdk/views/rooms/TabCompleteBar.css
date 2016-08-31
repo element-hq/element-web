@@ -34,6 +34,8 @@ limitations under the License.
     padding-bottom: 2px;
     margin-bottom: 6px;
     border-radius: 30px;
+    position: relative;
+    top: 1px;
 }
 
 .mx_TabCompleteBar_command .mx_TabCompleteBar_text {
