@@ -113,6 +113,7 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_typingBar {
+    padding-top: 10px;
     color: #4a4a4a;
     opacity: 0.5;
     overflow-y: hidden;
