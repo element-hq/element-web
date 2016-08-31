@@ -50,7 +50,10 @@ module.exports = React.createClass({
     },
 
     getRemoteAudioElement: function() {
-        return this.refs.remoteAudio;
+        // this needs to be somewhere at the top of the DOM which
+        // always exists to avoid audio interruptions.
+        // Might as well just use DOM.
+        return document.getElementById("remoteAudio");
     },
 
     getLocalVideoElement: function() {
@@ -106,7 +109,6 @@ module.exports = React.createClass({
                 <div className="mx_VideoView_remoteVideoFeed">
                     <VideoFeed ref="remote" onResize={this.props.onResize}
                         maxHeight={maxVideoHeight} />
-                    <audio ref="remoteAudio"/>
                 </div>
                 <div className="mx_VideoView_localVideoFeed">                
                     <VideoFeed ref="local"/>
