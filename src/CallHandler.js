@@ -63,13 +63,22 @@ global.mxCalls = {
 var calls = global.mxCalls;
 var ConferenceHandler = null;
 
+var audioPromises = {};
+
 function play(audioId) {
     // TODO: Attach an invisible element for this instead
     // which listens?
     var audio = document.getElementById(audioId);
     if (audio) {
-        audio.load();
-        audio.play();
+        if (audioPromises[audioId]) {
+            audioPromises[audioId] = audioPromises[audioId].then(()=>{
+                audio.load();
+                return audio.play();
+            });
+        }
+        else {
+            audioPromises[audioId] = audio.play();
+        }
     }
 }
 
@@ -78,7 +87,13 @@ function pause(audioId) {
     // which listens?
     var audio = document.getElementById(audioId);
     if (audio) {
-        audio.pause();
+        if (audioPromises[audioId]) {
+            audioPromises[audioId] = audioPromises[audioId].then(()=>audio.pause());
+        }
+        else {
+            // pause doesn't actually return a promise, but might as well do this for symmetry with play();
+            audioPromises[audioId] = audio.pause();
+        }
     }
 }
 
