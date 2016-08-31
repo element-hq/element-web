@@ -30,19 +30,11 @@ limitations under the License.
     height: 5px;
 }
 
-.mx_UploadBar_uploadProgressInner .mx_RoomView_callStatusBar {
-    background-color: #fff ! important;
-}
-
 .mx_UploadBar_uploadFilename {
     margin-top: 5px;
     margin-left: 65px;
     opacity: 0.5;
     color: #4a4a4a;
-}
-
-.mx_UploadBar_uploadFilename .mx_RoomView_callStatusBar {
-    color: #fff;
 }
 
 .mx_UploadBar_uploadIcon {

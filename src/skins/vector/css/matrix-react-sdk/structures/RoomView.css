@@ -216,6 +216,15 @@ hr.mx_RoomView_myReadMarker {
     height: 1px;
 }
 
+.mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
+    background-color: #fff;
+}
+
+.mx_RoomView_callStatusBar .mx_UploadBar_uploadFilename {
+    color: #fff;
+    opacity: 1.0;
+}
+
 .mx_RoomView_inCall .mx_RoomView_statusAreaBox_line {
     border-top: 1px hidden;
 }
