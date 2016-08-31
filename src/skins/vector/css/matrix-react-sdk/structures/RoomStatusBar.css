@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 .mx_RoomStatusBar {
-    margin-top: 10px;
     margin-left: 65px;
     min-height: 34px;
 }
@@ -109,6 +108,7 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_tabCompleteBar {
+    padding-top: 10px;
     color: #4a4a4a;
 }
 
