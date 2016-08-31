@@ -41,6 +41,16 @@ module.exports = React.createClass({
         // a callback which is called when the content in the callview changes
         // in a way that is likely to cause a resize.
         onResize: React.PropTypes.func,
+
+        // render ongoing audio call details - useful when in LeftPanel
+        showVoice: React.PropTypes.bool,
+    },
+
+    getInitialState: function() {
+        return {
+            // the call this view is displaying (if any)
+            call: null,
+        };
     },
 
     componentDidMount: function() {
@@ -71,9 +81,15 @@ module.exports = React.createClass({
                  this.props.ConferenceHandler.getConferenceCallForRoom(roomId) :
                  null
                 );
+
+            if (this.call) {
+                this.setState({ call: call });
+            }
+
         }
         else {
             call = CallHandler.getAnyActiveCall();
+            this.setState({ call: call });
         }
 
         if (call) {
@@ -108,11 +124,21 @@ module.exports = React.createClass({
 
     render: function(){
         var VideoView = sdk.getComponent('voip.VideoView');
+
+        var voice;
+        if (this.state.call && this.state.call.type === "voice" && this.props.showVoice) {
+            var callRoom = MatrixClientPeg.get().getRoom(this.state.call.roomId);
+            voice = <div className="mx_CallView_voice" onClick={ this.props.onClick }>Active call ({ callRoom.name })</div>;
+        }
+
         return (
-            <VideoView ref="video" onClick={ this.props.onClick }
-                onResize={ this.props.onResize }
-                maxHeight={ this.props.maxVideoHeight }
-            />
+            <div>
+                <VideoView ref="video" onClick={ this.props.onClick }
+                    onResize={ this.props.onResize }
+                    maxHeight={ this.props.maxVideoHeight }
+                />
+                { voice }
+            </div>
         );
     }
 });
