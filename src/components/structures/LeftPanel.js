@@ -109,7 +109,7 @@ var LeftPanel = React.createClass({
             var CallView = sdk.getComponent('voip.CallView');
             callPreview = (
                 <CallView
-                    className="mx_LeftPanel_callView" onClick={this.onCallViewClick}
+                    className="mx_LeftPanel_callView" showVoice={true} onClick={this.onCallViewClick}
                     ConferenceHandler={VectorConferenceHandler} />
             );
         }
