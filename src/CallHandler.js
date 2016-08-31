@@ -73,7 +73,7 @@ function play(audioId) {
         if (audioPromises[audioId]) {
             audioPromises[audioId] = audioPromises[audioId].then(()=>{
                 audio.load();
-                return audio.play());
+                return audio.play();
             });
         }
         else {
