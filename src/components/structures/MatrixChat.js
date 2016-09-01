@@ -357,6 +357,9 @@ module.exports = React.createClass({
                 this._setPage(this.PageTypes.RoomDirectory);
                 this.notifyNewScreen('directory');
                 break;
+            case 'view_one_to_one_chat':
+                this._oneToOneChat();
+                break;
             case 'notifier_enabled':
                 this.forceUpdate();
                 break;
@@ -491,6 +494,15 @@ module.exports = React.createClass({
         if (this.refs.roomView && room_info.showSettings) {
             this.refs.roomView.showSettings(true);
         }
+    },
+
+    _oneToOneChat: function() {
+        // TODO: Create a OneToOneChatChatDialog
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createDialog(ErrorDialog, {
+            title: "Unimplemented Feature",
+            description: "The OnToOneChatDialog is not yet implemented"
+        });
     },
 
     // update scrollStateMap according to the current scroll state of the
