@@ -79,7 +79,10 @@ module.exports = React.createClass({
         if (call) {
             call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
             call.setRemoteVideoElement(this.getVideoView().getRemoteVideoElement());
-            // always use a separate element for audio stream playback
+            // always use a separate element for audio stream playback.
+            // this is to let us move CallView around the DOM without interrupting remote audio
+            // during playback, by having the audio rendered by a top-level <audio/> element.
+            // rather than being rendered by the main remoteVideo <video/> element.
             call.setRemoteAudioElement(this.getVideoView().getRemoteAudioElement());
         }
         if (call && call.type === "video" && call.call_state !== "ended" && call.call_state !== "ringing") {
