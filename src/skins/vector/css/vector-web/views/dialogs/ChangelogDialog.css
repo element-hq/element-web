@@ -18,3 +18,7 @@ limitations under the License.
     max-height: 300px;
     overflow: auto;
 }
+
+.mx_ChangelogDialog_li {
+    padding: 0.2em;
+}
