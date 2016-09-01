@@ -27,8 +27,8 @@ module.exports = React.createClass({
         dis.dispatch({action: 'view_user_settings'});
     },
 
-    onRoomDirectoryClick: function() {
-        dis.dispatch({action: 'view_room_directory'});
+    onOneToOneChatClick: function() {
+        dis.dispatch({action: 'view_one_to_one_chat'});
     },
 
     onCreateRoomClick: function() {
@@ -51,11 +51,11 @@ module.exports = React.createClass({
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
-                    <div className="mx_BottomLeftMenu_createRoom" title="Start chat" onClick={ this.onCreateRoomClick }>
+                    <div className="mx_BottomLeftMenu_createRoom" title="Rooms" onClick={ this.onCreateRoomClick }>
                         <TintableSvg src="img/icons-create-room.svg" width="25" height="25"/>
                     </div>
-                    <div className="mx_BottomLeftMenu_directory" title="Room directory" onClick={ this.onRoomDirectoryClick }>
-                        <TintableSvg src="img/icons-directory.svg" width="25" height="25"/>
+                    <div className="mx_BottomLeftMenu_people" title="People" onClick={ this.onOneToOneChatClick }>
+                        <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
                     </div>
                     <div className="mx_BottomLeftMenu_settings" title="Settings" onClick={ this.onSettingsClick }>
                         <TintableSvg src="img/icons-settings.svg" width="25" height="25"/>

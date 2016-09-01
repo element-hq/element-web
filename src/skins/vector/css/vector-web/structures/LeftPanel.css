@@ -80,21 +80,21 @@ limitations under the License.
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu_createRoom,
-.mx_LeftPanel .mx_BottomLeftMenu_directory,
+.mx_LeftPanel .mx_BottomLeftMenu_people,
 .mx_LeftPanel .mx_BottomLeftMenu_settings {
     display: inline-block;
     cursor: pointer;
 }
 
 .collapsed .mx_BottomLeftMenu_createRoom,
-.collapsed .mx_BottomLeftMenu_directory,
+.collapsed .mx_BottomLeftMenu_people,
 .collapsed .mx_BottomLeftMenu_settings {
     margin-left: 0px ! important;
     padding-top: 3px ! important;
     padding-bottom: 3px ! important;
 }
 
-.mx_LeftPanel .mx_BottomLeftMenu_directory {
+.mx_LeftPanel .mx_BottomLeftMenu_people {
     margin-left: 10px;
 }
 
