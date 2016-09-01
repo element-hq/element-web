@@ -197,6 +197,8 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
 
+        // the extra q() ensures that synchronous exceptions hit the same codepath as
+        // asynchronous ones.
         q().then(() => {
             return Lifecycle.loadSession({
                 realQueryParams: this.props.realQueryParams,
