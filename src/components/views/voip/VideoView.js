@@ -53,7 +53,11 @@ module.exports = React.createClass({
         // this needs to be somewhere at the top of the DOM which
         // always exists to avoid audio interruptions.
         // Might as well just use DOM.
-        return document.getElementById("remoteAudio");
+        var remoteAudioElement = document.getElementById("remoteAudio");
+        if (!remoteAudioElement) {
+            console.error("Failed to find remoteAudio element - cannot play audio!  You need to add an <audio/> to the DOM.");
+        }
+        return remoteAudioElement;
     },
 
     getLocalVideoElement: function() {
