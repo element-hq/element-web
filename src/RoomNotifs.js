@@ -24,7 +24,7 @@ export const MENTIONS_ONLY = 'mentions_only';
 export const MUTE = 'mute';
 
 export function getRoomNotifsState(roomId) {
-    if (MatrixClientPeg.get().isGuest()) return RoomNotifs.ALL_MESSAGES;
+    if (MatrixClientPeg.get().isGuest()) return ALL_MESSAGES;
 
     // look through the override rules for a rule affecting this room:
     // if one exists, it will take precedence.
