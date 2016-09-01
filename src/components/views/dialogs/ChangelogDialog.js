@@ -50,9 +50,11 @@ export default class ChangelogDialog extends React.Component {
             return (
                 <div key={repo}>
                     <h2>{repo}</h2>
+                    <ul>
                     {this.state[repo].map(commit =>
-                        <div key={commit.commit.url}><a href={commit.commit.url}>{commit.commit.message}</a></div>
+                        <li key={commit.commit.url} className="mx_ChangelogDialog_li"><a href={commit.commit.url}>{commit.commit.message}</a></li>
                     )}
+                    </ul>
                 </div>
             )
         });
