@@ -212,9 +212,9 @@ function _restoreFromLocalStorage() {
 
             var msg = e.message;
             if (msg == "OLM.BAD_LEGACY_ACCOUNT_PICKLE") {
-                msg = "You need to log back in to generate and submit "
-                    + "end-to-end encryption keys. This is a once off; sorry "
-                    + "for the inconvenience.";
+                msg = "You need to log back in to generate end-to-end encryption keys "
+                    + "for this device and submit the public key to your homeserver. "
+                    + "This is a once off; sorry for the inconvenience.";
             }
 
             // don't leak things into the new session
