@@ -82,6 +82,10 @@ class ScalarAuthClient {
         url += "&room_id=" + encodeURIComponent(roomId);
         return url;
     }
+
+    getStarterLink(starterLinkUrl) {
+        return starterLinkUrl + "?scalar_token=" + encodeURIComponent(this.scalarToken);
+    }
 }
 
 module.exports = ScalarAuthClient;

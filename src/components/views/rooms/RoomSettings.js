@@ -80,14 +80,16 @@ module.exports = React.createClass({
             console.error("Failed to get room visibility: " + err);
         });
 
-        this.scalarClient = new ScalarAuthClient();
-        this.scalarClient.connect().done(() => {
-            this.forceUpdate();
-        }, (err) => {
-            this.setState({
-                scalar_error: err
-            });
-        })
+        if (UserSettingsStore.isFeatureEnabled("integration_management")) {
+            this.scalarClient = new ScalarAuthClient();
+            this.scalarClient.connect().done(() => {
+                this.forceUpdate();
+            }, (err) => {
+                this.setState({
+                    scalar_error: err
+                });
+            })
+        }
 
         dis.dispatch({
             action: 'ui_opacity',
