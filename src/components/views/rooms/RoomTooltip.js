@@ -25,7 +25,7 @@ module.exports = React.createClass({
     displayName: 'RoomTooltip',
 
     propTypes: {
-        component: React.PropTypes.object.isRequired,
+        parent: React.PropTypes.object.isRequired,
         room: React.PropTypes.object,
         label: React.PropTypes.string,
     },
@@ -36,14 +36,17 @@ module.exports = React.createClass({
         this.tooltipContainer.className = "mx_RoomTileTooltip_wrapper";
         document.body.appendChild(this.tooltipContainer);
 
-        this._renderTooltip();
+        // don't render tooltip if parent is undefined
+        if (this.props.parent) {
+            this._renderTooltip();
 
-        // tell the roomlist about us so it can position us
-        dis.dispatch({
-            action: 'view_tooltip',
-            tooltip: this.tooltip,
-            parent: this.props.component ? ReactDOM.findDOMNode(this.props.component) : null,
-        });
+            // tell the roomlist about us so it can position us
+            dis.dispatch({
+                action: 'view_tooltip',
+                tooltip: this.tooltip,
+                parent: this.props.parent,
+            });
+        }
     },
 
     // Remove the wrapper element, as the tooltip has finished using it
