@@ -197,15 +197,31 @@ function _restoreFromLocalStorage() {
 
     if (access_token && user_id && hs_url) {
         console.log("Restoring session for %s", user_id);
-        setLoggedIn({
-            userId: user_id,
-            deviceId: device_id,
-            accessToken: access_token,
-            homeserverUrl: hs_url,
-            identityServerUrl: is_url,
-            guest: is_guest,
-        });
-        return true;
+        try {
+            setLoggedIn({
+                userId: user_id,
+                deviceId: device_id,
+                accessToken: access_token,
+                homeserverUrl: hs_url,
+                identityServerUrl: is_url,
+                guest: is_guest,
+            });
+            return true;
+        } catch (e) {
+            console.log("Unable to restore session", e);
+
+            var msg = e.message;
+            if (msg == "OLM.BAD_LEGACY_ACCOUNT_PICKLE") {
+                msg = "You need to log back in to generate and submit "
+                    + "end-to-end encryption keys. This is a once off; sorry "
+                    + "for the inconvenience.";
+            }
+
+            // don't leak things into the new session
+            _clearLocalStorage();
+
+            throw new Error("Unable to restore previous session: " + msg);
+        }
     } else {
         console.log("No previous session found.");
         return false;
@@ -305,20 +321,25 @@ export function startMatrixClient() {
  * a session has been logged out / ended.
  */
 export function onLoggedOut() {
-    if (window.localStorage) {
-        const hsUrl = window.localStorage.getItem("mx_hs_url");
-        const isUrl = window.localStorage.getItem("mx_is_url");
-        window.localStorage.clear();
-        // preserve our HS & IS URLs for convenience
-        // N.B. we cache them in hsUrl/isUrl and can't really inline them
-        // as getCurrentHsUrl() may call through to localStorage.
-        // NB. We do clear the device ID (as well as all the settings)
-        if (hsUrl) window.localStorage.setItem("mx_hs_url", hsUrl);
-        if (isUrl) window.localStorage.setItem("mx_is_url", isUrl);
-    }
+    _clearLocalStorage();
     stopMatrixClient();
-
     dis.dispatch({action: 'on_logged_out'});
+}
+
+function _clearLocalStorage() {
+    if (!window.localStorage) {
+        return;
+    }
+    const hsUrl = window.localStorage.getItem("mx_hs_url");
+    const isUrl = window.localStorage.getItem("mx_is_url");
+    window.localStorage.clear();
+
+    // preserve our HS & IS URLs for convenience
+    // N.B. we cache them in hsUrl/isUrl and can't really inline them
+    // as getCurrentHsUrl() may call through to localStorage.
+    // NB. We do clear the device ID (as well as all the settings)
+    if (hsUrl) window.localStorage.setItem("mx_hs_url", hsUrl);
+    if (isUrl) window.localStorage.setItem("mx_is_url", isUrl);
 }
 
 /**
