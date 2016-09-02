@@ -13,6 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+import q from 'q';
+
 var React = require('react');
 var Matrix = require("matrix-js-sdk");
 var Favico = require('favico.js');
@@ -164,6 +167,9 @@ module.exports = React.createClass({
         // their mind & log back in)
         this.guestCreds = null;
 
+        // if the automatic session load failed, the error
+        this.sessionLoadError = null;
+
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
@@ -191,13 +197,20 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
 
-        Lifecycle.loadSession({
-            realQueryParams: this.props.realQueryParams,
-            fragmentQueryParams: this.props.startingFragmentQueryParams,
-            enableGuest: this.props.enableGuest,
-            guestHsUrl: this.getCurrentHsUrl(),
-            guestIsUrl: this.getCurrentIsUrl(),
-            defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
+        // the extra q() ensures that synchronous exceptions hit the same codepath as
+        // asynchronous ones.
+        q().then(() => {
+            return Lifecycle.loadSession({
+                realQueryParams: this.props.realQueryParams,
+                fragmentQueryParams: this.props.startingFragmentQueryParams,
+                enableGuest: this.props.enableGuest,
+                guestHsUrl: this.getCurrentHsUrl(),
+                guestIsUrl: this.getCurrentIsUrl(),
+                defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
+            });
+        }).catch((e) => {
+            console.error("Unable to load session", e);
+            this.sessionLoadError = e.message;
         }).done(()=>{
             // stuff this through the dispatcher so that it happens
             // after the on_logged_in action.
@@ -1085,7 +1098,7 @@ module.exports = React.createClass({
                     onLoginClick={this.onLoginClick} />
             );
         } else {
-            return (
+            var r = (
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}
                     onRegisterClick={this.onRegisterClick}
@@ -1098,8 +1111,16 @@ module.exports = React.createClass({
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     enableGuest={this.props.enableGuest}
                     onCancelClick={this.guestCreds ? this.onReturnToGuestClick : null}
-                    />
+                    initialErrorText={this.sessionLoadError}
+                />
             );
+
+            // we only want to show the session load error the first time the
+            // Login component is rendered. This is pretty hacky but I can't
+            // think of another way to achieve it.
+            this.sessionLoadError = null;
+
+            return r;
         }
     }
 });

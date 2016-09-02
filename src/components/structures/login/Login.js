@@ -52,12 +52,14 @@ module.exports = React.createClass({
         // login shouldn't care how password recovery is done.
         onForgotPasswordClick: React.PropTypes.func,
         onCancelClick: React.PropTypes.func,
+
+        initialErrorText: React.PropTypes.string,
     },
 
     getInitialState: function() {
         return {
             busy: false,
-            errorText: null,
+            errorText: this.props.initialErrorText,
             loginIncorrect: false,
             enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
             enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
@@ -116,7 +118,8 @@ module.exports = React.createClass({
     onHsUrlChanged: function(newHsUrl) {
         var self = this;
         this.setState({
-            enteredHomeserverUrl: newHsUrl
+            enteredHomeserverUrl: newHsUrl,
+            errorText: null, // reset err messages
         }, function() {
             self._initLoginLogic(newHsUrl);
         });
@@ -125,7 +128,8 @@ module.exports = React.createClass({
     onIsUrlChanged: function(newIsUrl) {
         var self = this;
         this.setState({
-            enteredIdentityServerUrl: newIsUrl
+            enteredIdentityServerUrl: newIsUrl,
+            errorText: null, // reset err messages
         }, function() {
             self._initLoginLogic(null, newIsUrl);
         });
@@ -160,7 +164,6 @@ module.exports = React.createClass({
             enteredHomeserverUrl: hsUrl,
             enteredIdentityServerUrl: isUrl,
             busy: true,
-            errorText: null, // reset err messages
             loginIncorrect: false,
         });
     },
