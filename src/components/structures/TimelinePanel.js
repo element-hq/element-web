@@ -32,7 +32,7 @@ var KeyCode = require('../../KeyCode');
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
 
-var DEBUG = false;
+var DEBUG = true;
 
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
