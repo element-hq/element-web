@@ -77,6 +77,7 @@ module.exports = React.createClass({
         switch (payload.action) {
             case 'view_tooltip':
                 this.tooltip = payload.tooltip;
+                this.tooltipParent = payload.parent;
                 this._repositionTooltip();
                 if (this.tooltip) this.tooltip.style.display = 'block';
                 break;
@@ -275,11 +276,9 @@ module.exports = React.createClass({
     },
 
     _repositionTooltip: function(e) {
-        // We access the parent of the parent, as the tooltip is inside a container
-        // Needs refactoring into a better multipurpose tooltip
-        if (this.tooltip && this.tooltip.parentElement && this.tooltip.parentElement.parentElement) {
-            var scroll = ReactDOM.findDOMNode(this);
-            this.tooltip.style.top = (3 + scroll.parentElement.offsetTop + this.tooltip.parentElement.parentElement.offsetTop - this._getScrollNode().scrollTop) + "px";
+        if (this.tooltip && this.tooltipParent) {
+            this.tooltip.style.top = this.tooltipParent.getBoundingClientRect().top + "px";
+            this.tooltip.style.left = this.tooltipParent.getBoundingClientRect().right + "px";
         }
     },
 

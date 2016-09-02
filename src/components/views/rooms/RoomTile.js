@@ -248,7 +248,7 @@ module.exports = React.createClass({
         }
         else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            label = <RoomTooltip room={this.props.room}/>;
+            label = <RoomTooltip room={this.props.room} component={this} />;
         }
 
         var incomingCallBox;
