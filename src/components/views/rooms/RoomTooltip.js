@@ -24,36 +24,56 @@ var dis = require('matrix-react-sdk/lib/dispatcher');
 module.exports = React.createClass({
     displayName: 'RoomTooltip',
 
+    propTypes: {
+        component: React.PropTypes.object.isRequired,
+        room: React.PropTypes.object,
+        label: React.PropTypes.string,
+    },
+
+    // Create a wrapper for the tooltip outside the main matrix element
     componentDidMount: function() {
-        var tooltip = ReactDOM.findDOMNode(this);
-        if (!this.props.bottom) {
-            // tell the roomlist about us so it can position us
-            dis.dispatch({
-                action: 'view_tooltip',
-                tooltip: tooltip,
-            });
-        }
-        else {
-            tooltip.style.top = (70 + tooltip.parentElement.getBoundingClientRect().top) + "px";
-            tooltip.style.display = "block";
-        }
+        this.tooltipContainer = document.createElement("div");
+        this.tooltipContainer.className = "mx_RoomTileTooltip_wrapper";
+        document.body.appendChild(this.tooltipContainer);
+
+        this._renderTooltip();
+
+        // tell the roomlist about us so it can position us
+        dis.dispatch({
+            action: 'view_tooltip',
+            tooltip: this.tooltip,
+            parent: this.props.component ? ReactDOM.findDOMNode(this.props.component) : null,
+        });
     },
 
+    // Remove the wrapper element, as the tooltip has finished using it
     componentWillUnmount: function() {
-        if (!this.props.bottom) {
-            dis.dispatch({
-                action: 'view_tooltip',
-                tooltip: null,
-            });
-        }
+        dis.dispatch({
+            action: 'view_tooltip',
+            tooltip: null,
+            parent: null,
+        });
+
+        ReactDOM.unmountComponentAtNode(this.tooltipContainer);
+        document.body.removeChild(this.tooltipContainer);
     },
 
-    render: function() {
+    _renderTooltip: function() {
         var label = this.props.room ? this.props.room.name : this.props.label;
-        return (
+        var tooltip = (
             <div className="mx_RoomTooltip">
                  <img className="mx_RoomTooltip_chevron" src="img/chevron-left.png" width="9" height="16"/>
                  { label }
+            </div>
+        );
+
+        this.tooltip = ReactDOM.render(tooltip, this.tooltipContainer);
+    },
+
+    render: function() {
+        // Render a placeholder
+        return (
+            <div className="mx_RoomToolTip_placeholder" >
             </div>
         );
     }

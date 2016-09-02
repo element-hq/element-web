@@ -41,12 +41,11 @@ module.exports = React.createClass({
         }
         else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            return <RoomTooltip name={name}/>;
+            return <RoomTooltip name={name} component={this} />;
         }
     },
 
     render: function() {
-        var BottomLeftMenuTile = sdk.getComponent('rooms.BottomLeftMenuTile');
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
         return (
             <div className="mx_BottomLeftMenu">

@@ -18,6 +18,7 @@ limitations under the License.
     position: absolute;
     left: -9px;
     top: 7px;
+    pointer-events: none;
 }
 
 .mx_RoomTooltip {
@@ -29,4 +30,9 @@ limitations under the License.
     z-index: 2000;
     left: 52px;
     padding: 6px;
+    pointer-events: none;
+}
+
+mx_RoomToolTip_placeholder {
+    display: none;
 }
