@@ -176,14 +176,22 @@ module.exports = React.createClass({
         }
     },
 
+    onStarterLinkClick: function() {
+    },
+
     render: function() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
         var mxEvent = this.props.mxEvent;
         var content = mxEvent.getContent();
+
         var body = HtmlUtils.bodyToHtml(content, this.props.highlights, {});
 
         if (this.props.highlightLink) {
             body = <a href={ this.props.highlightLink }>{ body }</a>;
+        }
+        else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
+            console.log("Set starter link");
+            body = <a href={ content.data["org.matrix.neb.starter_link"] }>{ body }</a>;
         }
 
         var widgets;

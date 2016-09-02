@@ -18,9 +18,41 @@ var q = require("q");
 var request = require('browser-request');
 
 var SdkConfig = require('./SdkConfig');
+var MatrixClientPeg = require('./MatrixClientPeg');
 
 class ScalarAuthClient {
-    getScalarToken(openid_token_object) {
+
+    constructor() {
+        this.scalarToken = null;
+    }
+
+    connect() {
+        return this.getScalarToken().then((tok) => {
+            this.scalarToken = tok;
+        });
+    }
+
+    hasCredentials() {
+        return this.scalarToken != null; // undef or null
+    }
+
+    // Returns a scalar_token string
+    getScalarToken() {
+        var tok = window.localStorage.getItem("mx_scalar_token");
+        if (tok) return q(tok);
+
+        // No saved token, so do the dance to get one. First, we
+        // need an openid bearer token from the HS.
+        return MatrixClientPeg.get().getOpenIdToken().then((token_object) => {
+            // Now we can send that to scalar and exchange it for a scalar token
+            return this.exchangeForScalarToken(token_object);
+        }).then((token_object) => {
+            window.localStorage.setItem("mx_scalar_token", token_object);
+            return token_object;
+        });
+    }
+
+    exchangeForScalarToken(openid_token_object) {
         var defer = q.defer();
 
         var scalar_rest_url = SdkConfig.get().integrations_rest_url;
@@ -42,6 +74,13 @@ class ScalarAuthClient {
         });
 
         return defer.promise;
+    }
+
+    getScalarInterfaceUrlForRoom(roomId) {
+        var url = SdkConfig.get().integrations_ui_url;
+        url += "?scalar_token=" + encodeURIComponent(this.scalarToken);
+        url += "&room_id=" + encodeURIComponent(roomId);
+        return url;
     }
 }
 
