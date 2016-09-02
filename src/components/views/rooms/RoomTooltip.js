@@ -49,6 +49,14 @@ module.exports = React.createClass({
         }
     },
 
+    componentDidUpdate: function() {
+        dis.dispatch({
+            action: 'view_tooltip',
+            tooltip: this.tooltip,
+            parent: this.props.parent,
+        });
+    },
+
     // Remove the wrapper element, as the tooltip has finished using it
     componentWillUnmount: function() {
         dis.dispatch({
