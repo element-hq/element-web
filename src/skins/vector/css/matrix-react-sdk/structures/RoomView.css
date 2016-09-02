@@ -278,3 +278,7 @@ hr.mx_RoomView_myReadMarker {
     padding: 6px 0;
     cursor: pointer;
 }
+
+.mx_RoomView_ongoingConfCallNotification a {
+    color: #fff ! important;
+}
