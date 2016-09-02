@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require("react-dom");
 var classNames = require('classnames');
 var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
@@ -73,6 +74,10 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("accountData", this.onAccountData);
+    },
+
+    componentDidMount: function() {
+        this.componentElement = ReactDOM.findDOMNode(this);
     },
 
     componentWillUnmount: function() {
@@ -248,7 +253,7 @@ module.exports = React.createClass({
         }
         else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            label = <RoomTooltip room={this.props.room} component={this} />;
+            label = <RoomTooltip room={this.props.room} parent={this.componentElement} />;
         }
 
         var incomingCallBox;
