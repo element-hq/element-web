@@ -103,8 +103,8 @@ module.exports = React.createClass({
 
             var tooltip = (
                 <div className="mx_RoomTooltip" style={style} >
-                     <img className="mx_RoomTooltip_chevron" src="img/chevron-left.png" width="9" height="16"/>
-                     { label }
+                    <div className="mx_RoomTooltip_chevron"></div>
+                    { label }
                 </div>
             );
 

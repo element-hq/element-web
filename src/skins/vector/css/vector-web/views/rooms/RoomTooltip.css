@@ -16,15 +16,31 @@ limitations under the License.
 
 .mx_RoomTooltip_chevron {
     position: absolute;
-    left: -9px;
+    left: -8px;
     top: 4px;
-    pointer-events: none;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-right: 8px solid rgba(187, 187, 187, 0.5);
+    border-bottom: 8px solid transparent;
+}
+
+.mx_RoomTooltip_chevron:after{
+    content:'';
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-right: 7px solid #fff;
+    border-bottom: 7px solid transparent;
+    position:absolute;
+    top: -7px;
+    left: 1px;
 }
 
 .mx_RoomTooltip {
     display: none;
     position: fixed;
-    border: 1px solid #a4a4a4;
+    border: 1px solid rgba(187, 187, 187, 0.5);
     border-radius: 5px;
     background-color: #fff;
     z-index: 2000;

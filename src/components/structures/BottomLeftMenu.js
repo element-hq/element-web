@@ -77,7 +77,7 @@ module.exports = React.createClass({
 
     // Get the label/tooltip to show
     getLabel: function(label, parent, show) {
-        if (true) {
+        if (show) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
             return <RoomTooltip label={label} parent={parent} left={6} top={this.props.collapsed ? 3 : null} />;
         }
