@@ -57,12 +57,14 @@ module.exports = React.createClass({
         }
     },
 
-    onConferenceNotificationClick: function(type) {
+    onConferenceNotificationClick: function(ev, type) {
         dis.dispatch({
             action: 'place_call',
             type: type,
             room_id: this.props.room.roomId,
         });
+        ev.stopPropagation();
+        ev.preventDefault();
     },
 
     render: function() {
@@ -91,7 +93,8 @@ module.exports = React.createClass({
             }
             else {
                 joinText = (<span>
-                    Join as <a onClick={this.onConferenceNotificationClick.bind(this, 'voice')} href="#">voice</a> or <a onClick={this.onConferenceNotificationClick.bind(this, 'video')} href="#">video</a>.
+                    Join as <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice')}} href="#">voice</a>&nbsp;
+                    or <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video') }} href="#">video</a>.
                 </span>);
 
             }
