@@ -207,13 +207,22 @@ hr.mx_RoomView_myReadMarker {
 .mx_RoomView_statusAreaBox {
     max-width: 960px;
     margin: auto;
-    min-height: 60px;
+    min-height: 50px;
 }
 
 .mx_RoomView_statusAreaBox_line {
     margin-left: 65px;
     border-top: 1px solid #e5e5e5;
     height: 1px;
+}
+
+.mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
+    background-color: #fff;
+}
+
+.mx_RoomView_callStatusBar .mx_UploadBar_uploadFilename {
+    color: #fff;
+    opacity: 1.0;
 }
 
 .mx_RoomView_inCall .mx_RoomView_statusAreaBox_line {
@@ -239,6 +248,7 @@ hr.mx_RoomView_myReadMarker {
 .mx_RoomView_voipButton {
     float: right;
     margin-right: 13px;
+    margin-top: 10px;
     cursor: pointer;
 }
 
@@ -267,4 +277,8 @@ hr.mx_RoomView_myReadMarker {
     font-weight: bold;
     padding: 6px 0;
     cursor: pointer;
+}
+
+.mx_RoomView_ongoingConfCallNotification a {
+    color: #fff ! important;
 }

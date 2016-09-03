@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 .mx_RoomStatusBar {
-    margin-top: 15px;
     margin-left: 65px;
     min-height: 34px;
 }
@@ -25,9 +24,15 @@ limitations under the License.
     padding-left: 18px;
     padding-right: 12px;
     margin-left: -73px;
+    margin-top: 13px;
     float: left;
     width: 24px;
     text-align: center;
+}
+
+.mx_RoomStatusBar_callBar {
+    height: 50px;
+    line-height: 50px;
 }
 
 .mx_RoomStatusBar_placeholderIndicator span {
@@ -70,6 +75,7 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_unreadMessagesBar {
+    padding-top: 10px;
     color: #ff0064;
     cursor: pointer;
 }
@@ -103,10 +109,12 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_tabCompleteBar {
+    padding-top: 10px;
     color: #4a4a4a;
 }
 
 .mx_RoomStatusBar_typingBar {
+    padding-top: 10px;
     color: #4a4a4a;
     opacity: 0.5;
     overflow-y: hidden;

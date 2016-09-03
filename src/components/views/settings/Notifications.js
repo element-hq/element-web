@@ -843,7 +843,7 @@ module.exports = React.createClass({
                                     <th width="55%"></th>
                                     <th width="15%">Off</th>
                                     <th width="15%">On</th>
-                                    <th width="15%">Highlight<br/>&amp; sound</th>
+                                    <th width="15%">Noisy</th>
                                 </tr>
                             </thead>
                             <tbody>

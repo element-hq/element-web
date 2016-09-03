@@ -1,3 +1,16 @@
+Changes in [0.7.5-r3](https://github.com/vector-im/vector-web/releases/tag/v0.7.5-r3) (2016-09-02)
+==================================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.5-r2...v0.7.5-r3)
+
+ * Bump to matrix-react-sdk 0.6.5-r3 in order to fix bug #2020 (tightloop when flooded with join events)
+
+
+Changes in [0.7.5-r2](https://github.com/vector-im/vector-web/releases/tag/v0.7.5-r2) (2016-09-01)
+==================================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.5-r1...v0.7.5-r2)
+
+ * Bump to matrix-react-sdk 0.6.5-r1 in order to fix guest access
+
 Changes in [0.7.5-r1](https://github.com/vector-im/vector-web/releases/tag/v0.7.5-r1) (2016-08-28)
 ==================================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.5...v0.7.5-r1)

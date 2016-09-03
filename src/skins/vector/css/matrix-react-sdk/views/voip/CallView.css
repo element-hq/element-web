@@ -13,3 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+.mx_CallView_voice {
+    background-color: #76cfa6;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    padding: 6px;
+    font-weight: bold;
+    font-size: 13px;
+}
