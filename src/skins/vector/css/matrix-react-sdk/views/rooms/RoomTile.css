@@ -113,7 +113,7 @@ limitations under the License.
     min-width: 12px;
     border-radius: 16px;
     padding: 0px 4px 0px 4px;
-    z-index: 200;
+    z-index: 3;
 }
 
 /* Hide the bottom of speech bubble */
