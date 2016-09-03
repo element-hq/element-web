@@ -76,10 +76,6 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("accountData", this.onAccountData);
     },
 
-    componentDidMount: function() {
-        this.componentElement = ReactDOM.findDOMNode(this);
-    },
-
     componentWillUnmount: function() {
         var cli = MatrixClientPeg.get();
         if (cli) {
@@ -253,7 +249,7 @@ module.exports = React.createClass({
         }
         else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            label = <RoomTooltip room={this.props.room} parent={this.componentElement} />;
+            label = <RoomTooltip room={this.props.room} parent={this} />;
         }
 
         var incomingCallBox;

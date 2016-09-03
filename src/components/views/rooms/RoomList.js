@@ -77,9 +77,6 @@ module.exports = React.createClass({
         switch (payload.action) {
             case 'view_tooltip':
                 this.tooltip = payload.tooltip;
-                this.tooltipParent = payload.parent;
-                this._repositionTooltip();
-                if (this.tooltip) this.tooltip.style.display = 'block';
                 break;
             case 'call_state':
                 var call = CallHandler.getCall(payload.room_id);
@@ -270,15 +267,15 @@ module.exports = React.createClass({
     },
 
     _whenScrolling: function(e) {
-        this._repositionTooltip(e);
+        this._hideTooltip(e);
         this._repositionIncomingCallBox(e, false);
         this._updateStickyHeaders(false);
     },
 
-    _repositionTooltip: function(e) {
-        if (this.tooltip && this.tooltipParent) {
-            this.tooltip.style.top = this.tooltipParent.getBoundingClientRect().top + "px";
-            this.tooltip.style.left = this.tooltipParent.getBoundingClientRect().right + "px";
+    _hideTooltip: function(e) {
+        // Hide tooltip when scrolling, as we'll no longer be over the one we were on
+        if (this.tooltip && this.tooltip.style.display !== "none") {
+            this.tooltip.style.display = "none";
         }
     },
 
