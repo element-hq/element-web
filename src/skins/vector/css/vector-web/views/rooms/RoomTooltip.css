@@ -28,9 +28,9 @@ limitations under the License.
     border-radius: 8px;
     background-color: #fff;
     z-index: 2000;
-    left: 52px;
     padding: 6px;
     pointer-events: none;
+    line-height: 18px;
 }
 
 mx_RoomToolTip_placeholder {

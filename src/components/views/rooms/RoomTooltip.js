@@ -25,36 +25,31 @@ module.exports = React.createClass({
     displayName: 'RoomTooltip',
 
     propTypes: {
+        // The 'parent' can either be a React component or a DOM element
         parent: React.PropTypes.object.isRequired,
+
+        // The tooltip is derived from either the room name or a label
         room: React.PropTypes.object,
         label: React.PropTypes.string,
+
+        // The tooltip position can be tweaked by passing in additional positional information
+        top: React.PropTypes.number,
+        botom: React.PropTypes.number,
+        left: React.PropTypes.number,
+        right: React.PropTypes.number,
     },
 
-    // Create a wrapper for the tooltip outside the main matrix element
+    // Create a wrapper for the tooltip outside the parent and attach to the body element
     componentDidMount: function() {
         this.tooltipContainer = document.createElement("div");
         this.tooltipContainer.className = "mx_RoomTileTooltip_wrapper";
         document.body.appendChild(this.tooltipContainer);
 
-        // don't render tooltip if parent is undefined
-        if (this.props.parent) {
-            this._renderTooltip();
-
-            // tell the roomlist about us so it can position us
-            dis.dispatch({
-                action: 'view_tooltip',
-                tooltip: this.tooltip,
-                parent: this.props.parent,
-            });
-        }
+        this._renderTooltip();
     },
 
     componentDidUpdate: function() {
-        dis.dispatch({
-            action: 'view_tooltip',
-            tooltip: this.tooltip,
-            parent: this.props.parent,
-        });
+        this._renderTooltip();
     },
 
     // Remove the wrapper element, as the tooltip has finished using it
@@ -69,16 +64,60 @@ module.exports = React.createClass({
         document.body.removeChild(this.tooltipContainer);
     },
 
+    _isDOMElement: function(obj) {
+        return (obj && typeof obj === "object" && obj instanceof HTMLElement);
+    },
+
+    _isReactComponent: function(obj) {
+        var ReactComponentPrototype = React.Component.prototype;
+        var ReactClassComponentPrototype = (Object.getPrototypeOf(Object.getPrototypeOf(new (React.createClass({ render () {} }))())));
+
+        return (obj && typeof obj === "object" && (ReactComponentPrototype.isPrototypeOf(obj) || ReactClassComponentPrototype.isPrototypeOf(obj)));
+    },
+
     _renderTooltip: function() {
         var label = this.props.room ? this.props.room.name : this.props.label;
-        var tooltip = (
-            <div className="mx_RoomTooltip">
-                 <img className="mx_RoomTooltip_chevron" src="img/chevron-left.png" width="9" height="16"/>
-                 { label }
-            </div>
-        );
+        var style = {};
+        if (this.props.top) { style.top = this.props.top; }
+        if (this.props.bottom) { style.bottom = this.props.bottom; }
+        if (this.props.left) { style.left = this.props.left; }
+        if (this.props.right) { style.right = this.props.right; }
 
-        this.tooltip = ReactDOM.render(tooltip, this.tooltipContainer);
+        let parent;
+        if (this._isDOMElement(this.props.parent)) {
+            parent = this.props.parent;
+        } else if (this._isReactComponent(this.props.parent)) {
+            parent = ReactDOM.findDOMNode(this.props.parent);
+        } else {
+            parent = null;
+        }
+
+        // If a parent exist, add the parents position to the tooltips, so it's correctly
+        // positioned, also taking into account any window zoom
+        // NOTE: The additional 6 pixels for the left position, is to take account of the
+        // tooltips chevron
+        if (parent) {
+            style.top = (+style.top || 0) + parent.getBoundingClientRect().top + window.pageYOffset;
+            style.left = (+style.left || 0) + 6 + parent.getBoundingClientRect().right + window.pageXOffset;
+            style.display = "block";
+
+            var tooltip = (
+                <div className="mx_RoomTooltip" style={style} >
+                     <img className="mx_RoomTooltip_chevron" src="img/chevron-left.png" width="9" height="16"/>
+                     { label }
+                </div>
+            );
+
+            // Render the tooltip manually, as we wish it to not be render within the parent
+            this.tooltip = ReactDOM.render(tooltip, this.tooltipContainer);
+
+            // tell the roomlist about us so it can position us
+            dis.dispatch({
+                action: 'view_tooltip',
+                tooltip: this.tooltip,
+                parent: parent,
+            });
+        }
     },
 
     render: function() {
