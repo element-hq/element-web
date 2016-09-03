@@ -17,31 +17,69 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
 module.exports = React.createClass({
     displayName: 'BottomLeftMenu',
 
+    propTypes: {
+        collapsed: React.PropTypes.bool.isRequired,
+    },
+
+    getInitialState: function() {
+        return({
+            roomsHover : false,
+            peopleHover : false,
+            settingsHover : false,
+        });
+    },
+
+    // Room events
+    onRoomsClick: function() {
+        dis.dispatch({action: 'view_create_room'});
+    },
+
+    onRoomsMouseEnter: function() {
+        this.setState({ roomsHover: true });
+    },
+
+    onRoomsMouseLeave: function() {
+        this.setState({ roomsHover: false });
+    },
+
+    // People events
+    onPeopleClick: function() {
+        dis.dispatch({action: 'view_one_to_one_chat'});
+    },
+
+    onPeopleMouseEnter: function() {
+        this.setState({ peopleHover: true });
+    },
+
+    onPeopleMouseLeave: function() {
+        this.setState({ peopleHover: false });
+    },
+
+    // Settings events
     onSettingsClick: function() {
         dis.dispatch({action: 'view_user_settings'});
     },
 
-    onOneToOneChatClick: function() {
-        dis.dispatch({action: 'view_one_to_one_chat'});
+    onSettingsMouseEnter: function() {
+        this.setState({ settingsHover: true });
     },
 
-    onCreateRoomClick: function() {
-        dis.dispatch({action: 'view_create_room'});
+    onSettingsMouseLeave: function() {
+        this.setState({ settingsHover: false });
     },
 
-    getLabel: function(name) {
-        if (!this.props.collapsed) {
-            return <div className="mx_RoomTile_name">{name}</div>
-        }
-        else if (this.state.hover) {
+    // Get the label/tooltip to show
+    getLabel: function(label, parent, show) {
+        if (true) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            return <RoomTooltip name={name} component={this} />;
+            return <RoomTooltip label={label} parent={parent} left={6} top={this.props.collapsed ? 3 : null} />;
         }
     },
 
@@ -50,14 +88,17 @@ module.exports = React.createClass({
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
-                    <div className="mx_BottomLeftMenu_createRoom" title="Rooms" onClick={ this.onCreateRoomClick }>
-                        <TintableSvg src="img/icons-create-room.svg" width="25" height="25"/>
+                    <div className="mx_BottomLeftMenu_createRoom" onClick={ this.onRoomsClick } onMouseEnter={ this.onRoomsMouseEnter } onMouseLeave={ this.onRoomsMouseLeave } ref={(ref) => this._rooms = ref} >
+                        <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
+                        { this.getLabel("Rooms", this._rooms, this.state.roomsHover) }
                     </div>
-                    <div className="mx_BottomLeftMenu_people" title="People" onClick={ this.onOneToOneChatClick }>
-                        <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
+                    <div className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } ref={(ref) => this._people = ref} >
+                        <TintableSvg src="img/icons-people.svg" width="25" height="25" />
+                        { this.getLabel("New direct message", this._people, this.state.peopleHover) }
                     </div>
-                    <div className="mx_BottomLeftMenu_settings" title="Settings" onClick={ this.onSettingsClick }>
-                        <TintableSvg src="img/icons-settings.svg" width="25" height="25"/>
+                    <div className="mx_BottomLeftMenu_settings" onClick={ this.onSettingsClick } onMouseEnter={ this.onSettingsMouseEnter } onMouseLeave={ this.onSettingsMouseLeave } ref={(ref) => this._settings = ref} >
+                        <TintableSvg src="img/icons-settings.svg" width="25" height="25" />
+                        { this.getLabel("Settings", this._settings, this.state.settingsHover) }
                     </div>
                 </div>
             </div>

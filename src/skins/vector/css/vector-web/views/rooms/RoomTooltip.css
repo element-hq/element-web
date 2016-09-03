@@ -17,7 +17,7 @@ limitations under the License.
 .mx_RoomTooltip_chevron {
     position: absolute;
     left: -9px;
-    top: 7px;
+    top: 4px;
     pointer-events: none;
 }
 
@@ -25,12 +25,13 @@ limitations under the License.
     display: none;
     position: fixed;
     border: 1px solid #a4a4a4;
-    border-radius: 8px;
+    border-radius: 5px;
     background-color: #fff;
     z-index: 2000;
-    padding: 6px;
+    padding: 5px;
     pointer-events: none;
-    line-height: 18px;
+    line-height: 14px;
+    font-size: 13px;
 }
 
 mx_RoomToolTip_placeholder {
