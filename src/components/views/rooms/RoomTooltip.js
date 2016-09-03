@@ -39,7 +39,7 @@ module.exports = React.createClass({
         right: React.PropTypes.number,
     },
 
-    // Create a wrapper for the tooltip outside the parent and attach to the body element
+    // Create a wrapper for the tooltip outside the parent and attach it to the body element
     componentDidMount: function() {
         this.tooltipContainer = document.createElement("div");
         this.tooltipContainer.className = "mx_RoomTileTooltip_wrapper";
@@ -83,7 +83,7 @@ module.exports = React.createClass({
         if (this.props.left) { style.left = this.props.left; }
         if (this.props.right) { style.right = this.props.right; }
 
-        let parent;
+        var parent;
         if (this._isDOMElement(this.props.parent)) {
             parent = this.props.parent;
         } else if (this._isReactComponent(this.props.parent)) {
@@ -92,7 +92,7 @@ module.exports = React.createClass({
             parent = null;
         }
 
-        // If a parent exist, add the parents position to the tooltips, so it's correctly
+        // If a parent exists, add the parent's position to the tooltips, so it's correctly
         // positioned, also taking into account any window zoom
         // NOTE: The additional 6 pixels for the left position, is to take account of the
         // tooltips chevron
@@ -108,10 +108,10 @@ module.exports = React.createClass({
                 </div>
             );
 
-            // Render the tooltip manually, as we wish it to not be render within the parent
+            // Render the tooltip manually, as we wish it not to be rendered within the parent
             this.tooltip = ReactDOM.render(tooltip, this.tooltipContainer);
 
-            // tell the roomlist about us so it can position us
+            // tell the roomlist about us so it can manipulate us if it wishes
             dis.dispatch({
                 action: 'view_tooltip',
                 tooltip: this.tooltip,
