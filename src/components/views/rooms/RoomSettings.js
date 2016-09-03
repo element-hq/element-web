@@ -249,7 +249,7 @@ module.exports = React.createClass({
         var roomId = this.props.room.roomId;
         return MatrixClientPeg.get().sendStateEvent(
             roomId, "m.room.encryption",
-            { algorithm: "m.olm.v1.curve25519-aes-sha2" }
+            { algorithm: "m.megolm.v1.aes-sha2" }
         );
     },
 
