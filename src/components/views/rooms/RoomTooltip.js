@@ -18,7 +18,6 @@ limitations under the License.
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
 module.exports = React.createClass({
@@ -88,7 +87,7 @@ module.exports = React.createClass({
         // Render the tooltip manually, as we wish it not to be rendered within the parent
         this.tooltip = ReactDOM.render(tooltip, this.tooltipContainer);
 
-        // tell the roomlist about us so it can manipulate us if it wishes
+        // Tell the roomlist about us so it can manipulate us if it wishes
         dis.dispatch({
             action: 'view_tooltip',
             tooltip: this.tooltip,
