@@ -14,41 +14,43 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
+import React from 'react';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
-module.exports = React.createClass({
-    displayName: 'MemberDeviceInfo',
-    propTypes: {
-        userId: React.PropTypes.string.isRequired,
-        device: React.PropTypes.object.isRequired,
-    },
+export default class MemberDeviceInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onVerifyClick = this.onVerifyClick.bind(this);
+        this.onUnverifyClick = this.onUnverifyClick.bind(this);
+        this.onBlockClick = this.onBlockClick.bind(this);
+        this.onUnblockClick = this.onUnblockClick.bind(this);
+    }
 
-    onVerifyClick: function() {
+    onVerifyClick() {
         MatrixClientPeg.get().setDeviceVerified(
             this.props.userId, this.props.device.id, true
         );
-    },
+    }
 
-    onUnverifyClick: function() {
+    onUnverifyClick() {
         MatrixClientPeg.get().setDeviceVerified(
             this.props.userId, this.props.device.id, false
         );
-    },
+    }
 
-    onBlockClick: function() {
+    onBlockClick() {
         MatrixClientPeg.get().setDeviceBlocked(
             this.props.userId, this.props.device.id, true
         );
-    },
+    }
 
-    onUnblockClick: function() {
+    onUnblockClick() {
         MatrixClientPeg.get().setDeviceBlocked(
             this.props.userId, this.props.device.id, false
         );
-    },
+    }
 
-    render: function() {
+    render() {
         var indicator = null, blockButton = null, verifyButton = null;
         if (this.props.device.blocked) {
             blockButton = (
@@ -107,5 +109,11 @@ module.exports = React.createClass({
                 {blockButton}
             </div>
         );
-    },
-});
+    }
+};
+
+MemberDeviceInfo.displayName = 'MemberDeviceInfo';
+MemberDeviceInfo.propTypes = {
+    userId: React.PropTypes.string.isRequired,
+    device: React.PropTypes.object.isRequired,
+};
