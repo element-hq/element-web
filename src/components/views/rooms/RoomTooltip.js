@@ -69,33 +69,31 @@ module.exports = React.createClass({
         if (this.props.left) { style.left = this.props.left; }
         if (this.props.right) { style.right = this.props.right; }
 
-        // If a parent exists, add the parent's position to the tooltips, so it's correctly
+        // Add the parent's position to the tooltips, so it's correctly
         // positioned, also taking into account any window zoom
         // NOTE: The additional 6 pixels for the left position, is to take account of the
         // tooltips chevron
         var parent = ReactDOM.findDOMNode(this).parentElement;
-        if (parent) {
-            style.top = (+style.top || 0) + parent.getBoundingClientRect().top + window.pageYOffset;
-            style.left = (+style.left || 0) + 6 + parent.getBoundingClientRect().right + window.pageXOffset;
-            style.display = "block";
+        style.top = (+style.top || 0) + parent.getBoundingClientRect().top + window.pageYOffset;
+        style.left = (+style.left || 0) + 6 + parent.getBoundingClientRect().right + window.pageXOffset;
+        style.display = "block";
 
-            var tooltip = (
-                <div className="mx_RoomTooltip" style={style} >
-                    <div className="mx_RoomTooltip_chevron"></div>
-                    { label }
-                </div>
-            );
+        var tooltip = (
+            <div className="mx_RoomTooltip" style={style} >
+                <div className="mx_RoomTooltip_chevron"></div>
+                { label }
+            </div>
+        );
 
-            // Render the tooltip manually, as we wish it not to be rendered within the parent
-            this.tooltip = ReactDOM.render(tooltip, this.tooltipContainer);
+        // Render the tooltip manually, as we wish it not to be rendered within the parent
+        this.tooltip = ReactDOM.render(tooltip, this.tooltipContainer);
 
-            // tell the roomlist about us so it can manipulate us if it wishes
-            dis.dispatch({
-                action: 'view_tooltip',
-                tooltip: this.tooltip,
-                parent: parent,
-            });
-        }
+        // tell the roomlist about us so it can manipulate us if it wishes
+        dis.dispatch({
+            action: 'view_tooltip',
+            tooltip: this.tooltip,
+            parent: parent,
+        });
     },
 
     render: function() {
