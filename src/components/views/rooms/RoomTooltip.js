@@ -60,18 +60,20 @@ module.exports = React.createClass({
 
     _renderTooltip: function() {
         var label = this.props.room ? this.props.room.name : this.props.label;
-        var style = {};
-        if (this.props.top) { style.top = this.props.top; }
-        if (this.props.left) { style.left = this.props.left; }
 
         // Add the parent's position to the tooltips, so it's correctly
         // positioned, also taking into account any window zoom
         // NOTE: The additional 6 pixels for the left position, is to take account of the
         // tooltips chevron
         var parent = ReactDOM.findDOMNode(this).parentElement;
-        style.top = (+style.top || 0) + parent.getBoundingClientRect().top + window.pageYOffset;
-        style.left = (+style.left || 0) + 6 + parent.getBoundingClientRect().right + window.pageXOffset;
+        var style = {};
+        style.top = parent.getBoundingClientRect().top + window.pageYOffset;
+        style.left = 6 + parent.getBoundingClientRect().right + window.pageXOffset;
         style.display = "block";
+
+        // Add any additional positional tweaks passed in to the tooltip
+        if (this.props.top) { style.top += this.props.top; }
+        if (this.props.left) { style.left += this.props.left; }
 
         var tooltip = (
             <div className="mx_RoomTooltip" style={style} >
