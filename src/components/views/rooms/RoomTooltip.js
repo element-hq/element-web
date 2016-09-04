@@ -52,6 +52,8 @@ module.exports = React.createClass({
             action: 'view_tooltip',
             tooltip: null,
             parent: null,
+            top: null,
+            left: null,
         });
 
         ReactDOM.unmountComponentAtNode(this.tooltipContainer);
@@ -90,6 +92,8 @@ module.exports = React.createClass({
             action: 'view_tooltip',
             tooltip: this.tooltip,
             parent: parent,
+            top: this.props.top,
+            left: this.props.left,
         });
     },
 
