@@ -14,23 +14,7 @@ import {
 } from 'draft-js';
 import * as sdk from  './index';
 import * as emojione from 'emojione';
-
-const BLOCK_RENDER_MAP = DefaultDraftBlockRenderMap.set('unstyled', {
-    element: 'span',
-    /*
-     draft uses <div> by default which we don't really like, so we're using <span>
-     this is probably not a good idea since <span> is not a block level element but
-     we're trying to fix things in contentStateToHTML below
-     */
-});
-
-const STYLES = {
-    BOLD: 'strong',
-    CODE: 'code',
-    ITALIC: 'em',
-    STRIKETHROUGH: 's',
-    UNDERLINE: 'u',
-};
+import {stateToHTML} from 'draft-js-export-html';
 
 const MARKDOWN_REGEX = {
     LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
@@ -42,36 +26,7 @@ const USERNAME_REGEX = /@\S+:\S+/g;
 const ROOM_REGEX = /#\S+:\S+/g;
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
 
-export function contentStateToHTML(contentState: ContentState): string {
-    return contentState.getBlockMap().map((block) => {
-        let elem = BLOCK_RENDER_MAP.get(block.getType()).element;
-        let content = [];
-        block.findStyleRanges(
-            () => true, // always return true => don't filter any ranges out
-            (start, end) => {
-                // map style names to elements
-                let tags = block.getInlineStyleAt(start).map(style => STYLES[style]).filter(style => !!style);
-                // combine them to get well-nested HTML
-                let open = tags.map(tag => `<${tag}>`).join('');
-                let close = tags.map(tag => `</${tag}>`).reverse().join('');
-                // and get the HTML representation of this styled range (this .substring() should never fail)
-                let text = block.getText().substring(start, end);
-                // http://shebang.brandonmintern.com/foolproof-html-escaping-in-javascript/
-                let div = document.createElement('div');
-                div.appendChild(document.createTextNode(text));
-                let safeText = div.innerHTML;
-                content.push(`${open}${safeText}${close}`);
-            }
-        );
-
-        let result = `<${elem}>${content.join('')}</${elem}>`;
-
-        // dirty hack because we don't want block level tags by default, but breaks
-        if (elem === 'span')
-            result += '<br />';
-        return result;
-    }).join('');
-}
+export const contentStateToHTML = stateToHTML;
 
 export function HTMLtoContentState(html: string): ContentState {
     return ContentState.createFromBlockArray(convertFromHTML(html));
@@ -96,6 +51,19 @@ function unicodeToEmojiUri(str) {
     });
 
     return str;
+}
+
+/**
+ * Utility function that looks for regex matches within a ContentBlock and invokes {callback} with (start, end)
+ * From https://facebook.github.io/draft-js/docs/advanced-topics-decorators.html
+ */
+function findWithRegex(regex, contentBlock: ContentBlock, callback: (start: number, end: number) => any) {
+    const text = contentBlock.getText();
+    let matchArr, start;
+    while ((matchArr = regex.exec(text)) !== null) {
+        start = matchArr.index;
+        callback(start, start + matchArr[0].length);
+    }
 }
 
 // Workaround for https://github.com/facebook/draft-js/issues/414
@@ -176,19 +144,6 @@ export function getScopedMDDecorators(scope: any): CompositeDecorator {
     markdownDecorators.push(emojiDecorator);
 
     return markdownDecorators;
-}
-
-/**
- * Utility function that looks for regex matches within a ContentBlock and invokes {callback} with (start, end)
- * From https://facebook.github.io/draft-js/docs/advanced-topics-decorators.html
- */
-function findWithRegex(regex, contentBlock: ContentBlock, callback: (start: number, end: number) => any) {
-    const text = contentBlock.getText();
-    let matchArr, start;
-    while ((matchArr = regex.exec(text)) !== null) {
-        start = matchArr.index;
-        callback(start, start + matchArr[0].length);
-    }
 }
 
 /**

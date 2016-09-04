@@ -42,6 +42,10 @@ export default class MessageComposer extends React.Component {
         this.state = {
             autocompleteQuery: '',
             selection: null,
+            selectionInfo: {
+                style: [],
+                blockType: null,
+            },
         };
 
     }
@@ -127,10 +131,11 @@ export default class MessageComposer extends React.Component {
         });
     }
 
-    onInputContentChanged(content: string, selection: {start: number, end: number}) {
+    onInputContentChanged(content: string, selection: {start: number, end: number}, selectionInfo) {
         this.setState({
             autocompleteQuery: content,
             selection,
+            selectionInfo,
         });
     }
 
@@ -153,6 +158,10 @@ export default class MessageComposer extends React.Component {
         if (this.messageComposerInput) {
             this.messageComposerInput.onConfirmAutocompletion(range, completion);
         }
+    }
+
+    onFormatButtonClicked(name: "bold" | "italic" | "strike" | "quote" | "bullet" | "numbullet", event) {
+        this.messageComposerInput.onFormatButtonClicked(name, event);
     }
 
     render() {
@@ -207,6 +216,12 @@ export default class MessageComposer extends React.Component {
                 </div>
             );
 
+            const formattingButton = (
+                <img title="Text Formatting"
+                     src="img/button-text-formatting.svg"
+                     key="controls_formatting" />
+            );
+
             controls.push(
                 <MessageComposerInput
                     ref={c => this.messageComposerInput = c}
@@ -218,6 +233,7 @@ export default class MessageComposer extends React.Component {
                     onDownArrow={this.onDownArrow}
                     tabComplete={this.props.tabComplete} // used for old messagecomposerinput/tabcomplete
                     onContentChanged={this.onInputContentChanged} />,
+                formattingButton,
                 uploadButton,
                 hangupButton,
                 callButton,
@@ -242,6 +258,17 @@ export default class MessageComposer extends React.Component {
             </div>;
         }
 
+
+        const {style, blockType} = this.state.selectionInfo;
+        const formatButtons = ["bold", "italic", "strike", "quote", "bullet", "numbullet"].map(
+            name => {
+                const active = style.includes(name) || blockType === name;
+                const suffix = active ? '-o-n' : '';
+                const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
+                return <img className="mx_MessageComposer_format_button" title={name} onClick={onFormatButtonClicked} key={name} src={`img/button-text-${name}${suffix}.svg`} height="17" />;
+            },
+        );
+
         return (
             <div className="mx_MessageComposer mx_fadable" style={{ opacity: this.props.opacity }}>
                 {autoComplete}
@@ -250,6 +277,11 @@ export default class MessageComposer extends React.Component {
                         {controls}
                     </div>
                 </div>
+                {UserSettingsStore.isFeatureEnabled('rich_text_editor') ?
+                    <div className="mx_MessageComposer_formatbar">
+                        {formatButtons}
+                    </div> : null
+                }
             </div>
         );
     }

@@ -32,6 +32,7 @@ import {Editor, EditorState, RichUtils, CompositeDecorator,
     getDefaultKeyBinding, KeyBindingUtil, ContentState} from 'draft-js';
 
 import {stateToMarkdown} from 'draft-js-export-markdown';
+import classNames from 'classnames';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
@@ -359,9 +360,12 @@ export default class MessageComposerInput extends React.Component {
         }
 
         if (this.props.onContentChanged) {
-            this.props.onContentChanged(editorState.getCurrentContent().getPlainText(),
-                RichText.selectionStateToTextOffsets(editorState.getSelection(),
-                    editorState.getCurrentContent().getBlocksAsArray()));
+            const textContent = editorState.getCurrentContent().getPlainText();
+            const selection = RichText.selectionStateToTextOffsets(editorState.getSelection(),
+                editorState.getCurrentContent().getBlocksAsArray());
+            const selectionInfo = this.getSelectionInfo(editorState);
+
+            this.props.onContentChanged(textContent, selection, selectionInfo);
         }
     }
 
@@ -418,6 +422,7 @@ export default class MessageComposerInput extends React.Component {
             this.setEditorState(newState);
             return true;
         }
+
         return false;
     }
 
@@ -536,12 +541,79 @@ export default class MessageComposerInput extends React.Component {
         setTimeout(() => this.refs.editor.focus(), 50);
     }
 
-    render() {
-        let className = "mx_MessageComposer_input";
+    onFormatButtonClicked(name: "bold" | "italic" | "strike" | "quote" | "bullet" | "numbullet", e) {
+        const style = {
+            bold: 'BOLD',
+            italic: 'ITALIC',
+            strike: 'STRIKETHROUGH',
+        }[name];
 
-        if (this.state.isRichtextEnabled) {
-            className += " mx_MessageComposer_input_rte"; // placeholder indicator for RTE mode
+        if (style) {
+            e.preventDefault();
+            this.setEditorState(RichUtils.toggleInlineStyle(this.state.editorState, style));
+        } else {
+            const blockType = {
+                quote: 'blockquote',
+                bullet: 'unordered-list-item',
+                numbullet: 'ordered-list-item',
+            }[name];
+
+            if (blockType) {
+                e.preventDefault();
+                this.setEditorState(RichUtils.toggleBlockType(this.state.editorState, blockType));
+            } else {
+                console.error(`Unknown formatting style "${name}", ignoring.`);
+            }
         }
+    }
+
+    /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
+    buttons. */
+    getSelectionInfo(editorState: EditorState) {
+        const styleName = {
+            BOLD: 'bold',
+            ITALIC: 'italic',
+            STRIKETHROUGH: 'strike',
+        };
+
+        const originalStyle = editorState.getCurrentInlineStyle().toArray();
+        const style = originalStyle
+                .map(style => styleName[style] || null)
+                .filter(styleName => !!styleName);
+
+        const blockName = {
+            blockquote: 'quote',
+            'unordered-list-item': 'bullet',
+            'ordered-list-item': 'numbullet',
+        };
+        const originalBlockType = editorState.getCurrentContent()
+            .getBlockForKey(editorState.getSelection().getStartKey())
+            .getType();
+        const blockType = blockName[originalBlockType] || null;
+
+        return {
+            style,
+            blockType,
+        };
+    }
+
+    render() {
+        const {editorState} = this.state;
+
+        // From https://github.com/facebook/draft-js/blob/master/examples/rich/rich.html#L92
+        // If the user changes block type before entering any text, we can
+        // either style the placeholder or hide it.
+        let hidePlaceholder = false;
+        const contentState = editorState.getCurrentContent();
+        if (!contentState.hasText()) {
+            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+                hidePlaceholder = true;
+            }
+        }
+
+        const className = classNames('mx_MessageComposer_input', {
+            mx_MessageComposer_input_empty: hidePlaceholder,
+        });
 
         return (
             <div className={className}
