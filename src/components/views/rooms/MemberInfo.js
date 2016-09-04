@@ -159,7 +159,7 @@ module.exports = React.createClass({
         if (userId == this.props.member.userId) {
             // no need to re-download the whole thing; just update our copy of
             // the list.
-            var devices = MatrixClientPeg.get().listDeviceKeys(userId);
+            var devices = MatrixClientPeg.get().getStoredDevicesForUser(userId);
             this.setState({devices: devices});
         }
     },
@@ -195,7 +195,7 @@ module.exports = React.createClass({
                 // we got cancelled - presumably a different user now
                 return;
             }
-            var devices = client.listDeviceKeys(member.userId);
+            var devices = client.getStoredDevicesForUser(member.userId);
             self.setState({devicesLoading: false, devices: devices});
         }, function(err) {
             console.log("Error downloading devices", err);
