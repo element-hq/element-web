@@ -25,9 +25,6 @@ module.exports = React.createClass({
     displayName: 'RoomTooltip',
 
     propTypes: {
-        // The 'parent' can either be a React component or a DOM element
-        parent: React.PropTypes.object.isRequired,
-
         // The tooltip is derived from either the room name or a label
         room: React.PropTypes.object,
         label: React.PropTypes.string,
@@ -83,19 +80,11 @@ module.exports = React.createClass({
         if (this.props.left) { style.left = this.props.left; }
         if (this.props.right) { style.right = this.props.right; }
 
-        var parent;
-        if (this._isDOMElement(this.props.parent)) {
-            parent = this.props.parent;
-        } else if (this._isReactComponent(this.props.parent)) {
-            parent = ReactDOM.findDOMNode(this.props.parent);
-        } else {
-            parent = null;
-        }
-
         // If a parent exists, add the parent's position to the tooltips, so it's correctly
         // positioned, also taking into account any window zoom
         // NOTE: The additional 6 pixels for the left position, is to take account of the
         // tooltips chevron
+        var parent = ReactDOM.findDOMNode(this).parentElement;
         if (parent) {
             style.top = (+style.top || 0) + parent.getBoundingClientRect().top + window.pageYOffset;
             style.left = (+style.left || 0) + 6 + parent.getBoundingClientRect().right + window.pageXOffset;

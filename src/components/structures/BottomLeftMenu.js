@@ -76,10 +76,10 @@ module.exports = React.createClass({
     },
 
     // Get the label/tooltip to show
-    getLabel: function(label, parent, show) {
+    getLabel: function(label, show) {
         if (show) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            return <RoomTooltip label={label} parent={parent} left={6} top={this.props.collapsed ? 3 : null} />;
+            return <RoomTooltip label={label} left={6} top={this.props.collapsed ? 3 : null} />;
         }
     },
 
@@ -88,17 +88,17 @@ module.exports = React.createClass({
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
-                    <div className="mx_BottomLeftMenu_createRoom" onClick={ this.onRoomsClick } onMouseEnter={ this.onRoomsMouseEnter } onMouseLeave={ this.onRoomsMouseLeave } ref={(ref) => this._rooms = ref} >
+                    <div className="mx_BottomLeftMenu_createRoom" onClick={ this.onRoomsClick } onMouseEnter={ this.onRoomsMouseEnter } onMouseLeave={ this.onRoomsMouseLeave } >
                         <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
-                        { this.getLabel("Rooms", this._rooms, this.state.roomsHover) }
+                        { this.getLabel("Rooms", this.state.roomsHover) }
                     </div>
-                    <div className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } ref={(ref) => this._people = ref} >
+                    <div className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
                         <TintableSvg src="img/icons-people.svg" width="25" height="25" />
-                        { this.getLabel("New direct message", this._people, this.state.peopleHover) }
+                        { this.getLabel("New direct message", this.state.peopleHover) }
                     </div>
-                    <div className="mx_BottomLeftMenu_settings" onClick={ this.onSettingsClick } onMouseEnter={ this.onSettingsMouseEnter } onMouseLeave={ this.onSettingsMouseLeave } ref={(ref) => this._settings = ref} >
+                    <div className="mx_BottomLeftMenu_settings" onClick={ this.onSettingsClick } onMouseEnter={ this.onSettingsMouseEnter } onMouseLeave={ this.onSettingsMouseLeave } >
                         <TintableSvg src="img/icons-settings.svg" width="25" height="25" />
-                        { this.getLabel("Settings", this._settings, this.state.settingsHover) }
+                        { this.getLabel("Settings", this.state.settingsHover) }
                     </div>
                 </div>
             </div>
