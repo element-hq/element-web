@@ -30,9 +30,7 @@ module.exports = React.createClass({
 
         // The tooltip position can be tweaked by passing in additional positional information
         top: React.PropTypes.number,
-        botom: React.PropTypes.number,
         left: React.PropTypes.number,
-        right: React.PropTypes.number,
     },
 
     // Create a wrapper for the tooltip outside the parent and attach it to the body element
@@ -64,9 +62,7 @@ module.exports = React.createClass({
         var label = this.props.room ? this.props.room.name : this.props.label;
         var style = {};
         if (this.props.top) { style.top = this.props.top; }
-        if (this.props.bottom) { style.bottom = this.props.bottom; }
         if (this.props.left) { style.left = this.props.left; }
-        if (this.props.right) { style.right = this.props.right; }
 
         // Add the parent's position to the tooltips, so it's correctly
         // positioned, also taking into account any window zoom
