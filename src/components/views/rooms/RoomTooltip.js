@@ -61,17 +61,6 @@ module.exports = React.createClass({
         document.body.removeChild(this.tooltipContainer);
     },
 
-    _isDOMElement: function(obj) {
-        return (obj && typeof obj === "object" && obj instanceof HTMLElement);
-    },
-
-    _isReactComponent: function(obj) {
-        var ReactComponentPrototype = React.Component.prototype;
-        var ReactClassComponentPrototype = (Object.getPrototypeOf(Object.getPrototypeOf(new (React.createClass({ render () {} }))())));
-
-        return (obj && typeof obj === "object" && (ReactComponentPrototype.isPrototypeOf(obj) || ReactClassComponentPrototype.isPrototypeOf(obj)));
-    },
-
     _renderTooltip: function() {
         var label = this.props.room ? this.props.room.name : this.props.label;
         var style = {};
