@@ -65,8 +65,9 @@ limitations under the License.
     font-size: 14px;
     margin-right: 6px;
 }
-.mx_MessageComposer_input_rte {
-    border-top: 2px solid #76cfa6; /* placeholder RTE indicator */
+
+.mx_MessageComposer_input_empty .public-DraftEditorPlaceholder-root {
+    display: none;
 }
 
 .mx_MessageComposer_input .DraftEditor-root {
@@ -122,3 +123,25 @@ limitations under the License.
     pointer-events: none;
 }
 
+.mx_MessageComposer_formatbar {
+    display: flex;
+
+    height: 30px;
+    width: 100%;
+    background-color: #f7f7f7;
+    box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.08);
+
+    box-sizing: border-box;
+    padding-left: 62px;
+
+    flex-direction: row;
+    align-items: center;
+}
+
+.mx_MessageComposer_formatbar * {
+    margin-right: 4px;
+}
+
+.mx_MessageComposer_format_button {
+    cursor: pointer;
+}
