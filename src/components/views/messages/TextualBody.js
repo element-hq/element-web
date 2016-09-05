@@ -23,6 +23,10 @@ var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
 var linkifyMatrix = require('../../../linkify-matrix');
 var sdk = require('../../../index');
+var ScalarAuthClient = require("../../../ScalarAuthClient");
+var Modal = require("../../../Modal");
+var SdkConfig = require('../../../SdkConfig');
+var UserSettingsStore = require('../../../UserSettingsStore');
 
 linkifyMatrix(linkify);
 
@@ -176,14 +180,65 @@ module.exports = React.createClass({
         }
     },
 
+    onStarterLinkClick: function(starterLink, ev) {
+        ev.preventDefault();
+        // We need to add on our scalar token to the starter link, but we may not have one!
+        // In addition, we can't fetch one on click and then go to it immediately as that
+        // is then treated as a popup!
+        // We can get around this by fetching one now and showing a "confirmation dialog" (hurr hurr)
+        // which requires the user to click through and THEN we can open the link in a new tab because
+        // the window.open command occurs in the same stack frame as the onClick callback.
+
+        let integrationsEnabled = UserSettingsStore.isFeatureEnabled("integration_management");
+        if (!integrationsEnabled) {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Integrations disabled",
+                description: "You need to enable the Labs option 'Integrations Management' in your Vector user settings first.",
+            });
+            return;
+        }
+
+        // Go fetch a scalar token
+        let scalarClient = new ScalarAuthClient();
+        scalarClient.connect().then(() => {
+            let completeUrl = scalarClient.getStarterLink(starterLink);
+            let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            let integrationsUrl = SdkConfig.get().integrations_ui_url;
+            Modal.createDialog(QuestionDialog, {
+                title: "Add an Integration",
+                description:
+                    <div>
+                        You are about to taken to a third-party site so you can authenticate your account for use with {integrationsUrl}.<br/>
+                        Do you wish to continue?
+                    </div>,
+                button: "Continue",
+                onFinished: function(confirmed) {
+                    if (!confirmed) {
+                        return;
+                    }
+                    let width  = window.screen.width  > 1024 ? 1024 : window.screen.width;
+                    let height = window.screen.height > 800  ? 800 : window.screen.height;
+                    let left = (window.screen.width - width) / 2;
+                    let top = (window.screen.height - height) / 2;
+                    window.open(completeUrl, '_blank', `height=${height}, width=${width}, top=${top}, left=${left},`);
+                },
+            });
+        });
+    },
+
     render: function() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
         var mxEvent = this.props.mxEvent;
         var content = mxEvent.getContent();
+
         var body = HtmlUtils.bodyToHtml(content, this.props.highlights, {});
 
         if (this.props.highlightLink) {
             body = <a href={ this.props.highlightLink }>{ body }</a>;
+        }
+        else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
+            body = <a href="#" onClick={ this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"]) }>{ body }</a>;
         }
 
         var widgets;

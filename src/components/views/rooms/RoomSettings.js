@@ -65,7 +65,6 @@ module.exports = React.createClass({
             // Default to false if it's undefined, otherwise react complains about changing
             // components from uncontrolled to controlled
             isRoomPublished: this._originalIsRoomPublished || false,
-            scalar_token: null,
             scalar_error: null,
         };
     },
@@ -81,11 +80,16 @@ module.exports = React.createClass({
             console.error("Failed to get room visibility: " + err);
         });
 
-        this.getScalarToken().done((token) => {
-            this.setState({scalar_token: token});
-        }, (err) => {
-            this.setState({scalar_error: err});
-        });
+        if (UserSettingsStore.isFeatureEnabled("integration_management")) {
+            this.scalarClient = new ScalarAuthClient();
+            this.scalarClient.connect().done(() => {
+                this.forceUpdate();
+            }, (err) => {
+                this.setState({
+                    scalar_error: err
+                });
+            })
+        }
 
         dis.dispatch({
             action: 'ui_opacity',
@@ -395,34 +399,13 @@ module.exports = React.createClass({
                 roomState.mayClientSendStateEvent("m.room.guest_access", cli))
     },
 
-    getScalarInterfaceUrl: function() {
-        var url = SdkConfig.get().integrations_ui_url;
-        url += "?scalar_token=" + encodeURIComponent(this.state.scalar_token);
-        url += "&room_id=" + encodeURIComponent(this.props.room.roomId);
-        return url;
-    },
-
-    getScalarToken() {
-        var tok = window.localStorage.getItem("mx_scalar_token");
-        if (tok) return q(tok);
-
-        // No saved token, so do the dance to get one. First, we
-        // need an openid bearer token from the HS.
-        return MatrixClientPeg.get().getOpenIdToken().then((token_object) => {
-            // Now we can send that to scalar and exchange it for a scalar token
-            var scalar_auth_client = new ScalarAuthClient();
-            return scalar_auth_client.getScalarToken(token_object);
-        }).then((token_object) => {
-            window.localStorage.setItem("mx_scalar_token", token_object);
-            return token_object;
-        });
-    },
-
     onManageIntegrations(ev) {
         ev.preventDefault();
         var IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         Modal.createDialog(IntegrationsManager, {
-            src: this.state.scalar_token ? this.getScalarInterfaceUrl() : null
+            src: this.scalarClient.hasCredentials() ?
+                    this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
+                    null
         }, "");
     },
 
@@ -649,7 +632,7 @@ module.exports = React.createClass({
         if (UserSettingsStore.isFeatureEnabled("integration_management")) {
             let integrations_body;
 
-            if (this.state.scalar_token) {
+            if (this.scalarClient.hasCredentials()) {
                 integrations_body = (
                     <div className="mx_RoomSettings_settings">
                         <a href="#" onClick={ this.onManageIntegrations }>Manage integrations</a>
