@@ -265,7 +265,7 @@ const onMessage = function(event) {
         return;
     }
     if (roomId !== currentRoomId) {
-        sendError(event, "Room not in view");
+        sendError(event, "Room " + roomId + " not in view");
         return;
     }
 
