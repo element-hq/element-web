@@ -193,6 +193,11 @@ function getMembershipState(event, roomId, userId) {
     returnStateEvent(event, roomId, "m.room.member", userId);
 }
 
+function getJoinRules(event, roomId) {
+    console.log(`join_rules of ${roomId} requested.`);
+    returnStateEvent(event, roomId, "m.room.join_rules");
+}
+
 function botOptions(event, roomId, userId) {
     console.log(`bot_options of ${userId} in room ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.bot.options", "_" + userId);
@@ -255,6 +260,9 @@ const onMessage = function(event) {
             break;
         case "set_bot_options":
             setBotOptions(event, roomId, userId);
+            break;
+        case "join_rules_state":
+            getJoinRules(event, roomId);
             break;
         default:
             console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
