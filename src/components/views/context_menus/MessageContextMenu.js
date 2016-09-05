@@ -84,6 +84,14 @@ module.exports = React.createClass({
         if (this.props.onFinished) this.props.onFinished();
     },
 
+    onQuoteClick: function () {
+        console.log(this.props.mxEvent);
+        dis.dispatch({
+            action: 'quote',
+            event: this.props.mxEvent,
+        });
+    },
+
     render: function() {
         var eventStatus = this.props.mxEvent.status;
         var resendButton;
@@ -141,6 +149,12 @@ module.exports = React.createClass({
             </div>
         );
 
+        const quoteButton = (
+            <div className="mx_MessageContextMenu_field" onClick={this.onQuoteClick}>
+                Quote
+            </div>
+        );
+
         return (
             <div>
                 {resendButton}
@@ -149,6 +163,7 @@ module.exports = React.createClass({
                 {viewSourceButton}
                 {unhidePreviewButton}
                 {permalinkButton}
+                {quoteButton}
             </div>
         );
     }
