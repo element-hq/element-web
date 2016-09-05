@@ -26,30 +26,52 @@ module.exports = {
         return room.getCanonicalAlias() || room.getAliases()[0];
     },
 
-    isDirectMessageRoom: function(room, me, ConferenceHandler, hideConferenceChans) {
+    /**
+     * If the room contains only two members including the logged-in user,
+     * return the other one. Otherwise, return null.
+     */
+    getOnlyOtherMember(room, me) {
+        const joinedMembers = room.getJoinedMembers();
+
+        if (joinedMembers.length === 2) {
+            return joinedMembers.filter(function(m) {
+                return m.userId !== me.userId
+            })[0];
+        }
+
+        return null;
+    },
+
+    isConfCallRoom: function(room, me, conferenceHandler) {
+        if (!conferenceHandler) return false;
+
+        if (me.membership != "join") {
+            return false;
+        }
+
+        const otherMember = this.getOnlyOtherMember(room, me);
+        if (otherMember === null) {
+            return false;
+        }
+
+        if (conferenceHandler.isConferenceUser(otherMember.userId)) {
+            return true;
+        }
+    },
+
+    isDirectMessageRoom: function(room, me) {
         if (me.membership == "join" || me.membership === "ban" ||
             (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
         {
             // Used to split rooms via tags
-            var tagNames = Object.keys(room.tags);
+            const tagNames = Object.keys(room.tags);
             // Used for 1:1 direct chats
-            var joinedMembers = room.getJoinedMembers();
+            const joinedMembers = room.getJoinedMembers();
 
             // Show 1:1 chats in seperate "Direct Messages" section as long as they haven't
             // been moved to a different tag section
             if (joinedMembers.length === 2 && !tagNames.length) {
-                var otherMember = joinedMembers.filter(function(m) {
-                    return m.userId !== me.userId
-                })[0];
-
-                if (ConferenceHandler && ConferenceHandler.isConferenceUser(otherMember.userId)) {
-                    // console.log("Hiding conference 1:1 room %s", room.roomId);
-                    if (!hideConferenceChans) {
-                        return true;
-                    }
-                } else {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
