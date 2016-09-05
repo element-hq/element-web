@@ -37,6 +37,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        console.log("### D E B U G - user:");
+        console.log(this.props.user);
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var name = this.props.user.displayName || this.props.user.userId

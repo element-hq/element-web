@@ -158,9 +158,9 @@ module.exports = React.createClass({
         var query;
         if (this.state.addressSelected) {
             var AddressTile = sdk.getComponent("elements.AddressTile");
-            // NOTE: _userList[0] is just a place holder until the selection logic is completed
+            // NOTE: this.state.queryList[0] is just a place holder until the selection logic is completed
             query = (
-                <AddressTile user={this._userList[0]} canDismiss={true} onDismissed={this.onDismissed} />
+                <AddressTile user={this.state.queryList[0]} canDismiss={true} onDismissed={this.onDismissed} />
             );
         } else {
             query = (
