@@ -45,6 +45,7 @@ module.exports.components['views.avatars.RoomAvatar'] = require('./components/vi
 module.exports.components['views.create_room.CreateRoomButton'] = require('./components/views/create_room/CreateRoomButton');
 module.exports.components['views.create_room.Presets'] = require('./components/views/create_room/Presets');
 module.exports.components['views.create_room.RoomAlias'] = require('./components/views/create_room/RoomAlias');
+module.exports.components['views.dialogs.ChatInviteDialog'] = require('./components/views/dialogs/ChatInviteDialog');
 module.exports.components['views.dialogs.DeactivateAccountDialog'] = require('./components/views/dialogs/DeactivateAccountDialog');
 module.exports.components['views.dialogs.ErrorDialog'] = require('./components/views/dialogs/ErrorDialog');
 module.exports.components['views.dialogs.LogoutPrompt'] = require('./components/views/dialogs/LogoutPrompt');

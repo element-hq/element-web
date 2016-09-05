@@ -497,11 +497,11 @@ module.exports = React.createClass({
     },
 
     _createChat: function() {
-        // TODO: Create a OneToOneChatChatDialog
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        Modal.createDialog(ErrorDialog, {
-            title: "Unimplemented Feature",
-            description: "The OnToOneChatDialog is not yet implemented"
+        var ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
+        Modal.createDialog(ChatInviteDialog, {
+            title: "Start a one to one chat",
+            description: "Who would you like to communicate with?",
+            placeholder: "User ID, Name or email",
         });
     },
 
