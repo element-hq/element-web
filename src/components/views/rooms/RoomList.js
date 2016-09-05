@@ -221,7 +221,10 @@ module.exports = React.createClass({
             if (me.membership == "invite") {
                 s.lists["im.vector.fake.invite"].push(room);
             }
-            else if (MatrixTools.isDirectMessageRoom(room, me, self.props.ConferenceHandler, HIDE_CONFERENCE_CHANS)) {
+            else if (HIDE_CONFERENCE_CHANS && MatrixTools.isConfCallRoom(room, me, self.props.ConferenceHandler)) {
+                // skip past this room & don't put it in any lists
+            }
+            else if (MatrixTools.isDirectMessageRoom(room, me)) {
                 // "Direct Message" rooms
                 s.lists["im.vector.fake.direct"].push(room);
             }
