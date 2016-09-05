@@ -75,6 +75,7 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_unreadMessagesBar {
+    padding-top: 10px;
     color: #ff0064;
     cursor: pointer;
 }
