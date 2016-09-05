@@ -18,7 +18,11 @@ var React = require("react");
 var sdk = require("../../../index");
 var Invite = require("../../../Invite");
 var createRoom = require("../../../createRoom");
+var MatrixClientPeg = require("../../../MatrixClientPeg");
+var rate_limited_func = require("../../../ratelimitedfunc");
 var Modal = require('../../../Modal');
+
+const TRUNCATE_QUERY_LIST = 4;
 
 module.exports = React.createClass({
     displayName: "ChatInviteDialog",
@@ -46,15 +50,54 @@ module.exports = React.createClass({
         };
     },
 
+    getInitialState: function() {
+        return {
+            query: "",
+            queryList: [],
+            addressSelected: false,
+        };
+    },
+
     componentDidMount: function() {
         if (this.props.focus) {
             // Set the cursor at the end of the text input
             this.refs.textinput.value = this.props.value;
         }
+        this._updateUserList();
     },
 
     onStartChat: function() {
         this._startChat(this.refs.textinput.value);
+    },
+
+    onCancel: function() {
+        this.props.onFinished(false);
+    },
+
+    onKeyDown: function(e) {
+        if (e.keyCode === 27) { // escape
+            e.stopPropagation();
+            e.preventDefault();
+            this.props.onFinished(false);
+        }
+        else if (e.keyCode === 13) { // enter
+            e.stopPropagation();
+            e.preventDefault();
+            //this._startChat(this.refs.textinput.value);
+            this.setState({ addressSelected: true });
+        }
+    },
+
+    onQueryChanged: function(ev) {
+        var query = ev.target.value;
+        var queryList = this._userList.filter((user) => {
+            return this._matches(query, user);
+        });
+        this.setState({ queryList: queryList });
+    },
+
+    onDismissed: function() {
+        this.setState({ addressSelected: false });
     },
 
     _startChat: function(addr) {
@@ -76,25 +119,65 @@ module.exports = React.createClass({
         this.props.onFinished(true, addr);
     },
 
-    onCancel: function() {
-        this.props.onFinished(false);
-    },
+    _updateUserList: new rate_limited_func(function() {
+        // Get all the users
+        this._userList = MatrixClientPeg.get().getUsers();
+    }, 500),
 
-    onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
-            e.stopPropagation();
-            e.preventDefault();
-            this.props.onFinished(false);
+    // This is the search algorithm for matching users
+    _matches: function(query, user) {
+        var name = user.displayName.toLowerCase();
+        var uid = user.userId.toLowerCase();
+        query = query.toLowerCase();
+
+        // direct prefix matches
+        if (name.indexOf(query) === 0 || uid.indexOf(query) === 0) {
+            return true;
         }
-        else if (e.keyCode === 13) { // enter
-            e.stopPropagation();
-            e.preventDefault();
-            this._startChat(this.refs.textinput.value);
+
+        // strip @ on uid and try matching again
+        if (uid.length > 1 && uid[0] === "@" && uid.substring(1).indexOf(query) === 0) {
+            return true;
         }
+
+        // split spaces in name and try matching constituent parts
+        var parts = name.split(" ");
+        for (var i = 0; i < parts.length; i++) {
+            if (parts[i].indexOf(query) === 0) {
+                return true;
+            }
+        }
+        return false;
     },
 
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        console.log("### D E B U G - queryList:");
+        console.log(this.state.queryList);
+
+        var query;
+        if (this.state.addressSelected) {
+            var AddressTile = sdk.getComponent("elements.AddressTile");
+            // NOTE: _userList[0] is just a place holder until the selection logic is completed
+            query = (
+                <AddressTile user={this._userList[0]} canDismiss={true} onDismissed={this.onDismissed} />
+            );
+        } else {
+            query = (
+                <input type="text"
+                    id="textinput"
+                    ref="textinput"
+                    className="mx_ChatInviteDialog_input"
+                    onChange={this.onQueryChanged}
+                    placeholder={this.props.placeholder}
+                    defaultValue={this.props.value}
+                    autoFocus={this.props.focus}
+                    onKeyDown={this.onKeyDown}
+                    autoComplete="off"
+                    size="64"/>
+            );
+        }
+
         return (
             <div className="mx_ChatInviteDialog">
                 <div className="mx_Dialog_title">
@@ -107,9 +190,7 @@ module.exports = React.createClass({
                     <label htmlFor="textinput"> {this.props.description} </label>
                 </div>
                 <div className="mx_Dialog_content">
-                    <div>
-                        <input id="textinput" ref="textinput" className="mx_ChatInviteDialog_input" placeholder={this.props.placeholder} defaultValue={this.props.value} autoFocus={this.props.focus} size="64" onKeyDown={this.onKeyDown}/>
-                    </div>
+                    <div>{ query }</div>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this.onStartChat}>

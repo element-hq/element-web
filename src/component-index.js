@@ -54,6 +54,7 @@ module.exports.components['views.dialogs.NeedToRegisterDialog'] = require('./com
 module.exports.components['views.dialogs.QuestionDialog'] = require('./components/views/dialogs/QuestionDialog');
 module.exports.components['views.dialogs.SetDisplayNameDialog'] = require('./components/views/dialogs/SetDisplayNameDialog');
 module.exports.components['views.dialogs.TextInputDialog'] = require('./components/views/dialogs/TextInputDialog');
+module.exports.components['views.elements.AddressTile'] = require('./components/views/elements/AddressTile');
 module.exports.components['views.elements.EditableText'] = require('./components/views/elements/EditableText');
 module.exports.components['views.elements.EditableTextContainer'] = require('./components/views/elements/EditableTextContainer');
 module.exports.components['views.elements.EmojiText'] = require('./components/views/elements/EmojiText');
