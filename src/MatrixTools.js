@@ -45,6 +45,10 @@ module.exports = {
     isConfCallRoom: function(room, me, conferenceHandler) {
         if (!conferenceHandler) return false;
 
+        if (me.membership != "join") {
+            return false;
+        }
+
         const otherMember = this.getOnlyOtherMember(room, me);
         if (otherMember === null) {
             return false;
