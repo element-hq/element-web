@@ -357,8 +357,8 @@ module.exports = React.createClass({
                 this._setPage(this.PageTypes.RoomDirectory);
                 this.notifyNewScreen('directory');
                 break;
-            case 'view_one_to_one_chat':
-                this._oneToOneChat();
+            case 'view_create_chat':
+                this._createChat();
                 break;
             case 'notifier_enabled':
                 this.forceUpdate();
@@ -496,7 +496,7 @@ module.exports = React.createClass({
         }
     },
 
-    _oneToOneChat: function() {
+    _createChat: function() {
         // TODO: Create a OneToOneChatChatDialog
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createDialog(ErrorDialog, {
