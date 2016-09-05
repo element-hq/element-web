@@ -51,7 +51,7 @@ module.exports = React.createClass({
 
     // People events
     onPeopleClick: function() {
-        dis.dispatch({action: 'view_one_to_one_chat'});
+        dis.dispatch({action: 'view_create_chat'});
     },
 
     onPeopleMouseEnter: function() {
