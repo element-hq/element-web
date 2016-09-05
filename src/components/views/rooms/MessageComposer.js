@@ -38,14 +38,19 @@ export default class MessageComposer extends React.Component {
         this.onDownArrow = this.onDownArrow.bind(this);
         this._tryComplete = this._tryComplete.bind(this);
         this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
+        this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
+        this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
+        this.onInputStateChanged = this.onInputStateChanged.bind(this);
 
         this.state = {
             autocompleteQuery: '',
             selection: null,
-            selectionInfo: {
+            inputState: {
                 style: [],
                 blockType: null,
+                isRichtextEnabled: true,
             },
+            showFormatting: false,
         };
 
     }
@@ -131,12 +136,15 @@ export default class MessageComposer extends React.Component {
         });
     }
 
-    onInputContentChanged(content: string, selection: {start: number, end: number}, selectionInfo) {
+    onInputContentChanged(content: string, selection: {start: number, end: number}) {
         this.setState({
             autocompleteQuery: content,
             selection,
-            selectionInfo,
         });
+    }
+
+    onInputStateChanged(inputState) {
+        this.setState({inputState});
     }
 
     onUpArrow() {
@@ -161,7 +169,16 @@ export default class MessageComposer extends React.Component {
     }
 
     onFormatButtonClicked(name: "bold" | "italic" | "strike" | "quote" | "bullet" | "numbullet", event) {
+        event.preventDefault();
         this.messageComposerInput.onFormatButtonClicked(name, event);
+    }
+
+    onToggleFormattingClicked() {
+        this.setState({showFormatting: !this.state.showFormatting});
+    }
+
+    onToggleMarkdownClicked() {
+        this.messageComposerInput.enableRichtext(!this.state.inputState.isRichtextEnabled);
     }
 
     render() {
@@ -217,8 +234,11 @@ export default class MessageComposer extends React.Component {
             );
 
             const formattingButton = (
-                <img title="Text Formatting"
+                <img className="mx_MessageComposer_formatting"
+                     title="Show Text Formatting Toolbar"
                      src="img/button-text-formatting.svg"
+                     onClick={this.onToggleFormattingClicked}
+                     style={{visibility: this.state.showFormatting ? 'hidden' : 'visible'}}
                      key="controls_formatting" />
             );
 
@@ -232,7 +252,8 @@ export default class MessageComposer extends React.Component {
                     onUpArrow={this.onUpArrow}
                     onDownArrow={this.onDownArrow}
                     tabComplete={this.props.tabComplete} // used for old messagecomposerinput/tabcomplete
-                    onContentChanged={this.onInputContentChanged} />,
+                    onContentChanged={this.onInputContentChanged}
+                    onInputStateChanged={this.onInputStateChanged} />,
                 formattingButton,
                 uploadButton,
                 hangupButton,
@@ -259,7 +280,7 @@ export default class MessageComposer extends React.Component {
         }
 
 
-        const {style, blockType} = this.state.selectionInfo;
+        const {style, blockType} = this.state.inputState;
         const formatButtons = ["bold", "italic", "strike", "quote", "bullet", "numbullet"].map(
             name => {
                 const active = style.includes(name) || blockType === name;
@@ -278,8 +299,17 @@ export default class MessageComposer extends React.Component {
                     </div>
                 </div>
                 {UserSettingsStore.isFeatureEnabled('rich_text_editor') ?
-                    <div className="mx_MessageComposer_formatbar">
+                    <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
                         {formatButtons}
+                        <div style={{flex: 1}}></div>
+                        <img title={`Turn Markdown ${this.state.inputState.isRichtextEnabled ? 'on' : 'off'}`}
+                             onClick={this.onToggleMarkdownClicked}
+                            className="mx_MessageComposer_formatbar_markdown"
+                            src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
+                        <img title="Hide Text Formatting Toolbar"
+                             onClick={this.onToggleFormattingClicked}
+                             className="mx_MessageComposer_formatbar_cancel"
+                             src="img/icon-text-cancel.svg" />
                     </div> : null
                 }
             </div>

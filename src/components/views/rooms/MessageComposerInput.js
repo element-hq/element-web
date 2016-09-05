@@ -29,10 +29,11 @@ marked.setOptions({
 
 import {Editor, EditorState, RichUtils, CompositeDecorator,
     convertFromRaw, convertToRaw, Modifier, EditorChangeType,
-    getDefaultKeyBinding, KeyBindingUtil, ContentState} from 'draft-js';
+    getDefaultKeyBinding, KeyBindingUtil, ContentState, SelectionState} from 'draft-js';
 
 import {stateToMarkdown} from 'draft-js-export-markdown';
 import classNames from 'classnames';
+import escape from 'lodash/escape';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
@@ -42,6 +43,7 @@ import sdk from '../../../index';
 
 import dis from '../../../dispatcher';
 import KeyCode from '../../../KeyCode';
+import UserSettingsStore from '../../../UserSettingsStore';
 
 import * as RichText from '../../../RichText';
 
@@ -90,14 +92,10 @@ export default class MessageComposerInput extends React.Component {
         this.onTab = this.onTab.bind(this);
         this.onConfirmAutocompletion = this.onConfirmAutocompletion.bind(this);
 
-        let isRichtextEnabled = window.localStorage.getItem('mx_editor_rte_enabled');
-        if (isRichtextEnabled == null) {
-            isRichtextEnabled = 'true';
-        }
-        isRichtextEnabled = isRichtextEnabled === 'true';
+        const isRichtextEnabled = UserSettingsStore.isFeatureEnabled('rich_text_editor');
 
         this.state = {
-            isRichtextEnabled: isRichtextEnabled,
+            isRichtextEnabled,
             editorState: null,
         };
 
@@ -237,8 +235,18 @@ export default class MessageComposerInput extends React.Component {
         this.sentHistory.saveLastTextEntry();
     }
 
+    componentWillUpdate(nextProps, nextState) {
+        // this is dirty, but moving all this state to MessageComposer is dirtier
+        if (this.props.onInputStateChanged && nextState !== this.state) {
+            const state = this.getSelectionInfo(nextState.editorState);
+            state.isRichtextEnabled = nextState.isRichtextEnabled;
+            this.props.onInputStateChanged(state);
+        }
+    }
+
     onAction(payload) {
         let editor = this.refs.editor;
+        let contentState = this.state.editorState.getCurrentContent();
 
         switch (payload.action) {
             case 'focus_composer':
@@ -247,20 +255,44 @@ export default class MessageComposerInput extends React.Component {
 
             // TODO change this so we insert a complete user alias
 
-            case 'insert_displayname':
-                if (this.state.editorState.getCurrentContent().hasText()) {
-                    console.log(payload);
-                    let contentState = Modifier.replaceText(
-                        this.state.editorState.getCurrentContent(),
-                        this.state.editorState.getSelection(),
-                        payload.displayname
-                    );
-                    this.setState({
-                        editorState: EditorState.push(this.state.editorState, contentState, 'insert-characters'),
-                    });
+            case 'insert_displayname': {
+                contentState = Modifier.replaceText(
+                    contentState,
+                    this.state.editorState.getSelection(),
+                    `${payload.displayname}: `
+                );
+                let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
+                editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
+                this.setEditorState(editorState);
+                editor.focus();
+            }
+            break;
+
+            case 'quote': {
+                let {event: {content: {body, formatted_body}}} = payload.event || {};
+                formatted_body = formatted_body || escape(body);
+                if (formatted_body) {
+                    let content = RichText.HTMLtoContentState(`<blockquote>${formatted_body}</blockquote>`);
+                    if (!this.state.isRichtextEnabled) {
+                        content = ContentState.createFromText(stateToMarkdown(content));
+                    }
+
+                    const blockMap = content.getBlockMap();
+                    let startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
+                    contentState = Modifier.splitBlock(contentState, startSelection);
+                    startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
+                    contentState = Modifier.replaceWithFragment(contentState,
+                        startSelection,
+                        blockMap);
+                    startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
+                    if (this.state.isRichtextEnabled)
+                        contentState = Modifier.setBlockType(contentState, startSelection, 'blockquote');
+                    let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
+                    this.setEditorState(editorState);
                     editor.focus();
                 }
-                break;
+            }
+            break;
         }
     }
 
@@ -363,9 +395,8 @@ export default class MessageComposerInput extends React.Component {
             const textContent = editorState.getCurrentContent().getPlainText();
             const selection = RichText.selectionStateToTextOffsets(editorState.getSelection(),
                 editorState.getCurrentContent().getBlocksAsArray());
-            const selectionInfo = this.getSelectionInfo(editorState);
 
-            this.props.onContentChanged(textContent, selection, selectionInfo);
+            this.props.onContentChanged(textContent, selection);
         }
     }
 
@@ -428,7 +459,8 @@ export default class MessageComposerInput extends React.Component {
 
     handleReturn(ev) {
         if (ev.shiftKey) {
-            return false;
+            this.setEditorState(RichUtils.insertSoftNewline(this.state.editorState));
+            return true;
         }
 
         const contentState = this.state.editorState.getCurrentContent();
@@ -469,7 +501,7 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
-        if(this.state.isRichtextEnabled) {
+        if (this.state.isRichtextEnabled) {
             contentHTML = RichText.contentStateToHTML(contentState);
         } else {
             contentHTML = mdownToHtml(contentText);
@@ -618,6 +650,9 @@ export default class MessageComposerInput extends React.Component {
         return (
             <div className={className}
                  onClick={ this.onInputClick }>
+                <img className="mx_MessageComposer_input_markdownIndicator"
+                     title={`Markdown is ${this.state.isRichtextEnabled ? 'disabled' : 'enabled'}`}
+                     src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />
                 <Editor ref="editor"
                         placeholder="Type a message…"
                         editorState={this.state.editorState}
@@ -654,4 +689,6 @@ MessageComposerInput.propTypes = {
 
     // attempts to confirm currently selected completion, returns whether actually confirmed
     tryComplete: React.PropTypes.func,
+
+    onInputStateChanged: React.PropTypes.func.isRequired,
 };
