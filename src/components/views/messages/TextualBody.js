@@ -180,7 +180,8 @@ module.exports = React.createClass({
         }
     },
 
-    onStarterLinkClick: function(starterLink) {
+    onStarterLinkClick: function(starterLink, ev) {
+        ev.preventDefault();
         // We need to add on our scalar token to the starter link, but we may not have one!
         // In addition, we can't fetch one on click and then go to it immediately as that
         // is then treated as a popup!
@@ -237,8 +238,7 @@ module.exports = React.createClass({
             body = <a href={ this.props.highlightLink }>{ body }</a>;
         }
         else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
-            // FIXME: React replaces this with a <span> because there is no href= - Matthew haaaalp!
-            body = <a onClick={ this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"]) }>{ body }</a>;
+            body = <a href="#" onClick={ this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"]) }>{ body }</a>;
         }
 
         var widgets;
