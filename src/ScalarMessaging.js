@@ -123,7 +123,7 @@ Example:
 
 const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require("./MatrixClientPeg");
-var dis = require("../../dispatcher");
+var dis = require("./dispatcher");
 
 function sendResponse(event, res) {
     const data = JSON.parse(JSON.stringify(event.data));
