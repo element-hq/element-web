@@ -57,12 +57,14 @@ module.exports = React.createClass({
         }
     },
 
-    onConferenceNotificationClick: function() {
+    onConferenceNotificationClick: function(ev, type) {
         dis.dispatch({
             action: 'place_call',
-            type: "video",
+            type: type,
             room_id: this.props.room.roomId,
         });
+        ev.stopPropagation();
+        ev.preventDefault();
     },
 
     render: function() {
@@ -85,14 +87,20 @@ module.exports = React.createClass({
 
         var conferenceCallNotification = null;
         if (this.props.displayConfCallNotification) {
-            var supportedText;
+            var supportedText, joinText;
             if (!MatrixClientPeg.get().supportsVoip()) {
                 supportedText = " (unsupported)";
             }
+            else {
+                joinText = (<span>
+                    Join as <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice')}} href="#">voice</a>&nbsp;
+                    or <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video') }} href="#">video</a>.
+                </span>);
+
+            }
             conferenceCallNotification = (
-                <div className="mx_RoomView_ongoingConfCallNotification"
-                        onClick={this.onConferenceNotificationClick}>
-                    Ongoing conference call {supportedText}
+                <div className="mx_RoomView_ongoingConfCallNotification">
+                    Ongoing conference call{ supportedText }. { joinText }
                 </div>
             );
         }

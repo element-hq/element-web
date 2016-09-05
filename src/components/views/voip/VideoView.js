@@ -50,7 +50,14 @@ module.exports = React.createClass({
     },
 
     getRemoteAudioElement: function() {
-        return this.refs.remoteAudio;
+        // this needs to be somewhere at the top of the DOM which
+        // always exists to avoid audio interruptions.
+        // Might as well just use DOM.
+        var remoteAudioElement = document.getElementById("remoteAudio");
+        if (!remoteAudioElement) {
+            console.error("Failed to find remoteAudio element - cannot play audio!  You need to add an <audio/> to the DOM.");
+        }
+        return remoteAudioElement;
     },
 
     getLocalVideoElement: function() {
@@ -106,7 +113,6 @@ module.exports = React.createClass({
                 <div className="mx_VideoView_remoteVideoFeed">
                     <VideoFeed ref="remote" onResize={this.props.onResize}
                         maxHeight={maxVideoHeight} />
-                    <audio ref="remoteAudio"/>
                 </div>
                 <div className="mx_VideoView_localVideoFeed">                
                     <VideoFeed ref="local"/>

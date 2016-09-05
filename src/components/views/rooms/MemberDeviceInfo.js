@@ -14,43 +14,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
+import React from 'react';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
-module.exports = React.createClass({
-    displayName: 'MemberDeviceInfo',
-    propTypes: {
-        userId: React.PropTypes.string.isRequired,
-        device: React.PropTypes.object.isRequired,
-    },
+export default class MemberDeviceInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onVerifyClick = this.onVerifyClick.bind(this);
+        this.onUnverifyClick = this.onUnverifyClick.bind(this);
+        this.onBlockClick = this.onBlockClick.bind(this);
+        this.onUnblockClick = this.onUnblockClick.bind(this);
+    }
 
-    onVerifyClick: function() {
+    onVerifyClick() {
         MatrixClientPeg.get().setDeviceVerified(
-            this.props.userId, this.props.device.id, true
+            this.props.userId, this.props.device.deviceId, true
         );
-    },
+    }
 
-    onUnverifyClick: function() {
+    onUnverifyClick() {
         MatrixClientPeg.get().setDeviceVerified(
-            this.props.userId, this.props.device.id, false
+            this.props.userId, this.props.device.deviceId, false
         );
-    },
+    }
 
-    onBlockClick: function() {
+    onBlockClick() {
         MatrixClientPeg.get().setDeviceBlocked(
-            this.props.userId, this.props.device.id, true
+            this.props.userId, this.props.device.deviceId, true
         );
-    },
+    }
 
-    onUnblockClick: function() {
+    onUnblockClick() {
         MatrixClientPeg.get().setDeviceBlocked(
-            this.props.userId, this.props.device.id, false
+            this.props.userId, this.props.device.deviceId, false
         );
-    },
+    }
 
-    render: function() {
+    render() {
         var indicator = null, blockButton = null, verifyButton = null;
-        if (this.props.device.blocked) {
+        if (this.props.device.isBlocked()) {
             blockButton = (
                 <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unblock"
                   onClick={this.onUnblockClick}>
@@ -66,7 +68,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (this.props.device.verified) {
+        if (this.props.device.isVerified()) {
             verifyButton = (
                 <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unverify"
                   onClick={this.onUnverifyClick}>
@@ -82,22 +84,22 @@ module.exports = React.createClass({
             );
         }
 
-        if (this.props.device.blocked) {
+        if (this.props.device.isBlocked()) {
             indicator = (
-                <div className="mx_MemberDeviceInfo_blocked">&#x2716;</div>
+                <div className="mx_MemberDeviceInfo_blocked">Blocked</div>
             );
-        } else if (this.props.device.verified) {
+        } else if (this.props.device.isVerified()) {
             indicator = (
-                    <div className="mx_MemberDeviceInfo_verified">&#x2714;</div>
+                    <div className="mx_MemberDeviceInfo_verified">Verified</div>
             );
 
         } else {
             indicator = (
-                <div className="mx_MemberDeviceInfo_unverified">?</div>
+                <div className="mx_MemberDeviceInfo_unverified">Unverified</div>
             );
         }
 
-        var deviceName = this.props.device.display_name || this.props.device.id;
+        var deviceName = this.props.device.display_name || this.props.device.deviceId;
 
         return (
             <div className="mx_MemberDeviceInfo">
@@ -107,5 +109,11 @@ module.exports = React.createClass({
                 {blockButton}
             </div>
         );
-    },
-});
+    }
+};
+
+MemberDeviceInfo.displayName = 'MemberDeviceInfo';
+MemberDeviceInfo.propTypes = {
+    userId: React.PropTypes.string.isRequired,
+    device: React.PropTypes.object.isRequired,
+};

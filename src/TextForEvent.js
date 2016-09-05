@@ -62,6 +62,9 @@ function textForMemberEvent(ev) {
                     return senderName + " changed their profile picture";
                 } else if (!ev.getPrevContent().avatar_url && ev.getContent().avatar_url) {
                     return senderName + " set a profile picture";
+                } else {
+                    // hacky hack for https://github.com/vector-im/vector-web/issues/2020
+                    return senderName + " rejoined the room.";
                 }
             } else {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
