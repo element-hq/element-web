@@ -123,6 +123,7 @@ Example:
 
 const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require("./MatrixClientPeg");
+var dis = require("../../dispatcher");
 
 function sendResponse(event, res) {
     const data = JSON.parse(JSON.stringify(event.data));
@@ -203,7 +204,6 @@ function botOptions(event, roomId, userId) {
     returnStateEvent(event, roomId, "m.room.bot.options", "_" + userId);
 }
 
-
 function returnStateEvent(event, roomId, eventType, stateKey) {
     const client = MatrixClientPeg.get();
     if (!client) {
@@ -221,6 +221,18 @@ function returnStateEvent(event, roomId, eventType, stateKey) {
         return;
     }
     sendResponse(event, stateEvent.getContent());
+}
+
+var currentRoomId = null;
+
+// Listen for when a room is viewed
+dis.register(onAction);
+function onAction(payload) {
+    switch (payload.action) {
+        case 'view_room':
+            currentRoomId = payload.room_id;
+        break;
+    }
 }
 
 const onMessage = function(event) {
@@ -248,6 +260,15 @@ const onMessage = function(event) {
         sendError(event, "Missing room_id in request");
         return;
     }
+    if (!currentRoomId) {
+        sendError(event, "Must be viewing a room");
+        return;
+    }
+    if (roomId !== currentRoomId) {
+        sendError(event, "Room not in view");
+        return;
+    }
+
     switch (event.data.action) {
         case "membership_state":
             getMembershipState(event, roomId, userId);
