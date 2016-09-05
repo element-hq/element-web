@@ -27,6 +27,46 @@ var dis = require("../../dispatcher");
 var FilePanel = React.createClass({
     displayName: 'FilePanel',
 
+    propTypes: {
+        roomId: React.PropTypes.string.isRequired,
+    },
+
+    getInitialState: function() {
+        return {
+            room: MatrixClientPeg.get().getRoom(this.props.roomId),
+            timelineSet: null,
+        }
+    },
+
+    componentWillMount: function() {
+        if (this.state.room) {
+            var client = MatrixClientPeg.get();
+            var filter = new Matrix.Filter(client.credentials.userId);
+            filter.setDefinition(
+                {
+                    "room": {
+                        "timeline": {
+                            "contains_url": true
+                        },
+                    }
+                }
+            );
+
+            client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter).then(
+                (filterId)=>{
+                    var timelineSet = this.state.room.getOrCreateFilteredTimelineSet(filter);
+                    this.setState({ timelineSet: timelineSet });
+                },
+                (error)=>{
+                    console.error("Failed to get or create file panel filter", error);
+                }
+            );
+        }
+        else {
+            console.error("Failed to add filtered timelineSet for FilePanel as no room!");
+        }
+    },
+
     // this has to be a proper method rather than an unnamed function,
     // otherwise react calls it with null on each update.
     _gatherTimelinePanelRef: function(r) {
@@ -35,8 +75,6 @@ var FilePanel = React.createClass({
 
     render: function() {
         // wrap a TimelinePanel with the jump-to-event bits turned off.
-
-        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
 
         // <TimelinePanel ref={this._gatherTimelinePanelRef}
         //     room={this.state.room}
@@ -51,7 +89,9 @@ var FilePanel = React.createClass({
 
         return (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
-                room={this.state.room}
+                manageReadReceipts={false}
+                manageReadMarkers={false}
+                timelineSet={this.state.timelineSet}
                 showUrlPreview = { false }
                 opacity={ this.props.opacity }
             />

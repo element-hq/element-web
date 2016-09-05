@@ -35,6 +35,7 @@ var USER_ID = '@me:localhost';
 
 describe('TimelinePanel', function() {
     var sandbox;
+    var timelineSet;
     var room;
     var client;
     var timeline;
@@ -60,8 +61,11 @@ describe('TimelinePanel', function() {
 
         timeline = new jssdk.EventTimeline(ROOM_ID);
         room = sinon.createStubInstance(jssdk.Room);
-        room.getLiveTimeline.returns(timeline);
         room.getPendingEvents.returns([]);
+
+        timelineSet = sinon.createStubInstance(jssdk.EventTimelineSet);
+        timelineSet.getLiveTimeline.returns(timeline);
+        timelineSet.room = room;
 
         client = peg.get();
         client.credentials = {userId: USER_ID};
@@ -95,7 +99,7 @@ describe('TimelinePanel', function() {
 
         var scrollDefer;
         var panel = ReactDOM.render(
-                <TimelinePanel room={room} onScroll={() => {scrollDefer.resolve()}}
+                <TimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}
                 />,
                 parentDiv,
         );
@@ -143,7 +147,10 @@ describe('TimelinePanel', function() {
             // a new event!
             var ev = mkMessage();
             timeline.addEvent(ev);
-            panel.onRoomTimeline(ev, room, false, false, {liveEvent: true});
+            panel.onRoomTimeline(ev, room, false, false, {
+                liveEvent: true,
+                timelineSet: timelineSet,
+            });
 
             // that won't make much difference, because we don't paginate
             // unless we're at the bottom of the timeline, but a scroll event
@@ -178,7 +185,7 @@ describe('TimelinePanel', function() {
         });
 
         var panel = ReactDOM.render(
-            <TimelinePanel room={room}/>,
+            <TimelinePanel timelineSet={timelineSet}/>,
             parentDiv
         );
 
@@ -226,7 +233,7 @@ describe('TimelinePanel', function() {
 
         var scrollDefer;
         var panel = ReactDOM.render(
-            <TimelinePanel room={room} onScroll={() => {scrollDefer.resolve()}}
+            <TimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}
                 timelineCap={TIMELINE_CAP}
             />,
             parentDiv
