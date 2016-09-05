@@ -15,10 +15,13 @@ limitations under the License.
 */
 
 var React = require("react");
-var sdk = require('../../../index');
+var sdk = require("../../../index");
+var Invite = require("../../../Invite");
+var createRoom = require("../../../createRoom");
+var Modal = require('../../../Modal');
 
 module.exports = React.createClass({
-    displayName: 'ChatInviteDialog',
+    displayName: "ChatInviteDialog",
     propTypes: {
         title: React.PropTypes.string,
         description: React.PropTypes.oneOfType([
@@ -48,8 +51,24 @@ module.exports = React.createClass({
         }
     },
 
-    onOk: function() {
-        this.props.onFinished(true, this.refs.textinput.value);
+    onStartChat: function() {
+        this._startChat(this.refs.textinput.value);
+    },
+
+    _startChat: function(addr) {
+        createRoom().then(function(roomId) {
+            return Invite.inviteToRoom(roomId, addr);
+        })
+        .catch(function(err) {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failure to invite " + addr,
+                description: err.toString()
+            });
+            return null;
+        })
+        .done();
+        this.props.onFinished(true, addr);
     },
 
     onCancel: function() {
@@ -65,12 +84,12 @@ module.exports = React.createClass({
         else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            this.props.onFinished(true, this.refs.textinput.value);
+            this._startChat(this.refs.textinput.value);
         }
     },
 
     render: function() {
-        var TintableSvg = sdk.getComponent('elements.TintableSvg');
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
         return (
             <div className="mx_ChatInviteDialog">
                 <div className="mx_Dialog_title">
@@ -88,7 +107,7 @@ module.exports = React.createClass({
                     </div>
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.onOk}>
+                    <button className="mx_Dialog_primary" onClick={this.onStartChat}>
                         {this.props.button}
                     </button>
                 </div>
