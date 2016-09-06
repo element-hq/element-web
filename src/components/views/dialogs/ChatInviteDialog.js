@@ -71,14 +71,23 @@ module.exports = React.createClass({
     componentDidUpdate: function() {
         // As the user scrolls with the arrow keys keep the selected item
         // at the top of the window. Each item is 29px high.
-        this.scrollElement.scrollTop = (this.state.selected * 29) - 29;
+        if (this.scrollElement) {
+            this.scrollElement.scrollTop = (this.state.selected * 29) - 29;
+        }
     },
 
     onStartChat: function() {
+        var addr;
+        // Either an address tile was created, or text input is being used
         if (this.state.user) {
-            this._startChat(this.state.user.userId);
-        } else if (this.refs.textinput.value.length > 0) {
-            this._startChat(this.refs.textinput.value);
+            addr = this.state.user.userId;
+        } else {
+            addr = this.refs.textinput.value;
+        }
+
+        // Check if the addr is a valid type
+        if (Invite.getAddressType(addr) !== null) {
+            this._startChat(addr);
         } else {
             // Nothing to do, so focus back on the textinput
             this.refs.textinput.focus();
@@ -232,8 +241,7 @@ module.exports = React.createClass({
 
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        console.log("### D E B U G - queryList:");
-        console.log(this.state.queryList);
+        this.scrollElement = null;
 
         var query;
         if (this.state.addressSelected) {
