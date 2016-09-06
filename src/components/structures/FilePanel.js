@@ -17,6 +17,7 @@ limitations under the License.
 var React = require('react');
 var ReactDOM = require("react-dom");
 
+var Matrix = require("matrix-js-sdk");
 var sdk = require('../../index');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
@@ -70,11 +71,13 @@ var FilePanel = React.createClass({
     // this has to be a proper method rather than an unnamed function,
     // otherwise react calls it with null on each update.
     _gatherTimelinePanelRef: function(r) {
-        this.refs.messagePanel = r;
+        //this.refs.messagePanel = r;
     },
 
     render: function() {
         // wrap a TimelinePanel with the jump-to-event bits turned off.
+        var TimelinePanel = sdk.getComponent("structures.TimelinePanel");
+        var Loader = sdk.getComponent("elements.Spinner");
 
         // <TimelinePanel ref={this._gatherTimelinePanelRef}
         //     room={this.state.room}
@@ -87,16 +90,21 @@ var FilePanel = React.createClass({
         //     showUrlPreview = { this.state.showUrlPreview }
         //     opacity={ this.props.opacity }
 
-        return (
-            <TimelinePanel ref={this._gatherTimelinePanelRef}
-                manageReadReceipts={false}
-                manageReadMarkers={false}
-                timelineSet={this.state.timelineSet}
-                showUrlPreview = { false }
-                opacity={ this.props.opacity }
-            />
-        );
+        if (this.state.timelineSet) {
+            return (
+                <TimelinePanel ref={this._gatherTimelinePanelRef}
+                    manageReadReceipts={false}
+                    manageReadMarkers={false}
+                    timelineSet={this.state.timelineSet}
+                    showUrlPreview = { false }
+                    opacity={ this.props.opacity }
+                />
+            );
+        }
+        else {
+            return <Loader/>
+        }
     },
 });
 
-module.exports = NotificationPanel;
+module.exports = FilePanel;
