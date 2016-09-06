@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/* Using a textarea for this element, to circumvent autofill */
 .mx_ChatInviteDialog_input,
 .mx_ChatInviteDialog_input:focus {
     line-height: 34px;
@@ -22,6 +23,13 @@ limitations under the License.
     padding-right: 12px;
     margin: 0 !important;
     border: 0 !important;
+    outline: 0 !important;
+    width: 1000%; /* Pretend that this is an "input type=text" */
+    resize: none;
+    overflow: hidden;
+    vertical-align: middle;
+    box-sizing: border-box;
+    word-wrap: nowrap;
 }
 
 .mx_ChatInviteDialog_inputContainer {
@@ -31,6 +39,7 @@ limitations under the License.
     padding-left: 4px;
     padding-right: 4px;
     padding-top: 2px;
+    overflow: hidden;
 }
 
 .mx_ChatInviteDialog_queryList {
