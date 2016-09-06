@@ -52,7 +52,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            query: "",
+            user: null,
             queryList: [],
             addressSelected: false,
             selected: 0,
@@ -68,7 +68,11 @@ module.exports = React.createClass({
     },
 
     onStartChat: function() {
-        this._startChat(this.refs.textinput.value);
+        if (this.state.user) {
+            this._startChat(this.state.user.userId);
+        } else {
+            this._startChat(this.refs.textinput.value);
+        }
     },
 
     onCancel: function() {
@@ -95,33 +99,34 @@ module.exports = React.createClass({
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            if (this.state.addressSelected && this.state.queryList.length > 0) {
-                this._startChat(this.refs.textinput.value);
-            } else if (this.state.queryList.length > 0) {
-                this.setState({ addressSelected: true });
+            if (this.state.queryList.length > 0) {
+                this.setState({
+                    user: this.state.queryList[this.state.selected],
+                    addressSelected: true,
+                    queryList: [],
+                });
             }
         }
     },
 
     onQueryChanged: function(ev) {
         var query = ev.target.value;
-        var list;
-        // Use the already filtered list if it has been filtered
-        if (query.length > 1) {
-            list = this.state.queryList;
-        } else {
-            list = this._userList;
-        }
-        var queryList = list.filter((user) => {
-            return this._matches(query, user);
-        });
+        var queryList = [];
 
-        // Make sure the selected item is still isn't outside the list bounds
+        // Only do search if there is something to search
+        if (query.length > 0) {
+            queryList = this._userList.filter((user) => {
+                return this._matches(query, user);
+            });
+        }
+
+        // Make sure the selected item isn't outside the list bounds
         var selected = this.state.selected;
         var maxSelected = this._maxSelected(queryList);
         if (selected > maxSelected) {
             selected = maxSelected;
         }
+
         this.setState({
             queryList: queryList,
             selected: selected,
@@ -130,11 +135,28 @@ module.exports = React.createClass({
 
     onDismissed: function() {
         this.setState({
-            query: "",
+            user: null,
             addressSelected: false,
             selected: 0,
             queryList: [],
         });
+    },
+
+    createQueryListTiles: function() {
+        var self = this;
+        var AddressTile = sdk.getComponent("elements.AddressTile");
+        var maxSelected = this._maxSelected(this.state.queryList);
+        var queryList = [];
+        if (this.state.queryList.length > 0) {
+            for (var i = 0; i <= maxSelected; i++) {
+                queryList.push(
+                    <div className="mx_ChatInviteDialog_queryListElement" key={i} >
+                        <AddressTile user={this.state.queryList[i]} canDismiss={false} />
+                    </div>
+                );
+            }
+        }
+        return queryList;
     },
 
     _startChat: function(addr) {
@@ -163,7 +185,8 @@ module.exports = React.createClass({
 
     _maxSelected: function(list) {
         var listSize = list.length === 0 ? 0 : list.length - 1;
-        var maxSelected = listSize > TRUNCATE_QUERY_LIST ? TRUNCATE_QUERY_LIST : listSize;
+        var maxSelected = listSize > (TRUNCATE_QUERY_LIST - 1) ? (TRUNCATE_QUERY_LIST - 1) : listSize
+        return maxSelected;
     },
 
     // This is the search algorithm for matching users
@@ -201,7 +224,7 @@ module.exports = React.createClass({
         if (this.state.addressSelected) {
             var AddressTile = sdk.getComponent("elements.AddressTile");
             query = (
-                <AddressTile user={this.state.queryList[this.state.selected]} canDismiss={true} onDismissed={this.onDismissed} />
+                <AddressTile user={this.state.user} canDismiss={true} onDismissed={this.onDismissed} />
             );
         } else {
             query = (
@@ -232,6 +255,9 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_Dialog_content">
                     <div className="mx_ChatInviteDialog_inputContainer">{ query }</div>
+                    <div className="mx_ChatInviteDialog_queryList">
+                        { this.createQueryListTiles() }
+                    </div>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this.onStartChat}>
