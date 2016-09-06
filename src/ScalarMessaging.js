@@ -196,7 +196,7 @@ function getMembershipState(event, roomId, userId) {
 
 function getJoinRules(event, roomId) {
     console.log(`join_rules of ${roomId} requested.`);
-    returnStateEvent(event, roomId, "m.room.join_rules");
+    returnStateEvent(event, roomId, "m.room.join_rules", "");
 }
 
 function botOptions(event, roomId, userId) {
@@ -228,11 +228,10 @@ var currentRoomId = null;
 // Listen for when a room is viewed
 dis.register(onAction);
 function onAction(payload) {
-    switch (payload.action) {
-        case 'view_room':
-            currentRoomId = payload.room_id;
-        break;
+    if (payload.action !== "view_room")
+        return;
     }
+    currentRoomId = payload.room_id;
 }
 
 const onMessage = function(event) {
@@ -265,7 +264,7 @@ const onMessage = function(event) {
         return;
     }
     if (roomId !== currentRoomId) {
-        sendError(event, "Room " + roomId + " not in view");
+        sendError(event, "Room " + roomId + " not visible");
         return;
     }
 
