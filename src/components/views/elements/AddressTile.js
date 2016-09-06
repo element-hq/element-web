@@ -41,7 +41,8 @@ module.exports = React.createClass({
         console.log(this.props.user);
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var name = this.props.user.displayName || this.props.user.userId
+        var userId = this.props.user.userId;
+        var name = this.props.user.displayName || userId;
         var imgUrl = Avatar.avatarUrlForUser(this.props.user, 25, 25, "crop");
 
         var dismiss;
@@ -56,10 +57,10 @@ module.exports = React.createClass({
         return (
             <div className="mx_AddressTile">
                 <div className="mx_AddressTile_avatar">
-                    <BaseAvatar width={25} height={25} name={name} url={imgUrl} />
+                    <BaseAvatar width={25} height={25} name={name} title={name} url={imgUrl} />
                 </div>
                 <div className="mx_AddressTile_name">{ name }</div>
-                <div className="mx_AddressTile_id">{ this.props.user.userId }</div>
+                <div className="mx_AddressTile_id">{ userId }</div>
                 { dismiss }
             </div>
         );

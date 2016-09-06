@@ -55,6 +55,7 @@ module.exports = React.createClass({
             query: "",
             queryList: [],
             addressSelected: false,
+            selected: 0,
         };
     },
 
@@ -79,12 +80,26 @@ module.exports = React.createClass({
             e.stopPropagation();
             e.preventDefault();
             this.props.onFinished(false);
-        }
-        else if (e.keyCode === 13) { // enter
+        } else if (e.keyCode === 38) { // up arrow
             e.stopPropagation();
             e.preventDefault();
-            //this._startChat(this.refs.textinput.value);
-            this.setState({ addressSelected: true });
+            if (this.state.selected > 0) {
+                this.setState({ selected: this.state.selected - 1 });
+            }
+        } else if (e.keyCode === 40) { // down arrow
+            e.stopPropagation();
+            e.preventDefault();
+            if (this.state.selected < this._maxSelected(this.state.queryList)) {
+                this.setState({ selected: this.state.selected + 1 });
+            }
+        } else if (e.keyCode === 13) { // enter
+            e.stopPropagation();
+            e.preventDefault();
+            if (this.state.addressSelected && this.state.queryList.length > 0) {
+                this._startChat(this.refs.textinput.value);
+            } else if (this.state.queryList.length > 0) {
+                this.setState({ addressSelected: true });
+            }
         }
     },
 
@@ -100,11 +115,26 @@ module.exports = React.createClass({
         var queryList = list.filter((user) => {
             return this._matches(query, user);
         });
-        this.setState({ queryList: queryList });
+
+        // Make sure the selected item is still isn't outside the list bounds
+        var selected = this.state.selected;
+        var maxSelected = this._maxSelected(queryList);
+        if (selected > maxSelected) {
+            selected = maxSelected;
+        }
+        this.setState({
+            queryList: queryList,
+            selected: selected,
+        });
     },
 
     onDismissed: function() {
-        this.setState({ addressSelected: false });
+        this.setState({
+            query: "",
+            addressSelected: false,
+            selected: 0,
+            queryList: [],
+        });
     },
 
     _startChat: function(addr) {
@@ -130,6 +160,11 @@ module.exports = React.createClass({
         // Get all the users
         this._userList = MatrixClientPeg.get().getUsers();
     }, 500),
+
+    _maxSelected: function(list) {
+        var listSize = list.length === 0 ? 0 : list.length - 1;
+        var maxSelected = listSize > TRUNCATE_QUERY_LIST ? TRUNCATE_QUERY_LIST : listSize;
+    },
 
     // This is the search algorithm for matching users
     _matches: function(query, user) {
@@ -165,9 +200,8 @@ module.exports = React.createClass({
         var query;
         if (this.state.addressSelected) {
             var AddressTile = sdk.getComponent("elements.AddressTile");
-            // NOTE: this.state.queryList[0] is just a place holder until the selection logic is completed
             query = (
-                <AddressTile user={this.state.queryList[0]} canDismiss={true} onDismissed={this.onDismissed} />
+                <AddressTile user={this.state.queryList[this.state.selected]} canDismiss={true} onDismissed={this.onDismissed} />
             );
         } else {
             query = (
