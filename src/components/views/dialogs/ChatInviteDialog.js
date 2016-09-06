@@ -22,7 +22,7 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 var rate_limited_func = require("../../../ratelimitedfunc");
 var Modal = require('../../../Modal');
 
-const TRUNCATE_QUERY_LIST = 4;
+const TRUNCATE_QUERY_LIST = 40;
 
 module.exports = React.createClass({
     displayName: "ChatInviteDialog",
@@ -242,6 +242,16 @@ module.exports = React.createClass({
             );
         }
 
+        var queryList;
+        var queryListElements = this.createQueryListTiles();
+        if (queryListElements.length > 0) {
+            queryList = (
+                <div className="mx_ChatInviteDialog_queryList">
+                    { queryListElements }
+                </div>
+            );
+        }
+
         return (
             <div className="mx_ChatInviteDialog">
                 <div className="mx_Dialog_title">
@@ -255,9 +265,7 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_Dialog_content">
                     <div className="mx_ChatInviteDialog_inputContainer">{ query }</div>
-                    <div className="mx_ChatInviteDialog_queryList">
-                        { this.createQueryListTiles() }
-                    </div>
+                    { queryList }
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this.onStartChat}>
