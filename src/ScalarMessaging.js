@@ -228,7 +228,7 @@ var currentRoomId = null;
 // Listen for when a room is viewed
 dis.register(onAction);
 function onAction(payload) {
-    if (payload.action !== "view_room")
+    if (payload.action !== "view_room") {
         return;
     }
     currentRoomId = payload.room_id;
