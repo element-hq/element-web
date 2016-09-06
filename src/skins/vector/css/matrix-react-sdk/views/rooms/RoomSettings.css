@@ -88,12 +88,14 @@ limitations under the License.
     height: 37px;
     border: 1px solid #979797;
     margin-right: 13px;
+    cursor: pointer;
 }
 
 .mx_RoomSettings .mx_RoomSettings_roomColor_selected {
     position: absolute;
     left: 10px;
     top: 4px;
+    cursor: default ! important;
 }
 
 .mx_RoomSettings .mx_RoomSettings_roomColorPrimary {
