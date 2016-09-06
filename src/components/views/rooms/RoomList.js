@@ -265,12 +265,27 @@ module.exports = React.createClass({
             for (const room of oldRecents) {
                 const me = room.getMember(MatrixClientPeg.get().credentials.userId);
 
-                if (!me || MatrixTools.looksLikeDirectMessageRoom(room, me)) {
-                    s.lists["im.vector.fake.recent"].push(room);
-                } else {
+                if (me && MatrixTools.looksLikeDirectMessageRoom(room, me)) {
                     s.lists["im.vector.fake.direct"].push(room);
+                } else {
+                    s.lists["im.vector.fake.recent"].push(room);
                 }
             }
+
+            // save these new guessed DM rooms into the account data
+            const newMDirectEvent = {};
+            for (const room of s.lists["im.vector.fake.direct"]) {
+                const me = room.getMember(MatrixClientPeg.get().credentials.userId);
+                const otherPerson = MatrixTools.getOnlyOtherMember(room, me);
+                if (!otherPerson) continue;
+
+                const roomList = newMDirectEvent[otherPerson.userId] || [];
+                roomList.push(room.roomId);
+                newMDirectEvent[otherPerson.userId] = roomList;
+            }
+
+            // if this fails, fine, we'll just do the same thing next time we get the room lists
+            MatrixClientPeg.get().setAccountData('m.direct', newMDirectEvent).done();
         }
 
         //console.log("calculated new roomLists; im.vector.fake.recent = " + s.lists["im.vector.fake.recent"]);
