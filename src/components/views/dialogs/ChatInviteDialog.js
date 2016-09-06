@@ -228,7 +228,7 @@ module.exports = React.createClass({
             );
         } else {
             query = (
-                <input type="text"
+                <textarea rows="1"
                     id="textinput"
                     ref="textinput"
                     className="mx_ChatInviteDialog_input"
@@ -236,9 +236,8 @@ module.exports = React.createClass({
                     placeholder={this.props.placeholder}
                     defaultValue={this.props.value}
                     autoFocus={this.props.focus}
-                    onKeyDown={this.onKeyDown}
-                    autoComplete="off"
-                    size="64"/>
+                    onKeyDown={this.onKeyDown}>
+                </textarea>
             );
         }
 
