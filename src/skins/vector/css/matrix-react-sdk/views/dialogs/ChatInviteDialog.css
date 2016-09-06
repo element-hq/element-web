@@ -33,6 +33,17 @@ limitations under the License.
     padding-top: 2px;
 }
 
+.mx_ChatInviteDialog_queryList {
+    position: absolute;
+    background-color: #fff;
+    border: 0;
+}
+
+.mx_ChatInviteDialog_queryListElement .mx_AddressTile {
+    background-color: #fff;
+    border: solid 1px #fff;
+}
+
 .mx_ChatInviteDialog_cancel {
     position: absolute;
     right: 11px;

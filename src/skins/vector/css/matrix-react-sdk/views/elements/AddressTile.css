@@ -41,12 +41,13 @@ limitations under the License.
 
 .mx_AddressTile_id {
     display: inline-block;
+    padding-right: 11px;
 }
 
 .mx_AddressTile_dismiss {
     display: inline-block;
     padding-right: 11px;
-    padding-left: 12px;
+    padding-left: 1px;
 }
 
 .mx_AddressTile_dismiss object {
