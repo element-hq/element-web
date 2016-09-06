@@ -71,14 +71,17 @@ module.exports = React.createClass({
     componentDidUpdate: function() {
         // As the user scrolls with the arrow keys keep the selected item
         // at the top of the window. Each item is 29px high.
-        this.scrollElement.scrollTop = this.state.selected * 29;
+        this.scrollElement.scrollTop = (this.state.selected * 29) - 29;
     },
 
     onStartChat: function() {
         if (this.state.user) {
             this._startChat(this.state.user.userId);
-        } else {
+        } else if (this.refs.textinput.value.length > 0) {
             this._startChat(this.refs.textinput.value);
+        } else {
+            // Nothing to do, so focus back on the textinput
+            this.refs.textinput.focus();
         }
     },
 
@@ -247,8 +250,7 @@ module.exports = React.createClass({
                     onChange={this.onQueryChanged}
                     placeholder={this.props.placeholder}
                     defaultValue={this.props.value}
-                    autoFocus={this.props.focus}
-                    onKeyDown={this.onKeyDown}>
+                    autoFocus={this.props.focus}>
                 </textarea>
             );
         }
@@ -264,7 +266,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="mx_ChatInviteDialog">
+            <div className="mx_ChatInviteDialog" onKeyDown={this.onKeyDown}>
                 <div className="mx_Dialog_title">
                     {this.props.title}
                 </div>
