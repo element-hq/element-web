@@ -16,7 +16,8 @@ limitations under the License.
 
 /* Using a textarea for this element, to circumvent autofill */
 .mx_ChatInviteDialog_input,
-.mx_ChatInviteDialog_input:focus {
+.mx_ChatInviteDialog_input:focus
+{
     line-height: 34px;
     font-size: 14px;
     padding-left: 12px;
@@ -56,6 +57,15 @@ limitations under the License.
 .mx_ChatInviteDialog_queryListElement .mx_AddressTile {
     background-color: #fff;
     border: solid 1px #fff;
+}
+
+.mx_ChatInviteDialog_queryListElement.mx_ChatInviteDialog_selected {
+     background-color: #ddd; /* selected colour */
+}
+
+.mx_ChatInviteDialog_queryListElement.mx_ChatInviteDialog_selected .mx_AddressTile {
+    background-color: #ddd; /* selected colour */
+    border: solid 1px #ddd; /* selected colour */
 }
 
 .mx_ChatInviteDialog_cancel {
