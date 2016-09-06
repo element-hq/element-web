@@ -67,7 +67,7 @@ export default class MessageComposer extends React.Component {
 
         let fileList = [];
         for (let i=0; i<files.length; i++) {
-            fileList.push(<li>
+            fileList.push(<li key={i}>
                 <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name}
             </li>);
         }
