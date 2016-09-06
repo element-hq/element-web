@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 var React = require("react");
+var classNames = require('classnames');
 var sdk = require("../../../index");
 var Invite = require("../../../Invite");
 var createRoom = require("../../../createRoom");
@@ -149,8 +150,13 @@ module.exports = React.createClass({
         var queryList = [];
         if (this.state.queryList.length > 0) {
             for (var i = 0; i <= maxSelected; i++) {
+                var classes = classNames({
+                    "mx_ChatInviteDialog_queryListElement": true,
+                    "mx_ChatInviteDialog_selected": this.state.selected === i,
+                });
+
                 queryList.push(
-                    <div className="mx_ChatInviteDialog_queryListElement" key={i} >
+                    <div className={classes} key={i} >
                         <AddressTile user={this.state.queryList[i]} canDismiss={false} />
                     </div>
                 );
