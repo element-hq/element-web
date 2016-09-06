@@ -26,6 +26,7 @@ var dis = require("../../../dispatcher");
 var sdk = require('../../../index');
 var rate_limited_func = require('../../../ratelimitedfunc');
 var MatrixTools = require('../../../MatrixTools');
+var DMRoomMap = require('../../../DMRoomMap');
 
 var HIDE_CONFERENCE_CHANS = true;
 
@@ -209,8 +210,10 @@ module.exports = React.createClass({
         s.lists["m.lowpriority"] = [];
         s.lists["im.vector.fake.archived"] = [];
 
+        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
+
         MatrixClientPeg.get().getRooms().forEach(function(room) {
-            var me = room.getMember(MatrixClientPeg.get().credentials.userId);
+            const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
 
             // console.log("room = " + room.name + ", me.membership = " + me.membership +
@@ -224,7 +227,7 @@ module.exports = React.createClass({
             else if (HIDE_CONFERENCE_CHANS && MatrixTools.isConfCallRoom(room, me, self.props.ConferenceHandler)) {
                 // skip past this room & don't put it in any lists
             }
-            else if (MatrixTools.isDirectMessageRoom(room, me)) {
+            else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
                 // "Direct Message" rooms
                 s.lists["im.vector.fake.direct"].push(room);
             }
@@ -252,6 +255,23 @@ module.exports = React.createClass({
                 console.error("unrecognised membership: " + me.membership + " - this should never happen");
             }
         });
+
+        if (s.lists["im.vector.fake.direct"].length == 0 && MatrixClientPeg.get().getAccountData('m.direct') === undefined) {
+            // scan through the 'recents' list for any rooms which look like DM rooms
+            // and make them DM rooms
+            const oldRecents = s.lists["im.vector.fake.recent"];
+            s.lists["im.vector.fake.recent"] = [];
+
+            for (const room of oldRecents) {
+                const me = room.getMember(MatrixClientPeg.get().credentials.userId);
+
+                if (!me || MatrixTools.looksLikeDirectMessageRoom(room, me)) {
+                    s.lists["im.vector.fake.recent"].push(room);
+                } else {
+                    s.lists["im.vector.fake.direct"].push(room);
+                }
+            }
+        }
 
         //console.log("calculated new roomLists; im.vector.fake.recent = " + s.lists["im.vector.fake.recent"]);
 
