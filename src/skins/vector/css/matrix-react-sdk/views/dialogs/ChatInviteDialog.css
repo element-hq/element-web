@@ -36,7 +36,12 @@ limitations under the License.
 .mx_ChatInviteDialog_queryList {
     position: absolute;
     background-color: #fff;
-    border: 0;
+    width: 410px;
+    max-height: 116px;
+    overflow-y: scroll;
+	border-radius: 3px;
+	background-color: #fff;
+	border: solid 1px #76cfa6;
 }
 
 .mx_ChatInviteDialog_queryListElement .mx_AddressTile {
