@@ -15,21 +15,40 @@ limitations under the License.
 */
 
 .mx_AddressTile {
-
+    display: inline-block;
+    border-radius: 3px;
+    background-color: rgba(74, 73, 74, 0.1);
+    border: solid 1px #f0f0f0;
+    line-height: 27px;
+    color: #454545;
+    font-size: 14px;
+    font-weight: normal;
 }
 
 .mx_AddressTile_avatar {
-
+    display: inline-block;
+    position: relative;
+    top: 1px;
+    padding-left: 2px;
+    padding-right: 7px;
 }
 
 .mx_AddressTile_name {
-
+    display: inline-block;
+    padding-right: 4px;
+    font-weight: 600;
 }
 
 .mx_AddressTile_id {
-
+    display: inline-block;
 }
 
 .mx_AddressTile_dismiss {
+    display: inline-block;
+    padding-right: 11px;
+    padding-left: 12px;
+}
 
+.mx_AddressTile_dismiss object {
+    pointer-events: none;
 }
