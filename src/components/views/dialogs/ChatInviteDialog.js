@@ -90,7 +90,14 @@ module.exports = React.createClass({
 
     onQueryChanged: function(ev) {
         var query = ev.target.value;
-        var queryList = this._userList.filter((user) => {
+        var list;
+        // Use the already filtered list if it has been filtered
+        if (query.length > 1) {
+            list = this.state.queryList;
+        } else {
+            list = this._userList;
+        }
+        var queryList = list.filter((user) => {
             return this._matches(query, user);
         });
         this.setState({ queryList: queryList });
@@ -187,10 +194,10 @@ module.exports = React.createClass({
                     <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
                 </div>
                 <div className="mx_ChatInviteDialog_label">
-                    <label htmlFor="textinput"> {this.props.description} </label>
+                    <label htmlFor="textinput">{ this.props.description }</label>
                 </div>
                 <div className="mx_Dialog_content">
-                    <div>{ query }</div>
+                    <div className="mx_ChatInviteDialog_inputContainer">{ query }</div>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this.onStartChat}>
