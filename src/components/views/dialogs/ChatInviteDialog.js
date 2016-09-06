@@ -68,6 +68,12 @@ module.exports = React.createClass({
         this._updateUserList();
     },
 
+    componentDidUpdate: function() {
+        // As the user scrolls with the arrow keys keep the selected item
+        // at the top of the window. Each item is 29px high.
+        this.scrollElement.scrollTop = this.state.selected * 29;
+    },
+
     onStartChat: function() {
         if (this.state.user) {
             this._startChat(this.state.user.userId);
@@ -251,7 +257,7 @@ module.exports = React.createClass({
         var queryListElements = this.createQueryListTiles();
         if (queryListElements.length > 0) {
             queryList = (
-                <div className="mx_ChatInviteDialog_queryList">
+                <div className="mx_ChatInviteDialog_queryList" ref={(ref) => {this.scrollElement = ref}}>
                     { queryListElements }
                 </div>
             );
