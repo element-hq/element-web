@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var classNames = require('classnames');
 var sdk = require("../../../index");
 var Avatar = require('../../../Avatar');
 
@@ -27,12 +28,14 @@ module.exports = React.createClass({
         user: React.PropTypes.object.isRequired,
         canDismiss: React.PropTypes.bool,
         onDismissed: React.PropTypes.func,
+        justified: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
         return {
             canDismiss: false,
             onDismissed: function() {}, // NOP
+            justified: false,
         };
     },
 
@@ -52,13 +55,23 @@ module.exports = React.createClass({
             );
         }
 
+        var nameClasses = classNames({
+            "mx_AddressTile_name": true,
+            "mx_AddressTile_justified": this.props.justified,
+        });
+
+        var idClasses = classNames({
+            "mx_AddressTile_id": true,
+            "mx_AddressTile_justified": this.props.justified,
+        });
+
         return (
             <div className="mx_AddressTile">
                 <div className="mx_AddressTile_avatar">
                     <BaseAvatar width={25} height={25} name={name} title={name} url={imgUrl} />
                 </div>
-                <div className="mx_AddressTile_name">{ name }</div>
-                <div className="mx_AddressTile_id">{ userId }</div>
+                <div className={nameClasses}>{ name }</div>
+                <div className={idClasses}>{ userId }</div>
                 { dismiss }
             </div>
         );

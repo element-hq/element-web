@@ -175,7 +175,7 @@ module.exports = React.createClass({
 
                 queryList.push(
                     <div className={classes} key={i} >
-                        <AddressTile user={this.state.queryList[i]} canDismiss={false} />
+                        <AddressTile user={this.state.queryList[i]} justified="true" />
                     </div>
                 );
             }
