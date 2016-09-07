@@ -404,11 +404,13 @@ export default class MessageComposerInput extends React.Component {
 
     enableRichtext(enabled: boolean) {
         if (enabled) {
-            let html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
-            this.setEditorState(this.createEditorState(enabled, RichText.HTMLtoContentState(html)));
+            const html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
+            const contentState = RichText.HTMLtoContentState(html);
+            this.setEditorState(this.createEditorState(enabled, contentState));
         } else {
-            let markdown = stateToMarkdown(this.state.editorState.getCurrentContent()),
-                contentState = ContentState.createFromText(markdown);
+            let markdown = stateToMarkdown(this.state.editorState.getCurrentContent());
+            markdown = markdown.substring(0, markdown.length - 1); // stateToMarkdown tacks on an extra newline (?!?)
+            const contentState = ContentState.createFromText(markdown);
             this.setEditorState(this.createEditorState(enabled, contentState));
         }
 
