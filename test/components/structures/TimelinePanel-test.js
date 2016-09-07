@@ -61,10 +61,10 @@ describe('TimelinePanel', function() {
 
         timeline = new jssdk.EventTimeline(ROOM_ID);
         room = sinon.createStubInstance(jssdk.Room);
-        room.getPendingEvents.returns([]);
 
         timelineSet = sinon.createStubInstance(jssdk.EventTimelineSet);
         timelineSet.getLiveTimeline.returns(timeline);
+        timelineSet.getPendingEvents.returns([]);
         timelineSet.room = room;
 
         client = peg.get();

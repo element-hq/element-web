@@ -92,7 +92,7 @@ var TimelinePanel = React.createClass({
         timelineCap: React.PropTypes.number,
 
         // classname to use for the messagepanel
-        className: React.PropTypes.string.isRequired,
+        className: React.PropTypes.string,
     },
 
     statics: {
@@ -106,6 +106,7 @@ var TimelinePanel = React.createClass({
     getDefaultProps: function() {
         return {
             timelineCap: 250,
+            className: 'mx_RoomView_messagePanel',
         };
     },
 
