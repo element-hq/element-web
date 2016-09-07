@@ -272,10 +272,6 @@ const onMessage = function(event) {
 
     const roomId = event.data.room_id;
     const userId = event.data.user_id;
-    if (!userId) {
-        sendError(event, "Missing user_id in request");
-        return;
-    }
     if (!roomId) {
         sendError(event, "Missing room_id in request");
         return;
@@ -289,6 +285,16 @@ const onMessage = function(event) {
         return;
     }
 
+    // Getting join rules does not require userId
+    if (event.data.action === "join_rules_state") {
+        getJoinRules(event, roomId);
+        return;
+    }
+
+    if (!userId) {
+        sendError(event, "Missing user_id in request");
+        return;
+    }
     switch (event.data.action) {
         case "membership_state":
             getMembershipState(event, roomId, userId);
@@ -304,9 +310,6 @@ const onMessage = function(event) {
             break;
         case "set_bot_power":
             setBotPower(event, roomId, userId, event.data.level);
-            break;
-        case "join_rules_state":
-            getJoinRules(event, roomId);
             break;
         default:
             console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
