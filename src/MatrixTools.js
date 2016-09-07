@@ -59,7 +59,7 @@ module.exports = {
         }
     },
 
-    isDirectMessageRoom: function(room, me) {
+    looksLikeDirectMessageRoom: function(room, me) {
         if (me.membership == "join" || me.membership === "ban" ||
             (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
         {
