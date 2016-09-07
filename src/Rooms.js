@@ -14,66 +14,64 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-module.exports = {
-    /**
-     * Given a room object, return the alias we should use for it,
-     * if any. This could be the canonical alias if one exists, otherwise
-     * an alias selected arbitrarily but deterministically from the list
-     * of aliases. Otherwise return null;
-     */
-    getDisplayAliasForRoom: function(room) {
-        return room.getCanonicalAlias() || room.getAliases()[0];
-    },
 
-    /**
-     * If the room contains only two members including the logged-in user,
-     * return the other one. Otherwise, return null.
-     */
-    getOnlyOtherMember(room, me) {
-        const joinedMembers = room.getJoinedMembers();
-
-        if (joinedMembers.length === 2) {
-            return joinedMembers.filter(function(m) {
-                return m.userId !== me.userId
-            })[0];
-        }
-
-        return null;
-    },
-
-    isConfCallRoom: function(room, me, conferenceHandler) {
-        if (!conferenceHandler) return false;
-
-        if (me.membership != "join") {
-            return false;
-        }
-
-        const otherMember = this.getOnlyOtherMember(room, me);
-        if (otherMember === null) {
-            return false;
-        }
-
-        if (conferenceHandler.isConferenceUser(otherMember.userId)) {
-            return true;
-        }
-    },
-
-    looksLikeDirectMessageRoom: function(room, me) {
-        if (me.membership == "join" || me.membership === "ban" ||
-            (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
-        {
-            // Used to split rooms via tags
-            const tagNames = Object.keys(room.tags);
-            // Used for 1:1 direct chats
-            const joinedMembers = room.getJoinedMembers();
-
-            // Show 1:1 chats in seperate "Direct Messages" section as long as they haven't
-            // been moved to a different tag section
-            if (joinedMembers.length === 2 && !tagNames.length) {
-                return true;
-            }
-        }
-        return false;
-    },
+/**
+ * Given a room object, return the alias we should use for it,
+ * if any. This could be the canonical alias if one exists, otherwise
+ * an alias selected arbitrarily but deterministically from the list
+ * of aliases. Otherwise return null;
+ */
+export function getDisplayAliasForRoom(room) {
+    return room.getCanonicalAlias() || room.getAliases()[0];
 }
 
+/**
+ * If the room contains only two members including the logged-in user,
+ * return the other one. Otherwise, return null.
+ */
+export function getOnlyOtherMember(room, me) {
+    const joinedMembers = room.getJoinedMembers();
+
+    if (joinedMembers.length === 2) {
+        return joinedMembers.filter(function(m) {
+            return m.userId !== me.userId
+        })[0];
+    }
+
+    return null;
+}
+
+export function isConfCallRoom(room, me, conferenceHandler) {
+    if (!conferenceHandler) return false;
+
+    if (me.membership != "join") {
+        return false;
+    }
+
+    const otherMember = getOnlyOtherMember(room, me);
+    if (otherMember === null) {
+        return false;
+    }
+
+    if (conferenceHandler.isConferenceUser(otherMember.userId)) {
+        return true;
+    }
+}
+
+export function looksLikeDirectMessageRoom(room, me) {
+    if (me.membership == "join" || me.membership === "ban" ||
+        (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
+    {
+        // Used to split rooms via tags
+        const tagNames = Object.keys(room.tags);
+        // Used for 1:1 direct chats
+        const joinedMembers = room.getJoinedMembers();
+
+        // Show 1:1 chats in seperate "Direct Messages" section as long as they haven't
+        // been moved to a different tag section
+        if (joinedMembers.length === 2 && !tagNames.length) {
+            return true;
+        }
+    }
+    return false;
+}
