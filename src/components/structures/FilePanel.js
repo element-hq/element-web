@@ -34,14 +34,27 @@ var FilePanel = React.createClass({
 
     getInitialState: function() {
         return {
-            room: MatrixClientPeg.get().getRoom(this.props.roomId),
             timelineSet: null,
         }
     },
 
     componentWillMount: function() {
-        if (this.state.room) {
-            var client = MatrixClientPeg.get();
+        this.updateTimelineSet(this.props.roomId);
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        if (nextProps.roomId !== this.props.roomId) {
+            // otherwise we race between updating the TimelinePanel and determining the new timelineSet
+            this.setState({ timelineSet: null });
+            this.updateTimelineSet(nextProps.roomId);
+        }
+    },
+
+    updateTimelineSet: function(roomId) {
+        var client = MatrixClientPeg.get();
+        var room = client.getRoom(roomId);
+
+        if (room) {
             var filter = new Matrix.Filter(client.credentials.userId);
             filter.setDefinition(
                 {
@@ -56,7 +69,7 @@ var FilePanel = React.createClass({
             client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter).then(
                 (filterId)=>{
                     filter.filterId = filterId;
-                    var timelineSet = this.state.room.getOrCreateFilteredTimelineSet(filter);
+                    var timelineSet = room.getOrCreateFilteredTimelineSet(filter);
                     this.setState({ timelineSet: timelineSet });
                 },
                 (error)=>{
@@ -80,20 +93,11 @@ var FilePanel = React.createClass({
         var TimelinePanel = sdk.getComponent("structures.TimelinePanel");
         var Loader = sdk.getComponent("elements.Spinner");
 
-        // <TimelinePanel ref={this._gatherTimelinePanelRef}
-        //     room={this.state.room}
-        //     hidden={hideMessagePanel}
-        //     highlightedEventId={this.props.highlightedEventId}
-        //     eventId={this.props.eventId}
-        //     eventPixelOffset={this.props.eventPixelOffset}
-        //     onScroll={ this.onMessageListScroll }
-        //     onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
-        //     showUrlPreview = { this.state.showUrlPreview }
-        //     opacity={ this.props.opacity }
-
         if (this.state.timelineSet) {
+            console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.roomId + " " +
+                        "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
             return (
-                <TimelinePanel ref={this._gatherTimelinePanelRef}
+                <TimelinePanel key={"filepanel_" + this.props.roomId} ref={this._gatherTimelinePanelRef}
                     className="mx_FilePanel"
                     manageReadReceipts={false}
                     manageReadMarkers={false}
@@ -104,7 +108,11 @@ var FilePanel = React.createClass({
             );
         }
         else {
-            return <Loader/>
+            return (
+                <div className="mx_FilePanel">
+                    <Loader/>
+                </div>
+            );
         }
     },
 });
