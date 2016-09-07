@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import MatrixClientPeg from './MatrixClientPeg';
+import DMRoomMap from './utils/DMRoomMap';
+
 
 /**
  * Given a room object, return the alias we should use for it,
@@ -74,4 +77,58 @@ export function looksLikeDirectMessageRoom(room, me) {
         }
     }
     return false;
+}
+
+/**
+ * Marks or unmarks the given room as being as a DM room.
+ * @param {string} roomId The ID of the room to modify
+ * @param {string} userId The user ID of the desired DM
+                   room target user or null to un-mark
+                   this room as a DM room
+ * @returns {object} A promise
+ */
+export function setDMRoom(roomId, userId) {
+    const mDirectEvent = MatrixClientPeg.get().getAccountData('m.direct');
+    let dmRoomMap = {};
+
+    if (mDirectEvent !== undefined) dmRoomMap = mDirectEvent.getContent();
+
+    for (const thisUserId of Object.keys(dmRoomMap)) {
+        const roomList = dmRoomMap[thisUserId];
+
+        if (thisUserId == userId) {
+            if (roomList.indexOf(roomId) == -1) {
+                roomList.push(roomId);
+            }
+        } else {
+            const indexOfRoom = roomList.indexOf(roomId);
+            if (indexOfRoom > -1) {
+                roomList.splice(indexOfRoom, 1);
+            }
+        }
+    }
+
+    return MatrixClientPeg.get().setAccountData('m.direct', dmRoomMap);
+}
+
+/**
+ * Given a room, estimate which of its members is likley to
+ * be the target if the room were a DM room and return that user.
+ */
+export function guessDMRoomTarget(room, me) {
+    let oldestTs;
+    let oldestUser;
+
+    // Pick the user who's been here longest (and isn't us)
+    for (const user of room.currentState.getMembers()) {
+        if (user.userId == me.userId) continue;
+
+        if (oldestTs === undefined || user.events.member.getTs() < oldestTs) {
+            oldestUser = user;
+            oldestTs = user.events.member.getTs();
+        }
+    }
+
+    if (oldestUser === undefined) return me;
+    return oldestUser;
 }
