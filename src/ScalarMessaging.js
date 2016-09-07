@@ -203,17 +203,15 @@ function setBotPower(event, roomId, userId, level) {
         return;
     }
 
-    client.getStateEvent(roomId, "m.room.power_levels", "").then((rawPowerState) => {
-        console.log(rawPowerState);
+    client.getStateEvent(roomId, "m.room.power_levels", "").then((powerLevels) => {
         let powerEvent = new MatrixEvent(
             {
                 type: "m.room.power_levels",
-                content: rawPowerState,
+                content: powerLevels,
             }
         );
 
         client.setPowerLevel(roomId, userId, level, powerEvent).done(() => {
-            console.log('Power level has been set');
             sendResponse(event, {
                 success: true,
             });
