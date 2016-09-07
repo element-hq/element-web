@@ -55,6 +55,7 @@ var FilePanel = React.createClass({
 
             client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter).then(
                 (filterId)=>{
+                    filter.filterId = filterId;
                     var timelineSet = this.state.room.getOrCreateFilteredTimelineSet(filter);
                     this.setState({ timelineSet: timelineSet });
                 },
@@ -93,6 +94,7 @@ var FilePanel = React.createClass({
         if (this.state.timelineSet) {
             return (
                 <TimelinePanel ref={this._gatherTimelinePanelRef}
+                    className="mx_FilePanel"
                     manageReadReceipts={false}
                     manageReadMarkers={false}
                     timelineSet={this.state.timelineSet}

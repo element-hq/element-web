@@ -1581,6 +1581,7 @@ module.exports = React.createClass({
                 onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
                 showUrlPreview = { this.state.showUrlPreview }
                 opacity={ this.props.opacity }
+                className="mx_RoomView_messagePanel"
             />);
 
         var topUnreadMessagesBar = null;

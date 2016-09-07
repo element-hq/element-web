@@ -73,6 +73,9 @@ module.exports = React.createClass({
 
         // opacity for dynamic UI fading effects
         opacity: React.PropTypes.number,
+
+        // className for the panel
+        className: React.PropTypes.string.isRequired,
     },
 
     componentWillMount: function() {
@@ -503,7 +506,7 @@ module.exports = React.createClass({
         style.opacity = this.props.opacity;
 
         return (
-            <ScrollPanel ref="scrollPanel" className="mx_RoomView_messagePanel mx_fadable"
+            <ScrollPanel ref="scrollPanel" className={ this.props.className + " mx_fadable" }
                     onScroll={ this.props.onScroll }
                     onResize={ this.onResize }
                     onFillRequest={ this.props.onFillRequest }

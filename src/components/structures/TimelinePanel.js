@@ -90,6 +90,9 @@ var TimelinePanel = React.createClass({
 
         // maximum number of events to show in a timeline
         timelineCap: React.PropTypes.number,
+
+        // classname to use for the messagepanel
+        className: React.PropTypes.string.isRequired,
     },
 
     statics: {
@@ -827,7 +830,7 @@ var TimelinePanel = React.createClass({
 
         // if we're at the end of the live timeline, append the pending events
         if (!this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
-            events.push(... this.props.timelineSet.room.getPendingEvents());
+            events.push(... this.props.timelineSet.getPendingEvents());
         }
 
         return events;
@@ -941,7 +944,7 @@ var TimelinePanel = React.createClass({
         // exist.
         if (this.state.timelineLoading) {
             return (
-                    <div className="mx_RoomView_messagePanel mx_RoomView_messageListWrapper">
+                    <div className={ this.props.className + " mx_RoomView_messageListWrapper" }>
                         <Loader />
                     </div>
             );
@@ -973,6 +976,7 @@ var TimelinePanel = React.createClass({
                     onScroll={ this.onMessageListScroll }
                     onFillRequest={ this.onMessageListFillRequest }
                     opacity={ this.props.opacity }
+                    className={ this.props.className }
             />
         );
     },
