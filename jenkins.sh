@@ -13,6 +13,12 @@ npm install
 # apparently npm 3.10.3 on node 6.4.0 doesn't upgrade #develop target with npm install unless explicitly asked.
 npm install matrix-react-sdk matrix-js-sdk
 
+# install olm. A naive 'npm i ./olm/olm-*.tgz' fails because it uses the url
+# from our package.json (or even matrix-js-sdk's) in preference.
+tar -C olm -xz < olm/olm-*.tgz
+rm -r node_modules/olm
+cp -r olm/package node_modules/olm
+
 # we may be using a dev branch of react-sdk, in which case we need to build it
 (cd node_modules/matrix-react-sdk && npm run build)
 
