@@ -83,7 +83,6 @@ export default class MessageComposerInput extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.onAction = this.onAction.bind(this);
-        this.focus = this.focus.bind(this);
         this.handleReturn = this.handleReturn.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
         this.setEditorState = this.setEditorState.bind(this);
@@ -378,13 +377,10 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    focus(ev) {
-        this.refs.editor.focus();
-    }
 
-    setEditorState(editorState: EditorState) {
+    setEditorState(editorState: EditorState, cb = () => null) {
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
-        this.setState({editorState});
+        this.setState({editorState}, cb);
 
         if (editorState.getCurrentContent().hasText()) {
             this.onTypingActivity();
@@ -402,19 +398,20 @@ export default class MessageComposerInput extends React.Component {
     }
 
     enableRichtext(enabled: boolean) {
+        let contentState = null;
         if (enabled) {
             const html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
-            const contentState = RichText.HTMLtoContentState(html);
-            this.setEditorState(this.createEditorState(enabled, contentState));
+            contentState = RichText.HTMLtoContentState(html);
         } else {
             let markdown = stateToMarkdown(this.state.editorState.getCurrentContent());
             markdown = markdown.substring(0, markdown.length - 1); // stateToMarkdown tacks on an extra newline (?!?)
-            const contentState = ContentState.createFromText(markdown);
-            this.setEditorState(this.createEditorState(enabled, contentState));
+            contentState = ContentState.createFromText(markdown);
         }
 
-        this.setState({
-            isRichtextEnabled: enabled,
+        this.setEditorState(this.createEditorState(enabled, contentState), () => {
+            this.setState({
+                isRichtextEnabled: enabled,
+            });
         });
 
         UserSettingsStore.setSyncedSetting('MessageComposerInput.isRichTextEnabled', enabled);
@@ -447,6 +444,7 @@ export default class MessageComposerInput extends React.Component {
                 bold: text => `**${text}**`,
                 italic: text => `*${text}*`,
                 underline: text => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
+                strike: text => `~~${text}~~`,
                 code: text => `\`${text}\``,
                 blockquote: text => text.split('\n').map(line => `> ${line}\n`).join(''),
                 'unordered-list-item': text => text.split('\n').map(line => `- ${line}\n`).join(''),
@@ -590,6 +588,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onFormatButtonClicked(name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", e) {
+        e.preventDefault(); // don't steal focus from the editor!
         const command = {
             code: 'code-block',
             quote: 'blockquote',
@@ -631,8 +630,9 @@ export default class MessageComposerInput extends React.Component {
         };
     }
 
-    onMarkdownToggleClicked() {
-        this.enableRichtext(!this.state.isRichtextEnabled);
+    onMarkdownToggleClicked(e) {
+        e.preventDefault(); // don't steal focus from the editor!
+        this.handleKeyCommand('toggle-mode');
     }
 
     render() {
@@ -654,10 +654,9 @@ export default class MessageComposerInput extends React.Component {
         });
 
         return (
-            <div className={className}
-                 onClick={ this.focus }>
+            <div className={className}>
                 <img className="mx_MessageComposer_input_markdownIndicator"
-                     onClick={this.onMarkdownToggleClicked}
+                     onMouseDown={this.onMarkdownToggleClicked}
                      title={`Markdown is ${this.state.isRichtextEnabled ? 'disabled' : 'enabled'}`}
                      src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />
                 <Editor ref="editor"

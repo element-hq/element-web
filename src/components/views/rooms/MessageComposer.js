@@ -178,12 +178,11 @@ export default class MessageComposer extends React.Component {
     onToggleFormattingClicked() {
         UserSettingsStore.setSyncedSetting('MessageComposer.showFormatting', !this.state.showFormatting);
         this.setState({showFormatting: !this.state.showFormatting});
-        this.messageComposerInput.focus();
     }
 
-    onToggleMarkdownClicked() {
+    onToggleMarkdownClicked(e) {
+        e.preventDefault(); // don't steal focus from the editor!
         this.messageComposerInput.enableRichtext(!this.state.inputState.isRichtextEnabled);
-        this.messageComposerInput.focus();
     }
 
     render() {
@@ -292,13 +291,13 @@ export default class MessageComposer extends React.Component {
                 const active = style.includes(name) || blockType === name;
                 const suffix = active ? '-o-n' : '';
                 const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
-                const disabled = !this.state.inputState.isRichtextEnabled && ['strike', 'underline'].includes(name);
+                const disabled = !this.state.inputState.isRichtextEnabled && 'underline' === name;
                 const className = classNames("mx_MessageComposer_format_button", {
                     mx_MessageComposer_format_button_disabled: disabled,
                 });
                 return <img className={className}
                             title={name}
-                            onClick={disabled ? null : onFormatButtonClicked}
+                            onMouseDown={disabled ? null : onFormatButtonClicked}
                             key={name}
                             src={`img/button-text-${name}${suffix}.svg`}
                             height="17" />;
@@ -319,7 +318,7 @@ export default class MessageComposer extends React.Component {
                             {formatButtons}
                             <div style={{flex: 1}}></div>
                             <img title={`Turn Markdown ${this.state.inputState.isRichtextEnabled ? 'on' : 'off'}`}
-                                 onClick={this.onToggleMarkdownClicked}
+                                 onMouseDown={this.onToggleMarkdownClicked}
                                 className="mx_MessageComposer_formatbar_markdown"
                                 src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
                             <img title="Hide Text Formatting Toolbar"
