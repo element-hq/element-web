@@ -189,6 +189,27 @@ function setBotOptions(event, roomId, userId) {
     });
 }
 
+function setBotPower(event, roomId, userId, level) {
+    if (!(Number.isInteger(level) && level >= 0)) {
+        sendError(event, "Power level must be positive integer.");
+        return;
+    }
+
+    console.log(`Received request to set power level for bot ${userId} in room ${roomId}.`);
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, "You need to be logged in.");
+        return;
+    }
+    client.setPowerLevel(roomId, userId, level).done(() => {
+        sendResponse(event, {
+            success: true,
+        });
+    }, (err) => {
+        sendError(event, err.message ? err.message : "Failed to send request.", err);
+    });
+}
+
 function getMembershipState(event, roomId, userId) {
     console.log(`membership_state of ${userId} in room ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.member", userId);
@@ -280,6 +301,9 @@ const onMessage = function(event) {
             break;
         case "set_bot_options":
             setBotOptions(event, roomId, userId);
+            break;
+        case "set_bot_power":
+            setBotPower(event, roomId, userId, event.data.level);
             break;
         case "join_rules_state":
             getJoinRules(event, roomId);
