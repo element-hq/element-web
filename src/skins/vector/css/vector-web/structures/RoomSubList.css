@@ -39,7 +39,7 @@ limitations under the License.
     padding-top: 6px;
     padding-bottom: 6px;
     cursor: pointer;
-    background-color: rgba(118, 207, 166, 0.2);
+    background-color: rgba(118, 207, 166, 0.2); /* Should be #d3ede1, but not a magic colour */
     border-top: solid 2px #eaf5f0;
 }
 

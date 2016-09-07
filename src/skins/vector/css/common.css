@@ -64,6 +64,11 @@ input[type=text]:focus, textarea:focus {
     box-shadow: none;
 }
 
+/* Required by Firefox */
+textarea {
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+}
+
 /* Prevent ugly dotted highlight around selected elements in Firefox */
 ::-moz-focus-inner {
     border: 0;

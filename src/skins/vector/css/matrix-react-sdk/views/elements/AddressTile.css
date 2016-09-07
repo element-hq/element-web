@@ -25,12 +25,20 @@ limitations under the License.
     font-weight: normal;
 }
 
+.mx_AddressTile_network {
+    display: inline-block;
+    position: relative;
+    padding-left: 2px;
+    padding-right: 4px;
+    vertical-align: middle;
+}
+
 .mx_AddressTile_avatar {
     display: inline-block;
     position: relative;
-    top: 1px;
     padding-left: 2px;
     padding-right: 7px;
+    vertical-align: middle;
 }
 
 .mx_AddressTile_name {
@@ -40,10 +48,11 @@ limitations under the License.
 }
 
 .mx_AddressTile_name.mx_AddressTile_justified {
-    width: 120px;
+    width: 180px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    vertical-align: middle;
 }
 
 .mx_AddressTile_id {
@@ -56,6 +65,7 @@ limitations under the License.
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    vertical-align: middle;
 }
 
 .mx_AddressTile_dismiss {
