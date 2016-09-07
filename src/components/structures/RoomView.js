@@ -36,7 +36,6 @@ var dis = require("../../dispatcher");
 var Tinter = require("../../Tinter");
 var rate_limited_func = require('../../ratelimitedfunc');
 var ObjectUtils = require('../../ObjectUtils');
-var MatrixTools = require('../../MatrixTools');
 
 import UserProvider from '../../autocomplete/UserProvider';
 

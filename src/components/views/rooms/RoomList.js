@@ -25,7 +25,7 @@ var Unread = require('../../../Unread');
 var dis = require("../../../dispatcher");
 var sdk = require('../../../index');
 var rate_limited_func = require('../../../ratelimitedfunc');
-var MatrixTools = require('../../../MatrixTools');
+var Rooms = require('../../../Rooms');
 var DMRoomMap = require('../../../utils/DMRoomMap');
 
 var HIDE_CONFERENCE_CHANS = true;
@@ -224,7 +224,7 @@ module.exports = React.createClass({
             if (me.membership == "invite") {
                 s.lists["im.vector.fake.invite"].push(room);
             }
-            else if (HIDE_CONFERENCE_CHANS && MatrixTools.isConfCallRoom(room, me, self.props.ConferenceHandler)) {
+            else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, self.props.ConferenceHandler)) {
                 // skip past this room & don't put it in any lists
             }
             else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
@@ -265,7 +265,7 @@ module.exports = React.createClass({
             for (const room of oldRecents) {
                 const me = room.getMember(MatrixClientPeg.get().credentials.userId);
 
-                if (me && MatrixTools.looksLikeDirectMessageRoom(room, me)) {
+                if (me && Rooms.looksLikeDirectMessageRoom(room, me)) {
                     s.lists["im.vector.fake.direct"].push(room);
                 } else {
                     s.lists["im.vector.fake.recent"].push(room);
@@ -276,7 +276,7 @@ module.exports = React.createClass({
             const newMDirectEvent = {};
             for (const room of s.lists["im.vector.fake.direct"]) {
                 const me = room.getMember(MatrixClientPeg.get().credentials.userId);
-                const otherPerson = MatrixTools.getOnlyOtherMember(room, me);
+                const otherPerson = Rooms.getOnlyOtherMember(room, me);
                 if (!otherPerson) continue;
 
                 const roomList = newMDirectEvent[otherPerson.userId] || [];

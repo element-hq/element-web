@@ -4,7 +4,7 @@ import Q from 'q';
 import MatrixClientPeg from '../MatrixClientPeg';
 import Fuse from 'fuse.js';
 import {PillCompletion} from './Components';
-import {getDisplayAliasForRoom} from '../MatrixTools';
+import {getDisplayAliasForRoom} from '../Rooms';
 import sdk from '../index';
 
 const ROOM_REGEX = /(?=#)([^\s]*)/g;
