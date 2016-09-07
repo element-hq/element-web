@@ -60,12 +60,12 @@ limitations under the License.
 }
 
 .mx_ChatInviteDialog_queryListElement.mx_ChatInviteDialog_selected {
-     background-color: #ddd; /* selected colour */
+     background-color: #eaf5f0; /* selected colour */
 }
 
 .mx_ChatInviteDialog_queryListElement.mx_ChatInviteDialog_selected .mx_AddressTile {
-    background-color: #ddd; /* selected colour */
-    border: solid 1px #ddd; /* selected colour */
+    background-color: #eaf5f0; /* selected colour */
+    border: solid 1px #eaf5f0; /* selected colour */
 }
 
 .mx_ChatInviteDialog_cancel {

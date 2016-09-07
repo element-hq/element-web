@@ -39,9 +39,23 @@ limitations under the License.
     font-weight: 600;
 }
 
+.mx_AddressTile_name.mx_AddressTile_justified {
+    width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .mx_AddressTile_id {
     display: inline-block;
     padding-right: 11px;
+}
+
+.mx_AddressTile_id.mx_AddressTile_justified {
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .mx_AddressTile_dismiss {
