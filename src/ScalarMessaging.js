@@ -123,7 +123,8 @@ Example:
 
 const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require("./MatrixClientPeg");
-var dis = require("./dispatcher");
+const MatrixEvent = require("matrix-js-sdk").MatrixEvent;
+const dis = require("./dispatcher");
 
 function sendResponse(event, res) {
     const data = JSON.parse(JSON.stringify(event.data));
@@ -201,12 +202,24 @@ function setBotPower(event, roomId, userId, level) {
         sendError(event, "You need to be logged in.");
         return;
     }
-    client.setPowerLevel(roomId, userId, level).done(() => {
-        sendResponse(event, {
-            success: true,
+
+    client.getStateEvent(roomId, "m.room.power_levels", "").then((rawPowerState) => {
+        console.log(rawPowerState);
+        let powerEvent = new MatrixEvent(
+            {
+                type: "m.room.power_levels",
+                content: rawPowerState,
+            }
+        );
+
+        client.setPowerLevel(roomId, userId, level, powerEvent).done(() => {
+            console.log('Power level has been set');
+            sendResponse(event, {
+                success: true,
+            });
+        }, (err) => {
+            sendError(event, err.message ? err.message : "Failed to send request.", err);
         });
-    }, (err) => {
-        sendError(event, err.message ? err.message : "Failed to send request.", err);
     });
 }
 
