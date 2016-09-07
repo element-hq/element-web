@@ -26,6 +26,12 @@ var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 module.exports = React.createClass({
     displayName: 'RightPanel',
 
+    propTypes: {
+        userId: React.PropTypes.string, // if showing an orphaned MemberInfo page, this is set
+        roomId: React.PropTypes.string, // if showing panels for a given room, this is set
+        collapsed: React.PropTypes.bool,
+    },
+
     Phase : {
         MemberList: 'MemberList',
         FilePanel: 'FilePanel',
