@@ -26,7 +26,7 @@ var dis = require("../../../dispatcher");
 var sdk = require('../../../index');
 var rate_limited_func = require('../../../ratelimitedfunc');
 var MatrixTools = require('../../../MatrixTools');
-var DMRoomMap = require('../../../DMRoomMap');
+var DMRoomMap = require('../../../utils/DMRoomMap');
 
 var HIDE_CONFERENCE_CHANS = true;
 
