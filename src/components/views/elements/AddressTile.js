@@ -29,6 +29,8 @@ module.exports = React.createClass({
         canDismiss: React.PropTypes.bool,
         onDismissed: React.PropTypes.func,
         justified: React.PropTypes.bool,
+        networkName: React.PropTypes.string,
+        networkUrl: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -36,6 +38,8 @@ module.exports = React.createClass({
             canDismiss: false,
             onDismissed: function() {}, // NOP
             justified: false,
+            networkName: "",
+            networkUrl: "",
         };
     },
 
@@ -45,6 +49,15 @@ module.exports = React.createClass({
         var userId = this.props.user.userId;
         var name = this.props.user.displayName || userId;
         var imgUrl = Avatar.avatarUrlForUser(this.props.user, 25, 25, "crop");
+
+        var network;
+        if (this.props.networkUrl !== "") {
+            network = (
+                <div className="mx_AddressTile_network">
+                    <BaseAvatar width={25} height={25} name={this.props.networkName} title="vector" url={this.props.networkUrl} />
+                </div>
+            );
+        }
 
         var dismiss;
         if (this.props.canDismiss) {
@@ -67,6 +80,7 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_AddressTile">
+                { network }
                 <div className="mx_AddressTile_avatar">
                     <BaseAvatar width={25} height={25} name={name} title={name} url={imgUrl} />
                 </div>

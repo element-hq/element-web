@@ -57,6 +57,7 @@ module.exports = React.createClass({
             queryList: [],
             addressSelected: false,
             selected: 0,
+            hover: false,
         };
     },
 
@@ -70,9 +71,10 @@ module.exports = React.createClass({
 
     componentDidUpdate: function() {
         // As the user scrolls with the arrow keys keep the selected item
-        // at the top of the window. Each item is 29px high.
-        if (this.scrollElement) {
-            this.scrollElement.scrollTop = (this.state.selected * 29) - 29;
+        // at the top of the window.
+        if (this.scrollElement && !this.state.hover) {
+            var elementHeight = this.queryListElement.getBoundingClientRect().height;
+            this.scrollElement.scrollTop = (this.state.selected * elementHeight) - elementHeight;
         }
     },
 
@@ -107,13 +109,19 @@ module.exports = React.createClass({
             e.stopPropagation();
             e.preventDefault();
             if (this.state.selected > 0) {
-                this.setState({ selected: this.state.selected - 1 });
+                this.setState({
+                    selected: this.state.selected - 1,
+                    hover : false,
+                });
             }
         } else if (e.keyCode === 40) { // down arrow
             e.stopPropagation();
             e.preventDefault();
             if (this.state.selected < this._maxSelected(this.state.queryList)) {
-                this.setState({ selected: this.state.selected + 1 });
+                this.setState({
+                    selected: this.state.selected + 1,
+                    hover : false,
+                });
             }
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
@@ -123,6 +131,7 @@ module.exports = React.createClass({
                     user: this.state.queryList[this.state.selected],
                     addressSelected: true,
                     queryList: [],
+                    hover : false,
                 });
             }
         }
@@ -161,11 +170,40 @@ module.exports = React.createClass({
         });
     },
 
+    onClick: function(index) {
+        var self = this;
+        return function() {
+            self.setState({
+                user: self.state.queryList[index],
+                addressSelected: true,
+                queryList: [],
+                hover: false,
+            });
+        };
+    },
+
+    onMouseEnter: function(index) {
+        var self = this;
+        return function() {
+            self.setState({
+                selected: index,
+                hover: true,
+            });
+        };
+    },
+
+    onMouseLeave: function() {
+        this.setState({ hover : false });
+    },
+
     createQueryListTiles: function() {
         var self = this;
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var AddressTile = sdk.getComponent("elements.AddressTile");
         var maxSelected = this._maxSelected(this.state.queryList);
         var queryList = [];
+
+        // Only create the query elements if there are queries
         if (this.state.queryList.length > 0) {
             for (var i = 0; i <= maxSelected; i++) {
                 var classes = classNames({
@@ -173,9 +211,12 @@ module.exports = React.createClass({
                     "mx_ChatInviteDialog_selected": this.state.selected === i,
                 });
 
+                // NOTE: Defaulting to "vector" as the network, until the network backend stuff is done
+                // Saving the queryListElement so we can use it to work out, in the componentDidUpdate
+                // method, how far to scroll when using the arrow keys
                 queryList.push(
-                    <div className={classes} key={i} >
-                        <AddressTile user={this.state.queryList[i]} justified={true} />
+                    <div className={classes} onClick={this.onClick(i)} onMouseEnter={this.onMouseEnter(i)} onMouseLeave={this.onMouseLeave} key={i} ref={(ref) => { this.queryListElement = ref; }} >
+                        <AddressTile user={this.state.queryList[i]} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
                     </div>
                 );
             }
