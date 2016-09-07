@@ -44,7 +44,12 @@ var FilePanel = React.createClass({
 
     componentWillReceiveProps: function(nextProps) {
         if (nextProps.roomId !== this.props.roomId) {
-            // otherwise we race between updating the TimelinePanel and determining the new timelineSet
+            // otherwise we race between re-rendering the TimelinePanel and setting the new timelineSet.
+            //
+            // FIXME: this race only happens because of the promise returned by getOrCreateFilter().
+            // We should only need to create the containsUrl filter once per login session, so in practice
+            // it shouldn't be being done here at all.  Then we could just update the timelineSet directly
+            // without resetting it first, and speed up room-change.
             this.setState({ timelineSet: null });
             this.updateTimelineSet(nextProps.roomId);
         }
@@ -66,6 +71,7 @@ var FilePanel = React.createClass({
                 }
             );
 
+            // FIXME: we shouldn't be doing this every time we change room - see comment above.
             client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter).then(
                 (filterId)=>{
                     filter.filterId = filterId;
