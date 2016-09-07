@@ -21,6 +21,8 @@ var React = require('react');
 var classNames = require('classnames');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
+var DMRoomMap = require('matrix-react-sdk/lib/utils/DMRoomMap');
+var Rooms = require('matrix-react-sdk/lib/Rooms');
 
 module.exports = React.createClass({
     displayName: 'RoomTagContextMenu',
@@ -32,9 +34,11 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
+        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
         return {
             isFavourite: this.props.room.tags.hasOwnProperty("m.favourite"),
             isLowPriority: this.props.room.tags.hasOwnProperty("m.lowpriority"),
+            isDirectMessage: Boolean(dmRoomMap.getUserIdForRoomId(this.props.room.roomId)),
         };
     },
 
@@ -113,6 +117,41 @@ module.exports = React.createClass({
         }
     },
 
+    _onClickDM: function() {
+        const newIsDirectMessage = !this.state.isDirectMessage;
+        this.setState({
+            isDirectMessage: newIsDirectMessage,
+        });
+
+        if (MatrixClientPeg.get().isGuest()) return;
+
+        let newTarget;
+        if (newIsDirectMessage) {
+            const guessedTarget = Rooms.guessDMRoomTarget(
+                this.props.room,
+                this.props.room.getMember(MatrixClientPeg.get().credentials.userId),
+            );
+            newTarget = guessedTarget.userId;
+        } else {
+            newTarget = null;
+        }
+
+        q.delay(500).done(() => {
+            return Rooms.setDMRoom(this.props.room.roomId, newTarget).finally(() => {
+                // Close the context menu
+                if (this.props.onFinished) {
+                    this.props.onFinished();
+                };
+            }, (err) => {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failed to set Direct Message status of room",
+                    description: err.toString()
+                });
+            });
+        });
+    },
+
     _onClickLeave: function() {
         // Leave room
         dis.dispatch({
@@ -146,24 +185,30 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var myUserId = MatrixClientPeg.get().credentials.userId;
-        var myMember = this.props.room.getMember(myUserId);
+        const myUserId = MatrixClientPeg.get().credentials.userId;
+        const myMember = this.props.room.getMember(myUserId);
 
-        var favouriteClasses = classNames({
+        const favouriteClasses = classNames({
             'mx_RoomTagContextMenu_field': true,
             'mx_RoomTagContextMenu_fieldSet': this.state.isFavourite,
             'mx_RoomTagContextMenu_fieldDisabled': false,
         });
 
-        var lowPriorityClasses = classNames({
+        const lowPriorityClasses = classNames({
             'mx_RoomTagContextMenu_field': true,
             'mx_RoomTagContextMenu_fieldSet': this.state.isLowPriority,
             'mx_RoomTagContextMenu_fieldDisabled': false,
         });
 
-        var leaveClasses = classNames({
+        const leaveClasses = classNames({
             'mx_RoomTagContextMenu_field': true,
             'mx_RoomTagContextMenu_fieldSet': false,
+            'mx_RoomTagContextMenu_fieldDisabled': false,
+        });
+
+        const dmClasses = classNames({
+            'mx_RoomTagContextMenu_field': true,
+            'mx_RoomTagContextMenu_fieldSet': this.state.isDirectMessage,
             'mx_RoomTagContextMenu_fieldDisabled': false,
         });
 
@@ -189,6 +234,11 @@ module.exports = React.createClass({
                     <img className="mx_RoomTagContextMenu_icon" src="img/icon_context_low.svg" width="15" height="15" />
                     <img className="mx_RoomTagContextMenu_icon_set" src="img/icon_context_low_on.svg" width="15" height="15" />
                     Low Priority
+                </div>
+                <div className={ dmClasses } onClick={this._onClickDM} >
+                    <img className="mx_RoomTagContextMenu_icon" src="img/icon_context_person.svg" width="15" height="15" />
+                    <img className="mx_RoomTagContextMenu_icon_set" src="img/icon_context_person_on.svg" width="15" height="15" />
+                    Direct Message
                 </div>
                 <hr className="mx_RoomTagContextMenu_separator" />
                 <div className={ leaveClasses } onClick={(myMember && myMember.membership === "join") ? this._onClickLeave : null} >
