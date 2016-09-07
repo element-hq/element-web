@@ -30,6 +30,10 @@
 }
 
 .mx_Markdown_HR {
-    color: rgba(0, 0, 0, 0.5);
-    text-decoration: #e7e7e7 double line-through;
+    display: block;
+    background: #e7e7e7;
+}
+
+.mx_Markdown_STRIKETHROUGH {
+    text-decoration: line-through;
 }
