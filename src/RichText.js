@@ -20,6 +20,8 @@ const MARKDOWN_REGEX = {
     LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
     ITALIC: /([\*_])([\w\s]+?)\1/g,
     BOLD: /([\*_])\1([\w\s]+?)\1\1/g,
+    HR: /(\n|^)((-|\*|_) *){3,}(\n|$)/g,
+    CODE: /`[^`]*`/g,
 };
 
 const USERNAME_REGEX = /@\S+:\S+/g;
@@ -119,7 +121,7 @@ export function getScopedRTDecorators(scope: any): CompositeDecorator {
 }
 
 export function getScopedMDDecorators(scope: any): CompositeDecorator {
-    let markdownDecorators = ['BOLD', 'ITALIC'].map(
+    let markdownDecorators = ['HR', 'BOLD', 'ITALIC', 'CODE'].map(
         (style) => ({
             strategy: (contentBlock, callback) => {
                 return findWithRegex(MARKDOWN_REGEX[style], contentBlock, callback);

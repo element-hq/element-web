@@ -83,7 +83,7 @@ export default class MessageComposerInput extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.onAction = this.onAction.bind(this);
-        this.onInputClick = this.onInputClick.bind(this);
+        this.focus = this.focus.bind(this);
         this.handleReturn = this.handleReturn.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
         this.setEditorState = this.setEditorState.bind(this);
@@ -91,8 +91,9 @@ export default class MessageComposerInput extends React.Component {
         this.onDownArrow = this.onDownArrow.bind(this);
         this.onTab = this.onTab.bind(this);
         this.onConfirmAutocompletion = this.onConfirmAutocompletion.bind(this);
+        this.onMarkdownToggleClicked = this.onMarkdownToggleClicked.bind(this);
 
-        const isRichtextEnabled = UserSettingsStore.isFeatureEnabled('rich_text_editor');
+        const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', true);
 
         this.state = {
             isRichtextEnabled,
@@ -240,6 +241,7 @@ export default class MessageComposerInput extends React.Component {
         if (this.props.onInputStateChanged && nextState !== this.state) {
             const state = this.getSelectionInfo(nextState.editorState);
             state.isRichtextEnabled = nextState.isRichtextEnabled;
+            state.wordCount = nextState.editorState.getCurrentContent().getPlainText().split(' ').filter(w => !!w).length;
             this.props.onInputStateChanged(state);
         }
     }
@@ -377,7 +379,7 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    onInputClick(ev) {
+    focus(ev) {
         this.refs.editor.focus();
     }
 
@@ -410,11 +412,11 @@ export default class MessageComposerInput extends React.Component {
             this.setEditorState(this.createEditorState(enabled, contentState));
         }
 
-        window.localStorage.setItem('mx_editor_rte_enabled', enabled);
-
         this.setState({
-            isRichtextEnabled: enabled
+            isRichtextEnabled: enabled,
         });
+
+        UserSettingsStore.setSyncedSetting('MessageComposerInput.isRichTextEnabled', enabled);
     }
 
     handleKeyCommand(command: string): boolean {
@@ -426,7 +428,17 @@ export default class MessageComposerInput extends React.Component {
         let newState: ?EditorState = null;
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
-        if (!this.state.isRichtextEnabled) {
+        if (this.state.isRichtextEnabled) {
+            // These are block types, not handled by RichUtils by default.
+            const blockCommands = ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item'];
+
+            if (blockCommands.includes(command)) {
+                this.setEditorState(RichUtils.toggleBlockType(this.state.editorState, command));
+            } else if (command === 'strike') {
+                // this is the only inline style not handled by Draft by default
+                this.setEditorState(RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'));
+            }
+        } else {
             let contentState = this.state.editorState.getCurrentContent(),
                 selection = this.state.editorState.getSelection();
 
@@ -435,6 +447,9 @@ export default class MessageComposerInput extends React.Component {
                 italic: text => `*${text}*`,
                 underline: text => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
                 code: text => `\`${text}\``,
+                blockquote: text => text.split('\n').map(line => `> ${line}\n`).join(''),
+                'unordered-list-item': text => text.split('\n').map(line => `- ${line}\n`).join(''),
+                'ordered-list-item': text => text.split('\n').map((line, i) => `${i+1}. ${line}\n`).join(''),
             }[command];
 
             if (modifyFn) {
@@ -573,30 +588,14 @@ export default class MessageComposerInput extends React.Component {
         setTimeout(() => this.refs.editor.focus(), 50);
     }
 
-    onFormatButtonClicked(name: "bold" | "italic" | "strike" | "quote" | "bullet" | "numbullet", e) {
-        const style = {
-            bold: 'BOLD',
-            italic: 'ITALIC',
-            strike: 'STRIKETHROUGH',
-        }[name];
-
-        if (style) {
-            e.preventDefault();
-            this.setEditorState(RichUtils.toggleInlineStyle(this.state.editorState, style));
-        } else {
-            const blockType = {
-                quote: 'blockquote',
-                bullet: 'unordered-list-item',
-                numbullet: 'ordered-list-item',
-            }[name];
-
-            if (blockType) {
-                e.preventDefault();
-                this.setEditorState(RichUtils.toggleBlockType(this.state.editorState, blockType));
-            } else {
-                console.error(`Unknown formatting style "${name}", ignoring.`);
-            }
-        }
+    onFormatButtonClicked(name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", e) {
+        const command = {
+            code: 'code-block',
+            quote: 'blockquote',
+            bullet: 'unordered-list-item',
+            numbullet: 'ordered-list-item',
+        }[name] || name;
+        this.handleKeyCommand(command);
     }
 
     /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
@@ -606,6 +605,7 @@ export default class MessageComposerInput extends React.Component {
             BOLD: 'bold',
             ITALIC: 'italic',
             STRIKETHROUGH: 'strike',
+            UNDERLINE: 'underline',
         };
 
         const originalStyle = editorState.getCurrentInlineStyle().toArray();
@@ -614,6 +614,7 @@ export default class MessageComposerInput extends React.Component {
                 .filter(styleName => !!styleName);
 
         const blockName = {
+            'code-block': 'code',
             blockquote: 'quote',
             'unordered-list-item': 'bullet',
             'ordered-list-item': 'numbullet',
@@ -627,6 +628,10 @@ export default class MessageComposerInput extends React.Component {
             style,
             blockType,
         };
+    }
+
+    onMarkdownToggleClicked() {
+        this.enableRichtext(!this.state.isRichtextEnabled);
     }
 
     render() {
@@ -649,8 +654,9 @@ export default class MessageComposerInput extends React.Component {
 
         return (
             <div className={className}
-                 onClick={ this.onInputClick }>
+                 onClick={ this.focus }>
                 <img className="mx_MessageComposer_input_markdownIndicator"
+                     onClick={this.onMarkdownToggleClicked}
                      title={`Markdown is ${this.state.isRichtextEnabled ? 'disabled' : 'enabled'}`}
                      src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />
                 <Editor ref="editor"
