@@ -59,7 +59,7 @@ limitations under the License.
 
 .mx_ChatInviteDialog_queryListElement .mx_AddressTile {
     background-color: #fff;
-    border: 0;
+    border: solid 1px #fff;
 }
 
 .mx_ChatInviteDialog_queryListElement.mx_ChatInviteDialog_selected {
@@ -68,6 +68,7 @@ limitations under the License.
 
 .mx_ChatInviteDialog_queryListElement.mx_ChatInviteDialog_selected .mx_AddressTile {
     background-color: #eaf5f0; /* selected colour */
+    border: solid 1px #eaf5f0; /* selected colour */
 }
 
 .mx_ChatInviteDialog_cancel {

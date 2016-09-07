@@ -19,7 +19,7 @@ limitations under the License.
     border-radius: 3px;
     background-color: rgba(74, 73, 74, 0.1);
     border: solid 1px #f0f0f0;
-    line-height: 27px;
+    line-height: 26px;
     color: #454545;
     font-size: 14px;
     font-weight: normal;
@@ -72,6 +72,7 @@ limitations under the License.
     display: inline-block;
     padding-right: 11px;
     padding-left: 1px;
+    cursor: pointer;
 }
 
 .mx_AddressTile_dismiss object {
