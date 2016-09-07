@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 var MatrixClientPeg = require("./MatrixClientPeg");
-var MatrixTools = require("./MatrixTools");
 var dis = require("./dispatcher");
 var Tinter = require("./Tinter");
 
