@@ -318,7 +318,6 @@ export default class MessageComposer extends React.Component {
                         <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
                             {formatButtons}
                             <div style={{flex: 1}}></div>
-                            <strong>{this.state.inputState.wordCount}</strong>
                             <img title={`Turn Markdown ${this.state.inputState.isRichtextEnabled ? 'on' : 'off'}`}
                                  onClick={this.onToggleMarkdownClicked}
                                 className="mx_MessageComposer_formatbar_markdown"

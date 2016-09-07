@@ -241,7 +241,6 @@ export default class MessageComposerInput extends React.Component {
         if (this.props.onInputStateChanged && nextState !== this.state) {
             const state = this.getSelectionInfo(nextState.editorState);
             state.isRichtextEnabled = nextState.isRichtextEnabled;
-            state.wordCount = nextState.editorState.getCurrentContent().getPlainText().split(' ').filter(w => !!w).length;
             this.props.onInputStateChanged(state);
         }
     }
