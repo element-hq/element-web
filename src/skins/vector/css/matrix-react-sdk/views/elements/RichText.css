@@ -20,3 +20,16 @@
 .mx_Markdown_ITALIC {
     font-style: italic;
 }
+
+.mx_Markdown_CODE {
+    padding: .2em 0;
+    margin: 0;
+    font-size: 85%;
+    background-color: rgba(0,0,0,.04);
+    border-radius: 3px;
+}
+
+.mx_Markdown_HR {
+    color: rgba(0, 0, 0, 0.5);
+    text-decoration: #e7e7e7 double line-through;
+}
