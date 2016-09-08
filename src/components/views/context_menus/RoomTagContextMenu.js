@@ -136,6 +136,8 @@ module.exports = React.createClass({
             newTarget = null;
         }
 
+        // give some time for the user to see the icon change first, since
+        // this will hide the context menu once it completes
         q.delay(500).done(() => {
             return Rooms.setDMRoom(this.props.room.roomId, newTarget).finally(() => {
                 // Close the context menu
