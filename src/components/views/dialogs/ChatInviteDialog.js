@@ -20,7 +20,9 @@ var sdk = require("../../../index");
 var Invite = require("../../../Invite");
 var createRoom = require("../../../createRoom");
 var MatrixClientPeg = require("../../../MatrixClientPeg");
+var DMRoomMap = require('../../../utils/DMRoomMap');
 var rate_limited_func = require("../../../ratelimitedfunc");
+var dis = require("../../../dispatcher");
 var Modal = require('../../../Modal');
 
 const TRUNCATE_QUERY_LIST = 40;
@@ -79,7 +81,9 @@ module.exports = React.createClass({
     },
 
     onStartChat: function() {
+        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
         var addr;
+
         // Either an address tile was created, or text input is being used
         if (this.state.user) {
             addr = this.state.user.userId;
@@ -88,7 +92,20 @@ module.exports = React.createClass({
         }
 
         // Check if the addr is a valid type
-        if (Invite.getAddressType(addr) !== null) {
+        if (Invite.getAddressType(addr) === "mx") {
+            var dmRooms = dmRoomMap.getDMRoomsForUserId(addr);
+            if (dmRooms) {
+                // A Direct Message room already exists for this user and you
+                // so go straight to that room
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: dmRooms[0],
+                });
+                this.props.onFinished(true, addr);
+            } else {
+                this._startChat(addr);
+            }
+        } else if (Invite.getAddressType(addr) === "email") {
             this._startChat(addr);
         } else {
             // Nothing to do, so focus back on the textinput
@@ -211,7 +228,7 @@ module.exports = React.createClass({
                     "mx_ChatInviteDialog_selected": this.state.selected === i,
                 });
 
-                // NOTE: Defaulting to "vector" as the network, until the network backend stuff is done
+                // NOTE: Defaulting to "vector" as the network, until the network backend stuff is done.
                 // Saving the queryListElement so we can use it to work out, in the componentDidUpdate
                 // method, how far to scroll when using the arrow keys
                 queryList.push(
