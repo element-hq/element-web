@@ -81,7 +81,6 @@ module.exports = React.createClass({
     },
 
     onStartChat: function() {
-        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
         var addr;
 
         // Either an address tile was created, or text input is being used
@@ -93,13 +92,13 @@ module.exports = React.createClass({
 
         // Check if the addr is a valid type
         if (Invite.getAddressType(addr) === "mx") {
-            var dmRooms = dmRoomMap.getDMRoomsForUserId(addr);
-            if (dmRooms) {
+            var room = this._getDirectMessageRoom(addr);
+            if (room) {
                 // A Direct Message room already exists for this user and you
                 // so go straight to that room
                 dis.dispatch({
                     action: 'view_room',
-                    room_id: dmRooms[0],
+                    room_id: room.roomId,
                 });
                 this.props.onFinished(true, addr);
             } else {
@@ -239,6 +238,21 @@ module.exports = React.createClass({
             }
         }
         return queryList;
+    },
+
+    _getDirectMessageRoom: function(addr) {
+        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
+        var dmRooms = dmRoomMap.getDMRoomsForUserId(addr);
+        if (dmRooms.length > 0) {
+            // Cycle through all the DM rooms and find the first non forgotten or parted room
+            for (let i = 0; i < dmRooms.length; i++) {
+                let room = MatrixClientPeg.get().getRoom(dmRooms[i]);
+                if (room) {
+                    return room;
+                }
+            }
+        }
+        return null;
     },
 
     _startChat: function(addr) {
