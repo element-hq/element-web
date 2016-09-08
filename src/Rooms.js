@@ -112,7 +112,7 @@ export function setDMRoom(roomId, userId) {
 }
 
 /**
- * Given a room, estimate which of its members is likley to
+ * Given a room, estimate which of its members is likely to
  * be the target if the room were a DM room and return that user.
  */
 export function guessDMRoomTarget(room, me) {
