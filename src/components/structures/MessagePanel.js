@@ -60,6 +60,9 @@ module.exports = React.createClass({
         // true to suppress the date at the start of the timeline
         suppressFirstDateSeparator: React.PropTypes.bool,
 
+        // whether to show read receipts
+        manageReadReceipts: React.PropTypes.bool,
+
         // true if updates to the event list should cause the scroll panel to
         // scroll down when we are at the bottom of the window. See ScrollPanel
         // for more details.
@@ -373,7 +376,10 @@ module.exports = React.createClass({
         // Local echos have a send "status".
         var scrollToken = mxEv.status ? undefined : eventId;
 
-        var readReceipts = this._getReadReceiptsForEvent(mxEv);
+        var readReceipts;
+        if (this.props.manageReadReceipts) {
+            readReceipts = this._getReadReceiptsForEvent(mxEv);
+        }
 
         ret.push(
                 <li key={eventId}
