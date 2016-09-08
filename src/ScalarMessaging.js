@@ -196,7 +196,7 @@ function setBotPower(event, roomId, userId, level) {
         return;
     }
 
-    console.log(`Received request to set power level for bot ${userId} in room ${roomId}.`);
+    console.log(`Received request to set power level to ${level} for bot ${userId} in room ${roomId}.`);
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, "You need to be logged in.");
