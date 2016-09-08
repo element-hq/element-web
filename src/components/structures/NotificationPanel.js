@@ -17,18 +17,53 @@ limitations under the License.
 var React = require('react');
 var ReactDOM = require("react-dom");
 
+var Matrix = require("matrix-js-sdk");
 var sdk = require('../../index');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
 
 /*
- * Component which shows the notification timeline using a TimelinePanel
+ * Component which shows the filtered file using a TimelinePanel
  */
 var NotificationPanel = React.createClass({
     displayName: 'NotificationPanel',
 
+    propTypes: {
+    },
+
+    // this has to be a proper method rather than an unnamed function,
+    // otherwise react calls it with null on each update.
+    _gatherTimelinePanelRef: function(r) {
+        //this.refs.messagePanel = r;
+    },
+
     render: function() {
         // wrap a TimelinePanel with the jump-to-event bits turned off.
+        var TimelinePanel = sdk.getComponent("structures.TimelinePanel");
+        var Loader = sdk.getComponent("elements.Spinner");
+
+        var timelineSet = MatrixClientPeg.get().getNotifTimelineSet();
+
+        if (timelineSet) {
+            return (
+                <TimelinePanel key={"NotificationPanel_" + this.props.roomId} ref={this._gatherTimelinePanelRef}
+                    className="mx_NotificationPanel"
+                    manageReadReceipts={false}
+                    manageReadMarkers={false}
+                    timelineSet={timelineSet}
+                    showUrlPreview = { false }
+                    opacity={ this.props.opacity }
+                />
+            );
+        }
+        else {
+            console.error("No notifTimelineSet available!");
+            return (
+                <div className="mx_NotificationPanel">
+                    <Loader/>
+                </div>
+            );
+        }
     },
 });
 
