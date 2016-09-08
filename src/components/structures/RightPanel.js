@@ -95,6 +95,20 @@ module.exports = React.createClass({
         }
     },
 
+    onNotificationListButtonClick: function() {
+        if (this.props.collapsed || this.state.phase !== this.Phase.NotificationPanel) {
+            this.setState({ phase: this.Phase.NotificationPanel });
+            dis.dispatch({
+                action: 'show_right_panel',
+            });
+        }
+        else {
+            dis.dispatch({
+                action: 'hide_right_panel',
+            });
+        }
+    },
+
     onRoomStateMember: function(ev, state, member) {
         // redraw the badge on the membership list
         if (this.state.phase == this.Phase.MemberList && member.roomId === this.props.roomId) {
@@ -182,7 +196,7 @@ module.exports = React.createClass({
                             <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
                             { filesHighlight }
                         </div>
-                        <div className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton" title="Notifications">
+                        <div className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton" title="Notifications" onClick={ this.onNotificationListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                             <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
                             { notificationsHighlight }
