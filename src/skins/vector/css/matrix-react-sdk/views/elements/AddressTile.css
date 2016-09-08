@@ -45,6 +45,9 @@ limitations under the License.
     display: inline-block;
     padding-right: 4px;
     font-weight: 600;
+    overflow: hidden;
+    height: 26px;
+    vertical-align: middle;
 }
 
 .mx_AddressTile_name.mx_AddressTile_justified {
