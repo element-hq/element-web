@@ -130,9 +130,9 @@ module.exports = {
         return event ? event.getContent() : {};
     },
 
-    getSyncedSetting: function(type) {
+    getSyncedSetting: function(type, defaultValue = null) {
         var settings = this.getSyncedSettings();
-        return settings[type];
+        return settings.hasOwnProperty(type) ? settings[type] : null;
     },
 
     setSyncedSetting: function(type, value) {
