@@ -107,7 +107,7 @@ class MatrixClientPeg {
 
         this.matrixClient.setGuest(Boolean(creds.guest));
 
-        var notifTimelineSet = new EventTimelineSet(null, null, {
+        var notifTimelineSet = new EventTimelineSet(null, {
             timelineSupport: true
         });
         // XXX: what is our initial pagination token?! it somehow needs to be synchronised with /sync.

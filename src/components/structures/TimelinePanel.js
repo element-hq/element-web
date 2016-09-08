@@ -320,8 +320,8 @@ var TimelinePanel = React.createClass({
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
-        // ignore events for other rooms
-        if (data.timelineSet !== this.props.timelineSet) return;
+        // ignore events for other timeline sets
+        if (data.timeline.getTimelineSet() !== this.props.timelineSet) return;
 
         // ignore anything but real-time updates at the end of the room:
         // updates from pagination will happen when the paginate completes.

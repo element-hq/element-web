@@ -342,6 +342,9 @@ module.exports = React.createClass({
         // ignore events for other rooms
         if (!this.state.room || room.roomId != this.state.room.roomId) return;
 
+        // ignore events from filtered timelines
+        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
+
         if (ev.getType() === "org.matrix.room.preview_urls") {
             this._updatePreviewUrlVisibility(room);
         }

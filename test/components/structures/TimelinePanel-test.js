@@ -59,13 +59,16 @@ describe('TimelinePanel', function() {
         test_utils.beforeEach(this);
         sandbox = test_utils.stubClient(sandbox);
 
-        timeline = new jssdk.EventTimeline(ROOM_ID);
         room = sinon.createStubInstance(jssdk.Room);
+        room.roomId = ROOM_ID;
 
         timelineSet = sinon.createStubInstance(jssdk.EventTimelineSet);
-        timelineSet.getLiveTimeline.returns(timeline);
         timelineSet.getPendingEvents.returns([]);
         timelineSet.room = room;
+
+        timeline = new jssdk.EventTimeline(timelineSet);
+
+        timelineSet.getLiveTimeline.returns(timeline);
 
         client = peg.get();
         client.credentials = {userId: USER_ID};
@@ -149,7 +152,7 @@ describe('TimelinePanel', function() {
             timeline.addEvent(ev);
             panel.onRoomTimeline(ev, room, false, false, {
                 liveEvent: true,
-                timelineSet: timelineSet,
+                timeline: timeline,
             });
 
             // that won't make much difference, because we don't paginate

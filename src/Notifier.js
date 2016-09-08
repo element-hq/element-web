@@ -224,10 +224,11 @@ var Notifier = {
         }
     },
 
-    onRoomTimeline: function(ev, room, toStartOfTimeline) {
+    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
         if (toStartOfTimeline) return;
         if (!this.isPrepared) return; // don't alert for any messages initially
         if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) return;
+        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
 
         var actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions && actions.notify) {
