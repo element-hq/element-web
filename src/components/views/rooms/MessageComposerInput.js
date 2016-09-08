@@ -29,7 +29,7 @@ marked.setOptions({
 
 import {Editor, EditorState, RichUtils, CompositeDecorator,
     convertFromRaw, convertToRaw, Modifier, EditorChangeType,
-    getDefaultKeyBinding, KeyBindingUtil, ContentState, SelectionState} from 'draft-js';
+    getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState} from 'draft-js';
 
 import {stateToMarkdown} from 'draft-js-export-markdown';
 import classNames from 'classnames';
@@ -296,21 +296,6 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    onKeyDown(ev) {
-        if (ev.keyCode === KeyCode.UP || ev.keyCode === KeyCode.DOWN) {
-            var oldSelectionStart = this.refs.textarea.selectionStart;
-            // Remember the keyCode because React will recycle the synthetic event
-            var keyCode = ev.keyCode;
-            // set a callback so we can see if the cursor position changes as
-            // a result of this event. If it doesn't, we cycle history.
-            setTimeout(() => {
-                if (this.refs.textarea.selectionStart == oldSelectionStart) {
-                    this.sentHistory.next(keyCode === KeyCode.UP ? 1 : -1);
-                }
-            }, 0);
-        }
-    }
-
     onTypingActivity() {
         this.isTyping = true;
         if (!this.userTypingTimer) {
@@ -404,7 +389,9 @@ export default class MessageComposerInput extends React.Component {
             contentState = RichText.HTMLtoContentState(html);
         } else {
             let markdown = stateToMarkdown(this.state.editorState.getCurrentContent());
-            markdown = markdown.substring(0, markdown.length - 1); // stateToMarkdown tacks on an extra newline (?!?)
+            if (markdown[markdown.length - 1] === '\n') {
+                markdown = markdown.substring(0, markdown.length - 1); // stateToMarkdown tacks on an extra newline (?!?)
+            }
             contentState = ContentState.createFromText(markdown);
         }
 
@@ -635,6 +622,14 @@ export default class MessageComposerInput extends React.Component {
         this.handleKeyCommand('toggle-mode');
     }
 
+    getBlockStyle(block: ContentBlock): ?string {
+        if (block.getType() === 'strikethrough') {
+            return 'mx_Markdown_STRIKETHROUGH';
+        }
+
+        return null;
+    }
+
     render() {
         const {editorState} = this.state;
 
@@ -663,6 +658,7 @@ export default class MessageComposerInput extends React.Component {
                         placeholder="Type a message…"
                         editorState={this.state.editorState}
                         onChange={this.setEditorState}
+                        blockStyleFn={this.getBlockStyle}
                         keyBindingFn={MessageComposerInput.getKeyBinding}
                         handleKeyCommand={this.handleKeyCommand}
                         handleReturn={this.handleReturn}
