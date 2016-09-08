@@ -31,12 +31,6 @@ var NotificationPanel = React.createClass({
     propTypes: {
     },
 
-    // this has to be a proper method rather than an unnamed function,
-    // otherwise react calls it with null on each update.
-    _gatherTimelinePanelRef: function(r) {
-        //this.refs.messagePanel = r;
-    },
-
     render: function() {
         // wrap a TimelinePanel with the jump-to-event bits turned off.
         var TimelinePanel = sdk.getComponent("structures.TimelinePanel");
@@ -46,7 +40,7 @@ var NotificationPanel = React.createClass({
 
         if (timelineSet) {
             return (
-                <TimelinePanel key={"NotificationPanel_" + this.props.roomId} ref={this._gatherTimelinePanelRef}
+                <TimelinePanel key={"NotificationPanel_" + this.props.roomId}
                     className="mx_NotificationPanel"
                     manageReadReceipts={false}
                     manageReadMarkers={false}

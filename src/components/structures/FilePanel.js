@@ -88,12 +88,6 @@ var FilePanel = React.createClass({
         }
     },
 
-    // this has to be a proper method rather than an unnamed function,
-    // otherwise react calls it with null on each update.
-    _gatherTimelinePanelRef: function(r) {
-        //this.refs.messagePanel = r;
-    },
-
     render: function() {
         // wrap a TimelinePanel with the jump-to-event bits turned off.
         var TimelinePanel = sdk.getComponent("structures.TimelinePanel");
@@ -103,7 +97,7 @@ var FilePanel = React.createClass({
             console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.roomId + " " +
                         "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
             return (
-                <TimelinePanel key={"filepanel_" + this.props.roomId} ref={this._gatherTimelinePanelRef}
+                <TimelinePanel key={"filepanel_" + this.props.roomId}
                     className="mx_FilePanel"
                     manageReadReceipts={false}
                     manageReadMarkers={false}
