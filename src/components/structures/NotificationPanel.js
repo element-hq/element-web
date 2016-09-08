@@ -23,7 +23,7 @@ var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
 
 /*
- * Component which shows the filtered file using a TimelinePanel
+ * Component which shows the global notification list using a TimelinePanel
  */
 var NotificationPanel = React.createClass({
     displayName: 'NotificationPanel',

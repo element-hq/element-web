@@ -1570,7 +1570,7 @@ module.exports = React.createClass({
 
         var messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
-                timelineSet={this.state.room.getTimelineSets()[0]}
+                timelineSet={this.state.room.getUnfilteredTimelineSet()}
                 manageReadReceipts={true}
                 manageReadMarkers={true}
                 hidden={hideMessagePanel}
