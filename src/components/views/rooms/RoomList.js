@@ -58,6 +58,7 @@ module.exports = React.createClass({
         cli.on("Room.receipt", this.onRoomReceipt);
         cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
+        cli.on("accountData", this.onAccountData);
 
         var s = this.getRoomLists();
         this.setState(s);
@@ -109,6 +110,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
+            MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
         }
         // cancel any pending calls to the rate_limited_funcs
         this._delayedRefreshRoomList.cancelPendingCall();
@@ -178,6 +180,12 @@ module.exports = React.createClass({
 
     onRoomMemberName: function(ev, member) {
         this._delayedRefreshRoomList();
+    },
+
+    onAccountData: function(ev) {
+        if (ev.getType() == 'm.direct') {
+            this._delayedRefreshRoomList();
+        }
     },
 
     _delayedRefreshRoomList: new rate_limited_func(function() {
