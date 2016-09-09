@@ -123,6 +123,8 @@ Example:
 
 const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require("./MatrixClientPeg");
+const MatrixEvent = require("matrix-js-sdk").MatrixEvent;
+const dis = require("./dispatcher");
 
 function sendResponse(event, res) {
     const data = JSON.parse(JSON.stringify(event.data));
@@ -188,16 +190,51 @@ function setBotOptions(event, roomId, userId) {
     });
 }
 
+function setBotPower(event, roomId, userId, level) {
+    if (!(Number.isInteger(level) && level >= 0)) {
+        sendError(event, "Power level must be positive integer.");
+        return;
+    }
+
+    console.log(`Received request to set power level to ${level} for bot ${userId} in room ${roomId}.`);
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, "You need to be logged in.");
+        return;
+    }
+
+    client.getStateEvent(roomId, "m.room.power_levels", "").then((powerLevels) => {
+        let powerEvent = new MatrixEvent(
+            {
+                type: "m.room.power_levels",
+                content: powerLevels,
+            }
+        );
+
+        client.setPowerLevel(roomId, userId, level, powerEvent).done(() => {
+            sendResponse(event, {
+                success: true,
+            });
+        }, (err) => {
+            sendError(event, err.message ? err.message : "Failed to send request.", err);
+        });
+    });
+}
+
 function getMembershipState(event, roomId, userId) {
     console.log(`membership_state of ${userId} in room ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.member", userId);
+}
+
+function getJoinRules(event, roomId) {
+    console.log(`join_rules of ${roomId} requested.`);
+    returnStateEvent(event, roomId, "m.room.join_rules", "");
 }
 
 function botOptions(event, roomId, userId) {
     console.log(`bot_options of ${userId} in room ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.bot.options", "_" + userId);
 }
-
 
 function returnStateEvent(event, roomId, eventType, stateKey) {
     const client = MatrixClientPeg.get();
@@ -218,6 +255,17 @@ function returnStateEvent(event, roomId, eventType, stateKey) {
     sendResponse(event, stateEvent.getContent());
 }
 
+var currentRoomId = null;
+
+// Listen for when a room is viewed
+dis.register(onAction);
+function onAction(payload) {
+    if (payload.action !== "view_room") {
+        return;
+    }
+    currentRoomId = payload.room_id;
+}
+
 const onMessage = function(event) {
     if (!event.origin) { // stupid chrome
         event.origin = event.originalEvent.origin;
@@ -235,12 +283,27 @@ const onMessage = function(event) {
 
     const roomId = event.data.room_id;
     const userId = event.data.user_id;
-    if (!userId) {
-        sendError(event, "Missing user_id in request");
-        return;
-    }
     if (!roomId) {
         sendError(event, "Missing room_id in request");
+        return;
+    }
+    if (!currentRoomId) {
+        sendError(event, "Must be viewing a room");
+        return;
+    }
+    if (roomId !== currentRoomId) {
+        sendError(event, "Room " + roomId + " not visible");
+        return;
+    }
+
+    // Getting join rules does not require userId
+    if (event.data.action === "join_rules_state") {
+        getJoinRules(event, roomId);
+        return;
+    }
+
+    if (!userId) {
+        sendError(event, "Missing user_id in request");
         return;
     }
     switch (event.data.action) {
@@ -255,6 +318,9 @@ const onMessage = function(event) {
             break;
         case "set_bot_options":
             setBotOptions(event, roomId, userId);
+            break;
+        case "set_bot_power":
+            setBotPower(event, roomId, userId, event.data.level);
             break;
         default:
             console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
