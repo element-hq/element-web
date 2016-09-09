@@ -149,13 +149,13 @@ export default class Autocomplete extends React.Component {
                     {completionResult.provider.renderCompletions(completions)}
                 </div>
             ) : null;
-        });
+        }).filter(completion => !!completion);
 
-        return (
+        return renderedCompletions.length > 0 ? (
             <div className="mx_Autocomplete" ref={(e) => this.container = e}>
                 {renderedCompletions}
             </div>
-        );
+        ) : null;
     }
 }
 
