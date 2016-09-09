@@ -64,6 +64,11 @@ input[type=text]:focus, textarea:focus {
     box-shadow: none;
 }
 
+/* Required by Firefox */
+textarea {
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+}
+
 /* Prevent ugly dotted highlight around selected elements in Firefox */
 ::-moz-focus-inner {
     border: 0;
@@ -198,14 +203,15 @@ input[type=text]:focus, textarea:focus {
     height: 36px;
     border-radius: 40px;
     border: solid 1px #76cfa6;
-    font-weight: 400;
-    font-size: 15px;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
     margin-left: 0px;
     margin-right: 8px;
     padding-left: 1.5em;
     padding-right: 1.5em;
     outline: none;
-
+    cursor: pointer;
     color: #76cfa6;
     background-color: #fff;
 }
