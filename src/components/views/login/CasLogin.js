@@ -16,26 +16,19 @@ limitations under the License.
 
 'use strict';
 
-var MatrixClientPeg = require("../../../MatrixClientPeg");
 var React = require('react');
-var url = require("url");
 
 module.exports = React.createClass({
     displayName: 'CasLogin',
 
-    onCasClicked: function(ev) {
-        var cli = MatrixClientPeg.get();
-        var parsedUrl = url.parse(window.location.href, true);
-        parsedUrl.query["homeserver"] = cli.getHomeserverUrl();
-        parsedUrl.query["identityServer"] = cli.getIdentityServerUrl();
-        var casUrl = MatrixClientPeg.get().getCasLoginUrl(url.format(parsedUrl));
-        window.location.href = casUrl;
+    propTypes: {
+      onSubmit: React.PropTypes.func, // fn()
     },
 
     render: function() {
         return (
             <div>
-                <button onClick={this.onCasClicked}>Sign in with CAS</button>
+                <button onClick={this.props.onSubmit}>Sign in with CAS</button>
             </div>
         );
     }
