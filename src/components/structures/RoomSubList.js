@@ -418,8 +418,18 @@ var RoomSubList = React.createClass({
             badge = <div className={badgeClasses}>{subListNotifCount > 99 ? "99+" : subListNotifCount}</div>;
         }
 
+        // When collapsed, allow a long hover on the header to show user
+        // the full tag name and room count
+        var title;
+        if (this.props.collapsed) {
+            title = this.props.label;
+            if (roomCount !== '') {
+                title += " [" + roomCount + "]";
+            }
+        }
+
         return (
-            <div className="mx_RoomSubList_labelContainer" ref="header">
+            <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
                 <div onClick={ this.onClick } className="mx_RoomSubList_label">
                     { this.props.collapsed ? '' : this.props.label }
                     <div className="mx_RoomSubList_roomCount">{roomCount}</div>

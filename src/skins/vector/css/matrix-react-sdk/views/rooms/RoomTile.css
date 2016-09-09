@@ -22,6 +22,14 @@ limitations under the License.
     height: 34px;
 }
 
+.mx_RoomTile_tooltip {
+    display: inline-block;
+    position: relative;
+    top: -62px;
+    left: 46px;
+}
+
+
 .mx_RoomTile_nameContainer {
     display: inline-block;
     width: 180px;
@@ -30,6 +38,10 @@ limitations under the License.
 
 .mx_RightPanel .mx_RoomTile_nameContainer {
     width: 170px;
+}
+
+.mx_RoomTile_avatar_container {
+    position: relative;
 }
 
 .mx_RoomTile_avatar {
@@ -43,6 +55,14 @@ limitations under the License.
     vertical-align: middle;
 }
 
+.mx_RoomTile_dm {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: -5px;
+    z-index: 2;
+}
+
 .mx_RoomTile_avatar_container:hover:before,
 .mx_RoomTile_avatar_container.mx_RoomTile_avatar_roomTagMenu:before {
     display: block;
@@ -51,7 +71,6 @@ limitations under the License.
     border-radius: 40px;
     background-image: url("img/icons_ellipsis.svg");
     background-size: 25px;
-    left: 15px;
     width: 24px;
     height: 24px;
     z-index: 4;
@@ -64,11 +83,11 @@ limitations under the License.
     content: "";
     border-radius: 40px;
     background: #4A4A4A;
-    top: 5px;
+    bottom: 0;
     width: 24px;
     height: 24px;
     opacity: 0.6;
-    z-index: 2;
+    z-index: 1;
 }
 
 .collapsed .mx_RoomTile_avatar_container:hover:before {
@@ -117,7 +136,7 @@ limitations under the License.
     min-width: 12px;
     border-radius: 16px;
     padding: 0px 4px 0px 4px;
-    z-index: 200;
+    z-index: 3;
 }
 
 /* Hide the bottom of speech bubble */
