@@ -233,10 +233,6 @@ module.exports = React.createClass({
             else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, self.props.ConferenceHandler)) {
                 // skip past this room & don't put it in any lists
             }
-            else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
-                // "Direct Message" rooms
-                s.lists["im.vector.fake.direct"].push(room);
-            }
             else if (me.membership == "join" || me.membership === "ban" ||
                      (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
             {
@@ -249,6 +245,10 @@ module.exports = React.createClass({
                         s.lists[tagName] = s.lists[tagName] || [];
                         s.lists[tagNames[i]].push(room);
                     }
+                }
+                else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
+                    // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
+                    s.lists["im.vector.fake.direct"].push(room);
                 }
                 else {
                     s.lists["im.vector.fake.recent"].push(room);
