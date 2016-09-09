@@ -370,6 +370,9 @@ module.exports = React.createClass({
                 this._setPage(this.PageTypes.RoomDirectory);
                 this.notifyNewScreen('directory');
                 break;
+            case 'view_create_chat':
+                this._createChat();
+                break;
             case 'notifier_enabled':
                 this.forceUpdate();
                 break;
@@ -504,6 +507,13 @@ module.exports = React.createClass({
         if (this.refs.roomView && room_info.showSettings) {
             this.refs.roomView.showSettings(true);
         }
+    },
+
+    _createChat: function() {
+        var ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
+        Modal.createDialog(ChatInviteDialog, {
+            title: "Start a one to one chat",
+        });
     },
 
     // update scrollStateMap according to the current scroll state of the

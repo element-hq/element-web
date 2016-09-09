@@ -17,9 +17,11 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require("react-dom");
 var classNames = require('classnames');
 var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var DMRoomMap = require('../../../utils/DMRoomMap');
 var sdk = require('../../../index');
 var ContextualMenu = require('../../structures/ContextualMenu');
 var RoomNotifs = require('../../../RoomNotifs');
@@ -64,6 +66,16 @@ module.exports = React.createClass({
 
     _shouldShowMentionBadge: function() {
         return this.state.notifState != RoomNotifs.MUTE;
+    },
+
+    _isDirectMessageRoom: function(roomId) {
+        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
+        var dmRooms = dmRoomMap.getUserIdForRoomId(roomId);
+        if (dmRooms) {
+            return true;
+        } else {
+            return false;
+        }
     },
 
     onAccountData: function(accountDataEvent) {
@@ -248,10 +260,9 @@ module.exports = React.createClass({
             } else {
                 label = <EmojiText element="div" title={ name } className={ nameClasses }>{name}</EmojiText>;
             }
-        }
-        else if (this.state.hover) {
+        } else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            label = <RoomTooltip room={this.props.room}/>;
+            tooltip = <RoomTooltip className="mx_RoomTile_tooltip" room={this.props.room} />;
         }
 
         var incomingCallBox;
@@ -261,6 +272,11 @@ module.exports = React.createClass({
         }
 
         var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
+
+        var directMessageIndicator;
+        if (this._isDirectMessageRoom(this.props.room.roomId)) {
+            directMessageIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm"/>;
+        }
 
         // These props are injected by React DnD,
         // as defined by your `collect` function above:
@@ -274,6 +290,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomTile_avatar_menu" onClick={this.onAvatarClicked}>
                         <div className={avatarContainerClasses}>
                             <RoomAvatar room={this.props.room} width={24} height={24} />
+                            {directMessageIndicator}
                         </div>
                     </div>
                 </div>
