@@ -79,8 +79,6 @@ module.exports = React.createClass({
         switch (payload.action) {
             case 'view_tooltip':
                 this.tooltip = payload.tooltip;
-                this._repositionTooltip();
-                if (this.tooltip) this.tooltip.style.display = 'block';
                 break;
             case 'call_state':
                 var call = CallHandler.getCall(payload.room_id);
@@ -315,17 +313,15 @@ module.exports = React.createClass({
     },
 
     _whenScrolling: function(e) {
-        this._repositionTooltip(e);
+        this._hideTooltip(e);
         this._repositionIncomingCallBox(e, false);
         this._updateStickyHeaders(false);
     },
 
-    _repositionTooltip: function(e) {
-        // We access the parent of the parent, as the tooltip is inside a container
-        // Needs refactoring into a better multipurpose tooltip
-        if (this.tooltip && this.tooltip.parentElement && this.tooltip.parentElement.parentElement) {
-            var scroll = ReactDOM.findDOMNode(this);
-            this.tooltip.style.top = (3 + scroll.parentElement.offsetTop + this.tooltip.parentElement.parentElement.offsetTop - this._getScrollNode().scrollTop) + "px";
+    _hideTooltip: function(e) {
+        // Hide tooltip when scrolling, as we'll no longer be over the one we were on
+        if (this.tooltip && this.tooltip.style.display !== "none") {
+            this.tooltip.style.display = "none";
         }
     },
 
@@ -374,7 +370,7 @@ module.exports = React.createClass({
         var scrollArea = this._getScrollNode();
         // Use the offset of the top of the scroll area from the window
         // as this is used to calculate the CSS fixed top position for the stickies
-        var scrollAreaOffset = scrollArea.getBoundingClientRect().top;
+        var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
         // Use the offset of the top of the componet from the window
         // as this is used to calculate the CSS fixed top position for the stickies
         var scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;

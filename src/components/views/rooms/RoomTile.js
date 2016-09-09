@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var ReactDOM = require("react-dom");
 var classNames = require('classnames');
 var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
@@ -245,10 +246,9 @@ module.exports = React.createClass({
             } else {
                 label = <EmojiText element="div" title={ name } className={ nameClasses }>{name}</EmojiText>;
             }
-        }
-        else if (this.state.hover) {
+        } else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            label = <RoomTooltip room={this.props.room}/>;
+            tooltip = <RoomTooltip className="mx_RoomTile_tooltip" room={this.props.room} />;
         }
 
         var incomingCallBox;
