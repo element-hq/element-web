@@ -67,7 +67,6 @@ limitations under the License.
     border-radius: 40px;
     background-image: url("img/icons_ellipsis.svg");
     background-size: 25px;
-    left: 15px;
     width: 24px;
     height: 24px;
     z-index: 4;
@@ -80,7 +79,7 @@ limitations under the License.
     content: "";
     border-radius: 40px;
     background: #4A4A4A;
-    top: 5px;
+    bottom: 0;
     width: 24px;
     height: 24px;
     opacity: 0.6;
