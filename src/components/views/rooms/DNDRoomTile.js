@@ -26,6 +26,13 @@ var sdk = require('matrix-react-sdk');
 var RoomTile = require('matrix-react-sdk/lib/components/views/rooms/RoomTile');
 
 /**
+ * Defines a new Component, DNDRoomTile that wraps RoomTile, making it draggable.
+ * Requires extra props:
+ *   roomSubList: React.PropTypes.object.isRequired,
+ *   refreshSubList: React.PropTypes.func.isRequired,
+ */
+
+/**
  * Specifies the drag source contract.
  * Only `beginDrag` function is required.
  */
@@ -202,4 +209,3 @@ DragSource('RoomTile', roomTileSource, function(connect, monitor) {
     };
 })(RoomTile));
 
-module.exports.replaces = 'RoomTile';

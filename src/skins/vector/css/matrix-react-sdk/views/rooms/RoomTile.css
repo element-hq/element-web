@@ -28,6 +28,10 @@ limitations under the License.
     height: 24px;
 }
 
+.mx_RightPanel .mx_RoomTile_nameContainer {
+    width: 170px;
+}
+
 .mx_RoomTile_avatar {
     display: inline-block;
     padding-top: 5px;

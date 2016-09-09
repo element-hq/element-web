@@ -46,7 +46,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var BottomLeftMenuTile = sdk.getComponent('rooms.BottomLeftMenuTile');
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
         return (
             <div className="mx_BottomLeftMenu">
