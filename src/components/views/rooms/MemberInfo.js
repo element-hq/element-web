@@ -35,6 +35,7 @@ var UserSettingsStore = require('../../../UserSettingsStore');
 var createRoom = require('../../../createRoom');
 var DMRoomMap = require('../../../utils/DMRoomMap');
 var Unread = require('../../../Unread');
+var Receipt = require('../../../utils/Receipt');
 
 module.exports = React.createClass({
     displayName: 'MemberInfo',
@@ -73,11 +74,21 @@ module.exports = React.createClass({
         // feature is enabled in the user settings
         this._enableDevices = MatrixClientPeg.get().isCryptoEnabled() &&
             UserSettingsStore.isFeatureEnabled("e2e_encryption");
+
+        const cli = MatrixClientPeg.get();
+        cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
+        cli.on("Room", this.onRoom);
+        cli.on("deleteRoom", this.onDeleteRoom);
+        cli.on("Room.timeline", this.onRoomTimeline);
+        cli.on("Room.name", this.onRoomName);
+        cli.on("Room.receipt", this.onRoomReceipt);
+        cli.on("RoomState.events", this.onRoomStateEvents);
+        cli.on("RoomMember.name", this.onRoomMemberName);
+        cli.on("accountData", this.onAccountData);
     },
 
     componentDidMount: function() {
         this._updateStateForNewMember(this.props.member);
-        MatrixClientPeg.get().on("deviceVerificationChanged", this.onDeviceVerificationChanged);
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -90,6 +101,14 @@ module.exports = React.createClass({
         var client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
+            client.removeListener("Room", this.onRoom);
+            client.removeListener("deleteRoom", this.onDeleteRoom);
+            client.removeListener("Room.timeline", this.onRoomTimeline);
+            client.removeListener("Room.name", this.onRoomName);
+            client.removeListener("Room.receipt", this.onRoomReceipt);
+            client.removeListener("RoomState.events", this.onRoomStateEvents);
+            client.removeListener("RoomMember.name", this.onRoomMemberName);
+            client.removeListener("accountData", this.onAccountData);
         }
         if (this._cancelDeviceList) {
             this._cancelDeviceList();
@@ -106,6 +125,45 @@ module.exports = React.createClass({
             // the list.
             var devices = MatrixClientPeg.get().getStoredDevicesForUser(userId);
             this.setState({devices: devices});
+        }
+    },
+
+    onRoom: function(room) {
+        this.forceUpdate();
+    },
+
+    onDeleteRoom: function(roomId) {
+        this.forceUpdate();
+    },
+
+    onRoomTimeline: function(ev, room, toStartOfTimeline) {
+        if (toStartOfTimeline) return;
+        this.forceUpdate();
+    },
+
+    onRoomName: function(room) {
+        this.forceUpdate();
+    },
+
+    onRoomReceipt: function(receiptEvent, room) {
+        // because if we read a notification, it will affect notification count
+        // only bother updating if there's a receipt from us
+        if (Receipt.findReadReceiptFromUserId(receiptEvent, MatrixClientPeg.get().credentials.userId)) {
+            this.forceUpdate();
+        }
+    },
+
+    onRoomStateEvents: function(ev, state) {
+        this.forceUpdate();
+    },
+
+    onRoomMemberName: function(ev, member) {
+        this.forceUpdate();
+    },
+
+    onAccountData: function(ev) {
+        if (ev.getType() == 'm.direct') {
+            this.forceUpdate();
         }
     },
 
