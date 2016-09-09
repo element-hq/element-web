@@ -36,6 +36,10 @@ limitations under the License.
     height: 24px;
 }
 
+.mx_RoomTile_avatar_container {
+    position: relative;
+}
+
 .mx_RoomTile_avatar {
     display: inline-block;
     padding-top: 5px;
@@ -45,6 +49,14 @@ limitations under the License.
     width: 24px;
     height: 24px;
     vertical-align: middle;
+}
+
+.mx_RoomTile_dm {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: -5px;
+    z-index: 2;
 }
 
 .mx_RoomTile_avatar_container:hover:before,
