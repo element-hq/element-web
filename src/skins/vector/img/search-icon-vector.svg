@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="25px" height="25px" viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>2EFF6BB8-D2CC-44E6-85E9-D057E4AE9DF2</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <ellipse id="path-1" cx="7.68292683" cy="15.4246795" rx="1.35501355" ry="1.40224359"></ellipse>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-0.780487805" y="-0.780487805" width="4.36546279" height="4.27100271">
+            <rect x="5.50019543" y="13.2891781" width="4.36546279" height="4.27100271" fill="white"></rect>
+            <use xlink:href="#path-1" fill="black"></use>
+        </mask>
+        <ellipse id="path-3" cx="1.72109346" cy="4.95482816" rx="1.35501355" ry="1.40224359"></ellipse>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-0.780487805" y="-0.780487805" width="4.29534171" height="4.3426507">
+            <rect x="-0.426577393" y="2.78350281" width="4.29534171" height="4.3426507" fill="white"></rect>
+            <use xlink:href="#path-3" fill="black"></use>
+        </mask>
+        <ellipse id="path-5" cx="13.4645442" cy="4.95482816" rx="1.35501355" ry="1.40224359"></ellipse>
+        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-0.780487805" y="-0.780487805" width="4.29534171" height="4.3426507">
+            <rect x="11.3168734" y="2.78350281" width="4.29534171" height="4.3426507" fill="white"></rect>
+            <use xlink:href="#path-5" fill="black"></use>
+        </mask>
+    </defs>
+    <g id="1:1-chat" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Chat-People-2a-Invite-modal-HOVER" transform="translate(-314.000000, -391.000000)">
+            <g id="search_icon_vector" transform="translate(314.000000, 391.000000)">
+                <circle id="Oval-2-Copy" fill="#FFFFFF" cx="12.5" cy="12.5" r="12.5"></circle>
+                <g id="Mark" transform="translate(5.000000, 4.000000)">
+                    <ellipse id="large-circ-copy-42" stroke="#E2E2E2" stroke-width="0.780487805" fill="#FFFFFF" cx="7.68292683" cy="8.50694444" rx="6.77506775" ry="7.01121795"></ellipse>
+                    <ellipse id="Oval-1-Copy-200" stroke="#E2E2E2" stroke-width="0.780487805" fill="#FFFFFF" cx="7.68292683" cy="1.40224359" rx="1.35501355" ry="1.40224359"></ellipse>
+                    <ellipse id="Oval-1-Copy-201" stroke="#E2E2E2" stroke-width="0.780487805" fill="#FFFFFF" cx="1.72109346" cy="11.8725632" rx="1.35501355" ry="1.40224359"></ellipse>
+                    <ellipse id="Oval-1-Copy-202" stroke="#E2E2E2" stroke-width="0.780487805" fill="#FFFFFF" cx="13.4645442" cy="11.8725632" rx="1.35501355" ry="1.40224359"></ellipse>
+                    <path d="M7.77326107,14.0224359 C7.77326107,14.0224359 3.07588076,10.0441118 3.07588076,5.04807692" id="Path-72-Copy-2" stroke="#73D0A5" stroke-width="0.780487805"></path>
+                    <path d="M12.2899729,14.0224359 C12.2899729,14.0224359 7.59259259,10.0441118 7.59259259,5.04807692" id="Path-72-Copy-3" stroke="#73D0A5" stroke-width="0.780487805" transform="translate(9.941283, 9.535256) scale(-1, 1) translate(-9.941283, -9.535256) "></path>
+                    <g id="Oval-1-Copy-203">
+                        <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                        <use stroke="#FFFFFF" mask="url(#mask-2)" stroke-width="1.56097561" xlink:href="#path-1"></use>
+                        <use stroke="#73D0A5" stroke-width="0.780487805" xlink:href="#path-1"></use>
+                    </g>
+                    <g id="Oval-1-Copy-204">
+                        <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-3"></use>
+                        <use stroke="#FFFFFF" mask="url(#mask-4)" stroke-width="1.56097561" xlink:href="#path-3"></use>
+                        <use stroke="#73D0A5" stroke-width="0.780487805" xlink:href="#path-3"></use>
+                    </g>
+                    <g id="Oval-1-Copy-205">
+                        <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-5"></use>
+                        <use stroke="#FFFFFF" mask="url(#mask-6)" stroke-width="1.56097561" xlink:href="#path-5"></use>
+                        <use stroke="#76CFA6" stroke-width="0.780487805" xlink:href="#path-5"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

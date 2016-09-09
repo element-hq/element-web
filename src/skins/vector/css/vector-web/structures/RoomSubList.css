@@ -39,7 +39,7 @@ limitations under the License.
     padding-top: 6px;
     padding-bottom: 6px;
     cursor: pointer;
-    background-color: rgba(118, 207, 166, 0.2);
+    background-color: rgba(118, 207, 166, 0.2); /* Should be #d3ede1, but not a magic colour */
     border-top: solid 2px #eaf5f0;
 }
 
@@ -90,9 +90,11 @@ limitations under the License.
     background-color: #76cfa6;
 }
 
+/*
 .collapsed .mx_RoomSubList_badge {
     display: none;
 }
+*/
 
 .mx_RoomSubList_badgeHighlight {
     background-color: #ff0064;
