@@ -340,6 +340,7 @@ module.exports = React.createClass({
         if (this.unmounted) return;
 
         // ignore events for other rooms
+        if (!room) return;
         if (!this.state.room || room.roomId != this.state.room.roomId) return;
 
         // ignore events from filtered timelines

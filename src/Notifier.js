@@ -190,7 +190,7 @@ var Notifier = {
 
     setToolbarHidden: function(hidden, persistent = true) {
         this.toolbarHidden = hidden;
-        
+
         // XXX: why are we dispatching this here?
         // this is nothing to do with notifier_enabled
         dis.dispatch({
@@ -226,6 +226,7 @@ var Notifier = {
 
     onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
         if (toStartOfTimeline) return;
+        if (!room) return;
         if (!this.isPrepared) return; // don't alert for any messages initially
         if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) return;
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
