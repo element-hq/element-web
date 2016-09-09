@@ -148,6 +148,7 @@ module.exports = React.createClass({
 
     onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
         if (toStartOfTimeline) return;
+        if (!room) return;
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
         this._delayedRefreshRoomList();
     },
