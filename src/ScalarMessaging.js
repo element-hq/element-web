@@ -293,6 +293,7 @@ const onMessage = function(event) {
     if (!currentRoomId) {
         if (!currentRoomAlias) {
             sendError(event, "Must be viewing a room");
+            return;
         }
         // no room ID but there is an alias, look it up.
         console.log("Looking up alias " + currentRoomAlias);
