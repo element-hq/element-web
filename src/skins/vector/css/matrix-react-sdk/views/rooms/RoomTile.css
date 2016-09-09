@@ -83,7 +83,7 @@ limitations under the License.
     width: 24px;
     height: 24px;
     opacity: 0.6;
-    z-index: 2;
+    z-index: 1;
 }
 
 .collapsed .mx_RoomTile_avatar_container:hover:before {
