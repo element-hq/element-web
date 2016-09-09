@@ -31,7 +31,7 @@ import {Editor, EditorState, RichUtils, CompositeDecorator,
     convertFromRaw, convertToRaw, Modifier, EditorChangeType,
     getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState} from 'draft-js';
 
-import {stateToMarkdown} from 'draft-js-export-markdown';
+import {stateToMarkdown as __stateToMarkdown} from 'draft-js-export-markdown';
 import classNames from 'classnames';
 import escape from 'lodash/escape';
 
@@ -50,6 +50,16 @@ import * as RichText from '../../../RichText';
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
 const KEY_M = 77;
+
+const ZWS_CODE = 8203;
+const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
+function stateToMarkdown(state) {
+    return __stateToMarkdown(state)
+        .replace(
+            ZWS, // draft-js-export-markdown adds these
+            ''); // this is *not* a zero width space, trust me :)
+}
+
 
 // FIXME Breaks markdown with multiple paragraphs, since it only strips first and last <p>
 function mdownToHtml(mdown: string): string {
@@ -480,7 +490,7 @@ export default class MessageComposerInput extends React.Component {
                 });
             }
             if (cmd.promise) {
-                cmd.promise.done(function() {
+                cmd.promise.then(function() {
                     console.log("Command success.");
                 }, function(err) {
                     console.error("Command failure: %s", err);
@@ -520,7 +530,7 @@ export default class MessageComposerInput extends React.Component {
         this.sentHistory.push(contentHTML);
         let sendMessagePromise = sendFn.call(this.client, this.props.room.roomId, contentText, contentHTML);
 
-        sendMessagePromise.done(() => {
+        sendMessagePromise.then(() => {
             dis.dispatch({
                 action: 'message_sent'
             });
