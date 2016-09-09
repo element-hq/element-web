@@ -257,9 +257,7 @@ module.exports = React.createClass({
 
     _startChat: function(addr) {
         // Start the chat
-        createRoom().then(function(roomId) {
-            return Invite.inviteToRoom(roomId, addr);
-        })
+        createRoom({dmUserId: addr})
         .catch(function(err) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
