@@ -36,6 +36,10 @@ limitations under the License.
     height: 24px;
 }
 
+.mx_RightPanel .mx_RoomTile_nameContainer {
+    width: 170px;
+}
+
 .mx_RoomTile_avatar_container {
     position: relative;
 }
