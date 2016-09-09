@@ -30,10 +30,9 @@ module.exports = React.createClass({
     displayName: 'RoomTile',
 
     propTypes: {
-        // TODO: We should *optionally* support DND stuff and ideally be impl agnostic about it
-        connectDragSource: React.PropTypes.func.isRequired,
-        connectDropTarget: React.PropTypes.func.isRequired,
-        isDragging: React.PropTypes.bool.isRequired,
+        connectDragSource: React.PropTypes.func,
+        connectDropTarget: React.PropTypes.func,
+        isDragging: React.PropTypes.bool,
 
         room: React.PropTypes.object.isRequired,
         collapsed: React.PropTypes.bool.isRequired,
@@ -41,9 +40,13 @@ module.exports = React.createClass({
         unread: React.PropTypes.bool.isRequired,
         highlight: React.PropTypes.bool.isRequired,
         isInvite: React.PropTypes.bool.isRequired,
-        roomSubList: React.PropTypes.object.isRequired,
-        refreshSubList: React.PropTypes.func.isRequired,
         incomingCall: React.PropTypes.object,
+    },
+
+    getDefaultProps: function() {
+        return {
+            isDragging: false,
+        };
     },
 
     getInitialState: function() {
@@ -281,7 +284,7 @@ module.exports = React.createClass({
         var connectDragSource = this.props.connectDragSource;
         var connectDropTarget = this.props.connectDropTarget;
 
-        return connectDragSource(connectDropTarget(
+        let ret = (
             <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className={avatarClasses}>
                     <div className="mx_RoomTile_avatar_menu" onClick={this.onAvatarClicked}>
@@ -298,6 +301,11 @@ module.exports = React.createClass({
                 { incomingCallBox }
                 { tooltip }
             </div>
-        ));
+        );
+
+        if (connectDropTarget) ret = connectDropTarget(ret);
+        if (connectDragSource) ret = connectDragSource(ret);
+
+        return ret;
     }
 });
