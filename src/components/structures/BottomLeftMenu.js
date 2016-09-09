@@ -30,6 +30,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return({
+            directoryHover : false,
             roomsHover : false,
             peopleHover : false,
             settingsHover : false,
@@ -37,8 +38,20 @@ module.exports = React.createClass({
     },
 
     // Room events
+    onDirectoryClick: function() {
+        dis.dispatch({ action: 'view_room_directory' });
+    },
+
+    onDirectoryMouseEnter: function() {
+        this.setState({ directoryHover: true });
+    },
+
+    onDirectoryMouseLeave: function() {
+        this.setState({ directoryHover: false });
+    },
+
     onRoomsClick: function() {
-        dis.dispatch({action: 'view_create_room'});
+        dis.dispatch({ action: 'view_create_room' });
     },
 
     onRoomsMouseEnter: function() {
@@ -51,7 +64,7 @@ module.exports = React.createClass({
 
     // People events
     onPeopleClick: function() {
-        dis.dispatch({action: 'view_create_chat'});
+        dis.dispatch({ action: 'view_create_chat' });
     },
 
     onPeopleMouseEnter: function() {
@@ -64,7 +77,7 @@ module.exports = React.createClass({
 
     // Settings events
     onSettingsClick: function() {
-        dis.dispatch({action: 'view_user_settings'});
+        dis.dispatch({ action: 'view_user_settings' });
     },
 
     onSettingsMouseEnter: function() {
@@ -88,9 +101,13 @@ module.exports = React.createClass({
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
+                    <div className="mx_BottomLeftMenu_directory" onClick={ this.onDirectoryClick } onMouseEnter={ this.onDirectoryMouseEnter } onMouseLeave={ this.onDirectoryMouseLeave } >
+                        <TintableSvg src="img/icons-directory.svg" width="25" height="25"/>
+                        { this.getLabel("Room directory", this.state.directoryHover) }
+                    </div>
                     <div className="mx_BottomLeftMenu_createRoom" onClick={ this.onRoomsClick } onMouseEnter={ this.onRoomsMouseEnter } onMouseLeave={ this.onRoomsMouseLeave } >
                         <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
-                        { this.getLabel("Rooms", this.state.roomsHover) }
+                        { this.getLabel("Create new room", this.state.roomsHover) }
                     </div>
                     <div className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
                         <TintableSvg src="img/icons-people.svg" width="25" height="25" />
