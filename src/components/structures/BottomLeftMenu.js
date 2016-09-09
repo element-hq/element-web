@@ -79,7 +79,7 @@ module.exports = React.createClass({
     getLabel: function(label, show) {
         if (show) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            return <RoomTooltip label={label} left={6} top={this.props.collapsed ? 3 : null} />;
+            return <RoomTooltip className="mx_BottomLeftMenu_tooltip" label={label} />;
         }
     },
 

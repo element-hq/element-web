@@ -24,13 +24,11 @@ module.exports = React.createClass({
     displayName: 'RoomTooltip',
 
     propTypes: {
+        // Alllow the tooltip to be styled by the parent element
+        className: React.PropTypes.string.isRequired,
         // The tooltip is derived from either the room name or a label
         room: React.PropTypes.object,
         label: React.PropTypes.string,
-
-        // The tooltip position can be tweaked by passing in additional positional information
-        top: React.PropTypes.number,
-        left: React.PropTypes.number,
     },
 
     // Create a wrapper for the tooltip outside the parent and attach it to the body element
@@ -52,8 +50,6 @@ module.exports = React.createClass({
             action: 'view_tooltip',
             tooltip: null,
             parent: null,
-            top: null,
-            left: null,
         });
 
         ReactDOM.unmountComponentAtNode(this.tooltipContainer);
@@ -67,15 +63,11 @@ module.exports = React.createClass({
         // positioned, also taking into account any window zoom
         // NOTE: The additional 6 pixels for the left position, is to take account of the
         // tooltips chevron
-        var parent = ReactDOM.findDOMNode(this).parentElement;
+        var parent = ReactDOM.findDOMNode(this);
         var style = {};
         style.top = parent.getBoundingClientRect().top + window.pageYOffset;
         style.left = 6 + parent.getBoundingClientRect().right + window.pageXOffset;
         style.display = "block";
-
-        // Add any additional positional tweaks passed in to the tooltip
-        if (this.props.top) { style.top += this.props.top; }
-        if (this.props.left) { style.left += this.props.left; }
 
         var tooltip = (
             <div className="mx_RoomTooltip" style={style} >
@@ -92,15 +84,13 @@ module.exports = React.createClass({
             action: 'view_tooltip',
             tooltip: this.tooltip,
             parent: parent,
-            top: this.props.top,
-            left: this.props.left,
         });
     },
 
     render: function() {
         // Render a placeholder
         return (
-            <div className="mx_RoomToolTip_placeholder" >
+            <div className={ this.props.className } >
             </div>
         );
     }

@@ -22,6 +22,14 @@ limitations under the License.
     height: 34px;
 }
 
+.mx_RoomTile_tooltip {
+    display: inline-block;
+    position: relative;
+    top: -62px;
+    left: 44px;
+}
+
+
 .mx_RoomTile_nameContainer {
     display: inline-block;
     width: 180px;

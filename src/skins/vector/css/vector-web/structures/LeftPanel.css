@@ -105,3 +105,10 @@ limitations under the License.
 .mx_LeftPanel.collapsed .mx_BottomLeftMenu_settings {
     float: none;
 }
+
+.mx_LeftPanel .mx_BottomLeftMenu_tooltip {
+    display: inline-block;
+    position: relative;
+    top: -25px;
+    left: 6px;
+}
