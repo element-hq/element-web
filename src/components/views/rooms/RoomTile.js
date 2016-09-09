@@ -271,7 +271,7 @@ module.exports = React.createClass({
         var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
         var directMessageIndicator;
-        if (this._isDirectMessageRoom(this.props.room)) {
+        if (this._isDirectMessageRoom(this.props.room.roomId)) {
             directMessageIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm"/>;
         }
 
