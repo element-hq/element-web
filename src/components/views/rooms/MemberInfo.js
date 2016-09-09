@@ -26,12 +26,15 @@ limitations under the License.
  * 'isTargetMod': boolean
  */
 var React = require('react');
+var classNames = require('classnames');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var dis = require("../../../dispatcher");
 var Modal = require("../../../Modal");
 var sdk = require('../../../index');
 var UserSettingsStore = require('../../../UserSettingsStore');
 var createRoom = require('../../../createRoom');
+var DMRoomMap = require('../../../utils/DMRoomMap');
+var Unread = require('../../../Unread');
 
 module.exports = React.createClass({
     displayName: 'MemberInfo',
@@ -60,7 +63,6 @@ module.exports = React.createClass({
             updating: 0,
             devicesLoading: true,
             devices: null,
-            existingOneToOneRoomId: null,
         }
     },
 
@@ -71,10 +73,6 @@ module.exports = React.createClass({
         // feature is enabled in the user settings
         this._enableDevices = MatrixClientPeg.get().isCryptoEnabled() &&
             UserSettingsStore.isFeatureEnabled("e2e_encryption");
-
-        this.setState({
-            existingOneToOneRoomId: this.getExistingOneToOneRoomId()
-        });
     },
 
     componentDidMount: function() {
@@ -96,59 +94,6 @@ module.exports = React.createClass({
         if (this._cancelDeviceList) {
             this._cancelDeviceList();
         }
-    },
-
-    getExistingOneToOneRoomId: function() {
-        const rooms = MatrixClientPeg.get().getRooms();
-        const userIds = [
-            this.props.member.userId,
-            MatrixClientPeg.get().credentials.userId
-        ];
-        let existingRoomId = null;
-        let invitedRoomId = null;
-
-        // roomId can be null here because of a hack in MatrixChat.onUserClick where we
-        // abuse this to view users rather than room members.
-        let currentMembers;
-        if (this.props.member.roomId) {
-            const currentRoom = MatrixClientPeg.get().getRoom(this.props.member.roomId);
-            currentMembers = currentRoom.getJoinedMembers();
-        }
-
-        // reuse the first private 1:1 we find
-        existingRoomId = null;
-
-        for (let i = 0; i < rooms.length; i++) {
-            // don't try to reuse public 1:1 rooms
-            const join_rules = rooms[i].currentState.getStateEvents("m.room.join_rules", '');
-            if (join_rules && join_rules.getContent().join_rule === 'public') continue;
-
-            const members = rooms[i].getJoinedMembers();
-            if (members.length === 2 &&
-                userIds.indexOf(members[0].userId) !== -1 &&
-                userIds.indexOf(members[1].userId) !== -1)
-            {
-                existingRoomId = rooms[i].roomId;
-                break;
-            }
-
-            const invited = rooms[i].getMembersWithMembership('invite');
-            if (members.length === 1 &&
-                invited.length === 1 &&
-                userIds.indexOf(members[0].userId) !== -1 &&
-                userIds.indexOf(invited[0].userId) !== -1 &&
-                invitedRoomId === null)
-            {
-                invitedRoomId = rooms[i].roomId;
-                // keep looking: we'll use this one if there's nothing better
-            }
-        }
-
-        if (existingRoomId === null) {
-            existingRoomId = invitedRoomId;
-        }
-
-        return existingRoomId;
     },
 
     onDeviceVerificationChanged: function(userId, device) {
@@ -416,33 +361,16 @@ module.exports = React.createClass({
         }
     },
 
-    onChatClick: function() {
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-
-        // TODO: keep existingOneToOneRoomId updated if we see any room member changes anywhere
-
-        const useExistingOneToOneRoom = this.state.existingOneToOneRoomId && (this.state.existingOneToOneRoomId !== this.props.member.roomId);
-
-        // check if there are any existing rooms with just us and them (1:1)
-        // If so, just view that room. If not, create a private room with them.
-        if (useExistingOneToOneRoom) {
-            dis.dispatch({
-                action: 'view_room',
-                room_id: this.state.existingOneToOneRoomId,
-            });
+    onNewDMClick: function() {
+        this.setState({ updating: this.state.updating + 1 });
+        createRoom({
+            createOpts: {
+                invite: [this.props.member.userId],
+            },
+        }).finally(() => {
             this.props.onFinished();
-        }
-        else {
-            this.setState({ updating: this.state.updating + 1 });
-            createRoom({
-                createOpts: {
-                    invite: [this.props.member.userId],
-                },
-            }).finally(() => {
-                this.props.onFinished();
-                this.setState({ updating: this.state.updating - 1 });
-            }).done();
-        }
+            this.setState({ updating: this.state.updating - 1 });
+        }).done();
     },
 
     onLeaveClick: function() {
@@ -583,24 +511,50 @@ module.exports = React.createClass({
     render: function() {
         var startChat, kickButton, banButton, muteButton, giveModButton, spinner;
         if (this.props.member.userId !== MatrixClientPeg.get().credentials.userId) {
-            // FIXME: we're referring to a vector component from react-sdk
-            var BottomLeftMenuTile = sdk.getComponent('rooms.BottomLeftMenuTile');
+            const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
+            const dmRooms = dmRoomMap.getDMRoomsForUserId(this.props.member.userId);
 
-            var label;
-            if (this.state.existingOneToOneRoomId) {
-                if (this.state.existingOneToOneRoomId == this.props.member.roomId) {
-                    label = "Start new direct chat";
-                }
-                else {
-                    label = "Go to direct chat";
+            const RoomTile = sdk.getComponent("rooms.RoomTile");
+
+            const tiles = [];
+            for (const roomId of dmRooms) {
+                const room = MatrixClientPeg.get().getRoom(roomId);
+                if (room) {
+                    const me = room.getMember(MatrixClientPeg.get().credentials.userId);
+                    const highlight = (
+                        room.getUnreadNotificationCount('highlight') > 0 ||
+                        me.membership == "invite"
+                    );
+                    tiles.push(
+                        <RoomTile key={room.roomId} room={room}
+                            collapsed={false}
+                            selected={false}
+                            unread={Unread.doesRoomHaveUnreadMessages(room)}
+                            highlight={highlight}
+                            isInvite={me.membership == "invite"}
+                        />
+                    );
                 }
             }
-            else {
-                label = "Start direct chat";
-            }
 
-            startChat = <BottomLeftMenuTile collapsed={ false } img="img/create-big.svg"
-                                            label={ label } onClick={ this.onChatClick }/>
+            const labelClasses = classNames({
+                mx_MemberInfo_createRoom_label: true,
+                mx_RoomTile_name: true,
+            });
+            const startNewChat = <div
+                className="mx_MemberInfo_createRoom"
+                onClick={this.onNewDMClick}
+            >
+                <div className="mx_RoomTile_avatar">
+                    <img src="img/create-big.svg" width="26" height="26" />
+                </div>
+                <div className={labelClasses}><i>Start new direct chat</i></div>
+            </div>
+
+            startChat = <div>
+                {tiles}
+                {startNewChat}
+            </div>;
         }
 
         if (this.state.updating) {
