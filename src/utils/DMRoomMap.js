@@ -37,10 +37,14 @@ export default class DMRoomMap {
     }
 
     getDMRoomsForUserId(userId) {
-        return this.userToRooms[userId];
+        // Here, we return the empty list if there are no rooms,
+        // since the number of conversations you have with this user is zero.
+        return this.userToRooms[userId] || [];
     }
 
     getUserIdForRoomId(roomId) {
+        // Here, we return undefined if the room is not in the map:
+        // the room ID you gave is not a DM room for any user.
         return this.roomToUser[roomId];
     }
 }
