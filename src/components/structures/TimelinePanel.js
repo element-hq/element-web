@@ -387,8 +387,8 @@ var TimelinePanel = React.createClass({
         });
     },
 
-    onRoomTimelineReset: function(room) {
-        if (room !== this.props.timelineSet.room) return;
+    onRoomTimelineReset: function(room, timelineSet) {
+        if (timelineSet !== this.props.timelineSet) return;
 
         if (this.refs.messagePanel && this.refs.messagePanel.isAtBottom()) {
             this._loadTimeline();
