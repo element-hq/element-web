@@ -94,8 +94,8 @@ var FilePanel = React.createClass({
         var Loader = sdk.getComponent("elements.Spinner");
 
         if (this.state.timelineSet) {
-            console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.roomId + " " +
-                        "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
+            // console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.room.roomId + " " +
+            //             "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
             return (
                 <TimelinePanel key={"filepanel_" + this.props.roomId}
                     className="mx_FilePanel"
