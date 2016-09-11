@@ -29,32 +29,90 @@ limitations under the License.
     overflow-y: auto;
 }
 
+.mx_FilePanel .mx_RoomView_messageListWrapper {
+    margin-right: 20px;
+}
+
 .mx_FilePanel .mx_RoomView_MessageList h2 {
     display: none;
 }
+
+/* FIXME: rather than having EventTile's default CSS be for MessagePanel,
+   we should make EventTile a base CSS class and customise it specifically
+   for usage in {Message,File,Notification}Panel. */
 
 .mx_FilePanel .mx_EventTile_avatar {
     display: none;
 }
 
+/* Overrides for the attachment body tiles */
+
+.mx_FilePanel .mx_EventTile .mx_MImageBody {
+    margin-right: 0px;
+}
+
+.mx_FilePanel .mx_EventTile .mx_MImageBody_download {
+    display: flex;
+    font-size: 14px;
+    color: #acacac;
+}
+
+.mx_FilePanel .mx_EventTile .mx_MImageBody_downloadLink {
+    flex: 1 1 auto;
+    color: #747474;
+    word-break: break-all;
+}
+
+.mx_FilePanel .mx_EventTile .mx_MImageBody_size {
+    flex: 1 0 0;
+    font-size: 11px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Overides for the sender details line */
+
+.mx_FilePanel .mx_EventTile_senderDetails {
+    display: flex;
+    margin-top: -2px;
+}
+
+.mx_FilePanel .mx_EventTile_senderDetailsLink {
+    text-decoration: none;
+}
+
 .mx_FilePanel .mx_EventTile .mx_SenderProfile {
+    flex: 1 1 auto;
+    line-height: initial;
     padding: 0px;
+    font-size: 11px;
+    opacity: 1.0;
+    color: #acacac;
+    word-break: break-all;
 }
 
 .mx_FilePanel .mx_EventTile .mx_MessageTimestamp {
+    flex: 1 0 0;
+    text-align: right;
     visibility: visible;
     position: initial;
+    font-size: 11px;
+    opacity: 1.0;
+    color: #acacac;
 }
+
+/* Overrides for the wrappers around the body tile */
 
 .mx_FilePanel .mx_EventTile_line {
     margin-right: 0px;
     padding-left: 0px;
 }
 
+.mx_FilePanel .mx_EventTile:hover .mx_EventTile_line {
+    background-color: #fff;
+}
+
 .mx_FilePanel .mx_EventTile_selected .mx_EventTile_line {
     padding-left: 0px;
 }
 
-.mx_FilePanel .mx_EventTile_content {
-    margin-right: 0px;
-}
