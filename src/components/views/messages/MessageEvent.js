@@ -37,6 +37,9 @@ module.exports = React.createClass({
 
         /* callback called when dynamic content in events are loaded */
         onWidgetLoad: React.PropTypes.func,
+
+        /* the shsape of the tile, used */
+        tileShape: React.PropTypes.string,
     },
 
     getEventTileOps: function() {
@@ -69,6 +72,7 @@ module.exports = React.createClass({
         return <BodyType ref="body" mxEvent={this.props.mxEvent} highlights={this.props.highlights}
                     highlightLink={this.props.highlightLink}
                     showUrlPreview={this.props.showUrlPreview}
+                    tileShape={this.props.tileShape}
                     onWidgetLoad={this.props.onWidgetLoad} />;
     },
 });

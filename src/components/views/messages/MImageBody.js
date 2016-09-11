@@ -123,6 +123,30 @@ module.exports = React.createClass({
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
 
+        var download;
+        if (this.props.tileShape === "file_grid") {
+            download = (
+                <div className="mx_MImageBody_download">
+                    <a className="mx_MImageBody_downloadLink" href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
+                        {content.body}
+                    </a>
+                    <div className="mx_MImageBody_size">
+                        { content.info && content.info.size ? filesize(content.info.size) : "" }
+                    </div>
+                </div>
+            );
+        }
+        else {
+            download = (
+                <div className="mx_MImageBody_download">
+                    <a href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
+                        <TintableSvg src="img/download.svg" width="12" height="14"/>
+                        Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
+                    </a>
+                </div>
+            );
+        }
+
         var thumbUrl = this._getThumbUrl();
         if (thumbUrl) {
             return (
@@ -133,12 +157,7 @@ module.exports = React.createClass({
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave} />
                     </a>
-                    <div className="mx_MImageBody_download">
-                        <a href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
-                            <TintableSvg src="img/download.svg" width="12" height="14"/>
-                            Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
-                        </a>
-                    </div>
+                    { download }
                 </span>
             );
         } else if (content.body) {

@@ -93,6 +93,9 @@ var TimelinePanel = React.createClass({
 
         // classname to use for the messagepanel
         className: React.PropTypes.string,
+
+        // shape property to be passed to EventTiles
+        tileShape: React.PropTypes.string,
     },
 
     statics: {
@@ -979,6 +982,7 @@ var TimelinePanel = React.createClass({
                     onFillRequest={ this.onMessageListFillRequest }
                     opacity={ this.props.opacity }
                     className={ this.props.className }
+                    tileShape={ this.props.tileShape }
             />
         );
     },

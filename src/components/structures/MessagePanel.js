@@ -79,6 +79,9 @@ module.exports = React.createClass({
 
         // className for the panel
         className: React.PropTypes.string.isRequired,
+
+        // shape parameter to be passed to EventTiles
+        tileShape: React.PropTypes.string,
     },
 
     componentWillMount: function() {
@@ -392,6 +395,7 @@ module.exports = React.createClass({
                         showUrlPreview={this.props.showUrlPreview}
                         checkUnmounting={this._isUnmounting}
                         eventSendStatus={mxEv.status}
+                        tileShape={this.props.tileShape}
                         last={last} isSelectedEvent={highlight}/>
                 </li>
         );

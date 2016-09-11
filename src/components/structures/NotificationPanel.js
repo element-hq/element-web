@@ -47,6 +47,7 @@ var NotificationPanel = React.createClass({
                     timelineSet={timelineSet}
                     showUrlPreview = { false }
                     opacity={ this.props.opacity }
+                    tileShape="notif"
                 />
             );
         }

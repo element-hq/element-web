@@ -103,6 +103,7 @@ var FilePanel = React.createClass({
                     manageReadMarkers={false}
                     timelineSet={this.state.timelineSet}
                     showUrlPreview = { false }
+                    tileShape="file_grid"
                     opacity={ this.props.opacity }
                 />
             );
