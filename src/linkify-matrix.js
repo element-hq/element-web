@@ -23,76 +23,84 @@ function matrixLinkify(linkify) {
     var S_START = linkify.parser.start;
 
 
-    var ROOMALIAS = function(value) {
-        MultiToken.call(this, value);
-        this.type = 'roomalias';
-        this.isLink = true;
-    };
-    ROOMALIAS.prototype = new MultiToken();
+    function ROOMALIAS(value) {
+        this.v = value;
+    }
+    linkify.inherits(MultiToken, ROOMALIAS, {
+        type: 'roomalias',
+        isLink: true,
+    });
 
-    var S_HASH = new linkify.parser.State();
+    var S_HASH = S_START.jump(TT.POUND);
     var S_HASH_NAME = new linkify.parser.State();
     var S_HASH_NAME_COLON = new linkify.parser.State();
-    var S_HASH_NAME_COLON_DOMAIN = new linkify.parser.State();
-    var S_HASH_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
     var S_ROOMALIAS = new linkify.parser.State(ROOMALIAS);
 
+    // WTF!? It is absolutely crazy that these have to be listed out this way,
+    // TT.DOMAIN should've covered all of them!
+
+    const localpart_tokens = [
+        TT.DOMAIN,
+        TT.TLD,
+        TT.LOCALHOST,
+        TT.NUM,
+        TT.UNDERSCORE,
+    ];
+
     var roomname_tokens = [
+        TT.POUND,
+        TT.UNDERSCORE,
         TT.DOT,
         TT.PLUS,
         TT.NUM,
         TT.DOMAIN,
-        TT.TLD
+        TT.LOCALHOST
     ];
 
     S_START.on(TT.POUND, S_HASH);
 
     S_HASH.on(roomname_tokens, S_HASH_NAME);
     S_HASH_NAME.on(roomname_tokens, S_HASH_NAME);
-    S_HASH_NAME.on(TT.DOMAIN, S_HASH_NAME);
 
     S_HASH_NAME.on(TT.COLON, S_HASH_NAME_COLON);
 
-    S_HASH_NAME_COLON.on(TT.DOMAIN, S_HASH_NAME_COLON_DOMAIN);
-    S_HASH_NAME_COLON_DOMAIN.on(TT.DOT, S_HASH_NAME_COLON_DOMAIN_DOT);
-    S_HASH_NAME_COLON_DOMAIN_DOT.on(TT.DOMAIN, S_HASH_NAME_COLON_DOMAIN);
-    S_HASH_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_ROOMALIAS);
+    S_HASH_NAME_COLON.on(localpart_tokens, S_ROOMALIAS);
+    S_ROOMALIAS.on(TT.DOT, S_HASH_NAME_COLON);
 
 
     var USERID = function(value) {
-        MultiToken.call(this, value);
-        this.type = 'userid';
-        this.isLink = true;
+        this.v = value;
     };
-    USERID.prototype = new MultiToken();
+    linkify.inherits(MultiToken, USERID, {
+        type: 'userid',
+        isLink: true,
+    });
 
     var S_AT = new linkify.parser.State();
     var S_AT_NAME = new linkify.parser.State();
     var S_AT_NAME_COLON = new linkify.parser.State();
-    var S_AT_NAME_COLON_DOMAIN = new linkify.parser.State();
     var S_AT_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
     var S_USERID = new linkify.parser.State(USERID);
 
     var username_tokens = [
         TT.DOT,
+        TT.UNDERSCORE,
         TT.PLUS,
         TT.NUM,
         TT.DOMAIN,
-        TT.TLD
+        TT.TLD,
+        TT.LOCALHOST,
     ];
 
     S_START.on(TT.AT, S_AT);
 
     S_AT.on(username_tokens, S_AT_NAME);
     S_AT_NAME.on(username_tokens, S_AT_NAME);
-    S_AT_NAME.on(TT.DOMAIN, S_AT_NAME);
 
     S_AT_NAME.on(TT.COLON, S_AT_NAME_COLON);
 
-    S_AT_NAME_COLON.on(TT.DOMAIN, S_AT_NAME_COLON_DOMAIN);
-    S_AT_NAME_COLON_DOMAIN.on(TT.DOT, S_AT_NAME_COLON_DOMAIN_DOT);
-    S_AT_NAME_COLON_DOMAIN_DOT.on(TT.DOMAIN, S_AT_NAME_COLON_DOMAIN);
-    S_AT_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_USERID);
+    S_AT_NAME_COLON.on(localpart_tokens, S_USERID);
+    S_USERID.on(TT.DOT, S_AT_NAME_COLON);
 }
 
 // stubs, overwritten in MatrixChat's componentDidMount
