@@ -50,7 +50,7 @@ limitations under the License.
 .mx_LinkPreviewWidget_description {
     margin-top: 8px;
     white-space: normal;
-    word-break: break-word;
+    word-wrap: break-word;
 }
 
 .mx_LinkPreviewWidget_cancel {

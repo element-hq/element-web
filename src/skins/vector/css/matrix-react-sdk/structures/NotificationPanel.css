@@ -44,6 +44,7 @@ limitations under the License.
 .mx_NotificationPanel .mx_EventTile_roomName {
     font-weight: bold;
     font-size: 14px;
+    word-wrap: break-word;
 }
 
 .mx_NotificationPanel .mx_EventTile_roomName a {
@@ -62,6 +63,7 @@ limitations under the License.
     font-size: 12px;
     display: inline;
     padding-left: 0px;
+    word-wrap: break-word;
 }
 
 .mx_NotificationPanel .mx_EventTile_senderDetails {
