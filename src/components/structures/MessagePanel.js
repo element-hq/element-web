@@ -346,6 +346,7 @@ module.exports = React.createClass({
             continuation = true;
         }
 
+/*
         // Work out if this is still a continuation, as we are now showing commands
         // and /me messages with their own little avatar. The case of a change of
         // event type (commands) is handled above, but we need to handle the /me
@@ -357,6 +358,7 @@ module.exports = React.createClass({
                 && prevEvent.getContent().msgtype === 'm.emote') {
             continuation = false;
         }
+*/
 
         // local echoes have a fake date, which could even be yesterday. Treat them
         // as 'today' for the date separators.

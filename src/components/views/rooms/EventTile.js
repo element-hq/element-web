@@ -375,7 +375,7 @@ module.exports = React.createClass({
 
         // Info messages are basically information about commands processed on a
         // room, or emote messages
-        var isInfoMessage = (msgtype === 'm.emote' || eventType !== 'm.room.message');
+        var isInfoMessage = false; // (msgtype === 'm.emote' || eventType !== 'm.room.message');
 
         var EventTileType = sdk.getComponent(eventTileTypes[eventType]);
         // This shouldn't happen: the caller should check we support this type
@@ -422,7 +422,7 @@ module.exports = React.createClass({
             needsSenderProfile = false;
         } else {
             avatarSize = 30;
-            needsSenderProfile = true;
+            needsSenderProfile = (eventType === 'm.room.message');
         }
 
         if (this.props.mxEvent.sender && avatarSize) {
