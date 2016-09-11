@@ -47,7 +47,7 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_RoomTile_avatar_container:hover:before,
+.mx_RoomTile:hover .mx_RoomTile_avatar_container:before,
 .mx_RoomTile_avatar_container.mx_RoomTile_avatar_roomTagMenu:before {
     display: block;
     position: absolute;
@@ -61,7 +61,7 @@ limitations under the License.
     z-index: 4;
 }
 
-.mx_RoomTile_avatar_container:hover:after,
+.mx_RoomTile:hover .mx_RoomTile_avatar_container:after,
 .mx_RoomTile_avatar_container.mx_RoomTile_avatar_roomTagMenu:after {
     display: block;
     position: absolute;
@@ -75,11 +75,11 @@ limitations under the License.
     z-index: 2;
 }
 
-.collapsed .mx_RoomTile_avatar_container:hover:before {
+.collapsed .mx_RoomTile:hover .mx_RoomTile_avatar_container:before {
     display: none;
 }
 
-.collapsed .mx_RoomTile_avatar_container:hover:after {
+.collapsed .mx_RoomTile:hover .mx_RoomTile_avatar_container:after {
     display: none;
 }
 
