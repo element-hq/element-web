@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-var React = require('react');
-
-module.exports = React.createClass({
-    displayName: 'CasLogin',
-
-    propTypes: {
-      onSubmit: React.PropTypes.func, // fn()
-    },
-
-    render: function() {
-        return (
-            <div>
-                <button onClick={this.props.onSubmit}>Sign in with CAS</button>
-            </div>
-        );
+/**
+ * Given MatrixEvent containing receipts, return the first
+ * read receipt from the given user ID, or null if no such
+ * receipt exists.
+ */
+export function findReadReceiptFromUserId(receiptEvent, userId) {
+    var receiptKeys = Object.keys(receiptEvent.getContent());
+    for (var i = 0; i < receiptKeys.length; ++i) {
+        var rcpt = receiptEvent.getContent()[receiptKeys[i]];
+        if (rcpt['m.read'] && rcpt['m.read'][userId]) {
+            return rcpt;
+        }
     }
 
-});
+    return null;
+}

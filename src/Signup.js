@@ -6,6 +6,7 @@ var MatrixClientPeg = require("./MatrixClientPeg");
 var SignupStages = require("./SignupStages");
 var dis = require("./dispatcher");
 var q = require("q");
+var url = require("url");
 
 const EMAIL_STAGE_TYPE = "m.login.email.identity";
 
@@ -412,6 +413,15 @@ class Login extends Signup {
             }
             throw error;
         });
+    }
+
+    redirectToCas() {
+      var client = this._createTemporaryClient();
+      var parsedUrl = url.parse(window.location.href, true);
+      parsedUrl.query["homeserver"] = client.getHomeserverUrl();
+      parsedUrl.query["identityServer"] = client.getIdentityServerUrl();
+      var casUrl = client.getCasLoginUrl(url.format(parsedUrl));
+      window.location.href = casUrl;
     }
 }
 

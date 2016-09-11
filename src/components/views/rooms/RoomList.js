@@ -27,6 +27,7 @@ var sdk = require('../../../index');
 var rate_limited_func = require('../../../ratelimitedfunc');
 var Rooms = require('../../../Rooms');
 var DMRoomMap = require('../../../utils/DMRoomMap');
+var Receipt = require('../../../utils/Receipt');
 
 var HIDE_CONFERENCE_CHANS = true;
 
@@ -156,13 +157,8 @@ module.exports = React.createClass({
     onRoomReceipt: function(receiptEvent, room) {
         // because if we read a notification, it will affect notification count
         // only bother updating if there's a receipt from us
-        var receiptKeys = Object.keys(receiptEvent.getContent());
-        for (var i = 0; i < receiptKeys.length; ++i) {
-            var rcpt = receiptEvent.getContent()[receiptKeys[i]];
-            if (rcpt['m.read'] && rcpt['m.read'][MatrixClientPeg.get().credentials.userId]) {
-                this._delayedRefreshRoomList();
-                break;
-            }
+        if (Receipt.findReadReceiptFromUserId(receiptEvent, MatrixClientPeg.get().credentials.userId)) {
+            this._delayedRefreshRoomList();
         }
     },
 
@@ -235,10 +231,6 @@ module.exports = React.createClass({
             else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, self.props.ConferenceHandler)) {
                 // skip past this room & don't put it in any lists
             }
-            else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
-                // "Direct Message" rooms
-                s.lists["im.vector.fake.direct"].push(room);
-            }
             else if (me.membership == "join" || me.membership === "ban" ||
                      (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
             {
@@ -251,6 +243,10 @@ module.exports = React.createClass({
                         s.lists[tagName] = s.lists[tagName] || [];
                         s.lists[tagNames[i]].push(room);
                     }
+                }
+                else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
+                    // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
+                    s.lists["im.vector.fake.direct"].push(room);
                 }
                 else {
                     s.lists["im.vector.fake.recent"].push(room);

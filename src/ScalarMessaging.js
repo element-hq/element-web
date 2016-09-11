@@ -256,6 +256,7 @@ function returnStateEvent(event, roomId, eventType, stateKey) {
 }
 
 var currentRoomId = null;
+var currentRoomAlias = null;
 
 // Listen for when a room is viewed
 dis.register(onAction);
@@ -264,6 +265,7 @@ function onAction(payload) {
         return;
     }
     currentRoomId = payload.room_id;
+    currentRoomAlias = payload.room_alias;
 }
 
 const onMessage = function(event) {
@@ -287,45 +289,59 @@ const onMessage = function(event) {
         sendError(event, "Missing room_id in request");
         return;
     }
+    let promise = Promise.resolve(currentRoomId);
     if (!currentRoomId) {
-        sendError(event, "Must be viewing a room");
-        return;
-    }
-    if (roomId !== currentRoomId) {
-        sendError(event, "Room " + roomId + " not visible");
-        return;
-    }
-
-    // Getting join rules does not require userId
-    if (event.data.action === "join_rules_state") {
-        getJoinRules(event, roomId);
-        return;
+        if (!currentRoomAlias) {
+            sendError(event, "Must be viewing a room");
+            return;
+        }
+        // no room ID but there is an alias, look it up.
+        console.log("Looking up alias " + currentRoomAlias);
+        promise = MatrixClientPeg.get().getRoomIdForAlias(currentRoomAlias).then((res) => {
+            return res.room_id;
+        });
     }
 
-    if (!userId) {
-        sendError(event, "Missing user_id in request");
-        return;
-    }
-    switch (event.data.action) {
-        case "membership_state":
-            getMembershipState(event, roomId, userId);
-            break;
-        case "invite":
-            inviteUser(event, roomId, userId);
-            break;
-        case "bot_options":
-            botOptions(event, roomId, userId);
-            break;
-        case "set_bot_options":
-            setBotOptions(event, roomId, userId);
-            break;
-        case "set_bot_power":
-            setBotPower(event, roomId, userId, event.data.level);
-            break;
-        default:
-            console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
-            break;
-    }
+    promise.then((viewingRoomId) => {
+        if (roomId !== viewingRoomId) {
+            sendError(event, "Room " + roomId + " not visible");
+            return;
+        }
+
+        // Getting join rules does not require userId
+        if (event.data.action === "join_rules_state") {
+            getJoinRules(event, roomId);
+            return;
+        }
+
+        if (!userId) {
+            sendError(event, "Missing user_id in request");
+            return;
+        }
+        switch (event.data.action) {
+            case "membership_state":
+                getMembershipState(event, roomId, userId);
+                break;
+            case "invite":
+                inviteUser(event, roomId, userId);
+                break;
+            case "bot_options":
+                botOptions(event, roomId, userId);
+                break;
+            case "set_bot_options":
+                setBotOptions(event, roomId, userId);
+                break;
+            case "set_bot_power":
+                setBotPower(event, roomId, userId, event.data.level);
+                break;
+            default:
+                console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
+                break;
+        }
+    }, (err) => {
+        console.error(err);
+        sendError(event, "Failed to lookup current room.");
+    })
 };
 
 module.exports = {

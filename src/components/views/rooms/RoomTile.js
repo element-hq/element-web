@@ -21,6 +21,7 @@ var ReactDOM = require("react-dom");
 var classNames = require('classnames');
 var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+var DMRoomMap = require('../../../utils/DMRoomMap');
 var sdk = require('../../../index');
 var ContextualMenu = require('../../structures/ContextualMenu');
 var RoomNotifs = require('../../../RoomNotifs');
@@ -29,10 +30,9 @@ module.exports = React.createClass({
     displayName: 'RoomTile',
 
     propTypes: {
-        // TODO: We should *optionally* support DND stuff and ideally be impl agnostic about it
-        connectDragSource: React.PropTypes.func.isRequired,
-        connectDropTarget: React.PropTypes.func.isRequired,
-        isDragging: React.PropTypes.bool.isRequired,
+        connectDragSource: React.PropTypes.func,
+        connectDropTarget: React.PropTypes.func,
+        isDragging: React.PropTypes.bool,
 
         room: React.PropTypes.object.isRequired,
         collapsed: React.PropTypes.bool.isRequired,
@@ -40,9 +40,13 @@ module.exports = React.createClass({
         unread: React.PropTypes.bool.isRequired,
         highlight: React.PropTypes.bool.isRequired,
         isInvite: React.PropTypes.bool.isRequired,
-        roomSubList: React.PropTypes.object.isRequired,
-        refreshSubList: React.PropTypes.func.isRequired,
         incomingCall: React.PropTypes.object,
+    },
+
+    getDefaultProps: function() {
+        return {
+            isDragging: false,
+        };
     },
 
     getInitialState: function() {
@@ -62,6 +66,16 @@ module.exports = React.createClass({
 
     _shouldShowMentionBadge: function() {
         return this.state.notifState != RoomNotifs.MUTE;
+    },
+
+    _isDirectMessageRoom: function(roomId) {
+        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
+        var dmRooms = dmRoomMap.getUserIdForRoomId(roomId);
+        if (dmRooms) {
+            return true;
+        } else {
+            return false;
+        }
     },
 
     onAccountData: function(accountDataEvent) {
@@ -261,18 +275,24 @@ module.exports = React.createClass({
 
         var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
+        var directMessageIndicator;
+        if (this._isDirectMessageRoom(this.props.room.roomId)) {
+            directMessageIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm"/>;
+        }
+
         // These props are injected by React DnD,
         // as defined by your `collect` function above:
         var isDragging = this.props.isDragging;
         var connectDragSource = this.props.connectDragSource;
         var connectDropTarget = this.props.connectDropTarget;
 
-        return connectDragSource(connectDropTarget(
+        let ret = (
             <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className={avatarClasses}>
                     <div className="mx_RoomTile_avatar_menu" onClick={this.onAvatarClicked}>
                         <div className={avatarContainerClasses}>
                             <RoomAvatar room={this.props.room} width={24} height={24} />
+                            {directMessageIndicator}
                         </div>
                     </div>
                 </div>
@@ -283,6 +303,11 @@ module.exports = React.createClass({
                 { incomingCallBox }
                 { tooltip }
             </div>
-        ));
+        );
+
+        if (connectDropTarget) ret = connectDropTarget(ret);
+        if (connectDragSource) ret = connectDragSource(ret);
+
+        return ret;
     }
 });
