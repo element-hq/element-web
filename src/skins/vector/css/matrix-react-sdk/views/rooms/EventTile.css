@@ -36,7 +36,7 @@ limitations under the License.
 
 .mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
     top: 8px;
-    left: 44px;
+    left: 65px;
 }
 
 .mx_EventTile_continuation {
@@ -85,6 +85,10 @@ limitations under the License.
     border-radius: 4px;
     min-height: 24px;
     line-height: 22px;
+}
+
+.mx_EventTile_info .mx_EventTile_line {
+    padding-left: 83px;
 }
 
 /* HACK to override line-height which is already marked important elsewhere */
