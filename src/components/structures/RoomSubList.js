@@ -368,12 +368,12 @@ var RoomSubList = React.createClass({
 
     makeRoomTiles: function() {
         var self = this;
-        var RoomTile = sdk.getComponent("rooms.RoomTile");
+        var DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
         return this.state.sortedList.map(function(room) {
             var selected = room.roomId == self.props.selectedRoom;
             // XXX: is it evil to pass in self as a prop to RoomTile?
             return (
-                <RoomTile
+                <DNDRoomTile
                     room={ room }
                     roomSubList={ self }
                     key={ room.roomId }

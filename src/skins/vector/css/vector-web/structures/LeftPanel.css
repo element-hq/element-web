@@ -49,11 +49,11 @@ limitations under the License.
     flex: 1 1 0;
 
     overflow-y: auto;
-    z-index: 5;
+    z-index: 6;
 }
 
 .mx_LeftPanel.collapsed .mx_BottomLeftMenu {
-   flex: 0 0 120px;
+   flex: 0 0 160px;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu {
@@ -79,6 +79,7 @@ limitations under the License.
     pointer-events: none;
 }
 
+.mx_LeftPanel .mx_BottomLeftMenu_directory,
 .mx_LeftPanel .mx_BottomLeftMenu_createRoom,
 .mx_LeftPanel .mx_BottomLeftMenu_people,
 .mx_LeftPanel .mx_BottomLeftMenu_settings {
@@ -86,6 +87,7 @@ limitations under the License.
     cursor: pointer;
 }
 
+.collapsed .mx_BottomLeftMenu_directory,
 .collapsed .mx_BottomLeftMenu_createRoom,
 .collapsed .mx_BottomLeftMenu_people,
 .collapsed .mx_BottomLeftMenu_settings {
@@ -94,8 +96,16 @@ limitations under the License.
     padding-bottom: 3px ! important;
 }
 
+.mx_LeftPanel .mx_BottomLeftMenu_directory {
+    margin-right: 10px;
+}
+
+.mx_LeftPanel .mx_BottomLeftMenu_createRoom {
+    margin-right: 10px;
+}
+
 .mx_LeftPanel .mx_BottomLeftMenu_people {
-    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu_settings {
