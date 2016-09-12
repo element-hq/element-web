@@ -248,7 +248,10 @@ module.exports = React.createClass({
             for (let i = 0; i < dmRooms.length; i++) {
                 let room = MatrixClientPeg.get().getRoom(dmRooms[i]);
                 if (room) {
-                    return room;
+                    const me = room.getMember(MatrixClientPeg.get().credentials.userId);
+                    if (me.membership == 'join') {
+                        return room;
+                    }
                 }
             }
         }
