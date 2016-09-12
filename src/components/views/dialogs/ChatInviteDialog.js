@@ -219,7 +219,7 @@ module.exports = React.createClass({
         query = query.toLowerCase();
 
         // dount match any that are already on the invite list
-        if (this._isOnInviteList(uid).toLowerCase()) {
+        if (this._isOnInviteList(uid)) {
             return false;
         }
 
@@ -245,7 +245,7 @@ module.exports = React.createClass({
 
     _isOnInviteList: function(uid) {
         for (let i = 0; i < this.state.inviteList.length; i++) {
-            if (this.state.inviteList[i] === uid) {
+            if (this.state.inviteList[i].toLowerCase() === uid) {
                 return true;
             }
         }
