@@ -56,10 +56,8 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             user: null,
-            queryList: [],
             addressSelected: false,
-            selected: 0,
-            hover: false,
+            queryList: [],
         };
     },
 
@@ -69,15 +67,6 @@ module.exports = React.createClass({
             this.refs.textinput.value = this.props.value;
         }
         this._updateUserList();
-    },
-
-    componentDidUpdate: function() {
-        // As the user scrolls with the arrow keys keep the selected item
-        // at the top of the window.
-        if (this.scrollElement && !this.state.hover) {
-            var elementHeight = this.queryListElement.getBoundingClientRect().height;
-            this.scrollElement.scrollTop = (this.state.selected * elementHeight) - elementHeight;
-        }
     },
 
     onStartChat: function() {
@@ -124,32 +113,15 @@ module.exports = React.createClass({
         } else if (e.keyCode === 38) { // up arrow
             e.stopPropagation();
             e.preventDefault();
-            if (this.state.selected > 0) {
-                this.setState({
-                    selected: this.state.selected - 1,
-                    hover : false,
-                });
-            }
+            this.addressSelector.onKeyUpArrow();
         } else if (e.keyCode === 40) { // down arrow
             e.stopPropagation();
             e.preventDefault();
-            if (this.state.selected < this._maxSelected(this.state.queryList)) {
-                this.setState({
-                    selected: this.state.selected + 1,
-                    hover : false,
-                });
-            }
+            this.addressSelector.onKeyDownArrow();
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            if (this.state.queryList.length > 0) {
-                this.setState({
-                    user: this.state.queryList[this.state.selected],
-                    addressSelected: true,
-                    queryList: [],
-                    hover : false,
-                });
-            }
+            this.addressSelector.onKeyReturn();
         }
     },
 
@@ -164,24 +136,13 @@ module.exports = React.createClass({
             });
         }
 
-        // Make sure the selected item isn't outside the list bounds
-        var selected = this.state.selected;
-        var maxSelected = this._maxSelected(queryList);
-        if (selected > maxSelected) {
-            selected = maxSelected;
-        }
-
-        this.setState({
-            queryList: queryList,
-            selected: selected,
-        });
+        this.setState({ queryList: queryList });
     },
 
     onDismissed: function() {
         this.setState({
             user: null,
             addressSelected: false,
-            selected: 0,
             queryList: [],
         });
     },
@@ -193,51 +154,16 @@ module.exports = React.createClass({
                 user: self.state.queryList[index],
                 addressSelected: true,
                 queryList: [],
-                hover: false,
             });
         };
     },
 
-    onMouseEnter: function(index) {
-        var self = this;
-        return function() {
-            self.setState({
-                selected: index,
-                hover: true,
-            });
-        };
-    },
-
-    onMouseLeave: function() {
-        this.setState({ hover : false });
-    },
-
-    createQueryListTiles: function() {
-        var self = this;
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var AddressTile = sdk.getComponent("elements.AddressTile");
-        var maxSelected = this._maxSelected(this.state.queryList);
-        var queryList = [];
-
-        // Only create the query elements if there are queries
-        if (this.state.queryList.length > 0) {
-            for (var i = 0; i <= maxSelected; i++) {
-                var classes = classNames({
-                    "mx_ChatInviteDialog_queryListElement": true,
-                    "mx_ChatInviteDialog_selected": this.state.selected === i,
-                });
-
-                // NOTE: Defaulting to "vector" as the network, until the network backend stuff is done.
-                // Saving the queryListElement so we can use it to work out, in the componentDidUpdate
-                // method, how far to scroll when using the arrow keys
-                queryList.push(
-                    <div className={classes} onClick={this.onClick(i)} onMouseEnter={this.onMouseEnter(i)} onMouseLeave={this.onMouseLeave} key={i} ref={(ref) => { this.queryListElement = ref; }} >
-                        <AddressTile user={this.state.queryList[i]} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
-                    </div>
-                );
-            }
-        }
-        return queryList;
+    onSelected: function(index) {
+        this.setState({
+            user: this.state.queryList[index],
+            addressSelected: true,
+            queryList: [],
+        });
     },
 
     _getDirectMessageRoom: function(addr) {
@@ -279,12 +205,6 @@ module.exports = React.createClass({
         this._userList = MatrixClientPeg.get().getUsers();
     }, 500),
 
-    _maxSelected: function(list) {
-        var listSize = list.length === 0 ? 0 : list.length - 1;
-        var maxSelected = listSize > (TRUNCATE_QUERY_LIST - 1) ? (TRUNCATE_QUERY_LIST - 1) : listSize
-        return maxSelected;
-    },
-
     // This is the search algorithm for matching users
     _matches: function(query, user) {
         var name = user.displayName.toLowerCase();
@@ -313,6 +233,7 @@ module.exports = React.createClass({
 
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        var AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
         var query;
@@ -335,16 +256,6 @@ module.exports = React.createClass({
             );
         }
 
-        var queryList;
-        var queryListElements = this.createQueryListTiles();
-        if (queryListElements.length > 0) {
-            queryList = (
-                <div className="mx_ChatInviteDialog_queryList" ref={(ref) => {this.scrollElement = ref}}>
-                    { queryListElements }
-                </div>
-            );
-        }
-
         return (
             <div className="mx_ChatInviteDialog" onKeyDown={this.onKeyDown}>
                 <div className="mx_Dialog_title">
@@ -358,7 +269,10 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_Dialog_content">
                     <div className="mx_ChatInviteDialog_inputContainer">{ query }</div>
-                    { queryList }
+                    <AddressSelector ref={(ref) => {this.addressSelector = ref}}
+                        addressList={ this.state.queryList }
+                        onSelected={ this.onSelected }
+                        truncateAt={ TRUNCATE_QUERY_LIST } />
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this.onStartChat}>
