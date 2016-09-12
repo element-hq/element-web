@@ -92,6 +92,10 @@ module.exports = React.createClass({
         }).done();
     },
 
+    onCasLogin: function() {
+      this._loginLogic.redirectToCas();
+    },
+
     _onLoginAsGuestClick: function() {
         var self = this;
         self.setState({
@@ -228,7 +232,7 @@ module.exports = React.createClass({
                 );
             case 'm.login.cas':
                 return (
-                    <CasLogin />
+                    <CasLogin onSubmit={this.onCasLogin} />
                 );
             default:
                 if (!step) {

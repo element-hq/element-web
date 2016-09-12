@@ -147,8 +147,10 @@ module.exports = React.createClass({
         this._updateStickyHeaders(true, scrollToPosition);
     },
 
-    onRoomTimeline: function(ev, room, toStartOfTimeline) {
+    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
         if (toStartOfTimeline) return;
+        if (!room) return;
+        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
         this._delayedRefreshRoomList();
     },
 

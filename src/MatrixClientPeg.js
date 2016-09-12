@@ -18,6 +18,8 @@ limitations under the License.
 
 import Matrix from 'matrix-js-sdk';
 import utils from 'matrix-js-sdk/lib/utils';
+import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
+import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
 
 const localStorage = window.localStorage;
 
@@ -104,6 +106,13 @@ class MatrixClientPeg {
         this.matrixClient.setMaxListeners(500);
 
         this.matrixClient.setGuest(Boolean(creds.guest));
+
+        var notifTimelineSet = new EventTimelineSet(null, {
+            timelineSupport: true
+        });
+        // XXX: what is our initial pagination token?! it somehow needs to be synchronised with /sync.
+        notifTimelineSet.getLiveTimeline().setPaginationToken("", EventTimeline.BACKWARDS);
+        this.matrixClient.setNotifTimelineSet(notifTimelineSet);
     }
 }
 
