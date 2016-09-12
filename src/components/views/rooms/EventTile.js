@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var classNames = require("classnames");
+var Modal = require('../../../Modal');
 
 var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg')
@@ -361,6 +362,66 @@ module.exports = React.createClass({
         });
     },
 
+    onCryptoClicked: function(e) {
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        var event = this.props.mxEvent;
+
+        // XXX: gutwrench - is there any reason not to expose this on MatrixClient itself?
+        var device = MatrixClientPeg.get()._crypto.getDeviceByIdentityKey(
+            event.getSender(),
+            event.getWireContent().algorithm,
+            event.getWireContent().sender_key
+        );
+
+        Modal.createDialog(ErrorDialog, {
+            title: "End-to-end encryption information",
+            description: (
+                <div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Sent by</td>
+                                <td>{ event.getSender() }</td>
+                            </tr>
+                            <tr>
+                                <td>Sender device name</td>
+                                <td>{ device.getDisplayName() }</td>
+                            </tr>
+                            <tr>
+                                <td>Sender device ID</td>
+                                <td>{ device.deviceId }</td>
+                            </tr>
+                            <tr>
+                                <td>Sender device verification:</td>
+                                <td>{ MatrixClientPeg.get().isEventSenderVerified(event) ? "verified" : <b>NOT verified</b> }</td>
+                            </tr>
+                            <tr>
+                                <td>Sender device ed25519 fingerprint</td>
+                                <td>{ device.getFingerprint() }</td>
+                            </tr>
+                            <tr>
+                                <td>Sender device curve25519 identity key</td>
+                                <td>{ event.getWireContent().sender_key }</td>
+                            </tr>
+                            <tr>
+                                <td>Algorithm</td>
+                                <td>{ event.getWireContent().algorithm }</td>
+                            </tr>
+                        {
+                            event.getContent().msgtype === 'm.bad.encrypted' ? (
+                            <tr>
+                                <td>Decryption error</td>
+                                <td>{ event.getContent().body }</td>
+                            </tr>
+                            ) : ''
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            )
+        });
+    },
+
     render: function() {
         var MessageTimestamp = sdk.getComponent('messages.MessageTimestamp');
         var SenderProfile = sdk.getComponent('messages.SenderProfile');
@@ -458,7 +519,7 @@ module.exports = React.createClass({
         var e2e;
         if (e2eEnabled) {
             if (this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted') {
-                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
+                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
             }
             else if (this.state.verified == true) {
                 e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" alt="Encrypted by a verified device"/>;
