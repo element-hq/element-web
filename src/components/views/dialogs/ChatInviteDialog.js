@@ -55,8 +55,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            user: null,
-            addressSelected: false,
+            inviteList: [],
             queryList: [],
         };
     },
@@ -73,8 +72,8 @@ module.exports = React.createClass({
         var addr;
 
         // Either an address tile was created, or text input is being used
-        if (this.state.user) {
-            addr = this.state.user.userId;
+        if (this.state.inviteList[0]) {
+            addr = this.state.inviteList[0].userId;
         } else {
             addr = this.refs.textinput.value;
         }
@@ -141,8 +140,7 @@ module.exports = React.createClass({
 
     onDismissed: function() {
         this.setState({
-            user: null,
-            addressSelected: false,
+            inviteList: [],
             queryList: [],
         });
     },
@@ -150,18 +148,15 @@ module.exports = React.createClass({
     onClick: function(index) {
         var self = this;
         return function() {
-            self.setState({
-                user: self.state.queryList[index],
-                addressSelected: true,
-                queryList: [],
-            });
+            self.onSelected(index);
         };
     },
 
     onSelected: function(index) {
+        var inviteList = this.state.inviteList.slice();
+        inviteList.push(this.state.queryList[index]);
         this.setState({
-            user: this.state.queryList[index],
-            addressSelected: true,
+            inviteList: inviteList,
             queryList: [],
         });
     },
@@ -237,10 +232,10 @@ module.exports = React.createClass({
         this.scrollElement = null;
 
         var query;
-        if (this.state.addressSelected) {
+        if (this.state.inviteList.length > 0) {
             var AddressTile = sdk.getComponent("elements.AddressTile");
             query = (
-                <AddressTile user={this.state.user} canDismiss={true} onDismissed={this.onDismissed} />
+                <AddressTile user={this.state.inviteList[0]} canDismiss={true} onDismissed={this.onDismissed} />
             );
         } else {
             query = (
