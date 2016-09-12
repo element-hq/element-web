@@ -458,16 +458,16 @@ module.exports = React.createClass({
         var e2e;
         if (e2eEnabled) {
             if (this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted') {
-                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-blocked.png" width="12" height="12"/>;
+                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
             }
             else if (this.state.verified == true) {
-                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-verified.png" width="10" height="12" alt="Encrypted by a verified device"/>;
+                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" alt="Encrypted by a verified device"/>;
             }
             else if (this.state.verified == false) {
-                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-warning.png" width="15" height="12" style={{ marginLeft: "-2px" }} alt="Encrypted by an unverified device!"/>;
+                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }} alt="Encrypted by an unverified device!"/>;
             }
             else {
-                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-unencrypted.png" width="12" height="12"/>;
+                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
             }
         }
 
