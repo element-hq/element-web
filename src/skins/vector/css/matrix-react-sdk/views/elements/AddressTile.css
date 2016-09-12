@@ -26,6 +26,12 @@ limitations under the License.
     margin-right: 4px;
 }
 
+.mx_AddressTile.mx_AddressTile_error {
+    background-color: rgba(255, 0, 100, 0.1);
+    color: #ff0064;
+    border-color: #ff0064;
+}
+
 .mx_AddressTile_network {
     display: inline-block;
     position: relative;
