@@ -73,7 +73,7 @@ module.exports = React.createClass({
 
         // Either an address tile was created, or text input is being used
         if (this.state.inviteList[0]) {
-            addr = this.state.inviteList[0].userId;
+            addr = this.state.inviteList[0];
         } else {
             addr = this.refs.textinput.value;
         }
@@ -159,7 +159,7 @@ module.exports = React.createClass({
 
     onSelected: function(index) {
         var inviteList = this.state.inviteList.slice();
-        inviteList.push(this.state.queryList[index]);
+        inviteList.push(this.state.queryList[index].userId.toLowerCase());
         this.setState({
             inviteList: inviteList,
             queryList: [],
@@ -238,7 +238,7 @@ module.exports = React.createClass({
 
     _isOnInviteList: function(uid) {
         for (let i = 0; i < this.state.inviteList.length; i++) {
-            if (this.state.inviteList[i].userId.toLowerCase() === uid) {
+            if (this.state.inviteList[i] === uid) {
                 return true;
             }
         }
@@ -256,7 +256,7 @@ module.exports = React.createClass({
             var AddressTile = sdk.getComponent("elements.AddressTile");
             for (let i = 0; i < this.state.inviteList.length; i++) {
                 query.push(
-                    <AddressTile key={i} user={this.state.inviteList[i]} canDismiss={true} onDismissed={ this.onDismissed(i) } />
+                    <AddressTile key={i} address={this.state.inviteList[i]} canDismiss={true} onDismissed={ this.onDismissed(i) } />
                 );
             }
         }

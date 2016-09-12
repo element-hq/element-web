@@ -125,7 +125,7 @@ module.exports = React.createClass({
                 // method, how far to scroll when using the arrow keys
                 addressList.push(
                     <div className={classes} onClick={this.onClick(i)} onMouseEnter={this.onMouseEnter(i)} onMouseLeave={this.onMouseLeave} key={i} ref={(ref) => { this.addressListElement = ref; }} >
-                        <AddressTile user={this.props.addressList[i]} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
+                        <AddressTile address={this.props.addressList[i].userId} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
                     </div>
                 );
             }
