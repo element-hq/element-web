@@ -58,6 +58,9 @@ module.exports = React.createClass({
                 userId = user.userId;
                 name = user.displayName || userId;
                 imgUrl = Avatar.avatarUrlForUser(user, 25, 25, "crop");
+            } else {
+                name="Unknown";
+                imgUrl = "img/icon-email-user.svg";
             }
         } else if (addrType === "email") {
             email = this.props.address;
