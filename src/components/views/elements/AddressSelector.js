@@ -99,8 +99,11 @@ module.exports = React.createClass({
     },
 
     selectAddress: function(index) {
-        this.props.onSelected(index);
-        this.setState({ hover: false });
+        // Only try to select an address if one exists
+        if (this.props.addressList.length !== 0) {
+            this.props.onSelected(index);
+            this.setState({ hover: false });
+        }
     },
 
     createAddressListTiles: function() {

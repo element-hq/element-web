@@ -236,28 +236,29 @@ module.exports = React.createClass({
         var AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
-        var query;
+        var query = [];
+        // create the invite list
         if (this.state.inviteList.length > 0) {
             var AddressTile = sdk.getComponent("elements.AddressTile");
-            query = [];
             for (let i = 0; i < this.state.inviteList.length; i++) {
                 query.push(
-                    <AddressTile key={i} user={this.state.inviteList[0]} canDismiss={true} onDismissed={ this.onDismissed(i) } />
+                    <AddressTile key={i} user={this.state.inviteList[i]} canDismiss={true} onDismissed={ this.onDismissed(i) } />
                 );
             }
-        } else {
-            query = (
-                <textarea rows="1"
-                    id="textinput"
-                    ref="textinput"
-                    className="mx_ChatInviteDialog_input"
-                    onChange={this.onQueryChanged}
-                    placeholder={this.props.placeholder}
-                    defaultValue={this.props.value}
-                    autoFocus={this.props.focus}>
-                </textarea>
-            );
         }
+        // Add the query at the end
+        query.push(
+            <textarea key={this.state.inviteList.length}
+                rows="1"
+                id="textinput"
+                ref="textinput"
+                className="mx_ChatInviteDialog_input"
+                onChange={this.onQueryChanged}
+                placeholder={this.props.placeholder}
+                defaultValue={this.props.value}
+                autoFocus={this.props.focus}>
+            </textarea>
+        );
 
         return (
             <div className="mx_ChatInviteDialog" onKeyDown={this.onKeyDown}>
