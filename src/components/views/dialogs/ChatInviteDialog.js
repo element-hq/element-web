@@ -74,8 +74,6 @@ module.exports = React.createClass({
         // Either an address tile was created, or text input is being used
         if (this.state.inviteList[0]) {
             addr = this.state.inviteList[0];
-        } else {
-            addr = this.refs.textinput.value;
         }
 
         // Check if the addr is a valid type
@@ -121,6 +119,15 @@ module.exports = React.createClass({
             e.stopPropagation();
             e.preventDefault();
             this.addressSelector.onKeyReturn();
+        } else if (e.keyCode === 32 || e.keyCode === 188) { // space or comma
+            e.stopPropagation();
+            e.preventDefault();
+            var inviteList = this.state.inviteList.slice();
+            inviteList.push(this.refs.textinput.value);
+            this.setState({
+                inviteList: inviteList,
+                queryList: [],
+            });
         }
     },
 
