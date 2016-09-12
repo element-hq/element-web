@@ -478,7 +478,7 @@ module.exports = React.createClass({
                 <div className={classes}>
                     <div className="mx_EventTile_roomName">
                         <a href={ permalink }>
-                            { room.name }
+                            { room ? room.name : '' }
                         </a>
                     </div>
                     <div className="mx_EventTile_senderDetails">
