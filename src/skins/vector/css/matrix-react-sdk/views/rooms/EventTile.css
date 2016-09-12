@@ -255,9 +255,11 @@ limitations under the License.
     left: 3px;
 }
 
+/*
 .mx_EventTile_verified .mx_EventTile_e2eIcon {
     display: none;
 }
+*/
 
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_e2eIcon,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_e2eIcon {
