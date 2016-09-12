@@ -49,6 +49,7 @@ module.exports.components['views.create_room.Presets'] = require('./components/v
 module.exports.components['views.create_room.RoomAlias'] = require('./components/views/create_room/RoomAlias');
 module.exports.components['views.dialogs.ChatInviteDialog'] = require('./components/views/dialogs/ChatInviteDialog');
 module.exports.components['views.dialogs.DeactivateAccountDialog'] = require('./components/views/dialogs/DeactivateAccountDialog');
+module.exports.components['views.dialogs.EncryptedEventDialog'] = require('./components/views/dialogs/EncryptedEventDialog');
 module.exports.components['views.dialogs.ErrorDialog'] = require('./components/views/dialogs/ErrorDialog');
 module.exports.components['views.dialogs.LogoutPrompt'] = require('./components/views/dialogs/LogoutPrompt');
 module.exports.components['views.dialogs.MultiInviteDialog'] = require('./components/views/dialogs/MultiInviteDialog');

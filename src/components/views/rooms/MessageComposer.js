@@ -204,7 +204,7 @@ export default class MessageComposer extends React.Component {
         if (MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId)) {
             // FIXME: show a /!\ if there are untrusted devices in the room...
             controls.push(
-                <img className="mx_MessageComposer_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" alt="Encrypted room"/>
+                <img key="e2eIcon" className="mx_MessageComposer_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" alt="Encrypted room"/>
             );
         }
 

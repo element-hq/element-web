@@ -363,62 +363,11 @@ module.exports = React.createClass({
     },
 
     onCryptoClicked: function(e) {
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        var EncryptedEventDialog = sdk.getComponent("dialogs.EncryptedEventDialog");
         var event = this.props.mxEvent;
 
-        // XXX: gutwrench - is there any reason not to expose this on MatrixClient itself?
-        var device = MatrixClientPeg.get()._crypto.getDeviceByIdentityKey(
-            event.getSender(),
-            event.getWireContent().algorithm,
-            event.getWireContent().sender_key
-        );
-
-        Modal.createDialog(ErrorDialog, {
-            title: "End-to-end encryption information",
-            description: (
-                <div>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Sent by</td>
-                                <td>{ event.getSender() }</td>
-                            </tr>
-                            <tr>
-                                <td>Sender device name</td>
-                                <td>{ device.getDisplayName() }</td>
-                            </tr>
-                            <tr>
-                                <td>Sender device ID</td>
-                                <td>{ device.deviceId }</td>
-                            </tr>
-                            <tr>
-                                <td>Sender device verification:</td>
-                                <td>{ MatrixClientPeg.get().isEventSenderVerified(event) ? "verified" : <b>NOT verified</b> }</td>
-                            </tr>
-                            <tr>
-                                <td>Sender device ed25519 fingerprint</td>
-                                <td>{ device.getFingerprint() }</td>
-                            </tr>
-                            <tr>
-                                <td>Sender device curve25519 identity key</td>
-                                <td>{ event.getWireContent().sender_key }</td>
-                            </tr>
-                            <tr>
-                                <td>Algorithm</td>
-                                <td>{ event.getWireContent().algorithm }</td>
-                            </tr>
-                        {
-                            event.getContent().msgtype === 'm.bad.encrypted' ? (
-                            <tr>
-                                <td>Decryption error</td>
-                                <td>{ event.getContent().body }</td>
-                            </tr>
-                            ) : ''
-                        }
-                        </tbody>
-                    </table>
-                </div>
-            )
+        Modal.createDialog(EncryptedEventDialog, {
+            event: event,
         });
     },
 
