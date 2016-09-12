@@ -166,7 +166,7 @@ module.exports = React.createClass({
 
     onSelected: function(index) {
         var inviteList = this.state.inviteList.slice();
-        inviteList.push(this.state.queryList[index].userId.toLowerCase());
+        inviteList.push(this.state.queryList[index].userId);
         this.setState({
             inviteList: inviteList,
             queryList: [],
@@ -219,7 +219,7 @@ module.exports = React.createClass({
         query = query.toLowerCase();
 
         // dount match any that are already on the invite list
-        if (this._isOnInviteList(uid)) {
+        if (this._isOnInviteList(uid).toLowerCase()) {
             return false;
         }
 
