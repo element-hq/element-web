@@ -42,7 +42,9 @@ limitations under the License.
     padding-right: 4px;
     padding-top: 1px;
     padding-bottom: 1px;
-    overflow: hidden;
+    max-height: 150px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .mx_ChatInviteDialog_cancel {
