@@ -37,14 +37,16 @@ module.exports = React.createClass({
         };
     },
 
-    componentDidUpdate: function() {
+    componentWillReceiveProps: function(props) {
         // Make sure the selected item isn't outside the list bounds
         var selected = this.state.selected;
-        var maxSelected = this._maxSelected(this.props.addressList);
+        var maxSelected = this._maxSelected(props.addressList);
         if (selected > maxSelected) {
-            selected = maxSelected;
+            this.setState({ selected: maxSelected });
         }
+    },
 
+    componentDidUpdate: function() {
         // As the user scrolls with the arrow keys keep the selected item
         // at the top of the window.
         if (this.scrollElement && this.props.addressList.length > 0 && !this.state.hover) {
