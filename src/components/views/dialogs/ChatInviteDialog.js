@@ -211,6 +211,11 @@ module.exports = React.createClass({
         var uid = user.userId.toLowerCase();
         query = query.toLowerCase();
 
+        // dount match any that are already on the invite list
+        if (this._isOnInviteList(uid)) {
+            return false;
+        }
+
         // direct prefix matches
         if (name.indexOf(query) === 0 || uid.indexOf(query) === 0) {
             return true;
@@ -225,6 +230,15 @@ module.exports = React.createClass({
         var parts = name.split(" ");
         for (var i = 0; i < parts.length; i++) {
             if (parts[i].indexOf(query) === 0) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    _isOnInviteList: function(uid) {
+        for (let i = 0; i < this.state.inviteList.length; i++) {
+            if (this.state.inviteList[i].userId.toLowerCase() === uid) {
                 return true;
             }
         }
