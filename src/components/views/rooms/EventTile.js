@@ -248,8 +248,7 @@ module.exports = React.createClass({
         if (!actions || !actions.tweaks) { return false; }
 
         // don't show self-highlights from another of our clients
-        if (this.props.mxEvent.sender &&
-            this.props.mxEvent.sender.userId === MatrixClientPeg.get().credentials.userId)
+        if (this.props.mxEvent.getSender() === MatrixClientPeg.get().credentials.userId)
         {
             return false;
         }
@@ -375,7 +374,7 @@ module.exports = React.createClass({
 
         // Info messages are basically information about commands processed on a
         // room, or emote messages
-        var isInfoMessage = (msgtype === 'm.emote' || eventType !== 'm.room.message');
+        var isInfoMessage = (eventType !== 'm.room.message');
 
         var EventTileType = sdk.getComponent(eventTileTypes[eventType]);
         // This shouldn't happen: the caller should check we support this type
@@ -384,21 +383,24 @@ module.exports = React.createClass({
             throw new Error("Event type not supported");
         }
 
+        var e2eEnabled = MatrixClientPeg.get().isRoomEncrypted(this.props.mxEvent.getRoomId());
+        var isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
+
         var classes = classNames({
             mx_EventTile: true,
             mx_EventTile_info: isInfoMessage,
-            mx_EventTile_sending: ['sending', 'queued'].indexOf(
-                this.props.eventSendStatus
-            ) !== -1,
+            mx_EventTile_encrypting: this.props.eventSendStatus == 'encrypting',
+            mx_EventTile_sending: isSending,
             mx_EventTile_notSent: this.props.eventSendStatus == 'not_sent',
-            mx_EventTile_highlight: this.props.tileShape === 'notif' ? false : this.shouldHighlight(),
+            mx_EventTile_highlight: this.props.tileShape == 'notif' ? false : this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent,
             mx_EventTile_continuation: this.props.tileShape ? '' : this.props.continuation,
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,
             menu: this.state.menu,
-            mx_EventTile_verified: this.state.verified == true,
+            mx_EventTile_verified: this.state.verified == true || (e2eEnabled && isSending),
             mx_EventTile_unverified: this.state.verified == false,
+            mx_EventTile_bad: this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted',
         });
         var permalink = "#/room/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId();
 
@@ -412,7 +414,7 @@ module.exports = React.createClass({
             avatarSize = 24;
             needsSenderProfile = true;
         } else if (isInfoMessage) {
-            // a small avatar, with no sender profile, for emotes and
+            // a small avatar, with no sender profile, for
             // joins/parts/etc
             avatarSize = 14;
             needsSenderProfile = false;
@@ -447,12 +449,27 @@ module.exports = React.createClass({
             else {
                 sender = <SenderProfile mxEvent={this.props.mxEvent} />;
             }
-
         }
 
         var editButton = (
             <img className="mx_EventTile_editButton" src="img/icon_context_message.svg" width="19" height="19" alt="Options" title="Options" onClick={this.onEditClicked} />
         );
+
+        var e2e;
+        if (e2eEnabled) {
+            if (this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted') {
+                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
+            }
+            else if (this.state.verified == true) {
+                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" alt="Encrypted by a verified device"/>;
+            }
+            else if (this.state.verified == false) {
+                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }} alt="Encrypted by an unverified device!"/>;
+            }
+            else {
+                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
+            }
+        }
 
         if (this.props.tileShape === "notif") {
             var room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
@@ -515,6 +532,7 @@ module.exports = React.createClass({
                         <a href={ permalink }>
                             <MessageTimestamp ts={this.props.mxEvent.getTs()} />
                         </a>
+                        { e2e }
                         <EventTileType ref="tile"
                             mxEvent={this.props.mxEvent}
                             highlights={this.props.highlights}

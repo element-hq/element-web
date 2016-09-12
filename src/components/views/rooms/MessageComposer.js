@@ -201,6 +201,13 @@ export default class MessageComposer extends React.Component {
             </div>
         );
 
+        if (MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId)) {
+            // FIXME: show a /!\ if there are untrusted devices in the room...
+            controls.push(
+                <img className="mx_MessageComposer_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" alt="Encrypted room"/>
+            );
+        }
+
         var callButton, videoCallButton, hangupButton;
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
