@@ -46,6 +46,11 @@ limitations under the License.
     width: 100%;
 }
 
+.mx_MessageComposer_e2eIcon {
+    position: absolute;
+    left: 46px;
+}
+
 .mx_MessageComposer_noperm_error {
     width: 100%;
     height: 60px;
