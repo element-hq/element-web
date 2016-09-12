@@ -60,7 +60,7 @@ limitations under the License.
 .mx_FilePanel .mx_EventTile .mx_MImageBody_downloadLink {
     flex: 1 1 auto;
     color: #747474;
-    word-break: break-all;
+    word-wrap: break-word;
 }
 
 .mx_FilePanel .mx_EventTile .mx_MImageBody_size {
@@ -88,7 +88,7 @@ limitations under the License.
     font-size: 11px;
     opacity: 1.0;
     color: #acacac;
-    word-break: break-all;
+    word-wrap: break-word;
 }
 
 .mx_FilePanel .mx_EventTile .mx_MessageTimestamp {
