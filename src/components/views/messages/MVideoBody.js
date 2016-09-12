@@ -83,6 +83,7 @@ module.exports = React.createClass({
             );
         }
         else {
+            var TintableSvg = sdk.getComponent("elements.TintableSvg");
             download = (
                 <div className="mx_MImageBody_download">
                     <a href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
