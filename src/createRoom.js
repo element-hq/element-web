@@ -57,6 +57,9 @@ function createRoom(opts) {
     if (opts.dmUserId && createOpts.invite === undefined) {
         createOpts.invite = [opts.dmUserId];
     }
+    if (opts.dmUserId && createOpts.is_direct === undefined) {
+        createOpts.is_direct = true;
+    }
 
     // Allow guests by default since the room is private and they'd
     // need an invite. This means clicking on a 3pid invite email can
