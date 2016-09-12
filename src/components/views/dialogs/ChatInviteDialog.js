@@ -138,11 +138,16 @@ module.exports = React.createClass({
         this.setState({ queryList: queryList });
     },
 
-    onDismissed: function() {
-        this.setState({
-            inviteList: [],
-            queryList: [],
-        });
+    onDismissed: function(index) {
+        var self = this;
+        return function() {
+            var inviteList = self.state.inviteList.slice();
+            inviteList.splice(index, 1);
+            self.setState({
+                inviteList: inviteList,
+                queryList: [],
+            });
+        }
     },
 
     onClick: function(index) {
@@ -234,9 +239,12 @@ module.exports = React.createClass({
         var query;
         if (this.state.inviteList.length > 0) {
             var AddressTile = sdk.getComponent("elements.AddressTile");
-            query = (
-                <AddressTile user={this.state.inviteList[0]} canDismiss={true} onDismissed={this.onDismissed} />
-            );
+            query = [];
+            for (let i = 0; i < this.state.inviteList.length; i++) {
+                query.push(
+                    <AddressTile key={i} user={this.state.inviteList[0]} canDismiss={true} onDismissed={ this.onDismissed(i) } />
+                );
+            }
         } else {
             query = (
                 <textarea rows="1"
