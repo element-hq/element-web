@@ -57,18 +57,34 @@ module.exports = React.createClass({
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         if (httpUrl) {
-            return (
-                <span className="mx_MFileBody">
-                    <div className="mx_MImageBody_download">
-                        <a href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
-                            <TintableSvg src="img/download.svg" width="12" height="14"/>
-                            Download {text}
-                        </a>
-                    </div>
-                </span>
-            );
+            if (this.props.tileShape === "file_grid") {
+                return (
+                    <span className="mx_MFileBody">
+                        <div className="mx_MImageBody_download">
+                            <a className="mx_ImageBody_downloadLink" href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
+                                { content.body && content.body.length > 0 ? content.body : "Attachment" }
+                            </a>
+                            <div className="mx_MImageBody_size">
+                                { content.info && content.info.size ? filesize(content.info.size) : "" }
+                            </div>
+                        </div>
+                    </span>
+                );
+            }
+            else {
+                return (
+                    <span className="mx_MFileBody">
+                        <div className="mx_MImageBody_download">
+                            <a href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
+                                <TintableSvg src="img/download.svg" width="12" height="14"/>
+                                Download {text}
+                            </a>
+                        </div>
+                    </span>
+                );
+            }
         } else {
-            var extra = text ? ': '+text : '';
+            var extra = text ? (': ' + text) : '';
             return <span className="mx_MFileBody">
                 Invalid file{extra}
             </span>

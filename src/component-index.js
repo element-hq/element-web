@@ -27,8 +27,10 @@ limitations under the License.
 module.exports.components = {};
 module.exports.components['structures.ContextualMenu'] = require('./components/structures/ContextualMenu');
 module.exports.components['structures.CreateRoom'] = require('./components/structures/CreateRoom');
+module.exports.components['structures.FilePanel'] = require('./components/structures/FilePanel');
 module.exports.components['structures.MatrixChat'] = require('./components/structures/MatrixChat');
 module.exports.components['structures.MessagePanel'] = require('./components/structures/MessagePanel');
+module.exports.components['structures.NotificationPanel'] = require('./components/structures/NotificationPanel');
 module.exports.components['structures.RoomStatusBar'] = require('./components/structures/RoomStatusBar');
 module.exports.components['structures.RoomView'] = require('./components/structures/RoomView');
 module.exports.components['structures.ScrollPanel'] = require('./components/structures/ScrollPanel');

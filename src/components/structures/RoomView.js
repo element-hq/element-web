@@ -340,7 +340,11 @@ module.exports = React.createClass({
         if (this.unmounted) return;
 
         // ignore events for other rooms
+        if (!room) return;
         if (!this.state.room || room.roomId != this.state.room.roomId) return;
+
+        // ignore events from filtered timelines
+        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
 
         if (ev.getType() === "org.matrix.room.preview_urls") {
             this._updatePreviewUrlVisibility(room);
@@ -1570,7 +1574,9 @@ module.exports = React.createClass({
 
         var messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
-                room={this.state.room}
+                timelineSet={this.state.room.getUnfilteredTimelineSet()}
+                manageReadReceipts={true}
+                manageReadMarkers={true}
                 hidden={hideMessagePanel}
                 highlightedEventId={this.props.highlightedEventId}
                 eventId={this.props.eventId}
@@ -1579,6 +1585,7 @@ module.exports = React.createClass({
                 onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
                 showUrlPreview = { this.state.showUrlPreview }
                 opacity={ this.props.opacity }
+                className="mx_RoomView_messagePanel"
             />);
 
         var topUnreadMessagesBar = null;

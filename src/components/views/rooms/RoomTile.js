@@ -106,14 +106,16 @@ module.exports = React.createClass({
 
     onMouseEnter: function() {
         this.setState( { hover : true });
+        this.badgeOnMouseEnter();
     },
 
     onMouseLeave: function() {
         this.setState( { hover : false });
+        this.badgeOnMouseLeave();
     },
 
     badgeOnMouseEnter: function() {
-        // Only allow none guests to access the context menu
+        // Only allow non-guests to access the context menu
         // and only change it if it needs to change
         if (!MatrixClientPeg.get().isGuest() && !this.state.badgeHover) {
             this.setState( { badgeHover : true } );
@@ -241,7 +243,7 @@ module.exports = React.createClass({
             badgeContent = '\u200B';
         }
 
-        badge = <div className={ badgeClasses } onClick={this.onBadgeClicked} onMouseEnter={this.badgeOnMouseEnter} onMouseLeave={this.badgeOnMouseLeave}>{ badgeContent }</div>;
+        badge = <div className={ badgeClasses } onClick={this.onBadgeClicked}>{ badgeContent }</div>;
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
         var label;
