@@ -60,7 +60,7 @@ module.exports = React.createClass({
                 imgUrl = Avatar.avatarUrlForUser(user, 25, 25, "crop");
             } else {
                 name="Unknown";
-                imgUrl = "img/icon-email-user.svg";
+                imgUrl = "img/avatar-error.svg";
             }
         } else if (addrType === "email") {
             email = this.props.address;
@@ -68,7 +68,7 @@ module.exports = React.createClass({
             imgUrl = "img/icon-email-user.svg";
         } else {
             name="Unknown";
-            imgUrl = "img/icon-email-user.svg";
+            imgUrl = "img/avatar-error.svg";
         }
 
         var network;
@@ -81,6 +81,7 @@ module.exports = React.createClass({
         }
 
         var info;
+        var error = false;
         if (userId) {
             var nameClasses = classNames({
                 "mx_AddressTile_name": true,
@@ -108,6 +109,7 @@ module.exports = React.createClass({
                 <div className={emailClasses}>{ email }</div>
             );
         } else {
+            error = true;
             var unknownClasses = classNames({
                 "mx_AddressTile_unknown": true,
                 "mx_AddressTile_justified": this.props.justified,
@@ -117,6 +119,11 @@ module.exports = React.createClass({
                 <div className={unknownClasses}>Unknown Address</div>
             );
         }
+
+        var classes = classNames({
+            "mx_AddressTile": true,
+            "mx_AddressTile_error": error,
+        });
 
         var dismiss;
         if (this.props.canDismiss) {
@@ -128,7 +135,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="mx_AddressTile">
+            <div className={classes}>
                 { network }
                 <div className="mx_AddressTile_avatar">
                     <BaseAvatar width={25} height={25} name={name} title={name} url={imgUrl} />
