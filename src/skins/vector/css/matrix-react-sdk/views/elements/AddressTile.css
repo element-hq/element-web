@@ -85,8 +85,23 @@ limitations under the License.
     vertical-align: middle;
 }
 
+.mx_AddressTile_unknownMx {
+    display: inline-block;
+    font-weight: 600;
+    padding-right: 11px;
+}
+
+.mx_AddressTile_unknownMxl.mx_AddressTile_justified {
+    width: 380px; /* name + id width */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
 .mx_AddressTile_email {
     display: inline-block;
+    font-weight: 600;
     padding-right: 11px;
 }
 
