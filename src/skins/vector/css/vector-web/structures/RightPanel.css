@@ -113,7 +113,7 @@ limitations under the License.
 }
 
 .collapsed .mx_RightPanel_footer .mx_RightPanel_invite {
-    padding-left: 10px;
+    display: none;
 }
 
 .mx_RightPanel_invite .mx_RightPanel_icon {
