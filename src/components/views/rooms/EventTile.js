@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var classNames = require("classnames");
+var Modal = require('../../../Modal');
 
 var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg')
@@ -128,6 +129,15 @@ module.exports = React.createClass({
         /* the status of this event - ie, mxEvent.status. Denormalised to here so
          * that we can tell when it changes. */
         eventSendStatus: React.PropTypes.string,
+
+        /* the shape of the tile. by default, the layout is intended for the
+         * normal room timeline.  alternative values are: "file_list", "file_grid"
+         * and "notif".  This could be done by CSS, but it'd be horribly inefficient.
+         * It could also be done by subclassing EventTile, but that'd be quite
+         * boiilerplatey.  So just make the necessary render decisions conditional
+         * for now.
+         */
+        tileShape: React.PropTypes.string,
     },
 
     getInitialState: function() {
@@ -239,8 +249,7 @@ module.exports = React.createClass({
         if (!actions || !actions.tweaks) { return false; }
 
         // don't show self-highlights from another of our clients
-        if (this.props.mxEvent.sender &&
-            this.props.mxEvent.sender.userId === MatrixClientPeg.get().credentials.userId)
+        if (this.props.mxEvent.getSender() === MatrixClientPeg.get().credentials.userId)
         {
             return false;
         }
@@ -353,6 +362,15 @@ module.exports = React.createClass({
         });
     },
 
+    onCryptoClicked: function(e) {
+        var EncryptedEventDialog = sdk.getComponent("dialogs.EncryptedEventDialog");
+        var event = this.props.mxEvent;
+
+        Modal.createDialog(EncryptedEventDialog, {
+            event: event,
+        });
+    },
+
     render: function() {
         var MessageTimestamp = sdk.getComponent('messages.MessageTimestamp');
         var SenderProfile = sdk.getComponent('messages.SenderProfile');
@@ -366,7 +384,7 @@ module.exports = React.createClass({
 
         // Info messages are basically information about commands processed on a
         // room, or emote messages
-        var isInfoMessage = (msgtype === 'm.emote' || eventType !== 'm.room.message');
+        var isInfoMessage = (eventType !== 'm.room.message');
 
         var EventTileType = sdk.getComponent(eventTileTypes[eventType]);
         // This shouldn't happen: the caller should check we support this type
@@ -375,25 +393,26 @@ module.exports = React.createClass({
             throw new Error("Event type not supported");
         }
 
+        var e2eEnabled = MatrixClientPeg.get().isRoomEncrypted(this.props.mxEvent.getRoomId());
+        var isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
+
         var classes = classNames({
             mx_EventTile: true,
             mx_EventTile_info: isInfoMessage,
-            mx_EventTile_sending: ['sending', 'queued'].indexOf(
-                this.props.eventSendStatus
-            ) !== -1,
+            mx_EventTile_encrypting: this.props.eventSendStatus == 'encrypting',
+            mx_EventTile_sending: isSending,
             mx_EventTile_notSent: this.props.eventSendStatus == 'not_sent',
-            mx_EventTile_highlight: this.shouldHighlight(),
+            mx_EventTile_highlight: this.props.tileShape == 'notif' ? false : this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent,
-            mx_EventTile_continuation: this.props.continuation,
+            mx_EventTile_continuation: this.props.tileShape ? '' : this.props.continuation,
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,
             menu: this.state.menu,
-            mx_EventTile_verified: this.state.verified == true,
+            mx_EventTile_verified: this.state.verified == true || (e2eEnabled && isSending),
             mx_EventTile_unverified: this.state.verified == false,
+            mx_EventTile_bad: this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted',
         });
-        var timestamp = <a href={ "#/room/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }>
-                            <MessageTimestamp ts={this.props.mxEvent.getTs()} />
-                        </a>
+        var permalink = "#/room/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId();
 
         var readAvatars = this.getReadAvatars();
 
@@ -401,8 +420,11 @@ module.exports = React.createClass({
         let avatarSize;
         let needsSenderProfile;
 
-        if (isInfoMessage) {
-            // a small avatar, with no sender profile, for emotes and
+        if (this.props.tileShape === "notif") {
+            avatarSize = 24;
+            needsSenderProfile = true;
+        } else if (isInfoMessage) {
+            // a small avatar, with no sender profile, for
             // joins/parts/etc
             avatarSize = 14;
             needsSenderProfile = false;
@@ -428,35 +450,109 @@ module.exports = React.createClass({
 
         if (needsSenderProfile) {
             let aux = null;
-            if (msgtype === 'm.image') aux = "sent an image";
-            else if (msgtype === 'm.video') aux = "sent a video";
-            else if (msgtype === 'm.file') aux = "uploaded a file";
-
-            sender = <SenderProfile onClick={ this.onSenderProfileClick } mxEvent={this.props.mxEvent} aux={aux} />;
+            if (!this.props.tileShape) {
+                if (msgtype === 'm.image') aux = "sent an image";
+                else if (msgtype === 'm.video') aux = "sent a video";
+                else if (msgtype === 'm.file') aux = "uploaded a file";
+                sender = <SenderProfile onClick={ this.onSenderProfileClick } mxEvent={this.props.mxEvent} aux={aux} />;
+            }
+            else {
+                sender = <SenderProfile mxEvent={this.props.mxEvent} />;
+            }
         }
 
         var editButton = (
             <img className="mx_EventTile_editButton" src="img/icon_context_message.svg" width="19" height="19" alt="Options" title="Options" onClick={this.onEditClicked} />
         );
 
-        return (
-            <div className={classes}>
-                <div className="mx_EventTile_msgOption">
-                    { readAvatars }
+        var e2e;
+        if (e2eEnabled) {
+            if (this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted') {
+                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
+            }
+            else if (this.state.verified == true) {
+                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" alt="Encrypted by a verified device"/>;
+            }
+            else if (this.state.verified == false) {
+                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }} alt="Encrypted by an unverified device!"/>;
+            }
+            else {
+                e2e = <img className="mx_EventTile_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
+            }
+        }
+
+        if (this.props.tileShape === "notif") {
+            var room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+
+            return (
+                <div className={classes}>
+                    <div className="mx_EventTile_roomName">
+                        <a href={ permalink }>
+                            { room ? room.name : '' }
+                        </a>
+                    </div>
+                    <div className="mx_EventTile_senderDetails">
+                        { avatar }
+                        <a href={ permalink }>
+                            { sender }
+                            <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                        </a>
+                    </div>
+                    <div className="mx_EventTile_line" >
+                        <EventTileType ref="tile"
+                            mxEvent={this.props.mxEvent}
+                            highlights={this.props.highlights}
+                            highlightLink={this.props.highlightLink}
+                            showUrlPreview={this.props.showUrlPreview}
+                            onWidgetLoad={this.props.onWidgetLoad} />
+                    </div>
                 </div>
-                { avatar }
-                { sender }
-                <div className="mx_EventTile_line">
-                    { timestamp }
-                    <EventTileType ref="tile"
-                        mxEvent={this.props.mxEvent}
-                        highlights={this.props.highlights}
-                        highlightLink={this.props.highlightLink}
-                        showUrlPreview={this.props.showUrlPreview}
-                        onWidgetLoad={this.props.onWidgetLoad} />
-                    { editButton }
+            );
+        }
+        else if (this.props.tileShape === "file_grid") {
+            return (
+                <div className={classes}>
+                    <div className="mx_EventTile_line" >
+                        <EventTileType ref="tile"
+                            mxEvent={this.props.mxEvent}
+                            highlights={this.props.highlights}
+                            highlightLink={this.props.highlightLink}
+                            showUrlPreview={this.props.showUrlPreview}
+                            tileShape={this.props.tileShape}
+                            onWidgetLoad={this.props.onWidgetLoad} />
+                    </div>
+                    <a className="mx_EventTile_senderDetailsLink" href={ permalink }>
+                        <div className="mx_EventTile_senderDetails">
+                                { sender }
+                                <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                        </div>
+                    </a>
                 </div>
-            </div>
-        );
+            );
+        }
+        else {
+            return (
+                <div className={classes}>
+                    <div className="mx_EventTile_msgOption">
+                        { readAvatars }
+                    </div>
+                    { avatar }
+                    { sender }
+                    <div className="mx_EventTile_line">
+                        <a href={ permalink }>
+                            <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                        </a>
+                        { e2e }
+                        <EventTileType ref="tile"
+                            mxEvent={this.props.mxEvent}
+                            highlights={this.props.highlights}
+                            highlightLink={this.props.highlightLink}
+                            showUrlPreview={this.props.showUrlPreview}
+                            onWidgetLoad={this.props.onWidgetLoad} />
+                        { editButton }
+                    </div>
+                </div>
+            );
+        }
     },
 });

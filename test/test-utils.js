@@ -39,6 +39,7 @@ export function stubClient() {
         loginFlows: sinon.stub(),
         on: sinon.stub(),
         removeListener: sinon.stub(),
+        isRoomEncrypted: sinon.stub().returns(false),
 
         paginateEventTimeline: sinon.stub().returns(q()),
         sendReadReceipt: sinon.stub().returns(q()),
