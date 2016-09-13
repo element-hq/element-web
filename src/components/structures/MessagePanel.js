@@ -60,6 +60,9 @@ module.exports = React.createClass({
         // true to suppress the date at the start of the timeline
         suppressFirstDateSeparator: React.PropTypes.bool,
 
+        // whether to show read receipts
+        manageReadReceipts: React.PropTypes.bool,
+
         // true if updates to the event list should cause the scroll panel to
         // scroll down when we are at the bottom of the window. See ScrollPanel
         // for more details.
@@ -73,6 +76,12 @@ module.exports = React.createClass({
 
         // opacity for dynamic UI fading effects
         opacity: React.PropTypes.number,
+
+        // className for the panel
+        className: React.PropTypes.string.isRequired,
+
+        // shape parameter to be passed to EventTiles
+        tileShape: React.PropTypes.string,
     },
 
     componentWillMount: function() {
@@ -337,6 +346,7 @@ module.exports = React.createClass({
             continuation = true;
         }
 
+/*
         // Work out if this is still a continuation, as we are now showing commands
         // and /me messages with their own little avatar. The case of a change of
         // event type (commands) is handled above, but we need to handle the /me
@@ -348,6 +358,7 @@ module.exports = React.createClass({
                 && prevEvent.getContent().msgtype === 'm.emote') {
             continuation = false;
         }
+*/
 
         // local echoes have a fake date, which could even be yesterday. Treat them
         // as 'today' for the date separators.
@@ -370,7 +381,10 @@ module.exports = React.createClass({
         // Local echos have a send "status".
         var scrollToken = mxEv.status ? undefined : eventId;
 
-        var readReceipts = this._getReadReceiptsForEvent(mxEv);
+        var readReceipts;
+        if (this.props.manageReadReceipts) {
+            readReceipts = this._getReadReceiptsForEvent(mxEv);
+        }
 
         ret.push(
                 <li key={eventId}
@@ -383,6 +397,7 @@ module.exports = React.createClass({
                         showUrlPreview={this.props.showUrlPreview}
                         checkUnmounting={this._isUnmounting}
                         eventSendStatus={mxEv.status}
+                        tileShape={this.props.tileShape}
                         last={last} isSelectedEvent={highlight}/>
                 </li>
         );
@@ -503,7 +518,7 @@ module.exports = React.createClass({
         style.opacity = this.props.opacity;
 
         return (
-            <ScrollPanel ref="scrollPanel" className="mx_RoomView_messagePanel mx_fadable"
+            <ScrollPanel ref="scrollPanel" className={ this.props.className + " mx_fadable" }
                     onScroll={ this.props.onScroll }
                     onResize={ this.onResize }
                     onFillRequest={ this.props.onFillRequest }

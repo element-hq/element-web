@@ -37,6 +37,7 @@ module.exports = React.createClass({
         ]),
         value: React.PropTypes.string,
         placeholder: React.PropTypes.string,
+        roomId: React.PropTypes.string,
         button: React.PropTypes.string,
         focus: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired
@@ -55,6 +56,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
+            error: false,
             inviteList: [],
             queryList: [],
         };
@@ -68,7 +70,7 @@ module.exports = React.createClass({
         this._updateUserList();
     },
 
-    onStartChat: function() {
+    onButtonClick: function() {
         var addr;
 
         // Either an address tile was created, or text input is being used
@@ -76,8 +78,8 @@ module.exports = React.createClass({
             addr = this.state.inviteList[0];
         }
 
-        // Check if the addr is a valid type
-        if (Invite.getAddressType(addr) === "mx") {
+        if (this.state.inviteList.length === 1 && Invite.getAddressType(addr) === "mx" && !this.props.roomId) {
+            // Direct Message chat
             var room = this._getDirectMessageRoom(addr);
             if (room) {
                 // A Direct Message room already exists for this user and you
@@ -90,11 +92,9 @@ module.exports = React.createClass({
             } else {
                 this._startChat(addr);
             }
-        } else if (Invite.getAddressType(addr) === "email") {
-            this._startChat(addr);
         } else {
-            // Nothing to do, so focus back on the textinput
-            this.refs.textinput.focus();
+            // Multi invite chat
+            this._startChat(addr);
         }
     },
 
@@ -122,12 +122,16 @@ module.exports = React.createClass({
         } else if (e.keyCode === 32 || e.keyCode === 188) { // space or comma
             e.stopPropagation();
             e.preventDefault();
-            var inviteList = this.state.inviteList.slice();
-            inviteList.push(this.refs.textinput.value);
-            this.setState({
-                inviteList: inviteList,
-                queryList: [],
-            });
+            if (Invite.isValidAddress(this.refs.textinput.value)) {
+                var inviteList = this.state.inviteList.slice();
+                inviteList.push(this.refs.textinput.value);
+                this.setState({
+                    inviteList: inviteList,
+                    queryList: [],
+                });
+            } else {
+                this.setState({ error: true });
+            }
         }
     },
 
@@ -142,7 +146,10 @@ module.exports = React.createClass({
             });
         }
 
-        this.setState({ queryList: queryList });
+        this.setState({
+            queryList: queryList,
+            error: false,
+        });
     },
 
     onDismissed: function(index) {
@@ -181,7 +188,10 @@ module.exports = React.createClass({
             for (let i = 0; i < dmRooms.length; i++) {
                 let room = MatrixClientPeg.get().getRoom(dmRooms[i]);
                 if (room) {
-                    return room;
+                    const me = room.getMember(MatrixClientPeg.get().credentials.userId);
+                    if (me.membership == 'join') {
+                        return room;
+                    }
                 }
             }
         }
@@ -189,19 +199,30 @@ module.exports = React.createClass({
     },
 
     _startChat: function(addr) {
-        // Start the chat
-        createRoom().then(function(roomId) {
-            return Invite.inviteToRoom(roomId, addr);
-        })
-        .catch(function(err) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Failure to invite user",
-                description: err.toString()
-            });
-            return null;
-        })
-        .done();
+        if (this.props.roomId) {
+            Invite.inviteToRoom(this.props.roomId, addr)
+            .catch(function(err) {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failure to invite user",
+                    description: err.toString()
+                });
+                return null;
+            })
+            .done();
+        } else {
+            // Start the chat
+            createRoom({dmUserId: addr})
+            .catch(function(err) {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failure to invite user",
+                    description: err.toString()
+                });
+                return null;
+            })
+            .done();
+        }
 
         // Close - this will happen before the above, as that is async
         this.props.onFinished(true, addr);
@@ -267,6 +288,7 @@ module.exports = React.createClass({
                 );
             }
         }
+
         // Add the query at the end
         query.push(
             <textarea key={this.state.inviteList.length}
@@ -281,6 +303,19 @@ module.exports = React.createClass({
             </textarea>
         );
 
+        var error;
+        var addressSelector;
+        if (this.state.error) {
+            error = <div className="mx_ChatInviteDialog_error">You have entered an invalid contact. Try using their Matrix ID or email address.</div>
+        } else {
+            addressSelector = (
+                <AddressSelector ref={(ref) => {this.addressSelector = ref}}
+                    addressList={ this.state.queryList }
+                    onSelected={ this.onSelected }
+                    truncateAt={ TRUNCATE_QUERY_LIST } />
+            );
+        }
+
         return (
             <div className="mx_ChatInviteDialog" onKeyDown={this.onKeyDown}>
                 <div className="mx_Dialog_title">
@@ -294,13 +329,11 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_Dialog_content">
                     <div className="mx_ChatInviteDialog_inputContainer">{ query }</div>
-                    <AddressSelector ref={(ref) => {this.addressSelector = ref}}
-                        addressList={ this.state.queryList }
-                        onSelected={ this.onSelected }
-                        truncateAt={ TRUNCATE_QUERY_LIST } />
+                    { error }
+                    { addressSelector }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.onStartChat}>
+                    <button className="mx_Dialog_primary" onClick={this.onButtonClick}>
                         {this.props.button}
                     </button>
                 </div>

@@ -78,7 +78,7 @@ export default class MessageComposer extends React.Component {
 
         let fileList = [];
         for (let i=0; i<files.length; i++) {
-            fileList.push(<li>
+            fileList.push(<li key={i}>
                 <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name}
             </li>);
         }
@@ -200,6 +200,13 @@ export default class MessageComposer extends React.Component {
                 <MemberAvatar member={me} width={24} height={24} />
             </div>
         );
+
+        if (MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId)) {
+            // FIXME: show a /!\ if there are untrusted devices in the room...
+            controls.push(
+                <img key="e2eIcon" className="mx_MessageComposer_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" alt="Encrypted room"/>
+            );
+        }
 
         var callButton, videoCallButton, hangupButton;
         if (this.props.callState && this.props.callState !== 'ended') {

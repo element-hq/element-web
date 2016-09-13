@@ -93,20 +93,26 @@ export function setDMRoom(roomId, userId) {
 
     if (mDirectEvent !== undefined) dmRoomMap = mDirectEvent.getContent();
 
+    // remove it from the lists of any others users
+    // (it can only be a DM room for one person)
     for (const thisUserId of Object.keys(dmRoomMap)) {
         const roomList = dmRoomMap[thisUserId];
 
-        if (thisUserId == userId) {
-            if (roomList.indexOf(roomId) == -1) {
-                roomList.push(roomId);
-            }
-        } else {
+        if (thisUserId != userId) {
             const indexOfRoom = roomList.indexOf(roomId);
             if (indexOfRoom > -1) {
                 roomList.splice(indexOfRoom, 1);
             }
         }
     }
+
+    // now add it, if it's not already there
+    const roomList = dmRoomMap[userId] || [];
+    if (roomList.indexOf(roomId) == -1) {
+        roomList.push(roomId);
+    }
+    dmRoomMap[userId] = roomList;
+
 
     return MatrixClientPeg.get().setAccountData('m.direct', dmRoomMap);
 }

@@ -421,11 +421,7 @@ module.exports = React.createClass({
 
     onNewDMClick: function() {
         this.setState({ updating: this.state.updating + 1 });
-        createRoom({
-            createOpts: {
-                invite: [this.props.member.userId],
-            },
-        }).finally(() => {
+        createRoom({dmUserId: this.props.member.userId}).finally(() => {
             this.props.onFinished();
             this.setState({ updating: this.state.updating - 1 });
         }).done();

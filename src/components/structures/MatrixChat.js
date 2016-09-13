@@ -373,6 +373,9 @@ module.exports = React.createClass({
             case 'view_create_chat':
                 this._createChat();
                 break;
+            case 'view_invite':
+                this._invite(payload.roomId);
+                break;
             case 'notifier_enabled':
                 this.forceUpdate();
                 break;
@@ -512,7 +515,17 @@ module.exports = React.createClass({
     _createChat: function() {
         var ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
         Modal.createDialog(ChatInviteDialog, {
-            title: "Start a one to one chat",
+            title: "Start a new chat",
+        });
+    },
+
+    _invite: function(roomId) {
+        var ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
+        Modal.createDialog(ChatInviteDialog, {
+            title: "Invite new room members",
+            button: "Send Invites",
+            description: "Who would you like to add to this room?",
+            roomId: roomId,
         });
     },
 

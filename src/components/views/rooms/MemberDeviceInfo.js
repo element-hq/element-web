@@ -54,33 +54,33 @@ export default class MemberDeviceInfo extends React.Component {
         var indicator = null, blockButton = null, verifyButton = null;
         if (this.props.device.isBlocked()) {
             blockButton = (
-                <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unblock"
+                <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unblock"
                   onClick={this.onUnblockClick}>
                     Unblock
-                </div>
+                </button>
             );
         } else {
             blockButton = (
-                <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_block"
+                <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_block"
                   onClick={this.onBlockClick}>
                     Block
-                </div>
+                </button>
             );
         }
 
         if (this.props.device.isVerified()) {
             verifyButton = (
-                <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unverify"
+                <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unverify"
                   onClick={this.onUnverifyClick}>
                     Unverify
-                </div>
+                </button>
             );
         } else {
             verifyButton = (
-                <div className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_verify"
+                <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_verify"
                   onClick={this.onVerifyClick}>
                     Verify
-                </div>
+                </button>
             );
         }
 
@@ -101,16 +101,25 @@ export default class MemberDeviceInfo extends React.Component {
 
         var deviceName = this.props.device.getDisplayName() || this.props.device.deviceId;
 
+        var info;
+        if (!this.props.hideInfo) {
+            info = (
+                <div>
+                    <div className="mx_MemberDeviceInfo_deviceId">{deviceName}</div>
+                    {indicator}
+                    <div className="mx_MemberDeviceInfo_deviceKey">
+                        {this.props.device.getFingerprint()}
+                    </div>
+                </div>
+            );
+        }
+
         // add the deviceId as a titletext to help with debugging
         return (
             <div className="mx_MemberDeviceInfo" title={this.props.device.deviceId}>
-                <div className="mx_MemberDeviceInfo_deviceId">{deviceName}</div>
-                {indicator}
-                <div className="mx_MemberDeviceInfo_deviceKey">
-                    {this.props.device.getFingerprint()}
-                </div>
-                {verifyButton}
-                {blockButton}
+                { info }
+                { verifyButton }
+                { blockButton }
             </div>
         );
     }
@@ -120,4 +129,5 @@ MemberDeviceInfo.displayName = 'MemberDeviceInfo';
 MemberDeviceInfo.propTypes = {
     userId: React.PropTypes.string.isRequired,
     device: React.PropTypes.object.isRequired,
+    hideInfo: React.PropTypes.bool,
 };

@@ -18,6 +18,11 @@ var dis = require("../../../dispatcher");
 
 module.exports = React.createClass({
     displayName: 'LogoutPrompt',
+
+    propTypes: {
+        onFinished: React.PropTypes.func,
+    },
+
     logOut: function() {
         dis.dispatch({action: 'logout'});
         if (this.props.onFinished) {

@@ -37,7 +37,8 @@ class UserActivity {
         // itself being scrolled. Need to use addEventListener's useCapture.
         // also this needs to be the wheel event, not scroll, as scroll is
         // fired when the view scrolls down for a new message.
-        window.addEventListener('wheel', this._onUserActivity.bind(this), true);
+        window.addEventListener('wheel', this._onUserActivity.bind(this),
+                                { passive: true, capture: true });
         this.lastActivityAtTs = new Date().getTime();
         this.lastDispatchAtTs = 0;
         this.activityEndTimer = undefined;
@@ -50,7 +51,8 @@ class UserActivity {
         document.onmousedown = undefined;
         document.onmousemove = undefined;
         document.onkeypress = undefined;
-        window.removeEventListener('wheel', this._onUserActivity.bind(this), true);
+        window.removeEventListener('wheel', this._onUserActivity.bind(this),
+                                   { passive: true, capture: true });
     }
 
     /**
