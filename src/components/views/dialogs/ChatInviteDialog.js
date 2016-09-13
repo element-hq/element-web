@@ -37,6 +37,7 @@ module.exports = React.createClass({
         ]),
         value: React.PropTypes.string,
         placeholder: React.PropTypes.string,
+        roomId: React.PropTypes.string,
         button: React.PropTypes.string,
         focus: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired
@@ -189,19 +190,31 @@ module.exports = React.createClass({
     },
 
     _startChat: function(addr) {
-        // Start the chat
-        createRoom().then(function(roomId) {
-            return Invite.inviteToRoom(roomId, addr);
-        })
-        .catch(function(err) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Failure to invite user",
-                description: err.toString()
-            });
-            return null;
-        })
-        .done();
+        if (this.props.roomId) {
+            Invite.inviteToRoom(this.props.roomId, addr).catch(function(err) {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failure to invite user",
+                    description: err.toString()
+                });
+                return null;
+            })
+            .done();
+        } else {
+            // Start the chat
+            createRoom().then(function(roomId) {
+                return Invite.inviteToRoom(roomId, addr);
+            })
+            .catch(function(err) {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failure to invite user",
+                    description: err.toString()
+                });
+                return null;
+            })
+            .done();
+        }
 
         // Close - this will happen before the above, as that is async
         this.props.onFinished(true, addr);
