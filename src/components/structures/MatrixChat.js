@@ -1008,43 +1008,49 @@ module.exports = React.createClass({
 
             switch (this.state.page_type) {
                 case this.PageTypes.RoomView:
-                    page_element = (
-                        <RoomView
-                            ref="roomView"
-                            roomAddress={this.state.currentRoomAlias || this.state.currentRoomId}
-                            autoJoin={this.state.autoJoin}
-                            onRoomIdResolved={this.onRoomIdResolved}
-                            eventId={this.state.initialEventId}
-                            thirdPartyInvite={this.state.thirdPartyInvite}
-                            oobData={this.state.roomOobData}
-                            highlightedEventId={this.state.highlightedEventId}
-                            eventPixelOffset={this.state.initialEventPixelOffset}
-                            key={this.state.currentRoomAlias || this.state.currentRoomId}
-                            opacity={this.state.middleOpacity}
-                            ConferenceHandler={this.props.ConferenceHandler} />
-                    );
-                    right_panel = <RightPanel roomId={this.state.currentRoomId} collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity} />
+                    page_element = <RoomView
+                        ref="roomView"
+                        roomAddress={this.state.currentRoomAlias || this.state.currentRoomId}
+                        autoJoin={this.state.autoJoin}
+                        onRoomIdResolved={this.onRoomIdResolved}
+                        eventId={this.state.initialEventId}
+                        thirdPartyInvite={this.state.thirdPartyInvite}
+                        oobData={this.state.roomOobData}
+                        highlightedEventId={this.state.highlightedEventId}
+                        eventPixelOffset={this.state.initialEventPixelOffset}
+                        key={this.state.currentRoomAlias || this.state.currentRoomId}
+                        opacity={this.state.middleOpacity}
+                        collapsedRhs={ this.state.collapse_rhs }
+                        ConferenceHandler={this.props.ConferenceHandler}
+                    />
+                    if (!this.state.collapse_rhs) right_panel = <RightPanel roomId={this.state.currentRoomId} opacity={this.state.sideOpacity} />
                     break;
                 case this.PageTypes.UserSettings:
                     page_element = <UserSettings
                         onClose={this.onUserSettingsClose}
                         version={this.state.version}
                         brand={this.props.config.brand}
+                        collapsedRhs={ this.state.collapse_rhs }
                         enableLabs={this.props.config.enableLabs}
                     />
-                    right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
+                    if (!this.state.collapse_rhs) right_panel = <RightPanel opacity={this.state.sideOpacity}/>
                     break;
                 case this.PageTypes.CreateRoom:
-                    page_element = <CreateRoom onRoomCreated={this.onRoomCreated}/>
-                    right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
+                    page_element = <CreateRoom
+                        onRoomCreated={this.onRoomCreated}
+                        collapsedRhs={ this.state.collapse_rhs }
+                    />
+                    if (!this.state.collapse_rhs) right_panel = <RightPanel opacity={this.state.sideOpacity}/>
                     break;
                 case this.PageTypes.RoomDirectory:
-                    page_element = <RoomDirectory />
-                    right_panel = <RightPanel collapsed={this.state.collapse_rhs} opacity={this.state.sideOpacity}/>
+                    page_element = <RoomDirectory
+                        collapsedRhs={ this.state.collapse_rhs }
+                    />
+                    if (!this.state.collapse_rhs) right_panel = <RightPanel opacity={this.state.sideOpacity}/>
                     break;
                 case this.PageTypes.UserView:
                     page_element = null; // deliberately null for now
-                    right_panel = <RightPanel userId={this.state.viewUserId} collapsed={false} opacity={this.state.sideOpacity} />
+                    right_panel = <RightPanel userId={this.state.viewUserId} opacity={this.state.sideOpacity} />
                     break;
             }
 

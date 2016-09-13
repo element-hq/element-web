@@ -17,6 +17,8 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var sdk = require('../../../index');
+var dis = require("../../../dispatcher");
 
 /*
  * A stripped-down room header used for things like the user settings
@@ -28,19 +30,39 @@ module.exports = React.createClass({
     propTypes: {
         title: React.PropTypes.string,
         onCancelClick: React.PropTypes.func,
+
+        // is the RightPanel collapsed?
+        collapsedRhs: React.PropTypes.bool,
+    },
+
+    onShowRhsClick: function(ev) {
+        dis.dispatch({ action: 'show_right_panel' });
     },
 
     render: function() {
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
+
         var cancelButton;
         if (this.props.onCancelClick) {
             cancelButton = <div className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>
         }
+
+        var showRhsButton;
+        /* // don't bother cluttering things up with this for now.
+        if (this.props.collapsedRhs) {
+            showRhsButton =
+                <div className="mx_RoomHeader_button" style={{ float: 'right' }} onClick={this.onShowRhsClick} title=">">
+                    <TintableSvg src="img/minimise.svg" width="10" height="16"/>
+                </div>
+        }
+        */
 
         return (
             <div className="mx_RoomHeader" >
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_simpleHeader">
                         { this.props.title }
+                        { showRhsButton }
                         { cancelButton }
                     </div>
                 </div>

@@ -97,7 +97,7 @@ module.exports = React.createClass({
         highlightedEventId: React.PropTypes.string,
 
         // is the RightPanel collapsed?
-        rightPanelCollapsed: React.PropTypes.bool,
+        collapsedRhs: React.PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -1374,7 +1374,7 @@ module.exports = React.createClass({
                             <RoomHeader ref="header"
                                 room={this.state.room}
                                 oobData={this.props.oobData}
-                                rightPanelCollapsed={ this.props.rightPanelCollapsed }
+                                collapsedRhs={ this.props.collapsedRhs }
                             />
                             <div className="mx_RoomView_auxPanel">
                                 <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked }
@@ -1413,7 +1413,11 @@ module.exports = React.createClass({
                 // We have a regular invite for this room.
                 return (
                     <div className="mx_RoomView">
-                        <RoomHeader ref="header" room={this.state.room}/>
+                        <RoomHeader
+                            ref="header"
+                            room={this.state.room}
+                            collapsedRhs={ this.props.collapsedRhs }
+                        />
                         <div className="mx_RoomView_auxPanel">
                             <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked }
                                             onRejectClick={ this.onRejectButtonClicked }
@@ -1622,6 +1626,7 @@ module.exports = React.createClass({
                     oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
                     saving={this.state.uploadingRoomSettings}
+                    collapsedRhs={ this.props.collapsedRhs }
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}
                     onSaveClick={this.onSettingsSaveClick}

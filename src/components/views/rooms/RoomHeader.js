@@ -20,6 +20,7 @@ var React = require('react');
 var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require("../../../Modal");
+var dis = require("../../../dispatcher");
 
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
@@ -35,7 +36,7 @@ module.exports = React.createClass({
         oobData: React.PropTypes.object,
         editing: React.PropTypes.bool,
         saving: React.PropTypes.bool,
-        rightPanelCollapsed: React.PropTypes.bool,
+        collapsedRhs: React.PropTypes.bool,
         onSettingsClick: React.PropTypes.func,
         onSaveClick: React.PropTypes.func,
         onSearchClick: React.PropTypes.func,
@@ -112,6 +113,10 @@ module.exports = React.createClass({
                 description: "Failed to set avatar. " + errMsg
             });
         }).done();
+    },
+
+    onShowRhsClick: function(ev) {
+        dis.dispatch({ action: 'show_right_panel' });
     },
 
     /**
@@ -287,8 +292,11 @@ module.exports = React.createClass({
         }
 
         var rightPanel_buttons;
-        if (this.props.rightPanelCollapsed) {
-            // TODO: embed the RightPanel header in here if it's collapsed.
+        if (this.props.collapsedRhs) {
+            rightPanel_buttons =
+                <div className="mx_RoomHeader_button" onClick={this.onShowRhsClick} title=">">
+                    <TintableSvg src="img/minimise.svg" width="10" height="16"/>
+                </div>
         }
 
         var right_row;
