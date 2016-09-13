@@ -200,7 +200,8 @@ module.exports = React.createClass({
 
     _startChat: function(addr) {
         if (this.props.roomId) {
-            Invite.inviteToRoom(this.props.roomId, addr).catch(function(err) {
+            Invite.inviteToRoom(this.props.roomId, addr)
+            .catch(function(err) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Failure to invite user",
@@ -211,9 +212,7 @@ module.exports = React.createClass({
             .done();
         } else {
             // Start the chat
-            createRoom().then(function(roomId) {
-                return Invite.inviteToRoom(roomId, addr);
-            })
+            createRoom({dmUserId: addr})
             .catch(function(err) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
@@ -224,17 +223,6 @@ module.exports = React.createClass({
             })
             .done();
         }
-//        // Start the chat
-//        createRoom({dmUserId: addr})
-//        .catch(function(err) {
-//            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-//            Modal.createDialog(ErrorDialog, {
-//                title: "Failure to invite user",
-//                description: err.toString()
-//            });
-//            return null;
-//        })
-//        .done();
 
         // Close - this will happen before the above, as that is async
         this.props.onFinished(true, addr);
