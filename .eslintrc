@@ -78,18 +78,26 @@
     /** react **/
 
     // bind or arrow function in props causes performance issues
-    "react/jsx-no-bind": ["error"],
+    "react/jsx-no-bind": ["error", {
+      "ignoreRefs": true
+    }],
     "react/jsx-key": ["error"],
     "react/prefer-stateless-function": ["warn"],
-    "react/sort-comp": ["warn"],
 
     /** flowtype **/
-    "flowtype/require-parameter-type": 1,
+    "flowtype/require-parameter-type": [
+      1,
+      {
+        "excludeArrowFunctions": true
+      }
+    ],
+    "flowtype/define-flow-type": 1,
     "flowtype/require-return-type": [
       1,
       "always",
       {
-        "annotateUndefined": "never"
+        "annotateUndefined": "never",
+        "excludeArrowFunctions": true
       }
     ],
     "flowtype/space-after-type-colon": [

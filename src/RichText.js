@@ -15,6 +15,7 @@ import {
 import * as sdk from  './index';
 import * as emojione from 'emojione';
 import {stateToHTML} from 'draft-js-export-html';
+import {SelectionRange} from "./autocomplete/Autocompleter";
 
 const MARKDOWN_REGEX = {
     LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
@@ -203,7 +204,7 @@ export function selectionStateToTextOffsets(selectionState: SelectionState,
     };
 }
 
-export function textOffsetsToSelectionState({start, end}: {start: number, end: number},
+export function textOffsetsToSelectionState({start, end}: SelectionRange,
                                             contentBlocks: Array<ContentBlock>): SelectionState {
     let selectionState = SelectionState.createEmpty();
 

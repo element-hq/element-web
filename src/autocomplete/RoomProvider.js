@@ -1,6 +1,5 @@
 import React from 'react';
 import AutocompleteProvider from './AutocompleteProvider';
-import Q from 'q';
 import MatrixClientPeg from '../MatrixClientPeg';
 import Fuse from 'fuse.js';
 import {PillCompletion} from './Components';
@@ -21,12 +20,12 @@ export default class RoomProvider extends AutocompleteProvider {
         });
     }
 
-    getCompletions(query: string, selection: {start: number, end: number}) {
+    async getCompletions(query: string, selection: {start: number, end: number}, force = false) {
         const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
 
         let client = MatrixClientPeg.get();
         let completions = [];
-        const {command, range} = this.getCurrentCommand(query, selection);
+        const {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
             // the only reason we need to do this is because Fuse only matches on properties
             this.fuse.set(client.getRooms().filter(room => !!room).map(room => {
@@ -48,7 +47,7 @@ export default class RoomProvider extends AutocompleteProvider {
                 };
             }).slice(0, 4);
         }
-        return Q.when(completions);
+        return completions;
     }
 
     getName() {
@@ -67,5 +66,9 @@ export default class RoomProvider extends AutocompleteProvider {
         return <div className="mx_Autocomplete_Completion_container_pill">
             {completions}
         </div>;
+    }
+
+    shouldForceComplete(): boolean {
+        return true;
     }
 }

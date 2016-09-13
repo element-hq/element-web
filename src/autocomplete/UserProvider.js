@@ -20,11 +20,11 @@ export default class UserProvider extends AutocompleteProvider {
         });
     }
 
-    getCompletions(query: string, selection: {start: number, end: number}) {
+    async getCompletions(query: string, selection: {start: number, end: number}, force = false) {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
         let completions = [];
-        let {command, range} = this.getCurrentCommand(query, selection);
+        let {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
             this.fuse.set(this.users);
             completions = this.fuse.search(command[0]).map(user => {
@@ -37,11 +37,11 @@ export default class UserProvider extends AutocompleteProvider {
                             title={displayName}
                             description={user.userId} />
                     ),
-                    range
+                    range,
                 };
             }).slice(0, 4);
         }
-        return Q.when(completions);
+        return completions;
     }
 
     getName() {
@@ -63,5 +63,9 @@ export default class UserProvider extends AutocompleteProvider {
         return <div className="mx_Autocomplete_Completion_container_pill">
             {completions}
         </div>;
+    }
+
+    shouldForceComplete(): boolean {
+        return true;
     }
 }

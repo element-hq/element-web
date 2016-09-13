@@ -158,5 +158,11 @@ React
   <Foo onClick={this.doStuff}> // Better
   <Foo onClick={this.onFooClick}> // Best, if onFooClick would do anything other than directly calling doStuff
   ```
+  
+  Not doing so is acceptable in a single case; in function-refs:
+  
+  ```jsx
+  <Foo ref={(self) => this.component = self}>
+  ```
 - Think about whether your component really needs state: are you duplicating
   information in component state that could be derived from the model?
