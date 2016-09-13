@@ -47,6 +47,12 @@ limitations under the License.
     overflow-y: scroll;
 }
 
+.mx_ChatInviteDialog_error {
+    position: absolute;
+    color: #ff0064;
+    line-height: 36px;
+}
+
 .mx_ChatInviteDialog_cancel {
     position: absolute;
     right: 11px;
