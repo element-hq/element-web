@@ -394,12 +394,12 @@ export default class MessageComposerInput extends React.Component {
     onEditorContentChanged(editorState: EditorState, didRespondToUserInput: boolean = true) {
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
 
-        const setPromise = Q.defer();
+        const contentChanged = Q.defer();
         /* If a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
             editorState,
             originalEditorState: didRespondToUserInput ? null : this.state.originalEditorState,
-        }, () => setPromise.resolve());
+        }, () => contentChanged.resolve());
 
         if (editorState.getCurrentContent().hasText()) {
             this.onTypingActivity();
@@ -414,11 +414,11 @@ export default class MessageComposerInput extends React.Component {
 
             this.props.onContentChanged(textContent, selection);
         }
-        return setPromise;
+        return contentChanged.promise;
     }
 
     setEditorState(editorState: EditorState) {
-        this.onEditorContentChanged(editorState, false);
+        return this.onEditorContentChanged(editorState, false);
     }
 
     enableRichtext(enabled: boolean) {
@@ -434,13 +434,13 @@ export default class MessageComposerInput extends React.Component {
             contentState = ContentState.createFromText(markdown);
         }
 
-        this.setEditorState(this.createEditorState(enabled, contentState), () => {
+        this.setEditorState(this.createEditorState(enabled, contentState)).then(() => {
             this.setState({
                 isRichtextEnabled: enabled,
             });
-        });
 
-        UserSettingsStore.setSyncedSetting('MessageComposerInput.isRichTextEnabled', enabled);
+            UserSettingsStore.setSyncedSetting('MessageComposerInput.isRichTextEnabled', enabled);
+        });
     }
 
     handleKeyCommand(command: string): boolean {

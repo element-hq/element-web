@@ -11,11 +11,11 @@ import {getCompletions} from '../../../autocomplete/Autocompleter';
 const COMPOSER_SELECTED = 0;
 
 export default class Autocomplete extends React.Component {
-    completionPromise: Promise = null;
 
     constructor(props) {
         super(props);
 
+        this.completionPromise = null;
         this.onConfirm = this.onConfirm.bind(this);
 
         this.state = {
