@@ -519,12 +519,13 @@ module.exports = React.createClass({
         });
     },
 
-    _invite: function() {
+    _invite: function(roomId) {
         var ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
         Modal.createDialog(ChatInviteDialog, {
             title: "Invite new room members",
             button: "Send Invites",
-            description: "Who would you like to add to this room?"
+            description: "Who would you like to add to this room?",
+            roomId: roomId,
         });
     },
 
