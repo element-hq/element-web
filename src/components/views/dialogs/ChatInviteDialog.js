@@ -70,7 +70,7 @@ module.exports = React.createClass({
         this._updateUserList();
     },
 
-    onStartChat: function() {
+    onButtonClick: function() {
         var addr;
 
         // Either an address tile was created, or text input is being used
@@ -78,8 +78,8 @@ module.exports = React.createClass({
             addr = this.state.inviteList[0];
         }
 
-        // Check if the addr is a valid type
-        if (Invite.getAddressType(addr) === "mx") {
+        if (this.state.inviteList.length === 1 && Invite.getAddressType(addr) === "mx" && !this.props.roomId) {
+            // Direct Message chat
             var room = this._getDirectMessageRoom(addr);
             if (room) {
                 // A Direct Message room already exists for this user and you
@@ -92,11 +92,9 @@ module.exports = React.createClass({
             } else {
                 this._startChat(addr);
             }
-        } else if (Invite.getAddressType(addr) === "email") {
-            this._startChat(addr);
         } else {
-            // Nothing to do, so focus back on the textinput
-            this.refs.textinput.focus();
+            // Multi invite chat
+            this._startChat(addr);
         }
     },
 
@@ -350,7 +348,7 @@ module.exports = React.createClass({
                     { addressSelector }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.onStartChat}>
+                    <button className="mx_Dialog_primary" onClick={this.onButtonClick}>
                         {this.props.button}
                     </button>
                 </div>
