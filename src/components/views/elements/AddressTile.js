@@ -19,13 +19,15 @@ limitations under the License.
 var React = require('react');
 var classNames = require('classnames');
 var sdk = require("../../../index");
+var Invite = require("../../../Invite");
+var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Avatar = require('../../../Avatar');
 
 module.exports = React.createClass({
     displayName: 'AddressTile',
 
     propTypes: {
-        user: React.PropTypes.object.isRequired,
+        address: React.PropTypes.string.isRequired,
         canDismiss: React.PropTypes.bool,
         onDismissed: React.PropTypes.func,
         justified: React.PropTypes.bool,
@@ -44,11 +46,30 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var userId, name, imgUrl, email;
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var userId = this.props.user.userId;
-        var name = this.props.user.displayName || userId;
-        var imgUrl = Avatar.avatarUrlForUser(this.props.user, 25, 25, "crop");
+
+        // Check if the addr is a valid type
+        var addrType = Invite.getAddressType(this.props.address);
+        if (addrType === "mx") {
+            let user = MatrixClientPeg.get().getUser(this.props.address);
+            if (user) {
+                userId = user.userId;
+                name = user.displayName || userId;
+                imgUrl = Avatar.avatarUrlForUser(user, 25, 25, "crop");
+            } else {
+                name=this.props.address;
+                imgUrl = "img/icon-mx-user.svg";
+            }
+        } else if (addrType === "email") {
+            email = this.props.address;
+            name="email";
+            imgUrl = "img/icon-email-user.svg";
+        } else {
+            name="Unknown";
+            imgUrl = "img/avatar-error.svg";
+        }
 
         var network;
         if (this.props.networkUrl !== "") {
@@ -59,6 +80,60 @@ module.exports = React.createClass({
             );
         }
 
+        var info;
+        var error = false;
+        if (addrType === "mx" && userId) {
+            var nameClasses = classNames({
+                "mx_AddressTile_name": true,
+                "mx_AddressTile_justified": this.props.justified,
+            });
+
+            var idClasses = classNames({
+                "mx_AddressTile_id": true,
+                "mx_AddressTile_justified": this.props.justified,
+            });
+
+            info = (
+                <div className="mx_AddressTile_mx">
+                    <div className={nameClasses}>{ name }</div>
+                    <div className={idClasses}>{ userId }</div>
+                </div>
+            );
+        } else if (addrType === "mx") {
+            var unknownMxClasses = classNames({
+                "mx_AddressTile_unknownMx": true,
+                "mx_AddressTile_justified": this.props.justified,
+            });
+
+            info = (
+                <div className={unknownMxClasses}>{ this.props.address }</div>
+            );
+        } else if (email)  {
+            var emailClasses = classNames({
+                "mx_AddressTile_email": true,
+                "mx_AddressTile_justified": this.props.justified,
+            });
+
+            info = (
+                <div className={emailClasses}>{ email }</div>
+            );
+        } else {
+            error = true;
+            var unknownClasses = classNames({
+                "mx_AddressTile_unknown": true,
+                "mx_AddressTile_justified": this.props.justified,
+            });
+
+            info = (
+                <div className={unknownClasses}>Unknown Address</div>
+            );
+        }
+
+        var classes = classNames({
+            "mx_AddressTile": true,
+            "mx_AddressTile_error": error,
+        });
+
         var dismiss;
         if (this.props.canDismiss) {
             dismiss = (
@@ -68,24 +143,13 @@ module.exports = React.createClass({
             );
         }
 
-        var nameClasses = classNames({
-            "mx_AddressTile_name": true,
-            "mx_AddressTile_justified": this.props.justified,
-        });
-
-        var idClasses = classNames({
-            "mx_AddressTile_id": true,
-            "mx_AddressTile_justified": this.props.justified,
-        });
-
         return (
-            <div className="mx_AddressTile">
+            <div className={classes}>
                 { network }
                 <div className="mx_AddressTile_avatar">
                     <BaseAvatar width={25} height={25} name={name} title={name} url={imgUrl} />
                 </div>
-                <div className={nameClasses}>{ name }</div>
-                <div className={idClasses}>{ userId }</div>
+                { info }
                 { dismiss }
             </div>
         );

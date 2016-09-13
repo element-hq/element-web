@@ -37,6 +37,7 @@ module.exports = React.createClass({
         ]),
         value: React.PropTypes.string,
         placeholder: React.PropTypes.string,
+        roomId: React.PropTypes.string,
         button: React.PropTypes.string,
         focus: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired
@@ -55,11 +56,9 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            user: null,
+            error: false,
+            inviteList: [],
             queryList: [],
-            addressSelected: false,
-            selected: 0,
-            hover: false,
         };
     },
 
@@ -71,44 +70,29 @@ module.exports = React.createClass({
         this._updateUserList();
     },
 
-    componentDidUpdate: function() {
-        // As the user scrolls with the arrow keys keep the selected item
-        // at the top of the window.
-        if (this.scrollElement && !this.state.hover) {
-            var elementHeight = this.queryListElement.getBoundingClientRect().height;
-            this.scrollElement.scrollTop = (this.state.selected * elementHeight) - elementHeight;
-        }
-    },
-
-    onStartChat: function() {
-        var addr;
-
-        // Either an address tile was created, or text input is being used
-        if (this.state.user) {
-            addr = this.state.user.userId;
-        } else {
-            addr = this.refs.textinput.value;
-        }
-
-        // Check if the addr is a valid type
-        if (Invite.getAddressType(addr) === "mx") {
-            var room = this._getDirectMessageRoom(addr);
-            if (room) {
-                // A Direct Message room already exists for this user and you
-                // so go straight to that room
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: room.roomId,
-                });
-                this.props.onFinished(true, addr);
+    onButtonClick: function() {
+        if (this.state.inviteList.length > 0) {
+            if (this._isDmChat()) {
+                // Direct Message chat
+                var room = this._getDirectMessageRoom(this.state.inviteList[0]);
+                if (room) {
+                    // A Direct Message room already exists for this user and you
+                    // so go straight to that room
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: room.roomId,
+                    });
+                    this.props.onFinished(true, this.state.inviteList[0]);
+                } else {
+                    this._startChat(this.state.inviteList);
+                }
             } else {
-                this._startChat(addr);
+                // Multi invite chat
+                this._startChat(this.state.inviteList);
             }
-        } else if (Invite.getAddressType(addr) === "email") {
-            this._startChat(addr);
         } else {
-            // Nothing to do, so focus back on the textinput
-            this.refs.textinput.focus();
+            // No addresses supplied
+            this.setState({ error: true });
         }
     },
 
@@ -124,31 +108,28 @@ module.exports = React.createClass({
         } else if (e.keyCode === 38) { // up arrow
             e.stopPropagation();
             e.preventDefault();
-            if (this.state.selected > 0) {
-                this.setState({
-                    selected: this.state.selected - 1,
-                    hover : false,
-                });
-            }
+            this.addressSelector.onKeyUpArrow();
         } else if (e.keyCode === 40) { // down arrow
             e.stopPropagation();
             e.preventDefault();
-            if (this.state.selected < this._maxSelected(this.state.queryList)) {
-                this.setState({
-                    selected: this.state.selected + 1,
-                    hover : false,
-                });
-            }
+            this.addressSelector.onKeyDownArrow();
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            if (this.state.queryList.length > 0) {
+            this.addressSelector.onKeyReturn();
+        } else if (e.keyCode === 32 || e.keyCode === 188) { // space or comma
+            e.stopPropagation();
+            e.preventDefault();
+            var check = Invite.isValidAddress(this.refs.textinput.value);
+            if (check === true || check === null) {
+                var inviteList = this.state.inviteList.slice();
+                inviteList.push(this.refs.textinput.value);
                 this.setState({
-                    user: this.state.queryList[this.state.selected],
-                    addressSelected: true,
+                    inviteList: inviteList,
                     queryList: [],
-                    hover : false,
                 });
+            } else {
+                this.setState({ error: true });
             }
         }
     },
@@ -164,80 +145,38 @@ module.exports = React.createClass({
             });
         }
 
-        // Make sure the selected item isn't outside the list bounds
-        var selected = this.state.selected;
-        var maxSelected = this._maxSelected(queryList);
-        if (selected > maxSelected) {
-            selected = maxSelected;
-        }
-
         this.setState({
             queryList: queryList,
-            selected: selected,
+            error: false,
         });
     },
 
-    onDismissed: function() {
-        this.setState({
-            user: null,
-            addressSelected: false,
-            selected: 0,
-            queryList: [],
-        });
+    onDismissed: function(index) {
+        var self = this;
+        return function() {
+            var inviteList = self.state.inviteList.slice();
+            inviteList.splice(index, 1);
+            self.setState({
+                inviteList: inviteList,
+                queryList: [],
+            });
+        }
     },
 
     onClick: function(index) {
         var self = this;
         return function() {
-            self.setState({
-                user: self.state.queryList[index],
-                addressSelected: true,
-                queryList: [],
-                hover: false,
-            });
+            self.onSelected(index);
         };
     },
 
-    onMouseEnter: function(index) {
-        var self = this;
-        return function() {
-            self.setState({
-                selected: index,
-                hover: true,
-            });
-        };
-    },
-
-    onMouseLeave: function() {
-        this.setState({ hover : false });
-    },
-
-    createQueryListTiles: function() {
-        var self = this;
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var AddressTile = sdk.getComponent("elements.AddressTile");
-        var maxSelected = this._maxSelected(this.state.queryList);
-        var queryList = [];
-
-        // Only create the query elements if there are queries
-        if (this.state.queryList.length > 0) {
-            for (var i = 0; i <= maxSelected; i++) {
-                var classes = classNames({
-                    "mx_ChatInviteDialog_queryListElement": true,
-                    "mx_ChatInviteDialog_selected": this.state.selected === i,
-                });
-
-                // NOTE: Defaulting to "vector" as the network, until the network backend stuff is done.
-                // Saving the queryListElement so we can use it to work out, in the componentDidUpdate
-                // method, how far to scroll when using the arrow keys
-                queryList.push(
-                    <div className={classes} onClick={this.onClick(i)} onMouseEnter={this.onMouseEnter(i)} onMouseLeave={this.onMouseLeave} key={i} ref={(ref) => { this.queryListElement = ref; }} >
-                        <AddressTile user={this.state.queryList[i]} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
-                    </div>
-                );
-            }
-        }
-        return queryList;
+    onSelected: function(index) {
+        var inviteList = this.state.inviteList.slice();
+        inviteList.push(this.state.queryList[index].userId);
+        this.setState({
+            inviteList: inviteList,
+            queryList: [],
+        });
     },
 
     _getDirectMessageRoom: function(addr) {
@@ -258,21 +197,50 @@ module.exports = React.createClass({
         return null;
     },
 
-    _startChat: function(addr) {
-        // Start the chat
-        createRoom({dmUserId: addr})
-        .catch(function(err) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Failure to invite user",
-                description: err.toString()
-            });
-            return null;
-        })
-        .done();
+    _startChat: function(addrs) {
+        if (this.props.roomId) {
+            // Invite new user to a room
+            Invite.inviteMultipleToRoom(this.props.roomId, addrs)
+            .catch(function(err) {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failure to invite user",
+                    description: err.toString()
+                });
+                return null;
+            })
+            .done();
+        } else if (this._isDmChat()) {
+            // Start the DM chat
+            createRoom({dmUserId: addrs[0]})
+            .catch(function(err) {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failure to invite user",
+                    description: err.toString()
+                });
+                return null;
+            })
+            .done();
+        } else {
+            // Start multi user chat
+            var self = this;
+            createRoom().then(function(roomId) {
+                return Invite.inviteMultipleToRoom(roomId, addrs);
+            })
+            .catch(function(err) {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failure to invite user",
+                    description: err.toString()
+                });
+                return null;
+            })
+            .done();
+        }
 
         // Close - this will happen before the above, as that is async
-        this.props.onFinished(true, addr);
+        this.props.onFinished(true, addrs);
     },
 
     _updateUserList: new rate_limited_func(function() {
@@ -280,17 +248,16 @@ module.exports = React.createClass({
         this._userList = MatrixClientPeg.get().getUsers();
     }, 500),
 
-    _maxSelected: function(list) {
-        var listSize = list.length === 0 ? 0 : list.length - 1;
-        var maxSelected = listSize > (TRUNCATE_QUERY_LIST - 1) ? (TRUNCATE_QUERY_LIST - 1) : listSize
-        return maxSelected;
-    },
-
     // This is the search algorithm for matching users
     _matches: function(query, user) {
         var name = user.displayName.toLowerCase();
         var uid = user.userId.toLowerCase();
         query = query.toLowerCase();
+
+        // dount match any that are already on the invite list
+        if (this._isOnInviteList(uid)) {
+            return false;
+        }
 
         // direct prefix matches
         if (name.indexOf(query) === 0 || uid.indexOf(query) === 0) {
@@ -312,37 +279,63 @@ module.exports = React.createClass({
         return false;
     },
 
+    _isOnInviteList: function(uid) {
+        for (let i = 0; i < this.state.inviteList.length; i++) {
+            if (this.state.inviteList[i].toLowerCase() === uid) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    _isDmChat: function() {
+        if (this.state.inviteList.length === 1 && Invite.getAddressType(this.state.inviteList[0]) === "mx" && !this.props.roomId) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        var AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
-        var query;
-        if (this.state.addressSelected) {
+        var query = [];
+        // create the invite list
+        if (this.state.inviteList.length > 0) {
             var AddressTile = sdk.getComponent("elements.AddressTile");
-            query = (
-                <AddressTile user={this.state.user} canDismiss={true} onDismissed={this.onDismissed} />
-            );
-        } else {
-            query = (
-                <textarea rows="1"
-                    id="textinput"
-                    ref="textinput"
-                    className="mx_ChatInviteDialog_input"
-                    onChange={this.onQueryChanged}
-                    placeholder={this.props.placeholder}
-                    defaultValue={this.props.value}
-                    autoFocus={this.props.focus}>
-                </textarea>
-            );
+            for (let i = 0; i < this.state.inviteList.length; i++) {
+                query.push(
+                    <AddressTile key={i} address={this.state.inviteList[i]} canDismiss={true} onDismissed={ this.onDismissed(i) } />
+                );
+            }
         }
 
-        var queryList;
-        var queryListElements = this.createQueryListTiles();
-        if (queryListElements.length > 0) {
-            queryList = (
-                <div className="mx_ChatInviteDialog_queryList" ref={(ref) => {this.scrollElement = ref}}>
-                    { queryListElements }
-                </div>
+        // Add the query at the end
+        query.push(
+            <textarea key={this.state.inviteList.length}
+                rows="1"
+                id="textinput"
+                ref="textinput"
+                className="mx_ChatInviteDialog_input"
+                onChange={this.onQueryChanged}
+                placeholder={this.props.placeholder}
+                defaultValue={this.props.value}
+                autoFocus={this.props.focus}>
+            </textarea>
+        );
+
+        var error;
+        var addressSelector;
+        if (this.state.error) {
+            error = <div className="mx_ChatInviteDialog_error">You have entered an invalid contact. Try using their Matrix ID or email address.</div>
+        } else {
+            addressSelector = (
+                <AddressSelector ref={(ref) => {this.addressSelector = ref}}
+                    addressList={ this.state.queryList }
+                    onSelected={ this.onSelected }
+                    truncateAt={ TRUNCATE_QUERY_LIST } />
             );
         }
 
@@ -359,10 +352,11 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_Dialog_content">
                     <div className="mx_ChatInviteDialog_inputContainer">{ query }</div>
-                    { queryList }
+                    { error }
+                    { addressSelector }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.onStartChat}>
+                    <button className="mx_Dialog_primary" onClick={this.onButtonClick}>
                         {this.props.button}
                     </button>
                 </div>
