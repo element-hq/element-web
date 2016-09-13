@@ -57,6 +57,9 @@ module.exports = React.createClass({
 
         // True to show the 'labs' section of experimental features
         enableLabs: React.PropTypes.bool,
+
+        // true if RightPanel is collapsed
+        collapsedRhs: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -506,7 +509,11 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_UserSettings">
-                <SimpleRoomHeader title="Settings" onCancelClick={ this.props.onClose }/>
+                <SimpleRoomHeader
+                    title="Settings"
+                    collapsedRhs={ this.props.collapsedRhs }
+                    onCancelClick={ this.props.onClose }
+                />
 
                 <GeminiScrollbar className="mx_UserSettings_body"
                                  autoshow={true}>

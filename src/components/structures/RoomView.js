@@ -96,7 +96,7 @@ module.exports = React.createClass({
         highlightedEventId: React.PropTypes.string,
 
         // is the RightPanel collapsed?
-        rightPanelCollapsed: React.PropTypes.bool,
+        collapsedRhs: React.PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -1359,7 +1359,7 @@ module.exports = React.createClass({
                             <RoomHeader ref="header"
                                 room={this.state.room}
                                 oobData={this.props.oobData}
-                                rightPanelCollapsed={ this.props.rightPanelCollapsed }
+                                collapsedRhs={ this.props.collapsedRhs }
                             />
                             <div className="mx_RoomView_auxPanel">
                                 <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked }

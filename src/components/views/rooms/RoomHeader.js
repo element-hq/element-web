@@ -35,7 +35,7 @@ module.exports = React.createClass({
         oobData: React.PropTypes.object,
         editing: React.PropTypes.bool,
         saving: React.PropTypes.bool,
-        rightPanelCollapsed: React.PropTypes.bool,
+        collapsedRhs: React.PropTypes.bool,
         onSettingsClick: React.PropTypes.func,
         onSaveClick: React.PropTypes.func,
         onSearchClick: React.PropTypes.func,
@@ -287,8 +287,11 @@ module.exports = React.createClass({
         }
 
         var rightPanel_buttons;
-        if (this.props.rightPanelCollapsed) {
-            // TODO: embed the RightPanel header in here if it's collapsed.
+        if (this.props.collapsedRhs) {
+            rightPanel_buttons =
+                <div className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
+                    <TintableSvg src="img/icons-search.svg" width="35" height="35"/>
+                </div>
         }
 
         var right_row;
