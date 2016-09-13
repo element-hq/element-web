@@ -103,7 +103,7 @@ module.exports = React.createClass({
                 <div className="mx_BottomLeftMenu_options">
                     <div className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
                         <TintableSvg src="img/icons-people.svg" width="25" height="25" />
-                        { this.getLabel("Start chat", this.state.peopleHover) }
+                        { this.getLabel("Chat to someone", this.state.peopleHover) }
                     </div>
                     <div className="mx_BottomLeftMenu_directory" onClick={ this.onDirectoryClick } onMouseEnter={ this.onDirectoryMouseEnter } onMouseLeave={ this.onDirectoryMouseLeave } >
                         <TintableSvg src="img/icons-directory.svg" width="25" height="25"/>
