@@ -56,6 +56,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
+            error: false,
             inviteList: [],
             queryList: [],
         };
@@ -123,12 +124,16 @@ module.exports = React.createClass({
         } else if (e.keyCode === 32 || e.keyCode === 188) { // space or comma
             e.stopPropagation();
             e.preventDefault();
-            var inviteList = this.state.inviteList.slice();
-            inviteList.push(this.refs.textinput.value);
-            this.setState({
-                inviteList: inviteList,
-                queryList: [],
-            });
+            if (this._isValidAddress(this.refs.textinput.value)) {
+                var inviteList = this.state.inviteList.slice();
+                inviteList.push(this.refs.textinput.value);
+                this.setState({
+                    inviteList: inviteList,
+                    queryList: [],
+                });
+            } else {
+                this.setState({ error: true });
+            }
         }
     },
 
@@ -143,7 +148,10 @@ module.exports = React.createClass({
             });
         }
 
-        this.setState({ queryList: queryList });
+        this.setState({
+            queryList: queryList,
+            error: false,
+        });
     },
 
     onDismissed: function(index) {
@@ -265,6 +273,23 @@ module.exports = React.createClass({
         return false;
     },
 
+    _isValidAddress: function(addr) {
+        // Check if the addr is a valid type
+        var addrType = Invite.getAddressType(addr);
+        if (addrType === "mx") {
+            let user = MatrixClientPeg.get().getUser(addr);
+            if (user) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (addrType === "email") {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var AddressSelector = sdk.getComponent("elements.AddressSelector");
@@ -280,6 +305,7 @@ module.exports = React.createClass({
                 );
             }
         }
+
         // Add the query at the end
         query.push(
             <textarea key={this.state.inviteList.length}
@@ -294,6 +320,19 @@ module.exports = React.createClass({
             </textarea>
         );
 
+        var error;
+        var addressSelector;
+        if (this.state.error) {
+            error = <div className="mx_ChatInviteDialog_error">You have entered an invalid contact. Try using their Matrix ID or email address.</div>
+        } else {
+            addressSelector = (
+                <AddressSelector ref={(ref) => {this.addressSelector = ref}}
+                    addressList={ this.state.queryList }
+                    onSelected={ this.onSelected }
+                    truncateAt={ TRUNCATE_QUERY_LIST } />
+            );
+        }
+
         return (
             <div className="mx_ChatInviteDialog" onKeyDown={this.onKeyDown}>
                 <div className="mx_Dialog_title">
@@ -307,10 +346,8 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_Dialog_content">
                     <div className="mx_ChatInviteDialog_inputContainer">{ query }</div>
-                    <AddressSelector ref={(ref) => {this.addressSelector = ref}}
-                        addressList={ this.state.queryList }
-                        onSelected={ this.onSelected }
-                        truncateAt={ TRUNCATE_QUERY_LIST } />
+                    { error }
+                    { addressSelector }
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this.onStartChat}>
