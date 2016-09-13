@@ -57,6 +57,7 @@ export function inviteToRoom(roomId, addr) {
 export function inviteMultipleToRoom(roomId, addrs) {
     this.inviter = new MultiInviter(roomId);
     return inviter.invite(addrs);
+}
 
 export function isValidAddress(addr) {
     // Check if the addr is a valid type
