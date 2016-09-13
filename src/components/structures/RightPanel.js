@@ -109,6 +109,14 @@ module.exports = React.createClass({
         }
     },
 
+    onInviteButtonClick: function() {
+        // call ChatInviteDialog
+        dis.dispatch({
+            action: 'view_invite',
+            roomId: this.props.roomId,
+        });
+    },
+
     onRoomStateMember: function(ev, state, member) {
         // redraw the badge on the membership list
         if (this.state.phase == this.Phase.MemberList && member.roomId === this.props.roomId) {
@@ -236,6 +244,12 @@ module.exports = React.createClass({
                 </div>
                 { panel }
                 <div className="mx_RightPanel_footer">
+                    <div className="mx_RightPanel_invite" >
+                        <div className="mx_RightPanel_icon" onClick={ this.onInviteButtonClick } >
+                            <TintableSvg src="img/icons-settings.svg" width="35" height="35" />
+                        </div>
+                        <div className="mx_RightPanel_message">Invite to this room</div>
+                    </div>
                 </div>
             </aside>
         );
