@@ -46,15 +46,15 @@ limitations under the License.
     margin-top: 6px;
     float: left;
     background-color: #fff;
-    margin-left: -4px;
+    margin-left: 0px;
 }
 
 .mx_RightPanel_headerButton {
     cursor: pointer;
     display: table-cell;
-    vertical-align: middle;
-    padding-left: 15px;
-    padding-right: 15px;
+    vertical-align: top;
+    padding-left: 4px;
+    padding-right: 5px;
     text-align: center;
     position: relative;
 }

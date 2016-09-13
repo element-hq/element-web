@@ -26,9 +26,16 @@ var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 module.exports = React.createClass({
     displayName: 'RightPanel',
 
+    propTypes: {
+        userId: React.PropTypes.string, // if showing an orphaned MemberInfo page, this is set
+        roomId: React.PropTypes.string, // if showing panels for a given room, this is set
+        collapsed: React.PropTypes.bool,
+    },
+
     Phase : {
         MemberList: 'MemberList',
-        FileList: 'FileList',
+        FilePanel: 'FilePanel',
+        NotificationPanel: 'NotificationPanel',
         MemberInfo: 'MemberInfo',
     },
 
@@ -61,8 +68,36 @@ module.exports = React.createClass({
     },
 
     onMemberListButtonClick: function() {
-        if (this.props.collapsed) {
+        if (this.props.collapsed || this.state.phase !== this.Phase.MemberList) {
             this.setState({ phase: this.Phase.MemberList });
+            dis.dispatch({
+                action: 'show_right_panel',
+            });
+        }
+        else {
+            dis.dispatch({
+                action: 'hide_right_panel',
+            });
+        }
+    },
+
+    onFileListButtonClick: function() {
+        if (this.props.collapsed || this.state.phase !== this.Phase.FilePanel) {
+            this.setState({ phase: this.Phase.FilePanel });
+            dis.dispatch({
+                action: 'show_right_panel',
+            });
+        }
+        else {
+            dis.dispatch({
+                action: 'hide_right_panel',
+            });
+        }
+    },
+
+    onNotificationListButtonClick: function() {
+        if (this.props.collapsed || this.state.phase !== this.Phase.NotificationPanel) {
+            this.setState({ phase: this.Phase.NotificationPanel });
             dis.dispatch({
                 action: 'show_right_panel',
             });
@@ -118,18 +153,24 @@ module.exports = React.createClass({
 
     render: function() {
         var MemberList = sdk.getComponent('rooms.MemberList');
+        var NotificationPanel = sdk.getComponent('structures.NotificationPanel');
+        var FilePanel = sdk.getComponent('structures.FilePanel');
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var buttonGroup;
         var panel;
 
         var filesHighlight;
         var membersHighlight;
+        var notificationsHighlight;
         if (!this.props.collapsed) {
             if (this.state.phase == this.Phase.MemberList || this.state.phase === this.Phase.MemberInfo) {
                 membersHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
             }
-            else if (this.state.phase == this.Phase.FileList) {
+            else if (this.state.phase == this.Phase.FilePanel) {
                 filesHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
+            }
+            else if (this.state.phase == this.Phase.NotificationPanel) {
+                notificationsHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
             }
         }
 
@@ -138,7 +179,7 @@ module.exports = React.createClass({
             var cli = MatrixClientPeg.get();
             var room = cli.getRoom(this.props.roomId);
             if (room) {
-                membersBadge = <div className="mx_RightPanel_headerButton_badge">{ room.getJoinedMembers().length }</div>;
+                membersBadge = room.getJoinedMembers().length;
             }
         }
 
@@ -146,13 +187,19 @@ module.exports = React.createClass({
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
                         <div className="mx_RightPanel_headerButton" title="Members" onClick={ this.onMemberListButtonClick }>
-                            { membersBadge }
+                            <div className="mx_RightPanel_headerButton_badge">{ membersBadge ? membersBadge : <span>&nbsp;</span>}</div>
                             <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
                             { membersHighlight }
                         </div>
-                        <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton" title="Files">
-                            <TintableSvg src="img/files.svg" width="17" height="22"/>
+                        <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton" title="Files" onClick={ this.onFileListButtonClick }>
+                            <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
+                            <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
                             { filesHighlight }
+                        </div>
+                        <div className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton" title="Notifications" onClick={ this.onNotificationListButtonClick }>
+                            <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
+                            <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
+                            { notificationsHighlight }
                         </div>
                     </div>;
         }
@@ -164,6 +211,12 @@ module.exports = React.createClass({
             else if(this.state.phase == this.Phase.MemberInfo) {
                 var MemberInfo = sdk.getComponent('rooms.MemberInfo');
                 panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.props.userId} />
+            }
+            else if (this.state.phase == this.Phase.NotificationPanel) {
+                panel = <NotificationPanel />
+            }
+            else if (this.state.phase == this.Phase.FilePanel) {
+                panel = <FilePanel roomId={this.props.roomId} />
             }
         }
 
