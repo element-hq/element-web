@@ -21,6 +21,7 @@ limitations under the License.
  */
 export default class DMRoomMap {
     constructor(matrixClient) {
+        this.matrixClient = matrixClient;
         this.roomToUser = null;
 
         const mDirectEvent = matrixClient.getAccountData('m.direct');
@@ -49,6 +50,20 @@ export default class DMRoomMap {
         }
         // Here, we return undefined if the room is not in the map:
         // the room ID you gave is not a DM room for any user.
+        if (this.roomToUser[roomId] === undefined) {
+            // no entry? if the room is an invite, look for the is_direct hint.
+            const room = this.matrixClient.getRoom(roomId);
+            if (room) {
+                const me = room.getMember(this.matrixClient.credentials.userId);
+                if (me.membership == 'invite') {
+                    // The 'direct' hihnt is there, so declare that this is a DM room for
+                    // whoever invited us.
+                    if (me.events.member.getContent().is_direct) {
+                        return me.events.member.getSender();
+                    }
+                }
+            }
+        }
         return this.roomToUser[roomId];
     }
 

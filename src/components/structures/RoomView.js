@@ -36,6 +36,7 @@ var dis = require("../../dispatcher");
 var Tinter = require("../../Tinter");
 var rate_limited_func = require('../../ratelimitedfunc');
 var ObjectUtils = require('../../ObjectUtils');
+var Rooms = require('../../Rooms');
 
 import UserProvider from '../../autocomplete/UserProvider';
 
@@ -674,6 +675,20 @@ module.exports = React.createClass({
         }
 
         display_name_promise.then(() => {
+            // if this is an invite and has the 'direct' hint set, mark it as a DM room now.
+            if (this.state.room) {
+                const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
+                if (me.membership == 'invite') {
+                    // The 'direct' hihnt is there, so declare that this is a DM room for
+                    // whoever invited us.
+                    if (me.events.member.getContent().is_direct) {
+                        return Rooms.setDMRoom(this.state.room.roomId, me.events.member.getSender());
+                    }
+                }
+            }
+
+            return q();
+        }).then(() => {
             var sign_url = this.props.thirdPartyInvite ? this.props.thirdPartyInvite.inviteSignUrl : undefined;
             return MatrixClientPeg.get().joinRoom(this.props.roomAddress,
                                                   { inviteSignUrl: sign_url } )
