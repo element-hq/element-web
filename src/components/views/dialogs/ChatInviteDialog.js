@@ -122,7 +122,7 @@ module.exports = React.createClass({
         } else if (e.keyCode === 32 || e.keyCode === 188) { // space or comma
             e.stopPropagation();
             e.preventDefault();
-            if (this._isValidAddress(this.refs.textinput.value)) {
+            if (Invite.isValidAddress(this.refs.textinput.value)) {
                 var inviteList = this.state.inviteList.slice();
                 inviteList.push(this.refs.textinput.value);
                 this.setState({
@@ -269,23 +269,6 @@ module.exports = React.createClass({
             }
         }
         return false;
-    },
-
-    _isValidAddress: function(addr) {
-        // Check if the addr is a valid type
-        var addrType = Invite.getAddressType(addr);
-        if (addrType === "mx") {
-            let user = MatrixClientPeg.get().getUser(addr);
-            if (user) {
-                return true;
-            } else {
-                return false;
-            }
-        } else if (addrType === "email") {
-            return true;
-        } else {
-            return false;
-        }
     },
 
     render: function() {
