@@ -5,6 +5,7 @@ import flatMap from 'lodash/flatMap';
 import isEqual from 'lodash/isEqual';
 import sdk from '../../../index';
 import type {Completion, SelectionRange} from '../../../autocomplete/Autocompleter';
+import Q from 'q';
 
 import {getCompletions} from '../../../autocomplete/Autocompleter';
 
@@ -140,12 +141,15 @@ export default class Autocomplete extends React.Component {
     }
 
     forceComplete() {
+        const done = Q.defer();
         this.setState({
             forceComplete: true,
         }, () => {
-            this.complete(this.props.query, this.props.selection);
-            setTimeout(() => this.onDownArrow(), 50); // FIXME HACK
+            this.complete(this.props.query, this.props.selection).then(() => {
+                done.resolve();
+            });
         });
+        return done.promise;
     }
 
     /** called from MessageComposerInput

@@ -595,7 +595,9 @@ export default class MessageComposerInput extends React.Component {
         e.preventDefault(); // we *never* want tab's default to happen, but we do want up/down sometimes
         const didTab = await (e.shiftKey ? this.onUpArrow : this.onDownArrow)(e);
         if (!didTab && this.autocomplete) {
-            this.autocomplete.forceComplete();
+            this.autocomplete.forceComplete().then(() => {
+                this.onDownArrow(e);
+            });
         }
     }
 
