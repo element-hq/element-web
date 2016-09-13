@@ -1,10 +1,10 @@
-import Q from 'q';
 import React from 'react';
+import type {Completion, SelectionRange} from './Autocompleter';
 
 export default class AutocompleteProvider {
     constructor(commandRegex?: RegExp, fuseOpts?: any) {
-        if(commandRegex) {
-            if(!commandRegex.global) {
+        if (commandRegex) {
+            if (!commandRegex.global) {
                 throw new Error('commandRegex must have global flag set');
             }
             this.commandRegex = commandRegex;
@@ -14,18 +14,23 @@ export default class AutocompleteProvider {
     /**
      * Of the matched commands in the query, returns the first that contains or is contained by the selection, or null.
      */
-    getCurrentCommand(query: string, selection: {start: number, end: number}): ?Array<string> {
-        if (this.commandRegex == null) {
+    getCurrentCommand(query: string, selection: {start: number, end: number}, force: boolean = false): ?string {
+        let commandRegex = this.commandRegex;
+
+        if (force && this.shouldForceComplete()) {
+            commandRegex = /[^\W]+/g;
+        }
+
+        if (commandRegex == null) {
             return null;
         }
 
-        this.commandRegex.lastIndex = 0;
+        commandRegex.lastIndex = 0;
         
         let match;
-        while ((match = this.commandRegex.exec(query)) != null) {
+        while ((match = commandRegex.exec(query)) != null) {
             let matchStart = match.index,
                 matchEnd = matchStart + match[0].length;
-            
             if (selection.start <= matchEnd && selection.end >= matchStart) {
                 return {
                     command: match,
@@ -45,8 +50,8 @@ export default class AutocompleteProvider {
         };
     }
 
-    getCompletions(query: string, selection: {start: number, end: number}) {
-        return Q.when([]);
+    async getCompletions(query: string, selection: SelectionRange, force: boolean = false): Array<Completion> {
+        return [];
     }
 
     getName(): string {
@@ -56,5 +61,10 @@ export default class AutocompleteProvider {
     renderCompletions(completions: [React.Component]): ?React.Component {
         console.error('stub; should be implemented in subclasses');
         return null;
+    }
+
+    // Whether we should provide completions even if triggered forcefully, without a sigil.
+    shouldForceComplete(): boolean {
+        return false;
     }
 }

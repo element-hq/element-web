@@ -1,10 +1,10 @@
 import React from 'react';
 import AutocompleteProvider from './AutocompleteProvider';
-import Q from 'q';
 import {emojioneList, shortnameToImage, shortnameToUnicode} from 'emojione';
 import Fuse from 'fuse.js';
 import sdk from '../index';
 import {PillCompletion} from './Components';
+import type {SelectionRange, Completion} from './Autocompleter';
 
 const EMOJI_REGEX = /:\w*:?/g;
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
@@ -17,7 +17,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         this.fuse = new Fuse(EMOJI_SHORTNAMES);
     }
 
-    getCompletions(query: string, selection: {start: number, end: number}) {
+    async getCompletions(query: string, selection: SelectionRange) {
         const EmojiText = sdk.getComponent('views.elements.EmojiText');
 
         let completions = [];
@@ -35,7 +35,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                 };
             }).slice(0, 8);
         }
-        return Q.when(completions);
+        return completions;
     }
 
     getName() {

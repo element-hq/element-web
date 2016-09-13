@@ -166,7 +166,7 @@ export default class MessageComposer extends React.Component {
 
     _onAutocompleteConfirm(range, completion) {
         if (this.messageComposerInput) {
-            this.messageComposerInput.onConfirmAutocompletion(range, completion);
+            this.messageComposerInput.setDisplayedCompletion(range, completion);
         }
     }
 
@@ -313,7 +313,6 @@ export default class MessageComposer extends React.Component {
 
         return (
             <div className="mx_MessageComposer mx_fadable" style={{ opacity: this.props.opacity }}>
-                {autoComplete}
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         {controls}

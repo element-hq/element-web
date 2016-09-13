@@ -2,14 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import flatMap from 'lodash/flatMap';
+import isEqual from 'lodash/isEqual';
 import sdk from '../../../index';
+import type {Completion, SelectionRange} from '../../../autocomplete/Autocompleter';
+import Q from 'q';
 
 import {getCompletions} from '../../../autocomplete/Autocompleter';
 
+const COMPOSER_SELECTED = 0;
+
 export default class Autocomplete extends React.Component {
+
     constructor(props) {
         super(props);
 
+        this.completionPromise = null;
         this.onConfirm = this.onConfirm.bind(this);
 
         this.state = {
@@ -19,79 +26,141 @@ export default class Autocomplete extends React.Component {
             // array of completions, so we can look up current selection by offset quickly
             completionList: [],
 
-            // how far down the completion list we are
-            selectionOffset: 0,
+            // how far down the completion list we are (THIS IS 1-INDEXED!)
+            selectionOffset: COMPOSER_SELECTED,
+
+            // whether we should show completions if they're available
+            shouldShowCompletions: true,
+
+            hide: false,
+
+            forceComplete: false,
         };
     }
 
-    componentWillReceiveProps(props, state) {
+    async componentWillReceiveProps(props, state) {
         if (props.query === this.props.query) {
+            return null;
+        }
+
+        return await this.complete(props.query, props.selection);
+    }
+
+    async complete(query, selection) {
+        let forceComplete = this.state.forceComplete;
+        const completionPromise = getCompletions(query, selection, forceComplete);
+        this.completionPromise = completionPromise;
+        const completions = await this.completionPromise;
+
+        // There's a newer completion request, so ignore results.
+        if (completionPromise !== this.completionPromise) {
             return;
         }
 
-        getCompletions(props.query, props.selection).forEach(completionResult => {
-            try {
-                completionResult.completions.then(completions => {
-                    let i = this.state.completions.findIndex(
-                        completion => completion.provider === completionResult.provider
-                    );
+        const completionList = flatMap(completions, provider => provider.completions);
 
-                    i = i === -1 ? this.state.completions.length : i;
-                    let newCompletions = Object.assign([], this.state.completions);
-                    completionResult.completions = completions;
-                    newCompletions[i] = completionResult;
-
-                    this.setState({
-                        completions: newCompletions,
-                        completionList: flatMap(newCompletions, provider => provider.completions),
-                    });
-                }, err => {
-                    console.error(err);
-                });
-            } catch (e) {
-                // An error in one provider shouldn't mess up the rest.
-                console.error(e);
+        // Reset selection when completion list becomes empty.
+        let selectionOffset = COMPOSER_SELECTED;
+        if (completionList.length > 0) {
+            /* If the currently selected completion is still in the completion list,
+             try to find it and jump to it. If not, select composer.
+             */
+            const currentSelection = this.state.selectionOffset === 0 ? null :
+                this.state.completionList[this.state.selectionOffset - 1].completion;
+            selectionOffset = completionList.findIndex(
+                completion => completion.completion === currentSelection);
+            if (selectionOffset === -1) {
+                selectionOffset = COMPOSER_SELECTED;
+            } else {
+                selectionOffset++; // selectionOffset is 1-indexed!
             }
+        } else {
+            // If no completions were returned, we should turn off force completion.
+            forceComplete = false;
+        }
+
+        let hide = this.state.hide;
+        // These are lists of booleans that indicate whether whether the corresponding provider had a matching pattern
+        const oldMatches = this.state.completions.map(completion => !!completion.command.command),
+            newMatches = completions.map(completion => !!completion.command.command);
+
+        // So, essentially, we re-show autocomplete if any provider finds a new pattern or stops finding an old one
+        if (!isEqual(oldMatches, newMatches)) {
+            hide = false;
+        }
+
+        this.setState({
+            completions,
+            completionList,
+            selectionOffset,
+            hide,
+            forceComplete,
         });
     }
 
     countCompletions(): number {
-        return this.state.completions.map(completionResult => {
-            return completionResult.completions.length;
-        }).reduce((l, r) => l + r);
+        return this.state.completionList.length;
     }
 
     // called from MessageComposerInput
-    onUpArrow(): boolean {
-        let completionCount = this.countCompletions(),
-            selectionOffset = (completionCount + this.state.selectionOffset - 1) % completionCount;
+    onUpArrow(): ?Completion {
+        const completionCount = this.countCompletions();
+        // completionCount + 1, since 0 means composer is selected
+        const selectionOffset = (completionCount + 1 + this.state.selectionOffset - 1)
+            % (completionCount + 1);
         if (!completionCount) {
-            return false;
+            return null;
         }
         this.setSelection(selectionOffset);
-        return true;
+        return selectionOffset === COMPOSER_SELECTED ? null : this.state.completionList[selectionOffset - 1];
     }
 
     // called from MessageComposerInput
-    onDownArrow(): boolean {
-        let completionCount = this.countCompletions(),
-            selectionOffset = (this.state.selectionOffset + 1) % completionCount;
+    onDownArrow(): ?Completion {
+        const completionCount = this.countCompletions();
+        // completionCount + 1, since 0 means composer is selected
+        const selectionOffset = (this.state.selectionOffset + 1) % (completionCount + 1);
         if (!completionCount) {
-            return false;
+            return null;
         }
         this.setSelection(selectionOffset);
-        return true;
+        return selectionOffset === COMPOSER_SELECTED ? null : this.state.completionList[selectionOffset - 1];
+    }
+
+    onEscape(e): boolean {
+        const completionCount = this.countCompletions();
+        if (completionCount === 0) {
+            // autocomplete is already empty, so don't preventDefault
+            return;
+        }
+
+        e.preventDefault();
+
+        // selectionOffset = 0, so we don't end up completing when autocomplete is hidden
+        this.setState({hide: true, selectionOffset: 0});
+    }
+
+    forceComplete() {
+        const done = Q.defer();
+        this.setState({
+            forceComplete: true,
+        }, () => {
+            this.complete(this.props.query, this.props.selection).then(() => {
+                done.resolve();
+            });
+        });
+        return done.promise;
     }
 
     /** called from MessageComposerInput
      * @returns {boolean} whether confirmation was handled
      */
     onConfirm(): boolean {
-        if (this.countCompletions() === 0) {
+        if (this.countCompletions() === 0 || this.state.selectionOffset === COMPOSER_SELECTED) {
             return false;
         }
 
-        let selectedCompletion = this.state.completionList[this.state.selectionOffset];
+        let selectedCompletion = this.state.completionList[this.state.selectionOffset - 1];
         this.props.onConfirm(selectedCompletion.range, selectedCompletion.completion);
 
         return true;
@@ -117,7 +186,7 @@ export default class Autocomplete extends React.Component {
     render() {
         const EmojiText = sdk.getComponent('views.elements.EmojiText');
 
-        let position = 0;
+        let position = 1;
         let renderedCompletions = this.state.completions.map((completionResult, i) => {
             let completions = completionResult.completions.map((completion, i) => {
 
@@ -135,7 +204,7 @@ export default class Autocomplete extends React.Component {
 
                 return React.cloneElement(completion.component, {
                     key: i,
-                    ref: `completion${i}`,
+                    ref: `completion${position - 1}`,
                     className,
                     onMouseOver,
                     onClick,
@@ -151,7 +220,7 @@ export default class Autocomplete extends React.Component {
             ) : null;
         }).filter(completion => !!completion);
 
-        return renderedCompletions.length > 0 ? (
+        return !this.state.hide && renderedCompletions.length > 0 ? (
             <div className="mx_Autocomplete" ref={(e) => this.container = e}>
                 {renderedCompletions}
             </div>

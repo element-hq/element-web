@@ -1,6 +1,5 @@
 import React from 'react';
 import AutocompleteProvider from './AutocompleteProvider';
-import Q from 'q';
 import Fuse from 'fuse.js';
 import {TextualCompletion} from './Components';
 
@@ -23,7 +22,7 @@ const COMMANDS = [
     {
         command: '/invite',
         args: '<user-id>',
-        description: 'Invites user with given id to current room'
+        description: 'Invites user with given id to current room',
     },
     {
         command: '/join',
@@ -40,6 +39,11 @@ const COMMANDS = [
         args: '<display-name>',
         description: 'Changes your display nickname',
     },
+    {
+        command: '/ddg',
+        args: '<query>',
+        description: 'Searches DuckDuckGo for results',
+    }
 ];
 
 let COMMAND_RE = /(^\/\w*)/g;
@@ -54,7 +58,7 @@ export default class CommandProvider extends AutocompleteProvider {
         });
     }
 
-    getCompletions(query: string, selection: {start: number, end: number}) {
+    async getCompletions(query: string, selection: {start: number, end: number}) {
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
@@ -70,7 +74,7 @@ export default class CommandProvider extends AutocompleteProvider {
                 };
             });
         }
-        return Q.when(completions);
+        return completions;
     }
 
     getName() {
