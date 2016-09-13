@@ -112,6 +112,10 @@ limitations under the License.
     padding-left: 5px;
 }
 
+.collapsed .mx_RightPanel_footer .mx_RightPanel_invite {
+    padding-left: 10px;
+}
+
 .mx_RightPanel_invite .mx_RightPanel_icon {
     display: inline-block;
     cursor: pointer;
