@@ -512,7 +512,7 @@ module.exports = React.createClass({
     _createChat: function() {
         var ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
         Modal.createDialog(ChatInviteDialog, {
-            title: "Start a one to one chat",
+            title: "Start a new chat",
         });
     },
 
