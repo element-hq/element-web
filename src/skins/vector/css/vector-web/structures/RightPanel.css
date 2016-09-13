@@ -103,3 +103,30 @@ limitations under the License.
     -webkit-flex: 0 0 60px;
     flex: 0 0 60px;
 }
+
+.mx_RightPanel_footer .mx_RightPanel_invite {
+    line-height: 35px;
+    font-size: 14px;
+	color: #4A4A4A;
+    padding-top: 13px;
+    padding-left: 5px;
+}
+
+.collapsed .mx_RightPanel_footer .mx_RightPanel_invite {
+    display: none;
+}
+
+.mx_RightPanel_invite .mx_RightPanel_icon {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.mx_RightPanel_invite .mx_RightPanel_icon object {
+    pointer-events: none;
+}
+
+.mx_RightPanel_invite .mx_RightPanel_message {
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 10px
+}

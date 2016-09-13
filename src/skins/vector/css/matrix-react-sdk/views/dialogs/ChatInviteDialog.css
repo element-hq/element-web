@@ -42,33 +42,15 @@ limitations under the License.
     padding-right: 4px;
     padding-top: 1px;
     padding-bottom: 1px;
-    overflow: hidden;
-}
-
-.mx_ChatInviteDialog_queryList {
-    position: absolute;
-    background-color: #fff;
-    width: 485px;
-    max-height: 116px;
+    max-height: 150px;
+    overflow-x: hidden;
     overflow-y: scroll;
-	border-radius: 3px;
-	background-color: #fff;
-	border: solid 1px #76cfa6;
-    cursor: pointer;
 }
 
-.mx_ChatInviteDialog_queryListElement .mx_AddressTile {
-    background-color: #fff;
-    border: solid 1px #fff;
-}
-
-.mx_ChatInviteDialog_queryListElement.mx_ChatInviteDialog_selected {
-     background-color: #eaf5f0; /* selected colour */
-}
-
-.mx_ChatInviteDialog_queryListElement.mx_ChatInviteDialog_selected .mx_AddressTile {
-    background-color: #eaf5f0; /* selected colour */
-    border: solid 1px #eaf5f0; /* selected colour */
+.mx_ChatInviteDialog_error {
+    position: absolute;
+    color: #ff0064;
+    line-height: 36px;
 }
 
 .mx_ChatInviteDialog_cancel {

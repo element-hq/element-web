@@ -151,6 +151,6 @@ limitations under the License.
 }
 
 .mx_MatrixChat .mx_RightPanel.collapsed {
-    -webkit-flex: 0 0 72px;
-    flex: 0 0 72px;
+    -webkit-flex: 0 0 122px;
+    flex: 0 0 122px;
 }

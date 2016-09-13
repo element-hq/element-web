@@ -23,6 +23,13 @@ limitations under the License.
     color: #454545;
     font-size: 14px;
     font-weight: normal;
+    margin-right: 4px;
+}
+
+.mx_AddressTile.mx_AddressTile_error {
+    background-color: rgba(255, 0, 100, 0.1);
+    color: #ff0064;
+    border-color: #ff0064;
 }
 
 .mx_AddressTile_network {
@@ -39,6 +46,13 @@ limitations under the License.
     padding-left: 2px;
     padding-right: 7px;
     vertical-align: middle;
+}
+
+.mx_AddressTile_mx {
+    display: inline-block;
+    margin: 0;
+    border: 0;
+    padding: 0;
 }
 
 .mx_AddressTile_name {
@@ -65,6 +79,47 @@ limitations under the License.
 
 .mx_AddressTile_id.mx_AddressTile_justified {
     width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.mx_AddressTile_unknownMx {
+    display: inline-block;
+    font-weight: 600;
+    padding-right: 11px;
+}
+
+.mx_AddressTile_unknownMxl.mx_AddressTile_justified {
+    width: 380px; /* name + id width */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.mx_AddressTile_email {
+    display: inline-block;
+    font-weight: 600;
+    padding-right: 11px;
+}
+
+.mx_AddressTile_email.mx_AddressTile_justified {
+    width: 380px; /* name + id width */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.mx_AddressTile_unknown {
+    display: inline-block;
+    padding-right: 11px;
+}
+
+.mx_AddressTile_unknown.mx_AddressTile_justified {
+    width: 380px; /* name + id width */
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

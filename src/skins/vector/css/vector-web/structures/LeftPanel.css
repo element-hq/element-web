@@ -91,19 +91,13 @@ limitations under the License.
 .collapsed .mx_BottomLeftMenu_createRoom,
 .collapsed .mx_BottomLeftMenu_people,
 .collapsed .mx_BottomLeftMenu_settings {
-    margin-left: 0px ! important;
+    margin-right: 0px ! important;
     padding-top: 3px ! important;
     padding-bottom: 3px ! important;
 }
 
-.mx_LeftPanel .mx_BottomLeftMenu_directory {
-    margin-right: 10px;
-}
-
-.mx_LeftPanel .mx_BottomLeftMenu_createRoom {
-    margin-right: 10px;
-}
-
+.mx_LeftPanel .mx_BottomLeftMenu_directory,
+.mx_LeftPanel .mx_BottomLeftMenu_createRoom,
 .mx_LeftPanel .mx_BottomLeftMenu_people {
     margin-right: 10px;
 }
