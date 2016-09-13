@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import MatrixClientPeg from './MatrixClientPeg';
-import MultiInviter from '../../../utils/MultiInviter';
+import MultiInviter from './utils/MultiInviter';
 
 const emailRegex = /^\S+@\S+\.\S+$/;
 
