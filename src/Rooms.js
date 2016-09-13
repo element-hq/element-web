@@ -107,11 +107,13 @@ export function setDMRoom(roomId, userId) {
     }
 
     // now add it, if it's not already there
-    const roomList = dmRoomMap[userId] || [];
-    if (roomList.indexOf(roomId) == -1) {
-        roomList.push(roomId);
+    if (userId) {
+        const roomList = dmRoomMap[userId] || [];
+        if (roomList.indexOf(roomId) == -1) {
+            roomList.push(roomId);
+        }
+        dmRoomMap[userId] = roomList;
     }
-    dmRoomMap[userId] = roomList;
 
 
     return MatrixClientPeg.get().setAccountData('m.direct', dmRoomMap);
