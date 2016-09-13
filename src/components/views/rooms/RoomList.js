@@ -496,7 +496,7 @@ module.exports = React.createClass({
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
-                             label="Direct Messages"
+                             label="People"
                              editable={ false }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
