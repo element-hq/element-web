@@ -20,6 +20,7 @@ var React = require('react');
 var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require("../../../Modal");
+var dis = require("../../../dispatcher");
 
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
@@ -112,6 +113,10 @@ module.exports = React.createClass({
                 description: "Failed to set avatar. " + errMsg
             });
         }).done();
+    },
+
+    onCollapseRhsClick: function(ev) {
+        dis.dispatch({ action: 'hide_right_panel' });
     },
 
     /**
@@ -289,8 +294,8 @@ module.exports = React.createClass({
         var rightPanel_buttons;
         if (this.props.collapsedRhs) {
             rightPanel_buttons =
-                <div className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
-                    <TintableSvg src="img/icons-search.svg" width="35" height="35"/>
+                <div className="mx_RoomHeader_button" onClick={this.onCollapseRhsClick} title=">">
+                    <TintableSvg src="img/minimise.svg" width="10" height="16"/>
                 </div>
         }
 
