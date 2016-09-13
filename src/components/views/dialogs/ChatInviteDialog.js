@@ -225,7 +225,7 @@ module.exports = React.createClass({
             // Start multi user chat
             var self = this;
             createRoom().then(function(roomId) {
-                return Invite.inviteMultipleToRoom(self.props.roomId, addrs);
+                return Invite.inviteMultipleToRoom(roomId, addrs);
             })
             .catch(function(err) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
