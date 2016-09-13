@@ -364,7 +364,19 @@ module.exports = React.createClass({
                 //this._setPage(this.PageTypes.CreateRoom);
                 //this.notifyNewScreen('new');
 
-                createRoom().done();
+                var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
+                Modal.createDialog(TextInputDialog, {
+                    title: "Create Room",
+                    description: "Room name (optional)",
+                    button: "Create Room",
+                    onFinished: (should_create, name) => {
+                        if (should_create) {
+                            const createOpts = {};
+                            if (name) createOpts.name = name;
+                            createRoom({createOpts}).done();
+                        }
+                    }
+                });
                 break;
             case 'view_room_directory':
                 this._setPage(this.PageTypes.RoomDirectory);
