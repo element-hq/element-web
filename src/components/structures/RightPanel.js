@@ -29,7 +29,7 @@ module.exports = React.createClass({
     propTypes: {
         userId: React.PropTypes.string, // if showing an orphaned MemberInfo page, this is set
         roomId: React.PropTypes.string, // if showing panels for a given room, this is set
-        collapsed: React.PropTypes.bool,
+        collapsed: React.PropTypes.bool, // currently unused property to request for a minimized view of the panel
     },
 
     Phase : {

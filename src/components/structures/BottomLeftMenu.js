@@ -101,6 +101,10 @@ module.exports = React.createClass({
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
+                    <div className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
+                        <TintableSvg src="img/icons-people.svg" width="25" height="25" />
+                        { this.getLabel("Chat to someone", this.state.peopleHover) }
+                    </div>
                     <div className="mx_BottomLeftMenu_directory" onClick={ this.onDirectoryClick } onMouseEnter={ this.onDirectoryMouseEnter } onMouseLeave={ this.onDirectoryMouseLeave } >
                         <TintableSvg src="img/icons-directory.svg" width="25" height="25"/>
                         { this.getLabel("Room directory", this.state.directoryHover) }
@@ -108,10 +112,6 @@ module.exports = React.createClass({
                     <div className="mx_BottomLeftMenu_createRoom" onClick={ this.onRoomsClick } onMouseEnter={ this.onRoomsMouseEnter } onMouseLeave={ this.onRoomsMouseLeave } >
                         <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
                         { this.getLabel("Create new room", this.state.roomsHover) }
-                    </div>
-                    <div className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
-                        <TintableSvg src="img/icons-people.svg" width="25" height="25" />
-                        { this.getLabel("New direct message", this.state.peopleHover) }
                     </div>
                     <div className="mx_BottomLeftMenu_settings" onClick={ this.onSettingsClick } onMouseEnter={ this.onSettingsMouseEnter } onMouseLeave={ this.onSettingsMouseLeave } >
                         <TintableSvg src="img/icons-settings.svg" width="25" height="25" />
