@@ -144,6 +144,7 @@ export default class Autocomplete extends React.Component {
             forceComplete: true,
         }, () => {
             this.complete(this.props.query, this.props.selection);
+            setTimeout(() => this.onDownArrow(), 50); // FIXME HACK
         });
     }
 

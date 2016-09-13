@@ -28,9 +28,15 @@ export default class UserProvider extends AutocompleteProvider {
         if (command) {
             this.fuse.set(this.users);
             completions = this.fuse.search(command[0]).map(user => {
-                const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
+                let displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
+                let completion = displayName;
+                if (range.start === 0) {
+                    completion += ': ';
+                } else {
+                    completion += ' ';
+                }
                 return {
-                    completion: user.userId,
+                    completion,
                     component: (
                         <PillCompletion
                             initialComponent={<MemberAvatar member={user} width={24} height={24}/>}

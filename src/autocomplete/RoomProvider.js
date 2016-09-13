@@ -32,7 +32,6 @@ export default class RoomProvider extends AutocompleteProvider {
                 return {
                     room: room,
                     name: room.name,
-                    roomId: room.roomId,
                     aliases: room.getAliases(),
                 };
             }));
