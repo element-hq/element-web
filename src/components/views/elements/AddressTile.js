@@ -59,8 +59,8 @@ module.exports = React.createClass({
                 name = user.displayName || userId;
                 imgUrl = Avatar.avatarUrlForUser(user, 25, 25, "crop");
             } else {
-                name="Unknown";
-                imgUrl = "img/avatar-error.svg";
+                name=this.props.address;
+                imgUrl = "img/icon-mx-user.svg";
             }
         } else if (addrType === "email") {
             email = this.props.address;
@@ -82,7 +82,7 @@ module.exports = React.createClass({
 
         var info;
         var error = false;
-        if (userId) {
+        if (addrType === "mx" && userId) {
             var nameClasses = classNames({
                 "mx_AddressTile_name": true,
                 "mx_AddressTile_justified": this.props.justified,
@@ -98,6 +98,15 @@ module.exports = React.createClass({
                     <div className={nameClasses}>{ name }</div>
                     <div className={idClasses}>{ userId }</div>
                 </div>
+            );
+        } else if (addrType === "mx") {
+            var unknownMxClasses = classNames({
+                "mx_AddressTile_unknownMx": true,
+                "mx_AddressTile_justified": this.props.justified,
+            });
+
+            info = (
+                <div className={unknownMxClasses}>{ this.props.address }</div>
             );
         } else if (email)  {
             var emailClasses = classNames({

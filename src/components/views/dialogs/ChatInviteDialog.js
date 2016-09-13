@@ -120,7 +120,8 @@ module.exports = React.createClass({
         } else if (e.keyCode === 32 || e.keyCode === 188) { // space or comma
             e.stopPropagation();
             e.preventDefault();
-            if (Invite.isValidAddress(this.refs.textinput.value)) {
+            var check = Invite.isValidAddress(this.refs.textinput.value);
+            if (check === true || check === null) {
                 var inviteList = this.state.inviteList.slice();
                 inviteList.push(this.refs.textinput.value);
                 this.setState({
