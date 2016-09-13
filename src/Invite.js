@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import MatrixClientPeg from './MatrixClientPeg';
+import MultiInviter from './utils/MultiInviter';
 
 const emailRegex = /^\S+@\S+\.\S+$/;
 
@@ -42,6 +43,20 @@ export function inviteToRoom(roomId, addr) {
     } else {
         throw new Error('Unsupported address');
     }
+}
+
+/**
+ * Invites multiple addresses to a room
+ * Simpler interface to utils/MultiInviter but with
+ * no option to cancel.
+ *
+ * @param {roomId} The ID of the room to invite to
+ * @param {array} Array of strings of addresses to invite. May be matrix IDs or 3pids.
+ * @returns Promise
+ */
+export function inviteMultipleToRoom(roomId, addrs) {
+    this.inviter = new MultiInviter(roomId);
+    return inviter.invite(addrs);
 }
 
 export function isValidAddress(addr) {
