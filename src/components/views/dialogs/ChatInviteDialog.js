@@ -71,30 +71,28 @@ module.exports = React.createClass({
     },
 
     onButtonClick: function() {
-        var addr;
-
-        // Either an address tile was created, or text input is being used
-        if (this.state.inviteList[0]) {
-            addr = this.state.inviteList[0];
-        }
-
-        if (this.state.inviteList.length === 1 && Invite.getAddressType(addr) === "mx" && !this.props.roomId) {
-            // Direct Message chat
-            var room = this._getDirectMessageRoom(addr);
-            if (room) {
-                // A Direct Message room already exists for this user and you
-                // so go straight to that room
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: room.roomId,
-                });
-                this.props.onFinished(true, addr);
+        if (this.state.inviteList.length > 0) {
+            if (this._isDmChat()) {
+                // Direct Message chat
+                var room = this._getDirectMessageRoom(this.state.inviteList[0]);
+                if (room) {
+                    // A Direct Message room already exists for this user and you
+                    // so go straight to that room
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: room.roomId,
+                    });
+                    this.props.onFinished(true, this.state.inviteList[0]);
+                } else {
+                    this._startChat(this.state.inviteList);
+                }
             } else {
-                this._startChat(addr);
+                // Multi invite chat
+                this._startChat(this.state.inviteList);
             }
         } else {
-            // Multi invite chat
-            this._startChat(addr);
+            // No addresses supplied
+            this.setState({ error: true });
         }
     },
 
@@ -198,9 +196,22 @@ module.exports = React.createClass({
         return null;
     },
 
-    _startChat: function(addr) {
+    _startChat: function(addrs) {
         if (this.props.roomId) {
-            Invite.inviteToRoom(this.props.roomId, addr)
+            // Invite new user to a room
+            Invite.inviteMultipleToRoom(this.props.roomId, addrs)
+            .catch(function(err) {
+                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Failure to invite user",
+                    description: err.toString()
+                });
+                return null;
+            })
+            .done();
+        } else if (this._isDmChat()) {
+            // Start the DM chat
+            createRoom({dmUserId: addrs[0]})
             .catch(function(err) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
@@ -211,8 +222,11 @@ module.exports = React.createClass({
             })
             .done();
         } else {
-            // Start the chat
-            createRoom({dmUserId: addr})
+            // Start multi user chat
+            var self = this;
+            createRoom().then(function(roomId) {
+                return Invite.inviteMultipleToRoom(self.props.roomId, addrs);
+            })
             .catch(function(err) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
@@ -225,7 +239,7 @@ module.exports = React.createClass({
         }
 
         // Close - this will happen before the above, as that is async
-        this.props.onFinished(true, addr);
+        this.props.onFinished(true, addrs);
     },
 
     _updateUserList: new rate_limited_func(function() {
@@ -271,6 +285,14 @@ module.exports = React.createClass({
             }
         }
         return false;
+    },
+
+    _isDmChat: function() {
+        if (this.state.inviteList.length === 1 && Invite.getAddressType(this.state.inviteList[0]) === "mx" && !this.props.roomId) {
+            return true;
+        } else {
+            return false;
+        }
     },
 
     render: function() {
