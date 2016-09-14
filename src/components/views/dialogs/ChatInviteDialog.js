@@ -108,16 +108,16 @@ module.exports = React.createClass({
         } else if (e.keyCode === 38) { // up arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyUpArrow();
+            this.addressSelector.onKeyU();
         } else if (e.keyCode === 40) { // down arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyDownArrow();
-        } else if (e.keyCode === 13) { // enter
+            this.addressSelector.onKeyDown();
+        } else if (e.keyCode === 13 || (e.keyCode === 9 && this.state.queryList.length > 0)) { // enter or tab
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyReturn();
-        } else if (e.keyCode === 32 || e.keyCode === 188) { // space or comma
+            this.addressSelector.onKeySelect();
+        } else if (e.keyCode === 32 || e.keyCode === 188 || e.keyCode === 9) { // space, comma or tab
             e.stopPropagation();
             e.preventDefault();
             var check = Invite.isValidAddress(this.refs.textinput.value);
