@@ -87,11 +87,11 @@ module.exports = React.createClass({
                                 <td>{ MatrixClientPeg.get().isEventSenderVerified(event) ? "verified" : <b>NOT verified</b> }</td>
                             </tr>
                             <tr>
-                                <td>Sender device ed25519 fingerprint</td>
+                                <td>Sender device ed25519 identity key</td>
                                 <td>{ device.getFingerprint() }</td>
                             </tr>
                             <tr>
-                                <td>Sender device curve25519 identity key</td>
+                                <td>Sender device curve25519 olm key</td>
                                 <td>{ event.getWireContent().sender_key }</td>
                             </tr>
                             <tr>
