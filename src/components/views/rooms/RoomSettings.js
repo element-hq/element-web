@@ -132,11 +132,11 @@ module.exports = React.createClass({
         });
 
         return stateWasSetDefer.promise.then(() => {
-            return this._save();
+            return q.allSettled(this._calcSavePromises());
         });
     },
 
-    _save: function() {
+    _calcSavePromises: function() {
         const roomId = this.props.room.roomId;
         var promises = this.saveAliases(); // returns Promise[]
         var originalState = this.getInitialState();
@@ -217,16 +217,26 @@ module.exports = React.createClass({
         }
 
         // color scheme
-        promises.push(this.saveColor());
+        var p;
+        p = this.saveColor();
+        if (!q.isFulfilled(p)) {
+            promises.push(p);
+        }
 
         // url preview settings
-        promises.push(this.saveUrlPreviewSettings());
+        var ps = this.saveUrlPreviewSettings();
+        if (ps.length > 0) {
+            promises.push();
+        }
 
         // encryption
-        promises.push(this.saveEncryption());
+        p = this.saveEncryption();
+        if (!q.isFulfilled(p)) {
+            promises.push(p);
+        }
 
         console.log("Performing %s operations: %s", promises.length, JSON.stringify(promises));
-        return q.allSettled(promises);
+        return promises;
     },
 
     saveAliases: function() {
@@ -402,6 +412,9 @@ module.exports = React.createClass({
     onManageIntegrations(ev) {
         ev.preventDefault();
         var IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        if (this._calcSavePromises().length === 0) {
+            this.props.onCancelClick(ev);
+        }
         Modal.createDialog(IntegrationsManager, {
             src: this.scalarClient.hasCredentials() ?
                     this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
@@ -661,8 +674,8 @@ module.exports = React.createClass({
                 console.error("Unable to contact integrations server");
             } else {
                 integrationsButton = (
-                    <div className="mx_RoomSettings_integrationsButton" onClick={ this.onManageIntegrations }>
-                        <Loader />
+                    <div className="mx_RoomSettings_integrationsButton" style={{ opacity: 0.5 }}>
+                        Manage Integrations
                     </div>
                 );
             }
