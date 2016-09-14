@@ -221,7 +221,7 @@ module.exports = React.createClass({
                 return null;
             })
             .done();
-        } else if (this._isDmChat()) {
+        } else if (this._isDmChat(addrs)) {
             // Start the DM chat
             createRoom({dmUserId: addrs[0]})
             .catch(function(err) {
@@ -299,8 +299,8 @@ module.exports = React.createClass({
         return false;
     },
 
-    _isDmChat: function() {
-        if (this.state.inviteList.length === 1 && Invite.getAddressType(this.state.inviteList[0]) === "mx" && !this.props.roomId) {
+    _isDmChat: function(addrs) {
+        if (addrs.length === 1 && Invite.getAddressType(addrs[0]) === "mx" && !this.props.roomId) {
             return true;
         } else {
             return false;
