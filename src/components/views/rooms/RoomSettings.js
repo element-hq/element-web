@@ -226,7 +226,7 @@ module.exports = React.createClass({
         // url preview settings
         var ps = this.saveUrlPreviewSettings();
         if (ps.length > 0) {
-            promises.push();
+            promises.push(ps);
         }
 
         // encryption
