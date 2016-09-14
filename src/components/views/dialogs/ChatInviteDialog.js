@@ -214,7 +214,8 @@ module.exports = React.createClass({
             var self = this;
             Invite.inviteMultipleToRoom(this.props.roomId, addrs)
             .then(function(addrs) {
-                return self._showAnyInviteErrors(addrs);
+                var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+                return self._showAnyInviteErrors(addrs, room);
             })
             .catch(function(err) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -240,11 +241,13 @@ module.exports = React.createClass({
         } else {
             // Start multi user chat
             var self = this;
+            var room;
             createRoom().then(function(roomId) {
+                room = MatrixClientPeg.get().getRoom(roomId);
                 return Invite.inviteMultipleToRoom(roomId, addrs);
             })
             .then(function(addrs) {
-                return self._showAnyInviteErrors(addrs);
+                return self._showAnyInviteErrors(addrs, room);
             })
             .catch(function(err) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -319,7 +322,7 @@ module.exports = React.createClass({
         }
     },
 
-    _showAnyInviteErrors: function(addrs) {
+    _showAnyInviteErrors: function(addrs, room) {
         // Show user any errors
         var errorList = [];
         for (var addr in addrs) {
@@ -327,10 +330,11 @@ module.exports = React.createClass({
                 errorList.push(addr);
             }
         }
+
         if (errorList.length > 0) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to invite the following users:",
+                title: "Failed to invite the following users to the " + room.name + " room:",
                 description: errorList.join(", "),
             });
         }
