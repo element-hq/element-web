@@ -71,10 +71,21 @@ module.exports = React.createClass({
     },
 
     onButtonClick: function() {
-        if (this.state.inviteList.length > 0) {
+        var inviteList = this.state.inviteList.slice();
+        // Check the text input field to see if user has an unconverted address
+        // If there is and it's valid add it to the local inviteList
+        var check = Invite.isValidAddress(this.refs.textinput.value);
+        if (check === true || check === null) {
+            inviteList.push(this.refs.textinput.value);
+        } else if (this.refs.textinput.value.length > 0) {
+            this.setState({ error: true });
+            return;
+        }
+
+        if (inviteList.length > 0) {
             if (this._isDmChat()) {
                 // Direct Message chat
-                var room = this._getDirectMessageRoom(this.state.inviteList[0]);
+                var room = this._getDirectMessageRoom(inviteList[0]);
                 if (room) {
                     // A Direct Message room already exists for this user and you
                     // so go straight to that room
@@ -82,13 +93,13 @@ module.exports = React.createClass({
                         action: 'view_room',
                         room_id: room.roomId,
                     });
-                    this.props.onFinished(true, this.state.inviteList[0]);
+                    this.props.onFinished(true, inviteList[0]);
                 } else {
-                    this._startChat(this.state.inviteList);
+                    this._startChat(inviteList);
                 }
             } else {
                 // Multi invite chat
-                this._startChat(this.state.inviteList);
+                this._startChat(inviteList);
             }
         } else {
             // No addresses supplied
