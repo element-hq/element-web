@@ -90,7 +90,7 @@ module.exports = React.createClass({
         var EntityTile = sdk.getComponent("rooms.EntityTile");
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        var label = input;
+        // var label = input;
         // if (input[0] === "@") {
         //     label = input;
         // }
@@ -98,16 +98,16 @@ module.exports = React.createClass({
         //     label = "Email: " + input;
         // }
 
-        this._emailEntity = new Entities.newEntity(
-            <EntityTile key="dynamic_invite_tile" suppressOnHover={true} showInviteButton={true}
-                avatarJsx={ <BaseAvatar name="@" width={36} height={36} /> }
-                className="mx_EntityTile_invitePlaceholder"
-                presenceState="online" onClick={this.onThirdPartyInvite} name={"Invite by email"}
-            />,
-            function(query) {
-                return true; // always show this
-            }
-        );
+        // this._emailEntity = new Entities.newEntity(
+        //     <EntityTile key="dynamic_invite_tile" suppressOnHover={true} showInviteButton={true}
+        //         avatarJsx={ <BaseAvatar name="@" width={36} height={36} /> }
+        //         className="mx_EntityTile_invitePlaceholder"
+        //         presenceState="online" onClick={this.onThirdPartyInvite} name={"Invite by email"}
+        //     />,
+        //     function(query) {
+        //         return true; // always show this
+        //     }
+        // );
 
         this.props.onSearchQueryChanged(input);
     },
@@ -117,9 +117,9 @@ module.exports = React.createClass({
         var entities = Entities.fromUsers(this._userList || [], true, this.props.onInvite);
 
         // Add an "Email: foo@bar.com" tile as the first tile
-        if (this._emailEntity) {
-            entities.unshift(this._emailEntity);
-        }
+        // if (this._emailEntity) {
+        //     entities.unshift(this._emailEntity);
+        // }
 
         return (
             <SearchableEntityList searchPlaceholderText={"Search/invite by name, email, id"}

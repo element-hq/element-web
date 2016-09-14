@@ -71,10 +71,21 @@ module.exports = React.createClass({
     },
 
     onButtonClick: function() {
-        if (this.state.inviteList.length > 0) {
-            if (this._isDmChat()) {
+        var inviteList = this.state.inviteList.slice();
+        // Check the text input field to see if user has an unconverted address
+        // If there is and it's valid add it to the local inviteList
+        var check = Invite.isValidAddress(this.refs.textinput.value);
+        if (check === true || check === null) {
+            inviteList.push(this.refs.textinput.value);
+        } else if (this.refs.textinput.value.length > 0) {
+            this.setState({ error: true });
+            return;
+        }
+
+        if (inviteList.length > 0) {
+            if (this._isDmChat(inviteList)) {
                 // Direct Message chat
-                var room = this._getDirectMessageRoom(this.state.inviteList[0]);
+                var room = this._getDirectMessageRoom(inviteList[0]);
                 if (room) {
                     // A Direct Message room already exists for this user and you
                     // so go straight to that room
@@ -82,13 +93,13 @@ module.exports = React.createClass({
                         action: 'view_room',
                         room_id: room.roomId,
                     });
-                    this.props.onFinished(true, this.state.inviteList[0]);
+                    this.props.onFinished(true, inviteList[0]);
                 } else {
-                    this._startChat(this.state.inviteList);
+                    this._startChat(inviteList);
                 }
             } else {
                 // Multi invite chat
-                this._startChat(this.state.inviteList);
+                this._startChat(inviteList);
             }
         } else {
             // No addresses supplied
@@ -108,16 +119,16 @@ module.exports = React.createClass({
         } else if (e.keyCode === 38) { // up arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyUpArrow();
+            this.addressSelector.onKeyU();
         } else if (e.keyCode === 40) { // down arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyDownArrow();
-        } else if (e.keyCode === 13) { // enter
+            this.addressSelector.onKeyDown();
+        } else if (e.keyCode === 13 || (e.keyCode === 9 && this.state.queryList.length > 0)) { // enter or tab
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyReturn();
-        } else if (e.keyCode === 32 || e.keyCode === 188) { // space or comma
+            this.addressSelector.onKeySelect();
+        } else if (e.keyCode === 32 || e.keyCode === 188 || e.keyCode === 9) { // space, comma or tab
             e.stopPropagation();
             e.preventDefault();
             var check = Invite.isValidAddress(this.refs.textinput.value);
@@ -200,17 +211,22 @@ module.exports = React.createClass({
     _startChat: function(addrs) {
         if (this.props.roomId) {
             // Invite new user to a room
+            var self = this;
             Invite.inviteMultipleToRoom(this.props.roomId, addrs)
+            .then(function(addrs) {
+                var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+                return self._showAnyInviteErrors(addrs, room);
+            })
             .catch(function(err) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to invite user",
+                    title: "Failure to invite",
                     description: err.toString()
                 });
                 return null;
             })
             .done();
-        } else if (this._isDmChat()) {
+        } else if (this._isDmChat(addrs)) {
             // Start the DM chat
             createRoom({dmUserId: addrs[0]})
             .catch(function(err) {
@@ -225,13 +241,18 @@ module.exports = React.createClass({
         } else {
             // Start multi user chat
             var self = this;
+            var room;
             createRoom().then(function(roomId) {
+                room = MatrixClientPeg.get().getRoom(roomId);
                 return Invite.inviteMultipleToRoom(roomId, addrs);
+            })
+            .then(function(addrs) {
+                return self._showAnyInviteErrors(addrs, room);
             })
             .catch(function(err) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to invite user",
+                    title: "Failure to invite",
                     description: err.toString()
                 });
                 return null;
@@ -254,8 +275,13 @@ module.exports = React.createClass({
         var uid = user.userId.toLowerCase();
         query = query.toLowerCase();
 
-        // dount match any that are already on the invite list
+        // don't match any that are already on the invite list
         if (this._isOnInviteList(uid)) {
+            return false;
+        }
+
+        // ignore current user
+        if (uid === MatrixClientPeg.get().credentials.userId) {
             return false;
         }
 
@@ -288,12 +314,31 @@ module.exports = React.createClass({
         return false;
     },
 
-    _isDmChat: function() {
-        if (this.state.inviteList.length === 1 && Invite.getAddressType(this.state.inviteList[0]) === "mx" && !this.props.roomId) {
+    _isDmChat: function(addrs) {
+        if (addrs.length === 1 && Invite.getAddressType(addrs[0]) === "mx" && !this.props.roomId) {
             return true;
         } else {
             return false;
         }
+    },
+
+    _showAnyInviteErrors: function(addrs, room) {
+        // Show user any errors
+        var errorList = [];
+        for (var addr in addrs) {
+            if (addrs.hasOwnProperty(addr) && addrs[addr] === "error") {
+                errorList.push(addr);
+            }
+        }
+
+        if (errorList.length > 0) {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to invite the following users to the " + room.name + " room:",
+                description: errorList.join(", "),
+            });
+        }
+        return addrs;
     },
 
     render: function() {

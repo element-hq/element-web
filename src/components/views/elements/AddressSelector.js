@@ -55,7 +55,7 @@ module.exports = React.createClass({
         }
     },
 
-    onKeyUpArrow: function() {
+    onKeyUp: function() {
         if (this.state.selected > 0) {
             this.setState({
                 selected: this.state.selected - 1,
@@ -64,7 +64,7 @@ module.exports = React.createClass({
         }
     },
 
-    onKeyDownArrow: function() {
+    onKeyDown: function() {
         if (this.state.selected < this._maxSelected(this.props.addressList)) {
             this.setState({
                 selected: this.state.selected + 1,
@@ -73,7 +73,7 @@ module.exports = React.createClass({
         }
     },
 
-    onKeyReturn: function() {
+    onKeySelect: function() {
         this.selectAddress(this.state.selected);
     },
 
