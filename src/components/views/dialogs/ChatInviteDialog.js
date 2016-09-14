@@ -83,7 +83,7 @@ module.exports = React.createClass({
         }
 
         if (inviteList.length > 0) {
-            if (this._isDmChat()) {
+            if (this._isDmChat(inviteList)) {
                 // Direct Message chat
                 var room = this._getDirectMessageRoom(inviteList[0]);
                 if (room) {
