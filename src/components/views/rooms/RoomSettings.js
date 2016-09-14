@@ -430,6 +430,27 @@ module.exports = React.createClass({
         });
     },
 
+    onEnableEncryptionClick() {
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createDialog(QuestionDialog, {
+            title: "Warning!",
+            description: (
+                <div>
+                    <p>End-to-end encryption is in beta and may not be reliable.</p>
+                    <p>You should <b>not</b> yet trust it to secure data.</p>
+                    <p>Once encryption is enabled for a room it <b>cannot</b> be turned off again (for now).</p>
+                    <p>Encrypted messages will not be visible on clients that do not yet implement encryption<br/>
+                       (e.g. Vector/iOS and Vector/Android).</p>
+                </div>
+            ),
+            onFinished: confirm=>{
+                if (!confirm) {
+                    this.refs.encrypt.checked = false;
+                }
+            },
+        });
+    },
+
     _renderEncryptionSection: function() {
         if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
             return null;
@@ -439,27 +460,27 @@ module.exports = React.createClass({
         var roomState = this.props.room.currentState;
         var isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
 
-        var text = "Encryption is " + (isEncrypted ? "" : "not ") +
-            "enabled in this room.";
-
-        var button;
         if (!isEncrypted &&
                 roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
-            button = (
+            return (
                 <label>
-                    <input type="checkbox" ref="encrypt" />
+                    <input type="checkbox" ref="encrypt" onClick={ this.onEnableEncryptionClick }/>
+                    <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
                     Enable encryption (warning: cannot be disabled again!)
                 </label>
             );
         }
-
-        return (
-            <div className="mx_RoomSettings_toggles">
-                <h3>Encryption</h3>
-                <label>{text}</label>
-                {button}
-            </div>
-        );
+        else {
+            return (
+                <label>
+                { isEncrypted
+                  ? <img className="mx_RoomSettings_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" />
+                  : <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                }
+                Encryption is { isEncrypted ? "" : "not " } enabled in this room.
+                </label>
+            );
+        }
     },
 
     render: function() {
@@ -628,33 +649,30 @@ module.exports = React.createClass({
                 </div>
         }
 
-        var integrations_section;
+        var integrationsButton;
         if (UserSettingsStore.isFeatureEnabled("integration_management")) {
-            let integrations_body;
-
             if (this.scalarClient.hasCredentials()) {
-                integrations_body = (
-                    <div className="mx_RoomSettings_settings">
-                        <a href="#" onClick={ this.onManageIntegrations }>Manage integrations</a>
+                integrationsButton = (
+                    <div className="mx_RoomSettings_integrationsButton" onClick={ this.onManageIntegrations }>
+                        Manage Integrations
                     </div>
                 );
             } else if (this.state.scalar_error) {
-                integrations_body = <div className="error">
-                    Unable to contact integrations server
-                </div>;
+                console.error("Unable to contact integrations server");
             } else {
-                integrations_body = <Loader />;
+                integrationsButton = (
+                    <div className="mx_RoomSettings_integrationsButton" onClick={ this.onManageIntegrations }>
+                        <Loader />
+                    </div>
+                );
             }
-            integrations_section = <div>
-                <h3>Integrations</h3>
-                {integrations_body}
-            </div>;
         }
 
         return (
             <div className="mx_RoomSettings">
 
                 { leaveButton }
+                { integrationsButton }
 
                 { tagsSection }
 
@@ -685,6 +703,7 @@ module.exports = React.createClass({
                         </label>
                         { addressWarning }
                         <br/>
+                        { this._renderEncryptionSection() }
                         <label>
                             <input type="checkbox" disabled={ !roomState.mayClientSendStateEvent("m.room.aliases", cli) }
                                    onChange={ this._onToggle.bind(this, "isRoomPublished", true, false)}
@@ -730,8 +749,6 @@ module.exports = React.createClass({
                     <h3>Room Colour</h3>
                     <ColorSettings ref="color_settings" room={this.props.room} />
                 </div>
-
-                { integrations_section }
 
                 <a id="addresses"/>
 
@@ -790,8 +807,6 @@ module.exports = React.createClass({
                 { userLevelsSection }
 
                 { bannedUsersSection }
-
-                { this._renderEncryptionSection() }
 
                 <h3>Advanced</h3>
                 <div className="mx_RoomSettings_settings">
