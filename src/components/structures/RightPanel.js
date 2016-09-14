@@ -244,8 +244,8 @@ module.exports = React.createClass({
                 </div>
                 { panel }
                 <div className="mx_RightPanel_footer">
-                    <div className="mx_RightPanel_invite" >
-                        <div className="mx_RightPanel_icon" onClick={ this.onInviteButtonClick } >
+                    <div className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
+                        <div className="mx_RightPanel_icon" >
                             <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
                         </div>
                         <div className="mx_RightPanel_message">Invite to this room</div>
