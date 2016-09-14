@@ -19,7 +19,7 @@ limitations under the License.
     background-color: #fff;
     width: 485px;
     max-height: 116px;
-    overflow-y: scroll;
+    overflow-y: auto;
 	border-radius: 3px;
 	background-color: #fff;
 	border: solid 1px #76cfa6;

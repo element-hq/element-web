@@ -165,6 +165,7 @@ module.exports = React.createClass({
         var FilePanel = sdk.getComponent('structures.FilePanel');
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var buttonGroup;
+        var inviteGroup;
         var panel;
 
         var filesHighlight;
@@ -210,6 +211,14 @@ module.exports = React.createClass({
                             { notificationsHighlight }
                         </div>
                     </div>;
+
+            inviteGroup =
+                <div className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
+                    <div className="mx_RightPanel_icon" >
+                        <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
+                    </div>
+                    <div className="mx_RightPanel_message">Invite to this room</div>
+                </div>;
         }
 
         if (!this.props.collapsed) {
@@ -244,12 +253,7 @@ module.exports = React.createClass({
                 </div>
                 { panel }
                 <div className="mx_RightPanel_footer">
-                    <div className="mx_RightPanel_invite" >
-                        <div className="mx_RightPanel_icon" onClick={ this.onInviteButtonClick } >
-                            <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
-                        </div>
-                        <div className="mx_RightPanel_message">Invite to this room</div>
-                    </div>
+                    { inviteGroup }
                 </div>
             </aside>
         );

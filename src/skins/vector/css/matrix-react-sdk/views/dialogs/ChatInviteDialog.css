@@ -44,7 +44,7 @@ limitations under the License.
     padding-bottom: 1px;
     max-height: 150px;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .mx_ChatInviteDialog_error {
