@@ -211,11 +211,15 @@ module.exports = React.createClass({
     _startChat: function(addrs) {
         if (this.props.roomId) {
             // Invite new user to a room
+            var self = this;
             Invite.inviteMultipleToRoom(this.props.roomId, addrs)
+            .then(function(addrs) {
+                return self._showAnyInviteErrors(addrs);
+            })
             .catch(function(err) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to invite user",
+                    title: "Failure to invite",
                     description: err.toString()
                 });
                 return null;
@@ -239,10 +243,13 @@ module.exports = React.createClass({
             createRoom().then(function(roomId) {
                 return Invite.inviteMultipleToRoom(roomId, addrs);
             })
+            .then(function(addrs) {
+                return self._showAnyInviteErrors(addrs);
+            })
             .catch(function(err) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to invite user",
+                    title: "Failure to invite",
                     description: err.toString()
                 });
                 return null;
@@ -310,6 +317,24 @@ module.exports = React.createClass({
         } else {
             return false;
         }
+    },
+
+    _showAnyInviteErrors: function(addrs) {
+        // Show user any errors
+        var errorList = [];
+        for (var addr in addrs) {
+            if (addrs.hasOwnProperty(addr) && addrs[addr] === "error") {
+                errorList.push(addr);
+            }
+        }
+        if (errorList.length > 0) {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to invite the following users:",
+                description: errorList.join(", "),
+            });
+        }
+        return addrs;
     },
 
     render: function() {
