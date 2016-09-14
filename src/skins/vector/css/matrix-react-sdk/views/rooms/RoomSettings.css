@@ -19,7 +19,8 @@ limitations under the License.
     margin-bottom: 20px;
 }
 
-.mx_RoomSettings_leaveButton {
+.mx_RoomSettings_leaveButton,
+.mx_RoomSettings_integrationsButton {
     height: 36px;
     background-color: #76cfa6;
     border-radius: 36px;
@@ -31,6 +32,14 @@ limitations under the License.
     cursor: pointer;
     padding-left: 12px;
     padding-right: 12px;
+}
+
+.mx_RoomSettings_e2eIcon {
+    padding-left: 4px;
+    padding-right: 7px;
+}
+
+.mx_RoomSettings_leaveButton {
     margin-right: 32px;
 }
 
