@@ -265,8 +265,13 @@ module.exports = React.createClass({
         var uid = user.userId.toLowerCase();
         query = query.toLowerCase();
 
-        // dount match any that are already on the invite list
+        // don't match any that are already on the invite list
         if (this._isOnInviteList(uid)) {
+            return false;
+        }
+
+        // ignore current user
+        if (uid === MatrixClientPeg.get().credentials.userId) {
             return false;
         }
 
