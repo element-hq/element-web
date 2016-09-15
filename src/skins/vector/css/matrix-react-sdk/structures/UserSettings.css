@@ -104,6 +104,18 @@ limitations under the License.
     margin-bottom: 28px;
 }
 
+.mx_UserSettings_cryptoSection ul {
+    display: table;
+}
+.mx_UserSettings_cryptoSection li {
+    display: table-row;
+}
+.mx_UserSettings_cryptoSection label,
+.mx_UserSettings_cryptoSection span {
+    display: table-cell;
+    padding-right: 1em;
+}
+
 .mx_UserSettings_toggle input {
     width: 16px;
     margin-right: 8px;
