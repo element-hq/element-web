@@ -276,12 +276,16 @@ module.exports = React.createClass({
             );
         }
 
-        var SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
+        const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
+        const NetworkDropdown = sdk.getComponent('directory.NetworkDropdown');
         return (
             <div className="mx_RoomDirectory">
                 <SimpleRoomHeader title="Directory" />
                 <div className="mx_RoomDirectory_list">
-                    <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
+                    <div className="mx_RoomDirectory_listheader">
+                        <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
+                        <NetworkDropdown />
+                    </div>
                     <GeminiScrollbar className="mx_RoomDirectory_tableWrapper">
                         <table ref="directory_table" className="mx_RoomDirectory_table">
                             <tbody>
