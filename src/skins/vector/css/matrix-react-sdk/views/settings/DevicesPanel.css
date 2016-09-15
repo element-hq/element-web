@@ -45,3 +45,7 @@ limitations under the License.
 .mx_DevicesPanel_device > div {
     display: table-cell;
 }
+
+.mx_DevicesPanel_myDevice {
+    font-weight: bold;
+}
