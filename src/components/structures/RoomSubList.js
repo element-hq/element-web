@@ -128,13 +128,41 @@ var RoomSubList = React.createClass({
 
     onClick: function(ev) {
         if (this.isCollapsableOnClick()) {
-            // The header isCollapsable, so the click is to be interpreted as collapse and truncation logic
-            var isHidden = !this.state.hidden;
-            this.setState({ hidden : isHidden });
+            // The header iscCollapsable, so the click is to be interpreted as collapse and truncation logic
+            var isHidden = false;
+            var isTruncatable = this.props.list.length > TRUNCATE_AT;
 
-            if (isHidden) {
-                // as good a way as any to reset the truncate state
-                this.setState({ truncateAt : TRUNCATE_AT });
+            if (this.state.hidden && (this.state.capTruncate && isTruncatable)) {
+                isHidden = false;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : true,
+                    truncateAt : TRUNCATE_AT
+                });
+            } else if ((!this.state.hidden && this.state.capTruncate)
+                        || (this.state.hidden && (this.state.capTruncate && !isTruncatable)))
+            {
+                isHidden = false;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : false,
+                    truncateAt : -1
+                });
+            } else if (!this.state.hidden && !this.state.capTruncate) {
+                isHidden = true;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : true,
+                    truncateAt : TRUNCATE_AT
+                });
+            } else {
+                // Catch any weird states the system gets into
+                isHidden = false;
+                this.setState({
+                    hidden : isHidden,
+                    capTruncate : true,
+                    truncateAt : TRUNCATE_AT
+                });
             }
 
             this.props.onShowMoreRooms();
@@ -368,11 +396,16 @@ var RoomSubList = React.createClass({
         var subListNotifHighlight = subListNotifications[1];
 
         var roomCount = this.props.list.length > 0 ? this.props.list.length : '';
+        var isTruncatable = this.props.list.length > TRUNCATE_AT;
+        if (!this.state.hidden && this.state.capTruncate && isTruncatable) {
+            roomCount = TRUNCATE_AT + " of " + roomCount;
+        }
 
         var chevronClasses = classNames({
             'mx_RoomSubList_chevron': true,
-            'mx_RoomSubList_chevronRight': this.state.hidden,
-            'mx_RoomSubList_chevronDown': !this.state.hidden,
+            'mx_RoomSubList_chevronUp': this.state.hidden,
+            'mx_RoomSubList_chevronRight': !this.state.hidden && this.state.capTruncate,
+            'mx_RoomSubList_chevronDown': !this.state.hidden && !this.state.capTruncate,
         });
 
         var badgeClasses = classNames({
@@ -422,27 +455,7 @@ var RoomSubList = React.createClass({
         );
     },
 
-    _createOverflowTile: function(overflowCount, totalCount) {
-        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        // XXX: this is duplicated from RoomTile - factor it out
-        return (
-            <div className="mx_RoomTile mx_RoomTile_ellipsis" onClick={this._showFullMemberList}>
-                <div className="mx_RoomTile_avatar">
-                    <BaseAvatar url="img/ellipsis.svg" name="..." width={24} height={24} />
-                </div>
-                <div className="mx_RoomTile_name">and { overflowCount } others...</div>
-            </div>
-        );
-    },
-
-    _showFullMemberList: function() {
-        this.setState({
-            truncateAt: -1
-        });
-
-        this.props.onShowMoreRooms();
-        this.props.onHeaderClick(false);
-    },
+    _createOverflowTile: function() {}, // NOP
 
     // Fix any undefined order elements of a room in a manual ordered list
     //     room.tag[tagname].order
