@@ -148,7 +148,7 @@ export default class MemberDeviceInfo extends React.Component {
             var deviceName = this.props.device.getDisplayName() || this.props.device.deviceId;
 
             var info = (
-                <div className="mx_MemberDeviceInfo_deviceInfo" title={this.props.device.deviceId}>
+                <div className="mx_MemberDeviceInfo_deviceInfo" title={ "device id: " + this.props.device.deviceId }>
                     <div className="mx_MemberDeviceInfo_deviceId">{deviceName}{indicator}</div>
                 </div>
             );
