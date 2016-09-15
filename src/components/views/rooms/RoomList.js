@@ -326,39 +326,45 @@ module.exports = React.createClass({
     _repositionIncomingCallBox: function(e, firstTime) {
         var incomingCallBox = document.getElementById("incomingCallBox");
         if (incomingCallBox && incomingCallBox.parentElement) {
-            var scroll = this._getScrollNode();
-            var top = (scroll.offsetTop + incomingCallBox.parentElement.offsetTop - scroll.scrollTop);
+            var scrollArea = this._getScrollNode();
+            // Use the offset of the top of the scroll area from the window
+            // as this is used to calculate the CSS fixed top position for the stickies
+            var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
 
-            if (firstTime) {
-                // scroll to make sure the callbox is on the screen...
-                if (top < 10) { // 10px of vertical margin at top of screen
-                    scroll.scrollTop = incomingCallBox.parentElement.offsetTop - 10;
-                }
-                else if (top > scroll.clientHeight - incomingCallBox.offsetHeight + 50) {
-                    scroll.scrollTop = incomingCallBox.parentElement.offsetTop - scroll.offsetHeight + incomingCallBox.offsetHeight - 50;
-                }
-                // recalculate top in case we clipped it.
-                top = (scroll.offsetTop + incomingCallBox.parentElement.offsetTop - scroll.scrollTop);
-            }
-            else {
-                // stop the box from scrolling off the screen
-                if (top < 10) {
-                    top = 10;
-                }
-                else if (top > scroll.clientHeight - incomingCallBox.offsetHeight + 50) {
-                    top = scroll.clientHeight - incomingCallBox.offsetHeight + 50;
-                }
-            }
+//            var scroll = this._getScrollNode();
+//            var top = (scroll.offsetTop + incomingCallBox.parentElement.offsetTop - scroll.scrollTop);
+            var top = (incomingCallBox.parentElement.getBoundingClientRect().top + window.pageYOffset)
 
-            // slightly ugly hack to offset if there's a toolbar present.
-            // we really should be calculating our absolute offsets of top by recursing through the DOM
-            toolbar = document.getElementsByClassName("mx_MatrixToolbar")[0];
-            if (toolbar) {
-                top += toolbar.offsetHeight;
-            }
+//            if (firstTime) {
+//                // scroll to make sure the callbox is on the screen...
+//                if (top < 10) { // 10px of vertical margin at top of screen
+//                    scrollArea.scrollTop = incomingCallBox.parentElement.offsetTop - 10;
+//                }
+//                else if (top > scroll.clientHeight - incomingCallBox.offsetHeight + 50) {
+//                    scroll.scrollTop = incomingCallBox.parentElement.offsetTop - scroll.offsetHeight + incomingCallBox.offsetHeight - 50;
+//                }
+//                // recalculate top in case we clipped it.
+//                top = (scroll.offsetTop + incomingCallBox.parentElement.offsetTop - scroll.scrollTop);
+//            }
+//            else {
+//                // stop the box from scrolling off the screen
+//                if (top < 10) {
+//                    top = 10;
+//                }
+//                else if (top > scroll.clientHeight - incomingCallBox.offsetHeight + 50) {
+//                    top = scroll.clientHeight - incomingCallBox.offsetHeight + 50;
+//                }
+//            }
+//
+//            // slightly ugly hack to offset if there's a toolbar present.
+//            // we really should be calculating our absolute offsets of top by recursing through the DOM
+//            toolbar = document.getElementsByClassName("mx_MatrixToolbar")[0];
+//            if (toolbar) {
+//                top += toolbar.offsetHeight;
+//            }
 
             incomingCallBox.style.top = top + "px";
-            incomingCallBox.style.left = scroll.offsetLeft + scroll.offsetWidth + "px";
+            incomingCallBox.style.left = scrollArea.offsetLeft + scrollArea.offsetWidth + "px";
         }
     },
 

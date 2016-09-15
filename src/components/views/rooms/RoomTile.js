@@ -267,11 +267,11 @@ module.exports = React.createClass({
             tooltip = <RoomTooltip className="mx_RoomTile_tooltip" room={this.props.room} />;
         }
 
-        var incomingCallBox;
-        if (this.props.incomingCall) {
-            var IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
-            incomingCallBox = <IncomingCallBox incomingCall={ this.props.incomingCall }/>;
-        }
+        //var incomingCallBox;
+        //if (this.props.incomingCall) {
+        //    var IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
+        //    incomingCallBox = <IncomingCallBox incomingCall={ this.props.incomingCall }/>;
+        //}
 
         var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
@@ -300,7 +300,7 @@ module.exports = React.createClass({
                     { label }
                     { badge }
                 </div>
-                { incomingCallBox }
+                {/* { incomingCallBox } */}
                 { tooltip }
             </div>
         );
