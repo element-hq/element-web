@@ -91,7 +91,6 @@ module.exports.components['views.rooms.Autocomplete'] = require('./components/vi
 module.exports.components['views.rooms.AuxPanel'] = require('./components/views/rooms/AuxPanel');
 module.exports.components['views.rooms.EntityTile'] = require('./components/views/rooms/EntityTile');
 module.exports.components['views.rooms.EventTile'] = require('./components/views/rooms/EventTile');
-module.exports.components['views.rooms.InviteMemberList'] = require('./components/views/rooms/InviteMemberList');
 module.exports.components['views.rooms.LinkPreviewWidget'] = require('./components/views/rooms/LinkPreviewWidget');
 module.exports.components['views.rooms.MemberDeviceInfo'] = require('./components/views/rooms/MemberDeviceInfo');
 module.exports.components['views.rooms.MemberInfo'] = require('./components/views/rooms/MemberInfo');
