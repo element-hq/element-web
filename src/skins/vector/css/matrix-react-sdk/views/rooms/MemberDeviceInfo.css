@@ -26,27 +26,44 @@ limitations under the License.
     text-align: center;
     padding-left: 1em;
     padding-right: 1em;
+    width: 95px;
+    border: 0px;
+    font-size: 14px;
 
     cursor: pointer;
     display: inline;
 }
 
+.mx_MemberDeviceInfo_deviceId {
+    font-size: 13px;
+}
+
+.mx_MemberDeviceInfo_deviceInfo {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.mx_MemberDeviceInfo_block,
+.mx_MemberDeviceInfo_unblock {
+    float: right;
+}
+
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_verified,
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_unverified,
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_blocked {
-    width: 17px;
-    border-radius: 17px;
-    text-align: center;
+    float: right;
+    padding-left: 1em;
 }
 
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_verified {
-    color: #76cfa6;
+    color: #76cfa5;
 }
 
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_unverified {
-    color: #b2b2b2;
+    color: #e8bf37;
 }
 
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_blocked {
-    color: #e55e5e;
+    color: #ba6363;
 }
