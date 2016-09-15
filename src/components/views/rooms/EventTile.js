@@ -467,7 +467,12 @@ module.exports = React.createClass({
         );
 
         var e2e;
-        if (this.props.mxEvent.isEncrypted() || (e2eEnabled && this.props.eventSendStatus)) {
+        // cosmetic padlocks:
+        if ((e2eEnabled && this.props.eventSendStatus) || this.props.mxEvent.getType() === 'm.room.encryption') {
+            e2e = <img style={{ cursor: 'initial', marginLeft: '-1px' }} className="mx_EventTile_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" />;
+        }
+        // real padlocks
+        else if (this.props.mxEvent.isEncrypted() || (e2eEnabled && this.props.eventSendStatus)) {
             if (this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted') {
                 e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
             }

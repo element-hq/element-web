@@ -42,6 +42,7 @@ export default class MessageComposer extends React.Component {
         this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
+        this.onEvent = this.onEvent.bind(this);
 
         this.state = {
             autocompleteQuery: '',
@@ -55,6 +56,24 @@ export default class MessageComposer extends React.Component {
             showFormatting: UserSettingsStore.getSyncedSetting('MessageComposer.showFormatting', false),
         };
 
+    }
+
+    componentDidMount() {
+        // N.B. using 'event' rather than 'RoomEvents' otherwise the crypto handler
+        // for 'event' fires *after* 'RoomEvent', and our room won't have yet been
+        // marked as encrypted.
+        // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
+        MatrixClientPeg.get().on("event", this.onEvent);
+    }
+
+    componentWillUnmount() {
+        MatrixClientPeg.get().removeListener("event", this.onEvent);
+    }
+
+    onEvent(event) {
+        if (event.getType() !== 'm.room.encryption') return;
+        if (event.getRoomId() !== this.props.room.roomId) return;
+        this.forceUpdate();
     }
 
     onUploadClick(ev) {

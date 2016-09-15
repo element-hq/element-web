@@ -92,11 +92,11 @@ module.exports = React.createClass({
                             </tr>
                             <tr>
                                 <td>Sender device curve25519 olm key</td>
-                                <td><code>{ event.getWireContent().sender_key }</code></td>
+                                <td><code>{ event.getWireContent().sender_key || <i>none</i> }</code></td>
                             </tr>
                             <tr>
                                 <td>Algorithm</td>
-                                <td>{ event.getWireContent().algorithm }</td>
+                                <td>{ event.getWireContent().algorithm || <i>unencrypted</i> }</td>
                             </tr>
                         {
                             event.getContent().msgtype === 'm.bad.encrypted' ? (
@@ -108,7 +108,7 @@ module.exports = React.createClass({
                         }
                             <tr>
                                 <td>Session ID</td>
-                                <td><code>{ event.getWireContent().session_id }</code></td>
+                                <td><code>{ event.getWireContent().session_id || <i>none</i> }</code></td>
                             </tr>
                         </tbody>
                     </table>
