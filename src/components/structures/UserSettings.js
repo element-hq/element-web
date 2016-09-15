@@ -72,7 +72,6 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             avatarUrl: null,
-            myDevice: null,
             threePids: [],
             phase: "UserSettings.LOADING", // LOADING, DISPLAY
             email_add_pending: false,
