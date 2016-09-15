@@ -4,5 +4,27 @@
     "brand": "Vector",
     "integrations_ui_url": "http://localhost:8081/",
     "integrations_rest_url": "http://localhost:5050",
-    "enableLabs": true
+    "enableLabs": true,
+    "roomDirectory": {
+        "networks": [
+            "matrix:example_com",
+            "matrix:matrix_org",
+            "irc:mynetwork"
+        ],
+        "networkPatterns": {
+            "matrix:myserver": "#.*:example.com",
+            "matrix:matrix_org": "#.*:matrix.org",
+            "irc:mynetwork": "#mynetwork_.*:example.com"
+        },
+        "networkNames": {
+            "matrix:matrix_org": "matrix.org",
+            "matrix:example_com": "example.com",
+            "irc:mynetwork": "My IRC Network"
+        },
+        "networkIcons": {
+            "matrix:example_com": "//matrix.org/favicon.ico",
+            "matrix:matrix_org": "//matrix.org/favicon.ico",
+            "irc:mynetwork": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX"
+        }
+    }
 }
