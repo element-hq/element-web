@@ -119,7 +119,8 @@ export function getScopedRTDecorators(scope: any): CompositeDecorator {
         }
     };
 
-    return [usernameDecorator, roomDecorator, emojiDecorator];
+    // TODO Re-enable usernameDecorator and roomDecorator
+    return [emojiDecorator];
 }
 
 export function getScopedMDDecorators(scope: any): CompositeDecorator {
