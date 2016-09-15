@@ -383,7 +383,7 @@ var RoomSubList = React.createClass({
                     highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites' }
                     isInvite={ self.props.label === 'Invites' }
                     refreshSubList={ self._updateSubListCount }
-                    incomingCall={ self.props.incomingCall && (self.props.incomingCall.roomId === room.roomId) ? self.props.incomingCall : null } />
+                    incomingCall={ null } />
             );
         });
     },
@@ -428,6 +428,20 @@ var RoomSubList = React.createClass({
             }
         }
 
+        var incomingCall;
+        if (this.props.incomingCall) {
+            var self = this;
+            // Check if the incoming call is for this section
+            var incomingCallRoom = this.state.sortedList.filter(function(room) {
+                return self.props.incomingCall.roomId === room.roomId;
+            });
+
+            if (incomingCallRoom.length === 1) {
+                var IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
+                incomingCall = <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={ this.props.incomingCall }/>;
+            }
+        }
+
         return (
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
                 <div onClick={ this.onClick } className="mx_RoomSubList_label">
@@ -436,6 +450,7 @@ var RoomSubList = React.createClass({
                     <div className={chevronClasses}></div>
                     {badge}
                 </div>
+                { incomingCall }
             </div>
         );
     },
