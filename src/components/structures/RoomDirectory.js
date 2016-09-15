@@ -223,7 +223,7 @@ module.exports = React.createClass({
             // FIXME: if incrementally typing, keep narrowing down the search set
             // incrementally rather than starting over each time.
             if (this.state.filterByNetwork) {
-                if (this._networkForRoom(a) != this.state.filterByNetwork) return false;
+                if (!this._isRoomInNetwork(a, this.state.filterByNetwork)) return false;
             }
 
             return (((a.name && a.name.toLowerCase().search(filter.toLowerCase()) >= 0) ||
@@ -301,16 +301,14 @@ module.exports = React.createClass({
      * Terrible temporary function that guess what network a public room
      * entry is in, until synapse is able to tell us
      */
-    _networkForRoom(room) {
-        if (room.aliases) {
+    _isRoomInNetwork(room, network) {
+        if (room.aliases && this.networkPatterns[network]) {
             for (const alias of room.aliases) {
-                for (const network of Object.keys(this.networkPatterns)) {
-                    if (this.networkPatterns[network].test(alias)) return network;
-                }
+                if (this.networkPatterns[network].test(alias)) return true;
             }
         }
 
-        return 'matrix:matrix_org';
+        return false;
     },
 
     render: function() {
