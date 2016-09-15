@@ -52,15 +52,29 @@ limitations under the License.
     flex: 1 1 0px;
 }
 
-.mx_MemberList .mx_SearchableEntityList {
-    order: 1;
-    flex: 0 0 auto;
-    -webkit-flex: 0 0 auto;
+.mx_MemberList_query {
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    border-radius: 3px;
+    border: 1px solid #f0f0f0;
+    padding: 9px;
+    color: #454545;
+    background-color: #fff;
+    margin-left: 3px;
+    font-size: 14px;
+    margin-bottom: 8px;
+    width: 189px;
 }
 
-.mx_MemberList .mx_SearchableEntityList_expanded {
-    flex: 1 0 0;
-    -webkit-flex: 1 0 0;
+.mx_MemberList_query::-moz-placeholder {
+    color: #454545;
+    opacity: 0.5;
+    font-size: 14px;
+}
+
+.mx_MemberList_query::-webkit-input-placeholder {
+    color: #454545;
+    opacity: 0.5;
+    font-size: 14px;
 }
 
 .mx_MemberList_joined {
