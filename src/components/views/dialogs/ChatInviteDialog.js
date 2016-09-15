@@ -119,15 +119,19 @@ module.exports = React.createClass({
         } else if (e.keyCode === 38) { // up arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyU();
+            this.addressSelector.onKeyUp();
         } else if (e.keyCode === 40) { // down arrow
             e.stopPropagation();
             e.preventDefault();
             this.addressSelector.onKeyDown();
-        } else if (e.keyCode === 13 || (e.keyCode === 9 && this.state.queryList.length > 0)) { // enter or tab
+        } else if (this.state.queryList.length > 0 && (e.keyCode === 13 || e.keyCode === 9)) { // enter or tab
             e.stopPropagation();
             e.preventDefault();
             this.addressSelector.onKeySelect();
+        } else if (e.keyCode === 13) { // enter
+            e.stopPropagation();
+            e.preventDefault();
+            this.onButtonClick();
         } else if (e.keyCode === 32 || e.keyCode === 188 || e.keyCode === 9) { // space, comma or tab
             e.stopPropagation();
             e.preventDefault();
