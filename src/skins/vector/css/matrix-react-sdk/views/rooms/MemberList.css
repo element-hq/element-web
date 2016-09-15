@@ -60,7 +60,7 @@ limitations under the License.
     color: #454545;
     background-color: #fff;
     margin-left: 3px;
-    font-size: 15px;
+    font-size: 14px;
     margin-bottom: 8px;
     width: 189px;
 }
@@ -68,13 +68,13 @@ limitations under the License.
 .mx_MemberList_query::-moz-placeholder {
     color: #454545;
     opacity: 0.5;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .mx_MemberList_query::-webkit-input-placeholder {
     color: #454545;
     opacity: 0.5;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .mx_MemberList_joined {
