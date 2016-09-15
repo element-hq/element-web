@@ -34,10 +34,6 @@ var SHARE_HISTORY_WARNING =
         turn off, 'Share message history with new users' in the settings for this room.
     </span>
 
-var shown_invite_warning_this_session = false;
-// global promise so people can bulk invite and they all get resolved
-var invite_defer = q.defer();
-
 module.exports = React.createClass({
     displayName: 'MemberList',
 
@@ -47,6 +43,7 @@ module.exports = React.createClass({
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
             truncateAt: INITIAL_LOAD_NUM_MEMBERS,
+            searchQuery: "",
         };
         if (!this.props.roomId) return state;
         var cli = MatrixClientPeg.get();
@@ -159,143 +156,6 @@ module.exports = React.createClass({
             members: self.roomMembers()
         });
     }, 500),
-
-    onThirdPartyInvite: function(inputText) {
-        var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
-        Modal.createDialog(TextInputDialog, {
-            title: "Invite members by email",
-            description: "Please enter one or more email addresses",
-            value: inputText,
-            button: "Invite",
-            onFinished: (should_invite, addresses)=>{
-                if (should_invite) {
-                    // defer the actual invite to the next event loop to give this
-                    // Modal a chance to unmount in case onInvite() triggers a new one
-                    setTimeout(()=>{
-                        this.onInvite(addresses);
-                    }, 0);
-                }
-            }
-        });
-    },
-
-    _doInvite(address) {
-        Invite.inviteToRoom(this.props.roomId, address).catch((err) => {
-            if (err !== null) {
-                console.error("Failed to invite: %s", JSON.stringify(err));
-                if (err.errcode == 'M_FORBIDDEN') {
-                    Modal.createDialog(ErrorDialog, {
-                        title: "Unable to Invite",
-                        description: "You do not have permission to invite people to this room."
-                    });
-                } else {
-                    Modal.createDialog(ErrorDialog, {
-                        title: "Server error whilst inviting",
-                        description: err.message
-                    });
-                }
-            }
-        }).finally(() => {
-            this.setState({
-                inviting: false
-            });
-            // XXX: hacky focus on the invite box
-            setTimeout(function() {
-                var inviteBox = document.getElementById("mx_SearchableEntityList_query");
-                if (inviteBox) {
-                    inviteBox.focus();
-                }
-            }, 0);
-        }).done();
-        this.setState({
-            inviting: true
-        });
-    },
-
-    onInvite: function(inputText) {
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-        var self = this;
-        inputText = inputText.trim(); // react requires es5-shim so we know trim() exists
-
-        if (MatrixClientPeg.get().isGuest()) {
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: "Unable to Invite",
-                description: "Guest user can't invite new users. Please register to be able to invite new users into a room."
-            });
-            return;
-        }
-
-        // email addresses and user IDs do not allow space, comma, semicolon so split
-        // on them for bulk inviting.
-        // '+' here will treat multiple consecutive separators as one separator, so
-        // ', ' separators will also do the right thing.
-        const inputs = inputText.split(/[, ;]+/).filter((x) => {
-            return x.trim().length > 0;
-        });
-
-        let validInputs = 0;
-        for (const input of inputs) {
-            if (Invite.getAddressType(input) != null) {
-                ++validInputs;
-            }
-        }
-
-        if (validInputs == 0) {
-            Modal.createDialog(ErrorDialog, {
-                title: "Invite Error",
-                description: "Malformed ID. Should be an email address or a Matrix ID like '@localpart:domain'"
-            });
-            return;
-        }
-
-        var inviteWarningDefer = q.defer();
-
-        var room = MatrixClientPeg.get().getRoom(this.props.roomId);
-        var history_visibility = room.currentState.getStateEvents('m.room.history_visibility', '');
-        if (history_visibility) history_visibility = history_visibility.getContent().history_visibility;
-
-        if (history_visibility == 'shared' && !shown_invite_warning_this_session) {
-            inviteWarningDefer = invite_defer; // whether we continue depends on this defer
-            var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            Modal.createDialog(QuestionDialog, {
-                title: "Warning",
-                description: SHARE_HISTORY_WARNING,
-                button: "Invite",
-                onFinished: function(should_invite) {
-                    if (should_invite) {
-                        shown_invite_warning_this_session = true;
-                        invite_defer.resolve();
-                    } else {
-                        invite_defer.reject(null);
-                        // reset the promise so we don't auto-reject all invites from
-                        // now on.
-                        invite_defer = q.defer();
-                    }
-                }
-            });
-        } else {
-            inviteWarningDefer.resolve();
-        }
-
-        const promise = inviteWarningDefer.promise;
-
-        if (inputs.length == 1) {
-            // for a single address, we just send the invite
-            promise.done(() => {
-                this._doInvite(inputs[0]);
-            });
-        } else {
-            // if there are several, display the confirmation/progress dialog
-            promise.done(() => {
-                const MultiInviteDialog = sdk.getComponent('views.dialogs.MultiInviteDialog');
-                Modal.createDialog(MultiInviteDialog, {
-                    roomId: this.props.roomId,
-                    inputs: inputs,
-                });
-            });
-        }
-    },
 
     getMemberDict: function() {
         if (!this.props.roomId) return {};
@@ -423,10 +283,8 @@ module.exports = React.createClass({
             return userB.getLastActiveTs() - userA.getLastActiveTs();
     },
 
-    onSearchQueryChanged: function(input) {
-        this.setState({
-            searchQuery: input
-        });
+    onSearchQueryChanged: function(ev) {
+        this.setState({ searchQuery: ev.target.value });
     },
 
     makeMemberTiles: function(membership, query) {
@@ -489,8 +347,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var InviteMemberList = sdk.getComponent("rooms.InviteMemberList");
-
         var invitedSection = null;
         var invitedMemberTiles = this.makeMemberTiles('invite', this.state.searchQuery);
         if (invitedMemberTiles.length > 0) {
@@ -504,35 +360,25 @@ module.exports = React.createClass({
             );
         }
 
-        var inviteMemberListSection;
-        if (this.state.inviting) {
-            var Loader = sdk.getComponent("elements.Spinner");
-            inviteMemberListSection = (
-                <Loader />
-            );
-        }
-        else {
-            inviteMemberListSection = (
-                <InviteMemberList roomId={this.props.roomId}
-                    onSearchQueryChanged={this.onSearchQueryChanged}
-                    onThirdPartyInvite={this.onThirdPartyInvite}
-                    onInvite={this.onInvite} />
-            );
-        }
-
+        var inputBox = (
+            <form autoComplete="off">
+                <input className="mx_MemberList_query" id="mx_MemberList_query" type="text"
+                    onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
+                    placeholder="Filter room members" />
+            </form>
+        );
 
         var TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
             <div className="mx_MemberList">
-                    {inviteMemberListSection}
-                    <GeminiScrollbar autoshow={true}
-                                     className="mx_MemberList_joined mx_MemberList_outerWrapper">
-                        <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
-                                createOverflowElement={this._createOverflowTile}>
-                            {this.makeMemberTiles('join', this.state.searchQuery)}
-                        </TruncatedList>
-                        {invitedSection}
-                    </GeminiScrollbar>
+                { inputBox }
+                <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
+                    <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
+                            createOverflowElement={this._createOverflowTile}>
+                        {this.makeMemberTiles('join', this.state.searchQuery)}
+                    </TruncatedList>
+                    {invitedSection}
+                </GeminiScrollbar>
             </div>
         );
     }
