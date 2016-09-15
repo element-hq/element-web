@@ -240,7 +240,7 @@ module.exports = React.createClass({
                 <div className={ dmClasses } onClick={this._onClickDM} >
                     <img className="mx_RoomTagContextMenu_icon" src="img/icon_context_person.svg" width="15" height="15" />
                     <img className="mx_RoomTagContextMenu_icon_set" src="img/icon_context_person_on.svg" width="15" height="15" />
-                    Direct Message
+                    Direct Chat
                 </div>
                 <hr className="mx_RoomTagContextMenu_separator" />
                 <div className={ leaveClasses } onClick={(myMember && myMember.membership === "join") ? this._onClickLeave : null} >
