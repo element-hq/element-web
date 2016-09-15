@@ -412,13 +412,15 @@ module.exports = React.createClass({
     onManageIntegrations(ev) {
         ev.preventDefault();
         var IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        if (this._calcSavePromises().length === 0) {
-            this.props.onCancelClick(ev);
-        }
         Modal.createDialog(IntegrationsManager, {
             src: this.scalarClient.hasCredentials() ?
                     this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
-                    null
+                    null,
+            onFinished: ()=>{
+                if (this._calcSavePromises().length === 0) {
+                    this.props.onCancelClick(ev);
+                }
+            },
         }, "");
     },
 
