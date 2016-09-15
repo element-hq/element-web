@@ -446,11 +446,11 @@ var RoomSubList = React.createClass({
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
                 <div onClick={ this.onClick } className="mx_RoomSubList_label">
                     { this.props.collapsed ? '' : this.props.label }
-                    <div className="mx_RoomSubList_roomCount">{roomCount}</div>
+                    <div className="mx_RoomSubList_roomCount">{ roomCount }</div>
                     <div className={chevronClasses}></div>
-                    {badge}
+                    { badge }
+                    { incomingCall }
                 </div>
-                { incomingCall }
             </div>
         );
     },
