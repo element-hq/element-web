@@ -85,8 +85,7 @@ var RoomSubList = React.createClass({
     getInitialState: function() {
         return {
             hidden: this.props.startAsHidden || false,
-            capTruncate: this.props.list.length > TRUNCATE_AT,
-            truncateAt: this.props.list.length > TRUNCATE_AT ? TRUNCATE_AT : -1,
+            truncateAt: TRUNCATE_AT,
             sortedList: [],
         };
     },
