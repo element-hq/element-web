@@ -21,6 +21,10 @@ var CallHandler = require("../../../CallHandler");
 module.exports = React.createClass({
     displayName: 'IncomingCallBox',
 
+    propTypes: {
+        incomingCall: React.PropTypes.object,
+    },
+
     onAnswerClick: function() {
         dis.dispatch({
             action: 'answer',
@@ -36,9 +40,13 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var room = null;
+        if (this.props.incomingCall) {
+            room = MatrixClientPeg.get().getRoom(this.props.incomingCall.roomId);
+        }
 
-        var room = this.props.incomingCall ? MatrixClientPeg.get().getRoom(this.props.incomingCall.roomId) : null;
         var caller = room ? room.name : "unknown";
+
         return (
             <div className="mx_IncomingCallBox" id="incomingCallBox">
                 <img className="mx_IncomingCallBox_chevron" src="img/chevron-left.png" width="9" height="16" />

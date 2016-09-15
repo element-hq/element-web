@@ -74,6 +74,7 @@ module.exports = React.createClass({
     componentDidUpdate: function() {
         // Reinitialise the stickyHeaders when the component is updated
         this._updateStickyHeaders(true);
+        this._repositionIncomingCallBox(undefined, false);
     },
 
     onAction: function(payload) {
@@ -326,39 +327,23 @@ module.exports = React.createClass({
     _repositionIncomingCallBox: function(e, firstTime) {
         var incomingCallBox = document.getElementById("incomingCallBox");
         if (incomingCallBox && incomingCallBox.parentElement) {
-            var scroll = this._getScrollNode();
-            var top = (scroll.offsetTop + incomingCallBox.parentElement.offsetTop - scroll.scrollTop);
+            var scrollArea = this._getScrollNode();
+            // Use the offset of the top of the scroll area from the window
+            // as this is used to calculate the CSS fixed top position for the stickies
+            var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
+            // Use the offset of the top of the componet from the window
+            // as this is used to calculate the CSS fixed top position for the stickies
+            var scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;
 
-            if (firstTime) {
-                // scroll to make sure the callbox is on the screen...
-                if (top < 10) { // 10px of vertical margin at top of screen
-                    scroll.scrollTop = incomingCallBox.parentElement.offsetTop - 10;
-                }
-                else if (top > scroll.clientHeight - incomingCallBox.offsetHeight + 50) {
-                    scroll.scrollTop = incomingCallBox.parentElement.offsetTop - scroll.offsetHeight + incomingCallBox.offsetHeight - 50;
-                }
-                // recalculate top in case we clipped it.
-                top = (scroll.offsetTop + incomingCallBox.parentElement.offsetTop - scroll.scrollTop);
-            }
-            else {
-                // stop the box from scrolling off the screen
-                if (top < 10) {
-                    top = 10;
-                }
-                else if (top > scroll.clientHeight - incomingCallBox.offsetHeight + 50) {
-                    top = scroll.clientHeight - incomingCallBox.offsetHeight + 50;
-                }
-            }
-
-            // slightly ugly hack to offset if there's a toolbar present.
-            // we really should be calculating our absolute offsets of top by recursing through the DOM
-            toolbar = document.getElementsByClassName("mx_MatrixToolbar")[0];
-            if (toolbar) {
-                top += toolbar.offsetHeight;
-            }
+            var top = (incomingCallBox.parentElement.getBoundingClientRect().top + window.pageYOffset)
+            // Make sure we don't go too far up, if the headers aren't sticky
+            top = (top < scrollAreaOffset) ? scrollAreaOffset : top;
+            // make sure we don't go too far down, if the headers aren't sticky
+            var bottomMargin = scrollAreaOffset + (scrollAreaHeight - 45);
+            top = (top > bottomMargin) ? bottomMargin : top;
 
             incomingCallBox.style.top = top + "px";
-            incomingCallBox.style.left = scroll.offsetLeft + scroll.offsetWidth + "px";
+            incomingCallBox.style.left = scrollArea.offsetLeft + scrollArea.offsetWidth + 12 + "px";
         }
     },
 
