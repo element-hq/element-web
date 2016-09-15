@@ -76,23 +76,23 @@ module.exports = React.createClass({
                             </tr>
                             <tr>
                                 <td>Sender device name</td>
-                                <td>{ device.getDisplayName() }</td>
+                                <td>{ device ? device.getDisplayName() : <i>unknown device</i>}</td>
                             </tr>
                             <tr>
                                 <td>Sender device ID</td>
-                                <td>{ device.deviceId }</td>
+                                <td>{ device ? <code>{ device.deviceId }</code> : <i>unknown device</i>}</td>
                             </tr>
                             <tr>
-                                <td>Sender device verification:</td>
+                                <td>Sender device verification</td>
                                 <td>{ MatrixClientPeg.get().isEventSenderVerified(event) ? "verified" : <b>NOT verified</b> }</td>
                             </tr>
                             <tr>
                                 <td>Sender device ed25519 identity key</td>
-                                <td>{ device.getFingerprint() }</td>
+                                <td>{ device ? <code>{device.getFingerprint()}</code> : <i>unknown device</i>}</td>
                             </tr>
                             <tr>
                                 <td>Sender device curve25519 olm key</td>
-                                <td>{ event.getWireContent().sender_key }</td>
+                                <td><code>{ event.getWireContent().sender_key }</code></td>
                             </tr>
                             <tr>
                                 <td>Algorithm</td>
@@ -106,6 +106,10 @@ module.exports = React.createClass({
                             </tr>
                             ) : ''
                         }
+                            <tr>
+                                <td>Session ID</td>
+                                <td><code>{ event.getWireContent().session_id }</code></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

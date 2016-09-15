@@ -471,10 +471,10 @@ module.exports = React.createClass({
                 e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
             }
             else if (this.state.verified == true || (e2eEnabled && this.props.eventSendStatus)) {
-                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" alt="Encrypted by a verified device"/>;
+                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-verified.svg" width="10" height="12"/>;
             }
             else {
-                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }} alt="Encrypted by an unverified device!"/>;
+                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }}/>;
             }
         }
         else if (e2eEnabled) {

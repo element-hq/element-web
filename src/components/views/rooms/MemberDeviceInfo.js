@@ -87,6 +87,10 @@ export default class MemberDeviceInfo extends React.Component {
     }
 
     render() {
+        if (!this.props.device) {
+            return <div className="mx_MemberDeviceInfo"/>;
+        }
+
         var indicator = null, blockButton = null, verifyButton = null;
         if (this.props.device.isBlocked()) {
             blockButton = (
@@ -120,36 +124,39 @@ export default class MemberDeviceInfo extends React.Component {
             );
         }
 
-        if (this.props.device.isBlocked()) {
-            indicator = (
-                <div className="mx_MemberDeviceInfo_blocked">Blocked</div>
-            );
-        } else if (this.props.device.isVerified()) {
-            indicator = (
-                    <div className="mx_MemberDeviceInfo_verified">Verified</div>
-            );
-
-        } else {
-            indicator = (
-                <div className="mx_MemberDeviceInfo_unverified">Unverified</div>
-            );
-        }
-
-        var deviceName = this.props.device.getDisplayName() || this.props.device.deviceId;
-
-        var info;
         if (!this.props.hideInfo) {
-            info = (
-                <div className="mx_MemberDeviceInfo_deviceInfo">
-                    <div className="mx_MemberDeviceInfo_deviceId">{deviceName}</div>
-                    {indicator}
+            if (this.props.device.isBlocked()) {
+                indicator = (
+                    <div className="mx_MemberDeviceInfo_blocked">
+                        <img src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} alt="Blocked"/>
+                    </div>
+                );
+            } else if (this.props.device.isVerified()) {
+                indicator = (
+                    <div className="mx_MemberDeviceInfo_verified">
+                        <img src="img/e2e-verified.svg" width="10" height="12" alt="Verified"/>
+                    </div>
+                );
+            } else {
+                indicator = (
+                    <div className="mx_MemberDeviceInfo_unverified">
+                        <img src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }} alt="Unverified"/>
+                    </div>
+                );
+            }
+
+            var deviceName = this.props.device.getDisplayName() || this.props.device.deviceId;
+
+            var info = (
+                <div className="mx_MemberDeviceInfo_deviceInfo" title={this.props.device.deviceId}>
+                    <div className="mx_MemberDeviceInfo_deviceId">{deviceName}{indicator}</div>
                 </div>
             );
         }
 
         // add the deviceId as a titletext to help with debugging
         return (
-            <div className="mx_MemberDeviceInfo" title={this.props.device.deviceId}>
+            <div className="mx_MemberDeviceInfo">
                 { info }
                 { verifyButton }
                 { blockButton }
