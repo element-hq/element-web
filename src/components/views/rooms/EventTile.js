@@ -409,7 +409,7 @@ module.exports = React.createClass({
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,
             menu: this.state.menu,
-            mx_EventTile_verified: this.state.verified == true || (e2eEnabled && this.props.eventSendStatus),
+            mx_EventTile_verified: this.state.verified == true,
             mx_EventTile_unverified: this.state.verified == false,
             mx_EventTile_bad: this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted',
         });
