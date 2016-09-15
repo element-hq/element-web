@@ -32,15 +32,20 @@ var sanitizeHtml = require('sanitize-html');
 
 linkifyMatrix(linkify);
 
-const NETWORK_PATTERNS = {
-    'gitter': /#gitter_.*/,
-    'irc:freenode': /#freenode_.*:.*/,
-    'irc:mozilla': /#mozilla_.*:.*/,
-    'irc:w3c': /@w3c_.*:.*/,
-};
-
 module.exports = React.createClass({
     displayName: 'RoomDirectory',
+
+    propTypes: {
+        config: React.PropTypes.object,
+    },
+
+    getDefaultProps: function() {
+        return {
+            config: {
+                networks: [],
+            },
+        }
+    },
 
     getInitialState: function() {
         return {
@@ -52,6 +57,14 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        // precompile Regexps
+        this.networkPatterns = {};
+        if (this.props.config.networkPatterns) {
+            for (const network of Object.keys(this.props.config.networkPatterns)) {
+                this.networkPatterns[network] = new RegExp(this.props.config.networkPatterns[network]);
+            }
+        }
+
         // dis.dispatch({
         //     action: 'ui_opacity',
         //     sideOpacity: 0.3,
@@ -291,8 +304,8 @@ module.exports = React.createClass({
     _networkForRoom(room) {
         if (room.aliases) {
             for (const alias of room.aliases) {
-                for (const network of Object.keys(NETWORK_PATTERNS)) {
-                    if (NETWORK_PATTERNS[network].test(alias)) return network;
+                for (const network of Object.keys(this.networkPatterns)) {
+                    if (this.networkPatterns[network].test(alias)) return network;
                 }
             }
         }
@@ -318,7 +331,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomDirectory_list">
                     <div className="mx_RoomDirectory_listheader">
                         <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
-                        <NetworkDropdown onNetworkChange={this.onNetworkChange} />
+                        <NetworkDropdown config={this.props.config} onNetworkChange={this.onNetworkChange} />
                     </div>
                     <GeminiScrollbar className="mx_RoomDirectory_tableWrapper">
                         <table ref="directory_table" className="mx_RoomDirectory_table">

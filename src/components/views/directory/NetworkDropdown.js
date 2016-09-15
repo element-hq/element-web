@@ -33,30 +33,6 @@ export default class NetworkDropdown extends React.Component {
             expanded: false,
             selectedNetwork: null,
         };
-
-        this.networks = [
-            'matrix:matrix_org',
-            'gitter',
-            'irc:freenode',
-            'irc:mozilla',
-            'irc:w3c',
-        ];
-
-        this.networkNames = {
-            'matrix:matrix_org': 'matrix.org',
-            'irc:freenode': 'Freenode',
-            'irc:mozilla': 'Mozilla',
-            'irc:w3c': 'W3C',
-            'gitter': 'Gitter',
-        };
-
-        this.networkIcons = {
-            'matrix:matrix_org': '//matrix.org/favicon.ico',
-            'irc:freenode': '//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX',
-            'irc:mozilla': '//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX',
-            'irc:w3c': '//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX',
-            'gitter': '//gitter.im/favicon.ico',
-        };
     }
 
     componentWillMount() {
@@ -124,8 +100,8 @@ export default class NetworkDropdown extends React.Component {
             name = 'All networks';
             span_class = 'mx_NetworkDropdown_menu_all';
         } else {
-            name = this.networkNames[network];
-            icon = <img src={this.networkIcons[network]} />;
+            name = this.props.config.networkNames[network];
+            icon = <img src={this.props.config.networkIcons[network]} />;
             span_class = 'mx_NetworkDropdown_menu_network';
         }
 
@@ -143,7 +119,7 @@ export default class NetworkDropdown extends React.Component {
         let menu;
         if (this.state.expanded) {
            const menu_options = [this._optionForNetwork(null)];
-            for (const network of this.networks) {
+            for (const network of this.props.config.networks) {
                 menu_options.push(this._optionForNetwork(network));
             }
             menu = <div className="mx_NetworkDropdown_menu">
@@ -163,5 +139,12 @@ export default class NetworkDropdown extends React.Component {
 
 NetworkDropdown.propTypes = {
     onNetworkChange: React.PropTypes.func.isRequired,
+    config: React.PropTypes.object,
+};
+
+NetworkDropdown.defaultProps = {
+    config: {
+        networks: [],
+    }
 };
 
