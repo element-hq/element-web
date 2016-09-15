@@ -107,8 +107,13 @@ export default class DevicesPanelEntry extends React.Component {
             );
         }
 
+        var myDeviceClass = '';
+        if (device.device_id === MatrixClientPeg.get().getDeviceId()) {
+            myDeviceClass = " mx_DevicesPanel_myDevice";
+        }
+
         return (
-            <div className="mx_DevicesPanel_device">
+            <div className={ "mx_DevicesPanel_device" + myDeviceClass }>
                 <div className="mx_DevicesPanel_deviceId">
                     {device.device_id}
                 </div>

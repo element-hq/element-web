@@ -137,3 +137,8 @@ export default class DevicesPanel extends React.Component {
         );
     }
 }
+
+DevicesPanel.displayName = 'MemberDeviceInfo';
+DevicesPanel.propTypes = {
+    className: React.PropTypes.string,
+};

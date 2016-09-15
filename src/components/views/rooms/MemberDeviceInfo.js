@@ -16,6 +16,8 @@ limitations under the License.
 
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import sdk from '../../../index';
+import Modal from '../../../Modal';
 
 export default class MemberDeviceInfo extends React.Component {
     constructor(props) {
@@ -27,9 +29,43 @@ export default class MemberDeviceInfo extends React.Component {
     }
 
     onVerifyClick() {
-        MatrixClientPeg.get().setDeviceVerified(
-            this.props.userId, this.props.device.deviceId, true
-        );
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createDialog(QuestionDialog, {
+            title: "Verify device",
+            description: (
+                <div>
+                    <p>
+                        To verify that this device can be trusted, please contact its
+                        owner using some other means (e.g. in person or a phone call)
+                        and ask them whether the key they see in their User Settings
+                        for this device matches the key below:
+                    </p>
+                    <div className="mx_UserSettings_cryptoSection">
+                        <ul>
+                            <li><label>Device name:</label> <span>{ this.props.device.getDisplayName() }</span></li>
+                            <li><label>Device ID:</label>   <span><code>{ this.props.device.deviceId}</code></span></li>
+                            <li><label>Device key:</label>  <span><code><b>{ this.props.device.getFingerprint() }</b></code></span></li>
+                        </ul>
+                    </div>
+                    <p>
+                        If it matches, press the verify button below.
+                        If it doesn't, then someone else is intercepting this device
+                        and you probably want to press the block button instead.
+                    </p>
+                    <p>
+                        In future this verification process will be more sophisticated.
+                    </p>
+                </div>
+            ),
+            button: "I verify that the keys match",
+            onFinished: confirm=>{
+                if (confirm) {
+                    MatrixClientPeg.get().setDeviceVerified(
+                        this.props.userId, this.props.device.deviceId, true
+                    );
+                }
+            },
+        });
     }
 
     onUnverifyClick() {
@@ -104,12 +140,9 @@ export default class MemberDeviceInfo extends React.Component {
         var info;
         if (!this.props.hideInfo) {
             info = (
-                <div>
+                <div className="mx_MemberDeviceInfo_deviceInfo">
                     <div className="mx_MemberDeviceInfo_deviceId">{deviceName}</div>
                     {indicator}
-                    <div className="mx_MemberDeviceInfo_deviceKey">
-                        {this.props.device.getFingerprint()}
-                    </div>
                 </div>
             );
         }
