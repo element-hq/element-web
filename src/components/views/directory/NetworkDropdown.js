@@ -23,7 +23,7 @@ export default class NetworkDropdown extends React.Component {
         this.dropdownRootElement = null;
         this.ignoreEvent = null;
 
-        this.onClick = this.onClick.bind(this);
+        this.onInputClick = this.onInputClick.bind(this);
         this.onRootClick = this.onRootClick.bind(this);
         this.onDocumentClick = this.onDocumentClick.bind(this);
         this.onNetworkClick = this.onNetworkClick.bind(this);
@@ -31,24 +31,30 @@ export default class NetworkDropdown extends React.Component {
 
         this.state = {
             expanded: false,
-            selectedNetwork: 'all',
+            selectedNetwork: null,
         };
 
         this.networks = [
-            'matrix_org',
-            'freenode',
+            'matrix:matrix_org',
             'gitter',
+            'irc:freenode',
+            'irc:mozilla',
+            'irc:w3c',
         ];
 
         this.networkNames = {
-            'matrix_org': 'matrix.org',
-            'freenode': 'Freenode',
+            'matrix:matrix_org': 'matrix.org',
+            'irc:freenode': 'Freenode',
+            'irc:mozilla': 'Mozilla',
+            'irc:w3c': 'W3C',
             'gitter': 'Gitter',
         };
 
         this.networkIcons = {
-            'matrix_org': '//matrix.org/favicon.ico',
-            'freenode': '//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX',
+            'matrix:matrix_org': '//matrix.org/favicon.ico',
+            'irc:freenode': '//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX',
+            'irc:mozilla': '//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX',
+            'irc:w3c': '//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX',
             'gitter': '//gitter.im/favicon.ico',
         };
     }
@@ -83,10 +89,11 @@ export default class NetworkDropdown extends React.Component {
         this.ignoreEvent = ev;
     }
 
-    onClick(ev) {
+    onInputClick(ev) {
         this.setState({
             expanded: !this.state.expanded,
         });
+        ev.preventDefault();
     }
 
     onNetworkClick(network, ev) {
@@ -94,6 +101,7 @@ export default class NetworkDropdown extends React.Component {
             expanded: false,
             selectedNetwork: network,
         });
+        this.props.onNetworkChange(network);
     }
 
     collectRoot(e) {
@@ -106,47 +114,54 @@ export default class NetworkDropdown extends React.Component {
         this.dropdownRootElement = e;
     }
 
-    _optionForNetwork(network) {
+    _optionForNetwork(network, wire_onclick) {
+        if (wire_onclick === undefined) wire_onclick = true;
         let icon;
         let name;
-        let spanClass;
+        let span_class;
 
-        if (network == 'all') {
+        if (network === null) {
             name = 'All networks';
-            spanClass = 'mx_NetworkDropdown_menu_all';
+            span_class = 'mx_NetworkDropdown_menu_all';
         } else {
             name = this.networkNames[network];
             icon = <img src={this.networkIcons[network]} />;
-            spanClass = 'mx_NetworkDropdown_menu_network';
+            span_class = 'mx_NetworkDropdown_menu_network';
         }
 
-        return <div key={network} className="mx_NetworkDropdown_networkoption" onClick={this.onNetworkClick.bind(this, network)}>
+        const click_handler = wire_onclick ? this.onNetworkClick.bind(this, network) : null;
+
+        return <div key={network} className="mx_NetworkDropdown_networkoption" onClick={click_handler}>
             {icon}
-            <span className={spanClass}>{name}</span>
+            <span className={span_class}>{name}</span>
         </div>;
     }
 
     render() {
-        const currentValue = this._optionForNetwork(this.state.selectedNetwork);
+        const current_value = this._optionForNetwork(this.state.selectedNetwork, false);
 
         let menu;
         if (this.state.expanded) {
-           const menuOptions = [this._optionForNetwork('all')];
+           const menu_options = [this._optionForNetwork(null)];
             for (const network of this.networks) {
-                menuOptions.push(this._optionForNetwork(network));
+                menu_options.push(this._optionForNetwork(network));
             }
             menu = <div className="mx_NetworkDropdown_menu">
-                {menuOptions}
+                {menu_options}
             </div>;
         }
 
         return <div className="mx_NetworkDropdown" ref={this.collectRoot}>
-            <div className="mx_NetworkDropdown_input" onClick={this.onClick}>
-                {currentValue}
+            <div className="mx_NetworkDropdown_input" onClick={this.onInputClick}>
+                {current_value}
                 <span className="mx_NetworkDropdown_arrow"></span>
                 {menu}
             </div>
         </div>;
     }
 }
+
+NetworkDropdown.propTypes = {
+    onNetworkChange: React.PropTypes.func.isRequired,
+};
 

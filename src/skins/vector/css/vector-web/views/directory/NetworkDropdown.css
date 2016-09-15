@@ -26,6 +26,7 @@ limitations under the License.
     font-size: 13px;
     margin-top: 12px;
     margin-bottom: 12px;
+    user-select: none;
 }
 
 .mx_NetworkDropdown_arrow {
