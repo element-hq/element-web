@@ -47,6 +47,7 @@ var eventTileTypes = {
     'm.room.topic'  : 'messages.TextualEvent',
     'm.room.third_party_invite' : 'messages.TextualEvent',
     'm.room.history_visibility' : 'messages.TextualEvent',
+    'm.room.encryption' : 'messages.TextualEvent',
 };
 
 var MAX_READ_AVATARS = 5;

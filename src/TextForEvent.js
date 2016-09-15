@@ -101,19 +101,19 @@ function textForMemberEvent(ev) {
                 return targetName + " left the room.";
             }
     }
-};
+}
 
 function textForTopicEvent(ev) {
     var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
     return senderDisplayName + ' changed the topic to "' + ev.getContent().topic + '"';
-};
+}
 
 function textForRoomNameEvent(ev) {
     var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
     return senderDisplayName + ' changed the room name to "' + ev.getContent().name + '"';
-};
+}
 
 function textForMessageEvent(ev) {
     var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
@@ -125,19 +125,19 @@ function textForMessageEvent(ev) {
         message = senderDisplayName + " sent an image.";
     }
     return message;
-};
+}
 
 function textForCallAnswerEvent(event) {
     var senderName = event.sender ? event.sender.name : "Someone";
     var supported = MatrixClientPeg.get().supportsVoip() ? "" : " (not supported by this browser)";
     return senderName + " answered the call." + supported;
-};
+}
 
 function textForCallHangupEvent(event) {
     var senderName = event.sender ? event.sender.name : "Someone";
     var supported = MatrixClientPeg.get().supportsVoip() ? "" : " (not supported by this browser)";
     return senderName + " ended the call." + supported;
-};
+}
 
 function textForCallInviteEvent(event) {
     var senderName = event.sender ? event.sender.name : "Someone";
@@ -149,13 +149,13 @@ function textForCallInviteEvent(event) {
     }
     var supported = MatrixClientPeg.get().supportsVoip() ? "" : " (not supported by this browser)";
     return senderName + " placed a " + type + " call." + supported;
-};
+}
 
 function textForThreePidInviteEvent(event) {
     var senderName = event.sender ? event.sender.name : event.getSender();
     return senderName + " sent an invitation to " + event.getContent().display_name +
      " to join the room.";
-};
+}
 
 function textForHistoryVisibilityEvent(event) {
     var senderName = event.sender ? event.sender.name : event.getSender();
@@ -177,7 +177,12 @@ function textForHistoryVisibilityEvent(event) {
         text += " unknown (" + vis + ")";
     }
     return text;
-};
+}
+
+function textForEncryptionEvent(event) {
+    var senderName = event.sender ? event.sender.name : event.getSender();
+    return senderName + " turned on end-to-end encryption (algorithm " + event.getContent().algorithm + ")";
+}
 
 var handlers = {
     'm.room.message': textForMessageEvent,
@@ -189,6 +194,7 @@ var handlers = {
     'm.call.hangup':  textForCallHangupEvent,
     'm.room.third_party_invite': textForThreePidInviteEvent,
     'm.room.history_visibility': textForHistoryVisibilityEvent,
+    'm.room.encryption': textForEncryptionEvent,
 };
 
 module.exports = {
