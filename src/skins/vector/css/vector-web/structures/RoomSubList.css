@@ -159,11 +159,19 @@ limitations under the License.
     font-size: 13px;
 }
 
+.collapsed .mx_RoomSubList_ellipsis {
+    height: 16px;
+}
+
 .mx_RoomSubList_line {
     display: inline-block;
     width: 159px;
     border-top: dotted 2px #76cfa6;
     vertical-align: middle;
+}
+
+.collapsed .mx_RoomSubList_line {
+    display: none;
 }
 
 .mx_RoomSubList_more {
@@ -177,6 +185,10 @@ limitations under the License.
     padding-right: 7px;
     padding-left: 7px;
     vertical-align: middle;
+}
+
+.collapsed .mx_RoomSubList_more {
+    display: none;
 }
 
 .mx_RoomSubList_moreBadge {
@@ -199,9 +211,16 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_RoomSubList_ellipsis .mx_RoomSubList_chevronDown {
-    position: absolute;
-    top: 4px;
-    right: 16px;
+.collapsed .mx_RoomSubList_moreBadge {
+    position: static;
+    margin-left: 16px;
+    margin-top: 2px;
 }
+
+.mx_RoomSubList_ellipsis .mx_RoomSubList_chevronDown {
+    position: relative;
+    top: 4px;
+    left: 2px;
+}
+
 

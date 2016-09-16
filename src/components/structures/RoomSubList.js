@@ -422,12 +422,12 @@ var RoomSubList = React.createClass({
     },
 
     _createOverflowTile: function(overflowCount, totalCount) {
+        var content = <div className="mx_RoomSubList_chevronDown"></div>;
         return (
             <div className="mx_RoomSubList_ellipsis" onClick={this._showFullMemberList}>
                 <div className="mx_RoomSubList_line"></div>
                 <div className="mx_RoomSubList_more">more</div>
-                <div className="mx_RoomSubList_moreBadge"></div>
-                <div className="mx_RoomSubList_chevronDown"></div>
+                <div className="mx_RoomSubList_moreBadge">{ content }</div>
             </div>
         );
     },
