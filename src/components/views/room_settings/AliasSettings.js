@@ -70,22 +70,6 @@ module.exports = React.createClass({
     saveSettings: function() {
         var promises = [];
 
-        // save new canonical alias
-        var oldCanonicalAlias = null;
-        if (this.props.canonicalAliasEvent) {
-            oldCanonicalAlias = this.props.canonicalAliasEvent.getContent().alias;
-        }
-        if (oldCanonicalAlias !== this.state.canonicalAlias) {
-            console.log("AliasSettings: Updating canonical alias");
-            promises.push(
-                MatrixClientPeg.get().sendStateEvent(
-                    this.props.roomId, "m.room.canonical_alias", {
-                        alias: this.state.canonicalAlias
-                    }, ""
-                )
-            );
-        }
-
         // save new aliases for m.room.aliases
         var aliasOperations = this.getAliasOperations();
         for (var i = 0; i < aliasOperations.length; i++) {
@@ -109,6 +93,23 @@ module.exports = React.createClass({
                 default:
                     console.log("Unknown alias operation, ignoring: " + alias_operation.place);
             }
+        }
+
+
+        // save new canonical alias
+        var oldCanonicalAlias = null;
+        if (this.props.canonicalAliasEvent) {
+            oldCanonicalAlias = this.props.canonicalAliasEvent.getContent().alias;
+        }
+        if (oldCanonicalAlias !== this.state.canonicalAlias) {
+            console.log("AliasSettings: Updating canonical alias");
+            promises = [ q.all(promises).then(
+                MatrixClientPeg.get().sendStateEvent(
+                    this.props.roomId, "m.room.canonical_alias", {
+                        alias: this.state.canonicalAlias
+                    }, ""
+                )
+            ) ];
         }
 
         return promises;
