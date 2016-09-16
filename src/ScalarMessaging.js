@@ -174,6 +174,25 @@ function inviteUser(event, roomId, userId) {
     });
 }
 
+function setPlumbingState(event, roomId, status) {
+    if (typeof status !== 'string') {
+        throw new Error('Plumbing state status should be a string');
+    }
+    console.log(`Received request to set plumbing state to status "${status}" in room ${roomId}`);
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, "You need to be logged in.");
+        return;
+    }
+    client.sendStateEvent(roomId, "m.room.plumbing", { status : status }).done(() => {
+        sendResponse(event, {
+            success: true,
+        });
+    }, (err) => {
+        sendError(event, err.message ? err.message : "Failed to send request.", err);
+    });
+}
+
 function setBotOptions(event, roomId, userId) {
     console.log(`Received request to set options for bot ${userId} in room ${roomId}`);
     const client = MatrixClientPeg.get();
@@ -311,6 +330,9 @@ const onMessage = function(event) {
         // Getting join rules does not require userId
         if (event.data.action === "join_rules_state") {
             getJoinRules(event, roomId);
+            return;
+        } else if (event.data.action === "set_plumbing_state") {
+            setPlumbingState(event, roomId, event.data.status);
             return;
         }
 
