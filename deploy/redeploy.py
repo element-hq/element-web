@@ -122,7 +122,8 @@ def on_receive_jenkins_poke():
 
     create_symlink(source=os.path.join(untar_location, "vector"), linkname=arg_symlink)
 
-    create_symlink(source=arg_config_location, linkname=os.path.join(untar_location, "vector", 'config.json'))
+    if arg_config_location:
+        create_symlink(source=arg_config_location, linkname=os.path.join(untar_location, "vector", 'config.json'))
 
     return jsonify({})
 
@@ -154,6 +155,12 @@ if __name__ == "__main__":
             "Write a symlink to this location pointing to the extracted tarball. \
             New builds will keep overwriting this symlink. The symlink will point \
             to the /vector directory INSIDE the tarball."
+        )
+    )
+    parser.add_argument(
+        "--config", dest="config", help=(
+            "Write a symlink to config.json in the extracted tarball. \
+            To this location."
         )
     )
     args = parser.parse_args()
