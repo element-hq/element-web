@@ -122,7 +122,7 @@ def on_receive_jenkins_poke():
 
     create_symlink(source=os.path.join(untar_location, "vector"), linkname=arg_symlink)
 
-    create_symlink(source=arg_config_location linkname=os.path.join(untar_location, "vector", 'config.json'))
+    create_symlink(source=arg_config_location, linkname=os.path.join(untar_location, "vector", 'config.json'))
 
     return jsonify({})
 
