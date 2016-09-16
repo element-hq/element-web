@@ -215,22 +215,24 @@ module.exports = React.createClass({
     onFilterChange: function(ev) {
         const alias = ev.target.value;
 
-        if (ev.key == "Enter") {
-            this.showRoomAlias(alias);
-        } else {
-            this.filterString = alias || null;
+        this.filterString = alias || null;
 
-            // don't send the request for a little bit,
-            // no point hammering the server with a
-            // request for every keystroke, let the
-            // user finish typing.
-            if (this.filterTimeout) {
-                clearTimeout(this.filterTimeout);
-            }
-            this.filterTimeout = setTimeout(() => {
-                this.filterTimeout = null;
-                this.refreshRoomList();
-            }, 300);
+        // don't send the request for a little bit,
+        // no point hammering the server with a
+        // request for every keystroke, let the
+        // user finish typing.
+        if (this.filterTimeout) {
+            clearTimeout(this.filterTimeout);
+        }
+        this.filterTimeout = setTimeout(() => {
+            this.filterTimeout = null;
+            this.refreshRoomList();
+        }, 300);
+    },
+
+    onFilterKeyUp: function(ev) {
+        if (ev.key == "Enter") {
+            this.showRoomAlias(ev.target.value);
         }
     },
 
@@ -397,7 +399,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomDirectory_list">
                     <div className="mx_RoomDirectory_listheader">
                         <input type="text" placeholder="Find a room by keyword or room ID (#foo:matrix.org)"
-                            className="mx_RoomDirectory_input" size="64" onChange={this.onFilterChange}
+                            className="mx_RoomDirectory_input" size="64" onChange={this.onFilterChange} onKeyUp={this.onFilterKeyUp}
                         />
                         <NetworkDropdown config={this.props.config} onNetworkChange={this.onNetworkChange} />
                     </div>
