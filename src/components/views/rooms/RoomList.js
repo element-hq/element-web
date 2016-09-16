@@ -261,7 +261,10 @@ module.exports = React.createClass({
             }
         });
 
-        if (s.lists["im.vector.fake.direct"].length == 0 && MatrixClientPeg.get().getAccountData('m.direct') === undefined) {
+        if (s.lists["im.vector.fake.direct"].length == 0 &&
+            MatrixClientPeg.get().getAccountData('m.direct') === undefined &&
+            !MatrixClientPeg.get().isGuest())
+        {
             // scan through the 'recents' list for any rooms which look like DM rooms
             // and make them DM rooms
             const oldRecents = s.lists["im.vector.fake.recent"];

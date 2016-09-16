@@ -88,6 +88,10 @@ export function looksLikeDirectMessageRoom(room, me) {
  * @returns {object} A promise
  */
 export function setDMRoom(roomId, userId) {
+    if (MatrixClientPeg.get().isGuest()) {
+        return q();
+    }
+
     const mDirectEvent = MatrixClientPeg.get().getAccountData('m.direct');
     let dmRoomMap = {};
 
