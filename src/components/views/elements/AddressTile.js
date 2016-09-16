@@ -56,7 +56,7 @@ module.exports = React.createClass({
             let user = MatrixClientPeg.get().getUser(this.props.address);
             if (user) {
                 userId = user.userId;
-                name = user.displayName || userId;
+                name = user.rawDisplayName || userId;
                 imgUrl = Avatar.avatarUrlForUser(user, 25, 25, "crop");
             } else {
                 name=this.props.address;
