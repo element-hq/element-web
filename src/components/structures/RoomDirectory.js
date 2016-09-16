@@ -95,11 +95,19 @@ module.exports = React.createClass({
     },
 
     getMoreRooms: function() {
+        const my_filter_string = this.filterString;
         const opts = {limit: 20};
         if (this.nextBatch) opts.since = this.nextBatch;
-        if (this.filterString) opts.filter = { generic_search_term: this.filterString } ;
+        if (this.filterString) opts.filter = { generic_search_term: my_filter_string } ;
         this.setState({loading: true});
         return MatrixClientPeg.get().publicRooms(opts).then((data) => {
+            if (my_filter_string != this.filterString) {
+                // if the filter has changed since this request was sent,
+                // throw away the result (don't even clear the busy flag
+                // since we must still have a request in flight)
+                return;
+            }
+
             this.nextBatch = data.next_batch;
             this.setState((s) => {
                 s.publicRooms.push(...data.chunk);
@@ -108,6 +116,11 @@ module.exports = React.createClass({
             });
             return Boolean(data.next_batch);
         }, (err) => {
+            if (my_filter_string != this.filterString) {
+                // as above: we don't care about errors for old
+                // requests either
+                return;
+            }
             this.setState({ loading: false });
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
