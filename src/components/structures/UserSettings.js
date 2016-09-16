@@ -26,24 +26,6 @@ var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
 
-const LABS_FEATURES = [
-    {
-        name: 'Rich Text Editor',
-        id: 'rich_text_editor',
-        default: false,
-    },
-    {
-        name: 'End-to-End Encryption',
-        id: 'e2e_encryption',
-        default: true,
-    },
-    {
-        name: 'Integration Management',
-        id: 'integration_management',
-        default: true,
-    },
-];
-
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha.
 const REACT_SDK_VERSION =
@@ -379,13 +361,13 @@ module.exports = React.createClass({
         // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
 
-        let features = LABS_FEATURES.map(feature => (
+        let features = UserSettingsStore.LABS_FEATURES.map(feature => (
             <div key={feature.id} className="mx_UserSettings_toggle">
                 <input
                     type="checkbox"
                     id={feature.id}
                     name={feature.id}
-                    defaultChecked={UserSettingsStore.isFeatureEnabled(feature.id) === null ? feature.default : UserSettingsStore.isFeatureEnabled(feature.id)}
+                    defaultChecked={ UserSettingsStore.isFeatureEnabled(feature.id) }
                     onChange={e => {
                         UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
                         this.forceUpdate();
