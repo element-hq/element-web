@@ -1072,6 +1072,7 @@ module.exports = React.createClass({
                 case this.PageTypes.RoomDirectory:
                     page_element = <RoomDirectory
                         collapsedRhs={ this.state.collapse_rhs }
+                        config={this.props.config.roomDirectory}
                     />
                     if (!this.state.collapse_rhs) right_panel = <RightPanel opacity={this.state.sideOpacity}/>
                     break;
