@@ -113,9 +113,61 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
-.mx_RoomTile_ellipsis .mx_RoomTile_name {
-    font-style: italic;
-    color: #454545;
+.mx_RoomTile_ellipsis {
+    line-height: 11px;
+    height: auto;
+    margin-bottom: 4px;
+}
+
+.mx_RoomTile_line {
+    display: inline-block;
+    width: 159px;
+    border-top: dotted 2px #76cfa6;
+    vertical-align: middle;
+}
+
+.mx_RoomTile_more {
+    display: inline-block;
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: left;
+    color: #76cfa6;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-left: 7px;
+    vertical-align: middle;
+}
+
+.mx_RoomTile_moreBadge {
+    display: inline-block;
+    min-width: 15px;
+    height: 13px;
+    position: absolute;
+    right: 8px; /*gutter */
+    top: -2px;
+    border-radius: 8px;
+    border: solid 1px #76cfa6;
+    color: #fff;
+    font-weight: 600;
+    font-size: 10px;
+    text-align: center;
+    padding-top: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: #fff;
+    vertical-align: middle;
+}
+
+.mx_RoomTile_chevronDown {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #76cfa6;
+    position: absolute;
+    top: 4px;
+    right: 16px;
 }
 
 .mx_RoomTile_invite {
