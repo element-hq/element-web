@@ -91,6 +91,7 @@ module.exports = React.createClass({
         this.nextBatch = null;
         this.setState({
             publicRooms: [],
+            loading: true,
         });
         this.getMoreRooms().done();
     },
@@ -100,7 +101,6 @@ module.exports = React.createClass({
         const opts = {limit: 20};
         if (this.nextBatch) opts.since = this.nextBatch;
         if (this.filterString) opts.filter = { generic_search_term: my_filter_string } ;
-        this.setState({loading: true});
         return MatrixClientPeg.get().publicRooms(opts).then((data) => {
             if (my_filter_string != this.filterString) {
                 // if the filter has changed since this request was sent,
