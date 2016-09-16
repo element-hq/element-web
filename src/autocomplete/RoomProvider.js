@@ -6,7 +6,7 @@ import {PillCompletion} from './Components';
 import {getDisplayAliasForRoom} from '../Rooms';
 import sdk from '../index';
 
-const ROOM_REGEX = /(?=#)([^\s]*)/g;
+const ROOM_REGEX = /(?=#)(\S*)/g;
 
 let instance = null;
 
