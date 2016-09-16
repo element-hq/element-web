@@ -429,7 +429,7 @@ module.exports = React.createClass({
             // joins/parts/etc
             avatarSize = 14;
             needsSenderProfile = false;
-        } else if (this.props.continuation) {
+        } else if (this.props.continuation && this.props.tileShape !== "file_grid") {
             // no avatar or sender profile for continuation messages
             avatarSize = 0;
             needsSenderProfile = false;
