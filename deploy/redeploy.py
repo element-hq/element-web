@@ -5,8 +5,8 @@ from urlparse import urljoin
 from flask import Flask, jsonify, request, abort
 app = Flask(__name__)
 
-arg_jenkins_url, arg_extract_path, arg_should_clean, arg_symlink = (
-    None, None, None, None
+arg_jenkins_url, arg_extract_path, arg_should_clean, arg_symlink, arg_config_location = (
+    None, None, None, None, None
 )
 
 def download_file(url):
@@ -122,6 +122,9 @@ def on_receive_jenkins_poke():
 
     create_symlink(source=os.path.join(untar_location, "vector"), linkname=arg_symlink)
 
+    if arg_config_location:
+        create_symlink(source=arg_config_location, linkname=os.path.join(untar_location, "vector", 'config.json'))
+
     return jsonify({})
 
 if __name__ == "__main__":
@@ -154,6 +157,12 @@ if __name__ == "__main__":
             to the /vector directory INSIDE the tarball."
         )
     )
+    parser.add_argument(
+        "--config", dest="config", help=(
+            "Write a symlink to config.json in the extracted tarball. \
+            To this location."
+        )
+    )
     args = parser.parse_args()
     if args.jenkins.endswith("/"): # important for urljoin
         arg_jenkins_url = args.jenkins
@@ -162,9 +171,10 @@ if __name__ == "__main__":
     arg_extract_path = args.extract
     arg_should_clean = args.clean
     arg_symlink = args.symlink
+    arg_config_location = args.config
     print(
-        "Listening on port %s. Extracting to %s%s. Symlinking to %s. Jenkins URL: %s" %
+        "Listening on port %s. Extracting to %s%s. Symlinking to %s. Jenkins URL: %s. Config location: %s" %
         (args.port, arg_extract_path,
-            " (clean after)" if arg_should_clean else "", arg_symlink, arg_jenkins_url)
+            " (clean after)" if arg_should_clean else "", arg_symlink, arg_jenkins_url, arg_config_location)
     )
     app.run(host="0.0.0.0", port=args.port, debug=True)
