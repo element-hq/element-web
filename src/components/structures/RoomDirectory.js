@@ -35,15 +35,36 @@ linkifyMatrix(linkify);
 module.exports = React.createClass({
     displayName: 'RoomDirectory',
 
+    propTypes: {
+        config: React.PropTypes.object,
+    },
+
+    getDefaultProps: function() {
+        return {
+            config: {
+                networks: [],
+            },
+        }
+    },
+
     getInitialState: function() {
         return {
             publicRooms: [],
             roomAlias: '',
             loading: true,
+            filterByNetwork: null,
         }
     },
 
     componentWillMount: function() {
+        // precompile Regexps
+        this.networkPatterns = {};
+        if (this.props.config.networkPatterns) {
+            for (const network of Object.keys(this.props.config.networkPatterns)) {
+                this.networkPatterns[network] = new RegExp(this.props.config.networkPatterns[network]);
+            }
+        }
+
         // dis.dispatch({
         //     action: 'ui_opacity',
         //     sideOpacity: 0.3,
@@ -143,6 +164,12 @@ module.exports = React.createClass({
         }
     },
 
+    onNetworkChange: function(network) {
+        this.setState({
+            filterByNetwork: network,
+        });
+    },
+
     showRoomAlias: function(alias) {
         this.showRoom(null, alias);
     },
@@ -192,9 +219,13 @@ module.exports = React.createClass({
 
         if (!this.state.publicRooms) return [];
 
-        var rooms = this.state.publicRooms.filter(function(a) {
+        var rooms = this.state.publicRooms.filter((a) => {
             // FIXME: if incrementally typing, keep narrowing down the search set
             // incrementally rather than starting over each time.
+            if (this.state.filterByNetwork) {
+                if (!this._isRoomInNetwork(a, this.state.filterByNetwork)) return false;
+            }
+
             return (((a.name && a.name.toLowerCase().search(filter.toLowerCase()) >= 0) ||
                      (a.aliases && a.aliases[0].toLowerCase().search(filter.toLowerCase()) >= 0)) &&
                       a.num_joined_members > 0);
@@ -266,6 +297,20 @@ module.exports = React.createClass({
         }
     },
 
+    /**
+     * Terrible temporary function that guess what network a public room
+     * entry is in, until synapse is able to tell us
+     */
+    _isRoomInNetwork(room, network) {
+        if (room.aliases && this.networkPatterns[network]) {
+            for (const alias of room.aliases) {
+                if (this.networkPatterns[network].test(alias)) return true;
+            }
+        }
+
+        return false;
+    },
+
     render: function() {
         if (this.state.loading) {
             var Loader = sdk.getComponent("elements.Spinner");
@@ -276,12 +321,16 @@ module.exports = React.createClass({
             );
         }
 
-        var SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
+        const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
+        const NetworkDropdown = sdk.getComponent('directory.NetworkDropdown');
         return (
             <div className="mx_RoomDirectory">
                 <SimpleRoomHeader title="Directory" />
                 <div className="mx_RoomDirectory_list">
-                    <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
+                    <div className="mx_RoomDirectory_listheader">
+                        <input ref="roomAlias" placeholder="Join a room (e.g. #foo:domain.com)" className="mx_RoomDirectory_input" size="64" onKeyUp={ this.onKeyUp }/>
+                        <NetworkDropdown config={this.props.config} onNetworkChange={this.onNetworkChange} />
+                    </div>
                     <GeminiScrollbar className="mx_RoomDirectory_tableWrapper">
                         <table ref="directory_table" className="mx_RoomDirectory_table">
                             <tbody>
