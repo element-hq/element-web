@@ -606,6 +606,7 @@ module.exports = React.createClass({
             </div>
 
             startChat = <div>
+                <h3>Direct chats</h3>
                 {tiles}
                 {startNewChat}
             </div>;
