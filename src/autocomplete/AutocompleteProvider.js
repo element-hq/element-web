@@ -18,7 +18,7 @@ export default class AutocompleteProvider {
         let commandRegex = this.commandRegex;
 
         if (force && this.shouldForceComplete()) {
-            commandRegex = /[^\W]+/g;
+            commandRegex = /\S+/g;
         }
 
         if (commandRegex == null) {

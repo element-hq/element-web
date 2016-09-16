@@ -5,7 +5,7 @@ import Fuse from 'fuse.js';
 import {PillCompletion} from './Components';
 import sdk from '../index';
 
-const USER_REGEX = /@[^\s]*/g;
+const USER_REGEX = /@\S*/g;
 
 let instance = null;
 
