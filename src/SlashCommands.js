@@ -304,7 +304,7 @@ module.exports = {
         // IRC-style commands
         input = input.replace(/\s+$/, "");
         if (input[0] === "/" && input[1] !== "/") {
-            var bits = input.match(/^(\S+?)( +(.*))?$/);
+            var bits = input.match(/^(\S+?)( +((.|\n)*))?$/);
             var cmd, args;
             if (bits) {
                 cmd = bits[1].substring(1).toLowerCase();

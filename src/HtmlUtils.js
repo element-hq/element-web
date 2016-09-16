@@ -55,7 +55,30 @@ export function unicodeToImage(str) {
     });
 
     return str;
-};
+}
+
+export function stripParagraphs(html: string): string {
+    const contentDiv = document.createElement('div');
+    contentDiv.innerHTML = html;
+
+    if (contentDiv.children.length === 0) {
+        return contentDiv.innerHTML;
+    }
+
+    let contentHTML = "";
+    for (let i=0; i<contentDiv.children.length; i++) {
+        const element = contentDiv.children[i];
+        if (element.tagName.toLowerCase() === 'p') {
+            contentHTML += element.innerHTML + '<br />';
+        } else {
+            const temp = document.createElement('div');
+            temp.appendChild(element.cloneNode(true));
+            contentHTML += temp.innerHTML;
+        }
+    }
+
+    return contentHTML;
+}
 
 var sanitizeHtmlParams = {
     allowedTags: [
@@ -153,8 +176,8 @@ class BaseHighlighter {
         }
 
         // handle postamble
-        if (lastOffset != safeSnippet.length) {
-            var subSnippet = safeSnippet.substring(lastOffset, undefined);
+        if (lastOffset !== safeSnippet.length) {
+            subSnippet = safeSnippet.substring(lastOffset, undefined);
             nodes = nodes.concat(this._applySubHighlights(subSnippet, safeHighlights));
         }
         return nodes;
@@ -219,7 +242,7 @@ class TextHighlighter extends BaseHighlighter {
             </span>;
 
         if (highlight && this.highlightLink) {
-            node = <a key={key} href={this.highlightLink}>{node}</a>
+            node = <a key={key} href={this.highlightLink}>{node}</a>;
         }
 
         return node;
@@ -227,7 +250,6 @@ class TextHighlighter extends BaseHighlighter {
 }
 
 
-module.exports = {
     /* turn a matrix event body into html
      *
      * content: 'content' of the MatrixEvent
@@ -236,59 +258,57 @@ module.exports = {
      *
      * opts.highlightLink: optional href to add to highlighted words
      */
-    bodyToHtml: function(content, highlights, opts) {
-        opts = opts || {};
+export function bodyToHtml(content, highlights, opts) {
+    opts = opts || {};
 
-        var isHtml = (content.format === "org.matrix.custom.html");
-        let body = isHtml ? content.formatted_body : escape(content.body);
+    var isHtml = (content.format === "org.matrix.custom.html");
+    let body = isHtml ? content.formatted_body : escape(content.body);
 
-        var safeBody;
-        // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
-        // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
-        // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
-        // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
-        try {
-            if (highlights && highlights.length > 0) {
-                var highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
-                var safeHighlights = highlights.map(function(highlight) {
-                    return sanitizeHtml(highlight, sanitizeHtmlParams);
-                });
-                // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
-                sanitizeHtmlParams.textFilter = function(safeText) {
-                    return highlighter.applyHighlights(safeText, safeHighlights).join('');
-                };
-            }
-            safeBody = sanitizeHtml(body, sanitizeHtmlParams);
-            safeBody = unicodeToImage(safeBody);
+    var safeBody;
+    // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
+    // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
+    // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
+    // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
+    try {
+        if (highlights && highlights.length > 0) {
+            var highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
+            var safeHighlights = highlights.map(function(highlight) {
+                return sanitizeHtml(highlight, sanitizeHtmlParams);
+            });
+            // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
+            sanitizeHtmlParams.textFilter = function(safeText) {
+                return highlighter.applyHighlights(safeText, safeHighlights).join('');
+            };
         }
-        finally {
-            delete sanitizeHtmlParams.textFilter;
-        }
+        safeBody = sanitizeHtml(body, sanitizeHtmlParams);
+        safeBody = unicodeToImage(safeBody);
+    }
+    finally {
+        delete sanitizeHtmlParams.textFilter;
+    }
 
-        EMOJI_REGEX.lastIndex = 0;
-        let contentBodyTrimmed = content.body.trim();
-        let match = EMOJI_REGEX.exec(contentBodyTrimmed);
-        let emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
+    EMOJI_REGEX.lastIndex = 0;
+    let contentBodyTrimmed = content.body.trim();
+    let match = EMOJI_REGEX.exec(contentBodyTrimmed);
+    let emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
 
-        const className = classNames({
-            'mx_EventTile_body': true,
-            'mx_EventTile_bigEmoji': emojiBody,
-            'markdown-body': isHtml,
-        });
-        return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} />;
-    },
+    const className = classNames({
+        'mx_EventTile_body': true,
+        'mx_EventTile_bigEmoji': emojiBody,
+        'markdown-body': isHtml,
+    });
+    return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} />;
+}
 
-    highlightDom: function(element) {
-        var blocks = element.getElementsByTagName("code");
-        for (var i = 0; i < blocks.length; i++) {
-            highlight.highlightBlock(blocks[i]);
-        }
-    },
+export function highlightDom(element) {
+    var blocks = element.getElementsByTagName("code");
+    for (var i = 0; i < blocks.length; i++) {
+        highlight.highlightBlock(blocks[i]);
+    }
+}
 
-    emojifyText: function(text) {
-        return {
-            __html: unicodeToImage(escape(text)),
-        };
-    },
-};
-
+export function emojifyText(text) {
+    return {
+        __html: unicodeToImage(escape(text)),
+    };
+}

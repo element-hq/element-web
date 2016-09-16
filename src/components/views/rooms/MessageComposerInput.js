@@ -47,6 +47,7 @@ import KeyCode from '../../../KeyCode';
 import UserSettingsStore from '../../../UserSettingsStore';
 
 import * as RichText from '../../../RichText';
+import * as HtmlUtils from '../../../HtmlUtils';
 import Autocomplete from './Autocomplete';
 import {Completion} from "../../../autocomplete/Autocompleter";
 
@@ -63,18 +64,9 @@ function stateToMarkdown(state) {
             ''); // this is *not* a zero width space, trust me :)
 }
 
-
-// FIXME Breaks markdown with multiple paragraphs, since it only strips first and last <p>
 function mdownToHtml(mdown: string): string {
     let html = marked(mdown) || "";
     html = html.trim();
-    // strip start and end <p> tags else you get 'orrible spacing
-    if (html.indexOf("<p>") === 0) {
-        html = html.substring("<p>".length);
-    }
-    if (html.lastIndexOf("</p>") === (html.length - "</p>".length)) {
-        html = html.substring(0, html.length - "</p>".length);
-    }
     return html;
 }
 
@@ -547,6 +539,8 @@ export default class MessageComposerInput extends React.Component {
             contentHTML = mdownToHtml(contentText);
         }
 
+        contentHTML = HtmlUtils.stripParagraphs(contentHTML);
+
         let sendFn = this.client.sendHtmlMessage;
 
         if (contentText.startsWith('/me')) {
@@ -561,16 +555,16 @@ export default class MessageComposerInput extends React.Component {
 
         sendMessagePromise.then(() => {
             dis.dispatch({
-                action: 'message_sent'
+                action: 'message_sent',
             });
         }, () => {
             dis.dispatch({
-                action: 'message_send_failed'
+                action: 'message_send_failed',
             });
         });
 
         this.setState({
-            editorState: this.createEditorState()
+            editorState: this.createEditorState(),
         });
 
         return true;
