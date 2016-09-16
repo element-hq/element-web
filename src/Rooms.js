@@ -16,7 +16,7 @@ limitations under the License.
 
 import MatrixClientPeg from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
-
+import q from 'q';
 
 /**
  * Given a room object, return the alias we should use for it,
