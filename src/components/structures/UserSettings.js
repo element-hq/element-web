@@ -510,6 +510,14 @@ module.exports = React.createClass({
             </div>);
         }
 
+        var olmVersion = MatrixClientPeg.get().olmVersion;
+        // If the olmVersion is not defined then either crypto is disabled, or
+        // we are using a version old version of olm. We assume the former.
+        var olmVersionString = "<not-enabled>";
+        if (olmVersion !== undefined) {
+            olmVersionString = olmVersion[0] + "." + olmVersion[1] + "." + olmVersion[2];
+        }
+
         return (
             <div className="mx_UserSettings">
                 <SimpleRoomHeader
@@ -585,6 +593,7 @@ module.exports = React.createClass({
                     <div className="mx_UserSettings_advanced">
                         matrix-react-sdk version: {REACT_SDK_VERSION}<br/>
                         vector-web version: {this.props.version}<br/>
+                        olm version: {olmVersionString}<br/>
                     </div>
                 </div>
 
