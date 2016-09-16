@@ -25,8 +25,8 @@ limitations under the License.
 .mx_RoomTile_tooltip {
     display: inline-block;
     position: relative;
-    top: -62px;
-    left: 46px;
+    top: -54px;
+    left: -12px;
 }
 
 
@@ -113,18 +113,12 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
-.mx_RoomTile_ellipsis .mx_RoomTile_name {
-    font-style: italic;
-    color: #454545;
-}
-
 .mx_RoomTile_invite {
-/*    color: rgba(69, 69, 69, 0.5);
-*/
+/*    color: rgba(69, 69, 69, 0.5); */
 }
 
 .collapsed .mx_RoomTile_nameContainer {
-    height: 0;
+    width: 60px; /* colapsed panel width */
 }
 
 .collapsed .mx_RoomTile_name {
