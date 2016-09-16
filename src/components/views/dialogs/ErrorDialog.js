@@ -49,9 +49,17 @@ module.exports = React.createClass({
         };
     },
 
+    onKeyDown: function(e) {
+        if (e.keyCode === 27) { // escape
+            e.stopPropagation();
+            e.preventDefault();
+            this.props.onFinished(false);
+        }
+    },
+
     render: function() {
         return (
-            <div className="mx_ErrorDialog">
+            <div className="mx_ErrorDialog" onKeyDown={ this.onKeyDown }>
                 <div className="mx_Dialog_title">
                     {this.props.title}
                 </div>

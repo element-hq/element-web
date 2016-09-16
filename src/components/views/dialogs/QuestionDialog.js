@@ -46,9 +46,22 @@ module.exports = React.createClass({
         this.props.onFinished(false);
     },
 
+    onKeyDown: function(e) {
+        if (e.keyCode === 27) { // escape
+            e.stopPropagation();
+            e.preventDefault();
+            this.props.onFinished(false);
+        }
+        else if (e.keyCode === 13) { // enter
+            e.stopPropagation();
+            e.preventDefault();
+            this.props.onFinished(true);
+        }
+    },
+
     render: function() {
         return (
-            <div className="mx_QuestionDialog">
+            <div className="mx_QuestionDialog" onKeyDown={ this.onKeyDown }>
                 <div className="mx_Dialog_title">
                     {this.props.title}
                 </div>
