@@ -79,6 +79,10 @@ module.exports = React.createClass({
 
         /* startAtBottom: if set to true, the view is assumed to start
          * scrolled to the bottom.
+         * XXX: It's likley this is unecessary and can be derived from
+         * stickyBottom, but I'm adding an extra parameter to ensure
+         * behaviour stays the same for other uses of ScrollPanel.
+         * If so, let's remove this parameter down the line.
          */
         startAtBottom: React.PropTypes.bool,
 
