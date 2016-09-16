@@ -98,6 +98,7 @@ module.exports = React.createClass({
         const opts = {limit: 20};
         if (this.nextBatch) opts.since = this.nextBatch;
         if (this.filterString) opts.filter = { generic_search_term: this.filterString } ;
+        this.setState({loading: true});
         return MatrixClientPeg.get().publicRooms(opts).then((data) => {
             this.nextBatch = data.next_batch;
             this.setState((s) => {
@@ -327,18 +328,31 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        let content;
         if (this.state.loading) {
-            var Loader = sdk.getComponent("elements.Spinner");
-            return (
-                <div className="mx_RoomDirectory">
-                    <Loader />
-                </div>
-            );
+            const Loader = sdk.getComponent("elements.Spinner");
+            content = <div className="mx_RoomDirectory">
+                <Loader />
+            </div>;
+        } else {
+            const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+            content = <ScrollPanel
+                className="mx_RoomDirectory_tableWrapper"
+                onFillRequest={ this.onFillRequest }
+                stickyBottom={false}
+                startAtBottom={false}
+                onResize={function(){}}
+            >
+                <table ref="directory_table" className="mx_RoomDirectory_table">
+                    <tbody>
+                        { this.getRows() }
+                    </tbody>
+                </table>
+            </ScrollPanel>;
         }
 
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const NetworkDropdown = sdk.getComponent('directory.NetworkDropdown');
-        const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         return (
             <div className="mx_RoomDirectory">
                 <SimpleRoomHeader title="Directory" />
@@ -349,19 +363,7 @@ module.exports = React.createClass({
                         />
                         <NetworkDropdown config={this.props.config} onNetworkChange={this.onNetworkChange} />
                     </div>
-                    <ScrollPanel
-                        className="mx_RoomDirectory_tableWrapper"
-                        onFillRequest={ this.onFillRequest }
-                        stickyBottom={false}
-                        startAtBottom={false}
-                        onResize={function(){}}
-                    >
-                        <table ref="directory_table" className="mx_RoomDirectory_table">
-                            <tbody>
-                                { this.getRows() }
-                            </tbody>
-                        </table>
-                    </ScrollPanel>
+                    {content}
                 </div>
             </div>
         );
