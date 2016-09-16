@@ -422,22 +422,12 @@ var RoomSubList = React.createClass({
     },
 
     _createOverflowTile: function(overflowCount, totalCount) {
-        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        // XXX: this is duplicated from RoomTile - factor it out
-//        return (
-//            <div className="mx_RoomTile mx_RoomTile_ellipsis" onClick={this._showFullMemberList}>
-//                <div className="mx_RoomTile_avatar">
-//                    <BaseAvatar url="img/ellipsis.svg" name="..." width={24} height={24} />
-//                </div>
-//                <div className="mx_RoomTile_name">and { overflowCount } others...</div>
-//            </div>
-//        );
         return (
-            <div className="mx_RoomTile mx_RoomTile_ellipsis" onClick={this._showFullMemberList}>
-                <div className="mx_RoomTile_line"></div>
-                <div className="mx_RoomTile_more">more</div>
-                <div className="mx_RoomTile_moreBadge"></div>
-                <div className="mx_RoomTile_chevronDown"></div>
+            <div className="mx_RoomSubList_ellipsis" onClick={this._showFullMemberList}>
+                <div className="mx_RoomSubList_line"></div>
+                <div className="mx_RoomSubList_more">more</div>
+                <div className="mx_RoomSubList_moreBadge"></div>
+                <div className="mx_RoomSubList_moreChevronDown"></div>
             </div>
         );
     },
