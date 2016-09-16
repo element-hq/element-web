@@ -77,6 +77,15 @@ module.exports = React.createClass({
          */
         stickyBottom: React.PropTypes.bool,
 
+        /* startAtBottom: if set to true, the view is assumed to start
+         * scrolled to the bottom.
+         * XXX: It's likley this is unecessary and can be derived from
+         * stickyBottom, but I'm adding an extra parameter to ensure
+         * behaviour stays the same for other uses of ScrollPanel.
+         * If so, let's remove this parameter down the line.
+         */
+        startAtBottom: React.PropTypes.bool,
+
         /* onFillRequest(backwards): a callback which is called on scroll when
          * the user nears the start (backwards = true) or end (backwards =
          * false) of the list.
@@ -113,6 +122,7 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             stickyBottom: true,
+            startAtBottom: true,
             onFillRequest: function(backwards) { return q(false); },
             onScroll: function() {},
         };
@@ -324,7 +334,7 @@ module.exports = React.createClass({
      * child list.)
      */
     resetScrollState: function() {
-        this.scrollState = {stuckAtBottom: true};
+        this.scrollState = {stuckAtBottom: this.props.startAtBottom};
     },
 
     /**
