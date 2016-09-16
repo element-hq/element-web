@@ -23,11 +23,11 @@ var sdk = require("./index");
 
 var DEBUG = 0;
 
-// The colour keys to be replaced as referred to in SVGs
+// The colour keys to be replaced as referred to in CSS
 var keyRgb = [
     "rgb(118, 207, 166)", // Vector Green
     "rgb(234, 245, 240)", // Vector Light Green
-    "rgba(118, 207, 166, 0.2)", // BottomLeftMenu overlay (20% Vector Green)
+    "rgb(211, 239, 225)", // BottomLeftMenu overlay (20% Vector Green)
 ];
 
 // Some algebra workings for calculating the tint % of Vector Green & Light Green
@@ -210,7 +210,7 @@ module.exports = {
         for (var i = 0; i < svgs.length; i++) {
             var svgDoc;
             try {
-                svgDoc = svgs[i].contentDocument;   
+                svgDoc = svgs[i].contentDocument;
             }
             catch(e) {
                 var msg = 'Failed to get svg.contentDocument of ' + svgs[i].toString();
