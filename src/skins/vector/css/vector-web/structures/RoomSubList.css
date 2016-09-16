@@ -199,12 +199,7 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_RoomSubList_moreChevronDown {
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 6px solid #76cfa6;
+.mx_RoomSubList_ellipsis .mx_RoomSubList_chevronDown {
     position: absolute;
     top: 4px;
     right: 16px;

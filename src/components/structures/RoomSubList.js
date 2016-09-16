@@ -427,7 +427,7 @@ var RoomSubList = React.createClass({
                 <div className="mx_RoomSubList_line"></div>
                 <div className="mx_RoomSubList_more">more</div>
                 <div className="mx_RoomSubList_moreBadge"></div>
-                <div className="mx_RoomSubList_moreChevronDown"></div>
+                <div className="mx_RoomSubList_chevronDown"></div>
             </div>
         );
     },
