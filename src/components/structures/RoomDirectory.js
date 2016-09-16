@@ -66,6 +66,7 @@ module.exports = React.createClass({
         }
         this.nextBatch = null;
         this.filterString = null;
+        this.filterTimeout = null;
 
         // dis.dispatch({
         //     action: 'ui_opacity',
@@ -209,7 +210,18 @@ module.exports = React.createClass({
             this.showRoomAlias(alias);
         } else {
             this.filterString = alias || null;
-            this.refreshRoomList();
+
+            // don't send the request for a little bit,
+            // no point hammering the server with a
+            // request for every keystroke, let the
+            // user finish typing.
+            if (this.filterTimeout) {
+                clearTimeout(this.filterTimeout);
+            }
+            this.filterTimeout = setTimeout(() => {
+                this.filterTimeout = null;
+                this.refreshRoomList();
+            }, 300);
         }
     },
 
