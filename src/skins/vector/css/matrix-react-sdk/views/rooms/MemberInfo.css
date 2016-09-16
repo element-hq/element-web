@@ -25,6 +25,18 @@ limitations under the License.
     margin-top: 6px;
 }
 
+.mx_MemberInfo .mx_RoomTile_nameContainer {
+    width: 154px;
+}
+
+.mx_MemberInfo .mx_RoomTile_badge {
+    display: none;
+}
+
+.mx_MemberInfo .mx_RoomTile_name {
+    width: 160px;
+}
+
 .mx_MemberInfo_cancel {
     float: right;
     margin-right: 10px;
@@ -80,7 +92,7 @@ limitations under the License.
 }
 
 .mx_MemberInfo_createRoom_label {
-    width: 160px ! important;
+    width: 150px ! important;
     cursor: pointer;
 }
 
