@@ -28,6 +28,13 @@ module.exports = React.createClass({
     componentWillMount: function() {
         var client = MatrixClientPeg.get();
         client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
+
+        client.downloadKeys([this.props.event.getSender()], true).done(()=>{
+            var devices = client.getStoredDevicesForUser(this.props.event.getSender());
+            this.setState({ device: this.refreshDevice() });
+        }, (err)=>{
+            console.log("Error downloading devices", err);
+        });
     },
 
     componentWillUnmount: function() {
@@ -56,6 +63,14 @@ module.exports = React.createClass({
         }
     },
 
+    onKeyDown: function(e) {
+        if (e.keyCode === 27) { // escape
+            e.stopPropagation();
+            e.preventDefault();
+            this.props.onFinished(false);
+        }
+    },
+
     render: function() {
         var event = this.props.event;
         var device = this.state.device;
@@ -63,7 +78,7 @@ module.exports = React.createClass({
         var MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
 
         return (
-            <div className="mx_EncryptedEventDialog">
+            <div className="mx_EncryptedEventDialog" onKeyDown={ this.onKeyDown }>
                 <div className="mx_Dialog_title">
                     End-to-end encryption information
                 </div>
