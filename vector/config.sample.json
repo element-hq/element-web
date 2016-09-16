@@ -9,22 +9,30 @@
         "networks": [
             "matrix:example_com",
             "matrix:matrix_org",
-            "irc:mynetwork"
+            "gitter",
+            "irc:freenode",
+            "irc:mozilla"
         ],
         "networkPatterns": {
-            "matrix:myserver": "#.*:example.com",
+            "matrix:example_com": "#.*:example.com",
             "matrix:matrix_org": "#.*:matrix.org",
-            "irc:mynetwork": "#mynetwork_.*:example.com"
+            "gitter": "#gitter_.*:matrix.org",
+            "irc:freenode": "#freenode_.*:matrix.org",
+            "irc:mozilla": "#mozilla_.*:matrix.org"
         },
         "networkNames": {
-            "matrix:matrix_org": "matrix.org",
             "matrix:example_com": "example.com",
-            "irc:mynetwork": "My IRC Network"
+            "matrix:matrix_org": "matrix.org",
+            "irc:freenode": "Freenode",
+            "irc:mozilla": "Mozilla",
+            "gitter": "Gitter"
         },
         "networkIcons": {
             "matrix:example_com": "//matrix.org/favicon.ico",
             "matrix:matrix_org": "//matrix.org/favicon.ico",
-            "irc:mynetwork": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX"
+            "irc:freenode": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
+            "irc:mozilla": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
+            "gitter": "//gitter.im/favicon.ico"
         }
     }
 }
