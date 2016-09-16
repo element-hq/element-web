@@ -152,15 +152,14 @@ limitations under the License.
 .mx_RoomSubList_ellipsis {
     display: block;
     line-height: 11px;
-    height: auto;
-    margin-bottom: 4px;
+    height: 18px;
     position: relative;
     cursor: pointer;
     font-size: 13px;
 }
 
 .collapsed .mx_RoomSubList_ellipsis {
-    height: 16px;
+    height: 20px;
 }
 
 .mx_RoomSubList_line {
@@ -205,10 +204,26 @@ limitations under the License.
     font-size: 10px;
     text-align: center;
     padding-top: 1px;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: 3px;
+    padding-right: 3px;
     background-color: #fff;
     vertical-align: middle;
+}
+
+.mx_RoomSubList_moreBadge.mx_RoomSubList_moreBadgeNotify {
+    background-color: #76cfa6;
+    border: 0;
+    padding-top: 3px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.mx_RoomSubList_moreBadge.mx_RoomSubList_moreBadgeHighlight {
+    background-color: #ff0064;
+    border: 0;
+    padding-top: 3px;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 
 .collapsed .mx_RoomSubList_moreBadge {

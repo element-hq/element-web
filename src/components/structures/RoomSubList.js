@@ -217,22 +217,30 @@ var RoomSubList = React.createClass({
         return roomNotifState != RoomNotifs.MUTE;
     },
 
-    roomNotificationCount: function() {
+    /**
+     * Total up all the notification counts from the rooms
+     *
+     * @param {Number} If supplied will only total notifications for rooms outside the truncation number
+     * @returns {Array} The array takes the form [total, highlight] where highlight is a bool
+     */
+    roomNotificationCount: function(truncateAt) {
         var self = this;
 
-        return this.props.list.reduce(function(result, room) {
-            var roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
-            var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites';
-            var notificationCount = room.getUnreadNotificationCount();
+        return this.props.list.reduce(function(result, room, index) {
+            if (truncateAt === undefined || index >= truncateAt) {
+                var roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
+                var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites';
+                var notificationCount = room.getUnreadNotificationCount();
 
-            const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
-            const mentionBadges = highlight && self._shouldShowMentionBadge(roomNotifState);
-            const badges = notifBadges || mentionBadges;
+                const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
+                const mentionBadges = highlight && self._shouldShowMentionBadge(roomNotifState);
+                const badges = notifBadges || mentionBadges;
 
-            if (badges) {
-                result[0] += notificationCount;
-                if (highlight) {
-                    result[1] = true;
+                if (badges) {
+                    result[0] += notificationCount;
+                    if (highlight) {
+                        result[1] = true;
+                    }
                 }
             }
             return result;
@@ -423,11 +431,25 @@ var RoomSubList = React.createClass({
 
     _createOverflowTile: function(overflowCount, totalCount) {
         var content = <div className="mx_RoomSubList_chevronDown"></div>;
+
+        var overflowNotifications = this.roomNotificationCount(TRUNCATE_AT);
+        var overflowNotifCount = overflowNotifications[0];
+        var overflowNotifHighlight = overflowNotifications[1];
+        if (overflowNotifCount && !this.props.collapsed) {
+            content = overflowNotifCount;
+        }
+
+        var badgeClasses = classNames({
+            'mx_RoomSubList_moreBadge': true,
+            'mx_RoomSubList_moreBadgeNotify': overflowNotifCount && !this.props.collapsed,
+            'mx_RoomSubList_moreBadgeHighlight': overflowNotifHighlight && !this.props.collapsed,
+        });
+
         return (
             <div className="mx_RoomSubList_ellipsis" onClick={this._showFullMemberList}>
                 <div className="mx_RoomSubList_line"></div>
                 <div className="mx_RoomSubList_more">more</div>
-                <div className="mx_RoomSubList_moreBadge">{ content }</div>
+            <div className={ badgeClasses }>{ content }</div>
             </div>
         );
     },
