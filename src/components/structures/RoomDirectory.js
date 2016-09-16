@@ -67,6 +67,7 @@ module.exports = React.createClass({
         this.nextBatch = null;
         this.filterString = null;
         this.filterTimeout = null;
+        this.scrollPanel = null;
 
         // dis.dispatch({
         //     action: 'ui_opacity',
@@ -194,6 +195,14 @@ module.exports = React.createClass({
     onNetworkChange: function(network) {
         this.setState({
             filterByNetwork: network,
+        }, () => {
+            // we just filtered out a bunch of rooms, so check to see if
+            // we need to fill up the scrollpanel again
+            // NB. Because we filter the results, the HS can keep giving
+            // us more rooms and we'll keep requesting more if none match
+            // the filter, which is pretty terrible. We need a way
+            // to filter by network on the server.
+            if (this.scrollPanel) this.scrollPanel.checkFillState();
         });
     },
 
@@ -338,6 +347,10 @@ module.exports = React.createClass({
         return rows;
     },
 
+    collectScrollPanel: function(element) {
+        this.scrollPanel = element;
+    },
+
     /**
      * Terrible temporary function that guess what network a public room
      * entry is in, until synapse is able to tell us
@@ -361,7 +374,7 @@ module.exports = React.createClass({
             </div>;
         } else {
             const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
-            content = <ScrollPanel
+            content = <ScrollPanel ref={this.collectScrollPanel}
                 className="mx_RoomDirectory_tableWrapper"
                 onFillRequest={ this.onFillRequest }
                 stickyBottom={false}
