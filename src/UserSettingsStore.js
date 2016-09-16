@@ -142,7 +142,10 @@ module.exports = {
         return MatrixClientPeg.get().setAccountData("im.vector.web.settings", settings);
     },
 
-    isFeatureEnabled: function(feature: string): boolean {
+    isFeatureEnabled: function(feature: string): ?boolean {
+        if (localStorage.getItem(`mx_labs_feature_${feature}`) === null) {
+            return null;
+        }
         return localStorage.getItem(`mx_labs_feature_${feature}`) === 'true';
     },
 

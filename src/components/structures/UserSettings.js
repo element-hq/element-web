@@ -29,15 +29,18 @@ var AddThreepid = require('../../AddThreepid');
 const LABS_FEATURES = [
     {
         name: 'Rich Text Editor',
-        id: 'rich_text_editor'
+        id: 'rich_text_editor',
+        default: false,
     },
     {
         name: 'End-to-End Encryption',
-        id: 'e2e_encryption'
+        id: 'e2e_encryption',
+        default: true,
     },
     {
         name: 'Integration Management',
-        id: 'integration_management'
+        id: 'integration_management',
+        default: true,
     },
 ];
 
@@ -382,7 +385,7 @@ module.exports = React.createClass({
                     type="checkbox"
                     id={feature.id}
                     name={feature.id}
-                    defaultChecked={UserSettingsStore.isFeatureEnabled(feature.id)}
+                    defaultChecked={UserSettingsStore.isFeatureEnabled(feature.id) === null ? feature.default : UserSettingsStore.isFeatureEnabled(feature.id)}
                     onChange={e => {
                         UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
                         this.forceUpdate();
