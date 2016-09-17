@@ -369,6 +369,16 @@ module.exports = React.createClass({
                     name={feature.id}
                     defaultChecked={ UserSettingsStore.isFeatureEnabled(feature.id) }
                     onChange={e => {
+                        if (MatrixClientPeg.get().isGuest()) {
+                            e.target.checked = false;
+                            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+                            Modal.createDialog(NeedToRegisterDialog, {
+                                title: "Please Register",
+                                description: "Guests can't use labs features. Please register.",
+                            });
+                            return;
+                        }
+
                         UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
                         this.forceUpdate();
                     }}/>

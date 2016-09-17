@@ -160,6 +160,9 @@ module.exports = {
     },
 
     isFeatureEnabled: function(feature: string): boolean {
+        // Disable labs for guests.
+        if (MatrixClientPeg.get().isGuest()) return false;
+
         if (localStorage.getItem(`mx_labs_feature_${feature}`) === null) {
             for (var i = 0; i < this.LABS_FEATURES.length; i++) {
                 var f = this.LABS_FEATURES[i];
