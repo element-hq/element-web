@@ -25,6 +25,7 @@ var DMRoomMap = require('../../../utils/DMRoomMap');
 var sdk = require('../../../index');
 var ContextualMenu = require('../../structures/ContextualMenu');
 var RoomNotifs = require('../../../RoomNotifs');
+var FormattingUtils = require('../../../utils/FormattingUtils');
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -237,7 +238,7 @@ module.exports = React.createClass({
         if (this.state.badgeHover || this.state.notificationTagMenu) {
             badgeContent = "\u00B7\u00B7\u00B7";
         } else if (badges) {
-            var limitedCount = (notificationCount > 99) ? '99+' : notificationCount;
+            var limitedCount = FormattingUtils.formatCount(notificationCount);
             badgeContent = notificationCount ? limitedCount : '!';
         } else {
             badgeContent = '\u200B';
