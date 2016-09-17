@@ -213,15 +213,25 @@ module.exports = React.createClass({
     },
 
     _startChat: function(addrs) {
+        if (MatrixClientPeg.get().isGuest()) {
+            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+            Modal.createDialog(NeedToRegisterDialog, {
+                title: "Please Register",
+                description: "Guest users can't invite users. Please register."
+            });
+            return;
+        }
+
         if (this.props.roomId) {
             // Invite new user to a room
             var self = this;
             Invite.inviteMultipleToRoom(this.props.roomId, addrs)
             .then(function(addrs) {
-                var room = MatrixClientPeg.get().getRoom(this.props.roomId);
+                var room = MatrixClientPeg.get().getRoom(self.props.roomId);
                 return self._showAnyInviteErrors(addrs, room);
             })
             .catch(function(err) {
+                console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Failure to invite",
@@ -234,6 +244,7 @@ module.exports = React.createClass({
             // Start the DM chat
             createRoom({dmUserId: addrs[0]})
             .catch(function(err) {
+                console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Failure to invite user",
@@ -254,6 +265,7 @@ module.exports = React.createClass({
                 return self._showAnyInviteErrors(addrs, room);
             })
             .catch(function(err) {
+                console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Failure to invite",
