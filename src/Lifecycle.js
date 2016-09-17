@@ -279,7 +279,12 @@ export function logout() {
         // logout doesn't work for guest sessions
         // Also we sometimes want to re-log in a guest session
         // if we abort the login
-        onLoggedOut();
+
+        // use settimeout to avoid racing with react unmounting components
+        // which need a valid matrixclientpeg
+        setTimeout(()=>{
+            onLoggedOut();
+        }, 0);
         return;
     }
 
