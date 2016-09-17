@@ -124,15 +124,19 @@ module.exports = React.createClass({
             e.stopPropagation();
             e.preventDefault();
             this.addressSelector.onKeyDown();
-        } else if (this.state.queryList.length > 0 && (e.keyCode === 13 || e.keyCode === 9)) { // enter or tab
+        } else if (this.state.queryList.length > 0 && (e.keyCode === 188, e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
             e.stopPropagation();
             e.preventDefault();
             this.addressSelector.onKeySelect();
+        } else if (this.refs.textinput.value.length === 0 && this.state.inviteList.length && e.keyCode === 8) { // backspace
+            e.stopPropagation();
+            e.preventDefault();
+            this.onDismissed(this.state.inviteList.length - 1)();
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
             this.onButtonClick();
-        } else if (e.keyCode === 32 || e.keyCode === 188 || e.keyCode === 9) { // space, comma or tab
+        } else if (e.keyCode === 188 || e.keyCode === 9) { // comma or tab
             e.stopPropagation();
             e.preventDefault();
             var check = Invite.isValidAddress(this.refs.textinput.value);
