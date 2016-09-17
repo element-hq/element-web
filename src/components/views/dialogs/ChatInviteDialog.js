@@ -142,7 +142,7 @@ module.exports = React.createClass({
             var check = Invite.isValidAddress(this.refs.textinput.value);
             if (check === true || check === null) {
                 var inviteList = this.state.inviteList.slice();
-                inviteList.push(this.refs.textinput.value);
+                inviteList.push(this.refs.textinput.value.trim());
                 this.setState({
                     inviteList: inviteList,
                     queryList: [],
