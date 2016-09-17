@@ -41,10 +41,12 @@ function createRoom(opts) {
 
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
-        Modal.createDialog(NeedToRegisterDialog, {
-            title: "Please Register",
-            description: "Guest users can't create new rooms. Please register to create room and start a chat."
-        });
+        setTimeout(()=>{
+            Modal.createDialog(NeedToRegisterDialog, {
+                title: "Please Register",
+                description: "Guest users can't create new rooms. Please register to create room and start a chat."
+            })
+        }, 0);
         return q(null);
     }
 
@@ -74,11 +76,14 @@ function createRoom(opts) {
         }
     ];
 
-    const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
+    let modal;
+    setTimeout(()=>{
+        modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner')
+    }, 0);
 
     let roomId;
     return client.createRoom(createOpts).finally(function() {
-        modal.close();
+        if (modal) modal.close();
     }).then(function(res) {
         roomId = res.room_id;
         if (opts.dmUserId) {
