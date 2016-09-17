@@ -454,7 +454,7 @@ module.exports = React.createClass({
             description: (
                 <div>
                     <p>End-to-end encryption is in beta and may not be reliable.</p>
-                    <p>You should <b>not</b> yet trust it to secure data.</p>
+                    <p>You should <b>not</b> yet trust it to secure data.  File transfers and calls are not yet encrypted.</p>
                     <p>Devices will <b>not</b> yet be able to decrypt history from before they joined the room.</p>
                     <p>Once encryption is enabled for a room it <b>cannot</b> be turned off again (for now).</p>
                     <p>Encrypted messages will not be visible on clients that do not yet implement encryption<br/>
