@@ -446,6 +446,8 @@ module.exports = React.createClass({
     },
 
     onEnableEncryptionClick() {
+        if (!this.refs.encrypt.checked) return;
+
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
             title: "Warning!",
