@@ -76,7 +76,7 @@ describe('joining a room', function () {
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
             httpBackend.when('GET', '/sync').respond(200, {});
-            httpBackend.when('GET', '/publicRooms').respond(200, {chunk: []});
+            httpBackend.when('POST', '/publicRooms').respond(200, {chunk: []});
             httpBackend.when('GET', '/directory/room/'+encodeURIComponent(ROOM_ALIAS)).respond(200, { room_id: ROOM_ID });
 
             // start with a logged-in client

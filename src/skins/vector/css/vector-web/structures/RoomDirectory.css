@@ -46,6 +46,11 @@ limitations under the License.
     -webkit-flex-direction: column;
 }
 
+.mx_RoomDirectory_list .mx_RoomView_messageListWrapper {
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+}
+
 .mx_RoomDirectory_listheader {
     display: table;
     width: 100%;
