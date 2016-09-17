@@ -197,9 +197,24 @@ module.exports = React.createClass({
         if ((this.state.phase == this.Phase.MemberList || this.state.phase === this.Phase.MemberInfo) && this.props.roomId) {
             var cli = MatrixClientPeg.get();
             var room = cli.getRoom(this.props.roomId);
+            var user_is_in_room;
             if (room) {
                 membersBadge = room.getJoinedMembers().length;
+                user_is_in_room = room.hasMembershipState(
+                    MatrixClientPeg.get().credentials.userId, 'join'
+                );
             }
+
+            if (user_is_in_room) {
+                inviteGroup =
+                    <div className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
+                        <div className="mx_RightPanel_icon" >
+                            <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
+                        </div>
+                        <div className="mx_RightPanel_message">Invite to this room</div>
+                    </div>;
+            }
+
         }
 
         if (this.props.roomId) {
@@ -221,14 +236,6 @@ module.exports = React.createClass({
                             { notificationsHighlight }
                         </div>
                     </div>;
-
-            inviteGroup =
-                <div className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
-                    <div className="mx_RightPanel_icon" >
-                        <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
-                    </div>
-                    <div className="mx_RightPanel_message">Invite to this room</div>
-                </div>;
         }
 
         if (!this.props.collapsed) {
