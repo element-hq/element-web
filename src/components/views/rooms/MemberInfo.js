@@ -115,6 +115,23 @@ module.exports = React.createClass({
         }
     },
 
+    _disambiguateDevices: function(devices) {
+        var names = Object.create(null);
+        for (var i = 0; i < devices.length; i++) {
+            var name = devices[i].getDisplayName();
+            var indexList = names[name] || [];
+            indexList.push(i);
+            names[name] = indexList;
+        }
+        for (name in names) {
+            if (names[name].length > 1) {
+                names[name].forEach((j)=>{
+                    devices[j].ambiguous = true;
+                });
+            }
+        }
+    },
+
     onDeviceVerificationChanged: function(userId, device) {
         if (!this._enableDevices) {
             return;
@@ -199,6 +216,7 @@ module.exports = React.createClass({
                 return;
             }
             var devices = client.getStoredDevicesForUser(member.userId);
+            self._disambiguateDevices(devices);
             self.setState({devicesLoading: false, devices: devices});
         }, function(err) {
             console.log("Error downloading devices", err);
