@@ -681,11 +681,11 @@ module.exports = React.createClass({
                     </div>
                 </div>
 
+                { adminTools }
+
                 { startChat }
 
                 { this._renderDevices() }
-
-                { adminTools }
 
                 { spinner }
             </div>
