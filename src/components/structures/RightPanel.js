@@ -22,6 +22,7 @@ var Matrix = require("matrix-js-sdk");
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
 var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
+var Modal = require('matrix-react-sdk/lib/Modal');
 
 module.exports = React.createClass({
     displayName: 'RightPanel',
@@ -110,6 +111,15 @@ module.exports = React.createClass({
     },
 
     onInviteButtonClick: function() {
+        if (MatrixClientPeg.get().isGuest()) {
+            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+            Modal.createDialog(NeedToRegisterDialog, {
+                title: "Please Register",
+                description: "Guest users can't invite users. Please register to invite."
+            });
+            return;
+        }
+
         // call ChatInviteDialog
         dis.dispatch({
             action: 'view_invite',
