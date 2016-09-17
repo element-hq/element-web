@@ -25,6 +25,7 @@ var dis = require('matrix-react-sdk/lib/dispatcher');
 var Unread = require('matrix-react-sdk/lib/Unread');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
+var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
 
 // turn this on for drop & drag console debugging galore
 var debug = false;
@@ -389,7 +390,7 @@ var RoomSubList = React.createClass({
 
         var badge;
         if (subListNotifCount > 0) {
-            badge = <div className={badgeClasses}>{subListNotifCount > 99 ? "99+" : subListNotifCount}</div>;
+            badge = <div className={badgeClasses}>{ FormattingUtils.formatCount(subListNotifCount) }</div>;
         }
 
         // When collapsed, allow a long hover on the header to show user
@@ -436,7 +437,7 @@ var RoomSubList = React.createClass({
         var overflowNotifCount = overflowNotifications[0];
         var overflowNotifHighlight = overflowNotifications[1];
         if (overflowNotifCount && !this.props.collapsed) {
-            content = overflowNotifCount;
+            content = FormattingUtils.formatCount(overflowNotifCount);
         }
 
         var badgeClasses = classNames({
