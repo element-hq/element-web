@@ -41,6 +41,16 @@ export default class ChangelogDialog extends React.Component {
         }
     }
 
+    _elementsForCommit(commit) {
+        return (
+            <li key={commit.sha} className="mx_ChangelogDialog_li">
+                <a href={commit.html_url} target="_blank" ref="noopener">
+                    {commit.commit.message}
+                </a>
+            </li>
+        );
+    }
+
     render() {
         const Spinner = sdk.getComponent('views.elements.Spinner');
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
@@ -51,9 +61,7 @@ export default class ChangelogDialog extends React.Component {
                 <div key={repo}>
                     <h2>{repo}</h2>
                     <ul>
-                    {this.state[repo].map(commit =>
-                        <li key={commit.commit.url} className="mx_ChangelogDialog_li"><a href={commit.commit.html_url} target="_blank" ref="noopener">{commit.commit.message}</a></li>
-                    )}
+                    {this.state[repo].map(this._elementsForCommit)}
                     </ul>
                 </div>
             )
