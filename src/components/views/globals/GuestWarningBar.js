@@ -34,7 +34,7 @@ module.exports = React.createClass({
             <div className="mx_GuestWarningBar">
                 <img className="mx_GuestWarningBar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
                 <div>
-                    You are using Riot as a guest. <a onClick={this.onRegisterClicked}>Register</a> or <a onClick={this.onLoginClicked}>log in</a> to access more rooms and features.
+                    You are Rioting as a guest. <a onClick={this.onRegisterClicked}>Register</a> or <a onClick={this.onLoginClicked}>log in</a> to access more rooms and features.
                 </div>
             </div>
         );
