@@ -27,7 +27,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_Login_logo">
-                <img src="img/logo.png" width="249" height="78" alt="vector"/>
+                <img src="img/logo.png" width="200" height="200" alt="Riot"/>
             </div>
         );
     }

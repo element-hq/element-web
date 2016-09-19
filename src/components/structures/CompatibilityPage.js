@@ -39,9 +39,9 @@ module.exports = React.createClass({
         return (
         <div className="mx_CompatibilityPage">
             <div className="mx_CompatibilityPage_box">
-                <p>Sorry, your browser is <b>not</b> able to run Vector.</p>
+                <p>Sorry, your browser is <b>not</b> able to run Riot.</p>
                 <p>
-                Vector uses many advanced browser features, some of which are not
+                Riot uses many advanced browser features, some of which are not
                 available or experimental in your current browser.
                 </p>
                 <p>
