@@ -298,7 +298,12 @@ const onMessage = function(event) {
         url = url.substr(0, url.length - 1);
     }
     if (url !== event.origin) {
-        console.warn("Unauthorised postMessage received. Source URL: " + event.origin);
+        return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
+    }
+
+    if (event.data.action === "close_scalar") {
+        dis.dispatch({ action: "close_scalar" });
+        sendResponse(event, null);
         return;
     }
 
