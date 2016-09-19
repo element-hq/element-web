@@ -421,7 +421,7 @@ module.exports = React.createClass({
                     this.props.onCancelClick(ev);
                 }
             },
-        }, "");
+        }, "mx_IntegrationsManager");
     },
 
     onLeaveClick() {
