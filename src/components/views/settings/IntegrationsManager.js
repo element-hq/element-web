@@ -57,9 +57,7 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_IntegrationsManager">
-                <iframe src={ this.props.src }></iframe>
-            </div>
+            <iframe src={ this.props.src }></iframe>
         );
     }
 });
