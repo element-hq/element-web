@@ -20,19 +20,30 @@ limitations under the License.
     flex: 0 0 93px ! important;
 }
 
+.mx_RoomHeader:hover:not(.mx_RoomHeader_editing) {
+    min-height: 70px;
+    -webit-flex: 0 0 auto ! important;
+    flex: 0 0 auto ! important;
+}
+
 .mx_RoomHeader_wrapper {
     max-width: 960px;
     margin: auto;
-    height: 70px;
+    min-height: 60px;
+    padding-top: 10px;
 
-    -webkit-align-items: center;
-    align-items: center;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
 
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
+}
+
+.mx_RoomHeader:hover .mx_RoomHeader_wrapper {
+    height: auto;
 }
 
 .mx_RoomHeader_leftRow {
@@ -46,6 +57,12 @@ limitations under the License.
 
     -webkit-flex: 1;
     flex: 1;
+    overflow: hidden;
+}
+
+.mx_RoomHeader_editing .mx_RoomHeader_leftRow,
+.mx_RoomHeader:hover .mx_RoomHeader_leftRow {
+    overflow: visible;
 }
 
 .mx_RoomHeader_spinner {
@@ -68,7 +85,7 @@ limitations under the License.
     margin-right: 8px;
     color: #fff;
     line-height: 34px;
-    margin-top: -2px;
+    margin-top: 6px;
     text-align: center;
 
     -webkit-box-ordinal-group: 2;
@@ -98,10 +115,11 @@ limitations under the License.
 
     padding-left: 12px;
     padding-right: 12px;
+    padding-top: 15px;
 }
 
 .mx_RoomHeader_rightRow {
-    margin-top: 4px;
+    margin-top: 8px;
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -205,13 +223,28 @@ limitations under the License.
     overflow: hidden;
     text-overflow: ellipsis;
     border-bottom: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.mx_RoomHeader.mx_RoomHeader_editing .mx_RoomHeader_topic,
+.mx_RoomHeader.mx_RoomHeader_editing:hover .mx_RoomHeader_topic
+{
+    max-height: 42px;
+    white-space: normal;
+    word-break: break-all;
+}
+
+.mx_RoomHeader:hover:not(.mx_RoomHeader_editing) .mx_RoomHeader_topic {
+    max-height: none;
+    white-space: normal;
+    word-break: break-all;
+    padding-bottom: 6px;
 }
 
 .mx_RoomHeader_avatar {
     display: table-cell;
     width: 48px;
     height: 50px;
-    vertical-align: middle;
 }
 
 .mx_RoomHeader_avatar .mx_BaseAvatar_image {
