@@ -28,7 +28,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_Login_links">
                 <a href="https://medium.com/@RiotChat">blog</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                <a href="https://twitter.com/@Riot_Chat">twitter</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                <a href="https://twitter.com/@RiotChat">twitter</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://github.com/vector-im/vector-web">github</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://matrix.org">powered by Matrix</a>
             </div>
