@@ -14,18 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_IntegrationsManager .mx_Dialog {
-    width: 60%;
-    height: 70%;
-    overflow: hidden;
-    padding: 0px;
-    max-width: initial;
-    max-height: initial;
+.mx_IntegrationsManager {
+    display: -webkit-flex;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    -webkit-align-items: center;
+    align-items: center;
+    justify-content: center;
+    -webkit-justify-content: center;
 }
 
 .mx_IntegrationsManager iframe {
     background-color: #fff;
     border: 0px;
-    width: 100%;
-    height: 100%;
+    width: 720px;
+    height: 512px;
 }
