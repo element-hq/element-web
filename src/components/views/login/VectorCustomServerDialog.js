@@ -33,7 +33,7 @@ module.exports = React.createClass({
                         You can use the custom server options to log into other Matrix
                         servers by specifying a different Home server URL.
                         <br/>
-                        This allows you to use Vector with an existing Matrix account on
+                        This allows you to use Riot with an existing Matrix account on
                         a different home server.
                         <br/>
                         <br/>

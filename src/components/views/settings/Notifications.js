@@ -132,7 +132,7 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Error saving email notification preferences",
-                description: "Vector was unable to save your email notification preferences.",
+                description: "An error occurred whilst saving your email notification preferences.",
             });
         });
     },
@@ -784,7 +784,7 @@ module.exports = React.createClass({
                 <div>
                     <h3>Advanced notifications settings</h3>
                     There are advanced notifications which are not shown here.<br/>
-                    You might have configured them in another client than Vector. You cannot tune them in Vector but they still apply.
+                    You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply.
                     <ul>
                         { externalRules }
                     </ul>

@@ -39,7 +39,7 @@ export default function NewVersionBar(props) {
         <div className="mx_MatrixToolbar">
             <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
             <div className="mx_MatrixToolbar_content">
-                A new version of Vector is available. Refresh your browser.
+                A new version of Riot is available. Refresh your browser.
             </div>
             <button className="mx_MatrixToolbar_action" onClick={onChangelogClicked}>Changelog</button>
         </div>
