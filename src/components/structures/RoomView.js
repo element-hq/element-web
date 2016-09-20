@@ -679,9 +679,9 @@ module.exports = React.createClass({
             if (this.state.room) {
                 const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
                 if (me && me.membership == 'invite') {
-                    // The 'direct' hihnt is there, so declare that this is a DM room for
-                    // whoever invited us.
                     if (me.events.member.getContent().is_direct) {
+                        // The 'direct' hint is there, so declare that this is a DM room for
+                        // whoever invited us.
                         return Rooms.setDMRoom(this.state.room.roomId, me.events.member.getSender());
                     }
                 }
