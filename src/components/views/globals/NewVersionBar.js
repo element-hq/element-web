@@ -20,6 +20,15 @@ var React = require('react');
 var sdk = require('matrix-react-sdk');
 import Modal from 'matrix-react-sdk/lib/Modal';
 
+/**
+ * Check a version string is compatible with the Changelog
+ * dialog
+ */
+function checkVersion(ver) {
+    const parts = ver.split('-');
+    return parts[0] == 'vector' && parts[2] == 'react' && parts[4] == 'js';
+}
+
 export default function NewVersionBar(props) {
     const onChangelogClicked = () => {
         const ChangelogDialog = sdk.getComponent('dialogs.ChangelogDialog');
@@ -35,13 +44,17 @@ export default function NewVersionBar(props) {
         });
     };
 
+    let changelog_button;
+    if (checkVersion(props.version) && checkVersion(props.newVersion)) {
+        changelog_button = <button className="mx_MatrixToolbar_action" onClick={onChangelogClicked}>Changelog</button>;
+    }
     return (
         <div className="mx_MatrixToolbar">
             <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
             <div className="mx_MatrixToolbar_content">
                 A new version of Riot is available. Refresh your browser.
             </div>
-            <button className="mx_MatrixToolbar_action" onClick={onChangelogClicked}>Changelog</button>
+            {changelog_button}
         </div>
     );
 }
