@@ -620,7 +620,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomTile_avatar">
                     <img src="img/create-big.svg" width="26" height="26" />
                 </div>
-                <div className={labelClasses}><i>Start new direct chat</i></div>
+                <div className={labelClasses}><i>Start new chat</i></div>
             </div>
 
             startChat = <div>
