@@ -18,6 +18,7 @@ export default class Autocomplete extends React.Component {
 
         this.completionPromise = null;
         this.onConfirm = this.onConfirm.bind(this);
+        this.hide = this.hide.bind(this);
 
         this.state = {
             // list of completionResults, each containing completions
@@ -137,6 +138,10 @@ export default class Autocomplete extends React.Component {
         e.preventDefault();
 
         // selectionOffset = 0, so we don't end up completing when autocomplete is hidden
+        this.hide();
+    }
+
+    hide() {
         this.setState({hide: true, selectionOffset: 0});
     }
 
