@@ -1,3 +1,14 @@
+Changes in [0.7.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.7.2) (2016-09-21)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.1...v0.7.2)
+
+ * Revert #333
+   [\#491](https://github.com/matrix-org/matrix-react-sdk/pull/491)
+ * EncryptedEventDialog updates
+   [\#490](https://github.com/matrix-org/matrix-react-sdk/pull/490)
+ * Apply heuristic on incoming DMs
+   [\#487](https://github.com/matrix-org/matrix-react-sdk/pull/487)
+
 Changes in [0.7.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.7.1) (2016-09-21)
 ===================================================================================================
  * Correct js-sdk version dependency
