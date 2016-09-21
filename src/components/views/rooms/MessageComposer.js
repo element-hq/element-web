@@ -178,7 +178,7 @@ export default class MessageComposer extends React.Component {
 
     _tryComplete(): boolean {
         if (this.refs.autocomplete) {
-            return this.refs.autocomplete.onConfirm();
+            return this.refs.autocomplete.onCompletionClicked();
         }
         return false;
     }
