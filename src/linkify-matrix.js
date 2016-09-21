@@ -42,7 +42,9 @@ function matrixLinkify(linkify) {
         TT.PLUS,
         TT.NUM,
         TT.DOMAIN,
-        TT.TLD
+        TT.TLD,
+        TT.UNDERSCORE,
+        TT.POUND,
     ];
 
     S_START.on(TT.POUND, S_HASH);
