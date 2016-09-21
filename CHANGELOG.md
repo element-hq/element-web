@@ -1,3 +1,72 @@
+Changes in [0.8.0](https://github.com/vector-im/vector-web/releases/tag/v0.8.0) (2016-09-21)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.5-r3...v0.8.0)
+
+ * Dbkr/rebrand
+   [\#2285](https://github.com/vector-im/vector-web/pull/2285)
+ * Listen for close_scalar and close the dialog box when received
+   [\#2282](https://github.com/vector-im/vector-web/pull/2282)
+ * Revert "improve lipstick and support scalar logout"
+   [\#2281](https://github.com/vector-im/vector-web/pull/2281)
+ * improve lipstick and support scalar logout
+   [\#2280](https://github.com/vector-im/vector-web/pull/2280)
+ * Fix changelog links
+   [\#2071](https://github.com/vector-im/vector-web/pull/2071)
+ * Paginate Room Directory
+   [\#2241](https://github.com/vector-im/vector-web/pull/2241)
+ * Make redeploy script symlink config
+   [\#2240](https://github.com/vector-im/vector-web/pull/2240)
+ * Update the version of olm to 1.3.0
+   [\#2210](https://github.com/vector-im/vector-web/pull/2210)
+ * Directory network selector
+   [\#2219](https://github.com/vector-im/vector-web/pull/2219)
+ * Wmwragg/two state sublist headers
+   [\#2235](https://github.com/vector-im/vector-web/pull/2235)
+ * Wmwragg/correct incoming call positioning
+   [\#2222](https://github.com/vector-im/vector-web/pull/2222)
+ * Wmwragg/remove old filter
+   [\#2211](https://github.com/vector-im/vector-web/pull/2211)
+ * Wmwragg/multi invite bugfix
+   [\#2198](https://github.com/vector-im/vector-web/pull/2198)
+ * Wmwragg/chat multi invite
+   [\#2181](https://github.com/vector-im/vector-web/pull/2181)
+ * shuffle bottomleftmenu around a bit
+   [\#2182](https://github.com/vector-im/vector-web/pull/2182)
+ * Improve autocomplete behaviour (styling)
+   [\#2175](https://github.com/vector-im/vector-web/pull/2175)
+ * First wave of E2E visuals
+   [\#2163](https://github.com/vector-im/vector-web/pull/2163)
+ * FilePanel and NotificationPanel support
+   [\#2113](https://github.com/vector-im/vector-web/pull/2113)
+ * Cursor: pointer on member info create room button
+   [\#2151](https://github.com/vector-im/vector-web/pull/2151)
+ * Support for adding DM rooms to the MemberInfo Panel
+   [\#2147](https://github.com/vector-im/vector-web/pull/2147)
+ * Wmwragg/one to one indicators
+   [\#2139](https://github.com/vector-im/vector-web/pull/2139)
+ * Added back the Directory listing button, with new tootlip
+   [\#2136](https://github.com/vector-im/vector-web/pull/2136)
+ * wmwragg/chat invite dialog fix
+   [\#2134](https://github.com/vector-im/vector-web/pull/2134)
+ * Wmwragg/one to one chat
+   [\#2110](https://github.com/vector-im/vector-web/pull/2110)
+ * Support toggling DM status of rooms
+   [\#2111](https://github.com/vector-im/vector-web/pull/2111)
+ * Formatting toolbar for RTE message composer.
+   [\#2082](https://github.com/vector-im/vector-web/pull/2082)
+ * jenkins.sh: install olm from jenkins artifacts
+   [\#2092](https://github.com/vector-im/vector-web/pull/2092)
+ * e2e device CSS
+   [\#2085](https://github.com/vector-im/vector-web/pull/2085)
+ * Bump to olm 1.1.0
+   [\#2069](https://github.com/vector-im/vector-web/pull/2069)
+ * Improve readability of the changelog dialog
+   [\#2056](https://github.com/vector-im/vector-web/pull/2056)
+ * Turn react consistency checks back on in develop builds
+   [\#2009](https://github.com/vector-im/vector-web/pull/2009)
+ * Wmwragg/direct chat sublist
+   [\#2028](https://github.com/vector-im/vector-web/pull/2028)
+
 Changes in [0.7.5-r3](https://github.com/vector-im/vector-web/releases/tag/v0.7.5-r3) (2016-09-02)
 ==================================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.7.5-r2...v0.7.5-r3)
