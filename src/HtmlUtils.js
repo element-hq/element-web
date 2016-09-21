@@ -101,6 +101,10 @@ var sanitizeHtmlParams = {
     selfClosing: [ 'img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta' ],
     // URL schemes we permit
     allowedSchemes: [ 'http', 'https', 'ftp', 'mailto' ],
+
+    // DO NOT USE. sanitize-html allows all URL starting with '//'
+    // so this will always allow links to whatever scheme the
+    // host page is served over.
     allowedSchemesByTag: {},
 
     transformTags: { // custom to matrix
