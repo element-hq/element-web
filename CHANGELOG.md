@@ -1,3 +1,115 @@
+Changes in [0.7.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.7.0) (2016-09-21)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.6.5-r3...v0.7.0)
+
+ * Rebrand
+   [\#485](https://github.com/matrix-org/matrix-react-sdk/pull/485)
+ * Pass close_scalar postMessage action through to the dispatcher
+   [\#484](https://github.com/matrix-org/matrix-react-sdk/pull/484)
+ * Replace <p>s with <br/>s consistently
+   [\#482](https://github.com/matrix-org/matrix-react-sdk/pull/482)
+ * Add 'startAtBottom' flag
+   [\#483](https://github.com/matrix-org/matrix-react-sdk/pull/483)
+ * Add the olm version to the settings page.
+   [\#474](https://github.com/matrix-org/matrix-react-sdk/pull/474)
+ * Pass through config for Room Directory
+   [\#479](https://github.com/matrix-org/matrix-react-sdk/pull/479)
+ * Fix unicode completions in autocomplete.
+   [\#481](https://github.com/matrix-org/matrix-react-sdk/pull/481)
+ * Add ability to set plumbing state in a room
+   [\#477](https://github.com/matrix-org/matrix-react-sdk/pull/477)
+ * Disable username and room decorators
+   [\#480](https://github.com/matrix-org/matrix-react-sdk/pull/480)
+ * Wmwragg/correct incoming call positioning
+   [\#478](https://github.com/matrix-org/matrix-react-sdk/pull/478)
+ * Wmwragg/remove old filter
+   [\#475](https://github.com/matrix-org/matrix-react-sdk/pull/475)
+ * Corrected onKeyUp misstype and return can now be used instead of clic…
+   [\#476](https://github.com/matrix-org/matrix-react-sdk/pull/476)
+ * Wmwragg/multi invite bugfix
+   [\#473](https://github.com/matrix-org/matrix-react-sdk/pull/473)
+ * Revert "Fix linkification and bump linkifyjs dep"
+   [\#471](https://github.com/matrix-org/matrix-react-sdk/pull/471)
+ * Wmwragg/chat multi invite
+   [\#469](https://github.com/matrix-org/matrix-react-sdk/pull/469)
+ * Matthew/right panel collapse
+   [\#470](https://github.com/matrix-org/matrix-react-sdk/pull/470)
+ * Fix linkification and bump linkifyjs dep
+   [\#460](https://github.com/matrix-org/matrix-react-sdk/pull/460)
+ * Add modal dialog on new room button
+   [\#468](https://github.com/matrix-org/matrix-react-sdk/pull/468)
+ * Flag incoming DMs as such
+   [\#463](https://github.com/matrix-org/matrix-react-sdk/pull/463)
+ * Improve autocomplete behaviour
+   [\#466](https://github.com/matrix-org/matrix-react-sdk/pull/466)
+ * Pull multi-inviting functionality out of MultiInviteDialog
+   [\#467](https://github.com/matrix-org/matrix-react-sdk/pull/467)
+ * Remove markdown line breaks
+   [\#464](https://github.com/matrix-org/matrix-react-sdk/pull/464)
+ * Fix un-marking rooms as DM  rooms
+   [\#465](https://github.com/matrix-org/matrix-react-sdk/pull/465)
+ * Don't re-use parted rooms for DMs
+   [\#461](https://github.com/matrix-org/matrix-react-sdk/pull/461)
+ * Update createRoom to support creating DM rooms
+   [\#458](https://github.com/matrix-org/matrix-react-sdk/pull/458)
+ * First wave of E2E Visuals
+   [\#462](https://github.com/matrix-org/matrix-react-sdk/pull/462)
+ * FilePanel, NotificationPanel and EventTimelineSet support
+   [\#450](https://github.com/matrix-org/matrix-react-sdk/pull/450)
+ * Fix CAS support by using a temporary Matrix client
+   [\#459](https://github.com/matrix-org/matrix-react-sdk/pull/459)
+ * Don't crash if no DM rooms with someone
+   [\#457](https://github.com/matrix-org/matrix-react-sdk/pull/457)
+ * Don't always show DM rooms in Direct Messages
+   [\#456](https://github.com/matrix-org/matrix-react-sdk/pull/456)
+ * Add DM rooms with that person to the MemberInfo panel
+   [\#455](https://github.com/matrix-org/matrix-react-sdk/pull/455)
+ * Add some tests for the rich text editor
+   [\#452](https://github.com/matrix-org/matrix-react-sdk/pull/452)
+ * Fix bug whereby refreshing Vector would not allow querying of membership
+   state
+   [\#454](https://github.com/matrix-org/matrix-react-sdk/pull/454)
+ * Wmwragg/one to one indicators
+   [\#453](https://github.com/matrix-org/matrix-react-sdk/pull/453)
+ * Update MemberDeviceInfo display
+   [\#451](https://github.com/matrix-org/matrix-react-sdk/pull/451)
+ * Wmwragg/one to one chat
+   [\#448](https://github.com/matrix-org/matrix-react-sdk/pull/448)
+ * Scalar Messaging: Expose join_rules and restrict to currently viewed room
+   [\#443](https://github.com/matrix-org/matrix-react-sdk/pull/443)
+ * API for (un)marking rooms as DM rooms
+   [\#449](https://github.com/matrix-org/matrix-react-sdk/pull/449)
+ * Formatting toolbar for RTE message composer.
+   [\#440](https://github.com/matrix-org/matrix-react-sdk/pull/440)
+ * Refactor MatrixTools to Rooms
+   [\#447](https://github.com/matrix-org/matrix-react-sdk/pull/447)
+ * Track DM rooms in account data
+   [\#446](https://github.com/matrix-org/matrix-react-sdk/pull/446)
+ * Fix: conference rooms were no longer hidden
+   [\#445](https://github.com/matrix-org/matrix-react-sdk/pull/445)
+ * Fix error dialog on conf call error
+   [\#444](https://github.com/matrix-org/matrix-react-sdk/pull/444)
+ * Make MemberInfo to use client.getStoredDevicesForUser
+   [\#441](https://github.com/matrix-org/matrix-react-sdk/pull/441)
+ * Implement starter link support
+   [\#437](https://github.com/matrix-org/matrix-react-sdk/pull/437)
+ * Convert MemberDeviceInfo to ES6 class
+   [\#442](https://github.com/matrix-org/matrix-react-sdk/pull/442)
+ * Make the 'encrypt this room' knob be megolm
+   [\#439](https://github.com/matrix-org/matrix-react-sdk/pull/439)
+ * Show something when we see a no-op join event
+   [\#438](https://github.com/matrix-org/matrix-react-sdk/pull/438)
+ * Handle broken OlmAccounts
+   [\#436](https://github.com/matrix-org/matrix-react-sdk/pull/436)
+ * Show session restore errors on the login screen
+   [\#435](https://github.com/matrix-org/matrix-react-sdk/pull/435)
+ * use a top-level audio tag for playing all VoIP audio.
+   [\#434](https://github.com/matrix-org/matrix-react-sdk/pull/434)
+ * use promises to mediate access to HTMLAudioElements
+   [\#433](https://github.com/matrix-org/matrix-react-sdk/pull/433)
+ * Wmwragg/direct chat sublist
+   [\#432](https://github.com/matrix-org/matrix-react-sdk/pull/432)
+
 Changes in [0.6.5-r3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.6.5-r3) (2016-09-02)
 =========================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.6.5-r2...v0.6.5-r3)
