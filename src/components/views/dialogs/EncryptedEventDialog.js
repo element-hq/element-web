@@ -22,15 +22,27 @@ module.exports = React.createClass({
     displayName: 'EncryptedEventDialog',
 
     propTypes: {
-        onFinished: React.PropTypes.func,
+        event: React.PropTypes.object.isRequired,
+        onFinished: React.PropTypes.func.isRequired,
+    },
+
+    getInitialState: function() {
+        return { device: this.refreshDevice() };
     },
 
     componentWillMount: function() {
+        this._unmounted = false;
         var client = MatrixClientPeg.get();
         client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
 
+        // no need to redownload keys if we already have the device
+        if (this.state.device) {
+            return;
+        }
         client.downloadKeys([this.props.event.getSender()], true).done(()=>{
-            var devices = client.getStoredDevicesForUser(this.props.event.getSender());
+            if (this._unmounted) {
+                return;
+            }
             this.setState({ device: this.refreshDevice() });
         }, (err)=>{
             console.log("Error downloading devices", err);
@@ -38,6 +50,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        this._unmounted = true;
         var client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
@@ -45,16 +58,7 @@ module.exports = React.createClass({
     },
 
     refreshDevice: function() {
-        // XXX: gutwrench - is there any reason not to expose this on MatrixClient itself?
-        return MatrixClientPeg.get()._crypto.getDeviceByIdentityKey(
-                    this.props.event.getSender(),
-                    this.props.event.getWireContent().algorithm,
-                    this.props.event.getWireContent().sender_key
-                );
-    },
-
-    getInitialState: function() {
-        return { device: this.refreshDevice() };
+        return MatrixClientPeg.get().getEventSenderDeviceInfo(this.props.event);
     },
 
     onDeviceVerificationChanged: function(userId, device) {
@@ -71,11 +75,93 @@ module.exports = React.createClass({
         }
     },
 
-    render: function() {
-        var event = this.props.event;
+    _renderDeviceInfo: function() {
         var device = this.state.device;
+        if (!device) {
+            return (<i>unknown device</i>);
+        }
 
+        var verificationStatus = (<b>NOT verified</b>);
+        if (device.isBlocked()) {
+            verificationStatus = (<b>Blocked</b>);
+        } else if (device.isVerified()) {
+            verificationStatus = "verified";
+        }
+
+        return (
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>{ device.getDisplayName() }</td>
+                    </tr>
+                    <tr>
+                        <td>Device ID</td>
+                        <td><code>{ device.deviceId }</code></td>
+                    </tr>
+                    <tr>
+                        <td>Verification</td>
+                        <td>{ verificationStatus }</td>
+                    </tr>
+                    <tr>
+                        <td>Ed25519 fingerprint</td>
+                        <td><code>{device.getFingerprint()}</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        );
+    },
+
+    _renderEventInfo: function() {
+        var event = this.props.event;
+
+        return (
+            <table>
+                <tbody>
+                    <tr>
+                        <td>User ID</td>
+                        <td>{ event.getSender() }</td>
+                    </tr>
+                    <tr>
+                        <td>Curve25519 identity key</td>
+                        <td><code>{ event.getSenderKey() || <i>none</i> }</code></td>
+                    </tr>
+                    <tr>
+                        <td>Claimed Ed25519 fingerprint key</td>
+                        <td><code>{ event.getKeysClaimed().ed25519 || <i>none</i> }</code></td>
+                    </tr>
+                    <tr>
+                        <td>Algorithm</td>
+                        <td>{ event.getWireContent().algorithm || <i>unencrypted</i> }</td>
+                    </tr>
+                {
+                    event.getContent().msgtype === 'm.bad.encrypted' ? (
+                    <tr>
+                        <td>Decryption error</td>
+                        <td>{ event.getContent().body }</td>
+                    </tr>
+                    ) : null
+                }
+                    <tr>
+                        <td>Session ID</td>
+                        <td><code>{ event.getWireContent().session_id || <i>none</i> }</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        );
+    },
+
+    render: function() {
         var MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
+
+        var buttons = null;
+        if (this.state.device) {
+            buttons = (
+                <MemberDeviceInfo hideInfo={true} device={ this.state.device }
+                    userId={ this.props.event.getSender() }
+                />
+            );
+        }
 
         return (
             <div className="mx_EncryptedEventDialog" onKeyDown={ this.onKeyDown }>
@@ -83,60 +169,19 @@ module.exports = React.createClass({
                     End-to-end encryption information
                 </div>
                 <div className="mx_Dialog_content">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Sent by</td>
-                                <td>{ event.getSender() }</td>
-                            </tr>
-                            <tr>
-                                <td>Sender device name</td>
-                                <td>{ device ? device.getDisplayName() : <i>unknown device</i>}</td>
-                            </tr>
-                            <tr>
-                                <td>Sender device ID</td>
-                                <td>{ device ? <code>{ device.deviceId }</code> : <i>unknown device</i>}</td>
-                            </tr>
-                            <tr>
-                                <td>Sender device verification</td>
-                                <td>{ MatrixClientPeg.get().isEventSenderVerified(event) ? "verified" : <b>NOT verified</b> }</td>
-                            </tr>
-                            <tr>
-                                <td>Sender device ed25519 identity key</td>
-                                <td>{ device ? <code>{device.getFingerprint()}</code> : <i>unknown device</i>}</td>
-                            </tr>
-                            <tr>
-                                <td>Sender device curve25519 olm key</td>
-                                <td><code>{ event.getWireContent().sender_key || <i>none</i> }</code></td>
-                            </tr>
-                            <tr>
-                                <td>Algorithm</td>
-                                <td>{ event.getWireContent().algorithm || <i>unencrypted</i> }</td>
-                            </tr>
-                        {
-                            event.getContent().msgtype === 'm.bad.encrypted' ? (
-                            <tr>
-                                <td>Decryption error</td>
-                                <td>{ event.getContent().body }</td>
-                            </tr>
-                            ) : ''
-                        }
-                            <tr>
-                                <td>Session ID</td>
-                                <td><code>{ event.getWireContent().session_id || <i>none</i> }</code></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h4>Event information</h4>
+                    {this._renderEventInfo()}
+
+                    <h4>Sender device information</h4>
+                    {this._renderDeviceInfo()}
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={ this.props.onFinished } autoFocus={ true }>
                         OK
                     </button>
-                    <MemberDeviceInfo ref="memberDeviceInfo" hideInfo={true} device={ this.state.device } userId={ this.props.event.getSender() }/>
+                    {buttons}
                 </div>
             </div>
         );
     }
 });
-
-
