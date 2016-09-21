@@ -451,6 +451,7 @@ module.exports = React.createClass({
                 room: room,
                 joining: false,
             });
+
             this._onRoomLoaded(room);
         }
     },
@@ -520,6 +521,17 @@ module.exports = React.createClass({
         // into.
         var me = MatrixClientPeg.get().credentials.userId;
         if (this.state.joining && this.state.room.hasMembershipState(me, "join")) {
+            // Having just joined a room, check to see if it looks like a DM room, and if so,
+            // mark it as one. This is to work around the fact that some clients don't support
+            // is_direct. We should remove this once they do.
+            const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
+            if (Rooms.looksLikeDirectMessageRoom(this.state.room, me)) {
+                // XXX: There's not a whole lot we can really do if this fails: at best
+                // perhaps we could try a couple more times, but since it's a temporary
+                // compatability workaround, let's not bother.
+                Rooms.setDMRoom(this.state.room.roomId, me.events.member.getSender()).done();
+            }
+
             this.setState({
                 joining: false
             });
@@ -679,9 +691,9 @@ module.exports = React.createClass({
             if (this.state.room) {
                 const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
                 if (me && me.membership == 'invite') {
-                    // The 'direct' hihnt is there, so declare that this is a DM room for
-                    // whoever invited us.
                     if (me.events.member.getContent().is_direct) {
+                        // The 'direct' hint is there, so declare that this is a DM room for
+                        // whoever invited us.
                         return Rooms.setDMRoom(this.state.room.roomId, me.events.member.getSender());
                     }
                 }

@@ -68,11 +68,11 @@ export function looksLikeDirectMessageRoom(room, me) {
         // Used to split rooms via tags
         const tagNames = Object.keys(room.tags);
         // Used for 1:1 direct chats
-        const joinedMembers = room.getJoinedMembers();
+        const members = room.currentState.getMembers();
 
         // Show 1:1 chats in seperate "Direct Messages" section as long as they haven't
         // been moved to a different tag section
-        if (joinedMembers.length === 2 && !tagNames.length) {
+        if (members.length === 2 && !tagNames.length) {
             return true;
         }
     }
