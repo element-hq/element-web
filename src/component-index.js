@@ -58,6 +58,7 @@ module.exports.components['views.dialogs.SetDisplayNameDialog'] = require('./com
 module.exports.components['views.dialogs.TextInputDialog'] = require('./components/views/dialogs/TextInputDialog');
 module.exports.components['views.elements.AddressSelector'] = require('./components/views/elements/AddressSelector');
 module.exports.components['views.elements.AddressTile'] = require('./components/views/elements/AddressTile');
+module.exports.components['views.elements.DeviceVerifyButtons'] = require('./components/views/elements/DeviceVerifyButtons');
 module.exports.components['views.elements.EditableText'] = require('./components/views/elements/EditableText');
 module.exports.components['views.elements.EditableTextContainer'] = require('./components/views/elements/EditableTextContainer');
 module.exports.components['views.elements.EmojiText'] = require('./components/views/elements/EmojiText');
