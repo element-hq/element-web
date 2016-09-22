@@ -30,6 +30,14 @@ renderer.link = function(href, title, text) {
     }
     return marked.Renderer.prototype.apply(this, arguments);
 }
+const PARAGRAPH_SUFFIX = '<br/><br/>';
+// suffix paragraphs with double line breaks instead of
+// wrapping them in 'p' tags: this makes it much easier
+// for us to just strip one set of these off at the end,
+// leaving valid markup if there were multiple paragraphs.
+renderer.paragraph = function(text) {
+    return text + PARAGRAPH_SUFFIX;
+}
 
 // marked only applies the default options on the high
 // level marked() interface, so we do it here.
@@ -42,6 +50,7 @@ const marked_options = Object.assign({}, marked.defaults, {
     sanitize: true,
     smartLists: true,
     smartypants: false,
+    xhtml: true, // return self closing tags (ie. <br /> not <br>)
 });
 
 const real_parser = new marked.Parser(marked_options);
@@ -109,6 +118,8 @@ export default class Markdown {
     }
 
     toHTML() {
-        return real_parser.parse(this._copyTokens());
+        return real_parser.parse(this._copyTokens()).slice(
+            0, 0 - PARAGRAPH_SUFFIX.length
+        );
     }
 }
