@@ -46,8 +46,10 @@ export default class MemberDeviceInfo extends React.Component {
             (this.props.device.getDisplayName() ? this.props.device.getDisplayName() : "") + " (" + this.props.device.deviceId + ")" :
             this.props.device.getDisplayName();
 
+        // add the deviceId as a titletext to help with debugging
         return (
-            <div className="mx_MemberDeviceInfo" >
+            <div className="mx_MemberDeviceInfo"
+                    title={"device id: " + this.props.device.deviceId} >
                 <div className="mx_MemberDeviceInfo_deviceInfo">
                     <div className="mx_MemberDeviceInfo_deviceId">
                         {deviceName}
