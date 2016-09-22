@@ -16,33 +16,9 @@ limitations under the License.
 
 import marked from 'marked';
 
-// replace the default link renderer function
-// to prevent marked from turning plain URLs
-// into links, because tits algorithm is fairly
-// poor, so let's send plain URLs rather than
-// badly linkified ones (the linkifier Vector
-// uses on message display is way better, eg.
-// handles URLs with closing parens at the end).
-const renderer = new marked.Renderer();
-renderer.link = function(href, title, text) {
-    if (text == href) {
-        return href;
-    }
-    return marked.Renderer.prototype.apply(this, arguments);
-}
-const PARAGRAPH_SUFFIX = '<br/><br/>';
-// suffix paragraphs with double line breaks instead of
-// wrapping them in 'p' tags: this makes it much easier
-// for us to just strip one set of these off at the end,
-// leaving valid markup if there were multiple paragraphs.
-renderer.paragraph = function(text) {
-    return text + PARAGRAPH_SUFFIX;
-}
-
 // marked only applies the default options on the high
 // level marked() interface, so we do it here.
 const marked_options = Object.assign({}, marked.defaults, {
-    renderer: renderer,
     gfm: true,
     tables: true,
     breaks: true,
@@ -52,8 +28,6 @@ const marked_options = Object.assign({}, marked.defaults, {
     smartypants: false,
     xhtml: true, // return self closing tags (ie. <br /> not <br>)
 });
-
-const real_parser = new marked.Parser(marked_options);
 
 /**
  * Class that wraps marked, adding the ability to see whether
@@ -90,36 +64,65 @@ export default class Markdown {
             is_plain = false;
         }
 
-        const dummyRenderer = {};
+        const dummy_renderer = {};
         for (const k of Object.keys(marked.Renderer.prototype)) {
-            dummyRenderer[k] = setNotPlain;
+            dummy_renderer[k] = setNotPlain;
         }
         // text and paragraph are just text
-        dummyRenderer.text = function(t){return t;}
-        dummyRenderer.paragraph = function(t){return t;}
+        dummy_renderer.text = function(t){return t;}
+        dummy_renderer.paragraph = function(t){return t;}
 
         // ignore links where text is just the url:
         // this ignores plain URLs that markdown has
         // detected whilst preserving markdown syntax links
-        dummyRenderer.link = function(href, title, text) {
+        dummy_renderer.link = function(href, title, text) {
             if (text != href) {
                 is_plain = false;
             }
         }
 
-        const dummyOptions = {};
-        Object.assign(dummyOptions, marked_options, {
-            renderer: dummyRenderer,
+        const dummy_options = Object.assign({}, marked_options, {
+            renderer: dummy_renderer,
         });
-        const dummyParser = new marked.Parser(dummyOptions);
-        dummyParser.parse(this._copyTokens());
+        const dummy_parser = new marked.Parser(dummy_options);
+        dummy_parser.parse(this._copyTokens());
 
         return is_plain;
     }
 
     toHTML() {
-        return real_parser.parse(this._copyTokens()).slice(
-            0, 0 - PARAGRAPH_SUFFIX.length
-        );
+        const real_renderer = new marked.Renderer();
+        real_renderer.link = function(href, title, text) {
+            // prevent marked from turning plain URLs
+            // into links, because tits algorithm is fairly
+            // poor. Let's send plain URLs rather than
+            // badly linkified ones (the linkifier Vector
+            // uses on message display is way better, eg.
+            // handles URLs with closing parens at the end).
+            if (text == href) {
+                return href;
+            }
+            return marked.Renderer.prototype.apply(this, arguments);
+        }
+
+        real_renderer.paragraph = (text) => {
+            // The tokens at the top level are the 'blocks', so if we
+            // have more than one, there are multiple 'paragraphs'.
+            // If there is only one top level token, just return the
+            // bare text: it's a single line of text and so should be
+            // 'inline', rather than necessarily wrapped in its own
+            // p tag. If, however, we have multiple tokens, each gets
+            // its own p tag to keep them as separate paragraphs.
+            if (this.tokens.length == 1) {
+                return text;
+            }
+            return '<p>' + text + '</p>';
+        }
+
+        const real_options = Object.assign({}, marked_options, {
+            renderer: real_renderer,
+        });
+        const real_parser = new marked.Parser(real_options);
+        return real_parser.parse(this._copyTokens());
     }
 }
