@@ -16,10 +16,25 @@ limitations under the License.
 
 import marked from 'marked';
 
+// replace the default link renderer function
+// to prevent marked from turning plain URLs
+// into links, because tits algorithm is fairly
+// poor, so let's send plain URLs rather than
+// badly linkified ones (the linkifier Vector
+// uses on message display is way better, eg.
+// handles URLs with closing parens at the end).
+const renderer = new marked.Renderer();
+renderer.link = function(href, title, text) {
+    if (text == href) {
+        return href;
+    }
+    return marked.Renderer.prototype.apply(this, arguments);
+}
+
 // marked only applies the default options on the high
 // level marked() interface, so we do it here.
-const marked_options = Object.assign({}, {
-    renderer: new marked.Renderer(),
+const marked_options = Object.assign({}, marked.defaults, {
+    renderer: renderer,
     gfm: true,
     tables: true,
     breaks: true,
@@ -27,7 +42,7 @@ const marked_options = Object.assign({}, {
     sanitize: true,
     smartLists: true,
     smartypants: false,
-}, marked.defaults);
+});
 
 const real_parser = new marked.Parser(marked_options);
 
