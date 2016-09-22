@@ -567,6 +567,8 @@ export default class MessageComposerInput extends React.Component {
             editorState: this.createEditorState(),
         });
 
+        this.autocomplete.hide();
+
         return true;
     }
 
