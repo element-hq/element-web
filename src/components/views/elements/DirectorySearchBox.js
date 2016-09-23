@@ -27,6 +27,10 @@ export default class DirectorySearchBox extends React.Component {
         this.onJoinButtonClick = this.onJoinButtonClick.bind(this);
 
         this.input = null;
+
+        this.state = {
+            value: '',
+        };
     }
 
     collectInput(e) {
@@ -34,8 +38,9 @@ export default class DirectorySearchBox extends React.Component {
     }
 
     onClearClick() {
+        this.setState({value: ''});
+
         if (this.input) {
-            this.input.value = '';
             this.input.focus();
 
             if (this.props.onClear) {
@@ -44,27 +49,34 @@ export default class DirectorySearchBox extends React.Component {
         }
     }
 
-    onChange() {
+    onChange(ev) {
         if (!this.input) return;
+        this.setState({value: ev.target.value});
 
         if (this.props.onChange) {
-            this.props.onChange(this.input.value);
+            this.props.onChange(this.state.value);
         }
     }
 
     onKeyUp(ev) {
         if (ev.key == 'Enter') {
             if (this.props.onJoinClick) {
-                this.props.onJoinClick(this.input.value);
+                this.props.onJoinClick(this.state.value);
             }
         }
     }
 
     onJoinButtonClick() {
+        if (this.props.onJoinClick) {
+            this.props.onJoinClick(this.state.value);
+        }
     }
 
     _contentLooksLikeAlias() {
-        return true;
+        if (!this.input) return false;
+
+        // liberal test for things that look like room aliases
+        return /#.+:.+/.test(this.state.value);
     }
 
     render() {
@@ -84,7 +96,7 @@ export default class DirectorySearchBox extends React.Component {
 
         return <span className={classnames(searchbox_classes)}>
             <div className="mx_DirectorySearchBox_container">
-                <input type="text" size="64"
+                <input type="text" value={this.state.value}
                     className="mx_DirectorySearchBox_input"
                     ref={this.collectInput}
                     onChange={this.onChange} onKeyUp={this.onKeyUp}
