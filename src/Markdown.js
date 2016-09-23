@@ -41,7 +41,7 @@ export default class Markdown {
     }
 
     _copyTokens() {
-        // copy tokens (the parser modifies it's input arg)
+        // copy tokens (the parser modifies its input arg)
         const tokens_copy = this.tokens.slice();
         // it also has a 'links' property, because this is javascript
         // and why wouldn't you have an array that also has properties?
@@ -94,7 +94,7 @@ export default class Markdown {
         const real_renderer = new marked.Renderer();
         real_renderer.link = function(href, title, text) {
             // prevent marked from turning plain URLs
-            // into links, because tits algorithm is fairly
+            // into links, because its algorithm is fairly
             // poor. Let's send plain URLs rather than
             // badly linkified ones (the linkifier Vector
             // uses on message display is way better, eg.
