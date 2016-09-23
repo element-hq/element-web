@@ -273,11 +273,15 @@ export function attachImmutableEntitiesToEmoji(editorState: EditorState): Editor
     });
 
     if (!newContentState.equals(contentState)) {
-        return EditorState.push(
+        const oldSelection = editorState.getSelection();
+        editorState = EditorState.push(
             editorState,
             newContentState,
             'convert-to-immutable-emojis',
         );
+        // this is somewhat of a hack, we're undoing selection changes caused above
+        // it would be better not to make those changes in the first place
+        editorState = EditorState.forceSelection(editorState, oldSelection);
     }
 
     return editorState;

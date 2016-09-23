@@ -17,7 +17,8 @@ export default class Autocomplete extends React.Component {
         super(props);
 
         this.completionPromise = null;
-        this.onConfirm = this.onConfirm.bind(this);
+        this.hide = this.hide.bind(this);
+        this.onCompletionClicked = this.onCompletionClicked.bind(this);
 
         this.state = {
             // list of completionResults, each containing completions
@@ -137,6 +138,10 @@ export default class Autocomplete extends React.Component {
         e.preventDefault();
 
         // selectionOffset = 0, so we don't end up completing when autocomplete is hidden
+        this.hide();
+    }
+
+    hide() {
         this.setState({hide: true, selectionOffset: 0});
     }
 
@@ -152,16 +157,13 @@ export default class Autocomplete extends React.Component {
         return done.promise;
     }
 
-    /** called from MessageComposerInput
-     * @returns {boolean} whether confirmation was handled
-     */
-    onConfirm(): boolean {
+    onCompletionClicked(): boolean {
         if (this.countCompletions() === 0 || this.state.selectionOffset === COMPOSER_SELECTED) {
             return false;
         }
 
-        let selectedCompletion = this.state.completionList[this.state.selectionOffset - 1];
-        this.props.onConfirm(selectedCompletion.range, selectedCompletion.completion);
+        this.props.onConfirm(this.state.completionList[this.state.selectionOffset - 1]);
+        this.hide();
 
         return true;
     }
@@ -199,7 +201,7 @@ export default class Autocomplete extends React.Component {
                 let onMouseOver = () => this.setSelection(componentPosition);
                 let onClick = () => {
                     this.setSelection(componentPosition);
-                    this.onConfirm();
+                    this.onCompletionClicked();
                 };
 
                 return React.cloneElement(completion.component, {
