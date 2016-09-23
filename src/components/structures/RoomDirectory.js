@@ -99,6 +99,8 @@ module.exports = React.createClass({
     },
 
     getMoreRooms: function() {
+        if (!MatrixClientPeg.get()) return q();
+
         const my_filter_string = this.filterString;
         const opts = {limit: 20};
         if (this.nextBatch) opts.since = this.nextBatch;
