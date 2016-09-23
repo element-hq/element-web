@@ -152,12 +152,12 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
+        var DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
 
         var buttons = null;
         if (this.state.device) {
             buttons = (
-                <MemberDeviceInfo hideInfo={true} device={ this.state.device }
+                <DeviceVerifyButtons device={ this.state.device }
                     userId={ this.props.event.getSender() }
                 />
             );
