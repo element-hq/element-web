@@ -42,7 +42,13 @@ function matrixLinkify(linkify) {
         TT.PLUS,
         TT.NUM,
         TT.DOMAIN,
-        TT.TLD
+        TT.TLD,
+        TT.UNDERSCORE,
+        TT.POUND,
+
+        // because 'localhost' is tokenised to the localhost token,
+        // usernames @localhost:foo.com are otherwise not matched!
+        TT.LOCALHOST,
     ];
 
     S_START.on(TT.POUND, S_HASH);
@@ -54,6 +60,7 @@ function matrixLinkify(linkify) {
     S_HASH_NAME.on(TT.COLON, S_HASH_NAME_COLON);
 
     S_HASH_NAME_COLON.on(TT.DOMAIN, S_HASH_NAME_COLON_DOMAIN);
+    S_HASH_NAME_COLON.on(TT.LOCALHOST, S_ROOMALIAS); // accept #foo:localhost
     S_HASH_NAME_COLON_DOMAIN.on(TT.DOT, S_HASH_NAME_COLON_DOMAIN_DOT);
     S_HASH_NAME_COLON_DOMAIN_DOT.on(TT.DOMAIN, S_HASH_NAME_COLON_DOMAIN);
     S_HASH_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_ROOMALIAS);
@@ -75,10 +82,14 @@ function matrixLinkify(linkify) {
 
     var username_tokens = [
         TT.DOT,
+        TT.UNDERSCORE,
         TT.PLUS,
         TT.NUM,
         TT.DOMAIN,
-        TT.TLD
+        TT.TLD,
+
+        // as in roomname_tokens
+        TT.LOCALHOST,
     ];
 
     S_START.on(TT.AT, S_AT);
@@ -90,6 +101,7 @@ function matrixLinkify(linkify) {
     S_AT_NAME.on(TT.COLON, S_AT_NAME_COLON);
 
     S_AT_NAME_COLON.on(TT.DOMAIN, S_AT_NAME_COLON_DOMAIN);
+    S_AT_NAME_COLON.on(TT.LOCALHOST, S_USERID); // accept @foo:localhost
     S_AT_NAME_COLON_DOMAIN.on(TT.DOT, S_AT_NAME_COLON_DOMAIN_DOT);
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.DOMAIN, S_AT_NAME_COLON_DOMAIN);
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_USERID);
