@@ -83,14 +83,18 @@ export default class DirectorySearchBox extends React.Component {
         }
 
         return <span className={classnames(searchbox_classes)}>
-            <input type="text" size="64"
-                className="mx_DirectorySearchBox_input"
-                ref={this.collectInput}
-                onChange={this.onChange} onKeyUp={this.onKeyUp}
-                placeholder="Find a room by keyword or room ID (#matrix:matrix.org)"
-            />
-            {join_button}
-            <span className="mx_DirectorySearchBox_clear" onClick={this.onClearClick} />
+            <div className="mx_DirectorySearchBox_container">
+                <input type="text" size="64"
+                    className="mx_DirectorySearchBox_input"
+                    ref={this.collectInput}
+                    onChange={this.onChange} onKeyUp={this.onKeyUp}
+                    placeholder="Find a room by keyword or room ID (#matrix:matrix.org)"
+                />
+                {join_button}
+                <span className="mx_DirectorySearchBox_clear_wrapper">
+                    <span className="mx_DirectorySearchBox_clear" onClick={this.onClearClick} />
+                </span>
+            </div>
         </span>;
     }
 }
