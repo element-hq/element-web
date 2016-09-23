@@ -539,6 +539,7 @@ export default class MessageComposerInput extends React.Component {
             sendTextFn = this.client.sendTextEmote;
         }
 
+        // XXX: We don't actually seem to use this history?
         this.sentHistory.push(contentHTML || contentText);
         let sendMessagePromise;
         if (contentHTML) {
