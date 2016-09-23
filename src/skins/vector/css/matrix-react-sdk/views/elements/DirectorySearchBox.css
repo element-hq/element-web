@@ -32,6 +32,23 @@ input[type=text].mx_DirectorySearchBox_input:focus {
     border: 0;
 }
 
+.mx_DirectorySearchBox_joinButton {
+    position: absolute;
+    right: 30px;
+    top: 5px;
+    padding: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #efefef;
+    border-radius: 3px;
+    background-image: url('img/icon-return.svg');
+    background-position: 8px 70%;
+    background-repeat: no-repeat;
+    text-indent: 18px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
 .mx_DirectorySearchBox_clear {
     position: absolute;
     right: 0px;
