@@ -1,0 +1,45 @@
+/*
+Copyright 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_DirectorySearchBox {
+    position: relative;
+    border-radius: 3px;
+    border: 1px solid #c7c7c7;
+    padding-left: 9px;
+    padding-right: 25px;
+}
+
+.mx_DirectorySearchBox_input {
+    border: 0;
+    padding: 0;
+    font-weight: 300;
+    font-size: 13px;
+}
+input[type=text].mx_DirectorySearchBox_input:focus {
+    border: 0;
+}
+
+.mx_DirectorySearchBox_clear {
+    position: absolute;
+    right: 0px;
+    display: inline-block;
+    top: 10px;
+    right: 10px;
+    background: url('img/icon_context_delete.svg');
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}

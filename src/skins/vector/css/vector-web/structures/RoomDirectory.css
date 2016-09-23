@@ -59,13 +59,8 @@ limitations under the License.
     border-spacing: 5px;
 }
 
-.mx_RoomDirectory_input {
+.mx_RoomDirectory_searchbox {
     display: table-cell;
-    border-radius: 3px;
-    border: 1px solid #c7c7c7;
-    font-weight: 300;
-    font-size: 13px;
-    padding: 9px;
 }
 
 .mx_RoomDirectory_listheader .mx_NetworkDropdown {
