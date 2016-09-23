@@ -24,6 +24,7 @@ export default class DirectorySearchBox extends React.Component {
         this.onClearClick = this.onClearClick.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onKeyUp = this.onKeyUp.bind(this);
+        this.onJoinButtonClick = this.onJoinButtonClick.bind(this);
 
         this.input = null;
     }
@@ -59,11 +60,27 @@ export default class DirectorySearchBox extends React.Component {
         }
     }
 
+    onJoinButtonClick() {
+    }
+
+    _contentLooksLikeAlias() {
+        return true;
+    }
+
     render() {
         const searchbox_classes = {
             mx_DirectorySearchBox: true,
         };
         searchbox_classes[this.props.className] = true;
+
+        let join_button;
+        if (this._contentLooksLikeAlias()) {
+            join_button = <span className="mx_DirectorySearchBox_joinButton"
+                onClick={this.onJoinButtonClick}
+            >
+                Join
+            </span>;
+        }
 
         return <span className={classnames(searchbox_classes)}>
             <input type="text" size="64"
@@ -72,6 +89,7 @@ export default class DirectorySearchBox extends React.Component {
                 onChange={this.onChange} onKeyUp={this.onKeyUp}
                 placeholder="Find a room by keyword or room ID (#matrix:matrix.org)"
             />
+            {join_button}
             <span className="mx_DirectorySearchBox_clear" onClick={this.onClearClick} />
         </span>;
     }
