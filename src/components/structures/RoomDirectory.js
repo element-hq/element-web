@@ -229,7 +229,7 @@ module.exports = React.createClass({
         }, 300);
     },
 
-    onFilterChange: function() {
+    onFilterClear: function() {
         this.filterString = null;
 
         if (this.filterTimeout) {
