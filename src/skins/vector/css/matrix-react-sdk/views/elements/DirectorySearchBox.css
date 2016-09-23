@@ -18,11 +18,15 @@ limitations under the License.
     position: relative;
     border-radius: 3px;
     border: 1px solid #c7c7c7;
+}
+
+.mx_DirectorySearchBox_container {
+    display: table;
     padding-left: 9px;
-    padding-right: 25px;
 }
 
 .mx_DirectorySearchBox_input {
+    display: table-cell;
     border: 0;
     padding: 0;
     font-weight: 300;
@@ -33,9 +37,7 @@ input[type=text].mx_DirectorySearchBox_input:focus {
 }
 
 .mx_DirectorySearchBox_joinButton {
-    position: absolute;
-    right: 30px;
-    top: 5px;
+    display: table-cell;
     padding: 3px;
     padding-left: 10px;
     padding-right: 10px;
@@ -49,13 +51,16 @@ input[type=text].mx_DirectorySearchBox_input:focus {
     font-size: 12px;
 }
 
+.mx_DirectorySearchBox_clear_wrapper {
+    display: table-cell;
+}
+
 .mx_DirectorySearchBox_clear {
-    position: absolute;
-    right: 0px;
     display: inline-block;
-    top: 10px;
-    right: 10px;
+    vertical-align: middle;
     background: url('img/icon_context_delete.svg');
+    background-position: 0 50%;
+    background-repeat: no-repeat;
     width: 15px;
     height: 15px;
     cursor: pointer;
