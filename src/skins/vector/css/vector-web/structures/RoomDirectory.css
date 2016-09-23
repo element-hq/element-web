@@ -53,6 +53,7 @@ limitations under the License.
 
 .mx_RoomDirectory_listheader {
     display: table;
+    table-layout: fixed;
     width: 100%;
     margin-top: 12px;
     margin-bottom: 12px;
@@ -65,7 +66,7 @@ limitations under the License.
 
 .mx_RoomDirectory_listheader .mx_NetworkDropdown {
     display: table-cell;
-    width: 100%;
+    width: 200px;
 }
 
 .mx_RoomDirectory_tableWrapper {

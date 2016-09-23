@@ -21,12 +21,13 @@ limitations under the License.
 }
 
 .mx_DirectorySearchBox_container {
-    display: table;
+    display: flex;
     padding-left: 9px;
+    padding-right: 9px;
 }
 
 .mx_DirectorySearchBox_input {
-    display: table-cell;
+    flex-grow: 1;
     border: 0;
     padding: 0;
     font-weight: 300;
@@ -49,6 +50,8 @@ input[type=text].mx_DirectorySearchBox_input:focus {
     text-indent: 18px;
     font-weight: 600;
     font-size: 12px;
+    user-select: none;
+    cursor: pointer;
 }
 
 .mx_DirectorySearchBox_clear_wrapper {
