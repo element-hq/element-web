@@ -15,18 +15,6 @@
  */
 var React = require("react");
 
-var marked = require("marked");
-marked.setOptions({
-    renderer: new marked.Renderer(),
-    gfm: true,
-    tables: true,
-    breaks: true,
-    pedantic: false,
-    sanitize: true,
-    smartLists: true,
-    smartypants: false
-});
-
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
@@ -35,23 +23,11 @@ var sdk = require('../../../index');
 
 var dis = require("../../../dispatcher");
 var KeyCode = require("../../../KeyCode");
+var Markdown = require("../../../Markdown");
 
 var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
 var MARKDOWN_ENABLED = true;
-
-function mdownToHtml(mdown) {
-    var html = marked(mdown) || "";
-    html = html.trim();
-    // strip start and end <p> tags else you get 'orrible spacing
-    if (html.indexOf("<p>") === 0) {
-        html = html.substring("<p>".length);
-    }
-    if (html.lastIndexOf("</p>") === (html.length - "</p>".length)) {
-        html = html.substring(0, html.length - "</p>".length);
-    }
-    return html;
-}
 
 /*
  * The textInput part of the MessageComposer
@@ -341,8 +317,15 @@ module.exports = React.createClass({
             contentText = contentText.substring(1);
         }
 
-        var htmlText;
-        if (this.markdownEnabled && (htmlText = mdownToHtml(contentText)) !== contentText) {
+        let send_markdown = false;
+        let mdown;
+        if (this.markdownEnabled) {
+            mdown = new Markdown(contentText);
+            send_markdown = !mdown.isPlainText();
+        }
+
+        if (send_markdown) {
+            const htmlText = mdown.toHTML();
             sendMessagePromise = isEmote ?
                 MatrixClientPeg.get().sendHtmlEmote(this.props.room.roomId, contentText, htmlText) :
                 MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, htmlText);
