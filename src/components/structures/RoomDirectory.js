@@ -68,7 +68,6 @@ module.exports = React.createClass({
         this.filterString = null;
         this.filterTimeout = null;
         this.scrollPanel = null;
-        this.searchBox = null;
 
         // dis.dispatch({
         //     action: 'ui_opacity',
@@ -243,10 +242,6 @@ module.exports = React.createClass({
 
     onJoinClick: function(alias) {
         this.showRoomAlias(alias);
-    },
-
-    collectSearchBox: function(e) {
-        this.searchBox = e;
     },
 
     showRoomAlias: function(alias) {
