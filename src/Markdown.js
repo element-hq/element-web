@@ -102,7 +102,7 @@ export default class Markdown {
             if (text == href) {
                 return href;
             }
-            return marked.Renderer.prototype.apply(this, arguments);
+            return marked.Renderer.prototype.link.apply(this, arguments);
         }
 
         real_renderer.paragraph = (text) => {
