@@ -76,7 +76,7 @@ export default class DirectorySearchBox extends React.Component {
         if (!this.input) return false;
 
         // liberal test for things that look like room aliases
-        return /^#.+:.+/.test(this.state.value);
+        return /^#.+:/.test(this.state.value);
     }
 
     render() {
