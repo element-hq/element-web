@@ -20,11 +20,11 @@ import classnames from 'classnames';
 export default class DirectorySearchBox extends React.Component {
     constructor() {
         super();
-        this.collectInput = this.collectInput.bind(this);
-        this.onClearClick = this.onClearClick.bind(this);
-        this.onChange = this.onChange.bind(this);
-        this.onKeyUp = this.onKeyUp.bind(this);
-        this.onJoinButtonClick = this.onJoinButtonClick.bind(this);
+        this._collectInput = this._collectInput.bind(this);
+        this._onClearClick = this._onClearClick.bind(this);
+        this._onChange = this._onChange.bind(this);
+        this._onKeyUp = this._onKeyUp.bind(this);
+        this._onJoinButtonClick = this._onJoinButtonClick.bind(this);
 
         this.input = null;
 
@@ -33,11 +33,11 @@ export default class DirectorySearchBox extends React.Component {
         };
     }
 
-    collectInput(e) {
+    _collectInput(e) {
         this.input = e;
     }
 
-    onClearClick() {
+    _onClearClick() {
         this.setState({value: ''});
 
         if (this.input) {
@@ -49,7 +49,7 @@ export default class DirectorySearchBox extends React.Component {
         }
     }
 
-    onChange(ev) {
+    _onChange(ev) {
         if (!this.input) return;
         this.setState({value: ev.target.value});
 
@@ -58,7 +58,7 @@ export default class DirectorySearchBox extends React.Component {
         }
     }
 
-    onKeyUp(ev) {
+    _onKeyUp(ev) {
         if (ev.key == 'Enter') {
             if (this.props.onJoinClick) {
                 this.props.onJoinClick(this.state.value);
@@ -66,7 +66,7 @@ export default class DirectorySearchBox extends React.Component {
         }
     }
 
-    onJoinButtonClick() {
+    _onJoinButtonClick() {
         if (this.props.onJoinClick) {
             this.props.onJoinClick(this.state.value);
         }
@@ -88,7 +88,7 @@ export default class DirectorySearchBox extends React.Component {
         let join_button;
         if (this._contentLooksLikeAlias()) {
             join_button = <span className="mx_DirectorySearchBox_joinButton"
-                onClick={this.onJoinButtonClick}
+                onClick={this._onJoinButtonClick}
             >
                 Join
             </span>;
@@ -98,13 +98,13 @@ export default class DirectorySearchBox extends React.Component {
             <div className="mx_DirectorySearchBox_container">
                 <input type="text" value={this.state.value}
                     className="mx_DirectorySearchBox_input"
-                    ref={this.collectInput}
-                    onChange={this.onChange} onKeyUp={this.onKeyUp}
+                    ref={this._collectInput}
+                    onChange={this._onChange} onKeyUp={this._onKeyUp}
                     placeholder="Find a room by keyword or room ID (#matrix:matrix.org)"
                 />
                 {join_button}
                 <span className="mx_DirectorySearchBox_clear_wrapper">
-                    <span className="mx_DirectorySearchBox_clear" onClick={this.onClearClick} />
+                    <span className="mx_DirectorySearchBox_clear" onClick={this._onClearClick} />
                 </span>
             </div>
         </span>;
