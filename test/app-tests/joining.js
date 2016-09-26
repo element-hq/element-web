@@ -102,6 +102,7 @@ describe('joining a room', function () {
                 var input = ReactTestUtils.findRenderedDOMComponentWithTag(
                     roomDir, 'input');
                 input.value = ROOM_ALIAS;
+                ReactTestUtils.Simulate.change(input);
                 ReactTestUtils.Simulate.keyUp(input, {key: 'Enter'});
 
                 // that should create a roomview which will start a peek; wait

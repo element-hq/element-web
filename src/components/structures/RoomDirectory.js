@@ -98,6 +98,8 @@ module.exports = React.createClass({
     },
 
     getMoreRooms: function() {
+        if (!MatrixClientPeg.get()) return q();
+
         const my_filter_string = this.filterString;
         const opts = {limit: 20};
         if (this.nextBatch) opts.since = this.nextBatch;
@@ -212,9 +214,7 @@ module.exports = React.createClass({
         return this.getMoreRooms();
     },
 
-    onFilterChange: function(ev) {
-        const alias = ev.target.value;
-
+    onFilterChange: function(alias) {
         this.filterString = alias || null;
 
         // don't send the request for a little bit,
@@ -230,10 +230,18 @@ module.exports = React.createClass({
         }, 300);
     },
 
-    onFilterKeyUp: function(ev) {
-        if (ev.key == "Enter") {
-            this.showRoomAlias(ev.target.value);
+    onFilterClear: function() {
+        this.filterString = null;
+
+        if (this.filterTimeout) {
+            clearTimeout(this.filterTimeout);
         }
+        // update immediately
+        this.refreshRoomList();
+    },
+
+    onJoinClick: function(alias) {
+        this.showRoomAlias(alias);
     },
 
     showRoomAlias: function(alias) {
@@ -393,13 +401,15 @@ module.exports = React.createClass({
 
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const NetworkDropdown = sdk.getComponent('directory.NetworkDropdown');
+        const DirectorySearchBox = sdk.getComponent('elements.DirectorySearchBox');
         return (
             <div className="mx_RoomDirectory">
                 <SimpleRoomHeader title="Directory" />
                 <div className="mx_RoomDirectory_list">
                     <div className="mx_RoomDirectory_listheader">
-                        <input type="text" placeholder="Find a room by keyword or room ID (#foo:matrix.org)"
-                            className="mx_RoomDirectory_input" size="64" onChange={this.onFilterChange} onKeyUp={this.onFilterKeyUp}
+                        <DirectorySearchBox
+                            className="mx_RoomDirectory_searchbox"
+                            onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinClick}
                         />
                         <NetworkDropdown config={this.props.config} onNetworkChange={this.onNetworkChange} />
                     </div>
