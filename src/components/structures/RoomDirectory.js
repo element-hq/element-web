@@ -408,7 +408,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomDirectory_list">
                     <div className="mx_RoomDirectory_listheader">
                         <DirectorySearchBox
-                            className="mx_RoomDirectory_searchbox" ref={this.collectSearchBox}
+                            className="mx_RoomDirectory_searchbox"
                             onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinClick}
                         />
                         <NetworkDropdown config={this.props.config} onNetworkChange={this.onNetworkChange} />
