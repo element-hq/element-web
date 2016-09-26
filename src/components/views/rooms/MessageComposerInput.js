@@ -536,7 +536,7 @@ export default class MessageComposerInput extends React.Component {
             // bit of a hack, but the alternative would be quite complicated
             if (contentHTML) contentHTML = contentHTML.replace('/me', '');
             sendHtmlFn = this.client.sendHtmlEmote;
-            sendTextFn = this.client.sendTextEmote;
+            sendTextFn = this.client.sendEmoteMessage;
         }
 
         // XXX: We don't actually seem to use this history?

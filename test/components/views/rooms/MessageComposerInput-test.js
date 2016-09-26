@@ -68,15 +68,17 @@ describe('MessageComposerInput', () => {
     });
 
     it('should not send messages when composer is empty', () => {
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const textSpy = sinon.spy(client, 'sendTextMessage');
+        const htmlSpy = sinon.spy(client, 'sendHtmlMessage');
         mci.enableRichtext(true);
         mci.handleReturn(sinon.stub());
 
-        expect(spy.calledOnce).toEqual(false, 'should not send message');
+        expect(textSpy.calledOnce).toEqual(false, 'should not send text message');
+        expect(htmlSpy.calledOnce).toEqual(false, 'should not send html message');
     });
 
     it('should not change content unnecessarily on RTE -> Markdown conversion', () => {
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendTextMessage');
         mci.enableRichtext(true);
         addTextToDraft('a');
         mci.handleKeyCommand('toggle-mode');
@@ -87,7 +89,7 @@ describe('MessageComposerInput', () => {
     });
 
     it('should not change content unnecessarily on Markdown -> RTE conversion', () => {
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendTextMessage');
         mci.enableRichtext(false);
         addTextToDraft('a');
         mci.handleKeyCommand('toggle-mode');
@@ -97,7 +99,7 @@ describe('MessageComposerInput', () => {
     });
 
     it('should send emoji messages in rich text', () => {
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendTextMessage');
         mci.enableRichtext(true);
         addTextToDraft('☹');
         mci.handleReturn(sinon.stub());
@@ -106,7 +108,7 @@ describe('MessageComposerInput', () => {
     });
 
     it('should send emoji messages in Markdown', () => {
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendTextMessage');
         mci.enableRichtext(false);
         addTextToDraft('☹');
         mci.handleReturn(sinon.stub());
@@ -139,7 +141,7 @@ describe('MessageComposerInput', () => {
     // });
 
     it('should insert formatting characters in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendTextMessage');
         mci.enableRichtext(false);
         mci.handleKeyCommand('italic');
         mci.handleReturn(sinon.stub());
