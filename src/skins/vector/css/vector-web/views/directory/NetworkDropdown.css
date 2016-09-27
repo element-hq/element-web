@@ -52,6 +52,10 @@ limitations under the License.
     vertical-align: middle;
 }
 
+input.mx_NetworkDropdown_networkoption, input.mx_NetworkDropdown_networkoption:focus {
+    border: 0;
+}
+
 .mx_NetworkDropdown_menu {
     position: absolute;
     left: -1px;

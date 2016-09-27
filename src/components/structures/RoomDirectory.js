@@ -53,6 +53,7 @@ module.exports = React.createClass({
             publicRooms: [],
             loading: true,
             filterByNetwork: null,
+            roomServer: null,
         }
     },
 
@@ -74,10 +75,6 @@ module.exports = React.createClass({
         //     sideOpacity: 0.3,
         //     middleOpacity: 0.3,
         // });
-    },
-
-    componentDidMount: function() {
-        this.refreshRoomList();
     },
 
     componentWillUnmount: function() {
@@ -102,6 +99,9 @@ module.exports = React.createClass({
 
         const my_filter_string = this.filterString;
         const opts = {limit: 20};
+        if (this.state.roomServer != MatrixClientPeg.getHomeServerName()) {
+            opts.server = this.state.roomServer;
+        }
         if (this.nextBatch) opts.since = this.nextBatch;
         if (this.filterString) opts.filter = { generic_search_term: my_filter_string } ;
         return MatrixClientPeg.get().publicRooms(opts).then((data) => {
@@ -194,18 +194,11 @@ module.exports = React.createClass({
         }
     },
 
-    onNetworkChange: function(network) {
+    onOptionChange: function(server, network) {
         this.setState({
+            roomServer: server,
             filterByNetwork: network,
-        }, () => {
-            // we just filtered out a bunch of rooms, so check to see if
-            // we need to fill up the scrollpanel again
-            // NB. Because we filter the results, the HS can keep giving
-            // us more rooms and we'll keep requesting more if none match
-            // the filter, which is pretty terrible. We need a way
-            // to filter by network on the server.
-            if (this.scrollPanel) this.scrollPanel.checkFillState();
-        });
+        }, this.refreshRoomList);
     },
 
     onFillRequest: function(backwards) {
@@ -295,7 +288,7 @@ module.exports = React.createClass({
 
         var rooms = this.state.publicRooms.filter((a) => {
             if (this.state.filterByNetwork) {
-                if (!this._isRoomInNetwork(a, this.state.filterByNetwork)) return false;
+                if (!this._isRoomInNetwork(a, this.state.roomServer, this.state.filterByNetwork)) return false;
             }
 
             return true;
@@ -365,14 +358,30 @@ module.exports = React.createClass({
      * Terrible temporary function that guess what network a public room
      * entry is in, until synapse is able to tell us
      */
-    _isRoomInNetwork(room, network) {
-        if (room.aliases && this.networkPatterns[network]) {
-            for (const alias of room.aliases) {
-                if (this.networkPatterns[network].test(alias)) return true;
+    _isRoomInNetwork(room, server, network) {
+        // We carve rooms into two categories here. 'portal' rooms are
+        // rooms created by a user joining a bridge 'portal' alias to
+        // participate in that room or a foreign network. A room is a
+        // portal room if it has exactly one alias and that alias matches
+        // a pattern defined in the config. It's network is the key
+        // of the pattern that it matches.
+        // All other rooms are considered 'native matrix' rooms, and
+        // go into the special '_matrix' network.
+
+        let roomNetwork = '_matrix';
+        if (room.aliases && room.aliases.length == 1) {
+            if (this.props.config.serverConfig && this.props.config.serverConfig[server] && this.props.config.serverConfig[server].networks) {
+                for (const n of this.props.config.serverConfig[server].networks) {
+                    const pat = this.networkPatterns[n];
+                    if (pat && pat) {
+                        if (this.networkPatterns[n].test(room.aliases[0])) {
+                            roomNetwork = n;
+                        }
+                    }
+                }
             }
         }
-
-        return false;
+        return roomNetwork == network;
     },
 
     render: function() {
@@ -411,7 +420,7 @@ module.exports = React.createClass({
                             className="mx_RoomDirectory_searchbox"
                             onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinClick}
                         />
-                        <NetworkDropdown config={this.props.config} onNetworkChange={this.onNetworkChange} />
+                        <NetworkDropdown config={this.props.config} onOptionChange={this.onOptionChange} />
                     </div>
                     {content}
                 </div>
