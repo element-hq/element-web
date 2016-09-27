@@ -773,7 +773,10 @@ module.exports = React.createClass({
                 <AliasSettings ref="alias_settings"
                     roomId={this.props.room.roomId}
                     canSetCanonicalAlias={ roomState.mayClientSendStateEvent("m.room.canonical_alias", cli) }
-                    canSetAliases={ roomState.mayClientSendStateEvent("m.room.aliases", cli) }
+                    canSetAliases={
+                        true 
+                        /* Originally, we arbitrarily restricted creating aliases to room admins: roomState.mayClientSendStateEvent("m.room.aliases", cli) */
+                    }
                     canonicalAliasEvent={this.props.room.currentState.getStateEvents('m.room.canonical_alias', '')}
                     aliasEvents={this.props.room.currentState.getStateEvents('m.room.aliases')} />
 
