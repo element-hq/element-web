@@ -318,7 +318,7 @@ export function startMatrixClient() {
     Notifier.start();
     UserActivity.start();
     Presence.start();
-    DMRoomMap.shared().start();
+    DMRoomMap.makeShared().start();
 
     MatrixClientPeg.start();
 }

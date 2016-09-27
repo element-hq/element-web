@@ -42,14 +42,20 @@ export default class DMRoomMap {
     }
 
     /**
+     * Makes and returns a new shared instance that can then be accessed
+     * with shared(). This returned instance is not automatically started.
+     */
+    static makeShared() {
+        DMRoomMap._sharedInstance = new DMRoomMap(MatrixClientPeg.get());
+        return DMRoomMap._sharedInstance;
+    }
+
+    /**
      * Returns a shared instance of the class
      * that uses the singleton matrix client
      * The shared instance must be started before use.
      */
     static shared() {
-        if (!DMRoomMap._sharedInstance) {
-            DMRoomMap._sharedInstance = new DMRoomMap(MatrixClientPeg.get());
-        }
         return DMRoomMap._sharedInstance;
     }
 
@@ -63,8 +69,8 @@ export default class DMRoomMap {
     }
 
     _onAccountData(ev) {
-        this.userToRooms = this.matrixClient.getAccountData('m.direct').getContent();
         if (ev.getType() == 'm.direct') {
+            this.userToRooms = this.matrixClient.getAccountData('m.direct').getContent();
             this._populateRoomToUser();
         }
     }
