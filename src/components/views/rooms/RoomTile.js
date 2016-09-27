@@ -70,8 +70,7 @@ module.exports = React.createClass({
     },
 
     _isDirectMessageRoom: function(roomId) {
-        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
-        var dmRooms = dmRoomMap.getUserIdForRoomId(roomId);
+        var dmRooms = DMRoomMap.shared().getUserIdForRoomId(roomId);
         if (dmRooms) {
             return true;
         } else {
@@ -277,11 +276,9 @@ module.exports = React.createClass({
         var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
         var directMessageIndicator;
-        // Temporarily turning off the LGM badges as isDirectMessageRoom is horribly unperformant
-        // - see https://github.com/vector-im/vector-web/issues/2343
-        // if (this._isDirectMessageRoom(this.props.room.roomId)) {
-        //     directMessageIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm"/>;
-        // }
+        if (this._isDirectMessageRoom(this.props.room.roomId)) {
+         directMessageIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm"/>;
+        }
 
         // These props are injected by React DnD,
         // as defined by your `collect` function above:

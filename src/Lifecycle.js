@@ -22,6 +22,7 @@ import Notifier from './Notifier'
 import UserActivity from './UserActivity';
 import Presence from './Presence';
 import dis from './dispatcher';
+import DMRoomMap from './utils/DMRoomMap';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -317,6 +318,7 @@ export function startMatrixClient() {
     Notifier.start();
     UserActivity.start();
     Presence.start();
+    DMRoomMap.makeShared().start();
 
     MatrixClientPeg.start();
 }
@@ -354,6 +356,7 @@ export function stopMatrixClient() {
     Notifier.stop();
     UserActivity.stop();
     Presence.stop();
+    DMRoomMap.shared().stop();
     var cli = MatrixClientPeg.get();
     if (cli) {
         cli.stopClient();
