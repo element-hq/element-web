@@ -22,6 +22,9 @@ function matrixLinkify(linkify) {
     var MultiToken = MT.Base;
     var S_START = linkify.parser.start;
 
+    if (TT.UNDERSCORE === undefined) {
+        throw new Error("linkify-matrix requires linkifyjs 2.1.1: this version is too old.");
+    }
 
     var ROOMALIAS = function(value) {
         MultiToken.call(this, value);
