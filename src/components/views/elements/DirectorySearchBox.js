@@ -100,7 +100,7 @@ export default class DirectorySearchBox extends React.Component {
                     className="mx_DirectorySearchBox_input"
                     ref={this._collectInput}
                     onChange={this._onChange} onKeyUp={this._onKeyUp}
-                    placeholder="Find a room by keyword or room ID (#matrix:matrix.org)"
+                    placeholder="Find a room by keyword or room alias (#matrix:matrix.org)"
                 />
                 {join_button}
                 <span className="mx_DirectorySearchBox_clear_wrapper">
