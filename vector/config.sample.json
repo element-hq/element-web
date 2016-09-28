@@ -12,6 +12,7 @@
 	"serverConfig": {
             "matrix.org": {
                 "networks": [
+                    "_matrix",
                     "gitter",
                     "irc:freenode",
                     "irc:mozilla"
