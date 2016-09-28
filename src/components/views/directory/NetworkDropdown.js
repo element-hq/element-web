@@ -167,7 +167,7 @@ export default class NetworkDropdown extends React.Component {
             span_class = 'mx_NetworkDropdown_menu_all';
         } else if (network == '_matrix') {
             name = 'Matrix';
-            icon = <img src="/img/network-matrix.svg" width="16" height="16" />;
+            icon = <img src="img/network-matrix.svg" width="16" height="16" />;
             span_class = 'mx_NetworkDropdown_menu_network';
         } else {
             name = this.props.config.networkNames[network];
