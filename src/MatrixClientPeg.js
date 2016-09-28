@@ -85,6 +85,19 @@ class MatrixClientPeg {
         };
     }
 
+    /**
+     * Return the server name of the user's home server
+     * Throws an error if unable to deduce the home server name
+     * (eg. if the user is not logged in)
+     */
+    getHomeServerName() {
+        const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
+        if (matches === null || matches.length < 1) {
+            throw new Error("Failed to derive home server name from user ID!");
+        }
+        return matches[1];
+    }
+
     _createClient(creds: MatrixClientCreds) {
         var opts = {
             baseUrl: creds.homeserverUrl,
