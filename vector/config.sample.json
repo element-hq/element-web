@@ -9,7 +9,7 @@
         "servers": [
             "matrix.org"
         ],
-	"serverConfig": {
+        "serverConfig": {
             "matrix.org": {
                 "networks": [
                     "_matrix",
@@ -18,7 +18,7 @@
                     "irc:mozilla"
                 ]
             }
-	},
+        },
         "networkPatterns": {
             "gitter": "#gitter_.*:matrix.org",
             "irc:freenode": "#freenode_.*:matrix.org",
