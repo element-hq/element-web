@@ -93,7 +93,7 @@ class MatrixClientPeg {
     getHomeServerName() {
         const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
         if (matches === null || matches.length < 1) {
-            throw new Error("Failed to derive home server name fro user ID!");
+            throw new Error("Failed to derive home server name from user ID!");
         }
         return matches[1];
     }
