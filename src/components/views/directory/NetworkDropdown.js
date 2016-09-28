@@ -64,6 +64,12 @@ export default class NetworkDropdown extends React.Component {
         document.removeEventListener('click', this.onDocumentClick, false);
     }
 
+    componentDidUpdate() {
+        if (this.state.expanded && this.inputTextBox) {
+            this.inputTextBox.focus();
+        }
+    }
+
     onDocumentClick(ev) {
         // Close the dropdown if the user clicks anywhere that isn't
         // within our root element
@@ -181,16 +187,8 @@ export default class NetworkDropdown extends React.Component {
         </div>;
     }
 
-    componentDidUpdate() {
-        if (this.state.expanded && this.inputTextBox) {
-            this.inputTextBox.focus();
-        }
-    }
-
     render() {
-        let current_value = this._makeMenuOption(
-            this.state.selectedServer, this.state.selectedNetwork, false
-        );
+        let current_value;
 
         let menu;
         if (this.state.expanded) {
@@ -201,6 +199,10 @@ export default class NetworkDropdown extends React.Component {
             current_value = <input type="text" className="mx_NetworkDropdown_networkoption"
                 ref={this.collectInputTextBox} onKeyUp={this.onInputKeyUp}
             />
+        } else {
+            current_value = this._makeMenuOption(
+                this.state.selectedServer, this.state.selectedNetwork, false
+            );
         }
 
         return <div className="mx_NetworkDropdown" ref={this.collectRoot}>
