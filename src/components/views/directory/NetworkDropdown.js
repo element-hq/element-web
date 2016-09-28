@@ -18,8 +18,8 @@ import React from 'react';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 
 export default class NetworkDropdown extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.dropdownRootElement = null;
         this.ignoreEvent = null;
@@ -34,10 +34,20 @@ export default class NetworkDropdown extends React.Component {
 
         this.inputTextBox = null;
 
+        let defaultNetwork = null;
+        if (
+            this.props.config.serverConfig &&
+            this.props.config.serverConfig[server] &&
+            this.props.config.serverConfig[server].networks &&
+            '_matrix' in this.props.config.serverConfig[server].networks
+        ) {
+            defaultNetwork = '_matrix';
+        }
+
         this.state = {
             expanded: false,
             selectedServer: MatrixClientPeg.getHomeServerName(),
-            selectedNetwork: '_matrix',
+            selectedNetwork: defaultNetwork,
         };
     }
 
