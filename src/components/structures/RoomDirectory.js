@@ -99,6 +99,9 @@ module.exports = React.createClass({
 
         const my_filter_string = this.filterString;
         const my_server = this.state.roomServer;
+        // remember the next batch token when we sent the request
+        // too. If it's changed, appending to the list will corrupt it.
+        const my_next_batch = this.nextBatch;
         const opts = {limit: 20};
         if (my_server != MatrixClientPeg.getHomeServerName()) {
             opts.server = my_server;
@@ -106,7 +109,11 @@ module.exports = React.createClass({
         if (this.nextBatch) opts.since = this.nextBatch;
         if (this.filterString) opts.filter = { generic_search_term: my_filter_string } ;
         return MatrixClientPeg.get().publicRooms(opts).then((data) => {
-            if (my_filter_string != this.filterString || my_server != this.state.roomServer) {
+            if (
+                my_filter_string != this.filterString ||
+                my_server != this.state.roomServer ||
+                my_next_batch != this.nextBatch)
+            {
                 // if the filter or server has changed since this request was sent,
                 // throw away the result (don't even clear the busy flag
                 // since we must still have a request in flight)
@@ -121,7 +128,11 @@ module.exports = React.createClass({
             });
             return Boolean(data.next_batch);
         }, (err) => {
-            if (my_filter_string != this.filterString || my_server != this.state.roomServer) {
+            if (
+                my_filter_string != this.filterString ||
+                my_server != this.state.roomServer ||
+                my_next_batch != this.nextBatch)
+            {
                 // as above: we don't care about errors for old
                 // requests either
                 return;
