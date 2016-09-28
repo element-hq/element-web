@@ -376,7 +376,7 @@ module.exports = React.createClass({
         // rooms created by a user joining a bridge 'portal' alias to
         // participate in that room or a foreign network. A room is a
         // portal room if it has exactly one alias and that alias matches
-        // a pattern defined in the config. It's network is the key
+        // a pattern defined in the config. Its network is the key
         // of the pattern that it matches.
         // All other rooms are considered 'native matrix' rooms, and
         // go into the special '_matrix' network.
@@ -386,10 +386,8 @@ module.exports = React.createClass({
             if (this.props.config.serverConfig && this.props.config.serverConfig[server] && this.props.config.serverConfig[server].networks) {
                 for (const n of this.props.config.serverConfig[server].networks) {
                     const pat = this.networkPatterns[n];
-                    if (pat && pat) {
-                        if (this.networkPatterns[n].test(room.aliases[0])) {
-                            roomNetwork = n;
-                        }
+                    if (pat && pat.test(room.aliases[0])) {
+                        roomNetwork = n;
                     }
                 }
             }
