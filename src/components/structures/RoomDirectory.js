@@ -53,6 +53,7 @@ module.exports = React.createClass({
             publicRooms: [],
             loading: true,
             filterByNetwork: null,
+            roomServer: null,
         }
     },
 
@@ -76,10 +77,6 @@ module.exports = React.createClass({
         // });
     },
 
-    componentDidMount: function() {
-        this.refreshRoomList();
-    },
-
     componentWillUnmount: function() {
         // dis.dispatch({
         //     action: 'ui_opacity',
@@ -101,12 +98,16 @@ module.exports = React.createClass({
         if (!MatrixClientPeg.get()) return q();
 
         const my_filter_string = this.filterString;
+        const my_server = this.state.roomServer;
         const opts = {limit: 20};
+        if (my_server != MatrixClientPeg.getHomeServerName()) {
+            opts.server = my_server;
+        }
         if (this.nextBatch) opts.since = this.nextBatch;
         if (this.filterString) opts.filter = { generic_search_term: my_filter_string } ;
         return MatrixClientPeg.get().publicRooms(opts).then((data) => {
-            if (my_filter_string != this.filterString) {
-                // if the filter has changed since this request was sent,
+            if (my_filter_string != this.filterString || my_server != this.state.roomServer) {
+                // if the filter or server has changed since this request was sent,
                 // throw away the result (don't even clear the busy flag
                 // since we must still have a request in flight)
                 return;
@@ -120,7 +121,7 @@ module.exports = React.createClass({
             });
             return Boolean(data.next_batch);
         }, (err) => {
-            if (my_filter_string != this.filterString) {
+            if (my_filter_string != this.filterString || my_server != this.state.roomServer) {
                 // as above: we don't care about errors for old
                 // requests either
                 return;
@@ -194,18 +195,23 @@ module.exports = React.createClass({
         }
     },
 
-    onNetworkChange: function(network) {
+    onOptionChange: function(server, network) {
+        // clear next batch so we don't try to load more rooms
+        this.nextBatch = null;
         this.setState({
+            // Clear the public rooms out here otherwise we needlessly
+            // spend time filtering lots of rooms when we're about to
+            // to clear the list anyway.
+            publicRooms: [],
+            roomServer: server,
             filterByNetwork: network,
-        }, () => {
-            // we just filtered out a bunch of rooms, so check to see if
-            // we need to fill up the scrollpanel again
-            // NB. Because we filter the results, the HS can keep giving
-            // us more rooms and we'll keep requesting more if none match
-            // the filter, which is pretty terrible. We need a way
-            // to filter by network on the server.
-            if (this.scrollPanel) this.scrollPanel.checkFillState();
-        });
+        }, this.refreshRoomList);
+        // We also refresh the room list each time even though this
+        // filtering is client-side. It hopefully won't be client side
+        // for very long, and we may have fetched a thousand rooms to
+        // find the five gitter ones, at which point we do not want
+        // to render all those rooms when switching back to 'all networks'.
+        // Easiest to just blow away the state & re-fetch.
     },
 
     onFillRequest: function(backwards) {
@@ -295,7 +301,7 @@ module.exports = React.createClass({
 
         var rooms = this.state.publicRooms.filter((a) => {
             if (this.state.filterByNetwork) {
-                if (!this._isRoomInNetwork(a, this.state.filterByNetwork)) return false;
+                if (!this._isRoomInNetwork(a, this.state.roomServer, this.state.filterByNetwork)) return false;
             }
 
             return true;
@@ -365,14 +371,28 @@ module.exports = React.createClass({
      * Terrible temporary function that guess what network a public room
      * entry is in, until synapse is able to tell us
      */
-    _isRoomInNetwork(room, network) {
-        if (room.aliases && this.networkPatterns[network]) {
-            for (const alias of room.aliases) {
-                if (this.networkPatterns[network].test(alias)) return true;
+    _isRoomInNetwork(room, server, network) {
+        // We carve rooms into two categories here. 'portal' rooms are
+        // rooms created by a user joining a bridge 'portal' alias to
+        // participate in that room or a foreign network. A room is a
+        // portal room if it has exactly one alias and that alias matches
+        // a pattern defined in the config. Its network is the key
+        // of the pattern that it matches.
+        // All other rooms are considered 'native matrix' rooms, and
+        // go into the special '_matrix' network.
+
+        let roomNetwork = '_matrix';
+        if (room.aliases && room.aliases.length == 1) {
+            if (this.props.config.serverConfig && this.props.config.serverConfig[server] && this.props.config.serverConfig[server].networks) {
+                for (const n of this.props.config.serverConfig[server].networks) {
+                    const pat = this.networkPatterns[n];
+                    if (pat && pat.test(room.aliases[0])) {
+                        roomNetwork = n;
+                    }
+                }
             }
         }
-
-        return false;
+        return roomNetwork == network;
     },
 
     render: function() {
@@ -411,7 +431,7 @@ module.exports = React.createClass({
                             className="mx_RoomDirectory_searchbox"
                             onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinClick}
                         />
-                        <NetworkDropdown config={this.props.config} onNetworkChange={this.onNetworkChange} />
+                        <NetworkDropdown config={this.props.config} onOptionChange={this.onOptionChange} />
                     </div>
                     {content}
                 </div>

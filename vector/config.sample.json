@@ -6,30 +6,30 @@
     "integrations_rest_url": "http://localhost:5050",
     "enableLabs": true,
     "roomDirectory": {
-        "networks": [
-            "matrix:example_com",
-            "matrix:matrix_org",
-            "gitter",
-            "irc:freenode",
-            "irc:mozilla"
+        "servers": [
+            "matrix.org"
         ],
+        "serverConfig": {
+            "matrix.org": {
+                "networks": [
+                    "_matrix",
+                    "gitter",
+                    "irc:freenode",
+                    "irc:mozilla"
+                ]
+            }
+        },
         "networkPatterns": {
-            "matrix:example_com": "#.*:example.com",
-            "matrix:matrix_org": "#.*:matrix.org",
             "gitter": "#gitter_.*:matrix.org",
             "irc:freenode": "#freenode_.*:matrix.org",
             "irc:mozilla": "#mozilla_.*:matrix.org"
         },
         "networkNames": {
-            "matrix:example_com": "example.com",
-            "matrix:matrix_org": "matrix.org",
             "irc:freenode": "Freenode",
             "irc:mozilla": "Mozilla",
             "gitter": "Gitter"
         },
         "networkIcons": {
-            "matrix:example_com": "//matrix.org/favicon.ico",
-            "matrix:matrix_org": "//matrix.org/favicon.ico",
             "irc:freenode": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
             "irc:mozilla": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
             "gitter": "//gitter.im/favicon.ico"

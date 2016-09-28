@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 
 export default class NetworkDropdown extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.dropdownRootElement = null;
         this.ignoreEvent = null;
@@ -26,12 +27,27 @@ export default class NetworkDropdown extends React.Component {
         this.onInputClick = this.onInputClick.bind(this);
         this.onRootClick = this.onRootClick.bind(this);
         this.onDocumentClick = this.onDocumentClick.bind(this);
-        this.onNetworkClick = this.onNetworkClick.bind(this);
+        this.onMenuOptionClick = this.onMenuOptionClick.bind(this);
+        this.onInputKeyUp = this.onInputKeyUp.bind(this);
         this.collectRoot = this.collectRoot.bind(this);
+        this.collectInputTextBox = this.collectInputTextBox.bind(this);
+
+        this.inputTextBox = null;
+
+        let defaultNetwork = null;
+        if (
+            this.props.config.serverConfig &&
+            this.props.config.serverConfig[server] &&
+            this.props.config.serverConfig[server].networks &&
+            '_matrix' in this.props.config.serverConfig[server].networks
+        ) {
+            defaultNetwork = '_matrix';
+        }
 
         this.state = {
             expanded: false,
-            selectedNetwork: null,
+            selectedServer: MatrixClientPeg.getHomeServerName(),
+            selectedNetwork: defaultNetwork,
         };
     }
 
@@ -39,10 +55,19 @@ export default class NetworkDropdown extends React.Component {
         // Listen for all clicks on the document so we can close the
         // menu when the user clicks somewhere else
         document.addEventListener('click', this.onDocumentClick, false);
+
+        // fire this now so the defaults can be set up
+        this.props.onOptionChange(this.state.selectedServer, this.state.selectedNetwork);
     }
 
     componentWillUnmount() {
         document.removeEventListener('click', this.onDocumentClick, false);
+    }
+
+    componentDidUpdate() {
+        if (this.state.expanded && this.inputTextBox) {
+            this.inputTextBox.focus();
+        }
     }
 
     onDocumentClick(ev) {
@@ -72,12 +97,24 @@ export default class NetworkDropdown extends React.Component {
         ev.preventDefault();
     }
 
-    onNetworkClick(network, ev) {
+    onMenuOptionClick(server, network, ev) {
         this.setState({
             expanded: false,
+            selectedServer: server,
             selectedNetwork: network,
         });
-        this.props.onNetworkChange(network);
+        this.props.onOptionChange(server, network);
+    }
+
+    onInputKeyUp(e) {
+        if (e.key == 'Enter') {
+            this.setState({
+                expanded: false,
+                selectedServer: e.target.value,
+                selectedNetwork: null,
+            });
+            this.props.onOptionChange(e.target.value, null);
+        }
     }
 
     collectRoot(e) {
@@ -90,41 +127,82 @@ export default class NetworkDropdown extends React.Component {
         this.dropdownRootElement = e;
     }
 
-    _optionForNetwork(network, wire_onclick) {
+    collectInputTextBox(e) {
+        this.inputTextBox = e;
+    }
+
+    _getMenuOptions() {
+        const options = [];
+
+        let servers = [];
+        if (this.props.config.servers) {
+            servers = servers.concat(this.props.config.servers);
+        }
+
+        if (servers.indexOf(MatrixClientPeg.getHomeServerName()) == -1) {
+            servers.unshift(MatrixClientPeg.getHomeServerName());
+        }
+
+        for (const server of servers) {
+            options.push(this._makeMenuOption(server, null));
+            if (this.props.config.serverConfig && this.props.config.serverConfig[server] && this.props.config.serverConfig[server].networks) {
+                for (const network of this.props.config.serverConfig[server].networks) {
+                    options.push(this._makeMenuOption(server, network));
+                }
+            }
+        }
+
+        return options;
+    }
+
+    _makeMenuOption(server, network, wire_onclick) {
         if (wire_onclick === undefined) wire_onclick = true;
         let icon;
         let name;
         let span_class;
 
         if (network === null) {
-            name = 'All networks';
+            name = server;
             span_class = 'mx_NetworkDropdown_menu_all';
+        } else if (network == '_matrix') {
+            name = 'Matrix';
+            icon = <img src="/img/network-matrix.svg" width="16" height="16" />;
+            span_class = 'mx_NetworkDropdown_menu_network';
         } else {
             name = this.props.config.networkNames[network];
             icon = <img src={this.props.config.networkIcons[network]} />;
             span_class = 'mx_NetworkDropdown_menu_network';
         }
 
-        const click_handler = wire_onclick ? this.onNetworkClick.bind(this, network) : null;
+        const click_handler = wire_onclick ? this.onMenuOptionClick.bind(this, server, network) : null;
 
-        return <div key={network} className="mx_NetworkDropdown_networkoption" onClick={click_handler}>
+        let key = server;
+        if (network !== null) {
+            key += '_' + network;
+        }
+
+        return <div key={key} className="mx_NetworkDropdown_networkoption" onClick={click_handler}>
             {icon}
             <span className={span_class}>{name}</span>
         </div>;
     }
 
     render() {
-        const current_value = this._optionForNetwork(this.state.selectedNetwork, false);
+        let current_value;
 
         let menu;
         if (this.state.expanded) {
-           const menu_options = [this._optionForNetwork(null)];
-            for (const network of this.props.config.networks) {
-                menu_options.push(this._optionForNetwork(network));
-            }
+            const menu_options = this._getMenuOptions();
             menu = <div className="mx_NetworkDropdown_menu">
                 {menu_options}
             </div>;
+            current_value = <input type="text" className="mx_NetworkDropdown_networkoption"
+                ref={this.collectInputTextBox} onKeyUp={this.onInputKeyUp}
+            />
+        } else {
+            current_value = this._makeMenuOption(
+                this.state.selectedServer, this.state.selectedNetwork, false
+            );
         }
 
         return <div className="mx_NetworkDropdown" ref={this.collectRoot}>
@@ -138,7 +216,7 @@ export default class NetworkDropdown extends React.Component {
 }
 
 NetworkDropdown.propTypes = {
-    onNetworkChange: React.PropTypes.func.isRequired,
+    onOptionChange: React.PropTypes.func.isRequired,
     config: React.PropTypes.object,
 };
 
