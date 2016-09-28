@@ -34,6 +34,7 @@ export default class NetworkDropdown extends React.Component {
 
         this.inputTextBox = null;
 
+        const server = MatrixClientPeg.getHomeServerName();
         let defaultNetwork = null;
         if (
             this.props.config.serverConfig &&
@@ -46,7 +47,7 @@ export default class NetworkDropdown extends React.Component {
 
         this.state = {
             expanded: false,
-            selectedServer: MatrixClientPeg.getHomeServerName(),
+            selectedServer: server,
             selectedNetwork: defaultNetwork,
         };
     }
