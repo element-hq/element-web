@@ -54,7 +54,7 @@ export default class DirectorySearchBox extends React.Component {
         this.setState({value: ev.target.value});
 
         if (this.props.onChange) {
-            this.props.onChange(this.state.value);
+            this.props.onChange(ev.target.value);
         }
     }
 
@@ -72,13 +72,6 @@ export default class DirectorySearchBox extends React.Component {
         }
     }
 
-    _contentLooksLikeAlias() {
-        if (!this.input) return false;
-
-        // liberal test for things that look like room aliases
-        return /^#.+:/.test(this.state.value);
-    }
-
     render() {
         const searchbox_classes = {
             mx_DirectorySearchBox: true,
@@ -86,7 +79,7 @@ export default class DirectorySearchBox extends React.Component {
         searchbox_classes[this.props.className] = true;
 
         let join_button;
-        if (this._contentLooksLikeAlias()) {
+        if (this.props.showJoinButton) {
             join_button = <span className="mx_DirectorySearchBox_joinButton"
                 onClick={this._onJoinButtonClick}
             >
@@ -100,7 +93,7 @@ export default class DirectorySearchBox extends React.Component {
                     className="mx_DirectorySearchBox_input"
                     ref={this._collectInput}
                     onChange={this._onChange} onKeyUp={this._onKeyUp}
-                    placeholder="Find a room by keyword or room alias (#matrix:matrix.org)"
+                    placeholder={this.props.placeholder}
                 />
                 {join_button}
                 <span className="mx_DirectorySearchBox_clear_wrapper">
@@ -116,4 +109,6 @@ DirectorySearchBox.propTypes = {
     onChange: React.PropTypes.func,
     onClear: React.PropTypes.func,
     onJoinClick: React.PropTypes.func,
+    placeholder: React.PropTypes.string,
+    showJoinButton: React.PropTypes.bool,
 };
