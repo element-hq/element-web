@@ -15,24 +15,53 @@
                     "_matrix",
                     "gitter",
                     "irc:freenode",
-                    "irc:mozilla"
+                    "irc:mozilla",
+                    "irc:snoonet",
+                    "irc:oftc"
                 ]
             }
         },
-        "networkPatterns": {
-            "gitter": "#gitter_.*:matrix.org",
-            "irc:freenode": "#freenode_.*:matrix.org",
-            "irc:mozilla": "#mozilla_.*:matrix.org"
-        },
-        "networkNames": {
-            "irc:freenode": "Freenode",
-            "irc:mozilla": "Mozilla",
-            "gitter": "Gitter"
-        },
-        "networkIcons": {
-            "irc:freenode": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
-            "irc:mozilla": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
-            "gitter": "//gitter.im/favicon.ico"
+        "networks": {
+            "gitter": {
+                "protocol": "gitter",
+                "portalRoomPattern": "#gitter_.*:matrix.org",
+                "name": "Gitter",
+                "icon": "//gitter.im/favicon.ico",
+                "example": "org/community",
+                "nativePattern": "[^\\s]+/[^\\s]+$"
+            },
+            "irc:freenode": {
+                "portalRoomPattern": "#freenode_.*:matrix.org",
+                "name": "Freenode",
+                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
+                "example": "#channel",
+                "nativePattern": "^#[^\\s]+$"
+            },
+            "irc:mozilla": {
+                "portalRoomPattern": "#mozilla_.*:matrix.org",
+                "name": "Mozilla",
+                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
+                "example": "#channel",
+                "nativePattern": "^#[^\\s]+$"
+            },
+            "irc:snoonet": {
+                "protocol": "irc",
+                "domain": "ipv6-irc.snoonet.org",
+                "portalRoomPattern": "#_snoonet_.*:matrix.org",
+                "name": "Snoonet",
+                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
+                "example": "#channel",
+                "nativePattern": "^#[^\\s]+$"
+            },
+            "irc:oftc": {
+                "protocol": "irc",
+                "domain": "irc.oftc.net",
+                "portalRoomPattern": "#_oftc_.*:matrix.org",
+                "name": "OFTC",
+                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
+                "example": "#channel",
+                "nativePattern": "^#[^\\s]+$"
+            }
         }
     }
 }
