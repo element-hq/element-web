@@ -54,6 +54,7 @@ export function stubClient() {
         },
         setAccountData: sinon.stub(),
         sendTyping: sinon.stub().returns(q({})),
+        sendTextMessage: () => q({}),
         sendHtmlMessage: () => q({}),
     };
 

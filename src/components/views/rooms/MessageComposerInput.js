@@ -15,17 +15,6 @@ limitations under the License.
 */
 import React from 'react';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
-import marked from 'marked';
-marked.setOptions({
-    renderer: new marked.Renderer(),
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: true,
-    smartLists: true,
-    smartypants: false,
-});
 
 import {Editor, EditorState, RichUtils, CompositeDecorator,
     convertFromRaw, convertToRaw, Modifier, EditorChangeType,
@@ -50,6 +39,7 @@ import * as RichText from '../../../RichText';
 import * as HtmlUtils from '../../../HtmlUtils';
 import Autocomplete from './Autocomplete';
 import {Completion} from "../../../autocomplete/Autocompleter";
+import Markdown from '../../../Markdown';
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
@@ -62,12 +52,6 @@ function stateToMarkdown(state) {
         .replace(
             ZWS, // draft-js-export-markdown adds these
             ''); // this is *not* a zero width space, trust me :)
-}
-
-function mdownToHtml(mdown: string): string {
-    let html = marked(mdown) || "";
-    html = html.trim();
-    return html;
 }
 
 /*
@@ -416,8 +400,8 @@ export default class MessageComposerInput extends React.Component {
     enableRichtext(enabled: boolean) {
         let contentState = null;
         if (enabled) {
-            const html = mdownToHtml(this.state.editorState.getCurrentContent().getPlainText());
-            contentState = RichText.HTMLtoContentState(html);
+            const md = new Markdown(this.state.editorState.getCurrentContent().getPlainText());
+            contentState = RichText.HTMLtoContentState(md.toHTML());
         } else {
             let markdown = stateToMarkdown(this.state.editorState.getCurrentContent());
             if (markdown[markdown.length - 1] === '\n') {
@@ -499,7 +483,7 @@ export default class MessageComposerInput extends React.Component {
         if (!contentState.hasText()) {
             return true;
         }
-            
+
 
         let contentText = contentState.getPlainText(), contentHTML;
 
@@ -534,24 +518,37 @@ export default class MessageComposerInput extends React.Component {
         }
 
         if (this.state.isRichtextEnabled) {
-            contentHTML = RichText.contentStateToHTML(contentState);
+            contentHTML = HtmlUtils.stripParagraphs(
+                RichText.contentStateToHTML(contentState)
+            );
         } else {
-            contentHTML = mdownToHtml(contentText);
+            const md = new Markdown(contentText);
+            if (!md.isPlainText()) {
+                contentHTML = md.toHTML();
+            }
         }
 
-        contentHTML = HtmlUtils.stripParagraphs(contentHTML);
-
-        let sendFn = this.client.sendHtmlMessage;
+        let sendHtmlFn = this.client.sendHtmlMessage;
+        let sendTextFn = this.client.sendTextMessage;
 
         if (contentText.startsWith('/me')) {
             contentText = contentText.replace('/me', '');
             // bit of a hack, but the alternative would be quite complicated
-            contentHTML = contentHTML.replace('/me', '');
-            sendFn = this.client.sendHtmlEmote;
+            if (contentHTML) contentHTML = contentHTML.replace('/me', '');
+            sendHtmlFn = this.client.sendHtmlEmote;
+            sendTextFn = this.client.sendEmoteMessage;
         }
 
-        this.sentHistory.push(contentHTML);
-        let sendMessagePromise = sendFn.call(this.client, this.props.room.roomId, contentText, contentHTML);
+        // XXX: We don't actually seem to use this history?
+        this.sentHistory.push(contentHTML || contentText);
+        let sendMessagePromise;
+        if (contentHTML) {
+            sendMessagePromise = sendHtmlFn.call(
+                this.client, this.props.room.roomId, contentText, contentHTML
+            );
+        } else {
+            sendMessagePromise = sendTextFn.call(this.client, this.props.room.roomId, contentText);
+        }
 
         sendMessagePromise.then(() => {
             dis.dispatch({
