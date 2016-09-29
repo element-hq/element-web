@@ -54,6 +54,8 @@ limitations under the License.
 
 input.mx_NetworkDropdown_networkoption, input.mx_NetworkDropdown_networkoption:focus {
     border: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .mx_NetworkDropdown_menu {
