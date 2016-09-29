@@ -47,6 +47,10 @@ limitations under the License.
 
 /* Overrides for the attachment body tiles */
 
+.mx_FilePanel .mx_EventTile {
+    word-break: break-word;
+}
+
 .mx_FilePanel .mx_EventTile .mx_MImageBody {
     margin-right: 0px;
 }
@@ -60,7 +64,6 @@ limitations under the License.
 .mx_FilePanel .mx_EventTile .mx_MImageBody_downloadLink {
     flex: 1 1 auto;
     color: #747474;
-    word-wrap: break-word;
 }
 
 .mx_FilePanel .mx_EventTile .mx_MImageBody_size {
@@ -88,7 +91,6 @@ limitations under the License.
     font-size: 11px;
     opacity: 1.0;
     color: #acacac;
-    word-wrap: break-word;
 }
 
 .mx_FilePanel .mx_EventTile .mx_MessageTimestamp {
