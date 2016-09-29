@@ -30,7 +30,7 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_Dialog_content">
                     <span>
-                        You can use the custom server options to log into other Matrix
+                        You can use the custom server options to sign into other Matrix
                         servers by specifying a different Home server URL.
                         <br/>
                         This allows you to use Riot with an existing Matrix account on
