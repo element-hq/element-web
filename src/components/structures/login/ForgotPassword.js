@@ -147,7 +147,7 @@ module.exports = React.createClass({
                 <div>
                     <p>Your password has been reset.</p>
                     <p>You have been logged out of all devices and will no longer receive push notifications.
-                    To re-enable notifications, re-log in on each device.</p>
+                    To re-enable notifications, sign in again on each device.</p>
                     <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
                         value="Return to login screen" />
                 </div>
@@ -188,7 +188,7 @@ module.exports = React.createClass({
                         onIsUrlChanged={this.onIsUrlChanged}
                         delayTimeMs={0}/>
                     <div className="mx_Login_error">
-                    </div>                        
+                    </div>
                     <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
                         Return to login
                     </a>

@@ -667,8 +667,8 @@ module.exports = React.createClass({
         cli.on('Session.logged_out', function(call) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Logged Out",
-                description: "For security, this session has been logged out. Please log in again."
+                title: "Signed Out",
+                description: "For security, this session has been signed out. Please sign in again."
             });
             dis.dispatch({
                 action: 'logout'

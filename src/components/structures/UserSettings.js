@@ -560,7 +560,7 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_section">
 
                     <div className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
-                        Log out
+                        Sign out
                     </div>
 
                     {accountJsx}
