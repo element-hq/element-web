@@ -245,6 +245,21 @@ module.exports = React.createClass({
         }
     },
 
+    setStateForNewScreen: function(state) {
+        const newState = {
+            screen: undefined,
+            currentRoomAlias: null,
+            currentRoomId: null,
+            viewUserId: null,
+            logged_in: false,
+            ready: false,
+            upgradeUsername: null,
+            guestAccessToken: null,
+       };
+       newState.update(state);
+       this.setState(state);
+    },
+
     onAction: function(payload) {
         var roomIndexDelta = 1;
 
@@ -273,20 +288,13 @@ module.exports = React.createClass({
                     newState.register_is_url = payload.params.is_url;
                     newState.register_id_sid = payload.params.sid;
                 }
-                this.setState(newState);
+                this.setStateForNewScreen(newState);
                 this.notifyNewScreen('register');
                 break;
             case 'start_login':
                 if (this.state.logged_in) return;
-                this.setState({
+                this.setStateForNewScreen({
                     screen: 'login',
-                    currentRoomAlias: null,
-                    currentRoomId: null,
-                    viewUserId: null,
-                    logged_in: false,
-                    ready: false,
-                    upgradeUsername: null,
-                    guestAccessToken: null,
                 });
                 this.notifyNewScreen('login');
                 break;
@@ -298,13 +306,8 @@ module.exports = React.createClass({
             case 'start_upgrade_registration':
                 // stash our guest creds so we can backout if needed
                 this.guestCreds = MatrixClientPeg.getCredentials();
-                this.setState({
+                this.setStateForNewScreen({
                     screen: "register",
-                    currentRoomAlias: null,
-                    currentRoomId: null,
-                    viewUserId: null,
-                    logged_in: false,
-                    ready: false,
                     upgradeUsername: MatrixClientPeg.get().getUserIdLocalpart(),
                     guestAccessToken: MatrixClientPeg.get().getAccessToken(),
                 });
@@ -312,15 +315,8 @@ module.exports = React.createClass({
                 break;
             case 'start_password_recovery':
                 if (this.state.logged_in) return;
-                this.setState({
+                this.setStateForNewScreen({
                     screen: 'forgot_password',
-                    currentRoomAlias: null,
-                    currentRoomId: null,
-                    viewUserId: null,
-                    logged_in: false,
-                    ready: false,
-                    upgradeUsername: null,
-                    guestAccessToken: null,
                 });
                 this.notifyNewScreen('forgot_password');
                 break;
@@ -626,15 +622,9 @@ module.exports = React.createClass({
      */
     _onLoggedOut: function() {
         this.notifyNewScreen('login');
-        this.setState({
-            screen: undefined,
-            currentRoomAlias: null,
-            currentRoomId: null,
-            viewUserId: null,
+        this.setStateForNewScreen({
             logged_in: false,
             ready: false,
-            upgradeUsername: null,
-            guestAccessToken: null,
             collapse_lhs: false,
             collapse_rhs: false,
         });
