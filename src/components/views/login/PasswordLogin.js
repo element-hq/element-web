@@ -104,7 +104,7 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
                     placeholder="Password" />
                 <br />
                 {forgotPasswordJsx}
-                <input className="mx_Login_submit" type="submit" value="Log in" />
+                <input className="mx_Login_submit" type="submit" value="Sign in" />
                 </form>
             </div>
         );
