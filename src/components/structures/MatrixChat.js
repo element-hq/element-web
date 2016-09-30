@@ -110,6 +110,13 @@ module.exports = React.createClass({
             upgradeUsername: null,
             // The access token we had for our guest account, used when upgrading to a normal account
             guestAccessToken: null,
+
+            // Parameters used in the registration dance with the IS
+            register_client_secret: null,
+            register_session_id: null,
+            register_hs_url: null,
+            register_is_url: null,
+            register_id_sid: null,
         };
         return s;
     },
