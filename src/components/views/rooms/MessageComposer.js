@@ -67,7 +67,9 @@ export default class MessageComposer extends React.Component {
     }
 
     componentWillUnmount() {
-        MatrixClientPeg.get().removeListener("event", this.onEvent);
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("event", this.onEvent);
+        }
     }
 
     onEvent(event) {
