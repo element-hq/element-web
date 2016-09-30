@@ -414,20 +414,25 @@ module.exports = React.createClass({
                 <Loader />
             </div>;
         } else {
-            const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
-            content = <ScrollPanel ref={this.collectScrollPanel}
-                className="mx_RoomDirectory_tableWrapper"
-                onFillRequest={ this.onFillRequest }
-                stickyBottom={false}
-                startAtBottom={false}
-                onResize={function(){}}
-            >
-                <table ref="directory_table" className="mx_RoomDirectory_table">
-                    <tbody>
-                        { this.getRows() }
-                    </tbody>
-                </table>
-            </ScrollPanel>;
+            const rows = this.getRows();
+            if (rows.length == 0) {
+                content = <i>No rooms to show</i>;
+            } else {
+                const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+                content = <ScrollPanel ref={this.collectScrollPanel}
+                    className="mx_RoomDirectory_tableWrapper"
+                    onFillRequest={ this.onFillRequest }
+                    stickyBottom={false}
+                    startAtBottom={false}
+                    onResize={function(){}}
+                >
+                    <table ref="directory_table" className="mx_RoomDirectory_table">
+                        <tbody>
+                            { this.getRows() }
+                        </tbody>
+                    </table>
+                </ScrollPanel>;
+            }
         }
 
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
