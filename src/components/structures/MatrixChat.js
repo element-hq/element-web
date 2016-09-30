@@ -257,7 +257,7 @@ module.exports = React.createClass({
             guestAccessToken: null,
        };
        newState.update(state);
-       this.setState(state);
+       this.setState(newState);
     },
 
     onAction: function(payload) {
