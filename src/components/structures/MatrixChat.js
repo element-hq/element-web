@@ -105,6 +105,18 @@ module.exports = React.createClass({
 
             version: null,
             newVersion: null,
+
+            // The username to default to when upgrading an account from a guest
+            upgradeUsername: null,
+            // The access token we had for our guest account, used when upgrading to a normal account
+            guestAccessToken: null,
+
+            // Parameters used in the registration dance with the IS
+            register_client_secret: null,
+            register_session_id: null,
+            register_hs_url: null,
+            register_is_url: null,
+            register_id_sid: null,
         };
         return s;
     },
@@ -233,6 +245,21 @@ module.exports = React.createClass({
         }
     },
 
+    setStateForNewScreen: function(state) {
+        const newState = {
+            screen: undefined,
+            currentRoomAlias: null,
+            currentRoomId: null,
+            viewUserId: null,
+            logged_in: false,
+            ready: false,
+            upgradeUsername: null,
+            guestAccessToken: null,
+       };
+       newState.update(state);
+       this.setState(newState);
+    },
+
     onAction: function(payload) {
         var roomIndexDelta = 1;
 
@@ -261,12 +288,12 @@ module.exports = React.createClass({
                     newState.register_is_url = payload.params.is_url;
                     newState.register_id_sid = payload.params.sid;
                 }
-                this.replaceState(newState);
+                this.setStateForNewScreen(newState);
                 this.notifyNewScreen('register');
                 break;
             case 'start_login':
                 if (this.state.logged_in) return;
-                this.replaceState({
+                this.setStateForNewScreen({
                     screen: 'login',
                 });
                 this.notifyNewScreen('login');
@@ -279,7 +306,7 @@ module.exports = React.createClass({
             case 'start_upgrade_registration':
                 // stash our guest creds so we can backout if needed
                 this.guestCreds = MatrixClientPeg.getCredentials();
-                this.replaceState({
+                this.setStateForNewScreen({
                     screen: "register",
                     upgradeUsername: MatrixClientPeg.get().getUserIdLocalpart(),
                     guestAccessToken: MatrixClientPeg.get().getAccessToken(),
@@ -288,8 +315,8 @@ module.exports = React.createClass({
                 break;
             case 'start_password_recovery':
                 if (this.state.logged_in) return;
-                this.replaceState({
-                    screen: 'forgot_password'
+                this.setStateForNewScreen({
+                    screen: 'forgot_password',
                 });
                 this.notifyNewScreen('forgot_password');
                 break;
@@ -595,9 +622,11 @@ module.exports = React.createClass({
      */
     _onLoggedOut: function() {
         this.notifyNewScreen('login');
-        this.replaceState({
+        this.setStateForNewScreen({
             logged_in: false,
             ready: false,
+            collapse_lhs: false,
+            collapse_rhs: false,
         });
     },
 
