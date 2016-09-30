@@ -106,7 +106,9 @@ module.exports = React.createClass({
             version: null,
             newVersion: null,
 
+            // The username to default to when upgrading an account from a guest
             upgradeUsername: null,
+            // The access token we had for our guest account, used when upgrading to a normal account
             guestAccessToken: null,
         };
         return s;
