@@ -64,11 +64,12 @@ module.exports = React.createClass({
         this.nativePatterns = {};
         if (this.props.config.networks) {
             for (const network of Object.keys(this.props.config.networks)) {
-                if (this.props.config.networks[network].portalRoomPattern) {
-                    this.portalRoomPatterns[network] = new RegExp(this.props.config.networks[network].portalRoomPattern);
+                const network_info = this.props.config.networks[network];
+                if (network_info.portalRoomPattern) {
+                    this.portalRoomPatterns[network] = new RegExp(network_info.portalRoomPattern);
                 }
-                if (this.props.config.networks[network].nativePattern) {
-                    this.nativePatterns[network] = new RegExp(this.props.config.networks[network].nativePattern);
+                if (network_info.nativePattern) {
+                    this.nativePatterns[network] = new RegExp(network_info.nativePattern);
                 }
             }
         }
