@@ -256,7 +256,7 @@ module.exports = React.createClass({
             upgradeUsername: null,
             guestAccessToken: null,
        };
-       newState.update(state);
+       Object.assign(newState, state);
        this.setState(newState);
     },
 
