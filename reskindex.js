@@ -42,8 +42,10 @@ for (var i = 0; i < files.length; ++i) {
     var file = files[i].replace('.js', '');
 
     var moduleName = (file.replace(/\//g, '.'));
+    var importName = moduleName.replace(/\./g, "$");
 
-    strm.write("module.exports.components['"+moduleName+"'] = require('./components/"+file+"');");
+    strm.write("import " + importName + " from './components/" + file + "';\n");
+    strm.write("module.exports.components['"+moduleName+"'] = " + importName + ";");
     strm.write('\n');
     strm.uncork();
 }
