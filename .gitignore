@@ -10,3 +10,4 @@
 /vector/config.json
 /vector/olm.js
 .DS_Store
+npm-debug.log
