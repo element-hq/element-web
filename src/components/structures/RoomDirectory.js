@@ -82,6 +82,12 @@ module.exports = React.createClass({
         MatrixClientPeg.get().getThirdpartyProtocols().done((response) => {
             this.protocols = response;
         }, (err) => {
+            if (MatrixClientPeg.get().isGuest()) {
+                // Guests currently aren't allowed to use this API, so
+                // ignore this as otherwise this error is literally the
+                // thing you see when loading the client!
+                return;
+            }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to get protocol list from Home Server",
