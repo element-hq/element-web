@@ -485,34 +485,49 @@ module.exports = React.createClass({
     },
 
     _getFieldsForThirdPartyLocation: function(user_input, network) {
-        const getfields_funcs = {
-            irc: (user_input, network) => {
-                if (!this.protocols.irc) return;
-                const domain = this.props.config.networks[network].domain;
-                // search through to make sure this is a domain actually
-                // recognised by the HS
-                for (const inst of this.protocols.irc.instances) {
-                    if (inst.fields && inst.fields.domain == domain) {
-                        return {
-                            domain: domain,
-                            channel: user_input,
-                        }
-                    }
-                }
-                return null;
-            },
-            gitter: (user_input, network) => {
-                if (!this.protocols.gitter) return;
-                return {
-                    room: user_input,
-                }
-            },
-        };
+        if (!this.props.config.networks || !this.props.config.networks[network]) return null;
 
-        const protocol = this._protocolForThirdPartyNetwork(network);
-        if (getfields_funcs[protocol]) {
-            return getfields_funcs[protocol](user_input, network);
+        const network_info = this.props.config.networks[network];
+        if (!network_info.protocol) return null;
+
+        if (!this.protocols) return null;
+
+        let instance;
+        // Try to find which instance in the 'protocols' response
+        // matches this network. We look for a matching protocol
+        // and the existence of a 'domain' field and if present,
+        // its value.
+        if (this.protocols[network_info.protocol].instances.length == 1) {
+            const the_instance = this.protocols[network_info.protocol].instances[0];
+            // If there's only one instance in this protocol, use it
+            // as long as it has no domain (which we assume to mean it's
+            // there is only one possible instance).
+            if (the_instance.fields.domain === undefined && network_info.domain === undefined) {
+                instance = this.protocols[network_info.protocol].instances[0];
+            }
+        } else if (network_info.domain) {
+            // otherwise, we look for one with a matching domain.
+            for (const this_instance of this.protocols[network_info.protocol].instances) {
+                if (this_instance.fields.domain == network_info.domain) {
+                    instance = this_instance;
+                }
+            }
         }
+
+        if (instance === undefined) return null;
+
+        // now make an object with the fields specified by that protocol. We
+        // require that the values of all but the last field come from the
+        // instance. The last is the user input.
+        const required_fields = this.protocols[network_info.protocol].location_fields;
+        const fields = {};
+        for (let i = 0; i < required_fields.length - 1; ++i) {
+            const this_field = required_fields[i];
+            if (instance.fields[this_field] === undefined) return null;
+            fields[this_field] = instance.fields[this_field];
+        }
+        fields[required_fields[required_fields.length - 1]] = user_input;
+        return fields;
     },
 
     render: function() {
