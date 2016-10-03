@@ -268,7 +268,7 @@ function _onAction(payload) {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
                     title: "Warning!",
-                    description: "Conference calling in Vector is in development and may not be reliable.",
+                    description: "Conference calling in Riot is in development and may not be reliable.",
                     onFinished: confirm=>{
                         if (confirm) {
                             ConferenceHandler.createNewMatrixCall(

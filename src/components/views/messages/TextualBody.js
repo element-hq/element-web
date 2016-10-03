@@ -194,7 +194,7 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Integrations disabled",
-                description: "You need to enable the Labs option 'Integrations Management' in your Vector user settings first.",
+                description: "You need to enable the Labs option 'Integrations Management' in your Riot user settings first.",
             });
             return;
         }

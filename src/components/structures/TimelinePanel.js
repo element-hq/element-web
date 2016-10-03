@@ -776,7 +776,7 @@ var TimelinePanel = React.createClass({
                     });
                 };
             }
-            var message = "Vector was trying to load a specific point in this room's timeline but ";
+            var message = "Riot was trying to load a specific point in this room's timeline but ";
             if (error.errcode == 'M_FORBIDDEN') {
                 message += "you do not have permission to view the message in question.";
             } else {
