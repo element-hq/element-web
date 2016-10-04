@@ -72,7 +72,32 @@ You can configure the app by copying `vector/config.sample.json` to
    addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
    for more details.  Currently the only public matrix identity servers are https://matrix.org
    and https://vector.im.  In future identity servers will be decentralised.
-
+1. `roomDirectory`: config for the public room directory. This section encodes behaviour
+   on the room directory screen for filtering the list by server / network type and joining
+   third party networks. This config section will disappear once APIs are available to
+   get this information for home servers. This section is optional.
+1. `roomDirectory.servers`: List of other Home Servers' directories to include in the drop
+   down list. Optional.
+1. `roomDirectory.serverConfig`: Config for each server in `roomDirectory.servers`. Optional.
+1. `roomDirectory.serverConfig.<server_name>.networks`: List of networks (named
+   in `roomDirectory.networks`) to include for this server. Optional.
+1. `roomDirectory.networks`: config for each network type. Optional.
+1. `roomDirectory.<network_type>.name`: Human-readable name for the network. Required.
+1. `roomDirectory.<network_type>.protocol`: Protocol as given by the server in
+   `/_matrix/client/unstable/thirdparty/protocolss` response. Required to be able to join
+   this type of third party network.
+1. `roomDirectory.<network_type>.domain`: Domain as given by the server in
+   `/_matrix/client/unstable/thirdparty/protocols` response, if present. Required to be
+   able to join this type of third party network, if present in `thirdparty/protocols`.
+1. `roomDirectory.<network_type>.portalRoomPattern`: Regular expression matching aliases
+   for portal rooms to locations on this network. Required.
+1. `roomDirectory.<network_type>.icon`: URL to an icon to be displayed for this network. Required.
+1. `roomDirectory.<network_type>.example`: Textual example of a location on this network,
+   eg. '#channel' for an IRC network. Optional.
+1. `roomDirectory.<network_type>.nativePattern`: Regular expression that matches a
+   valid location on this network. This is used as a hint to the user to indicate
+   when a valid location has been entered so it's not necessary for this to be
+   exactly correct. Optional.
 
 Running as a Desktop app
 ========================
