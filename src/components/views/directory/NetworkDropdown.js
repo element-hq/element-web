@@ -179,7 +179,9 @@ export default class NetworkDropdown extends React.Component {
                 name = network;
             }
             if (this.props.config.networks[network].icon) {
-                icon = <img src={this.props.config.networks[network].icon} />;
+                // omit height here so if people define a non-square logo in the config, it
+                // will keep the aspect when it scales
+                icon = <img src={this.props.config.networks[network].icon} width="16" />;
             } else {
                 icon = <img src={iconPath} width="16" height="16" />;
             }
