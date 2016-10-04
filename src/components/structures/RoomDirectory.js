@@ -509,7 +509,7 @@ module.exports = React.createClass({
             // as long as it has no domain (which we assume to mean it's
             // there is only one possible instance).
             if (the_instance.fields.domain === undefined && network_info.domain === undefined) {
-                matched_instance = this.protocols[network_info.protocol].instances[0];
+                matched_instance = the_instance;
             }
         } else if (network_info.domain) {
             // otherwise, we look for one with a matching domain.
