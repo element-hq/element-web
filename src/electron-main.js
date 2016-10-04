@@ -8,7 +8,6 @@ app.on('ready', () => {
         icon: `${__dirname}/img/logo.png`,
     });
     window.loadURL(`file://${__dirname}/index.html`);
-    window.webContents.openDevTools();
     window.on('closed', () => {
         window = null;
     })
