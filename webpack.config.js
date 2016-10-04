@@ -2,7 +2,8 @@ var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-module.exports = {
+module.exports = [{
+    entry: './src/vector/index.js',
     module: {
         preLoaders: [
             { test: /\.js$/, loader: "source-map-loader" }
@@ -32,7 +33,9 @@ module.exports = {
             // various levels of '.' and '..'
             // Also, sometimes the resource path is absolute.
             return path.relative(process.cwd(), info.resourcePath).replace(/^[\/\.]*/, '');
-        }
+        },
+        path: './vector/',
+        filename: 'bundle.js'
     },
     resolve: {
         alias: {
@@ -52,6 +55,7 @@ module.exports = {
         // loads it into the browser global `Olm`), and reference it as an
         // external here.
         "olm": "Olm",
+        "electron": 'commonjs electron'
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -65,4 +69,33 @@ module.exports = {
         }),
     ],
     devtool: 'source-map'
-};
+}, {
+    entry: './src/electron-main.js',
+    target: "electron",
+    output: {
+        devtoolModuleFilenameTemplate: function(info) {
+            // Reading input source maps gives only relative paths here for
+            // everything. Until I figure out how to fix this, this is a
+            // workaround.
+            // We use the relative resource path with any '../'s on the front
+            // removed which gives a tree with matrix-react-sdk and vector
+            // trees smashed together, but this fixes everything being under
+            // various levels of '.' and '..'
+            // Also, sometimes the resource path is absolute.
+            return path.relative(process.cwd(), info.resourcePath).replace(/^[\/\.]*/, '');
+        },
+        filename: 'vector/electron-main.js'
+    },
+    node: {
+        __dirname: false,
+        __filename: false
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+            }
+        }),
+    ],
+    devtool: 'source-map',
+}];
