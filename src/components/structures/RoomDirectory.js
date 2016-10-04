@@ -508,7 +508,16 @@ module.exports = React.createClass({
             // If there's only one instance in this protocol, use it
             // as long as it has no domain (which we assume to mean it's
             // there is only one possible instance).
-            if (the_instance.fields.domain === undefined && network_info.domain === undefined) {
+            if (
+                (
+                    the_instance.fields.domain === undefined &&
+                    network_info.domain === undefined
+                ) ||
+                (
+                    the_instance.fields.domain !== undefined &&
+                    the_instance.fields.domain == network_info.domain
+                )
+            ) {
                 matched_instance = the_instance;
             }
         } else if (network_info.domain) {
