@@ -132,7 +132,7 @@ module.exports = React.createClass({
             opts.server = my_server;
         }
         if (this.nextBatch) opts.since = this.nextBatch;
-        if (this.state.filterString) opts.filter = { generic_search_term: my_filter_string } ;
+        if (my_filter_string) opts.filter = { generic_search_term: my_filter_string } ;
         return MatrixClientPeg.get().publicRooms(opts).then((data) => {
             if (
                 my_filter_string != this.state.filterString ||
@@ -498,7 +498,7 @@ module.exports = React.createClass({
 
         if (!this.protocols) return null;
 
-        let instance;
+        let matched_instance;
         // Try to find which instance in the 'protocols' response
         // matches this network. We look for a matching protocol
         // and the existence of a 'domain' field and if present,
@@ -509,18 +509,18 @@ module.exports = React.createClass({
             // as long as it has no domain (which we assume to mean it's
             // there is only one possible instance).
             if (the_instance.fields.domain === undefined && network_info.domain === undefined) {
-                instance = this.protocols[network_info.protocol].instances[0];
+                matched_instance = this.protocols[network_info.protocol].instances[0];
             }
         } else if (network_info.domain) {
             // otherwise, we look for one with a matching domain.
             for (const this_instance of this.protocols[network_info.protocol].instances) {
                 if (this_instance.fields.domain == network_info.domain) {
-                    instance = this_instance;
+                    matched_instance = this_instance;
                 }
             }
         }
 
-        if (instance === undefined) return null;
+        if (matched_instance === undefined) return null;
 
         // now make an object with the fields specified by that protocol. We
         // require that the values of all but the last field come from the
@@ -529,8 +529,8 @@ module.exports = React.createClass({
         const fields = {};
         for (let i = 0; i < required_fields.length - 1; ++i) {
             const this_field = required_fields[i];
-            if (instance.fields[this_field] === undefined) return null;
-            fields[this_field] = instance.fields[this_field];
+            if (matched_instance.fields[this_field] === undefined) return null;
+            fields[this_field] = matched_instance.fields[this_field];
         }
         fields[required_fields[required_fields.length - 1]] = user_input;
         return fields;

@@ -170,17 +170,18 @@ export default class NetworkDropdown extends React.Component {
             icon = <img src="img/network-matrix.svg" width="16" height="16" />;
             span_class = 'mx_NetworkDropdown_menu_network';
         } else {
-            if (this.props.config.networks[network]) {
-                if (this.props.config.networks[network].name) {
-                    name = this.props.config.networks[network].name;
-                } else {
-                    name = network;
-                }
-                if (this.props.config.networks[network].icon) {
-                    icon = <img src={this.props.config.networks[network].icon} />;
-                } else {
-                    icon = <img src={iconPath} width="16" height="16" />;
-                }
+            if (this.props.config.networks[network] === undefined) {
+                throw new Error(network + ' network missing from config');
+            }
+            if (this.props.config.networks[network].name) {
+                name = this.props.config.networks[network].name;
+            } else {
+                name = network;
+            }
+            if (this.props.config.networks[network].icon) {
+                icon = <img src={this.props.config.networks[network].icon} />;
+            } else {
+                icon = <img src={iconPath} width="16" height="16" />;
             }
 
             span_class = 'mx_NetworkDropdown_menu_network';
@@ -210,7 +211,7 @@ export default class NetworkDropdown extends React.Component {
             </div>;
             current_value = <input type="text" className="mx_NetworkDropdown_networkoption"
                 ref={this.collectInputTextBox} onKeyUp={this.onInputKeyUp}
-                placeholder="matrix.org"
+                placeholder="matrix.org" // 'matrix.org' as an example of an HS name
             />
         } else {
             current_value = this._makeMenuOption(
