@@ -119,7 +119,7 @@ module.exports = React.createClass({
         var emailPusherPromise;
         if (event.target.checked) {
             var data = {}
-            data['brand'] = this.props.brand || 'Vector';
+            data['brand'] = this.props.brand || 'Riot';
             emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);
         } else {
             var emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
