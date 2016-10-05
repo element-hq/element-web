@@ -1,3 +1,42 @@
+Changes in [0.7.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.7.3) (2016-10-05)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.2...v0.7.3)
+
+ * Move 'show join button' functionality out
+   [\#502](https://github.com/matrix-org/matrix-react-sdk/pull/502)
+ * Update to linkify 2.1.3
+   [\#508](https://github.com/matrix-org/matrix-react-sdk/pull/508)
+ * Fix version going blank after logging in
+   [\#505](https://github.com/matrix-org/matrix-react-sdk/pull/505)
+ * Use 'Sign In' / 'Sign Out' universally
+   [\#506](https://github.com/matrix-org/matrix-react-sdk/pull/506)
+ * Prevent error when clicking 'log in'
+   [\#504](https://github.com/matrix-org/matrix-react-sdk/pull/504)
+ * Make RTE mode use the new Markdown wrapper class
+   [\#497](https://github.com/matrix-org/matrix-react-sdk/pull/497)
+ * Add 'getHomeServerName' util to client peg
+   [\#501](https://github.com/matrix-org/matrix-react-sdk/pull/501)
+ * Fix markdown link syntax
+   [\#499](https://github.com/matrix-org/matrix-react-sdk/pull/499)
+ * Fail hard & fast if linkifyjs version is wrong
+   [\#500](https://github.com/matrix-org/matrix-react-sdk/pull/500)
+ * Bring back the little green men without slowness
+   [\#498](https://github.com/matrix-org/matrix-react-sdk/pull/498)
+ * Directory search join button
+   [\#496](https://github.com/matrix-org/matrix-react-sdk/pull/496)
+ * Fix links to IRC rooms
+   [\#495](https://github.com/matrix-org/matrix-react-sdk/pull/495)
+ * Make markdown less aggressive
+   [\#492](https://github.com/matrix-org/matrix-react-sdk/pull/492)
+ * Move the device verification buttons to their own class
+   [\#493](https://github.com/matrix-org/matrix-react-sdk/pull/493)
+ * Add the deviceId back to memberdeviceinfo
+   [\#494](https://github.com/matrix-org/matrix-react-sdk/pull/494)
+ * Force-hide autocomplete after sending message.
+   [\#489](https://github.com/matrix-org/matrix-react-sdk/pull/489)
+ * force old selection state after creating entities
+   [\#488](https://github.com/matrix-org/matrix-react-sdk/pull/488)
+
 Changes in [0.7.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.7.2) (2016-09-21)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.1...v0.7.2)
