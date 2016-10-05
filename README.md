@@ -84,7 +84,7 @@ You can configure the app by copying `vector/config.sample.json` to
 1. `roomDirectory.networks`: config for each network type. Optional.
 1. `roomDirectory.<network_type>.name`: Human-readable name for the network. Required.
 1. `roomDirectory.<network_type>.protocol`: Protocol as given by the server in
-   `/_matrix/client/unstable/thirdparty/protocolss` response. Required to be able to join
+   `/_matrix/client/unstable/thirdparty/protocols` response. Required to be able to join
    this type of third party network.
 1. `roomDirectory.<network_type>.domain`: Domain as given by the server in
    `/_matrix/client/unstable/thirdparty/protocols` response, if present. Required to be
