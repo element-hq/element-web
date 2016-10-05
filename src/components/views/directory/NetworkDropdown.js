@@ -40,7 +40,7 @@ export default class NetworkDropdown extends React.Component {
             this.props.config.serverConfig &&
             this.props.config.serverConfig[server] &&
             this.props.config.serverConfig[server].networks &&
-            '_matrix' in this.props.config.serverConfig[server].networks
+            this.props.config.serverConfig[server].networks.indexOf('_matrix') > -1
         ) {
             defaultNetwork = '_matrix';
         }
@@ -170,8 +170,22 @@ export default class NetworkDropdown extends React.Component {
             icon = <img src="img/network-matrix.svg" width="16" height="16" />;
             span_class = 'mx_NetworkDropdown_menu_network';
         } else {
-            name = this.props.config.networkNames[network];
-            icon = <img src={this.props.config.networkIcons[network]} />;
+            if (this.props.config.networks[network] === undefined) {
+                throw new Error(network + ' network missing from config');
+            }
+            if (this.props.config.networks[network].name) {
+                name = this.props.config.networks[network].name;
+            } else {
+                name = network;
+            }
+            if (this.props.config.networks[network].icon) {
+                // omit height here so if people define a non-square logo in the config, it
+                // will keep the aspect when it scales
+                icon = <img src={this.props.config.networks[network].icon} width="16" />;
+            } else {
+                icon = <img src={iconPath} width="16" height="16" />;
+            }
+
             span_class = 'mx_NetworkDropdown_menu_network';
         }
 
@@ -199,6 +213,7 @@ export default class NetworkDropdown extends React.Component {
             </div>;
             current_value = <input type="text" className="mx_NetworkDropdown_networkoption"
                 ref={this.collectInputTextBox} onKeyUp={this.onInputKeyUp}
+                placeholder="matrix.org" // 'matrix.org' as an example of an HS name
             />
         } else {
             current_value = this._makeMenuOption(
