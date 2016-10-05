@@ -1,3 +1,24 @@
+Changes in [0.8.2](https://github.com/vector-im/vector-web/releases/tag/v0.8.2) (2016-10-05)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.1...v0.8.2)
+
+ * Add native joining of 3p networks to room dir
+   [\#2379](https://github.com/vector-im/vector-web/pull/2379)
+ * Update to linkify 2.1.3
+   [\#2406](https://github.com/vector-im/vector-web/pull/2406)
+ * Use 'Sign In' / 'Sign Out' universally
+   [\#2383](https://github.com/vector-im/vector-web/pull/2383)
+ * Prevent network dropdown resizing slightly
+   [\#2382](https://github.com/vector-im/vector-web/pull/2382)
+ * Room directory: indicate when there are no results
+   [\#2380](https://github.com/vector-im/vector-web/pull/2380)
+ * Room dir: New filtering & 3rd party networks
+   [\#2362](https://github.com/vector-im/vector-web/pull/2362)
+ * Update linkify version
+   [\#2359](https://github.com/vector-im/vector-web/pull/2359)
+ * Directory search join button
+   [\#2339](https://github.com/vector-im/vector-web/pull/2339)
+
 Changes in [0.8.1](https://github.com/vector-im/vector-web/releases/tag/v0.8.1) (2016-09-21)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.0...v0.8.1)
