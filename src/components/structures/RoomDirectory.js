@@ -554,24 +554,29 @@ module.exports = React.createClass({
             </div>;
         } else {
             const rows = this.getRows();
+            // we still show the scrollpanel, at least for now, because
+            // otherwise we don't fetch more because we don't get a fill
+            // request from the scrollpanel because there isn't one
+            let scrollpanel_content;
             if (rows.length == 0) {
-                content = <i>No rooms to show</i>;
+                scrollpanel_content = <i>No rooms to show</i>;
             } else {
-                const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
-                content = <ScrollPanel ref={this.collectScrollPanel}
-                    className="mx_RoomDirectory_tableWrapper"
-                    onFillRequest={ this.onFillRequest }
-                    stickyBottom={false}
-                    startAtBottom={false}
-                    onResize={function(){}}
-                >
-                    <table ref="directory_table" className="mx_RoomDirectory_table">
-                        <tbody>
-                            { this.getRows() }
-                        </tbody>
-                    </table>
-                </ScrollPanel>;
+                scrollpanel_content = <table ref="directory_table" className="mx_RoomDirectory_table">
+                    <tbody>
+                        { this.getRows() }
+                    </tbody>
+                </table>;
             }
+            const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+            content = <ScrollPanel ref={this.collectScrollPanel}
+                className="mx_RoomDirectory_tableWrapper"
+                onFillRequest={ this.onFillRequest }
+                stickyBottom={false}
+                startAtBottom={false}
+                onResize={function(){}}
+            >
+                { scrollpanel_content }
+            </ScrollPanel>;
         }
 
         let placeholder = 'Search for a room';
