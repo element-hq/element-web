@@ -21,6 +21,7 @@ import q from 'q';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DateUtils from '../../../DateUtils';
+import Modal from '../../../Modal';
 
 export default class DevicesPanelEntry extends React.Component {
     constructor(props, context) {
@@ -35,6 +36,7 @@ export default class DevicesPanelEntry extends React.Component {
 
         this._onDeleteClick = this._onDeleteClick.bind(this);
         this._onDisplayNameChanged = this._onDisplayNameChanged.bind(this);
+        this._makeDeleteRequest = this._makeDeleteRequest.bind(this);
     }
 
     componentWillUnmount() {
@@ -52,22 +54,44 @@ export default class DevicesPanelEntry extends React.Component {
     }
 
     _onDeleteClick() {
-        const device = this.props.device;
         this.setState({deleting: true});
 
-        MatrixClientPeg.get().deleteDevice(device.device_id).done(
+        // try without interactive auth to start off
+        this._makeDeleteRequest(null).catch((error) => {
+            if (this._unmounted) { return; }
+            if (error.httpStatus !== 401 || !error.data || !error.data.flows) {
+                // doesn't look like an interactive-auth failure
+                throw e;
+            }
+
+            // pop up an interactive auth dialog
+            var InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+
+            Modal.createDialog(InteractiveAuthDialog, {
+                authData: error.data,
+                makeRequest: this._makeDeleteRequest,
+            });
+
+            this.setState({
+                deleting: false,
+            });
+        }).catch((e) => {
+            console.error("Error deleting device", e);
+            if (this._unmounted) { return; }
+            this.setState({
+                deleting: false,
+                deleteError: "Failed to delete device",
+            });
+        }).done();
+    }
+
+    _makeDeleteRequest(auth) {
+        const device = this.props.device;
+        return MatrixClientPeg.get().deleteDevice(device.device_id, auth).then(
             () => {
                 this.props.onDeleted();
                 if (this._unmounted) { return; }
                 this.setState({ deleting: false });
-            },
-            (e) => {
-                console.error("Error deleting device", e);
-                if (this._unmounted) { return; }
-                this.setState({
-                    deleting: false,
-                    deleteError: "Failed to delete device",
-                });
             }
         );
     }
