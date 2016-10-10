@@ -61,7 +61,7 @@ describe('MessagePanel', function () {
 
     it('should show the events', function() {
         var res = TestUtils.renderIntoDocument(
-                <MessagePanel events={events} />
+                <MessagePanel className="cls" events={events} />
         );
 
         // just check we have the right number of tiles for now
@@ -72,7 +72,7 @@ describe('MessagePanel', function () {
 
     it('should show the read-marker in the right place', function() {
         var res = TestUtils.renderIntoDocument(
-                <MessagePanel events={events} readMarkerEventId={events[4].getId()}
+                <MessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
                     readMarkerVisible={true} />
         );
 
@@ -96,7 +96,7 @@ describe('MessagePanel', function () {
 
         // first render with the RM in one place
         var mp = ReactDOM.render(
-                <MessagePanel events={events} readMarkerEventId={events[4].getId()}
+                <MessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 
@@ -112,7 +112,7 @@ describe('MessagePanel', function () {
 
         // now move the RM
         mp = ReactDOM.render(
-                <MessagePanel events={events} readMarkerEventId={events[6].getId()}
+                <MessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 
@@ -147,7 +147,7 @@ describe('MessagePanel', function () {
 
         // first render with the RM in one place
         var mp = ReactDOM.render(
-                <MessagePanel events={events} readMarkerEventId={events[4].getId()}
+                <MessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 
@@ -159,7 +159,7 @@ describe('MessagePanel', function () {
 
         // now move the RM
         mp = ReactDOM.render(
-                <MessagePanel events={events} readMarkerEventId={events[6].getId()}
+                <MessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 
@@ -175,7 +175,7 @@ describe('MessagePanel', function () {
 
         // and move the RM again
         mp = ReactDOM.render(
-                <MessagePanel events={events} readMarkerEventId={events[8].getId()}
+                <MessagePanel className="cls" events={events} readMarkerEventId={events[8].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 

@@ -40,6 +40,7 @@ export function stubClient() {
         on: sinon.stub(),
         removeListener: sinon.stub(),
         isRoomEncrypted: sinon.stub().returns(false),
+        peekInRoom: sinon.stub().returns(q(this.mkStubRoom())),
 
         paginateEventTimeline: sinon.stub().returns(q()),
         sendReadReceipt: sinon.stub().returns(q()),
@@ -56,6 +57,7 @@ export function stubClient() {
         sendTyping: sinon.stub().returns(q({})),
         sendTextMessage: () => q({}),
         sendHtmlMessage: () => q({}),
+        getSyncState: () => "SYNCING",
     };
 
     // stub out the methods in MatrixClientPeg
@@ -185,11 +187,17 @@ export function mkMessage(opts) {
 }
 
 export function mkStubRoom(roomId = null) {
+    var stubTimeline = { getEvents: () => [] };
     return {
         roomId,
         getReceiptsForEvent: sinon.stub().returns([]),
         getMember: sinon.stub().returns({}),
         getJoinedMembers: sinon.stub().returns([]),
+        getPendingEvents: () => [],
+        getLiveTimeline: () => stubTimeline,
+        getUnfilteredTimelineSet: () => null,
+        getAccountData: () => null,
+        hasMembershipState: () => null,
         currentState: {
             getStateEvents: sinon.stub(),
             members: [],
