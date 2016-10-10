@@ -503,7 +503,11 @@ module.exports = React.createClass({
         // matches this network. We look for a matching protocol
         // and the existence of a 'domain' field and if present,
         // its value.
-        if (this.protocols[network_info.protocol].instances.length == 1) {
+        if (
+            this.protocols[network_info.protocol] &&
+            this.protocols[network_info.protocol].instances &&
+            this.protocols[network_info.protocol].instances.length == 1
+        ) {
             const the_instance = this.protocols[network_info.protocol].instances[0];
             // If there's only one instance in this protocol, use it
             // as long as it has no domain (which we assume to mean it's
@@ -591,10 +595,12 @@ module.exports = React.createClass({
             placeholder = this.props.config.networks[this.state.network].example;
         }
 
-        const showJoinButton = (
-            this._stringLooksLikeId(this.state.filterString, this.state.network) &&
-            this._getFieldsForThirdPartyLocation(this.state.filterString, this.state.network)
-        );
+        let showJoinButton = this._stringLooksLikeId(this.state.filterString, this.state.network);
+        if (this.state.network && this.state.network != '_matrix') {
+            if (this._getFieldsForThirdPartyLocation(this.state.filterString, this.state.network) === null) {
+                showJoinButton = false;
+            }
+        }
 
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const NetworkDropdown = sdk.getComponent('directory.NetworkDropdown');
