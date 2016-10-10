@@ -92,7 +92,7 @@ limitations under the License.
 }
 
 .mx_MemberInfo_createRoom_label {
-    width: 150px ! important;
+    width: initial ! important;
     cursor: pointer;
 }
 
