@@ -51,6 +51,9 @@ class Signup {
 
 /**
  * Registration logic class
+ * This exists for the lifetime of a user's attempt to register an account,
+ * so if their registration attempt fails for whatever reason and they
+ * try again, call register() on the same instance again.
  */
 class Register extends Signup {
     constructor(hsUrl, isUrl, opts) {
@@ -117,12 +120,16 @@ class Register extends Signup {
         });
     }
 
+    /**
+     * Starts the registration process from the first stage
+     */
     register(formVals) {
         var {username, password, email} = formVals;
         this.email = email;
         this.username = username;
         this.password = password;
         const client = this._createTemporaryClient();
+        this.activeStage = null;
         return this._tryRegister(client);
     }
 
