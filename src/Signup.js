@@ -160,7 +160,7 @@ class Register extends Signup {
                     if (flow) {
                         console.log("Active flow => %s", JSON.stringify(flow));
                         var flowStage = self.firstUncompletedStage(flow);
-                        if (flowStage != self.activeStage.type) {
+                        if (!self.activeStage || flowStage != self.activeStage.type) {
                             return self._startStage(client, flowStage).catch(function(err) {
                                 self.setStep('START');
                                 throw err;
