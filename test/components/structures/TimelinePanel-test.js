@@ -41,11 +41,15 @@ describe('TimelinePanel', function() {
     var timeline;
     var parentDiv;
 
-    function mkMessage(opts) {
+    // make a dummy message. eventNum is put in the message text to help
+    // identification during debugging, and also in the timestamp so that we
+    // don't get lots of events with the same timestamp.
+    function mkMessage(eventNum, opts) {
         return test_utils.mkMessage(
             {
                 event: true, room: ROOM_ID, user: USER_ID,
-                ts: Date.now(),
+                ts: Date.now() + eventNum,
+                msg: "Event " + eventNum,
                 ... opts,
             });
     }
@@ -97,7 +101,7 @@ describe('TimelinePanel', function() {
         // enough events to allow us to scroll back
         var N_EVENTS = 30;
         for (var i = 0; i < N_EVENTS; i++) {
-            timeline.addEvent(mkMessage());
+            timeline.addEvent(mkMessage(i));
         }
 
         var scrollDefer;
@@ -148,7 +152,7 @@ describe('TimelinePanel', function() {
             console.log("adding event");
 
             // a new event!
-            var ev = mkMessage();
+            var ev = mkMessage(N_EVENTS+1);
             timeline.addEvent(ev);
             panel.onRoomTimeline(ev, room, false, false, {
                 liveEvent: true,
@@ -161,7 +165,9 @@ describe('TimelinePanel', function() {
             expect(scryEventTiles(panel).length).toEqual(N_EVENTS);
 
             scrollingDiv.scrollTop = 10;
-        }).delay(0).then(awaitPaginationCompletion).then(() => {
+
+            return awaitScroll();
+        }).then(awaitPaginationCompletion).then(() => {
             expect(scryEventTiles(panel).length).toEqual(N_EVENTS+1);
         }).done(done, done);
     });
@@ -171,12 +177,7 @@ describe('TimelinePanel', function() {
         // joining a room
         var d = Date.now();
         for (var i = 0; i < 3; i++) {
-            timeline.addEvent(test_utils.mkMessage(
-                {
-                    event: true, room: ROOM_ID, user: USER_ID,
-                    ts: d+i,
-                }
-            ));
+            timeline.addEvent(mkMessage(i));
         }
         timeline.setPaginationToken('tok', EventTimeline.BACKWARDS);
 
@@ -230,7 +231,7 @@ describe('TimelinePanel', function() {
 
         // fill the timeline with lots of events
         for (var i = 0; i < N_EVENTS; i++) {
-            timeline.addEvent(mkMessage({msg: "Event "+i}));
+            timeline.addEvent(mkMessage(i));
         }
         console.log("added events to timeline");
 

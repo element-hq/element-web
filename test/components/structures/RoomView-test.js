@@ -18,6 +18,7 @@ describe('RoomView', function () {
     var parentDiv;
 
     beforeEach(function() {
+        test_utils.beforeEach(this);
         sandbox = test_utils.stubClient();
         parentDiv = document.createElement('div');
 
@@ -57,11 +58,10 @@ describe('RoomView', function () {
     it('joins by alias if given an alias', function (done) {
         peg.get().getRoomIdForAlias.returns(q({room_id: "!randomcharacters:aser.ver"}));
         peg.get().getProfileInfo.returns(q({displayname: "foo"}));
-        var parentDiv = document.createElement('div');
         var roomView = ReactDOM.render(<RoomView roomAddress="#alias:ser.ver" />, parentDiv);
 
         peg.get().joinRoom = sinon.spy();
-        
+
         process.nextTick(function() {
             roomView.onJoinButtonClicked();
             process.nextTick(function() {

@@ -760,5 +760,5 @@ MessageComposerInput.propTypes = {
     // attempts to confirm currently selected completion, returns whether actually confirmed
     tryComplete: React.PropTypes.func,
 
-    onInputStateChanged: React.PropTypes.func.isRequired,
+    onInputStateChanged: React.PropTypes.func,
 };
