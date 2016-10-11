@@ -214,6 +214,9 @@ textarea {
     cursor: pointer;
     color: #76cfa6;
     background-color: #fff;
+
+    /* align images in buttons (eg spinners) */
+    vertical-align: middle;
 }
 
 .mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
