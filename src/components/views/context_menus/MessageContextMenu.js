@@ -20,9 +20,10 @@ var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
 var Modal = require('matrix-react-sdk/lib/Modal');
 var Resend = require("matrix-react-sdk/lib/Resend");
+import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
@@ -163,7 +164,7 @@ module.exports = React.createClass({
                 {viewSourceButton}
                 {unhidePreviewButton}
                 {permalinkButton}
-                {quoteButton}
+                {UserSettingsStore.isFeatureEnabled('rich_text_editor') ? quoteButton : null}
             </div>
         );
     }
