@@ -146,9 +146,9 @@ export function getScopedMDDecorators(scope: any): CompositeDecorator {
             </a>
         )
     });
-    markdownDecorators.push(emojiDecorator);
-
-    return markdownDecorators;
+    // markdownDecorators.push(emojiDecorator);
+    // TODO Consider renabling "syntax highlighting" when we can do it properly
+    return [emojiDecorator];
 }
 
 /**
