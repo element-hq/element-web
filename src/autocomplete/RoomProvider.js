@@ -66,8 +66,4 @@ export default class RoomProvider extends AutocompleteProvider {
             {completions}
         </div>;
     }
-
-    shouldForceComplete(): boolean {
-        return true;
-    }
 }
