@@ -123,6 +123,7 @@ class Register extends Signup {
         this.username = username;
         this.password = password;
         const client = this._createTemporaryClient();
+        this.activeStage = null;
         return this._tryRegister(client);
     }
 
