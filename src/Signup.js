@@ -135,6 +135,10 @@ class Register extends Signup {
         // generate one for this session. It will only be used if
         // we do email verification, but far simpler to just make
         // sure we have one.
+        // We re-use this same secret over multiple calls to register
+        // so that the identity server can honour the sendAttempt
+        // parameter and not re-send email unless we actually want
+        // another mail to be sent.
         if (!this.params.clientSecret) {
             this.params.clientSecret = client.generateClientSecret();
         }
