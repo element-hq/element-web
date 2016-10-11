@@ -228,12 +228,9 @@ module.exports = React.createClass({
         });
     },
 
-    onCaptchaLoaded: function(divIdName) {
+    onCaptchaResponse: function(response) {
         this.registerLogic.tellStage("m.login.recaptcha", {
-            divId: divIdName
-        });
-        this.setState({
-            busy: false // requires user input
+            response: response
         });
     },
 
@@ -267,8 +264,15 @@ module.exports = React.createClass({
                 );
                 break;
             case "Register.STEP_m.login.recaptcha":
+                var publicKey;
+                var serverParams = this.registerLogic.getServerData().params;
+                if (serverParams && serverParams["m.login.recaptcha"]) {
+                    publicKey = serverParams["m.login.recaptcha"].public_key;
+                }
                 registerStep = (
-                    <CaptchaForm onCaptchaLoaded={this.onCaptchaLoaded} />
+                    <CaptchaForm sitePublicKey={publicKey}
+                        onCaptchaResponse={this.onCaptchaResponse}
+                    />
                 );
                 break;
             default:

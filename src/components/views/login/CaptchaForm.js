@@ -26,28 +26,34 @@ module.exports = React.createClass({
     displayName: 'CaptchaForm',
 
     propTypes: {
-        onCaptchaLoaded: React.PropTypes.func.isRequired // called with div id name
+        sitePublicKey: React.PropTypes.string,
+
+        // called with the captcha response
+        onCaptchaResponse: React.PropTypes.func,
     },
 
     getDefaultProps: function() {
         return {
-            onCaptchaLoaded: function() {
-                console.error("Unhandled onCaptchaLoaded");
-            }
+            onCaptchaResponse: () => {},
+        };
+    },
+
+    getInitialState: function() {
+        return {
+            errorText: null,
         };
     },
 
     componentDidMount: function() {
         // Just putting a script tag into the returned jsx doesn't work, annoyingly,
         // so we do this instead.
-        var self = this;
-        if (this.refs.recaptchaContainer) {
+        if (global.grecaptcha) {
+            // already loaded
+            this._onCaptchaLoaded();
+        } else {
             console.log("Loading recaptcha script...");
             var scriptTag = document.createElement('script');
-            window.mx_on_recaptcha_loaded = function() {
-                console.log("Loaded recaptcha script.");
-                self.props.onCaptchaLoaded(DIV_ID);
-            };
+            window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded()};
             scriptTag.setAttribute(
                 'src', global.location.protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit"
             );
@@ -55,12 +61,53 @@ module.exports = React.createClass({
         }
     },
 
+    _renderRecaptcha: function(divId) {
+        if (!global.grecaptcha) {
+            console.error("grecaptcha not loaded!");
+            throw new Error("Recaptcha did not load successfully");
+        }
+
+        var publicKey = this.props.sitePublicKey;
+        if (!publicKey) {
+            console.error("No public key for recaptcha!");
+            throw new Error(
+                "This server has not supplied enough information for Recaptcha "
+                    + "authentication");
+        }
+
+        console.log("Rendering to %s", divId);
+        global.grecaptcha.render(divId, {
+            sitekey: publicKey,
+            callback: this.props.onCaptchaResponse,
+        });
+    },
+
+    _onCaptchaLoaded: function() {
+        console.log("Loaded recaptcha script.");
+        try {
+            this._renderRecaptcha(DIV_ID);
+        } catch (e) {
+            this.setState({
+                errorText: e.toString(),
+            })
+        }
+    },
+
     render: function() {
-        // FIXME: Tight coupling with the div id and SignupStages.js
+        let error = null;
+        if (this.state.errorText) {
+            error = (
+                <div className="error">
+                    {this.state.errorText}
+                </div>
+            );
+        }
+
         return (
             <div ref="recaptchaContainer">
                 This Home Server would like to make sure you are not a robot
                 <div id={DIV_ID}></div>
+                {error}
             </div>
         );
     }
