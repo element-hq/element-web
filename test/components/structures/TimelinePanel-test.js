@@ -152,7 +152,7 @@ describe('TimelinePanel', function() {
             console.log("adding event");
 
             // a new event!
-            var ev = mkMessage(31);
+            var ev = mkMessage(N_EVENTS+1);
             timeline.addEvent(ev);
             panel.onRoomTimeline(ev, room, false, false, {
                 liveEvent: true,
