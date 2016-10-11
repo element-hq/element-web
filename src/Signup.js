@@ -130,6 +130,14 @@ class Register extends Signup {
         this.password = password;
         const client = this._createTemporaryClient();
         this.activeStage = null;
+
+        // If there hasn't been a client secret set by this point,
+        // generate one for this session. It will only be used if
+        // we do email verification, but far simpler to just make
+        // sure we have one.
+        if (!this.params.clientSecret) {
+            this.params.clientSecret = client.generateClientSecret();
+        }
         return this._tryRegister(client);
     }
 
