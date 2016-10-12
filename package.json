@@ -14,8 +14,8 @@
   },
   "scripts": {
     "reskindex": "./reskindex.js -h header",
-    "build": "babel src -d lib --source-maps",
-    "start": "babel src -w -d lib --source-maps",
+    "build": "node babelcheck.js && babel src -d lib --source-maps",
+    "start": "node babelcheck.js && babel src -w -d lib --source-maps",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
     "clean": "rimraf lib",
@@ -89,5 +89,8 @@
     "sinon": "^1.17.3",
     "source-map-loader": "^0.1.5",
     "webpack": "^1.12.14"
+  },
+  "optionalDependencies": {
+    "babel": "6.5.2"
   }
 }
