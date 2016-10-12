@@ -1,3 +1,16 @@
+Changes in [0.7.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.7.4) (2016-10-12)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.3...v0.7.4)
+
+ * A bundle of fixes to the react tests
+   [\#513](https://github.com/matrix-org/matrix-react-sdk/pull/513)
+ * Fix registration retry
+   [\#512](https://github.com/matrix-org/matrix-react-sdk/pull/512)
+ * Fix registration
+   [\#511](https://github.com/matrix-org/matrix-react-sdk/pull/511)
+ * Fix bug where riot would keep requesting tokens
+   [\#510](https://github.com/matrix-org/matrix-react-sdk/pull/510)
+
 Changes in [0.7.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.7.3) (2016-10-05)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.2...v0.7.3)
