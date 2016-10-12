@@ -116,7 +116,11 @@ class EmailIdentityStage extends Stage {
             return this._completeVerify();
         }
 
-        this.clientSecret = this.client.generateClientSecret();
+        this.clientSecret = this.signupInstance.params.clientSecret;
+        if (!this.clientSecret) {
+            return q.reject(new Error("No client secret specified by Signup class!"));
+        }
+
         var nextLink = this.signupInstance.params.registrationUrl +
                        '?client_secret=' +
                        encodeURIComponent(this.clientSecret) +
