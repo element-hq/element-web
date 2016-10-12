@@ -28,6 +28,10 @@ var CaptchaForm = require("../../views/login/CaptchaForm");
 
 var MIN_PASSWORD_LENGTH = 6;
 
+/**
+ * TODO: It would be nice to make use of the InteractiveAuthEntryComponents
+ * here, rather than inventing our own.
+ */
 module.exports = React.createClass({
     displayName: 'Registration',
 

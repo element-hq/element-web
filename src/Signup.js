@@ -54,6 +54,9 @@ class Signup {
  * This exists for the lifetime of a user's attempt to register an account,
  * so if their registration attempt fails for whatever reason and they
  * try again, call register() on the same instance again.
+ *
+ * TODO: parts of this overlap heavily with InteractiveAuth in the js-sdk. It
+ * would be nice to make use of that rather than rolling our own version of it.
  */
 class Register extends Signup {
     constructor(hsUrl, isUrl, opts) {
