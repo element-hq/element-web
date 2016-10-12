@@ -51,6 +51,7 @@ module.exports.components['views.dialogs.ChatInviteDialog'] = require('./compone
 module.exports.components['views.dialogs.DeactivateAccountDialog'] = require('./components/views/dialogs/DeactivateAccountDialog');
 module.exports.components['views.dialogs.EncryptedEventDialog'] = require('./components/views/dialogs/EncryptedEventDialog');
 module.exports.components['views.dialogs.ErrorDialog'] = require('./components/views/dialogs/ErrorDialog');
+module.exports.components['views.dialogs.InteractiveAuthDialog'] = require('./components/views/dialogs/InteractiveAuthDialog');
 module.exports.components['views.dialogs.LogoutPrompt'] = require('./components/views/dialogs/LogoutPrompt');
 module.exports.components['views.dialogs.NeedToRegisterDialog'] = require('./components/views/dialogs/NeedToRegisterDialog');
 module.exports.components['views.dialogs.QuestionDialog'] = require('./components/views/dialogs/QuestionDialog');
