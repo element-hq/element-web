@@ -7,7 +7,7 @@ var exec = require('child_process').exec;
 // 5.
 
 exec("babel -V", function (error, stdout, stderr) {
-    if (parseInt(stdout.substr(0,1), 10) < 6) {
+    if ((error && error.code) || parseInt(stdout.substr(0,1), 10) < 6) {
         console.log("\033[31m\033[1m"+
             '*****************************************\n'+
             '* matrix-react-sdk has moved to babel 6 *\n'+
