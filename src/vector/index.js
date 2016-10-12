@@ -16,10 +16,6 @@ limitations under the License.
 
 'use strict';
 
-// for ES6 stuff like startsWith() that Safari doesn't handle
-// and babel doesn't do by default
-require('babel-polyfill');
-
 // CSS requires: just putting them here for now as CSS is going to be
 // refactored soon anyway
 require('../../vector/components.css');
