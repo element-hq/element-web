@@ -1,3 +1,16 @@
+Changes in [0.8.3](https://github.com/vector-im/vector-web/releases/tag/v0.8.3) (2016-10-12)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.2...v0.8.3)
+
+ * Centre images in dialog buttons
+   [\#2453](https://github.com/vector-im/vector-web/pull/2453)
+ * Only show quote option if RTE is enabled
+   [\#2448](https://github.com/vector-im/vector-web/pull/2448)
+ * Fix join button for 'matrix' networks
+   [\#2443](https://github.com/vector-im/vector-web/pull/2443)
+ * Don't stop paginating if no rooms match
+   [\#2422](https://github.com/vector-im/vector-web/pull/2422)
+
 Changes in [0.8.2](https://github.com/vector-im/vector-web/releases/tag/v0.8.2) (2016-10-05)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.1...v0.8.2)
