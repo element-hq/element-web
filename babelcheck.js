@@ -16,6 +16,7 @@ exec("babel -V", function (error, stdout, stderr) {
             '*****************************************\n'+
             '* vector-web has moved to babel 6       *\n'+
             '* Please "rm -rf node_modules && npm i" *\n'+
+            '* then restore links as appropriate     *\n'+
             '*****************************************\n'+
         "\033[91m");
         process.exit(1);
