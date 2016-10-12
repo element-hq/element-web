@@ -26,7 +26,7 @@ var dis = require("../../../dispatcher");
 var sdk = require('../../../index');
 var rate_limited_func = require('../../../ratelimitedfunc');
 var Rooms = require('../../../Rooms');
-var DMRoomMap = require('../../../utils/DMRoomMap');
+import DMRoomMap from '../../../utils/DMRoomMap';
 var Receipt = require('../../../utils/Receipt');
 
 var HIDE_CONFERENCE_CHANS = true;
