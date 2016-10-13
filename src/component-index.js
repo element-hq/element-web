@@ -77,6 +77,8 @@ import views$dialogs$EncryptedEventDialog from './components/views/dialogs/Encry
 module.exports.components['views.dialogs.EncryptedEventDialog'] = views$dialogs$EncryptedEventDialog;
 import views$dialogs$ErrorDialog from './components/views/dialogs/ErrorDialog';
 module.exports.components['views.dialogs.ErrorDialog'] = views$dialogs$ErrorDialog;
+import views$dialogs$InteractiveAuthDialog from './components/views/dialogs/InteractiveAuthDialog';
+module.exports.components['views.dialogs.InteractiveAuthDialog'] = views$dialogs$InteractiveAuthDialog;
 import views$dialogs$LogoutPrompt from './components/views/dialogs/LogoutPrompt';
 module.exports.components['views.dialogs.LogoutPrompt'] = views$dialogs$LogoutPrompt;
 import views$dialogs$NeedToRegisterDialog from './components/views/dialogs/NeedToRegisterDialog';
@@ -117,6 +119,8 @@ import views$login$CasLogin from './components/views/login/CasLogin';
 module.exports.components['views.login.CasLogin'] = views$login$CasLogin;
 import views$login$CustomServerDialog from './components/views/login/CustomServerDialog';
 module.exports.components['views.login.CustomServerDialog'] = views$login$CustomServerDialog;
+import views$login$InteractiveAuthEntryComponents from './components/views/login/InteractiveAuthEntryComponents';
+module.exports.components['views.login.InteractiveAuthEntryComponents'] = views$login$InteractiveAuthEntryComponents;
 import views$login$LoginFooter from './components/views/login/LoginFooter';
 module.exports.components['views.login.LoginFooter'] = views$login$LoginFooter;
 import views$login$LoginHeader from './components/views/login/LoginHeader';

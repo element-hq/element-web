@@ -53,65 +53,23 @@ class RecaptchaStage extends Stage {
     constructor(matrixClient, signupInstance) {
         super(RecaptchaStage.TYPE, matrixClient, signupInstance);
         this.defer = q.defer(); // resolved with the captcha response
-        this.publicKey = null; // from the HS
-        this.divId = null; // from the UI component
     }
 
-    // called when the UI component has loaded the recaptcha <div> so we can
-    // render to it.
+    // called when the recaptcha has been completed.
     onReceiveData(data) {
-        if (!data || !data.divId) {
+        if (!data || !data.response) {
             return;
         }
-        this.divId = data.divId;
-        this._attemptRender();
+        this.defer.resolve({
+            auth: {
+                type: 'm.login.recaptcha',
+                response: data.response,
+            }
+        });
     }
 
     complete() {
-        var publicKey;
-        var serverParams = this.signupInstance.getServerData().params;
-        if (serverParams && serverParams["m.login.recaptcha"]) {
-            publicKey = serverParams["m.login.recaptcha"].public_key;
-        }
-        if (!publicKey) {
-            return q.reject({
-                message: "This server has not supplied enough information for Recaptcha " +
-                "authentication",
-                isFatal: true
-            });
-        }
-        this.publicKey = publicKey;
-        this._attemptRender();
         return this.defer.promise;
-    }
-
-    _attemptRender() {
-        if (!global.grecaptcha) {
-            console.error("grecaptcha not loaded!");
-            return;
-        }
-        if (!this.publicKey) {
-            console.error("No public key for recaptcha!");
-            return;
-        }
-        if (!this.divId) {
-            console.error("No div ID specified!");
-            return;
-        }
-        console.log("Rendering to %s", this.divId);
-        var self = this;
-        global.grecaptcha.render(this.divId, {
-            sitekey: this.publicKey,
-            callback: function(response) {
-                console.log("Received captcha response");
-                self.defer.resolve({
-                    auth: {
-                        type: 'm.login.recaptcha',
-                        response: response
-                    }
-                });
-            }
-        });
     }
 }
 RecaptchaStage.TYPE = "m.login.recaptcha";
@@ -158,7 +116,11 @@ class EmailIdentityStage extends Stage {
             return this._completeVerify();
         }
 
-        this.clientSecret = this.client.generateClientSecret();
+        this.clientSecret = this.signupInstance.params.clientSecret;
+        if (!this.clientSecret) {
+            return q.reject(new Error("No client secret specified by Signup class!"));
+        }
+
         var nextLink = this.signupInstance.params.registrationUrl +
                        '?client_secret=' +
                        encodeURIComponent(this.clientSecret) +
