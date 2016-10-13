@@ -45,7 +45,7 @@ for (var i = 0; i < files.length; ++i) {
     var importName = moduleName.replace(/\./g, "$");
 
     strm.write("import " + importName + " from './components/" + file + "';\n");
-    strm.write("module.exports.components['"+moduleName+"'] = " + importName + ";");
+    strm.write(importName + " && (module.exports.components['"+moduleName+"'] = " + importName + ");");
     strm.write('\n');
     strm.uncork();
 }
