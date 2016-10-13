@@ -51,11 +51,6 @@
     "velocity-vector": "vector-im/velocity#059e3b2",
     "whatwg-fetch": "^1.0.0"
   },
-  "//babelversion": [
-    "brief experiments with babel6 seems to show that it generates source ",
-    "maps which confuse chrome and make setting breakpoints tricky. So ",
-    "let's stick with v5 for now."
-  ],
   "devDependencies": {
     "babel-cli": "^6.5.2",
     "babel-core": "^6.14.0",
@@ -89,8 +84,5 @@
     "sinon": "^1.17.3",
     "source-map-loader": "^0.1.5",
     "webpack": "^1.12.14"
-  },
-  "optionalDependencies": {
-    "babel": "6.5.2"
   }
 }
