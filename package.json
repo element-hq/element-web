@@ -10,12 +10,12 @@
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "bin": {
-    "reskindex": "./reskindex.js"
+    "reskindex": "scripts/reskindex.js"
   },
   "scripts": {
-    "reskindex": "./reskindex.js -h header",
-    "build": "node babelcheck.js && babel src -d lib --source-maps",
-    "start": "node babelcheck.js && babel src -w -d lib --source-maps",
+    "reskindex": "scripts/reskindex.js -h header",
+    "build": "node scripts/babelcheck.js && babel src -d lib --source-maps",
+    "start": "node scripts/babelcheck.js && babel src -w -d lib --source-maps",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
     "clean": "rimraf lib",
