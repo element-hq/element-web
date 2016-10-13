@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var exec = require('child_process').exec;
 
 // Makes sure the babel executable in the path is babel 6 (or greater), not
