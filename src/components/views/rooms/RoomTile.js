@@ -21,7 +21,7 @@ var ReactDOM = require("react-dom");
 var classNames = require('classnames');
 var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
-import DMRoomMap from '../../../utils/DMRoomMap';
+var DMRoomMap = require('../../../utils/DMRoomMap');
 var sdk = require('../../../index');
 var ContextualMenu = require('../../structures/ContextualMenu');
 var RoomNotifs = require('../../../RoomNotifs');
