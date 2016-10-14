@@ -18,10 +18,13 @@ limitations under the License.
 
 // for ES6 stuff like startsWith() that Safari doesn't handle
 // and babel doesn't do by default
-// Note we use this, not the babel transform-runtime plugin
+// Note we use this, as well as the babel transform-runtime plugin
 // since transform-runtime does not cover instance methods
 // such as "foobar".includes("foo") which bits of our library
-// code use.
+// code use, but the babel transform-runtime plugin allows the
+// regenerator runtime to be injected early enough in the process
+// (it can't be here as it's too late: the alternative is to put
+// the babel-polyfill as the first 'entry' in the webpack config).
 // https://babeljs.io/docs/plugins/transform-runtime/
 require('babel-polyfill');
 
