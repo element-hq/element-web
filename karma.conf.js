@@ -131,7 +131,13 @@ module.exports = function (config) {
                         test: /\.js$/, loader: "babel",
                         include: [path.resolve('./src'),
                                   path.resolve('./test'),
-                                 ]
+                                 ],
+                        query: {
+                            // we're using react 5, for consistency with
+                            // the release build, which doesn't use the
+                            // presets.
+                            // presets: ['react', 'es2015'],
+                        },
                     },
                 ],
                 noParse: [
