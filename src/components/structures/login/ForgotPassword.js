@@ -162,16 +162,19 @@ module.exports = React.createClass({
                 <div>
                     <form onSubmit={this.onSubmitForm}>
                         <input className="mx_Login_field" ref="user" type="text"
+                            name="reset_email" // define a name so browser's password autofill gets less confused
                             value={this.state.email}
                             onChange={this.onInputChanged.bind(this, "email")}
                             placeholder="Email address" autoFocus />
                         <br />
                         <input className="mx_Login_field" ref="pass" type="password"
+                            name="reset_password"
                             value={this.state.password}
                             onChange={this.onInputChanged.bind(this, "password")}
                             placeholder="New password" />
                         <br />
                         <input className="mx_Login_field" ref="pass" type="password"
+                            name="reset_password_confirm"
                             value={this.state.password2}
                             onChange={this.onInputChanged.bind(this, "password2")}
                             placeholder="Confirm your new password" />
