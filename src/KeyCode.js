@@ -29,4 +29,6 @@ module.exports = {
     RIGHT: 39,
     DOWN: 40,
     DELETE: 46,
+    KEY_D: 68,
+    KEY_E: 69,
 };
