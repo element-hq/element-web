@@ -1,4 +1,4 @@
 {
   "presets": ["react", "es2015", "es2016"],
-  "plugins": ["transform-class-properties", "transform-object-rest-spread", "transform-async-to-generator"]
+  "plugins": ["transform-class-properties", "transform-object-rest-spread", "transform-async-to-generator", "transform-runtime", "add-module-exports"]
 }
