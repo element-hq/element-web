@@ -38,6 +38,8 @@ var rate_limited_func = require('../../ratelimitedfunc');
 var ObjectUtils = require('../../ObjectUtils');
 var Rooms = require('../../Rooms');
 
+import KeyCode from '../../KeyCode';
+
 import UserProvider from '../../autocomplete/UserProvider';
 
 var DEBUG = false;
@@ -239,9 +241,63 @@ module.exports = React.createClass({
         }
     },
 
+    componentDidMount: function() {
+        var call = this._getCallForRoom();
+        var callState = call ? call.call_state : "ended";
+        this.setState({
+            callState: callState
+        });
+
+        this._updateConfCallNotification();
+
+        window.addEventListener('resize', this.onResize);
+        this.onResize();
+
+        document.addEventListener("keydown", this.onKeyDown);
+
+        // XXX: EVIL HACK to autofocus inviting on empty rooms.
+        // We use the setTimeout to avoid racing with focus_composer.
+        if (this.state.room &&
+            this.state.room.getJoinedMembers().length == 1 &&
+            this.state.room.getLiveTimeline() &&
+            this.state.room.getLiveTimeline().getEvents() &&
+            this.state.room.getLiveTimeline().getEvents().length <= 6)
+        {
+            var inviteBox = document.getElementById("mx_SearchableEntityList_query");
+            setTimeout(function() {
+                if (inviteBox) {
+                    inviteBox.focus();
+                }
+            }, 50);
+        }
+    },
+
+    componentWillReceiveProps: function(newProps) {
+        if (newProps.roomAddress != this.props.roomAddress) {
+            throw new Error("changing room on a RoomView is not supported");
+        }
+
+        if (newProps.eventId != this.props.eventId) {
+            // when we change focussed event id, hide the search results.
+            this.setState({searchResults: null});
+        }
+    },
+
     shouldComponentUpdate: function(nextProps, nextState) {
         return (!ObjectUtils.shallowEqual(this.props, nextProps) ||
                 !ObjectUtils.shallowEqual(this.state, nextState));
+    },
+
+    componentDidUpdate: function() {
+        if (this.refs.roomView) {
+            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
+            if (!roomView.ondrop) {
+                roomView.addEventListener('drop', this.onDrop);
+                roomView.addEventListener('dragover', this.onDragOver);
+                roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
+                roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
+            }
+        }
     },
 
     componentWillUnmount: function() {
@@ -273,12 +329,39 @@ module.exports = React.createClass({
 
         window.removeEventListener('resize', this.onResize);
 
+        document.removeEventListener("keydown", this.onKeyDown);
+
         // cancel any pending calls to the rate_limited_funcs
         this._updateRoomMembers.cancelPendingCall();
 
         // no need to do this as Dir & Settings are now overlays. It just burnt CPU.
         // console.log("Tinter.tint from RoomView.unmount");
         // Tinter.tint(); // reset colourscheme
+    },
+
+    onKeyDown: function(ev) {
+        var handled = false;
+
+        switch (ev.keyCode) {
+            case KeyCode.KEY_D:
+                if (ev.ctrlKey) {
+                    this.onMuteAudioClick();
+                    handled = true;
+                }
+                break;
+
+            case KeyCode.KEY_E:
+                if (ev.ctrlKey) {
+                    this.onMuteVideoClick();
+                    handled = true;
+                }
+                break;
+        }
+
+        if (handled) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
     },
 
     onAction: function(payload) {
@@ -323,17 +406,6 @@ module.exports = React.createClass({
                 });
 
                 break;
-        }
-    },
-
-    componentWillReceiveProps: function(newProps) {
-        if (newProps.roomAddress != this.props.roomAddress) {
-            throw new Error("changing room on a RoomView is not supported");
-        }
-
-        if (newProps.eventId != this.props.eventId) {
-            // when we change focussed event id, hide the search results.
-            this.setState({searchResults: null});
         }
     },
 
@@ -571,47 +643,6 @@ module.exports = React.createClass({
                 confMember.membership === "join"
             )
         });
-    },
-
-    componentDidMount: function() {
-        var call = this._getCallForRoom();
-        var callState = call ? call.call_state : "ended";
-        this.setState({
-            callState: callState
-        });
-
-        this._updateConfCallNotification();
-
-        window.addEventListener('resize', this.onResize);
-        this.onResize();
-
-        // XXX: EVIL HACK to autofocus inviting on empty rooms.
-        // We use the setTimeout to avoid racing with focus_composer.
-        if (this.state.room &&
-            this.state.room.getJoinedMembers().length == 1 &&
-            this.state.room.getLiveTimeline() &&
-            this.state.room.getLiveTimeline().getEvents() &&
-            this.state.room.getLiveTimeline().getEvents().length <= 6)
-        {
-            var inviteBox = document.getElementById("mx_SearchableEntityList_query");
-            setTimeout(function() {
-                if (inviteBox) {
-                    inviteBox.focus();
-                }
-            }, 50);
-        }
-    },
-
-    componentDidUpdate: function() {
-        if (this.refs.roomView) {
-            var roomView = ReactDOM.findDOMNode(this.refs.roomView);
-            if (!roomView.ondrop) {
-                roomView.addEventListener('drop', this.onDrop);
-                roomView.addEventListener('dragover', this.onDragOver);
-                roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
-                roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
-            }
-        }
     },
 
     onSearchResultsResize: function() {
@@ -1261,9 +1292,7 @@ module.exports = React.createClass({
         }
         var newState = !call.isMicrophoneMuted();
         call.setMicrophoneMuted(newState);
-        this.setState({
-            audioMuted: newState
-        });
+        this.forceUpdate(); // TODO: just update the voip buttons
     },
 
     onMuteVideoClick: function() {
@@ -1273,9 +1302,7 @@ module.exports = React.createClass({
         }
         var newState = !call.isLocalVideoMuted();
         call.setLocalVideoMuted(newState);
-        this.setState({
-            videoMuted: newState
-        });
+        this.forceUpdate(); // TODO: just update the voip buttons
     },
 
     onChildResize: function() {
