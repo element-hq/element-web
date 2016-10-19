@@ -11,7 +11,7 @@ app.on('ready', () => {
     mainWindow.loadURL(`file://${__dirname}/../../vector/index.html`);
     mainWindow.on('closed', () => {
         mainWindow = null;
-    })
+    });
 });
 
 app.on('window-all-closed', () => {
