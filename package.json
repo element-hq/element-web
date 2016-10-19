@@ -119,11 +119,12 @@
     "//files": "We bundle everything, so we only need to include vector/",
     "files": [
       "!**/*",
+      "electron/src/**",
       "vector/**",
       "package.json"
     ]
   },
   "directories": {
-    "output": "vector/electron"
+    "output": "electron/dist"
   }
 }
