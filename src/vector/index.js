@@ -36,7 +36,6 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
 
-
  // add React and ReactPerf to the global namespace, to make them easier to
  // access via the console
 global.React = require("react");
@@ -57,6 +56,7 @@ import UAParser from 'ua-parser-js';
 import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
+import IntegrationManager from './integration';
 
 var lastLocationHashSet = null;
 
@@ -209,6 +209,7 @@ function onLoadCompleted() {
 async function loadApp() {
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
+    const integrationManager = new IntegrationManager();
 
     // don't try to redirect to the native apps if we're
     // verifying a 3pid
@@ -262,6 +263,7 @@ async function loadApp() {
                 enableGuest={true}
                 onLoadCompleted={onLoadCompleted}
                 defaultDeviceDisplayName={getDefaultDeviceDisplayName()}
+                integrationManager={integrationManager}
             />,
             document.getElementById('matrixchat')
         );
