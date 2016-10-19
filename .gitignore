@@ -5,10 +5,8 @@
 /node_modules
 /packages/
 /vector/bundle.*
-/vector/electron-main.*
 /vector/components.css
 /vector/emojione/
-/vector/electron/
 /vector/config.json
 /vector/olm.js
 .DS_Store

@@ -5,9 +5,9 @@ let window = null;
 
 app.on('ready', () => {
     window = new BrowserWindow({
-        icon: `${__dirname}/img/logo.png`,
+        icon: `${__dirname}/../../vector/img/logo.png`,
     });
-    window.loadURL(`file://${__dirname}/index.html`);
+    window.loadURL(`file://${__dirname}/../../vector/index.html`);
     window.on('closed', () => {
         window = null;
     })
