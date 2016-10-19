@@ -1,16 +1,16 @@
 // @flow
 const {app, BrowserWindow} = require('electron');
 
-let window = null;
+let mainWindow = null;
 
 app.on('ready', () => {
-    window = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         icon: `${__dirname}/../../vector/img/logo.png`,
         width: 1024, height: 768,
     });
-    window.loadURL(`file://${__dirname}/../../vector/index.html`);
-    window.on('closed', () => {
-        window = null;
+    mainWindow.loadURL(`file://${__dirname}/../../vector/index.html`);
+    mainWindow.on('closed', () => {
+        mainWindow = null;
     })
 });
 
