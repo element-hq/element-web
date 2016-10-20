@@ -1,6 +1,5 @@
 // @flow
-const {app, BrowserWindow} = require('electron');
-const open = require('open');
+const electron = require('electron');
 const url = require('url');
 
 const PERMITTED_URL_SCHEMES = [
@@ -19,7 +18,7 @@ function onWindowOrNavigate(ev, target) {
     // url in a window that has node scripting access.
     ev.preventDefault();
 
-    // node-open passes the target to open/start/xdg-open,
+    // openExternal passes the target to open/start/xdg-open,
     // so put fairly stringent limits on what can be opened
     // (for instance, open /bin/sh does indeed open a terminal
     // with a shell, albeit with no arguments)
@@ -30,11 +29,12 @@ function onWindowOrNavigate(ev, target) {
         // of the input string
         const new_target = url.format(parsed_url);
         open(new_target);
+        electron.shell.openExternal(new_target);
     }
 }
 
-app.on('ready', () => {
-    mainWindow = new BrowserWindow({
+electron.app.on('ready', () => {
+    mainWindow = new electron.BrowserWindow({
         icon: `${__dirname}/../../vector/img/logo.png`,
         width: 1024, height: 768,
     });
@@ -57,14 +57,14 @@ app.on('ready', () => {
     mainWindow.webContents.on('will-navigate', onWindowOrNavigate);
 });
 
-app.on('window-all-closed', () => {
+electron.app.on('window-all-closed', () => {
     app.quit();
 });
 
-app.on('activate', () => {
+electron.app.on('activate', () => {
     mainWindow.show();
 });
 
-app.on('before-quit', () => {
+electron.app.on('before-quit', () => {
     appQuitting = true;
 });
