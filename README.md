@@ -126,7 +126,7 @@ There's also a (much) older electron distribution at https://github.com/stevenha
 Development
 ===========
 
-Before attempting to develop on Ruit you **must** read the developer guide
+Before attempting to develop on Riot you **must** read the developer guide
 for `matrix-react-sdk` at https://github.com/matrix-org/matrix-react-sdk, which
 also defines the design, architecture and style for Riot too.
 
