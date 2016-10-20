@@ -56,7 +56,7 @@ import UAParser from 'ua-parser-js';
 import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
-import IntegrationManager from './integration';
+import Platform from './platform';
 
 var lastLocationHashSet = null;
 
@@ -209,7 +209,7 @@ function onLoadCompleted() {
 async function loadApp() {
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
-    const integrationManager = new IntegrationManager();
+    const platform = new Platform();
 
     // don't try to redirect to the native apps if we're
     // verifying a 3pid
@@ -263,7 +263,7 @@ async function loadApp() {
                 enableGuest={true}
                 onLoadCompleted={onLoadCompleted}
                 defaultDeviceDisplayName={getDefaultDeviceDisplayName()}
-                integrationManager={integrationManager}
+                platform={platform}
             />,
             document.getElementById('matrixchat')
         );
