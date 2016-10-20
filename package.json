@@ -122,7 +122,14 @@
       "electron/src/**",
       "vector/**",
       "package.json"
-    ]
+    ],
+    "mac": {
+      "target": "dmg",
+      "icon": "electron/icons/AppIcon.icns"
+    },
+    "dmg": {
+      "icon": "electron/icons/AppIcon.icns"
+    }
   },
   "directories": {
     "output": "electron/dist"
