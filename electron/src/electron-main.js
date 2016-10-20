@@ -18,7 +18,6 @@ function onWindowOrNavigate(ev, target) {
     // app, as we could end up opening any sort of random
     // url in a window that has node scripting access.
     ev.preventDefault();
-    debugger;
 
     // node-open passes the target to open/start/xdg-open,
     // so put fairly stringent limits on what can be opened
