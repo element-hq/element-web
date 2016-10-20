@@ -1,8 +1,8 @@
 // @flow
-import BaseIntegrationManager from './BaseIntegrationManager';
+import BasePlatform from './BasePlatform';
 import Favico from 'favico.js';
 
-export default class WebIntegrationManager extends BaseIntegrationManager {
+export default class WebPlatform extends BasePlatform {
     constructor() {
         super();
         this.favicon = new Favico({animation: 'popFade'});

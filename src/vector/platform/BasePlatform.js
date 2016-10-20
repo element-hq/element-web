@@ -1,6 +1,6 @@
 // @flow
 
-export default class BaseIntegrationManager {
+export default class BasePlatform {
     constructor() {
         this.notificationCount = 0;
         this.errorDidOccur = false;
