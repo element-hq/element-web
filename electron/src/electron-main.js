@@ -11,13 +11,7 @@ const PERMITTED_URL_SCHEMES = [
 let mainWindow = null;
 let appQuitting = false;
 
-function onWindowOrNavigate(ev, target) {
-    // always prevent the default: if something goes wrong,
-    // we don't want to end up opening it in the electron
-    // app, as we could end up opening any sort of random
-    // url in a window that has node scripting access.
-    ev.preventDefault();
-
+function safeOpenURL(target) {
     // openExternal passes the target to open/start/xdg-open,
     // so put fairly stringent limits on what can be opened
     // (for instance, open /bin/sh does indeed open a terminal
@@ -28,9 +22,29 @@ function onWindowOrNavigate(ev, target) {
         // so we know the url parser has understood all the parts
         // of the input string
         const new_target = url.format(parsed_url);
-        open(new_target);
         electron.shell.openExternal(new_target);
     }
+}
+
+function onWindowOrNavigate(ev, target) {
+    // always prevent the default: if something goes wrong,
+    // we don't want to end up opening it in the electron
+    // app, as we could end up opening any sort of random
+    // url in a window that has node scripting access.
+    ev.preventDefault();
+    safeOpenURL(target);
+}
+
+function onLinkContextMenu(ev, params) {
+    const popup_menu = new electron.Menu();
+    popup_menu.append(new electron.MenuItem({
+        label: params.linkURL,
+        click() {
+            safeOpenURL(params.linkURL);
+        },
+    }));
+    popup_menu.popup();
+    ev.preventDefault();
 }
 
 electron.app.on('ready', () => {
@@ -55,6 +69,12 @@ electron.app.on('ready', () => {
 
     mainWindow.webContents.on('new-window', onWindowOrNavigate);
     mainWindow.webContents.on('will-navigate', onWindowOrNavigate);
+
+    mainWindow.webContents.on('context-menu', function(ev, params) {
+        if (params.linkURL) {
+            onLinkContextMenu(ev, params);
+        }
+    });
 });
 
 electron.app.on('window-all-closed', () => {
