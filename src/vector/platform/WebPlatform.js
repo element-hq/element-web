@@ -5,7 +5,11 @@ import Favico from 'favico.js';
 export default class WebPlatform extends BasePlatform {
     constructor() {
         super();
-        this.favicon = new Favico({animation: 'popFade'});
+        // The 'animations' are really low framerate and look terrible.
+        // Also it re-starts the animationb every time you set the badge,
+        // and we set the state each time, even if the value hasn't changed,
+        // so we'd need to fix that if enabling the animation.
+        this.favicon = new Favico({animation: 'none'});
         this.updateFavicon();
     }
 
