@@ -1,8 +1,38 @@
 // @flow
 const {app, BrowserWindow} = require('electron');
+const open = require('open');
+const url = require('url');
+
+const PERMITTED_URL_SCHEMES = [
+    'http:',
+    'https:',
+    'mailto:',
+];
 
 let mainWindow = null;
 let appQuitting = false;
+
+function onWindowOrNavigate(ev, target) {
+    // always prevent the default: if something goes wrong,
+    // we don't want to end up opening it in the electron
+    // app, as we could end up opening any sort of random
+    // url in a window that has node scripting access.
+    ev.preventDefault();
+    debugger;
+
+    // node-open passes the target to open/start/xdg-open,
+    // so put fairly stringent limits on what can be opened
+    // (for instance, open /bin/sh does indeed open a terminal
+    // with a shell, albeit with no arguments)
+    const parsed_url = url.parse(target);
+    if (PERMITTED_URL_SCHEMES.indexOf(parsed_url.protocol) > -1) {
+        // explicitly use the URL re-assembled by the url library,
+        // so we know the url parser has understood all the parts
+        // of the input string
+        const new_target = url.format(parsed_url);
+        open(new_target);
+    }
+}
 
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
@@ -23,6 +53,9 @@ app.on('ready', () => {
             return false;
         }
     });
+
+    mainWindow.webContents.on('new-window', onWindowOrNavigate);
+    mainWindow.webContents.on('will-navigate', onWindowOrNavigate);
 });
 
 app.on('window-all-closed', () => {

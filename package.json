@@ -55,6 +55,7 @@
     "matrix-js-sdk": "matrix-org/matrix-js-sdk#develop",
     "matrix-react-sdk": "matrix-org/matrix-react-sdk#develop",
     "modernizr": "^3.1.0",
+    "open": "0.0.5",
     "q": "^1.4.1",
     "react": "^15.2.1",
     "react-dnd": "^2.1.4",
