@@ -67,6 +67,9 @@ function onLinkContextMenu(ev, params) {
 }
 
 electron.app.on('ready', () => {
+    // Enable auto-update once we can codesign on OS X
+    //electron.autoUpdater.setFeedURL("http://localhost:8888/");
+
     mainWindow = new electron.BrowserWindow({
         icon: `${__dirname}/../../vector/img/logo.png`,
         width: 1024, height: 768,
