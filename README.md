@@ -75,6 +75,8 @@ You can configure the app by copying `vector/config.sample.json` to
    addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
    for more details.  Currently the only public matrix identity servers are https://matrix.org
    and https://vector.im.  In future identity servers will be decentralised.
+1. `integrations_ui_url`: URL to the web interface for the integrations server.
+1. `integrations_rest_url`: URL to the REST interface for the integrations server.
 1. `roomDirectory`: config for the public room directory. This section encodes behaviour
    on the room directory screen for filtering the list by server / network type and joining
    third party networks. This config section will disappear once APIs are available to
