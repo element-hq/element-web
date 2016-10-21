@@ -3,7 +3,7 @@
   "productName": "Riot",
   "main": "electron/src/electron-main.js",
   "version": "0.8.3",
-  "description": "Vector webapp",
+  "description": "A feature-rich client for Matrix.org",
   "author": "Vector Creations Ltd.",
   "repository": {
     "type": "git",
