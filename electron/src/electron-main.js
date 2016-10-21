@@ -19,6 +19,8 @@ limitations under the License.
 const electron = require('electron');
 const url = require('url');
 
+const VectorMenu = require('./vectormenu');
+
 const PERMITTED_URL_SCHEMES = [
     'http:',
     'https:',
@@ -70,6 +72,8 @@ electron.app.on('ready', () => {
         width: 1024, height: 768,
     });
     mainWindow.loadURL(`file://${__dirname}/../../vector/index.html`);
+    electron.Menu.setApplicationMenu(VectorMenu);
+
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
