@@ -60,4 +60,29 @@ export default class WebPlatform extends BasePlatform {
         super.setErrorStatus(errorDidOccur);
         this.updateFavicon();
     }
+
+    displayNotification(title: string, msg: string, avatarUrl: string) {
+        const notification = new global.Notification(
+            title,
+            {
+                "body": msg,
+                "icon": avatarUrl,
+                "tag": "vector"
+            }
+        );
+
+        notification.onclick = function() {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: room.roomId
+            });
+            global.focus();
+        };
+
+        // Chrome only dismisses notifications after 20s, which
+        // is waaaaay too long
+        global.setTimeout(function() {
+            notification.close();
+        }, 5 * 1000);
+    }
 }

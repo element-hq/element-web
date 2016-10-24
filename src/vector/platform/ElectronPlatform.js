@@ -30,4 +30,30 @@ export default class ElectronPlatform extends BasePlatform {
         super.setNotificationCount(count);
         remote.app.setBadgeCount(count);
     }
+
+    displayNotification(title: string, msg: string, avatarUrl: string): Notification {
+        // Notifications in Electron use the HTML5 notification API
+        const notification = new global.Notification(
+            title,
+            {
+                "body": msg,
+                "icon": avatarUrl,
+                "tag": "vector"
+            }
+        );
+
+        notification.onclick = function() {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: room.roomId
+            });
+            global.focus();
+        };
+
+        return notification;
+    }
+
+    clearNotification(notif: Notification) {
+        notif.close();
+    }
 }
