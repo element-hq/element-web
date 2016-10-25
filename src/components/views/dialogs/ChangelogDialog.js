@@ -44,7 +44,7 @@ export default class ChangelogDialog extends React.Component {
     _elementsForCommit(commit) {
         return (
             <li key={commit.sha} className="mx_ChangelogDialog_li">
-                <a href={commit.html_url} target="_blank" ref="noopener">
+                <a href={commit.html_url} target="_blank" rel="noopener">
                     {commit.commit.message}
                 </a>
             </li>
