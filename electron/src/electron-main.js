@@ -147,7 +147,7 @@ electron.app.on('ready', () => {
 });
 
 electron.app.on('window-all-closed', () => {
-    app.quit();
+    electron.app.quit();
 });
 
 electron.app.on('activate', () => {
