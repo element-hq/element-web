@@ -117,7 +117,6 @@ export default class WebPlatform extends BasePlatform {
                     action: 'new_version',
                     currentVersion: this.runningVersion,
                     newVersion: ver,
-                    releaseNotes: "Theses are some release notes innit\n * Do a thing\n * Do some more things",
                 });
             }
         }, (err) => {
