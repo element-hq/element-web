@@ -1,6 +1,16 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
+var cachebuster = true;
+
+for (var i=0; i < process.argv.length; i++) {
+    var arg = process.argv[i];
+    if (arg == "--no-cache-buster") {
+        cachebuster = false;
+    }
+}
 
 module.exports = {
     entry: {
@@ -39,7 +49,7 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, "vector"),
-        filename: "[name].js",
+        filename: "[name]" + (cachebuster ? ".[chunkhash]" : "") + ".js",
         devtoolModuleFilenameTemplate: function(info) {
             // Reading input source maps gives only relative paths here for
             // everything. Until I figure out how to fix this, this is a
@@ -73,8 +83,16 @@ module.exports = {
             }
         }),
 
-        new ExtractTextPlugin("bundle.css", {
-            allChunks: true
+        new ExtractTextPlugin(
+            "[name]" + (cachebuster ? ".[contenthash]" : "") + ".css",
+            {
+                allChunks: true
+            }
+        ),
+
+        new HtmlWebpackPlugin({
+            template: './src/vector/index.html',
+            inject: false, // we inject the links ourselves via the template
         }),
     ],
     devtool: 'source-map'
