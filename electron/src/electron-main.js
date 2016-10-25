@@ -27,6 +27,8 @@ const PERMITTED_URL_SCHEMES = [
     'mailto:',
 ];
 
+const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
+
 let mainWindow = null;
 let appQuitting = false;
 
@@ -66,14 +68,57 @@ function onLinkContextMenu(ev, params) {
     ev.preventDefault();
 }
 
+function installUpdate() {
+    // for some reason, quitAndInstall does not fire the
+    // before-quit event, so we need to set the flag here.
+    appQuitting = true;
+    electron.autoUpdater.quitAndInstall();
+}
+
+function pollForUpdates() {
+    try {
+        electron.autoUpdater.checkForUpdates();
+    } catch (e) {
+        console.log("Couldn't check for update", e);
+    }
+}
+
+electron.ipcMain.on('install_update', installUpdate);
+
 electron.app.on('ready', () => {
-    // Enable auto-update once we can codesign on OS X
-    //electron.autoUpdater.setFeedURL("http://localhost:8888/");
+    try {
+        // For reasons best known to Squirrel, the way it checks for updates
+        // is completely different between macOS and windows. On macOS, it
+        // hits a URL that either gives it a 200 with some json or
+        // 204 No Content. On windows it takes a base path and looks for
+        // files under that path.
+        if (process.platform == 'darwin') {
+            electron.autoUpdater.setFeedURL("https://riot.im/autoupdate/desktop/");
+        } else if (process.platform == 'win32') {
+            electron.autoUpdater.setFeedURL("https://riot.im/download/desktop/win32/");
+        } else {
+            // Squirrel / electron only supports auto-update on these two platforms.
+            // I'm not even going to try to guess which feed style they'd use if they
+            // implemented it on Linux, or if it would be different again.
+            console.log("Auto update not supported on this platform");
+        }
+        // We check for updates ourselves rather than using 'updater' because we need to
+        // do it in the main process (and we don't really need to check every 10 minutes:
+        // every hour should be just fine for a desktop app)
+        // However, we still let the main window listen for the update events.
+        pollForUpdates();
+        setInterval(pollForUpdates, UPDATE_POLL_INTERVAL_MS);
+    } catch (err) {
+        // will fail if running in debug mode
+        console.log("Couldn't enable update checking", err);
+    }
 
     mainWindow = new electron.BrowserWindow({
         icon: `${__dirname}/../../vector/img/logo.png`,
         width: 1024, height: 768,
     });
+    // A useful one to uncomment for debugging
+    //mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/../../vector/index.html`);
     electron.Menu.setApplicationMenu(VectorMenu);
 

@@ -17,11 +17,22 @@ limitations under the License.
 */
 
 import BasePlatform from './BasePlatform';
+import dis from 'matrix-react-sdk/lib/dispatcher';
+
+function onUpdateDownloaded(ev, releaseNotes, ver, date, updateURL) {
+    dis.dispatch({
+        action: 'new_version',
+        currentVersion: electron.remote.app.getVersion(),
+        newVersion: ver,
+        releaseNotes: releaseNotes,
+    });
+}
 
 // index.js imports us unconditionally, so we need this check here as well
 let electron = null, remote = null;
 if (window && window.process && window.process && window.process.type === 'renderer') {
     electron = require('electron');
+    electron.remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
     remote = electron.remote;
 }
 
@@ -55,5 +66,18 @@ export default class ElectronPlatform extends BasePlatform {
 
     clearNotification(notif: Notification) {
         notif.close();
+    }
+
+    pollForUpdate() {
+        // In electron we control the update process ourselves, since
+        // it needs to run in the main process, so we just run the timer
+        // loop in the main electron process instead.
+    }
+
+    installUpdate() {
+        // IPC to the main process to install the update, since quitAndInstall
+        // doesn't fire the before-quit event so the main process needs to know
+        // it should exit.
+        electron.ipcRenderer.send('install_update');
     }
 }
