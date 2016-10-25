@@ -16,7 +16,7 @@ limitations under the License.
 
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 
-var POKE_RATE_MS = 1 * 6 * 1000; // 10 min
+var POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
 module.exports = {
     start: function() {
