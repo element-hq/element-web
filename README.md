@@ -226,7 +226,8 @@ Filing issues
 =============
 
 All issues for Vector-web and Matrix-react-sdk should be filed at
-https://github.com/matrix-org/matrix-react-sdk/issues
+https://github.com/vector-im/vector-web/issues and
+https://github.com/matrix-org/matrix-react-sdk/issues, respectively.
 
 Triaging issues
 ===============
