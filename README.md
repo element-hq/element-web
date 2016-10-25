@@ -21,6 +21,10 @@ released version of Riot:
    as desired. See below for details.
 1. Enter the URL into your browser and log into Riot!
 
+Note that Chrome does not allow microphone or webcam access for sites served
+over http (except localhost), so for working VoIP you will need to serve Riot
+over https.
+
 Important Security Note
 =======================
 
@@ -221,12 +225,6 @@ the skin's index by running, `npm run reskindex`.
 If any of these steps error with, `file table overflow`, you are probably on a mac
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
 You'll need to do this in each new terminal you open before building Riot.
-
-Filing issues
-=============
-
-All issues for Vector-web and Matrix-react-sdk should be filed at
-https://github.com/matrix-org/matrix-react-sdk/issues
 
 Triaging issues
 ===============
