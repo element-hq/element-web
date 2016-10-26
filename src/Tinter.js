@@ -35,7 +35,7 @@ var keyRgb = [
 // x * 118 + 255 - 255 * x = 234
 // x * 118 - x * 255 = 234 - 255
 // (255 - 118) x = 255 - 234
-// x = (255 - 234) / (255 - 118) = 0.16 
+// x = (255 - 234) / (255 - 118) = 0.16
 
 // The colour keys to be replaced as referred to in SVGs
 var keyHex = [
@@ -90,7 +90,20 @@ function calcCssFixups() {
         // See also #vector:matrix.org/$145357669685386ebCfr:matrix.org
         // ...except some browsers apparently return stylesheets without
         // hrefs, which we have no choice but ignore right now
-        if (ss.href && !ss.href.endsWith("/bundle.css")) continue;
+
+        // XXX seriously? we are hardcoding the name of vector's CSS file in
+        // here?
+        //
+        // Why do we need to limit it to vector's CSS file anyway - if there
+        // are other CSS files affecting the doc don't we want to apply the
+        // same transformations to them?
+        //
+        // Iterating through the CSS looking for matches to hack on feels
+        // pretty horrible anyway. And what if the application skin doesn't use
+        // Vector Green as its primary color?
+
+        if (ss.href && !ss.href.match(/\/bundle.*\.css$/)) continue;
+
         if (!ss.cssRules) continue;
         for (var j = 0; j < ss.cssRules.length; j++) {
             var rule = ss.cssRules[j];
