@@ -580,7 +580,7 @@ module.exports = React.createClass({
     // member in the room.
     _updateRoomMembers: new rate_limited_func(function() {
         // a member state changed in this room
-        // refresh, the conf call notification state
+        // refresh the conf call notification state
         this._updateConfCallNotification();
 
         // refresh the tab complete list
