@@ -8,6 +8,6 @@
 /vector/components.css
 /vector/emojione/
 /vector/config.json
-/vector/olm.js
+/vector/olm.*
 .DS_Store
 npm-debug.log
