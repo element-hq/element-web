@@ -47,9 +47,10 @@ export default class ElectronPlatform extends BasePlatform {
         const notification = new global.Notification(
             title,
             {
-                "body": msg,
-                "icon": avatarUrl,
-                "tag": "vector"
+                body: msg,
+                icon: avatarUrl,
+                tag: "vector",
+                silent: true, // we play our own sounds
             }
         );
 
