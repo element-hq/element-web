@@ -1,3 +1,4 @@
+/build
 /cert.pem
 /karma-reports
 /key.pem
@@ -5,7 +6,6 @@
 /node_modules
 /packages/
 /vector/bundle.*
-/vector/components.css
 /vector/emojione/
 /vector/config.json
 /vector/olm.js
