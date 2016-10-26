@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+var highlight = require('highlight.js');
 var HtmlUtils = require('../../../HtmlUtils');
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
@@ -62,15 +63,32 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
+        this._unmounted = false;
+
         linkifyElement(this.refs.content, linkifyMatrix.options);
         this.calculateUrlPreview();
 
-        if (this.props.mxEvent.getContent().format === "org.matrix.custom.html")
-            HtmlUtils.highlightDom(ReactDOM.findDOMNode(this));
+        if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
+            const blocks = ReactDOM.findDOMNode(this).getElementsByTagName("code");
+            if (blocks.length > 0) {
+                // Do this asynchronously: parsing code takes time and we don't
+                // need to block the DOM update on it.
+                setTimeout(() => {
+                    if (this._unmounted) return;
+                    for (let i = 0; i < blocks.length; i++) {
+                        highlight.highlightBlock(blocks[i]);
+                    }
+                }, 10);
+            }
+        }
     },
 
     componentDidUpdate: function() {
         this.calculateUrlPreview();
+    },
+
+    componentWillUnmount: function() {
+        this._unmounted = true;
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {

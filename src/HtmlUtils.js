@@ -302,13 +302,6 @@ export function bodyToHtml(content, highlights, opts) {
     return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} />;
 }
 
-export function highlightDom(element) {
-    var blocks = element.getElementsByTagName("code");
-    for (var i = 0; i < blocks.length; i++) {
-        highlight.highlightBlock(blocks[i]);
-    }
-}
-
 export function emojifyText(text) {
     return {
         __html: unicodeToImage(escape(text)),
