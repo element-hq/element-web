@@ -431,6 +431,10 @@ var TimelinePanel = React.createClass({
     sendReadReceipt: function() {
         if (!this.refs.messagePanel) return;
         if (!this.props.manageReadReceipts) return;
+        // This happens on user_activity_end which is delayed, and it's
+        // very possible have logged out within that timeframe, so check
+        // we still have a client.
+        if (!MatrixClientPeg.get()) return;
 
         // if we are scrolled to the bottom, do a quick-reset of our unreadNotificationCount
         // to avoid having to wait from the remote echo from the homeserver.
