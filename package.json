@@ -8,6 +8,19 @@
     "url": "https://github.com/vector-im/vector-web"
   },
   "license": "Apache-2.0",
+  "files": [
+    "AUTHORS.rst",
+    "CONTRIBUTING.rst",
+    "deploy",
+    "docs",
+    "karma.conf.js",
+    "lib",
+    "release.sh",
+    "scripts",
+    "src",
+    "test",
+    "webpack.config.js"
+  ],
   "style": "bundle.css",
   "matrix-react-parent": "matrix-react-sdk",
   "scripts": {
@@ -29,7 +42,7 @@
     "start": "node scripts/babelcheck.js && parallelshell \"npm run start:emojione\" \"npm run start:js\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
     "start:prod": "parallelshell \"npm run start:emojione\" \"npm run start:js:prod\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
     "clean": "rimraf build lib vector/olm.* vector/bundle.* vector/emojione",
-    "prepublish": "npm run build:css && npm run build:compile",
+    "prepublish": "npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
     "test:multi": "karma start"
   },
