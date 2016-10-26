@@ -62,6 +62,7 @@ limitations under the License.
 
 .mx_RoomDirectory_searchbox {
     display: table-cell;
+    vertical-align: middle;
 }
 
 .mx_RoomDirectory_listheader .mx_NetworkDropdown {
