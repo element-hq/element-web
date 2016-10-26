@@ -92,7 +92,12 @@ module.exports = {
 
         new HtmlWebpackPlugin({
             template: './src/vector/index.html',
-            inject: false, // we inject the links ourselves via the template
+
+            // we inject the links ourselves via the template, because
+            // HtmlWebpackPlugin wants to put the script tags either at the
+            // bottom of <head> or the bottom of <body>, and I'm a bit scared
+            // about moving them.
+            inject: false,
         }),
     ],
     devtool: 'source-map'
