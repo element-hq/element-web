@@ -37,18 +37,18 @@ if (window && window.process && window.process && window.process.type === 'rende
 }
 
 export default class ElectronPlatform extends BasePlatform {
-    // this sometimes throws because electron is made of fail:
-    // https://github.com/electron/electron/issues/7351
-    // For now, let's catch the error, but I suspect it may
-    // continue to fail and we might just have to accept that
-    // electron's remote RPC is a non-starter for now and use IPC
-    try {
-        setNotificationCount(count: number) {
-            super.setNotificationCount(count);
+    setNotificationCount(count: number) {
+        super.setNotificationCount(count);
+        // this sometimes throws because electron is made of fail:
+        // https://github.com/electron/electron/issues/7351
+        // For now, let's catch the error, but I suspect it may
+        // continue to fail and we might just have to accept that
+        // electron's remote RPC is a non-starter for now and use IPC
+        try {
             remote.app.setBadgeCount(count);
+        } catch (e) {
+            console.error("Failed to set notification count", e);
         }
-    } catch (e) {
-        console.error("Failed to set notification count", e);
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string): Notification {
