@@ -120,7 +120,6 @@
     "webpack": "^1.12.14"
   },
   "optionalDependencies": {
-<<<<<<< HEAD
     "olm": "https://matrix.org/packages/npm/olm/olm-1.3.0.tgz"
   },
   "build": {
