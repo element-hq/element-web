@@ -1,8 +1,30 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
+var cachebuster = true;
+
+for (var i=0; i < process.argv.length; i++) {
+    var arg = process.argv[i];
+    if (arg == "--no-cache-buster") {
+        cachebuster = false;
+    }
+}
 
 module.exports = {
+    entry: {
+        "bundle": "./src/vector/index.js",
+
+        // We ship olm.js as a separate lump of javascript. This makes it get
+        // loaded via a separate <script/> tag in index.html (which loads it
+        // into the browser global `Olm`), and define it as an external below.
+        //
+        // (we should probably make js-sdk load it asynchronously at some
+        // point, so that it doesn't block the pageload, but that is a separate
+        // problem)
+        "olm": "olm/olm.js",
+    },
     module: {
         preLoaders: [
             { test: /\.js$/, loader: "source-map-loader" }
@@ -19,9 +41,15 @@ module.exports = {
             // there is no need for webpack to parse them - they can just be
             // included as-is.
             /highlight\.js\/lib\/languages/,
+
+            // olm takes ages for webpack to process, and it's already heavily
+            // optimised, so there is little to gain by us uglifying it.
+            /olm\/(javascript\/)?olm\.js$/,
         ],
     },
     output: {
+        path: path.join(__dirname, "vector"),
+        filename: "[name]" + (cachebuster ? ".[chunkhash]" : "") + ".js",
         devtoolModuleFilenameTemplate: function(info) {
             // Reading input source maps gives only relative paths here for
             // everything. Until I figure out how to fix this, this is a
@@ -46,11 +74,6 @@ module.exports = {
         },
     },
     externals: {
-        // olm takes ages for webpack to process, and it's already heavily
-        // optimised, so there is little to gain by us uglifying it. We
-        // therefore use it via a separate <script/> tag in index.html (which
-        // loads it into the browser global `Olm`), and reference it as an
-        // external here.
         "olm": "Olm",
         // Don't try to bundle electron: leave it as a commonjs dependency
         // (the 'commonjs' here means it will output a 'require')
@@ -63,8 +86,21 @@ module.exports = {
             }
         }),
 
-        new ExtractTextPlugin("bundle.css", {
-            allChunks: true
+        new ExtractTextPlugin(
+            "[name]" + (cachebuster ? ".[contenthash]" : "") + ".css",
+            {
+                allChunks: true
+            }
+        ),
+
+        new HtmlWebpackPlugin({
+            template: './src/vector/index.html',
+
+            // we inject the links ourselves via the template, because
+            // HtmlWebpackPlugin wants to put the script tags either at the
+            // bottom of <head> or the bottom of <body>, and I'm a bit scared
+            // about moving them.
+            inject: false,
         }),
     ],
     devtool: 'source-map'

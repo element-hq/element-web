@@ -29,8 +29,8 @@ limitations under the License.
 require('babel-polyfill');
 
 // CSS requires: just putting them here for now as CSS is going to be
-// refactored soon anyway
-require('../../vector/components.css');
+// refactored "soon" anyway
+require('../../build/components.css');
 require('gemini-scrollbar/gemini-scrollbar.css');
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');

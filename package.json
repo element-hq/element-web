@@ -10,31 +10,42 @@
     "url": "https://github.com/vector-im/vector-web"
   },
   "license": "Apache-2.0",
+  "files": [
+    "AUTHORS.rst",
+    "CONTRIBUTING.rst",
+    "deploy",
+    "docs",
+    "karma.conf.js",
+    "lib",
+    "release.sh",
+    "scripts",
+    "src",
+    "test",
+    "webpack.config.js"
+  ],
   "style": "bundle.css",
   "matrix-react-parent": "matrix-react-sdk",
   "scripts": {
     "reskindex": "reskindex -h src/header",
     "build:emojione": "cpx \"node_modules/emojione/assets/svg/*\" vector/emojione/svg/",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
-    "build:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/components.css --no-watch",
+    "build:css": "mkdirp build && catw \"src/skins/vector/css/**/*.css\" -o build/components.css --no-watch",
     "build:compile": "babel --source-maps -d lib src",
-    "build:bundle": "NODE_ENV=production webpack -p lib/vector/index.js vector/bundle.js",
-    "build:bundle:dev": "webpack --optimize-occurence-order lib/vector/index.js vector/bundle.js",
-    "build:staticfiles": "cpx -v node_modules/olm/olm.js vector/",
+    "build:bundle": "NODE_ENV=production webpack -p --progress",
+    "build:bundle:dev": "webpack --optimize-occurence-order --progress",
     "build:electron": "build -lwm",
-    "build": "node scripts/babelcheck.js && npm run build:staticfiles && npm run build:emojione && npm run build:css && npm run build:compile && npm run build:bundle",
-    "build:dev": "npm run build:staticfiles && npm run build:emojione && npm run build:css && npm run build:compile && npm run build:bundle:dev",
+    "build": "node scripts/babelcheck.js && npm run build:emojione && npm run build:css && npm run build:bundle",
+    "build:dev": "npm run build:emojione && npm run build:css && npm run build:bundle:dev",
     "package": "scripts/package.sh",
     "start:emojione": "cpx \"node_modules/emojione/assets/svg/*\" vector/emojione/svg/ -w",
-    "start:js": "webpack -w src/vector/index.js vector/bundle.js",
-    "start:js:prod": "NODE_ENV=production webpack -w src/vector/index.js vector/bundle.js",
-    "start:skins:css": "catw \"src/skins/vector/css/**/*.css\" -o vector/components.css",
-    "start:staticfiles": "cpx -Lwv node_modules/olm/olm.js vector/",
+    "start:js": "webpack -w --progress --no-cache-buster",
+    "start:js:prod": "NODE_ENV=production webpack -w --progress --no-cache-buster",
+    "start:skins:css": "mkdirp build && catw \"src/skins/vector/css/**/*.css\" -o build/components.css",
     "//cache": "Note the -c 1 below due to https://code.google.com/p/chromium/issues/detail?id=508270",
-    "start": "node scripts/babelcheck.js && parallelshell \"npm run start:staticfiles\" \"npm run start:emojione\" \"npm run start:js\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
-    "start:prod": "parallelshell \"npm run start:staticfiles\" \"npm run start:emojione\" \"npm run start:js:prod\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
-    "clean": "rimraf lib vector/olm.js vector/bundle.css vector/bundle.js vector/bundle.js.map vector/webpack.css* vector/emojione",
-    "prepublish": "npm run build:css && npm run build:compile",
+    "start": "node scripts/babelcheck.js && parallelshell \"npm run start:emojione\" \"npm run start:js\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
+    "start:prod": "parallelshell \"npm run start:emojione\" \"npm run start:js:prod\" \"npm run start:skins:css\" \"http-server -c 1 vector\"",
+    "clean": "rimraf build lib vector/olm.* vector/bundle.* vector/emojione vector/index.html",
+    "prepublish": "npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
     "test:multi": "karma start"
   },
@@ -87,6 +98,7 @@
     "emojione": "^2.2.3",
     "expect": "^1.16.0",
     "fs-extra": "^0.30.0",
+    "html-webpack-plugin": "^2.24.0",
     "http-server": "^0.8.4",
     "json-loader": "^0.5.3",
     "karma": "^0.13.22",
@@ -97,6 +109,7 @@
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
+    "mkdirp": "^0.5.1",
     "mocha": "^2.4.5",
     "parallelshell": "^1.2.0",
     "phantomjs-prebuilt": "^2.1.7",
@@ -107,6 +120,7 @@
     "webpack": "^1.12.14"
   },
   "optionalDependencies": {
+<<<<<<< HEAD
     "olm": "https://matrix.org/packages/npm/olm/olm-1.3.0.tgz"
   },
   "build": {
@@ -127,5 +141,8 @@
   "directories": {
     "buildResources": "electron/build",
     "output": "electron/dist"
+=======
+    "olm": "https://matrix.org/packages/npm/olm/olm-2.0.0.tgz"
+>>>>>>> origin/develop
   }
 }
