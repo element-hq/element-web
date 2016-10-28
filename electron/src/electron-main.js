@@ -117,8 +117,6 @@ electron.app.on('ready', () => {
         icon: `${__dirname}/../../vector/img/logo.png`,
         width: 1024, height: 768,
     });
-    // A useful one to uncomment for debugging
-    //mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/../../vector/index.html`);
     electron.Menu.setApplicationMenu(VectorMenu);
 

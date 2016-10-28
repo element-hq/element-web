@@ -70,6 +70,13 @@ const template = [
       },
       {
         role: 'togglefullscreen'
+      },
+      {
+        label: 'Toggle Developer Tools',
+        accelerator: process.platform == 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+        click: function(item, focusedWindow) {
+          if (focusedWindow) focusedWindow.toggleDevTools();
+        }
       }
     ]
   },
