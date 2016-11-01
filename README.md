@@ -54,14 +54,14 @@ to build.
    && npm install)`
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it (see below for details)
-1. `npm run package` to build a tarball to deploy. Untaring this file will give
+1. `npm run dist` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
    web server.
 
-Note that `npm run package` is not supported on Windows, so Windows users can run `npm
+Note that `npm run dist` is not supported on Windows, so Windows users can run `npm
 run build`, which will build all the necessary files into the `vector`
 directory. The version of Vector will not appear in Settings without
-using the package script. You can then mount the vector directory on your
+using the dist script. You can then mount the vector directory on your
 webserver to actually serve up the app, which is entirely static content.
 
 config.json
