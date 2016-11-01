@@ -41,7 +41,7 @@ General Style
   "bad" // Bad
   'good' // Good
   ```
-- Use parentheses or `\`` instead of '\\' for line continuation where ever possible
+- Use parentheses or `` ` `` instead of `\` for line continuation where ever possible
 - Open braces on the same line (consistent with Node):
 
   ```javascript
