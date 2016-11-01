@@ -33,7 +33,7 @@
     "build:bundle:dev": "webpack --optimize-occurence-order --progress",
     "build": "node scripts/babelcheck.js && npm run build:emojione && npm run build:css && npm run build:bundle",
     "build:dev": "npm run build:emojione && npm run build:css && npm run build:bundle:dev",
-    "package": "scripts/package.sh",
+    "dist": "scripts/package.sh",
     "start:emojione": "cpx \"node_modules/emojione/assets/svg/*\" vector/emojione/svg/ -w",
     "start:js": "webpack -w --progress --no-cache-buster",
     "start:js:prod": "NODE_ENV=production webpack -w --progress --no-cache-buster",
