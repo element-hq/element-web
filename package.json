@@ -9,6 +9,23 @@
   },
   "license": "Apache-2.0",
   "main": "lib/index.js",
+  "files": [
+    "CHANGELOG.md",
+    "CONTRIBUTING.rst",
+    "LICENSE",
+    "README.md",
+    "code_style.md",
+    "git-revision.txt",
+    "header",
+    "jenkins.sh",
+    "karma.conf.js",
+    "lib",
+    "package.json",
+    "release.sh",
+    "scripts",
+    "src",
+    "test"
+  ],
   "bin": {
     "reskindex": "scripts/reskindex.js"
   },
