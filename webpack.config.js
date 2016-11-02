@@ -75,6 +75,9 @@ module.exports = {
     },
     externals: {
         "olm": "Olm",
+        // Don't try to bundle electron: leave it as a commonjs dependency
+        // (the 'commonjs' here means it will output a 'require')
+        "electron": "commonjs electron",
     },
     plugins: [
         new webpack.DefinePlugin({

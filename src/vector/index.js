@@ -36,7 +36,6 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
 
-
  // add React and ReactPerf to the global namespace, to make them easier to
  // access via the console
 global.React = require("react");
@@ -47,6 +46,7 @@ if (process.env.NODE_ENV !== 'production') {
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
+var PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
@@ -57,6 +57,7 @@ import UAParser from 'ua-parser-js';
 import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
+import Platform from './platform';
 
 var lastLocationHashSet = null;
 
@@ -111,10 +112,6 @@ function onHashChange(ev) {
     routeUrl(window.location);
 }
 
-function onVersion(current, latest) {
-    window.matrixChat.onVersion(current, latest);
-}
-
 var loaded = false;
 var lastLoadedScreen = null;
 
@@ -163,8 +160,7 @@ window.onload = function() {
     if (!validBrowser) {
         return;
     }
-    UpdateChecker.setVersionListener(onVersion);
-    UpdateChecker.run();
+    UpdateChecker.start();
     routeUrl(window.location);
     loaded = true;
     if (lastLoadedScreen) {
@@ -177,14 +173,27 @@ function getConfig() {
     let deferred = q.defer();
 
     request(
-        { method: "GET", url: "config.json", json: true },
+        { method: "GET", url: "config.json" },
         (err, response, body) => {
             if (err || response.status < 200 || response.status >= 300) {
+                // Lack of a config isn't an error, we should
+                // just use the defaults.
+                // Also treat a blank config as no config because
+                // we don't get 404s from file: URIs so this is the
+                // only way we can not fail if the file doesn't exist
+                // when loading from a file:// URI.
+                if (( err && err.response.status == 404) || body == '') {
+                    deferred.resolve({});
+                }
                 deferred.reject({err: err, response: response});
                 return;
             }
 
-            deferred.resolve(body);
+            // We parse the JSON ourselves rather than use the JSON
+            // parameter, since this throws a parse error on empty
+            // which breaks if there's no config.json and we're
+            // loading from the filesystem (see above).
+            deferred.resolve(iJSON.parse(body));
         }
     );
 
@@ -210,6 +219,9 @@ async function loadApp() {
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
 
+    // set the platform for react sdk (our Platform object automatically picks the right one)
+    PlatformPeg.set(new Platform());
+
     // don't try to redirect to the native apps if we're
     // verifying a 3pid
     const preventRedirect = Boolean(fragparts.params.client_secret);
@@ -234,13 +246,7 @@ async function loadApp() {
     try {
         configJson = await getConfig();
     } catch (e) {
-        // On 404 errors, carry on without a config,
-        // but on other errors, fail, otherwise it will
-        // lead to subtle errors where the app runs with
-        // the default config if it fails to fetch config.json.
-        if (e.response.status != 404) {
-            configError = e;
-        }
+        configError = e;
     }
 
     console.log("Vector starting at "+window.location);

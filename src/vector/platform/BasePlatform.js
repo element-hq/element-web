@@ -1,5 +1,7 @@
+// @flow
+
 /*
-Copyright 2016 OpenMarket Ltd
+Copyright 2016 Aviral Dasgupta and OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,17 +16,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
-
-var POKE_RATE_MS = 10 * 60 * 1000; // 10 min
-
-module.exports = {
-    start: function() {
-        module.exports.poll();
-        setInterval(module.exports.poll, POKE_RATE_MS);
-    },
-
-    poll: function() {
-        PlatformPeg.get().pollForUpdate();
+export default class BasePlatform {
+    constructor() {
+        this.notificationCount = 0;
+        this.errorDidOccur = false;
     }
-};
+
+    setNotificationCount(count: number) {
+        this.notificationCount = count;
+    }
+
+    setErrorStatus(errorDidOccur: boolean) {
+        this.errorDidOccur = errorDidOccur;
+    }
+}
