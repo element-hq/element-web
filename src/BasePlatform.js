@@ -38,21 +38,4 @@ export default class BasePlatform {
 
     displayNotification(title: string, msg: string, avatarUrl: string) {
     }
-
-    /**
-     * Check for the availability of an update to the version of the
-     * app that's currently running.
-     * If an update is available, this function should dispatch the
-     * 'new_version' action.
-     */
-    pollForUpdate() {
-    }
-
-    /**
-     * Update the currently running app to the latest available
-     * version and replace this instance of the app with the
-     * new version.
-     */
-    installUpdate() {
-    }
 }
