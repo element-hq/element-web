@@ -2,7 +2,7 @@
   "name": "vector-web",
   "productName": "Riot",
   "main": "electron/src/electron-main.js",
-  "version": "0.8.3",
+  "version": "0.8.4-rc.2",
   "description": "A feature-rich client for Matrix.org",
   "author": "Vector Creations Ltd.",
   "repository": {
@@ -36,7 +36,7 @@
     "build:electron": "build -lwm",
     "build": "node scripts/babelcheck.js && npm run build:emojione && npm run build:css && npm run build:bundle",
     "build:dev": "npm run build:emojione && npm run build:css && npm run build:bundle:dev",
-    "package": "scripts/package.sh",
+    "dist": "scripts/package.sh",
     "start:emojione": "cpx \"node_modules/emojione/assets/svg/*\" vector/emojione/svg/ -w",
     "start:js": "webpack -w --progress --no-cache-buster",
     "start:js:prod": "NODE_ENV=production webpack -w --progress --no-cache-buster",

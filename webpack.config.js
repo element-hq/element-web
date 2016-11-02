@@ -105,3 +105,12 @@ module.exports = {
     ],
     devtool: 'source-map'
 };
+
+// olm is an optional dependency. Ignore it if it's not installed, to avoid a
+// scary-looking error.
+try {
+    require('olm');
+} catch (e) {
+    console.log("Olm is not installed; not shipping it");
+    delete(module.exports.entry["olm"]);
+}
