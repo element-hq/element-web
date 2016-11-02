@@ -18,12 +18,14 @@ limitations under the License.
 
 import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
 import Favico from 'favico.js';
+import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
 import q from 'q';
 
 export default class WebPlatform extends BasePlatform {
     constructor() {
         super();
+        this.runningVersion = null;
         // The 'animations' are really low framerate and look terrible.
         // Also it re-starts the animationb every time you set the badge,
         // and we set the state each time, even if the value hasn't changed,
@@ -87,5 +89,43 @@ export default class WebPlatform extends BasePlatform {
         global.setTimeout(function() {
             notification.close();
         }, 5 * 1000);
+    }
+
+    _getVersion() {
+        const deferred = q.defer();
+        request(
+            { method: "GET", url: "version" },
+            (err, response, body) => {
+                if (err || response.status < 200 || response.status >= 300) {
+                    if (err == null) err = { status: response.status };
+                    deferred.reject(err);
+                    return;
+                }
+
+                const ver = body.trim();
+                deferred.resolve(ver);
+            }
+        );
+        return deferred.promise;
+    }
+
+    pollForUpdate() {
+        this._getVersion().done((ver) => {
+            if (this.runningVersion == null) {
+                this.runningVersion = ver;
+            } else if (this.runningVersion != ver) {
+                dis.dispatch({
+                    action: 'new_version',
+                    currentVersion: this.runningVersion,
+                    newVersion: ver,
+                });
+            }
+        }, (err) => {
+            console.error("Failed to poll for update", err);
+        });
+    }
+
+    installUpdate() {
+        window.location.reload();
     }
 }

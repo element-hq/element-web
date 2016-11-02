@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var sdk = require('matrix-react-sdk');
 import Modal from 'matrix-react-sdk/lib/Modal';
+import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 
 /**
  * Check a version string is compatible with the Changelog
@@ -31,30 +32,50 @@ function checkVersion(ver) {
 
 export default function NewVersionBar(props) {
     const onChangelogClicked = () => {
-        const ChangelogDialog = sdk.getComponent('dialogs.ChangelogDialog');
-
-        Modal.createDialog(ChangelogDialog, {
-            version: props.version,
-            newVersion: props.newVersion,
-            onFinished: (update) => {
-                if(update) {
-                    window.location.reload();
+        if (props.releaseNotes) {
+            const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
+            Modal.createDialog(QuestionDialog, {
+                title: "What's New",
+                description: <pre className="changelog_text">{props.releaseNotes}</pre>,
+                button: "Update",
+                onFinished: (update) => {
+                    if(update && PlatformPeg.get()) {
+                        PlatformPeg.get().installUpdate();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            const ChangelogDialog = sdk.getComponent('dialogs.ChangelogDialog');
+            Modal.createDialog(ChangelogDialog, {
+                version: props.version,
+                newVersion: props.newVersion,
+                releaseNotes: releaseNotes,
+                onFinished: (update) => {
+                    if(update && PlatformPeg.get()) {
+                        PlatformPeg.get().installUpdate();
+                    }
+                }
+            });
+        }
     };
 
-    let changelog_button;
-    if (checkVersion(props.version) && checkVersion(props.newVersion)) {
-        changelog_button = <button className="mx_MatrixToolbar_action" onClick={onChangelogClicked}>Changelog</button>;
+    const onUpdateClicked = () => {
+        PlatformPeg.get().installUpdate();
+    };
+
+    let action_button;
+    if (props.releaseNotes || (checkVersion(props.version) && checkVersion(props.newVersion))) {
+        action_button = <button className="mx_MatrixToolbar_action" onClick={onChangelogClicked}>What's new?</button>;
+    } else if (PlatformPeg.get()) {
+        action_button = <button className="mx_MatrixToolbar_action" onClick={onUpdateClicked}>Update</button>;
     }
     return (
         <div className="mx_MatrixToolbar">
             <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
             <div className="mx_MatrixToolbar_content">
-                A new version of Riot is available. Refresh your browser.
+                A new version of Riot is available.
             </div>
-            {changelog_button}
+            {action_button}
         </div>
     );
 }
@@ -62,4 +83,5 @@ export default function NewVersionBar(props) {
 NewVersionBar.propTypes = {
     version: React.PropTypes.string.isRequired,
     newVersion: React.PropTypes.string.isRequired,
+    releaseNotes: React.PropTypes.string,
 };
