@@ -14,7 +14,7 @@ https://riot.im/develop for those who like living dangerously.
 To host your own copy of Riot, the quickest bet is to use a pre-built
 released version of Riot:
 
-1. Download the latest version from https://vector.im/packages/
+1. Download the latest version from https://github.com/vector-im/vector-web/releases
 1. Untar the tarball on your web server
 1. Move (or symlink) the vector-x.x.x directory to an appropriate name
 1. If desired, copy `config.sample.json` to `config.json` and edit it
@@ -121,10 +121,11 @@ sudo npm install nativefier -g
 nativefier https://riot.im/app/
 ```
 
-krisa has a dedicated electron project at https://github.com/krisak/vector-electron-desktop
-(although you should swap out the 'vector' folder for the latest vector tarball you want to run.
-Get a tarball from https://vector.im/packages or build your own - see Building From Source
-above).
+krisa has a dedicated electron project at
+https://github.com/krisak/vector-electron-desktop (although you should swap out
+the 'vector' folder for the latest vector tarball you want to run.  Get a
+tarball from https://github.com/vector-im/vector-web/releases or build your own
+- see Building From Source above).
 
 There's also a (much) older electron distribution at https://github.com/stevenhammerton/vector-desktop
 
