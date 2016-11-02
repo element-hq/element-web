@@ -1,3 +1,45 @@
+Changes in [0.8.4-rc.1](https://github.com/vector-im/vector-web/releases/tag/v0.8.4-rc.1) (2016-11-02)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.3...v0.8.4-rc.1)
+
+Breaking Changes
+----------------
+ * End-to-end encryption now requires one-time keys to be
+   signed, so end-to-end encryption will not interoperate
+   with previous releases of vector-web. End-to-end encryption
+   remains in beta.
+
+Other Changes
+-------------
+ * Rename the package script/output dir to 'dist'
+   [\#2528](https://github.com/vector-im/vector-web/pull/2528)
+ * Avoid errors if olm is missing
+   [\#2518](https://github.com/vector-im/vector-web/pull/2518)
+ * Put a cachebuster in the names of CSS and JS files
+   [\#2515](https://github.com/vector-im/vector-web/pull/2515)
+ * Bump to olm 2.0.0
+   [\#2517](https://github.com/vector-im/vector-web/pull/2517)
+ * Don't include the world in the published packages
+   [\#2516](https://github.com/vector-im/vector-web/pull/2516)
+ * Use webpack to copy olm.js
+   [\#2514](https://github.com/vector-im/vector-web/pull/2514)
+ * Don't include two copies of the CSS in the tarball
+   [\#2513](https://github.com/vector-im/vector-web/pull/2513)
+ * Correct text alignment on room directory search
+   [\#2512](https://github.com/vector-im/vector-web/pull/2512)
+ * Correct spelling of 'rel'
+   [\#2510](https://github.com/vector-im/vector-web/pull/2510)
+ * readme tweaks
+   [\#2507](https://github.com/vector-im/vector-web/pull/2507)
+ * s/vector/riot/ in the readme
+   [\#2491](https://github.com/vector-im/vector-web/pull/2491)
+ * Switch to babel 6, again
+   [\#2480](https://github.com/vector-im/vector-web/pull/2480)
+ * Revert "Switch to babel 6"
+   [\#2472](https://github.com/vector-im/vector-web/pull/2472)
+ * Switch to babel 6
+   [\#2461](https://github.com/vector-im/vector-web/pull/2461)
+
 Changes in [0.8.3](https://github.com/vector-im/vector-web/releases/tag/v0.8.3) (2016-10-12)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.2...v0.8.3)
