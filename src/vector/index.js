@@ -47,6 +47,7 @@ if (process.env.NODE_ENV !== 'production') {
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
+var PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
@@ -57,6 +58,7 @@ import UAParser from 'ua-parser-js';
 import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
+import Platform from './platform';
 
 var lastLocationHashSet = null;
 
@@ -209,6 +211,9 @@ function onLoadCompleted() {
 async function loadApp() {
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
+
+    // set the platform for react sdk (our Platform object automatically picks the right one)
+    PlatformPeg.set(new Platform());
 
     // don't try to redirect to the native apps if we're
     // verifying a 3pid
