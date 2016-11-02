@@ -13,3 +13,4 @@
 /vector/olm.*
 .DS_Store
 npm-debug.log
+electron/dist
