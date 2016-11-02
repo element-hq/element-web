@@ -36,6 +36,32 @@ export default class BasePlatform {
         this.errorDidOccur = errorDidOccur;
     }
 
+    /**
+     * Returns true if the platform supports displaying
+     * notifications, otherwise false.
+     */
+    supportsNotifications() : boolean {
+        return false;
+    }
+
+    /**
+     * Returns true if the application currently has permission
+     * to display notifications. Otherwise false.
+     */
+    maySendNotifications() : boolean {
+        return false;
+    }
+
+    /**
+     * Requests permission to send notifications. Returns
+     * a promise that is resolved when the user has responded
+     * to the request. The promise has a single string argument
+     * that is 'granted' if the user allowed the request or
+     * 'denied' otherwise.
+     */
+    requestNotificationPermission() : Promise {
+    }
+
     displayNotification(title: string, msg: string, avatarUrl: string) {
     }
 }
