@@ -19,11 +19,17 @@ limitations under the License.
 var React = require('react');
 var filesize = require('filesize');
 
+// Pull in the encryption lib so that we can decrypt attachments.
+var encrypt = require("browser-encrypt-attachment");
+// Pull in a fetch polyfill so we can download encrypted attachments.
+require("isomorphic-fetch");
+
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var ImageUtils = require('../../../ImageUtils');
 var Modal = require('../../../Modal');
 var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
+
 
 module.exports = React.createClass({
     displayName: 'MImageBody',
@@ -85,6 +91,33 @@ module.exports = React.createClass({
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         this.fixupHeight();
+        var content = this.props.mxEvent.getContent();
+        if (content.file !== undefined) {
+            // TODO: hook up an error handler to the promise.
+            this.decryptFile(content.file);
+        }
+    },
+
+    decryptFile: function(file) {
+        var url = MatrixClientPeg.get().mxcUrlToHttp(file.url);
+        var self = this;
+        // Download the encrypted file as an array buffer.
+        return fetch(url).then(function (response) {
+            return response.arrayBuffer();
+        }).then(function (responseData) {
+            // Decrypt the array buffer using the information taken from
+            // the event content.
+            return encrypt.decryptAttachment(responseData, file);
+        }).then(function(dataArray) {
+            // Turn the array into a Blob and use createObjectURL to make
+            // a url that we can use as an img src.
+            var blob = new Blob([dataArray]);
+            var blobUrl = window.URL.createObjectURL(blob);
+            self.refs.image.src = blobUrl;
+            self.refs.image.onload = function() {
+                window.URL.revokeObjectURL(blobUrl);
+            };
+        });
     },
 
     componentWillUnmount: function() {
@@ -148,7 +181,16 @@ module.exports = React.createClass({
         }
 
         var thumbUrl = this._getThumbUrl();
-        if (thumbUrl) {
+        if (content.file !== undefined) {
+            // Need to decrypt the attachment
+            // The attachment is decrypted in componentDidMount.
+            return (
+                <span className="mx_MImageBody" ref="body">
+                <img className="mx_MImageBody_thumbnail" src="img/encrypted-placeholder.svg" ref="image"
+                    alt={content.body} />
+                </span>
+            );
+        } else if (thumbUrl) {
             return (
                 <span className="mx_MImageBody" ref="body">
                     <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
