@@ -27,7 +27,7 @@ class PlatformPeg {
     }
 
     /**
-     * Returns the current Platform object fir the application.
+     * Returns the current Platform object for the application.
      * This should be an instance of a class extending BasePlatform.
      */
     get() {
