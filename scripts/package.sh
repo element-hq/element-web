@@ -2,7 +2,11 @@
 
 set -e
 
-version=`git describe --dirty --tags || echo unknown`
+if [ $# -eq 1 ]; then
+    version=$1
+else
+    version=`git describe --dirty --tags || echo unknown`
+fi
 
 npm run build
 mkdir -p dist
