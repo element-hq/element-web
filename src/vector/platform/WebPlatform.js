@@ -16,13 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
+import VectorBasePlatform from './VectorBasePlatform';
 import Favico from 'favico.js';
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
 import q from 'q';
 
-export default class WebPlatform extends BasePlatform {
+export default class WebPlatform extends VectorBasePlatform {
     constructor() {
         super();
         this.runningVersion = null;
