@@ -105,6 +105,8 @@ module.exports = React.createClass({
 
             version: null,
             newVersion: null,
+            hasNewVersion: false,
+            newVersionReleaseNotes: null,
 
             // The username to default to when upgrading an account from a guest
             upgradeUsername: null,
@@ -468,6 +470,12 @@ module.exports = React.createClass({
                 break;
             case 'load_completed':
                 this._onLoadCompleted();
+                break;
+            case 'new_version':
+                this.onVersion(
+                    payload.currentVersion, payload.newVersion,
+                    payload.releaseNotes
+                );
                 break;
         }
     },
@@ -961,11 +969,12 @@ module.exports = React.createClass({
         this.showScreen("settings");
     },
 
-    onVersion: function(current, latest) {
+    onVersion: function(current, latest, releaseNotes) {
         this.setState({
             version: current,
             newVersion: latest,
-            hasNewVersion: current !== latest
+            hasNewVersion: current !== latest,
+            newVersionReleaseNotes: releaseNotes,
         });
     },
 
@@ -1100,7 +1109,9 @@ module.exports = React.createClass({
 
             var topBar;
             if (this.state.hasNewVersion) {
-                topBar = <NewVersionBar version={this.state.version} newVersion={this.state.newVersion} />;
+                topBar = <NewVersionBar version={this.state.version} newVersion={this.state.newVersion}
+                    releaseNotes={this.state.newVersionReleaseNotes}
+                />;
             }
             else if (MatrixClientPeg.get().isGuest()) {
                 topBar = <GuestWarningBar />;
