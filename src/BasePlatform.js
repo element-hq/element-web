@@ -59,7 +59,7 @@ export default class BasePlatform {
      * that is 'granted' if the user allowed the request or
      * 'denied' otherwise.
      */
-    requestNotificationPermission() : Promise {
+    requestNotificationPermission() : Promise<string> {
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string) {
