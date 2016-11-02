@@ -18,9 +18,9 @@ import q from 'q';
 
 var React = require('react');
 var Matrix = require("matrix-js-sdk");
-var Favico = require('favico.js');
 
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var PlatformPeg = require("../../PlatformPeg");
 var SdkConfig = require("../../SdkConfig");
 var Notifier = require("../../Notifier");
 var ContextualMenu = require("./ContextualMenu");
@@ -172,7 +172,6 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
-        this.favicon = new Favico({animation: 'none'});
 
         // Stashed guest credentials if the user logs out
         // whilst logged in as a guest user (so they can change
@@ -639,7 +638,7 @@ module.exports = React.createClass({
 
         var self = this;
         cli.on('sync', function(state, prevState) {
-            self.updateFavicon(state, prevState);
+            self.updateStatusIndicator(state, prevState);
             if (state === "SYNCING" && prevState === "SYNCING") {
                 return;
             }
@@ -970,7 +969,7 @@ module.exports = React.createClass({
         });
     },
 
-    updateFavicon: function(state, prevState) {
+    updateStatusIndicator: function(state, prevState) {
         var notifCount = 0;
 
         var rooms = MatrixClientPeg.get().getRooms();
@@ -984,24 +983,12 @@ module.exports = React.createClass({
                 notifCount++;
             }
         }
-        try {
-            // This needs to be in in a try block as it will throw
-            // if there are more than 100 badge count changes in
-            // its internal queue
-            var bgColor = "#d00",
-                notif = notifCount;
 
-            if(state === "ERROR") {
-                notif = notif || "×";
-                bgColor = "#f00";
-            }
-
-            this.favicon.badge(notif, {
-                bgColor: bgColor
-            });
-        } catch (e) {
-            console.warn("Failed to set badge count: "+e.message);
+        if (PlatformPeg.get()) {
+            PlatformPeg.get().setErrorStatus(state === 'ERROR');
+            PlatformPeg.get().setNotificationCount(notifCount);
         }
+
         document.title = `Riot ${state === "ERROR" ? " [offline]" : ""}${notifCount > 0 ? ` [${notifCount}]` : ""}`;
     },
 
