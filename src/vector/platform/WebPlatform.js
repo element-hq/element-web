@@ -68,7 +68,7 @@ export default class WebPlatform extends BasePlatform {
      * notifications, otherwise false.
      */
     supportsNotifications() : boolean {
-        return true;
+        return Boolean(global.Notification);
     }
 
     /**
