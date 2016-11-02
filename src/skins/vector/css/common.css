@@ -288,3 +288,7 @@ textarea {
     cursor: pointer;
     display: inline;
 }
+
+.changelog_text {
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+}
