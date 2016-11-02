@@ -179,14 +179,27 @@ function getConfig() {
     let deferred = q.defer();
 
     request(
-        { method: "GET", url: "config.json", json: true },
+        { method: "GET", url: "config.json" },
         (err, response, body) => {
             if (err || response.status < 200 || response.status >= 300) {
+                // Lack of a config isn't an error, we should
+                // just use the defaults.
+                // Also treat a blank config as no config because
+                // we don't get 404s from file: URIs so this is the
+                // only way we can not fail if the file doesn't exist
+                // when loading from a file:// URI.
+                if (( err && err.response.status == 404) || body == '') {
+                    deferred.resolve({});
+                }
                 deferred.reject({err: err, response: response});
                 return;
             }
 
-            deferred.resolve(body);
+            // We parse the JSON ourselves rather than use the JSON
+            // parameter, since this throws a parse error on empty
+            // which breaks if there's no config.json and we're
+            // loading from the filesystem (see above).
+            deferred.resolve(JSON.parse(body));
         }
     );
 
@@ -239,13 +252,7 @@ async function loadApp() {
     try {
         configJson = await getConfig();
     } catch (e) {
-        // On 404 errors, carry on without a config,
-        // but on other errors, fail, otherwise it will
-        // lead to subtle errors where the app runs with
-        // the default config if it fails to fetch config.json.
-        if (e.response.status != 404) {
-            configError = e;
-        }
+        configError = e;
     }
 
     console.log("Vector starting at "+window.location);
