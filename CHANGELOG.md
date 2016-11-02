@@ -1,3 +1,38 @@
+Changes in [0.7.5-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.7.5-rc.1) (2016-11-02)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.4...v0.7.5-rc.1)
+
+ * Explicitly list files in package.json
+   [\#530](https://github.com/matrix-org/matrix-react-sdk/pull/530)
+ * Fix some markdown in the code style doc
+   [\#529](https://github.com/matrix-org/matrix-react-sdk/pull/529)
+ * Run highlight.js asynchronously
+   [\#527](https://github.com/matrix-org/matrix-react-sdk/pull/527)
+ * Fix room tinting
+   [\#528](https://github.com/matrix-org/matrix-react-sdk/pull/528)
+ * Fix CPU spin on joining rooms
+   [\#525](https://github.com/matrix-org/matrix-react-sdk/pull/525)
+ * Don't send read receipt if user has logged out
+   [\#526](https://github.com/matrix-org/matrix-react-sdk/pull/526)
+ * Switch to babel 6, again
+   [\#523](https://github.com/matrix-org/matrix-react-sdk/pull/523)
+ * Keyboard shortcuts to mute microphone/camera
+   [\#522](https://github.com/matrix-org/matrix-react-sdk/pull/522)
+ * Give our input fields names
+   [\#520](https://github.com/matrix-org/matrix-react-sdk/pull/520)
+ * Revert "Switch to babel 6"
+   [\#521](https://github.com/matrix-org/matrix-react-sdk/pull/521)
+ * Switch to babel 6
+   [\#519](https://github.com/matrix-org/matrix-react-sdk/pull/519)
+ * Interactive auth for device delete
+   [\#517](https://github.com/matrix-org/matrix-react-sdk/pull/517)
+ * InteractiveAuthDialog
+   [\#516](https://github.com/matrix-org/matrix-react-sdk/pull/516)
+ * Prevent spamming emails by reusing client secret
+   [\#514](https://github.com/matrix-org/matrix-react-sdk/pull/514)
+ * Refactor CaptchaForm to put less logic in signupstages
+   [\#515](https://github.com/matrix-org/matrix-react-sdk/pull/515)
+
 Changes in [0.7.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.7.4) (2016-10-12)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.3...v0.7.4)
