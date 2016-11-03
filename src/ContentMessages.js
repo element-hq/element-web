@@ -161,7 +161,7 @@ class ContentMessages {
         var error;
         var self = this;
         return def.promise.then(function() {
-            if (matrixClient.isRoomEncrypted(room_id)) {
+            if (matrixClient.isRoomEncrypted(roomId)) {
                 // If the room is encrypted then encrypt the file before uploading it.
                 // First read the file into memory.
                 upload.promise = readFileAsArrayBuffer(file).then(function(data) {
