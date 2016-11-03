@@ -37,18 +37,6 @@ export default React.createClass({
         releaseNotes: React.PropTypes.string,
     },
 
-    onChangelogClicked: function() {
-        // If we have release notes to display, we display them. Otherwise,
-        // we display the Changelog Dialog which takes two versions and
-        // automatically tells you what's changed (provided the versions
-        // are in the right format)
-        if (this.props.releaseNotes) {
-            this.displayReleaseNotes(this.props.releaseNotes);
-        } else if (checkVersion(this.props.version) && checkVersion(this.props.newVersion)) {
-            this.displayChangelog();
-        }
-    },
-
     displayReleaseNotes: function(releaseNotes) {
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
         Modal.createDialog(QuestionDialog, {
@@ -82,8 +70,14 @@ export default React.createClass({
 
     render: function() {
         let action_button;
-        if (this.props.releaseNotes || (checkVersion(this.props.version) && checkVersion(this.props.newVersion))) {
-            action_button = <button className="mx_MatrixToolbar_action" onClick={this.onChangelogClicked}>What's new?</button>;
+        // If we have release notes to display, we display them. Otherwise,
+        // we display the Changelog Dialog which takes two versions and
+        // automatically tells you what's changed (provided the versions
+        // are in the right format)
+        if (this.props.releaseNotes) {
+            action_button = <button className="mx_MatrixToolbar_action" onClick={this.displayReleaseNotes}>What's new?</button>;
+        } else if (checkVersion(this.props.version) && checkVersion(this.props.newVersion)) {
+            action_button = <button className="mx_MatrixToolbar_action" onClick={this.displayChangelog}>What's new?</button>;
         } else if (PlatformPeg.get()) {
             action_button = <button className="mx_MatrixToolbar_action" onClick={this.onUpdateClicked}>Update</button>;
         }
