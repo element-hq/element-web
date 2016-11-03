@@ -102,7 +102,9 @@ const template = [
     }
 ];
 
+// macOS has specific menu conventions...
 if (process.platform === 'darwin') {
+    // first macOS menu is the name of the app
     const name = electron.app.getName()
     template.unshift({
         label: name,
@@ -138,6 +140,7 @@ if (process.platform === 'darwin') {
         ]
     })
     // Edit menu.
+    // This has a 'speech' section on macOS
     template[1].submenu.push(
         {
             type: 'separator'
@@ -155,6 +158,7 @@ if (process.platform === 'darwin') {
         }
     )
     // Window menu.
+    // This also has specific functionality on macOS
     template[3].submenu = [
         {
             label: 'Close',
