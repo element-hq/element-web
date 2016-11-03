@@ -13,48 +13,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+
 var POKE_RATE_MS = 10 * 60 * 1000; // 10 min
-var currentVersion = null;
-var latestVersion = null;
-var listener = function(){}; // NOP
 
 module.exports = {
-    setVersionListener: function(fn) { // invoked with fn(currentVer, newVer)
-        listener = fn;
+    start: function() {
+        module.exports.poll();
+        setInterval(module.exports.poll, POKE_RATE_MS);
     },
 
-    run: function() {
-        var req = new XMLHttpRequest();
-        req.addEventListener("load", function() {
-            if (!req.responseText) {
-                return;
-            }
-            var ver = req.responseText.trim();
-            if (!currentVersion) {
-                currentVersion = ver;
-                listener(currentVersion, currentVersion);
-            }
-
-            if (ver !== latestVersion) {
-                latestVersion = ver;
-                if (module.exports.hasNewVersion()) {
-                    console.log("Current=%s Latest=%s", currentVersion, latestVersion);
-                    listener(currentVersion, latestVersion);
-                }
-            }
-        });
-        var cacheBuster = "?ts=" + new Date().getTime();
-        req.open("GET", "version" + cacheBuster);
-        req.send(); // can't suppress 404s from being logged.
-
-        setTimeout(module.exports.run, POKE_RATE_MS);
-    },
-
-    getCurrentVersion: function() {
-        return currentVersion;
-    },
-
-    hasNewVersion: function() {
-        return currentVersion && latestVersion && (currentVersion !== latestVersion);
+    poll: function() {
+        PlatformPeg.get().pollForUpdate();
     }
 };
