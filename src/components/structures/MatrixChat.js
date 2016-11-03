@@ -22,7 +22,6 @@ var Matrix = require("matrix-js-sdk");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var PlatformPeg = require("../../PlatformPeg");
 var SdkConfig = require("../../SdkConfig");
-var Notifier = require("../../Notifier");
 var ContextualMenu = require("./ContextualMenu");
 var RoomListSorter = require("../../RoomListSorter");
 var UserActivity = require("../../UserActivity");
@@ -38,8 +37,8 @@ var Tinter = require("../../Tinter");
 var sdk = require('../../index');
 var Rooms = require('../../Rooms');
 var linkifyMatrix = require("../../linkify-matrix");
-var KeyCode = require('../../KeyCode');
 var Lifecycle = require('../../Lifecycle');
+var PageTypes = require('../../PageTypes');
 
 var createRoom = require("../../createRoom");
 
@@ -65,14 +64,6 @@ module.exports = React.createClass({
         // displayname, if any, to set on the device when logging
         // in/registering.
         defaultDeviceDisplayName: React.PropTypes.string,
-    },
-
-    PageTypes: {
-        RoomView: "room_view",
-        UserSettings: "user_settings",
-        CreateRoom: "create_room",
-        RoomDirectory: "room_directory",
-        UserView: "user_view",
     },
 
     AuxPanel: {
@@ -192,10 +183,6 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
 
         this.focusComposer = false;
-        // scrollStateMap is a map from room id to the scroll state returned by
-        // RoomView.getScrollState()
-        this.scrollStateMap = {};
-        document.addEventListener("keydown", this.onKeyDown);
         window.addEventListener("focus", this.onFocus);
 
         // this can technically be done anywhere but doing this here keeps all
@@ -234,7 +221,6 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
-        document.removeEventListener("keydown", this.onKeyDown);
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
     },
@@ -399,11 +385,11 @@ module.exports = React.createClass({
                 }
                 break;
             case 'view_user_settings':
-                this._setPage(this.PageTypes.UserSettings);
+                this._setPage(PageTypes.UserSettings);
                 this.notifyNewScreen('settings');
                 break;
             case 'view_create_room':
-                //this._setPage(this.PageTypes.CreateRoom);
+                //this._setPage(PageTypes.CreateRoom);
                 //this.notifyNewScreen('new');
 
                 var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
@@ -421,7 +407,7 @@ module.exports = React.createClass({
                 });
                 break;
             case 'view_room_directory':
-                this._setPage(this.PageTypes.RoomDirectory);
+                this._setPage(PageTypes.RoomDirectory);
                 this.notifyNewScreen('directory');
                 break;
             case 'view_create_chat':
@@ -481,9 +467,6 @@ module.exports = React.createClass({
     },
 
     _setPage: function(pageType) {
-        // record the scroll state if we're in a room view.
-        this._updateScrollMap();
-
         this.setState({
             page_type: pageType,
         });
@@ -506,16 +489,13 @@ module.exports = React.createClass({
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
     _viewRoom: function(room_info) {
-        // before we switch room, record the scroll state of the current room
-        this._updateScrollMap();
-
         this.focusComposer = true;
 
         var newState = {
             initialEventId: room_info.event_id,
             highlightedEventId: room_info.event_id,
             initialEventPixelOffset: undefined,
-            page_type: this.PageTypes.RoomView,
+            page_type: PageTypes.RoomView,
             thirdPartyInvite: room_info.third_party_invite,
             roomOobData: room_info.oob_data,
             currentRoomAlias: room_info.room_alias,
@@ -528,8 +508,8 @@ module.exports = React.createClass({
 
         // if we aren't given an explicit event id, look for one in the
         // scrollStateMap.
-        if (!room_info.event_id) {
-            var scrollState = this.scrollStateMap[room_info.room_id];
+        if (!room_info.event_id && this.refs.loggedInView) {
+            var scrollState = this.refs.loggedInView.getScrollStateForRoom(room_info.room_id);
             if (scrollState) {
                 newState.initialEventId = scrollState.focussedEvent;
                 newState.initialEventPixelOffset = scrollState.pixelOffset;
@@ -566,10 +546,6 @@ module.exports = React.createClass({
             newState.ready = true;
         }
         this.setState(newState);
-
-        if (this.refs.roomView && room_info.showSettings) {
-            this.refs.roomView.showSettings(true);
-        }
     },
 
     _createChat: function() {
@@ -587,21 +563,6 @@ module.exports = React.createClass({
             description: "Who would you like to add to this room?",
             roomId: roomId,
         });
-    },
-
-    // update scrollStateMap according to the current scroll state of the
-    // room view.
-    _updateScrollMap: function() {
-        if (!this.refs.roomView) {
-            return;
-        }
-        var roomview = this.refs.roomView;
-        var roomId = this.refs.roomView.getRoomId();
-        if (!roomId) {
-            return;
-        }
-        var state = roomview.getScrollState();
-        this.scrollStateMap[roomId] = state;
     },
 
     /**
@@ -664,12 +625,12 @@ module.exports = React.createClass({
                         firstRoom = RoomListSorter.mostRecentActivityFirst(
                             cli.getRooms()
                         )[0].roomId;
-                        self.setState({ready: true, currentRoomId: firstRoom, page_type: self.PageTypes.RoomView});
+                        self.setState({ready: true, currentRoomId: firstRoom, page_type: PageTypes.RoomView});
                     } else {
-                        self.setState({ready: true, page_type: self.PageTypes.RoomDirectory});
+                        self.setState({ready: true, page_type: PageTypes.RoomDirectory});
                     }
                 } else {
-                    self.setState({ready: true, page_type: self.PageTypes.RoomView});
+                    self.setState({ready: true, page_type: PageTypes.RoomView});
                 }
 
                 // we notifyNewScreen now because now the room will actually be displayed,
@@ -710,62 +671,6 @@ module.exports = React.createClass({
                 action: 'logout'
             });
         });
-    },
-
-    onKeyDown: function(ev) {
-            /*
-            // Remove this for now as ctrl+alt = alt-gr so this breaks keyboards which rely on alt-gr for numbers
-            // Will need to find a better meta key if anyone actually cares about using this.
-            if (ev.altKey && ev.ctrlKey && ev.keyCode > 48 && ev.keyCode < 58) {
-                dis.dispatch({
-                    action: 'view_indexed_room',
-                    roomIndex: ev.keyCode - 49,
-                });
-                ev.stopPropagation();
-                ev.preventDefault();
-                return;
-            }
-            */
-
-        var handled = false;
-
-        switch (ev.keyCode) {
-            case KeyCode.UP:
-            case KeyCode.DOWN:
-                if (ev.altKey) {
-                    var action = ev.keyCode == KeyCode.UP ?
-                        'view_prev_room' : 'view_next_room';
-                    dis.dispatch({action: action});
-                    handled = true;
-                }
-                break;
-
-            case KeyCode.PAGE_UP:
-            case KeyCode.PAGE_DOWN:
-                this._onScrollKeyPressed(ev);
-                handled = true;
-                break;
-
-            case KeyCode.HOME:
-            case KeyCode.END:
-                if (ev.ctrlKey) {
-                    this._onScrollKeyPressed(ev);
-                    handled = true;
-                }
-                break;
-        }
-
-        if (handled) {
-            ev.stopPropagation();
-            ev.preventDefault();
-        }
-    },
-
-    /** dispatch a page-up/page-down/etc to the appropriate component */
-    _onScrollKeyPressed(ev) {
-        if (this.refs.roomView) {
-            this.refs.roomView.handleScrollKey(ev);
-        }
     },
 
     onFocus: function(ev) {
@@ -845,7 +750,7 @@ module.exports = React.createClass({
         } else if (screen.indexOf('user/') == 0) {
             var userId = screen.substring(5);
             this.setState({ viewUserId: userId });
-            this._setPage(this.PageTypes.UserView);
+            this._setPage(PageTypes.UserView);
             this.notifyNewScreen('user/' + userId);
             var member = new Matrix.RoomMember(null, userId);
             if (member) {
@@ -958,7 +863,7 @@ module.exports = React.createClass({
         // the page type still unset when the MatrixClient
         // is started and show the Room Directory instead.
         //this.showScreen("view_user_settings");
-        this._setPage(this.PageTypes.UserSettings);
+        this._setPage(PageTypes.UserSettings);
     },
 
     onFinishPostRegistration: function() {
@@ -1025,16 +930,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var LeftPanel = sdk.getComponent('structures.LeftPanel');
-        var RoomView = sdk.getComponent('structures.RoomView');
-        var RightPanel = sdk.getComponent('structures.RightPanel');
-        var UserSettings = sdk.getComponent('structures.UserSettings');
-        var CreateRoom = sdk.getComponent('structures.CreateRoom');
-        var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
-        var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
-        var GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
-        var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
+        var LoggedInView = sdk.getComponent('structures.LoggedInView');
 
         // console.log("rendering; loading="+this.state.loading+"; screen="+this.state.screen +
         //             "; logged_in="+this.state.logged_in+"; ready="+this.state.ready);
@@ -1053,90 +950,20 @@ module.exports = React.createClass({
                 <PostRegistration
                     onComplete={this.onFinishPostRegistration} />
             );
-        }
-        else if (this.state.logged_in && this.state.ready) {
-            var page_element;
-            var right_panel = "";
-
-            switch (this.state.page_type) {
-                case this.PageTypes.RoomView:
-                    page_element = <RoomView
-                        ref="roomView"
-                        roomAddress={this.state.currentRoomAlias || this.state.currentRoomId}
-                        autoJoin={this.state.autoJoin}
-                        onRoomIdResolved={this.onRoomIdResolved}
-                        eventId={this.state.initialEventId}
-                        thirdPartyInvite={this.state.thirdPartyInvite}
-                        oobData={this.state.roomOobData}
-                        highlightedEventId={this.state.highlightedEventId}
-                        eventPixelOffset={this.state.initialEventPixelOffset}
-                        key={this.state.currentRoomAlias || this.state.currentRoomId}
-                        opacity={this.state.middleOpacity}
-                        collapsedRhs={ this.state.collapse_rhs }
-                        ConferenceHandler={this.props.ConferenceHandler}
-                    />
-                    if (!this.state.collapse_rhs) right_panel = <RightPanel roomId={this.state.currentRoomId} opacity={this.state.sideOpacity} />
-                    break;
-                case this.PageTypes.UserSettings:
-                    page_element = <UserSettings
-                        onClose={this.onUserSettingsClose}
-                        version={this.state.version}
-                        brand={this.props.config.brand}
-                        collapsedRhs={ this.state.collapse_rhs }
-                        enableLabs={this.props.config.enableLabs}
-                    />
-                    if (!this.state.collapse_rhs) right_panel = <RightPanel opacity={this.state.sideOpacity}/>
-                    break;
-                case this.PageTypes.CreateRoom:
-                    page_element = <CreateRoom
-                        onRoomCreated={this.onRoomCreated}
-                        collapsedRhs={ this.state.collapse_rhs }
-                    />
-                    if (!this.state.collapse_rhs) right_panel = <RightPanel opacity={this.state.sideOpacity}/>
-                    break;
-                case this.PageTypes.RoomDirectory:
-                    page_element = <RoomDirectory
-                        collapsedRhs={ this.state.collapse_rhs }
-                        config={this.props.config.roomDirectory}
-                    />
-                    if (!this.state.collapse_rhs) right_panel = <RightPanel opacity={this.state.sideOpacity}/>
-                    break;
-                case this.PageTypes.UserView:
-                    page_element = null; // deliberately null for now
-                    right_panel = <RightPanel userId={this.state.viewUserId} opacity={this.state.sideOpacity} />
-                    break;
-            }
-
-            var topBar;
-            if (this.state.hasNewVersion) {
-                topBar = <NewVersionBar version={this.state.version} newVersion={this.state.newVersion}
-                    releaseNotes={this.state.newVersionReleaseNotes}
-                />;
-            }
-            else if (MatrixClientPeg.get().isGuest()) {
-                topBar = <GuestWarningBar />;
-            }
-            else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
-                topBar = <MatrixToolbar />;
-            }
-
-            var bodyClasses = "mx_MatrixChat";
-            if (topBar) {
-                bodyClasses += " mx_MatrixChat_toolbarShowing";
-            }
-
+        } else if (this.state.logged_in && this.state.ready) {
+            /* for now, we stuff the entirety of our props and state into the LoggedInView.
+             * we should go through and figure out what we actually need to pass down, as well
+             * as using something like redux to avoid having a billion bits of state kicking around.
+             */
             return (
-                <div className="mx_MatrixChat_wrapper">
-                    {topBar}
-                    <div className={bodyClasses}>
-                        <LeftPanel selectedRoom={this.state.currentRoomId} collapsed={this.state.collapse_lhs || false} opacity={this.state.sideOpacity}/>
-                        <main className="mx_MatrixChat_middlePanel">
-                            {page_element}
-                        </main>
-                        {right_panel}
-                    </div>
-                </div>
-            );
+               <LoggedInView ref="loggedInView" matrixClient={MatrixClientPeg.get()}
+                    onRoomIdResolved={this.onRoomIdResolved}
+                    onRoomCreated={this.onRoomCreated}
+                    onUserSettingsClose={this.onUserSettingsClose}
+                    {...this.props}
+                    {...this.state}
+                />
+            )
         } else if (this.state.logged_in) {
             // we think we are logged in, but are still waiting for the /sync to complete
             var Spinner = sdk.getComponent('elements.Spinner');
