@@ -20,6 +20,11 @@ limitations under the License.
 import VectorBasePlatform from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 
+const electron = require('electron');
+const remote = electron.remote;
+
+electron.remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
+
 function onUpdateDownloaded(ev, releaseNotes, ver, date, updateURL) {
     dis.dispatch({
         action: 'new_version',
@@ -27,14 +32,6 @@ function onUpdateDownloaded(ev, releaseNotes, ver, date, updateURL) {
         newVersion: ver,
         releaseNotes: releaseNotes,
     });
-}
-
-// index.js imports us unconditionally, so we need this check here as well
-let electron = null, remote = null;
-if (window && window.process && window.process && window.process.type === 'renderer') {
-    electron = require('electron');
-    electron.remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
-    remote = electron.remote;
 }
 
 export default class ElectronPlatform extends VectorBasePlatform {

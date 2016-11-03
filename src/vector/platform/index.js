@@ -17,16 +17,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import ElectronPlatform from './ElectronPlatform';
-import WebPlatform from './WebPlatform';
-
 let Platform = null;
 
 if (window && window.process && window.process && window.process.type === 'renderer') {
     // we're running inside electron
-    Platform = ElectronPlatform;
+    Platform = require('./ElectronPlatform');;
 } else {
-    Platform = WebPlatform;
+    Platform = require('./WebPlatform');;
 }
 
 export default Platform;
