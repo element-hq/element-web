@@ -179,12 +179,15 @@ function getConfig() {
             if (err || response.status < 200 || response.status >= 300) {
                 // Lack of a config isn't an error, we should
                 // just use the defaults.
-                // Also treat a blank config as no config because
-                // we don't get 404s from file: URIs so this is the
-                // only way we can not fail if the file doesn't exist
-                // when loading from a file:// URI.
-                if (( err && err.response.status == 404) || body == '') {
-                    deferred.resolve({});
+                // Also treat a blank config as no config, assuming
+                // the status code is 0, because we don't get 404s
+                // from file: URIs so this is the only way we can
+                // not fail if the file doesn't exist when loading
+                // from a file:// URI.
+                if (response) {
+                    if (response.status == 404 || (response.status == 0 && body == '')) {
+                        deferred.resolve({});
+                    }
                 }
                 deferred.reject({err: err, response: response});
                 return;
