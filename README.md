@@ -14,7 +14,7 @@ https://riot.im/develop for those who like living dangerously.
 To host your own copy of Riot, the quickest bet is to use a pre-built
 released version of Riot:
 
-1. Download the latest version from https://vector.im/packages/
+1. Download the latest version from https://github.com/vector-im/vector-web/releases
 1. Untar the tarball on your web server
 1. Move (or symlink) the vector-x.x.x directory to an appropriate name
 1. If desired, copy `config.sample.json` to `config.json` and edit it
