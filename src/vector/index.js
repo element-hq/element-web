@@ -183,7 +183,7 @@ function getConfig() {
                 // we don't get 404s from file: URIs so this is the
                 // only way we can not fail if the file doesn't exist
                 // when loading from a file:// URI.
-                if (( err && err.response.status == 404) || body == '') {
+                if (( response && response.status == 404) || body == '') {
                     deferred.resolve({});
                 }
                 deferred.reject({err: err, response: response});
