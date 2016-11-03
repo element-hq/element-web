@@ -27,7 +27,6 @@ limitations under the License.
  */
 var React = require('react');
 var classNames = require('classnames');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
 var dis = require("../../../dispatcher");
 var Modal = require("../../../Modal");
 var sdk = require('../../../index');
@@ -36,11 +35,13 @@ var createRoom = require('../../../createRoom');
 var DMRoomMap = require('../../../utils/DMRoomMap');
 var Unread = require('../../../Unread');
 var Receipt = require('../../../utils/Receipt');
+var WithMatrixClient = require('../../../wrappers/WithMatrixClient');
 
-module.exports = React.createClass({
+module.exports = WithMatrixClient(React.createClass({
     displayName: 'MemberInfo',
 
     propTypes: {
+        matrixClient: React.PropTypes.object.isRequired,
         member: React.PropTypes.object.isRequired,
         onFinished: React.PropTypes.func,
     },
@@ -72,10 +73,10 @@ module.exports = React.createClass({
 
         // only display the devices list if our client supports E2E *and* the
         // feature is enabled in the user settings
-        this._enableDevices = MatrixClientPeg.get().isCryptoEnabled() &&
+        this._enableDevices = this.props.matrixClient.isCryptoEnabled() &&
             UserSettingsStore.isFeatureEnabled("e2e_encryption");
 
-        const cli = MatrixClientPeg.get();
+        const cli = this.props.matrixClient;
         cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
@@ -98,7 +99,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        var client = MatrixClientPeg.get();
+        var client = this.props.matrixClient;
         if (client) {
             client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
             client.removeListener("Room", this.onRoom);
@@ -140,7 +141,7 @@ module.exports = React.createClass({
         if (userId == this.props.member.userId) {
             // no need to re-download the whole thing; just update our copy of
             // the list.
-            var devices = MatrixClientPeg.get().getStoredDevicesForUser(userId);
+            var devices = this.props.matrixClient.getStoredDevicesForUser(userId);
             this.setState({devices: devices});
         }
     },
@@ -165,7 +166,7 @@ module.exports = React.createClass({
     onRoomReceipt: function(receiptEvent, room) {
         // because if we read a notification, it will affect notification count
         // only bother updating if there's a receipt from us
-        if (Receipt.findReadReceiptFromUserId(receiptEvent, MatrixClientPeg.get().credentials.userId)) {
+        if (Receipt.findReadReceiptFromUserId(receiptEvent, this.props.matrixClient.credentials.userId)) {
             this.forceUpdate();
         }
     },
@@ -206,7 +207,7 @@ module.exports = React.createClass({
         var cancelled = false;
         this._cancelDeviceList = function() { cancelled = true; }
 
-        var client = MatrixClientPeg.get();
+        var client = this.props.matrixClient;
         var self = this;
         client.downloadKeys([member.userId], true).finally(function() {
             self._cancelDeviceList = null;
@@ -229,7 +230,7 @@ module.exports = React.createClass({
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
         this.setState({ updating: this.state.updating + 1 });
-        MatrixClientPeg.get().kick(roomId, target).then(function() {
+        this.props.matrixClient.kick(roomId, target).then(function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
                 console.log("Kick success");
@@ -250,7 +251,7 @@ module.exports = React.createClass({
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
         this.setState({ updating: this.state.updating + 1 });
-        MatrixClientPeg.get().ban(roomId, target).then(
+        this.props.matrixClient.ban(roomId, target).then(
             function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
@@ -271,7 +272,7 @@ module.exports = React.createClass({
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
-        var room = MatrixClientPeg.get().getRoom(roomId);
+        var room = this.props.matrixClient.getRoom(roomId);
         if (!room) {
             this.props.onFinished();
             return;
@@ -300,7 +301,7 @@ module.exports = React.createClass({
 
         if (level !== NaN) {
             this.setState({ updating: this.state.updating + 1 });
-            MatrixClientPeg.get().setPowerLevel(roomId, target, level, powerLevelEvent).then(
+            this.props.matrixClient.setPowerLevel(roomId, target, level, powerLevelEvent).then(
                 function() {
                     // NO-OP; rely on the m.room.member event coming down else we could
                     // get out of sync if we force setState here!
@@ -322,7 +323,7 @@ module.exports = React.createClass({
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
-        var room = MatrixClientPeg.get().getRoom(roomId);
+        var room = this.props.matrixClient.getRoom(roomId);
         if (!room) {
             this.props.onFinished();
             return;
@@ -334,7 +335,7 @@ module.exports = React.createClass({
             this.props.onFinished();
             return;
         }
-        var me = room.getMember(MatrixClientPeg.get().credentials.userId);
+        var me = room.getMember(this.props.matrixClient.credentials.userId);
         if (!me) {
             this.props.onFinished();
             return;
@@ -345,7 +346,7 @@ module.exports = React.createClass({
         // toggle the level
         var newLevel = this.state.isTargetMod ? defaultLevel : modLevel;
         this.setState({ updating: this.state.updating + 1 });
-        MatrixClientPeg.get().setPowerLevel(roomId, target, parseInt(newLevel), powerLevelEvent).then(
+        this.props.matrixClient.setPowerLevel(roomId, target, parseInt(newLevel), powerLevelEvent).then(
             function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
@@ -372,7 +373,7 @@ module.exports = React.createClass({
 
     _applyPowerChange: function(roomId, target, powerLevel, powerLevelEvent) {
         this.setState({ updating: this.state.updating + 1 });
-        MatrixClientPeg.get().setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).then(
+        this.props.matrixClient.setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).then(
             function() {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
@@ -393,7 +394,7 @@ module.exports = React.createClass({
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var roomId = this.props.member.roomId;
         var target = this.props.member.userId;
-        var room = MatrixClientPeg.get().getRoom(roomId);
+        var room = this.props.matrixClient.getRoom(roomId);
         var self = this;
         if (!room) {
             this.props.onFinished();
@@ -407,7 +408,7 @@ module.exports = React.createClass({
             return;
         }
         if (powerLevelEvent.getContent().users) {
-            var myPower = powerLevelEvent.getContent().users[MatrixClientPeg.get().credentials.userId];
+            var myPower = powerLevelEvent.getContent().users[this.props.matrixClient.credentials.userId];
             if (parseInt(myPower) === parseInt(powerLevel)) {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
@@ -459,7 +460,7 @@ module.exports = React.createClass({
             muted: false,
             modifyLevel: false
         };
-        var room = MatrixClientPeg.get().getRoom(member.roomId);
+        var room = this.props.matrixClient.getRoom(member.roomId);
         if (!room) {
             return defaultPerms;
         }
@@ -469,7 +470,7 @@ module.exports = React.createClass({
         if (!powerLevels) {
             return defaultPerms;
         }
-        var me = room.getMember(MatrixClientPeg.get().credentials.userId);
+        var me = room.getMember(this.props.matrixClient.credentials.userId);
         if (!me) {
             return defaultPerms;
         }
@@ -534,7 +535,7 @@ module.exports = React.createClass({
         var avatarUrl = this.props.member.user ? this.props.member.user.avatarUrl : this.props.member.events.member.getContent().avatar_url;
         if(!avatarUrl) return;
 
-        var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(avatarUrl);
+        var httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl);
         var ImageView = sdk.getComponent("elements.ImageView");
         var params = {
             src: httpUrl,
@@ -582,17 +583,17 @@ module.exports = React.createClass({
 
     render: function() {
         var startChat, kickButton, banButton, muteButton, giveModButton, spinner;
-        if (this.props.member.userId !== MatrixClientPeg.get().credentials.userId) {
-            const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
+        if (this.props.member.userId !== this.props.matrixClient.credentials.userId) {
+            const dmRoomMap = new DMRoomMap(this.props.matrixClient);
             const dmRooms = dmRoomMap.getDMRoomsForUserId(this.props.member.userId);
 
             const RoomTile = sdk.getComponent("rooms.RoomTile");
 
             const tiles = [];
             for (const roomId of dmRooms) {
-                const room = MatrixClientPeg.get().getRoom(roomId);
+                const room = this.props.matrixClient.getRoom(roomId);
                 if (room) {
-                    const me = room.getMember(MatrixClientPeg.get().credentials.userId);
+                    const me = room.getMember(this.props.matrixClient.credentials.userId);
                     const highlight = (
                         room.getUnreadNotificationCount('highlight') > 0 ||
                         me.membership == "invite"
@@ -709,4 +710,4 @@ module.exports = React.createClass({
             </div>
         );
     }
-});
+}));
