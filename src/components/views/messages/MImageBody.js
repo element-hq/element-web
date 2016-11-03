@@ -92,9 +92,14 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         this.fixupHeight();
         var content = this.props.mxEvent.getContent();
+        var self = this;
         if (content.file !== undefined) {
             // TODO: hook up an error handler to the promise.
-            this.decryptFile(content.file);
+            this.decryptFile(content.file).catch(function (err) {
+                console.warn("Unable to decrypt attachment: ", err)
+                // Set a placeholder image when we can't decrypt the image.
+                self.refs.image.src = "img/warning.svg";
+            });
         }
     },
 
@@ -184,9 +189,10 @@ module.exports = React.createClass({
         if (content.file !== undefined) {
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
+            // For now add an img tag with a spinner.
             return (
                 <span className="mx_MImageBody" ref="body">
-                <img className="mx_MImageBody_thumbnail" src="img/encrypted-placeholder.svg" ref="image"
+                <img className="mx_MImageBody_thumbnail" src="img/spinner.gif" ref="image"
                     alt={content.body} />
                 </span>
             );
