@@ -3,15 +3,6 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var cachebuster = true;
-
-for (var i=0; i < process.argv.length; i++) {
-    var arg = process.argv[i];
-    if (arg == "--no-cache-buster") {
-        cachebuster = false;
-    }
-}
-
 module.exports = {
     entry: {
         "bundle": "./src/vector/index.js",
@@ -49,7 +40,7 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, "vector"),
-        filename: "[name]" + (cachebuster ? ".[chunkhash]" : "") + ".js",
+        filename: "[name].[chunkhash].js",
         devtoolModuleFilenameTemplate: function(info) {
             // Reading input source maps gives only relative paths here for
             // everything. Until I figure out how to fix this, this is a
@@ -87,7 +78,7 @@ module.exports = {
         }),
 
         new ExtractTextPlugin(
-            "[name]" + (cachebuster ? ".[contenthash]" : "") + ".css",
+            "[name].[contenthash].css",
             {
                 allChunks: true
             }
@@ -103,7 +94,13 @@ module.exports = {
             inject: false,
         }),
     ],
-    devtool: 'source-map'
+    devtool: 'source-map',
+
+    // configuration for the webpack-dev-server
+    devServer: {
+        // serve unwebpacked assets from vector.
+        contentBase: './vector',
+    },
 };
 
 // olm is an optional dependency. Ignore it if it's not installed, to avoid a
