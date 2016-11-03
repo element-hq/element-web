@@ -1,7 +1,8 @@
 // @flow
 
 /*
-Copyright 2016 Aviral Dasgupta and OpenMarket Ltd
+Copyright 2016 Aviral Dasgupta
+Copyright 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -63,6 +64,40 @@ export default class WebPlatform extends VectorBasePlatform {
     setErrorStatus(errorDidOccur: boolean) {
         super.setErrorStatus(errorDidOccur);
         this._updateFavicon();
+    }
+
+    /**
+     * Returns true if the platform supports displaying
+     * notifications, otherwise false.
+     */
+    supportsNotifications() : boolean {
+        return Boolean(global.Notification);
+    }
+
+    /**
+     * Returns true if the application currently has permission
+     * to display notifications. Otherwise false.
+     */
+    maySendNotifications() : boolean {
+        return global.Notification.permission == 'granted';
+    }
+
+    /**
+     * Requests permission to send notifications. Returns
+     * a promise that is resolved when the user has responded
+     * to the request. The promise has a single string argument
+     * that is 'granted' if the user allowed the request or
+     * 'denied' otherwise.
+     */
+    requestNotificationPermission() : Promise {
+        // annoyingly, the latest spec says this returns a
+        // promise, but this is only supported in Chrome 46
+        // and Firefox 47, so adapt the callback API.
+        const defer = q.defer();
+        global.Notification.requestPermission((result) => {
+            defer.resolve(result);
+        });
+        return defer.promise;
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string) {
