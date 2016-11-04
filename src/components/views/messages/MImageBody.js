@@ -162,7 +162,6 @@ module.exports = React.createClass({
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var content = this.props.mxEvent.getContent();
-        var cli = MatrixClientPeg.get();
 
         if (content.file !== undefined && this.state.decryptedUrl === null) {
 
