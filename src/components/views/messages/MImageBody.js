@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 var filesize = require('filesize');
 
-
+var MFileBody = require('./MFileBody');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var ImageUtils = require('../../../ImageUtils');
 var Modal = require('../../../Modal');
@@ -175,30 +175,6 @@ module.exports = React.createClass({
         var contentUrl = this._getContentUrl();
         var thumbUrl = this._getThumbUrl();
 
-        var download;
-        if (this.props.tileShape === "file_grid") {
-            download = (
-                <div className="mx_MImageBody_download">
-                    <a className="mx_MImageBody_downloadLink" href={contentUrl} target="_blank" rel="noopener">
-                        {content.body}
-                    </a>
-                    <div className="mx_MImageBody_size">
-                        { content.info && content.info.size ? filesize(content.info.size) : "" }
-                    </div>
-                </div>
-            );
-        }
-        else {
-            download = (
-                <div className="mx_MImageBody_download">
-                    <a href={contentUrl} target="_blank" rel="noopener">
-                        <TintableSvg src="img/download.svg" width="12" height="14"/>
-                        Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
-                    </a>
-                </div>
-            );
-        }
-
         if (thumbUrl) {
             return (
                 <span className="mx_MImageBody" ref="body">
@@ -208,7 +184,7 @@ module.exports = React.createClass({
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave} />
                     </a>
-                    { download }
+                    <MFileBody {...this.props} />
                 </span>
             );
         } else if (content.body) {
