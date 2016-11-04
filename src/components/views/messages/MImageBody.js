@@ -112,7 +112,6 @@ module.exports = React.createClass({
         var content = this.props.mxEvent.getContent();
         var self = this;
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            // TODO: hook up an error handler to the promise.
             DecryptFile.decryptFile(content.file).then(function(blob) {
                 if (!self._unmounted) {
                     self.setState({
