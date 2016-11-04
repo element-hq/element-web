@@ -54,34 +54,8 @@ export default React.createClass({
         document.removeEventListener('keydown', this._onKeyDown);
     },
 
-    componentWillReceiveProps: function(nextProps) {
-        if (nextProps.page_type !== this.props.page_type ||
-            nextProps.currentRoomAlias !== this.props.currentRoomAlias ||
-            nextProps.currentRoomId !== this.props.currentRoomId
-           ) {
-
-            // stash the scroll state before we change view
-            this._updateScrollMap();
-        }
-    },
-
     getScrollStateForRoom: function(roomId) {
         return this._scrollStateMap[roomId];
-    },
-
-    // update scrollStateMap according to the current scroll state of the
-    // room view.
-    _updateScrollMap: function() {
-        if (!this.refs.roomView) {
-            return;
-        }
-        var roomview = this.refs.roomView;
-        var roomId = this.refs.roomView.getRoomId();
-        if (!roomId) {
-            return;
-        }
-        var state = roomview.getScrollState();
-        this._scrollStateMap[roomId] = state;
     },
 
     _onKeyDown: function(ev) {
@@ -170,6 +144,7 @@ export default React.createClass({
                         opacity={this.props.middleOpacity}
                         collapsedRhs={this.props.collapse_rhs}
                         ConferenceHandler={this.props.ConferenceHandler}
+                        scrollStateMap={this._scrollStateMap}
                     />
                 if (!this.props.collapse_rhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.sideOpacity} />
                 break;

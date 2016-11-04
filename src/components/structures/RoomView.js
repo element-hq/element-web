@@ -100,6 +100,21 @@ module.exports = React.createClass({
 
         // is the RightPanel collapsed?
         collapsedRhs: React.PropTypes.bool,
+
+        // a map from room id to scroll state, which will be updated on unmount.
+        //
+        // If there is no special scroll state (ie, we are following the live
+        // timeline), the scroll state is null. Otherwise, it is an object with
+        // the following properties:
+        //
+        //    focussedEvent: the ID of the 'focussed' event. Typically this is
+        //        the last event fully visible in the viewport, though if we
+        //        have done an explicit scroll to an explicit event, it will be
+        //        that event.
+        //
+        //    pixelOffset: the number of pixels the window is scrolled down
+        //        from the focussedEvent.
+        scrollStateMap: React.PropTypes.object,
     },
 
     getInitialState: function() {
@@ -306,6 +321,9 @@ module.exports = React.createClass({
         //
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
+
+        // update the scroll map before we get unmounted
+        this._updateScrollMap();
 
         if (this.refs.roomView) {
             // disconnect the D&D event listeners from the room view. This
@@ -1203,22 +1221,25 @@ module.exports = React.createClass({
         }
     },
 
+    // update scrollStateMap on unmount
+    _updateScrollMap: function() {
+        if (!this.state.room) {
+            // we were instantiated on a room alias and haven't yet joined the room.
+            return;
+        }
+        if (!this.props.scrollStateMap) return;
+
+        var roomId = this.state.room.roomId;
+
+        var state = this._getScrollState();
+        this.props.scrollStateMap[roomId] = state;
+    },
+
+
     // get the current scroll position of the room, so that it can be
     // restored when we switch back to it.
     //
-    // If there is no special scroll state (ie, we are following the live
-    // timeline), returns null. Otherwise, returns an object with the following
-    // properties:
-    //
-    //    focussedEvent: the ID of the 'focussed' event. Typically this is the
-    //        last event fully visible in the viewport, though if we have done
-    //        an explicit scroll to an explicit event, it will be that event.
-    //
-    //    pixelOffset: the number of pixels the window is scrolled down from
-    //        the focussedEvent.
-    //
-    //
-    getScrollState: function() {
+    _getScrollState: function() {
         var messagePanel = this.refs.messagePanel;
         if (!messagePanel) return null;
 
@@ -1331,19 +1352,6 @@ module.exports = React.createClass({
         if(panel) {
             panel.handleScrollKey(ev);
         }
-    },
-
-    /**
-     * Get the ID of the displayed room
-     *
-     * Returns null if the RoomView was instantiated on a room alias and
-     * we haven't yet joined the room.
-     */
-    getRoomId: function() {
-        if (!this.state.room) {
-            return null;
-        }
-        return this.state.room.roomId;
     },
 
     /**
