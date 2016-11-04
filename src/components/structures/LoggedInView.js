@@ -28,6 +28,8 @@ import sdk from '../../index';
  *
  * Currently it's very tightly coupled with MatrixChat. We should try to do
  * something about that.
+ *
+ * Components mounted below us can access the matrix client via the react context.
  */
 export default React.createClass({
     displayName: 'LoggedInView',
@@ -42,7 +44,20 @@ export default React.createClass({
         // and lots and lots of other stuff.
     },
 
+    childContextTypes: {
+        matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient),
+    },
+
+    getChildContext: function() {
+        return {
+            matrixClient: this._matrixClient,
+        };
+    },
+
     componentWillMount: function() {
+        // stash the MatrixClient in case we log out before we are unmounted
+        this._matrixClient = this.props.matrixClient;
+
         // _scrollStateMap is a map from room id to the scroll state returned by
         // RoomView.getScrollState()
         this._scrollStateMap = {};
