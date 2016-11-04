@@ -22,6 +22,7 @@ var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
 var DecryptFile = require('../../../utils/DecryptFile');
 
+
 module.exports = React.createClass({
     displayName: 'MFileBody',
 
@@ -66,24 +67,15 @@ module.exports = React.createClass({
         var content = this.props.mxEvent.getContent();
         var self = this;
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            DecryptFile.decryptFile(content.file).then(function(blob) {
-                if (!self._unmounted) {
-                    self.setState({
-                        decryptedUrl: window.URL.createObjectURL(blob),
-                    });
-                }
+            DecryptFile.decryptFile(content.file).then(function(url) {
+                self.setState({
+                    decryptedUrl: url,
+                });
             }).catch(function (err) {
                 console.warn("Unable to decrypt attachment: ", err)
                 // Set a placeholder image when we can't decrypt the image.
                 self.refs.image.src = "img/warning.svg";
             });
-        }
-    },
-
-    componentWillUnmount: function() {
-        this._unmounted = true;
-        if (this.state.decryptedUrl) {
-            window.URL.revokeObjectURL(this.state.decryptedUrl);
         }
     },
 
