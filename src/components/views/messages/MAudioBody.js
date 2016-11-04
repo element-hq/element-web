@@ -49,24 +49,15 @@ export default class MAudioBody extends React.Component {
     componentDidMount() {
         var content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            decryptFile(content.file).then((blob) => {
-                if (!this._unmounted) {
-                    this.setState({
-                        decryptedUrl: window.URL.createObjectURL(blob),
-                    });
-                }
+            decryptFile(content.file).then((url) => {
+                this.setState({
+                    decryptedUrl: url
+                });
             }).catch((err) => {
                 console.warn("Unable to decrypt attachment: ", err)
                 // Set a placeholder image when we can't decrypt the image.
                 this.refs.image.src = "img/warning.svg";
             });
-        }
-    }
-
-    componentWillUnmount() {
-        this._unmounted = true;
-        if (this.state.decryptedUrl) {
-            window.URL.revokeObjectURL(this.state.decryptedUrl);
         }
     }
 

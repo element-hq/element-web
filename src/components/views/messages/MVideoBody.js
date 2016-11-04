@@ -88,21 +88,13 @@ module.exports = React.createClass({
                     content.info.thumbnail_file
                 );
             }
-            thumbnailPromise.then(function(thumbnailBlob) {
+            thumbnailPromise.then(function(thumbnailUrl) {
                 DecryptFile.decryptFile(
                     content.file
-                ).then(function(contentBlob) {
-                    if (self._unmounted) {
-                        return;
-                    }
-                    var contentUrl = window.URL.createObjectURL(contentBlob);
-                    var thumbUrl = null;
-                    if (thumbnailBlob) {
-                        thumbUrl = window.URL.createObjectURL(thumbnailBlob);
-                    }
+                ).then(function(contentUrl) {
                     self.setState({
                         decryptedUrl: contentUrl,
-                        decryptedThumbnailUrl: thumbUrl,
+                        decryptedThumbnailUrl: thumbnailUrl,
                     });
                 });
             }).catch(function (err) {
@@ -112,17 +104,6 @@ module.exports = React.createClass({
             });
         }
     },
-
-    componentWillUnmount: function() {
-        this._unmounted = true;
-        if (this.state.decryptedUrl) {
-            window.URL.revokeObjectURL(this.state.decryptedUrl);
-        }
-        if (this.state.decryptedThumbnailUrl) {
-            window.URL.revokeObjectURL(this.state.decryptedThumbnailUrl);
-        }
-    },
-
 
     render: function() {
         var content = this.props.mxEvent.getContent();

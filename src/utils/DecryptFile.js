@@ -22,6 +22,26 @@ var encrypt = require("browser-encrypt-attachment");
 require("isomorphic-fetch");
 // Grab the client so that we can turn mxc:// URLs into https:// URLS.
 var MatrixClientPeg = require('../MatrixClientPeg');
+var q = require('q');
+
+
+/**
+ * Read blob as a data:// URI.
+ * @return {Promise} A promise that resolves with the data:// URI.
+ */
+
+function readBlobAsDataUri(file) {
+    var deferred = q.defer();
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        deferred.resolve(e.target.result);
+    };
+    reader.onerror = function(e) {
+        deferred.reject(e);
+    };
+    reader.readAsDataURL(file);
+    return deferred.promise;
+}
 
 
 export function decryptFile(file) {
@@ -37,6 +57,6 @@ export function decryptFile(file) {
     }).then(function(dataArray) {
         // Turn the array into a Blob and give it the correct MIME-type.
         var blob = new Blob([dataArray], {type: file.mimetype});
-        return blob;
+        return readBlobAsDataUri(blob);
     });
 }

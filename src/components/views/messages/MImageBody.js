@@ -112,12 +112,10 @@ module.exports = React.createClass({
         var content = this.props.mxEvent.getContent();
         var self = this;
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            DecryptFile.decryptFile(content.file).then(function(blob) {
-                if (!self._unmounted) {
-                    self.setState({
-                        decryptedUrl: window.URL.createObjectURL(blob),
-                    });
-                }
+            DecryptFile.decryptFile(content.file).then(function(url) {
+                self.setState({
+                    decryptedUrl: url,
+                });
             }).catch(function (err) {
                 console.warn("Unable to decrypt attachment: ", err)
                 // Set a placeholder image when we can't decrypt the image.
@@ -128,10 +126,6 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
-        this._unmounted = true;
-        if (this.state.decryptedUrl) {
-            window.URL.revokeObjectURL(this.state.decryptedUrl);
-        }
     },
 
     onAction: function(payload) {
