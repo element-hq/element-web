@@ -33,11 +33,18 @@ module.exports = React.createClass({
         mxEvent: React.PropTypes.object.isRequired,
     },
 
+    getInitialState: function() {
+        return {
+            decryptedUrl: null,
+        };
+    },
+
+
     onClick: function onClick(ev) {
         if (ev.button == 0 && !ev.metaKey) {
             ev.preventDefault();
             var content = this.props.mxEvent.getContent();
-            var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(content.url);
+            var httpUrl = this._getContentUrl();
             var ImageView = sdk.getComponent("elements.ImageView");
             var params = {
                 src: httpUrl,
@@ -77,18 +84,68 @@ module.exports = React.createClass({
         imgElement.src = this._getThumbUrl();
     },
 
+    _getContentUrl: function() {
+        var content = this.props.mxEvent.getContent();
+        if (content.file !== undefined) {
+            return this.state.decryptedUrl;
+        } else {
+            return MatrixClientPeg.get().mxcUrlToHttp(content.url);
+        }
+    },
+
     _getThumbUrl: function() {
         var content = this.props.mxEvent.getContent();
-        return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
+        if (content.file !== undefined) {
+            // TODO: Decrypt and use the thumbnail file if one is present.
+            return this.state.decryptedUrl;
+        } else {
+            return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
+        }
     },
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         this.fixupHeight();
+        var content = this.props.mxEvent.getContent();
+        var self = this;
+        if (content.file !== undefined && this.state.decryptedUrl === null) {
+            // TODO: hook up an error handler to the promise.
+            this.decryptFile(content.file).catch(function (err) {
+                console.warn("Unable to decrypt attachment: ", err)
+                // Set a placeholder image when we can't decrypt the image.
+                self.refs.image.src = "img/warning.svg";
+            });
+        }
+    },
+
+    decryptFile: function(file) {
+        var url = MatrixClientPeg.get().mxcUrlToHttp(file.url);
+        var self = this;
+        // Download the encrypted file as an array buffer.
+        return fetch(url).then(function (response) {
+            return response.arrayBuffer();
+        }).then(function (responseData) {
+            // Decrypt the array buffer using the information taken from
+            // the event content.
+            return encrypt.decryptAttachment(responseData, file);
+        }).then(function(dataArray) {
+            // Turn the array into a Blob and use createObjectUrl to make
+            // a url that we can use as an img src.
+            var blob = new Blob([dataArray], {type: file.mimetype});
+            if (!self._unmounted) {
+                self.setState({
+                    decryptedUrl: window.URL.createObjectURL(blob),
+                });
+            }
+        });
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
+        this._unmounted = true;
+        if (this.state.decryptedUrl) {
+            window.URL.revokeObjectURL(this.state.decryptedUrl);
+        }
     },
 
     onAction: function(payload) {
@@ -123,11 +180,27 @@ module.exports = React.createClass({
         var content = this.props.mxEvent.getContent();
         var cli = MatrixClientPeg.get();
 
+        if (content.file !== undefined && this.state.decryptedUrl === null) {
+
+            // Need to decrypt the attachment
+            // The attachment is decrypted in componentDidMount.
+            // For now add an img tag with a spinner.
+            return (
+                <span className="mx_MImageBody" ref="body">
+                <img className="mx_MImageBody_thumbnail" src="img/spinner.gif" ref="image"
+                    alt={content.body} />
+                </span>
+            );
+        }
+
+        var contentUrl = this._getContentUrl();
+        var thumbUrl = this._getThumbUrl();
+
         var download;
         if (this.props.tileShape === "file_grid") {
             download = (
                 <div className="mx_MImageBody_download">
-                    <a className="mx_MImageBody_downloadLink" href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
+                    <a className="mx_MImageBody_downloadLink" href={contentUrl} target="_blank" rel="noopener">
                         {content.body}
                     </a>
                     <div className="mx_MImageBody_size">
@@ -139,7 +212,7 @@ module.exports = React.createClass({
         else {
             download = (
                 <div className="mx_MImageBody_download">
-                    <a href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
+                    <a href={contentUrl} target="_blank" rel="noopener">
                         <TintableSvg src="img/download.svg" width="12" height="14"/>
                         Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
                     </a>
@@ -147,11 +220,10 @@ module.exports = React.createClass({
             );
         }
 
-        var thumbUrl = this._getThumbUrl();
         if (thumbUrl) {
             return (
                 <span className="mx_MImageBody" ref="body">
-                    <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
+                    <a href={contentUrl} onClick={ this.onClick }>
                         <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
                             alt={content.body}
                             onMouseEnter={this.onImageEnter}

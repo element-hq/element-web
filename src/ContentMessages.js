@@ -149,7 +149,19 @@ class ContentMessages {
                 dis.dispatch({action: 'upload_progress', upload: upload});
             }
         }).then(function(url) {
-            content.url = url;
+            if (encryptInfo === null) {
+                // If the attachment isn't encrypted then include the URL directly.
+                content.url = url;
+            } else {
+                // If the attachment is encrypted then bundle the URL along
+                // with the information needed to decrypt the attachment and
+                // add it under a file key.
+                encryptInfo.url = url;
+                if (file.type) {
+                    encryptInfo.mimetype = file.type;
+                }
+                content.file = encryptInfo;
+            }
             return matrixClient.sendMessage(roomId, content);
         }, function(err) {
             error = err;
