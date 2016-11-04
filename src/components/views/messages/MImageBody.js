@@ -75,9 +75,7 @@ module.exports = React.createClass({
             return;
         }
         var imgElement = e.target;
-        imgElement.src = MatrixClientPeg.get().mxcUrlToHttp(
-            this.props.mxEvent.getContent().url
-        );
+        imgElement.src = this._getContentUrl();
     },
 
     onImageLeave: function(e) {
