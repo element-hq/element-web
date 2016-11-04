@@ -31,6 +31,8 @@ import structures$CreateRoom from './components/structures/CreateRoom';
 structures$CreateRoom && (module.exports.components['structures.CreateRoom'] = structures$CreateRoom);
 import structures$FilePanel from './components/structures/FilePanel';
 structures$FilePanel && (module.exports.components['structures.FilePanel'] = structures$FilePanel);
+import structures$LoggedInView from './components/structures/LoggedInView';
+structures$LoggedInView && (module.exports.components['structures.LoggedInView'] = structures$LoggedInView);
 import structures$MatrixChat from './components/structures/MatrixChat';
 structures$MatrixChat && (module.exports.components['structures.MatrixChat'] = structures$MatrixChat);
 import structures$MessagePanel from './components/structures/MessagePanel';
