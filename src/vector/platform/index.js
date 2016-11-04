@@ -17,8 +17,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import WebPlatform from './WebPlatform';
+let Platform = null;
 
-let Platform = WebPlatform;
+if (window && window.process && window.process && window.process.type === 'renderer') {
+    // we're running inside electron
+    Platform = require('./ElectronPlatform');
+} else {
+    Platform = require('./WebPlatform');
+}
 
 export default Platform;
