@@ -193,6 +193,9 @@ class ContentMessages {
                 // with the information needed to decrypt the attachment and
                 // add it under a file key.
                 encryptInfo.url = url;
+                if (file.type) {
+                    encryptInfo.mimetype = file.type;
+                }
                 content.file = encryptInfo;
             }
             return matrixClient.sendMessage(roomId, content);
