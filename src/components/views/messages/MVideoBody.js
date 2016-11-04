@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var filesize = require('filesize');
 
+import MFileBody from './MFileBody';
 
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require('../../../Modal');
@@ -140,38 +141,13 @@ module.exports = React.createClass({
             }
         }
 
-        var download;
-        if (this.props.tileShape === "file_grid") {
-            download = (
-                <div className="mx_MImageBody_download">
-                    <a className="mx_MImageBody_downloadLink" href={contentUrl} target="_blank" rel="noopener">
-                        {content.body}
-                    </a>
-                    <div className="mx_MImageBody_size">
-                        { content.info && content.info.size ? filesize(content.info.size) : "" }
-                    </div>
-                </div>
-            );
-        }
-        else {
-            var TintableSvg = sdk.getComponent("elements.TintableSvg");
-            download = (
-                <div className="mx_MImageBody_download">
-                    <a href={contentUrl} target="_blank" rel="noopener">
-                        <TintableSvg src="img/download.svg" width="12" height="14"/>
-                        Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
-                    </a>
-                </div>
-            );
-        }
-
         return (
             <span className="mx_MVideoBody">
                 <video className="mx_MVideoBody" src={contentUrl} alt={content.body}
                     controls preload={preload} autoPlay={false}
                     height={height} width={width} poster={poster}>
                 </video>
-                { download }
+                <MFileBody {...this.props} />
             </span>
         );
     },
