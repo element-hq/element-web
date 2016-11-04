@@ -2,8 +2,8 @@
 
 set -e
 
-if [ $# -eq 1 ]; then
-    version=$1
+if [ -n "$DIST_VERSION" ]; then
+    version=$DIST_VERSION
 else
     version=`git describe --dirty --tags || echo unknown`
 fi
