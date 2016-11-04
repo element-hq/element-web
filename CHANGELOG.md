@@ -1,3 +1,9 @@
+hanges in [0.8.4](https://github.com/vector-im/vector-web/releases/tag/v0.8.4) (2016-11-04)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.4-rc.2...v0.8.4)
+
+ * No changes
+
 Changes in [0.8.4-rc.2](https://github.com/vector-im/vector-web/releases/tag/v0.8.4-rc.2) (2016-11-02)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.4-rc.1...v0.8.4-rc.2)
