@@ -20,10 +20,16 @@ var React = require('react');
 var filesize = require('filesize');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
-var dis = require("../../../dispatcher");
+var DecryptFile = require('../../../utils/DecryptFile');
 
 module.exports = React.createClass({
     displayName: 'MFileBody',
+
+    getInitialState: function() {
+        return {
+            decryptedUrl: null,
+        };
+    },
 
     presentableTextForFile: function(content) {
         var linkText = 'Attachment';
@@ -47,21 +53,67 @@ module.exports = React.createClass({
         return linkText;
     },
 
+    _getContentUrl: function() {
+        var content = this.props.mxEvent.getContent();
+        if (content.file !== undefined) {
+            return this.state.decryptedUrl;
+        } else {
+            return MatrixClientPeg.get().mxcUrlToHttp(content.url);
+        }
+    },
+
+    componentDidMount: function() {
+        var content = this.props.mxEvent.getContent();
+        var self = this;
+        if (content.file !== undefined && this.state.decryptedUrl === null) {
+            DecryptFile.decryptFile(content.file).then(function(blob) {
+                if (!self._unmounted) {
+                    self.setState({
+                        decryptedUrl: window.URL.createObjectURL(blob),
+                    });
+                }
+            }).catch(function (err) {
+                console.warn("Unable to decrypt attachment: ", err)
+                // Set a placeholder image when we can't decrypt the image.
+                self.refs.image.src = "img/warning.svg";
+            });
+        }
+    },
+
+    componentWillUnmount: function() {
+        this._unmounted = true;
+        if (this.state.decryptedUrl) {
+            window.URL.revokeObjectURL(this.state.decryptedUrl);
+        }
+    },
+
     render: function() {
         var content = this.props.mxEvent.getContent();
-        var cli = MatrixClientPeg.get();
 
-        var httpUrl = cli.mxcUrlToHttp(content.url);
         var text = this.presentableTextForFile(content);
 
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        if (content.file !== undefined && this.state.decryptedUrl === null) {
 
-        if (httpUrl) {
+            // Need to decrypt the attachment
+            // The attachment is decrypted in componentDidMount.
+            // For now add an img tag with a spinner.
+            return (
+                <span className="mx_MFileBody" ref="body">
+                <img src="img/spinner.gif" ref="image"
+                    alt={content.body} />
+                </span>
+            );
+        }
+
+        var contentUrl = this._getContentUrl();
+
+        if (contentUrl) {
             if (this.props.tileShape === "file_grid") {
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MImageBody_download">
-                            <a className="mx_ImageBody_downloadLink" href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
+                            <a className="mx_ImageBody_downloadLink" href={contentUrl} target="_blank" rel="noopener">
                                 { content.body && content.body.length > 0 ? content.body : "Attachment" }
                             </a>
                             <div className="mx_MImageBody_size">
@@ -75,7 +127,7 @@ module.exports = React.createClass({
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MImageBody_download">
-                            <a href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
+                            <a href={contentUrl} target="_blank" rel="noopener">
                                 <TintableSvg src="img/download.svg" width="12" height="14"/>
                                 Download {text}
                             </a>
