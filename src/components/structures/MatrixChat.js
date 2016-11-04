@@ -508,6 +508,8 @@ module.exports = React.createClass({
 
         // if we aren't given an explicit event id, look for one in the
         // scrollStateMap.
+        //
+        // TODO: do this in RoomView rather than here
         if (!room_info.event_id && this.refs.loggedInView) {
             var scrollState = this.refs.loggedInView.getScrollStateForRoom(room_info.room_id);
             if (scrollState) {
