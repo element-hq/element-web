@@ -81,7 +81,7 @@ export default class MAudioBody extends React.Component {
         return (
             <span className="mx_MAudioBody">
                 <audio src={contentUrl} controls />
-                <MFileBody {...this.props} />
+                <MFileBody {...this.props} decryptedUrl={this.state.decryptedUrl} />
             </span>
         );
     }
