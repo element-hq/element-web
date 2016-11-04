@@ -28,7 +28,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            decryptedUrl: null,
+            decryptedUrl: (this.props.decryptedUrl ? this.props.decryptedUrl : null),
         };
     },
 

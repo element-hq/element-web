@@ -18,7 +18,9 @@ limitations under the License.
 
 var React = require('react');
 var filesize = require('filesize');
-var MFileBody = require('./MFileBody');
+
+import MFileBody from './MFileBody';
+
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var ImageUtils = require('../../../ImageUtils');
 var Modal = require('../../../Modal');
@@ -182,7 +184,7 @@ module.exports = React.createClass({
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave} />
                     </a>
-                    <MFileBody {...this.props} />
+                    <MFileBody {...this.props} decryptedUrl={this.state.decryptedUrl} />
                 </span>
             );
         } else if (content.body) {

@@ -147,7 +147,7 @@ module.exports = React.createClass({
                     controls preload={preload} autoPlay={false}
                     height={height} width={width} poster={poster}>
                 </video>
-                <MFileBody {...this.props} />
+                <MFileBody {...this.props} decryptedUrl={this.state.decryptedUrl} />
             </span>
         );
     },
