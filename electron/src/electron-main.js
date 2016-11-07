@@ -91,6 +91,16 @@ function pollForUpdates() {
     }
 }
 
+// handle uncaught errors otherwise it displays
+// stack traces in popup dialogs, which is terrible (which
+// it will do any time the auto update poke fails, and there's
+// no other way to catch this error).
+// Assuming we generally run from the console when developing,
+// this is far preferable.
+process.on('uncaughtException', function (error) {
+    console.log("Unhandled exception", error);
+});
+
 electron.ipcMain.on('install_update', installUpdate);
 
 electron.app.on('ready', () => {
