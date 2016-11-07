@@ -162,6 +162,12 @@ module.exports = React.createClass({
         else {
             var url = node.getAttribute("href");
             var host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
+
+            // never preview matrix.to links (if anything we should give a smart
+            // preview of the room/user they point to: nobody needs to be reminded
+            // what the matrix.to site looks like).
+            if (host == 'matrix.to') return false;
+
             if (node.textContent.toLowerCase().trim().startsWith(host.toLowerCase())) {
                 // it's a "foo.pl" style link
                 return;
