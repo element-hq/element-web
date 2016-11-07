@@ -17,6 +17,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Squirrel on windows starts the app with various flags
+// as hooks to tell us when we've been installed/uninstalled
+// etc.
+const check_squirrel_hooks = require('./squirrelhooks');
+if (check_squirrel_hooks()) return;
+
 const electron = require('electron');
 const url = require('url');
 
@@ -29,6 +35,7 @@ const PERMITTED_URL_SCHEMES = [
 ];
 
 const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
+const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
 
 let mainWindow = null;
 let appQuitting = false;
@@ -107,7 +114,10 @@ electron.app.on('ready', () => {
         // do it in the main process (and we don't really need to check every 10 minutes:
         // every hour should be just fine for a desktop app)
         // However, we still let the main window listen for the update events.
-        pollForUpdates();
+        // We also wait a short time before checking for updates the first time because
+        // of squirrel on windows and it taking a small amount of time to release a
+        // lock file.
+        setTimeout(pollForUpdates, INITIAL_UPDATE_DELAY_MS);
         setInterval(pollForUpdates, UPDATE_POLL_INTERVAL_MS);
     } catch (err) {
         // will fail if running in debug mode
@@ -115,7 +125,7 @@ electron.app.on('ready', () => {
     }
 
     mainWindow = new electron.BrowserWindow({
-        icon: `${__dirname}/../../vector/img/logo.png`,
+        icon: `${__dirname}/../img/riot.ico`,
         width: 1024, height: 768,
     });
     mainWindow.loadURL(`file://${__dirname}/../../vector/index.html`);

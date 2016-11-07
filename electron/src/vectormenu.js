@@ -182,7 +182,20 @@ if (process.platform === 'darwin') {
             role: 'front'
         }
     ]
-};
+} else {
+    template.unshift({
+        label: 'File',
+        submenu: [
+            // For some reason, 'about' does not seem to work on windows.
+            /*{
+                role: 'about'
+            },*/
+            {
+                role: 'quit'
+            }
+        ]
+    });
+}
 
 module.exports = electron.Menu.buildFromTemplate(template)
 
