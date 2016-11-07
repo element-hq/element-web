@@ -199,7 +199,7 @@ export default React.createClass({
         var topBar;
         if (this.props.hasNewVersion) {
             topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
-                releaseNotes={this.state.newVersionReleaseNotes}
+                releaseNotes={this.props.newVersionReleaseNotes}
             />;
         }
         else if (this.props.matrixClient.isGuest()) {
