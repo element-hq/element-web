@@ -157,7 +157,7 @@ module.exports = React.createClass({
         // TODO: make this configurable?
         if (node.textContent.indexOf("/") > -1)
         {
-            return node;
+            return true;
         }
         else {
             var url = node.getAttribute("href");
@@ -170,11 +170,11 @@ module.exports = React.createClass({
 
             if (node.textContent.toLowerCase().trim().startsWith(host.toLowerCase())) {
                 // it's a "foo.pl" style link
-                return;
+                return false;
             }
             else {
                 // it's a [foo bar](http://foo.com) style link
-                return node;
+                return true;
             }
         }
     },
