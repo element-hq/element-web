@@ -26,7 +26,7 @@ import React from 'react';
  */
 export default function(WrappedComponent) {
     return React.createClass({
-        displayName: "MatrixClient<" + WrappedComponent.displayName + ">",
+        displayName: "WithMatrixClient<" + WrappedComponent.displayName + ">",
 
         contextTypes: {
             matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
