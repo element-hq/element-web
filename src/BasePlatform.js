@@ -71,6 +71,6 @@ export default class BasePlatform {
      * the current version of the application.
      */
     getAppVersion() {
-        return q();
+        throw new Error("getAppVersion not implemented!");
     }
 }

@@ -36,7 +36,6 @@ module.exports = React.createClass({
     displayName: 'UserSettings',
 
     propTypes: {
-        version: React.PropTypes.string,
         onClose: React.PropTypes.func,
         // The brand string given when creating email pushers
         brand: React.PropTypes.string,
@@ -66,8 +65,11 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._unmounted = false;
+
         if (PlatformPeg.get()) {
             PlatformPeg.get().getAppVersion().done((appVersion) => {
+                if (this._unmounted) return;
                 this.setState({
                     vectorVersion: appVersion,
                 });
@@ -90,6 +92,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        this._unmounted = true;
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 1.0,
