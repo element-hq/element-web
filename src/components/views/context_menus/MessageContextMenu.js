@@ -74,7 +74,7 @@ module.exports = React.createClass({
         if (this.props.onFinished) this.props.onFinished();
     },
 
-    onPermalinkClick: function() {
+    onLinkClick: function() {
         if (this.props.onFinished) this.props.onFinished();
     },
 
@@ -101,6 +101,7 @@ module.exports = React.createClass({
         var cancelButton;
         var permalinkButton;
         var unhidePreviewButton;
+        var externalURLButton;
 
         if (eventStatus === 'not_sent') {
             resendButton = (
@@ -146,7 +147,7 @@ module.exports = React.createClass({
         permalinkButton = (
             <div className="mx_MessageContextMenu_field">
                 <a href={ "https://matrix.to/#/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }
-                   target="_blank" onClick={ this.onPermalinkClick }>Permalink</a>
+                   target="_blank" onClick={ this.onLinkClick }>Permalink</a>
             </div>
         );
 
@@ -155,6 +156,17 @@ module.exports = React.createClass({
                 Quote
             </div>
         );
+
+        // Bridges can provide a 'external_url' to link back to the source.
+        if( typeof(this.props.mxEvent.event.content.external_url) === "string") {
+          externalURLButton = (
+              <div className="mx_MessageContextMenu_field">
+                  <a target="_blank" href={ this.props.mxEvent.event.content.external_url }
+                     onClick={ this.onLinkClick }>Source URL</a>
+              </div>
+          );
+        }
+
 
         return (
             <div>
@@ -165,6 +177,7 @@ module.exports = React.createClass({
                 {unhidePreviewButton}
                 {permalinkButton}
                 {UserSettingsStore.isFeatureEnabled('rich_text_editor') ? quoteButton : null}
+                {externalURLButton}
             </div>
         );
     }
