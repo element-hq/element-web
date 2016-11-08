@@ -25,7 +25,7 @@ cp -r olm/package node_modules/olm
 # run the mocha tests
 npm run test
 
-rm packages/vector-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
+rm dist/vector-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
 
  # node_modules deps from 'npm install' don't have a .git dir so can't
  # rev-parse; but they do set the commit in package.json under 'gitHead' which
