@@ -144,6 +144,13 @@ export default class WebPlatform extends VectorBasePlatform {
         return deferred.promise;
     }
 
+    getAppVersion() {
+        if (this.runningVersion !== null) {
+            return q(this.runningVersion);
+        }
+        return this._getVersion();
+    }
+
     pollForUpdate() {
         this._getVersion().done((ver) => {
             if (this.runningVersion == null) {
