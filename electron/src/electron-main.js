@@ -28,6 +28,17 @@ const url = require('url');
 
 const VectorMenu = require('./vectormenu');
 
+let vectorConfig = {};
+try {
+    vectorConfig = require('../../vector/config.json');
+} catch (e) {
+    console.log(`file://${__dirname}/../../vector/config.json`, e);
+    // it would be nice to check the error code here and bail if the config
+    // is unparseable, but we get MODULE_NOT_FOUND in the case of a missing
+    // file or invalid json, so node is just very unhelpful.
+    // Continue with the defaults (ie. an empty config)
+}
+
 const PERMITTED_URL_SCHEMES = [
     'http:',
     'https:',
@@ -91,19 +102,10 @@ function pollForUpdates() {
     }
 }
 
-// handle uncaught errors otherwise it displays
-// stack traces in popup dialogs, which is terrible (which
-// it will do any time the auto update poke fails, and there's
-// no other way to catch this error).
-// Assuming we generally run from the console when developing,
-// this is far preferable.
-process.on('uncaughtException', function (error) {
-    console.log("Unhandled exception", error);
-});
-
-electron.ipcMain.on('install_update', installUpdate);
-
-electron.app.on('ready', () => {
+function startAutoUpdate(update_url) {
+    if (update_url.slice(-1) !== '/') {
+        update_url = update_url + '/';
+    }
     try {
         // For reasons best known to Squirrel, the way it checks for updates
         // is completely different between macOS and windows. On macOS, it
@@ -111,9 +113,9 @@ electron.app.on('ready', () => {
         // 204 No Content. On windows it takes a base path and looks for
         // files under that path.
         if (process.platform == 'darwin') {
-            electron.autoUpdater.setFeedURL("https://riot.im/autoupdate/desktop/");
+            electron.autoUpdater.setFeedURL(update_url);
         } else if (process.platform == 'win32') {
-            electron.autoUpdater.setFeedURL("https://riot.im/download/desktop/win32/");
+            electron.autoUpdater.setFeedURL(update_url + 'win32/');
         } else {
             // Squirrel / electron only supports auto-update on these two platforms.
             // I'm not even going to try to guess which feed style they'd use if they
@@ -132,6 +134,27 @@ electron.app.on('ready', () => {
     } catch (err) {
         // will fail if running in debug mode
         console.log("Couldn't enable update checking", err);
+    }
+}
+
+// handle uncaught errors otherwise it displays
+// stack traces in popup dialogs, which is terrible (which
+// it will do any time the auto update poke fails, and there's
+// no other way to catch this error).
+// Assuming we generally run from the console when developing,
+// this is far preferable.
+process.on('uncaughtException', function (error) {
+    console.log("Unhandled exception", error);
+});
+
+electron.ipcMain.on('install_update', installUpdate);
+
+electron.app.on('ready', () => {
+    if (vectorConfig.update_url) {
+        console.log("Starting auto update with URL: " + vectorConfig.update_url);
+        startAutoUpdate(vectorConfig.update_url);
+    } else {
+        console.log("No update_url is defined: auto update is disabled");
     }
 
     mainWindow = new electron.BrowserWindow({
