@@ -32,7 +32,6 @@ let vectorConfig = {};
 try {
     vectorConfig = require('../../vector/config.json');
 } catch (e) {
-    console.log(`file://${__dirname}/../../vector/config.json`, e);
     // it would be nice to check the error code here and bail if the config
     // is unparseable, but we get MODULE_NOT_FOUND in the case of a missing
     // file or invalid json, so node is just very unhelpful.
