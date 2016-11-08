@@ -53,7 +53,7 @@ function readBlobAsDataUri(file) {
 export function decryptFile(file) {
     const url = MatrixClientPeg.get().mxcUrlToHttp(file.url);
     // Download the encrypted file as an array buffer.
-    return fetch(url).then(function(response) {
+    return q(fetch(url)).then(function(response) {
         return response.arrayBuffer();
     }).then(function(responseData) {
         // Decrypt the array buffer using the information taken from

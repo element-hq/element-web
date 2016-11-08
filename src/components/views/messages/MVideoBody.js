@@ -16,12 +16,13 @@ limitations under the License.
 
 'use strict';
 
-import React from require('react');
+import React from 'react';
 import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Model from '../../../Modal';
 import sdk from '../../../index';
-import {decryptFile} from  '../../../utils/DecryptFile';
+import { decryptFile } from '../../../utils/DecryptFile';
+import q from 'q';
 
 module.exports = React.createClass({
     displayName: 'MVideoBody',
@@ -78,26 +79,24 @@ module.exports = React.createClass({
     componentDidMount: function() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            var thumbnailPromise = Promise.resolve(null);
+            var thumbnailPromise = q(null);
             if (content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
                     content.info.thumbnail_file
                 );
             }
-            thumbnailPromise.then(function (thumbnailUrl) {
-                decryptFile(content.file).then(function(contentUrl) {
-                    return {
+            thumbnailPromise.then((thumbnailUrl) => {
+                decryptFile(content.file).then((contentUrl) => {
+                    this.setState({
                         decryptedUrl: contentUrl,
                         decryptedThumbnailUrl: thumbnailUrl,
-                    };
+                    });
                 });
-            }).done((state) => {
-                this.setState(result);
-            }, (err) => {
+            }).catch((err) => {
                 console.warn("Unable to decrypt attachment: ", err)
                 // Set a placeholder image when we can't decrypt the image.
                 this.refs.image.src = "img/warning.svg";
-            });
+            }).done();
         }
     },
 
