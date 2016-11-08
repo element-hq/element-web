@@ -358,18 +358,25 @@ module.exports = React.createClass({
     },
 
     onKeyDown: function(ev) {
-        var handled = false;
+        let handled = false;
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        let ctrlCmdOnly;
+        if (isMac) {
+            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
+        } else {
+            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
+        }
 
         switch (ev.keyCode) {
             case KeyCode.KEY_D:
-                if (ev.ctrlKey) {
+                if (ctrlCmdOnly) {
                     this.onMuteAudioClick();
                     handled = true;
                 }
                 break;
 
             case KeyCode.KEY_E:
-                if (ev.ctrlKey) {
+                if (ctrlCmdOnly) {
                     this.onMuteVideoClick();
                     handled = true;
                 }
