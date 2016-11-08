@@ -6,7 +6,7 @@
 /lib
 /node_modules
 /packages/
-/vector
+/webapp
 .DS_Store
 npm-debug.log
 electron/dist
