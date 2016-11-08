@@ -160,7 +160,7 @@ electron.app.on('ready', () => {
         icon: `${__dirname}/../img/riot.ico`,
         width: 1024, height: 768,
     });
-    mainWindow.loadURL(`file://${__dirname}/../../vector/index.html`);
+    mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
     electron.Menu.setApplicationMenu(VectorMenu);
 
     mainWindow.on('closed', () => {

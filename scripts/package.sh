@@ -8,9 +8,10 @@ else
     version=`git describe --dirty --tags || echo unknown`
 fi
 
+npm run clean
 npm run build
 mkdir -p dist
-cp -r vector vector-$version
+cp -r webapp vector-$version
 echo $version > vector-$version/version
 tar chvzf dist/vector-$version.tar.gz vector-$version
 rm -r vector-$version
