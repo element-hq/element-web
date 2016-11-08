@@ -66,6 +66,7 @@ module.exports = React.createClass({
             // components from uncontrolled to controlled
             isRoomPublished: this._originalIsRoomPublished || false,
             scalar_error: null,
+            showIntegrationsError: false,
         };
     },
 
@@ -424,6 +425,13 @@ module.exports = React.createClass({
         }, "mx_IntegrationsManager");
     },
 
+    onShowIntegrationsError(ev) {
+        ev.preventDefault();
+        this.setState({
+            showIntegrationsError: !this.state.showIntegrationsError,
+        });
+    },
+
     onLeaveClick() {
         dis.dispatch({
             action: 'leave_room',
@@ -668,6 +676,15 @@ module.exports = React.createClass({
         }
 
         var integrationsButton;
+        var integrationsError;
+        if (this.state.showIntegrationsError && this.state.scalar_error) {
+            console.error(this.state.scalar_error);
+            integrationsError = (
+                <span className="mx_RoomSettings_integrationsButton_errorPopup">
+                    { this.state.scalar_error.message }
+                </span>
+            );
+        }
         if (UserSettingsStore.isFeatureEnabled("integration_management")) {
             if (this.scalarClient.hasCredentials()) {
                 integrationsButton = (
@@ -676,7 +693,12 @@ module.exports = React.createClass({
                     </div>
                 );
             } else if (this.state.scalar_error) {
-                console.error("Unable to contact integrations server");
+                integrationsButton = (
+                    <div className="mx_RoomSettings_integrationsButton_error" onClick={ this.onShowIntegrationsError }>
+                        Integrations Error <img src="img/warning.svg" width="17"/>
+                        { integrationsError }
+                    </div>
+                );
             } else {
                 integrationsButton = (
                     <div className="mx_RoomSettings_integrationsButton" style={{ opacity: 0.5 }}>
