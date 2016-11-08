@@ -55,7 +55,7 @@ module.exports = React.createClass({
     },
 
     _getContentUrl: function() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedUrl;
         } else {
@@ -64,25 +64,24 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        var content = this.props.mxEvent.getContent();
-        var self = this;
+        const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            DecryptFile.decryptFile(content.file).then(function(url) {
-                self.setState({
+            DecryptFile.decryptFile(content.file).done((url) => {
+                this.setState({
                     decryptedUrl: url,
                 });
-            }).catch(function (err) {
+            }, (err) => {
                 console.warn("Unable to decrypt attachment: ", err)
                 // Set a placeholder image when we can't decrypt the image.
-                self.refs.image.src = "img/warning.svg";
+                this.refs.image.src = "img/warning.svg";
             });
         }
     },
 
     render: function() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
 
-        var text = this.presentableTextForFile(content);
+        const text = this.presentableTextForFile(content);
 
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         if (content.file !== undefined && this.state.decryptedUrl === null) {
@@ -98,9 +97,9 @@ module.exports = React.createClass({
             );
         }
 
-        var contentUrl = this._getContentUrl();
+        const contentUrl = this._getContentUrl();
 
-        var fileName = content.body && content.body.length > 0 ? content.body : "Attachment";
+        const fileName = content.body && content.body.length > 0 ? content.body : "Attachment";
 
         var downloadAttr = undefined;
         if (this.state.decryptedUrl) {

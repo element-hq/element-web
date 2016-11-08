@@ -89,8 +89,8 @@ function infoForVideoFile(videoFile) {
  *   is read.
  */
 function readFileAsArrayBuffer(file) {
-    var deferred = q.defer();
-    var reader = new FileReader();
+    const deferred = q.defer();
+    const reader = new FileReader();
     reader.onload = function(e) {
         deferred.resolve(e.target.result);
     };

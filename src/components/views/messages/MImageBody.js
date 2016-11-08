@@ -16,17 +16,14 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var filesize = require('filesize');
-
+import React from 'react';
 import MFileBody from './MFileBody';
-
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var ImageUtils = require('../../../ImageUtils');
-var Modal = require('../../../Modal');
-var sdk = require('../../../index');
-var dis = require("../../../dispatcher");
-var DecryptFile = require('../../../utils/DecryptFile');
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import ImageUtils from '../../../ImageUtils';
+import Modal from '../../../Modal';
+import sdk from '../../../index';
+import dis from '../../../dispatcher';
+import DecryptFile from '../../../utils/DecryptFile';
 
 
 module.exports = React.createClass({
@@ -87,7 +84,7 @@ module.exports = React.createClass({
     },
 
     _getContentUrl: function() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedUrl;
         } else {
@@ -96,7 +93,7 @@ module.exports = React.createClass({
     },
 
     _getThumbUrl: function() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             // TODO: Decrypt and use the thumbnail file if one is present.
             return this.state.decryptedUrl;
@@ -108,17 +105,16 @@ module.exports = React.createClass({
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         this.fixupHeight();
-        var content = this.props.mxEvent.getContent();
-        var self = this;
+        const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            DecryptFile.decryptFile(content.file).then(function(url) {
-                self.setState({
+            DecryptFile.decryptFile(content.file).done((url) => {
+                this.setState({
                     decryptedUrl: url,
                 });
-            }).catch(function (err) {
+            }, (err) => {
                 console.warn("Unable to decrypt attachment: ", err)
                 // Set a placeholder image when we can't decrypt the image.
-                self.refs.image.src = "img/warning.svg";
+                this.refs.image.src = "img/warning.svg";
             });
         }
     },

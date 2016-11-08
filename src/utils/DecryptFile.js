@@ -14,22 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use struct';
-
 // Pull in the encryption lib so that we can decrypt attachments.
-var encrypt = require("browser-encrypt-attachment");
+import encrypt from 'browser-encrypt-attachment';
 // Pull in a fetch polyfill so we can download encrypted attachments.
-require("isomorphic-fetch");
+import 'isomorphic-fetch';
 // Grab the client so that we can turn mxc:// URLs into https:// URLS.
-var MatrixClientPeg = require('../MatrixClientPeg');
-var q = require('q');
+import MatrixClientPeg from '../MatrixClientPeg';
+import q from 'q';
 
 
 /**
  * Read blob as a data:// URI.
  * @return {Promise} A promise that resolves with the data:// URI.
  */
-
 function readBlobAsDataUri(file) {
     var deferred = q.defer();
     var reader = new FileReader();
@@ -44,13 +41,21 @@ function readBlobAsDataUri(file) {
 }
 
 
+/**
+ * Decrypt a file attached to a matrix event.
+ * @param file {Object} The json taken from the matrix event.
+ *   This passed to [link]{@link https://github.com/matrix-org/browser-encrypt-attachments}
+ *   as the encryption info object, so will also have the those keys in addition to
+ *   the keys below.
+ * @param file.url {string} An mxc:// URL for the encrypted file.
+ * @param file.mimetype {string} The MIME-type of the plaintext file.
+ */
 export function decryptFile(file) {
-    var url = MatrixClientPeg.get().mxcUrlToHttp(file.url);
-    var self = this;
+    const url = MatrixClientPeg.get().mxcUrlToHttp(file.url);
     // Download the encrypted file as an array buffer.
-    return fetch(url).then(function (response) {
+    return fetch(url).then(function(response) {
         return response.arrayBuffer();
-    }).then(function (responseData) {
+    }).then(function(responseData) {
         // Decrypt the array buffer using the information taken from
         // the event content.
         return encrypt.decryptAttachment(responseData, file);
