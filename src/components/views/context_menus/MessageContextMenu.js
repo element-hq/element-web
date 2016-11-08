@@ -74,7 +74,7 @@ module.exports = React.createClass({
         if (this.props.onFinished) this.props.onFinished();
     },
 
-    onLinkClick: function() {
+    closeMenu: function() {
         if (this.props.onFinished) this.props.onFinished();
     },
 
@@ -147,7 +147,7 @@ module.exports = React.createClass({
         permalinkButton = (
             <div className="mx_MessageContextMenu_field">
                 <a href={ "https://matrix.to/#/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }
-                   target="_blank" onClick={ this.onLinkClick }>Permalink</a>
+                  target="_blank" rel="noopener" onClick={ this.closeMenu }>Permalink</a>
             </div>
         );
 
@@ -161,8 +161,8 @@ module.exports = React.createClass({
         if( typeof(this.props.mxEvent.event.content.external_url) === "string") {
           externalURLButton = (
               <div className="mx_MessageContextMenu_field">
-                  <a target="_blank" href={ this.props.mxEvent.event.content.external_url }
-                     onClick={ this.onLinkClick }>Source URL</a>
+                  <a href={ this.props.mxEvent.event.content.external_url }
+                    rel="noopener" target="_blank"  onClick={ this.closeMenu }>Source URL</a>
               </div>
           );
         }
