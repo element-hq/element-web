@@ -2,6 +2,11 @@
 
 set -e
 
+dev=""
+if [ "$1" == '-d' ]; then
+    dev=":dev"
+fi
+
 if [ -n "$DIST_VERSION" ]; then
     version=$DIST_VERSION
 else
@@ -9,7 +14,7 @@ else
 fi
 
 npm run clean
-npm run build
+npm run build$dev
 mkdir -p dist
 cp -r webapp vector-$version
 echo $version > vector-$version/version

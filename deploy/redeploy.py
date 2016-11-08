@@ -110,20 +110,17 @@ def on_receive_jenkins_poke():
     filename = download_file(tar_gz_url)
     print("Downloaded file: %s" % filename)
     name_str = filename.replace(".tar.gz", "")
-    untar_location = os.path.join(arg_extract_path, name_str)
-    untar_to(filename, untar_location)
+    untar_to(filename, arg_extract_path)
+
+    extracted_dir = os.path.join(arg_extract_path, name_str)
 
     if arg_should_clean:
         os.remove(filename)
 
-    # stamp the version somewhere JS can get to it
-    with open(os.path.join(untar_location, "vector/version"), "w") as stamp_file:
-        stamp_file.write(name_str)
-
-    create_symlink(source=os.path.join(untar_location, "vector"), linkname=arg_symlink)
+    create_symlink(source=extracted_dir, linkname=arg_symlink)
 
     if arg_config_location:
-        create_symlink(source=arg_config_location, linkname=os.path.join(untar_location, "vector", 'config.json'))
+        create_symlink(source=arg_config_location, linkname=os.path.join(extracted_dir, 'config.json'))
 
     return jsonify({})
 
