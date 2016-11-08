@@ -20,6 +20,7 @@ var dis = require("../../dispatcher");
 var sdk = require('../../index');
 
 var MatrixClientPeg = require('../../MatrixClientPeg')
+var TruncatedList = require('../views/elements/TruncatedList.js');
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -285,6 +286,56 @@ module.exports = React.createClass({
             }
 
             var last = (i == lastShownEventIndex);
+
+            // Wrap consecutive member events in a TruncatedList
+            if (mxEv.getType() === 'm.room.member') {
+                // Prevent message continuations between truncations
+                prevEvent = null;
+
+                let collapsedEvents = [mxEv];
+                i++;
+                for (;i < this.props.events.length; i++) {
+                    let collapsedMxEv = this.props.events[i];
+
+                    if (collapsedMxEv.getType() !== 'm.room.member') {
+                        i--;
+                        break;
+                    }
+                    collapsedEvents.push(collapsedMxEv);
+                }
+                let ePrev = null;
+                collapsedEvents = collapsedEvents.map(
+                    (e) => {
+                        let ret = this._getTilesForEvent(ePrev, e);
+                        ePrev = e;
+                        return ret;
+                    }
+                ).reduce((a,b) => a.concat(b));
+
+                let overflowElement = (overflowCount, totalCount, toggleTruncate, isExpanded) => {
+                    if (isExpanded) {
+                        return (
+                            <div className="mx_EventTile_line">
+                                <a onClick={toggleTruncate} href="javascript:;">collapse ^</a>
+                            </div>
+                        );
+                    }
+                    else {
+                        return (
+                            <div className="mx_EventTile_line">
+                                <a onClick={toggleTruncate} href="javascript:;">and {overflowCount} more...</a>
+                            </div>
+                        );
+                    }
+                }
+                ret.push(
+                    <TruncatedList truncateAt={2} createOverflowElement={overflowElement}>
+                        {collapsedEvents}
+                    </TruncatedList>
+                );
+
+                wantTile = false;
+            }
 
             if (wantTile) {
                 // make sure we unpack the array returned by _getTilesForEvent,
