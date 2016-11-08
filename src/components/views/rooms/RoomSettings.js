@@ -681,7 +681,7 @@ module.exports = React.createClass({
             console.error(this.state.scalar_error);
             integrationsError = (
                 <span className="mx_RoomSettings_integrationsButton_errorPopup">
-                    { this.state.scalar_error.message }
+                    Could not connect to the integration server
                 </span>
             );
         }
