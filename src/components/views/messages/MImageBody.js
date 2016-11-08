@@ -23,7 +23,7 @@ import ImageUtils from '../../../ImageUtils';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import DecryptFile from '../../../utils/DecryptFile';
+import {decryptFile} from '../../../utils/DecryptFile';
 
 module.exports = React.createClass({
     displayName: 'MImageBody',
@@ -43,10 +43,10 @@ module.exports = React.createClass({
     onClick: function onClick(ev) {
         if (ev.button == 0 && !ev.metaKey) {
             ev.preventDefault();
-            var content = this.props.mxEvent.getContent();
-            var httpUrl = this._getContentUrl();
-            var ImageView = sdk.getComponent("elements.ImageView");
-            var params = {
+            const content = this.props.mxEvent.getContent();
+            const httpUrl = this._getContentUrl();
+            const ImageView = sdk.getComponent("elements.ImageView");
+            const params = {
                 src: httpUrl,
                 mxEvent: this.props.mxEvent
             };
@@ -62,7 +62,7 @@ module.exports = React.createClass({
     },
 
     _isGif: function() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
         return (content && content.info && content.info.mimetype === "image/gif");
     },
 
@@ -106,7 +106,7 @@ module.exports = React.createClass({
         this.fixupHeight();
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            DecryptFile.decryptFile(content.file).done((url) => {
+            decryptFile(content.file).done((url) => {
                 this.setState({
                     decryptedUrl: url,
                 });
@@ -134,14 +134,13 @@ module.exports = React.createClass({
             return;
         }
 
-        var content = this.props.mxEvent.getContent();
-
-        var thumbHeight = null;
-        var timelineWidth = this.refs.body.offsetWidth;
-        var maxHeight = 600; // let images take up as much width as they can so long as the height doesn't exceed 600px.
+        const content = this.props.mxEvent.getContent();
+        const timelineWidth = this.refs.body.offsetWidth;
+        const maxHeight = 600; // let images take up as much width as they can so long as the height doesn't exceed 600px.
         // the alternative here would be 600*timelineWidth/800; to scale them down to fit inside a 4:3 bounding box
 
         //console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
+        var thumbHeight = null;
         if (content.info) {
             thumbHeight = ImageUtils.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
         }
@@ -150,8 +149,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var content = this.props.mxEvent.getContent();
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const content = this.props.mxEvent.getContent();
 
         if (content.file !== undefined && this.state.decryptedUrl === null) {
 
@@ -166,8 +165,8 @@ module.exports = React.createClass({
             );
         }
 
-        var contentUrl = this._getContentUrl();
-        var thumbUrl = this._getThumbUrl();
+        const contentUrl = this._getContentUrl();
+        const thumbUrl = this._getThumbUrl();
 
         if (thumbUrl) {
             return (

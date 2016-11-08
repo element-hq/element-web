@@ -21,7 +21,7 @@ import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Model from '../../../Modal';
 import sdk from '../../../index';
-import DecryptFile from  '../../../utils/DecryptFile';
+import {decryptFile} from  '../../../utils/DecryptFile';
 
 module.exports = React.createClass({
     displayName: 'MVideoBody',
@@ -80,19 +80,19 @@ module.exports = React.createClass({
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             var thumbnailPromise = Promise.resolve(null);
             if (content.info.thumbnail_file) {
-                thumbnailPromise = DecryptFile.decryptFile(
+                thumbnailPromise = decryptFile(
                     content.info.thumbnail_file
                 );
             }
-            thumbnailPromise.done((thumbnailUrl) => {
-                DecryptFile.decryptFile(
-                    content.file
-                ).then(function(contentUrl) {
-                    this.setState({
+            thumbnailPromise.then(function (thumbnailUrl) {
+                decryptFile(content.file).then(function(contentUrl) {
+                    return {
                         decryptedUrl: contentUrl,
                         decryptedThumbnailUrl: thumbnailUrl,
-                    });
+                    };
                 });
+            }).done((state) => {
+                this.setState(result);
             }, (err) => {
                 console.warn("Unable to decrypt attachment: ", err)
                 // Set a placeholder image when we can't decrypt the image.

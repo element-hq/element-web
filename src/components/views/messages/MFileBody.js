@@ -16,11 +16,11 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var filesize = require('filesize');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var sdk = require('../../../index');
-var DecryptFile = require('../../../utils/DecryptFile');
+import React from 'react';
+import filesize from 'filesize';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import sdk from '../../../index';
+import {decryptFile} from '../../../utils/DecryptFile';
 
 
 module.exports = React.createClass({
@@ -66,7 +66,7 @@ module.exports = React.createClass({
     componentDidMount: function() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            DecryptFile.decryptFile(content.file).done((url) => {
+            decryptFile(content.file).done((url) => {
                 this.setState({
                     decryptedUrl: url,
                 });
