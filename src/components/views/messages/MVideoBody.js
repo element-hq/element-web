@@ -16,15 +16,12 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var filesize = require('filesize');
-
+import React from require('react');
 import MFileBody from './MFileBody';
-
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var Modal = require('../../../Modal');
-var sdk = require('../../../index');
-var DecryptFile = require("../../../utils/DecryptFile")
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import Model from '../../../Modal';
+import sdk from '../../../index';
+import DecryptFile from  '../../../utils/DecryptFile';
 
 module.exports = React.createClass({
     displayName: 'MVideoBody',
@@ -59,7 +56,7 @@ module.exports = React.createClass({
     },
 
     _getContentUrl: function() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedUrl;
         } else {
@@ -68,7 +65,7 @@ module.exports = React.createClass({
     },
 
     _getThumbUrl: function() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedThumbnailUrl;
         } else if (content.info.thumbnail_url) {
@@ -79,9 +76,7 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        var content = this.props.mxEvent.getContent();
-        var self = this;
-
+        const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             var thumbnailPromise = Promise.resolve(null);
             if (content.info.thumbnail_file) {
@@ -89,25 +84,25 @@ module.exports = React.createClass({
                     content.info.thumbnail_file
                 );
             }
-            thumbnailPromise.then(function(thumbnailUrl) {
+            thumbnailPromise.done((thumbnailUrl) => {
                 DecryptFile.decryptFile(
                     content.file
                 ).then(function(contentUrl) {
-                    self.setState({
+                    this.setState({
                         decryptedUrl: contentUrl,
                         decryptedThumbnailUrl: thumbnailUrl,
                     });
                 });
-            }).catch(function (err) {
+            }, (err) => {
                 console.warn("Unable to decrypt attachment: ", err)
                 // Set a placeholder image when we can't decrypt the image.
-                self.refs.image.src = "img/warning.svg";
+                this.refs.image.src = "img/warning.svg";
             });
         }
     },
 
     render: function() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
 
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             // Need to decrypt the attachment
@@ -121,15 +116,15 @@ module.exports = React.createClass({
             );
         }
 
-        var contentUrl = this._getContentUrl();
-        var thumbUrl = this._getThumbUrl();
+        const contentUrl = this._getContentUrl();
+        const thumbUrl = this._getThumbUrl();
 
         var height = null;
         var width = null;
         var poster = null;
         var preload = "metadata";
         if (content.info) {
-            var scale = this.thumbScale(content.info.w, content.info.h, 480, 360);
+            const scale = this.thumbScale(content.info.w, content.info.h, 480, 360);
             if (scale) {
                 width = Math.floor(content.info.w * scale);
                 height = Math.floor(content.info.h * scale);

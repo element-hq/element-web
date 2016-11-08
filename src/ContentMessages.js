@@ -81,6 +81,24 @@ function infoForVideoFile(videoFile) {
     return deferred.promise;
 }
 
+/**
+ * Read the file as an ArrayBuffer.
+ * @return {Promise} A promise that resolves with an ArrayBuffer when the file
+ *   is read.
+ */
+function readFileAsArrayBuffer(file) {
+    const deferred = q.defer();
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        deferred.resolve(e.target.result);
+    };
+    reader.onerror = function(e) {
+        deferred.reject(e);
+    };
+    reader.readAsArrayBuffer(file);
+    return deferred.promise;
+}
+
 
 class ContentMessages {
     constructor() {

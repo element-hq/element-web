@@ -38,7 +38,7 @@ export default class MAudioBody extends React.Component {
     }
 
     _getContentUrl() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedUrl;
         } else {
@@ -49,11 +49,11 @@ export default class MAudioBody extends React.Component {
     componentDidMount() {
         var content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            decryptFile(content.file).then((url) => {
+            decryptFile(content.file).done((url) => {
                 this.setState({
                     decryptedUrl: url
                 });
-            }).catch((err) => {
+            }, (err) => {
                 console.warn("Unable to decrypt attachment: ", err)
                 // Set a placeholder image when we can't decrypt the image.
                 this.refs.image.src = "img/warning.svg";
@@ -62,7 +62,7 @@ export default class MAudioBody extends React.Component {
     }
 
     render() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
 
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             // Need to decrypt the attachment
@@ -76,7 +76,7 @@ export default class MAudioBody extends React.Component {
             );
         }
 
-        var contentUrl = this._getContentUrl();
+        const contentUrl = this._getContentUrl();
 
         return (
             <span className="mx_MAudioBody">
