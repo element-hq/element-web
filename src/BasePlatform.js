@@ -65,4 +65,12 @@ export default class BasePlatform {
 
     displayNotification(title: string, msg: string, avatarUrl: string) {
     }
+
+    /**
+     * Returns a promise that resolves to a string representing
+     * the current version of the application.
+     */
+    getAppVersion() {
+        return q();
+    }
 }
