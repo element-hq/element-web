@@ -20,7 +20,7 @@ var dis = require("../../dispatcher");
 var sdk = require('../../index');
 
 var MatrixClientPeg = require('../../MatrixClientPeg')
-var TruncatedList = require('../views/elements/TruncatedList.js');
+var MemberEventListSummary = require('../views/elements/MemberEventListSummary.js');
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -287,54 +287,47 @@ module.exports = React.createClass({
 
             var last = (i == lastShownEventIndex);
 
-            // Wrap consecutive member events in a TruncatedList
-            if (mxEv.getType() === 'm.room.member') {
+            var isMembershipChange = (e) =>
+                e.getType() === 'm.room.member'
+                && ['join', 'leave'].indexOf(e.event.content.membership) !== -1
+                && (!e.event.prev_content || e.event.content.membership  !== e.event.prev_content.membership);
+
+            // Wrap consecutive member events in a ListSummary
+            if (isMembershipChange(mxEv)) {
                 // Prevent message continuations between truncations
                 prevEvent = null;
 
-                let collapsedEvents = [mxEv];
+                let summarisedEvents = [mxEv];
                 i++;
                 for (;i < this.props.events.length; i++) {
                     let collapsedMxEv = this.props.events[i];
 
-                    if (collapsedMxEv.getType() !== 'm.room.member') {
+                    if (!isMembershipChange(collapsedMxEv)) {
                         i--;
                         break;
                     }
-                    collapsedEvents.push(collapsedMxEv);
+                    summarisedEvents.push(collapsedMxEv);
                 }
                 let ePrev = null;
-                collapsedEvents = collapsedEvents.map(
-                    (e) => {
-                        let ret = this._getTilesForEvent(ePrev, e);
-                        ePrev = e;
-                        return ret;
+                let renderEvents = (events) => {
+                    if (events.length === 0) {
+                        return null;
                     }
-                ).reduce((a,b) => a.concat(b));
-
-                let overflowElement = (overflowCount, totalCount, toggleTruncate, isExpanded) => {
-                    if (isExpanded) {
-                        return (
-                            <div className="mx_EventTile_line">
-                                <a onClick={toggleTruncate} href="javascript:;">collapse ^</a>
-                            </div>
-                        );
-                    }
-                    else {
-                        return (
-                            <div className="mx_EventTile_line">
-                                <a onClick={toggleTruncate} href="javascript:;">and {overflowCount} more...</a>
-                            </div>
-                        );
-                    }
-                }
+                    return events.map(
+                        (e) => {
+                            let ret = this._getTilesForEvent(ePrev, e);
+                            ePrev = e;
+                            return ret;
+                        }
+                    ).reduce((a,b) => a.concat(b));
+                };
                 ret.push(
-                    <TruncatedList truncateAt={2} createOverflowElement={overflowElement}>
-                        {collapsedEvents}
-                    </TruncatedList>
+                    <MemberEventListSummary
+                        events={summarisedEvents}
+                        renderEvents={renderEvents}
+                    />
                 );
-
-                wantTile = false;
+                continue;
             }
 
             if (wantTile) {
