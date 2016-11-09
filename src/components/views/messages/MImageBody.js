@@ -16,14 +16,15 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var filesize = require('filesize');
+import React from 'react';
+import MFileBody from './MFileBody';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import ImageUtils from '../../../ImageUtils';
+import Modal from '../../../Modal';
+import sdk from '../../../index';
+import dis from '../../../dispatcher';
+import {decryptFile} from '../../../utils/DecryptFile';
 
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var ImageUtils = require('../../../ImageUtils');
-var Modal = require('../../../Modal');
-var sdk = require('../../../index');
-var dis = require("../../../dispatcher");
 
 module.exports = React.createClass({
     displayName: 'MImageBody',
@@ -33,13 +34,20 @@ module.exports = React.createClass({
         mxEvent: React.PropTypes.object.isRequired,
     },
 
+    getInitialState: function() {
+        return {
+            decryptedUrl: null,
+        };
+    },
+
+
     onClick: function onClick(ev) {
         if (ev.button == 0 && !ev.metaKey) {
             ev.preventDefault();
-            var content = this.props.mxEvent.getContent();
-            var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(content.url);
-            var ImageView = sdk.getComponent("elements.ImageView");
-            var params = {
+            const content = this.props.mxEvent.getContent();
+            const httpUrl = this._getContentUrl();
+            const ImageView = sdk.getComponent("elements.ImageView");
+            const params = {
                 src: httpUrl,
                 mxEvent: this.props.mxEvent
             };
@@ -55,7 +63,7 @@ module.exports = React.createClass({
     },
 
     _isGif: function() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
         return (content && content.info && content.info.mimetype === "image/gif");
     },
 
@@ -64,9 +72,7 @@ module.exports = React.createClass({
             return;
         }
         var imgElement = e.target;
-        imgElement.src = MatrixClientPeg.get().mxcUrlToHttp(
-            this.props.mxEvent.getContent().url
-        );
+        imgElement.src = this._getContentUrl();
     },
 
     onImageLeave: function(e) {
@@ -77,14 +83,40 @@ module.exports = React.createClass({
         imgElement.src = this._getThumbUrl();
     },
 
+    _getContentUrl: function() {
+        const content = this.props.mxEvent.getContent();
+        if (content.file !== undefined) {
+            return this.state.decryptedUrl;
+        } else {
+            return MatrixClientPeg.get().mxcUrlToHttp(content.url);
+        }
+    },
+
     _getThumbUrl: function() {
-        var content = this.props.mxEvent.getContent();
-        return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
+        const content = this.props.mxEvent.getContent();
+        if (content.file !== undefined) {
+            // TODO: Decrypt and use the thumbnail file if one is present.
+            return this.state.decryptedUrl;
+        } else {
+            return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
+        }
     },
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         this.fixupHeight();
+        const content = this.props.mxEvent.getContent();
+        if (content.file !== undefined && this.state.decryptedUrl === null) {
+            decryptFile(content.file).done((url) => {
+                this.setState({
+                    decryptedUrl: url,
+                });
+            }, (err) => {
+                console.warn("Unable to decrypt attachment: ", err)
+                // Set a placeholder image when we can't decrypt the image.
+                this.refs.image.src = "img/warning.svg";
+            });
+        }
     },
 
     componentWillUnmount: function() {
@@ -103,14 +135,13 @@ module.exports = React.createClass({
             return;
         }
 
-        var content = this.props.mxEvent.getContent();
-
-        var thumbHeight = null;
-        var timelineWidth = this.refs.body.offsetWidth;
-        var maxHeight = 600; // let images take up as much width as they can so long as the height doesn't exceed 600px.
+        const content = this.props.mxEvent.getContent();
+        const timelineWidth = this.refs.body.offsetWidth;
+        const maxHeight = 600; // let images take up as much width as they can so long as the height doesn't exceed 600px.
         // the alternative here would be 600*timelineWidth/800; to scale them down to fit inside a 4:3 bounding box
 
         //console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
+        var thumbHeight = null;
         if (content.info) {
             thumbHeight = ImageUtils.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
         }
@@ -119,45 +150,35 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var content = this.props.mxEvent.getContent();
-        var cli = MatrixClientPeg.get();
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const content = this.props.mxEvent.getContent();
 
-        var download;
-        if (this.props.tileShape === "file_grid") {
-            download = (
-                <div className="mx_MImageBody_download">
-                    <a className="mx_MImageBody_downloadLink" href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
-                        {content.body}
-                    </a>
-                    <div className="mx_MImageBody_size">
-                        { content.info && content.info.size ? filesize(content.info.size) : "" }
-                    </div>
-                </div>
-            );
-        }
-        else {
-            download = (
-                <div className="mx_MImageBody_download">
-                    <a href={cli.mxcUrlToHttp(content.url)} target="_blank" rel="noopener">
-                        <TintableSvg src="img/download.svg" width="12" height="14"/>
-                        Download {content.body} ({ content.info && content.info.size ? filesize(content.info.size) : "Unknown size" })
-                    </a>
-                </div>
+        if (content.file !== undefined && this.state.decryptedUrl === null) {
+
+            // Need to decrypt the attachment
+            // The attachment is decrypted in componentDidMount.
+            // For now add an img tag with a spinner.
+            return (
+                <span className="mx_MImageBody" ref="body">
+                <img className="mx_MImageBody_thumbnail" src="img/spinner.gif" ref="image"
+                    alt={content.body} />
+                </span>
             );
         }
 
-        var thumbUrl = this._getThumbUrl();
+        const contentUrl = this._getContentUrl();
+        const thumbUrl = this._getThumbUrl();
+
         if (thumbUrl) {
             return (
                 <span className="mx_MImageBody" ref="body">
-                    <a href={cli.mxcUrlToHttp(content.url)} onClick={ this.onClick }>
+                    <a href={contentUrl} onClick={ this.onClick }>
                         <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
                             alt={content.body}
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave} />
                     </a>
-                    { download }
+                    <MFileBody {...this.props} decryptedUrl={this.state.decryptedUrl} />
                 </span>
             );
         } else if (content.body) {
