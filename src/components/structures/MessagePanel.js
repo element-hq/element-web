@@ -294,7 +294,6 @@ module.exports = React.createClass({
 
             // Wrap consecutive member events in a ListSummary
             if (isMembershipChange(mxEv)) {
-
                 let summarisedEvents = [mxEv];
                 i++;
                 for (;i < this.props.events.length; i++) {
@@ -306,15 +305,14 @@ module.exports = React.createClass({
                     }
                     summarisedEvents.push(collapsedMxEv);
                 }
-
-                let renderEvents = (events) => {
+                let renderEvents = (pEvent, events) => {
                     if (events.length === 0) {
                         return null;
                     }
                     return events.map(
                         (e) => {
-                            // e, e to prevent date seperators
-                            let ret = this._getTilesForEvent(e, e);
+                            let ret = this._getTilesForEvent(pEvent, e);
+                            pEvent = e;
                             return ret;
                         }
                     ).reduce((a,b) => a.concat(b));
@@ -322,11 +320,11 @@ module.exports = React.createClass({
                 ret.push(
                     <MemberEventListSummary
                         events={summarisedEvents}
+                        previousEvent={prevEvent}
                         renderEvents={renderEvents}
                     />
                 );
-                // Use the first member event to create scroll token
-                ret.push(<li key={eventId} data-scroll-token={eventId}/>);
+                prevEvent = mxEv;
                 continue;
             }
 

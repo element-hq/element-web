@@ -31,6 +31,7 @@ module.exports = React.createClass({
         threshold: React.PropTypes.number,
         // The function to render events if they are not being summarised
         renderEvents: React.PropTypes.function,
+        previousEvent: React.PropTypes.object,
     },
 
     getInitialState: function() {
@@ -190,7 +191,7 @@ module.exports = React.createClass({
         let expandedEvents = null;
 
         if (expanded) {
-            expandedEvents = this.props.renderEvents(eventsToRender);
+            expandedEvents = this.props.renderEvents(this.props.previousEvent, eventsToRender);
         }
 
         let avatars = this.renderAvatars(joinEvents.concat(leaveEvents));
