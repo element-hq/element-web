@@ -15,7 +15,6 @@ limitations under the License.
 */
 import React from 'react';
 const MemberAvatar = require('../avatars/MemberAvatar.js');
-const dispatcher = require("../../../dispatcher");
 
 module.exports = React.createClass({
     displayName: 'MemberEventListSummary',
@@ -122,19 +121,12 @@ module.exports = React.createClass({
 
     _renderAvatars: function(events) {
         let avatars = events.slice(0, this.props.avatarsMaxLength).map((e) => {
-            let onClickAvatar = () => {
-                dispatcher.dispatch({
-                    action: 'view_user',
-                    member: e.sender,
-                });
-            };
             return (
                 <MemberAvatar
                     key={e.getId()}
                     member={e.sender}
                     width={14}
                     height={14}
-                    onClick={onClickAvatar}
                 />
             );
         });

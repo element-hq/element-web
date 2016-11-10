@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var Avatar = require('../../../Avatar');
 var sdk = require("../../../index");
+const dispatcher = require("../../../dispatcher");
 
 module.exports = React.createClass({
     displayName: 'MemberAvatar',
@@ -27,14 +28,17 @@ module.exports = React.createClass({
         member: React.PropTypes.object.isRequired,
         width: React.PropTypes.number,
         height: React.PropTypes.number,
-        resizeMethod: React.PropTypes.string
+        resizeMethod: React.PropTypes.string,
+        // Whether the onClick of the avatar should dispatch 'view_user'
+        viewUserOnClick: React.PropTypes.boolean
     },
 
     getDefaultProps: function() {
         return {
             width: 40,
             height: 40,
-            resizeMethod: 'crop'
+            resizeMethod: 'crop',
+            viewUserOnClick: false
         }
     },
 
@@ -65,9 +69,19 @@ module.exports = React.createClass({
 
         var {member, ...otherProps} = this.props;
 
+        var onClick = null;
+        if (this.props.viewUserOnClick) {
+            onClick = () => {
+                dispatcher.dispatch({
+                    action: 'view_user',
+                    member: this.props.member,
+                });
+            }
+        }
+
         return (
             <BaseAvatar {...otherProps} name={this.state.name} title={this.state.title}
-                idName={member.userId} url={this.state.imageUrl} />
+                idName={member.userId} url={this.state.imageUrl} onClick={onClick}/>
         );
     }
 });

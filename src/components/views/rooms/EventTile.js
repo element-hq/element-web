@@ -348,13 +348,6 @@ module.exports = React.createClass({
         </span>;
     },
 
-    onMemberAvatarClick: function(event) {
-        dispatcher.dispatch({
-            action: 'view_user',
-            member: this.props.mxEvent.sender,
-        });
-    },
-
     onSenderProfileClick: function(event) {
         var mxEvent = this.props.mxEvent;
         dispatcher.dispatch({
@@ -443,7 +436,7 @@ module.exports = React.createClass({
                     <div className="mx_EventTile_avatar">
                         <MemberAvatar member={this.props.mxEvent.sender}
                             width={avatarSize} height={avatarSize}
-                            onClick={ this.onMemberAvatarClick }
+                            viewUserOnClick={true}
                         />
                     </div>
             );
