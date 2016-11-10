@@ -28,27 +28,15 @@ module.exports = React.createClass({
         createOverflowElement: React.PropTypes.func
     },
 
-    getInitialState: function() {
-        return {
-            enabled: true,
-        };
-    },
-
     getDefaultProps: function() {
         return {
             truncateAt: 2,
-            createOverflowElement: function(overflowCount, totalCount, toggleTruncate, isExpanded) {
+            createOverflowElement: function(overflowCount, totalCount) {
                 return (
                     <div>And {overflowCount} more...</div>
                 );
             }
         };
-    },
-
-    toggleTruncate: function() {
-        this.setState({
-            enabled: !this.state.enabled
-        });
     },
 
     render: function() {
@@ -60,24 +48,18 @@ module.exports = React.createClass({
 
         var childCount = childArray.length;
 
-        if (this.state.enabled && this.props.truncateAt >= 0) {
+        if (this.props.truncateAt >= 0) {
             var overflowCount = childCount - this.props.truncateAt;
 
             if (overflowCount > 1) {
                 overflowJsx = this.props.createOverflowElement(
-                    overflowCount, childCount, this.toggleTruncate
+                    overflowCount, childCount
                 );
-
+                
                 // cut out the overflow elements
                 childArray.splice(childCount - overflowCount, overflowCount);
                 childsJsx = childArray; // use what is left
             }
-        }
-
-        if (!this.state.enabled) {
-            overflowJsx = this.props.createOverflowElement(
-                0, childCount, this.toggleTruncate, true
-            );
         }
 
         return (
