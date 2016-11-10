@@ -308,28 +308,23 @@ module.exports = React.createClass({
                 // At this point, i = this.props.events.length OR i = the index of the last
                 // MembershipChange in a sequence of MembershipChanges
 
-                let renderEvents = (pEvent, events) => {
-                    if (events.length === 0) {
-                        return null;
+                let eventTiles = summarisedEvents.map(
+                    (e) => {
+                        let ret = this._getTilesForEvent(prevEvent, e);
+                        prevEvent = e;
+                        return ret;
                     }
-                    return events.map(
-                        (e) => {
-                            let ret = this._getTilesForEvent(pEvent, e);
-                            pEvent = e;
-                            return ret;
-                        }
-                    ).reduce((a,b) => a.concat(b));
-                };
+                ).reduce((a,b) => a.concat(b));
 
-                let eventTiles = renderEvents(prevEvent, summarisedEvents);
+                if (eventTiles.length === 0) {
+                    eventTiles = null;
+                }
 
                 ret.push(
                     <MemberEventListSummary events={summarisedEvents}>
                         {eventTiles}
                     </MemberEventListSummary>
                 );
-                // Set previous event to last MembershipChange
-                prevEvent = this.props.events[i - 1];
                 continue;
             }
 
