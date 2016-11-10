@@ -29,7 +29,9 @@ module.exports = React.createClass({
         width: React.PropTypes.number,
         height: React.PropTypes.number,
         resizeMethod: React.PropTypes.string,
-        // Whether the onClick of the avatar should dispatch 'view_user'
+        // The onClick to give the avatar
+        onClick: React.PropTypes.function,
+        // Whether the onClick of the avatar should be overriden to dispatch 'view_user'
         viewUserOnClick: React.PropTypes.boolean,
     },
 
@@ -67,9 +69,8 @@ module.exports = React.createClass({
     render: function() {
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        var {member, ...otherProps} = this.props;
+        var {member, onClick, ...otherProps} = this.props;
 
-        var onClick = null;
         if (this.props.viewUserOnClick) {
             onClick = () => {
                 dispatcher.dispatch({
