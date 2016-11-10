@@ -20,7 +20,6 @@ var dis = require("../../dispatcher");
 var sdk = require('../../index');
 
 var MatrixClientPeg = require('../../MatrixClientPeg')
-var MemberEventListSummary = require('../views/elements/MemberEventListSummary.js');
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -230,6 +229,7 @@ module.exports = React.createClass({
 
     _getEventTiles: function() {
         var EventTile = sdk.getComponent('rooms.EventTile');
+        const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 
         this.eventNodes = {};
 
