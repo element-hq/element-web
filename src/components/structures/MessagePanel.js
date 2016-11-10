@@ -320,12 +320,13 @@ module.exports = React.createClass({
                         }
                     ).reduce((a,b) => a.concat(b));
                 };
+
+                let eventTiles = renderEvents(prevEvent, summarisedEvents);
+
                 ret.push(
-                    <MemberEventListSummary
-                        events={summarisedEvents}
-                        previousEvent={prevEvent}
-                        renderEvents={renderEvents}
-                    />
+                    <MemberEventListSummary events={summarisedEvents}>
+                        {eventTiles}
+                    </MemberEventListSummary>
                 );
                 prevEvent = mxEv;
                 continue;

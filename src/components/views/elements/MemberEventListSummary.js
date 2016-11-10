@@ -180,7 +180,7 @@ module.exports = React.createClass({
         let expandedEvents = null;
 
         if (expanded) {
-            expandedEvents = this.props.renderEvents(this.props.previousEvent, eventsToRender);
+            expandedEvents = this.props.children;
         }
 
         let avatars = this.renderAvatars(joinEvents.concat(leaveEvents));
