@@ -30,7 +30,7 @@ module.exports = React.createClass({
         height: React.PropTypes.number,
         resizeMethod: React.PropTypes.string,
         // Whether the onClick of the avatar should dispatch 'view_user'
-        viewUserOnClick: React.PropTypes.boolean
+        viewUserOnClick: React.PropTypes.boolean,
     },
 
     getDefaultProps: function() {
@@ -38,7 +38,7 @@ module.exports = React.createClass({
             width: 40,
             height: 40,
             resizeMethod: 'crop',
-            viewUserOnClick: false
+            viewUserOnClick: false,
         }
     },
 
