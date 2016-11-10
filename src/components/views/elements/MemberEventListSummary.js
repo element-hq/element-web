@@ -103,7 +103,7 @@ module.exports = React.createClass({
                 </span>
             );
         }
-        let leaveSummary = '';
+        let leaveSummary = null;
         if (leavers) {
             leaveSummary = (
                 <span>
@@ -186,7 +186,8 @@ module.exports = React.createClass({
             toggleButton = (
                 <a onClick={this._toggleSummary}>{expanded?'collapse':'expand'}</a>
             );
-            let noun = (joinAndLeft === 1 ? 'user' : 'others');
+            let plural = (joinEvents.length + leaveEvents.length > 0) ? 'others' : 'users';
+            let noun = (joinAndLeft === 1 ? 'user' : plural);
 
             summaryContainer = (
                 <div className="mx_EventTile_line">
