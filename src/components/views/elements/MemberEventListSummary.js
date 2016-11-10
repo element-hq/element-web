@@ -184,7 +184,7 @@ module.exports = React.createClass({
         if (!fewEvents) {
             summary = this._renderSummary(joinEvents, leaveEvents);
             toggleButton = (
-                <a onClick={this._toggleSummary} href="javascript:;">{expanded?'collapse':'expand'}</a>
+                <a onClick={this._toggleSummary}>{expanded?'collapse':'expand'}</a>
             );
             let noun = (joinAndLeft === 1 ? 'user' : 'others');
 
