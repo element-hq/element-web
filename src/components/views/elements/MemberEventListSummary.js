@@ -45,20 +45,20 @@ module.exports = React.createClass({
         };
     },
 
-    toggleSummary: function() {
+    _toggleSummary: function() {
         this.setState({
             expanded: !this.state.expanded,
         });
     },
 
-    getEventSenderName: function(ev) {
+    _getEventSenderName: function(ev) {
         if (!ev) {
             return 'undefined';
         }
         return ev.sender.name || ev.event.content.displayname || ev.getSender();
     },
 
-    renderNameList: function(events) {
+    _renderNameList: function(events) {
         if (events.length === 0) {
             return null;
         }
@@ -67,11 +67,11 @@ module.exports = React.createClass({
         let lastEvent = events.pop();
 
         let names = events.map((ev) => {
-            return this.getEventSenderName(ev);
+            return this._getEventSenderName(ev);
         }).join(', ');
 
         if (names.length === 0) {
-            return this.getEventSenderName(lastEvent);
+            return this._getEventSenderName(lastEvent);
         }
 
         // Special case the last name. ' and ' might be included later
@@ -83,13 +83,13 @@ module.exports = React.createClass({
             // name1, name2, name3 [and 100 others]
             names += ', ';
         }
-        return names + this.getEventSenderName(lastEvent);
+        return names + this._getEventSenderName(lastEvent);
     },
 
-    renderSummary: function(joinEvents, leaveEvents) {
-        let joiners = this.renderNameList(joinEvents);
+    _renderSummary: function(joinEvents, leaveEvents) {
+        let joiners = this._renderNameList(joinEvents);
         let remainingJoiners = joinEvents.length - this.props.summaryLength;
-        let leavers = this.renderNameList(leaveEvents);
+        let leavers = this._renderNameList(leaveEvents);
         let remainingLeavers = leaveEvents.length - this.props.summaryLength;
         let joinSummary = null;
         if (joiners) {
@@ -115,7 +115,7 @@ module.exports = React.createClass({
         );
     },
 
-    renderAvatars: function(events) {
+    _renderAvatars: function(events) {
         let avatars = events.slice(0, this.props.avatarsMaxLength).map((e) => {
             let onClickAvatar = () => {
                 dispatcher.dispatch({
@@ -180,14 +180,14 @@ module.exports = React.createClass({
             expandedEvents = this.props.children;
         }
 
-        let avatars = this.renderAvatars(joinEvents.concat(leaveEvents));
+        let avatars = this._renderAvatars(joinEvents.concat(leaveEvents));
 
         let toggleButton = null;
         let summaryContainer = null;
         if (!fewEvents) {
-            summary = this.renderSummary(joinEvents, leaveEvents);
+            summary = this._renderSummary(joinEvents, leaveEvents);
             toggleButton = (
-                <a onClick={this.toggleSummary} href="javascript:;">{expanded?'collapse':'expand'}</a>
+                <a onClick={this._toggleSummary} href="javascript:;">{expanded?'collapse':'expand'}</a>
             );
             let noun = (joinAndLeft === 1 ? 'user' : 'others');
 
