@@ -22,7 +22,7 @@ module.exports = React.createClass({
 
     propTypes: {
         // An array of member events to summarise
-        events: React.PropTypes.array,
+        events: React.PropTypes.array.isRequired,
         // The maximum number of names to show in either the join or leave summaries
         summaryLength: React.PropTypes.number,
         // The maximum number of avatars to display in the summary
