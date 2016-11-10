@@ -85,19 +85,22 @@ module.exports = React.createClass({
             // name1, name2, name3 [and 100 others]
             names += ', ';
         }
-        return names + this._getEventSenderName(lastEvent);
+
+        let remaining = originalNumber - this.props.summaryLength;
+        let remainingDesc = (remaining > 0 ? 'and ' + remaining + ' others ':'');
+
+        return names + this._getEventSenderName(lastEvent) + remainingDesc;
     },
 
     _renderSummary: function(joinEvents, leaveEvents) {
         let joiners = this._renderNameList(joinEvents);
-        let remainingJoiners = joinEvents.length - this.props.summaryLength;
         let leavers = this._renderNameList(leaveEvents);
-        let remainingLeavers = leaveEvents.length - this.props.summaryLength;
+
         let joinSummary = null;
         if (joiners) {
             joinSummary = (
                 <span>
-                    {joiners} {remainingJoiners > 0 ? 'and ' + remainingJoiners + ' others ':''}joined the room
+                    {joiners} joined the room
                 </span>
             );
         }
@@ -105,7 +108,7 @@ module.exports = React.createClass({
         if (leavers) {
             leaveSummary = (
                 <span>
-                    {leavers} {remainingLeavers > 0 ? 'and ' + remainingLeavers + ' others ':''}left the room
+                    {leavers} left the room
                 </span>
             );
         }
