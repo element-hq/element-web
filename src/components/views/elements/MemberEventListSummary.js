@@ -75,20 +75,20 @@ module.exports = React.createClass({
             return this._getEventSenderName(lastEvent);
         }
 
-        // Special case the last name. ' and ' might be included later
-        // So you have two cases:
-        if (originalNumber <= this.props.summaryLength) {
-            // name1, name2 and name3
-            names += ' and ';
-        } else {
-            // name1, name2, name3 [and 100 others]
-            names += ', ';
+        let lastName = this._getEventSenderName(lastEvent);
+        if (names.length === 0) {
+            // special-case for a single event
+            return lastName;
         }
 
         let remaining = originalNumber - this.props.summaryLength;
-        let remainingDesc = (remaining > 0 ? ' and ' + remaining + ' others ':'');
-
-        return names + this._getEventSenderName(lastEvent) + remainingDesc;
+        if (remaining > 0) {
+            //  name1, name2, name3, and 100 others
+            return names + ', ' + lastName + ', and ' + remaining + ' others';
+        } else {
+            //  name1, name2 and name3
+            return names + ' and ' + lastName;
+        }
     },
 
     _renderSummary: function(joinEvents, leaveEvents) {
