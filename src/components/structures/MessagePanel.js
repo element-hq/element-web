@@ -305,6 +305,9 @@ module.exports = React.createClass({
                     }
                     summarisedEvents.push(collapsedMxEv);
                 }
+                // At this point, i = this.props.events.length OR i = the index of the first event
+                // to NOT be a MembershipChange after a sequence of MembershipChanges
+
                 let renderEvents = (pEvent, events) => {
                     if (events.length === 0) {
                         return null;
