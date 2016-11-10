@@ -92,12 +92,9 @@ module.exports = React.createClass({
     renderSummary: function(joinEvents, leaveEvents) {
         let joiners = this.renderNameList(joinEvents);
         let remainingJoiners = joinEvents.length - this.props.summaryLength;
-
         let leavers = this.renderNameList(leaveEvents);
         let remainingLeavers = leaveEvents.length - this.props.summaryLength;
-
         let joinSummary = null;
-
         if (joiners) {
             joinSummary = (
                 <span>
@@ -105,9 +102,7 @@ module.exports = React.createClass({
                 </span>
             );
         }
-
         let leaveSummary = '';
-
         if (leavers) {
             leaveSummary = (
                 <span>
@@ -115,7 +110,6 @@ module.exports = React.createClass({
                 </span>
             );
         }
-
         return (
             <span>
                 {joinSummary}{joinSummary && leaveSummary?'; ':''}
@@ -124,10 +118,7 @@ module.exports = React.createClass({
         );
     },
 
-
-
     renderAvatars: function(events) {
-
         let avatars = events.slice(0, this.props.avatarsMaxLength).map((e) => {
             let onClickAvatar = () => {
                 dispatcher.dispatch({
@@ -201,7 +192,6 @@ module.exports = React.createClass({
             toggleButton = (
                 <a onClick={this.toggleSummary} href="javascript:;">{expanded?'collapse':'expand'}</a>
             );
-
             let noun = (joinAndLeft === 1 ? 'user' : 'others');
 
             summaryContainer = (
