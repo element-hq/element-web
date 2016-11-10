@@ -29,9 +29,6 @@ module.exports = React.createClass({
         avatarsMaxLength: React.PropTypes.number,
         // The minimum number of events needed to trigger summarisation
         threshold: React.PropTypes.number,
-        // The function to render events if they are not being summarised
-        renderEvents: React.PropTypes.function,
-        previousEvent: React.PropTypes.object,
     },
 
     getInitialState: function() {
