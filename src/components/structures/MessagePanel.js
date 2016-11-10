@@ -276,6 +276,11 @@ module.exports = React.createClass({
             this.currentGhostEventId = null;
         }
 
+        var isMembershipChange = (e) =>
+            e.getType() === 'm.room.member'
+            && ['join', 'leave'].indexOf(e.event.content.membership) !== -1
+            && (!e.event.prev_content || e.event.content.membership  !== e.event.prev_content.membership);
+
         for (i = 0; i < this.props.events.length; i++) {
             var mxEv = this.props.events[i];
             var wantTile = true;
@@ -286,11 +291,6 @@ module.exports = React.createClass({
             }
 
             var last = (i == lastShownEventIndex);
-
-            var isMembershipChange = (e) =>
-                e.getType() === 'm.room.member'
-                && ['join', 'leave'].indexOf(e.event.content.membership) !== -1
-                && (!e.event.prev_content || e.event.content.membership  !== e.event.prev_content.membership);
 
             // Wrap consecutive member events in a ListSummary
             if (isMembershipChange(mxEv)) {
