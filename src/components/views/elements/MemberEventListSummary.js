@@ -86,7 +86,7 @@ module.exports = React.createClass({
         }
 
         let remaining = originalNumber - this.props.summaryLength;
-        let remainingDesc = (remaining > 0 ? 'and ' + remaining + ' others ':'');
+        let remainingDesc = (remaining > 0 ? ' and ' + remaining + ' others ':'');
 
         return names + this._getEventSenderName(lastEvent) + remainingDesc;
     },

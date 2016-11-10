@@ -105,6 +105,8 @@ import views$elements$EditableTextContainer from './components/views/elements/Ed
 views$elements$EditableTextContainer && (module.exports.components['views.elements.EditableTextContainer'] = views$elements$EditableTextContainer);
 import views$elements$EmojiText from './components/views/elements/EmojiText';
 views$elements$EmojiText && (module.exports.components['views.elements.EmojiText'] = views$elements$EmojiText);
+import views$elements$MemberEventListSummary from './components/views/elements/MemberEventListSummary';
+views$elements$MemberEventListSummary && (module.exports.components['views.elements.MemberEventListSummary'] = views$elements$MemberEventListSummary);
 import views$elements$PowerSelector from './components/views/elements/PowerSelector';
 views$elements$PowerSelector && (module.exports.components['views.elements.PowerSelector'] = views$elements$PowerSelector);
 import views$elements$ProgressBar from './components/views/elements/ProgressBar';
