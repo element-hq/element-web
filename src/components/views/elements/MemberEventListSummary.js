@@ -185,8 +185,6 @@ module.exports = React.createClass({
         });
 
         let fewEvents = eventsToRender.length < this.props.threshold;
-        console.log(eventsToRender.length, joinEvents.length, leaveEvents.length, this.state.expanded, fewEvents);
-
         let expanded = this.state.expanded || fewEvents;
         let expandedEvents = null;
 
@@ -204,6 +202,8 @@ module.exports = React.createClass({
                 <a onClick={this.toggleSummary} href="javascript:;">{expanded?'collapse':'expand'}</a>
             );
 
+            let noun = (joinAndLeft === 1 ? 'user' : 'others');
+
             summaryContainer = (
                 <div className="mx_EventTile_line">
                     <div className="mx_EventTile_info">
@@ -211,7 +211,7 @@ module.exports = React.createClass({
                             {avatars}
                         </span>
                         <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
-                            {summary}{joinAndLeft? '. ' + joinAndLeft + ' others joined and left' : ''}
+                            {summary}{joinAndLeft? '. ' + joinAndLeft + ' ' + noun + ' joined and left' : ''}
                         </span>&nbsp;
                         {toggleButton}
                     </div>
