@@ -184,7 +184,9 @@ module.exports = React.createClass({
         if (!fewEvents) {
             summary = this._renderSummary(joinEvents, leaveEvents);
             toggleButton = (
-                <a onClick={this._toggleSummary}>{expanded?'collapse':'expand'}</a>
+                <a className="mx_MemberEventListSummary_toggle" onClick={this._toggleSummary}>
+                    {expanded ? 'collapse' : 'expand'}
+                </a>
             );
             let plural = (joinEvents.length + leaveEvents.length > 0) ? 'others' : 'users';
             let noun = (joinAndLeft === 1 ? 'user' : plural);
