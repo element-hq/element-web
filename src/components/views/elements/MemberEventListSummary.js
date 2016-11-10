@@ -71,10 +71,6 @@ module.exports = React.createClass({
             return this._getEventSenderName(ev);
         }).join(', ');
 
-        if (names.length === 0) {
-            return this._getEventSenderName(lastEvent);
-        }
-
         let lastName = this._getEventSenderName(lastEvent);
         if (names.length === 0) {
             // special-case for a single event
