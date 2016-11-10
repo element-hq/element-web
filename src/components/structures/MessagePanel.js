@@ -328,7 +328,8 @@ module.exports = React.createClass({
                         {eventTiles}
                     </MemberEventListSummary>
                 );
-                prevEvent = mxEv;
+                // Set previous event to last MembershipChange
+                prevEvent = this.props.events[i - 1];
                 continue;
             }
 
