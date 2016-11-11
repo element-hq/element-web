@@ -30,9 +30,9 @@ module.exports = React.createClass({
         height: React.PropTypes.number,
         resizeMethod: React.PropTypes.string,
         // The onClick to give the avatar
-        onClick: React.PropTypes.function,
+        onClick: React.PropTypes.func,
         // Whether the onClick of the avatar should be overriden to dispatch 'view_user'
-        viewUserOnClick: React.PropTypes.boolean,
+        viewUserOnClick: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
