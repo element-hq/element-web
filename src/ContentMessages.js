@@ -81,6 +81,24 @@ function infoForVideoFile(videoFile) {
     return deferred.promise;
 }
 
+/**
+ * Read the file as an ArrayBuffer.
+ * @return {Promise} A promise that resolves with an ArrayBuffer when the file
+ *   is read.
+ */
+function readFileAsArrayBuffer(file) {
+    const deferred = q.defer();
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        deferred.resolve(e.target.result);
+    };
+    reader.onerror = function(e) {
+        deferred.reject(e);
+    };
+    reader.readAsArrayBuffer(file);
+    return deferred.promise;
+}
+
 
 class ContentMessages {
     constructor() {
@@ -149,7 +167,19 @@ class ContentMessages {
                 dis.dispatch({action: 'upload_progress', upload: upload});
             }
         }).then(function(url) {
-            content.url = url;
+            if (encryptInfo === null) {
+                // If the attachment isn't encrypted then include the URL directly.
+                content.url = url;
+            } else {
+                // If the attachment is encrypted then bundle the URL along
+                // with the information needed to decrypt the attachment and
+                // add it under a file key.
+                encryptInfo.url = url;
+                if (file.type) {
+                    encryptInfo.mimetype = file.type;
+                }
+                content.file = encryptInfo;
+            }
             return matrixClient.sendMessage(roomId, content);
         }, function(err) {
             error = err;

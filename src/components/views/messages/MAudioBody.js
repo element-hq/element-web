@@ -21,29 +21,67 @@ import MFileBody from './MFileBody';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
+import { decryptFile } from '../../../utils/DecryptFile';
 
 export default class MAudioBody extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            playing: false
+            playing: false,
+            decryptedUrl: null,
         }
     }
-
     onPlayToggle() {
         this.setState({
             playing: !this.state.playing
         });
     }
 
-    render() {
+    _getContentUrl() {
+        const content = this.props.mxEvent.getContent();
+        if (content.file !== undefined) {
+            return this.state.decryptedUrl;
+        } else {
+            return MatrixClientPeg.get().mxcUrlToHttp(content.url);
+        }
+    }
+
+    componentDidMount() {
         var content = this.props.mxEvent.getContent();
-        var cli = MatrixClientPeg.get();
+        if (content.file !== undefined && this.state.decryptedUrl === null) {
+            decryptFile(content.file).done((url) => {
+                this.setState({
+                    decryptedUrl: url
+                });
+            }, (err) => {
+                console.warn("Unable to decrypt attachment: ", err)
+                // Set a placeholder image when we can't decrypt the image.
+                this.refs.image.src = "img/warning.svg";
+            });
+        }
+    }
+
+    render() {
+        const content = this.props.mxEvent.getContent();
+
+        if (content.file !== undefined && this.state.decryptedUrl === null) {
+            // Need to decrypt the attachment
+            // The attachment is decrypted in componentDidMount.
+            // For now add an img tag with a spinner.
+            return (
+                <span className="mx_MAudioBody">
+                <img src="img/spinner.gif" ref="image"
+                    alt={content.body} />
+                </span>
+            );
+        }
+
+        const contentUrl = this._getContentUrl();
 
         return (
             <span className="mx_MAudioBody">
-                <audio src={cli.mxcUrlToHttp(content.url)} controls />
-                <MFileBody {...this.props} />
+                <audio src={contentUrl} controls />
+                <MFileBody {...this.props} decryptedUrl={this.state.decryptedUrl} />
             </span>
         );
     }
