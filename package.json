@@ -37,7 +37,7 @@
     "build:bundle:dev": "webpack --optimize-occurence-order --progress",
     "build:electron": "build -lwm",
     "build": "node scripts/babelcheck.js && npm run build:res && npm run build:config && npm run build:emojione && npm run build:css && npm run build:bundle",
-    "build:dev": "npm run build:emojione && npm run build:css && npm run build:bundle:dev",
+    "build:dev": "node scripts/babelcheck.js && npm run build:res && npm run build:config && npm run build:emojione && npm run build:css && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
     "start:res": "parallelshell \"cpx -w \\\"{src/skins/vector/fonts,src/skins/vector/img}/**\\\" webapp/\" \"cpx -w \\\"{res/media,res/vector-icons}/**\\\" webapp/\"",
     "start:config": "cpx -w config.json webapp/",
