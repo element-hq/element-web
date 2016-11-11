@@ -39,7 +39,7 @@ module.exports = {
         ],
     },
     output: {
-        path: path.join(__dirname, "vector"),
+        path: path.join(__dirname, "webapp"),
         filename: "[name].[chunkhash].js",
         devtoolModuleFilenameTemplate: function(info) {
             // Reading input source maps gives only relative paths here for
@@ -98,8 +98,8 @@ module.exports = {
 
     // configuration for the webpack-dev-server
     devServer: {
-        // serve unwebpacked assets from vector.
-        contentBase: './vector',
+        // serve unwebpacked assets from webapp.
+        contentBase: './webapp',
     },
 };
 

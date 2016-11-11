@@ -2,15 +2,21 @@
 
 set -e
 
+dev=""
+if [ "$1" == '-d' ]; then
+    dev=":dev"
+fi
+
 if [ -n "$DIST_VERSION" ]; then
     version=$DIST_VERSION
 else
     version=`git describe --dirty --tags || echo unknown`
 fi
 
-npm run build
+npm run clean
+npm run build$dev
 mkdir -p dist
-cp -r vector vector-$version
+cp -r webapp vector-$version
 echo $version > vector-$version/version
 tar chvzf dist/vector-$version.tar.gz vector-$version
 rm -r vector-$version

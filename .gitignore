@@ -6,11 +6,7 @@
 /lib
 /node_modules
 /packages/
-/vector/bundle.*
-/vector/emojione/
-/vector/config.json
-/vector/index.html
-/vector/olm.*
+/webapp
 .DS_Store
 npm-debug.log
 electron/dist
