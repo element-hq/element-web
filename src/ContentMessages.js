@@ -23,8 +23,6 @@ var MatrixClientPeg = require('./MatrixClientPeg');
 var sdk = require('./index');
 var Modal = require('./Modal');
 
-var encrypt = require("browser-encrypt-attachment");
-
 function infoForImageFile(imageFile) {
     var deferred = q.defer();
 
@@ -80,24 +78,6 @@ function infoForVideoFile(videoFile) {
     };
     reader.readAsDataURL(videoFile);
 
-    return deferred.promise;
-}
-
-/**
- * Read the file as an ArrayBuffer.
- * @return {Promise} A promise that resolves with an ArrayBuffer when the file
- *   is read.
- */
-function readFileAsArrayBuffer(file) {
-    const deferred = q.defer();
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        deferred.resolve(e.target.result);
-    };
-    reader.onerror = function(e) {
-        deferred.reject(e);
-    };
-    reader.readAsArrayBuffer(file);
     return deferred.promise;
 }
 
@@ -157,26 +137,10 @@ class ContentMessages {
         this.inprogress.push(upload);
         dis.dispatch({action: 'upload_started'});
 
-        var encryptInfo = null;
         var error;
         var self = this;
         return def.promise.then(function() {
-            if (matrixClient.isRoomEncrypted(roomId)) {
-                // If the room is encrypted then encrypt the file before uploading it.
-                // First read the file into memory.
-                upload.promise = readFileAsArrayBuffer(file).then(function(data) {
-                    // Then encrypt the file.
-                    return encrypt.encryptAttachment(data);
-                }).then(function(encryptResult) {
-                    // Record the information needed to decrypt the attachment.
-                    encryptInfo = encryptResult.info;
-                    // Pass the encrypted data as a Blob to the uploader.
-                    var blob = new Blob([encryptResult.data]);
-                    return matrixClient.uploadContent(blob);
-                });
-            } else {
-                upload.promise = matrixClient.uploadContent(file);
-            }
+            upload.promise = matrixClient.uploadContent(file);
             return upload.promise;
         }).progress(function(ev) {
             if (ev) {
@@ -185,19 +149,7 @@ class ContentMessages {
                 dis.dispatch({action: 'upload_progress', upload: upload});
             }
         }).then(function(url) {
-            if (encryptInfo === null) {
-                // If the attachment isn't encrypted then include the URL directly.
-                content.url = url;
-            } else {
-                // If the attachment is encrypted then bundle the URL along
-                // with the information needed to decrypt the attachment and
-                // add it under a file key.
-                encryptInfo.url = url;
-                if (file.type) {
-                    encryptInfo.mimetype = file.type;
-                }
-                content.file = encryptInfo;
-            }
+            content.url = url;
             return matrixClient.sendMessage(roomId, content);
         }, function(err) {
             error = err;
