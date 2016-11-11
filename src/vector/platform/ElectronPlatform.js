@@ -19,6 +19,7 @@ limitations under the License.
 
 import VectorBasePlatform from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
+import q from 'q';
 
 const electron = require('electron');
 const remote = electron.remote;
@@ -82,6 +83,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     clearNotification(notif: Notification) {
         notif.close();
+    }
+
+    getAppVersion() {
+        return q(electron.remote.app.getVersion());
     }
 
     pollForUpdate() {
