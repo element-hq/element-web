@@ -3,7 +3,7 @@
 set -e
 
 dev=""
-if [ "$1" == '-d' ]; then
+if [ "$1" = '-d' ]; then
     dev=":dev"
 fi
 
