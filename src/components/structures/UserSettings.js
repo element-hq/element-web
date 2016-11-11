@@ -17,6 +17,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var sdk = require('../../index');
 var MatrixClientPeg = require("../../MatrixClientPeg");
+var PlatformPeg = require("../../PlatformPeg");
 var Modal = require('../../Modal');
 var dis = require("../../dispatcher");
 var q = require('q');
@@ -35,7 +36,6 @@ module.exports = React.createClass({
     displayName: 'UserSettings',
 
     propTypes: {
-        version: React.PropTypes.string,
         onClose: React.PropTypes.func,
         // The brand string given when creating email pushers
         brand: React.PropTypes.string,
@@ -60,10 +60,26 @@ module.exports = React.createClass({
             threePids: [],
             phase: "UserSettings.LOADING", // LOADING, DISPLAY
             email_add_pending: false,
+            vectorVersion: null,
         };
     },
 
     componentWillMount: function() {
+        this._unmounted = false;
+
+        if (PlatformPeg.get()) {
+            q().then(() => {
+                return PlatformPeg.get().getAppVersion();
+            }).done((appVersion) => {
+                if (this._unmounted) return;
+                this.setState({
+                    vectorVersion: appVersion,
+                });
+            }, (e) => {
+                console.log("Failed to fetch app version", e);
+            });
+        }
+
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 0.3,
@@ -78,6 +94,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        this._unmounted = true;
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 1.0,
@@ -587,7 +604,7 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_UserSettings_advanced">
                         matrix-react-sdk version: {REACT_SDK_VERSION}<br/>
-                        vector-web version: {this.props.version}<br/>
+                        vector-web version: {this.state.vectorVersion !== null ? this.state.vectorVersion : 'unknown'}<br/>
                         olm version: {olmVersionString}<br/>
                     </div>
                 </div>

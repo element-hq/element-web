@@ -167,7 +167,6 @@ export default React.createClass({
             case PageTypes.UserSettings:
                 page_element = <UserSettings
                     onClose={this.props.onUserSettingsClose}
-                    version={this.props.version}
                     brand={this.props.config.brand}
                     collapsedRhs={this.props.collapse_rhs}
                     enableLabs={this.props.config.enableLabs}
