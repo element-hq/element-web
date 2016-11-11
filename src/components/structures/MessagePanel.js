@@ -321,7 +321,7 @@ module.exports = React.createClass({
                 }
 
                 ret.push(
-                    <MemberEventListSummary events={summarisedEvents}>
+                    <MemberEventListSummary key={mxEv.getId()} events={summarisedEvents}>
                         {eventTiles}
                     </MemberEventListSummary>
                 );
