@@ -229,6 +229,7 @@ module.exports = React.createClass({
 
     _getEventTiles: function() {
         var EventTile = sdk.getComponent('rooms.EventTile');
+        const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 
         this.eventNodes = {};
 
@@ -275,6 +276,11 @@ module.exports = React.createClass({
             this.currentGhostEventId = null;
         }
 
+        var isMembershipChange = (e) =>
+            e.getType() === 'm.room.member'
+            && ['join', 'leave'].indexOf(e.event.content.membership) !== -1
+            && (!e.event.prev_content || e.event.content.membership  !== e.event.prev_content.membership);
+
         for (i = 0; i < this.props.events.length; i++) {
             var mxEv = this.props.events[i];
             var wantTile = true;
@@ -285,6 +291,42 @@ module.exports = React.createClass({
             }
 
             var last = (i == lastShownEventIndex);
+
+            // Wrap consecutive member events in a ListSummary
+            if (isMembershipChange(mxEv)) {
+                let summarisedEvents = [mxEv];
+                i++;
+                for (;i < this.props.events.length; i++) {
+                    let collapsedMxEv = this.props.events[i];
+
+                    if (!isMembershipChange(collapsedMxEv)) {
+                        i--;
+                        break;
+                    }
+                    summarisedEvents.push(collapsedMxEv);
+                }
+                // At this point, i = this.props.events.length OR i = the index of the last
+                // MembershipChange in a sequence of MembershipChanges
+
+                let eventTiles = summarisedEvents.map(
+                    (e) => {
+                        let ret = this._getTilesForEvent(prevEvent, e);
+                        prevEvent = e;
+                        return ret;
+                    }
+                ).reduce((a,b) => a.concat(b));
+
+                if (eventTiles.length === 0) {
+                    eventTiles = null;
+                }
+
+                ret.push(
+                    <MemberEventListSummary events={summarisedEvents}>
+                        {eventTiles}
+                    </MemberEventListSummary>
+                );
+                continue;
+            }
 
             if (wantTile) {
                 // make sure we unpack the array returned by _getTilesForEvent,
