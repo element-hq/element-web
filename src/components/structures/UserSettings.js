@@ -68,7 +68,9 @@ module.exports = React.createClass({
         this._unmounted = false;
 
         if (PlatformPeg.get()) {
-            PlatformPeg.get().getAppVersion().done((appVersion) => {
+            q().then(() => {
+                return PlatformPeg.get().getAppVersion();
+            }).done((appVersion) => {
                 if (this._unmounted) return;
                 this.setState({
                     vectorVersion: appVersion,
