@@ -23,6 +23,8 @@ var MatrixClientPeg = require('./MatrixClientPeg');
 var sdk = require('./index');
 var Modal = require('./Modal');
 
+var encrypt = require("browser-encrypt-attachment");
+
 function infoForImageFile(imageFile) {
     var deferred = q.defer();
 
@@ -155,10 +157,26 @@ class ContentMessages {
         this.inprogress.push(upload);
         dis.dispatch({action: 'upload_started'});
 
+        var encryptInfo = null;
         var error;
         var self = this;
         return def.promise.then(function() {
-            upload.promise = matrixClient.uploadContent(file);
+            if (matrixClient.isRoomEncrypted(roomId)) {
+                // If the room is encrypted then encrypt the file before uploading it.
+                // First read the file into memory.
+                upload.promise = readFileAsArrayBuffer(file).then(function(data) {
+                    // Then encrypt the file.
+                    return encrypt.encryptAttachment(data);
+                }).then(function(encryptResult) {
+                    // Record the information needed to decrypt the attachment.
+                    encryptInfo = encryptResult.info;
+                    // Pass the encrypted data as a Blob to the uploader.
+                    var blob = new Blob([encryptResult.data]);
+                    return matrixClient.uploadContent(blob);
+                });
+            } else {
+                upload.promise = matrixClient.uploadContent(file);
+            }
             return upload.promise;
         }).progress(function(ev) {
             if (ev) {
