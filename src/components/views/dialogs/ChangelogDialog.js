@@ -31,9 +31,10 @@ export default class ChangelogDialog extends React.Component {
         const version = this.props.newVersion.split('-');
         const version2 = this.props.version.split('-');
         if(version == null || version2 == null) return;
+        // parse versions of form: [vectorversion]-react-[react-sdk-version]-js-[js-sdk-version]
         for(let i=0; i<REPOS.length; i++) {
-            const oldVersion = version2[2*i+1];
-            const newVersion = version[2*i+1];
+            const oldVersion = version2[2*i];
+            const newVersion = version[2*i];
             request(`https://api.github.com/repos/${REPOS[i]}/compare/${oldVersion}...${newVersion}`, (a, b, body) => {
                 if(body == null) return;
                 this.setState({[REPOS[i]]: JSON.parse(body).commits});
