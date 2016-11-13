@@ -136,6 +136,7 @@ export default React.createClass({
         var UserSettings = sdk.getComponent('structures.UserSettings');
         var CreateRoom = sdk.getComponent('structures.CreateRoom');
         var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
+        var HomePage = sdk.getComponent('structures.HomePage');
         var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         var GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
         var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
@@ -189,6 +190,15 @@ export default React.createClass({
                 />
                 if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
                 break;
+
+            case PageTypes.HomePage:
+                page_element = <HomePage
+                    collapsedRhs={this.props.collapse_rhs}
+                    config={this.props.config}
+                />
+                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
+                break;
+
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
                 right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.sideOpacity} />

@@ -410,6 +410,10 @@ module.exports = React.createClass({
                 this._setPage(PageTypes.RoomDirectory);
                 this.notifyNewScreen('directory');
                 break;
+            case 'view_home_page':
+                this._setPage(PageTypes.HomePage);
+                this.notifyNewScreen('home');
+                break;
             case 'view_create_chat':
                 this._createChat();
                 break;
@@ -629,7 +633,12 @@ module.exports = React.createClass({
                         )[0].roomId;
                         self.setState({ready: true, currentRoomId: firstRoom, page_type: PageTypes.RoomView});
                     } else {
-                        self.setState({ready: true, page_type: PageTypes.RoomDirectory});
+                        if (self.props.config.home_page) {
+                            self.setState({ready: true, page_type: PageTypes.HomePage});
+                        }
+                        else {
+                            self.setState({ready: true, page_type: PageTypes.RoomDirectory});
+                        }
                     }
                 } else {
                     self.setState({ready: true, page_type: PageTypes.RoomView});
@@ -649,7 +658,12 @@ module.exports = React.createClass({
                 } else {
                     // There is no information on presentedId
                     // so point user to fallback like /directory
-                    self.notifyNewScreen('directory');
+                    if (self.props.config.home_page) {
+                        self.notifyNewScreen('home');
+                    }
+                    else {
+                        self.notifyNewScreen('directory');
+                    }
                 }
 
                 dis.dispatch({action: 'focus_composer'});
@@ -702,6 +716,10 @@ module.exports = React.createClass({
         } else if (screen == 'settings') {
             dis.dispatch({
                 action: 'view_user_settings',
+            });
+        } else if (screen == 'home') {
+            dis.dispatch({
+                action: 'view_home_page',
             });
         } else if (screen == 'directory') {
             dis.dispatch({

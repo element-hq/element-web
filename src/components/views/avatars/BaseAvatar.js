@@ -138,7 +138,7 @@ module.exports = React.createClass({
 
         const {
             name, idName, title, url, urls, width, height, resizeMethod,
-            defaultToInitialLetter,
+            defaultToInitialLetter, viewUserOnClick,
             ...otherProps
         } = this.props;
 
