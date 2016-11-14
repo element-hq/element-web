@@ -24,23 +24,49 @@ export function beforeEach(context) {
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
  * return it when get() is called.
  *
+ * TODO: once the components are updated to get their MatrixClients from
+ * the react context, we can get rid of this and just inject a test client
+ * via the context instead.
+ *
  * @returns {sinon.Sandbox}; remember to call sandbox.restore afterwards.
  */
 export function stubClient() {
     var sandbox = sinon.sandbox.create();
 
-    var client = {
+    var client = createTestClient();
+
+    // stub out the methods in MatrixClientPeg
+    //
+    // 'sandbox.restore()' doesn't work correctly on inherited methods,
+    // so we do this for each method
+    var methods = ['get', 'unset', 'replaceUsingCreds'];
+    for (var i = 0; i < methods.length; i++) {
+        sandbox.stub(peg, methods[i]);
+    }
+    // MatrixClientPeg.get() is called a /lot/, so implement it with our own
+    // fast stub function rather than a sinon stub
+    peg.get = function() { return client; };
+    return sandbox;
+}
+
+/**
+ * Create a stubbed-out MatrixClient
+ *
+ * @returns {object} MatrixClient stub
+ */
+export function createTestClient() {
+    return {
         getHomeserverUrl: sinon.stub(),
         getIdentityServerUrl: sinon.stub(),
 
         getPushActionsForEvent: sinon.stub(),
-        getRoom: sinon.stub().returns(this.mkStubRoom()),
+        getRoom: sinon.stub().returns(mkStubRoom()),
         getRooms: sinon.stub().returns([]),
         loginFlows: sinon.stub(),
         on: sinon.stub(),
         removeListener: sinon.stub(),
         isRoomEncrypted: sinon.stub().returns(false),
-        peekInRoom: sinon.stub().returns(q(this.mkStubRoom())),
+        peekInRoom: sinon.stub().returns(q(mkStubRoom())),
 
         paginateEventTimeline: sinon.stub().returns(q()),
         sendReadReceipt: sinon.stub().returns(q()),
@@ -59,21 +85,7 @@ export function stubClient() {
         sendHtmlMessage: () => q({}),
         getSyncState: () => "SYNCING",
     };
-
-    // stub out the methods in MatrixClientPeg
-    //
-    // 'sandbox.restore()' doesn't work correctly on inherited methods,
-    // so we do this for each method
-    var methods = ['get', 'unset', 'replaceUsingCreds'];
-    for (var i = 0; i < methods.length; i++) {
-        sandbox.stub(peg, methods[i]);
-    }
-    // MatrixClientPeg.get() is called a /lot/, so implement it with our own
-    // fast stub function rather than a sinon stub
-    peg.get = function() { return client; };
-    return sandbox;
 }
-
 
 /**
  * Create an Event.
