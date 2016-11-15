@@ -24,6 +24,7 @@ import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import {decryptFile} from '../../../utils/DecryptFile';
+import q from 'q';
 
 module.exports = React.createClass({
     displayName: 'MImageBody',
@@ -36,6 +37,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             decryptedUrl: null,
+            decryptedThumbnailUrl: null,
         };
     },
 
@@ -94,7 +96,9 @@ module.exports = React.createClass({
     _getThumbUrl: function() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
-            // TODO: Decrypt and use the thumbnail file if one is present.
+            if (this.state.decryptedThumbnailUrl) {
+                return this.state.decryptedThumbnailUrl;
+            }
             return this.state.decryptedUrl;
         } else {
             return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
@@ -106,15 +110,24 @@ module.exports = React.createClass({
         this.fixupHeight();
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            decryptFile(content.file).done((url) => {
-                this.setState({
-                    decryptedUrl: url,
+            var thumbnailPromise = q(null);
+            if (content.info.thumbnail_file) {
+                thumbnailPromise = decryptFile(
+                    content.info.thumbnail_file
+                );
+            }
+            thumbnailPromise.then((thumbnailUrl) => {
+                decryptFile(content.file).then((contentUrl) => {
+                    this.setState({
+                        decryptedUrl: contentUrl,
+                        decryptedThumbnailUrl: thumbnailUrl,
+                    });
                 });
-            }, (err) => {
+            }).catch((err) => {
                 console.warn("Unable to decrypt attachment: ", err)
                 // Set a placeholder image when we can't decrypt the image.
                 this.refs.image.src = "img/warning.svg";
-            });
+            }).done();
         }
     },
 
