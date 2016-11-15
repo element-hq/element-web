@@ -146,6 +146,7 @@ module.exports = WithMatrixClient(React.createClass({
         this._suppressReadReceiptAnimation = false;
         this.props.matrixClient.on("deviceVerificationChanged",
                                  this.onDeviceVerificationChanged);
+        this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
     },
 
     componentWillReceiveProps: function (nextProps) {
@@ -170,6 +171,15 @@ module.exports = WithMatrixClient(React.createClass({
         var client = this.props.matrixClient;
         client.removeListener("deviceVerificationChanged",
                               this.onDeviceVerificationChanged);
+        this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
+    },
+
+    /** called when the event is decrypted after we show it.
+     */
+    _onDecrypted: function() {
+        // we need to re-verify the sending device.
+        this._verifyEvent(this.props.mxEvent);
+        this.forceUpdate();
     },
 
     onDeviceVerificationChanged: function(userId, device) {
