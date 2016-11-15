@@ -33,6 +33,24 @@ var test_utils = require('test-utils');
 var ROOM_ID = '!room:localhost';
 var USER_ID = '@me:localhost';
 
+// wrap TimelinePanel with a component which provides the MatrixClient in the context.
+const WrappedTimelinePanel = React.createClass({
+    childContextTypes: {
+        matrixClient: React.PropTypes.object,
+    },
+
+    getChildContext: function() {
+        return {
+            matrixClient: peg.get(),
+        };
+    },
+
+    render: function() {
+        return <TimelinePanel ref="panel" {...this.props} />;
+    },
+});
+
+
 describe('TimelinePanel', function() {
     var sandbox;
     var timelineSet;
@@ -105,11 +123,12 @@ describe('TimelinePanel', function() {
         }
 
         var scrollDefer;
-        var panel = ReactDOM.render(
-                <TimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}
+        var rendered = ReactDOM.render(
+                <WrappedTimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}
                 />,
                 parentDiv,
         );
+        var panel = rendered.refs.panel;
         var scrollingDiv = ReactTestUtils.findRenderedDOMComponentWithClass(
             panel, "gm-scroll-view");
 
@@ -188,10 +207,11 @@ describe('TimelinePanel', function() {
             return q(true);
         });
 
-        var panel = ReactDOM.render(
-            <TimelinePanel timelineSet={timelineSet}/>,
+        var rendered = ReactDOM.render(
+            <WrappedTimelinePanel timelineSet={timelineSet}/>,
             parentDiv
         );
+        var panel = rendered.refs.panel;
 
         var messagePanel = ReactTestUtils.findRenderedComponentWithType(
             panel, sdk.getComponent('structures.MessagePanel'));
@@ -236,14 +256,14 @@ describe('TimelinePanel', function() {
         console.log("added events to timeline");
 
         var scrollDefer;
-        var panel = ReactDOM.render(
-            <TimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}
+        var rendered = ReactDOM.render(
+            <WrappedTimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}
                 timelineCap={TIMELINE_CAP}
             />,
             parentDiv
         );
         console.log("TimelinePanel rendered");
-
+        var panel = rendered.refs.panel;
         var messagePanel = ReactTestUtils.findRenderedComponentWithType(
             panel, sdk.getComponent('structures.MessagePanel'));
         var scrollingDiv = ReactTestUtils.findRenderedDOMComponentWithClass(
