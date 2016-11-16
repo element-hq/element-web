@@ -162,10 +162,15 @@ module.exports = React.createClass({
                     return e.getSender() === userId;
                 });
 
+                if (userEvents.length === 1) {
+                    filteredEvents.push(userEvents[0]);
+                    return;
+                }
+
                 let firstEvent = userEvents[0];
                 let lastEvent = userEvents[userEvents.length - 1];
 
-                if (firstEvent.getContent().membership !== lastEvent.getContent().membership) {
+                if (firstEvent.getContent().membership === lastEvent.getContent().membership) {
                     filteredEvents.push(lastEvent);
                 }
             }
