@@ -69,9 +69,9 @@ module.exports = React.createClass({
     render: function() {
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        var {member, onClick, ...otherProps} = this.props;
+        var {member, onClick, viewUserOnClick, ...otherProps} = this.props;
 
-        if (this.props.viewUserOnClick) {
+        if (viewUserOnClick) {
             onClick = () => {
                 dispatcher.dispatch({
                     action: 'view_user',

@@ -107,10 +107,20 @@ module.exports = React.createClass({
                 </span>
             );
         }
+
+        // The joinEvents and leaveEvents are representative of the net movement
+        // per-user, and so it is possible that the total net movement is nil,
+        // whilst there are some events in the expanded list. If the total net
+        // movement is nil, then neither joinSummary nor leaveSummary will be
+        // truthy, so return null.
+        if (!joinSummary && !leaveSummary) {
+            return null;
+        }
+
         return (
             <span>
                 {joinSummary}{joinSummary && leaveSummary?'; ':''}
-                {leaveSummary}
+                {leaveSummary}.&nbsp;
             </span>
         );
     },
@@ -140,15 +150,24 @@ module.exports = React.createClass({
         // Reorder events so that joins come before leaves
         let eventsToRender = this.props.events;
 
-        // Filter out those who joined, then left
-        let filteredEvents = eventsToRender.filter(
-            (e) => {
-                return eventsToRender.filter(
-                    (e2) => {
-                        return e.getSender() === e2.getSender()
-                            && e.event.content.membership !== e2.event.content.membership;
-                    }
-                ).length === 0;
+        // Create an array of events that are not "cancelled-out" by another
+        // A join of sender S is cancelled out by a leave of sender S etc.
+        let filteredEvents = [];
+        let senders = new Set(eventsToRender.map((e) => e.getSender()));
+        senders.forEach(
+            (userId) => {
+                // Only push the last event if it isn't the same membership as the first
+
+                let userEvents = eventsToRender.filter((e) => {
+                    return e.getSender() === userId;
+                });
+
+                let firstEvent = userEvents[0];
+                let lastEvent = userEvents[userEvents.length - 1];
+
+                if (firstEvent.getContent().membership !== lastEvent.getContent().membership) {
+                    filteredEvents.push(lastEvent);
+                }
             }
         );
 
@@ -194,7 +213,7 @@ module.exports = React.createClass({
                             {avatars}
                         </span>
                         <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
-                            {summary}{joinAndLeft? '. ' + joinAndLeft + ' ' + noun + ' joined and left' : ''}
+                            {summary}{joinAndLeft ? joinAndLeft + ' ' + noun + ' joined and left' : ''}
                         </span>&nbsp;
                         {toggleButton}
                     </div>
