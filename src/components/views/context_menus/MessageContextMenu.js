@@ -47,7 +47,16 @@ module.exports = React.createClass({
     onViewSourceClick: function() {
         var ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createDialog(ViewSource, {
-            mxEvent: this.props.mxEvent
+            content: this.props.mxEvent.event,
+        }, 'mx_Dialog_viewsource');
+        if (this.props.onFinished) this.props.onFinished();
+    },
+
+    onViewClearSourceClick: function() {
+        var ViewSource = sdk.getComponent('structures.ViewSource');
+        Modal.createDialog(ViewSource, {
+            // FIXME: _clearEvent is private
+            content: this.props.mxEvent._clearEvent,
         }, 'mx_Dialog_viewsource');
         if (this.props.onFinished) this.props.onFinished();
     },
@@ -97,6 +106,7 @@ module.exports = React.createClass({
         var eventStatus = this.props.mxEvent.status;
         var resendButton;
         var viewSourceButton;
+        var viewClearSourceButton;
         var redactButton;
         var cancelButton;
         var permalinkButton;
@@ -132,6 +142,14 @@ module.exports = React.createClass({
                 View Source
             </div>
         );
+
+        if (this.props.mxEvent.getType() !== this.props.mxEvent.getWireType()) {
+            viewClearSourceButton = (
+                <div className="mx_MessageContextMenu_field" onClick={this.onViewClearSourceClick}>
+                    View Decrypted Source
+                </div>
+            );
+        }
 
         if (this.props.eventTileOps) {
             if (this.props.eventTileOps.isWidgetHidden()) {
@@ -174,6 +192,7 @@ module.exports = React.createClass({
                 {redactButton}
                 {cancelButton}
                 {viewSourceButton}
+                {viewClearSourceButton}
                 {unhidePreviewButton}
                 {permalinkButton}
                 {UserSettingsStore.isFeatureEnabled('rich_text_editor') ? quoteButton : null}
