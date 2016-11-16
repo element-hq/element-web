@@ -156,16 +156,21 @@ module.exports = React.createClass({
         let senders = new Set(eventsToRender.map((e) => e.getSender()));
         senders.forEach(
             (userId) => {
-                // Only push the last event if it isn't the same membership as the first
-
                 let userEvents = eventsToRender.filter((e) => {
                     return e.getSender() === userId;
                 });
 
+                // NB: These may be the same event, in which case the lastEvent is used
+                // because prev_content should != content
                 let firstEvent = userEvents[0];
                 let lastEvent = userEvents[userEvents.length - 1];
 
-                if (firstEvent.getContent().membership !== lastEvent.getContent().membership) {
+                // Membership BEFORE eventsToRender
+                let previousMembership = firstEvent.getPrevContent().membership || "leave";
+
+                // Otherwise, if the last membership event differs from previousMembership,
+                // use that.
+                if (previousMembership !== lastEvent.getContent().membership) {
                     filteredEvents.push(lastEvent);
                 }
             }
