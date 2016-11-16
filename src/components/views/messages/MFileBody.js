@@ -21,7 +21,42 @@ import filesize from 'filesize';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import {decryptFile} from '../../../utils/DecryptFile';
+import Tinter from '../../../Tinter';
+import 'isomorphic-fetch';
+import q from 'q';
 
+// A cached tinted copy of "img/download.svg"
+var tintedDownloadImageURL;
+// Track a list of mounted MFileBody instances so that we can update
+// the "img/download.svg" when the tint changes.
+var nextMountId = 0;
+const mounts = {};
+
+/**
+ * Updates the tinted copy of "img/download.svg" when the tint changes.
+ */
+function updateTintedDownloadImage() {
+    // Download the svg as an XML document.
+    // We could cache the XML response here, but since the tint rarely changes
+    // it's probably not worth it.
+    q(fetch("img/download.svg")).then(function(response) {
+        return response.text();
+    }).then(function(svgText) {
+        const svg = new DOMParser().parseFromString(svgText, "image/svg+xml");
+        // Apply the fixups to the XML.
+        const fixups = Tinter.calcSvgFixups([{contentDocument: svg}]);
+        Tinter.applySvgFixups(fixups);
+        // Encoded the fixed up SVG as a data URL.
+        const svgString = new XMLSerializer().serializeToString(svg);
+        tintedDownloadImageURL = "data:image/svg+xml;base64," + window.btoa(svgString);
+        // Notify each mounted MFileBody that the URL has changed.
+        Object.keys(mounts).forEach(function(id) {
+            mounts[id].tint();
+        });
+    }).done();
+}
+
+Tinter.registerTintable(updateTintedDownloadImage);
 
 module.exports = React.createClass({
     displayName: 'MFileBody',
@@ -70,6 +105,12 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
+        // Add this to the list of mounted components to receive notifications
+        // when the tint changes.
+        this.id = nextMountId++;
+        mounts[this.id] = this;
+        this.tint();
+        // Check whether we need to decrypt the file content.
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             decryptFile(content.file).done((url) => {
@@ -84,12 +125,23 @@ module.exports = React.createClass({
         }
     },
 
+    componentWillUnmount: function() {
+        // Remove this from the list of mounted components
+        delete mounts[this.id];
+    },
+
+    tint: function() {
+        // Update our tinted copy of "img/download.svg"
+        if (this.refs.downloadImage) {
+            this.refs.downloadImage.src = tintedDownloadImageURL;
+        }
+    },
+
     render: function() {
         const content = this.props.mxEvent.getContent();
 
         const text = this.presentableTextForFile(content);
 
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
         if (content.file !== undefined && this.state.decryptedUrl === null) {
 
             // Need to decrypt the attachment
@@ -155,7 +207,7 @@ module.exports = React.createClass({
                     <span className="mx_MFileBody">
                         <div className="mx_MImageBody_download">
                             <a href={contentUrl} target="_blank" rel="noopener" download={downloadAttr}>
-                                <TintableSvg src="img/download.svg" width="12" height="14"/>
+                                <img src={tintedDownloadImageURL} width="12" height="14" ref="downloadImage"/>
                                 Download {text}
                             </a>
                         </div>

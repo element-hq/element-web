@@ -74,4 +74,13 @@ var TintableSvg = React.createClass({
     }
 });
 
+// Register with the Tinter so that we will be told if the tint changes
+Tinter.registerTintable(function() {
+    if (TintableSvg.mounts) {
+        Object.keys(TintableSvg.mounts).forEach((id) => {
+            TintableSvg.mounts[id].tint();
+        });
+    }
+});
+
 module.exports = TintableSvg;
