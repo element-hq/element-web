@@ -321,7 +321,7 @@ describe('TimelinePanel', function() {
             expect(messagePanel.props.suppressFirstDateSeparator).toBe(false);
             var events = scryEventTiles(panel);
             expect(events[0].props.mxEvent).toBe(timeline.getEvents()[0]);
-            expect(events.length).toEqual(TIMELINE_CAP);
+            expect(events.length).toBeLessThanOrEqualTo(TIMELINE_CAP);
 
             // we should now be able to scroll down, and paginate in the other
             // direction.
@@ -339,7 +339,7 @@ describe('TimelinePanel', function() {
             expect(messagePanel.props.suppressFirstDateSeparator).toBe(true);
 
             var events = scryEventTiles(panel);
-            expect(events.length).toEqual(TIMELINE_CAP);
+            expect(events.length).toBeLessThanOrEqualTo(TIMELINE_CAP);
 
             // we don't really know what the first event tile will be, since that
             // depends on how much the timelinepanel decides to paginate.

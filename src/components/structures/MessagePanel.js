@@ -321,8 +321,11 @@ module.exports = React.createClass({
                 }
 
                 ret.push(
-                    <MemberEventListSummary key={mxEv.getId()} events={summarisedEvents}>
-                        {eventTiles}
+                    <MemberEventListSummary
+                        key={mxEv.getId()}
+                        events={summarisedEvents}
+                        data-scroll-token={eventId}>
+                            {eventTiles}
                     </MemberEventListSummary>
                 );
                 continue;
@@ -564,6 +567,7 @@ module.exports = React.createClass({
                     onScroll={ this.props.onScroll }
                     onResize={ this.onResize }
                     onFillRequest={ this.props.onFillRequest }
+                    onUnfillRequest={ this.props.onUnfillRequest }
                     style={ style }
                     stickyBottom={ this.props.stickyBottom }>
                 {topSpinner}

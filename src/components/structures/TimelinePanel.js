@@ -108,7 +108,9 @@ var TimelinePanel = React.createClass({
 
     getDefaultProps: function() {
         return {
-            timelineCap: 250,
+            // By default, disable the timelineCap in favour of unpaginating based on
+            // event tile heights. (See _unpaginateEvents)
+            timelineCap: Number.MAX_VALUE,
             className: 'mx_RoomView_messagePanel',
         };
     },
@@ -242,6 +244,30 @@ var TimelinePanel = React.createClass({
             client.removeListener("Room.redaction", this.onRoomRedaction);
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
+        }
+    },
+
+    onMessageListUnfillRequest: function(backwards, scrollToken) {
+        let dir = backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS;
+        debuglog("TimelinePanel: unpaginating events in direction", dir);
+
+        // All tiles are inserted by MessagePanel to have a scrollToken === eventId
+        let eventId = scrollToken;
+
+        let marker = this.state.events.findIndex(
+            (ev) => {
+                return ev.getId() === eventId;
+            }
+        );
+
+        let count = backwards ? marker + 1 : this.state.events.length - marker;
+
+        if (count > 0) {
+            debuglog("TimelinePanel: Unpaginating", count, "in direction", dir);
+            this._timelineWindow._unpaginate(count, backwards);
+            this.setState({
+                events: this._getEvents(),
+            });
         }
     },
 
@@ -984,6 +1010,7 @@ var TimelinePanel = React.createClass({
                     stickyBottom={ stickyBottom }
                     onScroll={ this.onMessageListScroll }
                     onFillRequest={ this.onMessageListFillRequest }
+                    onUnfillRequest={ this.onMessageListUnfillRequest }
                     opacity={ this.props.opacity }
                     className={ this.props.className }
                     tileShape={ this.props.tileShape }
