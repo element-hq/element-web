@@ -53,7 +53,7 @@ module.exports = React.createClass({
     },
 
     onViewClearSourceClick: function() {
-        var ViewSource = sdk.getComponent('structures.ViewSource');
+        const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createDialog(ViewSource, {
             // FIXME: _clearEvent is private
             content: this.props.mxEvent._clearEvent,
