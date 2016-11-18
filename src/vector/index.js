@@ -120,6 +120,8 @@ var lastLoadedScreen = null;
 // so a web page can update the URL bar appropriately.
 var onNewScreen = function(screen) {
     console.log("newscreen "+screen);
+    // just remember the most recent screen while we are loading, so that the
+    // user doesn't see the URL bar doing a dance
     if (!loaded) {
         lastLoadedScreen = screen;
     } else {
@@ -156,19 +158,6 @@ function getDefaultDeviceDisplayName() {
 }
 
 window.addEventListener('hashchange', onHashChange);
-window.onload = function() {
-    console.log("window.onload");
-    if (!validBrowser) {
-        return;
-    }
-    UpdateChecker.start();
-    routeUrl(window.location);
-    loaded = true;
-    if (lastLoadedScreen) {
-        onNewScreen(lastLoadedScreen);
-        lastLoadedScreen = null;
-    }
-}
 
 function getConfig() {
     let deferred = q.defer();
@@ -259,6 +248,8 @@ async function loadApp() {
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser) {
+        UpdateChecker.start();
+
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
 
         window.matrixChat = ReactDOM.render(
@@ -275,6 +266,15 @@ async function loadApp() {
             />,
             document.getElementById('matrixchat')
         );
+
+        routeUrl(window.location);
+
+        // we didn't propagate screen changes to the URL bar while we were loading; do it now.
+        loaded = true;
+        if (lastLoadedScreen) {
+            onNewScreen(lastLoadedScreen);
+            lastLoadedScreen = null;
+        }
     }
     else {
         console.error("Browser is missing required features.");
@@ -285,7 +285,6 @@ async function loadApp() {
                 validBrowser = true;
                 console.log("User accepts the compatibility risks.");
                 loadApp();
-                window.onload(); // still do the same code paths for compatible clients
             }} />,
             document.getElementById('matrixchat')
         );
