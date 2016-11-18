@@ -146,7 +146,7 @@ module.exports = React.createClass({
                 <div>
                     <div className="mx_RoomPreviewBar_join_text">
                         You are trying to access { name }.<br/>
-                        <a onClick={ this.props.onJoinClick }>Click here to join</a> the discussion!
+                        <a onClick={ this.props.onJoinClick }><b>Click here</b></a> to join the discussion!
                     </div>
                 </div>
             );
