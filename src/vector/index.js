@@ -158,8 +158,6 @@ function getDefaultDeviceDisplayName() {
 }
 
 window.addEventListener('hashchange', onHashChange);
-window.onload = function() {
-}
 
 function getConfig() {
     let deferred = q.defer();
