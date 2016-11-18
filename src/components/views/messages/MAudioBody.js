@@ -29,6 +29,7 @@ export default class MAudioBody extends React.Component {
         this.state = {
             playing: false,
             decryptedUrl: null,
+            error: null,
         }
     }
     onPlayToggle() {
@@ -51,27 +52,38 @@ export default class MAudioBody extends React.Component {
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             decryptFile(content.file).done((url) => {
                 this.setState({
-                    decryptedUrl: url
+                    decryptedUrl: url,
                 });
             }, (err) => {
-                console.warn("Unable to decrypt attachment: ", err)
-                // Set a placeholder image when we can't decrypt the image.
-                this.refs.image.src = "img/warning.svg";
+                console.warn("Unable to decrypt attachment: ", err);
+                this.setState({
+                    error: err,
+                });
             });
         }
     }
 
     render() {
+
         const content = this.props.mxEvent.getContent();
+
+        if (this.state.error !== null) {
+            return (
+                <span className="mx_MAudioBody" ref="body">
+                    <img src="img/warning.svg" width="16" height="16"/>
+                    Error decrypting audio
+                </span>
+            );
+        }
 
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
-            // For now add an img tag with a spinner.
+            // For now add an img tag with a 16x16 spinner.
+            // Not sure how tall the audio player is so not sure how tall it should actually be.
             return (
                 <span className="mx_MAudioBody">
-                <img src="img/spinner.gif" ref="image"
-                    alt={content.body} />
+                    <img src="img/spinner.gif" alt={content.body} width="16" height="16"/>
                 </span>
             );
         }

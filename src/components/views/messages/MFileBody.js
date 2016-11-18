@@ -24,6 +24,8 @@ import {decryptFile} from '../../../utils/DecryptFile';
 import Tinter from '../../../Tinter';
 import 'isomorphic-fetch';
 import q from 'q';
+import Modal from '../../../Modal';
+
 
 // A cached tinted copy of "img/download.svg"
 var tintedDownloadImageURL;
@@ -110,19 +112,6 @@ module.exports = React.createClass({
         this.id = nextMountId++;
         mounts[this.id] = this;
         this.tint();
-        // Check whether we need to decrypt the file content.
-        const content = this.props.mxEvent.getContent();
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
-            decryptFile(content.file).done((url) => {
-                this.setState({
-                    decryptedUrl: url,
-                });
-            }, (err) => {
-                console.warn("Unable to decrypt attachment: ", err)
-                // Set a placeholder image when we can't decrypt the image.
-                this.refs.image.src = "img/warning.svg";
-            });
-        }
     },
 
     componentWillUnmount: function() {
@@ -141,16 +130,42 @@ module.exports = React.createClass({
         const content = this.props.mxEvent.getContent();
 
         const text = this.presentableTextForFile(content);
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
         if (content.file !== undefined && this.state.decryptedUrl === null) {
+
+            var decrypting = false;
+            const decrypt = () => {
+                if (decrypting) {
+                    return false;
+                }
+                decrypting = true;
+                decryptFile(content.file).then((url) => {
+                    this.setState({
+                        decryptedUrl: url,
+                    });
+                }).catch((err) => {
+                    console.warn("Unable to decrypt attachment: ", err)
+                    // Set a placeholder image when we can't decrypt the image
+                    Modal.createDialog(ErrorDialog, {
+                        description: "Error decrypting attachment"
+                    });
+                }).finally(function() {
+                    decrypting = false;
+                }).done();
+                return false;
+            };
 
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a spinner.
             return (
                 <span className="mx_MFileBody" ref="body">
-                <img src="img/spinner.gif" ref="image"
-                    alt={content.body} />
+                    <div className="mx_MImageBody_download">
+                        <a href="javascript:void(0)" onClick={decrypt}>
+                            Decrypt {text}
+                        </a>
+                    </div>
                 </span>
             );
         }
