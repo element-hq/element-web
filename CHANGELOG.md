@@ -1,3 +1,54 @@
+Changes in [0.8.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.0) (2016-11-19)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.5...v0.8.0)
+
+ * Fix more membership change collapsing bugs
+   [\#560](https://github.com/matrix-org/matrix-react-sdk/pull/560)
+ * Show an open padlock for unencrypted rooms
+   [\#557](https://github.com/matrix-org/matrix-react-sdk/pull/557)
+ * Clean up MFileBody.presentableTextForFile
+   [\#558](https://github.com/matrix-org/matrix-react-sdk/pull/558)
+ * Update eventtiles when the events are decrypted
+   [\#556](https://github.com/matrix-org/matrix-react-sdk/pull/556)
+ * Update EventTile to use WithMatrixClient instead of MatrixClientPeg
+   [\#552](https://github.com/matrix-org/matrix-react-sdk/pull/552)
+ * Disable conference calling for encrypted rooms
+   [\#549](https://github.com/matrix-org/matrix-react-sdk/pull/549)
+ * Encrypt attachments in encrypted rooms
+   [\#548](https://github.com/matrix-org/matrix-react-sdk/pull/548)
+ * Fix MemberAvatar PropTypes & MemberEventListSummary key
+   [\#547](https://github.com/matrix-org/matrix-react-sdk/pull/547)
+ * Revert "Encrypt attachments in encrypted rooms,"
+   [\#546](https://github.com/matrix-org/matrix-react-sdk/pull/546)
+ * Fix the vector web version in UserSettings
+   [\#542](https://github.com/matrix-org/matrix-react-sdk/pull/542)
+ * Truncate consecutive member events
+   [\#544](https://github.com/matrix-org/matrix-react-sdk/pull/544)
+ * Encrypt attachments in encrypted rooms,
+   [\#533](https://github.com/matrix-org/matrix-react-sdk/pull/533)
+ * Fix the ctrl+e mute camera shortcut
+   [\#545](https://github.com/matrix-org/matrix-react-sdk/pull/545)
+ * Show the error that occured when trying to reach scalar
+   [\#543](https://github.com/matrix-org/matrix-react-sdk/pull/543)
+ * Don't do URL previews for matrix.to
+   [\#541](https://github.com/matrix-org/matrix-react-sdk/pull/541)
+ * Fix NPE in LoggedInView
+   [\#540](https://github.com/matrix-org/matrix-react-sdk/pull/540)
+ * Make room alias & user ID links matrix.to links
+   [\#538](https://github.com/matrix-org/matrix-react-sdk/pull/538)
+ * Make MemberInfo use the matrixclient from the context
+   [\#537](https://github.com/matrix-org/matrix-react-sdk/pull/537)
+ * Add the MatrixClient to the react context
+   [\#536](https://github.com/matrix-org/matrix-react-sdk/pull/536)
+ * Factor out LoggedInView from MatrixChat
+   [\#535](https://github.com/matrix-org/matrix-react-sdk/pull/535)
+ * Move 'new version' support into Platform
+   [\#532](https://github.com/matrix-org/matrix-react-sdk/pull/532)
+ * Move Notifications into Platform
+   [\#534](https://github.com/matrix-org/matrix-react-sdk/pull/534)
+ * Move platform-specific functionality into Platform
+   [\#531](https://github.com/matrix-org/matrix-react-sdk/pull/531)
+
 Changes in [0.7.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.7.5) (2016-11-04)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.5-rc.1...v0.7.5)
