@@ -1,3 +1,48 @@
+Changes in [0.9.0](https://github.com/vector-im/vector-web/releases/tag/v0.9.0) (2016-11-19)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.4...v0.9.0)
+
+ * Add a cachebuster to /version
+   [\#2596](https://github.com/vector-im/vector-web/pull/2596)
+ * Add a 'View decrypted source' button
+   [\#2587](https://github.com/vector-im/vector-web/pull/2587)
+ * Fix changelog dialog to  read new version format
+   [\#2577](https://github.com/vector-im/vector-web/pull/2577)
+ * Build all of the vector dir in the build process
+   [\#2558](https://github.com/vector-im/vector-web/pull/2558)
+ * Support for get_app_version
+   [\#2553](https://github.com/vector-im/vector-web/pull/2553)
+ * Add CSS for mlist truncation
+   [\#2565](https://github.com/vector-im/vector-web/pull/2565)
+ * Add menu option for `external_url` if present
+   [\#2560](https://github.com/vector-im/vector-web/pull/2560)
+ * Make auto-update configureable
+   [\#2555](https://github.com/vector-im/vector-web/pull/2555)
+ * Missed files electron windows fixes
+   [\#2556](https://github.com/vector-im/vector-web/pull/2556)
+ * Add some CSS for  scalar error popup
+   [\#2554](https://github.com/vector-im/vector-web/pull/2554)
+ * Catch unhandled errors in the electron process
+   [\#2552](https://github.com/vector-im/vector-web/pull/2552)
+ * Slight grab-bag of fixes for electron on Windows
+   [\#2551](https://github.com/vector-im/vector-web/pull/2551)
+ * Electron app (take 3)
+   [\#2535](https://github.com/vector-im/vector-web/pull/2535)
+ * Use webpack-dev-server instead of http-server
+   [\#2542](https://github.com/vector-im/vector-web/pull/2542)
+ * Better support no-config when loading from file
+   [\#2541](https://github.com/vector-im/vector-web/pull/2541)
+ * Fix loading with no config from HTTP
+   [\#2540](https://github.com/vector-im/vector-web/pull/2540)
+ * Move 'new version' support into Platform
+   [\#2532](https://github.com/vector-im/vector-web/pull/2532)
+ * Add Notification support to the Web Platform
+   [\#2533](https://github.com/vector-im/vector-web/pull/2533)
+ * Use the defaults if given a blank config file
+   [\#2534](https://github.com/vector-im/vector-web/pull/2534)
+ * Implement Platforms
+   [\#2531](https://github.com/vector-im/vector-web/pull/2531)
+
 hanges in [0.8.4](https://github.com/vector-im/vector-web/releases/tag/v0.8.4) (2016-11-04)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.4-rc.2...v0.8.4)
