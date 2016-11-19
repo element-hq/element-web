@@ -124,7 +124,7 @@ module.exports = React.createClass({
         if (!eventStatus) { // sent
             redactButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
-                    Redact
+                    Delete
                 </div>
             );
         }
