@@ -272,7 +272,7 @@ export default class MessageComposerInput extends React.Component {
             break;
 
             case 'quote': {
-                let {event: {content: {body, formatted_body}}} = payload.event || {};
+                let {body, formatted_body} = payload.event.getContent();
                 formatted_body = formatted_body || escape(body);
                 if (formatted_body) {
                     let content = RichText.HTMLtoContentState(`<blockquote>${formatted_body}</blockquote>`);
