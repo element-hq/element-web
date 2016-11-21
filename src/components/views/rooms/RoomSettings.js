@@ -24,7 +24,6 @@ var ObjectUtils = require("../../../ObjectUtils");
 var dis = require("../../../dispatcher");
 var ScalarAuthClient = require("../../../ScalarAuthClient");
 var ScalarMessaging = require('../../../ScalarMessaging');
-var UserSettingsStore = require('../../../UserSettingsStore');
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
 // as an integer, return a default.
@@ -81,16 +80,14 @@ module.exports = React.createClass({
             console.error("Failed to get room visibility: " + err);
         });
 
-        if (UserSettingsStore.isFeatureEnabled("integration_management")) {
-            this.scalarClient = new ScalarAuthClient();
-            this.scalarClient.connect().done(() => {
-                this.forceUpdate();
-            }, (err) => {
-                this.setState({
-                    scalar_error: err
-                });
-            })
-        }
+        this.scalarClient = new ScalarAuthClient();
+        this.scalarClient.connect().done(() => {
+            this.forceUpdate();
+        }, (err) => {
+            this.setState({
+                scalar_error: err
+            });
+        });
 
         dis.dispatch({
             action: 'ui_opacity',
@@ -477,10 +474,6 @@ module.exports = React.createClass({
     },
 
     _renderEncryptionSection: function() {
-        if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
-            return null;
-        }
-
         var cli = MatrixClientPeg.get();
         var roomState = this.props.room.currentState;
         var isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
@@ -684,27 +677,26 @@ module.exports = React.createClass({
                 </span>
             );
         }
-        if (UserSettingsStore.isFeatureEnabled("integration_management")) {
-            if (this.scalarClient.hasCredentials()) {
-                integrationsButton = (
+
+        if (this.scalarClient.hasCredentials()) {
+            integrationsButton = (
                     <div className="mx_RoomSettings_integrationsButton" onClick={ this.onManageIntegrations }>
-                        Manage Integrations
-                    </div>
-                );
-            } else if (this.state.scalar_error) {
-                integrationsButton = (
+                    Manage Integrations
+                </div>
+            );
+        } else if (this.state.scalar_error) {
+            integrationsButton = (
                     <div className="mx_RoomSettings_integrationsButton_error" onClick={ this.onShowIntegrationsError }>
-                        Integrations Error <img src="img/warning.svg" width="17"/>
-                        { integrationsError }
-                    </div>
-                );
-            } else {
-                integrationsButton = (
+                    Integrations Error <img src="img/warning.svg" width="17"/>
+                    { integrationsError }
+                </div>
+            );
+        } else {
+            integrationsButton = (
                     <div className="mx_RoomSettings_integrationsButton" style={{ opacity: 0.5 }}>
-                        Manage Integrations
-                    </div>
-                );
-            }
+                    Manage Integrations
+                </div>
+            );
         }
 
         return (
@@ -795,7 +787,7 @@ module.exports = React.createClass({
                     roomId={this.props.room.roomId}
                     canSetCanonicalAlias={ roomState.mayClientSendStateEvent("m.room.canonical_alias", cli) }
                     canSetAliases={
-                        true 
+                        true
                         /* Originally, we arbitrarily restricted creating aliases to room admins: roomState.mayClientSendStateEvent("m.room.aliases", cli) */
                     }
                     canonicalAliasEvent={this.props.room.currentState.getStateEvents('m.room.canonical_alias', '')}

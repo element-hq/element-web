@@ -27,7 +27,6 @@ var sdk = require('../../../index');
 var ScalarAuthClient = require("../../../ScalarAuthClient");
 var Modal = require("../../../Modal");
 var SdkConfig = require('../../../SdkConfig');
-var UserSettingsStore = require('../../../UserSettingsStore');
 
 linkifyMatrix(linkify);
 
@@ -213,16 +212,6 @@ module.exports = React.createClass({
         // which requires the user to click through and THEN we can open the link in a new tab because
         // the window.open command occurs in the same stack frame as the onClick callback.
 
-        let integrationsEnabled = UserSettingsStore.isFeatureEnabled("integration_management");
-        if (!integrationsEnabled) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Integrations disabled",
-                description: "You need to enable the Labs option 'Integrations Management' in your Riot user settings first.",
-            });
-            return;
-        }
-
         // Go fetch a scalar token
         let scalarClient = new ScalarAuthClient();
         scalarClient.connect().then(() => {
@@ -304,4 +293,3 @@ module.exports = React.createClass({
         }
     },
 });
-
