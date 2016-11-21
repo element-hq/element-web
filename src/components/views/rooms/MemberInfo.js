@@ -30,7 +30,6 @@ var classNames = require('classnames');
 var dis = require("../../../dispatcher");
 var Modal = require("../../../Modal");
 var sdk = require('../../../index');
-var UserSettingsStore = require('../../../UserSettingsStore');
 var createRoom = require('../../../createRoom');
 var DMRoomMap = require('../../../utils/DMRoomMap');
 var Unread = require('../../../Unread');
@@ -71,10 +70,8 @@ module.exports = WithMatrixClient(React.createClass({
     componentWillMount: function() {
         this._cancelDeviceList = null;
 
-        // only display the devices list if our client supports E2E *and* the
-        // feature is enabled in the user settings
-        this._enableDevices = this.props.matrixClient.isCryptoEnabled() &&
-            UserSettingsStore.isFeatureEnabled("e2e_encryption");
+        // only display the devices list if our client supports E2E
+        this._enableDevices = this.props.matrixClient.isCryptoEnabled();
 
         const cli = this.props.matrixClient;
         cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
