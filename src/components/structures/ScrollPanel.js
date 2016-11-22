@@ -25,7 +25,7 @@ var DEBUG_SCROLL = false;
 
 // The amount of extra scroll distance to allow prior to unfilling.
 // See _getExcessHeight.
-const UNPAGINATION_PADDING = 500;
+const UNPAGINATION_PADDING = 1500;
 
 if (DEBUG_SCROLL) {
     // using bind means that we get to keep useful line numbers in the console
@@ -361,7 +361,14 @@ module.exports = React.createClass({
         }
 
         if (markerScrollToken) {
-            this.props.onUnfillRequest(backwards, markerScrollToken);
+            // Use a debouncer to prevent multiple unfill calls in quick succession
+            // This is to make the unfilling process less aggressive
+            if (this._unfillDebouncer) {
+                clearTimeout(this._unfillDebouncer);
+            }
+            this._unfillDebouncer = setTimeout(() => {
+                this.props.onUnfillRequest(backwards, markerScrollToken);
+            }, 200);
         }
     },
 
