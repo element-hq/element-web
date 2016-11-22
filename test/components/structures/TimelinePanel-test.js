@@ -341,8 +341,9 @@ describe('TimelinePanel', function() {
             var events = scryEventTiles(panel);
             expect(events[0].props.mxEvent).toBe(timeline.getEvents()[0]);
 
-            // Expect to be able to paginate forwards, having unpaginated a few events
-            expect(panel.state.canForwardPaginate).toBe(true);
+            // At this point, we make no assumption that unpagination has happened. This doesn't
+            // mean that we shouldn't be able to scroll all the way down to the bottom to see the
+            // most recent event in the timeline.
 
             // scroll all the way to the bottom
             return scrollDown();
