@@ -59,16 +59,16 @@ to build.
    web server.
 
 Note that `npm run dist` is not supported on Windows, so Windows users can run `npm
-run build`, which will build all the necessary files into the `vector`
+run build`, which will build all the necessary files into the `webapp`
 directory. The version of Vector will not appear in Settings without
-using the dist script. You can then mount the vector directory on your
+using the dist script. You can then mount the `webapp` directory on your
 webserver to actually serve up the app, which is entirely static content.
 
 config.json
 ===========
 
-You can configure the app by copying `vector/config.sample.json` to
-`vector/config.json` and customising it:
+You can configure the app by copying `config.sample.json` to
+`webapp/config.json` and customising it:
 
 1. `default_hs_url` is the default home server url.
 1. `default_is_url` is the default identity server url (this is the server used
