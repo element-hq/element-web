@@ -338,10 +338,6 @@ module.exports = React.createClass({
     },
 
     _renderCryptoInfo: function() {
-        if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
-            return null;
-        }
-
         var client = MatrixClientPeg.get();
         var deviceId = client.deviceId;
         var identityKey = client.getDeviceEd25519Key() || "<not supported>";
@@ -362,9 +358,6 @@ module.exports = React.createClass({
     },
 
     _renderDevicesPanel: function() {
-        if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
-            return null;
-        }
         var DevicesPanel = sdk.getComponent('settings.DevicesPanel');
         return (
             <div>
