@@ -31,6 +31,8 @@
                 "nativePattern": "[^\\s]+/[^\\s]+$"
             },
             "irc:freenode": {
+                "protocol": "irc",
+                "domain": "chat.freenode.net",
                 "portalRoomPattern": "#freenode_.*:matrix.org",
                 "name": "Freenode",
                 "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
@@ -38,6 +40,8 @@
                 "nativePattern": "^#[^\\s]+$"
             },
             "irc:mozilla": {
+                "protocol": "irc",
+                "domain": "irc.mozilla.org",
                 "portalRoomPattern": "#mozilla_.*:matrix.org",
                 "name": "Mozilla",
                 "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
