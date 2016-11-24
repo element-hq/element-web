@@ -54,7 +54,6 @@ var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
 
-import UAParser from 'ua-parser-js';
 import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
@@ -142,19 +141,6 @@ var makeRegistrationUrl = function() {
            window.location.host +
            window.location.pathname +
            '#/register';
-}
-
-
-function getDefaultDeviceDisplayName() {
-    // strip query-string and fragment from uri
-    let u = url.parse(window.location.href);
-    u.search = "";
-    u.hash = "";
-    let app_name = u.format();
-
-    let ua = new UAParser();
-    return app_name + " via " + ua.getBrowser().name +
-        " on " + ua.getOS().name;
 }
 
 window.addEventListener('hashchange', onHashChange);
@@ -262,7 +248,7 @@ async function loadApp() {
                 startingFragmentQueryParams={fragparts.params}
                 enableGuest={true}
                 onLoadCompleted={onLoadCompleted}
-                defaultDeviceDisplayName={getDefaultDeviceDisplayName()}
+                defaultDeviceDisplayName={PlatformPeg.get().getDefaultDeviceDisplayName()}
             />,
             document.getElementById('matrixchat')
         );

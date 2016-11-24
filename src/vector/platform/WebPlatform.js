@@ -23,6 +23,9 @@ import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
 import q from 'q';
 
+import url from 'url';
+import UAParser from 'ua-parser-js';
+
 export default class WebPlatform extends VectorBasePlatform {
     constructor() {
         super();
@@ -179,5 +182,17 @@ export default class WebPlatform extends VectorBasePlatform {
 
     installUpdate() {
         window.location.reload();
+    }
+
+    getDefaultDeviceDisplayName() {
+        // strip query-string and fragment from uri
+        let u = url.parse(window.location.href);
+        u.search = "";
+        u.hash = "";
+        let app_name = u.format();
+
+        let ua = new UAParser();
+        return app_name + " via " + ua.getBrowser().name +
+            " on " + ua.getOS().name;
     }
 }

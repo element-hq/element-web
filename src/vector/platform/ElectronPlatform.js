@@ -35,6 +35,27 @@ function onUpdateDownloaded(ev, releaseNotes, ver, date, updateURL) {
     });
 }
 
+function platformFriendlyName() {
+    console.log(window.process);
+    switch (window.process.platform) {
+        case 'darwin':
+            return 'macOS';
+        case 'freebsd':
+            return 'FreeBSD';
+        case 'openbsd':
+            return 'OpenBSD';
+        case 'sunos':
+            return 'SunOS';
+        case 'win32':
+            return 'Windows';
+        default:
+            // Sorry, Linux users: you get lumped into here,
+            // but only because Linux's capitalisation is
+            // normal. We do care about you.
+            return window.process.platform[0].toUpperCase + window.process.platform.slice(1);
+    }
+}
+
 export default class ElectronPlatform extends VectorBasePlatform {
     setNotificationCount(count: number) {
         super.setNotificationCount(count);
@@ -100,5 +121,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
         // doesn't fire the before-quit event so the main process needs to know
         // it should exit.
         electron.ipcRenderer.send('install_update');
+    }
+
+    getDefaultDeviceDisplayName() {
+        return "Riot Desktop on " + platformFriendlyName();
     }
 }
