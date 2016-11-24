@@ -75,6 +75,9 @@ module.exports = React.createClass({
             loading: true,
             screen: undefined,
 
+            // What the LoggedInView would be showing if visible
+            page_type: PageTypes.RoomDirectory,
+
             // If we are viewing a room by alias, this contains the alias
             currentRoomAlias: null,
 
@@ -235,6 +238,7 @@ module.exports = React.createClass({
     setStateForNewScreen: function(state) {
         const newState = {
             screen: undefined,
+            page_type: PageTypes.RoomDirectory,
             currentRoomAlias: null,
             currentRoomId: null,
             viewUserId: null,
