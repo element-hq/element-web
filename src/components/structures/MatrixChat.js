@@ -76,7 +76,7 @@ module.exports = React.createClass({
             screen: undefined,
 
             // What the LoggedInView would be showing if visible
-            page_type: PageTypes.RoomDirectory,
+            page_type: null,
 
             // If we are viewing a room by alias, this contains the alias
             currentRoomAlias: null,
