@@ -238,9 +238,6 @@ module.exports = React.createClass({
     setStateForNewScreen: function(state) {
         const newState = {
             screen: undefined,
-            page_type: PageTypes.RoomDirectory,
-            currentRoomAlias: null,
-            currentRoomId: null,
             viewUserId: null,
             logged_in: false,
             ready: false,
