@@ -598,6 +598,9 @@ module.exports = React.createClass({
             ready: false,
             collapse_lhs: false,
             collapse_rhs: false,
+            currentRoomAlias: null,
+            currentRoomId: null,
+            page_type: PageTypes.RoomDirectory,
         });
     },
 
