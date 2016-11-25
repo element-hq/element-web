@@ -29,7 +29,7 @@ mkdir -p "$dir/install/win32/ia32"
 cp electron/dist/win-ia32/*.exe "$dir/install/win32/ia32/"
 
 mkdir -p "$dir/install/win32/x64"
-cp electron/dist/win/*.exe "$dir/install/win32/ia32/"
+cp electron/dist/win/*.exe "$dir/install/win32/x64/"
 
 
 # Packages for auto-update. It would be nice if squirrel's
