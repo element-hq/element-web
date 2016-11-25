@@ -30,7 +30,7 @@ const VectorMenu = require('./vectormenu');
 
 let vectorConfig = {};
 try {
-    vectorConfig = require('../../vector/config.json');
+    vectorConfig = require('../../webapp/config.json');
 } catch (e) {
     // it would be nice to check the error code here and bail if the config
     // is unparseable, but we get MODULE_NOT_FOUND in the case of a missing
@@ -112,9 +112,11 @@ function startAutoUpdate(update_url) {
         // 204 No Content. On windows it takes a base path and looks for
         // files under that path.
         if (process.platform == 'darwin') {
-            electron.autoUpdater.setFeedURL(update_url);
+            // macos only has 64 bit
+            electron.autoUpdater.setFeedURL(update_url + 'macos/');
         } else if (process.platform == 'win32') {
-            electron.autoUpdater.setFeedURL(update_url + 'win32/');
+            // We split by 32/64 bit too: the builds are different and entirely separate
+            electron.autoUpdater.setFeedURL(update_url + 'win32/' + process.arch + '/');
         } else {
             // Squirrel / electron only supports auto-update on these two platforms.
             // I'm not even going to try to guess which feed style they'd use if they
