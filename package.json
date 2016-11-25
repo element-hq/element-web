@@ -35,7 +35,7 @@
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "NODE_ENV=production webpack -p --progress",
     "build:bundle:dev": "webpack --optimize-occurence-order --progress",
-    "build:electron": "npm run clean && npm run build && cpx electron/config.json webapp/ && build -lwm",
+    "build:electron": "rimraf electron/dist && npm run clean && npm run build && build -wm --ia32 --x64 && scripts/check-electron.sh",
     "build": "node scripts/babelcheck.js && npm run build:res && npm run build:config && npm run build:emojione && npm run build:css && npm run build:bundle",
     "build:dev": "node scripts/babelcheck.js && npm run build:res && npm run build:config && npm run build:emojione && npm run build:css && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
