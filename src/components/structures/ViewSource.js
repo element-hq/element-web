@@ -22,7 +22,8 @@ module.exports = React.createClass({
     displayName: 'ViewSource',
 
     propTypes: {
-        onFinished: React.PropTypes.func.isRequired
+        content: React.PropTypes.object.isRequired,
+        onFinished: React.PropTypes.func.isRequired,
     },
 
     componentDidMount: function() {
@@ -45,10 +46,9 @@ module.exports = React.createClass({
         return (
             <div className="mx_ViewSource">
                 <pre>
-                    {JSON.stringify(this.props.mxEvent.event, null, 2)}
+                    {JSON.stringify(this.props.content, null, 2)}
                 </pre>
             </div>
         );
     }
 });
-

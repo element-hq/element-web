@@ -1,4 +1,5 @@
 {
+    "update_url": "https://riot.im/download/desktop/",
     "default_hs_url": "https://matrix.org",
     "default_is_url": "https://vector.im",
     "brand": "Riot",
@@ -26,7 +27,7 @@
                 "protocol": "gitter",
                 "portalRoomPattern": "#gitter_.*:matrix.org",
                 "name": "Gitter",
-                "icon": "//gitter.im/favicon.ico",
+                "icon": "https://gitter.im/favicon.ico",
                 "example": "org/community",
                 "nativePattern": "[^\\s]+/[^\\s]+$"
             },
@@ -35,16 +36,16 @@
                 "domain": "chat.freenode.net",
                 "portalRoomPattern": "#freenode_.*:matrix.org",
                 "name": "Freenode",
-                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
+                "icon": "https://matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
                 "example": "#channel",
                 "nativePattern": "^#[^\\s]+$"
             },
             "irc:mozilla": {
                 "protocol": "irc",
-                "domain": "irc.mozilla.org",
+                "domain": "chat.freenode.net",
                 "portalRoomPattern": "#mozilla_.*:matrix.org",
                 "name": "Mozilla",
-                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
+                "icon": "https://matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
                 "example": "#channel",
                 "nativePattern": "^#[^\\s]+$"
             },
@@ -53,7 +54,7 @@
                 "domain": "ipv6-irc.snoonet.org",
                 "portalRoomPattern": "#_snoonet_.*:matrix.org",
                 "name": "Snoonet",
-                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
+                "icon": "https://matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
                 "example": "#channel",
                 "nativePattern": "^#[^\\s]+$"
             },
@@ -62,7 +63,7 @@
                 "domain": "irc.oftc.net",
                 "portalRoomPattern": "#_oftc_.*:matrix.org",
                 "name": "OFTC",
-                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
+                "icon": "https://matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
                 "example": "#channel",
                 "nativePattern": "^#[^\\s]+$"
             }
