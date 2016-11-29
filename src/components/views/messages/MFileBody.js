@@ -22,7 +22,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import {decryptFile} from '../../../utils/DecryptFile';
 import Tinter from '../../../Tinter';
-import 'isomorphic-fetch';
+import request from 'browser-request';
 import q from 'q';
 import Modal from '../../../Modal';
 
@@ -41,10 +41,13 @@ function updateTintedDownloadImage() {
     // Download the svg as an XML document.
     // We could cache the XML response here, but since the tint rarely changes
     // it's probably not worth it.
-    q(fetch("img/download.svg")).then(function(response) {
-        return response.text();
-    }).then(function(svgText) {
-        const svg = new DOMParser().parseFromString(svgText, "image/svg+xml");
+    // Also note that we can't use fetch here because fetch doesn't support
+    // file URLs, which the download image will be if we're running from
+    // the filesystem (like in an Electron wrapper).
+    request({uri: "img/download.svg"}, (err, response, body) => {
+        if (err) return;
+
+        const svg = new DOMParser().parseFromString(body, "image/svg+xml");
         // Apply the fixups to the XML.
         const fixups = Tinter.calcSvgFixups([{contentDocument: svg}]);
         Tinter.applySvgFixups(fixups);
@@ -55,7 +58,7 @@ function updateTintedDownloadImage() {
         Object.keys(mounts).forEach(function(id) {
             mounts[id].tint();
         });
-    }).done();
+    });
 }
 
 Tinter.registerTintable(updateTintedDownloadImage);
