@@ -44,14 +44,23 @@ limitations under the License.
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
-.mx_MemberDeviceInfo_block,
-.mx_MemberDeviceInfo_unblock {
+.mx_MemberDeviceInfo_blacklist,
+.mx_MemberDeviceInfo_unblacklist {
     float: right;
 }
 
+/* "Unblacklist" is too long for a regular button: make it wider and
+   reduce the padding. */  
+.mx_EncryptedEventDialog .mx_MemberDeviceInfo_blacklist,
+.mx_EncryptedEventDialog .mx_MemberDeviceInfo_unblacklist {
+    width: 8em;
+    padding-left: 1em;
+    padding-right: 1em;
+}    
+
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_verified,
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_unverified,
-.mx_MemberDeviceInfo div.mx_MemberDeviceInfo_blocked {
+.mx_MemberDeviceInfo div.mx_MemberDeviceInfo_blacklisted {
     float: right;
     padding-left: 1em;
 }
@@ -64,6 +73,6 @@ limitations under the License.
     color: #e8bf37;
 }
 
-.mx_MemberDeviceInfo div.mx_MemberDeviceInfo_blocked {
+.mx_MemberDeviceInfo div.mx_MemberDeviceInfo_blacklisted {
     color: #ba6363;
 }
