@@ -49,7 +49,7 @@ export default React.createClass({
                     <p>
                         If it matches, press the verify button below.
                         If it doesnt, then someone else is intercepting this device
-                        and you probably want to press the block button instead.
+                        and you probably want to press the blacklist button instead.
                     </p>
                     <p>
                         In future this verification process will be more sophisticated.
@@ -73,33 +73,33 @@ export default React.createClass({
         );
     },
 
-    onBlockClick: function() {
+    onBlacklistClick: function() {
         MatrixClientPeg.get().setDeviceBlocked(
             this.props.userId, this.props.device.deviceId, true
         );
     },
 
-    onUnblockClick: function() {
+    onUnblacklistClick: function() {
         MatrixClientPeg.get().setDeviceBlocked(
             this.props.userId, this.props.device.deviceId, false
         );
     },
 
     render: function() {
-        var blockButton = null, verifyButton = null;
+        var blacklistButton = null, verifyButton = null;
 
         if (this.props.device.isBlocked()) {
-            blockButton = (
-                <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unblock"
-                  onClick={this.onUnblockClick}>
-                    Unblock
+            blacklistButton = (
+                <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unblacklist"
+                  onClick={this.onUnblacklistClick}>
+                    Unblacklist
                 </button>
             );
         } else {
-            blockButton = (
-                <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_block"
-                  onClick={this.onBlockClick}>
-                    Block
+            blacklistButton = (
+                <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_blacklist"
+                  onClick={this.onBlacklistClick}>
+                    Blacklist
                 </button>
             );
         }
@@ -115,7 +115,7 @@ export default React.createClass({
             verifyButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_verify"
                   onClick={this.onVerifyClick}>
-                    Verify
+                    Verify...
                 </button>
             );
         }
@@ -124,7 +124,7 @@ export default React.createClass({
         return (
             <div className="mx_MemberDeviceInfo mx_DeviceVerifyButtons" >
                 { verifyButton }
-                { blockButton }
+                { blacklistButton }
             </div>
         );
     },
