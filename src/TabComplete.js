@@ -227,8 +227,20 @@ class TabComplete {
 
             // pressing any key at all (except tab) restarts the automatic tab-complete timer
             if (this.opts.autoEnterTabComplete) {
+                const cachedText = ev.target.value;
                 clearTimeout(this.enterTabCompleteTimerId);
                 this.enterTabCompleteTimerId = setTimeout(() => {
+                    if (this.completing) {
+                        // If you highlight text and CTRL+X it, tab-completing will not be reset.
+                        // This check makes sure that if something like a cut operation has been
+                        // done, that we correctly refresh the tab-complete list. Normal backspace
+                        // operations get caught by the stopTabCompleting() section above, but
+                        // because the CTRL key is held, this does not execute for CTRL+X.
+                        if (cachedText !== this.textArea.value) {
+                            this.stopTabCompleting();
+                        }
+                    }
+
                     if (!this.completing) {
                         this.handleTabPress(true, false);
                     }
