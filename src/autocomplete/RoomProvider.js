@@ -38,7 +38,7 @@ export default class RoomProvider extends AutocompleteProvider {
             completions = this.fuse.search(command[0]).map(room => {
                 let displayAlias = getDisplayAliasForRoom(room.room) || room.roomId;
                 return {
-                    completion: displayAlias,
+                    completion: displayAlias + ' ',
                     component: (
                         <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={room.room} />} title={room.name} description={displayAlias} />
                     ),
