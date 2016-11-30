@@ -72,7 +72,7 @@ export default class Markdown {
                 par = par.parent
             }
             if (par.firstChild != par.lastChild) {
-                real_paragraph.bind(this)(node, entering);
+                real_paragraph.call(this, node, entering);
             }
         }
 
