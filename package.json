@@ -35,7 +35,7 @@
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "NODE_ENV=production webpack -p --progress",
     "build:bundle:dev": "webpack --optimize-occurence-order --progress",
-    "build:electron": "rimraf electron/dist && npm run clean && npm run build && build -wm --ia32 --x64 && scripts/check-electron.sh",
+    "build:electron": "rimraf electron/dist && npm run clean && npm run build && build -wml --ia32 --x64 && scripts/check-electron.sh",
     "build": "node scripts/babelcheck.js && npm run build:res && npm run build:config && npm run build:emojione && npm run build:css && npm run build:bundle",
     "build:dev": "node scripts/babelcheck.js && npm run build:res && npm run build:config && npm run build:emojione && npm run build:css && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
@@ -58,6 +58,7 @@
     "browser-request": "^0.3.3",
     "classnames": "^2.1.2",
     "draft-js": "^0.8.1",
+    "electron-auto-updater": "^0.6.2",
     "extract-text-webpack-plugin": "^0.9.1",
     "favico.js": "^0.3.10",
     "filesize": "^3.1.2",
@@ -97,7 +98,7 @@
     "catw": "^1.0.1",
     "cpx": "^1.3.2",
     "css-raw-loader": "^0.1.1",
-    "electron-builder": "^7.23.2",
+    "electron-builder": "^10.4.1",
     "emojione": "^2.2.3",
     "expect": "^1.16.0",
     "fs-extra": "^0.30.0",
@@ -134,14 +135,15 @@
     "dereference": true,
     "//files": "We bundle everything, so we only need to include webapp/",
     "files": [
-      "!**/*",
       "electron/src/**",
       "electron/img/**",
+      "node_modules/electron-auto-updater/**",
       "webapp/**",
       "package.json"
     ],
-    "squirrelWindows": {
-      "iconUrl": "https://riot.im/favicon.ico"
+    "linux": {
+      "target": "deb",
+      "maintainer": "support@riot.im"
     }
   },
   "directories": {

@@ -17,13 +17,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Squirrel on windows starts the app with various flags
-// as hooks to tell us when we've been installed/uninstalled
-// etc.
-const check_squirrel_hooks = require('./squirrelhooks');
-if (check_squirrel_hooks()) return;
-
 const electron = require('electron');
+
+// Auto updater from the 'electron-auto-updater' package for NSIS
+// auto-update support (not the one that comes with electron).
+const autoUpdater = require('electron-auto-updater').autoUpdater;
 const url = require('url');
 
 const VectorMenu = require('./vectormenu');
@@ -45,7 +43,7 @@ const PERMITTED_URL_SCHEMES = [
 ];
 
 const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
-const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
+const INITIAL_UPDATE_DELAY_MS = 5 * 1000;
 
 let mainWindow = null;
 let appQuitting = false;
@@ -90,12 +88,12 @@ function installUpdate() {
     // for some reason, quitAndInstall does not fire the
     // before-quit event, so we need to set the flag here.
     appQuitting = true;
-    electron.autoUpdater.quitAndInstall();
+    autoUpdater.quitAndInstall();
 }
 
 function pollForUpdates() {
     try {
-        electron.autoUpdater.checkForUpdates();
+        autoUpdater.checkForUpdates();
     } catch (e) {
         console.log("Couldn't check for update", e);
     }
@@ -106,30 +104,19 @@ function startAutoUpdate(update_url) {
         update_url = update_url + '/';
     }
     try {
-        // For reasons best known to Squirrel, the way it checks for updates
-        // is completely different between macOS and windows. On macOS, it
-        // hits a URL that either gives it a 200 with some json or
-        // 204 No Content. On windows it takes a base path and looks for
-        // files under that path.
+        // Since writing, the electron auto update process has changed from being
+        // completely different between platforms to being differently completely
+        // different. On Mac, we set the feed URL here. On Windows, it uses a
+        // yaml file bundled at build time from the 'publish' entry in the
+        // package.json. There is no autoupdate for Linux: it's expected that
+        // the distro will provide it.
         if (process.platform == 'darwin') {
-            // macos only has 64 bit
-            electron.autoUpdater.setFeedURL(update_url + 'macos/');
-        } else if (process.platform == 'win32') {
-            // We split by 32/64 bit too: the builds are different and entirely separate
-            electron.autoUpdater.setFeedURL(update_url + 'win32/' + process.arch + '/');
-        } else {
-            // Squirrel / electron only supports auto-update on these two platforms.
-            // I'm not even going to try to guess which feed style they'd use if they
-            // implemented it on Linux, or if it would be different again.
-            console.log("Auto update not supported on this platform");
+            autoUpdater.setFeedURL(update_url + 'macos/');
         }
         // We check for updates ourselves rather than using 'updater' because we need to
         // do it in the main process (and we don't really need to check every 10 minutes:
         // every hour should be just fine for a desktop app)
         // However, we still let the main window listen for the update events.
-        // We also wait a short time before checking for updates the first time because
-        // of squirrel on windows and it taking a small amount of time to release a
-        // lock file.
         setTimeout(pollForUpdates, INITIAL_UPDATE_DELAY_MS);
         setInterval(pollForUpdates, UPDATE_POLL_INTERVAL_MS);
     } catch (err) {
