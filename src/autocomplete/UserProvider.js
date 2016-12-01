@@ -1,9 +1,9 @@
 import React from 'react';
 import AutocompleteProvider from './AutocompleteProvider';
 import Q from 'q';
-import Fuse from 'fuse.js';
 import {PillCompletion} from './Components';
 import sdk from '../index';
+import FuzzyMatcher from './FuzzyMatcher';
 
 const USER_REGEX = /@\S*/g;
 
@@ -15,7 +15,7 @@ export default class UserProvider extends AutocompleteProvider {
             keys: ['name', 'userId'],
         });
         this.users = [];
-        this.fuse = new Fuse([], {
+        this.matcher = new FuzzyMatcher([], {
             keys: ['name', 'userId'],
         });
     }
@@ -26,8 +26,7 @@ export default class UserProvider extends AutocompleteProvider {
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
-            this.fuse.set(this.users);
-            completions = this.fuse.search(command[0]).map(user => {
+            completions = this.matcher.match(command[0]).map(user => {
                 let displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 let completion = displayName;
                 if (range.start === 0) {
@@ -56,6 +55,7 @@ export default class UserProvider extends AutocompleteProvider {
 
     setUserList(users) {
         this.users = users;
+        this.matcher.setObjects(this.users);
     }
 
     static getInstance(): UserProvider {

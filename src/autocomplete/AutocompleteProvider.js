@@ -2,7 +2,7 @@ import React from 'react';
 import type {Completion, SelectionRange} from './Autocompleter';
 
 export default class AutocompleteProvider {
-    constructor(commandRegex?: RegExp, fuseOpts?: any) {
+    constructor(commandRegex?: RegExp) {
         if (commandRegex) {
             if (!commandRegex.global) {
                 throw new Error('commandRegex must have global flag set');

@@ -1,7 +1,7 @@
 import React from 'react';
 import AutocompleteProvider from './AutocompleteProvider';
 import {emojioneList, shortnameToImage, shortnameToUnicode} from 'emojione';
-import Fuse from 'fuse.js';
+import FuzzyMatcher from './FuzzyMatcher';
 import sdk from '../index';
 import {PillCompletion} from './Components';
 import type {SelectionRange, Completion} from './Autocompleter';
@@ -14,7 +14,7 @@ let instance = null;
 export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
-        this.fuse = new Fuse(EMOJI_SHORTNAMES);
+        this.matcher = new FuzzyMatcher(EMOJI_SHORTNAMES);
     }
 
     async getCompletions(query: string, selection: SelectionRange) {
@@ -23,7 +23,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
-            completions = this.fuse.search(command[0]).map(result => {
+            completions = this.matcher.match(command[0]).map(result => {
                 const shortname = EMOJI_SHORTNAMES[result];
                 const unicode = shortnameToUnicode(shortname);
                 return {

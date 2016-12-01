@@ -1,6 +1,6 @@
 import React from 'react';
 import AutocompleteProvider from './AutocompleteProvider';
-import Fuse from 'fuse.js';
+import FuzzyMatcher from './FuzzyMatcher';
 import {TextualCompletion} from './Components';
 
 const COMMANDS = [
@@ -53,7 +53,7 @@ let instance = null;
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
         super(COMMAND_RE);
-        this.fuse = new Fuse(COMMANDS, {
+        this.matcher = new FuzzyMatcher(COMMANDS, {
            keys: ['command', 'args', 'description'],
         });
     }
@@ -62,7 +62,7 @@ export default class CommandProvider extends AutocompleteProvider {
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
-            completions = this.fuse.search(command[0]).map(result => {
+            completions = this.matcher.match(command[0]).map(result => {
                 return {
                     completion: result.command + ' ',
                     component: (<TextualCompletion
