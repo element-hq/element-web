@@ -99,9 +99,9 @@ function pollForUpdates() {
     }
 }
 
-function startAutoUpdate(update_url) {
-    if (update_url.slice(-1) !== '/') {
-        update_url = update_url + '/';
+function startAutoUpdate() {
+    if (process.platform != 'darwin' && process.platform != 'win32') {
+        return;
     }
     try {
         // Since writing, the electron auto update process has changed from being
@@ -111,7 +111,19 @@ function startAutoUpdate(update_url) {
         // package.json. There is no autoupdate for Linux: it's expected that
         // the distro will provide it.
         if (process.platform == 'darwin') {
-            autoUpdater.setFeedURL(update_base_url + 'update/macos/');
+            const update_base_url = vectorConfig.update_base_url;
+            if (!update_base_url) {
+                console.log("No update_base_url: disabling auto-update");
+                return;
+            }
+            if (update_base_url.slice(-1) !== '/') {
+                update_base_url = update_url + '/';
+            }
+            const update_url = update_base_url + 'update/macos/tmp/';
+            console.log("Starting auto update with URL: " + update_url);
+            autoUpdater.setFeedURL(update_url);
+        } else {
+            console.log("Starting auto update with baked-in URL");
         }
         // We check for updates ourselves rather than using 'updater' because we need to
         // do it in the main process (and we don't really need to check every 10 minutes:
@@ -138,12 +150,7 @@ process.on('uncaughtException', function (error) {
 electron.ipcMain.on('install_update', installUpdate);
 
 electron.app.on('ready', () => {
-    if (vectorConfig.update_url) {
-        console.log("Starting auto update with URL: " + vectorConfig.update_url);
-        startAutoUpdate(vectorConfig.update_url);
-    } else {
-        console.log("No update_url is defined: auto update is disabled");
-    }
+    startAutoUpdate();
 
     mainWindow = new electron.BrowserWindow({
         icon: `${__dirname}/../img/riot.ico`,

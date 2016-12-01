@@ -107,6 +107,9 @@ You can configure the app by copying `vector/config.sample.json` to
    valid location on this network. This is used as a hint to the user to indicate
    when a valid location has been entered so it's not necessary for this to be
    exactly correct. Optional.
+1. `update_base_url` (electron app only): HTTPS URL to a web server to download
+   updates from. This should be the path to the directory containing `install`
+   and `update`.
 
 Running as a Desktop app
 ========================
