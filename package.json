@@ -35,7 +35,7 @@
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "NODE_ENV=production webpack -p --progress",
     "build:bundle:dev": "webpack --optimize-occurence-order --progress",
-    "build:electron": "rimraf electron/dist && npm run clean && npm run build && build -wml --ia32 --x64",
+    "build:electron": "npm run clean && npm run build && build -wml --ia32 --x64",
     "build": "node scripts/babelcheck.js && npm run build:res && npm run build:config && npm run build:emojione && npm run build:css && npm run build:bundle",
     "build:dev": "node scripts/babelcheck.js && npm run build:res && npm run build:config && npm run build:emojione && npm run build:css && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
@@ -47,7 +47,7 @@
     "start:skins:css": "mkdirp build && catw \"src/skins/vector/css/**/*.css\" -o build/components.css",
     "start": "node scripts/babelcheck.js && parallelshell \"npm run start:emojione\" \"npm run start:res\" \"npm run start:config\" \"npm run start:js\" \"npm run start:skins:css\"",
     "start:prod": "parallelshell \"npm run start:emojione\" \"npm run start:js:prod\" \"npm run start:skins:css\"",
-    "clean": "rimraf build lib webapp",
+    "clean": "rimraf build lib webapp electron/dist",
     "prepublish": "npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
     "test:multi": "karma start"
