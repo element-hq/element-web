@@ -111,7 +111,7 @@ function startAutoUpdate(update_url) {
         // package.json. There is no autoupdate for Linux: it's expected that
         // the distro will provide it.
         if (process.platform == 'darwin') {
-            autoUpdater.setFeedURL(update_url + 'macos/');
+            autoUpdater.setFeedURL(update_base_url + 'update/macos/');
         }
         // We check for updates ourselves rather than using 'updater' because we need to
         // do it in the main process (and we don't really need to check every 10 minutes:
