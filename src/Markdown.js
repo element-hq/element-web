@@ -56,23 +56,31 @@ export default class Markdown {
         return is_plain;
     }
 
-    toHTML() {
+    render(html) {
         const parser = new commonmark.Parser();
 
         const renderer = new commonmark.HtmlRenderer({safe: true});
         const real_paragraph = renderer.paragraph;
-        renderer.paragraph = function(node, entering) {
-            // If there is only one top level node, just return the
-            // bare text: it's a single line of text and so should be
-            // 'inline', rather than unnecessarily wrapped in its own
-            // p tag. If, however, we have multiple nodes, each gets
-            // its own p tag to keep them as separate paragraphs.
-            var par = node;
-            while (par.parent) {
-                par = par.parent
+        if (html) {
+            renderer.paragraph = function(node, entering) {
+                // If there is only one top level node, just return the
+                // bare text: it's a single line of text and so should be
+                // 'inline', rather than unnecessarily wrapped in its own
+                // p tag. If, however, we have multiple nodes, each gets
+                // its own p tag to keep them as separate paragraphs.
+                var par = node;
+                while (par.parent) {
+                    par = par.parent
+                }
+                if (par.firstChild != par.lastChild) {
+                    real_paragraph.call(this, node, entering);
+                }
             }
-            if (par.firstChild != par.lastChild) {
-                real_paragraph.call(this, node, entering);
+        } else {
+            renderer.paragraph = function(node, entering) {
+                if (entering) {
+                    this.lit('\n\n');
+                }
             }
         }
 
