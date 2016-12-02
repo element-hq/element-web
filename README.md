@@ -59,16 +59,16 @@ to build.
    web server.
 
 Note that `npm run dist` is not supported on Windows, so Windows users can run `npm
-run build`, which will build all the necessary files into the `vector`
-directory. The version of Vector will not appear in Settings without
-using the dist script. You can then mount the vector directory on your
+run build`, which will build all the necessary files into the `webapp`
+directory. The version of Riot will not appear in Settings without
+using the dist script. You can then mount the `webapp` directory on your
 webserver to actually serve up the app, which is entirely static content.
 
 config.json
 ===========
 
-You can configure the app by copying `vector/config.sample.json` to
-`vector/config.json` and customising it:
+You can configure the app by copying `config.sample.json` to
+`config.json` and customising it:
 
 1. `default_hs_url` is the default home server url.
 1. `default_is_url` is the default identity server url (this is the server used
@@ -110,6 +110,11 @@ You can configure the app by copying `vector/config.sample.json` to
 1. `update_base_url` (electron app only): HTTPS URL to a web server to download
    updates from. This should be the path to the directory containing `install`
    and `update`.
+1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
+   encrypted file attachments. This MUST be hosted on a completely separate domain to
+   anything else since it is used to isolate the privileges of file attachments to this
+   domain. Default: `usercontent.riot.im`. This needs to contain v1.html from
+   https://github.com/matrix-org/usercontent/blob/master/v1.html
 
 Running as a Desktop app
 ========================
