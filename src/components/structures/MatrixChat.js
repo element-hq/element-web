@@ -66,8 +66,18 @@ module.exports = React.createClass({
         defaultDeviceDisplayName: React.PropTypes.string,
     },
 
+    childContextTypes: {
+        appConfig: React.PropTypes.object,
+    },
+
     AuxPanel: {
         RoomSettings: "room_settings",
+    },
+
+    getChildContext: function() {
+        return {
+            appConfig: this.props.config,
+        }
     },
 
     getInitialState: function() {

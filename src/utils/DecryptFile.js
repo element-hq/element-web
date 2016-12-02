@@ -27,7 +27,7 @@ import q from 'q';
  * Read blob as a data:// URI.
  * @return {Promise} A promise that resolves with the data:// URI.
  */
-function readBlobAsDataUri(file) {
+export function readBlobAsDataUri(file) {
     var deferred = q.defer();
     var reader = new FileReader();
     reader.onload = function(e) {
@@ -62,6 +62,6 @@ export function decryptFile(file) {
     }).then(function(dataArray) {
         // Turn the array into a Blob and give it the correct MIME-type.
         var blob = new Blob([dataArray], {type: file.mimetype});
-        return readBlobAsDataUri(blob);
+        return blob;
     });
 }

@@ -21,7 +21,7 @@ import MFileBody from './MFileBody';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
-import { decryptFile } from '../../../utils/DecryptFile';
+import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 
 export default class MAudioBody extends React.Component {
     constructor(props) {
@@ -29,6 +29,7 @@ export default class MAudioBody extends React.Component {
         this.state = {
             playing: false,
             decryptedUrl: null,
+            decryptedBlob: null,
             error: null,
         }
     }
@@ -50,9 +51,14 @@ export default class MAudioBody extends React.Component {
     componentDidMount() {
         var content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            decryptFile(content.file).done((url) => {
+            var decryptedBlob;
+            decryptFile(content.file).then(function(blob) {
+                decryptedBlob = blob;
+                return readBlobAsDataUri(decryptedBlob);
+            }).done((url) => {
                 this.setState({
                     decryptedUrl: url,
+                    decryptedBlob: decryptedBlob,
                 });
             }, (err) => {
                 console.warn("Unable to decrypt attachment: ", err);
@@ -93,7 +99,7 @@ export default class MAudioBody extends React.Component {
         return (
             <span className="mx_MAudioBody">
                 <audio src={contentUrl} controls />
-                <MFileBody {...this.props} decryptedUrl={this.state.decryptedUrl} />
+                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
             </span>
         );
     }

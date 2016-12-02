@@ -21,7 +21,7 @@ import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Model from '../../../Modal';
 import sdk from '../../../index';
-import { decryptFile } from '../../../utils/DecryptFile';
+import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 import q from 'q';
 
 module.exports = React.createClass({
@@ -31,6 +31,7 @@ module.exports = React.createClass({
         return {
             decryptedUrl: null,
             decryptedThumbnailUrl: null,
+            decryptedBlob: null,
             error: null,
         };
     },
@@ -84,13 +85,20 @@ module.exports = React.createClass({
             if (content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
                     content.info.thumbnail_file
-                );
+                ).then(function(blob) {
+                    return readBlobAsDataUri(blob);
+                });
             }
+            var decryptedBlob;
             thumbnailPromise.then((thumbnailUrl) => {
-                decryptFile(content.file).then((contentUrl) => {
+                return decryptFile(content.file).then(function(blob) {
+                    decryptedBlob = blob;
+                    return readBlobAsDataUri(blob);
+                }).then((contentUrl) => {
                     this.setState({
                         decryptedUrl: contentUrl,
                         decryptedThumbnailUrl: thumbnailUrl,
+                        decryptedBlob: decryptedBlob,
                     });
                 });
             }).catch((err) => {
@@ -159,7 +167,7 @@ module.exports = React.createClass({
                     controls preload={preload} autoPlay={false}
                     height={height} width={width} poster={poster}>
                 </video>
-                <MFileBody {...this.props} decryptedUrl={this.state.decryptedUrl} />
+                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
             </span>
         );
     },
