@@ -110,12 +110,8 @@ You can configure the app by copying `config.sample.json` to
 1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
    encrypted file attachments. This MUST be hosted on a completely separate domain to
    anything else since it is used to isolate the privileges of file attachments to this
-   domain. Default: `usercontent.riot.im`. The HTML this page needs to contain is:
-   ```
-   <html><head><script>
-   window.onmessage=function(e){eval("("+e.data.code+")")(e)}
-   </script></head><body></body></html>
-   ```
+   domain. Default: `usercontent.riot.im`. This needs to contain v1.html from
+   https://github.com/matrix-org/usercontent/blob/master/v1.html
 
 Running as a Desktop app
 ========================
