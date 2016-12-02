@@ -32,6 +32,9 @@ module.exports = React.createClass({
     propTypes: {
         /* the MatrixEvent to show */
         mxEvent: React.PropTypes.object.isRequired,
+
+        /* called when the image has loaded */
+        onWidgetLoad: React.PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -123,6 +126,7 @@ module.exports = React.createClass({
                         decryptedUrl: contentUrl,
                         decryptedThumbnailUrl: thumbnailUrl,
                     });
+                    this.props.onWidgetLoad();
                 });
             }).catch((err) => {
                 console.warn("Unable to decrypt attachment: ", err);
@@ -186,11 +190,12 @@ module.exports = React.createClass({
                 <span className="mx_MImageBody" ref="body">
                     <div className="mx_MImageBody_thumbnail" ref="image" style={{
                         "display": "flex",
-                        "align-items": "center",
-                        "justify-items": "center",
+                        "alignItems": "center",
                         "width": "100%",
                     }}>
-                        <img src="img/spinner.gif" alt={content.body} width="16" height="16"/>
+                        <img src="img/spinner.gif" alt={content.body} width="32" height="32" style={{
+                            "margin": "auto",
+                        }}/>
                     </div>
                 </span>
             );
