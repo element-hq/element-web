@@ -351,7 +351,7 @@ module.exports = WithMatrixClient(React.createClass({
         var mxEvent = this.props.mxEvent;
         dispatcher.dispatch({
             action: 'insert_displayname',
-            displayname: mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender(),
+            displayname: (mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()).replace(' (IRC)', ''),
         });
     },
 
