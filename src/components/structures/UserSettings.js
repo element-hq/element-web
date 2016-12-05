@@ -339,25 +339,14 @@ module.exports = React.createClass({
 
     _renderCryptoInfo: function() {
         const client = MatrixClientPeg.get();
-        if (!client.isCryptoEnabled()) {
-            return <div>
-                <h3>Cryptography</h3>
-                <div className="mx_UserSettings_section mx_UserSettings_cryptoSection error">
-                    End-to-end encryption is disabled
-                </div>
-            </div>;
-        }
+        const deviceId = client.deviceId;
+        const identityKey = client.getDeviceEd25519Key() || "<not supported>";
 
-        var deviceId = client.deviceId;
-        var identityKey = client.getDeviceEd25519Key() || "<not supported>";
-
-        var myDevice = client.getStoredDevicesForUser(MatrixClientPeg.get().credentials.userId)[0];
         return (
             <div>
                 <h3>Cryptography</h3>
                 <div className="mx_UserSettings_section mx_UserSettings_cryptoSection">
                     <ul>
-                        <li><label>Device name:</label> <span>{ myDevice.getDisplayName() }</span></li>
                         <li><label>Device ID:</label>   <span><code>{deviceId}</code></span></li>
                         <li><label>Device key:</label>  <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
