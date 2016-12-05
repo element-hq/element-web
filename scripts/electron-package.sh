@@ -91,11 +91,6 @@ pubdir="$projdir/electron/pub"
 rm -r "$pubdir" || true
 mkdir -p "$pubdir"
 
-# figure out what version this build is known as
-# (since we could be building from a branch or indeed
-# any commit-ish, not just a version tag)
-vername=`python -c 'import yaml; import sys; print yaml.load(sys.stdin)["version"]' < $builddir/electron/dist/latest.yml`
-
 # Install packages: what the user downloads the first time,
 # (DMGs for mac, exe installer for windows)
 mkdir -p "$pubdir/install/macos"
@@ -127,5 +122,5 @@ cp $distdir/*.deb "$projdir/electron/dist/"
 
 rm -rf "$builddir"
 
-echo "Riot Desktop $vername is ready to go in $pubdir: this directory can be hosted on your web server."
+echo "Riot Desktop is ready to go in $pubdir: this directory can be hosted on your web server."
 echo "deb archives are in electron/dist/ - these should be added into your debian repository"
