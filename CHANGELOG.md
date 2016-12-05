@@ -1,3 +1,30 @@
+Changes in [0.9.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.1-rc.1) (2016-12-05)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.0...v0.9.1-rc.1)
+
+ * Final bits to prepare electron distribtion:
+   [\#2653](https://github.com/vector-im/riot-web/pull/2653)
+ * Update name & repo to reflect renamed repository
+   [\#2692](https://github.com/vector-im/riot-web/pull/2692)
+ * Document cross_origin_renderer_url
+   [\#2680](https://github.com/vector-im/riot-web/pull/2680)
+ * Add css for the iframes for e2e attachments
+   [\#2659](https://github.com/vector-im/riot-web/pull/2659)
+ * Fix config location in some more places
+   [\#2670](https://github.com/vector-im/riot-web/pull/2670)
+ * CSS updates for s/block/blacklist for e2e
+   [\#2662](https://github.com/vector-im/riot-web/pull/2662)
+ * Update to electron 1.4.8
+   [\#2660](https://github.com/vector-im/riot-web/pull/2660)
+ * Add electron config
+   [\#2644](https://github.com/vector-im/riot-web/pull/2644)
+ * Move getDefaultDeviceName into the Platforms
+   [\#2643](https://github.com/vector-im/riot-web/pull/2643)
+ * Add Freenode & Mozilla domains
+   [\#2641](https://github.com/vector-im/riot-web/pull/2641)
+ * Include config.sample.json in dist tarball
+   [\#2614](https://github.com/vector-im/riot-web/pull/2614)
+
 Changes in [0.9.0](https://github.com/vector-im/vector-web/releases/tag/v0.9.0) (2016-11-19)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.4...v0.9.0)
