@@ -1,3 +1,32 @@
+Changes in [0.8.1-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.1-rc.1) (2016-12-05)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.0...v0.8.1-rc.1)
+
+ * Strip (IRC) when clicking on username
+   [\#579](https://github.com/matrix-org/matrix-react-sdk/pull/579)
+ * Fix scroll jump on image decryption
+   [\#577](https://github.com/matrix-org/matrix-react-sdk/pull/577)
+ * Make cut operations update the tab complete list
+   [\#576](https://github.com/matrix-org/matrix-react-sdk/pull/576)
+ * s/block/blacklist for e2e
+   [\#574](https://github.com/matrix-org/matrix-react-sdk/pull/574)
+ * Fix the download icon on attachments
+   [\#573](https://github.com/matrix-org/matrix-react-sdk/pull/573)
+ * Don't default the page_type to room directory
+   [\#572](https://github.com/matrix-org/matrix-react-sdk/pull/572)
+ * Fix crash on logging in
+   [\#571](https://github.com/matrix-org/matrix-react-sdk/pull/571)
+ * Reinstate missing sections from the UserSettings
+   [\#569](https://github.com/matrix-org/matrix-react-sdk/pull/569)
+ * Bump browser-encrypt-attachment to v0.2.0
+   [\#568](https://github.com/matrix-org/matrix-react-sdk/pull/568)
+ * Make the unpagination process less aggressive
+   [\#567](https://github.com/matrix-org/matrix-react-sdk/pull/567)
+ * Get rid of always-on labs settings
+   [\#566](https://github.com/matrix-org/matrix-react-sdk/pull/566)
+ * Fix 'Quote' for e2e messages
+   [\#565](https://github.com/matrix-org/matrix-react-sdk/pull/565)
+
 Changes in [0.8.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.0) (2016-11-19)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.5...v0.8.0)
