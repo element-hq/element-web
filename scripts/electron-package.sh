@@ -81,18 +81,6 @@ if [ -n "$conffile" ]; then
     pushd "$builddir"
 fi
 
-if [ "$update_base_url" != "null" ]; then
-    # Inject a 'publish' configuration into the package.json.  This is what
-    # electron-builder needs for auto-update on windows but we don't want to
-    # keep it in the package.json as we don't want everyone cloning the source
-    # and building it for themselves to get our auto-update URL.
-    update_url=$update_base_url/install/win32/
-    jq '.build.publish.provider="generic"' package.json \
-        | jq '.build.publish.url="$update_url"' \
-        > package.json.tmp
-    mv package.json.tmp package.json
-fi
-
 npm install
 npm run build:electron
 
@@ -113,14 +101,24 @@ vername=`python -c 'import yaml; import sys; print yaml.load(sys.stdin)["version
 mkdir -p "$pubdir/install/macos"
 cp $distdir/mac/*.dmg "$pubdir/install/macos/"
 
-mkdir -p "$pubdir/install/win32/"
-cp $distdir/*.exe "$pubdir/install/win32/"
-cp $distdir/latest.yml "$pubdir/install/win32/"
+mkdir -p "$pubdir/install/win32/ia32/"
+cp $distdir/win-ia32/*.exe "$pubdir/install/win32/ia32/"
 
-# Packages for auto-update on mac (Windows (NSIS) uses the installer exe)
+mkdir -p "$pubdir/install/win32/x64/"
+cp $distdir/win/*.exe "$pubdir/install/win32/x64/"
+
+# Packages for auto-update
 mkdir -p "$pubdir/update/macos"
 cp $distdir/mac/*.zip "$pubdir/update/macos/"
 echo "$ver" > "$pubdir/update/macos/latest"
+
+mkdir -p "$pubdir/update/win32/ia32/"
+cp $distdir/win-ia32/*.nupkg "$pubdir/update/win32/ia32/"
+cp $distdir/win-ia32/RELEASES "$pubdir/install/win32/ia32/"
+
+mkdir -p "$pubdir/update/win32/x64/"
+cp $distdir/win/*.nupkg "$pubdir/update/win32/x64/"
+cp $distdir/win/RELEASES "$pubdir/update/win32x64ia32/"
 
 # Move the debs to the main project dir's dist folder
 rm -r "$projdir/electron/dist" || true

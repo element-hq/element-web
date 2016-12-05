@@ -17,11 +17,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const electron = require('electron');
+// Squirrel on windows starts the app with various flags
+// as hooks to tell us when we've been installed/uninstalled
+// etc.
+const check_squirrel_hooks = require('./squirrelhooks');
+if (check_squirrel_hooks()) return;
 
-// Auto updater from the 'electron-auto-updater' package for NSIS
-// auto-update support (not the one that comes with electron).
-const autoUpdater = require('electron-auto-updater').autoUpdater;
+const electron = require('electron');
 const url = require('url');
 
 const VectorMenu = require('./vectormenu');
@@ -43,7 +45,7 @@ const PERMITTED_URL_SCHEMES = [
 ];
 
 const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
-const INITIAL_UPDATE_DELAY_MS = 5 * 1000;
+const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
 
 let mainWindow = null;
 let appQuitting = false;
@@ -88,47 +90,44 @@ function installUpdate() {
     // for some reason, quitAndInstall does not fire the
     // before-quit event, so we need to set the flag here.
     appQuitting = true;
-    autoUpdater.quitAndInstall();
+    electron.autoUpdater.quitAndInstall();
 }
 
 function pollForUpdates() {
     try {
-        autoUpdater.checkForUpdates();
+        electron.autoUpdater.checkForUpdates();
     } catch (e) {
         console.log("Couldn't check for update", e);
     }
 }
 
-function startAutoUpdate() {
-    if (process.platform != 'darwin' && process.platform != 'win32') {
-        return;
+function startAutoUpdate(update_base_url) {
+    if (update_base_url.slice(-1) !== '/') {
+        update_base_url = update_base_url + '/';
     }
     try {
-        // Since writing, the electron auto update process has changed from being
-        // completely different between platforms to being differently completely
-        // different. On Mac, we set the feed URL here. On Windows, it uses a
-        // yaml file bundled at build time from the 'publish' entry in the
-        // package.json. There is no autoupdate for Linux: it's expected that
-        // the distro will provide it.
+        // For reasons best known to Squirrel, the way it checks for updates
+        // is completely different between macOS and windows. On macOS, it
+        // hits a URL that either gives it a 200 with some json or
+        // 204 No Content. On windows it takes a base path and looks for
+        // files under that path.
         if (process.platform == 'darwin') {
-            const update_base_url = vectorConfig.update_base_url;
-            if (!update_base_url) {
-                console.log("No update_base_url: disabling auto-update");
-                return;
-            }
-            if (update_base_url.slice(-1) !== '/') {
-                update_base_url = update_url + '/';
-            }
-            const update_url = update_base_url + 'update/macos/tmp/';
-            console.log("Starting auto update with URL: " + update_url);
-            autoUpdater.setFeedURL(update_url);
+            electron.autoUpdater.setFeedURL(update_base_url + 'macos/');
+        } else if (process.platform == 'win32') {
+            electron.autoUpdater.setFeedURL(update_base_url + 'win32/' + process.arch + '/');
         } else {
-            console.log("Starting auto update with baked-in URL");
+            // Squirrel / electron only supports auto-update on these two platforms.
+            // I'm not even going to try to guess which feed style they'd use if they
+            // implemented it on Linux, or if it would be different again.
+            console.log("Auto update not supported on this platform");
         }
         // We check for updates ourselves rather than using 'updater' because we need to
         // do it in the main process (and we don't really need to check every 10 minutes:
         // every hour should be just fine for a desktop app)
         // However, we still let the main window listen for the update events.
+        // We also wait a short time before checking for updates the first time because
+        // of squirrel on windows and it taking a small amount of time to release a
+        // lock file.
         setTimeout(pollForUpdates, INITIAL_UPDATE_DELAY_MS);
         setInterval(pollForUpdates, UPDATE_POLL_INTERVAL_MS);
     } catch (err) {
@@ -150,7 +149,12 @@ process.on('uncaughtException', function (error) {
 electron.ipcMain.on('install_update', installUpdate);
 
 electron.app.on('ready', () => {
-    startAutoUpdate();
+    if (vectorConfig.update_base_url) {
+        console.log("Starting auto update with base URL: " + vectorConfig.update_base_url);
+        startAutoUpdate(vectorConfig.update_base_url);
+    } else {
+        console.log("No update_base_url is defined: auto update is disabled");
+    }
 
     mainWindow = new electron.BrowserWindow({
         icon: `${__dirname}/../img/riot.ico`,
