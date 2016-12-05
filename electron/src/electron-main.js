@@ -30,7 +30,7 @@ const VectorMenu = require('./vectormenu');
 
 let vectorConfig = {};
 try {
-    vectorConfig = require('../../vector/config.json');
+    vectorConfig = require('../../webapp/config.json');
 } catch (e) {
     // it would be nice to check the error code here and bail if the config
     // is unparseable, but we get MODULE_NOT_FOUND in the case of a missing
@@ -101,9 +101,9 @@ function pollForUpdates() {
     }
 }
 
-function startAutoUpdate(update_url) {
-    if (update_url.slice(-1) !== '/') {
-        update_url = update_url + '/';
+function startAutoUpdate(update_base_url) {
+    if (update_base_url.slice(-1) !== '/') {
+        update_base_url = update_base_url + '/';
     }
     try {
         // For reasons best known to Squirrel, the way it checks for updates
@@ -112,9 +112,9 @@ function startAutoUpdate(update_url) {
         // 204 No Content. On windows it takes a base path and looks for
         // files under that path.
         if (process.platform == 'darwin') {
-            electron.autoUpdater.setFeedURL(update_url);
+            electron.autoUpdater.setFeedURL(update_base_url + 'macos/');
         } else if (process.platform == 'win32') {
-            electron.autoUpdater.setFeedURL(update_url + 'win32/');
+            electron.autoUpdater.setFeedURL(update_base_url + 'win32/' + process.arch + '/');
         } else {
             // Squirrel / electron only supports auto-update on these two platforms.
             // I'm not even going to try to guess which feed style they'd use if they
@@ -149,11 +149,11 @@ process.on('uncaughtException', function (error) {
 electron.ipcMain.on('install_update', installUpdate);
 
 electron.app.on('ready', () => {
-    if (vectorConfig.update_url) {
-        console.log("Starting auto update with URL: " + vectorConfig.update_url);
-        startAutoUpdate(vectorConfig.update_url);
+    if (vectorConfig.update_base_url) {
+        console.log("Starting auto update with base URL: " + vectorConfig.update_base_url);
+        startAutoUpdate(vectorConfig.update_base_url);
     } else {
-        console.log("No update_url is defined: auto update is disabled");
+        console.log("No update_base_url is defined: auto update is disabled");
     }
 
     mainWindow = new electron.BrowserWindow({

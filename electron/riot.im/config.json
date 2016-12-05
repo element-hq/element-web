@@ -1,5 +1,5 @@
 {
-    "update_url": "https://riot.im/download/desktop/",
+    "update_base_url": "https://riot.im/download/desktop/",
     "default_hs_url": "https://matrix.org",
     "default_is_url": "https://vector.im",
     "brand": "Riot",
