@@ -113,7 +113,7 @@ cp $distdir/win-ia32/RELEASES "$pubdir/install/win32/ia32/"
 
 mkdir -p "$pubdir/update/win32/x64/"
 cp $distdir/win/*.nupkg "$pubdir/update/win32/x64/"
-cp $distdir/win/RELEASES "$pubdir/update/win32x64ia32/"
+cp $distdir/win/RELEASES "$pubdir/update/win32/x64/"
 
 # Move the debs to the main project dir's dist folder
 rm -r "$projdir/electron/dist" || true
