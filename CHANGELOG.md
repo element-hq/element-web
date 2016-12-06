@@ -1,3 +1,12 @@
+Changes in [0.9.1-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.1-rc.2) (2016-12-06)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.1-rc.1...v0.9.1-rc.2)
+
+ * Fix clicking on notifications
+   [\#2700](https://github.com/vector-im/riot-web/pull/2700)
+ * Desktop app: Only show window when ready
+   [\#2697](https://github.com/vector-im/riot-web/pull/2697)
+
 Changes in [0.9.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.1-rc.1) (2016-12-05)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.0...v0.9.1-rc.1)
