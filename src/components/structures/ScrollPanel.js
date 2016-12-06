@@ -402,6 +402,9 @@ module.exports = React.createClass({
         q.finally(fillPromise, () => {
             this._pendingFillRequests[dir] = false;
         }).then((hasMoreResults) => {
+            if (this.unmounted) {
+                return;
+            }
             // Unpaginate once filling is complete
             this._checkUnfillState(!backwards);
 
