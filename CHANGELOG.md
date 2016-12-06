@@ -1,3 +1,18 @@
+Changes in [0.8.1-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.1-rc.2) (2016-12-06)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.1-rc.1...v0.8.1-rc.2)
+
+ * Fix exception when clearing room dir search
+   [\#585](https://github.com/matrix-org/matrix-react-sdk/pull/585)
+ * Allow integration UI URLs with paths
+   [\#583](https://github.com/matrix-org/matrix-react-sdk/pull/583)
+ * Give the search box field a name
+   [\#584](https://github.com/matrix-org/matrix-react-sdk/pull/584)
+ * Pass the room object into displayNotification
+   [\#582](https://github.com/matrix-org/matrix-react-sdk/pull/582)
+ * Don't throw an exception entering settings page
+   [\#581](https://github.com/matrix-org/matrix-react-sdk/pull/581)
+
 Changes in [0.8.1-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.1-rc.1) (2016-12-05)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.0...v0.8.1-rc.1)
