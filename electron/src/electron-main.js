@@ -159,10 +159,14 @@ electron.app.on('ready', () => {
     mainWindow = new electron.BrowserWindow({
         icon: `${__dirname}/../img/riot.ico`,
         width: 1024, height: 768,
+        show: false,
     });
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
     electron.Menu.setApplicationMenu(VectorMenu);
 
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+    });
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
@@ -198,3 +202,9 @@ electron.app.on('activate', () => {
 electron.app.on('before-quit', () => {
     appQuitting = true;
 });
+
+// Set the App User Model ID to match what the squirrel
+// installer uses for the shortcut icon.
+// This makes notifications work on windows 8.1 (and is
+// a noop on other platforms).
+electron.app.setAppUserModelId('com.squirrel.riot-web.Riot');
