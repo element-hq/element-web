@@ -63,7 +63,7 @@ export default class BasePlatform {
     requestNotificationPermission() : Promise<string> {
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string) {
+    displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {
     }
 
     /**
