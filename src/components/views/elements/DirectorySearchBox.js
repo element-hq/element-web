@@ -89,7 +89,7 @@ export default class DirectorySearchBox extends React.Component {
 
         return <span className={classnames(searchbox_classes)}>
             <div className="mx_DirectorySearchBox_container">
-                <input type="text" value={this.state.value}
+                <input type="text" name="dirsearch" value={this.state.value}
                     className="mx_DirectorySearchBox_input"
                     ref={this._collectInput}
                     onChange={this._onChange} onKeyUp={this._onKeyUp}
