@@ -159,10 +159,14 @@ electron.app.on('ready', () => {
     mainWindow = new electron.BrowserWindow({
         icon: `${__dirname}/../img/riot.ico`,
         width: 1024, height: 768,
+        show: false,
     });
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
     electron.Menu.setApplicationMenu(VectorMenu);
 
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+    });
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
