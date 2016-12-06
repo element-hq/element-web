@@ -79,7 +79,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return true;
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string): Notification {
+    displayNotification(title: string, msg: string, avatarUrl: string, room: Object): Notification {
         // Notifications in Electron use the HTML5 notification API
         const notification = new global.Notification(
             title,
@@ -97,6 +97,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
                 room_id: room.roomId
             });
             global.focus();
+            electron.remote.getCurrentWindow().restore();
         };
 
         return notification;

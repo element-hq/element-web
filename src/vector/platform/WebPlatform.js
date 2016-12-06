@@ -103,7 +103,7 @@ export default class WebPlatform extends VectorBasePlatform {
         return defer.promise;
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string) {
+    displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {
         const notification = new global.Notification(
             title,
             {
@@ -120,6 +120,7 @@ export default class WebPlatform extends VectorBasePlatform {
                 room_id: room.roomId
             });
             global.focus();
+            notification.close();
         };
 
         // Chrome only dismisses notifications after 20s, which

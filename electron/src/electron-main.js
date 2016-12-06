@@ -202,3 +202,9 @@ electron.app.on('activate', () => {
 electron.app.on('before-quit', () => {
     appQuitting = true;
 });
+
+// Set the App User Model ID to match what the squirrel
+// installer uses for the shortcut icon.
+// This makes notifications work on windows 8.1 (and is
+// a noop on other platforms).
+electron.app.setAppUserModelId('com.squirrel.riot-web.Riot');
