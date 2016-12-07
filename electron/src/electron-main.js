@@ -156,8 +156,12 @@ electron.app.on('ready', () => {
         console.log("No update_base_url is defined: auto update is disabled");
     }
 
+    const icon_path = `${__dirname}/../img/riot.` + (
+        process.platform == 'win32' ? 'ico' : 'png'
+    );
+
     mainWindow = new electron.BrowserWindow({
-        icon: `${__dirname}/../img/riot.ico`,
+        icon: icon_path,
         width: 1024, height: 768,
         show: false,
     });

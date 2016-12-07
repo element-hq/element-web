@@ -127,7 +127,7 @@ def on_receive_jenkins_poke():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("Runs a Vector redeployment server.")
     parser.add_argument(
-        "-j", "--jenkins", dest="jenkins", default="http://matrix.org/jenkins/", help=(
+        "-j", "--jenkins", dest="jenkins", default="https://matrix.org/jenkins/", help=(
             "The base URL of the Jenkins web server. This will be hit to get the\
             built artifacts (the .gz file) for redeploying."
         )
