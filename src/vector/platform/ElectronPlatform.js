@@ -52,7 +52,7 @@ function platformFriendlyName() {
             // Sorry, Linux users: you get lumped into here,
             // but only because Linux's capitalisation is
             // normal. We do care about you.
-            return window.process.platform[0].toUpperCase + window.process.platform.slice(1);
+            return window.process.platform[0].toUpperCase() + window.process.platform.slice(1);
     }
 }
 
