@@ -11,7 +11,7 @@ set -x
 
 tmpdir=`mktemp -d 2>/dev/null || mktemp -d -t 'icontmp'`
 
-for i in 1024 512 256 192 310 180 144 152 150 128 120 114 96 76 72 70 64 60 57 48 36 32 24 16
+for i in 1024 512 310 256 192 180 152 150 144 128 120 114 96 76 72 70 64 60 57 48 36 32 24 16
 do
     #convert -background none -density 1000 -resize $i -extent $i -gravity center "$1" "$tmpdir/$i.png"
 
