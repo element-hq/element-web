@@ -60,14 +60,13 @@ describe('RoomView', function () {
         peg.get().getProfileInfo.returns(q({displayname: "foo"}));
         var roomView = ReactDOM.render(<RoomView roomAddress="#alias:ser.ver" />, parentDiv);
 
-        peg.get().joinRoom = sinon.spy();
+        peg.get().joinRoom = function(x) {
+            expect(x).toEqual('#alias:ser.ver');
+            done();
+        }
 
         process.nextTick(function() {
             roomView.onJoinButtonClicked();
-            process.nextTick(function() {
-                expect(peg.get().joinRoom.calledWith('#alias:ser.ver')).toExist();
-                done();
-            });
         });
     });
 });
