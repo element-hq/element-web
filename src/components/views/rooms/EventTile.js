@@ -290,6 +290,18 @@ module.exports = WithMatrixClient(React.createClass({
 
         var left = 0;
 
+        var readReceiptData = Object.create(null);
+        var room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
+        if (room) {
+            // [ {type/userId/data} ]
+            room.getReceiptsForEvent(this.props.mxEvent).forEach(function(r) {
+                if (r.type !== "m.read" || !r.data.ts) {
+                    return;
+                }
+                readReceiptData[r.userId] = r.data;
+            })
+        }
+
         var receipts = this.props.readReceipts || [];
         for (var i = 0; i < receipts.length; ++i) {
             var member = receipts[i];
@@ -312,6 +324,8 @@ module.exports = WithMatrixClient(React.createClass({
 
             //console.log("i = " + i + ", MAX_READ_AVATARS = " + MAX_READ_AVATARS + ", allReadAvatars = " + this.state.allReadAvatars + " visibility = " + style.visibility);
 
+            var rData = readReceiptData[member.userId];
+
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
                 <ReadReceiptMarker key={userId} member={member}
@@ -320,6 +334,7 @@ module.exports = WithMatrixClient(React.createClass({
                     checkUnmounting={this.props.checkUnmounting}
                     suppressAnimation={this._suppressReadReceiptAnimation}
                     onClick={this.toggleAllReadAvatars}
+                    timestamp={rData ? rData.ts : null}
                 />
             );
 

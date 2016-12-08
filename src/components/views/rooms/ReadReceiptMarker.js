@@ -60,6 +60,9 @@ module.exports = React.createClass({
 
         // callback for clicks on this RR
         onClick: React.PropTypes.func,
+
+        // Timestamp when the receipt was read
+        timestamp: React.PropTypes.number,
     },
 
     getDefaultProps: function() {
@@ -162,6 +165,12 @@ module.exports = React.createClass({
             visibility: this.props.hidden ? 'hidden' : 'visible',
         };
 
+        var title;
+        if (this.props.timestamp) {
+            // "7:05:45 PM (@alice:matrix.org)"
+            title = new Date(this.props.timestamp).toLocaleTimeString() + " (" + this.props.member.userId + ")";
+        }
+
         return (
             <Velociraptor
                     startStyles={this.state.startStyles}
@@ -170,6 +179,7 @@ module.exports = React.createClass({
                     member={this.props.member}
                     width={14} height={14} resizeMethod="crop"
                     style={style}
+                    title={title}
                     onClick={this.props.onClick}
                 />
             </Velociraptor>
