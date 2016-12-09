@@ -17,25 +17,6 @@ Changes in [0.9.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.1) (2
  * Add missing brackets to call to toUpperCase
    [\#2703](https://github.com/vector-im/riot-web/pull/2703)
 
-Changes in [0.9.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.1) (2016-12-09)
-==========================================================================================
-[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.1-rc.2...v0.9.1)
-
- * Update README to say how to build the desktop app
-   [\#2732](https://github.com/vector-im/riot-web/pull/2732)
- * Add signing ID in release_config.yaml
-   [\#2731](https://github.com/vector-im/riot-web/pull/2731)
- * Makeover!
-   [\#2722](https://github.com/vector-im/riot-web/pull/2722)
- * Fix broken tests
-   [\#2730](https://github.com/vector-im/riot-web/pull/2730)
- * Make the 'loading' tests work in isolation
-   [\#2727](https://github.com/vector-im/riot-web/pull/2727)
- * Use a PNG for the icon on non-Windows
-   [\#2708](https://github.com/vector-im/riot-web/pull/2708)
- * Add missing brackets to call to toUpperCase
-   [\#2703](https://github.com/vector-im/riot-web/pull/2703)
-
 Changes in [0.9.1-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.1-rc.2) (2016-12-06)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.1-rc.1...v0.9.1-rc.2)
