@@ -103,7 +103,7 @@ module.exports = WithMatrixClient(React.createClass({
         /* callback called when dynamic content in events are loaded */
         onWidgetLoad: React.PropTypes.func,
 
-        /* a list of Room Members whose read-receipts we should show */
+        /* a list of read-receipts we should show. Each object has a 'roomMember' and 'ts'. */
         readReceipts: React.PropTypes.arrayOf(React.PropTypes.object),
 
         /* opaque readreceipt info for each userId; used by ReadReceiptMarker
@@ -231,7 +231,7 @@ module.exports = WithMatrixClient(React.createClass({
                     return false;
                 }
                 for (var j = 0; j < rA.length; j++) {
-                    if (rA[j].userId !== rB[j].userId) {
+                    if (rA[j].roomMember.userId !== rB[j].roomMember.userId) {
                         return false;
                     }
                 }
@@ -287,31 +287,18 @@ module.exports = WithMatrixClient(React.createClass({
     getReadAvatars: function() {
         var ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
         var avatars = [];
-
         var left = 0;
-
-        var readReceiptData = Object.create(null);
-        var room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
-        if (room) {
-            // [ {type/userId/data} ]
-            room.getReceiptsForEvent(this.props.mxEvent).forEach(function(r) {
-                if (r.type !== "m.read" || !r.data.ts) {
-                    return;
-                }
-                readReceiptData[r.userId] = r.data;
-            })
-        }
 
         var receipts = this.props.readReceipts || [];
         for (var i = 0; i < receipts.length; ++i) {
-            var member = receipts[i];
+            var receipt = receipts[i];
 
             var hidden = true;
             if ((i < MAX_READ_AVATARS) || this.state.allReadAvatars) {
                 hidden = false;
             }
 
-            var userId = member.userId;
+            var userId = receipt.roomMember.userId;
             var readReceiptInfo;
 
             if (this.props.readReceiptMap) {
@@ -323,18 +310,15 @@ module.exports = WithMatrixClient(React.createClass({
             }
 
             //console.log("i = " + i + ", MAX_READ_AVATARS = " + MAX_READ_AVATARS + ", allReadAvatars = " + this.state.allReadAvatars + " visibility = " + style.visibility);
-
-            var rData = readReceiptData[member.userId];
-
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
-                <ReadReceiptMarker key={userId} member={member}
+                <ReadReceiptMarker key={userId} member={receipt.roomMember}
                     leftOffset={left} hidden={hidden}
                     readReceiptInfo={readReceiptInfo}
                     checkUnmounting={this.props.checkUnmounting}
                     suppressAnimation={this._suppressReadReceiptAnimation}
                     onClick={this.toggleAllReadAvatars}
-                    timestamp={rData ? rData.ts : null}
+                    timestamp={receipt.ts}
                 />
             );
 

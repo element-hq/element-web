@@ -471,27 +471,33 @@ module.exports = React.createClass({
                 !== new Date(nextEventTs).toDateString());
     },
 
-    // get a list of the userids whose read receipts should
-    // be shown next to this event
+    // get a list of read receipts that should be shown next to this event
+    // Receipts are objects which have a 'roomMember' and 'ts'.
     _getReadReceiptsForEvent: function(event) {
-        var myUserId = MatrixClientPeg.get().credentials.userId;
+        const myUserId = MatrixClientPeg.get().credentials.userId;
 
         // get list of read receipts, sorted most recent first
-        var room = MatrixClientPeg.get().getRoom(event.getRoomId());
+        const room = MatrixClientPeg.get().getRoom(event.getRoomId());
         if (!room) {
-            // huh.
             return null;
         }
+        let receipts = [];
+        room.getReceiptsForEvent(event).forEach((r) => {
+            if (!r.userId || r.type !== "m.read" || r.userId === myUserId) {
+                return; // ignore non-read receipts and receipts from self.
+            }
+            let member = room.getMember(r.userId);
+            if (!member) {
+                return; // ignore unknown user IDs
+            }
+            receipts.push({
+                roomMember: member,
+                ts: r.data ? r.data.ts : 0,
+            });
+        });
 
-        return room.getReceiptsForEvent(event).filter(function(r) {
-            return r.type === "m.read" && r.userId != myUserId;
-        }).sort(function(r1, r2) {
-            return r2.data.ts - r1.data.ts;
-        }).map(function(r) {
-            return room.getMember(r.userId);
-        }).filter(function(m) {
-            // check that the user is a known room member
-            return m;
+        return receipts.sort((r1, r2) => {
+            return r2.ts - r1.ts;
         });
     },
 
