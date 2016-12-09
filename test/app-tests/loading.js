@@ -16,6 +16,8 @@ limitations under the License.
 
 /* loading.js: test the myriad paths we have for loading the application */
 
+import 'skin-sdk';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';
