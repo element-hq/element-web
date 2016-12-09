@@ -37,6 +37,9 @@ module.exports = React.createClass({
 
         /* callback called when the menu is dismissed */
         onFinished: React.PropTypes.func,
+
+        /* Edit Mesage functionality is enabled */
+        editEnabled: React.PropTypes.bool,
     },
 
     onResendClick: function() {
@@ -102,6 +105,15 @@ module.exports = React.createClass({
         });
     },
 
+    onEditClick: function onEditClick() {
+        console.log(this.props.mxEvent);
+        dis.dispatch({
+            action: 'edit',
+            mxEvent: this.props.mxEvent
+        });
+    },
+
+
     render: function() {
         var eventStatus = this.props.mxEvent.status;
         var resendButton;
@@ -112,6 +124,7 @@ module.exports = React.createClass({
         var permalinkButton;
         var unhidePreviewButton;
         var externalURLButton;
+        var editButton;
 
         if (eventStatus === 'not_sent') {
             resendButton = (
@@ -133,6 +146,15 @@ module.exports = React.createClass({
             cancelButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onCancelSendClick}>
                     Cancel Sending
+                </div>
+            );
+        }
+
+        if (!eventStatus && this.props.editEnabled) {
+            // sent
+            editButton = (
+                <div className="mx_MessageContextMenu_field" onClick={this.onEditClick}>
+                    Edit
                 </div>
             );
         }
@@ -190,6 +212,7 @@ module.exports = React.createClass({
             <div>
                 {resendButton}
                 {redactButton}
+                {editButton}
                 {cancelButton}
                 {viewSourceButton}
                 {viewClearSourceButton}
