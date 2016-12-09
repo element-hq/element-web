@@ -63,6 +63,9 @@ module.exports = React.createClass({
 
         // Timestamp when the receipt was read
         timestamp: React.PropTypes.number,
+
+        // True to show the full date/time rather than just the time
+        showFullTimestamp: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -165,10 +168,18 @@ module.exports = React.createClass({
             visibility: this.props.hidden ? 'hidden' : 'visible',
         };
 
-        var title;
+        let title;
         if (this.props.timestamp) {
-            // "7:05:45 PM (@alice:matrix.org)"
-            title = new Date(this.props.timestamp).toLocaleTimeString() + " (" + this.props.member.userId + ")";
+            let suffix = " (" + this.props.member.userId + ")";
+            let ts = new Date(this.props.timestamp);
+            if (this.props.showFullTimestamp) {
+                // "15/12/2016, 7:05:45 PM (@alice:matrix.org)"
+                title = ts.toLocaleString() + suffix;
+            }
+            else {
+                // "7:05:45 PM (@alice:matrix.org)"
+                title = ts.toLocaleTimeString() + suffix;
+            }
         }
 
         return (
