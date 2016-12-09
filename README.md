@@ -119,24 +119,54 @@ You can configure the app by copying `config.sample.json` to
 Running as a Desktop app
 ========================
 
-In future we'll do an official distribution of Riot as an desktop app.  Meanwhile,
-there are a few options:
+Riot can also be run as a desktop app, wrapped in electron. You can download a
+pre-built version from https://riot.im/download/desktop/ or, if you prefer,
+built it yourself.
 
-@asdf:matrix.org points out that you can use nativefier and it just works(tm):
-
+To run as a desktop app:
 ```
-sudo npm install nativefier -g
-nativefier https://riot.im/app/
+npm install
+npm install electron
+node_modules/.bin/electron .
 ```
 
-krisa has a dedicated electron project at
-https://github.com/krisak/vector-electron-desktop (although you should swap out
-the 'vector' folder for the latest vector tarball you want to run.  Get a
-tarball from https://github.com/vector-im/vector-web/releases or build your own
-- see Building From Source above).
+To build packages, use electron-builder. This is configured to output:
+ * dmg + zip for macOS
+ * exe + nupkg for Windows
+ * deb for Linux
+But this can be customised by editing the `build` section of package.json
+as per https://github.com/electron-userland/electron-builder/wiki/Options
 
-There's also a (much) older electron distribution at https://github.com/stevenhammerton/vector-desktop
+See https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build
+for dependencies required for building packages for various platforms.
 
+The only platform that can build packages for all three platforms is macOS:
+```
+brew install wine --without-x11
+brew install mono
+npm install
+npm run build:electron
+```
+
+For other packages, use electron-builder manually. For example, to build a package
+for 64 bit Linux:
+```
+npm install
+npm run build
+node_modules/.bin/build -l --x64
+```
+
+All electron packages go into `electron/dist/`
+
+Many thanks to @aviraldg for the initial work on the electron integration.
+
+Other options for running as a desktop app:
+ * https://github.com/krisak/vector-electron-desktop
+ * @asdf:matrix.org points out that you can use nativefier and it just works(tm)
+   ```
+   sudo npm install nativefier -g
+   nativefier https://riot.im/app/
+   ```
 
 Development
 ===========
