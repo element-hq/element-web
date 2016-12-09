@@ -33,6 +33,7 @@ module.exports = React.createClass({
         onClick: React.PropTypes.func,
         // Whether the onClick of the avatar should be overriden to dispatch 'view_user'
         viewUserOnClick: React.PropTypes.bool,
+        title: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -58,7 +59,7 @@ module.exports = React.createClass({
         }
         return {
             name: props.member.name,
-            title: props.member.userId,
+            title: props.title || props.member.userId,
             imageUrl: Avatar.avatarUrlForMember(props.member,
                                          props.width,
                                          props.height,

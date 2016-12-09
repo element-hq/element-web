@@ -103,7 +103,7 @@ module.exports = WithMatrixClient(React.createClass({
         /* callback called when dynamic content in events are loaded */
         onWidgetLoad: React.PropTypes.func,
 
-        /* a list of Room Members whose read-receipts we should show */
+        /* a list of read-receipts we should show. Each object has a 'roomMember' and 'ts'. */
         readReceipts: React.PropTypes.arrayOf(React.PropTypes.object),
 
         /* opaque readreceipt info for each userId; used by ReadReceiptMarker
@@ -231,7 +231,7 @@ module.exports = WithMatrixClient(React.createClass({
                     return false;
                 }
                 for (var j = 0; j < rA.length; j++) {
-                    if (rA[j].userId !== rB[j].userId) {
+                    if (rA[j].roomMember.userId !== rB[j].roomMember.userId) {
                         return false;
                     }
                 }
@@ -287,19 +287,28 @@ module.exports = WithMatrixClient(React.createClass({
     getReadAvatars: function() {
         var ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
         var avatars = [];
-
         var left = 0;
+
+        // It's possible that the receipt was sent several days AFTER the event.
+        // If it is, we want to display the complete date along with the HH:MM:SS,
+        // rather than just HH:MM:SS.
+        let dayAfterEvent = new Date(this.props.mxEvent.getTs());
+        dayAfterEvent.setDate(dayAfterEvent.getDate() + 1)
+        dayAfterEvent.setHours(0);
+        dayAfterEvent.setMinutes(0);
+        dayAfterEvent.setSeconds(0);
+        let dayAfterEventTime = dayAfterEvent.getTime();
 
         var receipts = this.props.readReceipts || [];
         for (var i = 0; i < receipts.length; ++i) {
-            var member = receipts[i];
+            var receipt = receipts[i];
 
             var hidden = true;
             if ((i < MAX_READ_AVATARS) || this.state.allReadAvatars) {
                 hidden = false;
             }
 
-            var userId = member.userId;
+            var userId = receipt.roomMember.userId;
             var readReceiptInfo;
 
             if (this.props.readReceiptMap) {
@@ -311,15 +320,16 @@ module.exports = WithMatrixClient(React.createClass({
             }
 
             //console.log("i = " + i + ", MAX_READ_AVATARS = " + MAX_READ_AVATARS + ", allReadAvatars = " + this.state.allReadAvatars + " visibility = " + style.visibility);
-
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
-                <ReadReceiptMarker key={userId} member={member}
+                <ReadReceiptMarker key={userId} member={receipt.roomMember}
                     leftOffset={left} hidden={hidden}
                     readReceiptInfo={readReceiptInfo}
                     checkUnmounting={this.props.checkUnmounting}
                     suppressAnimation={this._suppressReadReceiptAnimation}
                     onClick={this.toggleAllReadAvatars}
+                    timestamp={receipt.ts}
+                    showFullTimestamp={receipt.ts >= dayAfterEventTime}
                 />
             );
 
