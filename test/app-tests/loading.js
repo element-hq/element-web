@@ -16,6 +16,8 @@ limitations under the License.
 
 /* loading.js: test the myriad paths we have for loading the application */
 
+import 'skin-sdk';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';
@@ -153,6 +155,9 @@ describe('loading:', function () {
 
                 return httpBackend.flush();
             }).then(() => {
+                // Wait for another trip around the event loop for the UI to update
+                return q.delay(1);
+            }).then(() => {
                 // we expect a single <Login> component
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.login.Login'));
@@ -176,6 +181,9 @@ describe('loading:', function () {
 
                 return httpBackend.flush();
             }).then(() => {
+                // Wait for another trip around the event loop for the UI to update
+                return q.delay(1);
+            }).then(() => {
                 // we expect a single <Login> component
                 let login = ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.login.Login'));
@@ -190,6 +198,9 @@ describe('loading:', function () {
                 login.onPasswordLogin("user", "pass")
                 return httpBackend.flush();
             }).then(() => {
+                // Wait for another trip around the event loop for the UI to update
+                return q.delay(1);
+            }).then(() => {
                 // we expect a spinner
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('elements.Spinner'));
@@ -198,6 +209,9 @@ describe('loading:', function () {
                 httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
                 httpBackend.when('GET', '/sync').respond(200, {});
                 return httpBackend.flush();
+            }).then(() => {
+                // Wait for another trip around the event loop for the UI to update
+                return q.delay(1);
             }).then(() => {
                 // once the sync completes, we should have a room view
                 httpBackend.verifyNoOutstandingExpectation();
@@ -286,6 +300,9 @@ describe('loading:', function () {
 
                 return httpBackend.flush();
             }).then(() => {
+                // Wait for another trip around the event loop for the UI to update
+                return q.delay(1);
+            }).then(() => {
                 // now we should have a spinner with a logout link
                 assertAtSyncingSpinner(matrixChat);
 
@@ -320,6 +337,9 @@ describe('loading:', function () {
                 });
 
                 return httpBackend.flush();
+            }).then(() => {
+                // Wait for another trip around the event loop for the UI to update
+                return q.delay(1);
             }).then(() => {
                 // now we should have a spinner with a logout link
                 assertAtSyncingSpinner(matrixChat);
@@ -357,11 +377,17 @@ describe('loading:', function () {
 
                 return httpBackend.flush();
             }).then(() => {
+                // Wait for another trip around the event loop for the UI to update
+                return q.delay(1);
+            }).then(() => {
                 // now we should have a spinner with a logout link
                 assertAtSyncingSpinner(matrixChat);
 
                 httpBackend.when('GET', '/sync').respond(200, {});
                 return httpBackend.flush();
+            }).then(() => {
+                // Wait for another trip around the event loop for the UI to update
+                return q.delay(1);
             }).then(() => {
                 // once the sync completes, we should have a room view
                 httpBackend.verifyNoOutstandingExpectation();
