@@ -63,7 +63,7 @@ describe('RoomView', function () {
         peg.get().joinRoom = function(x) {
             expect(x).toEqual('#alias:ser.ver');
             done();
-        }
+        };
 
         process.nextTick(function() {
             roomView.onJoinButtonClicked();
