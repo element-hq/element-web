@@ -80,7 +80,7 @@ cp "$tmpdir/150.png" "res/vector-icons/mstile-150x150.png"
 cp "$tmpdir/310.png" "res/vector-icons/mstile-310x310.png"
 cp "$tmpdir/310x150.png" "res/vector-icons/mstile-310x150.png"
 
-convert "$tmpdir/16.png" "$tmpdir/32.png" "$tmpdir/64.png" "$tmpdir/128.png"  "res/vector-icons/favicon.ico"
+convert "$tmpdir/16.png" "$tmpdir/32.png" "$tmpdir/64.png" "$tmpdir/128.png"  "$tmpdir/256.png" "res/vector-icons/favicon.ico"
 
 cp "res/vector-icons/favicon.ico" "electron/build/icon.ico"
 
