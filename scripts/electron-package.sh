@@ -72,6 +72,10 @@ echo "Building $version using Update base URL $update_base_url"
 projdir=`pwd`
 builddir=`mktemp -d 2>/dev/null || mktemp -d -t 'buildtmp'`
 pushd "$builddir"
+
+# Figure out what version we're building
+vername=`jq -r .version package.json`
+
 git clone "$projdir" .
 git checkout "$version"
 
@@ -105,7 +109,7 @@ cp $distdir/win/*.exe "$pubdir/install/win32/x64/"
 # Packages for auto-update
 mkdir -p "$pubdir/update/macos"
 cp $distdir/mac/*.zip "$pubdir/update/macos/"
-echo "$ver" > "$pubdir/update/macos/latest"
+echo "$vername" > "$pubdir/update/macos/latest"
 
 mkdir -p "$pubdir/update/win32/ia32/"
 cp $distdir/win-ia32/*.nupkg "$pubdir/update/win32/ia32/"
