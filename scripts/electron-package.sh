@@ -73,11 +73,11 @@ projdir=`pwd`
 builddir=`mktemp -d 2>/dev/null || mktemp -d -t 'buildtmp'`
 pushd "$builddir"
 
-# Figure out what version we're building
-vername=`jq -r .version package.json`
-
 git clone "$projdir" .
 git checkout "$version"
+
+# Figure out what version we're building
+vername=`jq -r .version package.json`
 
 if [ -n "$conffile" ]; then
     popd
