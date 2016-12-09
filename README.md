@@ -158,6 +158,16 @@ node_modules/.bin/build -l --x64
 
 All electron packages go into `electron/dist/`
 
+Many thanks to @aviraldg for the initial work on the electron integration.
+
+Other options for running as a desktop app:
+ * https://github.com/krisak/vector-electron-desktop
+ * @asdf:matrix.org points out that you can use nativefier and it just works(tm)
+   ```
+   sudo npm install nativefier -g
+   nativefier https://riot.im/app/
+   ```
+
 Development
 ===========
 
