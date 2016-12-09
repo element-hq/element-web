@@ -356,7 +356,7 @@ export function stopMatrixClient() {
     Notifier.stop();
     UserActivity.stop();
     Presence.stop();
-    DMRoomMap.shared().stop();
+    if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     var cli = MatrixClientPeg.get();
     if (cli) {
         cli.stopClient();
