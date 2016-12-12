@@ -108,8 +108,8 @@ You can configure the app by copying `config.sample.json` to
    when a valid location has been entered so it's not necessary for this to be
    exactly correct. Optional.
 1. `update_base_url` (electron app only): HTTPS URL to a web server to download
-   updates from. This should be the path to the directory containing `install`
-   and `update`.
+   updates from. This should be the path to the directory containing `macos`
+   and `win32` (for update packages, not installer packages).
 1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
    encrypted file attachments. This MUST be hosted on a completely separate domain to
    anything else since it is used to isolate the privileges of file attachments to this
