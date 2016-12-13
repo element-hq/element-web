@@ -113,7 +113,7 @@ echo "$vername" > "$pubdir/update/macos/latest"
 
 mkdir -p "$pubdir/update/win32/ia32/"
 cp $distdir/win-ia32/*.nupkg "$pubdir/update/win32/ia32/"
-cp $distdir/win-ia32/RELEASES "$pubdir/install/win32/ia32/"
+cp $distdir/win-ia32/RELEASES "$pubdir/update/win32/ia32/"
 
 mkdir -p "$pubdir/update/win32/x64/"
 cp $distdir/win/*.nupkg "$pubdir/update/win32/x64/"
