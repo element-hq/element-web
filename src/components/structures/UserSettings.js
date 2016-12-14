@@ -461,6 +461,8 @@ module.exports = React.createClass({
 
         let reject = <Spinner />;
         if (!this.state.rejectingInvites) {
+            // bind() the invited rooms so any new invites that may come in as this button is clicked
+            // don't inadvertently get rejected as well.
             reject = (
                 <button className="mx_UserSettings_button danger"
                 onClick={this._onRejectAllInvitesClicked.bind(this, invitedRooms)}>
