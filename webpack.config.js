@@ -14,7 +14,7 @@ module.exports = {
         // (we should probably make js-sdk load it asynchronously at some
         // point, so that it doesn't block the pageload, but that is a separate
         // problem)
-        "olm": "olm/olm.js",
+        "olm": "./src/vector/olm-loader.js",
     },
     module: {
         preLoaders: [
