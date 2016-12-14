@@ -280,6 +280,10 @@ module.exports = React.createClass({
         Modal.createDialog(DeactivateAccountDialog, {});
     },
 
+    _onRejectAllInvitesClicked: function() {
+        console.log("yup");
+    },
+
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
 
@@ -413,6 +417,24 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_section">
                     <button className="mx_UserSettings_button danger"
                         onClick={this._onDeactivateAccountClicked}>Deactivate my account
+                    </button>
+                </div>
+        </div>;
+    },
+
+    _renderBulkOptions: function() {
+        let invitedRooms = MatrixClientPeg.get().getRooms().filter((r) => {
+            return r.hasMembershipState(this._me, "invite");
+        });
+        if (invitedRooms.length === 0) {
+            return null;
+        }
+        return <div>
+            <h3>Bulk Options</h3>
+                <div className="mx_UserSettings_section">
+                    <button className="mx_UserSettings_button danger"
+                        onClick={this._onRejectAllInvitesClicked}>
+                            Reject all {invitedRooms.length} invites
                     </button>
                 </div>
         </div>;
@@ -580,6 +602,7 @@ module.exports = React.createClass({
                 {this._renderLabs()}
                 {this._renderDevicesPanel()}
                 {this._renderCryptoInfo()}
+                {this._renderBulkOptions()}
 
                 <h3>Advanced</h3>
 
