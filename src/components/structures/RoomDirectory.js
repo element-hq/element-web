@@ -131,6 +131,11 @@ module.exports = React.createClass({
         if (my_server != MatrixClientPeg.getHomeServerName()) {
             opts.server = my_server;
         }
+        if (this.state.instance_id) {
+            opts.third_party_instance_id = this.state.instance_id;
+        } else if (this.state.network !== '_matrix') {
+            opts.include_all_networks = true;
+        }
         if (this.nextBatch) opts.since = this.nextBatch;
         if (my_filter_string) opts.filter = { generic_search_term: my_filter_string } ;
         return MatrixClientPeg.get().publicRooms(opts).then((data) => {
@@ -231,7 +236,7 @@ module.exports = React.createClass({
         }
     },
 
-    onOptionChange: function(server, network) {
+    onOptionChange: function(server, network, instance_id) {
         // clear next batch so we don't try to load more rooms
         this.nextBatch = null;
         this.setState({
@@ -241,6 +246,7 @@ module.exports = React.createClass({
             publicRooms: [],
             roomServer: server,
             network: network,
+            instance_id: instance_id,
         }, this.refreshRoomList);
         // We also refresh the room list each time even though this
         // filtering is client-side. It hopefully won't be client side
@@ -615,7 +621,7 @@ module.exports = React.createClass({
                             onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinClick}
                             placeholder={placeholder} showJoinButton={showJoinButton}
                         />
-                        <NetworkDropdown config={this.props.config} onOptionChange={this.onOptionChange} />
+                        <NetworkDropdown config={this.props.config} protocols={this.protocols} onOptionChange={this.onOptionChange} />
                     </div>
                     {content}
                 </div>

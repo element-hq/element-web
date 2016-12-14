@@ -89,7 +89,8 @@ You can configure the app by copying `config.sample.json` to
    down list. Optional.
 1. `roomDirectory.serverConfig`: Config for each server in `roomDirectory.servers`. Optional.
 1. `roomDirectory.serverConfig.<server_name>.networks`: List of networks (named
-   in `roomDirectory.networks`) to include for this server. Optional.
+   in `roomDirectory.networks`) to include for this server. Optional. If set, this will
+   override any networks sent by the Home Server (eg. if ASes are configured).
 1. `roomDirectory.networks`: config for each network type. Optional.
 1. `roomDirectory.<network_type>.name`: Human-readable name for the network. Required.
 1. `roomDirectory.<network_type>.protocol`: Protocol as given by the server in
