@@ -296,6 +296,12 @@ module.exports = React.createClass({
             // Wrap consecutive member events in a ListSummary
             if (isMembershipChange(mxEv)) {
                 let ts1 = mxEv.getTs();
+                // Ensure that the key of the MemberEventListSummary does not change with new
+                // member events. This will prevent it from being re-created necessarily, and
+                // instead will allow new props to be provided. In turn, the shouldComponentUpdate
+                // method on MELS can be used to prevent unnecessary renderings.
+                // `prevEvent` at this point is a non-member event or null.
+                const key = "memberlistsummary-" + (prevEvent ? prevEvent.getId() : "");
 
                 if (this._wantsDateSeparator(prevEvent, ts1)) {
                     let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1}/></li>;
@@ -332,7 +338,7 @@ module.exports = React.createClass({
 
                 ret.push(
                     <MemberEventListSummary
-                        key={mxEv.getId()}
+                        key={key}
                         events={summarisedEvents}
                         data-scroll-token={eventId}>
                             {eventTiles}

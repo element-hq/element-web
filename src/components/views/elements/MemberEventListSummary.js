@@ -42,7 +42,7 @@ module.exports = React.createClass({
         return {
             summaryLength: 3,
             threshold: 3,
-            avatarsMaxLength: 5
+            avatarsMaxLength: 5,
         };
     },
 
@@ -144,87 +144,105 @@ module.exports = React.createClass({
         );
     },
 
-    render: function() {
-        let summary = null;
-
-        // Reorder events so that joins come before leaves
-        let eventsToRender = this.props.events;
-
-        // Create an array of events that are not "cancelled-out" by another
-        // A join of sender S is cancelled out by a leave of sender S etc.
-        let filteredEvents = [];
-        let senders = new Set(eventsToRender.map((e) => e.getSender()));
-        senders.forEach(
-            (userId) => {
-                let userEvents = eventsToRender.filter((e) => {
-                    return e.getSender() === userId;
-                });
-
-                // NB: These may be the same event, in which case the lastEvent is used
-                // because prev_content should != content
-                let firstEvent = userEvents[0];
-                let lastEvent = userEvents[userEvents.length - 1];
-
-                // Membership BEFORE eventsToRender
-                let previousMembership = firstEvent.getPrevContent().membership || "leave";
-
-                // Otherwise, if the last membership event differs from previousMembership,
-                // use that.
-                if (previousMembership !== lastEvent.getContent().membership) {
-                    filteredEvents.push(lastEvent);
-                }
-            }
+    shouldComponentUpdate: function(nextProps, nextState) {
+        return (
+            nextProps.events.length !== this.props.events.length ||
+            nextState.expanded !== this.state.expanded
         );
+    },
 
-        let joinAndLeft = (eventsToRender.length - filteredEvents.length) / 2;
-        if (joinAndLeft <= 0 || joinAndLeft % 1 !== 0) {
-            joinAndLeft = null;
-        }
-
-        let joinEvents = filteredEvents.filter((ev) => {
-            return ev.event.content.membership === 'join';
-        });
-
-        let leaveEvents = filteredEvents.filter((ev) => {
-            return ev.event.content.membership === 'leave';
-        });
-
+    render: function() {
+        let eventsToRender = this.props.events;
         let fewEvents = eventsToRender.length < this.props.threshold;
         let expanded = this.state.expanded || fewEvents;
-        let expandedEvents = null;
 
+        let expandedEvents = null;
         if (expanded) {
             expandedEvents = this.props.children;
         }
 
-        let avatars = this._renderAvatars(joinEvents.concat(leaveEvents));
-
-        let toggleButton = null;
-        let summaryContainer = null;
-        if (!fewEvents) {
-            summary = this._renderSummary(joinEvents, leaveEvents);
-            toggleButton = (
-                <a className="mx_MemberEventListSummary_toggle" onClick={this._toggleSummary}>
-                    {expanded ? 'collapse' : 'expand'}
-                </a>
-            );
-            let plural = (joinEvents.length + leaveEvents.length > 0) ? 'others' : 'users';
-            let noun = (joinAndLeft === 1 ? 'user' : plural);
-
-            summaryContainer = (
-                <div className="mx_EventTile_line">
-                    <div className="mx_EventTile_info">
-                        <span className="mx_MemberEventListSummary_avatars">
-                            {avatars}
-                        </span>
-                        <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
-                            {summary}{joinAndLeft ? joinAndLeft + ' ' + noun + ' joined and left' : ''}
-                        </span>&nbsp;
-                        {toggleButton}
-                    </div>
+        if (fewEvents) {
+            return (
+                <div className="mx_MemberEventListSummary">
+                    {expandedEvents}
                 </div>
             );
         }
+
+        // Map user IDs to the first and last member events in eventsToRender for each user
+        let userEvents = {
+            // $userId : {first : e0, last : e1}
+        };
+
+        eventsToRender.forEach((e) => {
+            const userId = e.getSender();
+            // Initialise a user's events
+            if (!userEvents[userId]) {
+                userEvents[userId] = {first: null, last: null};
+            }
+            if (!userEvents[userId].first) {
+                userEvents[userId].first = e;
+            } else {
+                userEvents[userId].last = e;
+            }
+        });
+
+        // Populate the join/leave event arrays with events that represent what happened
+        // overall to a user's membership. If no events are added to either array for a
+        // particular user, they will be considered a user that "joined and left".
+        let joinEvents = [];
+        let leaveEvents = [];
+        let joinedAndLeft = 0;
+        let senders = Object.keys(userEvents);
+        senders.forEach(
+            (userId) => {
+                let firstEvent = userEvents[userId].first;
+                let lastEvent = userEvents[userId].last;
+                // Only one membership event was recorded for this userId
+                if (!lastEvent) {
+                    lastEvent = firstEvent;
+                }
+
+                // Membership BEFORE eventsToRender
+                let previousMembership = firstEvent.getPrevContent().membership || "leave";
+
+                // If the last membership event differs from previousMembership, use that.
+                if (previousMembership !== lastEvent.getContent().membership) {
+                    if (lastEvent.event.content.membership === 'join') {
+                        joinEvents.push(lastEvent);
+                    } else if (lastEvent.event.content.membership === 'leave') {
+                        leaveEvents.push(lastEvent);
+                    }
+                } else {
+                    // Increment the number of users whose membership change was nil overall
+                    joinedAndLeft++;
+                }
+            }
+        );
+
+        let avatars = this._renderAvatars(joinEvents.concat(leaveEvents));
+        let summary = this._renderSummary(joinEvents, leaveEvents);
+        let toggleButton = (
+            <a className="mx_MemberEventListSummary_toggle" onClick={this._toggleSummary}>
+                {expanded ? 'collapse' : 'expand'}
+            </a>
+        );
+        let plural = (joinEvents.length + leaveEvents.length > 0) ? 'others' : 'users';
+        let noun = (joinedAndLeft === 1 ? 'user' : plural);
+
+        let summaryContainer = (
+            <div className="mx_EventTile_line">
+                <div className="mx_EventTile_info">
+                    <span className="mx_MemberEventListSummary_avatars">
+                        {avatars}
+                    </span>
+                    <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
+                        {summary}{joinedAndLeft ? joinedAndLeft + ' ' + noun + ' joined and left' : ''}
+                    </span>&nbsp;
+                    {toggleButton}
+                </div>
+            </div>
+        );
 
         return (
             <div className="mx_MemberEventListSummary">
