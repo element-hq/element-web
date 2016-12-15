@@ -182,9 +182,8 @@ module.exports = React.createClass({
             }
             if (!userEvents[userId].first) {
                 userEvents[userId].first = e;
-            } else {
-                userEvents[userId].last = e;
             }
+            userEvents[userId].last = e;
         });
 
         // Populate the join/leave event arrays with events that represent what happened
@@ -198,10 +197,6 @@ module.exports = React.createClass({
             (userId) => {
                 let firstEvent = userEvents[userId].first;
                 let lastEvent = userEvents[userId].last;
-                // Only one membership event was recorded for this userId
-                if (!lastEvent) {
-                    lastEvent = firstEvent;
-                }
 
                 // Membership BEFORE eventsToRender
                 let previousMembership = firstEvent.getPrevContent().membership || "leave";
