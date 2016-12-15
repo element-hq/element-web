@@ -208,7 +208,7 @@ export default class NetworkDropdown extends React.Component {
     }
 
     _makeMenuOption(server, network, handleClicks) {
-        if (handleClicks === undefined) wire_onclick = true;
+        if (handleClicks === undefined) handleClicks = true;
         let icon;
         let name;
         let span_class;
