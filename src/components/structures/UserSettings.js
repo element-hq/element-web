@@ -108,7 +108,10 @@ module.exports = React.createClass({
             middleOpacity: 1.0,
         });
         dis.unregister(this.dispatcherRef);
-        MatrixClientPeg.get().removeListener("RoomMember.membership", this._onInviteStateChange);
+        let cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("RoomMember.membership", this._onInviteStateChange);
+        }
     },
 
     _refreshFromServer: function() {
