@@ -61,6 +61,7 @@ module.exports = React.createClass({
             phase: "UserSettings.LOADING", // LOADING, DISPLAY
             email_add_pending: false,
             vectorVersion: null,
+            rejectingInvites: false,
         };
     },
 
@@ -79,6 +80,12 @@ module.exports = React.createClass({
                 console.log("Failed to fetch app version", e);
             });
         }
+
+        // Bulk rejecting invites:
+        // /sync won't have had time to return when UserSettings re-renders from state changes, so getRooms()
+        // will still return rooms with invites. To get around this, add a listener for
+        // membership updates and kick the UI.
+        MatrixClientPeg.get().on("RoomMember.membership", this._onInviteStateChange);
 
         dis.dispatch({
             action: 'ui_opacity',
@@ -101,6 +108,10 @@ module.exports = React.createClass({
             middleOpacity: 1.0,
         });
         dis.unregister(this.dispatcherRef);
+        let cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("RoomMember.membership", this._onInviteStateChange);
+        }
     },
 
     _refreshFromServer: function() {
@@ -280,6 +291,29 @@ module.exports = React.createClass({
         Modal.createDialog(DeactivateAccountDialog, {});
     },
 
+    _onInviteStateChange: function(event, member, oldMembership) {
+        if (member.userId === this._me && oldMembership === "invite") {
+            this.forceUpdate();
+        }
+    },
+
+    _onRejectAllInvitesClicked: function(rooms, ev) {
+        this.setState({
+            rejectingInvites: true
+        });
+        // reject the invites
+        let promises = rooms.map((room) => {
+            return MatrixClientPeg.get().leave(room.roomId);
+        });
+        // purposefully drop errors to the floor: we'll just have a non-zero number on the UI
+        // after trying to reject all the invites.
+        q.allSettled(promises).then(() => {
+            this.setState({
+                rejectingInvites: false
+            });
+        }).done();
+    },
+
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
 
@@ -414,6 +448,36 @@ module.exports = React.createClass({
                     <button className="mx_UserSettings_button danger"
                         onClick={this._onDeactivateAccountClicked}>Deactivate my account
                     </button>
+                </div>
+        </div>;
+    },
+
+    _renderBulkOptions: function() {
+        let invitedRooms = MatrixClientPeg.get().getRooms().filter((r) => {
+            return r.hasMembershipState(this._me, "invite");
+        });
+        if (invitedRooms.length === 0) {
+            return null;
+        }
+
+        let Spinner = sdk.getComponent("elements.Spinner");
+
+        let reject = <Spinner />;
+        if (!this.state.rejectingInvites) {
+            // bind() the invited rooms so any new invites that may come in as this button is clicked
+            // don't inadvertently get rejected as well.
+            reject = (
+                <button className="mx_UserSettings_button danger"
+                onClick={this._onRejectAllInvitesClicked.bind(this, invitedRooms)}>
+                    Reject all {invitedRooms.length} invites
+                </button>
+            );
+        }
+
+        return <div>
+            <h3>Bulk Options</h3>
+                <div className="mx_UserSettings_section">
+                    {reject}
                 </div>
         </div>;
     },
@@ -580,6 +644,7 @@ module.exports = React.createClass({
                 {this._renderLabs()}
                 {this._renderDevicesPanel()}
                 {this._renderCryptoInfo()}
+                {this._renderBulkOptions()}
 
                 <h3>Advanced</h3>
 
