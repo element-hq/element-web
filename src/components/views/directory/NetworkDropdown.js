@@ -253,7 +253,7 @@ export default class NetworkDropdown extends React.Component {
         </div>;
     }
 
-    protocolNameForInstanceId(instance_id) {
+    _protocolNameForInstanceId(instance_id) {
         for (const proto of Object.keys(this.props.protocols)) {
             if (!this.props.protocols[proto].instances) continue;
             for (const instance of this.props.protocols[proto].instances) {
@@ -286,7 +286,7 @@ export default class NetworkDropdown extends React.Component {
             />
         } else {
             if (this.state.selectedInstanceId) {
-                const protocolName = this.protocolNameForInstanceId(this.state.selectedInstanceId);
+                const protocolName = this._protocolNameForInstanceId(this.state.selectedInstanceId);
                 const instance = this.instanceForInstanceId(this.state.selectedInstanceId);
                 current_value = this._makeMenuOptionFromProtocolInstance(
                     this.state.selectedServer, this.props.protocols[protocolName], instance
