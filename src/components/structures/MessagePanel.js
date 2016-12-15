@@ -300,8 +300,11 @@ module.exports = React.createClass({
                 // member events. This will prevent it from being re-created unnecessarily, and
                 // instead will allow new props to be provided. In turn, the shouldComponentUpdate
                 // method on MELS can be used to prevent unnecessary renderings.
-                // `prevEvent` at this point is a non-member event or null.
-                const key = "memberlistsummary-" + (prevEvent ? mxEv.getId() : "initial");
+                //
+                // Whilst back-paginating with a MELS at the top of the panel, prevEvent will be null,
+                // so use the key "membereventlistsummary-initial". Otherwise, use the ID of the first
+                // membership event, which will not change during forward pagination.
+                const key = "membereventlistsummary-" + (prevEvent ? mxEv.getId() : "initial");
 
                 if (this._wantsDateSeparator(prevEvent, ts1)) {
                     let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1}/></li>;
