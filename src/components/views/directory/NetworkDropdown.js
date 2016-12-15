@@ -17,6 +17,8 @@ limitations under the License.
 import React from 'react';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 
+const DEFAULT_ICON_URL = "img/network-matrix.svg";
+
 export default class NetworkDropdown extends React.Component {
     constructor(props) {
         super(props);
@@ -28,6 +30,7 @@ export default class NetworkDropdown extends React.Component {
         this.onRootClick = this.onRootClick.bind(this);
         this.onDocumentClick = this.onDocumentClick.bind(this);
         this.onMenuOptionClick = this.onMenuOptionClick.bind(this);
+        this.onMenuOptionClickProtocolInstance = this.onMenuOptionClickProtocolInstance.bind(this);
         this.onInputKeyUp = this.onInputKeyUp.bind(this);
         this.collectRoot = this.collectRoot.bind(this);
         this.collectInputTextBox = this.collectInputTextBox.bind(this);
@@ -98,13 +101,24 @@ export default class NetworkDropdown extends React.Component {
         ev.preventDefault();
     }
 
-    onMenuOptionClick(server, network, ev) {
+    onMenuOptionClick(server, network) {
         this.setState({
             expanded: false,
             selectedServer: server,
             selectedNetwork: network,
+            selectedInstanceId: null,
         });
         this.props.onOptionChange(server, network);
+    }
+
+    onMenuOptionClickProtocolInstance(server, instance_id) {
+        this.setState({
+            expanded: false,
+            selectedServer: server,
+            selectedNetwork: null,
+            selectedInstanceId: instance_id,
+        });
+        this.props.onOptionChange(server, null, instance_id);
     }
 
     onInputKeyUp(e) {
@@ -144,11 +158,34 @@ export default class NetworkDropdown extends React.Component {
             servers.unshift(MatrixClientPeg.getHomeServerName());
         }
 
+        // if the thirdparty/protocols entries have instance_ids,
+        // we can get the local server listings from here. If not,
+        // the server is too old.
+        let use_protocols = true;
+        for (const proto of Object.keys(this.props.protocols)) {
+            if (!this.props.protocols[proto].instances) continue;
+            for (const instance of this.props.protocols[proto].instances) {
+                if (!instance.instance_id) use_protocols = false;
+            }
+        }
+
+        // For our own HS, we can use the instance_ids given in the third party protocols
+        // response to get the server to filter the room list by network for us (if the
+        // server is new enough), although for now we prefer the config if it exists.
+        // For remote HSes, we use the data from the config.
         for (const server of servers) {
             options.push(this._makeMenuOption(server, null));
             if (this.props.config.serverConfig && this.props.config.serverConfig[server] && this.props.config.serverConfig[server].networks) {
                 for (const network of this.props.config.serverConfig[server].networks) {
                     options.push(this._makeMenuOption(server, network));
+                }
+            } else if (server == MatrixClientPeg.getHomeServerName() && use_protocols) {
+                options.push(this._makeMenuOption(server, '_matrix'));
+                for (const proto of Object.keys(this.props.protocols)) {
+                    if (!this.props.protocols[proto].instances) continue;
+                    for (const instance of this.props.protocols[proto].instances) {
+                        options.push(this._makeMenuOptionFromProtocolInstance(server, this.props.protocols[proto], instance));
+                    }
                 }
             }
         }
@@ -156,8 +193,22 @@ export default class NetworkDropdown extends React.Component {
         return options;
     }
 
-    _makeMenuOption(server, network, wire_onclick) {
-        if (wire_onclick === undefined) wire_onclick = true;
+    _makeMenuOptionFromProtocolInstance(server, protocol, instance, handleClicks) {
+        if (handleClicks === undefined) handleClicks = true;
+
+        const name = instance.desc;
+        const icon = <img src={protocol.icon || DEFAULT_ICON_URL} width="16" />;
+        const key = instance.instance_id;
+        const click_handler = handleClicks ? this.onMenuOptionClickProtocolInstance.bind(this, server, instance.instance_id) : null;
+        
+        return <div key={key} className="mx_NetworkDropdown_networkoption" onClick={click_handler}>
+            {icon}
+            <span className="mx_NetworkDropdown_menu_network">{name}</span>
+        </div>;
+    }
+
+    _makeMenuOption(server, network, handleClicks) {
+        if (handleClicks === undefined) wire_onclick = true;
         let icon;
         let name;
         let span_class;
@@ -189,7 +240,7 @@ export default class NetworkDropdown extends React.Component {
             span_class = 'mx_NetworkDropdown_menu_network';
         }
 
-        const click_handler = wire_onclick ? this.onMenuOptionClick.bind(this, server, network) : null;
+        const click_handler = handleClicks ? this.onMenuOptionClick.bind(this, server, network) : null;
 
         let key = server;
         if (network !== null) {
@@ -200,6 +251,24 @@ export default class NetworkDropdown extends React.Component {
             {icon}
             <span className={span_class}>{name}</span>
         </div>;
+    }
+
+    _protocolNameForInstanceId(instance_id) {
+        for (const proto of Object.keys(this.props.protocols)) {
+            if (!this.props.protocols[proto].instances) continue;
+            for (const instance of this.props.protocols[proto].instances) {
+                if (instance.instance_id == instance_id) return proto;
+            }
+        }
+    }
+
+    instanceForInstanceId(instance_id) {
+        for (const proto of Object.keys(this.props.protocols)) {
+            if (!this.props.protocols[proto].instances) continue;
+            for (const instance of this.props.protocols[proto].instances) {
+                if (instance.instance_id == instance_id) return instance;
+            }
+        }
     }
 
     render() {
@@ -216,9 +285,17 @@ export default class NetworkDropdown extends React.Component {
                 placeholder="matrix.org" // 'matrix.org' as an example of an HS name
             />
         } else {
-            current_value = this._makeMenuOption(
-                this.state.selectedServer, this.state.selectedNetwork, false
-            );
+            if (this.state.selectedInstanceId) {
+                const protocolName = this._protocolNameForInstanceId(this.state.selectedInstanceId);
+                const instance = this.instanceForInstanceId(this.state.selectedInstanceId);
+                current_value = this._makeMenuOptionFromProtocolInstance(
+                    this.state.selectedServer, this.props.protocols[protocolName], instance, false
+                );
+            } else {
+                current_value = this._makeMenuOption(
+                    this.state.selectedServer, this.state.selectedNetwork, false
+                );
+            }
         }
 
         return <div className="mx_NetworkDropdown" ref={this.collectRoot}>
@@ -234,11 +311,13 @@ export default class NetworkDropdown extends React.Component {
 NetworkDropdown.propTypes = {
     onOptionChange: React.PropTypes.func.isRequired,
     config: React.PropTypes.object,
+    protocols: React.PropTypes.object,
 };
 
 NetworkDropdown.defaultProps = {
     config: {
         networks: [],
-    }
+    },
+    protocols: {},
 };
 
