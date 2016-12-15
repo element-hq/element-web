@@ -193,13 +193,13 @@ export default class NetworkDropdown extends React.Component {
         return options;
     }
 
-    _makeMenuOptionFromProtocolInstance(server, protocol, instance, wire_onclick) {
-        if (wire_onclick === undefined) wire_onclick = true;
+    _makeMenuOptionFromProtocolInstance(server, protocol, instance, handleClicks) {
+        if (handleClicks === undefined) handleClicks = true;
 
         const name = instance.desc;
         const icon = <img src={protocol.icon || DEFAULT_ICON_URL} width="16" />;
         const key = instance.instance_id;
-        const click_handler = wire_onclick ? this.onMenuOptionClickProtocolInstance.bind(this, server, instance.instance_id) : null;
+        const click_handler = handleClicks ? this.onMenuOptionClickProtocolInstance.bind(this, server, instance.instance_id) : null;
         
         return <div key={key} className="mx_NetworkDropdown_networkoption" onClick={click_handler}>
             {icon}
@@ -207,8 +207,8 @@ export default class NetworkDropdown extends React.Component {
         </div>;
     }
 
-    _makeMenuOption(server, network, wire_onclick) {
-        if (wire_onclick === undefined) wire_onclick = true;
+    _makeMenuOption(server, network, handleClicks) {
+        if (handleClicks === undefined) wire_onclick = true;
         let icon;
         let name;
         let span_class;
@@ -240,7 +240,7 @@ export default class NetworkDropdown extends React.Component {
             span_class = 'mx_NetworkDropdown_menu_network';
         }
 
-        const click_handler = wire_onclick ? this.onMenuOptionClick.bind(this, server, network) : null;
+        const click_handler = handleClicks ? this.onMenuOptionClick.bind(this, server, network) : null;
 
         let key = server;
         if (network !== null) {
@@ -289,7 +289,7 @@ export default class NetworkDropdown extends React.Component {
                 const protocolName = this._protocolNameForInstanceId(this.state.selectedInstanceId);
                 const instance = this.instanceForInstanceId(this.state.selectedInstanceId);
                 current_value = this._makeMenuOptionFromProtocolInstance(
-                    this.state.selectedServer, this.props.protocols[protocolName], instance
+                    this.state.selectedServer, this.props.protocols[protocolName], instance, false
                 );
             } else {
                 current_value = this._makeMenuOption(
