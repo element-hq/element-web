@@ -101,7 +101,7 @@ export default class NetworkDropdown extends React.Component {
         ev.preventDefault();
     }
 
-    onMenuOptionClick(server, network, ev) {
+    onMenuOptionClick(server, network) {
         this.setState({
             expanded: false,
             selectedServer: server,
@@ -111,7 +111,7 @@ export default class NetworkDropdown extends React.Component {
         this.props.onOptionChange(server, network);
     }
 
-    onMenuOptionClickProtocolInstance(server, instance_id, ev) {
+    onMenuOptionClickProtocolInstance(server, instance_id) {
         this.setState({
             expanded: false,
             selectedServer: server,
