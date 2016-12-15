@@ -297,7 +297,7 @@ module.exports = React.createClass({
             if (isMembershipChange(mxEv)) {
                 let ts1 = mxEv.getTs();
                 // Ensure that the key of the MemberEventListSummary does not change with new
-                // member events. This will prevent it from being re-created necessarily, and
+                // member events. This will prevent it from being re-created unnecessarily, and
                 // instead will allow new props to be provided. In turn, the shouldComponentUpdate
                 // method on MELS can be used to prevent unnecessary renderings.
                 // `prevEvent` at this point is a non-member event or null.
