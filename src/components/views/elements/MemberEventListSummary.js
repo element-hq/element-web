@@ -149,9 +149,11 @@ module.exports = React.createClass({
         //  - The number of summarised events has changed
         //  - or if the summary is currently expanded
         //  - or if the summary is about to toggle to become collapsed
+        //  - or if there are fewEvents, meaning the child eventTiles are shown as-is
         return (
             nextProps.events.length !== this.props.events.length ||
-            this.state.expanded || nextState.expanded
+            this.state.expanded || nextState.expanded ||
+            nextProps.events.length < this.props.threshold
         );
     },
 
