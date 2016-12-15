@@ -301,7 +301,7 @@ module.exports = React.createClass({
                 // instead will allow new props to be provided. In turn, the shouldComponentUpdate
                 // method on MELS can be used to prevent unnecessary renderings.
                 // `prevEvent` at this point is a non-member event or null.
-                const key = "memberlistsummary-" + (prevEvent ? prevEvent.getId() : "");
+                const key = "memberlistsummary-" + (prevEvent ? mxEv.getId() : "initial");
 
                 if (this._wantsDateSeparator(prevEvent, ts1)) {
                     let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1}/></li>;
