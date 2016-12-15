@@ -53,6 +53,7 @@ module.exports = React.createClass({
             publicRooms: [],
             loading: true,
             network: null,
+            instance_id: null,
             roomServer: null,
             filterString: null,
         }
