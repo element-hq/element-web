@@ -308,7 +308,7 @@ module.exports = React.createClass({
             this.setState({
                 rejectingInvites: false
             });
-        });
+        }).done();
     },
 
     _renderUserInterfaceSettings: function() {
