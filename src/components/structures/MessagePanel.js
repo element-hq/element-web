@@ -21,6 +21,8 @@ var sdk = require('../../index');
 
 var MatrixClientPeg = require('../../MatrixClientPeg')
 
+const MILLIS_IN_DAY = 86400000;
+
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
 module.exports = React.createClass({
@@ -466,9 +468,7 @@ module.exports = React.createClass({
             // here.
             return !this.props.suppressFirstDateSeparator;
         }
-
-        return (new Date(prevEvent.getTs()).toDateString()
-                !== new Date(nextEventTs).toDateString());
+        return Math.floor(prevEvent.getTs() / MILLIS_IN_DAY) !== Math.floor(nextEventTs / MILLIS_IN_DAY);
     },
 
     // get a list of read receipts that should be shown next to this event
