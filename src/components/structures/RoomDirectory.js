@@ -31,6 +31,8 @@ var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
 var sanitizeHtml = require('sanitize-html');
 var q = require('q');
 
+import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/DirectoryUtils';
+
 linkifyMatrix(linkify);
 
 module.exports = React.createClass({
@@ -42,9 +44,7 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            config: {
-                networks: [],
-            },
+            config: {},
         }
     },
 
@@ -52,37 +52,26 @@ module.exports = React.createClass({
         return {
             publicRooms: [],
             loading: true,
-            network: null,
-            instance_id: null,
+            protocolsLoading: true,
+            instanceId: null,
+            includeAll: false,
             roomServer: null,
             filterString: null,
         }
     },
 
     componentWillMount: function() {
-        // precompile Regexps
-        this.portalRoomPatterns = {};
-        this.nativePatterns = {};
-        if (this.props.config.networks) {
-            for (const network of Object.keys(this.props.config.networks)) {
-                const network_info = this.props.config.networks[network];
-                if (network_info.portalRoomPattern) {
-                    this.portalRoomPatterns[network] = new RegExp(network_info.portalRoomPattern);
-                }
-                if (network_info.nativePattern) {
-                    this.nativePatterns[network] = new RegExp(network_info.nativePattern);
-                }
-            }
-        }
-
         this.nextBatch = null;
         this.filterTimeout = null;
         this.scrollPanel = null;
         this.protocols = null;
 
+        this.setState({protocolsLoading: true});
         MatrixClientPeg.get().getThirdpartyProtocols().done((response) => {
             this.protocols = response;
+            this.setState({protocolsLoading: false});
         }, (err) => {
+            this.setState({protocolsLoading: false});
             if (MatrixClientPeg.get().isGuest()) {
                 // Guests currently aren't allowed to use this API, so
                 // ignore this as otherwise this error is literally the
@@ -132,9 +121,9 @@ module.exports = React.createClass({
         if (my_server != MatrixClientPeg.getHomeServerName()) {
             opts.server = my_server;
         }
-        if (this.state.instance_id) {
-            opts.third_party_instance_id = this.state.instance_id;
-        } else if (this.state.network !== '_matrix') {
+        if (this.state.instanceId) {
+            opts.third_party_instanceId = this.state.instanceId;
+        } else if (this.state.includeAll) {
             opts.include_all_networks = true;
         }
         if (this.nextBatch) opts.since = this.nextBatch;
@@ -237,7 +226,7 @@ module.exports = React.createClass({
         }
     },
 
-    onOptionChange: function(server, network, instance_id) {
+    onOptionChange: function(server, instanceId, includeAll) {
         // clear next batch so we don't try to load more rooms
         this.nextBatch = null;
         this.setState({
@@ -246,8 +235,8 @@ module.exports = React.createClass({
             // to clear the list anyway.
             publicRooms: [],
             roomServer: server,
-            network: network,
-            instance_id: instance_id,
+            instanceId: instanceId,
+            includeAll: includeAll,
         }, this.refreshRoomList);
         // We also refresh the room list each time even though this
         // filtering is client-side. It hopefully won't be client side
@@ -278,7 +267,7 @@ module.exports = React.createClass({
         this.filterTimeout = setTimeout(() => {
             this.filterTimeout = null;
             this.refreshRoomList();
-        }, 300);
+        }, 700);
     },
 
     onFilterClear: function() {
@@ -295,12 +284,19 @@ module.exports = React.createClass({
     onJoinClick: function(alias) {
         // If we're on the 'Matrix' network (or all networks),
         // just show that rooms alias
-        if (this.state.network == null || this.state.network == '_matrix') {
+        if (!this.state.instanceId) {
+            // If the user specified an alias without a domain, add on whichever server is selected
+            // in the dropdown
+            if (alias.indexOf(':') == -1) {
+                alias = alias + ':' + this.state.roomServer;
+            }
             this.showRoomAlias(alias);
         } else {
             // This is a 3rd party protocol. Let's see if we
             // can join it
-            const fields = this._getFieldsForThirdPartyLocation(alias, this.state.network);
+            const protocol_name = protocolNameForInstanceId(this.protocols, this.state.instanceId);
+            const instance = instanceForInstanceId(this.protocols, this.state.instanceId);
+            const fields = this._getFieldsForThirdPartyLocation(alias, this.protocols[protocol_name], instance);
             if (!fields) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
@@ -309,8 +305,7 @@ module.exports = React.createClass({
                 });
                 return;
             }
-            const protocol = this._protocolForThirdPartyNetwork(this.state.network);
-            MatrixClientPeg.get().getThirdpartyLocation(protocol, fields).done((resp) => {
+            MatrixClientPeg.get().getThirdpartyLocation(protocol_name, fields).done((resp) => {
                 if (resp.length > 0 && resp[0].alias) {
                     this.showRoomAlias(resp[0].alias);
                 } else {
@@ -379,13 +374,7 @@ module.exports = React.createClass({
 
         if (!this.state.publicRooms) return [];
 
-        var rooms = this.state.publicRooms.filter((a) => {
-            if (this.state.network) {
-                if (!this._isRoomInNetwork(a, this.state.roomServer, this.state.network)) return false;
-            }
-
-            return true;
-        });
+        var rooms = this.state.publicRooms;
         var rows = [];
         var self = this;
         var guestRead, guestJoin, perms;
@@ -447,119 +436,46 @@ module.exports = React.createClass({
         this.scrollPanel = element;
     },
 
-    /**
-     * Terrible temporary function that guess what network a public room
-     * entry is in, until synapse is able to tell us
-     */
-    _isRoomInNetwork: function(room, server, network) {
-        // We carve rooms into two categories here. 'portal' rooms are
-        // rooms created by a user joining a bridge 'portal' alias to
-        // participate in that room or a foreign network. A room is a
-        // portal room if it has exactly one alias and that alias matches
-        // a pattern defined in the config. Its network is the key
-        // of the pattern that it matches.
-        // All other rooms are considered 'native matrix' rooms, and
-        // go into the special '_matrix' network.
-
-        let roomNetwork = '_matrix';
-        if (room.aliases && room.aliases.length == 1) {
-            if (this.props.config.serverConfig && this.props.config.serverConfig[server] && this.props.config.serverConfig[server].networks) {
-                for (const n of this.props.config.serverConfig[server].networks) {
-                    const pat = this.portalRoomPatterns[n];
-                    if (pat && pat.test(room.aliases[0])) {
-                        roomNetwork = n;
-                    }
-                }
-            }
-        }
-        return roomNetwork == network;
-    },
-
-    _stringLooksLikeId: function(s, network) {
+    _stringLooksLikeId: function(s, field_type) {
         let pat = /^#[^\s]+:[^\s]/;
-        if (
-            network && network != '_matrix' &&
-            this.nativePatterns[network]
-        ) {
-            pat = this.nativePatterns[network];
+        if (field_type && field_type.regexp) {
+            pat = new RegExp(field_type.regexp);
         }
 
         return pat.test(s);
     },
 
-    _protocolForThirdPartyNetwork: function(network) {
-        if (
-            this.props.config.networks &&
-            this.props.config.networks[network] &&
-            this.props.config.networks[network].protocol
-        ) {
-            return this.props.config.networks[network].protocol;
-        }
-    },
-
-    _getFieldsForThirdPartyLocation: function(user_input, network) {
-        if (!this.props.config.networks || !this.props.config.networks[network]) return null;
-
-        const network_info = this.props.config.networks[network];
-        if (!network_info.protocol) return null;
-
-        if (!this.protocols) return null;
-
-        let matched_instance;
-        // Try to find which instance in the 'protocols' response
-        // matches this network. We look for a matching protocol
-        // and the existence of a 'domain' field and if present,
-        // its value.
-        if (
-            this.protocols[network_info.protocol] &&
-            this.protocols[network_info.protocol].instances &&
-            this.protocols[network_info.protocol].instances.length == 1
-        ) {
-            const the_instance = this.protocols[network_info.protocol].instances[0];
-            // If there's only one instance in this protocol, use it
-            // as long as it has no domain (which we assume to mean it's
-            // there is only one possible instance).
-            if (
-                (
-                    the_instance.fields.domain === undefined &&
-                    network_info.domain === undefined
-                ) ||
-                (
-                    the_instance.fields.domain !== undefined &&
-                    the_instance.fields.domain == network_info.domain
-                )
-            ) {
-                matched_instance = the_instance;
-            }
-        } else if (network_info.domain) {
-            // otherwise, we look for one with a matching domain.
-            for (const this_instance of this.protocols[network_info.protocol].instances) {
-                if (this_instance.fields.domain == network_info.domain) {
-                    matched_instance = this_instance;
-                }
-            }
-        }
-
-        if (matched_instance === undefined) return null;
-
-        // now make an object with the fields specified by that protocol. We
+    _getFieldsForThirdPartyLocation: function(user_input, protocol, instance) {
+        // make an object with the fields specified by that protocol. We
         // require that the values of all but the last field come from the
         // instance. The last is the user input.
-        const required_fields = this.protocols[network_info.protocol].location_fields;
+        const required_fields = protocol.location_fields;
+        if (!required_fields) return null;
         const fields = {};
         for (let i = 0; i < required_fields.length - 1; ++i) {
             const this_field = required_fields[i];
-            if (matched_instance.fields[this_field] === undefined) return null;
-            fields[this_field] = matched_instance.fields[this_field];
+            if (instance.fields[this_field] === undefined) return null;
+            fields[this_field] = instance.fields[this_field];
         }
         fields[required_fields[required_fields.length - 1]] = user_input;
         return fields;
     },
 
     render: function() {
+        const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
+        const Loader = sdk.getComponent("elements.Spinner");
+
+        if (this.state.protocolsLoading) {
+            return (
+                <div className="mx_RoomDirectory">
+                    <SimpleRoomHeader title="Directory" />
+                    <Loader />
+                </div>
+            );
+        }
+
         let content;
         if (this.state.loading) {
-            const Loader = sdk.getComponent("elements.Spinner");
             content = <div className="mx_RoomDirectory">
                 <Loader />
             </div>;
@@ -590,26 +506,35 @@ module.exports = React.createClass({
             </ScrollPanel>;
         }
 
-        let placeholder = 'Search for a room';
-        if (this.state.network === null || this.state.network === '_matrix') {
-            placeholder = '#example:' + this.state.roomServer;
-        } else if (
-            this.props.config.networks &&
-            this.props.config.networks[this.state.network] &&
-            this.props.config.networks[this.state.network].example &&
-            this._getFieldsForThirdPartyLocation(this.state.filterString, this.state.network)
+        const protocol_name = protocolNameForInstanceId(this.protocols, this.state.instanceId);
+        let instance_expected_field_type;
+        if (
+            protocol_name &&
+            this.protocols &&
+            this.protocols[protocol_name] &&
+            this.protocols[protocol_name].location_fields.length > 0 &&
+            this.protocols[protocol_name].field_types
         ) {
-            placeholder = this.props.config.networks[this.state.network].example;
+            const last_field = this.protocols[protocol_name].location_fields.slice(-1)[0];
+            instance_expected_field_type = this.protocols[protocol_name].field_types[last_field];
         }
 
-        let showJoinButton = this._stringLooksLikeId(this.state.filterString, this.state.network);
-        if (this.state.network && this.state.network != '_matrix') {
-            if (this._getFieldsForThirdPartyLocation(this.state.filterString, this.state.network) === null) {
+
+        let placeholder = 'Search for a room';
+        if (!this.state.instanceId) {
+            placeholder = '#example:' + this.state.roomServer;
+        } else if (instance_expected_field_type) {
+            placeholder = instance_expected_field_type.placeholder;
+        }
+
+        let showJoinButton = this._stringLooksLikeId(this.state.filterString, instance_expected_field_type);
+        if (protocol_name) {
+            const instance = instanceForInstanceId(this.protocols, this.state.instanceId);
+            if (this._getFieldsForThirdPartyLocation(this.state.filterString, this.protocols[protocol_name], instance) === null) {
                 showJoinButton = false;
             }
         }
 
-        const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const NetworkDropdown = sdk.getComponent('directory.NetworkDropdown');
         const DirectorySearchBox = sdk.getComponent('elements.DirectorySearchBox');
         return (
