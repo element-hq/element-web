@@ -197,7 +197,7 @@ export default class NetworkDropdown extends React.Component {
         if (handleClicks === undefined) handleClicks = true;
 
         const name = instance.desc;
-        const icon = <img src={protocol.icon || DEFAULT_ICON_URL} width="16" />;
+        const icon = <img src={instance.icon || DEFAULT_ICON_URL} />;
         const key = instance.instance_id;
         const click_handler = handleClicks ? this.onMenuOptionClickProtocolInstance.bind(this, server, instance.instance_id) : null;
         
@@ -218,7 +218,7 @@ export default class NetworkDropdown extends React.Component {
             span_class = 'mx_NetworkDropdown_menu_all';
         } else if (network == '_matrix') {
             name = 'Matrix';
-            icon = <img src="img/network-matrix.svg" width="16" height="16" />;
+            icon = <img src="img/network-matrix.svg" />;
             span_class = 'mx_NetworkDropdown_menu_network';
         } else {
             if (this.props.config.networks[network] === undefined) {
@@ -232,9 +232,9 @@ export default class NetworkDropdown extends React.Component {
             if (this.props.config.networks[network].icon) {
                 // omit height here so if people define a non-square logo in the config, it
                 // will keep the aspect when it scales
-                icon = <img src={this.props.config.networks[network].icon} width="16" />;
+                icon = <img src={this.props.config.networks[network].icon} />;
             } else {
-                icon = <img src={iconPath} width="16" height="16" />;
+                icon = <img src={iconPath} />;
             }
 
             span_class = 'mx_NetworkDropdown_menu_network';
