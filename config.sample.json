@@ -8,64 +8,6 @@
     "roomDirectory": {
         "servers": [
             "matrix.org"
-        ],
-        "serverConfig": {
-            "matrix.org": {
-                "networks": [
-                    "_matrix",
-                    "gitter",
-                    "irc:freenode",
-                    "irc:mozilla",
-                    "irc:snoonet",
-                    "irc:oftc"
-                ]
-            }
-        },
-        "networks": {
-            "gitter": {
-                "protocol": "gitter",
-                "portalRoomPattern": "#gitter_.*:matrix.org",
-                "name": "Gitter",
-                "icon": "//gitter.im/favicon.ico",
-                "example": "org/community",
-                "nativePattern": "[^\\s]+/[^\\s]+$"
-            },
-            "irc:freenode": {
-                "protocol": "irc",
-                "domain": "chat.freenode.net",
-                "portalRoomPattern": "#freenode_.*:matrix.org",
-                "name": "Freenode",
-                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
-                "example": "#channel",
-                "nativePattern": "^#[^\\s]+$"
-            },
-            "irc:mozilla": {
-                "protocol": "irc",
-                "domain": "irc.mozilla.org",
-                "portalRoomPattern": "#mozilla_.*:matrix.org",
-                "name": "Mozilla",
-                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
-                "example": "#channel",
-                "nativePattern": "^#[^\\s]+$"
-            },
-            "irc:snoonet": {
-                "protocol": "irc",
-                "domain": "ipv6-irc.snoonet.org",
-                "portalRoomPattern": "#_snoonet_.*:matrix.org",
-                "name": "Snoonet",
-                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
-                "example": "#channel",
-                "nativePattern": "^#[^\\s]+$"
-            },
-            "irc:oftc": {
-                "protocol": "irc",
-                "domain": "irc.oftc.net",
-                "portalRoomPattern": "#_oftc_.*:matrix.org",
-                "name": "OFTC",
-                "icon": "//matrix.org/_matrix/media/v1/download/matrix.org/DHLHpDDgWNNejFmrewvwEAHX",
-                "example": "#channel",
-                "nativePattern": "^#[^\\s]+$"
-            }
-        }
+        ]
     }
 }

@@ -77,6 +77,7 @@ describe('joining a room', function () {
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
             httpBackend.when('GET', '/sync').respond(200, {});
             httpBackend.when('POST', '/publicRooms').respond(200, {chunk: []});
+            httpBackend.when('GET', '/thirdparty/protocols').respond(200, {});
             httpBackend.when('GET', '/directory/room/'+encodeURIComponent(ROOM_ALIAS)).respond(200, { room_id: ROOM_ID });
 
             // start with a logged-in client
@@ -131,6 +132,12 @@ describe('joining a room', function () {
                     .respond(200, {displayname: 'boris'});
                 httpBackend.when('POST', '/join/'+encodeURIComponent(ROOM_ALIAS))
                     .respond(200, {room_id: ROOM_ID});
+                return httpBackend.flush();
+            }).then(() => {
+                // wait for the join request to be made
+                return q.delay(1);
+            }).then(() => {
+                // flush it through
                 return httpBackend.flush();
             }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
