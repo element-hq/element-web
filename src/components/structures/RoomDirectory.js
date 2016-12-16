@@ -282,7 +282,7 @@ module.exports = React.createClass({
     },
 
     onJoinClick: function(alias) {
-        // If we don't have a prticular instance id selected, just show that rooms alias
+        // If we don't have a particular instance id selected, just show that rooms alias
         if (!this.state.instanceId) {
             // If the user specified an alias without a domain, add on whichever server is selected
             // in the dropdown
