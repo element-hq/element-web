@@ -3,7 +3,7 @@
 export function instanceForInstanceId(protocols, instance_id) {
     if (!instance_id) return null;
     for (const proto of Object.keys(protocols)) {
-        if (!protocols[proto].instances) continue;
+        if (!protocols[proto].instances && protocols[proto].instances instanceof Array) continue;
         for (const instance of protocols[proto].instances) {
             if (instance.instance_id == instance_id) return instance;
         }
@@ -15,7 +15,7 @@ export function instanceForInstanceId(protocols, instance_id) {
 export function protocolNameForInstanceId(protocols, instance_id) {
     if (!instance_id) return null;
     for (const proto of Object.keys(protocols)) {
-        if (!protocols[proto].instances) continue;
+        if (!protocols[proto].instances && protocols[proto].instances instanceof Array) continue;
         for (const instance of protocols[proto].instances) {
             if (instance.instance_id == instance_id) return proto;
         }

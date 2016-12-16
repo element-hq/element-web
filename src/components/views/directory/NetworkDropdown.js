@@ -180,7 +180,7 @@ export default class NetworkDropdown extends React.Component {
             icon = <img src="img/network-matrix.svg" />;
             span_class = 'mx_NetworkDropdown_menu_network';
         } else {
-            key = server + '_inst_'+instance.instance_id;
+            key = server + '_inst_' + instance.instance_id;
             icon = <img src={instance.icon || DEFAULT_ICON_URL} />;
             name = instance.desc;
             span_class = 'mx_NetworkDropdown_menu_network';
@@ -227,6 +227,7 @@ export default class NetworkDropdown extends React.Component {
 NetworkDropdown.propTypes = {
     onOptionChange: React.PropTypes.func.isRequired,
     protocols: React.PropTypes.object,
+    // The room directory config. May have a 'servers' key that is a list of server names to include in the dropdown
     config: React.PropTypes.object,
 };
 

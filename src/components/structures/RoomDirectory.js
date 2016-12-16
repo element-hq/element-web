@@ -122,7 +122,7 @@ module.exports = React.createClass({
             opts.server = my_server;
         }
         if (this.state.instanceId) {
-            opts.third_party_instanceId = this.state.instanceId;
+            opts.third_party_instance_id = this.state.instanceId;
         } else if (this.state.includeAll) {
             opts.include_all_networks = true;
         }
@@ -282,8 +282,7 @@ module.exports = React.createClass({
     },
 
     onJoinClick: function(alias) {
-        // If we're on the 'Matrix' network (or all networks),
-        // just show that rooms alias
+        // If we don't have a prticular instance id selected, just show that rooms alias
         if (!this.state.instanceId) {
             // If the user specified an alias without a domain, add on whichever server is selected
             // in the dropdown
@@ -292,11 +291,10 @@ module.exports = React.createClass({
             }
             this.showRoomAlias(alias);
         } else {
-            // This is a 3rd party protocol. Let's see if we
-            // can join it
-            const protocol_name = protocolNameForInstanceId(this.protocols, this.state.instanceId);
+            // This is a 3rd party protocol. Let's see if we can join it
+            const protocolName = protocolNameForInstanceId(this.protocols, this.state.instanceId);
             const instance = instanceForInstanceId(this.protocols, this.state.instanceId);
-            const fields = this._getFieldsForThirdPartyLocation(alias, this.protocols[protocol_name], instance);
+            const fields = protocolName ? this._getFieldsForThirdPartyLocation(alias, this.protocols[protocolName], instance) : null;
             if (!fields) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
@@ -305,7 +303,7 @@ module.exports = React.createClass({
                 });
                 return;
             }
-            MatrixClientPeg.get().getThirdpartyLocation(protocol_name, fields).done((resp) => {
+            MatrixClientPeg.get().getThirdpartyLocation(protocolName, fields).done((resp) => {
                 if (resp.length > 0 && resp[0].alias) {
                     this.showRoomAlias(resp[0].alias);
                 } else {
@@ -445,19 +443,19 @@ module.exports = React.createClass({
         return pat.test(s);
     },
 
-    _getFieldsForThirdPartyLocation: function(user_input, protocol, instance) {
+    _getFieldsForThirdPartyLocation: function(userInput, protocol, instance) {
         // make an object with the fields specified by that protocol. We
         // require that the values of all but the last field come from the
         // instance. The last is the user input.
-        const required_fields = protocol.location_fields;
-        if (!required_fields) return null;
+        const requiredFields = protocol.location_fields;
+        if (!requiredFields) return null;
         const fields = {};
-        for (let i = 0; i < required_fields.length - 1; ++i) {
-            const this_field = required_fields[i];
-            if (instance.fields[this_field] === undefined) return null;
-            fields[this_field] = instance.fields[this_field];
+        for (let i = 0; i < requiredFields.length - 1; ++i) {
+            const thisField = requiredFields[i];
+            if (instance.fields[thisField] === undefined) return null;
+            fields[thisField] = instance.fields[thisField];
         }
-        fields[required_fields[required_fields.length - 1]] = user_input;
+        fields[requiredFields[requiredFields.length - 1]] = userInput;
         return fields;
     },
 
@@ -506,17 +504,17 @@ module.exports = React.createClass({
             </ScrollPanel>;
         }
 
-        const protocol_name = protocolNameForInstanceId(this.protocols, this.state.instanceId);
+        const protocolName = protocolNameForInstanceId(this.protocols, this.state.instanceId);
         let instance_expected_field_type;
         if (
-            protocol_name &&
+            protocolName &&
             this.protocols &&
-            this.protocols[protocol_name] &&
-            this.protocols[protocol_name].location_fields.length > 0 &&
-            this.protocols[protocol_name].field_types
+            this.protocols[protocolName] &&
+            this.protocols[protocolName].location_fields.length > 0 &&
+            this.protocols[protocolName].field_types
         ) {
-            const last_field = this.protocols[protocol_name].location_fields.slice(-1)[0];
-            instance_expected_field_type = this.protocols[protocol_name].field_types[last_field];
+            const last_field = this.protocols[protocolName].location_fields.slice(-1)[0];
+            instance_expected_field_type = this.protocols[protocolName].field_types[last_field];
         }
 
 
@@ -528,9 +526,9 @@ module.exports = React.createClass({
         }
 
         let showJoinButton = this._stringLooksLikeId(this.state.filterString, instance_expected_field_type);
-        if (protocol_name) {
+        if (protocolName) {
             const instance = instanceForInstanceId(this.protocols, this.state.instanceId);
-            if (this._getFieldsForThirdPartyLocation(this.state.filterString, this.protocols[protocol_name], instance) === null) {
+            if (this._getFieldsForThirdPartyLocation(this.state.filterString, this.protocols[protocolName], instance) === null) {
                 showJoinButton = false;
             }
         }
