@@ -1,3 +1,20 @@
+Changes in [0.8.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.2) (2016-12-16)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.1...v0.8.2)
+
+ * Improve the performance of MemberEventListSummary
+   [\#590](https://github.com/matrix-org/matrix-react-sdk/pull/590)
+ * Implement bulk invite rejections
+   [\#592](https://github.com/matrix-org/matrix-react-sdk/pull/592)
+ * Fix performance issues with wantsDateSeperator
+   [\#591](https://github.com/matrix-org/matrix-react-sdk/pull/591)
+ * Add read receipt times to the hovertip of read markers
+   [\#586](https://github.com/matrix-org/matrix-react-sdk/pull/586)
+ * Don't throw exception on stop if no DMRoomMap
+   [\#589](https://github.com/matrix-org/matrix-react-sdk/pull/589)
+ * Fix failing test
+   [\#587](https://github.com/matrix-org/matrix-react-sdk/pull/587)
+
 Changes in [0.8.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.1) (2016-12-09)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.1-rc.2...v0.8.1)
