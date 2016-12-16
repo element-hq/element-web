@@ -256,10 +256,14 @@ function uploadFile(matrixClient, roomId, file) {
             });
         });
     } else {
-        return matrixClient.uploadContent(file).then(function(url) {
+        const basePromise =  matrixClient.uploadContent(file);
+        const promise1 = basePromise.then(function(url) {
             // If the attachment isn't encrypted then include the URL directly.
             return {"url": url};
         });
+        // XXX: copy over the abort method to the new promise
+        promise1.abort = basePromise.abort;
+        return promise1;
     }
 }
 
@@ -322,13 +326,16 @@ class ContentMessages {
 
         var error;
         return def.promise.then(function() {
+            // XXX: upload.promise must be the promise that
+            // is returned by uploadFile as it has an abort()
+            // method hacked onto it.
             upload.promise = uploadFile(
                 matrixClient, roomId, file
-            ).then(function(result) {
+            );
+            return upload.promise.then(function(result) {
                 content.file = result.file;
                 content.url = result.url;
             });
-            return upload.promise;
         }).progress(function(ev) {
             if (ev) {
                 upload.total = ev.total;
