@@ -1,3 +1,14 @@
+Changes in [0.9.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.2) (2016-12-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.1...v0.9.2)
+
+ * Remove the client side filtering from the room dir
+   [\#2750](https://github.com/vector-im/riot-web/pull/2750)
+ * Configure olm memory size
+   [\#2745](https://github.com/vector-im/riot-web/pull/2745)
+ * Support room dir 3rd party network filtering
+   [\#2747](https://github.com/vector-im/riot-web/pull/2747)
+
 Changes in [0.9.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.1) (2016-12-09)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.1-rc.2...v0.9.1)
