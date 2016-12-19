@@ -84,10 +84,15 @@ module.exports = React.createClass({
 
         var mlist = props.room.currentState.members;
         var userIds = [];
+        var leftUserIds = [];
         // for .. in optimisation to return early if there are >2 keys
         for (var uid in mlist) {
-            if (mlist.hasOwnProperty(uid) && ["join", "invite"].includes(mlist[uid].membership)) {
-                userIds.push(uid);
+            if (mlist.hasOwnProperty(uid)) {
+                if (["join", "invite"].includes(mlist[uid].membership)) {
+                    userIds.push(uid);
+                } else {
+                    leftUserIds.push(uid);
+                }
             }
             if (userIds.length > 2) {
                 return null;
@@ -101,12 +106,21 @@ module.exports = React.createClass({
             } else {
                 theOtherGuy = mlist[userIds[0]];
             }
+
             return theOtherGuy.getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
                 props.width, props.height, props.resizeMethod,
                 false
             );
         } else if (userIds.length == 1) {
+            // The other 1-1 user left, leaving just the current user, so show the left user's avatar
+            if (leftUserIds.length === 1) {
+                return mlist[leftUserIds[0]].getAvatarUrl(
+                    MatrixClientPeg.get().getHomeserverUrl(),
+                    props.width, props.height, props.resizeMethod,
+                        false
+                );
+            }
             return mlist[userIds[0]].getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
                 props.width, props.height, props.resizeMethod,
