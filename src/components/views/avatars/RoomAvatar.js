@@ -86,7 +86,7 @@ module.exports = React.createClass({
         var userIds = [];
         // for .. in optimisation to return early if there are >2 keys
         for (var uid in mlist) {
-            if (mlist.hasOwnProperty(uid)) {
+            if (mlist.hasOwnProperty(uid) && ["join", "invite"].includes(mlist[uid].membership)) {
                 userIds.push(uid);
             }
             if (userIds.length > 2) {
