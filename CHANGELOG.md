@@ -109,7 +109,7 @@ Changes in [0.9.0](https://github.com/vector-im/vector-web/releases/tag/v0.9.0) 
  * Implement Platforms
    [\#2531](https://github.com/vector-im/vector-web/pull/2531)
 
-hanges in [0.8.4](https://github.com/vector-im/vector-web/releases/tag/v0.8.4) (2016-11-04)
+Changes in [0.8.4](https://github.com/vector-im/vector-web/releases/tag/v0.8.4) (2016-11-04)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.4-rc.2...v0.8.4)
 
