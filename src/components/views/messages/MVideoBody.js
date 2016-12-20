@@ -27,6 +27,14 @@ import q from 'q';
 module.exports = React.createClass({
     displayName: 'MVideoBody',
 
+    propTypes: {
+        /* the MatrixEvent to show */
+        mxEvent: React.PropTypes.object.isRequired,
+
+        /* called when the video has loaded */
+        onWidgetLoad: React.PropTypes.func.isRequired,
+    },
+
     getInitialState: function() {
         return {
             decryptedUrl: null,
@@ -100,6 +108,7 @@ module.exports = React.createClass({
                         decryptedThumbnailUrl: thumbnailUrl,
                         decryptedBlob: decryptedBlob,
                     });
+                    this.props.onWidgetLoad();
                 });
             }).catch((err) => {
                 console.warn("Unable to decrypt attachment: ", err)
