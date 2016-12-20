@@ -61,6 +61,7 @@
     "gemini-scrollbar": "matrix-org/gemini-scrollbar#b302279",
     "gfm.css": "^1.1.1",
     "highlight.js": "^9.0.0",
+    "leaflet": "^1.0.2",
     "linkifyjs": "^2.1.3",
     "matrix-js-sdk": "matrix-org/matrix-js-sdk#develop",
     "matrix-react-sdk": "matrix-org/matrix-react-sdk#develop",

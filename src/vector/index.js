@@ -35,6 +35,7 @@ require('gemini-scrollbar/gemini-scrollbar.css');
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
+require('leaflet/dist/leaflet.css');
 
 const rageshake = require("./rageshake");
 rageshake.init().then(() => {

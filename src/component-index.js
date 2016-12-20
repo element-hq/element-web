@@ -34,6 +34,7 @@ import structures$LeftPanel from './components/structures/LeftPanel';
 structures$LeftPanel && (module.exports.components['structures.LeftPanel'] = structures$LeftPanel);
 import structures$RightPanel from './components/structures/RightPanel';
 structures$RightPanel && (module.exports.components['structures.RightPanel'] = structures$RightPanel);
+<<<<<<< ours
 import structures$HomePage from './components/structures/HomePage';
 structures$HomePage && (module.exports.components['structures.HomePage'] = structures$HomePage);
 import structures$RoomDirectory from './components/structures/RoomDirectory';
