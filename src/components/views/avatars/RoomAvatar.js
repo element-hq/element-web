@@ -106,7 +106,6 @@ module.exports = React.createClass({
             } else {
                 theOtherGuy = mlist[userIds[0]];
             }
-
             return theOtherGuy.getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
                 props.width, props.height, props.resizeMethod,
