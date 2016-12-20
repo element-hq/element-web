@@ -188,6 +188,7 @@ module.exports = React.createClass({
                     enterTransitionOpts={this.state.enterTransitionOpts} >
                 <MemberAvatar
                     member={this.props.member}
+                    aria-hidden="true"
                     width={14} height={14} resizeMethod="crop"
                     style={style}
                     title={title}
