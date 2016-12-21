@@ -174,7 +174,7 @@ limitations under the License.
     font-size: 16px;
 }
 
-.mx_UserSettings_addThreepid {
+.mx_UserSettings_threepidButton {
     display: table-cell;
     padding-left: 0.5em;
     position: relative;
