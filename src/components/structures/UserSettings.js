@@ -248,6 +248,31 @@ module.exports = React.createClass({
         this.setState({email_add_pending: true});
     },
 
+    onRemoveThreepidClicked: function(threepid) {
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createDialog(QuestionDialog, {
+            title: "Remove Contact Information?",
+            description: "Remove " + threepid.address + "?",
+            button: 'Remove',
+            onFinished: (submit) => {
+                if (submit) {
+                    this.setState({
+                        phase: "UserSettings.LOADING",
+                    });
+                    MatrixClientPeg.get().deleteThreePid(threepid.medium, threepid.address).then(() => {
+                        return this._refreshFromServer();
+                    }).catch((e) => {
+                        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Unable to remove contact information",
+                            description: err.toString(),
+                        });
+                    }).done();
+                }
+            },
+        });
+    },
+
     onEmailDialogFinished: function(ok) {
         if (ok) {
             this.verifyEmailAddress();
@@ -483,7 +508,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var self = this;
         var Loader = sdk.getComponent("elements.Spinner");
         switch (this.state.phase) {
             case "UserSettings.LOADING":
@@ -507,7 +531,7 @@ module.exports = React.createClass({
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
         );
 
-        var threepidsSection = this.state.threepids.map(function(val, pidIndex) {
+        var threepidsSection = this.state.threepids.map((val, pidIndex) => {
             var id = "email-" + val.address;
             return (
                 <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
@@ -516,6 +540,9 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
                         <input key={val.address} id={id} value={val.address} disabled />
+                    </div>
+                    <div className="mx_UserSettings_threepidButton">
+                        <img src="img/icon_context_delete.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
                     </div>
                 </div>
             );
@@ -537,7 +564,7 @@ module.exports = React.createClass({
                             blurToCancel={ false }
                             onValueChanged={ this.onAddThreepidClicked } />
                     </div>
-                    <div className="mx_UserSettings_addThreepid">
+                    <div className="mx_UserSettings_threepidButton">
                          <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked.bind(this, undefined, true) }/>
                     </div>
                 </div>
