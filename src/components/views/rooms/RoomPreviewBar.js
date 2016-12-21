@@ -94,7 +94,7 @@ module.exports = React.createClass({
             if (this.props.invitedEmail) {
                 if (this.state.threePidFetchError) {
                     emailMatchBlock = <div className="error">
-                        Riot was unable to ascertain that the address this invite was
+                        Unable to ascertain that the address this invite was
                         sent to matches one associated with your account.
                     </div>
                 } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().credentials.userId) {
