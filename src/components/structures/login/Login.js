@@ -203,7 +203,7 @@ module.exports = React.createClass({
                  !this.state.enteredHomeserverUrl.startsWith("http")))
             {
                 errorText = <span>
-                    Can't connect to homeserver via HTTP when using Riot served by HTTPS.
+                    Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar.
                     Either use HTTPS or <a href='https://www.google.com/search?&q=enable%20unsafe%20scripts'>enable unsafe scripts</a>
                 </span>;
             }
