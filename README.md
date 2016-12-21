@@ -12,17 +12,17 @@ a 'skin'. A skin provides:
  * Zero or more 'modules' containing non-UI functionality
 
 **WARNING: As of July 2016, the skinning abstraction is broken due to rapid
-development of `matrix-react-sdk` to meet the needs of Vector, the first app
-to be built on top of the SDK** (https://github.com/vector-im/vector-web).
-Right now `matrix-react-sdk` depends on some functionality from `vector-web`
-(e.g. CSS), and `matrix-react-sdk` contains some Vector specific behaviour
-(grep for 'vector').  This layering will be fixed asap once Vector development
+development of `matrix-react-sdk` to meet the needs of Riot (codenamed Vector), the first app
+to be built on top of the SDK** (https://github.com/vector-im/riot-web).
+Right now `matrix-react-sdk` depends on some functionality from `riot-web`
+(e.g. CSS), and `matrix-react-sdk` contains some Riot specific behaviour
+(grep for 'vector').  This layering will be fixed asap once Riot development
 has stabilised, but for now we do not advise trying to create new skins for
 matrix-react-sdk until the layers are clearly separated again.
 
-In the interim, `vector-im/vector-web` and `matrix-org/matrix-react-sdk` should
+In the interim, `vector-im/riot-web` and `matrix-org/matrix-react-sdk` should
 be considered as a single project (for instance, matrix-react-sdk bugs
-are currently filed against vector-im/vector-web rather than this project).
+are currently filed against vector-im/riot-web rather than this project).
 
 Developer Guide
 ===============
@@ -44,15 +44,15 @@ https://github.com/matrix-org/synapse/tree/master/CONTRIBUTING.rst
 Please follow the Matrix JS/React code style as per:
 https://github.com/matrix-org/matrix-react-sdk/tree/master/code_style.rst
 
-Whilst the layering separation between matrix-react-sdk and Vector is broken
+Whilst the layering separation between matrix-react-sdk and Riot is broken
 (as of July 2016), code should be committed as follows:
  * All new components: https://github.com/matrix-org/matrix-react-sdk/tree/master/src/components
- * Vector-specific components: https://github.com/vector-im/vector-web/tree/master/src/components
+ * Riot-specific components: https://github.com/vector-im/riot-web/tree/master/src/components
    * In practice, `matrix-react-sdk` is still evolving so fast that the maintenance
-     burden of customising and overriding these components for Vector can seriously
-     impede development.  So right now, there should be very few (if any) customisations for Vector.
- * CSS for Matrix SDK components: https://github.com/vector-im/vector-web/tree/master/src/skins/vector/css/matrix-react-sdk
- * CSS for Vector-specific overrides and components: https://github.com/vector-im/vector-web/tree/master/src/skins/vector/css/vector-web
+     burden of customising and overriding these components for Riot can seriously
+     impede development.  So right now, there should be very few (if any) customisations for Riot.
+ * CSS for Matrix SDK components: https://github.com/vector-im/riot-web/tree/master/src/skins/vector/css/matrix-react-sdk
+ * CSS for Riot-specific overrides and components: https://github.com/vector-im/riot-web/tree/master/src/skins/vector/css/riot-web
 
 React components in matrix-react-sdk are come in two different flavours:
 'structures' and 'views'.  Structures are stateful components which handle the
@@ -76,7 +76,7 @@ practices that anyone working with the SDK needs to be be aware of and uphold:
 
   * The view's CSS file MUST have the same name (e.g. view/rooms/MessageTile.css).
     CSS for matrix-react-sdk currently resides in
-    https://github.com/vector-im/vector-web/tree/master/src/skins/vector/css/matrix-react-sdk.
+    https://github.com/vector-im/riot-web/tree/master/src/skins/vector/css/matrix-react-sdk.
 
   * Per-view CSS is optional - it could choose to inherit all its styling from
     the context of the rest of the app, although this is unusual for any but
@@ -129,7 +129,7 @@ from it.
 Github Issues
 =============
 
-All issues should be filed under https://github.com/vector-im/vector-web/issues
+All issues should be filed under https://github.com/vector-im/riot-web/issues
 for now.
 
 OUTDATED: To Create Your Own Skin
