@@ -482,6 +482,11 @@ module.exports = React.createClass({
         </div>;
     },
 
+    nameForMedium: function(medium) {
+        if (medium == 'msisdn') return 'Phone';
+        return medium[0].toUpperCase() + medium.slice(1);
+    },
+
     render: function() {
         var self = this;
         var Loader = sdk.getComponent("elements.Spinner");
@@ -512,7 +517,7 @@ module.exports = React.createClass({
             return (
                 <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
                     <div className="mx_UserSettings_profileLabelCell">
-                        <label htmlFor={id}>Email</label>
+                        <label htmlFor={id}>{this.nameForMedium(val.medium)}</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
                         <input key={val.address} id={id} value={val.address} disabled />
