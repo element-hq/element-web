@@ -261,7 +261,7 @@ module.exports = React.createClass({
                     });
                     MatrixClientPeg.get().deleteThreePid(threepid.medium, threepid.address).then(() => {
                         return this._refreshFromServer();
-                    }).catch((e) => {
+                    }).catch((err) => {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         Modal.createDialog(ErrorDialog, {
                             title: "Unable to remove contact information",
