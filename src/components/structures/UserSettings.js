@@ -532,7 +532,7 @@ module.exports = React.createClass({
         );
 
         var threepidsSection = this.state.threepids.map((val, pidIndex) => {
-            var id = "email-" + val.address;
+            const id = "3pid-" + val.address;
             return (
                 <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
                     <div className="mx_UserSettings_profileLabelCell">
