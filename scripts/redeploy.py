@@ -120,6 +120,7 @@ def on_receive_jenkins_poke():
         build_dir = os.path.join(arg_extract_path, "%s-#%s" % (job_name, build_num))
         if os.path.exists(build_dir):
             abort(400, "Not deploying. We have previously deployed this build.")
+            return
         os.mkdir(build_dir)
 
         untar_to(filename, build_dir)
