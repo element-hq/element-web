@@ -1,3 +1,10 @@
+Changes in [0.9.4](https://github.com/vector-im/riot-web/releases/tag/v0.9.4) (2016-12-22)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.3...v0.9.4)
+
+ * Update to libolm 2.1.0. This should help resolve a problem with browser
+   sessions being logged out ([\#2726](https://github.com/vector-im/riot-web/issues/2726)).
+
 Changes in [0.9.3](https://github.com/vector-im/riot-web/releases/tag/v0.9.3) (2016-12-22)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.2...v0.9.3)
