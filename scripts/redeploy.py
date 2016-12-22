@@ -13,7 +13,7 @@ def download_file(url):
     local_filename = url.split('/')[-1]
     r = requests.get(url, stream=True)
     with open(local_filename, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024): 
+        for chunk in r.iter_content(chunk_size=1024):
             if chunk: # filter out keep-alive new chunks
                 f.write(chunk)
     return local_filename
@@ -107,20 +107,34 @@ def on_receive_jenkins_poke():
     )
 
     print("Retrieving .tar.gz file: %s" % tar_gz_url)
+
+    # we rely on the fact that flask only serves one request at a time to
+    # ensure that we do not overwrite a tarball from a concurrent request.
     filename = download_file(tar_gz_url)
     print("Downloaded file: %s" % filename)
+
+    try:
+        # we extract into a directory based on the build number. This avoids the
+        # problem of multiple builds building the same git version and thus having
+        # the same tarball name.
+        build_dir = os.path.join(arg_extract_path, "%s-#%s" % (job_name, build_num))
+        if os.path.exists(build_dir):
+            abort(400, "Not deploying. We have previously deployed this build.")
+        os.mkdir(build_dir)
+
+        untar_to(filename, build_dir)
+        print("Extracted to: %s" % build_dir)
+    finally:
+        if arg_should_clean:
+            os.remove(filename)
+
     name_str = filename.replace(".tar.gz", "")
-    untar_to(filename, arg_extract_path)
-
-    extracted_dir = os.path.join(arg_extract_path, name_str)
-
-    if arg_should_clean:
-        os.remove(filename)
-
-    create_symlink(source=extracted_dir, linkname=arg_symlink)
+    extracted_dir = os.path.join(build_dir, name_str)
 
     if arg_config_location:
         create_symlink(source=arg_config_location, linkname=os.path.join(extracted_dir, 'config.json'))
+
+    create_symlink(source=extracted_dir, linkname=arg_symlink)
 
     return jsonify({})
 
