@@ -1,3 +1,14 @@
+Changes in [0.8.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.3) (2016-12-22)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.2...v0.8.3)
+
+ * Revert performance fix for wantsDateSeperator which was causing date separators to
+   be shown at the wrong time of day.
+ * Unbranded error messages
+   [\#599](https://github.com/matrix-org/matrix-react-sdk/pull/599)
+ * Fix scroll jumping when a video is decrypted
+   [\#594](https://github.com/matrix-org/matrix-react-sdk/pull/594)
+
 Changes in [0.8.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.2) (2016-12-16)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.1...v0.8.2)
