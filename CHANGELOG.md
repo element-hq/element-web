@@ -1,3 +1,12 @@
+Changes in [0.9.3](https://github.com/vector-im/riot-web/releases/tag/v0.9.3) (2016-12-22)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.2...v0.9.3)
+
+ * (from matrix-react-sdk) Fix regression where the date separator would be displayed
+   at the wrong time of day.
+ * README.md: fix GFMD for nativefier
+   [\#2755](https://github.com/vector-im/riot-web/pull/2755)
+
 Changes in [0.9.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.2) (2016-12-16)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.1...v0.9.2)
