@@ -54,8 +54,9 @@ module.exports = React.createClass({
             console.log("Loading recaptcha script...");
             var scriptTag = document.createElement('script');
             window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded()};
+            var protocol = global.location.protocol === "file:" ? "https:" : global.location.protocol;
             scriptTag.setAttribute(
-                'src', global.location.protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit"
+                'src', protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit"
             );
             this.refs.recaptchaContainer.appendChild(scriptTag);
         }
