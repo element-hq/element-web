@@ -66,7 +66,7 @@ class RecaptchaStage extends Stage {
         if (!data || !data.response) {
             return;
         }
-        this.authDict.response = data.response;
+        this.authDict.auth.response = data.response;
     }
 
     complete() {
