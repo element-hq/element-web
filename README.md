@@ -122,6 +122,7 @@ The only platform that can build packages for all three platforms is macOS:
 ```
 brew install wine --without-x11
 brew install mono
+brew install gnu-tar
 npm install
 npm run build:electron
 ```
