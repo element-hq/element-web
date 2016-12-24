@@ -191,7 +191,7 @@ class Register extends Signup {
                     }
                 }
                 if (poll_for_success) {
-                    return q.delay(5000).then(function() {
+                    return q.delay(2000).then(function() {
                         return self._tryRegister(client, authDict, poll_for_success);
                     });
                 } else {

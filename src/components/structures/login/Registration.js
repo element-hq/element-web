@@ -273,6 +273,7 @@ module.exports = React.createClass({
                 if (serverParams && serverParams["m.login.recaptcha"]) {
                     publicKey = serverParams["m.login.recaptcha"].public_key;
                 }
+
                 registerStep = (
                     <CaptchaForm sitePublicKey={publicKey}
                         onCaptchaResponse={this.onCaptchaResponse}
