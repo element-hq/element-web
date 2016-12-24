@@ -1,3 +1,11 @@
+Changes in [0.9.5](https://github.com/vector-im/riot-web/releases/tag/v0.9.5) (2016-12-24)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.4...v0.9.5)
+
+ * make electron send email validation URLs with a nextlink of riot.im rather than file:///
+ * add gnu-tar to debian electron build deps
+ * fix win32 shortcut in start menu
+
 Changes in [0.9.4](https://github.com/vector-im/riot-web/releases/tag/v0.9.4) (2016-12-22)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.3...v0.9.4)
