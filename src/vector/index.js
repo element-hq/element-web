@@ -136,11 +136,20 @@ var onNewScreen = function(screen) {
 // click back to the client having registered.
 // It's up to us to recognise if we're loaded with
 // this URL and tell MatrixClient to resume registration.
+//
+// If we're in electron, we should never pass through a file:// URL otherwise
+// the identity server will try to 302 the browser to it, which breaks horribly.
+// so in that instance, hardcode to use riot.im/app for now instead.
 var makeRegistrationUrl = function() {
-    return window.location.protocol + '//' +
-           window.location.host +
-           window.location.pathname +
-           '#/register';
+    if (window.location.protocol === "file:") {
+        return 'https://riot.im/app/#/register';
+    }
+    else {
+        return window.location.protocol + '//' +
+               window.location.host +
+               window.location.pathname +
+               '#/register';
+    }
 }
 
 window.addEventListener('hashchange', onHashChange);

@@ -3,7 +3,7 @@ const spawn = require('child_process').spawn;
 const app = require('electron').app;
 
 function run_update_exe(args, done) {
-    const updateExe = path.resolve(path.dirname(process.execPath), '..', 'Update.exe');
+    const updateExe = path.resolve(path.dirname(process.execPath), 'Update.exe');
     spawn(updateExe, args, {
       detached: true
     }).on('close', done);
