@@ -25,6 +25,14 @@ Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
 over https.
 
+### Installation Steps for Debian Stretch
+1. Add the repository to your sources.list using either of the following two options:
+  - Directly to sources.list: `echo "deb https://riot.im/packages/debian/ stretch main" | sudo tee -a /etc/apt/sources.list`
+  - As a separate entry in sources.list.d: `echo "deb https://riot.im/packages/debian/ stretch main" | sudo tee /etc/apt/sources.list.d/riot.list`
+2. Add the gpg signing key for the riot repository: `curl -s https://riot.im/packages/debian/repo-key.asc | sudo apt-key add -`
+3. Update your package lists: `sudo apt-get update`
+4. Install Riot: `sudo apt-get install riot-web`
+
 Important Security Note
 =======================
 
@@ -104,6 +112,7 @@ To run as a desktop app:
 ```
 npm install
 npm install electron
+npm run build
 node_modules/.bin/electron .
 ```
 
