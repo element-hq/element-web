@@ -1,6 +1,6 @@
-Changes in [0.8.3-electron](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.3-electron) (2016-12-24)
-=====================================================================================================================
-[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.3...v0.8.3-electron)
+Changes in [0.8.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.4) (2016-12-24)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.3...v0.8.4)
 
  * Fix signup by working around the fact that reCapture doesn't work on electron
  * Fix windows shortcut link
