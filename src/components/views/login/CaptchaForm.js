@@ -52,12 +52,24 @@ module.exports = React.createClass({
             this._onCaptchaLoaded();
         } else {
             console.log("Loading recaptcha script...");
-            var scriptTag = document.createElement('script');
             window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded()};
-            scriptTag.setAttribute(
-                'src', global.location.protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit"
-            );
-            this.refs.recaptchaContainer.appendChild(scriptTag);
+            var protocol = global.location.protocol;
+            if (protocol === "file:") {
+                var warning = document.createElement('div');
+                // XXX: fix hardcoded app URL.  Better solutions include:
+                // * jumping straight to a hosted captcha page (but we don't support that yet)
+                // * embedding the captcha in an iframe (if that works)
+                // * using a better captcha lib
+                warning.innerHTML = "Robot check is currently unavailable on desktop - please sign up <a href='https://riot.im/app'>using a web browser</a>.";
+                this.refs.recaptchaContainer.appendChild(warning);
+            }
+            else {
+                var scriptTag = document.createElement('script');
+                scriptTag.setAttribute(
+                    'src', protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit"
+                );
+                this.refs.recaptchaContainer.appendChild(scriptTag);
+            }
         }
     },
 
@@ -106,6 +118,7 @@ module.exports = React.createClass({
         return (
             <div ref="recaptchaContainer">
                 This Home Server would like to make sure you are not a robot
+                <br/>
                 <div id={DIV_ID}></div>
                 {error}
             </div>
