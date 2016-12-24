@@ -60,7 +60,7 @@ module.exports = React.createClass({
                 // * jumping straight to a hosted captcha page (but we don't support that yet)
                 // * embedding the captcha in an iframe (if that works)
                 // * using a better captcha lib
-                warning.innerHTML = "Robot check is currently unavailable on desktop - please sign up <a href='https://riot.im/app'>using a web browser</a>.";
+                warning.innerHTML = "Robot check is currently unavailable on desktop - please use a <a href='https://riot.im/app'>web browser</a>.";
                 this.refs.recaptchaContainer.appendChild(warning);
             }
             else {
