@@ -44,7 +44,7 @@ limitations under the License.
 }
 
 .mx_EventTile .mx_SenderProfile {
-    color: #454545;
+    color: $primary-fg-color;
     opacity: 0.5;
     font-size: 14px;
     display: block; /* anti-zalgo, with overflow hidden */
@@ -61,7 +61,7 @@ limitations under the License.
     display: block;
     visibility: hidden;
     white-space: nowrap;
-    color: #acacac;
+    color: $event-timestamp-color;
     font-size: 11px;
     left: 8px;
     position: absolute;
@@ -93,20 +93,20 @@ limitations under the License.
  * TODO: ultimately we probably want some transition on here.
  */
 .mx_EventTile_selected .mx_EventTile_line {
-    border-left: #76cfa6 5px solid;
+    border-left: $accent-color 5px solid;
     padding-left: 60px;
-    background-color: #f7f7f7;
+    background-color: $event-selected-color;
 }
 
 .mx_EventTile:hover .mx_EventTile_line,
 .mx_EventTile.menu .mx_EventTile_line
 {
-    background-color: #f7f7f7;
+    background-color: $event-selected-color;
 }
 
 .mx_EventTile_searchHighlight {
-    background-color: #76cfa6;
-    color: #fff;
+    background-color: $accent-color;
+    color: $accent-fg-color;
     border-radius: 5px;
     padding-left: 2px;
     padding-right: 2px;
@@ -114,26 +114,26 @@ limitations under the License.
 }
 
 .mx_EventTile_searchHighlight a {
-    background-color: #76cfa6;
-    color: #fff;
+    background-color: $accent-color;
+    color: $accent-fg-color;
 }
 
 .mx_EventTile_encrypting {
-    color: #abddbc ! important;
+    color: $event-encrypting-color ! important;
 }
 
 .mx_EventTile_sending {
-    color: #ddd;
+    color: $event-sending-color;
 }
 
 .mx_EventTile_notSent {
-    color: #f44;
+    color: $event-notsent-color;
 }
 
 .mx_EventTile_highlight,
 .mx_EventTile_highlight .markdown-body
  {
-    color: #FF0064;
+    color: $warning-color;
 }
 
 .mx_EventTile_contextual {
@@ -204,7 +204,7 @@ limitations under the License.
 }
 
 .mx_EventTile_readAvatarRemainder {
-    color: #acacac;
+    color: $event-timestamp-color;
     font-size: 11px;
     position: absolute;
 }
@@ -244,10 +244,10 @@ limitations under the License.
 }
 
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line {
-    border-left: #76cfa5 5px solid;
+    border-left: $e2e-verified-color 5px solid;
 }
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line {
-    border-left: #e8bf37 5px solid;
+    border-left: $e2e-unverified-color 5px solid;
 }
 
 .mx_EventTile:hover.mx_EventTile_verified .mx_MessageTimestamp,
@@ -297,7 +297,7 @@ limitations under the License.
 }
 
 .mx_EventTile_content .markdown-body a {
-    color: #76cfa6;
+    color: $accent-color;
 }
 
 .mx_EventTile_content .markdown-body .hljs {

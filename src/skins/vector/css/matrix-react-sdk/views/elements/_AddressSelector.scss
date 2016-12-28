@@ -16,13 +16,13 @@ limitations under the License.
 
 .mx_AddressSelector {
     position: absolute;
-    background-color: #fff;
+    background-color: $primary-bg-color;
     width: 485px;
     max-height: 116px;
     overflow-y: auto;
 	border-radius: 3px;
-	background-color: #fff;
-	border: solid 1px #76cfa6;
+	background-color: $primary-bg-color;
+	border: solid 1px $accent-color;
     cursor: pointer;
 }
 
@@ -31,15 +31,15 @@ limitations under the License.
 }
 
 .mx_AddressSelector_addressListElement .mx_AddressTile {
-    background-color: #fff;
-    border: solid 1px #fff;
+    background-color: $primary-bg-color;
+    border: solid 1px $primary-bg-color;
 }
 
 .mx_AddressSelector_addressListElement.mx_AddressSelector_selected {
-     background-color: #eaf5f0; /* selected colour */
+    background-color: $selected-color;
 }
 
 .mx_AddressSelector_addressListElement.mx_AddressSelector_selected .mx_AddressTile {
-    background-color: #eaf5f0; /* selected colour */
-    border: solid 1px #eaf5f0; /* selected colour */
+    background-color: $selected-color;
+    border: solid 1px $selected-color;
 }

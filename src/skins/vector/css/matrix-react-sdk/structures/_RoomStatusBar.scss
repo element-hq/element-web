@@ -36,7 +36,7 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_placeholderIndicator span {
-    color: #4a4a4a;
+    color: $primary-fg-color;
     opacity: 0.5;
     position: relative;
     top: -4px;
@@ -76,7 +76,7 @@ limitations under the License.
 
 .mx_RoomStatusBar_unreadMessagesBar {
     padding-top: 10px;
-    color: #ff0064;
+    color: $warning-color;
     cursor: pointer;
 }
 
@@ -93,29 +93,29 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_connectionLostBar_title {
-    color: #ff0064;
+    color: $warning-color;
 }
 
 .mx_RoomStatusBar_connectionLostBar_desc {
-    color: #454545;
+    color: $primary-fg-color;
     font-size: 13px;
     opacity: 0.5;
 }
 
 .mx_RoomStatusBar_resend_link {
-    color: #454545 ! important;
+    color: $primary-fg-color ! important;
     text-decoration: underline ! important;
     cursor: pointer;
 }
 
 .mx_RoomStatusBar_tabCompleteBar {
     padding-top: 10px;
-    color: #4a4a4a;
+    color: $primary-fg-color;
 }
 
 .mx_RoomStatusBar_typingBar {
     padding-top: 10px;
-    color: #4a4a4a;
+    color: $primary-fg-color;
     opacity: 0.5;
     overflow-y: hidden;
     display: block;
@@ -135,7 +135,7 @@ limitations under the License.
 .mx_RoomStatusBar_tabCompleteEol {
     flex: 0 0 auto;
     -webkit-flex: 0 0 auto;
-    color: #76CFA6;
+    color: $accent-color;
 }
 
 .mx_RoomStatusBar_tabCompleteEol object {

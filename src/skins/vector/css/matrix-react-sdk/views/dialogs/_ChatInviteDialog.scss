@@ -36,7 +36,7 @@ limitations under the License.
 
 .mx_ChatInviteDialog_inputContainer {
     border-radius: 3px;
-    border: solid 1px #f0f0f0;
+    border: solid 1px $input-border-color;
     line-height: 36px;
     padding-left: 4px;
     padding-right: 4px;
@@ -49,7 +49,7 @@ limitations under the License.
 
 .mx_ChatInviteDialog_error {
     position: absolute;
-    color: #ff0064;
+    color: $warning-color;
     line-height: 36px;
 }
 

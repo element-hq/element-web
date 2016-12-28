@@ -27,7 +27,7 @@ limitations under the License.
 
 .mx_TabCompleteBar_command {
     margin-right: 8px;
-    background-color: #76CFA6;
+    background-color: $accent-color;
     padding-left: 8px;
     padding-right: 8px;
     padding-top: 2px;
@@ -41,7 +41,7 @@ limitations under the License.
 .mx_TabCompleteBar_command .mx_TabCompleteBar_text {
     opacity: 1.0;
     vertical-align: initial;
-    color: #fff;
+    color: $accent-fg-color;
 }
 
 .mx_TabCompleteBar_item img {
@@ -50,7 +50,7 @@ limitations under the License.
 }
 
 .mx_TabCompleteBar_text {
-    color: #4a4a4a;
+    color: $primary-fg-color;
     vertical-align: middle;
     opacity: 0.5;
 }

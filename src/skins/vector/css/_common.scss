@@ -29,7 +29,8 @@ body {
        Arial here. */
     font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
     font-size: 15px;
-    color: #454545;
+    background-color: $primary-bg-color;
+    color: $primary-fg-color;
     border: 0px;
     margin: 0px;
     /* This should render the fonts the same accross browsers */
@@ -41,7 +42,7 @@ div.error {
 }
 
 h2 {
-    color: #454545;
+    color: $primary-fg-color;
     font-weight: 400;
     font-size: 18px;
     margin-top: 16px;
@@ -51,7 +52,7 @@ h2 {
 a:hover,
 a:link,
 a:visited {
-    color: #76cfa6;
+    color: $accent-color;
 }
 
 input[type=text].error, input[type=password].error {
@@ -59,7 +60,7 @@ input[type=text].error, input[type=password].error {
 }
 
 input[type=text]:focus, textarea:focus {
-    border: 1px solid #76CFA6;
+    border: 1px solid $accent-color;
     outline: none;
     box-shadow: none;
 }
@@ -148,8 +149,8 @@ textarea {
 }
 
 .mx_Dialog {
-    background-color: #fff;
-    color: #747474;
+    background-color: $primary-bg-color;
+    color: $light-fg-color;
     z-index: 4010;
     font-weight: 300;
     font-size: 15px;
@@ -190,7 +191,7 @@ textarea {
 .mx_Dialog_content {
     margin: 24px 58px 68px 0;
     font-size: 14px;
-    color: #4a4a4a;
+    color: $primary-fg-color;
     word-wrap: break-word;
 }
 
@@ -202,7 +203,7 @@ textarea {
     border: 0px;
     height: 36px;
     border-radius: 40px;
-    border: solid 1px #76cfa6;
+    border: solid 1px $accent-color;
     font-weight: 600;
     font-size: 14px;
     font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
@@ -212,26 +213,26 @@ textarea {
     padding-right: 1.5em;
     outline: none;
     cursor: pointer;
-    color: #76cfa6;
-    background-color: #fff;
+    color: $accent-color;
+    background-color: $primary-bg-color;
 
     /* align images in buttons (eg spinners) */
     vertical-align: middle;
 }
 
 .mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
-    color: #fff;
-    background-color: #76cfa6;
+    color: $accent-fg-color;
+    background-color: $accent-color;
 }
 
 .mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger {
-    background-color: #ff0064;
-    border: solid 1px #ff0064;
+    background-color: $warning-color;
+    border: solid 1px $warning-color;
 }
 
 .mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled {
-    background-color: #777777;
-    border: solid 1px #777777;
+    background-color: $light-fg-color;
+    border: solid 1px $light-fg-color;
     opacity: 0.7;
 }
 
@@ -241,11 +242,11 @@ textarea {
     font-weight: bold;
     font-size: 22px;
     line-height: 1.4;
-    color: #454545;
+    color: $primary-fg-color;
 }
 
 .mx_Dialog_title.danger {
-    color: #ff0064;
+    color: $warning-color;
 }
 
 .mx_TextInputDialog_label {
@@ -256,10 +257,10 @@ textarea {
 .mx_TextInputDialog_input {
     font-size: 15px;
     border-radius: 3px;
-    border: 1px solid #f0f0f0;
+    border: 1px solid $input-border-color;
     padding: 9px;
-    color: #454545;
-    background-color: #fff;
+    color: $primary-fg-color;
+    background-color: $primary-bg-color;
 }
 
 .mx_emojione {
@@ -268,19 +269,19 @@ textarea {
 }
 
 ::-moz-selection {
-    background-color: #76CFA6;
+    background-color: $accent-color;
     color: white;
 }
 
 ::selection {
-    background-color: #76CFA6;
+    background-color: $accent-color;
     color: white;
 }
 
 /** green button with rounded corners */
 .mx_textButton {
-    color: #fff;
-    background-color: #76cfa6;
+    color: $accent-fg-color;
+    background-color: $accent-color;
     border-radius: 17px;
     text-align: center;
     padding-left: 1em;

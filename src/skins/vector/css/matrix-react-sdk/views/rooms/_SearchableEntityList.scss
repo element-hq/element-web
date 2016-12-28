@@ -25,10 +25,10 @@ limitations under the License.
 .mx_SearchableEntityList_query {
     font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
     border-radius: 3px;
-    border: 1px solid #f0f0f0;
+    border: 1px solid $input-border-color;
     padding: 9px;
-    color: #454545;
-    background-color: #fff;
+    color: $primary-fg-color;
+    background-color: $primary-bg-color;
     margin-left: 3px;
     font-size: 15px;
     margin-bottom: 8px;
@@ -36,13 +36,13 @@ limitations under the License.
 }
 
 .mx_SearchableEntityList_query::-moz-placeholder {
-    color: #454545;
+    color: $primary-fg-color;
     opacity: 0.5;
     font-size: 12px;
 }
 
 .mx_SearchableEntityList_query::-webkit-input-placeholder {
-    color: #454545;
+    color: $primary-fg-color;
     opacity: 0.5;
     font-size: 12px;
 }

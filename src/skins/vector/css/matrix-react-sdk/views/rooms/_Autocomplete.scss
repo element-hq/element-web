@@ -3,7 +3,7 @@
     bottom: 0;
     z-index: 1000;
     width: 100%;
-    border: 1px solid #e5e5e5;
+    border: 1px solid $primary-hairline-color;
     background: white;
     border-bottom: none;
     border-radius: 4px 4px 0 0;
@@ -12,7 +12,7 @@
 }
 
 .mx_Autocomplete_ProviderSection {
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid $primary-hairline-color;
 }
 
 .mx_Autocomplete_Completion_container_pill {
@@ -28,7 +28,7 @@
     user-select: none;
     cursor: pointer;
     align-items: center;
-    color: #4a4a4a;
+    color: $primary-fg-color;
 }
 
 .mx_Autocomplete_Completion_block * {
@@ -42,7 +42,7 @@
     user-select: none;
     cursor: pointer;
     align-items: center;
-    color: #4a4a4a;
+    color: $primary-fg-color;
 }
 
 .mx_Autocomplete_Completion_pill * {
@@ -57,13 +57,13 @@
 }
 
 .mx_Autocomplete_Completion.selected {
-    background: #f6f6f6;
+    background: $menu-bg-color;
     outline: none;
 }
 
 .mx_Autocomplete_provider_name {
     margin: 12px;
-    color: #454545;
+    color: $primary-fg-color;
     font-weight: 400;
     opacity: 0.4;
 }

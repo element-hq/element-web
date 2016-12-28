@@ -72,7 +72,7 @@ limitations under the License.
     font-color: #999999;
     font-size: 13px;
     position: relative;
-    background-color: #fff;
+    background-color: $primary-bg-color;
 }
 
 .mx_MemberInfo_buttons {
@@ -82,7 +82,7 @@ limitations under the License.
 .mx_MemberInfo_field {
     cursor: pointer;
     font-size: 13px;
-    color: #76cfa6;
+    color: $accent-color;
     margin-left: 8px;
     line-height: 23px;
 }

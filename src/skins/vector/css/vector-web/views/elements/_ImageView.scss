@@ -87,7 +87,7 @@ limitations under the License.
     padding-right: 30px;
     min-height: 100%;
     max-width: 240px;
-    color: #fff;
+    color: $lightbox-fg-color;
 }
 
 .mx_ImageView_cancel {
@@ -114,10 +114,10 @@ limitations under the License.
     margin-top: 24px;
     margin-bottom: 6px;
     border-radius: 5px;
-    background-color: #454545;
+    background-color: $lightbox-bg-color;
     font-size: 14px;
     padding: 9px;
-    border: 1px solid #fff;
+    border: 1px solid $lightbox-border-color;
 }
 
 .mx_ImageView_size {
@@ -125,7 +125,7 @@ limitations under the License.
 }
 
 .mx_ImageView_link {
-    color: #fff ! important;
+    color: $lightbox-fg-color ! important;
     text-decoration: none ! important;
 }
 

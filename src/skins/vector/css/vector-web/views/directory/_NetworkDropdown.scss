@@ -21,14 +21,14 @@ limitations under the License.
 .mx_NetworkDropdown_input {
     position: relative;
     border-radius: 3px;
-    border: 1px solid #c7c7c7;
+    border: 1px solid $strong-input-border-color;
     font-weight: 300;
     font-size: 13px;
     user-select: none;
 }
 
 .mx_NetworkDropdown_arrow {
-    border-color: #4a4a4a transparent transparent;
+    border-color: $primary-fg-color transparent transparent;
     border-style: solid;
     border-width: 5px 5px 0;
     display: block;
@@ -67,7 +67,7 @@ input.mx_NetworkDropdown_networkoption, input.mx_NetworkDropdown_networkoption:f
     margin: 0;
     padding: 0px;
     border-radius: 3px;
-    border: 1px solid #76cfa6;
+    border: 1px solid $accent-color;
     background-color: white;
 }
 

@@ -58,12 +58,12 @@ limitations under the License.
 .mx_FilePanel .mx_EventTile .mx_MImageBody_download {
     display: flex;
     font-size: 14px;
-    color: #acacac;
+    color: $event-timestamp-color;
 }
 
 .mx_FilePanel .mx_EventTile .mx_MImageBody_downloadLink {
     flex: 1 1 auto;
-    color: #747474;
+    color: $light-fg-color;
 }
 
 .mx_FilePanel .mx_EventTile .mx_MImageBody_size {
@@ -90,7 +90,7 @@ limitations under the License.
     padding: 0px;
     font-size: 11px;
     opacity: 1.0;
-    color: #acacac;
+    color: $event-timestamp-color;
 }
 
 .mx_FilePanel .mx_EventTile .mx_MessageTimestamp {
@@ -100,7 +100,7 @@ limitations under the License.
     position: initial;
     font-size: 11px;
     opacity: 1.0;
-    color: #acacac;
+    color: $event-timestamp-color;
 }
 
 /* Overrides for the wrappers around the body tile */
@@ -111,7 +111,7 @@ limitations under the License.
 }
 
 .mx_FilePanel .mx_EventTile:hover .mx_EventTile_line {
-    background-color: #fff;
+    background-color: $primary-bg-color;
 }
 
 .mx_FilePanel .mx_EventTile_selected .mx_EventTile_line {

@@ -20,7 +20,7 @@ limitations under the License.
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 12px;
-    color: #4a4a4a;
+    color: $primary-fg-color;
 
     display: -webkit-box;
     display: -moz-box;
@@ -78,7 +78,7 @@ limitations under the License.
 
 .mx_RoomDirectory_table {
     font-size: 14px;
-    color: #4a4a4a;
+    color: $primary-fg-color;
     width: 100%;
     text-align: left;
     table-layout: fixed;
@@ -110,7 +110,7 @@ limitations under the License.
     padding-right: 5px;
     height: 15px;
     border-radius: 11px;
-    background-color: #eaf5f0;
+    background-color: $secondary-accent-color;
     text-transform: uppercase;
     font-weight: 600;
     font-size: 11px;

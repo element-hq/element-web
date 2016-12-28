@@ -78,7 +78,7 @@ limitations under the License.
     position: absolute;
     content: "";
     border-radius: 40px;
-    background: #4A4A4A;
+    background: $primary-fg-color;
     bottom: 0;
     width: 24px;
     height: 24px;
@@ -103,7 +103,7 @@ limitations under the License.
     padding-right: 6px;
     padding-top: 2px;
     padding-bottom: 3px;
-    color: rgba(69, 69, 69, 0.8);
+    color: $roomtile-name-color;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -142,7 +142,7 @@ limitations under the License.
     width: 0;
     height: 0;
     margin-left: 5px;
-    border-top: 5px solid #ff0064;
+    border-top: 5px solid $warning-color;
     border-right: 7px solid transparent;
 }
 
@@ -154,7 +154,7 @@ limitations under the License.
     right: 8px; /*gutter */
     top: 9px;
     border-radius: 8px;
-    color: #fff;
+    color: $accent-fg-color;
     font-weight: 600;
     font-size: 10px;
     text-align: center;
@@ -175,11 +175,11 @@ limitations under the License.
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
-    background-color: #76cfa6;
+    background-color: $accent-color;
 }
 
 .mx_RoomTile_highlight .mx_RoomTile_badge {
-    background-color: #ff0064;
+    background-color: $warning-color;
 }
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
@@ -187,7 +187,7 @@ limitations under the License.
 }
 
 .mx_RoomTile_selected {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: $roomtile-selected-bg-color;
 }
 
 .mx_RoomTile .mx_RoomTile_name.mx_RoomTile_badgeShown {

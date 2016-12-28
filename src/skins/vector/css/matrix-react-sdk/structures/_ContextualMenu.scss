@@ -30,10 +30,10 @@ limitations under the License.
 }
 
 .mx_ContextualMenu {
-    border: solid 1px rgba(187, 187, 187, 0.5);
+    border: solid 1px $menu-border-color;
     border-radius: 4px;
-    background-color: #f6f6f6;
-    color: #4a4a4a;
+    background-color: $menu-bg-color;
+    color: $primary-fg-color;
     position: absolute;
     padding: 6px;
 	font-size: 14px;
@@ -51,7 +51,7 @@ limitations under the License.
     width: 0;
     height: 0;
     border-top: 8px solid transparent;
-    border-left: 8px solid rgba(187, 187, 187, 0.5);
+    border-left: 8px solid $menu-border-color;
     border-bottom: 8px solid transparent;
 }
 
@@ -60,7 +60,7 @@ limitations under the License.
     width: 0;
     height: 0;
     border-top: 7px solid transparent;
-    border-left: 7px solid #f6f6f6;
+    border-left: 7px solid $menu-bg-color;
     border-bottom: 7px solid transparent;
     position:absolute;
     top: -7px;
@@ -78,7 +78,7 @@ limitations under the License.
     width: 0;
     height: 0;
     border-top: 8px solid transparent;
-    border-right: 8px solid rgba(187, 187, 187, 0.5);
+    border-right: 8px solid $menu-border-color;
     border-bottom: 8px solid transparent;
 }
 
@@ -87,7 +87,7 @@ limitations under the License.
     width: 0;
     height: 0;
     border-top: 7px solid transparent;
-    border-right: 7px solid #f6f6f6;
+    border-right: 7px solid $menu-bg-color;
     border-bottom: 7px solid transparent;
     position:absolute;
     top: -7px;

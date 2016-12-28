@@ -84,8 +84,8 @@ limitations under the License.
     border-radius: 36px;
     font-weight: 400;
     font-size: 16px;
-    color: #fff;
-    background-color: #76cfa6;
+    color: $accent-fg-color;
+    background-color: $accent-color;
     width: auto;
     margin: auto;
     padding: 7px;
@@ -95,7 +95,7 @@ limitations under the License.
 }
 
 .mx_UserSettings_button.danger {
-    background-color: #ff0064;
+    background-color: $warning-color;
 }
 
 .mx_UserSettings_section {

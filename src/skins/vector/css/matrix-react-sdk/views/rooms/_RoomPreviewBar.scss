@@ -38,11 +38,11 @@ limitations under the License.
 }
 
 .mx_RoomPreviewBar_invite_text {
-    color: #454545;
+    color: $primary-fg-color;
 }
 
 .mx_RoomPreviewBar_join_text {
-    color: #ff0064;
+    color: $warning-color;
 }
 
 .mx_RoomPreviewBar_preview_text {

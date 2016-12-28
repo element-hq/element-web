@@ -22,18 +22,18 @@ limitations under the License.
 .mx_MImageBody_thumbnail {
     max-width: 100%;
 /*
-    background-color: #fff;
-    border: 2px solid #fff;
+    background-color: $primary-bg-color;
+    border: 2px solid $primary-bg-color;
     border-radius: 1px;
 */
 }
 
 .mx_MImageBody_download {
-    color: #76cfa6;
+    color: $accent-color;
 }
 
 .mx_MImageBody_download a {
-    color: #76cfa6;
+    color: $accent-color;
     text-decoration: none;
 }
 

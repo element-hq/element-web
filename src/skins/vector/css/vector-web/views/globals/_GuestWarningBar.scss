@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 .mx_GuestWarningBar {
-    background-color: #76cfa6;
-    color: #fff;
+    background-color: $accent-color;
+    color: $accent-fg-color;
 
     display: -webkit-box;
     display: -moz-box;
@@ -34,7 +34,7 @@ limitations under the License.
 }
 
 .mx_GuestWarningBar a {
-    color: #fff ! important;
+    color: $accent-fg-color ! important;
     text-decoration: underline ! important;
     cursor: pointer;
 }

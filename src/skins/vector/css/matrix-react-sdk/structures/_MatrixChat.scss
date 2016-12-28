@@ -91,7 +91,7 @@ limitations under the License.
     -webkit-order: 1;
     order: 1;
 
-    background-color: #eaf5f0;
+    background-color: $secondary-accent-color;
 
     -webkit-flex: 0 0 235px;
     flex: 0 0 235px;
@@ -111,7 +111,7 @@ limitations under the License.
 
     padding-left: 20px;
     padding-right: 22px;
-    background-color: #fff;
+    background-color: $primary-bg-color;
 
     -webkit-flex: 1;
     flex: 1;

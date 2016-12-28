@@ -18,9 +18,9 @@ limitations under the License.
     display: inline-block;
     border-radius: 3px;
     background-color: rgba(74, 73, 74, 0.1);
-    border: solid 1px #f0f0f0;
+    border: solid 1px $input-border-color;
     line-height: 26px;
-    color: #454545;
+    color: $primary-fg-color;
     font-size: 14px;
     font-weight: normal;
     margin-right: 4px;
@@ -28,8 +28,8 @@ limitations under the License.
 
 .mx_AddressTile.mx_AddressTile_error {
     background-color: rgba(255, 0, 100, 0.1);
-    color: #ff0064;
-    border-color: #ff0064;
+    color: $warning-color;
+    border-color: $warning-color;
 }
 
 .mx_AddressTile_network {

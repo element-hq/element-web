@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 .mx_MatrixToolbar {
-    background-color: #76cfa6;
-    color: #fff;
+    background-color: $accent-color;
+    color: $accent-fg-color;
 
     display: -webkit-box;
     display: -moz-box;
@@ -40,7 +40,7 @@ limitations under the License.
 
 .mx_MatrixToolbar_link
 {
-    color: #fff ! important;
+    color: $accent-fg-color ! important;
     text-decoration: underline ! important;
     cursor: pointer;
 }

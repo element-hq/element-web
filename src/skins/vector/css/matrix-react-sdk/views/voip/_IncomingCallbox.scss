@@ -18,7 +18,7 @@ limitations under the License.
     text-align: center;
     border: 1px solid #a4a4a4;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: $primary-bg-color;
     position: fixed;
     z-index: 1000;
     padding: 6px;
@@ -58,7 +58,7 @@ limitations under the License.
     height: 36px;
     line-height: 36px;
     border-radius: 36px;
-    color: #fff;
+    color: $accent-fg-color;
     margin: auto;
 }
 

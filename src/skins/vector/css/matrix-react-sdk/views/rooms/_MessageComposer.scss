@@ -18,7 +18,7 @@ limitations under the License.
     max-width: 960px;
     vertical-align: middle;
     margin: auto;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid $primary-hairline-color;
     position: relative;
 }
 
@@ -108,8 +108,8 @@ limitations under the License.
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
-    color: #454545;
-    background-color: #fff;
+    color: $primary-fg-color;
+    background-color: $primary-bg-color;
     font-size: 14px;
     max-height: 120px;
     overflow: auto;
@@ -120,11 +120,11 @@ limitations under the License.
 /* hack for FF as vertical alignment of custom placeholder text is broken */
 .mx_MessageComposer_input textarea::-moz-placeholder {
     line-height: 100%;
-    color: #76cfa6;
+    color: $accent-color;
     opacity: 1.0;
 }
 .mx_MessageComposer_input textarea::-webkit-input-placeholder {
-    color: #76cfa6;
+    color: $accent-color;
 }
 
 .mx_MessageComposer_upload,

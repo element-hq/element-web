@@ -26,7 +26,7 @@ limitations under the License.
 .mx_SearchBar_input {
     display: inline block;
     border-radius: 3px 0px 0px 3px;
-    border: 1px solid #f0f0f0;
+    border: 1px solid $input-border-color;
     font-size: 15px;
     padding: 9px;
     padding-left: 11px;
@@ -41,7 +41,7 @@ limitations under the License.
     width: 37px;
     height: 37px;
     border-radius: 0px 3px 3px 0px;
-    background-color: #76CFA6;
+    background-color: $accent-color;
 }
 
 @keyframes pulsate {
@@ -61,8 +61,8 @@ limitations under the License.
     border-radius: 36px;
     font-weight: 400;
     font-size: 15px;
-    color: #fff;
-    background-color: #76cfa6;
+    color: $accent-fg-color;
+    background-color: $accent-color;
     width: auto;
     margin: auto;
     margin-left: 7px;
@@ -74,9 +74,9 @@ limitations under the License.
 }
 
 .mx_SearchBar_unselected {
-    background-color: #fff;
-    color: #76CFA6;
-    border: #76CFA6 1px solid;
+    background-color: $primary-bg-color;
+    color: $accent-color;
+    border: $accent-color 1px solid;
 }
 
 .mx_SearchBar_cancel {

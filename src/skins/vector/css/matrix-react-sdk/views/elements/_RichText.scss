@@ -1,14 +1,14 @@
 .mx_UserPill {
     color: white;
-    background-color: #76cfa6;
+    background-color: $accent-color;
     padding: 2px 8px;
     border-radius: 16px;
 }
 
 .mx_RoomPill {
     background-color: white;
-    color: #76cfa6;
-    border: 1px solid #76cfa6;
+    color: $accent-color;
+    border: 1px solid $accent-color;
     padding: 2px 8px;
     border-radius: 16px;
 }

@@ -20,8 +20,8 @@ limitations under the License.
 
 
 .mx_MemberDeviceInfo_textButton {
-    color: #fff;
-    background-color: #76cfa6;
+    color: $accent-fg-color;
+    background-color: $accent-color;
     border-radius: 17px;
     text-align: center;
     padding-left: 1em;
@@ -50,13 +50,13 @@ limitations under the License.
 }
 
 /* "Unblacklist" is too long for a regular button: make it wider and
-   reduce the padding. */  
+   reduce the padding. */
 .mx_EncryptedEventDialog .mx_MemberDeviceInfo_blacklist,
 .mx_EncryptedEventDialog .mx_MemberDeviceInfo_unblacklist {
     width: 8em;
     padding-left: 1em;
     padding-right: 1em;
-}    
+}
 
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_verified,
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_unverified,
@@ -66,13 +66,13 @@ limitations under the License.
 }
 
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_verified {
-    color: #76cfa5;
+    color: $e2e-verified-color;
 }
 
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_unverified {
-    color: #e8bf37;
+    color: $e2e-unverified-color;
 }
 
 .mx_MemberDeviceInfo div.mx_MemberDeviceInfo_blacklisted {
-    color: #ba6363;
+    color: $e2e-warning-color;
 }

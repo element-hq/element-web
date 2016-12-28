@@ -89,7 +89,7 @@ limitations under the License.
     margin: auto;
 
     overflow: auto;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid $primary-hairline-color;
 
     -webkit-flex: 0 0 auto;
     flex: 0 0 auto;
@@ -158,7 +158,7 @@ limitations under the License.
     margin-bottom: 8px;
     margin-left: 63px;
     padding-bottom: 6px;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid $primary-hairline-color;
 }
 
 .mx_RoomView_invitePrompt {
@@ -185,8 +185,8 @@ li.mx_RoomView_myReadMarker_container {
 }
 
 hr.mx_RoomView_myReadMarker {
-    border-top: solid 1px #76cfa6;
-    border-bottom: solid 1px #76cfa6;
+    border-top: solid 1px $accent-color;
+    border-bottom: solid 1px $accent-color;
     margin-top: 0px;
     position: relative;
     top: 5px;
@@ -212,16 +212,16 @@ hr.mx_RoomView_myReadMarker {
 
 .mx_RoomView_statusAreaBox_line {
     margin-left: 65px;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid $primary-hairline-color;
     height: 1px;
 }
 
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
-    background-color: #fff;
+    background-color: $primary-bg-color;
 }
 
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadFilename {
-    color: #fff;
+    color: $accent-fg-color;
     opacity: 1.0;
 }
 
@@ -234,8 +234,8 @@ hr.mx_RoomView_myReadMarker {
 }
 
 .mx_RoomView_inCall .mx_RoomView_statusAreaBox {
-    background-color: #76CFA6;
-    color: #fff;
+    background-color: $accent-color;
+    color: $accent-fg-color;
     position: relative;
 }
 
@@ -272,13 +272,13 @@ hr.mx_RoomView_myReadMarker {
 .mx_RoomView_ongoingConfCallNotification {
     width: 100%;
     text-align: center;
-    background-color: #ff0064;
-    color: #fff;
+    background-color: $warning-color;
+    color: $accent-fg-color;
     font-weight: bold;
     padding: 6px 0;
     cursor: pointer;
 }
 
 .mx_RoomView_ongoingConfCallNotification a {
-    color: #fff ! important;
+    color: $accent-fg-color ! important;
 }

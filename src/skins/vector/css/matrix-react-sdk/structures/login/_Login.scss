@@ -32,7 +32,7 @@ limitations under the License.
 }
 
 .mx_Login h2 {
-    color: #4a4a4a;
+    color: $primary-fg-color;
     font-weight: 300;
     margin-top: 32px;
     margin-bottom: 20px;
@@ -53,7 +53,7 @@ limitations under the License.
 .mx_Login_field {
     width: 100%;
     border-radius: 3px;
-    border: 1px solid #c7c7c7;
+    border: 1px solid $strong-input-border-color;
     font-weight: 300;
     font-size: 13px;
     padding: 9px;
@@ -75,9 +75,9 @@ limitations under the License.
     border-radius: 40px;
     height: 40px;
     border: 0px;
-    background-color: #76cfa6;
+    background-color: $accent-color;
     font-size: 15px;
-    color: #fff;
+    color: $accent-fg-color;
 }
 
 .mx_Login_label {
@@ -99,7 +99,7 @@ limitations under the License.
 }
 
 .mx_Login_create:link {
-    color: #4a4a4a;
+    color: $primary-fg-color;
 }
 
 .mx_Login_links {
@@ -112,7 +112,7 @@ limitations under the License.
 }
 
 .mx_Login_links a:link {
-   color: #4a4a4a;
+   color: $primary-fg-color;
 }
 
 .mx_Login_prompt {
@@ -127,7 +127,7 @@ limitations under the License.
 }
 
 .mx_Login_forgot:link {
-    color: #4a4a4a;
+    color: $primary-fg-color;
 }
 
 .mx_Login_loader {

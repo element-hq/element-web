@@ -24,7 +24,7 @@ limitations under the License.
     border: 0px;
     height: 36px;
     border-radius: 40px;
-    border: solid 1px #76cfa6;
+    border: solid 1px $accent-color;
     font-weight: 600;
     font-size: 14px;
     font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
@@ -34,6 +34,6 @@ limitations under the License.
     padding-right: 1.5em;
     outline: none;
     cursor: pointer;
-    color: #76cfa6;
-    background-color: #fff;
+    color: $accent-color;
+    background-color: $primary-bg-color;
 }

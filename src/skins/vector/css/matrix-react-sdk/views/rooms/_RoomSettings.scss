@@ -24,10 +24,10 @@ limitations under the License.
 .mx_RoomSettings_integrationsButton_error {
     position: relative;
     height: 36px;
-    background-color: #76cfa6;
+    background-color: $accent-color;
     border-radius: 36px;
     margin-right: 8px;
-    color: #fff;
+    color: $accent-fg-color;
     line-height: 34px;
     text-align: center;
     float: right;
@@ -47,8 +47,8 @@ limitations under the License.
     font-size: 10pt;
     line-height: 1.5em;
     border-radius: 5px;
-    background-color: #000;
-    color: #fff;
+    background-color: $accent-color;
+    color: $accent-fg-color;
 }
 
 .mx_RoomSettings_e2eIcon {
@@ -174,7 +174,7 @@ limitations under the License.
 }
 
 .mx_RoomSettings_warning {
-    color: #ff0064;
+    color: $warning-color;
     font-weight: bold;
     margin-top: 8px;
     margin-bottom: 8px;
@@ -182,13 +182,13 @@ limitations under the License.
 
 .mx_RoomSettings_editable {
     border: 0px;
-    border-bottom: 1px solid #c7c7c7;
+    border-bottom: 1px solid $strong-input-border-color;
     padding: 0px;
     min-width: 240px;
 }
 
 .mx_RoomSettings_editable:focus {
-    border-bottom: 1px solid #76CFA6;
+    border-bottom: 1px solid $accent-color;
     outline: none;
     box-shadow: none;
 }
@@ -220,8 +220,8 @@ limitations under the License.
     border-radius: 36px;
     font-weight: 400;
     font-size: 15px;
-    color: #fff;
-    background-color: #76cfa6;
+    color: $accent-fg-color;
+    background-color: $accent-color;
     width: auto;
     margin: auto;
     padding: 6px;

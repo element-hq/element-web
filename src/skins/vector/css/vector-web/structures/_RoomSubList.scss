@@ -29,7 +29,7 @@ limitations under the License.
 .mx_RoomSubList_label {
     position: relative;
     text-transform: uppercase;
-    color: #3d3b39;
+    color: $roomsublist-label-fg-color;
     font-weight: 600;
     font-size: 12px;
     width: 203px; /* padding + width = LHS Panel width */
@@ -39,8 +39,8 @@ limitations under the License.
     padding-top: 6px;
     padding-bottom: 6px;
     cursor: pointer;
-    background-color: #d3efe1;
-    border-top: solid 2px #eaf5f0;
+    background-color: $roomsublist-label-bg-color;
+    border-top: solid 2px $secondary-accent-color;
 }
 
 .mx_RoomSubList_label.mx_RoomSubList_fixed {
@@ -63,7 +63,7 @@ limitations under the License.
     display: inline-block;
     font-size: 12px;
     font-weight: normal;
-    color: #76cfa6;
+    color: $accent-color;
     padding-left: 5px;
     text-transform: none;
 }
@@ -80,14 +80,14 @@ limitations under the License.
     right: 8px; /*gutter */
     top: 7px;
     border-radius: 8px;
-    color: #fff;
+    color: $accent-fg-color;
     font-weight: 600;
     font-size: 10px;
     text-align: center;
     padding-top: 1px;
     padding-left: 4px;
     padding-right: 4px;
-    background-color: #76cfa6;
+    background-color: $accent-color;
 }
 
 /*
@@ -97,7 +97,7 @@ limitations under the License.
 */
 
 .mx_RoomSubList_badgeHighlight {
-    background-color: #ff0064;
+    background-color: $warning-color;
 }
 
 /* This is the bottom of the speech bubble */
@@ -108,7 +108,7 @@ limitations under the License.
     width: 0;
     height: 0;
     margin-left: 5px;
-    border-top: 5px solid #ff0064;
+    border-top: 5px solid $warning-color;
     border-right: 7px solid transparent;
 }
 
@@ -129,7 +129,7 @@ limitations under the License.
     height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 6px solid #76cfa6;
+    border-top: 6px solid $accent-color;
 }
 
 .mx_RoomSubList_chevronUp {
@@ -137,14 +137,14 @@ limitations under the License.
     height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-bottom: 6px solid #76cfa6;
+    border-bottom: 6px solid $accent-color;
 }
 
 .mx_RoomSubList_chevronRight {
     width: 0;
     height: 0;
     border-top: 5px solid transparent;
-    border-left: 6px solid #76cfa6;
+    border-left: 6px solid $accent-color;
     border-bottom: 5px solid transparent;
 }
 
@@ -165,7 +165,7 @@ limitations under the License.
 .mx_RoomSubList_line {
     display: inline-block;
     width: 159px;
-    border-top: dotted 2px #76cfa6;
+    border-top: dotted 2px $accent-color;
     vertical-align: middle;
 }
 
@@ -179,7 +179,7 @@ limitations under the License.
     font-size: 10px;
     font-weight: 600;
     text-align: left;
-    color: #76cfa6;
+    color: $accent-color;
     padding-left: 7px;
     padding-right: 7px;
     padding-left: 7px;
@@ -198,20 +198,20 @@ limitations under the License.
     right: 8px; /*gutter */
     top: -2px;
     border-radius: 8px;
-    border: solid 1px #76cfa6;
-    color: #fff;
+    border: solid 1px $accent-color;
+    color: $accent-fg-color;
     font-weight: 600;
     font-size: 10px;
     text-align: center;
     padding-top: 1px;
     padding-left: 3px;
     padding-right: 3px;
-    background-color: #fff;
+    background-color: $primary-bg-color;
     vertical-align: middle;
 }
 
 .mx_RoomSubList_moreBadge.mx_RoomSubList_moreBadgeNotify {
-    background-color: #76cfa6;
+    background-color: $accent-color;
     border: 0;
     padding-top: 3px;
     padding-left: 4px;
@@ -219,7 +219,7 @@ limitations under the License.
 }
 
 .mx_RoomSubList_moreBadge.mx_RoomSubList_moreBadgeHighlight {
-    background-color: #ff0064;
+    background-color: $warning-color;
     border: 0;
     padding-top: 3px;
     padding-left: 4px;

@@ -30,7 +30,7 @@ require('babel-polyfill');
 
 // CSS requires: just putting them here for now as CSS is going to be
 // refactored "soon" anyway
-require('../../build/themes/light.css');
+require('../../build/themes/dark.css');
 require('gemini-scrollbar/gemini-scrollbar.css');
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');

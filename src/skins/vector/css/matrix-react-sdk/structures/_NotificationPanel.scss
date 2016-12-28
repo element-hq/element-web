@@ -51,7 +51,7 @@ limitations under the License.
 }
 
 .mx_NotificationPanel .mx_EventTile_roomName a {
-    color: #4a4a4a;
+    color: $primary-fg-color;
 }
 
 .mx_NotificationPanel .mx_EventTile_avatar {
@@ -61,8 +61,7 @@ limitations under the License.
 
 .mx_NotificationPanel .mx_EventTile .mx_SenderProfile, 
 .mx_NotificationPanel .mx_EventTile .mx_MessageTimestamp {
-    color: #000;
-    opacity: 0.3;
+    color: $primary-fg-color;
     font-size: 12px;
     display: inline;
     padding-left: 0px;
@@ -94,7 +93,7 @@ limitations under the License.
 }
 
 .mx_NotificationPanel .mx_EventTile:hover .mx_EventTile_line {
-    background-color: #fff;
+    background-color: $primary-bg-color;
 }
 
 .mx_NotificationPanel .mx_EventTile_selected .mx_EventTile_line {

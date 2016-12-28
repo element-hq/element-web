@@ -18,13 +18,13 @@ limitations under the License.
     width: 960px;
     margin-left: auto;
     margin-right: auto;
-    color: #4a4a4a;
+    color: $primary-fg-color;
 }
 
 .mx_CreateRoom input,
 .mx_CreateRoom textarea  {
     border-radius: 3px;
-    border: 1px solid #c7c7c7;
+    border: 1px solid $strong-input-border-color;
     font-weight: 300;
     font-size: 13px;
     padding: 9px;

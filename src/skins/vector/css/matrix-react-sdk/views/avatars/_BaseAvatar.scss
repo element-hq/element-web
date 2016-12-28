@@ -21,7 +21,7 @@ limitations under the License.
 .mx_BaseAvatar_initial {
     position: absolute;
     z-index: 1;
-    color: #fff;
+    color: $avatar-initial-color;
     text-align: center;
     speak: none;
     pointer-events: none;

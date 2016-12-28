@@ -1,50 +1,50 @@
-@import "_base";
+
 
 // typical text (dark-on-white in light skin)
-$primary-fg-color: #dddddd;
-$primary-bg-color: #2d2d2d;
+$primary-fg-color: #454545;
+$primary-bg-color: #ffffff;
 
 // used for dialog box text
 $light-fg-color: #747474;
 
 // button UI (white-on-green in light skin)
-$accent-fg-color: $primary-bg-color;
+$accent-fg-color: #ffffff;
 $accent-color: #76CFA6;
 
 // red warning colour
 $warning-color: #ff0064;
 
 // left-panel style muted accent color
-$secondary-accent-color: $primary-bg-color;
+$secondary-accent-color: #eaf5f0;
 
 // used by AddressSelector
 $selected-color: #eaf5f0;
 
 // selected for hoverover & selected event tiles
-$event-selected-color: #353535;
+$event-selected-color: #f7f7f7;
 
 // used for the hairline dividers in RoomView
-$primary-hairline-color: #474747;
+$primary-hairline-color: #e5e5e5;
 
 // used for the border of input text fields
-$input-border-color: #3a3a3a;
+$input-border-color: #f0f0f0;
 
 // apart from login forms, which have stronger border
-$strong-input-border-color: #656565;
+$strong-input-border-color: #c7c7c7;
 
 // context menus
 $menu-border-color: rgba(187, 187, 187, 0.5);
-$menu-bg-color: #373737;
+$menu-bg-color: #f6f6f6;
 
-$avatar-initial-color: #2d2d2d;
+$avatar-initial-color: #ffffff;
 
 // ********************
 
-$roomtile-name-color: rgba(186, 186, 186, 0.8);
-$roomtile-selected-bg-color: rgba(0, 0, 0, 0.8);
+$roomtile-name-color: rgba(69, 69, 69, 0.8);
+$roomtile-selected-bg-color: rgba(255, 255, 255, 0.8);
 
-$roomsublist-label-fg-color: $primary-fg-color;
-$roomsublist-label-bg-color: #454545;
+$roomsublist-label-fg-color: #3d3b39;
+$roomsublist-label-bg-color: #d3efe1;
 
 // ********************
 
@@ -61,9 +61,8 @@ $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
 $e2e-unverified-color: #e8bf37;
 $e2e-warning-color: #ba6363;
 
-/*** ImageView ***/
+// ********************
+
 $lightbox-bg-color: #454545;
 $lightbox-fg-color: #ffffff;
 $lightbox-border-color: #ffffff;
-
-@import "../_components";
