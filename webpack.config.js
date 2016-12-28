@@ -25,6 +25,7 @@ module.exports = {
             { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
             // css-raw-loader loads CSS but doesn't try to treat url()s as require()s
             { test: /\.css$/, loader: ExtractTextPlugin.extract("css-raw-loader") },
+            { test: /\.scss$/, loaders: ["style-loader", "css-loader?sourceMap", "sass-loader?sourceMap"] },
         ],
         noParse: [
             // don't parse the languages within highlight.js. They cause stack
