@@ -232,7 +232,9 @@ export default class MessageComposerInput extends React.Component {
                 let contentJSON = window.sessionStorage.getItem("mx_messagecomposer_input_" + this.roomId);
                 if (contentJSON) {
                     let content = convertFromRaw(JSON.parse(contentJSON));
-                    component.setEditorState(component.createEditorState(component.state.isRichtextEnabled, content));
+                    component.setState({
+                        editorState: component.createEditorState(component.state.isRichtextEnabled, content)
+                    });
                 }
             },
         };
@@ -379,36 +381,54 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    // Called by Draft to change editor contents, and by setEditorState
-    onEditorContentChanged = (editorState: EditorState, didRespondToUserInput: boolean = true) => {
+    // Called by Draft to change editor contents
+    onEditorContentChanged = (editorState: EditorState) => {
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
 
-        const contentChanged = Q.defer();
-        /* If a modification was made, set originalEditorState to null, since newState is now our original */
+        /* Since a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
             editorState,
-            originalEditorState: didRespondToUserInput ? null : this.state.originalEditorState,
-        }, () => contentChanged.resolve());
-
-        if (editorState.getCurrentContent().hasText()) {
-            this.onTypingActivity();
-        } else {
-            this.onFinishedTyping();
-        }
-
-        if (this.props.onContentChanged) {
-            const textContent = editorState.getCurrentContent().getPlainText();
-            const selection = RichText.selectionStateToTextOffsets(editorState.getSelection(),
-                editorState.getCurrentContent().getBlocksAsArray());
-
-            this.props.onContentChanged(textContent, selection);
-        }
-        return contentChanged.promise;
+            originalEditorState: null,
+        });
     };
 
-    setEditorState = (editorState: EditorState) => {
-        return this.onEditorContentChanged(editorState, false);
-    };
+    /**
+     * We're overriding setState here because it's the most convenient way to monitor changes to the editorState.
+     * Doing it using a separate function that calls setState is a possibility (and was the old approach), but that
+     * approach requires a callback and an extra setState whenever trying to set multiple state properties.
+     *
+     * @param state
+     * @param callback
+     */
+    setState(state, callback) {
+        if (state.editorState != null) {
+            state.editorState = RichText.attachImmutableEntitiesToEmoji(state.editorState);
+
+            if (state.editorState.getCurrentContent().hasText()) {
+                this.onTypingActivity();
+            } else {
+                this.onFinishedTyping();
+            }
+
+            if (!state.hasOwnProperty('originalEditorState')) {
+                state.originalEditorState = null;
+            }
+        }
+
+        super.setState(state, (state, props, context) => {
+            if (callback != null) {
+                callback(state, props, context);
+            }
+
+            if (this.props.onContentChanged) {
+                const textContent = state.editorState.getCurrentContent().getPlainText();
+                const selection = RichText.selectionStateToTextOffsets(state.editorState.getSelection(),
+                    state.editorState.getCurrentContent().getBlocksAsArray());
+
+                this.props.onContentChanged(textContent, selection);
+            }
+        });
+    }
 
     enableRichtext(enabled: boolean) {
         let contentState = null;
@@ -423,13 +443,11 @@ export default class MessageComposerInput extends React.Component {
             contentState = ContentState.createFromText(markdown);
         }
 
-        this.setEditorState(this.createEditorState(enabled, contentState)).then(() => {
-            this.setState({
-                isRichtextEnabled: enabled,
-            });
-
-            UserSettingsStore.setSyncedSetting('MessageComposerInput.isRichTextEnabled', enabled);
+        this.setState({
+            editorState: this.createEditorState(enabled, contentState),
+            isRichtextEnabled: enabled,
         });
+        UserSettingsStore.setSyncedSetting('MessageComposerInput.isRichTextEnabled', enabled);
     }
 
     handleKeyCommand = (command: string): boolean => {
@@ -446,10 +464,14 @@ export default class MessageComposerInput extends React.Component {
             const blockCommands = ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item'];
 
             if (blockCommands.includes(command)) {
-                this.setEditorState(RichUtils.toggleBlockType(this.state.editorState, command));
+                this.setState({
+                    editorState: RichUtils.toggleBlockType(this.state.editorState, command)
+                });
             } else if (command === 'strike') {
                 // this is the only inline style not handled by Draft by default
-                this.setEditorState(RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'));
+                this.setState({
+                    editorState: RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH')
+                });
             }
         } else {
             let contentState = this.state.editorState.getCurrentContent(),
@@ -480,7 +502,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         if (newState != null) {
-            this.setEditorState(newState);
+            this.setState({editorState: newState});
             return true;
         }
 
@@ -621,7 +643,7 @@ export default class MessageComposerInput extends React.Component {
 
         if (displayedCompletion == null) {
             if (this.state.originalEditorState) {
-                this.setEditorState(this.state.originalEditorState);
+                this.setState({editorState: this.state.originalEditorState});
             }
             return false;
         }
@@ -636,10 +658,7 @@ export default class MessageComposerInput extends React.Component {
 
         let editorState = EditorState.push(activeEditorState, contentState, 'insert-characters');
         editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
-        const originalEditorState = activeEditorState;
-
-        await this.setEditorState(editorState);
-        this.setState({originalEditorState});
+        this.setState({editorState, originalEditorState: activeEditorState});
 
         // for some reason, doing this right away does not update the editor :(
         setTimeout(() => this.refs.editor.focus(), 50);
