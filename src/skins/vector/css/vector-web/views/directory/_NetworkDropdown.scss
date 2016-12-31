@@ -68,11 +68,11 @@ input.mx_NetworkDropdown_networkoption, input.mx_NetworkDropdown_networkoption:f
     padding: 0px;
     border-radius: 3px;
     border: 1px solid $accent-color;
-    background-color: white;
+    background-color: $primary-bg-color;
 }
 
 .mx_NetworkDropdown_menu .mx_NetworkDropdown_networkoption:hover {
-    background-color: #ddd;
+    background-color: $focus-bg-color;
 }
 
 .mx_NetworkDropdown_menu_network {

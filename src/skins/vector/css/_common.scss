@@ -55,8 +55,13 @@ a:visited {
     color: $accent-color;
 }
 
+input[type=text] {
+    background-color: $primary-bg-color;
+    color: $primary-fg-color;
+}
+
 input[type=text].error, input[type=password].error {
-    border: 1px solid red;
+    border: 1px solid $warning-color;
 }
 
 input[type=text]:focus, textarea:focus {
