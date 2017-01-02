@@ -26,9 +26,8 @@ module.exports = React.createClass({
         var date = new Date(this.props.ts);
         return (
             <span className="mx_MessageTimestamp">
-                { DateUtils.formatTime(date) }
+                { DateUtils.formatTime(date)+'&nbsp;' }
             </span>
         );
     },
 });
-
