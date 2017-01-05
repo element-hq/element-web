@@ -172,6 +172,10 @@ limitations under the License.
     cursor: pointer;
     top: 6px;
     right: 6px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton,
