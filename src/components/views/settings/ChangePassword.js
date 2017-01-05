@@ -136,9 +136,9 @@ module.exports = React.createClass({
                                 <input id="password2" type="password" ref="confirm_input" />
                             </div>
                         </div>
-                        <div className={buttonClassName} onClick={this.onClickChange}>
+                        <a tabindex="0" className={buttonClassName} onClick={this.onClickChange}>
                             Change Password
-                        </div>
+                        </a>
                     </div>
                 );
             case this.Phases.Uploading:

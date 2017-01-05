@@ -287,7 +287,7 @@ module.exports = React.createClass({
         var connectDropTarget = this.props.connectDropTarget;
 
         let ret = (
-            <div className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <a tabindex="0" className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className={avatarClasses}>
                     <div className="mx_RoomTile_avatar_menu" onClick={this.onAvatarClicked}>
                         <div className={avatarContainerClasses}>
@@ -302,7 +302,7 @@ module.exports = React.createClass({
                 </div>
                 {/* { incomingCallBox } */}
                 { tooltip }
-            </div>
+            </a>
         );
 
         if (connectDropTarget) ret = connectDropTarget(ret);

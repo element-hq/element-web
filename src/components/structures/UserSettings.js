@@ -663,9 +663,9 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_section">
 
-                    <div className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
+                    <a tabindex="0" className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
                         Sign out
-                    </div>
+                    </a>
 
                     {accountJsx}
                 </div>

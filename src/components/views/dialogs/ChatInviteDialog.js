@@ -409,9 +409,9 @@ module.exports = React.createClass({
                 <div className="mx_Dialog_title">
                     {this.props.title}
                 </div>
-                <div className="mx_ChatInviteDialog_cancel" onClick={this.onCancel} >
+                <a tabindex="0" className="mx_ChatInviteDialog_cancel" onClick={this.onCancel} >
                     <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
-                </div>
+                </a>
                 <div className="mx_ChatInviteDialog_label">
                     <label htmlFor="textinput">{ this.props.description }</label>
                 </div>
