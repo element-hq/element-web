@@ -22,6 +22,7 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 var DateUtils = require('matrix-react-sdk/lib/DateUtils');
 var filesize = require('filesize');
+var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
 module.exports = React.createClass({
     displayName: 'ImageView',
@@ -162,7 +163,7 @@ module.exports = React.createClass({
                     <img src={this.props.src} style={style}/>
                     <div className="mx_ImageView_labelWrapper">
                         <div className="mx_ImageView_label">
-                            <img className="mx_ImageView_cancel" src="img/cancel-white.svg" width="18" height="18" alt="Close" onClick={ this.props.onFinished }/>
+                            <AccessibleButton className="mx_ImageView_cancel" onClick={ this.props.onFinished }><img src="img/cancel-white.svg" width="18" height="18" alt="Close"/></AccessibleButton>
                             <div className="mx_ImageView_shim">
                             </div>
                             <div className="mx_ImageView_name">
