@@ -3,7 +3,7 @@
 // copies the resources into the webapp directory.
 //
 
-// cpx includes globbes parts of the filename in the destination, but excludes
+// cpx includes globbed parts of the filename in the destination, but excludes
 // common parents. Hence, "res/{a,b}/**": the output will be "dest/a/..." and
 // "dest/b/...".
 const COPY_LIST = [
