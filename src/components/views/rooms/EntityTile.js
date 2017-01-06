@@ -152,7 +152,7 @@ module.exports = React.createClass({
         var av = this.props.avatarJsx || <BaseAvatar name={this.props.name} width={36} height={36} />;
 
         return (
-            <div className={mainClassName} title={ this.props.title }
+            <button className={mainClassName} title={ this.props.title }
                     onClick={ this.props.onClick } onMouseEnter={ this.mouseEnter }
                     onMouseLeave={ this.mouseLeave }>
                 <div className="mx_EntityTile_avatar">
@@ -161,7 +161,7 @@ module.exports = React.createClass({
                 </div>
                 { nameEl }
                 { inviteButton }
-            </div>
+            </button>
         );
     }
 });

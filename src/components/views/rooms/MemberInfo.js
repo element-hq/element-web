@@ -612,7 +612,7 @@ module.exports = WithMatrixClient(React.createClass({
                 mx_MemberInfo_createRoom_label: true,
                 mx_RoomTile_name: true,
             });
-            const startNewChat = <div
+            const startNewChat = <button
                 className="mx_MemberInfo_createRoom"
                 onClick={this.onNewDMClick}
             >
@@ -620,7 +620,7 @@ module.exports = WithMatrixClient(React.createClass({
                     <img src="img/create-big.svg" width="26" height="26" />
                 </div>
                 <div className={labelClasses}><i>Start new chat</i></div>
-            </div>
+            </button>
 
             startChat = <div>
                 <h3>Direct chats</h3>
@@ -635,26 +635,26 @@ module.exports = WithMatrixClient(React.createClass({
         }
 
         if (this.state.can.kick) {
-            kickButton = <div className="mx_MemberInfo_field" onClick={this.onKick}>
+            kickButton = <button className="mx_MemberInfo_field" onClick={this.onKick}>
                 { this.props.member.membership === "invite" ? "Disinvite" : "Kick" }
-            </div>;
+            </button>;
         }
         if (this.state.can.ban) {
-            banButton = <div className="mx_MemberInfo_field" onClick={this.onBan}>
+            banButton = <button className="mx_MemberInfo_field" onClick={this.onBan}>
                 Ban
-            </div>;
+            </button>;
         }
         if (this.state.can.mute) {
             var muteLabel = this.state.muted ? "Unmute" : "Mute";
-            muteButton = <div className="mx_MemberInfo_field" onClick={this.onMuteToggle}>
+            muteButton = <button className="mx_MemberInfo_field" onClick={this.onMuteToggle}>
                 {muteLabel}
-            </div>;
+            </button>;
         }
         if (this.state.can.toggleMod) {
             var giveOpLabel = this.state.isTargetMod ? "Revoke Moderator" : "Make Moderator";
-            giveModButton = <div className="mx_MemberInfo_field" onClick={this.onModToggle}>
+            giveModButton = <button className="mx_MemberInfo_field" onClick={this.onModToggle}>
                 {giveOpLabel}
-            </div>
+            </button>
         }
 
         // TODO: we should have an invite button if this MemberInfo is showing a user who isn't actually in the current room yet
@@ -682,7 +682,7 @@ module.exports = WithMatrixClient(React.createClass({
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
-                <img className="mx_MemberInfo_cancel" src="img/cancel.svg" width="18" height="18" onClick={this.onCancel}/>
+                <button className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18"/></button>
                 <div className="mx_MemberInfo_avatar">
                     <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
                 </div>
