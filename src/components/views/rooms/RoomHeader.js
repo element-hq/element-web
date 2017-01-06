@@ -182,8 +182,8 @@ module.exports = React.createClass({
                 'm.room.name', user_id
             );
 
-            save_button = <a tabindex="0" className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</a>
-            cancel_button = <a tabindex="0" className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </a>
+            save_button = <button className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</button>
+            cancel_button = <button className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </button>
         }
 
         if (this.props.saving) {
@@ -275,9 +275,9 @@ module.exports = React.createClass({
         var settings_button;
         if (this.props.onSettingsClick) {
             settings_button =
-                <a tabindex="0" className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title="Settings">
+                <button className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title="Settings">
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
-                </a>;
+                </button>;
         }
 
 //        var leave_button;
@@ -291,17 +291,17 @@ module.exports = React.createClass({
         var forget_button;
         if (this.props.onForgetClick) {
             forget_button =
-                <a tabindex="0" className="mx_RoomHeader_button" onClick={this.props.onForgetClick} title="Forget room">
+                <button className="mx_RoomHeader_button" onClick={this.props.onForgetClick} title="Forget room">
                     <TintableSvg src="img/leave.svg" width="26" height="20"/>
-                </a>;
+                </button>;
         }
 
         var rightPanel_buttons;
         if (this.props.collapsedRhs) {
             rightPanel_buttons =
-                <a tabindex="0" className="mx_RoomHeader_button" onClick={this.onShowRhsClick} title="<">
+                <button className="mx_RoomHeader_button" onClick={this.onShowRhsClick} title="<">
                     <TintableSvg src="img/minimise.svg" width="10" height="16"/>
-                </a>
+                </button>
         }
 
         var right_row;
@@ -310,9 +310,9 @@ module.exports = React.createClass({
                 <div className="mx_RoomHeader_rightRow">
                     { settings_button }
                     { forget_button }
-                    <a tabindex="0" className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
+                    <button className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
                         <TintableSvg src="img/icons-search.svg" width="35" height="35"/>
-                    </a>
+                    </button>
                     { rightPanel_buttons }
                 </div>;
         }
