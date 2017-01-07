@@ -287,7 +287,7 @@ module.exports = React.createClass({
         var connectDropTarget = this.props.connectDropTarget;
 
         let ret = (
-            <button className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <button className={classes} tabIndex="0" onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className={avatarClasses}>
                     <div className="mx_RoomTile_avatar_menu" onClick={this.onAvatarClicked}>
                         <div className={avatarContainerClasses}>

@@ -69,6 +69,7 @@ var TintableSvg = React.createClass({
                     width={ this.props.width }
                     height={ this.props.height }
                     onLoad={ this.onLoad }
+                    tabIndex="-1"
                 />
         );
     }
