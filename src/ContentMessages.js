@@ -276,7 +276,7 @@ class ContentMessages {
 
     sendContentToRoom(file, roomId, matrixClient) {
         const content = {
-            body: file.name,
+            body: file.name || 'Attachment',
             info: {
                 size: file.size,
             }
@@ -316,7 +316,7 @@ class ContentMessages {
         }
 
         const upload = {
-            fileName: file.name,
+            fileName: file.name || 'Attachment',
             roomId: roomId,
             total: 0,
             loaded: 0,
