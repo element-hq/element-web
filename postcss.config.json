@@ -1,0 +1,18 @@
+{
+    "use": [
+        "autoprefixer",
+        "postcss-import",
+        "postcss-simple-vars",
+        "postcss-extend",
+        "postcss-nested",
+        "postcss-mixins",
+        "postcss-strip-inline-comments"
+    ],
+    "parser": "postcss-scss",
+    "input": "src/skins/vector/css/themes/[^_]*.scss",
+    "dir": "build",
+    "local-plugins": true,
+    "autoprefixer": {
+        "browsers": "> 5%"
+    }
+}
