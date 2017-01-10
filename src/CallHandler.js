@@ -52,6 +52,7 @@ limitations under the License.
  */
 
 var MatrixClientPeg = require('./MatrixClientPeg');
+var PlatformPeg = require("./PlatformPeg");
 var Modal = require('./Modal');
 var sdk = require('./index');
 var Matrix = require("matrix-js-sdk");
@@ -187,6 +188,12 @@ function _onAction(payload) {
             );
         }
         else if (payload.type === 'screensharing') {
+            const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
+            if (screenCapErrorString) {
+                _setCallState(undefined, newCall.roomId, "ended");
+                console.log("Can't capture screen: " + screenCapErrorString);
+                return;
+            }
             newCall.placeScreenSharingCall(
                 payload.remote_element,
                 payload.local_element
