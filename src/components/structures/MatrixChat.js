@@ -1021,6 +1021,7 @@ module.exports = React.createClass({
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     onComplete={this.onLoginClick}
+                    onRegisterClick={this.onRegisterClick}
                     onLoginClick={this.onLoginClick} />
             );
         } else {
