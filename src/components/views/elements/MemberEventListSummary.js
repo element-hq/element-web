@@ -181,7 +181,7 @@ module.exports = React.createClass({
         };
 
         eventsToRender.forEach((e) => {
-            const userId = e.getSender();
+            const userId = e.getStateKey();
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = {first: null, last: null};
