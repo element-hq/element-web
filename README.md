@@ -57,8 +57,9 @@ to build.
 1. Switch to the vector-web directory: `cd vector-web`
 1. Install the prerequisites: `npm install`
 1. If you are using the `develop` branch of vector-web, you will probably need
-   to rebuild one of the dependencies, due to
+   to rebuild some of the dependencies, due to
    https://github.com/npm/npm/issues/3055:
+
    ```
    (cd node_modules/matrix-js-sdk && npm install)
    (cd node_modules/matrix-react-sdk && npm install)
