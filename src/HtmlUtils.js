@@ -141,7 +141,7 @@ var sanitizeHtmlParams = {
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
             return { tagName: tagName, attribs : attribs };
         },
-        '*': function(tagName, attribs) {
+        'font': function(tagName, attribs) {
             // Only allow certain CSS attributes to avoid XSS attacks
             // Sanitizing values to avoid `url(...)` and `expression(...)` attacks
             if (!attribs.style) {
