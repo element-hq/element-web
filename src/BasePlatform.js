@@ -73,4 +73,13 @@ export default class BasePlatform {
     getAppVersion() {
         throw new Error("getAppVersion not implemented!");
     }
+
+    /*
+     * If it's not expected that capturing the screen will work
+     * with getUserMedia, return a string explaining why not.
+     * Otherwise, return null.
+     */
+    screenCaptureErrorString() {
+        return "Not implemented";
+    }
 }
