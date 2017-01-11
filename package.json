@@ -126,7 +126,7 @@
   "build": {
     "appId": "im.riot.app",
     "category": "Network",
-    "electronVersion": "1.4.11",
+    "electronVersion": "1.4.14",
     "//asar=false": "https://github.com/electron-userland/electron-builder/issues/675",
     "asar": false,
     "dereference": true,
