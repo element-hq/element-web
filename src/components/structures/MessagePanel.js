@@ -295,8 +295,8 @@ module.exports = React.createClass({
 
             var last = (i == lastShownEventIndex);
 
-            // Wrap consecutive member events in a ListSummary
-            if (isMembershipChange(mxEv)) {
+            // Wrap consecutive member events in a ListSummary, ignore if redacted
+            if (isMembershipChange(mxEv) && EventTile.haveTileForEvent(mxEv)) {
                 let ts1 = mxEv.getTs();
                 // Ensure that the key of the MemberEventListSummary does not change with new
                 // member events. This will prevent it from being re-created unnecessarily, and
@@ -316,6 +316,11 @@ module.exports = React.createClass({
                 let summarisedEvents = [mxEv];
                 for (;i + 1 < this.props.events.length; i++) {
                     let collapsedMxEv = this.props.events[i + 1];
+
+                    // Ignore redacted member events
+                    if (!EventTile.haveTileForEvent(collapsedMxEv)) {
+                        continue;
+                    }
 
                     if (!isMembershipChange(collapsedMxEv) ||
                         this._wantsDateSeparator(this.props.events[i], collapsedMxEv.getDate())) {
