@@ -192,6 +192,11 @@ function _onAction(payload) {
             if (screenCapErrorString) {
                 _setCallState(undefined, newCall.roomId, "ended");
                 console.log("Can't capture screen: " + screenCapErrorString);
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Unable to capture screen",
+                    description: screenCapErrorString
+                });
                 return;
             }
             newCall.placeScreenSharingCall(
