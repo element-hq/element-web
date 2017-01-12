@@ -48,7 +48,7 @@ module.exports = React.createClass({
             title: "Start a chat",
             description: "Who would you like to communicate with?",
             value: "",
-            placeholder: "User ID, Name or email",
+            placeholder: "Email, name or matrix ID",
             button: "Start Chat",
             focus: true
         };
