@@ -3,4 +3,4 @@ node_js:
     - node # Latest stable version of nodejs.
 install:
     - npm install
-    - (cd node_modules/matrix-react-sdk && npm install)
+    - (cd node_modules/matrix-js-sdk && npm install)
