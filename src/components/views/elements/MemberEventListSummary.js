@@ -24,7 +24,7 @@ module.exports = React.createClass({
         events: React.PropTypes.array.isRequired,
         // An array of EventTiles to render when expanded
         children: React.PropTypes.array.isRequired,
-        // The maximum number of names to show in either the join or leave summaries
+        // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
         summaryLength: React.PropTypes.number,
         // The maximum number of avatars to display in the summary
         avatarsMaxLength: React.PropTypes.number,
@@ -40,7 +40,7 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            summaryLength: 3,
+            summaryLength: 1,
             threshold: 3,
             avatarsMaxLength: 5,
         };
@@ -52,88 +52,122 @@ module.exports = React.createClass({
         });
     },
 
-    _getEventSenderName: function(ev) {
-        if (!ev) {
-            return 'undefined';
-        }
-        return ev.sender.name || ev.event.content.displayname || ev.getSender();
-    },
-
-    _renderNameList: function(events) {
-        if (events.length === 0) {
+    _renderNameList: function(users) {
+        if (users.length === 0) {
             return null;
         }
-        let originalNumber = events.length;
-        events = events.slice(0, this.props.summaryLength);
-        let lastEvent = events.pop();
+        let originalNumber = users.length;
 
-        let names = events.map((ev) => {
-            return this._getEventSenderName(ev);
-        }).join(', ');
-
-        let lastName = this._getEventSenderName(lastEvent);
-        if (names.length === 0) {
-            // special-case for a single event
-            return lastName;
-        }
+        users = users.slice(0, this.props.summaryLength);
 
         let remaining = originalNumber - this.props.summaryLength;
-        if (remaining > 0) {
-            //  name1, name2, name3, and 100 others
-            return names + ', ' + lastName + ', and ' + remaining + ' others';
+        if (remaining < 0) {
+            remaining = 0;
+        }
+        let other = " other" + (remaining > 1 ? "s" : "");
+
+        return this._renderCommaSeparatedList(users, remaining) + (remaining ? ' and ' + remaining + other : '');
+    },
+
+    // Test whether the first n items repeat for the duration
+    // e.g. [1,2,3,4,1,2,3] would resolve true for n = 4
+    _isRepeatedSequence: function(transitions, n) {
+        let count = 0;
+        for (let i = 0; i < transitions.length; i++) {
+            if (transitions[i % n] !== transitions[i]) {
+                return null;
+            }
+        }
+        return true;
+    },
+
+    _renderCommaSeparatedList(items, disableAnd) {
+        if (disableAnd) {
+            return items.join(', ');
+        }
+        if (items.length === 0) {
+            return "";
+        } else if (items.length === 1) {
+            return items[0];
         } else {
-            //  name1, name2 and name3
-            return names + ' and ' + lastName;
+            let last = items.pop();
+            return items.join(', ') + ' and ' + last;
         }
     },
 
-    _renderSummary: function(joinEvents, leaveEvents) {
-        let joiners = this._renderNameList(joinEvents);
-        let leavers = this._renderNameList(leaveEvents);
+    _getDescriptionForTransition(t, plural) {
+        let beConjugated = plural ? "were" : "was";
+        let invitation = plural ? "invitations" : "an invitation";
 
-        let joinSummary = null;
-        if (joiners) {
-            joinSummary = (
-                <span>
-                    {joiners} joined the room
-                </span>
-            );
-        }
-        let leaveSummary = null;
-        if (leavers) {
-            leaveSummary = (
-                <span>
-                    {leavers} left the room
-                </span>
-            );
+        switch (t) {
+            case 'joined':  return "joined";
+            case 'left':    return "left";
+            case 'invite_reject':     return "rejected " + invitation;
+            case 'invite_withdrawal': return "withdrew " + invitation;
+            case 'invited':     return beConjugated + " invited";
+            case 'banned':      return beConjugated + " banned";
+            case 'unbanned':    return beConjugated + " unbanned";
+            case 'kicked':      return beConjugated + " kicked";
         }
 
-        // The joinEvents and leaveEvents are representative of the net movement
-        // per-user, and so it is possible that the total net movement is nil,
-        // whilst there are some events in the expanded list. If the total net
-        // movement is nil, then neither joinSummary nor leaveSummary will be
-        // truthy, so return null.
-        if (!joinSummary && !leaveSummary) {
+        return null;
+    },
+
+    _renderSummary: function(eventAggregates) {
+        let summaries = Object.keys(eventAggregates).map((transitions) => {
+            let nameList = this._renderNameList(eventAggregates[transitions]);
+
+            let repeats = 1;
+            let repeatExtra = 0;
+
+            let splitTransitions = transitions.split(',');
+            let describedTransitions = splitTransitions;
+            let plural = eventAggregates[transitions].length > 1;
+
+            for (let modulus = 1; modulus <= 2; modulus++) {
+                // Sequences that are repeating through modulus transitions will be truncated
+                if (this._isRepeatedSequence(describedTransitions, modulus)) {
+                    // Extra repeating sequence on the end that should be treated separately
+                    // so as to avoid j,l,j,l,j => "... joined and left 2.5 times"
+                    repeatExtra = describedTransitions.length % modulus;
+
+                    repeats = (describedTransitions.length - repeatExtra) / modulus;
+                    describedTransitions = describedTransitions.slice(0, modulus);
+                    break;
+                }
+            }
+
+            let numberOfTimes = repeats > 1 ? " " + repeats + " times" : "";
+
+            let descs = describedTransitions.map((t) => {
+                return this._getDescriptionForTransition(t, plural);
+            });
+
+            let afterRepeatDescs = splitTransitions.slice(splitTransitions.length - repeatExtra).map((t) => {
+                return this._getDescriptionForTransition(t, plural);
+            });
+
+            let desc = this._renderCommaSeparatedList(descs);
+            let afterRepeatDesc = this._renderCommaSeparatedList(afterRepeatDescs);
+
+            return nameList + " " + desc + numberOfTimes + (afterRepeatDesc ? " and then " + afterRepeatDesc : "");
+        });
+
+        if (!summaries) {
             return null;
         }
 
         return (
             <span>
-                {joinSummary}{joinSummary && leaveSummary?'; ':''}
-                {leaveSummary}.&nbsp;
+                {summaries.join(", ")}
             </span>
         );
     },
 
-    _renderAvatars: function(events) {
-        let avatars = events.slice(0, this.props.avatarsMaxLength).map((e) => {
+    _renderAvatars: function(roomMembers) {
+        let avatars = roomMembers.slice(0, this.props.avatarsMaxLength).map((m) => {
             return (
-                <MemberAvatar
-                    key={e.getId()}
-                    member={e.sender}
-                    width={14}
-                    height={14}
-                />
+                <MemberAvatar key={m.userId} member={m} width={14} height={14} />
             );
         });
 
@@ -157,6 +191,32 @@ module.exports = React.createClass({
         );
     },
 
+    _getTransition: function(e) {
+        switch (e.getContent().membership) {
+            case 'invite': return 'invited';
+            case 'ban': return 'banned';
+            case 'join': return 'joined';
+            case 'leave':
+                if (e.getSender() === e.getStateKey()) {
+                    switch (e.getPrevContent().membership) {
+                        case 'invite':  return 'invite_reject';
+                        default:        return 'left';
+                    }
+                }
+                switch (e.getPrevContent().membership) {
+                    case 'invite':  return 'invite_withdrawal';
+                    case 'ban':     return 'unbanned';
+                    case 'join':    return 'kicked';
+                    default:        return 'left';
+                }
+            default: return null;
+        }
+    },
+
+    _getTransitionSequence: function(events) {
+        return events.map(this._getTransition);
+    },
+
     render: function() {
         let eventsToRender = this.props.events;
         let fewEvents = eventsToRender.length < this.props.threshold;
@@ -175,61 +235,54 @@ module.exports = React.createClass({
             );
         }
 
-        // Map user IDs to the first and last member events in eventsToRender for each user
+        // Map user IDs to all of the user's member events in eventsToRender
         let userEvents = {
-            // $userId : {first : e0, last : e1}
+            // $userId : []
         };
 
         eventsToRender.forEach((e) => {
             const userId = e.getStateKey();
             // Initialise a user's events
             if (!userEvents[userId]) {
-                userEvents[userId] = {first: null, last: null};
+                userEvents[userId] = [];
             }
-            if (!userEvents[userId].first) {
-                userEvents[userId].first = e;
-            }
-            userEvents[userId].last = e;
+            userEvents[userId].push(e);
         });
 
-        // Populate the join/leave event arrays with events that represent what happened
-        // overall to a user's membership. If no events are added to either array for a
-        // particular user, they will be considered a user that "joined and left".
-        let joinEvents = [];
-        let leaveEvents = [];
-        let joinedAndLeft = 0;
-        let senders = Object.keys(userEvents);
-        senders.forEach(
+        // A map of agregate type to arrays of display names. Each aggregate type
+        // is a comma-delimited string of transitions, e.g. "joined,left,kicked".
+        // The array of display names is the array of users who went through that
+        // sequence during eventsToRender.
+        let aggregate = {
+            // $aggregateType : []:string
+        };
+        let avatarMembers = [];
+
+        let users = Object.keys(userEvents);
+        users.forEach(
             (userId) => {
-                let firstEvent = userEvents[userId].first;
-                let lastEvent = userEvents[userId].last;
+                let displayName = userEvents[userId][0].getContent().displayname || userId;
 
-                // Membership BEFORE eventsToRender
-                let previousMembership = firstEvent.getPrevContent().membership || "leave";
-
-                // If the last membership event differs from previousMembership, use that.
-                if (previousMembership !== lastEvent.getContent().membership) {
-                    if (lastEvent.event.content.membership === 'join') {
-                        joinEvents.push(lastEvent);
-                    } else if (lastEvent.event.content.membership === 'leave') {
-                        leaveEvents.push(lastEvent);
-                    }
-                } else {
-                    // Increment the number of users whose membership change was nil overall
-                    joinedAndLeft++;
+                let seq = this._getTransitionSequence(userEvents[userId]);
+                if (!aggregate[seq]) {
+                    aggregate[seq] = [];
                 }
+
+                // Assumes display names are unique
+                if (aggregate[seq].indexOf(displayName) === -1) {
+                    aggregate[seq].push(displayName);
+                }
+                avatarMembers.push(userEvents[userId][0].target);
             }
         );
 
-        let avatars = this._renderAvatars(joinEvents.concat(leaveEvents));
-        let summary = this._renderSummary(joinEvents, leaveEvents);
+        let avatars = this._renderAvatars(avatarMembers);
+        let summary = this._renderSummary(aggregate);
         let toggleButton = (
             <a className="mx_MemberEventListSummary_toggle" onClick={this._toggleSummary}>
                 {expanded ? 'collapse' : 'expand'}
             </a>
         );
-        let plural = (joinEvents.length + leaveEvents.length > 0) ? 'others' : 'users';
-        let noun = (joinedAndLeft === 1 ? 'user' : plural);
 
         let summaryContainer = (
             <div className="mx_EventTile_line">
@@ -238,7 +291,7 @@ module.exports = React.createClass({
                         {avatars}
                     </span>
                     <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
-                        {summary}{joinedAndLeft ? joinedAndLeft + ' ' + noun + ' joined and left' : ''}
+                        {summary}
                     </span>&nbsp;
                     {toggleButton}
                 </div>
