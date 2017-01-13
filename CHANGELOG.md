@@ -1,3 +1,26 @@
+Changes in [0.9.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.6-rc.1) (2017-01-13)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.5...v0.9.6-rc.1)
+
+ * Build the js-sdk in the CI script
+   [\#2920](https://github.com/vector-im/riot-web/pull/2920)
+ * Hopefully fix Windows shortcuts
+   [\#2917](https://github.com/vector-im/riot-web/pull/2917)
+ * Update README now the js-sdk has a transpile step
+   [\#2921](https://github.com/vector-im/riot-web/pull/2921)
+ * Use the role for 'toggle dev tools'
+   [\#2915](https://github.com/vector-im/riot-web/pull/2915)
+ * Enable screen sharing easter-egg in desktop app
+   [\#2909](https://github.com/vector-im/riot-web/pull/2909)
+ * make electron send email validation URLs with a nextlink of riot.im
+   [\#2808](https://github.com/vector-im/riot-web/pull/2808)
+ * add Debian Stretch install steps to readme
+   [\#2809](https://github.com/vector-im/riot-web/pull/2809)
+ * Update desktop build instructions fixes #2792
+   [\#2793](https://github.com/vector-im/riot-web/pull/2793)
+ * CSS for the delete threepid button
+   [\#2784](https://github.com/vector-im/riot-web/pull/2784)
+
 Changes in [0.9.5](https://github.com/vector-im/riot-web/releases/tag/v0.9.5) (2016-12-24)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.4...v0.9.5)
