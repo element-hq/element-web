@@ -376,6 +376,7 @@ module.exports = WithMatrixClient(React.createClass({
                 // get out of sync if we force setState here!
                 console.log("Power change success");
             }, function(err) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Failure to change power level",
                     description: err.message
@@ -383,7 +384,7 @@ module.exports = WithMatrixClient(React.createClass({
             }
         ).finally(()=>{
             this.setState({ updating: this.state.updating - 1 });
-        });
+        }).done();
         this.props.onFinished();
     },
 
