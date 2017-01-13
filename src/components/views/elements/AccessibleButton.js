@@ -1,5 +1,5 @@
 /*
- Copyright 2016 Aviral Dasgupta
+ Copyright 2016 Jani Mustonen
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -16,6 +16,10 @@
 
 import React from 'react';
 
+/**
+ * AccessibleButton is a generic wrapper for any element that should be treated as a button.
+ * Identifies the element as a button, setting proper tab indexing and keyboard activation behavior.
+ */
 export default function AccessibleButton(props) {
     const {element, onClick, children, ...restProps} = props;
     restProps.onClick = onClick;
@@ -24,13 +28,15 @@ export default function AccessibleButton(props) {
     };
     restProps.tabIndex = restProps.tabIndex || "0"; 
     restProps.role = "button";
-    if (Array.isArray(children)) {
-        return React.createElement(element, restProps, ...children);
-    } else {
-        return React.createElement(element, restProps, children);
-    }
+    return React.createElement(element, restProps, children);
 }
 
+/**
+ * children: React's magic prop. Represents all children given to the element.
+ * element:  (optional) The base element type. "div" by default.
+ * onClick:  (required) Event handler for button activation. Should be
+ *           implemented exactly like a normal onClick handler.
+ */
 AccessibleButton.propTypes = {
     children: React.PropTypes.node,
     element: React.PropTypes.string,
