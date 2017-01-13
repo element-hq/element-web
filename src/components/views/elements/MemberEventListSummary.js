@@ -239,12 +239,15 @@ module.exports = React.createClass({
         let userEvents = {
             // $userId : []
         };
+        // Array of userIds ordered by the same ordering as the first event of each user
+        let users = [];
 
         eventsToRender.forEach((e) => {
             const userId = e.getStateKey();
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = [];
+                users.push(userId);
             }
             userEvents[userId].push(e);
         });
@@ -258,7 +261,6 @@ module.exports = React.createClass({
         };
         let avatarMembers = [];
 
-        let users = Object.keys(userEvents);
         users.forEach(
             (userId) => {
                 let displayName = userEvents[userId][0].getContent().displayname || userId;
