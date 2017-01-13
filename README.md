@@ -46,9 +46,9 @@ to build.
 
 1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
 1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`
-1. Switch to the vector-web directory: `cd vector-web`
+1. Switch to the riot-web directory: `cd riot-web`
 1. Install the prerequisites: `npm install`
-1. If you are using the `develop` branch of vector-web, you will probably need
+1. If you are using the `develop` branch of riot-web, you will probably need
    to rebuild one of the dependencies, due to
    https://github.com/npm/npm/issues/3055: `(cd node_modules/matrix-react-sdk
    && npm install)`
