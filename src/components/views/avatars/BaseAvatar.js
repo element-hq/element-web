@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var AvatarLogic = require("../../../Avatar");
 import sdk from '../../../index';
+var AccessibleButton = require('../elements/AccessibleButton');
 
 module.exports = React.createClass({
     displayName: 'BaseAvatar',
@@ -158,13 +159,13 @@ module.exports = React.createClass({
         }
         if (onClick != null) {
             return (
-                <button className="mx_BaseAvatar" onClick={onClick}>
+                <AccessibleButton className="mx_BaseAvatar" onClick={onClick}>
                     <img className="mx_BaseAvatar_image" src={imageUrl}
                         onError={this.onError}
                         width={width} height={height}
                         title={title} alt=""
                         {...otherProps} />
-                </button>
+                </AccessibleButton>
             );
         } else {
             return (

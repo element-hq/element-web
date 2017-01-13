@@ -35,6 +35,7 @@ var DMRoomMap = require('../../../utils/DMRoomMap');
 var Unread = require('../../../Unread');
 var Receipt = require('../../../utils/Receipt');
 var WithMatrixClient = require('../../../wrappers/WithMatrixClient');
+var AccessibleButton = require('../elements/AccessibleButton');
 
 module.exports = WithMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -612,7 +613,7 @@ module.exports = WithMatrixClient(React.createClass({
                 mx_MemberInfo_createRoom_label: true,
                 mx_RoomTile_name: true,
             });
-            const startNewChat = <button
+            const startNewChat = <AccessibleButton
                 className="mx_MemberInfo_createRoom"
                 onClick={this.onNewDMClick}
             >
@@ -620,7 +621,7 @@ module.exports = WithMatrixClient(React.createClass({
                     <img src="img/create-big.svg" width="26" height="26" />
                 </div>
                 <div className={labelClasses}><i>Start new chat</i></div>
-            </button>
+            </AccessibleButton>
 
             startChat = <div>
                 <h3>Direct chats</h3>
@@ -635,26 +636,26 @@ module.exports = WithMatrixClient(React.createClass({
         }
 
         if (this.state.can.kick) {
-            kickButton = <button className="mx_MemberInfo_field" onClick={this.onKick}>
+            kickButton = <AccessibleButton className="mx_MemberInfo_field" onClick={this.onKick}>
                 { this.props.member.membership === "invite" ? "Disinvite" : "Kick" }
-            </button>;
+            </AccessibleButton>;
         }
         if (this.state.can.ban) {
-            banButton = <button className="mx_MemberInfo_field" onClick={this.onBan}>
+            banButton = <AccessibleButton className="mx_MemberInfo_field" onClick={this.onBan}>
                 Ban
-            </button>;
+            </AccessibleButton>;
         }
         if (this.state.can.mute) {
             var muteLabel = this.state.muted ? "Unmute" : "Mute";
-            muteButton = <button className="mx_MemberInfo_field" onClick={this.onMuteToggle}>
+            muteButton = <AccessibleButton className="mx_MemberInfo_field" onClick={this.onMuteToggle}>
                 {muteLabel}
-            </button>;
+            </AccessibleButton>;
         }
         if (this.state.can.toggleMod) {
             var giveOpLabel = this.state.isTargetMod ? "Revoke Moderator" : "Make Moderator";
-            giveModButton = <button className="mx_MemberInfo_field" onClick={this.onModToggle}>
+            giveModButton = <AccessibleButton className="mx_MemberInfo_field" onClick={this.onModToggle}>
                 {giveOpLabel}
-            </button>
+            </AccessibleButton>
         }
 
         // TODO: we should have an invite button if this MemberInfo is showing a user who isn't actually in the current room yet
@@ -682,7 +683,7 @@ module.exports = WithMatrixClient(React.createClass({
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
-                <button className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18"/></button>
+                <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18"/></AccessibleButton>
                 <div className="mx_MemberInfo_avatar">
                     <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
                 </div>

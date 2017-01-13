@@ -24,6 +24,7 @@ var DMRoomMap = require('../../../utils/DMRoomMap');
 var rate_limited_func = require("../../../ratelimitedfunc");
 var dis = require("../../../dispatcher");
 var Modal = require('../../../Modal');
+var AccessibleButton = require('../elements/AccessibleButton');
 
 const TRUNCATE_QUERY_LIST = 40;
 
@@ -409,9 +410,9 @@ module.exports = React.createClass({
                 <div className="mx_Dialog_title">
                     {this.props.title}
                 </div>
-                <button className="mx_ChatInviteDialog_cancel" onClick={this.onCancel} >
+                <AccessibleButton className="mx_ChatInviteDialog_cancel" onClick={this.onCancel} >
                     <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
-                </button>
+                </AccessibleButton>
                 <div className="mx_ChatInviteDialog_label">
                     <label htmlFor="textinput">{ this.props.description }</label>
                 </div>

@@ -192,9 +192,9 @@ module.exports = React.createClass({
                     width={14} height={14} resizeMethod="crop"
                     style={style}
                     title={title}
-                    onClick={this.props.onClick}
                 />
             </Velociraptor>
         );
+        /* onClick={this.props.onClick} */
     },
 });

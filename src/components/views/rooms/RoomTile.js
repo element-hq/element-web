@@ -26,6 +26,7 @@ var sdk = require('../../../index');
 var ContextualMenu = require('../../structures/ContextualMenu');
 var RoomNotifs = require('../../../RoomNotifs');
 var FormattingUtils = require('../../../utils/FormattingUtils');
+var AccessibleButton = require('../elements/AccessibleButton');
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -286,8 +287,10 @@ module.exports = React.createClass({
         var connectDragSource = this.props.connectDragSource;
         var connectDropTarget = this.props.connectDropTarget;
 
+        
         let ret = (
-            <button className={classes} tabIndex="0" onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <div> { /* Only native elements can be wrapped in a DnD object. */}
+            <AccessibleButton className={classes} tabIndex="0" onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className={avatarClasses}>
                     <div className="mx_RoomTile_avatar_menu" onClick={this.onAvatarClicked}>
                         <div className={avatarContainerClasses}>
@@ -302,7 +305,8 @@ module.exports = React.createClass({
                 </div>
                 {/* { incomingCallBox } */}
                 { tooltip }
-            </button>
+            </AccessibleButton>
+            </div>
         );
 
         if (connectDropTarget) ret = connectDropTarget(ret);
