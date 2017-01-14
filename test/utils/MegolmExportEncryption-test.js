@@ -56,6 +56,13 @@ function stringToArray(s) {
 }
 
 describe('MegolmExportEncryption', function() {
+    before(function() {
+        // if we don't have subtlecrypto, go home now
+        if (!window.crypto.subtle && !window.crypto.webkitSubtle) {
+            this.skip();
+        }
+    })
+
     beforeEach(function() {
         testUtils.beforeEach(this);
     });
