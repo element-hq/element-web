@@ -61,16 +61,16 @@ export default class TextEncoder {
                 outU8Array[outIdx++] = u;
             } else if (u <= 0x7FF) {
                 outU8Array[outIdx++] = 0xC0 | (u >> 6);
-                outU8Array[outIdx++] = 0x80 | (u & 63);
+                outU8Array[outIdx++] = 0x80 | (u & 0x3F);
             } else if (u <= 0xFFFF) {
                 outU8Array[outIdx++] = 0xE0 | (u >> 12);
-                outU8Array[outIdx++] = 0x80 | ((u >> 6) & 63);
-                outU8Array[outIdx++] = 0x80 | (u & 63);
+                outU8Array[outIdx++] = 0x80 | ((u >> 6) & 0x3F);
+                outU8Array[outIdx++] = 0x80 | (u & 0x3F);
             } else {
                 outU8Array[outIdx++] = 0xF0 | (u >> 18);
-                outU8Array[outIdx++] = 0x80 | ((u >> 12) & 63);
-                outU8Array[outIdx++] = 0x80 | ((u >> 6) & 63);
-                outU8Array[outIdx++] = 0x80 | (u & 63);
+                outU8Array[outIdx++] = 0x80 | ((u >> 12) & 0x3F);
+                outU8Array[outIdx++] = 0x80 | ((u >> 6) & 0x3F);
+                outU8Array[outIdx++] = 0x80 | (u & 0x3F);
             }
         }
         return outU8Array;

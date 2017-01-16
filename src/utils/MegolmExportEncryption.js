@@ -60,12 +60,12 @@ export function decryptMegolmKeyFile(data, password) {
     const hmac = body.subarray(-32);
 
     return deriveKeys(salt, iterations, password).then((keys) => {
-        const [aes_key, sha_key] = keys;
+        const [aes_key, hmac_key] = keys;
 
         const toVerify = body.subarray(0, -32);
         return subtleCrypto.verify(
             {name: 'HMAC'},
-            sha_key,
+            hmac_key,
             hmac,
             toVerify,
         ).then((isValid) => {
@@ -109,7 +109,7 @@ export function encryptMegolmKeyFile(data, password, options) {
     window.crypto.getRandomValues(iv);
 
     return deriveKeys(salt, kdf_rounds, password).then((keys) => {
-        const [aes_key, sha_key] = keys;
+        const [aes_key, hmac_key] = keys;
 
         return subtleCrypto.encrypt(
             {
@@ -137,7 +137,7 @@ export function encryptMegolmKeyFile(data, password, options) {
 
             return subtleCrypto.sign(
                 {name: 'HMAC'},
-                sha_key,
+                hmac_key,
                 toSign,
             ).then((hmac) => {
                 hmac = new Uint8Array(hmac);
@@ -149,12 +149,12 @@ export function encryptMegolmKeyFile(data, password, options) {
 }
 
 /**
- * Derive the AES and SHA keys for the file
+ * Derive the AES and HMAC-SHA-256 keys for the file
  *
  * @param {Unit8Array} salt  salt for pbkdf
  * @param {Number} iterations number of pbkdf iterations
  * @param {String} password  password
- * @return {Promise<[CryptoKey, CryptoKey]>} promise for [aes key, sha key]
+ * @return {Promise<[CryptoKey, CryptoKey]>} promise for [aes key, hmac key]
  */
 function deriveKeys(salt, iterations, password) {
     return subtleCrypto.importKey(
@@ -176,7 +176,7 @@ function deriveKeys(salt, iterations, password) {
         );
     }).then((keybits) => {
         const aes_key = keybits.slice(0, 32);
-        const sha_key = keybits.slice(32);
+        const hmac_key = keybits.slice(32);
 
         const aes_prom = subtleCrypto.importKey(
             'raw',
@@ -185,9 +185,9 @@ function deriveKeys(salt, iterations, password) {
             false,
             ['encrypt', 'decrypt']
         );
-        const sha_prom = subtleCrypto.importKey(
+        const hmac_prom = subtleCrypto.importKey(
             'raw',
-            sha_key,
+            hmac_key,
             {
                 name: 'HMAC',
                 hash: {name: 'SHA-256'},
@@ -195,7 +195,7 @@ function deriveKeys(salt, iterations, password) {
             false,
             ['sign', 'verify']
         );
-        return Promise.all([aes_prom, sha_prom]);
+        return Promise.all([aes_prom, hmac_prom]);
     });
 }
 
