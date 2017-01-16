@@ -1,3 +1,9 @@
+Changes in [0.9.6](https://github.com/vector-im/riot-web/releases/tag/v0.9.6) (2017-01-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.6-rc.1...v0.9.6)
+
+ * Update to matrix-js-sdk 0.9.6 for video calling fix
+
 Changes in [0.9.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.6-rc.1) (2017-01-13)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.5...v0.9.6-rc.1)
