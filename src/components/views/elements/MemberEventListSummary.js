@@ -316,7 +316,6 @@ module.exports = React.createClass({
                     aggregateIndices[seq] = -1;
                 }
 
-                // Assumes display names are unique
                 if (aggregate[seq].indexOf(displayName) === -1) {
                     aggregate[seq].push(displayName);
                 }
