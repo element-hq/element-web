@@ -178,8 +178,8 @@ module.exports = React.createClass({
         return res;
     },
 
-    _renderSummary: function(eventAggregates) {
-        let summaries = Object.keys(eventAggregates).map((transitions) => {
+    _renderSummary: function(eventAggregates, orderedTransitionSequences) {
+        let summaries = orderedTransitionSequences.map((transitions) => {
             let nameList = this._renderNameList(eventAggregates[transitions]);
             let plural = eventAggregates[transitions].length > 1;
 
@@ -228,18 +228,18 @@ module.exports = React.createClass({
     },
 
     _getTransition: function(e) {
-        switch (e.getContent().membership) {
+        switch (e.mxEvent.getContent().membership) {
             case 'invite': return 'invited';
             case 'ban': return 'banned';
             case 'join': return 'joined';
             case 'leave':
-                if (e.getSender() === e.getStateKey()) {
-                    switch (e.getPrevContent().membership) {
+                if (e.mxEvent.getSender() === e.mxEvent.getStateKey()) {
+                    switch (e.mxEvent.getPrevContent().membership) {
                         case 'invite':  return 'invite_reject';
                         default:        return 'left';
                     }
                 }
-                switch (e.getPrevContent().membership) {
+                switch (e.mxEvent.getPrevContent().membership) {
                     case 'invite':  return 'invite_withdrawal';
                     case 'ban':     return 'unbanned';
                     case 'join':    return 'kicked';
@@ -276,44 +276,64 @@ module.exports = React.createClass({
             // $userId : []
         };
 
-        eventsToRender.forEach((e) => {
+        eventsToRender.forEach((e, index) => {
             const userId = e.getStateKey();
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = [];
             }
-            userEvents[userId].push(e);
+            userEvents[userId].push({
+                mxEvent: e,
+                displayName: e.getContent().displayname || userId,
+                index: index,
+            });
         });
 
-        // A map of agregate type to arrays of display names. Each aggregate type
+        // A map of aggregate type to arrays of display names. Each aggregate type
         // is a comma-delimited string of transitions, e.g. "joined,left,kicked".
         // The array of display names is the array of users who went through that
         // sequence during eventsToRender.
         let aggregate = {
             // $aggregateType : []:string
         };
+        // A map of aggregate types to the indices that order them (the index of
+        // the first event for a given transition sequence)
+        let aggregateIndices = {
+            // $aggregateType : int
+        };
+
         let avatarMembers = [];
 
         let users = Object.keys(userEvents);
         users.forEach(
             (userId) => {
-                let displayName = userEvents[userId][0].getContent().displayname || userId;
+                let firstEvent = userEvents[userId][0];
+                let displayName = firstEvent.displayName;
 
                 let seq = this._getTransitionSequence(userEvents[userId]);
                 if (!aggregate[seq]) {
                     aggregate[seq] = [];
+                    aggregateIndices[seq] = -1;
                 }
 
                 // Assumes display names are unique
                 if (aggregate[seq].indexOf(displayName) === -1) {
                     aggregate[seq].push(displayName);
                 }
-                avatarMembers.push(userEvents[userId][0].target);
+
+                if (aggregateIndices[seq] === -1 || firstEvent.index < aggregateIndices[seq]) {
+                    aggregateIndices[seq] = firstEvent.index;
+                }
+
+                avatarMembers.push(firstEvent.mxEvent.target);
             }
         );
 
+        // Sort types by order of lowest event index within sequence
+        let orderedTransitionSequences = Object.keys(aggregate).sort((seq1, seq2) => aggregateIndices[seq1] > aggregateIndices[seq2]);
+
         let avatars = this._renderAvatars(avatarMembers);
-        let summary = this._renderSummary(aggregate);
+        let summary = this._renderSummary(aggregate, orderedTransitionSequences);
         let toggleButton = (
             <a className="mx_MemberEventListSummary_toggle" onClick={this._toggleSummary}>
                 {expanded ? 'collapse' : 'expand'}
