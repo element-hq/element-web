@@ -19,7 +19,8 @@ tar -C olm -xz < olm/olm-*.tgz
 rm -r node_modules/olm
 cp -r olm/package node_modules/olm
 
-# we may be using a dev branch of react-sdk, in which case we need to build it
+# we may be using dev branches of js-sdk and react-sdk, in which case we need to build them
+(cd node_modules/matrix-js-sdk && npm run build)
 (cd node_modules/matrix-react-sdk && npm run build)
 
 # run the mocha tests

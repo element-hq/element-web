@@ -148,6 +148,8 @@ process.on('uncaughtException', function (error) {
 
 electron.ipcMain.on('install_update', installUpdate);
 
+electron.app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
+
 electron.app.on('ready', () => {
     if (vectorConfig.update_base_url) {
         console.log("Starting auto update with base URL: " + vectorConfig.update_base_url);

@@ -196,4 +196,12 @@ export default class WebPlatform extends VectorBasePlatform {
         return app_name + " via " + ua.getBrowser().name +
             " on " + ua.getOS().name;
     }
+
+    screenCaptureErrorString() {
+        // it won't work at all if you're not on HTTPS so whine whine whine
+        if (!global.window || global.window.location.protocol !== "https:") {
+            return "You need to be using HTTPS to place a screen-sharing call.";
+        }
+        return null;
+    }
 }
