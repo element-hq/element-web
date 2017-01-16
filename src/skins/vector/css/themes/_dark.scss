@@ -19,6 +19,12 @@ $warning-color: #ff0064;
 // left-panel style muted accent color
 $secondary-accent-color: $primary-bg-color;
 
+// used by RoomDirectory permissions
+$plinth-bg-color: #474747;
+
+// used by RoomDropTarget
+$droptarget-bg-color: rgba(45,45,45,0.5);
+
 // used by AddressSelector
 $selected-color: #eaf5f0;
 
@@ -34,18 +40,27 @@ $input-border-color: #3a3a3a;
 // apart from login forms, which have stronger border
 $strong-input-border-color: #656565;
 
+// used for UserSettings EditableText
+$input-underline-color: $primary-fg-color;
+$input-fg-color: $primary-fg-color;
+
 // context menus
 $menu-border-color: rgba(187, 187, 187, 0.5);
 $menu-bg-color: #373737;
 
 $avatar-initial-color: #2d2d2d;
 
+$h3-color: $primary-fg-color;
+
+$dialog-background-bg-color: #000;
+$lightbox-background-bg-color: #000;
+
 // ********************
 
 $roomtile-name-color: rgba(186, 186, 186, 0.8);
 $roomtile-selected-bg-color: rgba(0, 0, 0, 0.8);
 
-$roomsublist-label-fg-color: $primary-fg-color;
+$roomsublist-label-fg-color: $h3-color;
 $roomsublist-label-bg-color: #454545;
 
 // ********************
@@ -67,3 +82,6 @@ $e2e-warning-color: #ba6363;
 $lightbox-bg-color: #454545;
 $lightbox-fg-color: #ffffff;
 $lightbox-border-color: #ffffff;
+
+// unused?
+$progressbar-color: #000;

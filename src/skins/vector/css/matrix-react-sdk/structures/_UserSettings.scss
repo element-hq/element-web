@@ -58,7 +58,7 @@ limitations under the License.
     clear: both;
     margin-left: 63px;
     text-transform: uppercase;
-    color: #3d3b39;
+    color: $h3-color;
     font-weight: 600;
     font-size: 13px;
     margin-top: 26px;
@@ -166,10 +166,10 @@ limitations under the License.
 {
     display: inline-block;
     border: 0px;
-    border-bottom: 1px solid rgba(151, 151, 151, 0.5);
+    border-bottom: 1px solid $input-underline-color;
     padding: 0px;
     width: 240px;
-    color: rgba(74, 74, 74, 0.9);
+    color: $input-fg-color;
     font-family: 'Open Sans', Helvetica, Arial, Sans-Serif;
     font-size: 16px;
 }

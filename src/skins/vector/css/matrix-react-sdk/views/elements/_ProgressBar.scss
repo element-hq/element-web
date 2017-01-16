@@ -16,10 +16,10 @@ limitations under the License.
 
 .mx_ProgressBar {
     height: 5px;
-    border: 1px solid black;
+    border: 1px solid $progressbar-color;
 }
 
 .mx_ProgressBar_fill {
     height: 100%;
-    background-color: #000;
+    background-color: $progressbar-color;
 }
