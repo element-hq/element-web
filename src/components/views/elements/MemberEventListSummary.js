@@ -88,62 +88,105 @@ module.exports = React.createClass({
         }
     },
 
-    _getDescriptionForTransition(t, plural) {
+    _getDescriptionForTransition(t, plural, repeats) {
         let beConjugated = plural ? "were" : "was";
         let invitation = plural ? "invitations" : "an invitation";
 
-        switch (t) {
-            case 'joined':  return "joined";
-            case 'left':    return "left";
-            case 'invite_reject':     return "rejected " + invitation;
-            case 'invite_withdrawal': return "withdrew " + invitation;
-            case 'invited':     return beConjugated + " invited";
-            case 'banned':      return beConjugated + " banned";
-            case 'unbanned':    return beConjugated + " unbanned";
-            case 'kicked':      return beConjugated + " kicked";
+        let res = null;
+        let map = {
+            "joined": "joined",
+            "left": "left",
+            "joined_and_left": "joined and left",
+            "left_and_joined": "left and rejoined",
+            "invite_reject": "rejected " + invitation,
+            "invite_withdrawal": "withdrew " + invitation,
+            "invited": beConjugated + " invited",
+            "banned": beConjugated + " banned",
+            "unbanned": beConjugated + " unbanned",
+            "kicked": beConjugated + " kicked",
+        };
+
+        if (Object.keys(map).includes(t)) {
+            res = map[t] + (repeats > 1 ? " " + repeats + " times" : "" );
         }
 
-        return null;
+        return res;
+    },
+
+    _getCanonicalTransitions: function(transitions) {
+        let modMap = {
+            'joined' : {
+                'after' : 'left',
+                'newTransition' : 'joined_and_left',
+            },
+            'left' : {
+                'after' : 'joined',
+                'newTransition' : 'left_and_joined',
+            },
+            // $currentTransition : {
+            //     'after' : $nextTransition,
+            //     'newTransition' : 'new_transition_type',
+            // },
+        };
+        const res = [];
+
+        for (let i = 0; i < transitions.length; i++) {
+            let t = transitions[i];
+            let t2 = transitions[i + 1];
+
+            let transition = t;
+
+            if (i < transitions.length - 1 && modMap[t] && modMap[t].after === t2) {
+                transition = modMap[t].newTransition;
+                i++;
+            }
+
+            res.push(transition);
+        }
+        return res;
+    },
+
+    _getTruncatedTransitions: function(transitions) {
+        let res = [];
+        for (let i = 0; i < transitions.length; i++) {
+            if (res.length > 0 && res[res.length - 1].transitionType === transitions[i]) {
+                res[res.length - 1].repeats += 1;
+            } else {
+                res.push({
+                    transitionType: transitions[i],
+                    repeats: 1,
+                });
+            }
+        }
+        // returns [{
+        //     transitionType: "joined_and_left"
+        //     repeats: 123
+        // }, ... ]
+        return res;
     },
 
     _renderSummary: function(eventAggregates) {
         let summaries = Object.keys(eventAggregates).map((transitions) => {
             let nameList = this._renderNameList(eventAggregates[transitions]);
+            let plural = eventAggregates[transitions].length > 1;
 
             let repeats = 1;
             let repeatExtra = 0;
 
             let splitTransitions = transitions.split(',');
-            let describedTransitions = splitTransitions;
-            let plural = eventAggregates[transitions].length > 1;
 
-            for (let modulus = 1; modulus <= 2; modulus++) {
-                // Sequences that are repeating through modulus transitions will be truncated
-                if (this._isRepeatedSequence(describedTransitions, modulus)) {
-                    // Extra repeating sequence on the end that should be treated separately
-                    // so as to avoid j,l,j,l,j => "... joined and left 2.5 times"
-                    repeatExtra = describedTransitions.length % modulus;
+            // Some pairs of transitions are common and are repeated a lot, so canonicalise them into "pair" transitions
+            let canonicalTransitions = this._getCanonicalTransitions(splitTransitions);
+            // Remove consecutive repetitions of the same transition (like 5 consecutive 'join_and_leave's)
+            let truncatedTransitions = this._getTruncatedTransitions(canonicalTransitions);
 
-                    repeats = (describedTransitions.length - repeatExtra) / modulus;
-                    describedTransitions = describedTransitions.slice(0, modulus);
-                    break;
-                }
-            }
-
-            let numberOfTimes = repeats > 1 ? " " + repeats + " times" : "";
-
-            let descs = describedTransitions.map((t) => {
-                return this._getDescriptionForTransition(t, plural);
-            });
-
-            let afterRepeatDescs = splitTransitions.slice(splitTransitions.length - repeatExtra).map((t) => {
-                return this._getDescriptionForTransition(t, plural);
+            let descs = truncatedTransitions.map((t) => {
+                return this._getDescriptionForTransition(t.transitionType, plural, t.repeats);
             });
 
             let desc = this._renderCommaSeparatedList(descs);
-            let afterRepeatDesc = this._renderCommaSeparatedList(afterRepeatDescs);
 
-            return nameList + " " + desc + numberOfTimes + (afterRepeatDesc ? " and then " + afterRepeatDesc : "");
+            return nameList + " " + desc;
         });
 
         if (!summaries) {
