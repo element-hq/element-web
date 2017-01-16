@@ -83,7 +83,7 @@ textarea {
 /* applied to side-panels and messagepanel when in RoomSettings */
 .mx_fadable {
     opacity: 1;
-    -o-transition: opacity 0.2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 }
 
 /* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.
