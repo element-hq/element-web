@@ -26,6 +26,8 @@ if (check_squirrel_hooks()) return;
 const electron = require('electron');
 const url = require('url');
 
+const tray = require('./tray');
+
 const VectorMenu = require('./vectormenu');
 
 let vectorConfig = {};
@@ -170,6 +172,12 @@ electron.app.on('ready', () => {
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
     electron.Menu.setApplicationMenu(VectorMenu);
 
+    // Create trayIcon icon
+    tray.create(mainWindow, {
+        icon_path: icon_path,
+        brand: vectorConfig.brand || 'Riot'
+    });
+
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
     });
@@ -177,7 +185,7 @@ electron.app.on('ready', () => {
         mainWindow = null;
     });
     mainWindow.on('close', (e) => {
-        if (process.platform == 'darwin' && !appQuitting) {
+        if (!appQuitting && (tray.hasTray() || process.platform == 'darwin')) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)
