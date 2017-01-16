@@ -46,6 +46,19 @@ module.exports = React.createClass({
         };
     },
 
+    shouldComponentUpdate: function(nextProps, nextState) {
+        // Update if
+        //  - The number of summarised events has changed
+        //  - or if the summary is currently expanded
+        //  - or if the summary is about to toggle to become collapsed
+        //  - or if there are fewEvents, meaning the child eventTiles are shown as-is
+        return (
+            nextProps.events.length !== this.props.events.length ||
+            this.state.expanded || nextState.expanded ||
+            nextProps.events.length < this.props.threshold
+        );
+    },
+
     _toggleSummary: function() {
         this.setState({
             expanded: !this.state.expanded,
@@ -211,19 +224,6 @@ module.exports = React.createClass({
             <span>
                 {avatars}
             </span>
-        );
-    },
-
-    shouldComponentUpdate: function(nextProps, nextState) {
-        // Update if
-        //  - The number of summarised events has changed
-        //  - or if the summary is currently expanded
-        //  - or if the summary is about to toggle to become collapsed
-        //  - or if there are fewEvents, meaning the child eventTiles are shown as-is
-        return (
-            nextProps.events.length !== this.props.events.length ||
-            this.state.expanded || nextState.expanded ||
-            nextProps.events.length < this.props.threshold
         );
     },
 
