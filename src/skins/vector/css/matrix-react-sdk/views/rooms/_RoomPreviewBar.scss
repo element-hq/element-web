@@ -17,13 +17,9 @@ limitations under the License.
 .mx_RoomPreviewBar {
     text-align: center;
     height: 176px;
-
     align-items: center;
-
     flex-direction: column;
-
     justify-content: center;
-
     display: flex;
 }
 
@@ -40,7 +36,7 @@ limitations under the License.
 
 .mx_RoomPreviewBar_preview_text {
     margin-top: 25px;
-    color: #a4a4a4;
+    color: $settings-grey-fg-color;
 }
 
 .mx_RoomPreviewBar_join_text a {

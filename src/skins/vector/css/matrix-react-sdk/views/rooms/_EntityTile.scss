@@ -77,12 +77,12 @@ limitations under the License.
 
 .mx_EntityTile_ellipsis .mx_EntityTile_name {
     font-style: italic;
-    font-color: $primary-fg-color;
+    color: $primary-fg-color;
 }
 
 .mx_EntityTile_invitePlaceholder .mx_EntityTile_name {
     font-style: italic;
-    font-color: $primary-fg-color;
+    color: $primary-fg-color;
 }
 
 .mx_EntityTile_unavailable .mx_EntityTile_avatar,

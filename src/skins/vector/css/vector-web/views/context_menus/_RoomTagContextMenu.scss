@@ -70,8 +70,7 @@ limitations under the License.
     border-right-style: none;
     border-top-style: solid;
     border-top-width: 1px;
-    border-color: #bbbbbb;
-    opacity: 0.4;
+    border-color: $menu-border-color;
 }
 
 .mx_RoomTagContextMenu_fieldSet .mx_RoomTagContextMenu_icon {

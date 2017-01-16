@@ -101,7 +101,7 @@ limitations under the License.
     text-transform: uppercase;
     font-weight: 600;
     font-size: 11px;
-    color: #61c295;
+    color: $accent-fg-color;
 }
 
 .mx_RoomDirectory_topic {
@@ -110,7 +110,7 @@ limitations under the License.
 
 .mx_RoomDirectory_alias {
     font-size: 12px;
-    color: #b3b3b3;
+    color: $settings-grey-fg-color;
 }
 
 .mx_RoomDirectory_roomMemberCount {

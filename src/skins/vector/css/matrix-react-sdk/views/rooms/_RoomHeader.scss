@@ -16,7 +16,6 @@ limitations under the License.
 
 /* add 20px to the height of the header when editing */
 .mx_RoomHeader_editing {
-    -webit-flex: 0 0 93px ! important;
     flex: 0 0 93px ! important;
 }
 
@@ -24,25 +23,19 @@ limitations under the License.
     max-width: 960px;
     margin: auto;
     height: 70px;
-
     align-items: center;
-
     display: flex;
 }
 
 .mx_RoomHeader_leftRow {
     margin-left: -2px;
-
     order: 1;
-
     flex: 1;
 }
 
 .mx_RoomHeader_spinner {
     height: 36px;
-
     order: 2;
-
     padding-left: 12px;
     padding-right: 12px;
 }
@@ -56,9 +49,7 @@ limitations under the License.
     line-height: 34px;
     margin-top: -2px;
     text-align: center;
-
     order: 2;
-
     cursor: pointer;
 
 /*
@@ -70,9 +61,7 @@ limitations under the License.
 
 .mx_RoomHeader_cancelButton {
     order: 2;
-
     cursor: pointer;
-
     padding-left: 12px;
     padding-right: 12px;
 }
@@ -126,7 +115,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_settingsHint {
-    color: #a2a2a2 ! important;
+    color: $settings-grey-fg-color ! important;
 }
 
 .mx_RoomHeader_searchStatus {
@@ -151,7 +140,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_placeholder {
-    color: #a2a2a2 ! important;
+    color: $settings-grey-fg-color ! important;
 }
 
 .mx_RoomHeader_editable {
@@ -170,7 +159,7 @@ limitations under the License.
     vertical-align: bottom;
     float: left;
     max-height: 42px;
-    color: #A2A2A2;
+    color: $settings-grey-fg-color;
     font-weight: 300;
     font-size: 13px;
     margin-left: 19px;

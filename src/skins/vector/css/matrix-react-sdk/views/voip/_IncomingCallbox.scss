@@ -61,9 +61,9 @@ limitations under the License.
 }
 
 .mx_IncomingCallBox_buttons_decline {
-    background-color: #f48080;
+    background-color: $voip-decline-color;
 }
 
 .mx_IncomingCallBox_buttons_accept {
-    background-color: #80f480;
+    background-color: $voip-accept-color;
 }

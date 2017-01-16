@@ -57,7 +57,7 @@ limitations under the License.
     height: 60px;
     text-align: center;
     font-style: italic;
-    color: #888;
+    color: $greyed-fg-color;
 }
 
 .mx_MessageComposer_input_wrapper {
@@ -90,10 +90,10 @@ limitations under the License.
 }
 
 .mx_MessageComposer_input blockquote {
-    color: rgb(119, 119, 119);
+    color: $blockquote-fg-color;
     margin: 0 0 16px;
     padding: 0 15px;
-    border-left: 4px solid rgb(221, 221, 221);
+    border-left: 4px solid $blockquote-bar-color;
 }
 
 .mx_MessageComposer_input textarea {
@@ -151,7 +151,7 @@ limitations under the License.
 
 .mx_MessageComposer_formatbar_wrapper {
     width: 100%;
-    background-color: #f7f7f7;
+    background-color: $menu-bg-color;
     box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.08);
 }
 
@@ -168,7 +168,7 @@ limitations under the License.
     flex-direction: row;
     align-items: center;
     font-size: 10px;
-    color: #888;
+    color: $greyed-fg-color;
 }
 
 .mx_MessageComposer_formatbar * {
