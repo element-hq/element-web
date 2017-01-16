@@ -366,10 +366,11 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     onCryptoClicked: function(e) {
-        var EncryptedEventDialog = sdk.getComponent("dialogs.EncryptedEventDialog");
         var event = this.props.mxEvent;
 
-        Modal.createDialog(EncryptedEventDialog, {
+        Modal.createDialogAsync((cb) => {
+            require(['../../../async-components/views/dialogs/EncryptedEventDialog'], cb)
+        }, {
             event: event,
         });
     },
