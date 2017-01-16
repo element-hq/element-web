@@ -152,6 +152,19 @@ electron.ipcMain.on('install_update', installUpdate);
 
 electron.app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
+const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+        if (!mainWindow.isVisible()) mainWindow.show();
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus();
+    }
+});
+
+if (shouldQuit) {
+    electron.app.quit()
+}
+
 electron.app.on('ready', () => {
     if (vectorConfig.update_base_url) {
         console.log("Starting auto update with base URL: " + vectorConfig.update_base_url);
