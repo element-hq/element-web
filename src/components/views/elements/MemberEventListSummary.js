@@ -56,17 +56,8 @@ module.exports = React.createClass({
         if (users.length === 0) {
             return null;
         }
-        let originalNumber = users.length;
 
-        users = users.slice(0, this.props.summaryLength);
-
-        let remaining = originalNumber - this.props.summaryLength;
-        if (remaining < 0) {
-            remaining = 0;
-        }
-        let other = " other" + (remaining > 1 ? "s" : "");
-
-        return this._renderCommaSeparatedList(users, remaining) + (remaining ? ' and ' + remaining + other : '');
+        return this._renderCommaSeparatedList(users, this.props.summaryLength);
     },
 
     // Test whether the first n items repeat for the duration
@@ -81,14 +72,16 @@ module.exports = React.createClass({
         return true;
     },
 
-    _renderCommaSeparatedList(items, disableAnd) {
-        if (disableAnd) {
-            return items.join(', ');
-        }
+    _renderCommaSeparatedList(items, itemLimit) {
+        const remaining = itemLimit === undefined ? 0 : Math.max(items.length - itemLimit, 0);
         if (items.length === 0) {
             return "";
         } else if (items.length === 1) {
             return items[0];
+        } else if (remaining) {
+            items = items.slice(0, itemLimit);
+            const other = " other" + (remaining > 1 ? "s" : "");
+            return items.join(', ') + ' and ' + remaining + other;
         } else {
             let last = items.pop();
             return items.join(', ') + ' and ' + last;
