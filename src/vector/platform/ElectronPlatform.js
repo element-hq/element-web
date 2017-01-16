@@ -131,4 +131,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
     screenCaptureErrorString() {
         return null;
     }
+
+    requestNotificationPermission() : Promise {
+        const defer = q.defer();
+        defer.resolve('granted');
+        return defer.promise;
+    }
 }
