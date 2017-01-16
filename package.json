@@ -62,13 +62,8 @@
     "gfm.css": "^1.1.1",
     "highlight.js": "^9.0.0",
     "linkifyjs": "^2.1.3",
-<<<<<<< HEAD
-    "matrix-js-sdk": "0.7.2",
-    "matrix-react-sdk": "0.8.4",
-=======
     "matrix-js-sdk": "0.7.4",
     "matrix-react-sdk": "0.8.5",
->>>>>>> release-v0.9.6
     "modernizr": "^3.1.0",
     "q": "^1.4.1",
     "react": "^15.4.0",
