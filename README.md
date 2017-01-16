@@ -25,6 +25,14 @@ Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
 over https.
 
+### Installation Steps for Debian Stretch
+1. Add the repository to your sources.list using either of the following two options:
+  - Directly to sources.list: `echo "deb https://riot.im/packages/debian/ stretch main" | sudo tee -a /etc/apt/sources.list`
+  - As a separate entry in sources.list.d: `echo "deb https://riot.im/packages/debian/ stretch main" | sudo tee /etc/apt/sources.list.d/riot.list`
+2. Add the gpg signing key for the riot repository: `curl -s https://riot.im/packages/debian/repo-key.asc | sudo apt-key add -`
+3. Update your package lists: `sudo apt-get update`
+4. Install Riot: `sudo apt-get install riot-web`
+
 Important Security Note
 =======================
 
@@ -48,10 +56,14 @@ to build.
 1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`
 1. Switch to the riot-web directory: `cd riot-web`
 1. Install the prerequisites: `npm install`
-1. If you are using the `develop` branch of riot-web, you will probably need
-   to rebuild one of the dependencies, due to
-   https://github.com/npm/npm/issues/3055: `(cd node_modules/matrix-react-sdk
-   && npm install)`
+1. If you are using the `develop` branch of vector-web, you will probably need
+   to rebuild some of the dependencies, due to
+   https://github.com/npm/npm/issues/3055:
+
+   ```
+   (cd node_modules/matrix-js-sdk && npm install)
+   (cd node_modules/matrix-react-sdk && npm install)
+   ```
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it (see below for details)
 1. `npm run dist` to build a tarball to deploy. Untaring this file will give
@@ -233,10 +245,10 @@ Finally, build and start Riot itself:
    disables caching, so do NOT use it in production.
 1. Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
 
-When you make changes to `matrix-react-sdk`, you will need to run `npm run
-build` in the relevant directory. You can do this automatically by instead
-running `npm start` in the directory, to start a development builder which
-will watch for changes to the files and rebuild automatically.
+When you make changes to `matrix-react-sdk` or `matrix-js-sdk`, you will need
+to run `npm run build` in the relevant directory. You can do this automatically
+by instead running `npm start` in the directory, to start a development builder
+which will watch for changes to the files and rebuild automatically.
 
 If you add or remove any components from the Riot skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.
