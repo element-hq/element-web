@@ -27,7 +27,6 @@ limitations under the License.
 
     align-items: center;
 
-    display: -moz-box;
     display: -ms-flexbox;
     display: flex;
 }
@@ -35,7 +34,6 @@ limitations under the License.
 .mx_RoomHeader_leftRow {
     margin-left: -2px;
 
-    -moz-box-ordinal-group: 1;
     -ms-flex-order: 1;
     order: 1;
 
@@ -45,7 +43,6 @@ limitations under the License.
 .mx_RoomHeader_spinner {
     height: 36px;
 
-    -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
     order: 2;
 
@@ -63,7 +60,6 @@ limitations under the License.
     margin-top: -2px;
     text-align: center;
 
-    -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
     order: 2;
 
@@ -77,7 +73,6 @@ limitations under the License.
 }
 
 .mx_RoomHeader_cancelButton {
-    -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
     order: 2;
 
@@ -92,7 +87,6 @@ limitations under the License.
     background-color: $primary-bg-color;
     display: flex;
     align-items: center;
-    -moz-box-ordinal-group: 3;
     -ms-flex-order: 3;
     order: 3;
 }

@@ -20,14 +20,12 @@ limitations under the License.
     margin-left: auto;
     margin-right: auto;
 
-    display: -moz-box;
     display: -ms-flexbox;
     display: flex;
     flex-direction: column;
 }
 
 .mx_UserSettings .mx_RoomHeader {
-    -moz-box-ordinal-group: 1;
     -ms-flex-order: 1;
     order: 1;
 
@@ -35,7 +33,6 @@ limitations under the License.
 }
 
 .mx_UserSettings_body {
-    -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
     order: 2;
 
