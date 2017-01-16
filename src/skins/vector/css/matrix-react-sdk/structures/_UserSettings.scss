@@ -20,20 +20,17 @@ limitations under the License.
     margin-left: auto;
     margin-right: auto;
 
-    display: -ms-flexbox;
     display: flex;
     flex-direction: column;
 }
 
 .mx_UserSettings .mx_RoomHeader {
-    -ms-flex-order: 1;
     order: 1;
 
     flex: 0 0 70px;
 }
 
 .mx_UserSettings_body {
-    -ms-flex-order: 2;
     order: 2;
 
     flex: 1 1 0;

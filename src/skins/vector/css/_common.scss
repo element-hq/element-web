@@ -83,7 +83,6 @@ textarea {
 /* applied to side-panels and messagepanel when in RoomSettings */
 .mx_fadable {
     opacity: 1;
-    -ms-transition: opacity 0.2s ease-in-out;
     -o-transition: opacity 0.2s ease-in-out;
 }
 
@@ -126,7 +125,6 @@ textarea {
     width: 100%;
     height: 100%;
 
-    display: -ms-flexbox;
     display: flex;
     align-items: center;
     justify-content: center;

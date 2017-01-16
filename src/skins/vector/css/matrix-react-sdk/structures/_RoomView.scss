@@ -18,7 +18,6 @@ limitations under the License.
     word-wrap: break-word;
     position: relative;
 
-    display: -ms-flexbox;
     display: flex;
     width: 100%;
 
@@ -26,7 +25,6 @@ limitations under the License.
 }
 
 .mx_RoomView .mx_RoomHeader {
-    -ms-flex-order: 1;
     order: 1;
 
     flex: 0 0 70px;
@@ -65,7 +63,6 @@ limitations under the License.
 }
 
 .mx_RoomView_auxPanel {
-    -ms-flex-order: 2;
     order: 2;
 
     min-width: 0px;
@@ -80,12 +77,10 @@ limitations under the License.
 }
 
 .mx_RoomView_topUnreadMessagesBar {
-    -ms-flex-order: 3;
     order: 3;
 }
 
 .mx_RoomView_messagePanel {
-    -ms-flex-order: 4;
     order: 4;
 
     flex: 1 1 0;
@@ -101,7 +96,6 @@ limitations under the License.
 
     min-height: 100%;
 
-    display: -ms-flexbox;
     display: flex;
 
     flex-direction: column;
@@ -133,7 +127,6 @@ limitations under the License.
 }
 
 .mx_RoomView_invitePrompt {
-    -ms-flex-order: 2;
     order: 2;
 
     min-width: 0px;
@@ -161,7 +154,6 @@ hr.mx_RoomView_myReadMarker {
 }
 
 .mx_RoomView_statusArea {
-    -ms-flex-order: 5;
     order: 5;
 
     width: 100%;
@@ -221,7 +213,6 @@ hr.mx_RoomView_myReadMarker {
 }
 
 .mx_RoomView .mx_MessageComposer {
-    -ms-flex-order: 6;
     order: 6;
 
     width: 100%;

@@ -17,13 +17,11 @@ limitations under the License.
 .mx_RightPanel {
     position: relative;
 
-    display: -ms-flexbox;
     display: flex;
     flex-direction: column;
 }
 
 .mx_RightPanel_header {
-    -ms-flex-order: 1;
     order: 1;
 
     border-bottom: 1px solid $primary-hairline-color;
@@ -73,13 +71,11 @@ limitations under the License.
 .mx_RightPanel .mx_MemberList,
 .mx_RightPanel .mx_MemberInfo,
 .mx_RightPanel_blank {
-    -ms-flex-order: 2;
     order: 2;
     flex: 1 1 0;
 }
 
 .mx_RightPanel_footer {
-    -ms-flex-order: 3;
     order: 3;
 
     border-top: 1px solid $primary-hairline-color;

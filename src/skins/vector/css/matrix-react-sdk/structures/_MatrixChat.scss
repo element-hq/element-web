@@ -27,7 +27,6 @@ limitations under the License.
 }
 
 .mx_MatrixChat_wrapper {
-    display: -ms-flexbox;
     display: flex;
 
     flex-direction: column;
@@ -37,14 +36,12 @@ limitations under the License.
 }
 
 .mx_MatrixToolbar {
-    -ms-flex-order: 1;
     order: 1;
 
     height: 40px;
 }
 
 .mx_GuestWarningBar {
-    -ms-flex-order: 1;
     order: 1;
 
     height: 40px;
@@ -58,17 +55,14 @@ limitations under the License.
     width: 100%;
     height: 100%;
 
-    display: -ms-flexbox;
     display: flex;
 
-    -ms-flex-order: 2;
     order: 2;
 
     flex: 1;
 }
 
 .mx_MatrixChat .mx_LeftPanel {
-    -ms-flex-order: 1;
     order: 1;
 
     background-color: $secondary-accent-color;
@@ -81,7 +75,6 @@ limitations under the License.
 }
 
 .mx_MatrixChat .mx_MatrixChat_middlePanel {
-    -ms-flex-order: 2;
     order: 2;
 
     padding-left: 20px;
@@ -106,12 +99,10 @@ limitations under the License.
      * point, but instead we fudge it and make the middlePanel
      * flex itself.
      */
-    display: -ms-flexbox;
     display: flex;
 }
 
 .mx_MatrixChat .mx_RightPanel {
-    -ms-flex-order: 3;
     order: 3;
 
     flex: 0 0 235px;

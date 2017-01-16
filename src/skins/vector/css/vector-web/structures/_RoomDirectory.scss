@@ -22,7 +22,6 @@ limitations under the License.
     margin-bottom: 12px;
     color: $primary-fg-color;
 
-    display: -ms-flexbox;
     display: flex;
 
     flex-direction: column;
@@ -31,7 +30,6 @@ limitations under the License.
 .mx_RoomDirectory_list {
     flex: 1;
 
-    display: -ms-flexbox;
     display: flex;
 
     flex-direction: column;

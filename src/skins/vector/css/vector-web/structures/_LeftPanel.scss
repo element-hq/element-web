@@ -17,7 +17,6 @@ limitations under the License.
 .mx_LeftPanel {
     position: relative;
 
-    display: -ms-flexbox;
     display: flex;
     flex-direction: column;
 }
@@ -35,7 +34,6 @@ limitations under the License.
 }
 
 .mx_LeftPanel .mx_RoomList_scrollbar {
-    -ms-flex-order: 1;
     order: 1;
 
     flex: 1 1 0;
@@ -49,7 +47,6 @@ limitations under the License.
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu {
-    -ms-flex-order: 3;
     order: 3;
 
     border-top: 1px solid rgba(118, 207, 166, 0.2);
