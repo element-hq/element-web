@@ -22,33 +22,25 @@ limitations under the License.
     margin-bottom: 12px;
     color: $primary-fg-color;
 
-    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
 
     flex-direction: column;
-    -webkit-flex-direction: column;
 }
 
 .mx_RoomDirectory_list {
-    -webkit-flex: 1;
     flex: 1;
 
-    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
 
     flex-direction: column;
-    -webkit-flex-direction: column;
 }
 
 .mx_RoomDirectory_list .mx_RoomView_messageListWrapper {
     justify-content: flex-start;
-    -webkit-justify-content: flex-start;
 }
 
 .mx_RoomDirectory_listheader {
@@ -72,7 +64,6 @@ limitations under the License.
 
 .mx_RoomDirectory_tableWrapper {
     overflow-y: auto;
-    -webkit-flex: 1 1 0;
     flex: 1 1 0;
 }
 

@@ -22,14 +22,12 @@ limitations under the License.
 
 .mx_DirectorySearchBox_container {
     display: flex;
-    display: -webkit-flex;
     padding-left: 9px;
     padding-right: 9px;
 }
 
 .mx_DirectorySearchBox_input {
     flex-grow: 1;
-    -webkit-flex-grow: 1;
     border: 0;
     padding: 0;
     font-weight: 300;

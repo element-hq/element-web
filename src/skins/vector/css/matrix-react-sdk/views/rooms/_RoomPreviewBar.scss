@@ -18,19 +18,14 @@ limitations under the License.
     text-align: center;
     height: 176px;
 
-    -webkit-align-items: center;
     align-items: center;
 
     flex-direction: column;
-    -webkit-flex-direction: column;
 
     justify-content: center;
-    -webkit-justify-content: center;
 
-    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
 }
 
@@ -56,9 +51,7 @@ limitations under the License.
 }
 
 .mx_RoomPreviewBar_warning {
-    display: -webkit-flex;
     display: flex;
-    -webkit-align-items: center;
     align-items: center;
     padding: 8px;
 }

@@ -18,12 +18,9 @@ limitations under the License.
     background-color: $accent-color;
     color: $accent-fg-color;
 
-    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
-    -webkit-align-items: center;
     align-items: center;
 }
 

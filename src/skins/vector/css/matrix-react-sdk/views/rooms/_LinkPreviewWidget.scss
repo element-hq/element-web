@@ -18,14 +18,12 @@ limitations under the License.
     margin-top: 15px;
     margin-right: 15px;
     margin-bottom: 15px;
-    display: -webkit-flex;
     display: flex;
     border-left: 4px solid #ddd;
     color: #888;
 }
 
 .mx_LinkPreviewWidget_image {
-    -webkit-flex: 0 0 100px;
     flex: 0 0 100px;
     margin-left: 15px;
     text-align: center;
@@ -34,7 +32,6 @@ limitations under the License.
 
 .mx_LinkPreviewWidget_caption {
     margin-left: 15px;
-    -webkit-flex: 1 1 auto;
     flex: 1 1 auto;
 }
 
@@ -56,7 +53,6 @@ limitations under the License.
 .mx_LinkPreviewWidget_cancel {
     visibility: hidden;
     cursor: pointer;
-    -webkit-flex: 0 0 40px;
     flex: 0 0 40px;
 }
 

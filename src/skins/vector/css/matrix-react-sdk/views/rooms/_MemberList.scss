@@ -20,22 +20,17 @@ limitations under the License.
     margin-top: 12px;
     margin-right: 20px;
 
-    -webkit-flex: 1;
     flex: 1;
 
-    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
 
     flex-direction: column;
-    -webkit-flex-direction: column;
 }
 
 .mx_MemberList .mx_Spinner {
     flex: 0;
-    -webkit-flex: 0;
 }
 
 .mx_MemberList_chevron {
@@ -48,7 +43,6 @@ limitations under the License.
     overflow-y: auto;
 
     order: 1;
-    -webkit-flex: 1 1 0;
     flex: 1 1 0px;
 }
 
@@ -80,7 +74,6 @@ limitations under the License.
 .mx_MemberList_joined {
     order: 2;
     flex: 1 0 0;
-    -webkit-flex: 1 0 0;
 
     overflow-y: auto;
 }
@@ -89,7 +82,6 @@ limitations under the License.
 .mx_MemberList_invited {
     order: 3;
     flex: 0 0 100px;
-    -webkit-flex: 0 0 100px;
     overflow-y: auto;
 }
 */

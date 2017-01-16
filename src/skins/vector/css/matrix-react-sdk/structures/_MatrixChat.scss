@@ -27,34 +27,27 @@ limitations under the License.
 }
 
 .mx_MatrixChat_wrapper {
-    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
 
     flex-direction: column;
-    -webkit-flex-direction: column;
 
     width: 100%;
     height: 100%;
 }
 
 .mx_MatrixToolbar {
-    -webkit-box-ordinal-group: 1;
     -moz-box-ordinal-group: 1;
     -ms-flex-order: 1;
-    -webkit-order: 1;
     order: 1;
 
     height: 40px;
 }
 
 .mx_GuestWarningBar {
-    -webkit-box-ordinal-group: 1;
     -moz-box-ordinal-group: 1;
     -ms-flex-order: 1;
-    -webkit-order: 1;
     order: 1;
 
     height: 40px;
@@ -68,52 +61,40 @@ limitations under the License.
     width: 100%;
     height: 100%;
 
-    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
 
-    -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
-    -webkit-order: 2;
     order: 2;
 
-    -webkit-flex: 1;
     flex: 1;
 }
 
 .mx_MatrixChat .mx_LeftPanel {
-    -webkit-box-ordinal-group: 1;
     -moz-box-ordinal-group: 1;
     -ms-flex-order: 1;
-    -webkit-order: 1;
     order: 1;
 
     background-color: $secondary-accent-color;
 
-    -webkit-flex: 0 0 235px;
     flex: 0 0 235px;
 }
 
 .mx_MatrixChat .mx_LeftPanel.collapsed {
-    -webkit-flex: 0 0 60px;
     flex: 0 0 60px;
 }
 
 .mx_MatrixChat .mx_MatrixChat_middlePanel {
-    -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
-    -webkit-order: 2;
     order: 2;
 
     padding-left: 20px;
     padding-right: 22px;
     background-color: $primary-bg-color;
 
-    -webkit-flex: 1;
     flex: 1;
 
     /* Experimental fix for https://github.com/vector-im/vector-web/issues/947
@@ -132,25 +113,19 @@ limitations under the License.
      * point, but instead we fudge it and make the middlePanel
      * flex itself.
      */
-    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
 }
 
 .mx_MatrixChat .mx_RightPanel {
-    -webkit-box-ordinal-group: 3;
     -moz-box-ordinal-group: 3;
     -ms-flex-order: 3;
-    -webkit-order: 3;
     order: 3;
 
-    -webkit-flex: 0 0 235px;
     flex: 0 0 235px;
 }
 
 .mx_MatrixChat .mx_RightPanel.collapsed {
-    -webkit-flex: 0 0 122px;
     flex: 0 0 122px;
 }

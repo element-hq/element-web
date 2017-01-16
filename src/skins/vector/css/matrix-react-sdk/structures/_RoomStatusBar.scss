@@ -123,18 +123,15 @@ limitations under the License.
 
 .mx_RoomStatusBar_tabCompleteWrapper {
     display: flex;
-    display: -webkit-flex;
     height: 26px;
 }
 
 .mx_RoomStatusBar_tabCompleteWrapper .mx_TabCompleteBar {
     flex: 1 1 auto;
-    -webkit-flex: 1 1 auto;
 }
 
 .mx_RoomStatusBar_tabCompleteEol {
     flex: 0 0 auto;
-    -webkit-flex: 0 0 auto;
     color: $accent-color;
 }
 

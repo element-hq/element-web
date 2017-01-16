@@ -41,14 +41,12 @@ limitations under the License.
 
 .mx_IncomingCallBox_buttons {
     display: flex;
-    display: -webkit-flex;
 }
 
 .mx_IncomingCallBox_buttons_cell {
     vertical-align: middle;
     padding: 6px;
     flex: 1;
-    -webkit-flex: 1;
 }
 
 .mx_IncomingCallBox_buttons_decline,

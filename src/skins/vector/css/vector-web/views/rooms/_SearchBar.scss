@@ -18,9 +18,7 @@ limitations under the License.
     padding-top: 5px;
     padding-bottom: 5px;
     display: flex;
-    display: -webkit-flex;
     align-items: center;
-    -webkit-align-items: center;
 }
 
 .mx_SearchBar_input {
@@ -32,7 +30,6 @@ limitations under the License.
     padding-left: 11px;
     width: auto;
     flex: 1 1 0;
-    -webkit-flex: 1 1 0;
 }
 
 .mx_SearchBar_searchButton {

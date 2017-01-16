@@ -15,16 +15,12 @@ limitations under the License.
 */
 
 .mx_Spinner {
-    display: -webkit-flex;
     display: flex;
-    -webkit-align-items: center;
-    -webkit-justify-content: center;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
     flex: 1;
-    -webkit-flex: 1;
 }
 
 .mx_MatrixChat_middlePanel .mx_Spinner {

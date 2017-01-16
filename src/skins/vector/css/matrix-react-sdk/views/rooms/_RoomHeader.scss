@@ -25,36 +25,28 @@ limitations under the License.
     margin: auto;
     height: 70px;
 
-    -webkit-align-items: center;
     align-items: center;
 
-    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
 }
 
 .mx_RoomHeader_leftRow {
     margin-left: -2px;
 
-    -webkit-box-ordinal-group: 1;
     -moz-box-ordinal-group: 1;
     -ms-flex-order: 1;
-    -webkit-order: 1;
     order: 1;
 
-    -webkit-flex: 1;
     flex: 1;
 }
 
 .mx_RoomHeader_spinner {
     height: 36px;
 
-    -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
-    -webkit-order: 2;
     order: 2;
 
     padding-left: 12px;
@@ -71,16 +63,13 @@ limitations under the License.
     margin-top: -2px;
     text-align: center;
 
-    -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
-    -webkit-order: 2;
     order: 2;
 
     cursor: pointer;
 
 /*
-    -webkit-flex: 0 0 90px;
     flex: 0 0 90px;
 */
     padding-left: 12px;
@@ -88,10 +77,8 @@ limitations under the License.
 }
 
 .mx_RoomHeader_cancelButton {
-    -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
-    -webkit-order: 2;
     order: 2;
 
     cursor: pointer;
@@ -105,10 +92,8 @@ limitations under the License.
     background-color: $primary-bg-color;
     display: flex;
     align-items: center;
-    -webkit-box-ordinal-group: 3;
     -moz-box-ordinal-group: 3;
     -ms-flex-order: 3;
-    -webkit-order: 3;
     order: 3;
 }
 

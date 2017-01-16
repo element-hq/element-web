@@ -16,10 +16,8 @@ limitations under the License.
 
 .mx_SearchableEntityList {
     display: flex;
-    display: -webkit-flex;
 
     flex-direction: column;
-    -webkit-flex-direction: column;
 }
 
 .mx_SearchableEntityList_query {
@@ -49,7 +47,6 @@ limitations under the License.
 
 .mx_SearchableEntityList_listWrapper {
     flex: 1;
-    -webkit-flex: 1;
 
     overflow-y: auto;
 }
@@ -67,7 +64,6 @@ limitations under the License.
 .mx_SearchableEntityList_hrWrapper {
     width: 100%;
     flex: 0 0 auto;
-    -webkit-flex: 0 0 auto;
 }
 
 .mx_SearchableEntityList hr {

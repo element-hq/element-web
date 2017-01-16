@@ -20,34 +20,25 @@ limitations under the License.
     margin-left: auto;
     margin-right: auto;
 
-    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     flex-direction: column;
-    -webkit-flex-direction: column;
 }
 
 .mx_UserSettings .mx_RoomHeader {
-    -webkit-box-ordinal-group: 1;
     -moz-box-ordinal-group: 1;
     -ms-flex-order: 1;
-    -webkit-order: 1;
     order: 1;
 
-    -webkit-flex: 0 0 70px;
     flex: 0 0 70px;
 }
 
 .mx_UserSettings_body {
-    -webkit-box-ordinal-group: 2;
     -moz-box-ordinal-group: 2;
     -ms-flex-order: 2;
-    -webkit-order: 2;
     order: 2;
 
-    -webkit-flex: 1 1 0;
     flex: 1 1 0;
 
     margin-top: -20px;
