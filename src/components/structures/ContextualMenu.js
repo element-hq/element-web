@@ -67,7 +67,7 @@ module.exports = {
             chevronOffset.top = props.chevronOffset;
         }
 
-        // To overide the deafult chevron colour, if it's been set
+        // To override the default chevron colour, if it's been set
         var chevronCSS = "";
         if (props.menuColour) {
             chevronCSS = `
