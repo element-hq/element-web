@@ -78,6 +78,10 @@ export default class Markdown {
                 }
             }
         } else {
+            renderer.out = function(s) {
+                this.lit(s);
+            }
+
             renderer.paragraph = function(node, entering) {
                 // If there is only one top level node, just return the
                 // bare text: it's a single line of text and so should be
