@@ -116,7 +116,8 @@ function startAutoUpdate(update_base_url) {
             // it anywhere (apart from the User-Agent) so it's up to us. We could
             // (and previously did) just use the User-Agent, but this doesn't
             // rely on NSURLConnection setting the User-Agent to what we expect,
-            // and also acts as a convenient cache-buster between versions.
+            // and also acts as a convenient cache-buster to ensure that when the
+            // app updates it always gets a fresh value to avoid update-looping.
             electron.autoUpdater.setFeedURL(
                 update_base_url +
                 'macos/?localVersion=' + encodeURIComponent(electron.app.getVersion())
