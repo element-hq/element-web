@@ -62,7 +62,7 @@ limitations under the License.
     max-height: 100%;
     /* object-fit hack needed for Chrome due to Chrome not re-laying-out until you refresh */
     object-fit: contain;
-    /* background-image: url('img/trans.png'); */
+    /* background-image: url('../img/trans.png'); */
     pointer-events: all;
 }
 
