@@ -48,6 +48,7 @@ export default class Markdown {
         }
         // text and paragraph are just text
         dummy_renderer.text = function(t) { return t; }
+        dummy_renderer.softbreak = function(t) { return t; }
         dummy_renderer.paragraph = function(t) { return t; }
 
         const dummy_parser = new commonmark.Parser();
