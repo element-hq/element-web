@@ -69,57 +69,44 @@ module.exports = React.createClass({
         return this._renderCommaSeparatedList(users, this.props.summaryLength);
     },
 
-    // Test whether the first n items repeat for the duration
-    // e.g. [1,2,3,4,1,2,3] would resolve true for n = 4
-    _isRepeatedSequence: function(transitions, n) {
-        let count = 0;
-        for (let i = 0; i < transitions.length; i++) {
-            if (transitions[i % n] !== transitions[i]) {
-                return null;
-            }
+    _renderSummary: function(eventAggregates, orderedTransitionSequences) {
+        let summaries = orderedTransitionSequences.map((transitions) => {
+            let nameList = this._renderNameList(eventAggregates[transitions]);
+            let plural = eventAggregates[transitions].length > 1;
+
+            let splitTransitions = transitions.split(',');
+
+            // Some pairs of transitions are common and are repeated a lot, so canonicalise them into "pair" transitions
+            let canonicalTransitions = this._getCanonicalTransitions(splitTransitions);
+            // Remove consecutive repetitions of the same transition (like 5 consecutive 'join_and_leave's)
+            let truncatedTransitions = this._getTruncatedTransitions(canonicalTransitions);
+
+            let descs = truncatedTransitions.map((t) => {
+                return this._getDescriptionForTransition(t.transitionType, plural, t.repeats);
+            });
+
+            let desc = this._renderCommaSeparatedList(descs);
+
+            return nameList + " " + desc;
+        });
+
+        if (!summaries) {
+            return null;
         }
-        return true;
+
+        return (
+            <span>
+                {summaries.join(", ")}
+            </span>
+        );
     },
 
-    _renderCommaSeparatedList(items, itemLimit) {
-        const remaining = itemLimit === undefined ? 0 : Math.max(items.length - itemLimit, 0);
-        if (items.length === 0) {
-            return "";
-        } else if (items.length === 1) {
-            return items[0];
-        } else if (remaining) {
-            items = items.slice(0, itemLimit);
-            const other = " other" + (remaining > 1 ? "s" : "");
-            return items.join(', ') + ' and ' + remaining + other;
-        } else {
-            let last = items.pop();
-            return items.join(', ') + ' and ' + last;
-        }
-    },
-
-    _getDescriptionForTransition(t, plural, repeats) {
-        let beConjugated = plural ? "were" : "was";
-        let invitation = "their invitation" + (plural || (repeats > 1) ? "s" : "");
-
-        let res = null;
-        let map = {
-            "joined": "joined",
-            "left": "left",
-            "joined_and_left": "joined and left",
-            "left_and_joined": "left and rejoined",
-            "invite_reject": "rejected " + invitation,
-            "invite_withdrawal": "had " + invitation + " withdrawn",
-            "invited": beConjugated + " invited",
-            "banned": beConjugated + " banned",
-            "unbanned": beConjugated + " unbanned",
-            "kicked": beConjugated + " kicked",
-        };
-
-        if (Object.keys(map).includes(t)) {
-            res = map[t] + (repeats > 1 ? " " + repeats + " times" : "" );
+    _renderNameList: function(users) {
+        if (users.length === 0) {
+            return null;
         }
 
-        return res;
+        return this._renderCommaSeparatedList(users, this.props.summaryLength);
     },
 
     _getCanonicalTransitions: function(transitions) {
@@ -174,39 +161,53 @@ module.exports = React.createClass({
         return res;
     },
 
-    _renderSummary: function(eventAggregates, orderedTransitionSequences) {
-        let summaries = orderedTransitionSequences.map((transitions) => {
-            let nameList = this._renderNameList(eventAggregates[transitions]);
-            let plural = eventAggregates[transitions].length > 1;
+    /**
+     * For a certain transition, t, describe what happened to the users that
+     * underwent the transition.
+     * @param {string} t the transition type
+     * @param {boolean} plural whether there were multiple users undergoing the same transition
+     * @param {number} repeats the number of times the transition was repeated in a row
+     * @returns {string} the spoken English equivalent of the transition
+     */
+    _getDescriptionForTransition(t, plural, repeats) {
+        let beConjugated = plural ? "were" : "was";
+        let invitation = "their invitation" + (plural || (repeats > 1) ? "s" : "");
 
-            let repeats = 1;
-            let repeatExtra = 0;
+        let res = null;
+        let map = {
+            "joined": "joined",
+            "left": "left",
+            "joined_and_left": "joined and left",
+            "left_and_joined": "left and rejoined",
+            "invite_reject": "rejected " + invitation,
+            "invite_withdrawal": "had " + invitation + " withdrawn",
+            "invited": beConjugated + " invited",
+            "banned": beConjugated + " banned",
+            "unbanned": beConjugated + " unbanned",
+            "kicked": beConjugated + " kicked",
+        };
 
-            let splitTransitions = transitions.split(',');
-
-            // Some pairs of transitions are common and are repeated a lot, so canonicalise them into "pair" transitions
-            let canonicalTransitions = this._getCanonicalTransitions(splitTransitions);
-            // Remove consecutive repetitions of the same transition (like 5 consecutive 'join_and_leave's)
-            let truncatedTransitions = this._getTruncatedTransitions(canonicalTransitions);
-
-            let descs = truncatedTransitions.map((t) => {
-                return this._getDescriptionForTransition(t.transitionType, plural, t.repeats);
-            });
-
-            let desc = this._renderCommaSeparatedList(descs);
-
-            return nameList + " " + desc;
-        });
-
-        if (!summaries) {
-            return null;
+        if (Object.keys(map).includes(t)) {
+            res = map[t] + (repeats > 1 ? " " + repeats + " times" : "" );
         }
 
-        return (
-            <span>
-                {summaries.join(", ")}
-            </span>
-        );
+        return res;
+    },
+
+    _renderCommaSeparatedList(items, itemLimit) {
+        const remaining = itemLimit === undefined ? 0 : Math.max(items.length - itemLimit, 0);
+        if (items.length === 0) {
+            return "";
+        } else if (items.length === 1) {
+            return items[0];
+        } else if (remaining) {
+            items = items.slice(0, itemLimit);
+            const other = " other" + (remaining > 1 ? "s" : "");
+            return items.join(', ') + ' and ' + remaining + other;
+        } else {
+            let last = items.pop();
+            return items.join(', ') + ' and ' + last;
+        }
     },
 
     _renderAvatars: function(roomMembers) {
@@ -221,6 +222,10 @@ module.exports = React.createClass({
                 {avatars}
             </span>
         );
+    },
+
+    _getTransitionSequence: function(events) {
+        return events.map(this._getTransition);
     },
 
     _getTransition: function(e) {
@@ -243,10 +248,6 @@ module.exports = React.createClass({
                 }
             default: return null;
         }
-    },
-
-    _getTransitionSequence: function(events) {
-        return events.map(this._getTransition);
     },
 
     render: function() {
