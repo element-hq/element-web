@@ -263,41 +263,7 @@ describe.only('MemberEventListSummary', function() {
         done();
     });
 
-    it('handles multple users following the same sequence of memberships', function(done) {
-        const events = generateEvents([
-            // user_1
-            {userId : "@user_1:some.domain", prevMembership: "ban", membership: "leave", senderId: "@some_other_user:some.domain"},
-            {userId : "@user_1:some.domain", prevMembership: "leave", membership: "join"},
-            {userId : "@user_1:some.domain", prevMembership: "join", membership: "leave"},
-            {userId : "@user_1:some.domain", prevMembership: "leave", membership: "join"},
-            {userId : "@user_1:some.domain", prevMembership: "join", membership: "leave"},
-            {userId : "@user_1:some.domain", prevMembership: "leave", membership: "ban", senderId: "@some_other_user:some.domain"},
-            // user_2
-            {userId : "@user_2:some.domain", prevMembership: "ban", membership: "leave", senderId: "@some_other_user:some.domain"},
-            {userId : "@user_2:some.domain", prevMembership: "leave", membership: "join"},
-            {userId : "@user_2:some.domain", prevMembership: "join", membership: "leave"},
-            {userId : "@user_2:some.domain", prevMembership: "leave", membership: "join"},
-            {userId : "@user_2:some.domain", prevMembership: "join", membership: "leave"},
-            {userId : "@user_2:some.domain", prevMembership: "leave", membership: "ban", senderId: "@some_other_user:some.domain"},
-        ]);
-        const props = {
-            events : events,
-            children : generateTiles(events),
-            summaryLength : 1,
-            avatarsMaxLength : 5,
-            threshold : 3,
-        };
-
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
-        const summaryText = summary.innerText;
-
-        expect(summaryText).toBe("user_1 and 1 other were unbanned, joined and left 2 times and were banned");
-
-        done();
-    });
-
-    it('handles multple users following the same sequence of memberships', function(done) {
+    it('handles multiple users following the same sequence of memberships', function(done) {
         const events = generateEvents([
             // user_1
             {userId : "@user_1:some.domain", prevMembership: "ban", membership: "leave", senderId: "@some_other_user:some.domain"},
