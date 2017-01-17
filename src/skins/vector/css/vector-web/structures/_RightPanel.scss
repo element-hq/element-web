@@ -58,7 +58,8 @@ limitations under the License.
     width: 25px;
     height: 5px;
     border-radius: 5px;
-    background-color: rgba(118, 207, 166, 0.2);
+    background-color: $accent-color;
+    opacity: 0.2;
 }
 
 .mx_RightPanel_headerButton_badge {

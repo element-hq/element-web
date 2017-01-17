@@ -266,12 +266,12 @@ textarea {
 
 ::-moz-selection {
     background-color: $accent-color;
-    color: white;
+    color: $selection-fg-color;
 }
 
 ::selection {
     background-color: $accent-color;
-    color: white;
+    color: $selection-fg-color;
 }
 
 /** green button with rounded corners */
