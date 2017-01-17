@@ -78,8 +78,20 @@ export default class Markdown {
             }
         } else {
             renderer.paragraph = function(node, entering) {
-                if (entering) {
-                    this.lit('\n\n');
+                // If there is only one top level node, just return the
+                // bare text: it's a single line of text and so should be
+                // 'inline', rather than unnecessarily wrapped in its own
+                // p tag. If, however, we have multiple nodes, each gets
+                // its own p tag to keep them as separate paragraphs.
+                var par = node;
+                while (par.parent) {
+                    node = par;
+                    par = par.parent;
+                }
+                if (node != par.lastChild) {
+                    if (!entering) {
+                        this.lit('\n\n');
+                    }
                 }
             }
         }
