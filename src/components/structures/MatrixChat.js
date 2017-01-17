@@ -25,6 +25,7 @@ var SdkConfig = require("../../SdkConfig");
 var ContextualMenu = require("./ContextualMenu");
 var RoomListSorter = require("../../RoomListSorter");
 var UserActivity = require("../../UserActivity");
+var UserSettingsStore = require('../../UserSettingsStore');
 var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
 
@@ -456,6 +457,9 @@ module.exports = React.createClass({
                     middleOpacity: payload.middleOpacity,
                 });
                 break;
+            case 'set_theme':
+                this._onSetTheme(payload.value);
+                break;
             case 'on_logged_in':
                 this._onLoggedIn();
                 break;
@@ -584,6 +588,44 @@ module.exports = React.createClass({
     _onLoadCompleted: function() {
         this.props.onLoadCompleted();
         this.setState({loading: false});
+
+        // set up the right theme.
+        // XXX: this will temporarily flicker the wrong CSS.
+        dis.dispatch({
+            action: 'set_theme',
+            value: UserSettingsStore.getSyncedSetting('theme')
+        });
+    },
+
+    /**
+     * Called whenever someone changes the theme
+     */
+    _onSetTheme: function(theme) {
+        if (!theme) {
+            theme = 'light';
+        }
+
+        var i, a;
+        for (i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
+            var href = a.getAttribute("href");
+            if (href.startsWith("theme-")) {
+                if (href.startsWith("theme-" + theme + ".")) {
+                    a.disabled = false;
+                }
+                else {
+                    a.disabled = true;
+                }
+            }
+        }
+
+        if (theme === 'dark') {
+            // abuse the tinter to change all the SVG's #fff to #2d2d2d
+            // XXX: obviously this shouldn't be hardcoded here.
+            Tinter.tint(undefined, undefined, undefined, '#2d2d2d');
+        }
+        else {
+            Tinter.tint(undefined, undefined, undefined, '#ffffff');
+        }
     },
 
     /**

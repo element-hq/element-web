@@ -363,7 +363,23 @@ module.exports = React.createClass({
         */
         ];
 
+        var themes = [
+            {
+                id: 'theme',
+                label: 'Light theme',
+                value: 'light',
+            },
+            {
+                id: 'theme',
+                label: 'Dark theme',
+                value: 'dark',
+            }
+        ];
+
         var syncedSettings = UserSettingsStore.getSyncedSettings();
+        if (!syncedSettings.theme) {
+            syncedSettings.theme = 'light';
+        }
 
         return (
             <div>
@@ -379,19 +395,42 @@ module.exports = React.createClass({
                             Disable inline URL previews by default
                         </label>
                     </div>
+                    { settingsLabels.map( setting => {
+                        return <div className="mx_UserSettings_toggle" key={ setting.id }>
+                            <input id={ setting.id }
+                                   type="checkbox"
+                                   defaultChecked={ syncedSettings[setting.id] }
+                                   onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
+                            />
+                            <label htmlFor={ setting.id }>
+                                { setting.label }
+                            </label>
+                        </div>
+                    })}
+                    { themes.map( setting => {
+                        return <div className="mx_UserSettings_toggle" key={ setting.id + "_" + setting.value }>
+                            <input id={ setting.id + "_" + setting.value }
+                                   type="radio"
+                                   name={ setting.id }
+                                   value={ setting.value }
+                                   defaultChecked={ syncedSettings[setting.id] === setting.value }
+                                   onChange={ e => {
+                                            if (e.target.checked) {
+                                                UserSettingsStore.setSyncedSetting(setting.id, setting.value)
+                                            }
+                                            dis.dispatch({
+                                                action: 'set_theme',
+                                                value: setting.value,
+                                            });
+                                        }
+                                   }
+                            />
+                            <label htmlFor={ setting.id + "_" + setting.value }>
+                                { setting.label }
+                            </label>
+                        </div>
+                    })}
                 </div>
-                { settingsLabels.forEach( setting => {
-                    <div className="mx_UserSettings_toggle">
-                        <input id={ setting.id }
-                               type="checkbox"
-                               defaultChecked={ syncedSettings[setting.id] }
-                               onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
-                        />
-                        <label htmlFor={ setting.id }>
-                            { settings.label }
-                        </label>
-                    </div>
-                })}
             </div>
         );
     },
