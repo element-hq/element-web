@@ -66,10 +66,6 @@ module.exports = React.createClass({
     },
 
     _renderNameList: function(users) {
-        if (users.length === 0) {
-            return null;
-        }
-
         return this._renderCommaSeparatedList(users, this.props.summaryLength);
     },
 
