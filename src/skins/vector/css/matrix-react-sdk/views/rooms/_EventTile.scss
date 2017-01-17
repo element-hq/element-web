@@ -146,7 +146,12 @@ limitations under the License.
     z-index: 1;
     position: relative;
     width: 90px;
-    height: 1px; /* Hack to stop the height of this pushing the messages apart. Replaces marigin-top: -6px. This interacts better with a read marker being in between. Content overflows. */
+
+    /* Hack to stop the height of this pushing the messages apart.
+       Replaces margin-top: -6px. This interacts better with a read
+       marker being in between. Content overflows. */
+    height: 1px;
+
     margin-right: 10px;
 }
 
@@ -172,6 +177,9 @@ limitations under the License.
     cursor: pointer;
     top: 6px;
     right: 6px;
+    width: 19px;
+    height: 19px;
+    background-image: url($edit-button-url);
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton,
