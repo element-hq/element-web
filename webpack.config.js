@@ -15,6 +15,10 @@ module.exports = {
         // point, so that it doesn't block the pageload, but that is a separate
         // problem)
         "olm": "./src/vector/olm-loader.js",
+
+        // CSS themes
+        "theme-light": "./build/light.scss",
+        "theme-dark": "./build/dark.scss",
     },
     module: {
         preLoaders: [
