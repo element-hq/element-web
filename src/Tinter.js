@@ -42,6 +42,7 @@ var keyHex = [
     "#76CFA6", // Vector Green
     "#EAF5F0", // Vector Light Green
     "#D3EFE1", // BottomLeftMenu overlay (20% Vector Green overlaid on Vector Light Green)
+    "#FFFFFF", // white highlights of the SVGs (for switching to dark theme)
 ];
 
 // cache of our replacement colours
@@ -50,6 +51,7 @@ var colors = [
     keyHex[0],
     keyHex[1],
     keyHex[2],
+    keyHex[3],
 ];
 
 var cssFixups = [
@@ -172,7 +174,7 @@ module.exports = {
         tintables.push(tintable);
     },
 
-    tint: function(primaryColor, secondaryColor, tertiaryColor) {
+    tint: function(primaryColor, secondaryColor, tertiaryColor, whiteColor) {
 
         if (!cached) {
             calcCssFixups();
@@ -203,14 +205,19 @@ module.exports = {
             tertiaryColor = rgbToHex(rgb1);
         }
 
+        if (!whiteColor) {
+            whiteColor = colors[3];
+        }
+
         if (colors[0] === primaryColor &&
             colors[1] === secondaryColor &&
-            colors[2] === tertiaryColor)
+            colors[2] === tertiaryColor &&
+            colors[3] === whiteColor)
         {
             return;
         }
 
-        colors = [primaryColor, secondaryColor, tertiaryColor];
+        colors = [primaryColor, secondaryColor, tertiaryColor, whiteColor];
 
         if (DEBUG) console.log("Tinter.tint");
 
