@@ -396,11 +396,16 @@ module.exports = React.createClass({
         if (this.state.error) {
             error = <div className="mx_ChatInviteDialog_error">You have entered an invalid contact. Try using their Matrix ID or email address.</div>
         } else {
+            const addressSelectorHeader = <div className="mx_ChatInviteDialog_addressSelectHeader">
+                Searching known users
+            </div>;
             addressSelector = (
                 <AddressSelector ref={(ref) => {this.addressSelector = ref}}
                     addressList={ this.state.queryList }
                     onSelected={ this.onSelected }
-                    truncateAt={ TRUNCATE_QUERY_LIST } />
+                    truncateAt={ TRUNCATE_QUERY_LIST }
+                    header={ addressSelectorHeader }
+                />
             );
         }
 
