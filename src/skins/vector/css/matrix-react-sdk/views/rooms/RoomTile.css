@@ -65,7 +65,7 @@ limitations under the License.
     position: absolute;
     content: "";
     border-radius: 40px;
-    background-image: url("../img/icons_ellipsis.svg");
+    background-image: url("../../img/icons_ellipsis.svg");
     background-size: 25px;
     width: 24px;
     height: 24px;
