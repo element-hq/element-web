@@ -325,12 +325,13 @@ module.exports = React.createClass({
         }
 
         if (send_markdown) {
-            const htmlText = mdown.toHTML();
+            const htmlText = mdown.render(true);
             sendMessagePromise = isEmote ?
                 MatrixClientPeg.get().sendHtmlEmote(this.props.room.roomId, contentText, htmlText) :
                 MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, htmlText);
         }
         else {
+            const contentText = mdown.render(false);
             sendMessagePromise = isEmote ?
                 MatrixClientPeg.get().sendEmoteMessage(this.props.room.roomId, contentText) :
                 MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);
