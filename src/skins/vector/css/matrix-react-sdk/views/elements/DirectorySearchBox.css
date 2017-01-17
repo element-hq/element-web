@@ -46,7 +46,7 @@ input[type=text].mx_DirectorySearchBox_input:focus {
     padding-right: 10px;
     background-color: #efefef;
     border-radius: 3px;
-    background-image: url('../img/icon-return.svg');
+    background-image: url('../../img/icon-return.svg');
     background-position: 8px 70%;
     background-repeat: no-repeat;
     text-indent: 18px;
@@ -63,7 +63,7 @@ input[type=text].mx_DirectorySearchBox_input:focus {
 .mx_DirectorySearchBox_clear {
     display: inline-block;
     vertical-align: middle;
-    background: url('../img/icon_context_delete.svg');
+    background: url('../../img/icon_context_delete.svg');
     background-position: 0 50%;
     background-repeat: no-repeat;
     width: 15px;
