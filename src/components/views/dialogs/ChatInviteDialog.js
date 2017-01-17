@@ -27,6 +27,10 @@ var Modal = require('../../../Modal');
 
 const TRUNCATE_QUERY_LIST = 40;
 
+function escapeRegExp(str) {
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
+
 module.exports = React.createClass({
     displayName: "ChatInviteDialog",
     propTypes: {
@@ -315,13 +319,18 @@ module.exports = React.createClass({
             return true;
         }
 
-        // split spaces in name and try matching constituent parts
-        var parts = name.split(" ");
-        for (var i = 0; i < parts.length; i++) {
-            if (parts[i].indexOf(query) === 0) {
-                return true;
-            }
+        // Try to find the query following a "word boundary", except that
+        // this does avoids using \b because it only considers letters from
+        // the roman alphabet to be word characters.
+        // Instead, we look for the query following either:
+        //  * The start of the string
+        //  * Whitespace, or
+        //  * A fixed number of punctuation characters
+        let expr = new RegExp("(?:^|[\\s\\('\",\.-])" + escapeRegExp(query));
+        if (expr.test(name)) {
+            return true;
         }
+
         return false;
     },
 
