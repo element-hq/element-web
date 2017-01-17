@@ -112,7 +112,16 @@ function startAutoUpdate(update_base_url) {
         // 204 No Content. On windows it takes a base path and looks for
         // files under that path.
         if (process.platform == 'darwin') {
-            electron.autoUpdater.setFeedURL(update_base_url + 'macos/');
+            // include the current version in the URL we hit. Electron doesn't add
+            // it anywhere (apart from the User-Agent) so it's up to us. We could
+            // (and previously did) just use the User-Agent, but this doesn't
+            // rely on NSURLConnection setting the User-Agent to what we expect,
+            // and also acts as a convenient cache-buster to ensure that when the
+            // app updates it always gets a fresh value to avoid update-looping.
+            electron.autoUpdater.setFeedURL(
+                update_base_url +
+                'macos/?localVersion=' + encodeURIComponent(electron.app.getVersion())
+            );
         } else if (process.platform == 'win32') {
             electron.autoUpdater.setFeedURL(update_base_url + 'win32/' + process.arch + '/');
         } else {
