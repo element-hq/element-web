@@ -103,7 +103,7 @@ module.exports = React.createClass({
 
     _getDescriptionForTransition(t, plural, repeats) {
         let beConjugated = plural ? "were" : "was";
-        let invitation = plural ? "invitations" : "an invitation";
+        let invitation = "their invitation" + (plural || (repeats > 1) ? "s" : "");
 
         let res = null;
         let map = {
@@ -112,7 +112,7 @@ module.exports = React.createClass({
             "joined_and_left": "joined and left",
             "left_and_joined": "left and rejoined",
             "invite_reject": "rejected " + invitation,
-            "invite_withdrawal": "withdrew " + invitation,
+            "invite_withdrawal": "had " + invitation + " withdrawn",
             "invited": beConjugated + " invited",
             "banned": beConjugated + " banned",
             "unbanned": beConjugated + " unbanned",
