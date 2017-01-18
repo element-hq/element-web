@@ -17,13 +17,14 @@ limitations under the License.
 "use strict";
 
 // polyfill textencoder if necessary
+import * as TextEncodingUtf8 from 'text-encoding-utf-8';
 let TextEncoder = window.TextEncoder;
 if (!TextEncoder) {
-    TextEncoder = require('./TextEncoderPolyfill');
+    TextEncoder = TextEncodingUtf8.TextEncoder;
 }
 let TextDecoder = window.TextDecoder;
-if (TextDecoder) {
-    TextDecoder = require('./TextDecoderPolyfill');
+if (!TextDecoder) {
+    TextDecoder = TextEncodingUtf8.TextDecoder;
 }
 
 const subtleCrypto = window.crypto.subtle || window.crypto.webkitSubtle;
