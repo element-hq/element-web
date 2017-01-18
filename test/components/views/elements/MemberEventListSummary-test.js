@@ -10,7 +10,6 @@ var MatrixEvent = jssdk.MatrixEvent;
 const testUtils = require('../../../test-utils');
 describe.only('MemberEventListSummary', function() {
     let sandbox;
-    let parentDiv;
 
     // Generate dummy event tiles for use in simulating an expanded MELS
     const generateTiles = (events) => {
@@ -85,8 +84,6 @@ describe.only('MemberEventListSummary', function() {
     beforeEach(function() {
         testUtils.beforeEach(this);
         sandbox = testUtils.stubClient();
-        parentDiv = document.createElement('div');
-        document.body.appendChild(parentDiv);
     });
 
     afterEach(function() {
@@ -155,7 +152,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -189,7 +186,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -225,7 +222,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -258,7 +255,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -292,7 +289,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -318,7 +315,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -349,7 +346,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -389,7 +386,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -415,7 +412,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -439,7 +436,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 1, // threshold = 1 to force collapse
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -465,7 +462,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -490,7 +487,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
@@ -513,7 +510,7 @@ describe.only('MemberEventListSummary', function() {
             threshold : 3,
         };
 
-        const instance = ReactDOM.render(<MemberEventListSummary {...props} />, parentDiv);
+        const instance = ReactTestUtils.renderIntoDocument(<MemberEventListSummary {...props} />);
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(instance, "mx_MemberEventListSummary_summary");
         const summaryText = summary.innerText;
 
