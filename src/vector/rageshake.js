@@ -23,7 +23,9 @@ limitations under the License.
 //    local storage, which does work in incognito mode. We also need to handle the case where there are 2+ tabs. Each JS runtime
 //    generates a random string which serves as the "ID" for that tab/session. These IDs are stored along with the log lines.
 //  - Bug reports are sent as a POST over HTTPS: it purposefully does not use Matrix as bug reports may be made when Matrix is
-//    not responsive (which may be the cause of the bug).
+//    not responsive (which may be the cause of the bug). We send the most recent N MB of UTF-8 log data, starting with the most
+//    recent, which we know because the "ID"s are actually timestamps. We then purge the remaining logs. We also do this check
+//    on startup to prevent logs from accumulating.
 
 const FLUSH_RATE_MS = 30 * 1000;
 
@@ -143,6 +145,39 @@ class IndexedDBLogStore {
         });
     }
 
+    /**
+     * Consume the most recent logs and return them. Older logs which are not returned are deleted at the same time,
+     * so this can be called at startup to do house-keeping to keep the logs from growing too large.
+     *
+     * @param {boolean} clearAll True to clear the most recent logs returned in addition to the
+     * older logs. This is desirable when sending bug reports as we do not want to submit the
+     * same logs twice. This is not desirable when doing house-keeping at startup in case they
+     * want to submit a bug report later.
+     * @return {Promise<Object[]>} Resolves to an array of objects. The array is sorted in time (oldest first) based on
+     * when the log file was created (the log ID). The objects have said log ID in an "id" field and "lines" which is a
+     * big string with all the new-line delimited logs.
+     */
+    consume(clearAll) {
+        const MAX_LOG_SIZE = 1024 * 1024 * 50; // 50 MB
+        // To gather all the logs, we first query for every log entry with index "0", this will let us
+        // know all the IDs from different tabs/sessions.
+        return new Promise((resolve, reject) => {
+            // let txn = this.db.transaction("logs", "readonly");
+            // let objectStore = txn.objectStore("logs");
+
+            // we know each entry has a unique ID, and we know IDs are timestamps, so accumulate all the IDs,
+            // ignoring the logs for now, and sort them to work out the correct log ID ordering.
+
+            // Starting with the most recent ID, fetch the logs (all indices) for said ID and accumulate them
+            // in order. After fetching ALL the logs for an ID, recheck the total length of the logs to work out
+            // if we have exceeded the max size cutoff for "recent" logs.
+
+            // Remove all logs that are older than the cutoff (or the entire logs if clearAll is set).
+
+            // Return the logs that are within the cutoff.
+        });
+    }
+
     _generateLogEntry(lines) {
         return {
             id: this.id,
@@ -187,9 +222,8 @@ module.exports = {
      * @return {Promise} Resolved when the bug report is sent.
      */
     sendBugReport: function(userText) {
-        // To gather all the logs, we first query for every log entry with index "0", this will let us
-        // know all the IDs from different tabs/sessions.
-
-        // Send logs grouped by ID
+        return store.consume(true).then((data) => {
+            // Send logs grouped by ID
+        });
     }
 };
