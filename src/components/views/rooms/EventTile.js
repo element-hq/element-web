@@ -263,7 +263,7 @@ module.exports = WithMatrixClient(React.createClass({
 
         // The window X and Y offsets are to adjust position when zoomed in to page
         var x = buttonRect.right + window.pageXOffset;
-        var y = (buttonRect.top + (e.target.height / 2) + window.pageYOffset) - 19;
+        var y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
         var self = this;
         ContextualMenu.createMenu(MessageContextMenu, {
             chevronOffset: 10,
@@ -465,7 +465,7 @@ module.exports = WithMatrixClient(React.createClass({
         }
 
         var editButton = (
-            <img className="mx_EventTile_editButton" src="img/icon_context_message.svg" width="19" height="19" alt="Options" title="Options" onClick={this.onEditClicked} />
+            <span className="mx_EventTile_editButton" title="Options" onClick={this.onEditClicked} />
         );
 
         var e2e;

@@ -42,6 +42,7 @@ var keyHex = [
     "#76CFA6", // Vector Green
     "#EAF5F0", // Vector Light Green
     "#D3EFE1", // BottomLeftMenu overlay (20% Vector Green overlaid on Vector Light Green)
+    "#FFFFFF", // white highlights of the SVGs (for switching to dark theme)
 ];
 
 // cache of our replacement colours
@@ -50,6 +51,7 @@ var colors = [
     keyHex[0],
     keyHex[1],
     keyHex[2],
+    keyHex[3],
 ];
 
 var cssFixups = [
@@ -210,7 +212,9 @@ module.exports = {
             return;
         }
 
-        colors = [primaryColor, secondaryColor, tertiaryColor];
+        colors[0] = primaryColor;
+        colors[1] = secondaryColor;
+        colors[2] = tertiaryColor;
 
         if (DEBUG) console.log("Tinter.tint");
 
@@ -219,6 +223,19 @@ module.exports = {
 
         // tell all the SVGs to go fix themselves up
         // we don't do this as a dispatch otherwise it will visually lag
+        tintables.forEach(function(tintable) {
+            tintable();
+        });
+    },
+
+    tintSvgWhite: function(whiteColor) {
+        if (!whiteColor) {
+            whiteColor = colors[3];
+        }
+        if (colors[3] === whiteColor) {
+            return;
+        }
+        colors[3] = whiteColor;
         tintables.forEach(function(tintable) {
             tintable();
         });
