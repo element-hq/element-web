@@ -605,7 +605,7 @@ module.exports = React.createClass({
                         <label htmlFor={id}>{this.nameForMedium(val.medium)}</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
-                        <input key={val.address} id={id} value={val.address} disabled />
+                        <input type="text" key={val.address} id={id} value={val.address} disabled />
                     </div>
                     <div className="mx_UserSettings_threepidButton">
                         <img src="img/icon_context_delete.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
