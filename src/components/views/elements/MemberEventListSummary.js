@@ -65,20 +65,27 @@ module.exports = React.createClass({
         });
     },
 
-    _renderNameList: function(users) {
-        return this._renderCommaSeparatedList(users, this.props.summaryLength);
-    },
-
+    /**
+     * Render the JSX for users aggregated by their transition sequences (`eventAggregates`) where
+     * the sequences are ordered by `orderedTransitionSequences`.
+     * @param {object[]} eventAggregates a map of transition sequence to array of user display names
+     * or user IDs.
+     * @param {string[]} orderedTransitionSequences an array which is some ordering of
+     * `Object.keys(eventAggregates)`.
+     * @returns {ReactElement} a single <span> containing the textual summary of the aggregated
+     * events that occurred.
+     */
     _renderSummary: function(eventAggregates, orderedTransitionSequences) {
         let summaries = orderedTransitionSequences.map((transitions) => {
-            let nameList = this._renderNameList(eventAggregates[transitions]);
-            let plural = eventAggregates[transitions].length > 1;
+            let userNames = eventAggregates[transitions];
+            let nameList = this._renderNameList(userNames);
+            let plural = userNames.length > 1;
 
             let splitTransitions = transitions.split(',');
 
-            // Some pairs of transitions are common and are repeated a lot, so canonicalise them into "pair" transitions
+            // Some neighbouring transitions are common, so canonicalise some into "pair" transitions
             let canonicalTransitions = this._getCanonicalTransitions(splitTransitions);
-            // Remove consecutive repetitions of the same transition (like 5 consecutive 'join_and_leave's)
+            // Transform into consecutive repetitions of the same transition (like 5 consecutive 'joined_and_left's)
             let truncatedTransitions = this._getTruncatedTransitions(canonicalTransitions);
 
             let descs = truncatedTransitions.map((t) => {
@@ -101,14 +108,30 @@ module.exports = React.createClass({
         );
     },
 
+    /**
+     * @param {string[]} users an array of user display names or user IDs.
+     * @returns {string} a comma-separated list that ends with "and [n] others" if there are
+     * more items in `users` than `this.props.summaryLength`, which is the number of names
+     * included before "and [n] others".
+     */
     _renderNameList: function(users) {
-        if (users.length === 0) {
-            return null;
-        }
-
         return this._renderCommaSeparatedList(users, this.props.summaryLength);
     },
 
+    /**
+     * Canonicalise an array of transitions into an array of transitions and how many times
+     * they are repeated consecutively.
+     *
+     * An array of 123 "joined_and_left" transitions, would result in:
+     * ```
+     * [{
+     *   transitionType: "joined_and_left"
+     *   repeats: 123
+     * }, ... ]
+     * ```
+     * @param {string[]} transitions the array of transitions to transform.
+     * @returns {object[]} an array of truncated transitions.
+     */
     _getCanonicalTransitions: function(transitions) {
         let modMap = {
             'joined' : {
@@ -142,6 +165,20 @@ module.exports = React.createClass({
         return res;
     },
 
+    /**
+     * Transform an array of transitions into an array of transitions and how many times
+     * they are repeated consecutively.
+     *
+     * An array of 123 "joined_and_left" transitions, would result in:
+     * ```
+     * [{
+     *   transitionType: "joined_and_left"
+     *   repeats: 123
+     * }, ... ]
+     * ```
+     * @param {string[]} transitions the array of transitions to transform.
+     * @returns {object[]} an array of truncated transitions.
+     */
     _getTruncatedTransitions: function(transitions) {
         let res = [];
         for (let i = 0; i < transitions.length; i++) {
@@ -154,20 +191,16 @@ module.exports = React.createClass({
                 });
             }
         }
-        // returns [{
-        //     transitionType: "joined_and_left"
-        //     repeats: 123
-        // }, ... ]
         return res;
     },
 
     /**
      * For a certain transition, t, describe what happened to the users that
      * underwent the transition.
-     * @param {string} t the transition type
-     * @param {boolean} plural whether there were multiple users undergoing the same transition
-     * @param {number} repeats the number of times the transition was repeated in a row
-     * @returns {string} the spoken English equivalent of the transition
+     * @param {string} t the transition type.
+     * @param {boolean} plural whether there were multiple users undergoing the same transition.
+     * @param {number} repeats the number of times the transition was repeated in a row.
+     * @returns {string} the written English equivalent of the transition.
      */
     _getDescriptionForTransition(t, plural, repeats) {
         let beConjugated = plural ? "were" : "was";
@@ -194,6 +227,16 @@ module.exports = React.createClass({
         return res;
     },
 
+    /**
+     * Constructs a written English string representing `items`, with an optional limit on the number
+     * of items included in the result. If specified and if the length of `items` is greater than the
+     * limit, the string "and n others" will be appended onto the result.
+     * If `items` is empty, returns the empty string. If there is only one item, return it.
+     * @param {string[]} items the items to construct a string from.
+     * @param {number?} itemLimit the number by which to limit the list.
+     * @returns {string} a string constructed by joining `items` with a comma between each
+     * item, but with the last item appended as " and [lastItem]".
+     */
     _renderCommaSeparatedList(items, itemLimit) {
         const remaining = itemLimit === undefined ? 0 : Math.max(items.length - itemLimit, 0);
         if (items.length === 0) {
@@ -228,6 +271,14 @@ module.exports = React.createClass({
         return events.map(this._getTransition);
     },
 
+    /**
+     * Enumerate a given membership event, `e`, where `getContent().membership` has
+     * changed for each transition allowed by the Matrix protocol. This attempts to
+     * enumerate the membership changes that occur in `../../../TextForEvent.js`.
+     * @param {MatrixEvent} e the membership change event to enumerate.
+     * @returns {string?} the transition type given to this event. This defaults to `null`
+     * if a transition is not recognised.
+     */
     _getTransition: function(e) {
         switch (e.mxEvent.getContent().membership) {
             case 'invite': return 'invited';
@@ -268,16 +319,25 @@ module.exports = React.createClass({
             );
         }
 
-        // Map user IDs to all of the user's member events in eventsToRender
+        // Map user IDs to an array of objects:
         let userEvents = {
-            // $userId : []
+            // $userId : [{
+            //     // The original event
+            //     mxEvent: e,
+            //     // The display name of the user (if not, then user ID)
+            //     displayName: e.target.name || userId,
+            //     // The original index of the event in this.props.events
+            //     index: index,
+            // }]
         };
+        let avatarMembers = [];
 
         eventsToRender.forEach((e, index) => {
             const userId = e.getStateKey();
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = [];
+                avatarMembers.push(e.target);
             }
             userEvents[userId].push({
                 mxEvent: e,
@@ -299,8 +359,6 @@ module.exports = React.createClass({
             // $aggregateType : int
         };
 
-        let avatarMembers = [];
-
         let users = Object.keys(userEvents);
         users.forEach(
             (userId) => {
@@ -320,8 +378,6 @@ module.exports = React.createClass({
                 if (aggregateIndices[seq] === -1 || firstEvent.index < aggregateIndices[seq]) {
                     aggregateIndices[seq] = firstEvent.index;
                 }
-
-                avatarMembers.push(firstEvent.mxEvent.target);
             }
         );
 
