@@ -203,7 +203,17 @@ class Register extends Signup {
                 } else if (error.errcode == 'M_INVALID_USERNAME') {
                     throw new Error("User names may only contain alphanumeric characters, underscores or dots!");
                 } else if (error.httpStatus >= 400 && error.httpStatus < 500) {
-                    throw new Error(`Registration failed! (${error.httpStatus})`);
+                    let msg = null;
+                    if (error.message) {
+                        msg = error.message;
+                    } else if (error.errcode) {
+                        msg = error.errcode;
+                    }
+                    if (msg) {
+                        throw new Error(`Registration failed! (${error.httpStatus}) - ${msg}`);
+                    } else {
+                        throw new Error(`Registration failed! (${error.httpStatus}) - That's all we know.`);
+                    }
                 } else if (error.httpStatus >= 500 && error.httpStatus < 600) {
                     throw new Error(
                         `Server error during registration! (${error.httpStatus})`

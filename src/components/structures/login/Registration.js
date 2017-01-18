@@ -49,6 +49,16 @@ module.exports = React.createClass({
         email: React.PropTypes.string,
         username: React.PropTypes.string,
         guestAccessToken: React.PropTypes.string,
+        teamsConfig: React.PropTypes.shape({
+            // Email address to request new teams
+            supportEmail: React.PropTypes.string,
+            teams: React.PropTypes.arrayOf(React.PropTypes.shape({
+                // The displayed name of the team
+                "name": React.PropTypes.string,
+                // The suffix with which every team email address ends
+                "emailSuffix": React.PropTypes.string,
+            })).required,
+        }),
 
         defaultDeviceDisplayName: React.PropTypes.string,
 
@@ -254,6 +264,7 @@ module.exports = React.createClass({
                         defaultUsername={this.state.formVals.username}
                         defaultEmail={this.state.formVals.email}
                         defaultPassword={this.state.formVals.password}
+                        teamsConfig={this.props.teamsConfig}
                         guestUsername={this.props.username}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
