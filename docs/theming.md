@@ -13,7 +13,7 @@ To define a theme for Riot:
  1. Pick a name, e.g. `teal`. at time of writing we have `light` and `dark`.
  2. Fork `src/skins/vector/css/themes/dark.scss` to be teal.scss
  3. Fork `src/skins/vector/css/themes/_base.scss` to be _teal.scss
- 4. Override variables in _teal.css as desired. You may wish to delete ones
+ 4. Override variables in _teal.scss as desired. You may wish to delete ones
     which don't differ from _base.scss, to make it clear which are being
     overridden. If every single colour is being changed (as per _dark.scss)
     then you might as well keep them all.
