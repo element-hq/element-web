@@ -71,6 +71,8 @@ module.exports = React.createClass({
             imgUrl = "img/avatar-error.svg";
         }
 
+        // Removing networks for now as they're not really supported
+        /*
         var network;
         if (this.props.networkUrl !== "") {
             network = (
@@ -79,6 +81,7 @@ module.exports = React.createClass({
                 </div>
             );
         }
+        */
 
         var info;
         var error = false;
@@ -145,7 +148,6 @@ module.exports = React.createClass({
 
         return (
             <div className={classes}>
-                { network }
                 <div className="mx_AddressTile_avatar">
                     <BaseAvatar width={25} height={25} name={name} title={name} url={imgUrl} />
                 </div>

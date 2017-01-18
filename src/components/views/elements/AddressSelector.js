@@ -25,6 +25,8 @@ module.exports = React.createClass({
 
     propTypes: {
         onSelected: React.PropTypes.func.isRequired,
+
+        // List of strings: the addresses to display
         addressList: React.PropTypes.array.isRequired,
         truncateAt: React.PropTypes.number.isRequired,
         selected: React.PropTypes.number,
@@ -125,7 +127,7 @@ module.exports = React.createClass({
                 // method, how far to scroll when using the arrow keys
                 addressList.push(
                     <div className={classes} onClick={this.onClick(i)} onMouseEnter={this.onMouseEnter(i)} onMouseLeave={this.onMouseLeave} key={i} ref={(ref) => { this.addressListElement = ref; }} >
-                        <AddressTile address={this.props.addressList[i].userId} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
+                        <AddressTile address={this.props.addressList[i]} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
                     </div>
                 );
             }

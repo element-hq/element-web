@@ -154,14 +154,26 @@ module.exports = React.createClass({
     },
 
     onQueryChanged: function(ev) {
-        var query = ev.target.value;
-        var queryList = [];
+        const query = ev.target.value;
+        let queryList = [];
 
         // Only do search if there is something to search
-        if (query.length > 0) {
+        if (query.length > 0 && query != '@') {
+            // filter the known users list
             queryList = this._userList.filter((user) => {
                 return this._matches(query, user);
+            }).map((user) => {
+                return user.userId;
             });
+
+            // If the query isn't a user we know about, but is a
+            // valid address, add an entry for that
+            if (queryList.length == 0) {
+                const addrType = Invite.getAddressType(query);
+                if (addrType !== null) {
+                    queryList.push(query);
+                }
+            }
         }
 
         this.setState({
