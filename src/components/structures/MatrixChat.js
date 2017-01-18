@@ -588,13 +588,6 @@ module.exports = React.createClass({
     _onLoadCompleted: function() {
         this.props.onLoadCompleted();
         this.setState({loading: false});
-
-        // set up the right theme.
-        // XXX: this will temporarily flicker the wrong CSS.
-        dis.dispatch({
-            action: 'set_theme',
-            value: UserSettingsStore.getSyncedSetting('theme')
-        });
     },
 
     /**
@@ -729,6 +722,16 @@ module.exports = React.createClass({
             dis.dispatch({
                 action: 'logout'
             });
+        });
+        cli.on("accountData", function(ev) {
+            if (ev.getType() === 'im.vector.web.settings') {
+                if (ev.getContent() && ev.getContent().theme) {
+                    dis.dispatch({
+                        action: 'set_theme',
+                        value: ev.getContent().theme,
+                    });
+                }
+            }
         });
     },
 
