@@ -10,8 +10,16 @@ from __future__ import print_function
 import argparse
 import os
 import os.path
+import subprocess
+import sys
 import tarfile
-import urllib
+
+try:
+    # python3
+    from urllib.request import urlretrieve
+except ImportError:
+    # python2
+    from urllib import urlretrieve
 
 class DeployException(Exception):
     pass
@@ -56,6 +64,7 @@ class Deployer:
         self.bundles_path = None
         self.should_clean = False
         self.config_location = None
+        self.verify_signature = True
 
     def deploy(self, tarball, extract_path):
         """Download a tarball if necessary, and unpack it
@@ -65,9 +74,15 @@ class Deployer:
         """
         print("Deploying %s to %s" % (tarball, extract_path))
 
+        name_str = os.path.basename(tarball).replace(".tar.gz", "")
+        extracted_dir = os.path.join(extract_path, name_str)
+        if os.path.exists(extracted_dir):
+            raise DeployException('Cannot unpack %s: %s already exists' % (
+                tarball, extracted_dir))
+
         downloaded = False
         if tarball.startswith("http://") or tarball.startswith("https://"):
-            tarball = self.download_file(tarball)
+            tarball = self.download_and_verify(tarball)
             print("Downloaded file: %s" % tarball)
             downloaded = True
 
@@ -78,8 +93,6 @@ class Deployer:
             if self.should_clean and downloaded:
                 os.remove(tarball)
 
-        name_str = os.path.basename(tarball).replace(".tar.gz", "")
-        extracted_dir = os.path.join(extract_path, name_str)
         print ("Extracted into: %s" % extracted_dir)
 
         if self.config_location:
@@ -101,12 +114,24 @@ class Deployer:
             )
         return extracted_dir
 
+    def download_and_verify(self, url):
+        tarball = self.download_file(url)
+
+        if self.verify_signature:
+            sigfile = self.download_file(url + ".asc")
+            subprocess.check_call(["gpg", "--verify", sigfile, tarball])
+
+        return tarball
+
     def download_file(self, url):
         if not os.path.isdir(self.packages_path):
             os.mkdir(self.packages_path)
         local_filename = os.path.join(self.packages_path,
                                       url.split('/')[-1])
-        urllib.urlretrieve(url, local_filename)
+        sys.stdout.write("Downloading %s -> %s..." % (url, local_filename))
+        sys.stdout.flush()
+        urlretrieve(url, local_filename)
+        print ("Done")
         return local_filename
 
 if __name__ == "__main__":

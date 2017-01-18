@@ -214,6 +214,12 @@ if __name__ == "__main__":
     deployer.should_clean = args.clean
     deployer.config_location = args.config
 
+    # we don't pgp-sign jenkins artifacts; instead we rely on HTTPS access to
+    # the jenkins server (and the jenkins server not being compromised and/or
+    # github not serving it compromised source). If that's not good enough for
+    # you, don't use riot.im/develop.
+    deployer.verify_signature = False
+
     if args.tarball_uri is not None:
         build_dir = os.path.join(arg_extract_path, "test-%i" % (time.time()))
         deploy_tarball(args.tarball_uri, build_dir)
