@@ -36,6 +36,13 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
 
+const rageshake = require("./rageshake");
+rageshake.init().then(() => {
+    console.log("Initialised rageshake");
+}, (err) => {
+    console.error("Failed to initialise rageshake: " + err);
+});
+
 
  // add React and ReactPerf to the global namespace, to make them easier to
  // access via the console
