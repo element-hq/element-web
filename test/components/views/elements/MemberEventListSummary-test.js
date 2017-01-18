@@ -6,7 +6,7 @@ const sdk = require('matrix-react-sdk');
 const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 
 const testUtils = require('../../../test-utils');
-describe('MemberEventListSummary', function() {
+describe.only('MemberEventListSummary', function() {
     let sandbox;
     let parentDiv;
 
