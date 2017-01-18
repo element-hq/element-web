@@ -78,6 +78,9 @@ export default class Markdown {
                 }
             }
         } else {
+            // The default `out` function only sends the input through an XML
+            // escaping function, which causes messages to be entity encoded,
+            // which we don't want in this case.
             renderer.out = function(s) {
                 this.lit(s);
             }
