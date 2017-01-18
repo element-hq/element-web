@@ -4,12 +4,15 @@ const ReactDOM = require("react-dom");
 const ReactTestUtils = require('react-addons-test-utils');
 const sdk = require('matrix-react-sdk');
 const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
+var jssdk = require('matrix-js-sdk');
+var MatrixEvent = jssdk.MatrixEvent;
 
 const testUtils = require('../../../test-utils');
 describe.only('MemberEventListSummary', function() {
     let sandbox;
     let parentDiv;
 
+    // Generate dummy event tiles for use in simulating an expanded MELS
     const generateTiles = (events) => {
         return events.map((e) => {
             return (
@@ -20,42 +23,41 @@ describe.only('MemberEventListSummary', function() {
         });
     };
 
+    /**
+     * Generates a membership event with the target of the event set as a mocked RoomMember based
+     * on `parameters.userId`.
+     * @param {string} eventId the ID of the event.
+     * @param {object} parameters the parameters to use to create the event.
+     * @param {string} parameters.membership the membership to assign to `content.membership`
+     * @param {string} parameters.userId the state key and target userId of the event. If
+     * `parameters.senderId` is not specified, this is also used as the event sender.
+     * @param {string} parameters.prevMembership the membership to assign to
+     * `prev_content.membership`.
+     * @param {string} parameters.senderId the user ID of the sender of the event. Optional.
+     * Defaults to `parameters.userId`.
+     * @returns {MatrixEvent} the event created.
+     */
     const generateMembershipEvent = (eventId, parameters) => {
-        let membership = parameters.membership;
-        let userId = parameters.userId;
-        let prevMembership = parameters.prevMembership;
-        let senderId = parameters.senderId;
-        return {
-            content: {
-                membership: membership,
-            },
-            target: {
-                name: userId.match(/@([^:]*):/)[1],
+        let e = testUtils.mkMembership({
+            event: true,
+            user: parameters.senderId || parameters.userId,
+            skey: parameters.userId,
+            mship: parameters.membership,
+            prevMship: parameters.prevMembership,
+            target : {
+                name: parameters.userId.match(/@([^:]*):/)[1], // Use localpart as display name
+                userId: parameters.userId,
                 getAvatarUrl: () => {
                     return "avatar.jpeg";
                 },
-                userId: userId,
             },
-            getId: () => {
-                return eventId;
-            },
-            getContent: function() {
-                return this.content;
-            },
-            getPrevContent: function() {
-                return {
-                    membership: prevMembership ? prevMembership : this.content,
-                };
-            },
-            getSender: () => {
-                return senderId || userId;
-            },
-            getStateKey: () => {
-                return userId;
-            },
-        };
+        });
+        // Override random event ID
+        e.event.event_id = eventId;
+        return e;
     };
 
+    // Generate mock MatrixEvents from the array of parameters
     const generateEvents = (parameters) => {
         const res = [];
         for (let i = 0; i < parameters.length; i++) {
@@ -64,6 +66,9 @@ describe.only('MemberEventListSummary', function() {
         return res;
     };
 
+    // Generate the same sequence of `events` for `n` users, where each user ID
+    // is created by replacing the first "$" in userIdTemplate with `i` for
+    // `i = 0 .. n`.
     const generateEventsForUsers = (userIdTemplate, n, events) => {
         let eventsForUsers = [];
         let userId = "";
@@ -71,7 +76,6 @@ describe.only('MemberEventListSummary', function() {
             userId = userIdTemplate.replace('$', i);
             events.forEach((e) => {
                 e.userId = userId;
-                return e;
             });
             eventsForUsers = eventsForUsers.concat(generateEvents(events));
         }
