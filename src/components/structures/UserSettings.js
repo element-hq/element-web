@@ -32,6 +32,47 @@ var AddThreepid = require('../../AddThreepid');
 const REACT_SDK_VERSION =
       'dist' in package_json ? package_json.version : package_json.gitHead || "<local>";
 
+
+// Enumerate some simple 'flip a bit' UI settings (if any)
+const SETTINGS_LABELS = [
+/*
+    {
+        id: 'alwaysShowTimestamps',
+        label: 'Always show message timestamps',
+    },
+    {
+        id: 'showTwelveHourTimestamps',
+        label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
+    },
+    {
+        id: 'useCompactLayout',
+        label: 'Use compact timeline layout',
+    },
+    {
+        id: 'useFixedWidthFont',
+        label: 'Use fixed width font',
+    },
+*/
+];
+
+// Enumerate the available themes, with a nice human text label.
+// XXX: Ideally we would have a theme manifest or something and they'd be nicely
+// packaged up in a single directory, and/or located at the application layer.
+// But for now for expedience we just hardcode them here.
+const THEMES = [
+    {
+        id: 'theme',
+        label: 'Light theme',
+        value: 'light',
+    },
+    {
+        id: 'theme',
+        label: 'Dark theme',
+        value: 'dark',
+    }
+];
+
+
 module.exports = React.createClass({
     displayName: 'UserSettings',
 
@@ -93,6 +134,12 @@ module.exports = React.createClass({
             middleOpacity: 0.3,
         });
         this._refreshFromServer();
+
+        var syncedSettings = UserSettingsStore.getSyncedSettings();
+        if (!syncedSettings.theme) {
+            syncedSettings.theme = 'light';
+        }
+        this._syncedSettings = syncedSettings;
     },
 
     componentDidMount: function() {
@@ -342,97 +389,66 @@ module.exports = React.createClass({
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
 
-        var settingsLabels = [
-        /*
-            {
-                id: 'alwaysShowTimestamps',
-                label: 'Always show message timestamps',
-            },
-            {
-                id: 'showTwelveHourTimestamps',
-                label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
-            },
-            {
-                id: 'useCompactLayout',
-                label: 'Use compact timeline layout',
-            },
-            {
-                id: 'useFixedWidthFont',
-                label: 'Use fixed width font',
-            },
-        */
-        ];
-
-        var themes = [
-            {
-                id: 'theme',
-                label: 'Light theme',
-                value: 'light',
-            },
-            {
-                id: 'theme',
-                label: 'Dark theme',
-                value: 'dark',
-            }
-        ];
-
-        var syncedSettings = UserSettingsStore.getSyncedSettings();
-        if (!syncedSettings.theme) {
-            syncedSettings.theme = 'light';
-        }
-
         return (
             <div>
                 <h3>User Interface</h3>
                 <div className="mx_UserSettings_section">
-                    <div className="mx_UserSettings_toggle">
-                        <input id="urlPreviewsDisabled"
-                               type="checkbox"
-                               defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
-                               onChange={ e => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
-                        />
-                        <label htmlFor="urlPreviewsDisabled">
-                            Disable inline URL previews by default
-                        </label>
-                    </div>
-                    { settingsLabels.map( setting => {
-                        return <div className="mx_UserSettings_toggle" key={ setting.id }>
-                            <input id={ setting.id }
-                                   type="checkbox"
-                                   defaultChecked={ syncedSettings[setting.id] }
-                                   onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
-                            />
-                            <label htmlFor={ setting.id }>
-                                { setting.label }
-                            </label>
-                        </div>
-                    })}
-                    { themes.map( setting => {
-                        return <div className="mx_UserSettings_toggle" key={ setting.id + "_" + setting.value }>
-                            <input id={ setting.id + "_" + setting.value }
-                                   type="radio"
-                                   name={ setting.id }
-                                   value={ setting.value }
-                                   defaultChecked={ syncedSettings[setting.id] === setting.value }
-                                   onChange={ e => {
-                                            if (e.target.checked) {
-                                                UserSettingsStore.setSyncedSetting(setting.id, setting.value)
-                                            }
-                                            dis.dispatch({
-                                                action: 'set_theme',
-                                                value: setting.value,
-                                            });
-                                        }
-                                   }
-                            />
-                            <label htmlFor={ setting.id + "_" + setting.value }>
-                                { setting.label }
-                            </label>
-                        </div>
-                    })}
+                    { this._renderUrlPreviewSelector() }
+                    { SETTINGS_LABELS.map( this._renderSyncedSetting ) }
+                    { THEMES.map( this._renderThemeSelector ) }
                 </div>
             </div>
         );
+    },
+
+    _renderUrlPreviewSelector: function() {
+        return <div className="mx_UserSettings_toggle">
+            <input id="urlPreviewsDisabled"
+                   type="checkbox"
+                   defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
+                   onChange={ e => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
+            />
+            <label htmlFor="urlPreviewsDisabled">
+                Disable inline URL previews by default
+            </label>
+        </div>
+    },
+
+    _renderSyncedSetting: function(setting) {
+        return <div className="mx_UserSettings_toggle" key={ setting.id }>
+            <input id={ setting.id }
+                   type="checkbox"
+                   defaultChecked={ this._syncedSettings[setting.id] }
+                   onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
+            />
+            <label htmlFor={ setting.id }>
+                { setting.label }
+            </label>
+        </div>
+    },
+
+    _renderThemeSelector: function(setting) {
+        return <div className="mx_UserSettings_toggle" key={ setting.id + "_" + setting.value }>
+            <input id={ setting.id + "_" + setting.value }
+                   type="radio"
+                   name={ setting.id }
+                   value={ setting.value }
+                   defaultChecked={ this._syncedSettings[setting.id] === setting.value }
+                   onChange={ e => {
+                            if (e.target.checked) {
+                                UserSettingsStore.setSyncedSetting(setting.id, setting.value)
+                            }
+                            dis.dispatch({
+                                action: 'set_theme',
+                                value: setting.value,
+                            });
+                        }
+                   }
+            />
+            <label htmlFor={ setting.id + "_" + setting.value }>
+                { setting.label }
+            </label>
+        </div>
     },
 
     _renderCryptoInfo: function() {

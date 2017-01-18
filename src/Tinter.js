@@ -174,7 +174,7 @@ module.exports = {
         tintables.push(tintable);
     },
 
-    tint: function(primaryColor, secondaryColor, tertiaryColor, whiteColor) {
+    tint: function(primaryColor, secondaryColor, tertiaryColor) {
 
         if (!cached) {
             calcCssFixups();
@@ -205,19 +205,16 @@ module.exports = {
             tertiaryColor = rgbToHex(rgb1);
         }
 
-        if (!whiteColor) {
-            whiteColor = colors[3];
-        }
-
         if (colors[0] === primaryColor &&
             colors[1] === secondaryColor &&
-            colors[2] === tertiaryColor &&
-            colors[3] === whiteColor)
+            colors[2] === tertiaryColor)
         {
             return;
         }
 
-        colors = [primaryColor, secondaryColor, tertiaryColor, whiteColor];
+        colors[0] = primaryColor;
+        colors[1] = secondaryColor;
+        colors[2] = tertiaryColor;
 
         if (DEBUG) console.log("Tinter.tint");
 
@@ -226,6 +223,19 @@ module.exports = {
 
         // tell all the SVGs to go fix themselves up
         // we don't do this as a dispatch otherwise it will visually lag
+        tintables.forEach(function(tintable) {
+            tintable();
+        });
+    },
+
+    tintSvgWhite: function(whiteColor) {
+        if (!whiteColor) {
+            whiteColor = colors[3];
+        }
+        if (colors[3] === whiteColor) {
+            return;
+        }
+        colors[3] = whiteColor;
         tintables.forEach(function(tintable) {
             tintable();
         });

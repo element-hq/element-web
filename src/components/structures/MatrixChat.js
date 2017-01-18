@@ -608,8 +608,9 @@ module.exports = React.createClass({
         var i, a;
         for (i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
             var href = a.getAttribute("href");
-            if (href.startsWith("theme-")) {
-                if (href.startsWith("theme-" + theme + ".")) {
+            var match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
+            if (match) {
+                if (match[1] === theme) {
                     a.disabled = false;
                 }
                 else {
@@ -621,10 +622,10 @@ module.exports = React.createClass({
         if (theme === 'dark') {
             // abuse the tinter to change all the SVG's #fff to #2d2d2d
             // XXX: obviously this shouldn't be hardcoded here.
-            Tinter.tint(undefined, undefined, undefined, '#2d2d2d');
+            Tinter.tintSvgWhite('#2d2d2d');
         }
         else {
-            Tinter.tint(undefined, undefined, undefined, '#ffffff');
+            Tinter.tintSvgWhite('#ffffff');
         }
     },
 
