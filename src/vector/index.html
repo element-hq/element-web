@@ -22,9 +22,11 @@
     <meta name="theme-color" content="#ffffff">
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
         var file = htmlWebpackPlugin.files.css[i];
-        if (file.match(/^theme-(?!light\.)/)) {
+        var match = file.match(/^bundles\/.*?\/theme-((?!light\.).*)\.css$/);
+        if (match) {
+            var title = match[1].charAt(0).toUpperCase() + match[1].slice(1);
         %>
-           <link rel="alternate stylesheet" title="<%= file %>" href="<%= file %>">
+           <link rel="alternate stylesheet" title="<%= title  %>" href="<%= file %>">
         <% } else { %>
            <link rel="stylesheet" href="<%= file %>">
         <% }
