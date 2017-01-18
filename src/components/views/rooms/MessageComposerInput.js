@@ -401,7 +401,7 @@ export default class MessageComposerInput extends React.Component {
         let contentState = null;
         if (enabled) {
             const md = new Markdown(this.state.editorState.getCurrentContent().getPlainText());
-            contentState = RichText.HTMLtoContentState(md.render(true));
+            contentState = RichText.HTMLtoContentState(md.toHTML());
         } else {
             let markdown = stateToMarkdown(this.state.editorState.getCurrentContent());
             if (markdown[markdown.length - 1] === '\n') {
@@ -524,9 +524,9 @@ export default class MessageComposerInput extends React.Component {
         } else {
             const md = new Markdown(contentText);
             if (md.isPlainText()) {
-                contentText = md.render(false);
+                contentText = md.toPlaintext();
             } else {
-                contentHTML = md.render(true);
+                contentHTML = md.toHTML(true);
             }
         }
 
