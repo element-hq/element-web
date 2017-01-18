@@ -74,8 +74,8 @@ module.exports = React.createClass({
         var inviteList = this.state.inviteList.slice();
         // Check the text input field to see if user has an unconverted address
         // If there is and it's valid add it to the local inviteList
-        var check = Invite.isValidAddress(this.refs.textinput.value);
-        if (check === true || check === null) {
+        const addrType = Invite.getAddressType(this.refs.textinput.value);
+        if (addrType !== null) {
             inviteList.push(this.refs.textinput.value);
         } else if (this.refs.textinput.value.length > 0) {
             this.setState({ error: true });
@@ -135,12 +135,26 @@ module.exports = React.createClass({
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            this.onButtonClick();
+            if (this.state.queryList.length > 0) {
+                this.addressSelector.chooseSelection();
+            } else {
+                const addrType = Invite.getAddressType(this.refs.textinput.value);
+                if (addrType !== null) {
+                    const inviteList = this.state.inviteList.slice();
+                    inviteList.push(this.refs.textinput.value.trim());
+                    this.setState({
+                        inviteList: inviteList,
+                        queryList: [],
+                    });
+                } else {
+                    this.setState({ error: true });
+                }
+            }
         } else if (e.keyCode === 188 || e.keyCode === 9) { // comma or tab
             e.stopPropagation();
             e.preventDefault();
-            var check = Invite.isValidAddress(this.refs.textinput.value);
-            if (check === true || check === null) {
+            const addrType = Invite.getAddressType(this.refs.textinput.value);
+            if (addrType !== null) {
                 var inviteList = this.state.inviteList.slice();
                 inviteList.push(this.refs.textinput.value.trim());
                 this.setState({
