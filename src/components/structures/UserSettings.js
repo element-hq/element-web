@@ -33,7 +33,9 @@ const REACT_SDK_VERSION =
       'dist' in package_json ? package_json.version : package_json.gitHead || "<local>";
 
 
-// Enumerate some simple 'flip a bit' UI settings (if any)
+// Enumerate some simple 'flip a bit' UI settings (if any).
+// 'id' gives the key name in the im.vector.web.settings account data event
+// 'label' is how we describe it in the UI.
 const SETTINGS_LABELS = [
 /*
     {
@@ -56,6 +58,10 @@ const SETTINGS_LABELS = [
 ];
 
 // Enumerate the available themes, with a nice human text label.
+// 'id' gives the key name in the im.vector.web.settings account data event
+// 'value' is the value for that key in the event
+// 'label' is how we describe it in the UI.
+//
 // XXX: Ideally we would have a theme manifest or something and they'd be nicely
 // packaged up in a single directory, and/or located at the application layer.
 // But for now for expedience we just hardcode them here.
