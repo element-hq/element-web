@@ -20,7 +20,8 @@ limitations under the License.
 //  - We use IndexedDB to persists logs because it has generous disk space limits compared to local storage. IndexedDB does not work
 //    in incognito mode, in which case this module will not be able to write logs to disk. However, the logs will still be stored
 //    in-memory, so can still be submitted in a bug report should the user wish to: we can also store more logs in-memory than in
-//    local storage, which does work in incognito mode.
+//    local storage, which does work in incognito mode. We also need to handle the case where there are 2+ tabs. Each JS runtime
+//    generates a random string which serves as the "ID" for that tab/session. These IDs are stored along with the log lines.
 //  - Bug reports are sent as a POST over HTTPS: it purposefully does not use Matrix as bug reports may be made when Matrix is
 //    not responsive (which may be the cause of the bug).
 
@@ -77,6 +78,8 @@ class IndexedDBLogStore {
     constructor(indexedDB, logger) {
         this.indexedDB = indexedDB;
         this.logger = logger;
+        this.id = "instance-" + Date.now();
+        this.index = 0;
         this.db = null;
     }
 
@@ -103,13 +106,13 @@ class IndexedDBLogStore {
             req.onupgradeneeded = (event) => {
                 const db = event.target.result;
                 const objectStore = db.createObjectStore("logs", {
-                    autoIncrement: true
-                })
-                objectStore.transaction.oncomplete = function(event) {
-                    objectStore.add(
+                    keyPath: ["id", "index"]
+                });
+                objectStore.add(
+                    this._generateLogEntry(
                         new Date() + " ::: Log database was created."
-                    );
-                };
+                    )
+                );
             }
         });
     }
@@ -129,7 +132,7 @@ class IndexedDBLogStore {
         return new Promise((resolve, reject) => {
             let txn = this.db.transaction("logs", "readwrite");
             let objStore = txn.objectStore("logs");
-            objStore.add(lines);
+            objStore.add(this._generateLogEntry(lines));
             txn.oncomplete = (event) => {
                 resolve();
             };
@@ -138,6 +141,14 @@ class IndexedDBLogStore {
                 reject(new Error("Failed to write logs: " + event.target.errorCode));
             }
         });
+    }
+
+    _generateLogEntry(lines) {
+        return {
+            id: this.id,
+            lines: lines,
+            index: this.index++
+        };
     }
 }
 
@@ -176,5 +187,9 @@ module.exports = {
      * @return {Promise} Resolved when the bug report is sent.
      */
     sendBugReport: function(userText) {
+        // To gather all the logs, we first query for every log entry with index "0", this will let us
+        // know all the IDs from different tabs/sessions.
+
+        // Send logs grouped by ID
     }
 };
