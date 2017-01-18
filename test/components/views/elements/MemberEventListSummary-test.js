@@ -4,8 +4,8 @@ const ReactDOM = require("react-dom");
 const ReactTestUtils = require('react-addons-test-utils');
 const sdk = require('matrix-react-sdk');
 const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
-var jssdk = require('matrix-js-sdk');
-var MatrixEvent = jssdk.MatrixEvent;
+const jssdk = require('matrix-js-sdk');
+const MatrixEvent = jssdk.MatrixEvent;
 
 const testUtils = require('../../../test-utils');
 describe.only('MemberEventListSummary', function() {
@@ -90,7 +90,7 @@ describe.only('MemberEventListSummary', function() {
         sandbox.restore();
     });
 
-    it('renders expanded events if there are less than props.threshold', function(done) {
+    it('renders expanded events if there are less than props.threshold', function() {
         const events = generateEvents([
             {userId : "@user_1:some.domain", prevMembership: "leave", membership: "join"},
         ]);
@@ -110,10 +110,9 @@ describe.only('MemberEventListSummary', function() {
         expect(result.props.children).toEqual([
           <div className="event_tile" key="event0">Expanded membership</div>,
         ]);
-        done();
     });
 
-    it('renders expanded events if there are less than props.threshold', function(done) {
+    it('renders expanded events if there are less than props.threshold', function() {
         const events = generateEvents([
             {userId : "@user_1:some.domain", prevMembership: "leave", membership: "join"},
             {userId : "@user_1:some.domain", prevMembership: "join", membership: "leave"},
@@ -135,10 +134,9 @@ describe.only('MemberEventListSummary', function() {
           <div className="event_tile" key="event0">Expanded membership</div>,
           <div className="event_tile" key="event1">Expanded membership</div>,
         ]);
-        done();
     });
 
-    it('renders collapsed events if events.length = props.threshold', function(done) {
+    it('renders collapsed events if events.length = props.threshold', function() {
         const events = generateEvents([
             {userId : "@user_1:some.domain", prevMembership: "leave", membership: "join"},
             {userId : "@user_1:some.domain", prevMembership: "join", membership: "leave"},
@@ -157,11 +155,9 @@ describe.only('MemberEventListSummary', function() {
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe("user_1 joined and left and joined");
-
-        done();
     });
 
-    it('truncates long join,leave repetitions', function(done) {
+    it('truncates long join,leave repetitions', function() {
         const events = generateEvents([
             {userId : "@user_1:some.domain", prevMembership: "leave", membership: "join"},
             {userId : "@user_1:some.domain", prevMembership: "join", membership: "leave"},
@@ -191,11 +187,9 @@ describe.only('MemberEventListSummary', function() {
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe("user_1 joined and left 7 times");
-
-        done();
     });
 
-    it('truncates long join,leave repetitions inbetween other events', function(done) {
+    it('truncates long join,leave repetitions inbetween other events', function() {
         const events = generateEvents([
             {userId : "@user_1:some.domain", prevMembership: "ban", membership: "leave", senderId: "@some_other_user:some.domain"},
             {userId : "@user_1:some.domain", prevMembership: "leave", membership: "join"},
@@ -227,11 +221,9 @@ describe.only('MemberEventListSummary', function() {
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe("user_1 was unbanned, joined and left 7 times and was invited");
-
-        done();
     });
 
-    it('truncates multiple sequences of repetitions with other events inbetween', function(done) {
+    it('truncates multiple sequences of repetitions with other events inbetween', function() {
         const events = generateEvents([
             {userId : "@user_1:some.domain", prevMembership: "ban", membership: "leave", senderId: "@some_other_user:some.domain"},
             {userId : "@user_1:some.domain", prevMembership: "leave", membership: "join"},
@@ -260,11 +252,9 @@ describe.only('MemberEventListSummary', function() {
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe("user_1 was unbanned, joined and left 2 times, was banned, joined and left 3 times and was invited");
-
-        done();
     });
 
-    it('handles multiple users following the same sequence of memberships', function(done) {
+    it('handles multiple users following the same sequence of memberships', function() {
         const events = generateEvents([
             // user_1
             {userId : "@user_1:some.domain", prevMembership: "ban", membership: "leave", senderId: "@some_other_user:some.domain"},
@@ -294,11 +284,9 @@ describe.only('MemberEventListSummary', function() {
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe("user_1 and 1 other were unbanned, joined and left 2 times and were banned");
-
-        done();
     });
 
-    it('handles many users following the same sequence of memberships', function(done) {
+    it('handles many users following the same sequence of memberships', function() {
         const events = generateEventsForUsers("@user_$:some.domain", 20, [
             {prevMembership: "ban", membership: "leave", senderId: "@some_other_user:some.domain"},
             {prevMembership: "leave", membership: "join"},
@@ -320,11 +308,9 @@ describe.only('MemberEventListSummary', function() {
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe("user_0 and 19 others were unbanned, joined and left 2 times and were banned");
-
-        done();
     });
 
-    it('correctly orders sequences of transitions by the order of their first event', function(done) {
+    it('correctly orders sequences of transitions by the order of their first event', function() {
         const events = generateEvents([
             {userId : "@user_2:some.domain", prevMembership: "ban", membership: "leave", senderId: "@some_other_user:some.domain"},
             {userId : "@user_1:some.domain", prevMembership: "ban", membership: "leave", senderId: "@some_other_user:some.domain"},
@@ -353,11 +339,9 @@ describe.only('MemberEventListSummary', function() {
         expect(summaryText).toBe(
             "user_2 was unbanned and joined and left 2 times, user_1 was unbanned, joined and left 2 times and was banned"
         );
-
-        done();
     });
 
-    it('correctly identifies transitions', function(done) {
+    it('correctly identifies transitions', function() {
         const events = generateEvents([
             // invited
             {userId : "@user_1:some.domain", membership: "invite"},
@@ -393,11 +377,9 @@ describe.only('MemberEventListSummary', function() {
         expect(summaryText).toBe(
             "user_1 was invited, was banned, joined, rejected their invitation, left, had their invitation withdrawn, was unbanned, was kicked and left"
         );
-
-        done();
     });
 
-    it('handles invitation plurals correctly when there are multiple users', function(done) {
+    it('handles invitation plurals correctly when there are multiple users', function() {
         const events = generateEvents([
             {userId : "@user_1:some.domain", prevMembership: "invite", membership: "leave"},
             {userId : "@user_1:some.domain", prevMembership: "invite", membership: "leave", senderId: "@some_other_user:some.domain"},
@@ -419,11 +401,9 @@ describe.only('MemberEventListSummary', function() {
         expect(summaryText).toBe(
             "user_1 and 1 other rejected their invitations and had their invitations withdrawn"
         );
-
-        done();
     });
 
-    it('handles invitation plurals correctly when there are multiple invites', function(done) {
+    it('handles invitation plurals correctly when there are multiple invites', function() {
         const events = generateEvents([
             {userId : "@user_1:some.domain", prevMembership: "invite", membership: "leave"},
             {userId : "@user_1:some.domain", prevMembership: "invite", membership: "leave"},
@@ -443,11 +423,9 @@ describe.only('MemberEventListSummary', function() {
         expect(summaryText).toBe(
             "user_1 rejected their invitations 2 times"
         );
-
-        done();
     });
 
-    it('handles a summary length = 2, with no "others"', function(done) {
+    it('handles a summary length = 2, with no "others"', function() {
         const events = generateEvents([
             {userId : "@user_1:some.domain", membership: "join"},
             {userId : "@user_1:some.domain", membership: "join"},
@@ -469,11 +447,9 @@ describe.only('MemberEventListSummary', function() {
         expect(summaryText).toBe(
             "user_1 and user_2 joined 2 times"
         );
-
-        done();
     });
 
-    it('handles a summary length = 2, with 1 "other"', function(done) {
+    it('handles a summary length = 2, with 1 "other"', function() {
         const events = generateEvents([
             {userId : "@user_1:some.domain", membership: "join"},
             {userId : "@user_2:some.domain", membership: "join"},
@@ -494,11 +470,9 @@ describe.only('MemberEventListSummary', function() {
         expect(summaryText).toBe(
             "user_1, user_2 and 1 other joined"
         );
-
-        done();
     });
 
-    it('handles a summary length = 2, with many "others"', function(done) {
+    it('handles a summary length = 2, with many "others"', function() {
         const events = generateEventsForUsers("@user_$:some.domain", 20, [
             {membership: "join"},
         ]);
@@ -517,7 +491,5 @@ describe.only('MemberEventListSummary', function() {
         expect(summaryText).toBe(
             "user_0, user_1 and 18 others joined"
         );
-
-        done();
     });
 });
