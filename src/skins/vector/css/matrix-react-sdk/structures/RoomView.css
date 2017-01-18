@@ -202,6 +202,25 @@ hr.mx_RoomView_myReadMarker {
     width: 100%;
     -webkit-flex: 0 0 auto;
     flex: 0 0 auto;
+
+    max-height: 0px;
+    background-color: #fff;
+    z-index: 1000;
+    overflow: hidden;
+
+    -webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    -ms-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+}
+
+.mx_RoomView_statusArea_expanded {
+    max-height: 50px;
+    margin-top: 0px;
+}
+
+.mx_RoomView_statusArea_expanded.mx_RoomView_statusArea_mid_timeline {
+    margin-top: -50px;
 }
 
 .mx_RoomView_statusAreaBox {
