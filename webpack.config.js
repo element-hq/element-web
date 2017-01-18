@@ -45,7 +45,17 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, "webapp"),
-        filename: "[name].[chunkhash].js",
+
+        // the generated js (and CSS, from the ExtractTextPlugin) are put in a
+        // unique subdirectory for the build. There will only be one such
+        // 'bundle' directory in the generated tarball; however, hosting
+        // servers can collect 'bundles' from multiple versions into one
+        // directory and symlink it into place - this allows users who loaded
+        // an older version of the application to continue to access webpack
+        // chunks even after the app is redeployed.
+        //
+        filename: "bundles/[hash]/[name].js",
+        chunkFilename: "bundles/[hash]/[name].js",
         devtoolModuleFilenameTemplate: function(info) {
             // Reading input source maps gives only relative paths here for
             // everything. Until I figure out how to fix this, this is a
@@ -84,7 +94,7 @@ module.exports = {
         }),
 
         new ExtractTextPlugin(
-            "[name].[contenthash].css",
+            "bundles/[hash]/[name].css",
             {
                 allChunks: true
             }

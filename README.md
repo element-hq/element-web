@@ -14,7 +14,7 @@ https://riot.im/develop for those who like living dangerously.
 To host your own copy of Riot, the quickest bet is to use a pre-built
 released version of Riot:
 
-1. Download the latest version from https://github.com/vector-im/vector-web/releases
+1. Download the latest version from https://github.com/vector-im/riot-web/releases
 1. Untar the tarball on your web server
 1. Move (or symlink) the vector-x.x.x directory to an appropriate name
 1. If desired, copy `config.sample.json` to `config.json` and edit it
@@ -44,7 +44,7 @@ access to Riot (or other apps) due to sharing the same domain.
 
 We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place.  See
-https://github.com/vector-im/vector-web/issues/1977 for more details.
+https://github.com/vector-im/riot-web/issues/1977 for more details.
 
 Building From Source
 ====================
@@ -53,8 +53,8 @@ Riot is a modular webapp built with modern ES6 and requires a npm build system
 to build.
 
 1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
-1. Clone the repo: `git clone https://github.com/vector-im/vector-web.git`
-1. Switch to the vector-web directory: `cd vector-web`
+1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`
+1. Switch to the riot-web directory: `cd riot-web`
 1. Install the prerequisites: `npm install`
 1. If you are using the `develop` branch of vector-web, you will probably need
    to rebuild some of the dependencies, due to
@@ -109,7 +109,7 @@ Running as a Desktop app
 ========================
 
 Riot can also be run as a desktop app, wrapped in electron. You can download a
-pre-built version from https://riot.im/download/desktop/ or, if you prefer,
+pre-built version from https://riot.im/desktop.html or, if you prefer,
 built it yourself.
 
 To run as a desktop app:
@@ -179,13 +179,13 @@ the `component-index.js` for the app (used in future for skinning)
 development on Riot forcing `matrix-react-sdk` to move fast at the expense of
 maintaining a clear abstraction between the two.**  Hacking on Riot inevitably
 means hacking equally on `matrix-react-sdk`, and there are bits of
-`matrix-react-sdk` behaviour incorrectly residing in the `vector-web` project
+`matrix-react-sdk` behaviour incorrectly residing in the `riot-web` project
 (e.g. matrix-react-sdk specific CSS), and a bunch of Riot specific behaviour
 in the `matrix-react-sdk` (grep for `vector` / `riot`).  This separation problem will be
 solved asap once development on Riot (and thus matrix-react-sdk) has
 stabilised.  Until then, the two projects should basically be considered as a
 single unit.  In particular, `matrix-react-sdk` issues are currently filed
-against `vector-web` in github.
+against `riot-web` in github.
 
 Please note that Riot is intended to run correctly without access to the public
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
@@ -220,8 +220,8 @@ Then similarly with `matrix-react-sdk`:
 
 Finally, build and start Riot itself:
 
-1. `git clone git@github.com:vector-im/vector-web.git`
-1. `cd vector-web`
+1. `git clone git@github.com:vector-im/riot-web.git`
+1. `cd riot-web`
 1. `git checkout develop`
 1. `npm install`
 1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
