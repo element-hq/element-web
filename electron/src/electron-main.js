@@ -175,6 +175,7 @@ electron.app.on('ready', () => {
         icon: icon_path,
         width: 1024, height: 768,
         show: false,
+        autoHideMenuBar: true,
     });
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
     electron.Menu.setApplicationMenu(VectorMenu);
