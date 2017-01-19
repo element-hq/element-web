@@ -526,7 +526,7 @@ export default class MessageComposerInput extends React.Component {
             if (md.isPlainText()) {
                 contentText = md.toPlaintext();
             } else {
-                contentHTML = md.toHTML(true);
+                contentHTML = md.toHTML();
             }
         }
 

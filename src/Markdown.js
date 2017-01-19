@@ -59,7 +59,7 @@ export default class Markdown {
         return is_plain;
     }
 
-    toHTML(html) {
+    toHTML() {
         const real_paragraph = this.renderer.paragraph;
 
         this.renderer.paragraph = function(node, entering) {
