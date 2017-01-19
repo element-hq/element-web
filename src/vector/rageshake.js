@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 import request from "browser-request";
 
 // This module contains all the code needed to log the console, persist it to disk and submit bug reports. Rationale is as follows:
@@ -356,6 +357,18 @@ module.exports = {
         if (!bugReportEndpoint) {
             throw new Error("No bug report endpoint has been set.");
         }
+
+        let version = "UNKNOWN";
+        try {
+            version = await PlatformPeg.get().getAppVersion();
+        }
+        catch (err) {} // PlatformPeg already logs this.
+
+        let userAgent = "UNKNOWN";
+        if (window.navigator && window.navigator.userAgent) {
+            userAgent = window.navigator.userAgent;
+        }
+
         // If in incognito mode, store is null, but we still want bug report sending to work going off
         // the in-memory console logs.
         let logs = [];
@@ -376,6 +389,8 @@ module.exports = {
                 body: {
                     logs: logs,
                     text: userText || "User did not supply any additional text.",
+                    version: version,
+                    user_agent: userAgent,
                 },
                 json: true,
             }, (err, res) => {
