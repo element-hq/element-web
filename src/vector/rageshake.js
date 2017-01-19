@@ -166,7 +166,7 @@ class IndexedDBLogStore {
      * when the log file was created (the log ID). The objects have said log ID in an "id" field and "lines" which is a
      * big string with all the new-line delimited logs.
      */
-    consume(clearAll) {
+    async consume(clearAll) {
         const MAX_LOG_SIZE = 1024 * 1024 * 50; // 50 MB
         const db = this.db;
 
@@ -223,65 +223,36 @@ class IndexedDBLogStore {
             });
         }
 
-        // Ideally we'd just use coroutines and a for loop but riot-web doesn't support async/await so instead
-        // recursively fetch logs up to the given threshold. We can't cheat and fetch all the logs
-        // from all time, but we may OOM if we do so.
-        // Returns: Promise<Object[]> : Each object having 'id' and 'lines'. Same ordering as logIds.
-        function fetchLogsToThreshold(logIds, threshold, logs) {
-            // Base case: check log size and return if bigger than threshold
-            let size = 0;
-            logs.forEach((l) => {
-                size += l.lines.length;
+        let allLogIds = await fetchLogIds();
+        let removeLogIds = [];
+        let logs = [];
+        let size = 0;
+        for (let i = 0; i < allLogIds.length; i++) {
+            let lines = await fetchLogs(allLogIds[i]);
+            logs.push({
+                lines: lines,
+                id: allLogIds[i],
             });
-            if (size > threshold) {
-                return Promise.resolve(logs);
+            size += lines.length;
+            if (size > MAX_LOG_SIZE) {
+                // the remaining log IDs should be removed. If we go out of bounds this is just []
+                removeLogIds = allLogIds.slice(i + 1);
+                break;
             }
-
-            // fetch logs for the first element
-            let logId = logIds.shift();
-            if (!logId) {
-                // no more entries
-                return Promise.resolve(logs);
-            }
-            return fetchLogs(logId).then((lines) => {
-                // add result to logs
-                logs.push({
-                    lines: lines,
-                    id: logId,
-                });
-                // recurse with the next log ID. TODO: Stack overflow risk?
-                return fetchLogsToThreshold(logIds, threshold, logs);
-            })
         }
-
-        let allLogIds = [];
-        return fetchLogIds().then((logIds) => {
-            allLogIds = logIds.map((id) => id); // deep copy array as we'll modify it when fetching logs
-            return fetchLogsToThreshold(logIds, MAX_LOG_SIZE, []);
-        }).then((logs) => {
-            // Remove all logs that are beyond the threshold (not in logs), or the entire logs if clearAll was set.
-            let removeLogIds = allLogIds;
-            if (!clearAll) {
-                removeLogIds = removeLogIds.filter((id) => {
-                    for (let i = 0; i < logs.length; i++) {
-                        if (logs[i].id === id) {
-                            return false; // do not remove logs that we're about to return to the caller.
-                        }
-                    }
-                    return true;
-                });
-            }
-            if (removeLogIds.length > 0) {
-                console.log("Removing logs: ", removeLogIds);
-                // Don't promise chain this because it's non-fatal if we can't clean up logs.
-                Promise.all(removeLogIds.map((id) => deleteLogs(id))).then(() => {
-                    console.log(`Removed ${removeLogIds.length} old logs.`);
-                }, (err) => {
-                    console.error(err);
-                })
-            }
-            return logs;
-        });
+        if (clearAll) {
+            removeLogIds = allLogIds;
+        }
+        if (removeLogIds.length > 0) {
+            console.log("Removing logs: ", removeLogIds);
+            // Don't await this because it's non-fatal if we can't clean up logs.
+            Promise.all(removeLogIds.map((id) => deleteLogs(id))).then(() => {
+                console.log(`Removed ${removeLogIds.length} old logs.`);
+            }, (err) => {
+                console.error(err);
+            })
+        }console.log("async consumeeeee");
+        return logs;
     }
 
     _generateLogEntry(lines) {
@@ -350,22 +321,22 @@ module.exports = {
      * Force-flush the logs to storage.
      * @return {Promise} Resolved when the logs have been flushed.
      */
-    flush: function() {
+    flush: async function() {
         if (!store) {
-            return Promise.resolve();
+            return;
         }
-        return store.flush();
+        await store.flush();
     },
 
     /**
      * Clean up old logs.
      * @return Promise Resolves if cleaned logs.
      */
-    cleanup: function() {
+    cleanup: async function() {
         if (!store) {
-            return Promise.resolve();
+            return;
         }
-        return store.consume(false);
+        await store.consume(false);
     },
 
     /**
@@ -373,45 +344,43 @@ module.exports = {
      * @param {string} userText Any additional user input.
      * @return {Promise} Resolved when the bug report is sent.
      */
-    sendBugReport: function(userText) {
+    sendBugReport: async function(userText) {
         if (!logger) {
-            return Promise.reject(new Error("No console logger, did you forget to call init()?"));
+            throw new Error("No console logger, did you forget to call init()?");
         }
         // If in incognito mode, store is null, but we still want bug report sending to work going off
         // the in-memory console logs.
-        let promise = Promise.resolve([]);
+        let logs = [];
         if (store) {
-            promise = store.consume(false); //  TODO Swap to true to remove all logs
+            logs = await store.consume(false);
         }
-        return promise.then((logs) => {
-            // and add the most recent console logs which won't be in the store yet.
-            const consoleLogs = logger.flush(); // remove logs from console
-            const currentId = store ? store.id : "-";
-            logs.unshift({
-                lines: consoleLogs,
-                id: currentId,
-            });
-            return new Promise((resolve, reject) => {
-                request({
-                    method: "POST",
-                    url: "http://localhost:1337",
-                    body: {
-                        logs: logs,
-                        text: userText || "User did not supply any additional text.",
-                    },
-                    json: true,
-                }, (err, res) => {
-                    if (err) {
-                        reject(err);
-                        return;
-                    }
-                    if (res.status < 200 || res.status >= 400) {
-                        reject(new Error(`HTTP ${res.status}`));
-                        return;
-                    }
-                    resolve();
-                })
-            });
+        // and add the most recent console logs which won't be in the store yet.
+        const consoleLogs = logger.flush(); // remove logs from console
+        const currentId = store ? store.id : "-";
+        logs.unshift({
+            lines: consoleLogs,
+            id: currentId,
+        });
+        await new Promise((resolve, reject) => {
+            request({
+                method: "POST",
+                url: "http://localhost:1337",
+                body: {
+                    logs: logs,
+                    text: userText || "User did not supply any additional text.",
+                },
+                json: true,
+            }, (err, res) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                if (res.status < 200 || res.status >= 400) {
+                    reject(new Error(`HTTP ${res.status}`));
+                    return;
+                }
+                resolve();
+            })
         });
     }
 };
