@@ -6,15 +6,20 @@
 
 set -ev
 
-git clone --depth=1 --branch develop https://github.com/vector-im/riot-web.git riot-web
-cd riot-web
+RIOT_WEB_DIR=riot-web
+REACT_SDK_DIR=`pwd`
+
+git clone --depth=1 --branch develop https://github.com/vector-im/riot-web.git \
+    "$RIOT_WEB_DIR"
+
+cd "$RIOT_WEB_DIR"
+
 mkdir node_modules
-ln -s ../.. node_modules/matrix-react-sdk
 npm install
 
 (cd node_modules/matrix-js-sdk && npm install)
 
-# https://github.com/webpack/webpack/issues/1472 workaround
-(cd node_modules/matrix-react-sdk && npm install source-map-loader)
+rm -r node_modules/matrix-react-sdk
+ln -s "$REACT_SDK_DIR" node_modules/matrix-react-sdk
 
 npm run test
