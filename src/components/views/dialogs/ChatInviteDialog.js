@@ -71,15 +71,12 @@ module.exports = React.createClass({
     },
 
     onButtonClick: function() {
-        var inviteList = this.state.inviteList.slice();
+        let inviteList = this.state.inviteList.slice();
         // Check the text input field to see if user has an unconverted address
         // If there is and it's valid add it to the local inviteList
-        var check = Invite.isValidAddress(this.refs.textinput.value);
-        if (check === true || check === null) {
-            inviteList.push(this.refs.textinput.value);
-        } else if (this.refs.textinput.value.length > 0) {
-            this.setState({ error: true });
-            return;
+        if (this.refs.textinput.value !== '') {
+            inviteList = this._addInputToList();
+            if (inviteList === null) return;
         }
 
         if (inviteList.length > 0) {
@@ -119,15 +116,15 @@ module.exports = React.createClass({
         } else if (e.keyCode === 38) { // up arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyUp();
+            this.addressSelector.moveSelectionUp();
         } else if (e.keyCode === 40) { // down arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyDown();
-        } else if (this.state.queryList.length > 0 && (e.keyCode === 188, e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
+            this.addressSelector.moveSelectionDown();
+        } else if (this.state.queryList.length > 0 && (e.keyCode === 188 || e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeySelect();
+            this.addressSelector.chooseSelection();
         } else if (this.refs.textinput.value.length === 0 && this.state.inviteList.length && e.keyCode === 8) { // backspace
             e.stopPropagation();
             e.preventDefault();
@@ -135,21 +132,16 @@ module.exports = React.createClass({
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            this.onButtonClick();
+            if (this.refs.textinput.value == '') {
+                // if there's nothing in the input box, submit the form
+                this.onButtonClick();
+            } else {
+                this._addInputToList();
+            }
         } else if (e.keyCode === 188 || e.keyCode === 9) { // comma or tab
             e.stopPropagation();
             e.preventDefault();
-            var check = Invite.isValidAddress(this.refs.textinput.value);
-            if (check === true || check === null) {
-                var inviteList = this.state.inviteList.slice();
-                inviteList.push(this.refs.textinput.value.trim());
-                this.setState({
-                    inviteList: inviteList,
-                    queryList: [],
-                });
-            } else {
-                this.setState({ error: true });
-            }
+            this._addInputToList();
         }
     },
 
@@ -359,6 +351,22 @@ module.exports = React.createClass({
             });
         }
         return addrs;
+    },
+
+    _addInputToList: function() {
+        const addrType = Invite.getAddressType(this.refs.textinput.value);
+        if (addrType !== null) {
+            const inviteList = this.state.inviteList.slice();
+            inviteList.push(this.refs.textinput.value.trim());
+            this.setState({
+                inviteList: inviteList,
+                queryList: [],
+            });
+            return inviteList;
+        } else {
+            this.setState({ error: true });
+            return null;
+        }
     },
 
     render: function() {
