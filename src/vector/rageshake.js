@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import request from "browser-request";
+
 // This module contains all the code needed to log the console, persist it to disk and submit bug reports. Rationale is as follows:
 //  - Monkey-patching the console is preferable to having a log library because we can catch logs by other libraries more easily,
 //    without having to all depend on the same log framework / pass the logger around.
@@ -321,20 +323,27 @@ function selectQuery(store, keyRange, resultMapper) {
 
 
 let store = null;
-let inited = false;
+let logger = null;
+let initPromise = null;
 module.exports = {
 
     /**
      * Configure rage shaking support for sending bug reports.
      * Modifies globals.
+     * @return {Promise} Resolves when set up.
      */
     init: function() {
-        if (inited || !window.indexedDB) {
-            return;
+        if (initPromise) {
+            return initPromise;
         }
-        store = new IndexedDBLogStore(window.indexedDB, new ConsoleLogger());
-        inited = true;
-        return store.connect();
+        logger = new ConsoleLogger();
+        if (window.indexedDB) {
+            store = new IndexedDBLogStore(window.indexedDB, logger);
+            initPromise = store.connect();
+            return initPromise;
+        }
+        initPromise = Promise.resolve();
+        return initPromise;
     },
 
     /**
@@ -343,9 +352,20 @@ module.exports = {
      */
     flush: function() {
         if (!store) {
-            return;
+            return Promise.resolve();
         }
         return store.flush();
+    },
+
+    /**
+     * Clean up old logs.
+     * @return Promise Resolves if cleaned logs.
+     */
+    cleanup: function() {
+        if (!store) {
+            return Promise.resolve();
+        }
+        return store.consume(false);
     },
 
     /**
@@ -354,9 +374,44 @@ module.exports = {
      * @return {Promise} Resolved when the bug report is sent.
      */
     sendBugReport: function(userText) {
-        return store.consume(false).then((logs) => {
-            // Send logs grouped by ID
-            console.log(logs);
+        if (!logger) {
+            return Promise.reject(new Error("No console logger, did you forget to call init()?"));
+        }
+        // If in incognito mode, store is null, but we still want bug report sending to work going off
+        // the in-memory console logs.
+        let promise = Promise.resolve([]);
+        if (store) {
+            promise = store.consume(false); //  TODO Swap to true to remove all logs
+        }
+        return promise.then((logs) => {
+            // and add the most recent console logs which won't be in the store yet.
+            const consoleLogs = logger.flush(); // remove logs from console
+            const currentId = store ? store.id : "-";
+            logs.unshift({
+                lines: consoleLogs,
+                id: currentId,
+            });
+            return new Promise((resolve, reject) => {
+                request({
+                    method: "POST",
+                    url: "http://localhost:1337",
+                    body: {
+                        logs: logs,
+                        text: userText || "User did not supply any additional text.",
+                    },
+                    json: true,
+                }, (err, res) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    if (res.status < 200 || res.status >= 400) {
+                        reject(new Error(`HTTP ${res.status}`));
+                        return;
+                    }
+                    resolve();
+                })
+            });
         });
     }
 };
