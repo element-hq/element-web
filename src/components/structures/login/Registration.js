@@ -57,6 +57,11 @@ module.exports = React.createClass({
                 "name": React.PropTypes.string,
                 // The suffix with which every team email address ends
                 "emailSuffix": React.PropTypes.string,
+                // The rooms to use during auto-join
+                "rooms": React.PropTypes.arrayOf(React.PropTypes.shape({
+                    "id": React.PropTypes.string,
+                    "autoJoin": React.PropTypes.bool,
+                })),
             })).required,
         }),
 
@@ -180,11 +185,14 @@ module.exports = React.createClass({
             });
 
             // Auto-join rooms
-            if (self.props.teamsConfig) {
+            if (self.props.teamsConfig && self.props.teamsConfig.teams) {
                 for (let i = 0; i < self.props.teamsConfig.teams.length; i++) {
                     let team = self.props.teamsConfig.teams[i];
                     if (self.state.formVals.email.endsWith(team.emailSuffix)) {
                         console.log("User successfully registered with team " + team.name);
+                        if (!team.rooms) {
+                            break;
+                        }
                         team.rooms.forEach((room) => {
                             if (room.autoJoin) {
                                 console.log("Auto-joining " + room.id);
