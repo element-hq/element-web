@@ -75,8 +75,6 @@ import views$dialogs$ChatInviteDialog from './components/views/dialogs/ChatInvit
 views$dialogs$ChatInviteDialog && (module.exports.components['views.dialogs.ChatInviteDialog'] = views$dialogs$ChatInviteDialog);
 import views$dialogs$DeactivateAccountDialog from './components/views/dialogs/DeactivateAccountDialog';
 views$dialogs$DeactivateAccountDialog && (module.exports.components['views.dialogs.DeactivateAccountDialog'] = views$dialogs$DeactivateAccountDialog);
-import views$dialogs$EncryptedEventDialog from './components/views/dialogs/EncryptedEventDialog';
-views$dialogs$EncryptedEventDialog && (module.exports.components['views.dialogs.EncryptedEventDialog'] = views$dialogs$EncryptedEventDialog);
 import views$dialogs$ErrorDialog from './components/views/dialogs/ErrorDialog';
 views$dialogs$ErrorDialog && (module.exports.components['views.dialogs.ErrorDialog'] = views$dialogs$ErrorDialog);
 import views$dialogs$InteractiveAuthDialog from './components/views/dialogs/InteractiveAuthDialog';

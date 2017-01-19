@@ -331,6 +331,7 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, htmlText);
         }
         else {
+            const contentText = mdown.toPlaintext();
             sendMessagePromise = isEmote ?
                 MatrixClientPeg.get().sendEmoteMessage(this.props.room.roomId, contentText) :
                 MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);
