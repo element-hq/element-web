@@ -179,6 +179,23 @@ module.exports = React.createClass({
                 accessToken: response.access_token
             });
 
+            // Auto-join rooms
+            if (self.props.teamsConfig) {
+                for (let i = 0; i < self.props.teamsConfig.teams.length; i++) {
+                    let team = self.props.teamsConfig.teams[i];
+                    if (self.state.formVals.email.endsWith(team.emailSuffix)) {
+                        console.log("User successfully registered with team " + team.name);
+                        team.rooms.forEach((room) => {
+                            if (room.autoJoin) {
+                                console.log("Auto-joining " + room.id);
+                                MatrixClientPeg.get().joinRoom(room.id);
+                            }
+                        });
+                        break;
+                    }
+                }
+            }
+
             if (self.props.brand) {
                 MatrixClientPeg.get().getPushers().done((resp)=>{
                     var pushers = resp.pushers;

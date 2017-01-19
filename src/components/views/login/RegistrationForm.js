@@ -116,10 +116,14 @@ module.exports = React.createClass({
     },
 
     _doSubmit: function() {
+        let email = this.refs.email.value.trim();
+        if (this.state.selectedTeam) {
+            email += "@" + this.state.selectedTeam.emailSuffix;
+        }
         var promise = this.props.onRegisterClick({
             username: this.refs.username.value.trim() || this.props.guestUsername,
             password: this.refs.password.value.trim(),
-            email: this.refs.email.value.trim()
+            email: email,
         });
 
         if (promise) {
