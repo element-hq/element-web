@@ -76,7 +76,7 @@ module.exports = React.createClass({
         // If there is and it's valid add it to the local inviteList
         if (this.refs.textinput.value !== '') {
             inviteList = this._addInputToList();
-            if (inviteList === false) return;
+            if (inviteList === null) return;
         }
 
         if (inviteList.length > 0) {
@@ -365,7 +365,7 @@ module.exports = React.createClass({
             return inviteList;
         } else {
             this.setState({ error: true });
-            return false;
+            return null;
         }
     },
 
