@@ -28,3 +28,27 @@ module.exports.getComponent = function(componentName) {
     return Skinner.getComponent(componentName);
 };
 
+
+/* hacky functions for megolm import/export until we give it a UI */
+import * as MegolmExportEncryption from './utils/MegolmExportEncryption';
+import MatrixClientPeg from './MatrixClientPeg';
+
+window.exportKeys = function(password) {
+    return MatrixClientPeg.get().exportRoomKeys().then((k) => {
+        return MegolmExportEncryption.encryptMegolmKeyFile(
+            JSON.stringify(k), password
+        );
+    }).then((f) => {
+        console.log(new TextDecoder().decode(new Uint8Array(f)));
+    }).done();
+};
+
+window.importKeys = function(password, data) {
+    const arrayBuffer = new TextEncoder().encode(data).buffer;
+    return MegolmExportEncryption.decryptMegolmKeyFile(
+        arrayBuffer, password
+    ).then((j) => {
+        const k = JSON.parse(j);
+        return MatrixClientPeg.get().importRoomKeys(k);
+    });
+};

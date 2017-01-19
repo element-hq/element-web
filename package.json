@@ -67,6 +67,7 @@
     "react-dom": "^15.4.0",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "sanitize-html": "^1.11.1",
+    "text-encoding-utf-8": "^1.0.1",
     "velocity-vector": "vector-im/velocity#059e3b2",
     "whatwg-fetch": "^1.0.0"
   },
