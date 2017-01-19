@@ -14,32 +14,17 @@ from __future__ import print_function
 import json, requests, tarfile, argparse, os, errno
 import time
 from urlparse import urljoin
+
 from flask import Flask, jsonify, request, abort
+
+from deploy import Deployer, DeployException
 
 app = Flask(__name__)
 
 arg_jenkins_url = None
+deployer = None
 arg_extract_path = None
-arg_bundles_path = None
-arg_should_clean = None
 arg_symlink = None
-arg_config_location = None
-
-class DeployException(Exception):
-    pass
-
-def download_file(url):
-    local_filename = url.split('/')[-1]
-    r = requests.get(url, stream=True)
-    with open(local_filename, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024):
-            if chunk: # filter out keep-alive new chunks
-                f.write(chunk)
-    return local_filename
-
-def untar_to(tarball, dest):
-    with tarfile.open(tarball) as tar:
-        tar.extractall(dest)
 
 def create_symlink(source, linkname):
     try:
@@ -137,17 +122,20 @@ def fetch_jenkins_build(job_name, build_num):
     #       see half-written files.
     build_dir = os.path.join(arg_extract_path, "%s-#%s" % (job_name, build_num))
     try:
-        deploy_tarball(tar_gz_url, build_dir)
+        extracted_dir = deploy_tarball(tar_gz_url, build_dir)
     except DeployException as e:
         abort(400, e.message)
+
+    create_symlink(source=extracted_dir, linkname=arg_symlink)
 
     return jsonify({})
 
 def deploy_tarball(tar_gz_url, build_dir):
-    """Download a tarball from jenkins and deploy it as the new version
-    """
-    print("Deploying %s to %s" % (tar_gz_url, build_dir))
+    """Download a tarball from jenkins and unpack it
 
+    Returns:
+        (str) the path to the unpacked deployment
+    """
     if os.path.exists(build_dir):
         raise DeployException(
             "Not deploying. We have previously deployed this build."
@@ -156,62 +144,8 @@ def deploy_tarball(tar_gz_url, build_dir):
 
     # we rely on the fact that flask only serves one request at a time to
     # ensure that we do not overwrite a tarball from a concurrent request.
-    filename = download_file(tar_gz_url)
-    print("Downloaded file: %s" % filename)
 
-    try:
-        untar_to(filename, build_dir)
-        print("Extracted to: %s" % build_dir)
-    finally:
-        if arg_should_clean:
-            os.remove(filename)
-
-    name_str = filename.replace(".tar.gz", "")
-    extracted_dir = os.path.join(build_dir, name_str)
-
-    if arg_config_location:
-        create_symlink(source=arg_config_location, linkname=os.path.join(extracted_dir, 'config.json'))
-
-    if arg_bundles_path:
-        extracted_bundles = os.path.join(extracted_dir, 'bundles')
-        move_bundles(source=extracted_bundles, dest=arg_bundles_path)
-
-        # replace the (hopefully now empty) extracted_bundles dir with a
-        # symlink to the common dir.
-        relpath = os.path.relpath(arg_bundles_path, extracted_dir)
-        os.rmdir(extracted_bundles)
-        print ("Symlink %s -> %s" % (extracted_bundles, relpath))
-        os.symlink(relpath, extracted_bundles)
-
-    create_symlink(source=extracted_dir, linkname=arg_symlink)
-
-def move_bundles(source, dest):
-    """Move the contents of the 'bundles' directory to a common dir
-
-    We check that we will not be overwriting anything before we proceed.
-
-    Args:
-        source (str): path to 'bundles' within the extracted tarball
-        dest (str): target common directory
-    """
-
-    if not os.path.isdir(dest):
-        os.mkdir(dest)
-
-    # build a map from source to destination, checking for non-existence as we go.
-    renames = {}
-    for f in os.listdir(source):
-        dst = os.path.join(dest, f)
-        if os.path.exists(dst):
-            raise DeployException(
-                "Not deploying. The bundle includes '%s' which we have previously deployed."
-                % f
-            )
-        renames[os.path.join(source, f)] = dst
-
-    for (src, dst) in renames.iteritems():
-        print ("Move %s -> %s" % (src, dst))
-        os.rename(src, dst)
+    return deployer.deploy(tar_gz_url, build_dir)
 
 
 if __name__ == "__main__":
@@ -270,13 +204,21 @@ if __name__ == "__main__":
     else:
         arg_jenkins_url = args.jenkins + "/"
     arg_extract_path = args.extract
-    arg_bundles_path = args.bundles_dir
-    arg_should_clean = args.clean
     arg_symlink = args.symlink
-    arg_config_location = args.config
 
     if not os.path.isdir(arg_extract_path):
         os.mkdir(arg_extract_path)
+
+    deployer = Deployer()
+    deployer.bundles_path = args.bundles_dir
+    deployer.should_clean = args.clean
+    deployer.config_location = args.config
+
+    # we don't pgp-sign jenkins artifacts; instead we rely on HTTPS access to
+    # the jenkins server (and the jenkins server not being compromised and/or
+    # github not serving it compromised source). If that's not good enough for
+    # you, don't use riot.im/develop.
+    deployer.verify_signature = False
 
     if args.tarball_uri is not None:
         build_dir = os.path.join(arg_extract_path, "test-%i" % (time.time()))
@@ -284,7 +226,12 @@ if __name__ == "__main__":
     else:
         print(
             "Listening on port %s. Extracting to %s%s. Symlinking to %s. Jenkins URL: %s. Config location: %s" %
-            (args.port, arg_extract_path,
-             " (clean after)" if arg_should_clean else "", arg_symlink, arg_jenkins_url, arg_config_location)
+            (args.port,
+             arg_extract_path,
+             " (clean after)" if deployer.should_clean else "",
+             arg_symlink,
+             arg_jenkins_url,
+             deployer.config_location,
+            )
         )
         app.run(host="0.0.0.0", port=args.port, debug=True)
