@@ -28,9 +28,9 @@ limitations under the License.
 // https://babeljs.io/docs/plugins/transform-runtime/
 require('babel-polyfill');
 
-// CSS requires: just putting them here for now as CSS is going to be
-// refactored "soon" anyway
-require('../../build/components.css');
+// Require common CSS here; this will make webpack process it into bundle.css.
+// Our own CSS (which is themed) is imported via separate webpack entry points
+// in webpack.config.js
 require('gemini-scrollbar/gemini-scrollbar.css');
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');

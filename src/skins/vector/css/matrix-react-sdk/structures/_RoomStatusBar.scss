@@ -1,0 +1,143 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RoomStatusBar {
+    margin-left: 65px;
+    min-height: 34px;
+}
+
+/* position the indicator in the same place horizontally as .mx_EventTile_avatar. */
+.mx_RoomStatusBar_indicator {
+    padding-left: 18px;
+    padding-right: 12px;
+    margin-left: -73px;
+    margin-top: 13px;
+    float: left;
+    width: 24px;
+    text-align: center;
+}
+
+.mx_RoomStatusBar_callBar {
+    height: 50px;
+    line-height: 50px;
+}
+
+.mx_RoomStatusBar_placeholderIndicator span {
+    color: $primary-fg-color;
+    opacity: 0.5;
+    position: relative;
+    top: -4px;
+/*    
+    animation-duration: 1s;
+    animation-name: bounce;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+*/    
+}
+
+.mx_RoomStatusBar_placeholderIndicator span:nth-child(1) {
+    animation-delay: 0.3s;
+}
+.mx_RoomStatusBar_placeholderIndicator span:nth-child(2) {
+    animation-delay: 0.6s;
+}
+.mx_RoomStatusBar_placeholderIndicator span:nth-child(3) {
+    animation-delay: 0.9s;
+}
+
+@keyframes bounce {
+    from {
+        opacity: 0.5;
+        top: 0;
+    }
+
+    to {
+        opacity: 0.2;
+        top: -3px;
+    }
+}
+
+.mx_RoomStatusBar_scrollDownIndicator {
+    cursor: pointer;
+}
+
+.mx_RoomStatusBar_unreadMessagesBar {
+    padding-top: 10px;
+    color: $warning-color;
+    cursor: pointer;
+}
+
+.mx_RoomStatusBar_connectionLostBar {
+    margin-top: 19px;
+    height: 58px;
+}
+
+.mx_RoomStatusBar_connectionLostBar img {
+    padding-left: 10px;
+    padding-right: 22px;
+    vertical-align: middle;
+    float: left;
+}
+
+.mx_RoomStatusBar_connectionLostBar_title {
+    color: $warning-color;
+}
+
+.mx_RoomStatusBar_connectionLostBar_desc {
+    color: $primary-fg-color;
+    font-size: 13px;
+    opacity: 0.5;
+}
+
+.mx_RoomStatusBar_resend_link {
+    color: $primary-fg-color ! important;
+    text-decoration: underline ! important;
+    cursor: pointer;
+}
+
+.mx_RoomStatusBar_tabCompleteBar {
+    padding-top: 10px;
+    color: $primary-fg-color;
+}
+
+.mx_RoomStatusBar_typingBar {
+    padding-top: 10px;
+    color: $primary-fg-color;
+    opacity: 0.5;
+    overflow-y: hidden;
+    display: block;
+}
+
+.mx_RoomStatusBar_tabCompleteWrapper {
+    display: flex;
+    height: 26px;
+}
+
+.mx_RoomStatusBar_tabCompleteWrapper .mx_TabCompleteBar {
+    flex: 1 1 auto;
+}
+
+.mx_RoomStatusBar_tabCompleteEol {
+    flex: 0 0 auto;
+    color: $accent-color;
+}
+
+.mx_RoomStatusBar_tabCompleteEol object {
+    vertical-align: middle;
+    margin-right: 8px;
+    margin-top: -2px;
+}
+
