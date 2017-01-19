@@ -27,8 +27,13 @@ var Modal = require('../../../Modal');
 
 const TRUNCATE_QUERY_LIST = 40;
 
+/*
+ * Escapes a string so it can be used in a RegExp
+ * Basically just replaces: \ ^ $ * + ? . ( ) | { } [ ]
+ * From http://stackoverflow.com/a/6969486
+ */
 function escapeRegExp(str) {
-  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
 
 module.exports = React.createClass({
@@ -326,7 +331,7 @@ module.exports = React.createClass({
         //  * The start of the string
         //  * Whitespace, or
         //  * A fixed number of punctuation characters
-        let expr = new RegExp("(?:^|[\\s\\('\",\.-])" + escapeRegExp(query));
+        let expr = new RegExp("(?:^|[\\s\\(\)'\",\.-])" + escapeRegExp(query));
         if (expr.test(name)) {
             return true;
         }
