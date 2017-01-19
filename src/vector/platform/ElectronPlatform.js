@@ -97,7 +97,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
                 room_id: room.roomId
             });
             global.focus();
-            electron.remote.getCurrentWindow().restore();
+            const currentWin = electron.remote.getCurrentWindow();
+            currentWin.show();
+            currentWin.restore();
+            currentWin.focus();
         };
 
         return notification;
@@ -130,5 +133,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     screenCaptureErrorString() {
         return null;
+    }
+
+    requestNotificationPermission() : Promise {
+        return q('granted');
     }
 }
