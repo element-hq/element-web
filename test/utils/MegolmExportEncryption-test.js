@@ -21,12 +21,6 @@ import * as MegolmExportEncryption from 'utils/MegolmExportEncryption';
 import * as testUtils from '../test-utils';
 import expect from 'expect';
 
-// polyfill textencoder if necessary
-let TextEncoder = window.TextEncoder;
-if (!TextEncoder) {
-    TextEncoder = require('utils/TextEncoderPolyfill');
-}
-
 const TEST_VECTORS=[
     [
         "plain",
