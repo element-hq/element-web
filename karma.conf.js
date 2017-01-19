@@ -29,12 +29,22 @@ module.exports = function (config) {
         files: [
             'node_modules/babel-polyfill/browser.js',
             testFile,
-            {pattern: 'vector/img/*', watched: false, included: false, served: true, nocache: false},
+
+            // make the images available via our httpd. They will be avaliable
+            // below http://localhost:[PORT]/base/. See also `proxies` which
+            // defines alternative URLs for them.
+            //
+            // This isn't required by any of the tests, but it stops karma
+            // logging warnings when it serves a 404 for them.
+            {
+                pattern: 'src/skins/vector/img/*',
+                watched: false, included: false, served: true, nocache: false,
+            },
         ],
 
-        // redirect img links to the karma server
         proxies: {
-            "/img/": "/base/vector/img/",
+            // redirect img links to the karma server. See above.
+            "/img/": "/base/src/skins/vector/img/",
         },
 
         // preprocess matching files before serving them to the browser
@@ -86,6 +96,12 @@ module.exports = function (config) {
 
         webpack: {
             module: {
+                preLoaders: [
+                    // use the source-map-loader for javascript. This means
+                    // that we have a better chance of seeing line numbers from
+                    // the pre-babeled source.
+                    { test: /\.js$/, loader: "source-map-loader" },
+                ],
                 loaders: [
                     { test: /\.json$/, loader: "json" },
                     {
