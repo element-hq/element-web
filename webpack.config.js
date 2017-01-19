@@ -17,8 +17,8 @@ module.exports = {
         "olm": "./src/vector/olm-loader.js",
 
         // CSS themes
-        "theme-light": "./build/light.scss",
-        "theme-dark": "./build/dark.scss",
+        "theme-light": "./src/skins/vector/css/themes/light.scss",
+        "theme-dark": "./src/skins/vector/css/themes/dark.scss"
     },
     module: {
         preLoaders: [
@@ -27,9 +27,25 @@ module.exports = {
         loaders: [
             { test: /\.json$/, loader: "json" },
             { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
-            // css-raw-loader loads CSS but doesn't try to treat url()s as require()s
-            // we're assuming that postcss has already preprocessed SCSS by this point
-            { test: /\.s?css$/, loader: ExtractTextPlugin.extract("css-raw-loader") },
+            {
+                test: /\.scss$/,
+
+                // 1. postcss-loader turns the SCSS into normal CSS.
+                // 2. css-raw-loader turns the CSS into a javascript module
+                //    whose default export is a string containing the CSS.
+                //    (css-raw-loader is similar to css-loader, but the latter
+                //    would also drag in the imgs and fonts that our CSS refers to
+                //    as webpack inputs.)
+                // 3. ExtractTextPlugin turns that string into a separate asset.
+                loader: ExtractTextPlugin.extract(
+                    "css-raw-loader!postcss-loader?config=postcss.config.js"
+                ),
+            },
+            {
+                // this works similarly to the scss case, without postcss.
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract("css-raw-loader"),
+            },
         ],
         noParse: [
             // don't parse the languages within highlight.js. They cause stack
