@@ -71,15 +71,12 @@ module.exports = React.createClass({
     },
 
     onButtonClick: function() {
-        var inviteList = this.state.inviteList.slice();
+        let inviteList = this.state.inviteList.slice();
         // Check the text input field to see if user has an unconverted address
         // If there is and it's valid add it to the local inviteList
-        const addrType = Invite.getAddressType(this.refs.textinput.value);
-        if (addrType !== null) {
-            inviteList.push(this.refs.textinput.value);
-        } else if (this.refs.textinput.value.length > 0) {
-            this.setState({ error: true });
-            return;
+        if (this.refs.textinput.value !== '') {
+            inviteList = this._addInputToList();
+            if (inviteList === false) return;
         }
 
         if (inviteList.length > 0) {
@@ -139,32 +136,12 @@ module.exports = React.createClass({
                 // if there's nothing in the input box, submit the form
                 this.onButtonClick();
             } else {
-                const addrType = Invite.getAddressType(this.refs.textinput.value);
-                if (addrType !== null) {
-                    const inviteList = this.state.inviteList.slice();
-                    inviteList.push(this.refs.textinput.value.trim());
-                    this.setState({
-                        inviteList: inviteList,
-                        queryList: [],
-                    });
-                } else {
-                    this.setState({ error: true });
-                }
+                this._addInputToList();
             }
         } else if (e.keyCode === 188 || e.keyCode === 9) { // comma or tab
             e.stopPropagation();
             e.preventDefault();
-            const addrType = Invite.getAddressType(this.refs.textinput.value);
-            if (addrType !== null) {
-                var inviteList = this.state.inviteList.slice();
-                inviteList.push(this.refs.textinput.value.trim());
-                this.setState({
-                    inviteList: inviteList,
-                    queryList: [],
-                });
-            } else {
-                this.setState({ error: true });
-            }
+            this._addInputToList();
         }
     },
 
@@ -374,6 +351,22 @@ module.exports = React.createClass({
             });
         }
         return addrs;
+    },
+
+    _addInputToList: function() {
+        const addrType = Invite.getAddressType(this.refs.textinput.value);
+        if (addrType !== null) {
+            const inviteList = this.state.inviteList.slice();
+            inviteList.push(this.refs.textinput.value.trim());
+            this.setState({
+                inviteList: inviteList,
+                queryList: [],
+            });
+            return inviteList;
+        } else {
+            this.setState({ error: true });
+            return false;
+        }
     },
 
     render: function() {
