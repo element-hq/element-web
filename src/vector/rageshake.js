@@ -251,7 +251,7 @@ class IndexedDBLogStore {
             }, (err) => {
                 console.error(err);
             })
-        }console.log("async consumeeeee");
+        }
         return logs;
     }
 
@@ -296,6 +296,7 @@ function selectQuery(store, keyRange, resultMapper) {
 let store = null;
 let logger = null;
 let initPromise = null;
+let bugReportEndpoint = null;
 module.exports = {
 
     /**
@@ -339,6 +340,10 @@ module.exports = {
         await store.consume(false);
     },
 
+    setBugReportEndpoint: function(url) {
+        bugReportEndpoint = url;
+    },
+
     /**
      * Send a bug report.
      * @param {string} userText Any additional user input.
@@ -347,6 +352,9 @@ module.exports = {
     sendBugReport: async function(userText) {
         if (!logger) {
             throw new Error("No console logger, did you forget to call init()?");
+        }
+        if (!bugReportEndpoint) {
+            throw new Error("No bug report endpoint has been set.");
         }
         // If in incognito mode, store is null, but we still want bug report sending to work going off
         // the in-memory console logs.
@@ -364,7 +372,7 @@ module.exports = {
         await new Promise((resolve, reject) => {
             request({
                 method: "POST",
-                url: "http://localhost:1337",
+                url: bugReportEndpoint,
                 body: {
                     logs: logs,
                     text: userText || "User did not supply any additional text.",
