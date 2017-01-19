@@ -24,7 +24,7 @@ limitations under the License.
 //    generates a random string which serves as the "ID" for that tab/session. These IDs are stored along with the log lines.
 //  - Bug reports are sent as a POST over HTTPS: it purposefully does not use Matrix as bug reports may be made when Matrix is
 //    not responsive (which may be the cause of the bug). We send the most recent N MB of UTF-8 log data, starting with the most
-//    recent, which we know because the "ID"s are actually timestamps. We then purge the remaining logs. We also do this check
+//    recent, which we know because the "ID"s are actually timestamps. We then purge the remaining logs. We also do this purge
 //    on startup to prevent logs from accumulating.
 
 const FLUSH_RATE_MS = 30 * 1000;
@@ -38,6 +38,7 @@ class ConsoleLogger {
         const consoleFunctionsToLevels = {
             log: "I",
             info: "I",
+            warn: "W",
             error: "E",
         };
         Object.keys(consoleFunctionsToLevels).forEach((fnName) => {
@@ -110,6 +111,12 @@ class IndexedDBLogStore {
                 const objectStore = db.createObjectStore("logs", {
                     keyPath: ["id", "index"]
                 });
+                // Keys in the database look like: [ "instance-148938490", 0 ]
+                // Later on we need to query for everything with index=0, and query everything for an instance id.
+                // In order to do this, we need to set up indexes on both "id" and "index".
+                objectStore.createIndex("index", "index", { unique: false });
+                objectStore.createIndex("id", "id", { unique: false });
+
                 objectStore.add(
                     this._generateLogEntry(
                         new Date() + " ::: Log database was created."
@@ -161,9 +168,11 @@ class IndexedDBLogStore {
         const MAX_LOG_SIZE = 1024 * 1024 * 50; // 50 MB
         // To gather all the logs, we first query for every log entry with index "0", this will let us
         // know all the IDs from different tabs/sessions.
-        return new Promise((resolve, reject) => {
-            // let txn = this.db.transaction("logs", "readonly");
-            // let objectStore = txn.objectStore("logs");
+        const txn = this.db.transaction("logs", "readonly");
+        const objectStore = txn.objectStore("logs");
+        return selectQuery(objectStore.index("index"), IDBKeyRange.only(0), (cursor) => cursor.value.id).then((res) => {
+            console.log("Instances: ", res);
+        });
 
             // we know each entry has a unique ID, and we know IDs are timestamps, so accumulate all the IDs,
             // ignoring the logs for now, and sort them to work out the correct log ID ordering.
@@ -175,7 +184,6 @@ class IndexedDBLogStore {
             // Remove all logs that are older than the cutoff (or the entire logs if clearAll is set).
 
             // Return the logs that are within the cutoff.
-        });
     }
 
     _generateLogEntry(lines) {
@@ -185,6 +193,34 @@ class IndexedDBLogStore {
             index: this.index++
         };
     }
+}
+
+/**
+ * Helper method to collect results from a Cursor and promiseify it.
+ * @param {ObjectStore|Index} store The store to perform openCursor on.
+ * @param {IDBKeyRange=} keyRange Optional key range to apply on the cursor.
+ * @param {Function} resultMapper A function which is repeatedly called with a Cursor.
+ * Return the data you want to keep.
+ * @return {Promise<T[]>} Resolves to an array of whatever you returned from resultMapper.
+ */
+function selectQuery(store, keyRange, resultMapper) {
+    const query = store.openCursor(keyRange);
+    return new Promise((resolve, reject) => {
+        let results = [];
+        query.onerror = (event) => {
+            reject(new Error("Query failed: " + event.target.errorCode));
+        };
+        // collect results
+        query.onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (!cursor) {
+                resolve(results);
+                return; // end of results
+            }
+            results.push(resultMapper(cursor));
+            cursor.continue();
+        }
+    });
 }
 
 
