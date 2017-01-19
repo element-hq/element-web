@@ -373,7 +373,7 @@ module.exports = {
         // the in-memory console logs.
         let logs = [];
         if (store) {
-            logs = await store.consume(false);
+            logs = await store.consume(true);
         }
         // and add the most recent console logs which won't be in the store yet.
         const consoleLogs = logger.flush(); // remove logs from console
