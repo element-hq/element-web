@@ -598,19 +598,31 @@ module.exports = React.createClass({
             theme = 'light';
         }
 
+        // look for the stylesheet elements.
+        // styleElements is a map from style name to HTMLLinkElement.
+        var styleElements = Object.create(null);
         var i, a;
         for (i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
             var href = a.getAttribute("href");
+            // shouldn't we be using the 'title' tag rather than the href?
             var match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
             if (match) {
-                if (match[1] === theme) {
-                    a.disabled = false;
-                }
-                else {
-                    a.disabled = true;
-                }
+                styleElements[match[1]] = a;
             }
         }
+
+        if (!(theme in styleElements)) {
+            throw new Error("Unknown theme " + theme);
+        }
+
+        // disable all of them first, then enable the one we want. Chrome only
+        // bothers to do an update on a true->false transition, so this ensures
+        // that we get exactly one update, at the right time.
+
+        Object.values(styleElements).forEach((a) => {
+            a.disabled = true;
+        });
+        styleElements[theme].disabled = false;
 
         if (theme === 'dark') {
             // abuse the tinter to change all the SVG's #fff to #2d2d2d
