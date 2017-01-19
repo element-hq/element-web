@@ -6,7 +6,7 @@
 
 set -ev
 
-git clone --depth=1 https://github.com/vector-im/riot-web.git riot-web
+git clone --depth=1 --branch develop https://github.com/vector-im/riot-web.git riot-web
 cd riot-web
 mkdir node_modules
 ln -s ../.. node_modules/matrix-react-sdk
