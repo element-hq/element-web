@@ -39,6 +39,7 @@ require('draft-js/dist/Draft.css');
 const rageshake = require("./rageshake");
 rageshake.init().then(() => {
     console.log("Initialised rageshake");
+    rageshake.sendBugReport();
 }, (err) => {
     console.error("Failed to initialise rageshake: " + err);
 });

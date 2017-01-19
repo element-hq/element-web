@@ -166,24 +166,120 @@ class IndexedDBLogStore {
      */
     consume(clearAll) {
         const MAX_LOG_SIZE = 1024 * 1024 * 50; // 50 MB
-        // To gather all the logs, we first query for every log entry with index "0", this will let us
-        // know all the IDs from different tabs/sessions.
-        const txn = this.db.transaction("logs", "readonly");
-        const objectStore = txn.objectStore("logs");
-        return selectQuery(objectStore.index("index"), IDBKeyRange.only(0), (cursor) => cursor.value.id).then((res) => {
-            console.log("Instances: ", res);
+        const db = this.db;
+
+        // Returns: a string representing the concatenated logs for this ID.
+        function fetchLogs(id) {
+            const o = db.transaction("logs", "readonly").objectStore("logs");
+            return selectQuery(o.index("id"), IDBKeyRange.only(id), (cursor) => {
+                return {
+                    lines: cursor.value.lines,
+                    index: cursor.value.index,
+                }
+            }).then((linesArray) => {
+                // We have been storing logs periodically, so string them all together *in order of index* now
+                linesArray.sort((a, b) => {
+                    return a.index - b.index;
+                })
+                return linesArray.map((l) => l.lines).join("");
+            });
+        }
+
+        // Returns: A sorted array of log IDs. (newest first)
+        function fetchLogIds() {
+            // To gather all the log IDs, query for every log entry with index "0", this will let us
+            // know all the IDs from different tabs/sessions.
+            const o = db.transaction("logs", "readonly").objectStore("logs");
+            return selectQuery(o.index("index"), IDBKeyRange.only(0), (cursor) => cursor.value.id).then((res) => {
+                // we know each entry has a unique ID, and we know IDs are timestamps, so accumulate all the IDs,
+                // ignoring the logs for now, and sort them to work out the correct log ID ordering, newest first.
+                // E.g. [ "instance-1484827160051", "instance-1374827160051", "instance-1000007160051"]
+                return res.sort().reverse();
+            });
+        }
+
+        function deleteLogs(id) {
+            return new Promise((resolve, reject) => {
+                const txn = db.transaction("logs", "readwrite");
+                const o = txn.objectStore("logs");
+                // only load the key path, not the data which may be huge
+                const query = o.index("id").openKeyCursor(IDBKeyRange.only(id));
+                query.onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    if (!cursor) {
+                        return;
+                    }
+                    o.delete(cursor.primaryKey);
+                    cursor.continue();
+                }
+                txn.oncomplete = () => {
+                    resolve();
+                };
+                txn.onerror = (event) => {
+                    reject(new Error(`Failed to delete logs for '${id}' : ${event.target.errorCode}`));
+                }
+            });
+        }
+
+        // Ideally we'd just use coroutines and a for loop but riot-web doesn't support async/await so instead
+        // recursively fetch logs up to the given threshold. We can't cheat and fetch all the logs
+        // from all time, but we may OOM if we do so.
+        // Returns: Promise<Object[]> : Each object having 'id' and 'lines'. Same ordering as logIds.
+        function fetchLogsToThreshold(logIds, threshold, logs) {
+            // Base case: check log size and return if bigger than threshold
+            let size = 0;
+            logs.forEach((l) => {
+                size += l.lines.length;
+            });
+            if (size > threshold) {
+                return Promise.resolve(logs);
+            }
+
+            // fetch logs for the first element
+            let logId = logIds.shift();
+            if (!logId) {
+                // no more entries
+                return Promise.resolve(logs);
+            }
+            return fetchLogs(logId).then((lines) => {
+                // add result to logs
+                logs.push({
+                    lines: lines,
+                    id: logId,
+                });
+                // recurse with the next log ID. TODO: Stack overflow risk?
+                return fetchLogsToThreshold(logIds, threshold, logs);
+            })
+        }
+
+        let allLogIds = [];
+        return fetchLogIds().then((logIds) => {
+            allLogIds = logIds.map((id) => id); // deep copy array as we'll modify it when fetching logs
+            return fetchLogsToThreshold(logIds, MAX_LOG_SIZE, []);
+        }).then((logs) => {
+            // Remove all logs that are beyond the threshold (not in logs), or the entire logs if clearAll was set.
+            let removeLogIds = allLogIds;
+            if (!clearAll) {
+                removeLogIds = removeLogIds.filter((id) => {
+                    for (let i = 0; i < logs.length; i++) {
+                        if (logs[i].id === id) {
+                            return false; // do not remove logs that we're about to return to the caller.
+                        }
+                    }
+                    return true;
+                });
+            }
+            if (removeLogIds.length > 0) {
+                console.log("Removing logs: ", removeLogIds);
+                // Don't promise chain this because it's non-fatal if we can't clean up logs.
+                Promise.all(removeLogIds.map((id) => deleteLogs(id))).then(() => {
+                    console.log(`Removed ${removeLogIds.length} old logs.`);
+                }, (err) => {
+                    console.error(err);
+                })
+            }
+            return logs;
         });
-
-            // we know each entry has a unique ID, and we know IDs are timestamps, so accumulate all the IDs,
-            // ignoring the logs for now, and sort them to work out the correct log ID ordering.
-
-            // Starting with the most recent ID, fetch the logs (all indices) for said ID and accumulate them
-            // in order. After fetching ALL the logs for an ID, recheck the total length of the logs to work out
-            // if we have exceeded the max size cutoff for "recent" logs.
-
-            // Remove all logs that are older than the cutoff (or the entire logs if clearAll is set).
-
-            // Return the logs that are within the cutoff.
     }
 
     _generateLogEntry(lines) {
@@ -258,8 +354,9 @@ module.exports = {
      * @return {Promise} Resolved when the bug report is sent.
      */
     sendBugReport: function(userText) {
-        return store.consume(true).then((data) => {
+        return store.consume(false).then((logs) => {
             // Send logs grouped by ID
+            console.log(logs);
         });
     }
 };
