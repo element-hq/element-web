@@ -124,7 +124,7 @@ module.exports = React.createClass({
             e.stopPropagation();
             e.preventDefault();
             this.addressSelector.moveSelectionDown();
-        } else if (this.state.queryList.length > 0 && (e.keyCode === 188, e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
+        } else if (this.state.queryList.length > 0 && (e.keyCode === 188 || e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
             e.stopPropagation();
             e.preventDefault();
             this.addressSelector.chooseSelection();
@@ -138,8 +138,6 @@ module.exports = React.createClass({
             if (this.refs.textinput.value == '') {
                 // if there's nothing in the input box, submit the form
                 this.onButtonClick();
-            } else if (this.state.queryList.length > 0) {
-                this.addressSelector.chooseSelection();
             } else {
                 const addrType = Invite.getAddressType(this.refs.textinput.value);
                 if (addrType !== null) {
