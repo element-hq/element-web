@@ -331,7 +331,7 @@ module.exports = React.createClass({
         //  * The start of the string
         //  * Whitespace, or
         //  * A fixed number of punctuation characters
-        let expr = new RegExp("(?:^|[\\s\\(\)'\",\.-])" + escapeRegExp(query));
+        const expr = new RegExp("(?:^|[\\s\\(\)'\",\.-_@\?;:{}\\[\\]\\#~`\\*\\&\\$])" + escapeRegExp(query));
         if (expr.test(name)) {
             return true;
         }
