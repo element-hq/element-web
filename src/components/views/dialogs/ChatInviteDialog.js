@@ -135,7 +135,10 @@ module.exports = React.createClass({
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            if (this.state.queryList.length > 0) {
+            if (this.refs.textinput.value == '') {
+                // if there's nothing in the input box, submit the form
+                this.onButtonClick();
+            } else if (this.state.queryList.length > 0) {
                 this.addressSelector.chooseSelection();
             } else {
                 const addrType = Invite.getAddressType(this.refs.textinput.value);
