@@ -11,5 +11,10 @@ cd riot-web
 mkdir node_modules
 ln -s ../.. node_modules/matrix-react-sdk
 npm install
+
 (cd node_modules/matrix-js-sdk && npm install)
+
+# https://github.com/webpack/webpack/issues/1472 workaround
+(cd node_modules/matrix-react-sdk && npm install source-map-loader)
+
 npm run test
