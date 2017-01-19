@@ -523,7 +523,9 @@ export default class MessageComposerInput extends React.Component {
             );
         } else {
             const md = new Markdown(contentText);
-            if (!md.isPlainText()) {
+            if (md.isPlainText()) {
+                contentText = md.toPlaintext();
+            } else {
                 contentHTML = md.toHTML();
             }
         }
