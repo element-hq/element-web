@@ -121,13 +121,13 @@ module.exports = React.createClass({
                            onChange={ this.onGlobalDisableUrlPreviewChange }
                            checked={ this.state.globalDisableUrlPreview } />
                     Disable URL previews by default for participants in this room
-                </label>
+                </label>;
         }
         else {
             disableRoomPreviewUrls =
                 <label>
                     URL previews are { this.state.globalDisableUrlPreview ? "disabled" : "enabled" } by default for participants in this room.
-                </label>
+                </label>;
         }
 
         return (

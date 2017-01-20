@@ -40,7 +40,7 @@ class MatrixDispatcher extends flux.Dispatcher {
             setTimeout(super.dispatch.bind(this, payload), 0);
         }
     }
-};
+}
 
 if (global.mxDispatcher === undefined) {
     global.mxDispatcher = new MatrixDispatcher();

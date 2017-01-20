@@ -49,12 +49,12 @@ module.exports = {
     },
 
     defaultAvatarUrlForString: function(s) {
-        var images = [ '76cfa6', '50e2c2', 'f4c371' ];
+        var images = ['76cfa6', '50e2c2', 'f4c371'];
         var total = 0;
         for (var i = 0; i < s.length; ++i) {
             total += s.charCodeAt(i);
         }
         return 'img/' + images[total % images.length] + '.png';
     }
-}
+};
 

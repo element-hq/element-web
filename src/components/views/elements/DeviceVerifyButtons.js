@@ -42,8 +42,8 @@ export default React.createClass({
                     <div className="mx_UserSettings_cryptoSection">
                         <ul>
                             <li><label>Device name:</label> <span>{ this.props.device.getDisplayName() }</span></li>
-                            <li><label>Device ID:</label>   <span><code>{ this.props.device.deviceId}</code></span></li>
-                            <li><label>Device key:</label>  <span><code><b>{ this.props.device.getFingerprint() }</b></code></span></li>
+                            <li><label>Device ID:</label>             <span><code>{ this.props.device.deviceId}</code></span></li>
+                            <li><label>Device key:</label>            <span><code><b>{ this.props.device.getFingerprint() }</b></code></span></li>
                         </ul>
                     </div>
                     <p>

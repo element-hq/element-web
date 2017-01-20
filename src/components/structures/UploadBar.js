@@ -57,7 +57,7 @@ module.exports = React.createClass({displayName: 'UploadBar',
         // }];
 
         if (uploads.length == 0) {
-            return <div />
+            return <div />;
         }
 
         var upload;
@@ -68,7 +68,7 @@ module.exports = React.createClass({displayName: 'UploadBar',
             }
         }
         if (!upload) {
-            return <div />
+            return <div />;
         }
 
         var innerProgressStyle = {
@@ -76,7 +76,7 @@ module.exports = React.createClass({displayName: 'UploadBar',
         };
         var uploadedSize = filesize(upload.loaded);
         var totalSize = filesize(upload.total);
-        if (uploadedSize.replace(/^.* /,'') === totalSize.replace(/^.* /,'')) {
+        if (uploadedSize.replace(/^.* /, '') === totalSize.replace(/^.* /, '')) {
             uploadedSize = uploadedSize.replace(/ .*/, '');
         }
 

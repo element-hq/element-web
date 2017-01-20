@@ -49,9 +49,9 @@ export default class Markdown {
             dummy_renderer[k] = setNotPlain;
         }
         // text and paragraph are just text
-        dummy_renderer.text = function(t) { return t; }
-        dummy_renderer.softbreak = function(t) { return t; }
-        dummy_renderer.paragraph = function(t) { return t; }
+        dummy_renderer.text = function(t) { return t; };
+        dummy_renderer.softbreak = function(t) { return t; };
+        dummy_renderer.paragraph = function(t) { return t; };
 
         const dummy_parser = new commonmark.Parser();
         dummy_renderer.render(dummy_parser.parse(this.input));
@@ -70,12 +70,12 @@ export default class Markdown {
             // its own p tag to keep them as separate paragraphs.
             var par = node;
             while (par.parent) {
-                par = par.parent
+                par = par.parent;
             }
             if (par.firstChild != par.lastChild) {
                 real_paragraph.call(this, node, entering);
             }
-        }
+        };
 
         var parsed = this.parser.parse(this.input);
         var rendered = this.renderer.render(parsed);
@@ -94,7 +94,7 @@ export default class Markdown {
         this.renderer.out = function(s) {
             // The `lit` function adds a string literal to the output buffer.
             this.lit(s);
-        }
+        };
 
         this.renderer.paragraph = function(node, entering) {
             // If there is only one top level node, just return the
@@ -112,7 +112,7 @@ export default class Markdown {
                     this.lit('\n\n');
                 }
             }
-        }
+        };
 
         var parsed = this.parser.parse(this.input);
         var rendered = this.renderer.render(parsed);

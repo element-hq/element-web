@@ -171,7 +171,7 @@ module.exports = React.createClass({
                 inviteList: inviteList,
                 queryList: [],
             });
-        }
+        };
     },
 
     onClick: function(index) {
@@ -402,10 +402,10 @@ module.exports = React.createClass({
         var error;
         var addressSelector;
         if (this.state.error) {
-            error = <div className="mx_ChatInviteDialog_error">You have entered an invalid contact. Try using their Matrix ID or email address.</div>
+            error = <div className="mx_ChatInviteDialog_error">You have entered an invalid contact. Try using their Matrix ID or email address.</div>;
         } else {
             addressSelector = (
-                <AddressSelector ref={(ref) => {this.addressSelector = ref}}
+                <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
                     addressList={ this.state.queryList }
                     onSelected={ this.onSelected }
                     truncateAt={ TRUNCATE_QUERY_LIST } />

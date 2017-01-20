@@ -75,7 +75,6 @@ function textForMemberEvent(ev) {
                     return targetName + " joined the room.";
                 }
             }
-            return '';
         case 'leave':
             if (ev.getSender() === ev.getStateKey()) {
                 if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
@@ -203,4 +202,4 @@ module.exports = {
         if (!hdlr) return "";
         return hdlr(ev);
     }
-}
+};

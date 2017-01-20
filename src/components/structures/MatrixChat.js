@@ -77,7 +77,7 @@ module.exports = React.createClass({
     getChildContext: function() {
         return {
             appConfig: this.props.config,
-        }
+        };
     },
 
     getInitialState: function() {
@@ -1038,7 +1038,7 @@ module.exports = React.createClass({
                     {...this.props}
                     {...this.state}
                 />
-            )
+            );
         } else if (this.state.logged_in) {
             // we think we are logged in, but are still waiting for the /sync to complete
             var Spinner = sdk.getComponent('elements.Spinner');

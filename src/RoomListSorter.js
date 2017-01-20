@@ -26,7 +26,7 @@ function tsOfNewestEvent(room) {
 }
 
 function mostRecentActivityFirst(roomList) {
-    return roomList.sort(function(a,b) {
+    return roomList.sort(function(a, b) {
         return tsOfNewestEvent(b) - tsOfNewestEvent(a);
     });
 }

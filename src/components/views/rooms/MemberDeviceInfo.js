@@ -60,7 +60,7 @@ export default class MemberDeviceInfo extends React.Component {
             </div>
         );
     }
-};
+}
 
 MemberDeviceInfo.displayName = 'MemberDeviceInfo';
 MemberDeviceInfo.propTypes = {

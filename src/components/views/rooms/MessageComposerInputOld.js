@@ -192,7 +192,7 @@ module.exports = React.createClass({
         }
     },
 
-    onKeyDown: function (ev) {
+    onKeyDown: function(ev) {
         if (ev.keyCode === KeyCode.ENTER && !ev.shiftKey) {
             var input = this.refs.textarea.value;
             if (input.length === 0) {

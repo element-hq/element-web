@@ -52,12 +52,12 @@ export default class RoomProvider extends AutocompleteProvider {
     getName() {
         return '💬 Rooms';
     }
-    
+
     static getInstance() {
         if (instance == null) {
             instance = new RoomProvider();
         }
-        
+
         return instance;
     }
 

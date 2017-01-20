@@ -103,13 +103,13 @@ module.exports = React.createClass({
         }
         if (oldCanonicalAlias !== this.state.canonicalAlias) {
             console.log("AliasSettings: Updating canonical alias");
-            promises = [ q.all(promises).then(
+            promises = [q.all(promises).then(
                 MatrixClientPeg.get().sendStateEvent(
                     this.props.roomId, "m.room.canonical_alias", {
                         alias: this.state.canonicalAlias
                     }, ""
                 )
-            ) ];
+            )];
         }
 
         return promises;
@@ -144,7 +144,7 @@ module.exports = React.createClass({
             // XXX: do we need to deep copy aliases before editing it?
             this.state.domainToAliases[domain] = this.state.domainToAliases[domain] || [];
             this.state.domainToAliases[domain].push(alias);
-            this.setState({ 
+            this.setState({
                 domainToAliases: this.state.domainToAliases
             });
 
@@ -152,9 +152,9 @@ module.exports = React.createClass({
             this.refs.add_alias.setValue(''); // FIXME
         }
         else {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");            
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Invalid alias format", 
+                title: "Invalid alias format",
                 description: "'" + alias + "' is not a valid format for an alias",
             });
         }
@@ -168,9 +168,9 @@ module.exports = React.createClass({
             this.state.domainToAliases[domain][index] = alias;
         }
         else {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");            
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Invalid address format", 
+                title: "Invalid address format",
                 description: "'" + alias + "' is not a valid format for an address",
             });
         }
@@ -183,7 +183,7 @@ module.exports = React.createClass({
         // would be to arbitrarily deepcopy to a temp variable and then setState
         // that, but why bother when we can cut this corner.
         var alias = this.state.domainToAliases[domain].splice(index, 1);
-        this.setState({ 
+        this.setState({
             domainToAliases: this.state.domainToAliases
         });
     },

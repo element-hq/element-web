@@ -38,7 +38,7 @@ if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
     var debuglog = console.log.bind(console);
 } else {
-    var debuglog = function () {};
+    var debuglog = function() {};
 }
 
 /*
@@ -322,7 +322,7 @@ var TimelinePanel = React.createClass({
         });
     },
 
-    onMessageListScroll: function () {
+    onMessageListScroll: function() {
         if (this.props.onScroll) {
             this.props.onScroll();
         }
@@ -387,7 +387,7 @@ var TimelinePanel = React.createClass({
 
             // if we're at the end of the live timeline, append the pending events
             if (this.props.timelineSet.room && !this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
-                events.push(... this.props.timelineSet.room.getPendingEvents());
+                events.push(...this.props.timelineSet.room.getPendingEvents());
             }
 
             var updatedState = {events: events};
@@ -564,8 +564,9 @@ var TimelinePanel = React.createClass({
 
         // first find where the current RM is
         for (var i = 0; i < events.length; i++) {
-            if (events[i].getId() == this.state.readMarkerEventId)
+            if (events[i].getId() == this.state.readMarkerEventId) {
                 break;
+            }
         }
         if (i >= events.length) {
             return;
@@ -644,7 +645,7 @@ var TimelinePanel = React.createClass({
         var tl = this.props.timelineSet.getTimelineForEvent(rmId);
         var rmTs;
         if (tl) {
-            var event = tl.getEvents().find((e) => { return e.getId() == rmId });
+            var event = tl.getEvents().find((e) => { return e.getId() == rmId; });
             if (event) {
                 rmTs = event.getTs();
             }
@@ -821,7 +822,7 @@ var TimelinePanel = React.createClass({
                 description: message,
                 onFinished: onFinished,
             });
-        }
+        };
 
         var prom = this._timelineWindow.load(eventId, INITIAL_SIZE);
 
@@ -843,7 +844,7 @@ var TimelinePanel = React.createClass({
                 timelineLoading: true,
             });
 
-            prom = prom.then(onLoaded, onError)
+            prom = prom.then(onLoaded, onError);
         }
 
         prom.done();
@@ -868,7 +869,7 @@ var TimelinePanel = React.createClass({
 
         // if we're at the end of the live timeline, append the pending events
         if (!this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
-            events.push(... this.props.timelineSet.getPendingEvents());
+            events.push(...this.props.timelineSet.getPendingEvents());
         }
 
         return events;
@@ -930,8 +931,9 @@ var TimelinePanel = React.createClass({
     _getCurrentReadReceipt: function(ignoreSynthesized) {
         var client = MatrixClientPeg.get();
         // the client can be null on logout
-        if (client == null)
+        if (client == null) {
             return null;
+        }
 
         var myUserId = client.credentials.userId;
         return this.props.timelineSet.room.getEventReadUpTo(myUserId, ignoreSynthesized);

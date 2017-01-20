@@ -81,7 +81,7 @@ export default class DeactivateAccountDialog extends React.Component {
         if (this.state.errStr) {
             error = <div className="error">
                 {this.state.errStr}
-            </div>
+            </div>;
             passwordBoxClass = 'error';
         }
 
@@ -92,7 +92,7 @@ export default class DeactivateAccountDialog extends React.Component {
         if (!this.state.busy) {
             cancelButton = <button onClick={this._onCancel} autoFocus={true}>
                 Cancel
-            </button>
+            </button>;
         }
 
         return (

@@ -55,7 +55,7 @@ export function inviteToRoom(roomId, addr) {
  * @returns Promise
  */
 export function inviteMultipleToRoom(roomId, addrs) {
-    this.inviter = new MultiInviter(roomId);
-    return this.inviter.invite(addrs);
+    const inviter = new MultiInviter(roomId);
+    return inviter.invite(addrs);
 }
 

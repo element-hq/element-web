@@ -73,7 +73,7 @@ module.exports = React.createClass({
     getValue: function() {
         var value;
         if (this.refs.select) {
-            value = reverseRoles[ this.refs.select.value ];
+            value = reverseRoles[this.refs.select.value];
             if (this.refs.custom) {
                 if (value === undefined) value = parseInt( this.refs.custom.value );
             }
@@ -86,10 +86,10 @@ module.exports = React.createClass({
         if (this.state.custom) {
             var input;
             if (this.props.disabled) {
-                input = <span>{ this.props.value }</span>
+                input = <span>{ this.props.value }</span>;
             }
             else {
-                input = <input ref="custom" type="text" size="3" defaultValue={ this.props.value } onBlur={ this.onCustomBlur } onKeyDown={ this.onCustomKeyDown }/>
+                input = <input ref="custom" type="text" size="3" defaultValue={ this.props.value } onBlur={ this.onCustomBlur } onKeyDown={ this.onCustomKeyDown }/>;
             }
             customPicker = <span> of { input }</span>;
         }
@@ -115,7 +115,7 @@ module.exports = React.createClass({
                     <option value="Moderator">Moderator (50)</option>
                     <option value="Admin">Admin (100)</option>
                     <option value="Custom">Custom level</option>
-                </select>
+                </select>;
         }
 
         return (

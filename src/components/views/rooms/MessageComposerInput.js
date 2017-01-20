@@ -443,12 +443,12 @@ export default class MessageComposerInput extends React.Component {
                 selection = this.state.editorState.getSelection();
 
             let modifyFn = {
-                bold: text => `**${text}**`,
-                italic: text => `*${text}*`,
-                underline: text => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
-                strike: text => `~~${text}~~`,
-                code: text => `\`${text}\``,
-                blockquote: text => text.split('\n').map(line => `> ${line}\n`).join(''),
+                'bold': text => `**${text}**`,
+                'italic': text => `*${text}*`,
+                'underline': text => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
+                'strike': text => `~~${text}~~`,
+                'code': text => `\`${text}\``,
+                'blockquote': text => text.split('\n').map(line => `> ${line}\n`).join(''),
                 'unordered-list-item': text => text.split('\n').map(line => `- ${line}\n`).join(''),
                 'ordered-list-item': text => text.split('\n').map((line, i) => `${i+1}. ${line}\n`).join(''),
             }[command];
@@ -462,8 +462,9 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
-        if (newState == null)
+        if (newState == null) {
             newState = RichUtils.handleKeyCommand(this.state.editorState, command);
+        }
 
         if (newState != null) {
             this.setEditorState(newState);
@@ -665,7 +666,7 @@ export default class MessageComposerInput extends React.Component {
 
         const blockName = {
             'code-block': 'code',
-            blockquote: 'quote',
+            'blockquote': 'quote',
             'unordered-list-item': 'bullet',
             'ordered-list-item': 'numbullet',
         };
@@ -740,7 +741,7 @@ export default class MessageComposerInput extends React.Component {
             </div>
         );
     }
-};
+}
 
 MessageComposerInput.propTypes = {
     tabComplete: React.PropTypes.any,
