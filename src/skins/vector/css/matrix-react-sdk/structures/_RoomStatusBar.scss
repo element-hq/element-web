@@ -40,12 +40,12 @@ limitations under the License.
     opacity: 0.5;
     position: relative;
     top: -4px;
-/*    
+/*
     animation-duration: 1s;
     animation-name: bounce;
     animation-direction: alternate;
     animation-iteration-count: infinite;
-*/    
+*/
 }
 
 .mx_RoomStatusBar_placeholderIndicator span:nth-child(1) {
@@ -68,6 +68,36 @@ limitations under the License.
         opacity: 0.2;
         top: -3px;
     }
+}
+
+.mx_RoomStatusBar_typingIndicatorAvatars {
+    width: 52px;
+    text-align: left;
+}
+
+.mx_RoomStatusBar_typingIndicatorAvatars .mx_BaseAvatar_image {
+    margin-right: -12px;
+    border: 1px solid $primary-bg-color;
+}
+
+.mx_RoomStatusBar_typingIndicatorAvatars .mx_BaseAvatar_initial {
+    padding-left: 1px;
+    padding-top: 1px;
+}
+
+.mx_RoomStatusBar_typingIndicatorRemaining {
+    display: inline-block;
+    color: #acacac;
+    background-color: #ddd;
+    border: 1px solid $primary-bg-color;
+    border-radius: 40px;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 0.8em;
+    vertical-align: top;
+    text-align: center;
+    position: absolute;
 }
 
 .mx_RoomStatusBar_scrollDownIndicator {
