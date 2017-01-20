@@ -25,7 +25,6 @@ var SdkConfig = require("../../SdkConfig");
 var ContextualMenu = require("./ContextualMenu");
 var RoomListSorter = require("../../RoomListSorter");
 var UserActivity = require("../../UserActivity");
-var UserSettingsStore = require('../../UserSettingsStore');
 var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
 
