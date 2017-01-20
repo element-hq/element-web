@@ -80,7 +80,7 @@ export default class DeactivateAccountDialog extends React.Component {
         let error = null;
         if (this.state.errStr) {
             error = <div className="error">
-                {this.state.err_str}
+                {this.state.errStr}
             </div>
             passwordBoxClass = 'error';
         }
