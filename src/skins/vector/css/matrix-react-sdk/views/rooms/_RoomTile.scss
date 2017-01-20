@@ -171,7 +171,7 @@ limitations under the License.
 
 .mx_RoomTile.mx_RoomTile_noBadges .mx_RoomTile_badge.mx_RoomTile_badgeButton,
 .mx_RoomTile.mx_RoomTile_notificationStateMenu.mx_RoomTile_noBadges .mx_RoomTile_badge {
-    background-color: rgb(214, 214, 214);
+    background-color: $preview-widget-bar-color;
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
