@@ -169,7 +169,7 @@ module.exports = React.createClass({
 
     validateField: function(field_id) {
         var pwd1 = this.refs.password.value.trim();
-        var pwd2 = this.refs.passwordConfirm.value.trim()
+        var pwd2 = this.refs.passwordConfirm.value.trim();
 
         switch (field_id) {
             case FIELD_EMAIL:
@@ -283,7 +283,7 @@ module.exports = React.createClass({
                         autoFocus={true} placeholder="Email address (optional)"
                         defaultValue={this.props.defaultEmail}
                         className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_EMAIL)}}
+                        onBlur={function() {self.validateField(FIELD_EMAIL);}}
                         value={self.state.email}/>
                     {emailSuffix ? <input className="mx_Login_field" value={emailSuffix} disabled/> : null }
                 </div>
@@ -293,8 +293,8 @@ module.exports = React.createClass({
                     <select
                         defaultValue="-1"
                         className="mx_Login_field"
-                        onBlur={function() {self.validateField(FIELD_EMAIL)}}
-                        onChange={function(ev) {self.onSelectTeam(ev.target.value)}}
+                        onBlur={function() {self.validateField(FIELD_EMAIL);}}
+                        onChange={function(ev) {self.onSelectTeam(ev.target.value);}}
                     >
                         <option key="-1" value="-1">No team</option>
                         {this.props.teamsConfig.teams.map((t, index) => {
@@ -327,7 +327,7 @@ module.exports = React.createClass({
 
         var placeholderUserName = "User name";
         if (this.props.guestUsername) {
-            placeholderUserName += " (default: " + this.props.guestUsername + ")"
+            placeholderUserName += " (default: " + this.props.guestUsername + ")";
         }
 
         return (
@@ -341,20 +341,20 @@ module.exports = React.createClass({
                     <input type="text" ref="username"
                         placeholder={ placeholderUserName } defaultValue={this.props.defaultUsername}
                         className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_USERNAME)}} />
+                        onBlur={function() {self.validateField(FIELD_USERNAME);}} />
                     <br />
                     { this.props.guestUsername ?
                         <div className="mx_Login_fieldLabel">Setting a user name will create a fresh account</div> : null
                     }
                     <input type="password" ref="password"
                         className={this._classForField(FIELD_PASSWORD, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_PASSWORD)}}
+                        onBlur={function() {self.validateField(FIELD_PASSWORD);}}
                         placeholder="Password" defaultValue={this.props.defaultPassword} />
                     <br />
                     <input type="password" ref="passwordConfirm"
                         placeholder="Confirm password"
                         className={this._classForField(FIELD_PASSWORD_CONFIRM, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM)}}
+                        onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM);}}
                         defaultValue={this.props.defaultPassword} />
                     <br />
                     {registerButton}

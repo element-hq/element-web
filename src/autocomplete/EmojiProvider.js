@@ -44,7 +44,7 @@ export default class EmojiProvider extends AutocompleteProvider {
 
     static getInstance() {
         if (instance == null)
-            instance = new EmojiProvider();
+            {instance = new EmojiProvider();}
         return instance;
     }
 

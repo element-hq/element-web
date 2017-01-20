@@ -221,7 +221,7 @@ module.exports = React.createClass({
         var avatarContainerClasses = classNames({
             'mx_RoomTile_avatar_container': true,
             'mx_RoomTile_avatar_roomTagMenu': this.state.roomTagMenu,
-        })
+        });
 
         var badgeClasses = classNames({
             'mx_RoomTile_badge': true,

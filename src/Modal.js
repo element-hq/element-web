@@ -36,7 +36,7 @@ const AsyncWrapper = React.createClass({
     getInitialState: function() {
         return {
             component: null,
-        }
+        };
     },
 
     componentWillMount: function() {
@@ -82,8 +82,8 @@ module.exports = {
         return container;
     },
 
-    createDialog: function (Element, props, className) {
-        return this.createDialogAsync((cb) => {cb(Element)}, props, className);
+    createDialog: function(Element, props, className) {
+        return this.createDialogAsync((cb) => {cb(Element);}, props, className);
     },
 
     /**
@@ -105,7 +105,7 @@ module.exports = {
      *
      * @param {String} className   CSS class to apply to the modal wrapper
      */
-    createDialogAsync: function (loader, props, className) {
+    createDialogAsync: function(loader, props, className) {
         var self = this;
         // never call this via modal.close() from onFinished() otherwise it will loop
         var closeDialog = function() {

@@ -129,7 +129,7 @@ module.exports = React.createClass({
 
     _maxSelected: function(list) {
         var listSize = list.length === 0 ? 0 : list.length - 1;
-        var maxSelected = listSize > (this.props.truncateAt - 1) ? (this.props.truncateAt - 1) : listSize
+        var maxSelected = listSize > (this.props.truncateAt - 1) ? (this.props.truncateAt - 1) : listSize;
         return maxSelected;
     },
 
@@ -140,7 +140,7 @@ module.exports = React.createClass({
         });
 
         return (
-            <div className={classes} ref={(ref) => {this.scrollElement = ref}}>
+            <div className={classes} ref={(ref) => {this.scrollElement = ref;}}>
                 { this.createAddressListTiles() }
             </div>
         );

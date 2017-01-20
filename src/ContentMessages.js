@@ -256,7 +256,7 @@ function uploadFile(matrixClient, roomId, file) {
             });
         });
     } else {
-        const basePromise =  matrixClient.uploadContent(file);
+        const basePromise = matrixClient.uploadContent(file);
         const promise1 = basePromise.then(function(url) {
             // If the attachment isn't encrypted then include the URL directly.
             return {"url": url};

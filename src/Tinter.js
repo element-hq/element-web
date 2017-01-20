@@ -14,9 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var dis = require("./dispatcher");
-var sdk = require("./index");
-
 // FIXME: these vars should be bundled up and attached to
 // module.exports otherwise this will break when included by both
 // react-sdk and apps layered on top.
@@ -152,7 +149,7 @@ function hexToRgb(color) {
 
 function rgbToHex(rgb) {
     var val = (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
-    return '#' + (0x1000000 + val).toString(16).slice(1)
+    return '#' + (0x1000000 + val).toString(16).slice(1);
 }
 
 // List of functions to call when the tint changes.
@@ -187,7 +184,7 @@ module.exports = {
         }
 
         if (!secondaryColor) {
-            var x = 0.16; // average weighting factor calculated from vector green & light green
+            const x = 0.16; // average weighting factor calculated from vector green & light green
             var rgb = hexToRgb(primaryColor);
             rgb[0] = x * rgb[0] + (1 - x) * 255;
             rgb[1] = x * rgb[1] + (1 - x) * 255;
@@ -196,7 +193,7 @@ module.exports = {
         }
 
         if (!tertiaryColor) {
-            var x = 0.19;
+            const x = 0.19;
             var rgb1 = hexToRgb(primaryColor);
             var rgb2 = hexToRgb(secondaryColor);
             rgb1[0] = x * rgb1[0] + (1 - x) * rgb2[0];

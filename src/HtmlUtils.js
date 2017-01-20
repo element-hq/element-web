@@ -91,16 +91,16 @@ var sanitizeHtmlParams = {
     ],
     allowedAttributes: {
         // custom ones first:
-        font: [ 'color' ], // custom to matrix
-        a: [ 'href', 'name', 'target', 'rel' ], // remote target: custom to matrix
+        font: ['color'], // custom to matrix
+        a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix
         // We don't currently allow img itself by default, but this
         // would make sense if we did
-        img: [ 'src' ],
+        img: ['src'],
     },
     // Lots of these won't come up by default because we don't allow them
-    selfClosing: [ 'img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta' ],
+    selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
     // URL schemes we permit
-    allowedSchemes: [ 'http', 'https', 'ftp', 'mailto' ],
+    allowedSchemes: ['http', 'https', 'ftp', 'mailto'],
 
     // DO NOT USE. sanitize-html allows all URL starting with '//'
     // so this will always allow links to whatever scheme the

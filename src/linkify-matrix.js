@@ -129,7 +129,7 @@ matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/
 matrixLinkify.MATRIXTO_BASE_URL= "https://matrix.to";
 
 matrixLinkify.options = {
-    events: function (href, type) {
+    events: function(href, type) {
         switch (type) {
             case "userid":
                 return {
@@ -146,7 +146,7 @@ matrixLinkify.options = {
         }
     },
 
-    formatHref: function (href, type) {
+    formatHref: function(href, type) {
         switch (type) {
             case 'roomalias':
             case 'userid':

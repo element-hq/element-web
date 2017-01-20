@@ -57,7 +57,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             phase: this.Phases.Display,
-        }
+        };
     },
 
     componentWillReceiveProps: function(nextProps) {
@@ -164,7 +164,7 @@ module.exports = React.createClass({
 
         this.setState({
             phase: this.Phases.Edit,
-        })
+        });
     },
 
     onFocus: function(ev) {
@@ -197,9 +197,9 @@ module.exports = React.createClass({
         sel.removeAllRanges();
 
         if (this.props.blurToCancel)
-            this.cancelEdit();
+            {this.cancelEdit();}
         else
-            this.onFinish(ev);
+            {this.onFinish(ev);}
 
         this.showPlaceholder(!this.value);
     },

@@ -333,7 +333,7 @@ module.exports = React.createClass({
             returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
                     Return to app
-                </a>
+                </a>;
         }
 
         return (

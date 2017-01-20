@@ -124,7 +124,7 @@ module.exports = React.createClass({
         return this.refs.video;
     },
 
-    render: function(){
+    render: function() {
         var VideoView = sdk.getComponent('voip.VideoView');
 
         var voice;

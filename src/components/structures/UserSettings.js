@@ -346,8 +346,8 @@ module.exports = React.createClass({
             this.setState({email_add_pending: false});
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                var message = "Unable to verify email address. "
-                message += "Please check your email and click on the link it contains. Once this is done, click continue."
+                var message = "Unable to verify email address. ";
+                message += "Please check your email and click on the link it contains. Once this is done, click continue.";
                 Modal.createDialog(QuestionDialog, {
                     title: "Verification Pending",
                     description: message,
@@ -417,7 +417,7 @@ module.exports = React.createClass({
             <label htmlFor="urlPreviewsDisabled">
                 Disable inline URL previews by default
             </label>
-        </div>
+        </div>;
     },
 
     _renderSyncedSetting: function(setting) {
@@ -430,7 +430,7 @@ module.exports = React.createClass({
             <label htmlFor={ setting.id }>
                 { setting.label }
             </label>
-        </div>
+        </div>;
     },
 
     _renderThemeSelector: function(setting) {
@@ -442,7 +442,7 @@ module.exports = React.createClass({
                    defaultChecked={ this._syncedSettings[setting.id] === setting.value }
                    onChange={ e => {
                             if (e.target.checked) {
-                                UserSettingsStore.setSyncedSetting(setting.id, setting.value)
+                                UserSettingsStore.setSyncedSetting(setting.id, setting.value);
                             }
                             dis.dispatch({
                                 action: 'set_theme',
@@ -454,7 +454,7 @@ module.exports = React.createClass({
             <label htmlFor={ setting.id + "_" + setting.value }>
                 { setting.label }
             </label>
-        </div>
+        </div>;
     },
 
     _renderCryptoInfo: function() {
@@ -467,8 +467,8 @@ module.exports = React.createClass({
                 <h3>Cryptography</h3>
                 <div className="mx_UserSettings_section mx_UserSettings_cryptoSection">
                     <ul>
-                        <li><label>Device ID:</label>   <span><code>{deviceId}</code></span></li>
-                        <li><label>Device key:</label>  <span><code><b>{identityKey}</b></code></span></li>
+                        <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
+                        <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
                 </div>
             </div>
@@ -485,7 +485,7 @@ module.exports = React.createClass({
         );
     },
 
-    _renderLabs: function () {
+    _renderLabs: function() {
         // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
 
@@ -521,7 +521,7 @@ module.exports = React.createClass({
                     {features}
                 </div>
             </div>
-        )
+        );
     },
 
     _renderDeactivateAccount: function() {

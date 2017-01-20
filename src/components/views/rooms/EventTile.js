@@ -149,13 +149,13 @@ module.exports = WithMatrixClient(React.createClass({
         this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
     },
 
-    componentWillReceiveProps: function (nextProps) {
+    componentWillReceiveProps: function(nextProps) {
         if (nextProps.mxEvent !== this.props.mxEvent) {
             this._verifyEvent(nextProps.mxEvent);
         }
     },
 
-    shouldComponentUpdate: function (nextProps, nextState) {
+    shouldComponentUpdate: function(nextProps, nextState) {
         if (!ObjectUtils.shallowEqual(this.state, nextState)) {
             return true;
         }
@@ -259,7 +259,7 @@ module.exports = WithMatrixClient(React.createClass({
 
     onEditClicked: function(e) {
         var MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
-        var buttonRect = e.target.getBoundingClientRect()
+        var buttonRect = e.target.getBoundingClientRect();
 
         // The window X and Y offsets are to adjust position when zoomed in to page
         var x = buttonRect.right + window.pageXOffset;
@@ -293,7 +293,7 @@ module.exports = WithMatrixClient(React.createClass({
         // If it is, we want to display the complete date along with the HH:MM:SS,
         // rather than just HH:MM:SS.
         let dayAfterEvent = new Date(this.props.mxEvent.getTs());
-        dayAfterEvent.setDate(dayAfterEvent.getDate() + 1)
+        dayAfterEvent.setDate(dayAfterEvent.getDate() + 1);
         dayAfterEvent.setHours(0);
         dayAfterEvent.setMinutes(0);
         dayAfterEvent.setSeconds(0);
@@ -369,7 +369,7 @@ module.exports = WithMatrixClient(React.createClass({
         var event = this.props.mxEvent;
 
         Modal.createDialogAsync((cb) => {
-            require(['../../../async-components/views/dialogs/EncryptedEventDialog'], cb)
+            require(['../../../async-components/views/dialogs/EncryptedEventDialog'], cb);
         }, {
             event: event,
         });

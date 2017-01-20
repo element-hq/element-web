@@ -71,7 +71,7 @@ export function decryptMegolmKeyFile(data, password) {
             toVerify,
         ).then((isValid) => {
             if (!isValid) {
-                throw new Error('Authentication check failed: incorrect password?')
+                throw new Error('Authentication check failed: incorrect password?');
             }
 
             return subtleCrypto.decrypt(

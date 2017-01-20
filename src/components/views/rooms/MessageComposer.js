@@ -367,7 +367,7 @@ export default class MessageComposer extends React.Component {
             </div>
         );
     }
-};
+}
 
 MessageComposer.propTypes = {
     tabComplete: React.PropTypes.any,

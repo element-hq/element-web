@@ -53,7 +53,7 @@ var Notifier = {
         if (!msg) return;
 
         var title;
-        if (!ev.sender ||  room.name == ev.sender.name) {
+        if (!ev.sender || room.name == ev.sender.name) {
             title = room.name;
             // notificationMessageForEvent includes sender,
             // but we already have the sender here
@@ -88,7 +88,7 @@ var Notifier = {
         if (e) {
             e.load();
             e.play();
-        };
+        }
     },
 
     start: function() {
