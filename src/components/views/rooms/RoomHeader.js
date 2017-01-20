@@ -183,7 +183,7 @@ module.exports = React.createClass({
             );
 
             save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</div>;
-            cancel_button = <div className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>;
+            cancel_button = <div className="mx_RoomHeader_cancelButton mx_filterFlipColor" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>;
         }
 
         if (this.props.saving) {

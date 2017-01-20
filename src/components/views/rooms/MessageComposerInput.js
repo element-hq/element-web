@@ -719,7 +719,7 @@ export default class MessageComposerInput extends React.Component {
                         selection={selection} />
                 </div>
                 <div className={className}>
-                    <img className="mx_MessageComposer_input_markdownIndicator"
+                    <img className="mx_MessageComposer_input_markdownIndicator mx_filterFlipColor"
                          onMouseDown={this.onMarkdownToggleClicked}
                          title={`Markdown is ${this.state.isRichtextEnabled ? 'disabled' : 'enabled'}`}
                          src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />

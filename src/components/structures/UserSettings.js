@@ -607,8 +607,8 @@ module.exports = React.createClass({
                     <div className="mx_UserSettings_profileInputCell">
                         <input type="text" key={val.address} id={id} value={val.address} disabled />
                     </div>
-                    <div className="mx_UserSettings_threepidButton">
-                        <img src="img/icon_context_delete.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
+                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
+                        <img src="img/cancel-small.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
                     </div>
                 </div>
             );
@@ -630,7 +630,7 @@ module.exports = React.createClass({
                             blurToCancel={ false }
                             onValueChanged={ this.onAddThreepidClicked } />
                     </div>
-                    <div className="mx_UserSettings_threepidButton">
+                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
                          <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked.bind(this, undefined, true) }/>
                     </div>
                 </div>
@@ -711,7 +711,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserSettings_avatarPicker_edit">
                             <label htmlFor="avatarInput" ref="file_label">
-                                <img src="img/camera.svg"
+                                <img src="img/camera.svg" className="mx_filterFlipColor"
                                     alt="Upload avatar" title="Upload avatar"
                                     width="17" height="15" />
                             </label>

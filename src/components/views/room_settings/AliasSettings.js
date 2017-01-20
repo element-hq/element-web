@@ -281,7 +281,7 @@ module.exports = React.createClass({
                                     onValueChanged={ self.onAliasChanged.bind(self, localDomain, i) }
                                     editable={ self.props.canSetAliases }
                                     initialValue={ alias } />
-                                <div className="mx_RoomSettings_deleteAlias">
+                                <div className="mx_RoomSettings_deleteAlias mx_filterFlipColor">
                                      { deleteButton }
                                 </div>
                             </div>
@@ -297,7 +297,7 @@ module.exports = React.createClass({
                                 placeholder={ "New address (e.g. #foo:" + localDomain + ")" }
                                 blurToCancel={ false }
                                 onValueChanged={ self.onAliasAdded } />
-                            <div className="mx_RoomSettings_addAlias">
+                            <div className="mx_RoomSettings_addAlias mx_filterFlipColor">
                                  <img src="img/plus.svg" width="14" height="14" alt="Add"
                                       onClick={ self.onAliasAdded.bind(self, undefined) }/>
                             </div>
