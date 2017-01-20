@@ -96,7 +96,7 @@ class IndexedDBLogStore {
     constructor(indexedDB, logger) {
         this.indexedDB = indexedDB;
         this.logger = logger;
-        this.id = "instance-" + Date.now();
+        this.id = "instance-" + Math.random() + Date.now();
         this.index = 0;
         this.db = null;
     }
@@ -125,22 +125,24 @@ class IndexedDBLogStore {
             // First time: Setup the object store
             req.onupgradeneeded = (event) => {
                 const db = event.target.result;
-                const objectStore = db.createObjectStore("logs", {
+                const logObjStore = db.createObjectStore("logs", {
                     keyPath: ["id", "index"]
                 });
                 // Keys in the database look like: [ "instance-148938490", 0 ]
-                // Later on we need to query for everything with index=0, and
-                // query everything for an instance id.
-                // In order to do this, we need to set up indexes on both "id"
-                // and "index".
-                objectStore.createIndex("index", "index", { unique: false });
-                objectStore.createIndex("id", "id", { unique: false });
+                // Later on we need to query everything based on an instance id.
+                // In order to do this, we need to set up indexes "id".
+                logObjStore.createIndex("id", "id", { unique: false });
 
-                objectStore.add(
+                logObjStore.add(
                     this._generateLogEntry(
                         new Date() + " ::: Log database was created."
                     )
                 );
+
+                const lastModifiedStore = db.createObjectStore("logslastmod", {
+                    keyPath: "id",
+                });
+                lastModifiedStore.add(this._generateLastModifiedTime());
             }
         });
     }
@@ -158,15 +160,17 @@ class IndexedDBLogStore {
             return Promise.resolve();
         }
         return new Promise((resolve, reject) => {
-            let txn = this.db.transaction("logs", "readwrite");
+            let txn = this.db.transaction(["logs", "logslastmod"], "readwrite");
             let objStore = txn.objectStore("logs");
             objStore.add(this._generateLogEntry(lines));
+            let lastModStore = txn.objectStore("logslastmod");
+            lastModStore.put(this._generateLastModifiedTime());
             txn.oncomplete = (event) => {
                 resolve();
             };
             txn.onerror = (event) => {
                 console.error(
-                    "Failed to flush logs : " + event.target.errorCode
+                    "Failed to flush logs : ", event
                 );
                 reject(
                     new Error("Failed to write logs: " + event.target.errorCode)
@@ -210,25 +214,28 @@ class IndexedDBLogStore {
 
         // Returns: A sorted array of log IDs. (newest first)
         function fetchLogIds() {
-            // To gather all the log IDs, query for every log entry with index
-            // "0", this will let us know all the IDs from different
-            // tabs/sessions.
-            const o = db.transaction("logs", "readonly").objectStore("logs");
-            return selectQuery(o.index("index"), IDBKeyRange.only(0),
-            (cursor) => cursor.value.id).then((res) => {
-                // we know each entry has a unique ID, and we know IDs are
-                // timestamps, so accumulate all the IDs, ignoring the logs for
-                // now, and sort them to work out the correct log ID ordering,
-                // newest first.
-                // E.g. [ "instance-1484827160051", "instance-1374827160051",
-                //        "instance-1000007160051"]
-                return res.sort().reverse();
+            // To gather all the log IDs, query for all records in logslastmod.
+            const o = db.transaction("logslastmod", "readonly").objectStore(
+                "logslastmod"
+            );
+            return selectQuery(o, undefined, (cursor) => {
+                return {
+                    id: cursor.value.id,
+                    ts: cursor.value.ts,
+                };
+            }).then((res) => {
+                // Sort IDs by timestamp (newest first)
+                return res.sort((a, b) => {
+                    return b.ts - a.ts;
+                }).map((a) => a.id);
             });
         }
 
         function deleteLogs(id) {
             return new Promise((resolve, reject) => {
-                const txn = db.transaction("logs", "readwrite");
+                const txn = db.transaction(
+                    ["logs", "logslastmod"], "readwrite"
+                );
                 const o = txn.objectStore("logs");
                 // only load the key path, not the data which may be huge
                 const query = o.index("id").openKeyCursor(IDBKeyRange.only(id));
@@ -250,7 +257,10 @@ class IndexedDBLogStore {
                             `'${id}' : ${event.target.errorCode}`
                         )
                     );
-                }
+                };
+                // delete last modified entries
+                const lastModStore = txn.objectStore("logslastmod");
+                lastModStore.delete(id);
             });
         }
 
@@ -290,6 +300,13 @@ class IndexedDBLogStore {
             id: this.id,
             lines: lines,
             index: this.index++
+        };
+    }
+
+    _generateLastModifiedTime() {
+        return {
+            id: this.id,
+            ts: Date.now(),
         };
     }
 }
