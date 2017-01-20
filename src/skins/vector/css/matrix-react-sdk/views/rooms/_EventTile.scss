@@ -294,6 +294,10 @@ limitations under the License.
     overflow-y: visible;
 }
 
+.mx_EventTile_content .markdown-body code {
+    background-color: #f8f8f8;
+}
+
 .mx_EventTile_content .markdown-body h1,
 .mx_EventTile_content .markdown-body h2,
 .mx_EventTile_content .markdown-body h3,
