@@ -393,6 +393,16 @@ module.exports = React.createClass({
         }).done();
     },
 
+    _onExportE2eKeysClicked: function() {
+        Modal.createDialogAsync(
+            (cb) => {
+                require(['../../async-components/views/dialogs/ExportE2eKeysDialog'], cb);
+            }, {
+                matrixClient: MatrixClientPeg.get(),
+            }
+        );
+    },
+
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
 
@@ -463,6 +473,16 @@ module.exports = React.createClass({
         const deviceId = client.deviceId;
         const identityKey = client.getDeviceEd25519Key() || "<not supported>";
 
+        let exportButton = null;
+
+        if (client.isCryptoEnabled) {
+            exportButton = (
+                <AccessibleButton className="mx_UserSettings_button"
+                        onClick={this._onExportE2eKeysClicked}>
+                    Export E2E room keys
+                </AccessibleButton>
+            );
+        }
         return (
             <div>
                 <h3>Cryptography</h3>
@@ -471,6 +491,7 @@ module.exports = React.createClass({
                         <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
                         <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
+                    {exportButton}
                 </div>
             </div>
         );
