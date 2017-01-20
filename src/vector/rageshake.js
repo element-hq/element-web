@@ -36,7 +36,9 @@ const FLUSH_RATE_MS = 30 * 1000;
 class ConsoleLogger {
     constructor() {
         this.logs = "";
+    }
 
+    monkeyPatch(consoleObj) {
         // Monkey-patch console logging
         const consoleFunctionsToLevels = {
             log: "I",
@@ -46,8 +48,8 @@ class ConsoleLogger {
         };
         Object.keys(consoleFunctionsToLevels).forEach((fnName) => {
             const level = consoleFunctionsToLevels[fnName];
-            let originalFn = window.console[fnName].bind(window.console);
-            window.console[fnName] = (...args) => {
+            let originalFn = consoleObj[fnName].bind(consoleObj);
+            consoleObj[fnName] = (...args) => {
                 this.log(level, ...args);
                 originalFn(...args);
             }
@@ -310,6 +312,7 @@ module.exports = {
             return initPromise;
         }
         logger = new ConsoleLogger();
+        logger.monkeyPatch(window.console);
         if (window.indexedDB) {
             store = new IndexedDBLogStore(window.indexedDB, logger);
             initPromise = store.connect();
