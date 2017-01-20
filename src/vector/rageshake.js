@@ -180,17 +180,12 @@ class IndexedDBLogStore {
      * returned are deleted at the same time, so this can be called at startup
      * to do house-keeping to keep the logs from growing too large.
      *
-     * @param {boolean} clearAll True to clear the most recent logs returned in
-     * addition to the older logs. This is desirable when sending bug reports as
-     * we do not want to submit the same logs twice. This is not desirable when
-     * doing house-keeping at startup in case they want to submit a bug report
-     * later.
      * @return {Promise<Object[]>} Resolves to an array of objects. The array is
      * sorted in time (oldest first) based on when the log file was created (the
      * log ID). The objects have said log ID in an "id" field and "lines" which
      * is a big string with all the new-line delimited logs.
      */
-    async consume(clearAll) {
+    async consume() {
         const MAX_LOG_SIZE = 1024 * 1024 * 50; // 50 MB
         const db = this.db;
 
@@ -276,9 +271,6 @@ class IndexedDBLogStore {
                 removeLogIds = allLogIds.slice(i + 1);
                 break;
             }
-        }
-        if (clearAll) {
-            removeLogIds = allLogIds;
         }
         if (removeLogIds.length > 0) {
             console.log("Removing logs: ", removeLogIds);
@@ -378,7 +370,7 @@ module.exports = {
         if (!store) {
             return;
         }
-        await store.consume(false);
+        await store.consume();
     },
 
     setBugReportEndpoint: function(url) {
@@ -415,7 +407,7 @@ module.exports = {
         // sending to work going off the in-memory console logs.
         let logs = [];
         if (store) {
-            logs = await store.consume(true);
+            logs = await store.consume();
         }
         // and add the most recent console logs which won't be in the store yet.
         const consoleLogs = logger.flush(); // remove logs from console
