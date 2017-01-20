@@ -55,7 +55,7 @@ a:visited {
     color: $accent-color;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], textarea {
     background-color: transparent;
     color: $primary-fg-color;
 }
