@@ -99,6 +99,11 @@ class IndexedDBLogStore {
         this.id = "instance-" + Math.random() + Date.now();
         this.index = 0;
         this.db = null;
+        // Promise is not null when a flush is IN PROGRESS
+        this.flushPromise = null;
+        // Promise is not null when flush() is called when one is already in
+        // progress.
+        this.flushAgainPromise = null;
     }
 
     /**
@@ -148,35 +153,80 @@ class IndexedDBLogStore {
     }
 
     /**
+     * Flush logs to disk.
+     *
+     * There are guards to protect against race conditions in order to ensure
+     * that all previous flushes have completed before the most recent flush.
+     * Consider without guards:
+     *  - A calls flush() periodically.
+     *  - B calls flush() and wants to send logs immediately afterwards.
+     *  - If B doesn't wait for A's flush to complete, B will be missing the
+     *    contents of A's flush.
+     * To protect against this, we set 'flushPromise' when a flush is ongoing.
+     * Subsequent calls to flush() during this period return a new promise
+     * 'flushAgainPromise' which is chained off the current 'flushPromise'.
+     * Subsequent calls to flush() when the first flush hasn't completed will
+     * return the same 'flushAgainPromise' as we can guarantee that we WILL
+     * do a brand new flush at some point in the future. Once the first flush
+     * has completed, 'flushAgainPromise' becomes 'flushPromise' and can be
+     * chained again.
+     *
+     * This guarantees that we will always eventually do a flush when flush() is
+     * called.
+     *
      * @return {Promise} Resolved when the logs have been flushed.
      */
     flush() {
-        if (!this.db) {
-            // not connected yet or user rejected access for us to r/w to the db
-            return Promise.reject(new Error("No connected database"));
+        if (this.flushPromise) { // a flush is ongoing
+            if (this.flushAgainPromise) { // a flush is queued up, return that.
+                return this.flushAgainPromise;
+            }
+            // queue up a new flush
+            this.flushAgainPromise = this.flushPromise.then(() => {
+                // the current flush has completed, so shuffle the promises
+                // around:
+                // flushAgainPromise => flushPromise and null flushAgainPromise.
+                // flushPromise has already nulled itself.
+                this.flushAgainPromise = null;
+                return this.flush();
+            });
+            return this.flushAgainPromise;
         }
-        const lines = this.logger.flush();
-        if (lines.length === 0) {
-            return Promise.resolve();
-        }
-        return new Promise((resolve, reject) => {
+
+        this.flushPromise = new Promise((resolve, reject) => {
+            if (!this.db) {
+                // not connected yet or user rejected access for us to r/w to
+                // the db.
+                this.flushPromise = null;
+                reject(new Error("No connected database"));
+                return;
+            }
+            const lines = this.logger.flush();
+            if (lines.length === 0) {
+                this.flushPromise = null;
+                resolve();
+                return;
+            }
             let txn = this.db.transaction(["logs", "logslastmod"], "readwrite");
             let objStore = txn.objectStore("logs");
             objStore.add(this._generateLogEntry(lines));
             let lastModStore = txn.objectStore("logslastmod");
             lastModStore.put(this._generateLastModifiedTime());
             txn.oncomplete = (event) => {
+                this.flushPromise = null;
                 resolve();
             };
             txn.onerror = (event) => {
                 console.error(
                     "Failed to flush logs : ", event
                 );
+                this.flushPromise = null;
                 reject(
                     new Error("Failed to write logs: " + event.target.errorCode)
                 );
             }
         });
+        return this.flushPromise;
     }
 
     /**
@@ -369,17 +419,6 @@ module.exports = {
     },
 
     /**
-     * Force-flush the logs to storage.
-     * @return {Promise} Resolved when the logs have been flushed.
-     */
-    flush: async function() {
-        if (!store) {
-            return;
-        }
-        await store.flush();
-    },
-
-    /**
      * Clean up old logs.
      * @return Promise Resolves if cleaned logs.
      */
@@ -422,17 +461,20 @@ module.exports = {
 
         // If in incognito mode, store is null, but we still want bug report
         // sending to work going off the in-memory console logs.
+        console.log("Sending bug report.");
         let logs = [];
         if (store) {
+            // flush most recent logs
+            await store.flush();
             logs = await store.consume();
         }
-        // and add the most recent console logs which won't be in the store yet.
-        const consoleLogs = logger.flush(); // remove logs from console
-        const currentId = store ? store.id : "-";
-        logs.unshift({
-            lines: consoleLogs,
-            id: currentId,
-        });
+        else {
+            logs.push({
+                lines: logger.flush(),
+                id: "-",
+            });
+        }
+
         await new Promise((resolve, reject) => {
             request({
                 method: "POST",
