@@ -37,8 +37,9 @@ module.exports = React.createClass({
 
     render: function() {
         var client = MatrixClientPeg.get();
+        var blacklistUnverified = (client.getGlobalBlacklistUnverifiedDevices() || room.getBlacklistUnverifiedDevices());
         var warning;
-        if (client.getGlobalBlacklistUnverifiedDevices() || room.getBlacklistUnverifiedDevices()) {
+        if (blacklistUnverified) {
             warning = <h4>You are currently blacklisting unverified devices; to send messages to these devices you must verify them.<h4>;
         }
         else {
@@ -61,8 +62,11 @@ module.exports = React.createClass({
                                     <ul>
                                     {
                                         Object.keys(this.props.devices[userId]).map(deviceId=>{
+                                            var DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
+                                            var device = this.props.devices[userId][deviceId];
+                                            var buttons = <DeviceVerifyButtons device={ device } userId={ userId } />
                                             return <li key={ deviceId }>
-                                                { deviceId } ( { this.props.devices[userId][deviceId].getDisplayName() } )
+                                                { deviceId } ( { device.getDisplayName() } ) { buttons }
                                             </li>
                                         })
                                     }
