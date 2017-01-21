@@ -150,7 +150,8 @@ module.exports = {
     },
 
     getLocalSettings: function() {
-        return localStorage.getItem('mx_local_settings');
+        var localSettingsString = localStorage.getItem('mx_local_settings') || '{}';
+        return JSON.parse(localSettingsString);
     },
 
     getLocalSetting: function(type, defaultValue = null) {
@@ -162,7 +163,7 @@ module.exports = {
         var settings = this.getLocalSettings();
         settings[type] = value;
         // FIXME: handle errors
-        localStorage.setItem('mx_local_settings', settings);
+        localStorage.setItem('mx_local_settings', JSON.stringify(settings));
     },
 
     isFeatureEnabled: function(feature: string): boolean {

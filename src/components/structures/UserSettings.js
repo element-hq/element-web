@@ -485,7 +485,9 @@ module.exports = React.createClass({
                         <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
                 </div>
-                 { CRYPTO_SETTINGS_LABELS.map( this._renderLocalSetting ) }
+                <div className="mx_UserSettings_section">
+                    { CRYPTO_SETTINGS_LABELS.map( this._renderLocalSetting ) }
+                </div>
             </div>
         );
     },
