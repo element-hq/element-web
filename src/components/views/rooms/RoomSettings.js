@@ -24,6 +24,8 @@ var ObjectUtils = require("../../../ObjectUtils");
 var dis = require("../../../dispatcher");
 var ScalarAuthClient = require("../../../ScalarAuthClient");
 var ScalarMessaging = require('../../../ScalarMessaging');
+var UserSettingsStore = require('../../../UserSettingsStore');
+
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
 // as an integer, return a default.
@@ -283,9 +285,9 @@ module.exports = React.createClass({
     },
 
     _setRoomBlacklistUnverified: function(value) {
-        var blacklistUnverifiedDevicesPerRoom = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevicesPerRoom;
+        var blacklistUnverifiedDevicesPerRoom = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevicesPerRoom || {};
         blacklistUnverifiedDevicesPerRoom[this.props.room.roomId] = value;
-        UserSettingsStore.setLocalSettings('blacklistUnverifiedDevicesPerRoom', blacklistUnverifiedDevicesPerRoom);
+        UserSettingsStore.setLocalSetting('blacklistUnverifiedDevicesPerRoom', blacklistUnverifiedDevicesPerRoom);
 
         this.props.room.setBlacklistUnverifiedDevices(value);
     },
@@ -508,8 +510,8 @@ module.exports = React.createClass({
         var settings =
             <label>
                 <input type="checkbox" ref="blacklistUnverified"
-                       checked={ isGlobalBlacklistUnverified || isRoomBlacklistUnverified }
-                       disabled={ isGlobalBlacklistUnverified || !this.refs.encrypt.checked }/>
+                       defaultChecked={ isGlobalBlacklistUnverified || isRoomBlacklistUnverified }
+                       disabled={ isGlobalBlacklistUnverified || (this.refs.encrypt && !this.refs.encrypt.checked) }/>
                 Never send encrypted messages to unverified devices in this room.
             </label>;
 
