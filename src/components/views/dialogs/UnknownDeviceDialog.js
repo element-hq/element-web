@@ -69,5 +69,7 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
+        // XXX: do we want to give the user the option to enable blacklistUnverifiedDevices for this room (or globally) at this point?
+        // It feels like confused users will likely turn it on and then disappear in a cloud of UISIs...
     }
 });

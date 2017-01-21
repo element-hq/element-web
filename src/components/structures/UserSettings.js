@@ -57,6 +57,18 @@ const SETTINGS_LABELS = [
 */
 ];
 
+const CRYPTO_SETTINGS_LABELS = [
+    {
+        id: 'blacklistUnverifiedDevices',
+        label: 'Never send encrypted messages to unverified devices',
+    },
+    // XXX: this is here for documentation; the actual setting is managed via RoomSettings
+    // {
+    //     id: 'blacklistUnverifiedDevicesPerRoom'
+    //     label: 'Never send encrypted messages to unverified devices in this room',
+    // }
+];
+
 // Enumerate the available themes, with a nice human text label.
 // 'id' gives the key name in the im.vector.web.settings account data event
 // 'value' is the value for that key in the event
@@ -146,6 +158,8 @@ module.exports = React.createClass({
             syncedSettings.theme = 'light';
         }
         this._syncedSettings = syncedSettings;
+
+        this._localSettings = UserSettingsStore.getLocalSettings();
     },
 
     componentDidMount: function() {
@@ -471,8 +485,30 @@ module.exports = React.createClass({
                         <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
                 </div>
+                 { CRYPTO_SETTINGS_LABELS.map( this._renderLocalSetting ) }
             </div>
         );
+    },
+
+    _renderLocalSetting: function(setting) {
+        const client = MatrixClientPeg.get();
+        return <div className="mx_UserSettings_toggle" key={ setting.id }>
+            <input id={ setting.id }
+                   type="checkbox"
+                   defaultChecked={ this._localSettings[setting.id] }
+                   onChange={
+                        e => {
+                            UserSettingsStore.setLocalSetting(setting.id, e.target.checked)
+                            if (setting.id === 'blacklistUnverifiedDevices') { // XXX: this is a bit ugly
+                                client.setGlobalBlacklistUnverifiedDevices(e.target.checked);
+                            }
+                        }
+                    }
+            />
+            <label htmlFor={ setting.id }>
+                { setting.label }
+            </label>
+        </div>;
     },
 
     _renderDevicesPanel: function() {
