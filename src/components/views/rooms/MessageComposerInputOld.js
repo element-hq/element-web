@@ -345,7 +345,8 @@ module.exports = React.createClass({
             if (err.name === "UnknownDeviceError") {
                 var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
                 Modal.createDialog(UnknownDeviceDialog, {
-                    devices: err.devices
+                    devices: err.devices,
+                    room: this.props.room,
                 });
             }
 

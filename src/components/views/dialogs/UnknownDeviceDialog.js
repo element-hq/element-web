@@ -22,6 +22,7 @@ module.exports = React.createClass({
     displayName: 'UnknownEventDialog',
 
     propTypes: {
+        room: React.PropTypes.object.isRequired,
         devices: React.PropTypes.object.isRequired,
         onFinished: React.PropTypes.func.isRequired,
     },
@@ -35,6 +36,15 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var client = MatrixClientPeg.get();
+        var warning;
+        if (client.getGlobalBlacklistUnverifiedDevices() || room.getBlacklistUnverifiedDevices()) {
+            warning = <h4>You are currently blacklisting unverified devices; to send messages to these devices you must verify them.<h4>;
+        }
+        else {
+            warning = <h4>We strongly recommend you verify them before continuing.</h4>;
+        }
+
         return (
             <div className="mx_UnknownDeviceDialog" onKeyDown={ this.onKeyDown }>
                 <div className="mx_Dialog_title">
@@ -42,7 +52,7 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_Dialog_content">
                     <h4>This room contains unknown devices which have not been verified.</h4>
-                    <h4>We strongly recommend you verify them before continuing.</h4>
+                    { warning }
                     <p>Unknown devices:
                         <ul>{
                             Object.keys(this.props.devices).map(userId=>{
