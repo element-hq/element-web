@@ -553,11 +553,17 @@ export default class MessageComposerInput extends React.Component {
             sendMessagePromise = sendTextFn.call(this.client, this.props.room.roomId, contentText);
         }
 
-        sendMessagePromise.then(() => {
+        sendMessagePromise.then((res) => {
             dis.dispatch({
                 action: 'message_sent',
             });
-        }, () => {
+        }, (err) => {
+            if (err.name === "UnknownDeviceError") {
+                var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
+                Modal.createDialog(UnknownDeviceDialog, {
+                    devices: err.devices
+                });
+            }
             dis.dispatch({
                 action: 'message_send_failed',
             });

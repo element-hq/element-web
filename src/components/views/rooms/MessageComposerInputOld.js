@@ -337,11 +337,18 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);
         }
 
-        sendMessagePromise.done(function() {
+        sendMessagePromise.done(function(res) {
             dis.dispatch({
                 action: 'message_sent'
             });
-        }, function() {
+        }, function(err) {
+            if (err.name === "UnknownDeviceError") {
+                var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
+                Modal.createDialog(UnknownDeviceDialog, {
+                    devices: err.devices
+                });
+            }
+
             dis.dispatch({
                 action: 'message_send_failed'
             });
