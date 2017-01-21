@@ -516,24 +516,28 @@ module.exports = React.createClass({
         if (!isEncrypted &&
                 roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
             return (
-                <label>
-                    <input type="checkbox" ref="encrypt" onClick={ this.onEnableEncryptionClick }/>
-                    <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
-                    Enable encryption (warning: cannot be disabled again!)
-                </label>
-                { settings }
+                <div>
+                    <label>
+                        <input type="checkbox" ref="encrypt" onClick={ this.onEnableEncryptionClick }/>
+                        <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                        Enable encryption (warning: cannot be disabled again!)
+                    </label>
+                    { settings }
+                </div>
             );
         }
         else {
             return (
-                <label>
-                { isEncrypted
-                  ? <img className="mx_RoomSettings_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" />
-                  : <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
-                }
-                Encryption is { isEncrypted ? "" : "not " } enabled in this room.
-                </label>
-                { settings }
+                <div>
+                    <label>
+                    { isEncrypted
+                      ? <img className="mx_RoomSettings_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" />
+                      : <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                    }
+                    Encryption is { isEncrypted ? "" : "not " } enabled in this room.
+                    </label>
+                    { settings }
+                </div>
             );
         }
     },
