@@ -186,7 +186,10 @@ electron.app.on('ready', () => {
     }
 
     const icon_path = `${__dirname}/../img/riot.` + (
-        process.platform == 'win32' ? 'ico' : 'png'
+        process.platform === 'win32' ? 'ico' : 'png'
+    );
+    const icon_path_unread = `${__dirname}/../img/riot-unread.` + (
+        process.platform === 'win32' ? 'ico' : 'png'
     );
 
     // Load the previous window state with fallback to defaults
@@ -210,8 +213,9 @@ electron.app.on('ready', () => {
 
     // Create trayIcon icon
     tray.create(mainWindow, {
+        icon_path_unread: icon_path_unread,
         icon_path: icon_path,
-        brand: vectorConfig.brand || 'Riot'
+        brand: vectorConfig.brand || 'Riot',
     });
 
     if (!process.argv.includes('--hidden')) {

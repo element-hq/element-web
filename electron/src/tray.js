@@ -20,6 +20,7 @@ const electron = require('electron');
 
 const app = electron.app;
 const Tray = electron.Tray;
+const ipcMain = electron.ipcMain;
 const MenuItem = electron.MenuItem;
 
 let trayIcon = null;
@@ -64,4 +65,10 @@ exports.create = function (win, config) {
     trayIcon.setToolTip(config.brand);
     trayIcon.setContextMenu(contextMenu);
     trayIcon.on('click', toggleWin);
+
+    ipcMain.on('set_badge', function(event, count) {
+        console.log("set_badge", count);
+		trayIcon.setImage(count ? config.icon_path_unread : config.icon_path);
+		trayIcon.setToolTip(`${config.brand} — ${count} unread`);
+	});
 };

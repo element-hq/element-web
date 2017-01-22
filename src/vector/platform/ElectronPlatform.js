@@ -20,7 +20,7 @@ limitations under the License.
 import VectorBasePlatform from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import q from 'q';
-import electron, {remote} from 'electron';
+import electron, {remote, ipcRenderer} from 'electron';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
@@ -68,6 +68,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         } catch (e) {
             console.error('Failed to set notification count', e);
         }
+        ipcRenderer.send('set_badge', count);
     }
 
     supportsNotifications(): boolean {
@@ -135,7 +136,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         // IPC to the main process to install the update, since quitAndInstall
         // doesn't fire the before-quit event so the main process needs to know
         // it should exit.
-        electron.ipcRenderer.send('install_update');
+        ipcRenderer.send('install_update');
     }
 
     getDefaultDeviceDisplayName(): string {
