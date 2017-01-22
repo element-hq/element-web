@@ -60,7 +60,7 @@ const SETTINGS_LABELS = [
 const CRYPTO_SETTINGS_LABELS = [
     {
         id: 'blacklistUnverifiedDevices',
-        label: 'Never send encrypted messages to unverified devices',
+        label: 'Never send encrypted messages to unverified devices from this device',
     },
     // XXX: this is here for documentation; the actual setting is managed via RoomSettings
     // {

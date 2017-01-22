@@ -512,7 +512,7 @@ module.exports = React.createClass({
                 <input type="checkbox" ref="blacklistUnverified"
                        defaultChecked={ isGlobalBlacklistUnverified || isRoomBlacklistUnverified }
                        disabled={ isGlobalBlacklistUnverified || (this.refs.encrypt && !this.refs.encrypt.checked) }/>
-                Never send encrypted messages to unverified devices in this room.
+                Never send encrypted messages to unverified devices in this room from this device.
             </label>;
 
         if (!isEncrypted &&

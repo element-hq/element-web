@@ -553,6 +553,7 @@ export default class MessageComposerInput extends React.Component {
             sendMessagePromise = sendTextFn.call(this.client, this.props.room.roomId, contentText);
         }
 
+        var self = this;
         sendMessagePromise.then((res) => {
             dis.dispatch({
                 action: 'message_sent',
@@ -562,7 +563,7 @@ export default class MessageComposerInput extends React.Component {
                 var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
                 Modal.createDialog(UnknownDeviceDialog, {
                     devices: err.devices,
-                    room: this.props.room,
+                    room: self.props.room,
                 });
             }
             dis.dispatch({

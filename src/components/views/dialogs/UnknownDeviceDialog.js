@@ -36,14 +36,15 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        var DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
         var client = MatrixClientPeg.get();
-        var blacklistUnverified = (client.getGlobalBlacklistUnverifiedDevices() || room.getBlacklistUnverifiedDevices());
+        var blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices() || this.props.room.getBlacklistUnverifiedDevices();
         var warning;
         if (blacklistUnverified) {
-            warning = <h4>You are currently blacklisting unverified devices; to send messages to these devices you must verify them.<h4>;
+            warning = <h4>You are currently blacklisting unverified devices; to send messages to these devices you must verify them.</h4>
         }
         else {
-            warning = <h4>We strongly recommend you verify them before continuing.</h4>;
+            warning = <h4>We strongly recommend you verify them before continuing.</h4>
         }
 
         return (
@@ -54,27 +55,27 @@ module.exports = React.createClass({
                 <div className="mx_Dialog_content">
                     <h4>This room contains unknown devices which have not been verified.</h4>
                     { warning }
-                    <p>Unknown devices:
-                        <ul>{
-                            Object.keys(this.props.devices).map(userId=>{
-                                return <li key={ userId }>
-                                    <p>{ userId }:</p>
-                                    <ul>
-                                    {
-                                        Object.keys(this.props.devices[userId]).map(deviceId=>{
-                                            var DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
-                                            var device = this.props.devices[userId][deviceId];
-                                            var buttons = <DeviceVerifyButtons device={ device } userId={ userId } />
-                                            return <li key={ deviceId }>
-                                                { deviceId } ( { device.getDisplayName() } ) { buttons }
-                                            </li>
-                                        })
-                                    }
-                                    </ul>
-                                </li>
-                            })
-                        }</ul>
-                    </p>
+                    Unknown devices:
+                    <ul>{
+                        Object.keys(this.props.devices).map(userId=>{
+                            return <li key={ userId }>
+                                <p>{ userId }:</p>
+                                <ul className="mx_UnknownDeviceDialog_deviceList">
+                                {
+                                    Object.keys(this.props.devices[userId]).map(deviceId=>{
+                                        var device = this.props.devices[userId][deviceId];
+                                        var buttons = <DeviceVerifyButtons device={ device } userId={ userId } />
+                                        return <li key={ deviceId }>
+                                            { buttons }
+                                            { deviceId }<br/>
+                                            { device.getDisplayName() }
+                                        </li>
+                                    })
+                                }
+                                </ul>
+                            </li>
+                        })
+                    }</ul>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={ this.props.onFinished } autoFocus={ true }>
