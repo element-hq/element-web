@@ -158,4 +158,85 @@ describe('MessageComposerInput', () => {
         expect(['__', '**']).toContain(spy.args[0][1]);
     });
 
+    it('should not entity-encode " in Markdown mode', () => {
+        const spy = sinon.spy(client, 'sendTextMessage');
+        mci.enableRichtext(false);
+        addTextToDraft('"');
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.calledOnce).toEqual(true);
+        expect(spy.args[0][1]).toEqual('"');
+    });
+
+    it('should escape characters without other markup in Markdown mode', () => {
+        const spy = sinon.spy(client, 'sendTextMessage');
+        mci.enableRichtext(false);
+        addTextToDraft('\\*escaped\\*');
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.calledOnce).toEqual(true);
+        expect(spy.args[0][1]).toEqual('*escaped*');
+    });
+
+    it('should escape characters with other markup in Markdown mode', () => {
+        const spy = sinon.spy(client, 'sendHtmlMessage');
+        mci.enableRichtext(false);
+        addTextToDraft('\\*escaped\\* *italic*');
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.calledOnce).toEqual(true);
+        expect(spy.args[0][1]).toEqual('\\*escaped\\* *italic*');
+        expect(spy.args[0][2]).toEqual('*escaped* <em>italic</em>');
+    });
+
+    it('should not convert -_- into a horizontal rule in Markdown mode', () => {
+        const spy = sinon.spy(client, 'sendTextMessage');
+        mci.enableRichtext(false);
+        addTextToDraft('-_-');
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.calledOnce).toEqual(true);
+        expect(spy.args[0][1]).toEqual('-_-');
+    });
+
+    it('should not strip <del> tags in Markdown mode', () => {
+        const spy = sinon.spy(client, 'sendHtmlMessage');
+        mci.enableRichtext(false);
+        addTextToDraft('<del>striked-out</del>');
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.calledOnce).toEqual(true);
+        expect(spy.args[0][1]).toEqual('<del>striked-out</del>');
+        expect(spy.args[0][2]).toEqual('<del>striked-out</del>');
+    });
+
+    it('should not strike-through ~~~ in Markdown mode', () => {
+        const spy = sinon.spy(client, 'sendTextMessage');
+        mci.enableRichtext(false);
+        addTextToDraft('~~~striked-out~~~');
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.calledOnce).toEqual(true);
+        expect(spy.args[0][1]).toEqual('~~~striked-out~~~');
+    });
+
+    it('should not mark single unmarkedup paragraphs as HTML in Markdown mode', () => {
+        const spy = sinon.spy(client, 'sendTextMessage');
+        mci.enableRichtext(false);
+        addTextToDraft('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.calledOnce).toEqual(true);
+        expect(spy.args[0][1]).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
+    });
+
+    it('should not mark two unmarkedup paragraphs as HTML in Markdown mode', () => {
+        const spy = sinon.spy(client, 'sendTextMessage');
+        mci.enableRichtext(false);
+        addTextToDraft('Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nFusce congue sapien sed neque molestie volutpat.');
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.calledOnce).toEqual(true);
+        expect(spy.args[0][1]).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nFusce congue sapien sed neque molestie volutpat.');
+    });
 });

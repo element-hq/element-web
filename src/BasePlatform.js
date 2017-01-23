@@ -41,7 +41,7 @@ export default class BasePlatform {
      * Returns true if the platform supports displaying
      * notifications, otherwise false.
      */
-    supportsNotifications() : boolean {
+    supportsNotifications(): boolean {
         return false;
     }
 
@@ -49,7 +49,7 @@ export default class BasePlatform {
      * Returns true if the application currently has permission
      * to display notifications. Otherwise false.
      */
-    maySendNotifications() : boolean {
+    maySendNotifications(): boolean {
         return false;
     }
 
@@ -60,7 +60,7 @@ export default class BasePlatform {
      * that is 'granted' if the user allowed the request or
      * 'denied' otherwise.
      */
-    requestNotificationPermission() : Promise<string> {
+    requestNotificationPermission(): Promise<string> {
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {

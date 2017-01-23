@@ -26,7 +26,7 @@ export default class AutocompleteProvider {
         }
 
         commandRegex.lastIndex = 0;
-        
+
         let match;
         while ((match = commandRegex.exec(query)) != null) {
             let matchStart = match.index,

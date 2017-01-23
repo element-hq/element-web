@@ -136,6 +136,6 @@ module.exports = {
     fromUsers: function(users, showInviteButton, inviteFn) {
         return users.map(function(u) {
             return new UserEntity(u, showInviteButton, inviteFn);
-        })
+        });
     }
 };

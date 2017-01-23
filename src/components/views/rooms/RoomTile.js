@@ -26,6 +26,7 @@ var sdk = require('../../../index');
 var ContextualMenu = require('../../structures/ContextualMenu');
 var RoomNotifs = require('../../../RoomNotifs');
 var FormattingUtils = require('../../../utils/FormattingUtils');
+var UserSettingsStore = require('../../../UserSettingsStore');
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -176,7 +177,8 @@ module.exports = React.createClass({
             var self = this;
             ContextualMenu.createMenu(RoomTagMenu, {
                 chevronOffset: 10,
-                menuColour: "#FFFFFF",
+                // XXX: fix horrid hardcoding
+                menuColour: UserSettingsStore.getSyncedSettings().theme === 'dark' ? "#2d2d2d" : "#FFFFFF",
                 left: x,
                 top: y,
                 room: this.props.room,
@@ -219,7 +221,7 @@ module.exports = React.createClass({
         var avatarContainerClasses = classNames({
             'mx_RoomTile_avatar_container': true,
             'mx_RoomTile_avatar_roomTagMenu': this.state.roomTagMenu,
-        })
+        });
 
         var badgeClasses = classNames({
             'mx_RoomTile_badge': true,

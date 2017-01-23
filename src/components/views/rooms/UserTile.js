@@ -38,7 +38,7 @@ module.exports = React.createClass({
         var active = -1;
 
         // FIXME: make presence data update whenever User.presence changes...
-        active = user.lastActiveAgo ? 
+        active = user.lastActiveAgo ?
             (Date.now() - (user.lastPresenceTs - user.lastActiveAgo)) : -1;
 
         var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');

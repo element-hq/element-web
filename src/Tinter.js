@@ -14,9 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var dis = require("./dispatcher");
-var sdk = require("./index");
-
 // FIXME: these vars should be bundled up and attached to
 // module.exports otherwise this will break when included by both
 // react-sdk and apps layered on top.
@@ -42,6 +39,7 @@ var keyHex = [
     "#76CFA6", // Vector Green
     "#EAF5F0", // Vector Light Green
     "#D3EFE1", // BottomLeftMenu overlay (20% Vector Green overlaid on Vector Light Green)
+    "#FFFFFF", // white highlights of the SVGs (for switching to dark theme)
 ];
 
 // cache of our replacement colours
@@ -50,6 +48,7 @@ var colors = [
     keyHex[0],
     keyHex[1],
     keyHex[2],
+    keyHex[3],
 ];
 
 var cssFixups = [
@@ -150,7 +149,7 @@ function hexToRgb(color) {
 
 function rgbToHex(rgb) {
     var val = (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
-    return '#' + (0x1000000 + val).toString(16).slice(1)
+    return '#' + (0x1000000 + val).toString(16).slice(1);
 }
 
 // List of functions to call when the tint changes.
@@ -185,7 +184,7 @@ module.exports = {
         }
 
         if (!secondaryColor) {
-            var x = 0.16; // average weighting factor calculated from vector green & light green
+            const x = 0.16; // average weighting factor calculated from vector green & light green
             var rgb = hexToRgb(primaryColor);
             rgb[0] = x * rgb[0] + (1 - x) * 255;
             rgb[1] = x * rgb[1] + (1 - x) * 255;
@@ -194,7 +193,7 @@ module.exports = {
         }
 
         if (!tertiaryColor) {
-            var x = 0.19;
+            const x = 0.19;
             var rgb1 = hexToRgb(primaryColor);
             var rgb2 = hexToRgb(secondaryColor);
             rgb1[0] = x * rgb1[0] + (1 - x) * rgb2[0];
@@ -210,7 +209,9 @@ module.exports = {
             return;
         }
 
-        colors = [primaryColor, secondaryColor, tertiaryColor];
+        colors[0] = primaryColor;
+        colors[1] = secondaryColor;
+        colors[2] = tertiaryColor;
 
         if (DEBUG) console.log("Tinter.tint");
 
@@ -219,6 +220,19 @@ module.exports = {
 
         // tell all the SVGs to go fix themselves up
         // we don't do this as a dispatch otherwise it will visually lag
+        tintables.forEach(function(tintable) {
+            tintable();
+        });
+    },
+
+    tintSvgWhite: function(whiteColor) {
+        if (!whiteColor) {
+            whiteColor = colors[3];
+        }
+        if (colors[3] === whiteColor) {
+            return;
+        }
+        colors[3] = whiteColor;
         tintables.forEach(function(tintable) {
             tintable();
         });

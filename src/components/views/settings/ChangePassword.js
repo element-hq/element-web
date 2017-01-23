@@ -59,7 +59,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             phase: this.Phases.Edit
-        }
+        };
     },
 
     changePassword: function(old_password, new_password) {
@@ -105,7 +105,7 @@ module.exports = React.createClass({
     render: function() {
         var rowClassName = this.props.rowClassName;
         var rowLabelClassName = this.props.rowLabelClassName;
-        var rowInputClassName = this.props.rowInputClassName
+        var rowInputClassName = this.props.rowInputClassName;
         var buttonClassName = this.props.buttonClassName;
 
         switch (this.state.phase) {

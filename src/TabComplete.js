@@ -112,7 +112,7 @@ class TabComplete {
             return;
         }
         // ES6 destructuring; ignore first element (the complete match)
-        var [ , boundaryGroup, partialGroup] = res;
+        var [, boundaryGroup, partialGroup] = res;
 
         if (partialGroup.length === 0 && passive) {
             return;
@@ -254,7 +254,7 @@ class TabComplete {
         if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
 
         // tab key has been pressed at this point
-        this.handleTabPress(false, ev.shiftKey)
+        this.handleTabPress(false, ev.shiftKey);
 
         // prevent the default TAB operation (typically focus shifting)
         ev.preventDefault();
@@ -386,6 +386,6 @@ class TabComplete {
             this.memberTabOrder[ev.getSender()] = this.memberOrderSeq++;
         }
     }
-};
+}
 
 module.exports = TabComplete;

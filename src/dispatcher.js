@@ -28,6 +28,7 @@ class MatrixDispatcher extends flux.Dispatcher {
      *        for.
      */
     dispatch(payload, sync) {
+        console.log("Dispatch: "+payload.action);
         if (sync) {
             super.dispatch(payload);
         } else {
@@ -39,7 +40,7 @@ class MatrixDispatcher extends flux.Dispatcher {
             setTimeout(super.dispatch.bind(this, payload), 0);
         }
     }
-};
+}
 
 if (global.mxDispatcher === undefined) {
     global.mxDispatcher = new MatrixDispatcher();

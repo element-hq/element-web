@@ -58,7 +58,7 @@ module.exports = React.createClass({
         }
     },
 
-    onKeyUp: function() {
+    moveSelectionUp: function() {
         if (this.state.selected > 0) {
             this.setState({
                 selected: this.state.selected - 1,
@@ -67,7 +67,7 @@ module.exports = React.createClass({
         }
     },
 
-    onKeyDown: function() {
+    moveSelectionDown: function() {
         if (this.state.selected < this._maxSelected(this.props.addressList)) {
             this.setState({
                 selected: this.state.selected + 1,
@@ -76,25 +76,19 @@ module.exports = React.createClass({
         }
     },
 
-    onKeySelect: function() {
+    chooseSelection: function() {
         this.selectAddress(this.state.selected);
     },
 
     onClick: function(index) {
-        var self = this;
-        return function() {
-            self.selectAddress(index);
-        };
+        this.selectAddress(index);
     },
 
     onMouseEnter: function(index) {
-        var self = this;
-        return function() {
-            self.setState({
-                selected: index,
-                hover: true,
-            });
-        };
+        this.setState({
+            selected: index,
+            hover: true,
+        });
     },
 
     onMouseLeave: function() {
@@ -127,7 +121,7 @@ module.exports = React.createClass({
                 // Saving the addressListElement so we can use it to work out, in the componentDidUpdate
                 // method, how far to scroll when using the arrow keys
                 addressList.push(
-                    <div className={classes} onClick={this.onClick(i)} onMouseEnter={this.onMouseEnter(i)} onMouseLeave={this.onMouseLeave} key={i} ref={(ref) => { this.addressListElement = ref; }} >
+                    <div className={classes} onClick={this.onClick.bind(this, i)} onMouseEnter={this.onMouseEnter.bind(this, i)} onMouseLeave={this.onMouseLeave} key={i} ref={(ref) => { this.addressListElement = ref; }} >
                         <AddressTile address={this.props.addressList[i].userId} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
                     </div>
                 );
@@ -138,7 +132,7 @@ module.exports = React.createClass({
 
     _maxSelected: function(list) {
         var listSize = list.length === 0 ? 0 : list.length - 1;
-        var maxSelected = listSize > (this.props.truncateAt - 1) ? (this.props.truncateAt - 1) : listSize
+        var maxSelected = listSize > (this.props.truncateAt - 1) ? (this.props.truncateAt - 1) : listSize;
         return maxSelected;
     },
 
@@ -149,7 +143,7 @@ module.exports = React.createClass({
         });
 
         return (
-            <div className={classes} ref={(ref) => {this.scrollElement = ref}}>
+            <div className={classes} ref={(ref) => {this.scrollElement = ref;}}>
                 { this.props.header }
                 { this.createAddressListTiles() }
             </div>

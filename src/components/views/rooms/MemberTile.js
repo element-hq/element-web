@@ -46,7 +46,7 @@ module.exports = React.createClass({
             (this.user_last_modified_time === undefined ||
             this.user_last_modified_time < nextProps.member.user.getLastModifiedTime())
         ) {
-            return true
+            return true;
         }
         return false;
     },

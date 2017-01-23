@@ -46,7 +46,7 @@ module.exports = React.createClass({
             isLoadingLeftRooms: false,
             lists: {},
             incomingCall: null,
-        }
+        };
     },
 
     componentWillMount: function() {
@@ -338,7 +338,7 @@ module.exports = React.createClass({
             // as this is used to calculate the CSS fixed top position for the stickies
             var scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;
 
-            var top = (incomingCallBox.parentElement.getBoundingClientRect().top + window.pageYOffset)
+            var top = (incomingCallBox.parentElement.getBoundingClientRect().top + window.pageYOffset);
             // Make sure we don't go too far up, if the headers aren't sticky
             top = (top < scrollAreaOffset) ? scrollAreaOffset : top;
             // make sure we don't go too far down, if the headers aren't sticky
@@ -401,7 +401,7 @@ module.exports = React.createClass({
             var stickyHeight = sticky.dataset.originalHeight;
             var stickyHeader = sticky.childNodes[0];
             var topStuckHeight = stickyHeight * i;
-            var bottomStuckHeight = stickyHeight * (stickyWrappers.length - i)
+            var bottomStuckHeight = stickyHeight * (stickyWrappers.length - i);
 
             if (self.scrollAreaSufficient && stickyPosition < (scrollArea.scrollTop + topStuckHeight)) {
                 // Top stickies
@@ -520,7 +520,7 @@ module.exports = React.createClass({
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
-                             onShowMoreRooms={ self.onShowMoreRooms } />
+                             onShowMoreRooms={ self.onShowMoreRooms } />;
 
                     }
                 }) }

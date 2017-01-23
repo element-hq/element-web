@@ -60,13 +60,15 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        if (this.refs.description)
+        if (this.refs.description) {
             linkifyElement(this.refs.description, linkifyMatrix.options);
+        }
     },
 
     componentDidUpdate: function() {
-        if (this.refs.description)
+        if (this.refs.description) {
             linkifyElement(this.refs.description, linkifyMatrix.options);
+        }
     },
 
     componentWillUnmount: function() {
@@ -116,7 +118,7 @@ module.exports = React.createClass({
         if (image) {
             img = <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
                     <img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={ image } onClick={ this.onImageClick }/>
-                  </div>
+                  </div>;
         }
 
         return (

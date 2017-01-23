@@ -19,6 +19,9 @@ var sdk = require('../../index');
 var dis = require("../../dispatcher");
 var WhoIsTyping = require("../../WhoIsTyping");
 var MatrixClientPeg = require("../../MatrixClientPeg");
+const MemberAvatar = require("../views/avatars/MemberAvatar");
+
+const TYPING_AVATARS_LIMIT = 2;
 
 module.exports = React.createClass({
     displayName: 'RoomStatusBar',
@@ -173,10 +176,8 @@ module.exports = React.createClass({
 
         if (wantPlaceholder) {
             return (
-                <div className="mx_RoomStatusBar_placeholderIndicator">
-                    <span>.</span>
-                    <span>.</span>
-                    <span>.</span>
+                <div className="mx_RoomStatusBar_typingIndicatorAvatars">
+                    {this._renderTypingIndicatorAvatars(TYPING_AVATARS_LIMIT)}
                 </div>
             );
         }
@@ -184,6 +185,36 @@ module.exports = React.createClass({
         return null;
     },
 
+    _renderTypingIndicatorAvatars: function(limit) {
+        let users = WhoIsTyping.usersTyping(this.props.room);
+
+        let othersCount = Math.max(users.length - limit, 0);
+        users = users.slice(0, limit);
+
+        let avatars = users.map((u, index) => {
+            let showInitial = othersCount === 0 && index === users.length - 1;
+            return (
+                <MemberAvatar
+                    key={u.userId}
+                    member={u}
+                    width={24}
+                    height={24}
+                    resizeMethod="crop"
+                    defaultToInitialLetter={showInitial}
+                />
+            );
+        });
+
+        if (othersCount > 0) {
+            avatars.push(
+                <span className="mx_RoomStatusBar_typingIndicatorRemaining">
+                    +{othersCount}
+                </span>
+            );
+        }
+
+        return avatars;
+    },
 
     // return suitable content for the main (text) part of the status bar.
     _getContent: function() {

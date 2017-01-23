@@ -35,7 +35,7 @@ var FilePanel = React.createClass({
     getInitialState: function() {
         return {
             timelineSet: null,
-        }
+        };
     },
 
     componentWillMount: function() {

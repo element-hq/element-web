@@ -12,7 +12,7 @@ import {
     SelectionState,
     Entity,
 } from 'draft-js';
-import * as sdk from  './index';
+import * as sdk from './index';
 import * as emojione from 'emojione';
 import {stateToHTML} from 'draft-js-export-html';
 import {SelectionRange} from "./autocomplete/Autocompleter";
@@ -109,7 +109,7 @@ export function getScopedRTDecorators(scope: any): CompositeDecorator {
             return <span className="mx_UserPill">{avatar}{props.children}</span>;
         }
     };
-    
+
     let roomDecorator = {
         strategy: (contentBlock, callback) => {
             findWithRegex(ROOM_REGEX, contentBlock, callback);
