@@ -80,11 +80,15 @@ class ConsoleLogger {
 
     /**
      * Retrieve log lines to flush to disk.
+     * @param {boolean} keepLogs True to not delete logs after flushing.
      * @return {string} \n delimited log lines to flush.
      */
-    flush() {
+    flush(keepLogs) {
         // The ConsoleLogger doesn't care how these end up on disk, it just
         // flushes them to the caller.
+        if (keepLogs) {
+            return this.logs;
+        }
         const logsToFlush = this.logs;
         this.logs = "";
         return logsToFlush;
@@ -470,7 +474,7 @@ module.exports = {
         }
         else {
             logs.push({
-                lines: logger.flush(),
+                lines: logger.flush(true),
                 id: "-",
             });
         }
