@@ -41,6 +41,8 @@
     "start:js:prod": "NODE_ENV=production webpack-dev-server -w --progress",
     "start": "node scripts/babelcheck.js && parallelshell \"npm run start:res\" \"npm run start:js\"",
     "start:prod": "parallelshell \"npm run start:res\" \"npm run start:js:prod\"",
+    "lint": "eslint src/",
+    "lintall": "eslint src/ test/",
     "clean": "rimraf lib webapp electron/dist",
     "prepublish": "npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
@@ -95,6 +97,9 @@
     "electron-builder": "^11.2.4",
     "electron-builder-squirrel-windows": "^11.2.1",
     "emojione": "^2.2.3",
+    "eslint": "^3.14.0",
+    "eslint-plugin-flowtype": "^2.30.0",
+    "eslint-plugin-react": "^6.9.0",
     "expect": "^1.16.0",
     "fs-extra": "^0.30.0",
     "html-webpack-plugin": "^2.24.0",
@@ -148,7 +153,7 @@
       "target": "deb",
       "maintainer": "support@riot.im",
       "desktop": {
-          "StartupWMClass": "riot-web"
+        "StartupWMClass": "riot-web"
       }
     },
     "win": {
