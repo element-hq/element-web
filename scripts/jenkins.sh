@@ -26,6 +26,9 @@ cp -r olm/package node_modules/olm
 # run the mocha tests
 npm run test
 
+# run eslint
+npm run lintall -- -f checkstyle -o eslint.xml || true
+
 rm dist/vector-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
 
  # node_modules deps from 'npm install' don't have a .git dir so can't
