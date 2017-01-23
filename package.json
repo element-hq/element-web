@@ -10,6 +10,7 @@
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "files": [
+    ".eslintrc.js",
     "CHANGELOG.md",
     "CONTRIBUTING.rst",
     "LICENSE",
