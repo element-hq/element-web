@@ -201,13 +201,11 @@ class IndexedDBLogStore {
             if (!this.db) {
                 // not connected yet or user rejected access for us to r/w to
                 // the db.
-                this.flushPromise = null;
                 reject(new Error("No connected database"));
                 return;
             }
             const lines = this.logger.flush();
             if (lines.length === 0) {
-                this.flushPromise = null;
                 resolve();
                 return;
             }
@@ -217,18 +215,20 @@ class IndexedDBLogStore {
             let lastModStore = txn.objectStore("logslastmod");
             lastModStore.put(this._generateLastModifiedTime());
             txn.oncomplete = (event) => {
-                this.flushPromise = null;
                 resolve();
             };
             txn.onerror = (event) => {
                 console.error(
                     "Failed to flush logs : ", event
                 );
-                this.flushPromise = null;
                 reject(
                     new Error("Failed to write logs: " + event.target.errorCode)
                 );
             }
+        }).then(() => {
+            this.flushPromise = null;
+        }, (err) => {
+            this.flushPromise = null;
         });
         return this.flushPromise;
     }
