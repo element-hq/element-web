@@ -216,16 +216,6 @@ hr.mx_RoomView_myReadMarker {
 
 .mx_RoomView_statusArea_expanded {
     max-height: 50px;
-    margin-top: 0px;
-}
-
-.mx_RoomView_statusArea_expanded.mx_RoomView_statusArea_mid_timeline {
-    margin-top: -50px;
-
-    -webkit-transition: all .2s ease-in;
-    -moz-transition: all .2s ease-in;
-    -ms-transition: all .2s ease-in;
-    -o-transition: all .2s ease-in;
 }
 
 .mx_RoomView_statusAreaBox {
