@@ -1,0 +1,249 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RoomView {
+    word-wrap: break-word;
+    position: relative;
+
+    display: flex;
+    width: 100%;
+
+    flex-direction: column;
+}
+
+.mx_RoomView .mx_RoomHeader {
+    order: 1;
+
+    flex: 0 0 70px;
+}
+
+.mx_RoomView_fileDropTarget {
+    min-width: 0px;
+    max-width: 960px;
+    width: 100%;
+    font-size: 18px;
+    text-align: center;
+
+    pointer-events: none;
+
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-left: -12px;
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+    background-color: $droptarget-bg-color;
+    border: 2px #e1dddd solid;
+    border-bottom: none;
+    position: absolute;
+    top: 70px;
+    bottom: 0px;
+    z-index: 3000;
+}
+
+.mx_RoomView_fileDropTargetLabel {
+    top: 50%;
+    width: 100%;
+    margin-top: -50px;
+    position: absolute;
+}
+
+.mx_RoomView_auxPanel {
+    order: 2;
+
+    min-width: 0px;
+    max-width: 960px;
+    width: 100%;
+    margin: auto;
+
+    overflow: auto;
+    border-bottom: 1px solid $primary-hairline-color;
+
+    flex: 0 0 auto;
+}
+
+.mx_RoomView_topUnreadMessagesBar {
+    order: 3;
+}
+
+.mx_RoomView_messagePanel {
+    order: 4;
+
+    flex: 1 1 0;
+
+    width: 100%;
+
+    overflow-y: auto;
+}
+
+.mx_RoomView_messageListWrapper {
+    max-width: 960px;
+    margin: auto;
+
+    min-height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-end;
+}
+
+.mx_RoomView_searchResultsPanel .mx_RoomView_messageListWrapper {
+    justify-content: flex-start;
+}
+
+.mx_RoomView_MessageList {
+    width: 100%;
+    list-style-type: none;
+    padding: 0px;
+}
+
+.mx_RoomView_MessageList li {
+    clear: both;
+}
+
+.mx_RoomView_MessageList h2 {
+    clear: both;
+    margin-top: 32px;
+    margin-bottom: 8px;
+    margin-left: 63px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid $primary-hairline-color;
+}
+
+.mx_RoomView_invitePrompt {
+    order: 2;
+
+    min-width: 0px;
+    max-width: 960px;
+    width: 100%;
+    margin: auto;
+
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+li.mx_RoomView_myReadMarker_container {
+    height: 0px;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+hr.mx_RoomView_myReadMarker {
+    border-top: solid 1px $accent-color;
+    border-bottom: solid 1px $accent-color;
+    margin-top: 0px;
+    position: relative;
+    top: 5px;
+}
+
+.mx_RoomView_statusArea {
+    order: 5;
+
+    width: 100%;
+    flex: 0 0 auto;
+
+    max-height: 0px;
+    background-color: #fff;
+    z-index: 1000;
+    overflow: hidden;
+
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -ms-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+}
+
+.mx_RoomView_statusArea_expanded {
+    max-height: 50px;
+}
+
+.mx_RoomView_statusAreaBox {
+    max-width: 960px;
+    margin: auto;
+    min-height: 50px;
+}
+
+.mx_RoomView_statusAreaBox_line {
+    margin-left: 65px;
+    border-top: 1px solid $primary-hairline-color;
+    height: 1px;
+}
+
+.mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
+    background-color: $primary-bg-color;
+}
+
+.mx_RoomView_callStatusBar .mx_UploadBar_uploadFilename {
+    color: $accent-fg-color;
+    opacity: 1.0;
+}
+
+.mx_RoomView_inCall .mx_RoomView_statusAreaBox_line {
+    border-top: 1px hidden;
+}
+
+.mx_RoomView_inCall .mx_MessageComposer_wrapper {
+    border-top: 2px hidden;
+}
+
+.mx_RoomView_inCall .mx_RoomView_statusAreaBox {
+    background-color: $accent-color;
+    color: $accent-fg-color;
+    position: relative;
+}
+
+.mx_RoomView_voipChevron {
+    position: absolute;
+    bottom: -11px;
+    right: 11px;
+}
+
+.mx_RoomView_voipButton {
+    float: right;
+    margin-right: 13px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.mx_RoomView_voipButton object {
+    pointer-events: none;
+}
+
+.mx_RoomView .mx_MessageComposer {
+    order: 6;
+
+    width: 100%;
+    flex: 0 0 auto;
+    margin-right: 2px;
+}
+
+.mx_RoomView_ongoingConfCallNotification {
+    width: 100%;
+    text-align: center;
+    background-color: $warning-color;
+    color: $accent-fg-color;
+    font-weight: bold;
+    padding: 6px 0;
+    cursor: pointer;
+}
+
+.mx_RoomView_ongoingConfCallNotification a {
+    color: $accent-fg-color ! important;
+}

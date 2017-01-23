@@ -1,0 +1,70 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UserNotifSettings_tableRow
+{
+    display: table-row;
+}
+
+.mx_UserNotifSettings_inputCell {
+    display: table-cell;
+    padding-bottom: 8px;
+    padding-right: 8px;
+    width: 16px;
+}
+
+.mx_UserNotifSettings_labelCell
+{
+    padding-bottom: 8px;
+    width: 400px;
+    display: table-cell;
+}
+
+.mx_UserNotifSettings_pushRulesTableWrapper {
+    padding-bottom: 8px;
+}
+
+.mx_UserNotifSettings_pushRulesTable {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.mx_UserNotifSettings_pushRulesTable thead {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.mx_UserNotifSettings_pushRulesTable tbody th {
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.mx_UserNotifSettings_pushRulesTable tbody th:first-child {
+    text-align: left;
+}
+
+.mx_UserNotifSettings_keywords {
+    cursor: pointer;
+    color: $accent-color;
+}
+
+.mx_UserSettings_devicesTable td {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.mx_UserSettings_devicesTable_nodevices {
+    font-style: italic;
+}

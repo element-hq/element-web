@@ -26,6 +26,8 @@ if (check_squirrel_hooks()) return;
 const electron = require('electron');
 const url = require('url');
 
+const tray = require('./tray');
+
 const VectorMenu = require('./vectormenu');
 
 let vectorConfig = {};
@@ -112,7 +114,16 @@ function startAutoUpdate(update_base_url) {
         // 204 No Content. On windows it takes a base path and looks for
         // files under that path.
         if (process.platform == 'darwin') {
-            electron.autoUpdater.setFeedURL(update_base_url + 'macos/');
+            // include the current version in the URL we hit. Electron doesn't add
+            // it anywhere (apart from the User-Agent) so it's up to us. We could
+            // (and previously did) just use the User-Agent, but this doesn't
+            // rely on NSURLConnection setting the User-Agent to what we expect,
+            // and also acts as a convenient cache-buster to ensure that when the
+            // app updates it always gets a fresh value to avoid update-looping.
+            electron.autoUpdater.setFeedURL(
+                update_base_url +
+                'macos/?localVersion=' + encodeURIComponent(electron.app.getVersion())
+            );
         } else if (process.platform == 'win32') {
             electron.autoUpdater.setFeedURL(update_base_url + 'win32/' + process.arch + '/');
         } else {
@@ -150,6 +161,19 @@ electron.ipcMain.on('install_update', installUpdate);
 
 electron.app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
+const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+        if (!mainWindow.isVisible()) mainWindow.show();
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus();
+    }
+});
+
+if (shouldQuit) {
+    electron.app.quit()
+}
+
 electron.app.on('ready', () => {
     if (vectorConfig.update_base_url) {
         console.log("Starting auto update with base URL: " + vectorConfig.update_base_url);
@@ -166,9 +190,16 @@ electron.app.on('ready', () => {
         icon: icon_path,
         width: 1024, height: 768,
         show: false,
+        autoHideMenuBar: true,
     });
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
     electron.Menu.setApplicationMenu(VectorMenu);
+
+    // Create trayIcon icon
+    tray.create(mainWindow, {
+        icon_path: icon_path,
+        brand: vectorConfig.brand || 'Riot'
+    });
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
@@ -177,7 +208,7 @@ electron.app.on('ready', () => {
         mainWindow = null;
     });
     mainWindow.on('close', (e) => {
-        if (process.platform == 'darwin' && !appQuitting) {
+        if (!appQuitting && (tray.hasTray() || process.platform == 'darwin')) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)

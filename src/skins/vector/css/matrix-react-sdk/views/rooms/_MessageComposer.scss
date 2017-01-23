@@ -1,0 +1,202 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MessageComposer_wrapper {
+    max-width: 960px;
+    vertical-align: middle;
+    margin: auto;
+    border-top: 1px solid $primary-hairline-color;
+    position: relative;
+}
+
+.mx_MessageComposer_autocomplete_wrapper {
+    position: relative;
+    height: 0;
+}
+
+.mx_MessageComposer_row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.mx_MessageComposer .mx_MessageComposer_avatar {
+    padding-left: 10px;
+    padding-right: 28px;
+}
+
+.mx_MessageComposer .mx_MessageComposer_avatar .mx_BaseAvatar {
+    display: block;
+}
+
+.mx_MessageComposer_composecontrols {
+    width: 100%;
+}
+
+.mx_MessageComposer_e2eIcon {
+    position: absolute;
+    left: 44px;
+}
+
+.mx_MessageComposer_noperm_error {
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    font-style: italic;
+    color: $greyed-fg-color;
+}
+
+.mx_MessageComposer_input_wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_MessageComposer_input {
+    flex: 1;
+    vertical-align: middle;
+    display: flex;
+    flex-direction: column;
+    min-height: 60px;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: 14px;
+    margin-right: 6px;
+}
+
+.mx_MessageComposer_input_empty .public-DraftEditorPlaceholder-root {
+    display: none;
+}
+
+.mx_MessageComposer_input .DraftEditor-root {
+    width: 100%;
+    flex: 1;
+    max-height: 120px;
+    overflow: auto;
+}
+
+.mx_MessageComposer_input blockquote {
+    color: $blockquote-fg-color;
+    margin: 0 0 16px;
+    padding: 0 15px;
+    border-left: 4px solid $blockquote-bar-color;
+}
+
+.mx_MessageComposer_input textarea {
+    display: block;
+    width: 100%;
+    padding: 0px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 0px;
+    resize: none;
+    outline: none;
+    box-shadow: none;
+    color: $primary-fg-color;
+    background-color: $primary-bg-color;
+    font-size: 14px;
+    max-height: 120px;
+    overflow: auto;
+    /* needed for FF */
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+}
+
+/* hack for FF as vertical alignment of custom placeholder text is broken */
+.mx_MessageComposer_input textarea::-moz-placeholder {
+    line-height: 100%;
+    color: $accent-color;
+    opacity: 1.0;
+}
+.mx_MessageComposer_input textarea::-webkit-input-placeholder {
+    color: $accent-color;
+}
+
+.mx_MessageComposer_upload,
+.mx_MessageComposer_hangup,
+.mx_MessageComposer_voicecall,
+.mx_MessageComposer_videocall {
+    /*display: table-cell;*/
+    /*vertical-align: middle;*/
+    /*padding-left: 10px;*/
+    padding-right: 5px;
+    cursor: pointer;
+    padding-top: 4px;
+}
+
+.mx_MessageComposer_upload object,
+.mx_MessageComposer_hangup object,
+.mx_MessageComposer_voicecall object,
+.mx_MessageComposer_videocall object {
+    pointer-events: none;
+}
+
+.mx_MessageComposer_formatting {
+    cursor: pointer;
+    margin: 0 11px;
+}
+
+.mx_MessageComposer_formatbar_wrapper {
+    width: 100%;
+    background-color: $menu-bg-color;
+    box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.08);
+}
+
+.mx_MessageComposer_formatbar {
+    margin: auto;
+    max-width: 960px;
+    display: flex;
+
+    height: 30px;
+
+    box-sizing: border-box;
+    padding-left: 62px;
+
+    flex-direction: row;
+    align-items: center;
+    font-size: 10px;
+    color: $greyed-fg-color;
+}
+
+.mx_MessageComposer_formatbar * {
+    margin-right: 4px;
+}
+
+.mx_MessageComposer_format_button,
+.mx_MessageComposer_formatbar_cancel,
+.mx_MessageComposer_formatbar_markdown {
+    cursor: pointer;
+}
+
+.mx_MessageComposer_format_button_disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.mx_MessageComposer_formatbar_cancel {
+    margin-right: 22px;
+}
+
+.mx_MessageComposer_formatbar_markdown {
+    margin-right: 64px;
+}
+
+.mx_MessageComposer_input_markdownIndicator {
+    cursor: pointer;
+    height: 10px;
+    padding: 4px 4px 4px 0;
+    opacity: 0.8;
+}

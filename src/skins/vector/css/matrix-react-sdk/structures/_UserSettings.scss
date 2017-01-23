@@ -1,0 +1,199 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UserSettings {
+    max-width: 960px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_UserSettings .mx_RoomHeader {
+    order: 1;
+
+    flex: 0 0 70px;
+}
+
+.mx_UserSettings_body {
+    order: 2;
+
+    flex: 1 1 0;
+
+    margin-top: -20px;
+    overflow-y: auto;
+}
+
+.mx_UserSettings h3 {
+    clear: both;
+    margin-left: 63px;
+    text-transform: uppercase;
+    color: $h3-color;
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 26px;
+    margin-bottom: 10px;
+}
+
+.mx_UserSettings_section h3 {
+    margin-left: 0px;
+}
+
+.mx_UserSettings_spinner {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 12px;
+    width: 32px;
+    height: 32px;
+}
+
+.mx_UserSettings_button {
+    display: inline;
+    vertical-align: middle;
+    border: 0px;
+    border-radius: 36px;
+    font-weight: 400;
+    font-size: 16px;
+    color: $accent-fg-color;
+    background-color: $accent-color;
+    width: auto;
+    margin: auto;
+    padding: 7px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+}
+
+.mx_UserSettings_button.danger {
+    background-color: $warning-color;
+}
+
+.mx_UserSettings_section {
+    margin-left: 63px;
+    margin-top: 28px;
+    margin-bottom: 28px;
+}
+
+.mx_UserSettings_cryptoSection ul {
+    display: table;
+}
+.mx_UserSettings_cryptoSection li {
+    display: table-row;
+}
+.mx_UserSettings_cryptoSection label,
+.mx_UserSettings_cryptoSection span {
+    display: table-cell;
+    padding-right: 1em;
+}
+
+.mx_UserSettings_toggle input {
+    width: 16px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.mx_UserSettings_toggle label {
+    padding-bottom: 21px;
+}
+
+.mx_UserSettings_accountTable
+.mx_UserSettings_notifTable
+{
+    display: table;
+}
+
+.mx_UserSettings_notifTable .mx_Spinner {
+    position: absolute;
+}
+
+.mx_UserSettings_profileTable
+{
+    display: table;
+    float: left;
+}
+
+.mx_UserSettings_profileTableRow
+{
+    display: table-row;
+}
+
+.mx_UserSettings_profileLabelCell
+{
+    padding-bottom: 21px;
+    display: table-cell;
+    font-weight: bold;
+    padding-right: 24px;
+}
+
+.mx_UserSettings_profileInputCell {
+    display: table-cell;
+    padding-bottom: 21px;
+    width: 240px;
+}
+
+.mx_UserSettings_profileInputCell input,
+.mx_UserSettings_profileInputCell .mx_EditableText
+{
+    display: inline-block;
+    border: 0px;
+    border-bottom: 1px solid $input-underline-color;
+    padding: 0px;
+    width: 240px;
+    color: $input-fg-color;
+    font-family: 'Open Sans', Helvetica, Arial, Sans-Serif;
+    font-size: 16px;
+}
+
+.mx_UserSettings_threepidButton {
+    display: table-cell;
+    padding-left: 0.5em;
+    position: relative;
+    cursor: pointer;
+}
+
+.mx_UserSettings_changePasswordButton {
+    float: right;
+    margin-right: 32px;
+    margin-left: 32px;
+}
+
+.mx_UserSettings_logout {
+    float: right;
+    margin-right: 32px;
+    margin-left: 32px;
+}
+
+.mx_UserSettings_avatarPicker {
+    margin-left: 32px;
+    margin-right: 32px;
+    float: right;
+    cursor: pointer;
+}
+
+.mx_UserSettings_avatarPicker_img .mx_BaseAvatar_image {
+    object-fit: cover;
+}
+
+.mx_UserSettings_avatarPicker_edit {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.mx_UserSettings_avatarPicker_edit > input {
+    display: none;
+}

@@ -1,0 +1,230 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RoomSettings {
+    margin-left: 65px;
+    margin-bottom: 20px;
+}
+
+.mx_RoomSettings_leaveButton,
+.mx_RoomSettings_integrationsButton,
+.mx_RoomSettings_integrationsButton_error {
+    position: relative;
+    height: 36px;
+    background-color: $accent-color;
+    border-radius: 36px;
+    margin-right: 8px;
+    color: $accent-fg-color;
+    line-height: 34px;
+    text-align: center;
+    float: right;
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+.mx_RoomSettings_integrationsButton_error {
+    pointer: not-allowed;
+}
+.mx_RoomSettings_integrationsButton_errorPopup {
+    position: absolute;
+    top: 110%;
+    left: -26%;
+    width: 150%;
+    padding: 2%;
+    font-size: 10pt;
+    line-height: 1.5em;
+    border-radius: 5px;
+    background-color: $accent-color;
+    color: $accent-fg-color;
+}
+
+.mx_RoomSettings_e2eIcon {
+    padding-left: 4px;
+    padding-right: 7px;
+}
+
+.mx_RoomSettings_leaveButton {
+    margin-right: 32px;
+}
+
+.mx_RoomSettings_powerLevels {
+    display: table;
+}
+
+.mx_RoomSettings_powerLevel {
+    display: table-row;
+}
+
+.mx_RoomSettings_powerLevelKey,
+.mx_RoomSettings_powerLevel .mx_PowerSelector {
+    display: table-cell;
+    padding-bottom: 5px;
+}
+
+.mx_RoomSettings_powerLevelKey {
+    text-align: right;
+    padding-right: 0.3em;
+}
+
+.mx_RoomSettings h3 {
+    text-transform: uppercase;
+    color: $h3-color;
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 36px;
+    margin-bottom: 10px;
+}
+
+.mx_RoomSettings .mx_RoomSettings_toggles label {
+    margin-bottom: 8px;
+    display: block;
+}
+
+.mx_RoomSettings .mx_RoomSettings_toggles input[type="checkbox"],
+.mx_RoomSettings .mx_RoomSettings_toggles input[type="radio"] {
+    margin-right: 7px;
+}
+
+.mx_RoomSettings .mx_RoomSettings_tags input[type="checkbox"] {
+    margin-left: 1em;
+    margin-right: 7px;
+}
+
+.mx_RoomSettings .mx_RoomSettings_tags {
+    margin-bottom: 8px;
+}
+
+.mx_RoomSettings .mx_RoomSettings_roomColor {
+    display: inline-block;
+    position: relative;
+    width: 37px;
+    height: 37px;
+    border: 1px solid #979797;
+    margin-right: 13px;
+    cursor: pointer;
+}
+
+.mx_RoomSettings .mx_RoomSettings_roomColor_selected {
+    position: absolute;
+    left: 10px;
+    top: 4px;
+    cursor: default ! important;
+}
+
+.mx_RoomSettings .mx_RoomSettings_roomColorPrimary {
+    height: 10px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
+.mx_RoomSettings .mx_RoomSettings_aliasLabel {
+    margin-bottom: 8px;
+}
+
+.mx_RoomSettings .mx_RoomSettings_aliasesTable {
+    margin-top: 12px;
+    margin-bottom: 0px;
+    margin-left: 56px;
+    display: table;
+}
+
+.mx_RoomSettings .mx_RoomSettings_aliasesTableRow {
+    display: table-row;
+    margin-bottom: 16px;
+}
+
+.mx_RoomSettings .mx_RoomSettings_alias {
+    max-width: 400px;
+    margin-bottom: 16px;
+    /*
+    commented out so margin applies
+    display: table-cell; */
+}
+
+.mx_RoomSettings .mx_RoomSettings_addAlias,
+.mx_RoomSettings .mx_RoomSettings_deleteAlias {
+    display: table-cell;
+    padding-left: 0.5em;
+    position: relative;
+    cursor: pointer;
+}
+
+.mx_RoomSettings .mx_RoomSettings_addAlias img,
+.mx_RoomSettings .mx_RoomSettings_deleteAlias img {
+    visibility: hidden;
+}
+
+.mx_RoomSettings .mx_RoomSettings_aliasesTableRow:hover .mx_RoomSettings_addAlias img,
+.mx_RoomSettings .mx_RoomSettings_aliasesTableRow:hover .mx_RoomSettings_deleteAlias img {
+    visibility: visible;
+}
+
+.mx_RoomSettings_warning {
+    color: $warning-color;
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.mx_RoomSettings_editable {
+    border: 0px;
+    border-bottom: 1px solid $strong-input-border-color;
+    padding: 0px;
+    min-width: 240px;
+}
+
+.mx_RoomSettings_editable:focus {
+    border-bottom: 1px solid $accent-color;
+    outline: none;
+    box-shadow: none;
+}
+
+.mx_RoomSettings_deleteAlias,
+.mx_RoomSettings_addAlias {
+    display: table-cell;
+    visibility: visible;
+}
+
+.mx_RoomSettings_deleteAlias:hover,
+.mx_RoomSettings_addAlias:hover {
+    visibility: visible;
+}
+
+.mx_RoomSettings_aliasPlaceholder {
+    color: $settings-grey-fg-color;
+}
+
+.mx_RoomSettings_buttons {
+    text-align: right;
+    margin-bottom: 16px;
+}
+
+.mx_RoomSettings_button {
+    display: inline;
+    border: 0px;
+    height: 36px;
+    border-radius: 36px;
+    font-weight: 400;
+    font-size: 15px;
+    color: $accent-fg-color;
+    background-color: $accent-color;
+    width: auto;
+    margin: auto;
+    padding: 6px;
+    padding-left: 1em;
+    padding-right: 1em;
+}
