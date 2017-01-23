@@ -186,7 +186,7 @@ module.exports = React.createClass({
     },
 
     _renderTypingIndicatorAvatars: function(limit) {
-        let users = WhoIsTyping.usersTyping(this.props.room);
+        let users = WhoIsTyping.usersTypingApartFromMe(this.props.room);
 
         let othersCount = Math.max(users.length - limit, 0);
         users = users.slice(0, limit);
