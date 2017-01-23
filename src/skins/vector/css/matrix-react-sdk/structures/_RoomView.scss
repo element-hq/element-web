@@ -158,6 +158,20 @@ hr.mx_RoomView_myReadMarker {
 
     width: 100%;
     flex: 0 0 auto;
+
+    max-height: 0px;
+    background-color: $primary-bg-color;
+    z-index: 1000;
+    overflow: hidden;
+
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -ms-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+}
+
+.mx_RoomView_statusArea_expanded {
+    max-height: 50px;
 }
 
 .mx_RoomView_statusAreaBox {
