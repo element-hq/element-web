@@ -32,17 +32,22 @@ module.exports = {
         return whoIsTyping;
     },
 
-    whoIsTypingString: function(room) {
-        var whoIsTyping = this.usersTypingApartFromMe(room);
+    whoIsTypingString: function(room, limit) {
+        const whoIsTyping = this.usersTypingApartFromMe(room);
+        const othersCount = limit === undefined ? 0 : Math.max(whoIsTyping.length - limit, 0);
         if (whoIsTyping.length == 0) {
-            return null;
+            return '';
         } else if (whoIsTyping.length == 1) {
             return whoIsTyping[0].name + ' is typing';
+        }
+        const names = whoIsTyping.map(function(m) {
+            return m.name;
+        });
+        if (othersCount) {
+            const other = ' other' + (othersCount > 1 ? 's' : '');
+            return names.slice(0, limit).join(', ') + ' and ' + othersCount + other + ' are typing';
         } else {
-            var names = whoIsTyping.map(function(m) {
-                return m.name;
-            });
-            var lastPerson = names.shift();
+            const lastPerson = names.pop();
             return names.join(', ') + ' and ' + lastPerson + ' are typing';
         }
     }

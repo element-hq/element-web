@@ -53,6 +53,10 @@ module.exports = React.createClass({
         // more interesting)
         hasActiveCall: React.PropTypes.bool,
 
+        // Number of names to display in typing indication. E.g. set to 3, will
+        // result in "X, Y, Z and 100 others are typing."
+        whoIsTypingLimit: React.PropTypes.number,
+
         // callback for when the user clicks on the 'resend all' button in the
         // 'unsent messages' bar
         onResendAllClick: React.PropTypes.func,
@@ -80,7 +84,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
-            whoisTypingString: WhoIsTyping.whoIsTypingString(this.props.room),
+            whoisTypingString: WhoIsTyping.whoIsTypingString(this.props.room, this.props.whoIsTypingLimit),
         };
     },
 
@@ -127,7 +131,7 @@ module.exports = React.createClass({
 
     onRoomMemberTyping: function(ev, member) {
         this.setState({
-            whoisTypingString: WhoIsTyping.whoIsTypingString(this.props.room),
+            whoisTypingString: WhoIsTyping.whoIsTypingString(this.props.room, this.props.whoIsTypingLimit),
         });
     },
 
