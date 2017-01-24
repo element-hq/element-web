@@ -23,8 +23,9 @@ limitations under the License.
  * });
  */
 
-var React = require("react");
-var dis = require("../../../dispatcher");
+import React from 'react';
+import dis from '../../../dispatcher';
+import sdk from '../../../index';
 
 module.exports = React.createClass({
     displayName: 'NeedToRegisterDialog',
@@ -54,11 +55,12 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <div className="mx_NeedToRegisterDialog">
-                <div className="mx_Dialog_title">
-                    {this.props.title}
-                </div>
+            <BaseDialog className="mx_NeedToRegisterDialog"
+                onFinished={this.props.onFinished}
+                title={this.props.title}
+            >
                 <div className="mx_Dialog_content">
                     {this.props.description}
                 </div>
@@ -70,7 +72,7 @@ module.exports = React.createClass({
                         Register
                     </button>
                 </div>
-            </div>
+            </BaseDialog>
         );
-    }
+    },
 });

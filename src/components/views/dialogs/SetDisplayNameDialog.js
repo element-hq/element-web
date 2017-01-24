@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require("react");
-var sdk = require("../../../index.js");
-var MatrixClientPeg = require("../../../MatrixClientPeg");
+import React from 'react';
+import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'SetDisplayNameDialog',
     propTypes: {
         onFinished: React.PropTypes.func.isRequired,
@@ -59,11 +59,12 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <div className="mx_SetDisplayNameDialog">
-                <div className="mx_Dialog_title">
-                    Set a Display Name
-                </div>
+            <BaseDialog className="mx_SetDisplayNameDialog"
+                onFinished={this.props.onFinished}
+                title="Set a Display Name"
+            >
                 <div className="mx_Dialog_content">
                     Your display name is how you'll appear to others when you speak in rooms.<br/>
                     What would you like it to be?
@@ -79,7 +80,7 @@ module.exports = React.createClass({
                         <input className="mx_Dialog_primary" type="submit" value="Set" />
                     </div>
                 </form>
-            </div>
+            </BaseDialog>
         );
-    }
+    },
 });
