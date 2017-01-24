@@ -16,6 +16,7 @@ limitations under the License.
 
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 import request from "browser-request";
+import q from "q";
 
 // This module contains all the code needed to log the console, persist it to
 // disk and submit bug reports. Rationale is as follows:
@@ -105,9 +106,6 @@ class IndexedDBLogStore {
         this.db = null;
         // Promise is not null when a flush is IN PROGRESS
         this.flushPromise = null;
-        // Promise is not null when flush() is called when one is already in
-        // progress.
-        this.flushAgainPromise = null;
     }
 
     /**
@@ -115,7 +113,7 @@ class IndexedDBLogStore {
      */
     connect() {
         let req = this.indexedDB.open("logs");
-        return new Promise((resolve, reject) => {
+        return q.Promise((resolve, reject) => {
             req.onsuccess = (event) => {
                 this.db = event.target.result;
                 // Periodically flush logs to local storage / indexeddb
@@ -167,13 +165,10 @@ class IndexedDBLogStore {
      *  - If B doesn't wait for A's flush to complete, B will be missing the
      *    contents of A's flush.
      * To protect against this, we set 'flushPromise' when a flush is ongoing.
-     * Subsequent calls to flush() during this period return a new promise
-     * 'flushAgainPromise' which is chained off the current 'flushPromise'.
-     * Subsequent calls to flush() when the first flush hasn't completed will
-     * return the same 'flushAgainPromise' as we can guarantee that we WILL
-     * do a brand new flush at some point in the future. Once the first flush
-     * has completed, 'flushAgainPromise' becomes 'flushPromise' and can be
-     * chained again.
+     * Subsequent calls to flush() during this period will chain another flush.
+     * This guarantees that we WILL do a brand new flush at some point in the
+     * future. Once the flushes have finished, it's  safe to clobber the promise
+     * with a new one to prevent very deep promise chains from building up.
      *
      * This guarantees that we will always eventually do a flush when flush() is
      * called.
@@ -181,23 +176,20 @@ class IndexedDBLogStore {
      * @return {Promise} Resolved when the logs have been flushed.
      */
     flush() {
-        if (this.flushPromise) { // a flush is ongoing
-            if (this.flushAgainPromise) { // a flush is queued up, return that.
-                return this.flushAgainPromise;
-            }
-            // queue up a new flush
-            this.flushAgainPromise = this.flushPromise.then(() => {
-                // the current flush has completed, so shuffle the promises
-                // around:
-                // flushAgainPromise => flushPromise and null flushAgainPromise.
-                // flushPromise has already nulled itself.
-                this.flushAgainPromise = null;
+        // check if a flush() operation is ongoing
+        if (this.flushPromise && this.flushPromise.isPending()) {
+            // chain a flush operation after this one has completed to guarantee
+            // that a complete flush() is done. This does mean that if there are
+            // 3 calls to flush() in one go, the 2nd and 3rd promises will run
+            // concurrently, but this is fine since they can safely race when
+            // collecting logs.
+            return this.flushPromise.then(() => {
                 return this.flush();
             });
-            return this.flushAgainPromise;
         }
-
-        this.flushPromise = new Promise((resolve, reject) => {
+        // there is no flush promise or there was but it has finished, so do
+        // a brand new one, destroying the chain which may have been built up.
+        this.flushPromise = q.Promise((resolve, reject) => {
             if (!this.db) {
                 // not connected yet or user rejected access for us to r/w to
                 // the db.
@@ -225,10 +217,6 @@ class IndexedDBLogStore {
                     new Error("Failed to write logs: " + event.target.errorCode)
                 );
             }
-        }).then(() => {
-            this.flushPromise = null;
-        }, (err) => {
-            this.flushPromise = null;
         });
         return this.flushPromise;
     }
@@ -286,7 +274,7 @@ class IndexedDBLogStore {
         }
 
         function deleteLogs(id) {
-            return new Promise((resolve, reject) => {
+            return q.Promise((resolve, reject) => {
                 const txn = db.transaction(
                     ["logs", "logslastmod"], "readwrite"
                 );
@@ -377,7 +365,7 @@ class IndexedDBLogStore {
  */
 function selectQuery(store, keyRange, resultMapper) {
     const query = store.openCursor(keyRange);
-    return new Promise((resolve, reject) => {
+    return q.Promise((resolve, reject) => {
         let results = [];
         query.onerror = (event) => {
             reject(new Error("Query failed: " + event.target.errorCode));
@@ -479,7 +467,7 @@ module.exports = {
             });
         }
 
-        await new Promise((resolve, reject) => {
+        await q.Promise((resolve, reject) => {
             request({
                 method: "POST",
                 url: bugReportEndpoint,
