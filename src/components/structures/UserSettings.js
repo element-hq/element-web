@@ -369,6 +369,11 @@ module.exports = React.createClass({
         Modal.createDialog(DeactivateAccountDialog, {});
     },
 
+    _onBugReportClicked: function() {
+        const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
+        Modal.createDialog(BugReportDialog, {});
+    },
+
     _onInviteStateChange: function(event, member, oldMembership) {
         if (member.userId === this._me && oldMembership === "invite") {
             this.forceUpdate();
@@ -481,6 +486,21 @@ module.exports = React.createClass({
             <div>
                 <h3>Devices</h3>
                 <DevicesPanel className="mx_UserSettings_section"/>
+            </div>
+        );
+    },
+
+    _renderBugReport: function() {
+        // TODO: If there is no bug report endpoint, hide this.
+        return (
+            <div>
+                <h3>Bug Report</h3>
+                <div className="mx_UserSettings_section">
+                    <p>Found a bug?</p>
+                    <button className="mx_UserSettings_button danger"
+                        onClick={this._onBugReportClicked}>Report it
+                    </button>
+                </div>
             </div>
         );
     },
@@ -738,6 +758,7 @@ module.exports = React.createClass({
                 {this._renderDevicesPanel()}
                 {this._renderCryptoInfo()}
                 {this._renderBulkOptions()}
+                {this._renderBugReport()}
 
                 <h3>Advanced</h3>
 
