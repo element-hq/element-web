@@ -118,7 +118,7 @@ module.exports = React.createClass({
 
         var self = this;
 
-        deferred.then(function (resp) {
+        deferred.then(function(resp) {
             self.setState({
                 phase: self.phases.CREATED,
             });
@@ -210,7 +210,7 @@ module.exports = React.createClass({
     onAliasChanged: function(alias) {
         this.setState({
             alias: alias
-        })
+        });
     },
 
     onEncryptChanged: function(ev) {

@@ -77,7 +77,7 @@ module.exports = React.createClass({
     getChildContext: function() {
         return {
             appConfig: this.props.config,
-        }
+        };
     },
 
     getInitialState: function() {
@@ -456,6 +456,9 @@ module.exports = React.createClass({
                     middleOpacity: payload.middleOpacity,
                 });
                 break;
+            case 'set_theme':
+                this._onSetTheme(payload.value);
+                break;
             case 'on_logged_in':
                 this._onLoggedIn();
                 break;
@@ -587,6 +590,50 @@ module.exports = React.createClass({
     },
 
     /**
+     * Called whenever someone changes the theme
+     */
+    _onSetTheme: function(theme) {
+        if (!theme) {
+            theme = 'light';
+        }
+
+        // look for the stylesheet elements.
+        // styleElements is a map from style name to HTMLLinkElement.
+        var styleElements = Object.create(null);
+        var i, a;
+        for (i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
+            var href = a.getAttribute("href");
+            // shouldn't we be using the 'title' tag rather than the href?
+            var match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
+            if (match) {
+                styleElements[match[1]] = a;
+            }
+        }
+
+        if (!(theme in styleElements)) {
+            throw new Error("Unknown theme " + theme);
+        }
+
+        // disable all of them first, then enable the one we want. Chrome only
+        // bothers to do an update on a true->false transition, so this ensures
+        // that we get exactly one update, at the right time.
+
+        Object.values(styleElements).forEach((a) => {
+            a.disabled = true;
+        });
+        styleElements[theme].disabled = false;
+
+        if (theme === 'dark') {
+            // abuse the tinter to change all the SVG's #fff to #2d2d2d
+            // XXX: obviously this shouldn't be hardcoded here.
+            Tinter.tintSvgWhite('#2d2d2d');
+        }
+        else {
+            Tinter.tintSvgWhite('#ffffff');
+        }
+    },
+
+    /**
      * Called when a new logged in session has started
      */
     _onLoggedIn: function(credentials) {
@@ -686,6 +733,16 @@ module.exports = React.createClass({
             dis.dispatch({
                 action: 'logout'
             });
+        });
+        cli.on("accountData", function(ev) {
+            if (ev.getType() === 'im.vector.web.settings') {
+                if (ev.getContent() && ev.getContent().theme) {
+                    dis.dispatch({
+                        action: 'set_theme',
+                        value: ev.getContent().theme,
+                    });
+                }
+            }
         });
     },
 
@@ -979,7 +1036,7 @@ module.exports = React.createClass({
                     {...this.props}
                     {...this.state}
                 />
-            )
+            );
         } else if (this.state.logged_in) {
             // we think we are logged in, but are still waiting for the /sync to complete
             var Spinner = sdk.getComponent('elements.Spinner');
@@ -1003,6 +1060,7 @@ module.exports = React.createClass({
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
                     brand={this.props.config.brand}
+                    teamsConfig={this.props.config.teamsConfig}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     registrationUrl={this.props.registrationUrl}

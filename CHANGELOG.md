@@ -1,3 +1,30 @@
+Changes in [0.8.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.5) (2017-01-16)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.5-rc.1...v0.8.5)
+
+ * Pull in newer matrix-js-sdk for video calling fix
+
+Changes in [0.8.5-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.5-rc.1) (2017-01-13)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.4...v0.8.5-rc.1)
+
+ * Build the js-sdk in the CI script
+   [\#612](https://github.com/matrix-org/matrix-react-sdk/pull/612)
+ * Fix redacted member events being visible
+   [\#609](https://github.com/matrix-org/matrix-react-sdk/pull/609)
+ * Use `getStateKey` instead of `getSender`
+   [\#611](https://github.com/matrix-org/matrix-react-sdk/pull/611)
+ * Move screen sharing error check into platform
+   [\#608](https://github.com/matrix-org/matrix-react-sdk/pull/608)
+ * Fix 'create account' link in 'forgot password'
+   [\#606](https://github.com/matrix-org/matrix-react-sdk/pull/606)
+ * Let electron users complete captchas in a web browser
+   [\#601](https://github.com/matrix-org/matrix-react-sdk/pull/601)
+ * Add support for deleting threepids
+   [\#597](https://github.com/matrix-org/matrix-react-sdk/pull/597)
+ * Display msisdn threepids as 'Phone'
+   [\#598](https://github.com/matrix-org/matrix-react-sdk/pull/598)
+
 Changes in [0.8.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.4) (2016-12-24)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.3...v0.8.4)

@@ -65,7 +65,7 @@ module.exports = WithMatrixClient(React.createClass({
             updating: 0,
             devicesLoading: true,
             devices: null,
-        }
+        };
     },
 
     componentWillMount: function() {
@@ -203,7 +203,7 @@ module.exports = WithMatrixClient(React.createClass({
         }
 
         var cancelled = false;
-        this._cancelDeviceList = function() { cancelled = true; }
+        this._cancelDeviceList = function() { cancelled = true; };
 
         var client = this.props.matrixClient;
         var self = this;
@@ -530,7 +530,7 @@ module.exports = WithMatrixClient(React.createClass({
         });
     },
 
-    onMemberAvatarClick: function () {
+    onMemberAvatarClick: function() {
         var avatarUrl = this.props.member.user ? this.props.member.user.avatarUrl : this.props.member.events.member.getContent().avatar_url;
         if(!avatarUrl) return;
 
@@ -621,7 +621,7 @@ module.exports = WithMatrixClient(React.createClass({
                     <img src="img/create-big.svg" width="26" height="26" />
                 </div>
                 <div className={labelClasses}><i>Start new chat</i></div>
-            </AccessibleButton>
+            </AccessibleButton>;
 
             startChat = <div>
                 <h3>Direct chats</h3>
@@ -655,7 +655,7 @@ module.exports = WithMatrixClient(React.createClass({
             var giveOpLabel = this.state.isTargetMod ? "Revoke Moderator" : "Make Moderator";
             giveModButton = <AccessibleButton className="mx_MemberInfo_field" onClick={this.onModToggle}>
                 {giveOpLabel}
-            </AccessibleButton>
+            </AccessibleButton>;
         }
 
         // TODO: we should have an invite button if this MemberInfo is showing a user who isn't actually in the current room yet
@@ -673,7 +673,7 @@ module.exports = WithMatrixClient(React.createClass({
                         {banButton}
                         {giveModButton}
                     </div>
-                </div>
+                </div>;
         }
 
         const memberName = this.props.member.name;

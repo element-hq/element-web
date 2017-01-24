@@ -42,7 +42,7 @@ module.exports = React.createClass({
             height: 40,
             resizeMethod: 'crop',
             defaultToInitialLetter: true
-        }
+        };
     },
 
     getInitialState: function() {

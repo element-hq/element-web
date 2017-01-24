@@ -46,4 +46,4 @@ module.exports = {
             return names.join(', ') + ' and ' + lastPerson + ' are typing';
         }
     }
-}
+};

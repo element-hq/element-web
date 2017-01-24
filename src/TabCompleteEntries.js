@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require("react");
 var sdk = require("./index");
 
 class Entry {
@@ -90,7 +89,7 @@ CommandEntry.fromCommands = function(commandArray) {
     return commandArray.map(function(cmd) {
         return new CommandEntry(cmd.getCommand(), cmd.getCommandWithArgs());
     });
-}
+};
 
 class MemberEntry extends Entry {
     constructor(member) {
@@ -119,7 +118,7 @@ MemberEntry.fromMemberList = function(members) {
     return members.map(function(m) {
         return new MemberEntry(m);
     });
-}
+};
 
 module.exports.Entry = Entry;
 module.exports.MemberEntry = MemberEntry;

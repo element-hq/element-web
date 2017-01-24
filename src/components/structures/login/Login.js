@@ -173,7 +173,7 @@ module.exports = React.createClass({
     },
 
     _getCurrentFlowStep: function() {
-        return this._loginLogic ? this._loginLogic.getCurrentFlowStep() : null
+        return this._loginLogic ? this._loginLogic.getCurrentFlowStep() : null;
     },
 
     _setStateFromError: function(err, isLoginAttempt) {
@@ -195,7 +195,7 @@ module.exports = React.createClass({
         }
 
         let errorText = "Error: Problem communicating with the given homeserver " +
-                (errCode ? "(" + errCode + ")" : "")
+                (errCode ? "(" + errCode + ")" : "");
 
         if (err.cors === 'rejected') {
             if (window.location.protocol === 'https:' &&
@@ -258,7 +258,7 @@ module.exports = React.createClass({
             loginAsGuestJsx =
                 <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
                     Login as guest
-                </a>
+                </a>;
         }
 
         var returnToAppJsx;
@@ -266,7 +266,7 @@ module.exports = React.createClass({
             returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
                     Return to app
-                </a>
+                </a>;
         }
 
         return (

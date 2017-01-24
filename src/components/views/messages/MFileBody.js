@@ -281,7 +281,7 @@ module.exports = React.createClass({
                             decryptedBlob: blob,
                         });
                     }).catch((err) => {
-                        console.warn("Unable to decrypt attachment: ", err)
+                        console.warn("Unable to decrypt attachment: ", err);
                         Modal.createDialog(ErrorDialog, {
                             description: "Error decrypting attachment"
                         });
@@ -372,7 +372,7 @@ module.exports = React.createClass({
             var extra = text ? (': ' + text) : '';
             return <span className="mx_MFileBody">
                 Invalid file{extra}
-            </span>
+            </span>;
         }
     },
 });

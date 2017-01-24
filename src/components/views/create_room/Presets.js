@@ -40,7 +40,7 @@ module.exports = React.createClass({
     },
 
     onValueChanged: function(ev) {
-        this.props.onChange(ev.target.value)
+        this.props.onChange(ev.target.value);
     },
 
     render: function() {

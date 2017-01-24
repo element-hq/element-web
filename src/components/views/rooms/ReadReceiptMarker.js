@@ -71,7 +71,7 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             leftOffset: 0,
-        }
+        };
     },
 
     getInitialState: function() {
@@ -81,7 +81,7 @@ module.exports = React.createClass({
         // position.
         return {
             suppressDisplay: !this.props.suppressAnimation,
-        }
+        };
     },
 
     componentWillUnmount: function() {

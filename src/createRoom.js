@@ -45,7 +45,7 @@ function createRoom(opts) {
             Modal.createDialog(NeedToRegisterDialog, {
                 title: "Please Register",
                 description: "Guest users can't create new rooms. Please register to create room and start a chat."
-            })
+            });
         }, 0);
         return q(null);
     }
@@ -78,7 +78,7 @@ function createRoom(opts) {
 
     let modal;
     setTimeout(()=>{
-        modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner')
+        modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
     }, 0);
 
     let roomId;

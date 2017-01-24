@@ -45,7 +45,7 @@ module.exports = React.createClass({
 
         var cancelButton;
         if (this.props.onCancelClick) {
-            cancelButton = <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </AccessibleButton>
+            cancelButton = <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </AccessibleButton>;
         }
 
         var showRhsButton;
@@ -71,4 +71,3 @@ module.exports = React.createClass({
         );
     },
 });
-

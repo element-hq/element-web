@@ -19,7 +19,7 @@ npm install
 npm run test
 
 # run eslint
-npm run lint -- -f checkstyle -o eslint.xml || true
+npm run lintall -- -f checkstyle -o eslint.xml || true
 
 # delete the old tarball, if it exists
 rm -f matrix-react-sdk-*.tgz

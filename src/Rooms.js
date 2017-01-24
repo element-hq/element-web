@@ -37,7 +37,7 @@ export function getOnlyOtherMember(room, me) {
 
     if (joinedMembers.length === 2) {
         return joinedMembers.filter(function(m) {
-            return m.userId !== me.userId
+            return m.userId !== me.userId;
         })[0];
     }
 

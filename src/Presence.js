@@ -111,7 +111,7 @@ class Presence {
         this.timer = setTimeout(function() {
             self._onUnavailableTimerFire();
         }, UNAVAILABLE_TIME_MS);
-    } 
+    }
 }
 
 module.exports = new Presence();

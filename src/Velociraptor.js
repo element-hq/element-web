@@ -76,7 +76,7 @@ module.exports = React.createClass({
 
                 var startStyles = self.props.startStyles;
                 if (startStyles.length > 0) {
-                    var startStyle = startStyles[0]
+                    var startStyle = startStyles[0];
                     newProps.style = startStyle;
                     // console.log("mounted@startstyle0: "+JSON.stringify(startStyle));
                 }
@@ -105,7 +105,7 @@ module.exports = React.createClass({
         ) {
             var startStyles = this.props.startStyles;
             var transitionOpts = this.props.enterTransitionOpts;
-            var domNode = ReactDom.findDOMNode(node);
+            const domNode = ReactDom.findDOMNode(node);
             // start from startStyle 1: 0 is the one we gave it
             // to start with, so now we animate 1 etc.
             for (var i = 1; i < startStyles.length; ++i) {
@@ -145,7 +145,7 @@ module.exports = React.createClass({
             // and the FAQ entry, "Preventing memory leaks when
             // creating/destroying large numbers of elements"
             // (https://github.com/julianshapiro/velocity/issues/47)
-            var domNode = ReactDom.findDOMNode(this.nodes[k]);
+            const domNode = ReactDom.findDOMNode(this.nodes[k]);
             Velocity.Utilities.removeData(domNode);
         }
         this.nodes[k] = node;

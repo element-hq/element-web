@@ -183,8 +183,8 @@ module.exports = React.createClass({
                 'm.room.name', user_id
             );
 
-            save_button = <AccessibleButton className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</AccessibleButton>
-            cancel_button = <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </AccessibleButton>
+            save_button = <AccessibleButton className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</AccessibleButton>;
+            cancel_button = <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </AccessibleButton>;
         }
 
         if (this.props.saving) {
@@ -194,7 +194,7 @@ module.exports = React.createClass({
 
         if (can_set_room_name) {
             var RoomNameEditor = sdk.getComponent("rooms.RoomNameEditor");
-            name = <RoomNameEditor ref="nameEditor" room={this.props.room} />
+            name = <RoomNameEditor ref="nameEditor" room={this.props.room} />;
         }
         else {
             var searchStatus;
@@ -233,7 +233,7 @@ module.exports = React.createClass({
 
         if (can_set_room_topic) {
             var RoomTopicEditor = sdk.getComponent("rooms.RoomTopicEditor");
-            topic_el = <RoomTopicEditor ref="topicEditor" room={this.props.room} />
+            topic_el = <RoomTopicEditor ref="topicEditor" room={this.props.room} />;
         } else {
             var topic;
             if (this.props.room) {
@@ -302,7 +302,11 @@ module.exports = React.createClass({
             rightPanel_buttons =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShowRhsClick} title="<">
                     <TintableSvg src="img/minimise.svg" width="10" height="16"/>
+<<<<<<< HEAD
                 </AccessibleButton>
+=======
+                </div>;
+>>>>>>> origin/develop
         }
 
         var right_row;
