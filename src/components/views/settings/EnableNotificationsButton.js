@@ -17,7 +17,6 @@ limitations under the License.
 'use strict';
 var React = require("react");
 var Notifier = require("../../../Notifier");
-var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
 
 module.exports = React.createClass({

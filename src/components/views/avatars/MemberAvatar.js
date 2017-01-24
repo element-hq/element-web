@@ -42,7 +42,7 @@ module.exports = React.createClass({
             height: 40,
             resizeMethod: 'crop',
             viewUserOnClick: false,
-        }
+        };
     },
 
     getInitialState: function() {
@@ -64,7 +64,7 @@ module.exports = React.createClass({
                                          props.width,
                                          props.height,
                                          props.resizeMethod)
-        }
+        };
     },
 
     render: function() {
@@ -78,7 +78,7 @@ module.exports = React.createClass({
                     action: 'view_user',
                     member: this.props.member,
                 });
-            }
+            };
         }
 
         return (

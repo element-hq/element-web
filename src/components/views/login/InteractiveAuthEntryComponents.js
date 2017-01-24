@@ -70,7 +70,7 @@ export const PasswordAuthEntry = React.createClass({
         });
     },
 
-    _onPasswordFieldChange: function (ev) {
+    _onPasswordFieldChange: function(ev) {
         // enable the submit button iff the password is non-empty
         this.props.setSubmitButtonEnabled(Boolean(ev.target.value));
     },
@@ -209,4 +209,4 @@ export function getEntryComponentForLoginType(loginType) {
         }
     }
     return FallbackAuthEntry;
-};
+}

@@ -15,12 +15,9 @@ limitations under the License.
 */
 
 import React from 'react';
-import classNames from 'classnames';
-import q from 'q';
 
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import DateUtils from '../../../DateUtils';
 import Modal from '../../../Modal';
 
 export default class DevicesPanelEntry extends React.Component {
@@ -61,7 +58,7 @@ export default class DevicesPanelEntry extends React.Component {
             if (this._unmounted) { return; }
             if (error.httpStatus !== 401 || !error.data || !error.data.flows) {
                 // doesn't look like an interactive-auth failure
-                throw e;
+                throw error;
             }
 
             // pop up an interactive auth dialog
@@ -121,7 +118,7 @@ export default class DevicesPanelEntry extends React.Component {
 
         let deleteButton;
         if (this.state.deleteError) {
-            deleteButton = <div className="error">{this.state.deleteError}</div>
+            deleteButton = <div className="error">{this.state.deleteError}</div>;
         } else {
             deleteButton = (
                 <div className="mx_textButton"

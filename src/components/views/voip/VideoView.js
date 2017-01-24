@@ -114,7 +114,7 @@ module.exports = React.createClass({
                     <VideoFeed ref="remote" onResize={this.props.onResize}
                         maxHeight={maxVideoHeight} />
                 </div>
-                <div className="mx_VideoView_localVideoFeed">                
+                <div className="mx_VideoView_localVideoFeed">
                     <VideoFeed ref="local"/>
                 </div>
             </div>

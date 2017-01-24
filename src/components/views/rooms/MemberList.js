@@ -32,7 +32,7 @@ var SHARE_HISTORY_WARNING =
         Newly invited users will see the history of this room. <br/>
         If you'd prefer invited users not to see messages that were sent before they joined, <br/>
         turn off, 'Share message history with new users' in the settings for this room.
-    </span>
+    </span>;
 
 module.exports = React.createClass({
     displayName: 'MemberList',
@@ -207,7 +207,7 @@ module.exports = React.createClass({
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         var EntityTile = sdk.getComponent("rooms.EntityTile");
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-        var text = "and " + overflowCount + " other" + (overflowCount > 1 ? "s" : "") +  "...";
+        var text = "and " + overflowCount + " other" + (overflowCount > 1 ? "s" : "") + "...";
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
                 <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
@@ -338,8 +338,8 @@ module.exports = React.createClass({
                     }
                     memberList.push(
                         <EntityTile key={e.getStateKey()} name={e.getContent().display_name} />
-                    )
-                })
+                    );
+                });
             }
         }
 

@@ -49,7 +49,7 @@ module.exports = React.createClass({
         return {
             avatarUrl: this.props.initialAvatarUrl,
             phase: this.Phases.Display,
-        }
+        };
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -120,7 +120,7 @@ module.exports = React.createClass({
             var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
             // XXX: FIXME: once we track in the JS what our own displayname is(!) then use it here rather than ?
             avatarImg = <BaseAvatar width={this.props.width} height={this.props.height} resizeMethod='crop'
-                        name='?' idName={ MatrixClientPeg.get().getUserIdLocalpart() } url={this.state.avatarUrl} />
+                        name='?' idName={ MatrixClientPeg.get().getUserIdLocalpart() } url={this.state.avatarUrl} />;
         }
 
         var uploadSection;
@@ -130,7 +130,7 @@ module.exports = React.createClass({
                     Upload new:
                     <input type="file" onChange={this.onFileSelected}/>
                     {this.state.errorText}
-                </div>  
+                </div>
             );
         }
 

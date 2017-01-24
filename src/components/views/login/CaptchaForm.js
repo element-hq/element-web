@@ -52,7 +52,7 @@ module.exports = React.createClass({
             this._onCaptchaLoaded();
         } else {
             console.log("Loading recaptcha script...");
-            window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded()};
+            window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded();};
             var protocol = global.location.protocol;
             if (protocol === "file:") {
                 var warning = document.createElement('div');
@@ -101,7 +101,7 @@ module.exports = React.createClass({
         } catch (e) {
             this.setState({
                 errorText: e.toString(),
-            })
+            });
         }
     },
 

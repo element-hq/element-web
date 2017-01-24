@@ -31,7 +31,7 @@ export default class MAudioBody extends React.Component {
             decryptedUrl: null,
             decryptedBlob: null,
             error: null,
-        }
+        };
     }
     onPlayToggle() {
         this.setState({

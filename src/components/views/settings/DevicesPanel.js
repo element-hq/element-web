@@ -88,7 +88,7 @@ export default class DevicesPanel extends React.Component {
         const removed_id = device.device_id;
         this.setState((state, props) => {
             const newDevices = state.devices.filter(
-                d => { return d.device_id != removed_id }
+                d => { return d.device_id != removed_id; }
             );
             return { devices: newDevices };
         });
@@ -98,7 +98,7 @@ export default class DevicesPanel extends React.Component {
         var DevicesPanelEntry = sdk.getComponent('settings.DevicesPanelEntry');
         return (
             <DevicesPanelEntry key={device.device_id} device={device}
-               onDeleted={()=>{this._onDeviceDeleted(device)}} />
+               onDeleted={()=>{this._onDeviceDeleted(device);}} />
         );
     }
 

@@ -371,7 +371,7 @@ const onMessage = function(event) {
     }, (err) => {
         console.error(err);
         sendError(event, "Failed to lookup current room.");
-    })
+    });
 };
 
 module.exports = {
