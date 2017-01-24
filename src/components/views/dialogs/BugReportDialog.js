@@ -1,5 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
+Copyright 2017 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ export default class BugReportDialog extends React.Component {
         const userText = this.state.text;
         if (!sendLogs && userText.trim().length === 0) {
             this.setState({
-                err: "Please describe the bug and/or send logs."
+                err: "Please describe the bug and/or send logs.",
             });
             return;
         }
@@ -85,7 +85,8 @@ export default class BugReportDialog extends React.Component {
                     Report a bug
                 </div>
                 <div className="mx_Dialog_content">
-                    <p>Please describe the bug. What did you do? What did you expect to happen?
+                    <p>Please describe the bug. What did you do?
+                    What did you expect to happen?
                     What actually happened?</p>
                     <textarea
                         className="mx_BugReportDialog_input"
@@ -94,7 +95,8 @@ export default class BugReportDialog extends React.Component {
                         value={this.state.text}
                         placeholder="Describe your problem here."
                     />
-                    <p>In order to diagnose problems, logs from this client will be sent with this bug report.
+                    <p>In order to diagnose problems, logs from this client will be sent with
+                    this bug report.
                     If you would prefer to only send the text above, please untick:</p>
                     <input type="checkbox" checked={this.state.sendLogs}
                         onChange={this._onSendLogsChange} id="mx_BugReportDialog_logs"/>
