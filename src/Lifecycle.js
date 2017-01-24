@@ -22,7 +22,6 @@ import Notifier from './Notifier';
 import UserActivity from './UserActivity';
 import Presence from './Presence';
 import dis from './dispatcher';
-import Modal from './Modal';
 import DMRoomMap from './utils/DMRoomMap';
 
 /**
@@ -290,35 +289,19 @@ export function logout() {
         return;
     }
 
-    var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-    Modal.createDialog(QuestionDialog, {
-        title: "Warning",
-        description:
-            <div>
-                For security, logging out will delete any end-to-end encryption keys from this browser,
-                making previous encrypted chat history unreadable if you log back in.
-                In future this <a href="https://github.com/vector-im/riot-web/issues/2108">will be improved</a>,
-                but for now be warned.
-            </div>,
-        button: "Continue",
-        onFinished: (confirmed) => {
-            if (confirmed) {
-                MatrixClientPeg.get().logout().then(onLoggedOut,
-                    (err) => {
-                        // Just throwing an error here is going to be very unhelpful
-                        // if you're trying to log out because your server's down and
-                        // you want to log into a different server, so just forget the
-                        // access token. It's annoying that this will leave the access
-                        // token still valid, but we should fix this by having access
-                        // tokens expire (and if you really think you've been compromised,
-                        // change your password).
-                        console.log("Failed to call logout API: token will not be invalidated");
-                        onLoggedOut();
-                    }
-                );
-            }
-        },
-    });
+    return MatrixClientPeg.get().logout().then(onLoggedOut,
+        (err) => {
+            // Just throwing an error here is going to be very unhelpful
+            // if you're trying to log out because your server's down and
+            // you want to log into a different server, so just forget the
+            // access token. It's annoying that this will leave the access
+            // token still valid, but we should fix this by having access
+            // tokens expire (and if you really think you've been compromised,
+            // change your password).
+            console.log("Failed to call logout API: token will not be invalidated");
+            onLoggedOut();
+        }
+    );
 }
 
 /**
