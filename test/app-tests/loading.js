@@ -210,13 +210,10 @@ describe('loading:', function () {
                 httpBackend.when('GET', '/sync').respond(200, {});
                 return httpBackend.flush();
             }).then(() => {
-                // Wait for another trip around the event loop for the UI to update
-                return q.delay(1);
-            }).then(() => {
                 // once the sync completes, we should have a room view
+                return awaitRoomView(matrixChat);
+            }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.RoomView'));
                 expect(windowLocation.hash).toEqual("#/room/!room:id");
 
                 // and the localstorage should have been updated
@@ -269,9 +266,9 @@ describe('loading:', function () {
                 return httpBackend.flush();
             }).then(() => {
                 // once the sync completes, we should have a room view
+                return awaitRoomView(matrixChat);
+            }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.RoomView'));
                 expect(windowLocation.hash).toEqual("#/room/!room:id");
             }).done(done, done);
 
@@ -371,13 +368,10 @@ describe('loading:', function () {
                 httpBackend.when('GET', '/sync').respond(200, {});
                 return httpBackend.flush();
             }).then(() => {
-                // Wait for another trip around the event loop for the UI to update
-                return q.delay(1);
-            }).then(() => {
                 // once the sync completes, we should have a room view
+                return awaitRoomView(matrixChat);
+            }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.RoomView'));
                 expect(windowLocation.hash).toEqual("#/room/!room:id");
             }).done(done, done);
         });
@@ -468,4 +462,31 @@ function assertAtSyncingSpinner(matrixChat) {
     var logoutLink = ReactTestUtils.findRenderedDOMComponentWithTag(
         matrixChat, 'a');
     expect(logoutLink.text).toEqual("Logout");
+}
+
+function awaitRoomView(matrixChat, retryLimit, retryCount) {
+    if (retryLimit === undefined) {
+        retryLimit = 5;
+    }
+    if (retryCount === undefined) {
+        retryCount = 0;
+    }
+
+    if (!matrixChat.state.ready) {
+        console.log(Date.now() + " Awaiting room view: not ready yet.");
+        if (retryCount >= retryLimit) {
+            throw new Error("MatrixChat still not ready after " +
+                            retryCount + " tries");
+        }
+        return q.delay(0).then(() => {
+            return awaitRoomView(matrixChat, retryLimit, retryCount + 1);
+        });
+    }
+
+    console.log(Date.now() + " Awaiting room view: now ready.");
+
+    // state looks good, check the rendered output
+    ReactTestUtils.findRenderedComponentWithType(
+        matrixChat, sdk.getComponent('structures.RoomView'));
+    return q();
 }
