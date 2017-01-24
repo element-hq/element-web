@@ -135,7 +135,11 @@ module.exports = React.createClass({
     // changed - so we use '0' to indicate normal size, and other values to
     // indicate other sizes.
     _getSize: function(state, props) {
-        if (state.syncState === "ERROR" || state.whoisTypingString) {
+        if (state.syncState === "ERROR" ||
+            state.whoisTypingString ||
+            props.numUnreadMessages ||
+            !props.atEndOfLiveTimeline ||
+            props.hasActiveCall) {
             return STATUS_BAR_EXPANDED;
         } else if (props.tabCompleteEntries) {
             return STATUS_BAR_HIDDEN;
