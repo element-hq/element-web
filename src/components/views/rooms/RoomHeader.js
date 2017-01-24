@@ -302,11 +302,7 @@ module.exports = React.createClass({
             rightPanel_buttons =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShowRhsClick} title="<">
                     <TintableSvg src="img/minimise.svg" width="10" height="16"/>
-<<<<<<< HEAD
-                </AccessibleButton>
-=======
-                </div>;
->>>>>>> origin/develop
+                </AccessibleButton>;
         }
 
         var right_row;
