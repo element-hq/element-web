@@ -34,7 +34,8 @@ module.exports = {
 
     whoIsTypingString: function(room, limit) {
         const whoIsTyping = this.usersTypingApartFromMe(room);
-        const othersCount = limit === undefined ? 0 : Math.max(whoIsTyping.length - limit, 0);
+        const othersCount = limit === undefined ?
+            0 : Math.max(whoIsTyping.length - limit, 0);
         if (whoIsTyping.length == 0) {
             return '';
         } else if (whoIsTyping.length == 1) {
@@ -45,7 +46,8 @@ module.exports = {
         });
         if (othersCount) {
             const other = ' other' + (othersCount > 1 ? 's' : '');
-            return names.slice(0, limit).join(', ') + ' and ' + othersCount + other + ' are typing';
+            return names.slice(0, limit).join(', ') + ' and ' +
+                othersCount + other + ' are typing';
         } else {
             const lastPerson = names.pop();
             return names.join(', ') + ' and ' + lastPerson + ' are typing';

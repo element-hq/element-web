@@ -88,7 +88,10 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
-            whoisTypingString: WhoIsTyping.whoIsTypingString(this.props.room, this.props.whoIsTypingLimit),
+            whoisTypingString: WhoIsTyping.whoIsTypingString(
+                this.props.room,
+                this.props.whoIsTypingLimit
+            ),
         };
     },
 
@@ -135,7 +138,10 @@ module.exports = React.createClass({
 
     onRoomMemberTyping: function(ev, member) {
         this.setState({
-            whoisTypingString: WhoIsTyping.whoIsTypingString(this.props.room, this.props.whoIsTypingLimit),
+            whoisTypingString: WhoIsTyping.whoIsTypingString(
+                this.props.room,
+                this.props.whoIsTypingLimit
+            ),
         });
     },
 
