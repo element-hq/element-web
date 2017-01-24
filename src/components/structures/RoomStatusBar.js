@@ -79,6 +79,12 @@ module.exports = React.createClass({
         onVisible: React.PropTypes.func,
     },
 
+    getDefaultProps: function() {
+        return {
+            whoIsTypingLimit: 2,
+        };
+    },
+
     getInitialState: function() {
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
