@@ -16,18 +16,19 @@ limitations under the License.
 
 'use strict';
 
-var React = require("react");
-var sdk = require("../../../index");
-var classNames = require('classnames');
+const React = require("react");
+const sdk = require("../../../index");
+const classNames = require('classnames');
+const InviteAddressType = require("./AddressTile");
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'AddressSelector',
 
     propTypes: {
         onSelected: React.PropTypes.func.isRequired,
 
-        // List of strings: the addresses to display
-        addressList: React.PropTypes.array.isRequired,
+        // List of the addresses to display
+        addressList: React.PropTypes.arrayOf(InviteAddressType).isRequired,
         truncateAt: React.PropTypes.number.isRequired,
         selected: React.PropTypes.number,
 

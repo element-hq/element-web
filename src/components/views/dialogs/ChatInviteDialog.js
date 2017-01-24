@@ -164,7 +164,13 @@ module.exports = React.createClass({
             queryList = this._userList.filter((user) => {
                 return this._matches(query, user);
             }).map((user) => {
-                return user.userId;
+                return {
+                    addressType: 'mx',
+                    address: user.userId,
+                    displayName: user.displayName,
+                    avatarMxc: user.avatarUrl,
+                    isKnown: true,
+                }
             });
 
             // If the query isn't a user we know about, but is a
@@ -172,7 +178,11 @@ module.exports = React.createClass({
             if (queryList.length == 0) {
                 const addrType = Invite.getAddressType(query);
                 if (addrType !== null) {
-                    queryList.push(query);
+                    queryList.push({
+                        addressType: addrType,
+                        address: query,
+                        isKnown: false,
+                    });
                 }
             }
         }
@@ -204,7 +214,7 @@ module.exports = React.createClass({
 
     onSelected: function(index) {
         var inviteList = this.state.inviteList.slice();
-        inviteList.push(this.state.queryList[index].userId);
+        inviteList.push(this.state.queryList[index]);
         this.setState({
             inviteList: inviteList,
             queryList: [],
@@ -239,10 +249,14 @@ module.exports = React.createClass({
             return;
         }
 
+        const addrTexts = addrs.map((addr) => {
+            return addr.address;
+        });
+
         if (this.props.roomId) {
             // Invite new user to a room
             var self = this;
-            Invite.inviteMultipleToRoom(this.props.roomId, addrs)
+            Invite.inviteMultipleToRoom(this.props.roomId, addrTexts)
             .then(function(addrs) {
                 var room = MatrixClientPeg.get().getRoom(self.props.roomId);
                 return self._showAnyInviteErrors(addrs, room);
@@ -257,9 +271,9 @@ module.exports = React.createClass({
                 return null;
             })
             .done();
-        } else if (this._isDmChat(addrs)) {
+        } else if (this._isDmChat(addrTexts)) {
             // Start the DM chat
-            createRoom({dmUserId: addrs[0]})
+            createRoom({dmUserId: addrTexts[0]})
             .catch(function(err) {
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -276,7 +290,7 @@ module.exports = React.createClass({
             var room;
             createRoom().then(function(roomId) {
                 room = MatrixClientPeg.get().getRoom(roomId);
-                return Invite.inviteMultipleToRoom(roomId, addrs);
+                return Invite.inviteMultipleToRoom(roomId, addrTexts);
             })
             .then(function(addrs) {
                 return self._showAnyInviteErrors(addrs, room);
@@ -294,7 +308,7 @@ module.exports = React.createClass({
         }
 
         // Close - this will happen before the above, as that is async
-        this.props.onFinished(true, addrs);
+        this.props.onFinished(true, addrTexts);
     },
 
     _updateUserList: new rate_limited_func(function() {
@@ -345,7 +359,10 @@ module.exports = React.createClass({
 
     _isOnInviteList: function(uid) {
         for (let i = 0; i < this.state.inviteList.length; i++) {
-            if (this.state.inviteList[i].toLowerCase() === uid) {
+            if (
+                this.state.inviteList[i].addressType == 'mx' &&
+                this.state.inviteList[i].address.toLowerCase() === uid
+            ) {
                 return true;
             }
         }
@@ -380,24 +397,35 @@ module.exports = React.createClass({
     },
 
     _addInputToList: function() {
-        const addrType = Invite.getAddressType(this.refs.textinput.value);
-        if (addrType !== null) {
-            const inviteList = this.state.inviteList.slice();
-            inviteList.push(this.refs.textinput.value.trim());
-            this.setState({
-                inviteList: inviteList,
-                queryList: [],
-            });
-            return inviteList;
-        } else {
-            this.setState({ error: true });
-            return null;
+        const addressText = this.refs.textinput.value.trim();
+        const addrType = Invite.getAddressType(addressText);
+        const addrObj = {
+            addressType: addrType,
+            address: addressText,
+            isKnown: false,
+        };
+        if (addrType == null) {
+        } else if (addrType == 'mx') {
+            const user = MatrixClientPeg.get().getUser(addrObj.address);
+            if (user) {
+                addrObj.displayName = user.displayName;
+                addrObj.avatarMxc = user.avatarUrl;
+                addrObj.isKnown = true;
+            }
         }
+
+        const inviteList = this.state.inviteList.slice();
+        inviteList.push(addrObj);
+        this.setState({
+            inviteList: inviteList,
+            queryList: [],
+        });
+        return inviteList;
     },
 
     render: function() {
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var AddressSelector = sdk.getComponent("elements.AddressSelector");
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
         var query = [];
