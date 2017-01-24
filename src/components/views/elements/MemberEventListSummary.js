@@ -46,111 +46,55 @@ module.exports = React.createClass({
         };
     },
 
+    shouldComponentUpdate: function(nextProps, nextState) {
+        // Update if
+        //  - The number of summarised events has changed
+        //  - or if the summary is currently expanded
+        //  - or if the summary is about to toggle to become collapsed
+        //  - or if there are fewEvents, meaning the child eventTiles are shown as-is
+        return (
+            nextProps.events.length !== this.props.events.length ||
+            this.state.expanded || nextState.expanded ||
+            nextProps.events.length < this.props.threshold
+        );
+    },
+
     _toggleSummary: function() {
         this.setState({
             expanded: !this.state.expanded,
         });
     },
 
-    _renderNameList: function(users) {
-        if (users.length === 0) {
-            return null;
-        }
-        let originalNumber = users.length;
-
-        users = users.slice(0, this.props.summaryLength);
-
-        let remaining = originalNumber - this.props.summaryLength;
-        if (remaining < 0) {
-            remaining = 0;
-        }
-        let other = " other" + (remaining > 1 ? "s" : "");
-
-        return this._renderCommaSeparatedList(users, remaining) + (remaining ? ' and ' + remaining + other : '');
-    },
-
-    // Test whether the first n items repeat for the duration
-    // e.g. [1,2,3,4,1,2,3] would resolve true for n = 4
-    _isRepeatedSequence: function(transitions, n) {
-        let count = 0;
-        for (let i = 0; i < transitions.length; i++) {
-            if (transitions[i % n] !== transitions[i]) {
-                return null;
-            }
-        }
-        return true;
-    },
-
-    _renderCommaSeparatedList(items, disableAnd) {
-        if (disableAnd) {
-            return items.join(', ');
-        }
-        if (items.length === 0) {
-            return "";
-        } else if (items.length === 1) {
-            return items[0];
-        } else {
-            let last = items.pop();
-            return items.join(', ') + ' and ' + last;
-        }
-    },
-
-    _getDescriptionForTransition(t, plural) {
-        let beConjugated = plural ? "were" : "was";
-        let invitation = plural ? "invitations" : "an invitation";
-
-        switch (t) {
-            case 'joined':  return "joined";
-            case 'left':    return "left";
-            case 'invite_reject':     return "rejected " + invitation;
-            case 'invite_withdrawal': return "withdrew " + invitation;
-            case 'invited':     return beConjugated + " invited";
-            case 'banned':      return beConjugated + " banned";
-            case 'unbanned':    return beConjugated + " unbanned";
-            case 'kicked':      return beConjugated + " kicked";
-        }
-
-        return null;
-    },
-
-    _renderSummary: function(eventAggregates) {
-        let summaries = Object.keys(eventAggregates).map((transitions) => {
-            let nameList = this._renderNameList(eventAggregates[transitions]);
-
-            let repeats = 1;
-            let repeatExtra = 0;
+    /**
+     * Render the JSX for users aggregated by their transition sequences (`eventAggregates`) where
+     * the sequences are ordered by `orderedTransitionSequences`.
+     * @param {object[]} eventAggregates a map of transition sequence to array of user display names
+     * or user IDs.
+     * @param {string[]} orderedTransitionSequences an array which is some ordering of
+     * `Object.keys(eventAggregates)`.
+     * @returns {ReactElement} a single <span> containing the textual summary of the aggregated
+     * events that occurred.
+     */
+    _renderSummary: function(eventAggregates, orderedTransitionSequences) {
+        let summaries = orderedTransitionSequences.map((transitions) => {
+            let userNames = eventAggregates[transitions];
+            let nameList = this._renderNameList(userNames);
+            let plural = userNames.length > 1;
 
             let splitTransitions = transitions.split(',');
-            let describedTransitions = splitTransitions;
-            let plural = eventAggregates[transitions].length > 1;
 
-            for (let modulus = 1; modulus <= 2; modulus++) {
-                // Sequences that are repeating through modulus transitions will be truncated
-                if (this._isRepeatedSequence(describedTransitions, modulus)) {
-                    // Extra repeating sequence on the end that should be treated separately
-                    // so as to avoid j,l,j,l,j => "... joined and left 2.5 times"
-                    repeatExtra = describedTransitions.length % modulus;
+            // Some neighbouring transitions are common, so canonicalise some into "pair" transitions
+            let canonicalTransitions = this._getCanonicalTransitions(splitTransitions);
+            // Transform into consecutive repetitions of the same transition (like 5 consecutive 'joined_and_left's)
+            let truncatedTransitions = this._getTruncatedTransitions(canonicalTransitions);
 
-                    repeats = (describedTransitions.length - repeatExtra) / modulus;
-                    describedTransitions = describedTransitions.slice(0, modulus);
-                    break;
-                }
-            }
-
-            let numberOfTimes = repeats > 1 ? " " + repeats + " times" : "";
-
-            let descs = describedTransitions.map((t) => {
-                return this._getDescriptionForTransition(t, plural);
-            });
-
-            let afterRepeatDescs = splitTransitions.slice(splitTransitions.length - repeatExtra).map((t) => {
-                return this._getDescriptionForTransition(t, plural);
+            let descs = truncatedTransitions.map((t) => {
+                return this._getDescriptionForTransition(t.transitionType, plural, t.repeats);
             });
 
             let desc = this._renderCommaSeparatedList(descs);
-            let afterRepeatDesc = this._renderCommaSeparatedList(afterRepeatDescs);
 
-            return nameList + " " + desc + numberOfTimes + (afterRepeatDesc ? " and then " + afterRepeatDesc : "");
+            return nameList + " " + desc;
         });
 
         if (!summaries) {
@@ -162,6 +106,151 @@ module.exports = React.createClass({
                 {summaries.join(", ")}
             </span>
         );
+    },
+
+    /**
+     * @param {string[]} users an array of user display names or user IDs.
+     * @returns {string} a comma-separated list that ends with "and [n] others" if there are
+     * more items in `users` than `this.props.summaryLength`, which is the number of names
+     * included before "and [n] others".
+     */
+    _renderNameList: function(users) {
+        return this._renderCommaSeparatedList(users, this.props.summaryLength);
+    },
+
+    /**
+     * Canonicalise an array of transitions into an array of transitions and how many times
+     * they are repeated consecutively.
+     *
+     * An array of 123 "joined_and_left" transitions, would result in:
+     * ```
+     * [{
+     *   transitionType: "joined_and_left"
+     *   repeats: 123
+     * }, ... ]
+     * ```
+     * @param {string[]} transitions the array of transitions to transform.
+     * @returns {object[]} an array of truncated transitions.
+     */
+    _getCanonicalTransitions: function(transitions) {
+        let modMap = {
+            'joined' : {
+                'after' : 'left',
+                'newTransition' : 'joined_and_left',
+            },
+            'left' : {
+                'after' : 'joined',
+                'newTransition' : 'left_and_joined',
+            },
+            // $currentTransition : {
+            //     'after' : $nextTransition,
+            //     'newTransition' : 'new_transition_type',
+            // },
+        };
+        const res = [];
+
+        for (let i = 0; i < transitions.length; i++) {
+            let t = transitions[i];
+            let t2 = transitions[i + 1];
+
+            let transition = t;
+
+            if (i < transitions.length - 1 && modMap[t] && modMap[t].after === t2) {
+                transition = modMap[t].newTransition;
+                i++;
+            }
+
+            res.push(transition);
+        }
+        return res;
+    },
+
+    /**
+     * Transform an array of transitions into an array of transitions and how many times
+     * they are repeated consecutively.
+     *
+     * An array of 123 "joined_and_left" transitions, would result in:
+     * ```
+     * [{
+     *   transitionType: "joined_and_left"
+     *   repeats: 123
+     * }, ... ]
+     * ```
+     * @param {string[]} transitions the array of transitions to transform.
+     * @returns {object[]} an array of truncated transitions.
+     */
+    _getTruncatedTransitions: function(transitions) {
+        let res = [];
+        for (let i = 0; i < transitions.length; i++) {
+            if (res.length > 0 && res[res.length - 1].transitionType === transitions[i]) {
+                res[res.length - 1].repeats += 1;
+            } else {
+                res.push({
+                    transitionType: transitions[i],
+                    repeats: 1,
+                });
+            }
+        }
+        return res;
+    },
+
+    /**
+     * For a certain transition, t, describe what happened to the users that
+     * underwent the transition.
+     * @param {string} t the transition type.
+     * @param {boolean} plural whether there were multiple users undergoing the same transition.
+     * @param {number} repeats the number of times the transition was repeated in a row.
+     * @returns {string} the written English equivalent of the transition.
+     */
+    _getDescriptionForTransition(t, plural, repeats) {
+        let beConjugated = plural ? "were" : "was";
+        let invitation = "their invitation" + (plural || (repeats > 1) ? "s" : "");
+
+        let res = null;
+        let map = {
+            "joined": "joined",
+            "left": "left",
+            "joined_and_left": "joined and left",
+            "left_and_joined": "left and rejoined",
+            "invite_reject": "rejected " + invitation,
+            "invite_withdrawal": "had " + invitation + " withdrawn",
+            "invited": beConjugated + " invited",
+            "banned": beConjugated + " banned",
+            "unbanned": beConjugated + " unbanned",
+            "kicked": beConjugated + " kicked",
+        };
+
+        if (Object.keys(map).includes(t)) {
+            res = map[t] + (repeats > 1 ? " " + repeats + " times" : "" );
+        }
+
+        return res;
+    },
+
+    /**
+     * Constructs a written English string representing `items`, with an optional limit on the number
+     * of items included in the result. If specified and if the length of `items` is greater than the
+     * limit, the string "and n others" will be appended onto the result.
+     * If `items` is empty, returns the empty string. If there is only one item, return it.
+     * @param {string[]} items the items to construct a string from.
+     * @param {number?} itemLimit the number by which to limit the list.
+     * @returns {string} a string constructed by joining `items` with a comma between each
+     * item, but with the last item appended as " and [lastItem]".
+     */
+    _renderCommaSeparatedList(items, itemLimit) {
+        const remaining = itemLimit === undefined ? 0 : Math.max(items.length - itemLimit, 0);
+        if (items.length === 0) {
+            return "";
+        } else if (items.length === 1) {
+            return items[0];
+        } else if (remaining) {
+            items = items.slice(0, itemLimit);
+            const other = " other" + (remaining > 1 ? "s" : "");
+            return items.join(', ') + ' and ' + remaining + other;
+        } else {
+            let last = items.pop();
+            return items.join(', ') + ' and ' + last;
+        }
     },
 
     _renderAvatars: function(roomMembers) {
@@ -178,32 +267,31 @@ module.exports = React.createClass({
         );
     },
 
-    shouldComponentUpdate: function(nextProps, nextState) {
-        // Update if
-        //  - The number of summarised events has changed
-        //  - or if the summary is currently expanded
-        //  - or if the summary is about to toggle to become collapsed
-        //  - or if there are fewEvents, meaning the child eventTiles are shown as-is
-        return (
-            nextProps.events.length !== this.props.events.length ||
-            this.state.expanded || nextState.expanded ||
-            nextProps.events.length < this.props.threshold
-        );
+    _getTransitionSequence: function(events) {
+        return events.map(this._getTransition);
     },
 
+    /**
+     * Enumerate a given membership event, `e`, where `getContent().membership` has
+     * changed for each transition allowed by the Matrix protocol. This attempts to
+     * enumerate the membership changes that occur in `../../../TextForEvent.js`.
+     * @param {MatrixEvent} e the membership change event to enumerate.
+     * @returns {string?} the transition type given to this event. This defaults to `null`
+     * if a transition is not recognised.
+     */
     _getTransition: function(e) {
-        switch (e.getContent().membership) {
+        switch (e.mxEvent.getContent().membership) {
             case 'invite': return 'invited';
             case 'ban': return 'banned';
             case 'join': return 'joined';
             case 'leave':
-                if (e.getSender() === e.getStateKey()) {
-                    switch (e.getPrevContent().membership) {
+                if (e.mxEvent.getSender() === e.mxEvent.getStateKey()) {
+                    switch (e.mxEvent.getPrevContent().membership) {
                         case 'invite':  return 'invite_reject';
                         default:        return 'left';
                     }
                 }
-                switch (e.getPrevContent().membership) {
+                switch (e.mxEvent.getPrevContent().membership) {
                     case 'invite':  return 'invite_withdrawal';
                     case 'ban':     return 'unbanned';
                     case 'join':    return 'kicked';
@@ -213,8 +301,44 @@ module.exports = React.createClass({
         }
     },
 
-    _getTransitionSequence: function(events) {
-        return events.map(this._getTransition);
+    _getAggregate: function(userEvents) {
+        // A map of aggregate type to arrays of display names. Each aggregate type
+        // is a comma-delimited string of transitions, e.g. "joined,left,kicked".
+        // The array of display names is the array of users who went through that
+        // sequence during eventsToRender.
+        let aggregate = {
+            // $aggregateType : []:string
+        };
+        // A map of aggregate types to the indices that order them (the index of
+        // the first event for a given transition sequence)
+        let aggregateIndices = {
+            // $aggregateType : int
+        };
+
+        let users = Object.keys(userEvents);
+        users.forEach(
+            (userId) => {
+                let firstEvent = userEvents[userId][0];
+                let displayName = firstEvent.displayName;
+
+                let seq = this._getTransitionSequence(userEvents[userId]);
+                if (!aggregate[seq]) {
+                    aggregate[seq] = [];
+                    aggregateIndices[seq] = -1;
+                }
+
+                aggregate[seq].push(displayName);
+
+                if (aggregateIndices[seq] === -1 || firstEvent.index < aggregateIndices[seq]) {
+                    aggregateIndices[seq] = firstEvent.index;
+                }
+            }
+        );
+
+        return {
+            names: aggregate,
+            indices: aggregateIndices,
+        };
     },
 
     render: function() {
@@ -235,51 +359,40 @@ module.exports = React.createClass({
             );
         }
 
-        // Map user IDs to all of the user's member events in eventsToRender
+        // Map user IDs to an array of objects:
         let userEvents = {
-            // $userId : []
+            // $userId : [{
+            //     // The original event
+            //     mxEvent: e,
+            //     // The display name of the user (if not, then user ID)
+            //     displayName: e.target.name || userId,
+            //     // The original index of the event in this.props.events
+            //     index: index,
+            // }]
         };
-        // Array of userIds ordered by the same ordering as the first event of each user
-        let users = [];
 
-        eventsToRender.forEach((e) => {
+        let avatarMembers = [];
+        eventsToRender.forEach((e, index) => {
             const userId = e.getStateKey();
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = [];
-                users.push(userId);
+                avatarMembers.push(e.target);
             }
-            userEvents[userId].push(e);
+            userEvents[userId].push({
+                mxEvent: e,
+                displayName: e.target.name || userId,
+                index: index,
+            });
         });
 
-        // A map of agregate type to arrays of display names. Each aggregate type
-        // is a comma-delimited string of transitions, e.g. "joined,left,kicked".
-        // The array of display names is the array of users who went through that
-        // sequence during eventsToRender.
-        let aggregate = {
-            // $aggregateType : []:string
-        };
-        let avatarMembers = [];
+        let aggregate = this._getAggregate(userEvents);
 
-        users.forEach(
-            (userId) => {
-                let displayName = userEvents[userId][0].getContent().displayname || userId;
-
-                let seq = this._getTransitionSequence(userEvents[userId]);
-                if (!aggregate[seq]) {
-                    aggregate[seq] = [];
-                }
-
-                // Assumes display names are unique
-                if (aggregate[seq].indexOf(displayName) === -1) {
-                    aggregate[seq].push(displayName);
-                }
-                avatarMembers.push(userEvents[userId][0].target);
-            }
-        );
+        // Sort types by order of lowest event index within sequence
+        let orderedTransitionSequences = Object.keys(aggregate.names).sort((seq1, seq2) => aggregate.indices[seq1] > aggregate.indices[seq2]);
 
         let avatars = this._renderAvatars(avatarMembers);
-        let summary = this._renderSummary(aggregate);
+        let summary = this._renderSummary(aggregate.names, orderedTransitionSequences);
         let toggleButton = (
             <a className="mx_MemberEventListSummary_toggle" onClick={this._toggleSummary}>
                 {expanded ? 'collapse' : 'expand'}
