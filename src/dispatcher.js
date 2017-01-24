@@ -28,6 +28,7 @@ class MatrixDispatcher extends flux.Dispatcher {
      *        for.
      */
     dispatch(payload, sync) {
+        console.log("Dispatch: "+payload.action);
         if (sync) {
             super.dispatch(payload);
         } else {
@@ -39,8 +40,11 @@ class MatrixDispatcher extends flux.Dispatcher {
             setTimeout(super.dispatch.bind(this, payload), 0);
         }
     }
-};
+}
 
+// XXX this is a big anti-pattern, and makes testing hard. Because dispatches
+// happen asynchronously, it is possible for actions dispatched in one thread
+// to arrive in another, with *hilarious* consequences.
 if (global.mxDispatcher === undefined) {
     global.mxDispatcher = new MatrixDispatcher();
 }

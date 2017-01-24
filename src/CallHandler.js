@@ -159,10 +159,10 @@ function _setCallState(call, roomId, status) {
     calls[roomId] = call;
 
     if (status === "ringing") {
-        play("ringAudio")
+        play("ringAudio");
     }
     else if (call && call.call_state === "ringing") {
-        pause("ringAudio")
+        pause("ringAudio");
     }
 
     if (call) {

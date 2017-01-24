@@ -23,4 +23,4 @@ module.exports = function(dest, src) {
         }
     }
     return dest;
-}
+};

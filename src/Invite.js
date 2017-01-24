@@ -55,29 +55,7 @@ export function inviteToRoom(roomId, addr) {
  * @returns Promise
  */
 export function inviteMultipleToRoom(roomId, addrs) {
-    this.inviter = new MultiInviter(roomId);
-    return this.inviter.invite(addrs);
+    const inviter = new MultiInviter(roomId);
+    return inviter.invite(addrs);
 }
 
-/**
- * Checks is the supplied address is valid
- *
- * @param {addr} The mx userId or email address to check
- * @returns true, false, or null for unsure
- */
-export function isValidAddress(addr) {
-    // Check if the addr is a valid type
-    var addrType = this.getAddressType(addr);
-    if (addrType === "mx") {
-        let user = MatrixClientPeg.get().getUser(addr);
-        if (user) {
-            return true;
-        } else {
-            return null;
-        }
-    } else if (addrType === "email") {
-        return true;
-    } else {
-        return false;
-    }
-}

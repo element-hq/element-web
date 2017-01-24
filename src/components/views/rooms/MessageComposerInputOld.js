@@ -192,7 +192,7 @@ module.exports = React.createClass({
         }
     },
 
-    onKeyDown: function (ev) {
+    onKeyDown: function(ev) {
         if (ev.keyCode === KeyCode.ENTER && !ev.shiftKey) {
             var input = this.refs.textarea.value;
             if (input.length === 0) {
@@ -331,6 +331,7 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, htmlText);
         }
         else {
+            const contentText = mdown.toPlaintext();
             sendMessagePromise = isEmote ?
                 MatrixClientPeg.get().sendEmoteMessage(this.props.room.roomId, contentText) :
                 MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);

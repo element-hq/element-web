@@ -13,7 +13,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
     constructor() {
         super(DDG_REGEX);
     }
-    
+
     static getQueryUri(query: String) {
         return `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}`
          + `&format=json&no_redirect=1&no_html=1&t=${encodeURIComponent(REFERRER)}`;

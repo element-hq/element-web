@@ -93,8 +93,8 @@ module.exports = React.createClass({
             }
             else {
                 joinText = (<span>
-                    Join as <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice')}} 
-                               href="#">voice</a> or <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video') }}
+                    Join as <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}}
+                               href="#">voice</a> or <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video'); }}
                                href="#">video</a>.
                 </span>);
 

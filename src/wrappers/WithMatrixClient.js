@@ -36,4 +36,4 @@ export default function(WrappedComponent) {
             return <WrappedComponent {...this.props} matrixClient={this.context.matrixClient} />;
         },
     });
-};
+}

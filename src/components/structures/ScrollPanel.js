@@ -34,7 +34,7 @@ if (DEBUG_SCROLL) {
     // using bind means that we get to keep useful line numbers in the console
     var debuglog = console.log.bind(console);
 } else {
-    var debuglog = function () {};
+    var debuglog = function() {};
 }
 
 /* This component implements an intelligent scrolling list.
@@ -600,7 +600,7 @@ module.exports = React.createClass({
                     stuckAtBottom: false,
                     trackedScrollToken: node.dataset.scrollToken,
                     pixelOffset: wrapperRect.bottom - boundingRect.bottom,
-                }
+                };
                 debuglog("Saved scroll state", this.scrollState);
                 return;
             }

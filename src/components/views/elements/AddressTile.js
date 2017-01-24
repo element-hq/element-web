@@ -108,7 +108,7 @@ module.exports = React.createClass({
             info = (
                 <div className={unknownMxClasses}>{ this.props.address }</div>
             );
-        } else if (email)  {
+        } else if (email) {
             var emailClasses = classNames({
                 "mx_AddressTile_email": true,
                 "mx_AddressTile_justified": this.props.justified,

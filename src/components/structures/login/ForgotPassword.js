@@ -58,7 +58,7 @@ module.exports = React.createClass({
             this.setState({
                 progress: null
             });
-        })
+        });
     },
 
     onVerify: function(ev) {
@@ -71,7 +71,7 @@ module.exports = React.createClass({
             this.setState({ progress: "complete" });
         }, (err) => {
             this.showErrorDialog(err.message);
-        })
+        });
     },
 
     onSubmitForm: function(ev) {
@@ -129,7 +129,7 @@ module.exports = React.createClass({
         var resetPasswordJsx;
 
         if (this.state.progress === "sending_email") {
-            resetPasswordJsx = <Spinner />
+            resetPasswordJsx = <Spinner />;
         }
         else if (this.state.progress === "sent_email") {
             resetPasswordJsx = (

@@ -48,7 +48,7 @@ if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
     var debuglog = console.log.bind(console);
 } else {
-    var debuglog = function () {};
+    var debuglog = function() {};
 }
 
 module.exports = React.createClass({
@@ -146,7 +146,9 @@ module.exports = React.createClass({
             showTopUnreadMessagesBar: false,
 
             auxPanelMaxHeight: undefined,
-        }
+
+            statusBarVisible: false,
+        };
     },
 
     componentWillMount: function() {
@@ -674,8 +676,9 @@ module.exports = React.createClass({
     },
 
     onSearchResultsFillRequest: function(backwards) {
-        if (!backwards)
+        if (!backwards) {
             return q(false);
+        }
 
         if (this.state.searchResults.next_batch) {
             debuglog("requesting more search results");
@@ -758,7 +761,7 @@ module.exports = React.createClass({
         }).then(() => {
             var sign_url = this.props.thirdPartyInvite ? this.props.thirdPartyInvite.inviteSignUrl : undefined;
             return MatrixClientPeg.get().joinRoom(this.props.roomAddress,
-                                                  { inviteSignUrl: sign_url } )
+                                                  { inviteSignUrl: sign_url } );
         }).then(function(resp) {
             var roomId = resp.roomId;
 
@@ -962,7 +965,7 @@ module.exports = React.createClass({
             // For overlapping highlights,
             // favour longer (more specific) terms first
             highlights = highlights.sort(function(a, b) {
-                return b.length - a.length });
+                return b.length - a.length; });
 
             self.setState({
                 searchHighlights: highlights,
@@ -1025,7 +1028,7 @@ module.exports = React.createClass({
             if (scrollPanel) {
                 scrollPanel.checkScroll();
             }
-        }
+        };
 
         var lastRoomId;
 
@@ -1090,7 +1093,7 @@ module.exports = React.createClass({
         }
 
         this.refs.room_settings.save().then((results) => {
-            var fails = results.filter(function(result) { return result.state !== "fulfilled" });
+            var fails = results.filter(function(result) { return result.state !== "fulfilled"; });
             console.log("Settings saved with %s errors", fails.length);
             if (fails.length) {
                 fails.forEach(function(result) {
@@ -1099,7 +1102,7 @@ module.exports = React.createClass({
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Failed to save settings",
-                    description: fails.map(function(result) { return result.reason }).join("\n"),
+                    description: fails.map(function(result) { return result.reason; }).join("\n"),
                 });
                 // still editing room settings
             }
@@ -1183,7 +1186,7 @@ module.exports = React.createClass({
         this.setState({ searching: true });
     },
 
-    onCancelSearchClick: function () {
+    onCancelSearchClick: function() {
         this.setState({
             searching: false,
             searchResults: null,
@@ -1208,8 +1211,9 @@ module.exports = React.createClass({
 
     // decide whether or not the top 'unread messages' bar should be shown
     _updateTopUnreadMessagesBar: function() {
-        if (!this.refs.messagePanel)
+        if (!this.refs.messagePanel) {
             return;
+        }
 
         var pos = this.refs.messagePanel.getReadMarkerPosition();
 
@@ -1329,6 +1333,18 @@ module.exports = React.createClass({
 
     onChildResize: function() {
         // no longer anything to do here
+    },
+
+    onStatusBarVisible: function() {
+        this.setState({
+            statusBarVisible: true,
+        });
+    },
+
+    onStatusBarHidden: function() {
+        this.setState({
+            statusBarVisible: false,
+        });
     },
 
     showSettings: function(show) {
@@ -1498,7 +1514,7 @@ module.exports = React.createClass({
 
         if (ContentMessages.getCurrentUploads().length > 0) {
             var UploadBar = sdk.getComponent('structures.UploadBar');
-            statusBar = <UploadBar room={this.state.room} />
+            statusBar = <UploadBar room={this.state.room} />;
         } else if (!this.state.searchResults) {
             var RoomStatusBar = sdk.getComponent('structures.RoomStatusBar');
 
@@ -1513,7 +1529,9 @@ module.exports = React.createClass({
                 onCancelAllClick={this.onCancelAllClick}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
                 onResize={this.onChildResize}
-                />
+                onVisible={this.onStatusBarVisible}
+                onHidden={this.onStatusBarHidden}
+            />;
         }
 
         var aux = null;
@@ -1569,7 +1587,7 @@ module.exports = React.createClass({
             messageComposer =
                 <MessageComposer
                     room={this.state.room} onResize={this.onChildResize} uploadFile={this.uploadFile}
-                    callState={this.state.callState} tabComplete={this.tabComplete} opacity={ this.props.opacity }/>
+                    callState={this.state.callState} tabComplete={this.tabComplete} opacity={ this.props.opacity }/>;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format
@@ -1597,14 +1615,14 @@ module.exports = React.createClass({
                         <img src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"}
                              alt={call.isLocalVideoMuted() ? "Click to unmute video" : "Click to mute video"}
                              width="31" height="27"/>
-                    </div>
+                    </div>;
             }
             voiceMuteButton =
                 <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
                     <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"}
                          alt={call.isMicrophoneMuted() ? "Click to unmute audio" : "Click to mute audio"}
                          width="21" height="26"/>
-                </div>
+                </div>;
 
             // wrap the existing status bar into a 'callStatusBar' which adds more knobs.
             statusBar =
@@ -1614,7 +1632,7 @@ module.exports = React.createClass({
                     { zoomButton }
                     { statusBar }
                     <TintableSvg className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17"/>
-                </div>
+                </div>;
         }
 
         // if we have search results, we keep the messagepanel (so that it preserves its
@@ -1667,6 +1685,10 @@ module.exports = React.createClass({
                 </div>
             );
         }
+        let statusBarAreaClass = "mx_RoomView_statusArea mx_fadable";
+        if (this.state.statusBarVisible) {
+            statusBarAreaClass += " mx_RoomView_statusArea_expanded";
+        }
 
         return (
             <div className={ "mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "") } ref="roomView">
@@ -1689,7 +1711,7 @@ module.exports = React.createClass({
                 { topUnreadMessagesBar }
                 { messagePanel }
                 { searchResultsPanel }
-                <div className="mx_RoomView_statusArea mx_fadable" style={{ opacity: this.props.opacity }}>
+                <div className={statusBarAreaClass} style={{opacity: this.props.opacity}}>
                     <div className="mx_RoomView_statusAreaBox">
                         <div className="mx_RoomView_statusAreaBox_line"></div>
                         { statusBar }

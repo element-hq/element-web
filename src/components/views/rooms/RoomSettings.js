@@ -252,7 +252,7 @@ module.exports = React.createClass({
         return this.refs.url_preview_settings.saveSettings();
     },
 
-    saveEncryption: function () {
+    saveEncryption: function() {
         if (!this.refs.encrypt) { return q(); }
 
         var encrypt = this.refs.encrypt.checked;
@@ -404,7 +404,7 @@ module.exports = React.createClass({
         var cli = MatrixClientPeg.get();
         var roomState = this.props.room.currentState;
         return (roomState.mayClientSendStateEvent("m.room.join_rules", cli) &&
-                roomState.mayClientSendStateEvent("m.room.guest_access", cli))
+                roomState.mayClientSendStateEvent("m.room.guest_access", cli));
     },
 
     onManageIntegrations(ev) {
@@ -510,7 +510,7 @@ module.exports = React.createClass({
         var UrlPreviewSettings = sdk.getComponent("room_settings.UrlPreviewSettings");
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
-        var Loader = sdk.getComponent("elements.Spinner")
+        var Loader = sdk.getComponent("elements.Spinner");
 
         var cli = MatrixClientPeg.get();
         var roomState = this.props.room.currentState;
@@ -557,7 +557,7 @@ module.exports = React.createClass({
                 </div>;
         }
         else {
-            userLevelsSection = <div>No users have specific privileges in this room.</div>
+            userLevelsSection = <div>No users have specific privileges in this room.</div>;
         }
 
         var banned = this.props.room.getMembersWithMembership("ban");
@@ -635,7 +635,7 @@ module.exports = React.createClass({
                                     </label>);
                         })) : (self.state.tags && self.state.tags.join) ? self.state.tags.join(", ") : ""
                     }
-                </div>
+                </div>;
         }
 
         // If there is no history_visibility, it is assumed to be 'shared'.
@@ -653,7 +653,7 @@ module.exports = React.createClass({
             addressWarning =
                 <div className="mx_RoomSettings_warning">
                     To link to a room it must have <a href="#addresses">an address</a>.
-                </div>
+                </div>;
         }
 
         var inviteGuestWarning;
@@ -664,7 +664,7 @@ module.exports = React.createClass({
                         this.setState({ join_rule: "invite", guest_access: "can_join" });
                         e.preventDefault();
                     }}>Click here to fix</a>.
-                </div>
+                </div>;
         }
 
         var integrationsButton;

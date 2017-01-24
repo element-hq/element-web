@@ -49,6 +49,21 @@ module.exports = React.createClass({
         email: React.PropTypes.string,
         username: React.PropTypes.string,
         guestAccessToken: React.PropTypes.string,
+        teamsConfig: React.PropTypes.shape({
+            // Email address to request new teams
+            supportEmail: React.PropTypes.string,
+            teams: React.PropTypes.arrayOf(React.PropTypes.shape({
+                // The displayed name of the team
+                "name": React.PropTypes.string,
+                // The suffix with which every team email address ends
+                "emailSuffix": React.PropTypes.string,
+                // The rooms to use during auto-join
+                "rooms": React.PropTypes.arrayOf(React.PropTypes.shape({
+                    "id": React.PropTypes.string,
+                    "autoJoin": React.PropTypes.bool,
+                })),
+            })).required,
+        }),
 
         defaultDeviceDisplayName: React.PropTypes.string,
 
@@ -169,6 +184,26 @@ module.exports = React.createClass({
                 accessToken: response.access_token
             });
 
+            // Auto-join rooms
+            if (self.props.teamsConfig && self.props.teamsConfig.teams) {
+                for (let i = 0; i < self.props.teamsConfig.teams.length; i++) {
+                    let team = self.props.teamsConfig.teams[i];
+                    if (self.state.formVals.email.endsWith(team.emailSuffix)) {
+                        console.log("User successfully registered with team " + team.name);
+                        if (!team.rooms) {
+                            break;
+                        }
+                        team.rooms.forEach((room) => {
+                            if (room.autoJoin) {
+                                console.log("Auto-joining " + room.id);
+                                MatrixClientPeg.get().joinRoom(room.id);
+                            }
+                        });
+                        break;
+                    }
+                }
+            }
+
             if (self.props.brand) {
                 MatrixClientPeg.get().getPushers().done((resp)=>{
                     var pushers = resp.pushers;
@@ -254,6 +289,7 @@ module.exports = React.createClass({
                         defaultUsername={this.state.formVals.username}
                         defaultEmail={this.state.formVals.email}
                         defaultPassword={this.state.formVals.password}
+                        teamsConfig={this.props.teamsConfig}
                         guestUsername={this.props.username}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
@@ -297,7 +333,7 @@ module.exports = React.createClass({
             returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
                     Return to app
-                </a>
+                </a>;
         }
 
         return (

@@ -19,7 +19,7 @@ var ReactDOM = require("react-dom");
 var dis = require("../../dispatcher");
 var sdk = require('../../index');
 
-var MatrixClientPeg = require('../../MatrixClientPeg')
+var MatrixClientPeg = require('../../MatrixClientPeg');
 
 const MILLIS_IN_DAY = 86400000;
 
@@ -281,7 +281,7 @@ module.exports = React.createClass({
 
         var isMembershipChange = (e) =>
             e.getType() === 'm.room.member'
-            && (!e.getPrevContent() || e.getContent().membership  !== e.getPrevContent().membership);
+            && (!e.getPrevContent() || e.getContent().membership !== e.getPrevContent().membership);
 
         for (i = 0; i < this.props.events.length; i++) {
             var mxEv = this.props.events[i];
@@ -339,7 +339,7 @@ module.exports = React.createClass({
                         prevEvent = e;
                         return ret;
                     }
-                ).reduce((a,b) => a.concat(b));
+                ).reduce((a, b) => a.concat(b));
 
                 if (eventTiles.length === 0) {
                     eventTiles = null;

@@ -19,6 +19,14 @@ var sdk = require('../../index');
 var dis = require("../../dispatcher");
 var WhoIsTyping = require("../../WhoIsTyping");
 var MatrixClientPeg = require("../../MatrixClientPeg");
+const MemberAvatar = require("../views/avatars/MemberAvatar");
+
+const TYPING_AVATARS_LIMIT = 2;
+
+const HIDE_DEBOUNCE_MS = 10000;
+const STATUS_BAR_HIDDEN = 0;
+const STATUS_BAR_EXPANDED = 1;
+const STATUS_BAR_EXPANDED_LARGE = 2;
 
 module.exports = React.createClass({
     displayName: 'RoomStatusBar',
@@ -60,6 +68,13 @@ module.exports = React.createClass({
         // status bar. This is used to trigger a re-layout in the parent
         // component.
         onResize: React.PropTypes.func,
+
+        // callback for when the status bar can be hidden from view, as it is
+        // not displaying anything
+        onHidden: React.PropTypes.func,
+        // callback for when the status bar is displaying something and should
+        // be visible
+        onVisible: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -77,6 +92,18 @@ module.exports = React.createClass({
     componentDidUpdate: function(prevProps, prevState) {
         if(this.props.onResize && this._checkForResize(prevProps, prevState)) {
             this.props.onResize();
+        }
+
+        const size = this._getSize(this.state, this.props);
+        if (size > 0) {
+            this.props.onVisible();
+        } else {
+            if (this.hideDebouncer) {
+                clearTimeout(this.hideDebouncer);
+            }
+            this.hideDebouncer = setTimeout(() => {
+                this.props.onHidden();
+            }, HIDE_DEBOUNCE_MS);
         }
     },
 
@@ -104,35 +131,24 @@ module.exports = React.createClass({
         });
     },
 
+    // We don't need the actual height - just whether it is likely to have
+    // changed - so we use '0' to indicate normal size, and other values to
+    // indicate other sizes.
+    _getSize: function(state, props) {
+        if (state.syncState === "ERROR" || state.whoisTypingString) {
+            return STATUS_BAR_EXPANDED;
+        } else if (props.tabCompleteEntries) {
+            return STATUS_BAR_HIDDEN;
+        } else if (props.hasUnsentMessages) {
+            return STATUS_BAR_EXPANDED_LARGE;
+        }
+        return STATUS_BAR_HIDDEN;
+    },
+
     // determine if we need to call onResize
     _checkForResize: function(prevProps, prevState) {
-        // figure out the old height and the new height of the status bar. We
-        // don't need the actual height - just whether it is likely to have
-        // changed - so we use '0' to indicate normal size, and other values to
-        // indicate other sizes.
-        var oldSize, newSize;
-
-        if (prevState.syncState === "ERROR") {
-            oldSize = 1;
-        } else if (prevProps.tabCompleteEntries) {
-            oldSize = 0;
-        } else if (prevProps.hasUnsentMessages) {
-            oldSize = 2;
-        } else {
-            oldSize = 0;
-        }
-
-        if (this.state.syncState === "ERROR") {
-            newSize = 1;
-        } else if (this.props.tabCompleteEntries) {
-            newSize = 0;
-        } else if (this.props.hasUnsentMessages) {
-            newSize = 2;
-        } else {
-            newSize = 0;
-        }
-
-        return newSize != oldSize;
+        // figure out the old height and the new height of the status bar.
+        return this._getSize(prevProps, prevState) !== this._getSize(this.props, this.state);
     },
 
     // return suitable content for the image on the left of the status bar.
@@ -173,10 +189,8 @@ module.exports = React.createClass({
 
         if (wantPlaceholder) {
             return (
-                <div className="mx_RoomStatusBar_placeholderIndicator">
-                    <span>.</span>
-                    <span>.</span>
-                    <span>.</span>
+                <div className="mx_RoomStatusBar_typingIndicatorAvatars">
+                    {this._renderTypingIndicatorAvatars(TYPING_AVATARS_LIMIT)}
                 </div>
             );
         }
@@ -184,6 +198,36 @@ module.exports = React.createClass({
         return null;
     },
 
+    _renderTypingIndicatorAvatars: function(limit) {
+        let users = WhoIsTyping.usersTypingApartFromMe(this.props.room);
+
+        let othersCount = Math.max(users.length - limit, 0);
+        users = users.slice(0, limit);
+
+        let avatars = users.map((u, index) => {
+            let showInitial = othersCount === 0 && index === users.length - 1;
+            return (
+                <MemberAvatar
+                    key={u.userId}
+                    member={u}
+                    width={24}
+                    height={24}
+                    resizeMethod="crop"
+                    defaultToInitialLetter={showInitial}
+                />
+            );
+        });
+
+        if (othersCount > 0) {
+            avatars.push(
+                <span className="mx_RoomStatusBar_typingIndicatorRemaining">
+                    +{othersCount}
+                </span>
+            );
+        }
+
+        return avatars;
+    },
 
     // return suitable content for the main (text) part of the status bar.
     _getContent: function() {

@@ -32,6 +32,53 @@ var AddThreepid = require('../../AddThreepid');
 const REACT_SDK_VERSION =
       'dist' in package_json ? package_json.version : package_json.gitHead || "<local>";
 
+
+// Enumerate some simple 'flip a bit' UI settings (if any).
+// 'id' gives the key name in the im.vector.web.settings account data event
+// 'label' is how we describe it in the UI.
+const SETTINGS_LABELS = [
+/*
+    {
+        id: 'alwaysShowTimestamps',
+        label: 'Always show message timestamps',
+    },
+    {
+        id: 'showTwelveHourTimestamps',
+        label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
+    },
+    {
+        id: 'useCompactLayout',
+        label: 'Use compact timeline layout',
+    },
+    {
+        id: 'useFixedWidthFont',
+        label: 'Use fixed width font',
+    },
+*/
+];
+
+// Enumerate the available themes, with a nice human text label.
+// 'id' gives the key name in the im.vector.web.settings account data event
+// 'value' is the value for that key in the event
+// 'label' is how we describe it in the UI.
+//
+// XXX: Ideally we would have a theme manifest or something and they'd be nicely
+// packaged up in a single directory, and/or located at the application layer.
+// But for now for expedience we just hardcode them here.
+const THEMES = [
+    {
+        id: 'theme',
+        label: 'Light theme',
+        value: 'light',
+    },
+    {
+        id: 'theme',
+        label: 'Dark theme',
+        value: 'dark',
+    }
+];
+
+
 module.exports = React.createClass({
     displayName: 'UserSettings',
 
@@ -93,6 +140,12 @@ module.exports = React.createClass({
             middleOpacity: 0.3,
         });
         this._refreshFromServer();
+
+        var syncedSettings = UserSettingsStore.getSyncedSettings();
+        if (!syncedSettings.theme) {
+            syncedSettings.theme = 'light';
+        }
+        this._syncedSettings = syncedSettings;
     },
 
     componentDidMount: function() {
@@ -293,8 +346,8 @@ module.exports = React.createClass({
             this.setState({email_add_pending: false});
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                var message = "Unable to verify email address. "
-                message += "Please check your email and click on the link it contains. Once this is done, click continue."
+                var message = "Unable to verify email address. ";
+                message += "Please check your email and click on the link it contains. Once this is done, click continue.";
                 Modal.createDialog(QuestionDialog, {
                     title: "Verification Pending",
                     description: message,
@@ -342,58 +395,66 @@ module.exports = React.createClass({
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
 
-        var settingsLabels = [
-        /*
-            {
-                id: 'alwaysShowTimestamps',
-                label: 'Always show message timestamps',
-            },
-            {
-                id: 'showTwelveHourTimestamps',
-                label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
-            },
-            {
-                id: 'useCompactLayout',
-                label: 'Use compact timeline layout',
-            },
-            {
-                id: 'useFixedWidthFont',
-                label: 'Use fixed width font',
-            },
-        */
-        ];
-
-        var syncedSettings = UserSettingsStore.getSyncedSettings();
-
         return (
             <div>
                 <h3>User Interface</h3>
                 <div className="mx_UserSettings_section">
-                    <div className="mx_UserSettings_toggle">
-                        <input id="urlPreviewsDisabled"
-                               type="checkbox"
-                               defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
-                               onChange={ e => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
-                        />
-                        <label htmlFor="urlPreviewsDisabled">
-                            Disable inline URL previews by default
-                        </label>
-                    </div>
+                    { this._renderUrlPreviewSelector() }
+                    { SETTINGS_LABELS.map( this._renderSyncedSetting ) }
+                    { THEMES.map( this._renderThemeSelector ) }
                 </div>
-                { settingsLabels.forEach( setting => {
-                    <div className="mx_UserSettings_toggle">
-                        <input id={ setting.id }
-                               type="checkbox"
-                               defaultChecked={ syncedSettings[setting.id] }
-                               onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
-                        />
-                        <label htmlFor={ setting.id }>
-                            { settings.label }
-                        </label>
-                    </div>
-                })}
             </div>
         );
+    },
+
+    _renderUrlPreviewSelector: function() {
+        return <div className="mx_UserSettings_toggle">
+            <input id="urlPreviewsDisabled"
+                   type="checkbox"
+                   defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
+                   onChange={ e => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
+            />
+            <label htmlFor="urlPreviewsDisabled">
+                Disable inline URL previews by default
+            </label>
+        </div>;
+    },
+
+    _renderSyncedSetting: function(setting) {
+        return <div className="mx_UserSettings_toggle" key={ setting.id }>
+            <input id={ setting.id }
+                   type="checkbox"
+                   defaultChecked={ this._syncedSettings[setting.id] }
+                   onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
+            />
+            <label htmlFor={ setting.id }>
+                { setting.label }
+            </label>
+        </div>;
+    },
+
+    _renderThemeSelector: function(setting) {
+        return <div className="mx_UserSettings_toggle" key={ setting.id + "_" + setting.value }>
+            <input id={ setting.id + "_" + setting.value }
+                   type="radio"
+                   name={ setting.id }
+                   value={ setting.value }
+                   defaultChecked={ this._syncedSettings[setting.id] === setting.value }
+                   onChange={ e => {
+                            if (e.target.checked) {
+                                UserSettingsStore.setSyncedSetting(setting.id, setting.value);
+                            }
+                            dis.dispatch({
+                                action: 'set_theme',
+                                value: setting.value,
+                            });
+                        }
+                   }
+            />
+            <label htmlFor={ setting.id + "_" + setting.value }>
+                { setting.label }
+            </label>
+        </div>;
     },
 
     _renderCryptoInfo: function() {
@@ -406,8 +467,8 @@ module.exports = React.createClass({
                 <h3>Cryptography</h3>
                 <div className="mx_UserSettings_section mx_UserSettings_cryptoSection">
                     <ul>
-                        <li><label>Device ID:</label>   <span><code>{deviceId}</code></span></li>
-                        <li><label>Device key:</label>  <span><code><b>{identityKey}</b></code></span></li>
+                        <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
+                        <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
                 </div>
             </div>
@@ -424,7 +485,7 @@ module.exports = React.createClass({
         );
     },
 
-    _renderLabs: function () {
+    _renderLabs: function() {
         // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
 
@@ -460,7 +521,7 @@ module.exports = React.createClass({
                     {features}
                 </div>
             </div>
-        )
+        );
     },
 
     _renderDeactivateAccount: function() {
@@ -544,10 +605,10 @@ module.exports = React.createClass({
                         <label htmlFor={id}>{this.nameForMedium(val.medium)}</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
-                        <input key={val.address} id={id} value={val.address} disabled />
+                        <input type="text" key={val.address} id={id} value={val.address} disabled />
                     </div>
-                    <div className="mx_UserSettings_threepidButton">
-                        <img src="img/icon_context_delete.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
+                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
+                        <img src="img/cancel-small.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
                     </div>
                 </div>
             );
@@ -569,7 +630,7 @@ module.exports = React.createClass({
                             blurToCancel={ false }
                             onValueChanged={ this.onAddThreepidClicked } />
                     </div>
-                    <div className="mx_UserSettings_threepidButton">
+                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
                          <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked.bind(this, undefined, true) }/>
                     </div>
                 </div>
@@ -650,7 +711,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserSettings_avatarPicker_edit">
                             <label htmlFor="avatarInput" ref="file_label">
-                                <img src="img/camera.svg"
+                                <img src="img/camera.svg" className="mx_filterFlipColor"
                                     alt="Upload avatar" title="Upload avatar"
                                     width="17" height="15" />
                             </label>

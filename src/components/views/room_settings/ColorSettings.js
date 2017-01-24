@@ -135,7 +135,7 @@ module.exports = React.createClass({
                             </div>
                         );
                     }
-                    var boundClick = this._onColorSchemeChanged.bind(this, i)
+                    var boundClick = this._onColorSchemeChanged.bind(this, i);
                     return (
                         <div className="mx_RoomSettings_roomColor"
                               key={ "room_color_" + i }

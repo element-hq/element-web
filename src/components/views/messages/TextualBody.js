@@ -200,7 +200,7 @@ module.exports = React.createClass({
                     global.localStorage.removeItem("hide_preview_" + self.props.mxEvent.getId());
                 }
             },
-        }
+        };
     },
 
     onStarterLinkClick: function(starterLink, ev) {
@@ -230,8 +230,8 @@ module.exports = React.createClass({
                     if (!confirmed) {
                         return;
                     }
-                    let width  = window.screen.width  > 1024 ? 1024 : window.screen.width;
-                    let height = window.screen.height > 800  ? 800 : window.screen.height;
+                    let width = window.screen.width > 1024 ? 1024 : window.screen.width;
+                    let height = window.screen.height > 800 ? 800 : window.screen.height;
                     let left = (window.screen.width - width) / 2;
                     let top = (window.screen.height - height) / 2;
                     window.open(completeUrl, '_blank', `height=${height}, width=${width}, top=${top}, left=${left},`);

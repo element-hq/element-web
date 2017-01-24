@@ -27,6 +27,15 @@ var Modal = require('../../../Modal');
 
 const TRUNCATE_QUERY_LIST = 40;
 
+/*
+ * Escapes a string so it can be used in a RegExp
+ * Basically just replaces: \ ^ $ * + ? . ( ) | { } [ ]
+ * From http://stackoverflow.com/a/6969486
+ */
+function escapeRegExp(str) {
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
+
 module.exports = React.createClass({
     displayName: "ChatInviteDialog",
     propTypes: {
@@ -48,7 +57,7 @@ module.exports = React.createClass({
             title: "Start a chat",
             description: "Who would you like to communicate with?",
             value: "",
-            placeholder: "User ID, Name or email",
+            placeholder: "Email, name or matrix ID",
             button: "Start Chat",
             focus: true
         };
@@ -71,15 +80,12 @@ module.exports = React.createClass({
     },
 
     onButtonClick: function() {
-        var inviteList = this.state.inviteList.slice();
+        let inviteList = this.state.inviteList.slice();
         // Check the text input field to see if user has an unconverted address
         // If there is and it's valid add it to the local inviteList
-        var check = Invite.isValidAddress(this.refs.textinput.value);
-        if (check === true || check === null) {
-            inviteList.push(this.refs.textinput.value);
-        } else if (this.refs.textinput.value.length > 0) {
-            this.setState({ error: true });
-            return;
+        if (this.refs.textinput.value !== '') {
+            inviteList = this._addInputToList();
+            if (inviteList === null) return;
         }
 
         if (inviteList.length > 0) {
@@ -119,15 +125,15 @@ module.exports = React.createClass({
         } else if (e.keyCode === 38) { // up arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyUp();
+            this.addressSelector.moveSelectionUp();
         } else if (e.keyCode === 40) { // down arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyDown();
-        } else if (this.state.queryList.length > 0 && (e.keyCode === 188, e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
+            this.addressSelector.moveSelectionDown();
+        } else if (this.state.queryList.length > 0 && (e.keyCode === 188 || e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeySelect();
+            this.addressSelector.chooseSelection();
         } else if (this.refs.textinput.value.length === 0 && this.state.inviteList.length && e.keyCode === 8) { // backspace
             e.stopPropagation();
             e.preventDefault();
@@ -135,21 +141,16 @@ module.exports = React.createClass({
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            this.onButtonClick();
+            if (this.refs.textinput.value == '') {
+                // if there's nothing in the input box, submit the form
+                this.onButtonClick();
+            } else {
+                this._addInputToList();
+            }
         } else if (e.keyCode === 188 || e.keyCode === 9) { // comma or tab
             e.stopPropagation();
             e.preventDefault();
-            var check = Invite.isValidAddress(this.refs.textinput.value);
-            if (check === true || check === null) {
-                var inviteList = this.state.inviteList.slice();
-                inviteList.push(this.refs.textinput.value.trim());
-                this.setState({
-                    inviteList: inviteList,
-                    queryList: [],
-                });
-            } else {
-                this.setState({ error: true });
-            }
+            this._addInputToList();
         }
     },
 
@@ -179,7 +180,7 @@ module.exports = React.createClass({
                 inviteList: inviteList,
                 queryList: [],
             });
-        }
+        };
     },
 
     onClick: function(index) {
@@ -315,13 +316,18 @@ module.exports = React.createClass({
             return true;
         }
 
-        // split spaces in name and try matching constituent parts
-        var parts = name.split(" ");
-        for (var i = 0; i < parts.length; i++) {
-            if (parts[i].indexOf(query) === 0) {
-                return true;
-            }
+        // Try to find the query following a "word boundary", except that
+        // this does avoids using \b because it only considers letters from
+        // the roman alphabet to be word characters.
+        // Instead, we look for the query following either:
+        //  * The start of the string
+        //  * Whitespace, or
+        //  * A fixed number of punctuation characters
+        const expr = new RegExp("(?:^|[\\s\\(\)'\",\.-_@\?;:{}\\[\\]\\#~`\\*\\&\\$])" + escapeRegExp(query));
+        if (expr.test(name)) {
+            return true;
         }
+
         return false;
     },
 
@@ -361,6 +367,22 @@ module.exports = React.createClass({
         return addrs;
     },
 
+    _addInputToList: function() {
+        const addrType = Invite.getAddressType(this.refs.textinput.value);
+        if (addrType !== null) {
+            const inviteList = this.state.inviteList.slice();
+            inviteList.push(this.refs.textinput.value.trim());
+            this.setState({
+                inviteList: inviteList,
+                queryList: [],
+            });
+            return inviteList;
+        } else {
+            this.setState({ error: true });
+            return null;
+        }
+    },
+
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
         var AddressSelector = sdk.getComponent("elements.AddressSelector");
@@ -394,13 +416,18 @@ module.exports = React.createClass({
         var error;
         var addressSelector;
         if (this.state.error) {
-            error = <div className="mx_ChatInviteDialog_error">You have entered an invalid contact. Try using their Matrix ID or email address.</div>
+            error = <div className="mx_ChatInviteDialog_error">You have entered an invalid contact. Try using their Matrix ID or email address.</div>;
         } else {
+            const addressSelectorHeader = <div className="mx_ChatInviteDialog_addressSelectHeader">
+                Searching known users
+            </div>;
             addressSelector = (
-                <AddressSelector ref={(ref) => {this.addressSelector = ref}}
+                <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
                     addressList={ this.state.queryList }
                     onSelected={ this.onSelected }
-                    truncateAt={ TRUNCATE_QUERY_LIST } />
+                    truncateAt={ TRUNCATE_QUERY_LIST }
+                    header={ addressSelectorHeader }
+                />
             );
         }
 
