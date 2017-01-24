@@ -104,8 +104,9 @@ class IndexedDBLogStore {
         this.id = "instance-" + Math.random() + Date.now();
         this.index = 0;
         this.db = null;
-        // Promise is not null when a flush is IN PROGRESS
         this.flushPromise = null;
+        // set if flush() is called whilst one is ongoing
+        this.flushAgainPromise = null;
     }
 
     /**
@@ -165,10 +166,8 @@ class IndexedDBLogStore {
      *  - If B doesn't wait for A's flush to complete, B will be missing the
      *    contents of A's flush.
      * To protect against this, we set 'flushPromise' when a flush is ongoing.
-     * Subsequent calls to flush() during this period will chain another flush.
-     * This guarantees that we WILL do a brand new flush at some point in the
-     * future. Once the flushes have finished, it's  safe to clobber the promise
-     * with a new one to prevent very deep promise chains from building up.
+     * Subsequent calls to flush() during this period will chain another flush,
+     * then keep returning that same chained flush.
      *
      * This guarantees that we will always eventually do a flush when flush() is
      * called.
@@ -178,14 +177,17 @@ class IndexedDBLogStore {
     flush() {
         // check if a flush() operation is ongoing
         if (this.flushPromise && this.flushPromise.isPending()) {
-            // chain a flush operation after this one has completed to guarantee
-            // that a complete flush() is done. This does mean that if there are
-            // 3 calls to flush() in one go, the 2nd and 3rd promises will run
-            // concurrently, but this is fine since they can safely race when
-            // collecting logs.
-            return this.flushPromise.then(() => {
+            if (this.flushAgainPromise && this.flushAgainPromise.isPending()) {
+                // this is the 3rd+ time we've called flush() : return the same
+                // promise.
+                return this.flushAgainPromise;
+            }
+            // queue up a flush to occur immediately after the pending one
+            // completes.
+            this.flushAgainPromise = this.flushPromise.then(() => {
                 return this.flush();
             });
+            return this.flushAgainPromise;
         }
         // there is no flush promise or there was but it has finished, so do
         // a brand new one, destroying the chain which may have been built up.
