@@ -28,7 +28,6 @@ class MatrixDispatcher extends flux.Dispatcher {
      *        for.
      */
     dispatch(payload, sync) {
-        console.log("Dispatch: "+payload.action);
         if (sync) {
             super.dispatch(payload);
         } else {
