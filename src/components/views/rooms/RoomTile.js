@@ -26,7 +26,7 @@ var sdk = require('../../../index');
 var ContextualMenu = require('../../structures/ContextualMenu');
 var RoomNotifs = require('../../../RoomNotifs');
 var FormattingUtils = require('../../../utils/FormattingUtils');
-var AccessibleButton = require('../elements/AccessibleButton');
+import AccessibleButton from '../elements/AccessibleButton';
 var UserSettingsStore = require('../../../UserSettingsStore');
 
 module.exports = React.createClass({

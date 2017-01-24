@@ -26,7 +26,7 @@ var UserSettingsStore = require('../../UserSettingsStore');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
-var AccessibleButton = require('../views/elements/AccessibleButton');
+import AccessibleButton from '../views/elements/AccessibleButton';
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha.

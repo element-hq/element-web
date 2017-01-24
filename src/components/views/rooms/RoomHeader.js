@@ -26,7 +26,7 @@ var rate_limited_func = require('../../../ratelimitedfunc');
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
 var linkifyMatrix = require('../../../linkify-matrix');
-var AccessibleButton = require('../elements/AccessibleButton');
+import AccessibleButton from '../elements/AccessibleButton';
 
 linkifyMatrix(linkify);
 
