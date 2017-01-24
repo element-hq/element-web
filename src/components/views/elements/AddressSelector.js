@@ -28,6 +28,9 @@ module.exports = React.createClass({
         addressList: React.PropTypes.array.isRequired,
         truncateAt: React.PropTypes.number.isRequired,
         selected: React.PropTypes.number,
+
+        // Element to put as a header on top of the list
+        header: React.PropTypes.node,
     },
 
     getInitialState: function() {
@@ -141,6 +144,7 @@ module.exports = React.createClass({
 
         return (
             <div className={classes} ref={(ref) => {this.scrollElement = ref;}}>
+                { this.props.header }
                 { this.createAddressListTiles() }
             </div>
         );
