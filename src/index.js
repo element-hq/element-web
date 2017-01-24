@@ -27,16 +27,3 @@ module.exports.resetSkin = function() {
 module.exports.getComponent = function(componentName) {
     return Skinner.getComponent(componentName);
 };
-
-
-/*
-window.importKeys = function(password, data) {
-    const arrayBuffer = new TextEncoder().encode(data).buffer;
-    return MegolmExportEncryption.decryptMegolmKeyFile(
-        arrayBuffer, password
-    ).then((j) => {
-        const k = JSON.parse(j);
-        return MatrixClientPeg.get().importRoomKeys(k);
-    });
-};
-*/
