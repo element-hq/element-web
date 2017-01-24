@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var sdk = require("../../../index");
+var AccessibleButton = require('../elements/AccessibleButton');
 
 module.exports = React.createClass({
     displayName: 'ChangePassword',
@@ -136,9 +137,9 @@ module.exports = React.createClass({
                                 <input id="password2" type="password" ref="confirm_input" />
                             </div>
                         </div>
-                        <div className={buttonClassName} onClick={this.onClickChange}>
+                        <AccessibleButton className={buttonClassName} onClick={this.onClickChange}>
                             Change Password
-                        </div>
+                        </AccessibleButton>
                     </div>
                 );
             case this.Phases.Uploading:

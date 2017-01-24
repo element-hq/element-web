@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var AvatarLogic = require("../../../Avatar");
 import sdk from '../../../index';
+var AccessibleButton = require('../elements/AccessibleButton');
 
 module.exports = React.createClass({
     displayName: 'BaseAvatar',
@@ -138,7 +139,7 @@ module.exports = React.createClass({
 
         const {
             name, idName, title, url, urls, width, height, resizeMethod,
-            defaultToInitialLetter,
+            defaultToInitialLetter, onClick,
             ...otherProps
         } = this.props;
 
@@ -156,12 +157,24 @@ module.exports = React.createClass({
                 </span>
             );
         }
-        return (
-            <img className="mx_BaseAvatar mx_BaseAvatar_image" src={imageUrl}
-                onError={this.onError}
-                width={width} height={height}
-                title={title} alt=""
-                {...otherProps} />
-        );
+        if (onClick != null) {
+            return (
+                <AccessibleButton className="mx_BaseAvatar" onClick={onClick}>
+                    <img className="mx_BaseAvatar_image" src={imageUrl}
+                        onError={this.onError}
+                        width={width} height={height}
+                        title={title} alt=""
+                        {...otherProps} />
+                </AccessibleButton>
+            );
+        } else {
+            return (
+                <img className="mx_BaseAvatar mx_BaseAvatar_image" src={imageUrl}
+                    onError={this.onError}
+                    width={width} height={height}
+                    title={title} alt=""
+                    {...otherProps} />
+            );
+        }
     }
 });

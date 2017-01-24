@@ -26,6 +26,7 @@ var UserSettingsStore = require('../../UserSettingsStore');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
+var AccessibleButton = require('../views/elements/AccessibleButton');
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha.
@@ -531,9 +532,9 @@ module.exports = React.createClass({
         return <div>
             <h3>Deactivate Account</h3>
                 <div className="mx_UserSettings_section">
-                    <button className="mx_UserSettings_button danger"
+                    <AccessibleButton className="mx_UserSettings_button danger"
                         onClick={this._onDeactivateAccountClicked}>Deactivate my account
-                    </button>
+                    </AccessibleButton>
                 </div>
         </div>;
     },
@@ -553,10 +554,10 @@ module.exports = React.createClass({
             // bind() the invited rooms so any new invites that may come in as this button is clicked
             // don't inadvertently get rejected as well.
             reject = (
-                <button className="mx_UserSettings_button danger"
+                <AccessibleButton className="mx_UserSettings_button danger"
                 onClick={this._onRejectAllInvitesClicked.bind(this, invitedRooms)}>
                     Reject all {invitedRooms.length} invites
-                </button>
+                </AccessibleButton>
             );
         }
 
@@ -724,9 +725,9 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_section">
 
-                    <div className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
+                    <AccessibleButton className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
                         Sign out
-                    </div>
+                    </AccessibleButton>
 
                     {accountJsx}
                 </div>

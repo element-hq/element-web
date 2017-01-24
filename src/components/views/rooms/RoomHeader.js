@@ -26,6 +26,7 @@ var rate_limited_func = require('../../../ratelimitedfunc');
 var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
 var linkifyMatrix = require('../../../linkify-matrix');
+var AccessibleButton = require('../elements/AccessibleButton');
 
 linkifyMatrix(linkify);
 
@@ -182,8 +183,8 @@ module.exports = React.createClass({
                 'm.room.name', user_id
             );
 
-            save_button = <div className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</div>;
-            cancel_button = <div className="mx_RoomHeader_cancelButton mx_filterFlipColor" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>;
+            save_button = <AccessibleButton className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</AccessibleButton>;
+            cancel_button = <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </AccessibleButton>;
         }
 
         if (this.props.saving) {
@@ -275,9 +276,9 @@ module.exports = React.createClass({
         var settings_button;
         if (this.props.onSettingsClick) {
             settings_button =
-                <div className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title="Settings">
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title="Settings">
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
-                </div>;
+                </AccessibleButton>;
         }
 
 //        var leave_button;
@@ -291,17 +292,17 @@ module.exports = React.createClass({
         var forget_button;
         if (this.props.onForgetClick) {
             forget_button =
-                <div className="mx_RoomHeader_button" onClick={this.props.onForgetClick} title="Forget room">
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onForgetClick} title="Forget room">
                     <TintableSvg src="img/leave.svg" width="26" height="20"/>
-                </div>;
+                </AccessibleButton>;
         }
 
         var rightPanel_buttons;
         if (this.props.collapsedRhs) {
             rightPanel_buttons =
-                <div className="mx_RoomHeader_button" onClick={this.onShowRhsClick} title="<">
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShowRhsClick} title="<">
                     <TintableSvg src="img/minimise.svg" width="10" height="16"/>
-                </div>;
+                </AccessibleButton>;
         }
 
         var right_row;
@@ -310,9 +311,9 @@ module.exports = React.createClass({
                 <div className="mx_RoomHeader_rightRow">
                     { settings_button }
                     { forget_button }
-                    <div className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
+                    <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
                         <TintableSvg src="img/icons-search.svg" width="35" height="35"/>
-                    </div>
+                    </AccessibleButton>
                     { rightPanel_buttons }
                 </div>;
         }
