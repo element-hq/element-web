@@ -405,6 +405,8 @@ module.exports = React.createClass({
             isKnown: false,
         };
         if (addrType == null) {
+            this.setState({ error: true });
+            return null;
         } else if (addrType == 'mx') {
             const user = MatrixClientPeg.get().getUser(addrObj.address);
             if (user) {
