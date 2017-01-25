@@ -35,7 +35,7 @@ var DMRoomMap = require('../../../utils/DMRoomMap');
 var Unread = require('../../../Unread');
 var Receipt = require('../../../utils/Receipt');
 var WithMatrixClient = require('../../../wrappers/WithMatrixClient');
-var AccessibleButton = require('../elements/AccessibleButton');
+import AccessibleButton from '../elements/AccessibleButton';
 
 module.exports = WithMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -636,20 +636,31 @@ module.exports = WithMatrixClient(React.createClass({
         }
 
         if (this.state.can.kick) {
-            kickButton = <AccessibleButton className="mx_MemberInfo_field" onClick={this.onKick}>
-                { this.props.member.membership === "invite" ? "Disinvite" : "Kick" }
-            </AccessibleButton>;
+            const membership = this.props.member.membership;
+            const kickLabel = membership === "invite" ? "Disinvite" : "Kick";
+            kickButton = (
+                <AccessibleButton className="mx_MemberInfo_field"
+                        onClick={this.onKick}>
+                    {kickLabel}
+                </AccessibleButton>
+            );
         }
         if (this.state.can.ban) {
-            banButton = <AccessibleButton className="mx_MemberInfo_field" onClick={this.onBan}>
-                Ban
-            </AccessibleButton>;
+            banButton = (
+                <AccessibleButton className="mx_MemberInfo_field"
+                        onClick={this.onBan}>
+                    Ban
+                </AccessibleButton>
+            );
         }
         if (this.state.can.mute) {
-            var muteLabel = this.state.muted ? "Unmute" : "Mute";
-            muteButton = <AccessibleButton className="mx_MemberInfo_field" onClick={this.onMuteToggle}>
-                {muteLabel}
-            </AccessibleButton>;
+            const muteLabel = this.state.muted ? "Unmute" : "Mute";
+            muteButton = (
+                <AccessibleButton className="mx_MemberInfo_field"
+                        onClick={this.onMuteToggle}>
+                    {muteLabel}
+                </AccessibleButton>
+            );
         }
         if (this.state.can.toggleMod) {
             var giveOpLabel = this.state.isTargetMod ? "Revoke Moderator" : "Make Moderator";

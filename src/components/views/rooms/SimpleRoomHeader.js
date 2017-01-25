@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
-var AccessibleButton = require('../elements/AccessibleButton');
+import AccessibleButton from '../elements/AccessibleButton';
 
 /*
  * A stripped-down room header used for things like the user settings

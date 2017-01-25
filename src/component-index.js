@@ -81,8 +81,6 @@ import views$dialogs$ErrorDialog from './components/views/dialogs/ErrorDialog';
 views$dialogs$ErrorDialog && (module.exports.components['views.dialogs.ErrorDialog'] = views$dialogs$ErrorDialog);
 import views$dialogs$InteractiveAuthDialog from './components/views/dialogs/InteractiveAuthDialog';
 views$dialogs$InteractiveAuthDialog && (module.exports.components['views.dialogs.InteractiveAuthDialog'] = views$dialogs$InteractiveAuthDialog);
-import views$dialogs$LogoutPrompt from './components/views/dialogs/LogoutPrompt';
-views$dialogs$LogoutPrompt && (module.exports.components['views.dialogs.LogoutPrompt'] = views$dialogs$LogoutPrompt);
 import views$dialogs$NeedToRegisterDialog from './components/views/dialogs/NeedToRegisterDialog';
 views$dialogs$NeedToRegisterDialog && (module.exports.components['views.dialogs.NeedToRegisterDialog'] = views$dialogs$NeedToRegisterDialog);
 import views$dialogs$QuestionDialog from './components/views/dialogs/QuestionDialog';
@@ -91,6 +89,8 @@ import views$dialogs$SetDisplayNameDialog from './components/views/dialogs/SetDi
 views$dialogs$SetDisplayNameDialog && (module.exports.components['views.dialogs.SetDisplayNameDialog'] = views$dialogs$SetDisplayNameDialog);
 import views$dialogs$TextInputDialog from './components/views/dialogs/TextInputDialog';
 views$dialogs$TextInputDialog && (module.exports.components['views.dialogs.TextInputDialog'] = views$dialogs$TextInputDialog);
+import views$elements$AccessibleButton from './components/views/elements/AccessibleButton';
+views$elements$AccessibleButton && (module.exports.components['views.elements.AccessibleButton'] = views$elements$AccessibleButton);
 import views$elements$AddressSelector from './components/views/elements/AddressSelector';
 views$elements$AddressSelector && (module.exports.components['views.elements.AddressSelector'] = views$elements$AddressSelector);
 import views$elements$AddressTile from './components/views/elements/AddressTile';
