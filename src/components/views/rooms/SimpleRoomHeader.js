@@ -16,16 +16,27 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('../../../index');
-var dis = require("../../../dispatcher");
+import React from 'react';
+import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
+
+// cancel button which is shared between room header and simple room header
+export function CancelButton(props) {
+    const {onClick} = props;
+
+    return (
+        <AccessibleButton className='mx_RoomHeader_cancelButton' onClick={onClick}>
+            <img src="img/cancel.svg" className='mx_filterFlipColor'
+                width="18" height="18" alt="Cancel"/>
+        </AccessibleButton>
+    );
+}
 
 /*
  * A stripped-down room header used for things like the user settings
  * and room directory.
  */
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'SimpleRoomHeader',
 
     propTypes: {
@@ -41,15 +52,15 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-
-        var cancelButton;
+        let cancelButton;
         if (this.props.onCancelClick) {
-            cancelButton = <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </AccessibleButton>;
+            cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
         }
 
-        var showRhsButton;
+        let showRhsButton;
         /* // don't bother cluttering things up with this for now.
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+
         if (this.props.collapsedRhs) {
             showRhsButton =
                 <div className="mx_RoomHeader_button" style={{ float: 'right' }} onClick={this.onShowRhsClick} title=">">
