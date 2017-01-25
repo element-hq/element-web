@@ -21,8 +21,6 @@ var WhoIsTyping = require("../../WhoIsTyping");
 var MatrixClientPeg = require("../../MatrixClientPeg");
 const MemberAvatar = require("../views/avatars/MemberAvatar");
 
-const TYPING_AVATARS_LIMIT = 2;
-
 const HIDE_DEBOUNCE_MS = 10000;
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -53,6 +51,10 @@ module.exports = React.createClass({
         // more interesting)
         hasActiveCall: React.PropTypes.bool,
 
+        // Number of names to display in typing indication. E.g. set to 3, will
+        // result in "X, Y, Z and 100 others are typing."
+        whoIsTypingLimit: React.PropTypes.number,
+
         // callback for when the user clicks on the 'resend all' button in the
         // 'unsent messages' bar
         onResendAllClick: React.PropTypes.func,
@@ -77,10 +79,19 @@ module.exports = React.createClass({
         onVisible: React.PropTypes.func,
     },
 
+    getDefaultProps: function() {
+        return {
+            whoIsTypingLimit: 2,
+        };
+    },
+
     getInitialState: function() {
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
-            whoisTypingString: WhoIsTyping.whoIsTypingString(this.props.room),
+            whoisTypingString: WhoIsTyping.whoIsTypingString(
+                this.props.room,
+                this.props.whoIsTypingLimit
+            ),
         };
     },
 
@@ -127,7 +138,10 @@ module.exports = React.createClass({
 
     onRoomMemberTyping: function(ev, member) {
         this.setState({
-            whoisTypingString: WhoIsTyping.whoIsTypingString(this.props.room),
+            whoisTypingString: WhoIsTyping.whoIsTypingString(
+                this.props.room,
+                this.props.whoIsTypingLimit
+            ),
         });
     },
 
@@ -135,7 +149,11 @@ module.exports = React.createClass({
     // changed - so we use '0' to indicate normal size, and other values to
     // indicate other sizes.
     _getSize: function(state, props) {
-        if (state.syncState === "ERROR" || state.whoisTypingString) {
+        if (state.syncState === "ERROR" ||
+            state.whoisTypingString ||
+            props.numUnreadMessages ||
+            !props.atEndOfLiveTimeline ||
+            props.hasActiveCall) {
             return STATUS_BAR_EXPANDED;
         } else if (props.tabCompleteEntries) {
             return STATUS_BAR_HIDDEN;
@@ -190,7 +208,7 @@ module.exports = React.createClass({
         if (wantPlaceholder) {
             return (
                 <div className="mx_RoomStatusBar_typingIndicatorAvatars">
-                    {this._renderTypingIndicatorAvatars(TYPING_AVATARS_LIMIT)}
+                    {this._renderTypingIndicatorAvatars(this.props.whoIsTypingLimit)}
                 </div>
             );
         }

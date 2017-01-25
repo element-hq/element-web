@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var sdk = require('../../../index');
 var dis = require("../../../dispatcher");
+import AccessibleButton from '../elements/AccessibleButton';
 
 /*
  * A stripped-down room header used for things like the user settings
@@ -44,7 +45,7 @@ module.exports = React.createClass({
 
         var cancelButton;
         if (this.props.onCancelClick) {
-            cancelButton = <div className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>;
+            cancelButton = <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </AccessibleButton>;
         }
 
         var showRhsButton;
@@ -70,4 +71,3 @@ module.exports = React.createClass({
         );
     },
 });
-

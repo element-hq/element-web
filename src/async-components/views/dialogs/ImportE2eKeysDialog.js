@@ -1,0 +1,170 @@
+/*
+Copyright 2017 Vector Creations Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+import React from 'react';
+
+import * as Matrix from 'matrix-js-sdk';
+import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
+import sdk from '../../../index';
+
+function readFileAsArrayBuffer(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            resolve(e.target.result);
+        };
+        reader.onerror = reject;
+
+        reader.readAsArrayBuffer(file);
+    });
+}
+
+const PHASE_EDIT = 1;
+const PHASE_IMPORTING = 2;
+
+export default React.createClass({
+    displayName: 'ImportE2eKeysDialog',
+
+    propTypes: {
+        matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        onFinished: React.PropTypes.func.isRequired,
+    },
+
+    getInitialState: function() {
+        return {
+            enableSubmit: false,
+            phase: PHASE_EDIT,
+            errStr: null,
+        };
+    },
+
+    componentWillMount: function() {
+        this._unmounted = false;
+    },
+
+    componentWillUnmount: function() {
+        this._unmounted = true;
+    },
+
+    _onFormChange: function(ev) {
+        const files = this.refs.file.files || [];
+        this.setState({
+            enableSubmit: (this.refs.passphrase.value !== "" && files.length > 0),
+        });
+    },
+
+    _onFormSubmit: function(ev) {
+        ev.preventDefault();
+        this._startImport(this.refs.file.files[0], this.refs.passphrase.value);
+        return false;
+    },
+
+    _startImport: function(file, passphrase) {
+        this.setState({
+            errStr: null,
+            phase: PHASE_IMPORTING,
+        });
+
+        return readFileAsArrayBuffer(file).then((arrayBuffer) => {
+            return MegolmExportEncryption.decryptMegolmKeyFile(
+                arrayBuffer, passphrase
+            );
+        }).then((keys) => {
+            return this.props.matrixClient.importRoomKeys(JSON.parse(keys));
+        }).then(() => {
+            // TODO: it would probably be nice to give some feedback about what we've imported here.
+            this.props.onFinished(true);
+        }).catch((e) => {
+            if (this._unmounted) {
+                return;
+            }
+            this.setState({
+                errStr: e.message,
+                phase: PHASE_EDIT,
+            });
+        });
+    },
+
+    render: function() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
+
+        const disableForm = (this.state.phase !== PHASE_EDIT);
+
+        return (
+            <BaseDialog className='mx_importE2eKeysDialog'
+                onFinished={this.props.onFinished}
+                title="Import room keys"
+            >
+                <form onSubmit={this._onFormSubmit}>
+                    <div className="mx_Dialog_content">
+                        <p>
+                            This process allows you to import encryption keys
+                            that you had previously exported from another Matrix
+                            client. You will then be able to decrypt any
+                            messages that the other client could decrypt.
+                        </p>
+                        <p>
+                            The export file will be protected with a passphrase.
+                            You should enter the passphrase here, to decrypt the
+                            file.
+                        </p>
+                        <div className='error'>
+                            {this.state.errStr}
+                        </div>
+                        <div className='mx_E2eKeysDialog_inputTable'>
+                            <div className='mx_E2eKeysDialog_inputRow'>
+                               <div className='mx_E2eKeysDialog_inputLabel'>
+                                   <label htmlFor='importFile'>
+                                       File to import
+                                   </label>
+                               </div>
+                               <div className='mx_E2eKeysDialog_inputCell'>
+                                   <input ref='file' id='importFile' type='file'
+                                       autoFocus={true}
+                                       onChange={this._onFormChange}
+                                       disabled={disableForm} />
+                               </div>
+                            </div>
+                            <div className='mx_E2eKeysDialog_inputRow'>
+                               <div className='mx_E2eKeysDialog_inputLabel'>
+                                   <label htmlFor='passphrase'>
+                                       Enter passphrase
+                                   </label>
+                               </div>
+                               <div className='mx_E2eKeysDialog_inputCell'>
+                                   <input ref='passphrase' id='passphrase'
+                                       size='64' type='password'
+                                       onChange={this._onFormChange}
+                                       disabled={disableForm}/>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='mx_Dialog_buttons'>
+                        <input className='mx_Dialog_primary' type='submit' value='Import'
+                            disabled={!this.state.enableSubmit || disableForm}
+                        />
+                        <AccessibleButton element='button' onClick={this.props.onFinished}
+                                disabled={disableForm}>
+                            Cancel
+                        </AccessibleButton>
+                    </div>
+                </form>
+            </BaseDialog>
+        );
+    },
+});

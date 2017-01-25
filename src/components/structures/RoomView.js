@@ -722,15 +722,11 @@ module.exports = React.createClass({
                 if (!result.displayname) {
                     var SetDisplayNameDialog = sdk.getComponent('views.dialogs.SetDisplayNameDialog');
                     var dialog_defer = q.defer();
-                    var dialog_ref;
                     Modal.createDialog(SetDisplayNameDialog, {
                         currentDisplayName: result.displayname,
-                        ref: (r) => {
-                            dialog_ref = r;
-                        },
-                        onFinished: (submitted) => {
+                        onFinished: (submitted, newDisplayName) => {
                             if (submitted) {
-                                cli.setDisplayName(dialog_ref.getValue()).done(() => {
+                                cli.setDisplayName(newDisplayName).done(() => {
                                     dialog_defer.resolve();
                                 });
                             }
@@ -1531,6 +1527,7 @@ module.exports = React.createClass({
                 onResize={this.onChildResize}
                 onVisible={this.onStatusBarVisible}
                 onHidden={this.onStatusBarHidden}
+                whoIsTypingLimit={2}
             />;
         }
 
