@@ -26,6 +26,7 @@ var UserSettingsStore = require('../../UserSettingsStore');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
+var SdkConfig = require('../../SdkConfig');
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha.
@@ -491,7 +492,9 @@ module.exports = React.createClass({
     },
 
     _renderBugReport: function() {
-        // TODO: If there is no bug report endpoint, hide this.
+        if (!SdkConfig.get().bug_report_endpoint_url) {
+            return <div />
+        }
         return (
             <div>
                 <h3>Bug Report</h3>
