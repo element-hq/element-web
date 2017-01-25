@@ -37,7 +37,7 @@
     "build:dev": "node scripts/babelcheck.js && npm run build:res && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
     "start:res": "node scripts/copy-res.js -w",
-    "start:js": "webpack-dev-server -w --progress",
+    "start:js": "webpack-dev-server --output-filename=bundles/_dev_/[name].js --output-chunk-file=bundles/_dev_/[name].js -w --progress",
     "start:js:prod": "NODE_ENV=production webpack-dev-server -w --progress",
     "start": "node scripts/babelcheck.js && parallelshell \"npm run start:res\" \"npm run start:js\"",
     "start:prod": "parallelshell \"npm run start:res\" \"npm run start:js:prod\"",
