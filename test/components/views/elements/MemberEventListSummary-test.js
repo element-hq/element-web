@@ -51,7 +51,7 @@ describe('MemberEventListSummary', function() {
                 },
             },
         });
-        // Override random event ID
+        // Override random event ID to allow for equality tests against tiles from generateTiles
         e.event.event_id = eventId;
         return e;
     };
