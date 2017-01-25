@@ -76,23 +76,29 @@ module.exports = React.createClass({
      * events that occurred.
      */
     _renderSummary: function(eventAggregates, orderedTransitionSequences) {
-        let summaries = orderedTransitionSequences.map((transitions) => {
-            let userNames = eventAggregates[transitions];
-            let nameList = this._renderNameList(userNames);
-            let plural = userNames.length > 1;
+        const summaries = orderedTransitionSequences.map((transitions) => {
+            const userNames = eventAggregates[transitions];
+            const nameList = this._renderNameList(userNames);
+            const plural = userNames.length > 1;
 
-            let splitTransitions = transitions.split(',');
+            const splitTransitions = transitions.split(',');
 
-            // Some neighbouring transitions are common, so canonicalise some into "pair" transitions
-            let canonicalTransitions = this._getCanonicalTransitions(splitTransitions);
-            // Transform into consecutive repetitions of the same transition (like 5 consecutive 'joined_and_left's)
-            let coalescedTransitions = this._coalesceRepeatedTransitions(canonicalTransitions);
+            // Some neighbouring transitions are common, so canonicalise some into "pair"
+            // transitions
+            const canonicalTransitions = this._getCanonicalTransitions(splitTransitions);
+            // Transform into consecutive repetitions of the same transition (like 5
+            // consecutive 'joined_and_left's)
+            const coalescedTransitions = this._coalesceRepeatedTransitions(
+                canonicalTransitions
+            );
 
-            let descs = coalescedTransitions.map((t) => {
-                return this._getDescriptionForTransition(t.transitionType, plural, t.repeats);
+            const descs = coalescedTransitions.map((t) => {
+                return this._getDescriptionForTransition(
+                    t.transitionType, plural, t.repeats
+                );
             });
 
-            let desc = this._renderCommaSeparatedList(descs);
+            const desc = this._renderCommaSeparatedList(descs);
 
             return nameList + " " + desc;
         });
@@ -126,14 +132,14 @@ module.exports = React.createClass({
      * @returns {string[]} an array of transitions.
      */
     _getCanonicalTransitions: function(transitions) {
-        let modMap = {
-            'joined' : {
-                'after' : 'left',
-                'newTransition' : 'joined_and_left',
+        const modMap = {
+            'joined': {
+                'after': 'left',
+                'newTransition': 'joined_and_left',
             },
-            'left' : {
-                'after' : 'joined',
-                'newTransition' : 'left_and_joined',
+            'left': {
+                'after': 'joined',
+                'newTransition': 'left_and_joined',
             },
             // $currentTransition : {
             //     'after' : $nextTransition,
@@ -143,8 +149,8 @@ module.exports = React.createClass({
         const res = [];
 
         for (let i = 0; i < transitions.length; i++) {
-            let t = transitions[i];
-            let t2 = transitions[i + 1];
+            const t = transitions[i];
+            const t2 = transitions[i + 1];
 
             let transition = t;
 
@@ -173,7 +179,7 @@ module.exports = React.createClass({
      * @returns {object[]} an array of coalesced transitions.
      */
     _coalesceRepeatedTransitions: function(transitions) {
-        let res = [];
+        const res = [];
         for (let i = 0; i < transitions.length; i++) {
             if (res.length > 0 && res[res.length - 1].transitionType === transitions[i]) {
                 res[res.length - 1].repeats += 1;
@@ -191,16 +197,17 @@ module.exports = React.createClass({
      * For a certain transition, t, describe what happened to the users that
      * underwent the transition.
      * @param {string} t the transition type.
-     * @param {boolean} plural whether there were multiple users undergoing the same transition.
+     * @param {boolean} plural whether there were multiple users undergoing the same
+     * transition.
      * @param {number} repeats the number of times the transition was repeated in a row.
      * @returns {string} the written English equivalent of the transition.
      */
     _getDescriptionForTransition(t, plural, repeats) {
-        let beConjugated = plural ? "were" : "was";
-        let invitation = "their invitation" + (plural || (repeats > 1) ? "s" : "");
+        const beConjugated = plural ? "were" : "was";
+        const invitation = "their invitation" + (plural || (repeats > 1) ? "s" : "");
 
         let res = null;
-        let map = {
+        const map = {
             "joined": "joined",
             "left": "left",
             "joined_and_left": "joined and left",
@@ -221,17 +228,21 @@ module.exports = React.createClass({
     },
 
     /**
-     * Constructs a written English string representing `items`, with an optional limit on the number
-     * of items included in the result. If specified and if the length of `items` is greater than the
-     * limit, the string "and n others" will be appended onto the result.
-     * If `items` is empty, returns the empty string. If there is only one item, return it.
+     * Constructs a written English string representing `items`, with an optional limit on
+     * the number of items included in the result. If specified and if the length of
+     *`items` is greater than the limit, the string "and n others" will be appended onto
+     * the result.
+     * If `items` is empty, returns the empty string. If there is only one item, return
+     * it.
      * @param {string[]} items the items to construct a string from.
      * @param {number?} itemLimit the number by which to limit the list.
      * @returns {string} a string constructed by joining `items` with a comma between each
      * item, but with the last item appended as " and [lastItem]".
      */
     _renderCommaSeparatedList(items, itemLimit) {
-        const remaining = itemLimit === undefined ? 0 : Math.max(items.length - itemLimit, 0);
+        const remaining = itemLimit === undefined ? 0 : Math.max(
+            items.length - itemLimit, 0
+        );
         if (items.length === 0) {
             return "";
         } else if (items.length === 1) {
@@ -241,18 +252,16 @@ module.exports = React.createClass({
             const other = " other" + (remaining > 1 ? "s" : "");
             return items.join(', ') + ' and ' + remaining + other;
         } else {
-            let last = items.pop();
-            return items.join(', ') + ' and ' + last;
+            return items.join(', ') + ' and ' + items.pop();
         }
     },
 
     _renderAvatars: function(roomMembers) {
-        let avatars = roomMembers.slice(0, this.props.avatarsMaxLength).map((m) => {
+        const avatars = roomMembers.slice(0, this.props.avatarsMaxLength).map((m) => {
             return (
                 <MemberAvatar key={m.userId} member={m} width={14} height={14} />
             );
         });
-
         return (
             <span>
                 {avatars}
@@ -280,15 +289,15 @@ module.exports = React.createClass({
             case 'leave':
                 if (e.mxEvent.getSender() === e.mxEvent.getStateKey()) {
                     switch (e.mxEvent.getPrevContent().membership) {
-                        case 'invite':  return 'invite_reject';
-                        default:        return 'left';
+                        case 'invite': return 'invite_reject';
+                        default: return 'left';
                     }
                 }
                 switch (e.mxEvent.getPrevContent().membership) {
-                    case 'invite':  return 'invite_withdrawal';
-                    case 'ban':     return 'unbanned';
-                    case 'join':    return 'kicked';
-                    default:        return 'left';
+                    case 'invite': return 'invite_withdrawal';
+                    case 'ban': return 'unbanned';
+                    case 'join': return 'kicked';
+                    default: return 'left';
                 }
             default: return null;
         }
@@ -299,22 +308,22 @@ module.exports = React.createClass({
         // is a comma-delimited string of transitions, e.g. "joined,left,kicked".
         // The array of display names is the array of users who went through that
         // sequence during eventsToRender.
-        let aggregate = {
+        const aggregate = {
             // $aggregateType : []:string
         };
         // A map of aggregate types to the indices that order them (the index of
         // the first event for a given transition sequence)
-        let aggregateIndices = {
+        const aggregateIndices = {
             // $aggregateType : int
         };
 
-        let users = Object.keys(userEvents);
+        const users = Object.keys(userEvents);
         users.forEach(
             (userId) => {
-                let firstEvent = userEvents[userId][0];
-                let displayName = firstEvent.displayName;
+                const firstEvent = userEvents[userId][0];
+                const displayName = firstEvent.displayName;
 
-                let seq = this._getTransitionSequence(userEvents[userId]);
+                const seq = this._getTransitionSequence(userEvents[userId]);
                 if (!aggregate[seq]) {
                     aggregate[seq] = [];
                     aggregateIndices[seq] = -1;
@@ -322,8 +331,9 @@ module.exports = React.createClass({
 
                 aggregate[seq].push(displayName);
 
-                if (aggregateIndices[seq] === -1 || firstEvent.index < aggregateIndices[seq]) {
-                    aggregateIndices[seq] = firstEvent.index;
+                if (aggregateIndices[seq] === -1 ||
+                    firstEvent.index < aggregateIndices[seq]) {
+                        aggregateIndices[seq] = firstEvent.index;
                 }
             }
         );
@@ -335,9 +345,9 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let eventsToRender = this.props.events;
-        let fewEvents = eventsToRender.length < this.props.threshold;
-        let expanded = this.state.expanded || fewEvents;
+        const eventsToRender = this.props.events;
+        const fewEvents = eventsToRender.length < this.props.threshold;
+        const expanded = this.state.expanded || fewEvents;
 
         let expandedEvents = null;
         if (expanded) {
@@ -353,7 +363,7 @@ module.exports = React.createClass({
         }
 
         // Map user IDs to an array of objects:
-        let userEvents = {
+        const userEvents = {
             // $userId : [{
             //     // The original event
             //     mxEvent: e,
@@ -364,7 +374,7 @@ module.exports = React.createClass({
             // }]
         };
 
-        let avatarMembers = [];
+        const avatarMembers = [];
         eventsToRender.forEach((e, index) => {
             const userId = e.getStateKey();
             // Initialise a user's events
@@ -379,20 +389,22 @@ module.exports = React.createClass({
             });
         });
 
-        let aggregate = this._getAggregate(userEvents);
+        const aggregate = this._getAggregate(userEvents);
 
         // Sort types by order of lowest event index within sequence
-        let orderedTransitionSequences = Object.keys(aggregate.names).sort((seq1, seq2) => aggregate.indices[seq1] > aggregate.indices[seq2]);
+        const orderedTransitionSequences = Object.keys(aggregate.names).sort(
+            (seq1, seq2) => aggregate.indices[seq1] > aggregate.indices[seq2]
+        );
 
-        let avatars = this._renderAvatars(avatarMembers);
-        let summary = this._renderSummary(aggregate.names, orderedTransitionSequences);
-        let toggleButton = (
+        const avatars = this._renderAvatars(avatarMembers);
+        const summary = this._renderSummary(aggregate.names, orderedTransitionSequences);
+        const toggleButton = (
             <a className="mx_MemberEventListSummary_toggle" onClick={this._toggleSummary}>
                 {expanded ? 'collapse' : 'expand'}
             </a>
         );
 
-        let summaryContainer = (
+        const summaryContainer = (
             <div className="mx_EventTile_line">
                 <div className="mx_EventTile_info">
                     <span className="mx_MemberEventListSummary_avatars">
