@@ -86,9 +86,9 @@ module.exports = React.createClass({
             // Some neighbouring transitions are common, so canonicalise some into "pair" transitions
             let canonicalTransitions = this._getCanonicalTransitions(splitTransitions);
             // Transform into consecutive repetitions of the same transition (like 5 consecutive 'joined_and_left's)
-            let truncatedTransitions = this._getTruncatedTransitions(canonicalTransitions);
+            let coalescedTransitions = this._coalesceRepeatedTransitions(canonicalTransitions);
 
-            let descs = truncatedTransitions.map((t) => {
+            let descs = coalescedTransitions.map((t) => {
                 return this._getDescriptionForTransition(t.transitionType, plural, t.repeats);
             });
 
@@ -167,12 +167,12 @@ module.exports = React.createClass({
      * [{
      *   transitionType: "joined_and_left"
      *   repeats: 123
-     * }, ... ]
+     * }]
      * ```
      * @param {string[]} transitions the array of transitions to transform.
-     * @returns {object[]} an array of truncated transitions.
+     * @returns {object[]} an array of coalesced transitions.
      */
-    _getTruncatedTransitions: function(transitions) {
+    _coalesceRepeatedTransitions: function(transitions) {
         let res = [];
         for (let i = 0; i < transitions.length; i++) {
             if (res.length > 0 && res[res.length - 1].transitionType === transitions[i]) {
