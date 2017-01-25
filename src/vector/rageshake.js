@@ -430,9 +430,10 @@ module.exports = {
     /**
      * Send a bug report.
      * @param {string} userText Any additional user input.
+     * @param {boolean} sendLogs True to send logs
      * @return {Promise} Resolved when the bug report is sent.
      */
-    sendBugReport: async function(userText) {
+    sendBugReport: async function(userText, sendLogs) {
         if (!logger) {
             throw new Error(
                 "No console logger, did you forget to call init()?"
@@ -457,16 +458,18 @@ module.exports = {
         // sending to work going off the in-memory console logs.
         console.log("Sending bug report.");
         let logs = [];
-        if (store) {
-            // flush most recent logs
-            await store.flush();
-            logs = await store.consume();
-        }
-        else {
-            logs.push({
-                lines: logger.flush(true),
-                id: "-",
-            });
+        if (sendLogs) {
+            if (store) {
+                // flush most recent logs
+                await store.flush();
+                logs = await store.consume();
+            }
+            else {
+                logs.push({
+                    lines: logger.flush(true),
+                    id: "-",
+                });
+            }
         }
 
         await q.Promise((resolve, reject) => {
