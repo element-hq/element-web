@@ -66,7 +66,14 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             error: false,
+
+            // List of AddressTile.InviteAddressType objects represeting
+            // the list of addresses we're going to invite
             inviteList: [],
+
+            // List of AddressTile.InviteAddressType objects represeting
+            // the set of autocompletion results for the current search
+            // query.
             queryList: [],
         };
     },
