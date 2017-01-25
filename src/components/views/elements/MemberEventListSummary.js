@@ -252,7 +252,8 @@ module.exports = React.createClass({
             const other = " other" + (remaining > 1 ? "s" : "");
             return items.join(', ') + ' and ' + remaining + other;
         } else {
-            return items.join(', ') + ' and ' + items.pop();
+            const lastItem = items.pop();
+            return items.join(', ') + ' and ' + lastItem;
         }
     },
 
