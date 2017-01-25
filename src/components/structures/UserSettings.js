@@ -411,6 +411,30 @@ module.exports = React.createClass({
         }).done();
     },
 
+    _onExportE2eKeysClicked: function() {
+        Modal.createDialogAsync(
+            (cb) => {
+                require.ensure(['../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
+                    cb(require('../../async-components/views/dialogs/ExportE2eKeysDialog'));
+                }, "e2e-export");
+            }, {
+                matrixClient: MatrixClientPeg.get(),
+            }
+        );
+    },
+
+    _onImportE2eKeysClicked: function() {
+        Modal.createDialogAsync(
+            (cb) => {
+                require.ensure(['../../async-components/views/dialogs/ImportE2eKeysDialog'], () => {
+                    cb(require('../../async-components/views/dialogs/ImportE2eKeysDialog'));
+                }, "e2e-export");
+            }, {
+                matrixClient: MatrixClientPeg.get(),
+            }
+        );
+    },
+
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
 
@@ -481,6 +505,23 @@ module.exports = React.createClass({
         const deviceId = client.deviceId;
         const identityKey = client.getDeviceEd25519Key() || "<not supported>";
 
+        let exportButton = null,
+            importButton = null;
+
+        if (client.isCryptoEnabled) {
+            exportButton = (
+                <AccessibleButton className="mx_UserSettings_button"
+                        onClick={this._onExportE2eKeysClicked}>
+                    Export E2E room keys
+                </AccessibleButton>
+            );
+            importButton = (
+                <AccessibleButton className="mx_UserSettings_button"
+                        onClick={this._onImportE2eKeysClicked}>
+                    Import E2E room keys
+                </AccessibleButton>
+            );
+        }
         return (
             <div>
                 <h3>Cryptography</h3>
@@ -489,6 +530,8 @@ module.exports = React.createClass({
                         <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
                         <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
+                    {exportButton}
+                    {importButton}
                 </div>
             </div>
         );
