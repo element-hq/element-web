@@ -16,16 +16,19 @@ limitations under the License.
 
 'use strict';
 
-var React = require("react");
-var sdk = require("../../../index");
-var classNames = require('classnames');
+import React from 'react';
+import sdk from '../../../index';
+import classNames from 'classnames';
+import { InviteAddressType } from './AddressTile';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'AddressSelector',
 
     propTypes: {
         onSelected: React.PropTypes.func.isRequired,
-        addressList: React.PropTypes.array.isRequired,
+
+        // List of the addresses to display
+        addressList: React.PropTypes.arrayOf(InviteAddressType).isRequired,
         truncateAt: React.PropTypes.number.isRequired,
         selected: React.PropTypes.number,
 
@@ -122,7 +125,7 @@ module.exports = React.createClass({
                 // method, how far to scroll when using the arrow keys
                 addressList.push(
                     <div className={classes} onClick={this.onClick.bind(this, i)} onMouseEnter={this.onMouseEnter.bind(this, i)} onMouseLeave={this.onMouseLeave} key={i} ref={(ref) => { this.addressListElement = ref; }} >
-                        <AddressTile address={this.props.addressList[i].userId} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
+                        <AddressTile address={this.props.addressList[i]} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
                     </div>
                 );
             }

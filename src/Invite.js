@@ -19,9 +19,12 @@ import MultiInviter from './utils/MultiInviter';
 
 const emailRegex = /^\S+@\S+\.\S+$/;
 
+// We allow localhost for mxids to avoid confusion
+const mxidRegex = /^@\S+:(?:\S+\.\S+|localhost)$/
+
 export function getAddressType(inputText) {
-    const isEmailAddress = /^\S+@\S+\.\S+$/.test(inputText);
-    const isMatrixId = inputText[0] === '@' && inputText.indexOf(":") > 0;
+    const isEmailAddress = emailRegex.test(inputText);
+    const isMatrixId = mxidRegex.test(inputText);
 
     // sanity check the input for user IDs
     if (isEmailAddress) {
