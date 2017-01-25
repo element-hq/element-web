@@ -67,6 +67,8 @@ const AsyncWrapper = React.createClass({
     },
 });
 
+let _counter = 0;
+
 module.exports = {
     DialogContainerId: "mx_Dialog_Container",
 
@@ -113,12 +115,16 @@ module.exports = {
             ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
         };
 
+        // don't attempt to reuse the same AsyncWrapper for different dialogs,
+        // otherwise we'll get confused.
+        const modalCount = _counter++;
+
         // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the dialog from a button click!
         var dialog = (
             <div className={"mx_Dialog_wrapper " + className}>
                 <div className="mx_Dialog">
-                     <AsyncWrapper loader={loader} {...props} onFinished={closeDialog}/>
+                    <AsyncWrapper key={modalCount} loader={loader} {...props} onFinished={closeDialog}/>
                 </div>
                 <div className="mx_Dialog_background" onClick={ closeDialog.bind(this, false) }></div>
             </div>

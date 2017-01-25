@@ -26,6 +26,7 @@ var UserSettingsStore = require('../../UserSettingsStore');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
+import AccessibleButton from '../views/elements/AccessibleButton';
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha.
@@ -228,8 +229,26 @@ module.exports = React.createClass({
     },
 
     onLogoutClicked: function(ev) {
-        var LogoutPrompt = sdk.getComponent('dialogs.LogoutPrompt');
-        this.logoutModal = Modal.createDialog(LogoutPrompt);
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createDialog(QuestionDialog, {
+            title: "Sign out?",
+            description:
+                <div>
+                    For security, logging out will delete any end-to-end encryption keys from this browser,
+                    making previous encrypted chat history unreadable if you log back in.
+                    In future this <a href="https://github.com/vector-im/riot-web/issues/2108">will be improved</a>,
+                    but for now be warned.
+                </div>,
+            button: "Sign out",
+            onFinished: (confirmed) => {
+                if (confirmed) {
+                    dis.dispatch({action: 'logout'});
+                    if (this.props.onFinished) {
+                        this.props.onFinished();
+                    }
+                }
+            },
+        });
     },
 
     onPasswordChangeError: function(err) {
@@ -392,6 +411,30 @@ module.exports = React.createClass({
         }).done();
     },
 
+    _onExportE2eKeysClicked: function() {
+        Modal.createDialogAsync(
+            (cb) => {
+                require.ensure(['../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
+                    cb(require('../../async-components/views/dialogs/ExportE2eKeysDialog'));
+                }, "e2e-export");
+            }, {
+                matrixClient: MatrixClientPeg.get(),
+            }
+        );
+    },
+
+    _onImportE2eKeysClicked: function() {
+        Modal.createDialogAsync(
+            (cb) => {
+                require.ensure(['../../async-components/views/dialogs/ImportE2eKeysDialog'], () => {
+                    cb(require('../../async-components/views/dialogs/ImportE2eKeysDialog'));
+                }, "e2e-export");
+            }, {
+                matrixClient: MatrixClientPeg.get(),
+            }
+        );
+    },
+
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
 
@@ -462,6 +505,23 @@ module.exports = React.createClass({
         const deviceId = client.deviceId;
         const identityKey = client.getDeviceEd25519Key() || "<not supported>";
 
+        let exportButton = null,
+            importButton = null;
+
+        if (client.isCryptoEnabled) {
+            exportButton = (
+                <AccessibleButton className="mx_UserSettings_button"
+                        onClick={this._onExportE2eKeysClicked}>
+                    Export E2E room keys
+                </AccessibleButton>
+            );
+            importButton = (
+                <AccessibleButton className="mx_UserSettings_button"
+                        onClick={this._onImportE2eKeysClicked}>
+                    Import E2E room keys
+                </AccessibleButton>
+            );
+        }
         return (
             <div>
                 <h3>Cryptography</h3>
@@ -470,6 +530,8 @@ module.exports = React.createClass({
                         <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
                         <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
+                    {exportButton}
+                    {importButton}
                 </div>
             </div>
         );
@@ -531,9 +593,9 @@ module.exports = React.createClass({
         return <div>
             <h3>Deactivate Account</h3>
                 <div className="mx_UserSettings_section">
-                    <button className="mx_UserSettings_button danger"
+                    <AccessibleButton className="mx_UserSettings_button danger"
                         onClick={this._onDeactivateAccountClicked}>Deactivate my account
-                    </button>
+                    </AccessibleButton>
                 </div>
         </div>;
     },
@@ -553,10 +615,10 @@ module.exports = React.createClass({
             // bind() the invited rooms so any new invites that may come in as this button is clicked
             // don't inadvertently get rejected as well.
             reject = (
-                <button className="mx_UserSettings_button danger"
+                <AccessibleButton className="mx_UserSettings_button danger"
                 onClick={this._onRejectAllInvitesClicked.bind(this, invitedRooms)}>
                     Reject all {invitedRooms.length} invites
-                </button>
+                </AccessibleButton>
             );
         }
 
@@ -724,9 +786,9 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_section">
 
-                    <div className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
+                    <AccessibleButton className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
                         Sign out
-                    </div>
+                    </AccessibleButton>
 
                     {accountJsx}
                 </div>
