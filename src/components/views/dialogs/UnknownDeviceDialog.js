@@ -26,6 +26,16 @@ module.exports = React.createClass({
         onFinished: React.PropTypes.func.isRequired,
     },
 
+    componentDidMount: function() {
+        // Given we've now shown the user the unknown device, it is no longer
+        // unknown to them. Therefore mark it as 'known'.
+        Object.keys(this.props.devices).forEach(userId=>{
+            Object.keys(this.props.devices[userId]).map(deviceId=>{
+                MatrixClientPeg.get().setDeviceKnown(userId, deviceId, true);
+            })
+        });
+    },
+
     onKeyDown: function(e) {
         if (e.keyCode === 27) { // escape
             e.stopPropagation();
