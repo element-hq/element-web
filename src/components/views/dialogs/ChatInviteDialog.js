@@ -164,6 +164,8 @@ module.exports = React.createClass({
             queryList = this._userList.filter((user) => {
                 return this._matches(query, user);
             }).map((user) => {
+                // Return objects, structure of which is defined
+                // by InviteAddressType
                 return {
                     addressType: 'mx',
                     address: user.userId,
