@@ -16,10 +16,10 @@ limitations under the License.
 
 'use strict';
 
-const React = require("react");
-const sdk = require("../../../index");
-const classNames = require('classnames');
-const InviteAddressType = require("./AddressTile");
+import React from 'react';
+import sdk from '../../../index';
+import classNames from 'classnames';
+import { InviteAddressType } from './AddressTile';
 
 export default React.createClass({
     displayName: 'AddressSelector',
