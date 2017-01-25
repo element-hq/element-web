@@ -119,18 +119,11 @@ module.exports = React.createClass({
     },
 
     /**
-     * Canonicalise an array of transitions into an array of transitions and how many times
-     * they are repeated consecutively.
-     *
-     * An array of 123 "joined_and_left" transitions, would result in:
-     * ```
-     * [{
-     *   transitionType: "joined_and_left"
-     *   repeats: 123
-     * }, ... ]
-     * ```
-     * @param {string[]} transitions the array of transitions to transform.
-     * @returns {object[]} an array of truncated transitions.
+     * Canonicalise an array of transitions such that some pairs of transitions become
+     * single transitions. For example an input ['joined','left'] would result in an output
+     * ['joined_and_left'].
+     * @param {string[]} transitions an array of transitions.
+     * @returns {string[]} an array of transitions.
      */
     _getCanonicalTransitions: function(transitions) {
         let modMap = {
