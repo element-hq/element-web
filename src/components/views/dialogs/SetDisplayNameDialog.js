@@ -18,6 +18,12 @@ var React = require("react");
 var sdk = require("../../../index.js");
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 
+
+/**
+ * Prompt the user to set a display name.
+ *
+ * On success, `onFinished(true, newDisplayName)` is called.
+ */
 module.exports = React.createClass({
     displayName: 'SetDisplayNameDialog',
     propTypes: {
@@ -42,10 +48,6 @@ module.exports = React.createClass({
         this.refs.input_value.select();
     },
 
-    getValue: function() {
-        return this.state.value;
-    },
-
     onValueChange: function(ev) {
         this.setState({
             value: ev.target.value
@@ -54,7 +56,7 @@ module.exports = React.createClass({
 
     onFormSubmit: function(ev) {
         ev.preventDefault();
-        this.props.onFinished(true);
+        this.props.onFinished(true, this.state.value);
         return false;
     },
 
