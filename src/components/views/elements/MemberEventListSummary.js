@@ -265,10 +265,10 @@ module.exports = React.createClass({
     },
 
     /**
-     * Enumerate a given membership event, `e`, where `getContent().membership` has
+     * Label a given membership event, `e`, where `getContent().membership` has
      * changed for each transition allowed by the Matrix protocol. This attempts to
-     * enumerate the membership changes that occur in `../../../TextForEvent.js`.
-     * @param {MatrixEvent} e the membership change event to enumerate.
+     * label the membership changes that occur in `../../../TextForEvent.js`.
+     * @param {MatrixEvent} e the membership change event to label.
      * @returns {string?} the transition type given to this event. This defaults to `null`
      * if a transition is not recognised.
      */
