@@ -26,7 +26,7 @@ var UserSettingsStore = require('../../UserSettingsStore');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
-var AccessibleButton = require('../views/elements/AccessibleButton');
+import AccessibleButton from '../views/elements/AccessibleButton';
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha.
@@ -229,8 +229,26 @@ module.exports = React.createClass({
     },
 
     onLogoutClicked: function(ev) {
-        var LogoutPrompt = sdk.getComponent('dialogs.LogoutPrompt');
-        this.logoutModal = Modal.createDialog(LogoutPrompt);
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createDialog(QuestionDialog, {
+            title: "Sign out?",
+            description:
+                <div>
+                    For security, logging out will delete any end-to-end encryption keys from this browser,
+                    making previous encrypted chat history unreadable if you log back in.
+                    In future this <a href="https://github.com/vector-im/riot-web/issues/2108">will be improved</a>,
+                    but for now be warned.
+                </div>,
+            button: "Sign out",
+            onFinished: (confirmed) => {
+                if (confirmed) {
+                    dis.dispatch({action: 'logout'});
+                    if (this.props.onFinished) {
+                        this.props.onFinished();
+                    }
+                }
+            },
+        });
     },
 
     onPasswordChangeError: function(err) {

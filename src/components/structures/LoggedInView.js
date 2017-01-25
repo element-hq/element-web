@@ -21,6 +21,7 @@ import KeyCode from '../../KeyCode';
 import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
 import sdk from '../../index';
+import dis from '../../dispatcher';
 
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is

@@ -87,10 +87,26 @@ module.exports = React.createClass({
             this.showErrorDialog("New passwords must match each other.");
         }
         else {
-            this.submitPasswordReset(
-                this.state.enteredHomeserverUrl, this.state.enteredIdentityServerUrl,
-                this.state.email, this.state.password
-            );
+            var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            Modal.createDialog(QuestionDialog, {
+                title: "Warning",
+                description:
+                    <div>
+                        Resetting password will currently reset any end-to-end encryption keys on all devices,
+                        making encrypted chat history unreadable.
+                        In future this <a href="https://github.com/vector-im/riot-web/issues/2671">may be improved</a>,
+                        but for now be warned.
+                    </div>,
+                button: "Continue",
+                onFinished: (confirmed) => {
+                    if (confirmed) {
+                        this.submitPasswordReset(
+                            this.state.enteredHomeserverUrl, this.state.enteredIdentityServerUrl,
+                            this.state.email, this.state.password
+                        );
+                    }
+                },
+            });
         }
     },
 

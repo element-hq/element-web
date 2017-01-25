@@ -20,7 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
-var AccessibleButton = require('../elements/AccessibleButton');
+import AccessibleButton from '../elements/AccessibleButton';
 
 
 var PRESENCE_CLASS = {

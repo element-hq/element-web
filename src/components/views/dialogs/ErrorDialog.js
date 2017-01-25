@@ -25,9 +25,10 @@ limitations under the License.
  * });
  */
 
-var React = require("react");
+import React from 'react';
+import sdk from '../../../index';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'ErrorDialog',
     propTypes: {
         title: React.PropTypes.string,
@@ -49,20 +50,11 @@ module.exports = React.createClass({
         };
     },
 
-    onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
-            e.stopPropagation();
-            e.preventDefault();
-            this.props.onFinished(false);
-        }
-    },
-
     render: function() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <div className="mx_ErrorDialog" onKeyDown={ this.onKeyDown }>
-                <div className="mx_Dialog_title">
-                    {this.props.title}
-                </div>
+            <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
+                    title={this.props.title}>
                 <div className="mx_Dialog_content">
                     {this.props.description}
                 </div>
@@ -71,7 +63,7 @@ module.exports = React.createClass({
                         {this.props.button}
                     </button>
                 </div>
-            </div>
+            </BaseDialog>
         );
-    }
+    },
 });

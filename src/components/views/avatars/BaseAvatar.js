@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 var AvatarLogic = require("../../../Avatar");
 import sdk from '../../../index';
-var AccessibleButton = require('../elements/AccessibleButton');
+import AccessibleButton from '../elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'BaseAvatar',

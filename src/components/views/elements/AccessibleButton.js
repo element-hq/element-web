@@ -17,8 +17,12 @@
 import React from 'react';
 
 /**
- * AccessibleButton is a generic wrapper for any element that should be treated as a button.
- * Identifies the element as a button, setting proper tab indexing and keyboard activation behavior.
+ * AccessibleButton is a generic wrapper for any element that should be treated
+ * as a button.  Identifies the element as a button, setting proper tab
+ * indexing and keyboard activation behavior.
+ *
+ * @param {Object} props  react element properties
+ * @returns {Object} rendered react
  */
 export default function AccessibleButton(props) {
     const {element, onClick, children, ...restProps} = props;
@@ -26,7 +30,7 @@ export default function AccessibleButton(props) {
     restProps.onKeyDown = function(e) {
         if (e.keyCode == 13 || e.keyCode == 32) return onClick();
     };
-    restProps.tabIndex = restProps.tabIndex || "0"; 
+    restProps.tabIndex = restProps.tabIndex || "0";
     restProps.role = "button";
     return React.createElement(element, restProps, children);
 }
@@ -44,7 +48,7 @@ AccessibleButton.propTypes = {
 };
 
 AccessibleButton.defaultProps = {
-    element: 'div'
+    element: 'div',
 };
 
 AccessibleButton.displayName = "AccessibleButton";
