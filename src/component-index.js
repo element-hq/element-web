@@ -71,8 +71,6 @@ import views$create_room$Presets from './components/views/create_room/Presets';
 views$create_room$Presets && (module.exports.components['views.create_room.Presets'] = views$create_room$Presets);
 import views$create_room$RoomAlias from './components/views/create_room/RoomAlias';
 views$create_room$RoomAlias && (module.exports.components['views.create_room.RoomAlias'] = views$create_room$RoomAlias);
-import views$dialogs$BugReportDialog from './components/views/dialogs/BugReportDialog';
-views$dialogs$BugReportDialog && (module.exports.components['views.dialogs.BugReportDialog'] = views$dialogs$BugReportDialog);
 import views$dialogs$BaseDialog from './components/views/dialogs/BaseDialog';
 views$dialogs$BaseDialog && (module.exports.components['views.dialogs.BaseDialog'] = views$dialogs$BaseDialog);
 import views$dialogs$ChatInviteDialog from './components/views/dialogs/ChatInviteDialog';
