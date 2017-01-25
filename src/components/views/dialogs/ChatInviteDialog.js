@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require("react");
-var classNames = require('classnames');
-var sdk = require("../../../index");
-var Invite = require("../../../Invite");
-var createRoom = require("../../../createRoom");
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var DMRoomMap = require('../../../utils/DMRoomMap');
-var rate_limited_func = require("../../../ratelimitedfunc");
-var dis = require("../../../dispatcher");
-var Modal = require('../../../Modal');
+import React from 'react';
+import classNames from 'classnames';
+import sdk from '../../../index';
+import { getAddressType } from '../../../Invite';
+import createRoom from '../../../createRoom';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import DMRoomMap from '../../../utils/DMRoomMap';
+import rate_limited_func from '../../../ratelimitedfunc';
+import dis from '../../../dispatcher';
+import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
+import q from 'q';
 
 const TRUNCATE_QUERY_LIST = 40;
 
@@ -186,13 +187,22 @@ module.exports = React.createClass({
             // If the query isn't a user we know about, but is a
             // valid address, add an entry for that
             if (queryList.length == 0) {
-                const addrType = Invite.getAddressType(query);
+                const addrType = getAddressType(query);
                 if (addrType !== null) {
-                    queryList.push({
+                    queryList[0] = {
                         addressType: addrType,
                         address: query,
                         isKnown: false,
-                    });
+                    };
+                    if (addrType == 'email') {
+                        this._lookupThreepid(addrType, query).then((res) => {
+                            if (res !== null) {
+                                this.setState({
+                                    queryList: [res]
+                                });
+                            }
+                        }).done();
+                    }
                 }
             }
         }
@@ -380,7 +390,7 @@ module.exports = React.createClass({
     },
 
     _isDmChat: function(addrs) {
-        if (addrs.length === 1 && Invite.getAddressType(addrs[0]) === "mx" && !this.props.roomId) {
+        if (addrs.length === 1 && getAddressType(addrs[0]) === "mx" && !this.props.roomId) {
             return true;
         } else {
             return false;
@@ -408,7 +418,7 @@ module.exports = React.createClass({
 
     _addInputToList: function() {
         const addressText = this.refs.textinput.value.trim();
-        const addrType = Invite.getAddressType(addressText);
+        const addrType = getAddressType(addressText);
         const addrObj = {
             addressType: addrType,
             address: addressText,
@@ -433,6 +443,39 @@ module.exports = React.createClass({
             queryList: [],
         });
         return inviteList;
+    },
+
+    _lookupThreepid(medium, address) {
+        // wait a bit to let the user finish typing
+        return q.delay(500).then(() => {
+            // If the query has changed, forget it
+            if (this.state.queryList[0] && this.state.queryList[0].address !== address) {
+                return null;
+            }
+            return MatrixClientPeg.get().lookupThreePid(medium, address);
+        }).then((res) => {
+            if (res === null || !res.mxid) return null;
+            // If the query has changed now, drop the response
+            if (this.state.queryList[0] && this.state.queryList[0].address !== address) {
+                return null;
+            }
+
+            return MatrixClientPeg.get().getProfileInfo(res.mxid);
+        }).then((res) => {
+            if (res === null) return null;
+            // If the query has changed now, drop the response
+            if (this.state.queryList[0] && this.state.queryList[0].address !== address) {
+                return null;
+            }
+            // return an InviteAddressType
+            return {
+                addressType: medium,
+                address: address,
+                displayName: res.displayname,
+                avatarMxc: res.avatar_url,
+                isKnown: true,
+            }
+        });
     },
 
     render: function() {
