@@ -8,7 +8,7 @@ const jssdk = require('matrix-js-sdk');
 const MatrixEvent = jssdk.MatrixEvent;
 
 const testUtils = require('../../../test-utils');
-describe.only('MemberEventListSummary', function() {
+describe('MemberEventListSummary', function() {
     let sandbox;
 
     // Generate dummy event tiles for use in simulating an expanded MELS
