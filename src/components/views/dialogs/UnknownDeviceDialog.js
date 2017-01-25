@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 function UserUnknownDeviceList(props) {
     const {userDevices} = props;
@@ -61,6 +62,16 @@ export default React.createClass({
         // map from userid -> deviceid -> deviceinfo
         devices: React.PropTypes.object.isRequired,
         onFinished: React.PropTypes.func.isRequired,
+    },
+
+    componentDidMount: function() {
+        // Given we've now shown the user the unknown device, it is no longer
+        // unknown to them. Therefore mark it as 'known'.
+        Object.keys(this.props.devices).forEach((userId) => {
+            Object.keys(this.props.devices[userId]).map((deviceId) => {
+                MatrixClientPeg.get().setDeviceKnown(userId, deviceId, true);
+            });
+        });
     },
 
     render: function() {
