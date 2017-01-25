@@ -391,6 +391,9 @@ module.exports = React.createClass({
 
     _onBugReportClicked: function() {
         const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
+        if (!BugReportDialog) {
+            return;
+        }
         Modal.createDialog(BugReportDialog, {});
     },
 
