@@ -27,6 +27,7 @@ var linkify = require('linkifyjs');
 var linkifyElement = require('linkifyjs/element');
 var linkifyMatrix = require('../../../linkify-matrix');
 import AccessibleButton from '../elements/AccessibleButton';
+import {CancelButton} from './SimpleRoomHeader';
 
 linkifyMatrix(linkify);
 
@@ -184,7 +185,7 @@ module.exports = React.createClass({
             );
 
             save_button = <AccessibleButton className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</AccessibleButton>;
-            cancel_button = <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </AccessibleButton>;
+            cancel_button = <CancelButton onClick={this.props.onCancelClick}/>;
         }
 
         if (this.props.saving) {
