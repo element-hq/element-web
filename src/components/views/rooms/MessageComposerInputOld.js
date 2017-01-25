@@ -29,10 +29,22 @@ var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
 var MARKDOWN_ENABLED = true;
 
+export function onSendMessageFailed(err) {
+    if (err.name === "UnknownDeviceError") {
+        const UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
+        Modal.createDialog(UnknownDeviceDialog, {
+            devices: err.devices,
+        });
+    }
+    dis.dispatch({
+        action: 'message_send_failed',
+    });
+}
+
 /*
  * The textInput part of the MessageComposer
  */
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'MessageComposerInput',
 
     statics: {
@@ -341,18 +353,8 @@ module.exports = React.createClass({
             dis.dispatch({
                 action: 'message_sent'
             });
-        }, function(err) {
-            if (err.name === "UnknownDeviceError") {
-                var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
-                Modal.createDialog(UnknownDeviceDialog, {
-                    devices: err.devices
-                });
-            }
+        }, onSendMessageFailed);
 
-            dis.dispatch({
-                action: 'message_send_failed'
-            });
-        });
         this.refs.textarea.value = '';
         this.resizeInput();
         ev.preventDefault();
