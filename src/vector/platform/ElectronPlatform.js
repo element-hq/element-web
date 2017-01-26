@@ -58,7 +58,6 @@ function platformFriendlyName() {
 
 export default class ElectronPlatform extends VectorBasePlatform {
     setNotificationCount(count: number) {
-        if (this.notificationCount === number) return;
         super.setNotificationCount(count);
         // this sometimes throws because electron is made of fail:
         // https://github.com/electron/electron/issues/7351
