@@ -49,6 +49,7 @@ export default class BugReportDialog extends React.Component {
         this.setState({ busy: true, err: null });
         rageshake.sendBugReport(userText, sendLogs).then(() => {
             this.setState({ busy: false });
+            this.props.onFinished(false);
         }, (err) => {
             this.setState({ busy: false, err: `Failed: ${err.message}` });
         });
