@@ -194,6 +194,7 @@ module.exports = React.createClass({
                         address: query,
                         isKnown: false,
                     };
+                    if (this._cancelThreepidLookup) this._cancelThreepidLookup();
                     if (addrType == 'email') {
                         this._lookupThreepid(addrType, query).done();
                     }
@@ -216,6 +217,7 @@ module.exports = React.createClass({
                 inviteList: inviteList,
                 queryList: [],
             });
+            if (this._cancelThreepidLookup) this._cancelThreepidLookup();
         };
     },
 
@@ -233,6 +235,7 @@ module.exports = React.createClass({
             inviteList: inviteList,
             queryList: [],
         });
+        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
     },
 
     _getDirectMessageRoom: function(addr) {
@@ -436,31 +439,32 @@ module.exports = React.createClass({
             inviteList: inviteList,
             queryList: [],
         });
+        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
         return inviteList;
     },
 
     _lookupThreepid: function(medium, address) {
+        let cancelled = false;
+        // Note that we can't safely remove this after we're done
+        // because we don't know that it's the same one, so we just
+        // leave it: it's replacing the old one each time so it's
+        // not like they leak.
+        this._cancelThreepidLookup = function() {
+            cancelled = true;
+        }
+
         // wait a bit to let the user finish typing
         return q.delay(500).then(() => {
-            // If the query has changed, forget it
-            if (this.state.queryList[0] && this.state.queryList[0].address !== address) {
-                return null;
-            }
+            if (cancelled) return null;
             return MatrixClientPeg.get().lookupThreePid(medium, address);
         }).then((res) => {
             if (res === null || !res.mxid) return null;
-            // If the query has changed now, drop the response
-            if (this.state.queryList[0] && this.state.queryList[0].address !== address) {
-                return null;
-            }
+            if (cancelled) return null;
 
             return MatrixClientPeg.get().getProfileInfo(res.mxid);
         }).then((res) => {
             if (res === null) return null;
-            // If the query has changed now, drop the response
-            if (this.state.queryList[0] && this.state.queryList[0].address !== address) {
-                return null;
-            }
+            if (cancelled) return null;
             this.setState({
                 queryList: [{
                     // an InviteAddressType
