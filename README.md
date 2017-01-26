@@ -113,12 +113,14 @@ pre-built version from https://riot.im/desktop.html or, if you prefer,
 built it yourself.
 
 To run as a desktop app:
-```
-npm install
-npm install electron
-npm run build
-node_modules/.bin/electron .
-```
+
+1. Follow the instructions in 'Building From Source' above
+2. Install electron and run it:
+
+   ```
+   npm install electron
+   node_modules/.bin/electron .
+   ```
 
 To build packages, use electron-builder. This is configured to output:
  * dmg + zip for macOS
@@ -141,11 +143,9 @@ npm run build:electron
 
 For other packages, use electron-builder manually. For example, to build a package
 for 64 bit Linux:
-```
-npm install
-npm run build
-node_modules/.bin/build -l --x64
-```
+
+ 1. Follow the instructions in 'Building From Source' above
+ 2. `node_modules/.bin/build -l --x64`
 
 All electron packages go into `electron/dist/`
 
