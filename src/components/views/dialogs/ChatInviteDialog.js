@@ -195,13 +195,7 @@ module.exports = React.createClass({
                         isKnown: false,
                     };
                     if (addrType == 'email') {
-                        this._lookupThreepid(addrType, query).then((res) => {
-                            if (res !== null) {
-                                this.setState({
-                                    queryList: [res]
-                                });
-                            }
-                        }).done();
+                        this._lookupThreepid(addrType, query).done();
                     }
                 }
             }
@@ -467,14 +461,16 @@ module.exports = React.createClass({
             if (this.state.queryList[0] && this.state.queryList[0].address !== address) {
                 return null;
             }
-            // return an InviteAddressType
-            return {
-                addressType: medium,
-                address: address,
-                displayName: res.displayname,
-                avatarMxc: res.avatar_url,
-                isKnown: true,
-            }
+            this.setState({
+                queryList: [{
+                    // an InviteAddressType
+                    addressType: medium,
+                    address: address,
+                    displayName: res.displayname,
+                    avatarMxc: res.avatar_url,
+                    isKnown: true,
+                }]
+            });
         });
     },
 
