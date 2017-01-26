@@ -85,7 +85,7 @@ func main() {
 		//  "bugreport-20170115-112233-0.log.gz" => most recent log
 		//  "bugreport-20170115-112233-1.log.gz" => ...
 		//  "bugreport-20170115-112233-N.log.gz" => oldest log
-		t := time.Now()
+		t := time.Now().UTC()
 		prefix := t.Format("bugreport-20060102-150405")
 		summary := fmt.Sprintf(
 			"%s\n\nNumber of logs: %d\nVersion: %s\nUser-Agent: %s\n", p.Text, len(p.Logs), p.Version, p.UserAgent,
