@@ -281,7 +281,6 @@ module.exports = React.createClass({
 
         var isMembershipChange = (e) =>
             e.getType() === 'm.room.member'
-            && ['join', 'leave'].indexOf(e.getContent().membership) !== -1
             && (!e.getPrevContent() || e.getContent().membership !== e.getPrevContent().membership);
 
         for (i = 0; i < this.props.events.length; i++) {

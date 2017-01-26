@@ -14,32 +14,100 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require("react");
-var sdk = require('../../../index');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
+import React from 'react';
+import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
-module.exports = React.createClass({
+function DeviceListEntry(props) {
+    const {userId, device} = props;
+
+    const DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
+
+    return (
+        <li>
+            <DeviceVerifyButtons device={ device } userId={ userId } />
+            { device.deviceId }
+            <br/>
+            { device.getDisplayName() }
+        </li>
+    );
+}
+
+DeviceListEntry.propTypes = {
+    userId: React.PropTypes.string.isRequired,
+
+    // deviceinfo
+    device: React.PropTypes.object.isRequired,
+};
+
+
+function UserUnknownDeviceList(props) {
+    const {userId, userDevices} = props;
+
+    const deviceListEntries = Object.keys(userDevices).map((deviceId) =>
+       <DeviceListEntry key={ deviceId } userId={ userId } device={ userDevices[deviceId] } />,
+    );
+
+    return (
+        <ul className="mx_UnknownDeviceDialog_deviceList">
+            {deviceListEntries}
+        </ul>
+    );
+}
+
+UserUnknownDeviceList.propTypes = {
+    userId: React.PropTypes.string.isRequired,
+
+    // map from deviceid -> deviceinfo
+    userDevices: React.PropTypes.object.isRequired,
+};
+
+
+function UnknownDeviceList(props) {
+    const {devices} = props;
+
+    const userListEntries = Object.keys(devices).map((userId) =>
+        <li key={ userId }>
+            <p>{ userId }:</p>
+            <UserUnknownDeviceList userId={ userId } userDevices={ devices[userId] } />
+        </li>,
+    );
+
+    return <ul>{userListEntries}</ul>;
+}
+
+UnknownDeviceList.propTypes = {
+    // map from userid -> deviceid -> deviceinfo
+    devices: React.PropTypes.object.isRequired,
+};
+
+
+export default React.createClass({
     displayName: 'UnknownEventDialog',
 
     propTypes: {
         room: React.PropTypes.object.isRequired,
+
+        // map from userid -> deviceid -> deviceinfo
         devices: React.PropTypes.object.isRequired,
         onFinished: React.PropTypes.func.isRequired,
     },
 
-    onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
-            e.stopPropagation();
-            e.preventDefault();
-            this.props.onFinished(false);
-        }
+    componentDidMount: function() {
+        // Given we've now shown the user the unknown device, it is no longer
+        // unknown to them. Therefore mark it as 'known'.
+        Object.keys(this.props.devices).forEach((userId) => {
+            Object.keys(this.props.devices[userId]).map((deviceId) => {
+                MatrixClientPeg.get().setDeviceKnown(userId, deviceId, true);
+            });
+        });
     },
 
     render: function() {
-        var DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
-        var client = MatrixClientPeg.get();
-        var blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices() || this.props.room.getBlacklistUnverifiedDevices();
-        var warning;
+        const client = MatrixClientPeg.get();
+        const blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices() || this.props.room.getBlacklistUnverifiedDevices();
+
+        let warning;
         if (blacklistUnverified) {
             warning = <h4>You are currently blacklisting unverified devices; to send messages to these devices you must verify them.</h4>
         }
@@ -47,44 +115,27 @@ module.exports = React.createClass({
             warning = <h4>We strongly recommend you verify them before continuing.</h4>
         }
 
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <div className="mx_UnknownDeviceDialog" onKeyDown={ this.onKeyDown }>
-                <div className="mx_Dialog_title">
-                    Room contains unknown devices
-                </div>
+            <BaseDialog className='mx_UnknownDeviceDialog'
+                onFinished={this.props.onFinished}
+                title='Room contains unknown devices'
+            >
                 <div className="mx_Dialog_content">
                     <h4>This room contains unknown devices which have not been verified.</h4>
                     { warning }
                     Unknown devices:
-                    <ul>{
-                        Object.keys(this.props.devices).map(userId=>{
-                            return <li key={ userId }>
-                                <p>{ userId }:</p>
-                                <ul className="mx_UnknownDeviceDialog_deviceList">
-                                {
-                                    Object.keys(this.props.devices[userId]).map(deviceId=>{
-                                        var device = this.props.devices[userId][deviceId];
-                                        var buttons = <DeviceVerifyButtons device={ device } userId={ userId } />
-                                        return <li key={ deviceId }>
-                                            { buttons }
-                                            { deviceId }<br/>
-                                            { device.getDisplayName() }
-                                        </li>
-                                    })
-                                }
-                                </ul>
-                            </li>
-                        })
-                    }</ul>
+                    <UnknownDeviceList devices={this.props.devices} />
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={ this.props.onFinished } autoFocus={ true }>
+                    <button className="mx_Dialog_primary" autoFocus={ true }
+                            onClick={ this.props.onFinished } >
                         OK
                     </button>
                 </div>
-            </div>
+            </BaseDialog>
         );
         // XXX: do we want to give the user the option to enable blacklistUnverifiedDevices for this room (or globally) at this point?
         // It feels like confused users will likely turn it on and then disappear in a cloud of UISIs...
-    }
+    },
 });

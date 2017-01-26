@@ -21,6 +21,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 import sdk from './index';
 
+const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
+
 /**
  * Wrap an asynchronous loader function with a react component which shows a
  * spinner until the real component loads.
@@ -67,24 +69,37 @@ const AsyncWrapper = React.createClass({
     },
 });
 
-module.exports = {
-    DialogContainerId: "mx_Dialog_Container",
+class ModalManager {
+    constructor() {
+        this._counter = 0;
 
-    getOrCreateContainer: function() {
-        var container = document.getElementById(this.DialogContainerId);
+        /** list of the modals we have stacked up, with the most recent at [0] */
+        this._modals = [
+            /* {
+               elem: React component for this dialog
+               onFinished: caller-supplied onFinished callback
+               className: CSS class for the dialog wrapper div
+               } */
+        ];
+
+        this.closeAll = this.closeAll.bind(this);
+    }
+
+    getOrCreateContainer() {
+        let container = document.getElementById(DIALOG_CONTAINER_ID);
 
         if (!container) {
             container = document.createElement("div");
-            container.id = this.DialogContainerId;
+            container.id = DIALOG_CONTAINER_ID;
             document.body.appendChild(container);
         }
 
         return container;
-    },
+    }
 
-    createDialog: function(Element, props, className) {
+    createDialog(Element, props, className) {
         return this.createDialogAsync((cb) => {cb(Element);}, props, className);
-    },
+    }
 
     /**
      * Open a modal view.
@@ -105,27 +120,73 @@ module.exports = {
      *
      * @param {String} className   CSS class to apply to the modal wrapper
      */
-    createDialogAsync: function(loader, props, className) {
+    createDialogAsync(loader, props, className) {
         var self = this;
-        // never call this via modal.close() from onFinished() otherwise it will loop
+        const modal = {};
+
+        // never call this from onFinished() otherwise it will loop
+        //
+        // nb explicit function() rather than arrow function, to get `arguments`
         var closeDialog = function() {
             if (props && props.onFinished) props.onFinished.apply(null, arguments);
-            ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
+            var i = self._modals.indexOf(modal);
+            if (i >= 0) {
+                self._modals.splice(i, 1);
+            }
+            self._reRender();
         };
+
+        // don't attempt to reuse the same AsyncWrapper for different dialogs,
+        // otherwise we'll get confused.
+        const modalCount = this._counter++;
 
         // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the dialog from a button click!
+        modal.elem = (
+            <AsyncWrapper key={modalCount} loader={loader} {...props}
+                onFinished={closeDialog}/>
+        );
+        modal.onFinished = props ? props.onFinished : null;
+        modal.className = className;
+
+        this._modals.unshift(modal);
+
+        this._reRender();
+        return {close: closeDialog};
+    }
+
+    closeAll() {
+        const modals = this._modals;
+        this._modals = [];
+
+        for (let i = 0; i < modals.length; i++) {
+            const m = modals[i];
+            if (m.onFinished) {
+                m.onFinished(false);
+            }
+        }
+
+        this._reRender();
+    }
+
+    _reRender() {
+        if (this._modals.length == 0) {
+            ReactDOM.unmountComponentAtNode(this.getOrCreateContainer());
+            return;
+        }
+
+        var modal = this._modals[0];
         var dialog = (
-            <div className={"mx_Dialog_wrapper " + className}>
+            <div className={"mx_Dialog_wrapper " + modal.className}>
                 <div className="mx_Dialog">
-                     <AsyncWrapper loader={loader} {...props} onFinished={closeDialog}/>
+                    {modal.elem}
                 </div>
-                <div className="mx_Dialog_background" onClick={ closeDialog.bind(this, false) }></div>
+                <div className="mx_Dialog_background" onClick={ this.closeAll }></div>
             </div>
         );
 
         ReactDOM.render(dialog, this.getOrCreateContainer());
+    }
+}
 
-        return {close: closeDialog};
-    },
-};
+export default new ModalManager();
