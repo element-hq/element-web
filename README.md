@@ -114,8 +114,8 @@ built it yourself.
 
 To run as a desktop app:
 
- 1. Follow the instructions in 'Building From Source' above
- 2.
+1. Follow the instructions in 'Building From Source' above
+2. Install electron and run it:
     ```
     npm install electron
     node_modules/.bin/electron .
