@@ -106,7 +106,7 @@ limitations under the License.
 }
 
 .mx_AddressTile_email.mx_AddressTile_justified {
-    width: 380px; /* name + id width */
+    width: 200px; /* same as id width */
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
