@@ -60,11 +60,13 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     setNotificationCount(count: number) {
+        if (this.notificationCount === number) return;
         super.setNotificationCount(count);
         this._updateFavicon();
     }
 
     setErrorStatus(errorDidOccur: boolean) {
+        if (this.errorDidOccur === errorDidOccur) return;
         super.setErrorStatus(errorDidOccur);
         this._updateFavicon();
     }
