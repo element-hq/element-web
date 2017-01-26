@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -83,9 +84,18 @@ func main() {
 		//  "bugreport-20170115-112233-N.log.gz" => oldest log
 		t := time.Now()
 		prefix := t.Format("bugreport-20060102-150405")
-		if err := gzipAndSave([]byte(p.Text), prefix+".log.gz"); err != nil {
+		summary := fmt.Sprintf(
+			"%s\n\nNumber of logs: %d\nVersion: %s\nUser-Agent: %s\n", p.Text, len(p.Logs), p.Version, p.UserAgent,
+		)
+		if err := gzipAndSave([]byte(summary), prefix+".log.gz"); err != nil {
 			respond(500, w)
 			return
+		}
+		for i, log := range p.Logs {
+			if err := gzipAndSave([]byte(log.Lines), fmt.Sprintf("%s-%d.log.gz", prefix, i)); err != nil {
+				respond(500, w)
+				return // TODO: Rollback?
+			}
 		}
 		respond(200, w)
 	})
