@@ -1332,12 +1332,14 @@ module.exports = React.createClass({
     },
 
     onStatusBarVisible: function() {
+        if (this.unmounted) return;
         this.setState({
             statusBarVisible: true,
         });
     },
 
     onStatusBarHidden: function() {
+        if (this.unmounted) return;
         this.setState({
             statusBarVisible: false,
         });
