@@ -94,14 +94,14 @@ export default React.createClass({
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
+        const nameClasses = classNames({
+            "mx_AddressTile_name": true,
+            "mx_AddressTile_justified": this.props.justified,
+        });
+
         let info;
         let error = false;
         if (address.addressType === "mx" && address.isKnown) {
-            const nameClasses = classNames({
-                "mx_AddressTile_name": true,
-                "mx_AddressTile_justified": this.props.justified,
-            });
-
             const idClasses = classNames({
                 "mx_AddressTile_id": true,
                 "mx_AddressTile_justified": this.props.justified,
@@ -123,13 +123,21 @@ export default React.createClass({
                 <div className={unknownMxClasses}>{ this.props.address.address }</div>
             );
         } else if (address.addressType === "email") {
-            var emailClasses = classNames({
+            const emailClasses = classNames({
                 "mx_AddressTile_email": true,
                 "mx_AddressTile_justified": this.props.justified,
             });
 
+            let nameNode = null;
+            if (address.displayName) {
+                nameNode = <div className={nameClasses}>{ address.displayName }</div>
+            }
+
             info = (
-                <div className={emailClasses}>{ address.address }</div>
+                <div className="mx_AddressTile_mx">
+                    <div className={emailClasses}>{ address.address }</div>
+                    {nameNode}
+                </div>
             );
         } else {
             error = true;
