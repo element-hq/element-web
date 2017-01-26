@@ -82,10 +82,16 @@ export default React.createClass({
                 title='Room contains unknown devices'
             >
                 <div className="mx_Dialog_content">
-                    <h4>This room contains unknown devices which have not been
+                    <h4>This room contains devices which have not been
                     verified.</h4>
-
-                    <h4>We strongly recommend you verify them before continuing.</h4>
+                    <p>
+                        This means there is no guarantee that the devices belong
+                        to a valid user of the room.
+                    </p><p>
+                        We recommend you go through the verification process
+                        for each device before continuing, but you can resend
+                        the message without verifying if you prefer.
+                    </p>
                     <p>Unknown devices:</p>
                     <UnknownDeviceList devices={this.props.devices} />
                 </div>
