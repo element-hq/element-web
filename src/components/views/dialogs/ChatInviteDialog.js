@@ -439,7 +439,7 @@ module.exports = React.createClass({
         return inviteList;
     },
 
-    _lookupThreepid(medium, address) {
+    _lookupThreepid: function(medium, address) {
         // wait a bit to let the user finish typing
         return q.delay(500).then(() => {
             // If the query has changed, forget it
