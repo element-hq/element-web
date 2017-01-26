@@ -60,7 +60,7 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     setNotificationCount(count: number) {
-        if (this.notificationCount === number) return;
+        if (this.notificationCount === count) return;
         super.setNotificationCount(count);
         this._updateFavicon();
     }
