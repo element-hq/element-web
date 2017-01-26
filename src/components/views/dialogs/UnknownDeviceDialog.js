@@ -45,7 +45,8 @@ function UserUnknownDeviceList(props) {
     const {userId, userDevices} = props;
 
     const deviceListEntries = Object.keys(userDevices).map((deviceId) =>
-       <DeviceListEntry key={ deviceId } userId={ userId } device={ userDevices[deviceId] } />,
+       <DeviceListEntry key={ deviceId } userId={ userId }
+           device={ userDevices[deviceId] } />,
     );
 
     return (
@@ -105,14 +106,19 @@ export default React.createClass({
 
     render: function() {
         const client = MatrixClientPeg.get();
-        const blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices() || this.props.room.getBlacklistUnverifiedDevices();
+        const blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices() ||
+              this.props.room.getBlacklistUnverifiedDevices();
 
         let warning;
         if (blacklistUnverified) {
-            warning = <h4>You are currently blacklisting unverified devices; to send messages to these devices you must verify them.</h4>
-        }
-        else {
-            warning = <h4>We strongly recommend you verify them before continuing.</h4>
+            warning = (
+                <h4>
+                    You are currently blacklisting unverified devices; to send
+                    messages to these devices you must verify them.
+                </h4>
+            );
+        } else {
+            warning = <h4>We strongly recommend you verify them before continuing.</h4>;
         }
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
@@ -122,7 +128,10 @@ export default React.createClass({
                 title='Room contains unknown devices'
             >
                 <div className="mx_Dialog_content">
-                    <h4>This room contains unknown devices which have not been verified.</h4>
+                    <h4>
+                        This room contains unknown devices which have not been
+                        verified.
+                    </h4>
                     { warning }
                     Unknown devices:
                     <UnknownDeviceList devices={this.props.devices} />
