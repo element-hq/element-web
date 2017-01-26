@@ -37,6 +37,9 @@ func respond(code int, w http.ResponseWriter) {
 }
 
 func gzipAndSave(data []byte, filepath string) error {
+	if _, err := os.Stat(filepath); err == nil {
+		return fmt.Errorf("file already exists") // the user can just retry
+	}
 	var b bytes.Buffer
 	gz := gzip.NewWriter(&b)
 	if _, err := gz.Write(data); err != nil {
