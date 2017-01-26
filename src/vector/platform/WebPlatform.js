@@ -66,6 +66,7 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     setErrorStatus(errorDidOccur: boolean) {
+        if (this.errorDidOccur === errorDidOccur) return;
         super.setErrorStatus(errorDidOccur);
         this._updateFavicon();
     }
