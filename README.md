@@ -116,10 +116,10 @@ To run as a desktop app:
 
 1. Follow the instructions in 'Building From Source' above
 2. Install electron and run it:
-    ```
-    npm install electron
-    node_modules/.bin/electron .
-    ```
+   ```
+   npm install electron
+   node_modules/.bin/electron .
+   ```
 
 To build packages, use electron-builder. This is configured to output:
  * dmg + zip for macOS
