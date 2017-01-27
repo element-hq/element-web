@@ -90,6 +90,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._unmounted = false;
         this.dispatcherRef = dis.register(this.onAction);
         // attach this to the instance rather than this.state since it isn't UI
         this.registerLogic = new Signup.Register(
@@ -107,6 +108,7 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
+        this._unmounted = true;
     },
 
     componentDidMount: function() {
@@ -273,6 +275,14 @@ module.exports = React.createClass({
         });
     },
 
+    onTeamSelected: function(team) {
+        if (!this._unmounted) {
+            this.setState({
+                teamIcon: team ? team.icon : null,
+            });
+        }
+    },
+
     _getRegisterContentJsx: function() {
         var currStep = this.registerLogic.getStep();
         var registerStep;
@@ -293,7 +303,9 @@ module.exports = React.createClass({
                         guestUsername={this.props.username}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
-                        onRegisterClick={this.onFormSubmit} />
+                        onRegisterClick={this.onFormSubmit}
+                        onTeamSelected={this.onTeamSelected}
+                    />
                 );
                 break;
             case "Register.STEP_m.login.email.identity":
@@ -367,7 +379,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
-                    <LoginHeader />
+                    <LoginHeader icon={this.state.teamIcon}/>
                     {this._getRegisterContentJsx()}
                     <LoginFooter />
                 </div>
