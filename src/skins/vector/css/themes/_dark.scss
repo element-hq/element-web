@@ -115,3 +115,12 @@ $progressbar-color: #000;
 .gm-scrollbar .thumb {
     filter: invert();
 }
+
+.mx_EventTile_content .markdown-body pre,
+.mx_EventTile_content .markdown-body code {
+    filter: invert();
+}
+
+.mx_EventTile_content .markdown-body pre code {
+    filter: none;
+}
