@@ -30,7 +30,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_Login_logo">
-                <img src={this.props.icon || "img/logo.png"} width="195" height="195" alt="Riot"/>
+                <img src={this.props.icon || "img/logo.png"} alt="Riot"/>
             </div>
         );
     }
