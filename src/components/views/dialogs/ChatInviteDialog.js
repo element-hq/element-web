@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import sdk from '../../../index';
-import { getAddressType } from '../../../Invite';
+import { getAddressType, inviteMultipleToRoom } from '../../../Invite';
 import createRoom from '../../../createRoom';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
@@ -273,7 +273,7 @@ module.exports = React.createClass({
         if (this.props.roomId) {
             // Invite new user to a room
             var self = this;
-            Invite.inviteMultipleToRoom(this.props.roomId, addrTexts)
+            inviteMultipleToRoom(this.props.roomId, addrTexts)
             .then(function(addrs) {
                 var room = MatrixClientPeg.get().getRoom(self.props.roomId);
                 return self._showAnyInviteErrors(addrs, room);
@@ -307,7 +307,7 @@ module.exports = React.createClass({
             var room;
             createRoom().then(function(roomId) {
                 room = MatrixClientPeg.get().getRoom(roomId);
-                return Invite.inviteMultipleToRoom(roomId, addrTexts);
+                return inviteMultipleToRoom(roomId, addrTexts);
             })
             .then(function(addrs) {
                 return self._showAnyInviteErrors(addrs, room);
