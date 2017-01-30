@@ -125,7 +125,7 @@ module.exports = React.createClass({
                 this.setState({
                     teamServerBusy: false,
                 });
-            });
+            }).done();
         }
     },
 
