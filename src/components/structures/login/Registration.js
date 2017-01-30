@@ -307,7 +307,7 @@ module.exports = React.createClass({
     },
 
     _getRegisterContentJsx: function() {
-        var Spinner = sdk.getComponent("elements.Spinner");
+        const Spinner = sdk.getComponent("elements.Spinner");
 
         var currStep = this.registerLogic.getStep();
         var registerStep;
