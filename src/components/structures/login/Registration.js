@@ -25,6 +25,7 @@ var ServerConfig = require("../../views/login/ServerConfig");
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var RegistrationForm = require("../../views/login/RegistrationForm");
 var CaptchaForm = require("../../views/login/CaptchaForm");
+var RtsClient = require("../../../RtsClient");
 
 var MIN_PASSWORD_LENGTH = 6;
 
@@ -49,20 +50,11 @@ module.exports = React.createClass({
         email: React.PropTypes.string,
         username: React.PropTypes.string,
         guestAccessToken: React.PropTypes.string,
-        teamsConfig: React.PropTypes.shape({
+        teamServerConfig: React.PropTypes.shape({
             // Email address to request new teams
-            supportEmail: React.PropTypes.string,
-            teams: React.PropTypes.arrayOf(React.PropTypes.shape({
-                // The displayed name of the team
-                "name": React.PropTypes.string,
-                // The suffix with which every team email address ends
-                "emailSuffix": React.PropTypes.string,
-                // The rooms to use during auto-join
-                "rooms": React.PropTypes.arrayOf(React.PropTypes.shape({
-                    "id": React.PropTypes.string,
-                    "autoJoin": React.PropTypes.bool,
-                })),
-            })).required,
+            supportEmail: React.PropTypes.string.isRequired,
+            // URL of the riot-team-server to get team configurations and track referrals
+            teamServerURL: React.PropTypes.string.isRequired,
         }),
 
         defaultDeviceDisplayName: React.PropTypes.string,
@@ -104,6 +96,27 @@ module.exports = React.createClass({
         this.registerLogic.setIdSid(this.props.idSid);
         this.registerLogic.setGuestAccessToken(this.props.guestAccessToken);
         this.registerLogic.recheckState();
+
+        if (this.props.teamServerConfig &&
+        this.props.teamServerConfig.teamServerURL &&
+        !this._rtsClient) {
+            this._rtsClient = new RtsClient(this.props.teamServerConfig.teamServerURL);
+
+            // GET team configurations including domains, names and icons
+            this._rtsClient.getTeamsConfig().done((args) => {
+                // args = [$request, $body]
+                const teamsConfig = {
+                    teams: args[1],
+                    supportEmail: this.props.teamServerConfig.supportEmail,
+                };
+                console.log('Setting teams config to ', teamsConfig);
+                this.setState({
+                    teamsConfig: teamsConfig,
+                });
+            }, (err) => {
+                console.error('Error retrieving config for teams', err);
+            });
+        }
     },
 
     componentWillUnmount: function() {
@@ -187,10 +200,10 @@ module.exports = React.createClass({
             });
 
             // Auto-join rooms
-            if (self.props.teamsConfig && self.props.teamsConfig.teams) {
-                for (let i = 0; i < self.props.teamsConfig.teams.length; i++) {
-                    let team = self.props.teamsConfig.teams[i];
-                    if (self.state.formVals.email.endsWith(team.emailSuffix)) {
+            if (self.state.teamsConfig && self.state.teamsConfig.teams) {
+                for (let i = 0; i < self.state.teamsConfig.teams.length; i++) {
+                    let team = self.state.teamsConfig.teams[i];
+                    if (self.state.formVals.email.endsWith(team.domain)) {
                         console.log("User successfully registered with team " + team.name);
                         if (!team.rooms) {
                             break;
@@ -299,7 +312,7 @@ module.exports = React.createClass({
                         defaultUsername={this.state.formVals.username}
                         defaultEmail={this.state.formVals.email}
                         defaultPassword={this.state.formVals.password}
-                        teamsConfig={this.props.teamsConfig}
+                        teamsConfig={this.state.teamsConfig}
                         guestUsername={this.props.username}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
