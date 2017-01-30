@@ -97,9 +97,11 @@ module.exports = React.createClass({
         this.registerLogic.setGuestAccessToken(this.props.guestAccessToken);
         this.registerLogic.recheckState();
 
-        if (this.props.teamServerConfig &&
-        this.props.teamServerConfig.teamServerURL &&
-        !this._rtsClient) {
+        if (
+            this.props.teamServerConfig &&
+            this.props.teamServerConfig.teamServerURL &&
+            !this._rtsClient
+        ) {
             this._rtsClient = new RtsClient(this.props.teamServerConfig.teamServerURL);
 
             // GET team configurations including domains, names and icons
