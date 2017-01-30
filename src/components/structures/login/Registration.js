@@ -67,6 +67,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             busy: false,
+            teamServerBusy: false,
             errorText: null,
             // We remember the values entered by the user because
             // the registration form will be unmounted during the
@@ -104,8 +105,11 @@ module.exports = React.createClass({
         ) {
             this._rtsClient = new RtsClient(this.props.teamServerConfig.teamServerURL);
 
+            this.setState({
+                teamServerBusy: true,
+            });
             // GET team configurations including domains, names and icons
-            this._rtsClient.getTeamsConfig().done((args) => {
+            this._rtsClient.getTeamsConfig().then((args) => {
                 // args = [$request, $body]
                 const teamsConfig = {
                     teams: args[1],
@@ -117,6 +121,10 @@ module.exports = React.createClass({
                 });
             }, (err) => {
                 console.error('Error retrieving config for teams', err);
+            }).finally(() => {
+                this.setState({
+                    teamServerBusy: false,
+                });
             });
         }
     },
@@ -299,6 +307,8 @@ module.exports = React.createClass({
     },
 
     _getRegisterContentJsx: function() {
+        var Spinner = sdk.getComponent("elements.Spinner");
+
         var currStep = this.registerLogic.getStep();
         var registerStep;
         switch (currStep) {
@@ -308,6 +318,10 @@ module.exports = React.createClass({
             case "Register.STEP_m.login.dummy":
                 // NB. Our 'username' prop is specifically for upgrading
                 // a guest account
+                if (this.state.teamServerBusy) {
+                    registerStep = <Spinner />;
+                    break;
+                }
                 registerStep = (
                     <RegistrationForm
                         showEmail={true}
