@@ -363,7 +363,6 @@ module.exports = React.createClass({
         }
         var busySpinner;
         if (this.state.busy) {
-            var Spinner = sdk.getComponent("elements.Spinner");
             busySpinner = (
                 <Spinner />
             );
