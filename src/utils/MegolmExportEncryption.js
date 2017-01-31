@@ -50,7 +50,7 @@ export function decryptMegolmKeyFile(data, password) {
     }
 
     const ciphertextLength = body.length-(1+16+16+4+32);
-    if (body.length < 0) {
+    if (ciphertextLength < 0) {
         throw new Error('Invalid file: too short');
     }
 
