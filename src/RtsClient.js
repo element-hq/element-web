@@ -1,5 +1,25 @@
 const q = require('q');
-const request = q.nfbind(require('browser-request'));
+const request = (opts) => {
+    const expectingJSONOnSucess = opts.json;
+    if (opts.json) {
+        opts.json = false;
+    }
+    return q.nfbind(require('browser-request'))(opts).then((args) => {
+        const response = args[0];
+        let body = args[1];
+
+        // Do not expect JSON on error status code, throw error instead
+        if (response.statusCode !== 200) {
+            throw new Error(body);
+        }
+
+        if (expectingJSONOnSucess) {
+            body = JSON.parse(body);
+        }
+
+        return [response, body];
+    });
+};
 
 export default class RtsClient {
     constructor(url) {
