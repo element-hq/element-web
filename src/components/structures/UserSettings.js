@@ -444,6 +444,27 @@ module.exports = React.createClass({
         );
     },
 
+    _renderReferral: function() {
+        const teamToken = window.localStorage.getItem('mx_team_token');
+        if (!teamToken) {
+            return null;
+        }
+        if (typeof teamToken !== 'string') {
+            console.warn('Team token not a string');
+            return null;
+        }
+        const href = window.location.origin +
+            `/#/register?referrer=${this._me}&team_token=${teamToken}`;
+        return (
+            <div>
+                <h3>Referral</h3>
+                <div className="mx_UserSettings_section">
+                    Refer a friend to Riot: <a href={href}>{href}</a>
+                </div>
+            </div>
+        );
+    },
+
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
 
@@ -818,6 +839,8 @@ module.exports = React.createClass({
 
                     {accountJsx}
                 </div>
+
+                {this._renderReferral()}
 
                 {notification_area}
 

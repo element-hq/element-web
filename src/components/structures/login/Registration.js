@@ -57,7 +57,7 @@ module.exports = React.createClass({
             // URL of the riot-team-server to get team configurations and track referrals
             teamServerURL: React.PropTypes.string.isRequired,
         }),
-        teamSelected: null,
+        teamSelected: React.PropTypes.object,
 
         defaultDeviceDisplayName: React.PropTypes.string,
 
