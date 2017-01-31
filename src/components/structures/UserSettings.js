@@ -92,6 +92,9 @@ module.exports = React.createClass({
         // True to show the 'labs' section of experimental features
         enableLabs: React.PropTypes.bool,
 
+        // The base URL to use in the referral link. Defaults to window.location.origin.
+        referralBaseUrl: React.PropTypes.string,
+
         // true if RightPanel is collapsed
         collapsedRhs: React.PropTypes.bool,
     },
@@ -453,7 +456,7 @@ module.exports = React.createClass({
             console.warn('Team token not a string');
             return null;
         }
-        const href = window.location.origin +
+        const href = (this.props.referralBaseUrl || window.location.origin) +
             `/#/register?referrer=${this._me}&team_token=${teamToken}`;
         return (
             <div>
