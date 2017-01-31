@@ -165,6 +165,14 @@ module.exports = function (config) {
             },
             devtool: 'inline-source-map',
         },
+
+        webpackMiddleware: {
+            stats: {
+                // don't fill the console up with a mahoosive list of modules
+                chunks: false,
+            },
+        },
+
         browserNoActivityTimeout: 15000,
     });
 };

@@ -73,6 +73,7 @@ var Tester = React.createClass({
 
     /* returns a promise which will resolve when the fill happens */
     awaitFill: function(dir) {
+        console.log("ScrollPanel Tester: awaiting " + dir + " fill");
         var defer = q.defer();
         this._fillDefers[dir] = defer;
         return defer.promise;
@@ -80,7 +81,7 @@ var Tester = React.createClass({
 
     _onScroll: function(ev) {
         var st = ev.target.scrollTop;
-        console.log("Scroll event; scrollTop: " + st);
+        console.log("ScrollPanel Tester: scroll event; scrollTop: " + st);
         this.lastScrollEvent = st;
 
         var d = this._scrollDefer;
@@ -159,10 +160,29 @@ describe('ScrollPanel', function() {
         scrollingDiv = ReactTestUtils.findRenderedDOMComponentWithClass(
             tester, "gm-scroll-view");
 
-        // wait for a browser tick to let the initial paginates complete
-        setTimeout(function() {
-            done();
-        }, 0);
+        // we need to make sure we don't call done() until q has finished
+        // running the completion handlers from the fill requests. We can't
+        // just use .done(), because that will end up ahead of those handlers
+        // in the queue. We can't use window.setTimeout(0), because that also might
+        // run ahead of those handlers.
+        const sp = tester.scrollPanel();
+        let retriesRemaining = 1;
+        const awaitReady = function() {
+            return q().then(() => {
+                if (sp._pendingFillRequests.b === false &&
+                    sp._pendingFillRequests.f === false
+                   ) {
+                    return;
+                }
+
+                if (retriesRemaining == 0) {
+                    throw new Error("fillRequests did not complete");
+                }
+                retriesRemaining--;
+                return awaitReady();
+            });
+        };
+        awaitReady().done(done);
     });
 
     afterEach(function() {

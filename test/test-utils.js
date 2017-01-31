@@ -14,7 +14,15 @@ var MatrixEvent = jssdk.MatrixEvent;
  */
 export function beforeEach(context) {
     var desc = context.currentTest.fullTitle();
+
     console.log();
+
+    // this puts a mark in the chrome devtools timeline, which can help
+    // figure out what's been going on.
+    if (console.timeStamp) {
+        console.timeStamp(desc);
+    }
+
     console.log(desc);
     console.log(new Array(1 + desc.length).join("="));
 };
