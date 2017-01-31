@@ -75,6 +75,16 @@ describe('MegolmExportEncryption', function() {
                 .toThrow('Trailer line not found');
         });
 
+        it('should handle a too-short body', function() {
+            const input=stringToArray(`-----BEGIN MEGOLM SESSION DATA-----
+AXNhbHRzYWx0c2FsdHNhbHSIiIiIiIiIiIiIiIiIiIiIAAAACmIRUW2OjZ3L2l6j9h0lHlV3M2dx
+cissyYBxjsfsAn
+-----END MEGOLM SESSION DATA-----
+`);
+            expect(()=>{MegolmExportEncryption.decryptMegolmKeyFile(input, '')})
+                .toThrow('Invalid file: too short');
+        });
+
         it('should decrypt a range of inputs', function(done) {
             function next(i) {
                 if (i >= TEST_VECTORS.length) {
