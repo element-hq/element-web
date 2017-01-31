@@ -48,6 +48,7 @@ module.exports = React.createClass({
         defaultIsUrl: React.PropTypes.string,
         brand: React.PropTypes.string,
         email: React.PropTypes.string,
+        referrer: React.PropTypes.string,
         username: React.PropTypes.string,
         guestAccessToken: React.PropTypes.string,
         teamServerConfig: React.PropTypes.shape({
@@ -56,6 +57,7 @@ module.exports = React.createClass({
             // URL of the riot-team-server to get team configurations and track referrals
             teamServerURL: React.PropTypes.string.isRequired,
         }),
+        teamSelected: null,
 
         defaultDeviceDisplayName: React.PropTypes.string,
 
@@ -209,24 +211,42 @@ module.exports = React.createClass({
                 accessToken: response.access_token
             });
 
-            // Auto-join rooms
-            if (self.state.teamsConfig && self.state.teamsConfig.teams) {
-                for (let i = 0; i < self.state.teamsConfig.teams.length; i++) {
-                    let team = self.state.teamsConfig.teams[i];
-                    if (self.state.formVals.email.endsWith(team.domain)) {
-                        console.log("User successfully registered with team " + team.name);
+            if (
+                self._rtsClient &&
+                self.props.referrer &&
+                self.state.teamSelected
+            ) {
+                // Track referral, get team_token in order to retrieve team config
+                self._rtsClient.trackReferral(
+                    self.props.referrer,
+                    response.user_id,
+                    self.state.formVals.email
+                ).then((args) => {
+                    const teamToken = args[1].team_token;
+                    // Store for use /w welcome pages
+                    window.localStorage.setItem('mx_team_token', teamToken);
+
+                    self._rtsClient.getTeam(teamToken).then((args) => {
+                        const team = args[1];
+                        console.log(
+                            `User successfully registered with team ${team.name}`
+                        );
                         if (!team.rooms) {
-                            break;
+                            return;
                         }
+                        // Auto-join rooms
                         team.rooms.forEach((room) => {
-                            if (room.autoJoin) {
-                                console.log("Auto-joining " + room.id);
-                                MatrixClientPeg.get().joinRoom(room.id);
+                            if (room.auto_join && room.room_id) {
+                                console.log(`Auto-joining ${room.room_id}`);
+                                MatrixClientPeg.get().joinRoom(room.room_id);
                             }
                         });
-                        break;
-                    }
-                }
+                    }, (err) => {
+                        console.error('Error getting team config', err);
+                    });
+                }, (err) => {
+                    console.error('Error tracking referral', err);
+                });
             }
 
             if (self.props.brand) {
@@ -298,11 +318,9 @@ module.exports = React.createClass({
         });
     },
 
-    onTeamSelected: function(team) {
+    onTeamSelected: function(teamSelected) {
         if (!this._unmounted) {
-            this.setState({
-                teamIcon: team ? team.icon : null,
-            });
+            this.setState({ teamSelected });
         }
     },
 
@@ -407,7 +425,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
-                    <LoginHeader icon={this.state.teamIcon}/>
+                    <LoginHeader icon={this.state.teamSelected ? this.state.teamSelected.icon : null}/>
                     {this._getRegisterContentJsx()}
                     <LoginFooter />
                 </div>
