@@ -1,6 +1,6 @@
 const q = require('q');
 const request = (opts) => {
-    const expectingJSONOnSucess = opts.json;
+    const expectingJSONOnSuccess = opts.json;
     if (opts.json) {
         opts.json = false;
     }
@@ -13,7 +13,7 @@ const request = (opts) => {
             throw new Error(body);
         }
 
-        if (expectingJSONOnSucess) {
+        if (expectingJSONOnSuccess) {
             body = JSON.parse(body);
         }
 
