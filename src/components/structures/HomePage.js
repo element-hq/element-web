@@ -45,7 +45,7 @@ module.exports = React.createClass({
                 console.log(error);
                 this.setState({ page: "Couldn't load home page" });
             }
-        ).then(
+        ).done(
             (body)=>{
                 this.setState({ page: body });
             }
