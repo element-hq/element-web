@@ -111,23 +111,22 @@ module.exports = React.createClass({
                 teamServerBusy: true,
             });
             // GET team configurations including domains, names and icons
-            this._rtsClient.getTeamsConfig().then((args) => {
-                // args = [$request, $body]
+            this._rtsClient.getTeamsConfig().then((data) => {
                 const teamsConfig = {
-                    teams: args[1],
+                    teams: data,
                     supportEmail: this.props.teamServerConfig.supportEmail,
                 };
                 console.log('Setting teams config to ', teamsConfig);
                 this.setState({
                     teamsConfig: teamsConfig,
+                    teamServerBusy: false,
                 });
             }, (err) => {
                 console.error('Error retrieving config for teams', err);
-            }).finally(() => {
                 this.setState({
                     teamServerBusy: false,
                 });
-            }).done();
+            });
         }
     },
 
@@ -221,13 +220,12 @@ module.exports = React.createClass({
                     self.props.referrer,
                     response.user_id,
                     self.state.formVals.email
-                ).then((args) => {
-                    const teamToken = args[1].team_token;
+                ).then((data) => {
+                    const teamToken = data.team_token;
                     // Store for use /w welcome pages
                     window.localStorage.setItem('mx_team_token', teamToken);
 
-                    self._rtsClient.getTeam(teamToken).then((args) => {
-                        const team = args[1];
+                    self._rtsClient.getTeam(teamToken).then((team) => {
                         console.log(
                             `User successfully registered with team ${team.name}`
                         );

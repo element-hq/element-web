@@ -1,25 +1,41 @@
-const q = require('q');
-const request = (opts) => {
-    const expectingJSONOnSuccess = opts.json;
-    if (opts.json) {
-        opts.json = false;
+import 'whatwg-fetch';
+
+function checkStatus(response) {
+    if (!response.ok) {
+        return response.text().then((text) => {
+            throw new Error(text);
+        });
     }
-    return q.nfbind(require('browser-request'))(opts).then((args) => {
-        const response = args[0];
-        let body = args[1];
+    return response;
+}
 
-        // Do not expect JSON on error status code, throw error instead
-        if (response.statusCode !== 200) {
-            throw new Error(body);
+function parseJson(response) {
+    return response.json();
+}
+
+function encodeQueryParams(params) {
+    return '?' + Object.keys(params).map((k) => {
+        return k + '=' + encodeURIComponent(params[k]);
+    }).join('&');
+}
+
+const request = (url, opts) => {
+    if (opts && opts.qs) {
+        url += encodeQueryParams(opts.qs);
+        delete opts.qs;
+    }
+    if (opts && opts.body) {
+        if (!opts.headers) {
+            opts.headers = {};
         }
-
-        if (expectingJSONOnSuccess) {
-            body = JSON.parse(body);
-        }
-
-        return [response, body];
-    });
+        opts.body = JSON.stringify(opts.body);
+        opts.headers['Content-Type'] = 'application/json';
+    }
+    return fetch(url, opts)
+        .then(checkStatus)
+        .then(parseJson);
 };
+
 
 export default class RtsClient {
     constructor(url) {
@@ -27,10 +43,7 @@ export default class RtsClient {
     }
 
     getTeamsConfig() {
-        return request({
-            url: this._url + '/teams',
-            json: true,
-        });
+        return request(this._url + '/teams');
     }
 
     /**
@@ -39,25 +52,23 @@ export default class RtsClient {
      * @param {string} referrer the user ID of one who referred the user to Riot.
      * @param {string} user_id the user ID of the user being referred.
      * @param {string} user_email the email address linked to `user_id`.
-     * @returns {Promise} a promise that resolves to [$response, $body], where $response
-     * is the response object created by the request lib and $body is the object parsed
-     * from the JSON response body. $body should be { team_token: 'sometoken' } upon
+     * @returns {Promise} a promise that resolves to { team_token: 'sometoken' } upon
      * success.
      */
     trackReferral(referrer, user_id, user_email) {
-        return request({
-            url: this._url + '/register',
-            json: true,
-            body: {referrer, user_id, user_email},
-            method: 'POST',
-        });
+        return request(this._url + '/register',
+            {
+                body: {referrer, user_id, user_email},
+                method: 'POST',
+            }
+        );
     }
 
     getTeam(team_token) {
-        return request({
-            url: this._url + '/teamConfiguration',
-            json: true,
-            qs: {team_token},
-        });
+        return request(this._url + '/teamConfiguration',
+            {
+                qs: {team_token},
+            }
+        );
     }
 }
