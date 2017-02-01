@@ -21,7 +21,7 @@ var MatrixClientPeg = require("./MatrixClientPeg");
  * optionally, the identity servers.
  *
  * This involves getting an email token from the identity server to "prove" that
- * the client owns the given email address, which is then passed to the 
+ * the client owns the given email address, which is then passed to the
  * add threepid API on the homeserver.
  */
 class AddThreepid {

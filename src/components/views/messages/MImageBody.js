@@ -23,7 +23,8 @@ import ImageUtils from '../../../ImageUtils';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import {decryptFile} from '../../../utils/DecryptFile';
+import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
+import q from 'q';
 
 module.exports = React.createClass({
     displayName: 'MImageBody',
@@ -31,11 +32,17 @@ module.exports = React.createClass({
     propTypes: {
         /* the MatrixEvent to show */
         mxEvent: React.PropTypes.object.isRequired,
+
+        /* called when the image has loaded */
+        onWidgetLoad: React.PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
         return {
             decryptedUrl: null,
+            decryptedThumbnailUrl: null,
+            decryptedBlob: null,
+            error: null
         };
     },
 
@@ -94,7 +101,9 @@ module.exports = React.createClass({
     _getThumbUrl: function() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
-            // TODO: Decrypt and use the thumbnail file if one is present.
+            if (this.state.decryptedThumbnailUrl) {
+                return this.state.decryptedThumbnailUrl;
+            }
             return this.state.decryptedUrl;
         } else {
             return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
@@ -106,15 +115,34 @@ module.exports = React.createClass({
         this.fixupHeight();
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            decryptFile(content.file).done((url) => {
-                this.setState({
-                    decryptedUrl: url,
+            var thumbnailPromise = q(null);
+            if (content.info.thumbnail_file) {
+                thumbnailPromise = decryptFile(
+                    content.info.thumbnail_file
+                ).then(function(blob) {
+                    return readBlobAsDataUri(blob);
                 });
-            }, (err) => {
-                console.warn("Unable to decrypt attachment: ", err)
+            }
+            var decryptedBlob;
+            thumbnailPromise.then((thumbnailUrl) => {
+                return decryptFile(content.file).then(function(blob) {
+                    decryptedBlob = blob;
+                    return readBlobAsDataUri(blob);
+                }).then((contentUrl) => {
+                    this.setState({
+                        decryptedUrl: contentUrl,
+                        decryptedThumbnailUrl: thumbnailUrl,
+                        decryptedBlob: decryptedBlob,
+                    });
+                    this.props.onWidgetLoad();
+                });
+            }).catch((err) => {
+                console.warn("Unable to decrypt attachment: ", err);
                 // Set a placeholder image when we can't decrypt the image.
-                this.refs.image.src = "img/warning.svg";
-            });
+                this.setState({
+                    error: err,
+                });
+            }).done();
         }
     },
 
@@ -152,6 +180,15 @@ module.exports = React.createClass({
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const content = this.props.mxEvent.getContent();
 
+        if (this.state.error !== null) {
+            return (
+                <span className="mx_MImageBody" ref="body">
+                    <img src="img/warning.svg" width="16" height="16"/>
+                    Error decrypting image
+                </span>
+            );
+        }
+
         if (content.file !== undefined && this.state.decryptedUrl === null) {
 
             // Need to decrypt the attachment
@@ -159,8 +196,15 @@ module.exports = React.createClass({
             // For now add an img tag with a spinner.
             return (
                 <span className="mx_MImageBody" ref="body">
-                <img className="mx_MImageBody_thumbnail" src="img/spinner.gif" ref="image"
-                    alt={content.body} />
+                    <div className="mx_MImageBody_thumbnail" ref="image" style={{
+                        "display": "flex",
+                        "alignItems": "center",
+                        "width": "100%",
+                    }}>
+                        <img src="img/spinner.gif" alt={content.body} width="32" height="32" style={{
+                            "margin": "auto",
+                        }}/>
+                    </div>
                 </span>
             );
         }
@@ -177,7 +221,7 @@ module.exports = React.createClass({
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave} />
                     </a>
-                    <MFileBody {...this.props} decryptedUrl={this.state.decryptedUrl} />
+                    <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
                 </span>
             );
         } else if (content.body) {

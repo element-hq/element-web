@@ -60,12 +60,18 @@ module.exports = React.createClass({
 
         // callback for clicks on this RR
         onClick: React.PropTypes.func,
+
+        // Timestamp when the receipt was read
+        timestamp: React.PropTypes.number,
+
+        // True to show the full date/time rather than just the time
+        showFullTimestamp: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
         return {
             leftOffset: 0,
-        }
+        };
     },
 
     getInitialState: function() {
@@ -75,7 +81,7 @@ module.exports = React.createClass({
         // position.
         return {
             suppressDisplay: !this.props.suppressAnimation,
-        }
+        };
     },
 
     componentWillUnmount: function() {
@@ -162,17 +168,33 @@ module.exports = React.createClass({
             visibility: this.props.hidden ? 'hidden' : 'visible',
         };
 
+        let title;
+        if (this.props.timestamp) {
+            let suffix = " (" + this.props.member.userId + ")";
+            let ts = new Date(this.props.timestamp);
+            if (this.props.showFullTimestamp) {
+                // "15/12/2016, 7:05:45 PM (@alice:matrix.org)"
+                title = ts.toLocaleString() + suffix;
+            }
+            else {
+                // "7:05:45 PM (@alice:matrix.org)"
+                title = ts.toLocaleTimeString() + suffix;
+            }
+        }
+
         return (
             <Velociraptor
                     startStyles={this.state.startStyles}
                     enterTransitionOpts={this.state.enterTransitionOpts} >
                 <MemberAvatar
                     member={this.props.member}
+                    aria-hidden="true"
                     width={14} height={14} resizeMethod="crop"
                     style={style}
-                    onClick={this.props.onClick}
+                    title={title}
                 />
             </Velociraptor>
         );
+        /* onClick={this.props.onClick} */
     },
 });

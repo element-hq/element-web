@@ -21,7 +21,7 @@ import MFileBody from './MFileBody';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
-import { decryptFile } from '../../../utils/DecryptFile';
+import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 
 export default class MAudioBody extends React.Component {
     constructor(props) {
@@ -29,7 +29,9 @@ export default class MAudioBody extends React.Component {
         this.state = {
             playing: false,
             decryptedUrl: null,
-        }
+            decryptedBlob: null,
+            error: null,
+        };
     }
     onPlayToggle() {
         this.setState({
@@ -49,29 +51,45 @@ export default class MAudioBody extends React.Component {
     componentDidMount() {
         var content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            decryptFile(content.file).done((url) => {
+            var decryptedBlob;
+            decryptFile(content.file).then(function(blob) {
+                decryptedBlob = blob;
+                return readBlobAsDataUri(decryptedBlob);
+            }).done((url) => {
                 this.setState({
-                    decryptedUrl: url
+                    decryptedUrl: url,
+                    decryptedBlob: decryptedBlob,
                 });
             }, (err) => {
-                console.warn("Unable to decrypt attachment: ", err)
-                // Set a placeholder image when we can't decrypt the image.
-                this.refs.image.src = "img/warning.svg";
+                console.warn("Unable to decrypt attachment: ", err);
+                this.setState({
+                    error: err,
+                });
             });
         }
     }
 
     render() {
+
         const content = this.props.mxEvent.getContent();
+
+        if (this.state.error !== null) {
+            return (
+                <span className="mx_MAudioBody" ref="body">
+                    <img src="img/warning.svg" width="16" height="16"/>
+                    Error decrypting audio
+                </span>
+            );
+        }
 
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
-            // For now add an img tag with a spinner.
+            // For now add an img tag with a 16x16 spinner.
+            // Not sure how tall the audio player is so not sure how tall it should actually be.
             return (
                 <span className="mx_MAudioBody">
-                <img src="img/spinner.gif" ref="image"
-                    alt={content.body} />
+                    <img src="img/spinner.gif" alt={content.body} width="16" height="16"/>
                 </span>
             );
         }
@@ -81,7 +99,7 @@ export default class MAudioBody extends React.Component {
         return (
             <span className="mx_MAudioBody">
                 <audio src={contentUrl} controls />
-                <MFileBody {...this.props} decryptedUrl={this.state.decryptedUrl} />
+                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
             </span>
         );
     }

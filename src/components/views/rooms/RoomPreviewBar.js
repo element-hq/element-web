@@ -58,7 +58,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             busy: false
-        }
+        };
     },
 
     componentWillMount: function() {
@@ -94,9 +94,9 @@ module.exports = React.createClass({
             if (this.props.invitedEmail) {
                 if (this.state.threePidFetchError) {
                     emailMatchBlock = <div className="error">
-                        Riot was unable to ascertain that the address this invite was
+                        Unable to ascertain that the address this invite was
                         sent to matches one associated with your account.
-                    </div>
+                    </div>;
                 } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().credentials.userId) {
                     emailMatchBlock =
                         <div className="mx_RoomPreviewBar_warning">
@@ -107,7 +107,7 @@ module.exports = React.createClass({
                                 This invitation was sent to <b><span className="email">{this.props.invitedEmail}</span></b>, which is not associated with this account.<br/>
                                 You may wish to login with a different account, or add this email to this account.
                             </div>
-                        </div>
+                        </div>;
                 }
             }
             joinBlock = (

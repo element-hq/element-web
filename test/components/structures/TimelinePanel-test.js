@@ -33,6 +33,24 @@ var test_utils = require('test-utils');
 var ROOM_ID = '!room:localhost';
 var USER_ID = '@me:localhost';
 
+// wrap TimelinePanel with a component which provides the MatrixClient in the context.
+const WrappedTimelinePanel = React.createClass({
+    childContextTypes: {
+        matrixClient: React.PropTypes.object,
+    },
+
+    getChildContext: function() {
+        return {
+            matrixClient: peg.get(),
+        };
+    },
+
+    render: function() {
+        return <TimelinePanel ref="panel" {...this.props} />;
+    },
+});
+
+
 describe('TimelinePanel', function() {
     var sandbox;
     var timelineSet;
@@ -81,7 +99,11 @@ describe('TimelinePanel', function() {
         // the document so that we can interact with it properly.
         parentDiv = document.createElement('div');
         parentDiv.style.width = '800px';
-        parentDiv.style.height = '600px';
+
+        // This has to be slightly carefully chosen. We expect to have to do
+        // exactly one pagination to fill it.
+        parentDiv.style.height = '500px';
+
         parentDiv.style.overflow = 'hidden';
         document.body.appendChild(parentDiv);
     });
@@ -105,11 +127,12 @@ describe('TimelinePanel', function() {
         }
 
         var scrollDefer;
-        var panel = ReactDOM.render(
-                <TimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}
+        var rendered = ReactDOM.render(
+                <WrappedTimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}
                 />,
                 parentDiv,
         );
+        var panel = rendered.refs.panel;
         var scrollingDiv = ReactTestUtils.findRenderedDOMComponentWithClass(
             panel, "gm-scroll-view");
 
@@ -188,10 +211,11 @@ describe('TimelinePanel', function() {
             return q(true);
         });
 
-        var panel = ReactDOM.render(
-            <TimelinePanel timelineSet={timelineSet}/>,
+        var rendered = ReactDOM.render(
+            <WrappedTimelinePanel timelineSet={timelineSet}/>,
             parentDiv
         );
+        var panel = rendered.refs.panel;
 
         var messagePanel = ReactTestUtils.findRenderedComponentWithType(
             panel, sdk.getComponent('structures.MessagePanel'));
@@ -215,12 +239,11 @@ describe('TimelinePanel', function() {
                 expect(client.paginateEventTimeline.callCount).toEqual(0);
                 done();
             }, 0);
-        }, 0);
+        }, 10);
     });
 
-    it("should let you scroll down again after you've scrolled up", function(done) {
-        var TIMELINE_CAP = 100; // needs to be more than we can fit in the div
-        var N_EVENTS = 120;     // needs to be more than TIMELINE_CAP
+    it("should let you scroll down to the bottom after you've scrolled up", function(done) {
+        var N_EVENTS = 120; // the number of events to simulate being added to the timeline
 
         // sadly, loading all those events takes a while
         this.timeout(N_EVENTS * 50);
@@ -236,14 +259,12 @@ describe('TimelinePanel', function() {
         console.log("added events to timeline");
 
         var scrollDefer;
-        var panel = ReactDOM.render(
-            <TimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}
-                timelineCap={TIMELINE_CAP}
-            />,
+        var rendered = ReactDOM.render(
+            <WrappedTimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}/>,
             parentDiv
         );
         console.log("TimelinePanel rendered");
-
+        var panel = rendered.refs.panel;
         var messagePanel = ReactTestUtils.findRenderedComponentWithType(
             panel, sdk.getComponent('structures.MessagePanel'));
         var scrollingDiv = ReactTestUtils.findRenderedDOMComponentWithClass(
@@ -253,6 +274,7 @@ describe('TimelinePanel', function() {
         // the TimelinePanel fires a scroll event
         var awaitScroll = function() {
             scrollDefer = q.defer();
+
             return scrollDefer.promise.then(() => {
                 console.log("got scroll event; scrollTop now " +
                             scrollingDiv.scrollTop);
@@ -286,6 +308,27 @@ describe('TimelinePanel', function() {
             });
         }
 
+        function scrollDown() {
+            // Scroll the bottom of the viewport to the bottom of the panel
+            setScrollTop(scrollingDiv.scrollHeight - scrollingDiv.clientHeight);
+            console.log("scrolling down... " + scrollingDiv.scrollTop);
+            return awaitScroll().delay(0).then(() => {
+
+                let eventTiles = scryEventTiles(panel);
+                let events = timeline.getEvents();
+
+                let lastEventInPanel = eventTiles[eventTiles.length - 1].props.mxEvent;
+                let lastEventInTimeline = events[events.length - 1];
+
+                // Scroll until the last event in the panel = the last event in the timeline
+                if(lastEventInPanel.getId() !== lastEventInTimeline.getId()) {
+                    // need to go further
+                    return scrollDown();
+                }
+                console.log("paginated to end.");
+            });
+        }
+
         // let the first round of pagination finish off
         awaitScroll().then(() => {
             // we should now have loaded the first few events
@@ -301,31 +344,23 @@ describe('TimelinePanel', function() {
             expect(messagePanel.props.suppressFirstDateSeparator).toBe(false);
             var events = scryEventTiles(panel);
             expect(events[0].props.mxEvent).toBe(timeline.getEvents()[0]);
-            expect(events.length).toEqual(TIMELINE_CAP);
 
-            // we should now be able to scroll down, and paginate in the other
-            // direction.
-            setScrollTop(scrollingDiv.scrollHeight);
-            scrollingDiv.scrollTop = scrollingDiv.scrollHeight;
+            // At this point, we make no assumption that unpagination has happened. This doesn't
+            // mean that we shouldn't be able to scroll all the way down to the bottom to see the
+            // most recent event in the timeline.
 
-            // the delay() below is a heinous hack to deal with the fact that,
-            // without it, we may or may not get control back before the
-            // forward pagination completes. The delay means that it should
-            // have completed.
-            return awaitScroll().delay(0);
+            // scroll all the way to the bottom
+            return scrollDown();
         }).then(() => {
             expect(messagePanel.props.backPaginating).toBe(false);
             expect(messagePanel.props.forwardPaginating).toBe(false);
-            expect(messagePanel.props.suppressFirstDateSeparator).toBe(true);
 
             var events = scryEventTiles(panel);
-            expect(events.length).toEqual(TIMELINE_CAP);
 
-            // we don't really know what the first event tile will be, since that
-            // depends on how much the timelinepanel decides to paginate.
-            //
-            // just check that the first tile isn't event 0.
-            expect(events[0].props.mxEvent).toNotBe(timeline.getEvents()[0]);
+            // Expect to be able to see the most recent event
+            var lastEventInPanel = events[events.length - 1].props.mxEvent;
+            var lastEventInTimeline = timeline.getEvents()[timeline.getEvents().length - 1];
+            expect(lastEventInPanel.getContent()).toBe(lastEventInTimeline.getContent());
 
             console.log("done");
         }).done(done, done);

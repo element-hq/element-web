@@ -173,7 +173,7 @@ module.exports = React.createClass({
     },
 
     _getCurrentFlowStep: function() {
-        return this._loginLogic ? this._loginLogic.getCurrentFlowStep() : null
+        return this._loginLogic ? this._loginLogic.getCurrentFlowStep() : null;
     },
 
     _setStateFromError: function(err, isLoginAttempt) {
@@ -195,7 +195,7 @@ module.exports = React.createClass({
         }
 
         let errorText = "Error: Problem communicating with the given homeserver " +
-                (errCode ? "(" + errCode + ")" : "")
+                (errCode ? "(" + errCode + ")" : "");
 
         if (err.cors === 'rejected') {
             if (window.location.protocol === 'https:' &&
@@ -203,7 +203,7 @@ module.exports = React.createClass({
                  !this.state.enteredHomeserverUrl.startsWith("http")))
             {
                 errorText = <span>
-                    Can't connect to homeserver via HTTP when using Riot served by HTTPS.
+                    Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar.
                     Either use HTTPS or <a href='https://www.google.com/search?&q=enable%20unsafe%20scripts'>enable unsafe scripts</a>
                 </span>;
             }
@@ -258,7 +258,7 @@ module.exports = React.createClass({
             loginAsGuestJsx =
                 <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
                     Login as guest
-                </a>
+                </a>;
         }
 
         var returnToAppJsx;
@@ -266,7 +266,7 @@ module.exports = React.createClass({
             returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
                     Return to app
-                </a>
+                </a>;
         }
 
         return (

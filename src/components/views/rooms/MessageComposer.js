@@ -222,13 +222,24 @@ export default class MessageComposer extends React.Component {
             </div>
         );
 
+        let e2eImg, e2eTitle, e2eClass;
+
         if (MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId)) {
             // FIXME: show a /!\ if there are untrusted devices in the room...
-            controls.push(
-                <img key="e2eIcon" className="mx_MessageComposer_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" alt="Encrypted room"/>
-            );
+            e2eImg = 'img/e2e-verified.svg';
+            e2eTitle = 'Encrypted room';
+            e2eClass = 'mx_MessageComposer_e2eIcon';
+        } else {
+            e2eImg = 'img/e2e-unencrypted.svg';
+            e2eTitle = 'Unencrypted room';
+            e2eClass = 'mx_MessageComposer_e2eIcon mx_filterFlipColor';
         }
 
+        controls.push(
+            <img key="e2eIcon" className={e2eClass} src={e2eImg} width="12" height="12"
+                alt={e2eTitle} title={e2eTitle}
+            />
+        );
         var callButton, videoCallButton, hangupButton;
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
@@ -322,6 +333,7 @@ export default class MessageComposer extends React.Component {
                 const disabled = !this.state.inputState.isRichtextEnabled && 'underline' === name;
                 const className = classNames("mx_MessageComposer_format_button", {
                     mx_MessageComposer_format_button_disabled: disabled,
+                    mx_filterFlipColor: true,
                 });
                 return <img className={className}
                             title={name}
@@ -346,11 +358,11 @@ export default class MessageComposer extends React.Component {
                             <div style={{flex: 1}}></div>
                             <img title={`Turn Markdown ${this.state.inputState.isRichtextEnabled ? 'on' : 'off'}`}
                                  onMouseDown={this.onToggleMarkdownClicked}
-                                className="mx_MessageComposer_formatbar_markdown"
+                                className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
                                 src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
                             <img title="Hide Text Formatting Toolbar"
                                  onClick={this.onToggleFormattingClicked}
-                                 className="mx_MessageComposer_formatbar_cancel"
+                                 className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
                                  src="img/icon-text-cancel.svg" />
                         </div>
                     </div>: null
@@ -358,7 +370,7 @@ export default class MessageComposer extends React.Component {
             </div>
         );
     }
-};
+}
 
 MessageComposer.propTypes = {
     tabComplete: React.PropTypes.any,

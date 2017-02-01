@@ -23,11 +23,18 @@ var KeyCode = require('../../KeyCode');
 var DEBUG_SCROLL = false;
 // var DEBUG_SCROLL = true;
 
+// The amount of extra scroll distance to allow prior to unfilling.
+// See _getExcessHeight.
+const UNPAGINATION_PADDING = 1500;
+// The number of milliseconds to debounce calls to onUnfillRequest, to prevent
+// many scroll events causing many unfilling requests.
+const UNFILL_REQUEST_DEBOUNCE_MS = 200;
+
 if (DEBUG_SCROLL) {
     // using bind means that we get to keep useful line numbers in the console
     var debuglog = console.log.bind(console);
 } else {
-    var debuglog = function () {};
+    var debuglog = function() {};
 }
 
 /* This component implements an intelligent scrolling list.
@@ -101,6 +108,17 @@ module.exports = React.createClass({
          */
         onFillRequest: React.PropTypes.func,
 
+        /* onUnfillRequest(backwards): a callback which is called on scroll when
+         * there are children elements that are far out of view and could be removed
+         * without causing pagination to occur.
+         *
+         * This function should accept a boolean, which is true to indicate the back/top
+         * of the panel and false otherwise, and a scroll token, which refers to the
+         * first element to remove if removing from the front/bottom, and last element
+         * to remove if removing from the back/top.
+         */
+        onUnfillRequest: React.PropTypes.func,
+
         /* onScroll: a callback which is called whenever any scroll happens.
          */
         onScroll: React.PropTypes.func,
@@ -124,6 +142,7 @@ module.exports = React.createClass({
             stickyBottom: true,
             startAtBottom: true,
             onFillRequest: function(backwards) { return q(false); },
+            onUnfillRequest: function(backwards, scrollToken) {},
             onScroll: function() {},
         };
     },
@@ -226,6 +245,46 @@ module.exports = React.createClass({
         return sn.scrollHeight - Math.ceil(sn.scrollTop) <= sn.clientHeight + 3;
     },
 
+    // returns the vertical height in the given direction that can be removed from
+    // the content box (which has a height of scrollHeight, see checkFillState) without
+    // pagination occuring.
+    //
+    // padding* = UNPAGINATION_PADDING
+    //
+    // ### Region determined as excess.
+    //
+    //   .---------.                        -              -
+    //   |#########|                        |              |
+    //   |#########|   -                    |  scrollTop   |
+    //   |         |   | padding*           |              |
+    //   |         |   |                    |              |
+    // .-+---------+-. -  -                 |              |
+    // : |         | :    |                 |              |
+    // : |         | :    |  clientHeight   |              |
+    // : |         | :    |                 |              |
+    // .-+---------+-.    -                 -              |
+    // | |         | |    |                                |
+    // | |         | |    |  clientHeight                  | scrollHeight
+    // | |         | |    |                                |
+    // `-+---------+-'    -                                |
+    // : |         | :    |                                |
+    // : |         | :    |  clientHeight                  |
+    // : |         | :    |                                |
+    // `-+---------+-' -  -                                |
+    //   |         |   | padding*                          |
+    //   |         |   |                                   |
+    //   |#########|   -                                   |
+    //   |#########|                                       |
+    //   `---------'                                       -
+    _getExcessHeight: function(backwards) {
+        var sn = this._getScrollNode();
+        if (backwards) {
+            return sn.scrollTop - sn.clientHeight - UNPAGINATION_PADDING;
+        } else {
+            return sn.scrollHeight - (sn.scrollTop + 2*sn.clientHeight) - UNPAGINATION_PADDING;
+        }
+    },
+
     // check the scroll state and send out backfill requests if necessary.
     checkFillState: function() {
         if (this.unmounted) {
@@ -268,6 +327,55 @@ module.exports = React.createClass({
         }
     },
 
+    // check if unfilling is possible and send an unfill request if necessary
+    _checkUnfillState: function(backwards) {
+        let excessHeight = this._getExcessHeight(backwards);
+        if (excessHeight <= 0) {
+            return;
+        }
+        var itemlist = this.refs.itemlist;
+        var tiles = itemlist.children;
+
+        // The scroll token of the first/last tile to be unpaginated
+        let markerScrollToken = null;
+
+        // Subtract clientHeights to simulate the events being unpaginated whilst counting
+        // the events to be unpaginated.
+        if (backwards) {
+            // Iterate forwards from start of tiles, subtracting event tile height
+            let i = 0;
+            while (i < tiles.length && excessHeight > tiles[i].clientHeight) {
+                excessHeight -= tiles[i].clientHeight;
+                if (tiles[i].dataset.scrollToken) {
+                    markerScrollToken = tiles[i].dataset.scrollToken;
+                }
+                i++;
+            }
+        } else {
+            // Iterate backwards from end of tiles, subtracting event tile height
+            let i = tiles.length - 1;
+            while (i > 0 && excessHeight > tiles[i].clientHeight) {
+                excessHeight -= tiles[i].clientHeight;
+                if (tiles[i].dataset.scrollToken) {
+                    markerScrollToken = tiles[i].dataset.scrollToken;
+                }
+                i--;
+            }
+        }
+
+        if (markerScrollToken) {
+            // Use a debouncer to prevent multiple unfill calls in quick succession
+            // This is to make the unfilling process less aggressive
+            if (this._unfillDebouncer) {
+                clearTimeout(this._unfillDebouncer);
+            }
+            this._unfillDebouncer = setTimeout(() => {
+                this._unfillDebouncer = null;
+                this.props.onUnfillRequest(backwards, markerScrollToken);
+            }, UNFILL_REQUEST_DEBOUNCE_MS);
+        }
+    },
+
     // check if there is already a pending fill request. If not, set one off.
     _maybeFill: function(backwards) {
         var dir = backwards ? 'b' : 'f';
@@ -285,7 +393,7 @@ module.exports = React.createClass({
         this._pendingFillRequests[dir] = true;
         var fillPromise;
         try {
-             fillPromise = this.props.onFillRequest(backwards);
+            fillPromise = this.props.onFillRequest(backwards);
         } catch (e) {
             this._pendingFillRequests[dir] = false;
             throw e;
@@ -294,6 +402,12 @@ module.exports = React.createClass({
         q.finally(fillPromise, () => {
             this._pendingFillRequests[dir] = false;
         }).then((hasMoreResults) => {
+            if (this.unmounted) {
+                return;
+            }
+            // Unpaginate once filling is complete
+            this._checkUnfillState(!backwards);
+
             debuglog("ScrollPanel: "+dir+" fill complete; hasMoreResults:"+hasMoreResults);
             if (hasMoreResults) {
                 // further pagination requests have been disabled until now, so
@@ -456,7 +570,7 @@ module.exports = React.createClass({
         var boundingRect = node.getBoundingClientRect();
         var scrollDelta = boundingRect.bottom + pixelOffset - wrapperRect.bottom;
 
-        debuglog("Scrolling to token '" + node.dataset.scrollToken + "'+" +
+        debuglog("ScrollPanel: scrolling to token '" + node.dataset.scrollToken + "'+" +
                  pixelOffset + " (delta: "+scrollDelta+")");
 
         if(scrollDelta != 0) {
@@ -468,7 +582,7 @@ module.exports = React.createClass({
     _saveScrollState: function() {
         if (this.props.stickyBottom && this.isAtBottom()) {
             this.scrollState = { stuckAtBottom: true };
-            debuglog("Saved scroll state", this.scrollState);
+            debuglog("ScrollPanel: Saved scroll state", this.scrollState);
             return;
         }
 
@@ -486,13 +600,13 @@ module.exports = React.createClass({
                     stuckAtBottom: false,
                     trackedScrollToken: node.dataset.scrollToken,
                     pixelOffset: wrapperRect.bottom - boundingRect.bottom,
-                }
-                debuglog("Saved scroll state", this.scrollState);
+                };
+                debuglog("ScrollPanel: saved scroll state", this.scrollState);
                 return;
             }
         }
 
-        debuglog("Unable to save scroll state: found no children in the viewport");
+        debuglog("ScrollPanel: unable to save scroll state: found no children in the viewport");
     },
 
     _restoreSavedScrollState: function() {
@@ -526,7 +640,7 @@ module.exports = React.createClass({
             this._lastSetScroll = scrollNode.scrollTop;
         }
 
-        debuglog("Set scrollTop:", scrollNode.scrollTop,
+        debuglog("ScrollPanel: set scrollTop:", scrollNode.scrollTop,
                  "requested:", scrollTop,
                  "_lastSetScroll:", this._lastSetScroll);
     },

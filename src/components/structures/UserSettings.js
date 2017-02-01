@@ -26,11 +26,60 @@ var UserSettingsStore = require('../../UserSettingsStore');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
+var SdkConfig = require('../../SdkConfig');
+import AccessibleButton from '../views/elements/AccessibleButton';
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha.
 const REACT_SDK_VERSION =
       'dist' in package_json ? package_json.version : package_json.gitHead || "<local>";
+
+
+// Enumerate some simple 'flip a bit' UI settings (if any).
+// 'id' gives the key name in the im.vector.web.settings account data event
+// 'label' is how we describe it in the UI.
+const SETTINGS_LABELS = [
+/*
+    {
+        id: 'alwaysShowTimestamps',
+        label: 'Always show message timestamps',
+    },
+    {
+        id: 'showTwelveHourTimestamps',
+        label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
+    },
+    {
+        id: 'useCompactLayout',
+        label: 'Use compact timeline layout',
+    },
+    {
+        id: 'useFixedWidthFont',
+        label: 'Use fixed width font',
+    },
+*/
+];
+
+// Enumerate the available themes, with a nice human text label.
+// 'id' gives the key name in the im.vector.web.settings account data event
+// 'value' is the value for that key in the event
+// 'label' is how we describe it in the UI.
+//
+// XXX: Ideally we would have a theme manifest or something and they'd be nicely
+// packaged up in a single directory, and/or located at the application layer.
+// But for now for expedience we just hardcode them here.
+const THEMES = [
+    {
+        id: 'theme',
+        label: 'Light theme',
+        value: 'light',
+    },
+    {
+        id: 'theme',
+        label: 'Dark theme',
+        value: 'dark',
+    }
+];
+
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
@@ -42,6 +91,9 @@ module.exports = React.createClass({
 
         // True to show the 'labs' section of experimental features
         enableLabs: React.PropTypes.bool,
+
+        // The base URL to use in the referral link. Defaults to window.location.origin.
+        referralBaseUrl: React.PropTypes.string,
 
         // true if RightPanel is collapsed
         collapsedRhs: React.PropTypes.bool,
@@ -61,6 +113,7 @@ module.exports = React.createClass({
             phase: "UserSettings.LOADING", // LOADING, DISPLAY
             email_add_pending: false,
             vectorVersion: null,
+            rejectingInvites: false,
         };
     },
 
@@ -80,12 +133,24 @@ module.exports = React.createClass({
             });
         }
 
+        // Bulk rejecting invites:
+        // /sync won't have had time to return when UserSettings re-renders from state changes, so getRooms()
+        // will still return rooms with invites. To get around this, add a listener for
+        // membership updates and kick the UI.
+        MatrixClientPeg.get().on("RoomMember.membership", this._onInviteStateChange);
+
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 0.3,
             middleOpacity: 0.3,
         });
         this._refreshFromServer();
+
+        var syncedSettings = UserSettingsStore.getSyncedSettings();
+        if (!syncedSettings.theme) {
+            syncedSettings.theme = 'light';
+        }
+        this._syncedSettings = syncedSettings;
     },
 
     componentDidMount: function() {
@@ -101,6 +166,10 @@ module.exports = React.createClass({
             middleOpacity: 1.0,
         });
         dis.unregister(this.dispatcherRef);
+        let cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("RoomMember.membership", this._onInviteStateChange);
+        }
     },
 
     _refreshFromServer: function() {
@@ -164,8 +233,26 @@ module.exports = React.createClass({
     },
 
     onLogoutClicked: function(ev) {
-        var LogoutPrompt = sdk.getComponent('dialogs.LogoutPrompt');
-        this.logoutModal = Modal.createDialog(LogoutPrompt);
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createDialog(QuestionDialog, {
+            title: "Sign out?",
+            description:
+                <div>
+                    For security, logging out will delete any end-to-end encryption keys from this browser,
+                    making previous encrypted chat history unreadable if you log back in.
+                    In future this <a href="https://github.com/vector-im/riot-web/issues/2108">will be improved</a>,
+                    but for now be warned.
+                </div>,
+            button: "Sign out",
+            onFinished: (confirmed) => {
+                if (confirmed) {
+                    dis.dispatch({action: 'logout'});
+                    if (this.props.onFinished) {
+                        this.props.onFinished();
+                    }
+                }
+            },
+        });
     },
 
     onPasswordChangeError: function(err) {
@@ -237,6 +324,31 @@ module.exports = React.createClass({
         this.setState({email_add_pending: true});
     },
 
+    onRemoveThreepidClicked: function(threepid) {
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createDialog(QuestionDialog, {
+            title: "Remove Contact Information?",
+            description: "Remove " + threepid.address + "?",
+            button: 'Remove',
+            onFinished: (submit) => {
+                if (submit) {
+                    this.setState({
+                        phase: "UserSettings.LOADING",
+                    });
+                    MatrixClientPeg.get().deleteThreePid(threepid.medium, threepid.address).then(() => {
+                        return this._refreshFromServer();
+                    }).catch((err) => {
+                        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Unable to remove contact information",
+                            description: err.toString(),
+                        });
+                    }).done();
+                }
+            },
+        });
+    },
+
     onEmailDialogFinished: function(ok) {
         if (ok) {
             this.verifyEmailAddress();
@@ -257,8 +369,8 @@ module.exports = React.createClass({
             this.setState({email_add_pending: false});
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                var message = "Unable to verify email address. "
-                message += "Please check your email and click on the link it contains. Once this is done, click continue."
+                var message = "Unable to verify email address. ";
+                message += "Please check your email and click on the link it contains. Once this is done, click continue.";
                 Modal.createDialog(QuestionDialog, {
                     title: "Verification Pending",
                     description: message,
@@ -280,91 +392,185 @@ module.exports = React.createClass({
         Modal.createDialog(DeactivateAccountDialog, {});
     },
 
+    _onBugReportClicked: function() {
+        const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
+        if (!BugReportDialog) {
+            return;
+        }
+        Modal.createDialog(BugReportDialog, {});
+    },
+
+    _onInviteStateChange: function(event, member, oldMembership) {
+        if (member.userId === this._me && oldMembership === "invite") {
+            this.forceUpdate();
+        }
+    },
+
+    _onRejectAllInvitesClicked: function(rooms, ev) {
+        this.setState({
+            rejectingInvites: true
+        });
+        // reject the invites
+        let promises = rooms.map((room) => {
+            return MatrixClientPeg.get().leave(room.roomId);
+        });
+        // purposefully drop errors to the floor: we'll just have a non-zero number on the UI
+        // after trying to reject all the invites.
+        q.allSettled(promises).then(() => {
+            this.setState({
+                rejectingInvites: false
+            });
+        }).done();
+    },
+
+    _onExportE2eKeysClicked: function() {
+        Modal.createDialogAsync(
+            (cb) => {
+                require.ensure(['../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
+                    cb(require('../../async-components/views/dialogs/ExportE2eKeysDialog'));
+                }, "e2e-export");
+            }, {
+                matrixClient: MatrixClientPeg.get(),
+            }
+        );
+    },
+
+    _onImportE2eKeysClicked: function() {
+        Modal.createDialogAsync(
+            (cb) => {
+                require.ensure(['../../async-components/views/dialogs/ImportE2eKeysDialog'], () => {
+                    cb(require('../../async-components/views/dialogs/ImportE2eKeysDialog'));
+                }, "e2e-export");
+            }, {
+                matrixClient: MatrixClientPeg.get(),
+            }
+        );
+    },
+
+    _renderReferral: function() {
+        const teamToken = window.localStorage.getItem('mx_team_token');
+        if (!teamToken) {
+            return null;
+        }
+        if (typeof teamToken !== 'string') {
+            console.warn('Team token not a string');
+            return null;
+        }
+        const href = (this.props.referralBaseUrl || window.location.origin) +
+            `/#/register?referrer=${this._me}&team_token=${teamToken}`;
+        return (
+            <div>
+                <h3>Referral</h3>
+                <div className="mx_UserSettings_section">
+                    Refer a friend to Riot: <a href={href}>{href}</a>
+                </div>
+            </div>
+        );
+    },
+
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
-
-        var settingsLabels = [
-        /*
-            {
-                id: 'alwaysShowTimestamps',
-                label: 'Always show message timestamps',
-            },
-            {
-                id: 'showTwelveHourTimestamps',
-                label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
-            },
-            {
-                id: 'useCompactLayout',
-                label: 'Use compact timeline layout',
-            },
-            {
-                id: 'useFixedWidthFont',
-                label: 'Use fixed width font',
-            },
-        */
-        ];
-
-        var syncedSettings = UserSettingsStore.getSyncedSettings();
 
         return (
             <div>
                 <h3>User Interface</h3>
                 <div className="mx_UserSettings_section">
-                    <div className="mx_UserSettings_toggle">
-                        <input id="urlPreviewsDisabled"
-                               type="checkbox"
-                               defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
-                               onChange={ e => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
-                        />
-                        <label htmlFor="urlPreviewsDisabled">
-                            Disable inline URL previews by default
-                        </label>
-                    </div>
+                    { this._renderUrlPreviewSelector() }
+                    { SETTINGS_LABELS.map( this._renderSyncedSetting ) }
+                    { THEMES.map( this._renderThemeSelector ) }
                 </div>
-                { settingsLabels.forEach( setting => {
-                    <div className="mx_UserSettings_toggle">
-                        <input id={ setting.id }
-                               type="checkbox"
-                               defaultChecked={ syncedSettings[setting.id] }
-                               onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
-                        />
-                        <label htmlFor={ setting.id }>
-                            { settings.label }
-                        </label>
-                    </div>
-                })}
             </div>
         );
     },
 
+    _renderUrlPreviewSelector: function() {
+        return <div className="mx_UserSettings_toggle">
+            <input id="urlPreviewsDisabled"
+                   type="checkbox"
+                   defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
+                   onChange={ e => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
+            />
+            <label htmlFor="urlPreviewsDisabled">
+                Disable inline URL previews by default
+            </label>
+        </div>;
+    },
+
+    _renderSyncedSetting: function(setting) {
+        return <div className="mx_UserSettings_toggle" key={ setting.id }>
+            <input id={ setting.id }
+                   type="checkbox"
+                   defaultChecked={ this._syncedSettings[setting.id] }
+                   onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
+            />
+            <label htmlFor={ setting.id }>
+                { setting.label }
+            </label>
+        </div>;
+    },
+
+    _renderThemeSelector: function(setting) {
+        return <div className="mx_UserSettings_toggle" key={ setting.id + "_" + setting.value }>
+            <input id={ setting.id + "_" + setting.value }
+                   type="radio"
+                   name={ setting.id }
+                   value={ setting.value }
+                   defaultChecked={ this._syncedSettings[setting.id] === setting.value }
+                   onChange={ e => {
+                            if (e.target.checked) {
+                                UserSettingsStore.setSyncedSetting(setting.id, setting.value);
+                            }
+                            dis.dispatch({
+                                action: 'set_theme',
+                                value: setting.value,
+                            });
+                        }
+                   }
+            />
+            <label htmlFor={ setting.id + "_" + setting.value }>
+                { setting.label }
+            </label>
+        </div>;
+    },
+
     _renderCryptoInfo: function() {
-        if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
-            return null;
+        const client = MatrixClientPeg.get();
+        const deviceId = client.deviceId;
+        const identityKey = client.getDeviceEd25519Key() || "<not supported>";
+
+        let exportButton = null,
+            importButton = null;
+
+        if (client.isCryptoEnabled) {
+            exportButton = (
+                <AccessibleButton className="mx_UserSettings_button"
+                        onClick={this._onExportE2eKeysClicked}>
+                    Export E2E room keys
+                </AccessibleButton>
+            );
+            importButton = (
+                <AccessibleButton className="mx_UserSettings_button"
+                        onClick={this._onImportE2eKeysClicked}>
+                    Import E2E room keys
+                </AccessibleButton>
+            );
         }
-
-        var client = MatrixClientPeg.get();
-        var deviceId = client.deviceId;
-        var identityKey = client.getDeviceEd25519Key() || "<not supported>";
-
-        var myDevice = client.getStoredDevicesForUser(MatrixClientPeg.get().credentials.userId)[0];
         return (
             <div>
                 <h3>Cryptography</h3>
                 <div className="mx_UserSettings_section mx_UserSettings_cryptoSection">
                     <ul>
-                        <li><label>Device name:</label> <span>{ myDevice.getDisplayName() }</span></li>
-                        <li><label>Device ID:</label>   <span><code>{deviceId}</code></span></li>
-                        <li><label>Device key:</label>  <span><code><b>{identityKey}</b></code></span></li>
+                        <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
+                        <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
+                    {exportButton}
+                    {importButton}
                 </div>
             </div>
         );
     },
 
     _renderDevicesPanel: function() {
-        if (!UserSettingsStore.isFeatureEnabled("e2e_encryption")) {
-            return null;
-        }
         var DevicesPanel = sdk.getComponent('settings.DevicesPanel');
         return (
             <div>
@@ -374,7 +580,24 @@ module.exports = React.createClass({
         );
     },
 
-    _renderLabs: function () {
+    _renderBugReport: function() {
+        if (!SdkConfig.get().bug_report_endpoint_url) {
+            return <div />
+        }
+        return (
+            <div>
+                <h3>Bug Report</h3>
+                <div className="mx_UserSettings_section">
+                    <p>Found a bug?</p>
+                    <button className="mx_UserSettings_button danger"
+                        onClick={this._onBugReportClicked}>Report it
+                    </button>
+                </div>
+            </div>
+        );
+    },
+
+    _renderLabs: function() {
         // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
 
@@ -410,7 +633,7 @@ module.exports = React.createClass({
                     {features}
                 </div>
             </div>
-        )
+        );
     },
 
     _renderDeactivateAccount: function() {
@@ -420,15 +643,49 @@ module.exports = React.createClass({
         return <div>
             <h3>Deactivate Account</h3>
                 <div className="mx_UserSettings_section">
-                    <button className="mx_UserSettings_button danger"
+                    <AccessibleButton className="mx_UserSettings_button danger"
                         onClick={this._onDeactivateAccountClicked}>Deactivate my account
-                    </button>
+                    </AccessibleButton>
                 </div>
         </div>;
     },
 
+    _renderBulkOptions: function() {
+        let invitedRooms = MatrixClientPeg.get().getRooms().filter((r) => {
+            return r.hasMembershipState(this._me, "invite");
+        });
+        if (invitedRooms.length === 0) {
+            return null;
+        }
+
+        let Spinner = sdk.getComponent("elements.Spinner");
+
+        let reject = <Spinner />;
+        if (!this.state.rejectingInvites) {
+            // bind() the invited rooms so any new invites that may come in as this button is clicked
+            // don't inadvertently get rejected as well.
+            reject = (
+                <AccessibleButton className="mx_UserSettings_button danger"
+                onClick={this._onRejectAllInvitesClicked.bind(this, invitedRooms)}>
+                    Reject all {invitedRooms.length} invites
+                </AccessibleButton>
+            );
+        }
+
+        return <div>
+            <h3>Bulk Options</h3>
+                <div className="mx_UserSettings_section">
+                    {reject}
+                </div>
+        </div>;
+    },
+
+    nameForMedium: function(medium) {
+        if (medium == 'msisdn') return 'Phone';
+        return medium[0].toUpperCase() + medium.slice(1);
+    },
+
     render: function() {
-        var self = this;
         var Loader = sdk.getComponent("elements.Spinner");
         switch (this.state.phase) {
             case "UserSettings.LOADING":
@@ -452,15 +709,18 @@ module.exports = React.createClass({
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
         );
 
-        var threepidsSection = this.state.threepids.map(function(val, pidIndex) {
-            var id = "email-" + val.address;
+        var threepidsSection = this.state.threepids.map((val, pidIndex) => {
+            const id = "3pid-" + val.address;
             return (
                 <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
                     <div className="mx_UserSettings_profileLabelCell">
-                        <label htmlFor={id}>Email</label>
+                        <label htmlFor={id}>{this.nameForMedium(val.medium)}</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
-                        <input key={val.address} id={id} value={val.address} disabled />
+                        <input type="text" key={val.address} id={id} value={val.address} disabled />
+                    </div>
+                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
+                        <img src="img/cancel-small.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
                     </div>
                 </div>
             );
@@ -482,7 +742,7 @@ module.exports = React.createClass({
                             blurToCancel={ false }
                             onValueChanged={ this.onAddThreepidClicked } />
                     </div>
-                    <div className="mx_UserSettings_addThreepid">
+                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
                          <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked.bind(this, undefined, true) }/>
                     </div>
                 </div>
@@ -563,7 +823,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserSettings_avatarPicker_edit">
                             <label htmlFor="avatarInput" ref="file_label">
-                                <img src="img/camera.svg"
+                                <img src="img/camera.svg" className="mx_filterFlipColor"
                                     alt="Upload avatar" title="Upload avatar"
                                     width="17" height="15" />
                             </label>
@@ -576,12 +836,14 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_section">
 
-                    <div className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
+                    <AccessibleButton className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
                         Sign out
-                    </div>
+                    </AccessibleButton>
 
                     {accountJsx}
                 </div>
+
+                {this._renderReferral()}
 
                 {notification_area}
 
@@ -589,6 +851,8 @@ module.exports = React.createClass({
                 {this._renderLabs()}
                 {this._renderDevicesPanel()}
                 {this._renderCryptoInfo()}
+                {this._renderBulkOptions()}
+                {this._renderBugReport()}
 
                 <h3>Advanced</h3>
 

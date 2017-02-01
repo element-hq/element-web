@@ -19,7 +19,9 @@ var ReactDOM = require("react-dom");
 var dis = require("../../dispatcher");
 var sdk = require('../../index');
 
-var MatrixClientPeg = require('../../MatrixClientPeg')
+var MatrixClientPeg = require('../../MatrixClientPeg');
+
+const MILLIS_IN_DAY = 86400000;
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -229,6 +231,7 @@ module.exports = React.createClass({
 
     _getEventTiles: function() {
         var EventTile = sdk.getComponent('rooms.EventTile');
+        var DateSeparator = sdk.getComponent('messages.DateSeparator');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 
         this.eventNodes = {};
@@ -278,8 +281,7 @@ module.exports = React.createClass({
 
         var isMembershipChange = (e) =>
             e.getType() === 'm.room.member'
-            && ['join', 'leave'].indexOf(e.event.content.membership) !== -1
-            && (!e.event.prev_content || e.event.content.membership  !== e.event.prev_content.membership);
+            && (!e.getPrevContent() || e.getContent().membership !== e.getPrevContent().membership);
 
         for (i = 0; i < this.props.events.length; i++) {
             var mxEv = this.props.events[i];
@@ -292,37 +294,63 @@ module.exports = React.createClass({
 
             var last = (i == lastShownEventIndex);
 
-            // Wrap consecutive member events in a ListSummary
-            if (isMembershipChange(mxEv)) {
-                let summarisedEvents = [mxEv];
-                i++;
-                for (;i < this.props.events.length; i++) {
-                    let collapsedMxEv = this.props.events[i];
+            // Wrap consecutive member events in a ListSummary, ignore if redacted
+            if (isMembershipChange(mxEv) && EventTile.haveTileForEvent(mxEv)) {
+                let ts1 = mxEv.getTs();
+                // Ensure that the key of the MemberEventListSummary does not change with new
+                // member events. This will prevent it from being re-created unnecessarily, and
+                // instead will allow new props to be provided. In turn, the shouldComponentUpdate
+                // method on MELS can be used to prevent unnecessary renderings.
+                //
+                // Whilst back-paginating with a MELS at the top of the panel, prevEvent will be null,
+                // so use the key "membereventlistsummary-initial". Otherwise, use the ID of the first
+                // membership event, which will not change during forward pagination.
+                const key = "membereventlistsummary-" + (prevEvent ? mxEv.getId() : "initial");
 
-                    if (!isMembershipChange(collapsedMxEv)) {
-                        i--;
+                if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
+                    let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1}/></li>;
+                    ret.push(dateSeparator);
+                }
+
+                let summarisedEvents = [mxEv];
+                for (;i + 1 < this.props.events.length; i++) {
+                    let collapsedMxEv = this.props.events[i + 1];
+
+                    // Ignore redacted member events
+                    if (!EventTile.haveTileForEvent(collapsedMxEv)) {
+                        continue;
+                    }
+
+                    if (!isMembershipChange(collapsedMxEv) ||
+                        this._wantsDateSeparator(this.props.events[i], collapsedMxEv.getDate())) {
                         break;
                     }
                     summarisedEvents.push(collapsedMxEv);
                 }
-                // At this point, i = this.props.events.length OR i = the index of the last
-                // MembershipChange in a sequence of MembershipChanges
+                // At this point, i = the index of the last event in the summary sequence
 
                 let eventTiles = summarisedEvents.map(
                     (e) => {
-                        let ret = this._getTilesForEvent(prevEvent, e);
+                        // In order to prevent DateSeparators from appearing in the expanded form
+                        // of MemberEventListSummary, render each member event as if the previous
+                        // one was itself. This way, the timestamp of the previous event === the
+                        // timestamp of the current event, and no DateSeperator is inserted.
+                        let ret = this._getTilesForEvent(e, e);
                         prevEvent = e;
                         return ret;
                     }
-                ).reduce((a,b) => a.concat(b));
+                ).reduce((a, b) => a.concat(b));
 
                 if (eventTiles.length === 0) {
                     eventTiles = null;
                 }
 
                 ret.push(
-                    <MemberEventListSummary key={mxEv.getId()} events={summarisedEvents}>
-                        {eventTiles}
+                    <MemberEventListSummary
+                        key={key}
+                        events={summarisedEvents}
+                        data-scroll-token={eventId}>
+                            {eventTiles}
                     </MemberEventListSummary>
                 );
                 continue;
@@ -405,12 +433,14 @@ module.exports = React.createClass({
         // local echoes have a fake date, which could even be yesterday. Treat them
         // as 'today' for the date separators.
         var ts1 = mxEv.getTs();
+        var eventDate = mxEv.getDate();
         if (mxEv.status) {
-            ts1 = new Date();
+            eventDate = new Date();
+            ts1 = eventDate.getTime();
         }
 
         // do we need a date separator since the last event?
-        if (this._wantsDateSeparator(prevEvent, ts1)) {
+        if (this._wantsDateSeparator(prevEvent, eventDate)) {
             var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
             ret.push(dateSeparator);
             continuation = false;
@@ -447,38 +477,48 @@ module.exports = React.createClass({
         return ret;
     },
 
-    _wantsDateSeparator: function(prevEvent, nextEventTs) {
+    _wantsDateSeparator: function(prevEvent, nextEventDate) {
         if (prevEvent == null) {
             // first event in the panel: depends if we could back-paginate from
             // here.
             return !this.props.suppressFirstDateSeparator;
         }
-
-        return (new Date(prevEvent.getTs()).toDateString()
-                !== new Date(nextEventTs).toDateString());
-    },
-
-    // get a list of the userids whose read receipts should
-    // be shown next to this event
-    _getReadReceiptsForEvent: function(event) {
-        var myUserId = MatrixClientPeg.get().credentials.userId;
-
-        // get list of read receipts, sorted most recent first
-        var room = MatrixClientPeg.get().getRoom(event.getRoomId());
-        if (!room) {
-            // huh.
-            return null;
+        // Return early for events that are > 24h apart
+        if (Math.abs(prevEvent.getTs() - nextEventDate.getTime()) > MILLIS_IN_DAY) {
+            return true;
         }
 
-        return room.getReceiptsForEvent(event).filter(function(r) {
-            return r.type === "m.read" && r.userId != myUserId;
-        }).sort(function(r1, r2) {
-            return r2.data.ts - r1.data.ts;
-        }).map(function(r) {
-            return room.getMember(r.userId);
-        }).filter(function(m) {
-            // check that the user is a known room member
-            return m;
+        // Compare weekdays
+        return prevEvent.getDate().getDay() !== nextEventDate.getDay();
+    },
+
+    // get a list of read receipts that should be shown next to this event
+    // Receipts are objects which have a 'roomMember' and 'ts'.
+    _getReadReceiptsForEvent: function(event) {
+        const myUserId = MatrixClientPeg.get().credentials.userId;
+
+        // get list of read receipts, sorted most recent first
+        const room = MatrixClientPeg.get().getRoom(event.getRoomId());
+        if (!room) {
+            return null;
+        }
+        let receipts = [];
+        room.getReceiptsForEvent(event).forEach((r) => {
+            if (!r.userId || r.type !== "m.read" || r.userId === myUserId) {
+                return; // ignore non-read receipts and receipts from self.
+            }
+            let member = room.getMember(r.userId);
+            if (!member) {
+                return; // ignore unknown user IDs
+            }
+            receipts.push({
+                roomMember: member,
+                ts: r.data ? r.data.ts : 0,
+            });
+        });
+
+        return receipts.sort((r1, r2) => {
+            return r2.ts - r1.ts;
         });
     },
 
@@ -564,6 +604,7 @@ module.exports = React.createClass({
                     onScroll={ this.props.onScroll }
                     onResize={ this.onResize }
                     onFillRequest={ this.props.onFillRequest }
+                    onUnfillRequest={ this.props.onUnfillRequest }
                     style={ style }
                     stickyBottom={ this.props.stickyBottom }>
                 {topSpinner}

@@ -39,7 +39,7 @@ module.exports = React.createClass({
             height: 36,
             resizeMethod: 'crop',
             oobData: {},
-        }
+        };
     },
 
     getInitialState: function() {
@@ -51,7 +51,7 @@ module.exports = React.createClass({
     componentWillReceiveProps: function(newProps) {
         this.setState({
             urls: this.getImageUrls(newProps)
-        })
+        });
     },
 
     getImageUrls: function(props) {

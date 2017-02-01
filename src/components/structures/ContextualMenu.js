@@ -47,7 +47,7 @@ module.exports = {
         return container;
     },
 
-    createMenu: function (Element, props) {
+    createMenu: function(Element, props) {
         var self = this;
 
         var closeMenu = function() {
@@ -67,7 +67,7 @@ module.exports = {
             chevronOffset.top = props.chevronOffset;
         }
 
-        // To overide the deafult chevron colour, if it's been set
+        // To override the default chevron colour, if it's been set
         var chevronCSS = "";
         if (props.menuColour) {
             chevronCSS = `
@@ -78,15 +78,15 @@ module.exports = {
                 .mx_ContextualMenu_chevron_right:after {
                     border-left-color: ${props.menuColour};
                 }
-            `
+            `;
         }
 
         var chevron = null;
         if (props.left) {
-            chevron = <div style={chevronOffset} className="mx_ContextualMenu_chevron_left"></div>
+            chevron = <div style={chevronOffset} className="mx_ContextualMenu_chevron_left"></div>;
             position.left = props.left;
         } else {
-            chevron = <div style={chevronOffset} className="mx_ContextualMenu_chevron_right"></div>
+            chevron = <div style={chevronOffset} className="mx_ContextualMenu_chevron_right"></div>;
             position.right = props.right;
         }
 

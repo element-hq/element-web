@@ -27,4 +27,3 @@ module.exports.resetSkin = function() {
 module.exports.getComponent = function(componentName) {
     return Skinner.getComponent(componentName);
 };
-

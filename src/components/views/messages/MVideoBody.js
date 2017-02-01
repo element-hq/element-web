@@ -21,16 +21,26 @@ import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Model from '../../../Modal';
 import sdk from '../../../index';
-import { decryptFile } from '../../../utils/DecryptFile';
+import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 import q from 'q';
 
 module.exports = React.createClass({
     displayName: 'MVideoBody',
 
+    propTypes: {
+        /* the MatrixEvent to show */
+        mxEvent: React.PropTypes.object.isRequired,
+
+        /* called when the video has loaded */
+        onWidgetLoad: React.PropTypes.func.isRequired,
+    },
+
     getInitialState: function() {
         return {
             decryptedUrl: null,
             decryptedThumbnailUrl: null,
+            decryptedBlob: null,
+            error: null,
         };
     },
 
@@ -83,19 +93,29 @@ module.exports = React.createClass({
             if (content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
                     content.info.thumbnail_file
-                );
+                ).then(function(blob) {
+                    return readBlobAsDataUri(blob);
+                });
             }
+            var decryptedBlob;
             thumbnailPromise.then((thumbnailUrl) => {
-                decryptFile(content.file).then((contentUrl) => {
+                return decryptFile(content.file).then(function(blob) {
+                    decryptedBlob = blob;
+                    return readBlobAsDataUri(blob);
+                }).then((contentUrl) => {
                     this.setState({
                         decryptedUrl: contentUrl,
                         decryptedThumbnailUrl: thumbnailUrl,
+                        decryptedBlob: decryptedBlob,
                     });
+                    this.props.onWidgetLoad();
                 });
             }).catch((err) => {
-                console.warn("Unable to decrypt attachment: ", err)
+                console.warn("Unable to decrypt attachment: ", err);
                 // Set a placeholder image when we can't decrypt the image.
-                this.refs.image.src = "img/warning.svg";
+                this.setState({
+                    error: err,
+                });
             }).done();
         }
     },
@@ -103,14 +123,29 @@ module.exports = React.createClass({
     render: function() {
         const content = this.props.mxEvent.getContent();
 
+        if (this.state.error !== null) {
+            return (
+                <span className="mx_MVideoBody" ref="body">
+                    <img src="img/warning.svg" width="16" height="16"/>
+                    Error decrypting video
+                </span>
+            );
+        }
+
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a spinner.
             return (
-                <span className="mx_MImageBody" ref="body">
-                <img className="mx_MImageBody_thumbnail" src="img/spinner.gif" ref="image"
-                    alt={content.body} />
+                <span className="mx_MVideoBody" ref="body">
+                    <div className="mx_MImageBody_thumbnail" ref="image" style={{
+                        "display": "flex",
+                        "align-items": "center",
+                        "justify-items": "center",
+                        "width": "100%",
+                    }}>
+                        <img src="img/spinner.gif" alt={content.body} width="16" height="16"/>
+                    </div>
                 </span>
             );
         }
@@ -141,7 +176,7 @@ module.exports = React.createClass({
                     controls preload={preload} autoPlay={false}
                     height={height} width={width} poster={poster}>
                 </video>
-                <MFileBody {...this.props} decryptedUrl={this.state.decryptedUrl} />
+                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
             </span>
         );
     },

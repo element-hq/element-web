@@ -56,7 +56,7 @@ module.exports = React.createClass({
             <div>
                 <ul className="mx_UserSelector_UserIdList" ref="list">
                     {this.props.selected_users.map(function(user_id, i) {
-                        return <li key={user_id}>{user_id} - <span onClick={function() {self.removeUser(user_id);}}>X</span></li>
+                        return <li key={user_id}>{user_id} - <span onClick={function() {self.removeUser(user_id);}}>X</span></li>;
                     })}
                 </ul>
                 <input type="text" ref="user_id_input" defaultValue="" className="mx_UserSelector_userIdInput" placeholder="ex. @bob:example.com"/>

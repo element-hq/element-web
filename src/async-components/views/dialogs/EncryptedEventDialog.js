@@ -83,7 +83,7 @@ module.exports = React.createClass({
 
         var verificationStatus = (<b>NOT verified</b>);
         if (device.isBlocked()) {
-            verificationStatus = (<b>Blocked</b>);
+            verificationStatus = (<b>Blacklisted</b>);
         } else if (device.isVerified()) {
             verificationStatus = "verified";
         }

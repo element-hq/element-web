@@ -20,30 +20,44 @@ var TestUtils = require('react-addons-test-utils');
 var expect = require('expect');
 
 var sdk = require('matrix-react-sdk');
-var MatrixClientPeg = require('MatrixClientPeg');
 
 var MessagePanel = sdk.getComponent('structures.MessagePanel');
 
 var test_utils = require('test-utils');
 var mockclock = require('mock-clock');
 
+var client;
+
+// wrap MessagePanel with a component which provides the MatrixClient in the context.
+const WrappedMessagePanel = React.createClass({
+    childContextTypes: {
+        matrixClient: React.PropTypes.object,
+    },
+
+    getChildContext: function() {
+        return {
+            matrixClient: client,
+        };
+    },
+
+    render: function() {
+        return <MessagePanel {...this.props} />;
+    },
+});
+
 describe('MessagePanel', function () {
-    var sandbox;
     var clock = mockclock.clock();
     var realSetTimeout = window.setTimeout;
     var events = mkEvents();
 
     beforeEach(function() {
         test_utils.beforeEach(this);
-        sandbox = test_utils.stubClient(sandbox);
-
-        var client = MatrixClientPeg.get();
+        client = test_utils.createTestClient();
         client.credentials = {userId: '@me:here'};
     });
 
     afterEach(function () {
         clock.uninstall();
-        sandbox.restore();
     });
 
     function mkEvents() {
@@ -61,7 +75,7 @@ describe('MessagePanel', function () {
 
     it('should show the events', function() {
         var res = TestUtils.renderIntoDocument(
-                <MessagePanel className="cls" events={events} />
+                <WrappedMessagePanel className="cls" events={events} />
         );
 
         // just check we have the right number of tiles for now
@@ -72,7 +86,7 @@ describe('MessagePanel', function () {
 
     it('should show the read-marker in the right place', function() {
         var res = TestUtils.renderIntoDocument(
-                <MessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
+                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
                     readMarkerVisible={true} />
         );
 
@@ -96,7 +110,7 @@ describe('MessagePanel', function () {
 
         // first render with the RM in one place
         var mp = ReactDOM.render(
-                <MessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
+                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 
@@ -112,7 +126,7 @@ describe('MessagePanel', function () {
 
         // now move the RM
         mp = ReactDOM.render(
-                <MessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
+                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 
@@ -147,7 +161,7 @@ describe('MessagePanel', function () {
 
         // first render with the RM in one place
         var mp = ReactDOM.render(
-                <MessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
+                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 
@@ -159,7 +173,7 @@ describe('MessagePanel', function () {
 
         // now move the RM
         mp = ReactDOM.render(
-                <MessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
+                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 
@@ -175,7 +189,7 @@ describe('MessagePanel', function () {
 
         // and move the RM again
         mp = ReactDOM.render(
-                <MessagePanel className="cls" events={events} readMarkerEventId={events[8].getId()}
+                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[8].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 

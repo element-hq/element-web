@@ -118,7 +118,7 @@ var SearchableEntityList = React.createClass({
     _createOverflowEntity: function(overflowCount, totalCount) {
         var EntityTile = sdk.getComponent("rooms.EntityTile");
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-        var text = "and " + overflowCount + " other" + (overflowCount > 1 ? "s" : "") +  "...";
+        var text = "and " + overflowCount + " other" + (overflowCount > 1 ? "s" : "") + "...";
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
                 <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
@@ -135,8 +135,8 @@ var SearchableEntityList = React.createClass({
                 <form onSubmit={this.onQuerySubmit} autoComplete="off">
                     <input className="mx_SearchableEntityList_query" id="mx_SearchableEntityList_query" type="text"
                         onChange={this.onQueryChanged} value={this.state.query}
-                        onFocus= {() => { this.setState({ focused: true }) }}
-                        onBlur= {() => { this.setState({ focused: false }) }}
+                        onFocus= {() => { this.setState({ focused: true }); }}
+                        onBlur= {() => { this.setState({ focused: false }); }}
                         placeholder={this.props.searchPlaceholderText} />
                 </form>
             );

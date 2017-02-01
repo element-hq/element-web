@@ -53,7 +53,7 @@ var Notifier = {
         if (!msg) return;
 
         var title;
-        if (!ev.sender ||  room.name == ev.sender.name) {
+        if (!ev.sender || room.name == ev.sender.name) {
             title = room.name;
             // notificationMessageForEvent includes sender,
             // but we already have the sender here
@@ -73,7 +73,7 @@ var Notifier = {
             ev.sender, 40, 40, 'crop'
         ) : null;
 
-        const notif = plaf.displayNotification(title, msg, avatarUrl);
+        const notif = plaf.displayNotification(title, msg, avatarUrl, room);
 
         // if displayNotification returns non-null,  the platform supports
         // clearing notifications later, so keep track of this.
@@ -88,7 +88,7 @@ var Notifier = {
         if (e) {
             e.load();
             e.play();
-        };
+        }
     },
 
     start: function() {

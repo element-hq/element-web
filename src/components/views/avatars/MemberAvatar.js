@@ -33,6 +33,7 @@ module.exports = React.createClass({
         onClick: React.PropTypes.func,
         // Whether the onClick of the avatar should be overriden to dispatch 'view_user'
         viewUserOnClick: React.PropTypes.bool,
+        title: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -41,7 +42,7 @@ module.exports = React.createClass({
             height: 40,
             resizeMethod: 'crop',
             viewUserOnClick: false,
-        }
+        };
     },
 
     getInitialState: function() {
@@ -58,26 +59,26 @@ module.exports = React.createClass({
         }
         return {
             name: props.member.name,
-            title: props.member.userId,
+            title: props.title || props.member.userId,
             imageUrl: Avatar.avatarUrlForMember(props.member,
                                          props.width,
                                          props.height,
                                          props.resizeMethod)
-        }
+        };
     },
 
     render: function() {
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        var {member, onClick, ...otherProps} = this.props;
+        var {member, onClick, viewUserOnClick, ...otherProps} = this.props;
 
-        if (this.props.viewUserOnClick) {
+        if (viewUserOnClick) {
             onClick = () => {
                 dispatcher.dispatch({
                     action: 'view_user',
                     member: this.props.member,
                 });
-            }
+            };
         }
 
         return (

@@ -24,8 +24,8 @@ export default class MemberDeviceInfo extends React.Component {
 
         if (this.props.device.isBlocked()) {
             indicator = (
-                    <div className="mx_MemberDeviceInfo_blocked">
-                    <img src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} alt="Blocked"/>
+                    <div className="mx_MemberDeviceInfo_blacklisted">
+                    <img src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} alt="Blacklisted"/>
                     </div>
             );
         } else if (this.props.device.isVerified()) {
@@ -60,7 +60,7 @@ export default class MemberDeviceInfo extends React.Component {
             </div>
         );
     }
-};
+}
 
 MemberDeviceInfo.displayName = 'MemberDeviceInfo';
 MemberDeviceInfo.propTypes = {

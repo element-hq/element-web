@@ -14,18 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require("react");
-var classNames = require('classnames');
-var sdk = require("../../../index");
-var Invite = require("../../../Invite");
-var createRoom = require("../../../createRoom");
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var DMRoomMap = require('../../../utils/DMRoomMap');
-var rate_limited_func = require("../../../ratelimitedfunc");
-var dis = require("../../../dispatcher");
-var Modal = require('../../../Modal');
+import React from 'react';
+import classNames from 'classnames';
+import sdk from '../../../index';
+import { getAddressType, inviteMultipleToRoom } from '../../../Invite';
+import createRoom from '../../../createRoom';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import DMRoomMap from '../../../utils/DMRoomMap';
+import rate_limited_func from '../../../ratelimitedfunc';
+import dis from '../../../dispatcher';
+import Modal from '../../../Modal';
+import AccessibleButton from '../elements/AccessibleButton';
+import q from 'q';
 
 const TRUNCATE_QUERY_LIST = 40;
+
+/*
+ * Escapes a string so it can be used in a RegExp
+ * Basically just replaces: \ ^ $ * + ? . ( ) | { } [ ]
+ * From http://stackoverflow.com/a/6969486
+ */
+function escapeRegExp(str) {
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
 
 module.exports = React.createClass({
     displayName: "ChatInviteDialog",
@@ -48,7 +59,7 @@ module.exports = React.createClass({
             title: "Start a chat",
             description: "Who would you like to communicate with?",
             value: "",
-            placeholder: "User ID, Name or email",
+            placeholder: "Email, name or matrix ID",
             button: "Start Chat",
             focus: true
         };
@@ -57,7 +68,14 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             error: false,
+
+            // List of AddressTile.InviteAddressType objects represeting
+            // the list of addresses we're going to invite
             inviteList: [],
+
+            // List of AddressTile.InviteAddressType objects represeting
+            // the set of autocompletion results for the current search
+            // query.
             queryList: [],
         };
     },
@@ -71,15 +89,12 @@ module.exports = React.createClass({
     },
 
     onButtonClick: function() {
-        var inviteList = this.state.inviteList.slice();
+        let inviteList = this.state.inviteList.slice();
         // Check the text input field to see if user has an unconverted address
         // If there is and it's valid add it to the local inviteList
-        var check = Invite.isValidAddress(this.refs.textinput.value);
-        if (check === true || check === null) {
-            inviteList.push(this.refs.textinput.value);
-        } else if (this.refs.textinput.value.length > 0) {
-            this.setState({ error: true });
-            return;
+        if (this.refs.textinput.value !== '') {
+            inviteList = this._addInputToList();
+            if (inviteList === null) return;
         }
 
         if (inviteList.length > 0) {
@@ -119,15 +134,15 @@ module.exports = React.createClass({
         } else if (e.keyCode === 38) { // up arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyUp();
+            this.addressSelector.moveSelectionUp();
         } else if (e.keyCode === 40) { // down arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeyDown();
-        } else if (this.state.queryList.length > 0 && (e.keyCode === 188, e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
+            this.addressSelector.moveSelectionDown();
+        } else if (this.state.queryList.length > 0 && (e.keyCode === 188 || e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.onKeySelect();
+            this.addressSelector.chooseSelection();
         } else if (this.refs.textinput.value.length === 0 && this.state.inviteList.length && e.keyCode === 8) { // backspace
             e.stopPropagation();
             e.preventDefault();
@@ -135,33 +150,56 @@ module.exports = React.createClass({
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            this.onButtonClick();
+            if (this.refs.textinput.value == '') {
+                // if there's nothing in the input box, submit the form
+                this.onButtonClick();
+            } else {
+                this._addInputToList();
+            }
         } else if (e.keyCode === 188 || e.keyCode === 9) { // comma or tab
             e.stopPropagation();
             e.preventDefault();
-            var check = Invite.isValidAddress(this.refs.textinput.value);
-            if (check === true || check === null) {
-                var inviteList = this.state.inviteList.slice();
-                inviteList.push(this.refs.textinput.value.trim());
-                this.setState({
-                    inviteList: inviteList,
-                    queryList: [],
-                });
-            } else {
-                this.setState({ error: true });
-            }
+            this._addInputToList();
         }
     },
 
     onQueryChanged: function(ev) {
-        var query = ev.target.value;
-        var queryList = [];
+        const query = ev.target.value;
+        let queryList = [];
 
         // Only do search if there is something to search
-        if (query.length > 0) {
+        if (query.length > 0 && query != '@') {
+            // filter the known users list
             queryList = this._userList.filter((user) => {
                 return this._matches(query, user);
+            }).map((user) => {
+                // Return objects, structure of which is defined
+                // by InviteAddressType
+                return {
+                    addressType: 'mx',
+                    address: user.userId,
+                    displayName: user.displayName,
+                    avatarMxc: user.avatarUrl,
+                    isKnown: true,
+                }
             });
+
+            // If the query isn't a user we know about, but is a
+            // valid address, add an entry for that
+            if (queryList.length == 0) {
+                const addrType = getAddressType(query);
+                if (addrType !== null) {
+                    queryList[0] = {
+                        addressType: addrType,
+                        address: query,
+                        isKnown: false,
+                    };
+                    if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+                    if (addrType == 'email') {
+                        this._lookupThreepid(addrType, query).done();
+                    }
+                }
+            }
         }
 
         this.setState({
@@ -179,7 +217,8 @@ module.exports = React.createClass({
                 inviteList: inviteList,
                 queryList: [],
             });
-        }
+            if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+        };
     },
 
     onClick: function(index) {
@@ -191,11 +230,12 @@ module.exports = React.createClass({
 
     onSelected: function(index) {
         var inviteList = this.state.inviteList.slice();
-        inviteList.push(this.state.queryList[index].userId);
+        inviteList.push(this.state.queryList[index]);
         this.setState({
             inviteList: inviteList,
             queryList: [],
         });
+        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
     },
 
     _getDirectMessageRoom: function(addr) {
@@ -226,10 +266,14 @@ module.exports = React.createClass({
             return;
         }
 
+        const addrTexts = addrs.map((addr) => {
+            return addr.address;
+        });
+
         if (this.props.roomId) {
             // Invite new user to a room
             var self = this;
-            Invite.inviteMultipleToRoom(this.props.roomId, addrs)
+            inviteMultipleToRoom(this.props.roomId, addrTexts)
             .then(function(addrs) {
                 var room = MatrixClientPeg.get().getRoom(self.props.roomId);
                 return self._showAnyInviteErrors(addrs, room);
@@ -244,9 +288,9 @@ module.exports = React.createClass({
                 return null;
             })
             .done();
-        } else if (this._isDmChat(addrs)) {
+        } else if (this._isDmChat(addrTexts)) {
             // Start the DM chat
-            createRoom({dmUserId: addrs[0]})
+            createRoom({dmUserId: addrTexts[0]})
             .catch(function(err) {
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -263,7 +307,7 @@ module.exports = React.createClass({
             var room;
             createRoom().then(function(roomId) {
                 room = MatrixClientPeg.get().getRoom(roomId);
-                return Invite.inviteMultipleToRoom(roomId, addrs);
+                return inviteMultipleToRoom(roomId, addrTexts);
             })
             .then(function(addrs) {
                 return self._showAnyInviteErrors(addrs, room);
@@ -281,7 +325,7 @@ module.exports = React.createClass({
         }
 
         // Close - this will happen before the above, as that is async
-        this.props.onFinished(true, addrs);
+        this.props.onFinished(true, addrTexts);
     },
 
     _updateUserList: new rate_limited_func(function() {
@@ -315,19 +359,27 @@ module.exports = React.createClass({
             return true;
         }
 
-        // split spaces in name and try matching constituent parts
-        var parts = name.split(" ");
-        for (var i = 0; i < parts.length; i++) {
-            if (parts[i].indexOf(query) === 0) {
-                return true;
-            }
+        // Try to find the query following a "word boundary", except that
+        // this does avoids using \b because it only considers letters from
+        // the roman alphabet to be word characters.
+        // Instead, we look for the query following either:
+        //  * The start of the string
+        //  * Whitespace, or
+        //  * A fixed number of punctuation characters
+        const expr = new RegExp("(?:^|[\\s\\(\)'\",\.-_@\?;:{}\\[\\]\\#~`\\*\\&\\$])" + escapeRegExp(query));
+        if (expr.test(name)) {
+            return true;
         }
+
         return false;
     },
 
     _isOnInviteList: function(uid) {
         for (let i = 0; i < this.state.inviteList.length; i++) {
-            if (this.state.inviteList[i].toLowerCase() === uid) {
+            if (
+                this.state.inviteList[i].addressType == 'mx' &&
+                this.state.inviteList[i].address.toLowerCase() === uid
+            ) {
                 return true;
             }
         }
@@ -335,7 +387,7 @@ module.exports = React.createClass({
     },
 
     _isDmChat: function(addrs) {
-        if (addrs.length === 1 && Invite.getAddressType(addrs[0]) === "mx" && !this.props.roomId) {
+        if (addrs.length === 1 && getAddressType(addrs[0]) === "mx" && !this.props.roomId) {
             return true;
         } else {
             return false;
@@ -361,9 +413,74 @@ module.exports = React.createClass({
         return addrs;
     },
 
+    _addInputToList: function() {
+        const addressText = this.refs.textinput.value.trim();
+        const addrType = getAddressType(addressText);
+        const addrObj = {
+            addressType: addrType,
+            address: addressText,
+            isKnown: false,
+        };
+        if (addrType == null) {
+            this.setState({ error: true });
+            return null;
+        } else if (addrType == 'mx') {
+            const user = MatrixClientPeg.get().getUser(addrObj.address);
+            if (user) {
+                addrObj.displayName = user.displayName;
+                addrObj.avatarMxc = user.avatarUrl;
+                addrObj.isKnown = true;
+            }
+        }
+
+        const inviteList = this.state.inviteList.slice();
+        inviteList.push(addrObj);
+        this.setState({
+            inviteList: inviteList,
+            queryList: [],
+        });
+        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+        return inviteList;
+    },
+
+    _lookupThreepid: function(medium, address) {
+        let cancelled = false;
+        // Note that we can't safely remove this after we're done
+        // because we don't know that it's the same one, so we just
+        // leave it: it's replacing the old one each time so it's
+        // not like they leak.
+        this._cancelThreepidLookup = function() {
+            cancelled = true;
+        }
+
+        // wait a bit to let the user finish typing
+        return q.delay(500).then(() => {
+            if (cancelled) return null;
+            return MatrixClientPeg.get().lookupThreePid(medium, address);
+        }).then((res) => {
+            if (res === null || !res.mxid) return null;
+            if (cancelled) return null;
+
+            return MatrixClientPeg.get().getProfileInfo(res.mxid);
+        }).then((res) => {
+            if (res === null) return null;
+            if (cancelled) return null;
+            this.setState({
+                queryList: [{
+                    // an InviteAddressType
+                    addressType: medium,
+                    address: address,
+                    displayName: res.displayname,
+                    avatarMxc: res.avatar_url,
+                    isKnown: true,
+                }]
+            });
+        });
+    },
+
     render: function() {
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var AddressSelector = sdk.getComponent("elements.AddressSelector");
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
         var query = [];
@@ -394,13 +511,18 @@ module.exports = React.createClass({
         var error;
         var addressSelector;
         if (this.state.error) {
-            error = <div className="mx_ChatInviteDialog_error">You have entered an invalid contact. Try using their Matrix ID or email address.</div>
+            error = <div className="mx_ChatInviteDialog_error">You have entered an invalid contact. Try using their Matrix ID or email address.</div>;
         } else {
+            const addressSelectorHeader = <div className="mx_ChatInviteDialog_addressSelectHeader">
+                Searching known users
+            </div>;
             addressSelector = (
-                <AddressSelector ref={(ref) => {this.addressSelector = ref}}
+                <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
                     addressList={ this.state.queryList }
                     onSelected={ this.onSelected }
-                    truncateAt={ TRUNCATE_QUERY_LIST } />
+                    truncateAt={ TRUNCATE_QUERY_LIST }
+                    header={ addressSelectorHeader }
+                />
             );
         }
 
@@ -409,9 +531,10 @@ module.exports = React.createClass({
                 <div className="mx_Dialog_title">
                     {this.props.title}
                 </div>
-                <div className="mx_ChatInviteDialog_cancel" onClick={this.onCancel} >
+                <AccessibleButton className="mx_ChatInviteDialog_cancel"
+                        onClick={this.onCancel} >
                     <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
-                </div>
+                </AccessibleButton>
                 <div className="mx_ChatInviteDialog_label">
                     <label htmlFor="textinput">{ this.props.description }</label>
                 </div>

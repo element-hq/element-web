@@ -83,7 +83,7 @@ export default class CommandProvider extends AutocompleteProvider {
 
     static getInstance(): CommandProvider {
         if (instance == null)
-            instance = new CommandProvider();
+            {instance = new CommandProvider();}
 
         return instance;
     }

@@ -52,7 +52,13 @@ DummyStage.TYPE = "m.login.dummy";
 class RecaptchaStage extends Stage {
     constructor(matrixClient, signupInstance) {
         super(RecaptchaStage.TYPE, matrixClient, signupInstance);
-        this.defer = q.defer(); // resolved with the captcha response
+        this.authDict = {
+            auth: {
+                type: 'm.login.recaptcha',
+                // we'll add in the response param if we get one from the local user.
+            },
+            poll_for_success: true,
+        };
     }
 
     // called when the recaptcha has been completed.
@@ -60,16 +66,15 @@ class RecaptchaStage extends Stage {
         if (!data || !data.response) {
             return;
         }
-        this.defer.resolve({
-            auth: {
-                type: 'm.login.recaptcha',
-                response: data.response,
-            }
-        });
+        this.authDict.auth.response = data.response;
     }
 
     complete() {
-        return this.defer.promise;
+        // we return the authDict with no response, telling Signup to keep polling
+        // the server in case the captcha is filled in on another window (e.g. by
+        // following a nextlink from an email signup).  If the user completes the
+        // captcha locally, then we return at the next poll.
+        return q(this.authDict);
     }
 }
 RecaptchaStage.TYPE = "m.login.recaptcha";

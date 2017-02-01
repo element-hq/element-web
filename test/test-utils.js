@@ -14,7 +14,15 @@ var MatrixEvent = jssdk.MatrixEvent;
  */
 export function beforeEach(context) {
     var desc = context.currentTest.fullTitle();
+
     console.log();
+
+    // this puts a mark in the chrome devtools timeline, which can help
+    // figure out what's been going on.
+    if (console.timeStamp) {
+        console.timeStamp(desc);
+    }
+
     console.log(desc);
     console.log(new Array(1 + desc.length).join("="));
 };
@@ -24,23 +32,49 @@ export function beforeEach(context) {
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
  * return it when get() is called.
  *
+ * TODO: once the components are updated to get their MatrixClients from
+ * the react context, we can get rid of this and just inject a test client
+ * via the context instead.
+ *
  * @returns {sinon.Sandbox}; remember to call sandbox.restore afterwards.
  */
 export function stubClient() {
     var sandbox = sinon.sandbox.create();
 
-    var client = {
+    var client = createTestClient();
+
+    // stub out the methods in MatrixClientPeg
+    //
+    // 'sandbox.restore()' doesn't work correctly on inherited methods,
+    // so we do this for each method
+    var methods = ['get', 'unset', 'replaceUsingCreds'];
+    for (var i = 0; i < methods.length; i++) {
+        sandbox.stub(peg, methods[i]);
+    }
+    // MatrixClientPeg.get() is called a /lot/, so implement it with our own
+    // fast stub function rather than a sinon stub
+    peg.get = function() { return client; };
+    return sandbox;
+}
+
+/**
+ * Create a stubbed-out MatrixClient
+ *
+ * @returns {object} MatrixClient stub
+ */
+export function createTestClient() {
+    return {
         getHomeserverUrl: sinon.stub(),
         getIdentityServerUrl: sinon.stub(),
 
         getPushActionsForEvent: sinon.stub(),
-        getRoom: sinon.stub().returns(this.mkStubRoom()),
+        getRoom: sinon.stub().returns(mkStubRoom()),
         getRooms: sinon.stub().returns([]),
         loginFlows: sinon.stub(),
         on: sinon.stub(),
         removeListener: sinon.stub(),
         isRoomEncrypted: sinon.stub().returns(false),
-        peekInRoom: sinon.stub().returns(q(this.mkStubRoom())),
+        peekInRoom: sinon.stub().returns(q(mkStubRoom())),
 
         paginateEventTimeline: sinon.stub().returns(q()),
         sendReadReceipt: sinon.stub().returns(q()),
@@ -59,21 +93,7 @@ export function stubClient() {
         sendHtmlMessage: () => q({}),
         getSyncState: () => "SYNCING",
     };
-
-    // stub out the methods in MatrixClientPeg
-    //
-    // 'sandbox.restore()' doesn't work correctly on inherited methods,
-    // so we do this for each method
-    var methods = ['get', 'unset', 'replaceUsingCreds'];
-    for (var i = 0; i < methods.length; i++) {
-        sandbox.stub(peg, methods[i]);
-    }
-    // MatrixClientPeg.get() is called a /lot/, so implement it with our own
-    // fast stub function rather than a sinon stub
-    peg.get = function() { return client; };
-    return sandbox;
 }
-
 
 /**
  * Create an Event.
@@ -96,6 +116,7 @@ export function mkEvent(opts) {
         room_id: opts.room,
         sender: opts.user,
         content: opts.content,
+        prev_content: opts.prev_content,
         event_id: "$" + Math.random() + "-" + Math.random(),
         origin_server_ts: opts.ts,
     };
@@ -138,7 +159,9 @@ export function mkPresence(opts) {
  * @param {Object} opts Values for the membership.
  * @param {string} opts.room The room ID for the event.
  * @param {string} opts.mship The content.membership for the event.
+ * @param {string} opts.prevMship The prev_content.membership for the event.
  * @param {string} opts.user The user ID for the event.
+ * @param {RoomMember} opts.target The target of the event.
  * @param {string} opts.skey The other user ID for the event if applicable
  * e.g. for invites/bans.
  * @param {string} opts.name The content.displayname for the event.
@@ -157,9 +180,16 @@ export function mkMembership(opts) {
     opts.content = {
         membership: opts.mship
     };
+    if (opts.prevMship) {
+        opts.prev_content = { membership: opts.prevMship };
+    }
     if (opts.name) { opts.content.displayname = opts.name; }
     if (opts.url) { opts.content.avatar_url = opts.url; }
-    return mkEvent(opts);
+    let e = mkEvent(opts);
+    if (opts.target) {
+        e.target = opts.target;
+    }
+    return e;
 };
 
 /**

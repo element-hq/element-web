@@ -292,12 +292,15 @@ const onMessage = function(event) {
         event.origin = event.originalEvent.origin;
     }
 
-    // check it is from the integrations UI URL (remove trailing spaces)
+    // Check that the integrations UI URL starts with the origin of the event
+    // This means the URL could contain a path (like /develop) and still be used
+    // to validate event origins, which do not specify paths.
+    // (See https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
+    //
+    // All strings start with the empty string, so for sanity return if the length
+    // of the event origin is 0.
     let url = SdkConfig.get().integrations_ui_url;
-    if (url.endsWith("/")) {
-        url = url.substr(0, url.length - 1);
-    }
-    if (url !== event.origin) {
+    if (event.origin.length === 0 || !url.startsWith(event.origin)) {
         return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
     }
 
@@ -368,7 +371,7 @@ const onMessage = function(event) {
     }, (err) => {
         console.error(err);
         sendError(event, "Failed to lookup current room.");
-    })
+    });
 };
 
 module.exports = {

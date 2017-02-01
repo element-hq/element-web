@@ -27,7 +27,6 @@ var sdk = require('../../../index');
 var ScalarAuthClient = require("../../../ScalarAuthClient");
 var Modal = require("../../../Modal");
 var SdkConfig = require('../../../SdkConfig');
-var UserSettingsStore = require('../../../UserSettingsStore');
 
 linkifyMatrix(linkify);
 
@@ -201,7 +200,7 @@ module.exports = React.createClass({
                     global.localStorage.removeItem("hide_preview_" + self.props.mxEvent.getId());
                 }
             },
-        }
+        };
     },
 
     onStarterLinkClick: function(starterLink, ev) {
@@ -212,16 +211,6 @@ module.exports = React.createClass({
         // We can get around this by fetching one now and showing a "confirmation dialog" (hurr hurr)
         // which requires the user to click through and THEN we can open the link in a new tab because
         // the window.open command occurs in the same stack frame as the onClick callback.
-
-        let integrationsEnabled = UserSettingsStore.isFeatureEnabled("integration_management");
-        if (!integrationsEnabled) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Integrations disabled",
-                description: "You need to enable the Labs option 'Integrations Management' in your Riot user settings first.",
-            });
-            return;
-        }
 
         // Go fetch a scalar token
         let scalarClient = new ScalarAuthClient();
@@ -241,8 +230,8 @@ module.exports = React.createClass({
                     if (!confirmed) {
                         return;
                     }
-                    let width  = window.screen.width  > 1024 ? 1024 : window.screen.width;
-                    let height = window.screen.height > 800  ? 800 : window.screen.height;
+                    let width = window.screen.width > 1024 ? 1024 : window.screen.width;
+                    let height = window.screen.height > 800 ? 800 : window.screen.height;
                     let left = (window.screen.width - width) / 2;
                     let top = (window.screen.height - height) / 2;
                     window.open(completeUrl, '_blank', `height=${height}, width=${width}, top=${top}, left=${left},`);
@@ -304,4 +293,3 @@ module.exports = React.createClass({
         }
     },
 });
-

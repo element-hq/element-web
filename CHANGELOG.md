@@ -1,3 +1,166 @@
+Changes in [0.8.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.5) (2017-01-16)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.5-rc.1...v0.8.5)
+
+ * Pull in newer matrix-js-sdk for video calling fix
+
+Changes in [0.8.5-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.5-rc.1) (2017-01-13)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.4...v0.8.5-rc.1)
+
+ * Build the js-sdk in the CI script
+   [\#612](https://github.com/matrix-org/matrix-react-sdk/pull/612)
+ * Fix redacted member events being visible
+   [\#609](https://github.com/matrix-org/matrix-react-sdk/pull/609)
+ * Use `getStateKey` instead of `getSender`
+   [\#611](https://github.com/matrix-org/matrix-react-sdk/pull/611)
+ * Move screen sharing error check into platform
+   [\#608](https://github.com/matrix-org/matrix-react-sdk/pull/608)
+ * Fix 'create account' link in 'forgot password'
+   [\#606](https://github.com/matrix-org/matrix-react-sdk/pull/606)
+ * Let electron users complete captchas in a web browser
+   [\#601](https://github.com/matrix-org/matrix-react-sdk/pull/601)
+ * Add support for deleting threepids
+   [\#597](https://github.com/matrix-org/matrix-react-sdk/pull/597)
+ * Display msisdn threepids as 'Phone'
+   [\#598](https://github.com/matrix-org/matrix-react-sdk/pull/598)
+
+Changes in [0.8.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.4) (2016-12-24)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.3...v0.8.4)
+
+ * Fix signup by working around the fact that reCapture doesn't work on electron
+ * Fix windows shortcut link
+
+Changes in [0.8.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.3) (2016-12-22)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.2...v0.8.3)
+
+ * Revert performance fix for wantsDateSeperator which was causing date separators to
+   be shown at the wrong time of day.
+ * Unbranded error messages
+   [\#599](https://github.com/matrix-org/matrix-react-sdk/pull/599)
+ * Fix scroll jumping when a video is decrypted
+   [\#594](https://github.com/matrix-org/matrix-react-sdk/pull/594)
+
+Changes in [0.8.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.2) (2016-12-16)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.1...v0.8.2)
+
+ * Improve the performance of MemberEventListSummary
+   [\#590](https://github.com/matrix-org/matrix-react-sdk/pull/590)
+ * Implement bulk invite rejections
+   [\#592](https://github.com/matrix-org/matrix-react-sdk/pull/592)
+ * Fix performance issues with wantsDateSeperator
+   [\#591](https://github.com/matrix-org/matrix-react-sdk/pull/591)
+ * Add read receipt times to the hovertip of read markers
+   [\#586](https://github.com/matrix-org/matrix-react-sdk/pull/586)
+ * Don't throw exception on stop if no DMRoomMap
+   [\#589](https://github.com/matrix-org/matrix-react-sdk/pull/589)
+ * Fix failing test
+   [\#587](https://github.com/matrix-org/matrix-react-sdk/pull/587)
+
+Changes in [0.8.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.1) (2016-12-09)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.1-rc.2...v0.8.1)
+
+No changes
+
+Changes in [0.8.1-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.1-rc.2) (2016-12-06)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.1-rc.1...v0.8.1-rc.2)
+
+ * Fix exception when clearing room dir search
+   [\#585](https://github.com/matrix-org/matrix-react-sdk/pull/585)
+ * Allow integration UI URLs with paths
+   [\#583](https://github.com/matrix-org/matrix-react-sdk/pull/583)
+ * Give the search box field a name
+   [\#584](https://github.com/matrix-org/matrix-react-sdk/pull/584)
+ * Pass the room object into displayNotification
+   [\#582](https://github.com/matrix-org/matrix-react-sdk/pull/582)
+ * Don't throw an exception entering settings page
+   [\#581](https://github.com/matrix-org/matrix-react-sdk/pull/581)
+
+Changes in [0.8.1-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.1-rc.1) (2016-12-05)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.0...v0.8.1-rc.1)
+
+ * Strip (IRC) when clicking on username
+   [\#579](https://github.com/matrix-org/matrix-react-sdk/pull/579)
+ * Fix scroll jump on image decryption
+   [\#577](https://github.com/matrix-org/matrix-react-sdk/pull/577)
+ * Make cut operations update the tab complete list
+   [\#576](https://github.com/matrix-org/matrix-react-sdk/pull/576)
+ * s/block/blacklist for e2e
+   [\#574](https://github.com/matrix-org/matrix-react-sdk/pull/574)
+ * Fix the download icon on attachments
+   [\#573](https://github.com/matrix-org/matrix-react-sdk/pull/573)
+ * Don't default the page_type to room directory
+   [\#572](https://github.com/matrix-org/matrix-react-sdk/pull/572)
+ * Fix crash on logging in
+   [\#571](https://github.com/matrix-org/matrix-react-sdk/pull/571)
+ * Reinstate missing sections from the UserSettings
+   [\#569](https://github.com/matrix-org/matrix-react-sdk/pull/569)
+ * Bump browser-encrypt-attachment to v0.2.0
+   [\#568](https://github.com/matrix-org/matrix-react-sdk/pull/568)
+ * Make the unpagination process less aggressive
+   [\#567](https://github.com/matrix-org/matrix-react-sdk/pull/567)
+ * Get rid of always-on labs settings
+   [\#566](https://github.com/matrix-org/matrix-react-sdk/pull/566)
+ * Fix 'Quote' for e2e messages
+   [\#565](https://github.com/matrix-org/matrix-react-sdk/pull/565)
+
+Changes in [0.8.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.0) (2016-11-19)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.5...v0.8.0)
+
+ * Fix more membership change collapsing bugs
+   [\#560](https://github.com/matrix-org/matrix-react-sdk/pull/560)
+ * Show an open padlock for unencrypted rooms
+   [\#557](https://github.com/matrix-org/matrix-react-sdk/pull/557)
+ * Clean up MFileBody.presentableTextForFile
+   [\#558](https://github.com/matrix-org/matrix-react-sdk/pull/558)
+ * Update eventtiles when the events are decrypted
+   [\#556](https://github.com/matrix-org/matrix-react-sdk/pull/556)
+ * Update EventTile to use WithMatrixClient instead of MatrixClientPeg
+   [\#552](https://github.com/matrix-org/matrix-react-sdk/pull/552)
+ * Disable conference calling for encrypted rooms
+   [\#549](https://github.com/matrix-org/matrix-react-sdk/pull/549)
+ * Encrypt attachments in encrypted rooms
+   [\#548](https://github.com/matrix-org/matrix-react-sdk/pull/548)
+ * Fix MemberAvatar PropTypes & MemberEventListSummary key
+   [\#547](https://github.com/matrix-org/matrix-react-sdk/pull/547)
+ * Revert "Encrypt attachments in encrypted rooms,"
+   [\#546](https://github.com/matrix-org/matrix-react-sdk/pull/546)
+ * Fix the vector web version in UserSettings
+   [\#542](https://github.com/matrix-org/matrix-react-sdk/pull/542)
+ * Truncate consecutive member events
+   [\#544](https://github.com/matrix-org/matrix-react-sdk/pull/544)
+ * Encrypt attachments in encrypted rooms,
+   [\#533](https://github.com/matrix-org/matrix-react-sdk/pull/533)
+ * Fix the ctrl+e mute camera shortcut
+   [\#545](https://github.com/matrix-org/matrix-react-sdk/pull/545)
+ * Show the error that occured when trying to reach scalar
+   [\#543](https://github.com/matrix-org/matrix-react-sdk/pull/543)
+ * Don't do URL previews for matrix.to
+   [\#541](https://github.com/matrix-org/matrix-react-sdk/pull/541)
+ * Fix NPE in LoggedInView
+   [\#540](https://github.com/matrix-org/matrix-react-sdk/pull/540)
+ * Make room alias & user ID links matrix.to links
+   [\#538](https://github.com/matrix-org/matrix-react-sdk/pull/538)
+ * Make MemberInfo use the matrixclient from the context
+   [\#537](https://github.com/matrix-org/matrix-react-sdk/pull/537)
+ * Add the MatrixClient to the react context
+   [\#536](https://github.com/matrix-org/matrix-react-sdk/pull/536)
+ * Factor out LoggedInView from MatrixChat
+   [\#535](https://github.com/matrix-org/matrix-react-sdk/pull/535)
+ * Move 'new version' support into Platform
+   [\#532](https://github.com/matrix-org/matrix-react-sdk/pull/532)
+ * Move Notifications into Platform
+   [\#534](https://github.com/matrix-org/matrix-react-sdk/pull/534)
+ * Move platform-specific functionality into Platform
+   [\#531](https://github.com/matrix-org/matrix-react-sdk/pull/531)
+
 Changes in [0.7.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.7.5) (2016-11-04)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.7.5-rc.1...v0.7.5)

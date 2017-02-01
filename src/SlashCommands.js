@@ -41,7 +41,7 @@ class Command {
     }
 
     getUsage() {
-        return "Usage: " + this.getCommandWithArgs()
+        return "Usage: " + this.getCommandWithArgs();
     }
 }
 
@@ -84,7 +84,7 @@ var commands = {
             var matches = args.match(/^(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}))( +(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})))?$/);
             if (matches) {
                 Tinter.tint(matches[1], matches[4]);
-                var colorScheme = {}
+                var colorScheme = {};
                 colorScheme.primary_color = matches[1];
                 if (matches[4]) {
                     colorScheme.secondary_color = matches[4];
@@ -288,7 +288,7 @@ var commands = {
 // helpful aliases
 var aliases = {
     j: "join"
-}
+};
 
 module.exports = {
     /**
@@ -331,9 +331,9 @@ module.exports = {
         // Return all the commands plus /me and /markdown which aren't handled like normal commands
         var cmds = Object.keys(commands).sort().map(function(cmdKey) {
             return commands[cmdKey];
-        })
-        cmds.push(new Command("me", "<action>", function(){}));
-        cmds.push(new Command("markdown", "<on|off>", function(){}));
+        });
+        cmds.push(new Command("me", "<action>", function() {}));
+        cmds.push(new Command("markdown", "<on|off>", function() {}));
 
         return cmds;
     }

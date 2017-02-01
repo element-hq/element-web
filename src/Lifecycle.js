@@ -18,7 +18,7 @@ import q from 'q';
 import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
-import Notifier from './Notifier'
+import Notifier from './Notifier';
 import UserActivity from './UserActivity';
 import Presence from './Presence';
 import dis from './dispatcher';
@@ -140,7 +140,7 @@ function _loginWithToken(queryParams, defaultDeviceDisplayName) {
             homeserverUrl: queryParams.homeserver,
             identityServerUrl: queryParams.identityServer,
             guest: false,
-        })
+        });
     }, (err) => {
         console.error("Failed to log in with login token: " + err + " " +
                       err.data);
@@ -356,7 +356,7 @@ export function stopMatrixClient() {
     Notifier.stop();
     UserActivity.stop();
     Presence.stop();
-    DMRoomMap.shared().stop();
+    if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     var cli = MatrixClientPeg.get();
     if (cli) {
         cli.stopClient();

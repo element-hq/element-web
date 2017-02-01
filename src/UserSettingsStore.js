@@ -30,16 +30,6 @@ module.exports = {
             id: 'rich_text_editor',
             default: false,
         },
-        {
-            name: 'End-to-End Encryption',
-            id: 'e2e_encryption',
-            default: true,
-        },
-        {
-            name: 'Integration Management',
-            id: 'integration_management',
-            default: true,
-        },
     ],
 
     loadProfileInfo: function() {

@@ -52,6 +52,7 @@ limitations under the License.
  */
 
 var MatrixClientPeg = require('./MatrixClientPeg');
+var PlatformPeg = require("./PlatformPeg");
 var Modal = require('./Modal');
 var sdk = require('./index');
 var Matrix = require("matrix-js-sdk");
@@ -158,10 +159,10 @@ function _setCallState(call, roomId, status) {
     calls[roomId] = call;
 
     if (status === "ringing") {
-        play("ringAudio")
+        play("ringAudio");
     }
     else if (call && call.call_state === "ringing") {
-        pause("ringAudio")
+        pause("ringAudio");
     }
 
     if (call) {
@@ -187,6 +188,17 @@ function _onAction(payload) {
             );
         }
         else if (payload.type === 'screensharing') {
+            const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
+            if (screenCapErrorString) {
+                _setCallState(undefined, newCall.roomId, "ended");
+                console.log("Can't capture screen: " + screenCapErrorString);
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createDialog(ErrorDialog, {
+                    title: "Unable to capture screen",
+                    description: screenCapErrorString
+                });
+                return;
+            }
             newCall.placeScreenSharingCall(
                 payload.remote_element,
                 payload.local_element
@@ -280,7 +292,7 @@ function _onAction(payload) {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
                     title: "Warning!",
-                    description: "Conference calling in Riot is in development and may not be reliable.",
+                    description: "Conference calling is in development and may not be reliable.",
                     onFinished: confirm=>{
                         if (confirm) {
                             ConferenceHandler.createNewMatrixCall(
