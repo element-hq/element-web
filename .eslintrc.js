@@ -53,7 +53,11 @@ module.exports = {
          * things that are errors in the js-sdk config that the current
          * code does not adhere to, turned down to warn
          */
-        "max-len": ["warn"],
+        "max-len": ["warn", {
+            // apparently people believe the length limit shouldn't apply
+            // to JSX.
+            ignorePattern: '^\\s*<',
+        }],
         "valid-jsdoc": ["warn"],
         "new-cap": ["warn"],
         "key-spacing": ["warn"],
