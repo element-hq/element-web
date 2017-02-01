@@ -80,7 +80,7 @@ export default React.createClass({
 
         return readFileAsArrayBuffer(file).then((arrayBuffer) => {
             return MegolmExportEncryption.decryptMegolmKeyFile(
-                arrayBuffer, passphrase
+                arrayBuffer, passphrase,
             );
         }).then((keys) => {
             return this.props.matrixClient.importRoomKeys(JSON.parse(keys));
@@ -98,9 +98,14 @@ export default React.createClass({
         });
     },
 
+    _onCancelClick: function(ev) {
+        ev.preventDefault();
+        this.props.onFinished(false);
+        return false;
+    },
+
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
 
         const disableForm = (this.state.phase !== PHASE_EDIT);
 
@@ -158,10 +163,9 @@ export default React.createClass({
                         <input className='mx_Dialog_primary' type='submit' value='Import'
                             disabled={!this.state.enableSubmit || disableForm}
                         />
-                        <AccessibleButton element='button' onClick={this.props.onFinished}
-                                disabled={disableForm}>
+                        <button onClick={this._onCancelClick} disabled={disableForm}>
                             Cancel
-                        </AccessibleButton>
+                        </button>
                     </div>
                 </form>
             </BaseDialog>

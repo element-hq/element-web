@@ -171,6 +171,7 @@ export default React.createClass({
                     brand={this.props.config.brand}
                     collapsedRhs={this.props.collapse_rhs}
                     enableLabs={this.props.config.enableLabs}
+                    referralBaseUrl={this.props.config.referralBaseUrl}
                 />;
                 if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>;
                 break;
