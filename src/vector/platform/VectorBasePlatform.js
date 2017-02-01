@@ -39,4 +39,12 @@ export default class VectorBasePlatform extends BasePlatform {
      */
     installUpdate() {
     }
+
+    /**
+     * Get a sensible default display name for the
+     * device Vector is running on
+     */
+    getDefaultDeviceDisplayName() {
+        return "Unknown device";
+    }
 }

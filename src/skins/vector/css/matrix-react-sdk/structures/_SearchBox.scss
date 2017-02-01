@@ -1,0 +1,66 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_SearchBox {
+    height: 24px;
+    margin-left: 16px;
+    margin-right: 16px;
+    padding-top: 24px;
+    padding-bottom: 22px;
+
+    display: flex;
+}
+
+.mx_SearchBox_searchButton {
+    margin-right: 10px;
+    margin-top: 5px;
+    pointer-events: none;
+}
+
+.mx_SearchBox_closeButton {
+    cursor: pointer;
+    margin-top: -5px;
+}
+
+.mx_SearchBox_search {
+    flex: 1 1 auto;
+    width: 0px;
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-size: 12px;
+    margin-top: -2px;
+    height: 24px;
+    border: 0px ! important;
+    /* border-bottom: 1px solid rgba(0, 0, 0, 0.1) ! important; */
+    border: 0px;
+}
+
+.mx_SearchBox_minimise,
+.mx_SearchBox_maximise {
+    margin-top: 3px;
+    cursor: pointer;
+}
+
+.mx_SearchBox_minimise {
+    margin-left: 10px;
+}
+
+.mx_SearchBox_maximise {
+    margin-left: 9px;
+}
+
+.mx_SearchBox object {
+    pointer-events: none;
+}

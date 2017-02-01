@@ -14,7 +14,11 @@ module.exports = {
         // (we should probably make js-sdk load it asynchronously at some
         // point, so that it doesn't block the pageload, but that is a separate
         // problem)
-        "olm": "olm/olm.js",
+        "olm": "./src/vector/olm-loader.js",
+
+        // CSS themes
+        "theme-light": "./src/skins/vector/css/themes/light.scss",
+        "theme-dark": "./src/skins/vector/css/themes/dark.scss"
     },
     module: {
         preLoaders: [
@@ -23,8 +27,25 @@ module.exports = {
         loaders: [
             { test: /\.json$/, loader: "json" },
             { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
-            // css-raw-loader loads CSS but doesn't try to treat url()s as require()s
-            { test: /\.css$/, loader: ExtractTextPlugin.extract("css-raw-loader") },
+            {
+                test: /\.scss$/,
+
+                // 1. postcss-loader turns the SCSS into normal CSS.
+                // 2. css-raw-loader turns the CSS into a javascript module
+                //    whose default export is a string containing the CSS.
+                //    (css-raw-loader is similar to css-loader, but the latter
+                //    would also drag in the imgs and fonts that our CSS refers to
+                //    as webpack inputs.)
+                // 3. ExtractTextPlugin turns that string into a separate asset.
+                loader: ExtractTextPlugin.extract(
+                    "css-raw-loader!postcss-loader?config=postcss.config.js"
+                ),
+            },
+            {
+                // this works similarly to the scss case, without postcss.
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract("css-raw-loader"),
+            },
         ],
         noParse: [
             // don't parse the languages within highlight.js. They cause stack
@@ -40,7 +61,17 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, "webapp"),
-        filename: "[name].[chunkhash].js",
+
+        // the generated js (and CSS, from the ExtractTextPlugin) are put in a
+        // unique subdirectory for the build. There will only be one such
+        // 'bundle' directory in the generated tarball; however, hosting
+        // servers can collect 'bundles' from multiple versions into one
+        // directory and symlink it into place - this allows users who loaded
+        // an older version of the application to continue to access webpack
+        // chunks even after the app is redeployed.
+        //
+        filename: "bundles/[hash]/[name].js",
+        chunkFilename: "bundles/[hash]/[name].js",
         devtoolModuleFilenameTemplate: function(info) {
             // Reading input source maps gives only relative paths here for
             // everything. Until I figure out how to fix this, this is a
@@ -57,7 +88,8 @@ module.exports = {
         alias: {
             // alias any requires to the react module to the one in our path, otherwise
             // we tend to get the react source included twice when using npm link.
-            react: path.resolve('./node_modules/react'),
+            "react": path.resolve('./node_modules/react'),
+            "react-dom": path.resolve('./node_modules/react-dom'),
             "react-addons-perf": path.resolve('./node_modules/react-addons-perf'),
 
             // same goes for js-sdk
@@ -78,7 +110,7 @@ module.exports = {
         }),
 
         new ExtractTextPlugin(
-            "[name].[contenthash].css",
+            "bundles/[hash]/[name].css",
             {
                 allChunks: true
             }

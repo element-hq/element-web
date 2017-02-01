@@ -23,11 +23,11 @@ import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 
 /**
  * Check a version string is compatible with the Changelog
- * dialog
+ * dialog ([vectorversion]-react-[react-sdk-version]-js-[js-sdk-version])
  */
 function checkVersion(ver) {
     const parts = ver.split('-');
-    return parts[0] == 'vector' && parts[2] == 'react' && parts[4] == 'js';
+    return parts.length == 5 && parts[1] == 'react' && parts[3] == 'js';
 }
 
 export default React.createClass({

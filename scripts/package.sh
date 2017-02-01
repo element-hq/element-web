@@ -15,6 +15,11 @@ fi
 
 npm run clean
 npm run build$dev
+
+# include the sample config in the tarball. Arguably this should be done by
+# `npm run build`, but it's just too painful.
+cp config.sample.json webapp/
+
 mkdir -p dist
 cp -r webapp vector-$version
 echo $version > vector-$version/version

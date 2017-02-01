@@ -23,6 +23,9 @@ import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
 import q from 'q';
 
+import url from 'url';
+import UAParser from 'ua-parser-js';
+
 export default class WebPlatform extends VectorBasePlatform {
     constructor() {
         super();
@@ -57,11 +60,13 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     setNotificationCount(count: number) {
+        if (this.notificationCount === count) return;
         super.setNotificationCount(count);
         this._updateFavicon();
     }
 
     setErrorStatus(errorDidOccur: boolean) {
+        if (this.errorDidOccur === errorDidOccur) return;
         super.setErrorStatus(errorDidOccur);
         this._updateFavicon();
     }
@@ -100,7 +105,7 @@ export default class WebPlatform extends VectorBasePlatform {
         return defer.promise;
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string) {
+    displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {
         const notification = new global.Notification(
             title,
             {
@@ -117,6 +122,7 @@ export default class WebPlatform extends VectorBasePlatform {
                 room_id: room.roomId
             });
             global.focus();
+            notification.close();
         };
 
         // Chrome only dismisses notifications after 20s, which
@@ -128,8 +134,18 @@ export default class WebPlatform extends VectorBasePlatform {
 
     _getVersion() {
         const deferred = q.defer();
+
+        // We add a cachebuster to the request to make sure that we know about
+        // the most recent version on the origin server. That might not
+        // actually be the version we'd get on a reload (particularly in the
+        // presence of intermediate caching proxies), but still: we're trying
+        // to tell the user that there is a new version.
         request(
-            { method: "GET", url: "version" },
+            {
+                method: "GET",
+                url: "version",
+                qs: { cachebuster: Date.now() },
+            },
             (err, response, body) => {
                 if (err || response.status < 200 || response.status >= 300) {
                     if (err == null) err = { status: response.status };
@@ -169,5 +185,25 @@ export default class WebPlatform extends VectorBasePlatform {
 
     installUpdate() {
         window.location.reload();
+    }
+
+    getDefaultDeviceDisplayName() {
+        // strip query-string and fragment from uri
+        let u = url.parse(window.location.href);
+        u.search = "";
+        u.hash = "";
+        let app_name = u.format();
+
+        let ua = new UAParser();
+        return app_name + " via " + ua.getBrowser().name +
+            " on " + ua.getOS().name;
+    }
+
+    screenCaptureErrorString() {
+        // it won't work at all if you're not on HTTPS so whine whine whine
+        if (!global.window || global.window.location.protocol !== "https:") {
+            return "You need to be using HTTPS to place a screen-sharing call.";
+        }
+        return null;
     }
 }

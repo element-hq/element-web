@@ -1,4 +1,168 @@
-hanges in [0.8.4](https://github.com/vector-im/vector-web/releases/tag/v0.8.4) (2016-11-04)
+Changes in [0.9.6](https://github.com/vector-im/riot-web/releases/tag/v0.9.6) (2017-01-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.6-rc.1...v0.9.6)
+
+ * Update to matrix-js-sdk 0.9.6 for video calling fix
+
+Changes in [0.9.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.6-rc.1) (2017-01-13)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.5...v0.9.6-rc.1)
+
+ * Build the js-sdk in the CI script
+   [\#2920](https://github.com/vector-im/riot-web/pull/2920)
+ * Hopefully fix Windows shortcuts
+   [\#2917](https://github.com/vector-im/riot-web/pull/2917)
+ * Update README now the js-sdk has a transpile step
+   [\#2921](https://github.com/vector-im/riot-web/pull/2921)
+ * Use the role for 'toggle dev tools'
+   [\#2915](https://github.com/vector-im/riot-web/pull/2915)
+ * Enable screen sharing easter-egg in desktop app
+   [\#2909](https://github.com/vector-im/riot-web/pull/2909)
+ * make electron send email validation URLs with a nextlink of riot.im
+   [\#2808](https://github.com/vector-im/riot-web/pull/2808)
+ * add Debian Stretch install steps to readme
+   [\#2809](https://github.com/vector-im/riot-web/pull/2809)
+ * Update desktop build instructions fixes #2792
+   [\#2793](https://github.com/vector-im/riot-web/pull/2793)
+ * CSS for the delete threepid button
+   [\#2784](https://github.com/vector-im/riot-web/pull/2784)
+
+Changes in [0.9.5](https://github.com/vector-im/riot-web/releases/tag/v0.9.5) (2016-12-24)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.4...v0.9.5)
+
+ * make electron send email validation URLs with a nextlink of riot.im rather than file:///
+ * add gnu-tar to debian electron build deps
+ * fix win32 shortcut in start menu
+
+Changes in [0.9.4](https://github.com/vector-im/riot-web/releases/tag/v0.9.4) (2016-12-22)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.3...v0.9.4)
+
+ * Update to libolm 2.1.0. This should help resolve a problem with browser
+   sessions being logged out ([\#2726](https://github.com/vector-im/riot-web/issues/2726)).
+
+Changes in [0.9.3](https://github.com/vector-im/riot-web/releases/tag/v0.9.3) (2016-12-22)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.2...v0.9.3)
+
+ * (from matrix-react-sdk) Fix regression where the date separator would be displayed
+   at the wrong time of day.
+ * README.md: fix GFMD for nativefier
+   [\#2755](https://github.com/vector-im/riot-web/pull/2755)
+
+Changes in [0.9.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.2) (2016-12-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.1...v0.9.2)
+
+ * Remove the client side filtering from the room dir
+   [\#2750](https://github.com/vector-im/riot-web/pull/2750)
+ * Configure olm memory size
+   [\#2745](https://github.com/vector-im/riot-web/pull/2745)
+ * Support room dir 3rd party network filtering
+   [\#2747](https://github.com/vector-im/riot-web/pull/2747)
+
+Changes in [0.9.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.1) (2016-12-09)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.1-rc.2...v0.9.1)
+
+ * Update README to say how to build the desktop app
+   [\#2732](https://github.com/vector-im/riot-web/pull/2732)
+ * Add signing ID in release_config.yaml
+   [\#2731](https://github.com/vector-im/riot-web/pull/2731)
+ * Makeover!
+   [\#2722](https://github.com/vector-im/riot-web/pull/2722)
+ * Fix broken tests
+   [\#2730](https://github.com/vector-im/riot-web/pull/2730)
+ * Make the 'loading' tests work in isolation
+   [\#2727](https://github.com/vector-im/riot-web/pull/2727)
+ * Use a PNG for the icon on non-Windows
+   [\#2708](https://github.com/vector-im/riot-web/pull/2708)
+ * Add missing brackets to call to toUpperCase
+   [\#2703](https://github.com/vector-im/riot-web/pull/2703)
+
+Changes in [0.9.1-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.1-rc.2) (2016-12-06)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.1-rc.1...v0.9.1-rc.2)
+
+ * Fix clicking on notifications
+   [\#2700](https://github.com/vector-im/riot-web/pull/2700)
+ * Desktop app: Only show window when ready
+   [\#2697](https://github.com/vector-im/riot-web/pull/2697)
+
+Changes in [0.9.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.1-rc.1) (2016-12-05)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.0...v0.9.1-rc.1)
+
+ * Final bits to prepare electron distribtion:
+   [\#2653](https://github.com/vector-im/riot-web/pull/2653)
+ * Update name & repo to reflect renamed repository
+   [\#2692](https://github.com/vector-im/riot-web/pull/2692)
+ * Document cross_origin_renderer_url
+   [\#2680](https://github.com/vector-im/riot-web/pull/2680)
+ * Add css for the iframes for e2e attachments
+   [\#2659](https://github.com/vector-im/riot-web/pull/2659)
+ * Fix config location in some more places
+   [\#2670](https://github.com/vector-im/riot-web/pull/2670)
+ * CSS updates for s/block/blacklist for e2e
+   [\#2662](https://github.com/vector-im/riot-web/pull/2662)
+ * Update to electron 1.4.8
+   [\#2660](https://github.com/vector-im/riot-web/pull/2660)
+ * Add electron config
+   [\#2644](https://github.com/vector-im/riot-web/pull/2644)
+ * Move getDefaultDeviceName into the Platforms
+   [\#2643](https://github.com/vector-im/riot-web/pull/2643)
+ * Add Freenode & Mozilla domains
+   [\#2641](https://github.com/vector-im/riot-web/pull/2641)
+ * Include config.sample.json in dist tarball
+   [\#2614](https://github.com/vector-im/riot-web/pull/2614)
+
+Changes in [0.9.0](https://github.com/vector-im/vector-web/releases/tag/v0.9.0) (2016-11-19)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.4...v0.9.0)
+
+ * Add a cachebuster to /version
+   [\#2596](https://github.com/vector-im/vector-web/pull/2596)
+ * Add a 'View decrypted source' button
+   [\#2587](https://github.com/vector-im/vector-web/pull/2587)
+ * Fix changelog dialog to  read new version format
+   [\#2577](https://github.com/vector-im/vector-web/pull/2577)
+ * Build all of the vector dir in the build process
+   [\#2558](https://github.com/vector-im/vector-web/pull/2558)
+ * Support for get_app_version
+   [\#2553](https://github.com/vector-im/vector-web/pull/2553)
+ * Add CSS for mlist truncation
+   [\#2565](https://github.com/vector-im/vector-web/pull/2565)
+ * Add menu option for `external_url` if present
+   [\#2560](https://github.com/vector-im/vector-web/pull/2560)
+ * Make auto-update configureable
+   [\#2555](https://github.com/vector-im/vector-web/pull/2555)
+ * Missed files electron windows fixes
+   [\#2556](https://github.com/vector-im/vector-web/pull/2556)
+ * Add some CSS for  scalar error popup
+   [\#2554](https://github.com/vector-im/vector-web/pull/2554)
+ * Catch unhandled errors in the electron process
+   [\#2552](https://github.com/vector-im/vector-web/pull/2552)
+ * Slight grab-bag of fixes for electron on Windows
+   [\#2551](https://github.com/vector-im/vector-web/pull/2551)
+ * Electron app (take 3)
+   [\#2535](https://github.com/vector-im/vector-web/pull/2535)
+ * Use webpack-dev-server instead of http-server
+   [\#2542](https://github.com/vector-im/vector-web/pull/2542)
+ * Better support no-config when loading from file
+   [\#2541](https://github.com/vector-im/vector-web/pull/2541)
+ * Fix loading with no config from HTTP
+   [\#2540](https://github.com/vector-im/vector-web/pull/2540)
+ * Move 'new version' support into Platform
+   [\#2532](https://github.com/vector-im/vector-web/pull/2532)
+ * Add Notification support to the Web Platform
+   [\#2533](https://github.com/vector-im/vector-web/pull/2533)
+ * Use the defaults if given a blank config file
+   [\#2534](https://github.com/vector-im/vector-web/pull/2534)
+ * Implement Platforms
+   [\#2531](https://github.com/vector-im/vector-web/pull/2531)
+
+Changes in [0.8.4](https://github.com/vector-im/vector-web/releases/tag/v0.8.4) (2016-11-04)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/vector-web/compare/v0.8.4-rc.2...v0.8.4)
 

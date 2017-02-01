@@ -14,7 +14,7 @@ https://riot.im/develop for those who like living dangerously.
 To host your own copy of Riot, the quickest bet is to use a pre-built
 released version of Riot:
 
-1. Download the latest version from https://github.com/vector-im/vector-web/releases
+1. Download the latest version from https://github.com/vector-im/riot-web/releases
 1. Untar the tarball on your web server
 1. Move (or symlink) the vector-x.x.x directory to an appropriate name
 1. If desired, copy `config.sample.json` to `config.json` and edit it
@@ -24,6 +24,14 @@ released version of Riot:
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
 over https.
+
+### Installation Steps for Debian Stretch
+1. Add the repository to your sources.list using either of the following two options:
+  - Directly to sources.list: `echo "deb https://riot.im/packages/debian/ stretch main" | sudo tee -a /etc/apt/sources.list`
+  - As a separate entry in sources.list.d: `echo "deb https://riot.im/packages/debian/ stretch main" | sudo tee /etc/apt/sources.list.d/riot.list`
+2. Add the gpg signing key for the riot repository: `curl -s https://riot.im/packages/debian/repo-key.asc | sudo apt-key add -`
+3. Update your package lists: `sudo apt-get update`
+4. Install Riot: `sudo apt-get install riot-web`
 
 Important Security Note
 =======================
@@ -36,7 +44,7 @@ access to Riot (or other apps) due to sharing the same domain.
 
 We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place.  See
-https://github.com/vector-im/vector-web/issues/1977 for more details.
+https://github.com/vector-im/riot-web/issues/1977 for more details.
 
 Building From Source
 ====================
@@ -45,13 +53,17 @@ Riot is a modular webapp built with modern ES6 and requires a npm build system
 to build.
 
 1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
-1. Clone the repo: `git clone https://github.com/vector-im/vector-web.git`
-1. Switch to the vector-web directory: `cd vector-web`
+1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`
+1. Switch to the riot-web directory: `cd riot-web`
 1. Install the prerequisites: `npm install`
 1. If you are using the `develop` branch of vector-web, you will probably need
-   to rebuild one of the dependencies, due to
-   https://github.com/npm/npm/issues/3055: `(cd node_modules/matrix-react-sdk
-   && npm install)`
+   to rebuild some of the dependencies, due to
+   https://github.com/npm/npm/issues/3055:
+
+   ```
+   (cd node_modules/matrix-js-sdk && npm install)
+   (cd node_modules/matrix-react-sdk && npm install)
+   ```
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it (see below for details)
 1. `npm run dist` to build a tarball to deploy. Untaring this file will give
@@ -59,16 +71,16 @@ to build.
    web server.
 
 Note that `npm run dist` is not supported on Windows, so Windows users can run `npm
-run build`, which will build all the necessary files into the `vector`
-directory. The version of Vector will not appear in Settings without
-using the dist script. You can then mount the vector directory on your
+run build`, which will build all the necessary files into the `webapp`
+directory. The version of Riot will not appear in Settings without
+using the dist script. You can then mount the `webapp` directory on your
 webserver to actually serve up the app, which is entirely static content.
 
 config.json
 ===========
 
-You can configure the app by copying `vector/config.sample.json` to
-`vector/config.json` and customising it:
+You can configure the app by copying `config.sample.json` to
+`config.json` and customising it:
 
 1. `default_hs_url` is the default home server url.
 1. `default_is_url` is the default identity server url (this is the server used
@@ -81,54 +93,72 @@ You can configure the app by copying `vector/config.sample.json` to
    and https://vector.im.  In future identity servers will be decentralised.
 1. `integrations_ui_url`: URL to the web interface for the integrations server.
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
-1. `roomDirectory`: config for the public room directory. This section encodes behaviour
-   on the room directory screen for filtering the list by server / network type and joining
-   third party networks. This config section will disappear once APIs are available to
-   get this information for home servers. This section is optional.
+1. `roomDirectory`: config for the public room directory. This section is optional.
 1. `roomDirectory.servers`: List of other Home Servers' directories to include in the drop
    down list. Optional.
-1. `roomDirectory.serverConfig`: Config for each server in `roomDirectory.servers`. Optional.
-1. `roomDirectory.serverConfig.<server_name>.networks`: List of networks (named
-   in `roomDirectory.networks`) to include for this server. Optional.
-1. `roomDirectory.networks`: config for each network type. Optional.
-1. `roomDirectory.<network_type>.name`: Human-readable name for the network. Required.
-1. `roomDirectory.<network_type>.protocol`: Protocol as given by the server in
-   `/_matrix/client/unstable/thirdparty/protocols` response. Required to be able to join
-   this type of third party network.
-1. `roomDirectory.<network_type>.domain`: Domain as given by the server in
-   `/_matrix/client/unstable/thirdparty/protocols` response, if present. Required to be
-   able to join this type of third party network, if present in `thirdparty/protocols`.
-1. `roomDirectory.<network_type>.portalRoomPattern`: Regular expression matching aliases
-   for portal rooms to locations on this network. Required.
-1. `roomDirectory.<network_type>.icon`: URL to an icon to be displayed for this network. Required.
-1. `roomDirectory.<network_type>.example`: Textual example of a location on this network,
-   eg. '#channel' for an IRC network. Optional.
-1. `roomDirectory.<network_type>.nativePattern`: Regular expression that matches a
-   valid location on this network. This is used as a hint to the user to indicate
-   when a valid location has been entered so it's not necessary for this to be
-   exactly correct. Optional.
+1. `update_base_url` (electron app only): HTTPS URL to a web server to download
+   updates from. This should be the path to the directory containing `macos`
+   and `win32` (for update packages, not installer packages).
+1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
+   encrypted file attachments. This MUST be hosted on a completely separate domain to
+   anything else since it is used to isolate the privileges of file attachments to this
+   domain. Default: `usercontent.riot.im`. This needs to contain v1.html from
+   https://github.com/matrix-org/usercontent/blob/master/v1.html
 
 Running as a Desktop app
 ========================
 
-In future we'll do an official distribution of Riot as an desktop app.  Meanwhile,
-there are a few options:
+Riot can also be run as a desktop app, wrapped in electron. You can download a
+pre-built version from https://riot.im/desktop.html or, if you prefer,
+built it yourself.
 
-@asdf:matrix.org points out that you can use nativefier and it just works(tm):
+To run as a desktop app:
+
+1. Follow the instructions in 'Building From Source' above
+2. Install electron and run it:
+
+   ```
+   npm install electron
+   node_modules/.bin/electron .
+   ```
+
+To build packages, use electron-builder. This is configured to output:
+ * dmg + zip for macOS
+ * exe + nupkg for Windows
+ * deb for Linux
+But this can be customised by editing the `build` section of package.json
+as per https://github.com/electron-userland/electron-builder/wiki/Options
+
+See https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build
+for dependencies required for building packages for various platforms.
+
+The only platform that can build packages for all three platforms is macOS:
+```
+brew install wine --without-x11
+brew install mono
+brew install gnu-tar
+npm install
+npm run build:electron
+```
+
+For other packages, use electron-builder manually. For example, to build a package
+for 64 bit Linux:
+
+ 1. Follow the instructions in 'Building From Source' above
+ 2. `node_modules/.bin/build -l --x64`
+
+All electron packages go into `electron/dist/`
+
+Many thanks to @aviraldg for the initial work on the electron integration.
+
+Other options for running as a desktop app:
+ * https://github.com/krisak/vector-electron-desktop
+ * @asdf:matrix.org points out that you can use nativefier and it just works(tm)
 
 ```
 sudo npm install nativefier -g
 nativefier https://riot.im/app/
 ```
-
-krisa has a dedicated electron project at
-https://github.com/krisak/vector-electron-desktop (although you should swap out
-the 'vector' folder for the latest vector tarball you want to run.  Get a
-tarball from https://github.com/vector-im/vector-web/releases or build your own
-- see Building From Source above).
-
-There's also a (much) older electron distribution at https://github.com/stevenhammerton/vector-desktop
-
 
 Development
 ===========
@@ -149,13 +179,13 @@ the `component-index.js` for the app (used in future for skinning)
 development on Riot forcing `matrix-react-sdk` to move fast at the expense of
 maintaining a clear abstraction between the two.**  Hacking on Riot inevitably
 means hacking equally on `matrix-react-sdk`, and there are bits of
-`matrix-react-sdk` behaviour incorrectly residing in the `vector-web` project
+`matrix-react-sdk` behaviour incorrectly residing in the `riot-web` project
 (e.g. matrix-react-sdk specific CSS), and a bunch of Riot specific behaviour
 in the `matrix-react-sdk` (grep for `vector` / `riot`).  This separation problem will be
 solved asap once development on Riot (and thus matrix-react-sdk) has
 stabilised.  Until then, the two projects should basically be considered as a
 single unit.  In particular, `matrix-react-sdk` issues are currently filed
-against `vector-web` in github.
+against `riot-web` in github.
 
 Please note that Riot is intended to run correctly without access to the public
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
@@ -190,8 +220,8 @@ Then similarly with `matrix-react-sdk`:
 
 Finally, build and start Riot itself:
 
-1. `git clone git@github.com:vector-im/vector-web.git`
-1. `cd vector-web`
+1. `git clone git@github.com:vector-im/riot-web.git`
+1. `cd riot-web`
 1. `git checkout develop`
 1. `npm install`
 1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
@@ -215,10 +245,10 @@ Finally, build and start Riot itself:
    disables caching, so do NOT use it in production.
 1. Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
 
-When you make changes to `matrix-react-sdk`, you will need to run `npm run
-build` in the relevant directory. You can do this automatically by instead
-running `npm start` in the directory, to start a development builder which
-will watch for changes to the files and rebuild automatically.
+When you make changes to `matrix-react-sdk` or `matrix-js-sdk`, you will need
+to run `npm run build` in the relevant directory. You can do this automatically
+by instead running `npm start` in the directory, to start a development builder
+which will watch for changes to the files and rebuild automatically.
 
 If you add or remove any components from the Riot skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.

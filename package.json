@@ -1,13 +1,13 @@
 {
-  "name": "vector-web",
+  "name": "riot-web",
   "productName": "Riot",
   "main": "electron/src/electron-main.js",
-  "version": "0.8.4",
+  "version": "0.9.6",
   "description": "A feature-rich client for Matrix.org",
   "author": "Vector Creations Ltd.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vector-im/vector-web"
+    "url": "https://github.com/vector-im/riot-web"
   },
   "license": "Apache-2.0",
   "files": [
@@ -27,27 +27,23 @@
   "matrix-react-parent": "matrix-react-sdk",
   "scripts": {
     "reskindex": "reskindex -h src/header",
-    "build:res": "cpx \"{src/skins/vector/fonts,src/skins/vector/img}/**\" webapp/ && cpx \"{res/media,res/vector-icons}/**\" webapp/",
-    "build:config": "cpx config.json webapp/",
-    "build:emojione": "cpx \"node_modules/emojione/assets/svg/*\" webapp/emojione/svg/",
+    "build:res": "node scripts/copy-res.js",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
-    "build:css": "mkdirp build && catw \"src/skins/vector/css/**/*.css\" -o build/components.css --no-watch",
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "NODE_ENV=production webpack -p --progress",
     "build:bundle:dev": "webpack --optimize-occurence-order --progress",
-    "build:electron": "build -lwm",
-    "build": "node scripts/babelcheck.js && npm run build:res && npm run build:config && npm run build:emojione && npm run build:css && npm run build:bundle",
-    "build:dev": "node scripts/babelcheck.js && npm run build:res && npm run build:config && npm run build:emojione && npm run build:css && npm run build:bundle:dev",
+    "build:electron": "npm run clean && npm run build && build -wml --ia32 --x64",
+    "build": "node scripts/babelcheck.js && npm run build:res && npm run build:bundle",
+    "build:dev": "node scripts/babelcheck.js && npm run build:res && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
-    "start:res": "parallelshell \"cpx -w \\\"{src/skins/vector/fonts,src/skins/vector/img}/**\\\" webapp/\" \"cpx -w \\\"{res/media,res/vector-icons}/**\\\" webapp/\"",
-    "start:config": "cpx -w config.json webapp/",
-    "start:emojione": "cpx \"node_modules/emojione/assets/svg/*\" webapp/emojione/svg/ -w",
-    "start:js": "webpack-dev-server -w --progress",
+    "start:res": "node scripts/copy-res.js -w",
+    "start:js": "webpack-dev-server --output-filename=bundles/_dev_/[name].js --output-chunk-file=bundles/_dev_/[name].js -w --progress",
     "start:js:prod": "NODE_ENV=production webpack-dev-server -w --progress",
-    "start:skins:css": "mkdirp build && catw \"src/skins/vector/css/**/*.css\" -o build/components.css",
-    "start": "node scripts/babelcheck.js && parallelshell \"npm run start:emojione\" \"npm run start:res\" \"npm run start:config\" \"npm run start:js\" \"npm run start:skins:css\"",
-    "start:prod": "parallelshell \"npm run start:emojione\" \"npm run start:js:prod\" \"npm run start:skins:css\"",
-    "clean": "rimraf build lib webapp",
+    "start": "node scripts/babelcheck.js && parallelshell \"npm run start:res\" \"npm run start:js\"",
+    "start:prod": "parallelshell \"npm run start:res\" \"npm run start:js:prod\"",
+    "lint": "eslint src/",
+    "lintall": "eslint src/ test/",
+    "clean": "rimraf lib webapp electron/dist",
     "prepublish": "npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
     "test:multi": "karma start"
@@ -70,16 +66,17 @@
     "matrix-react-sdk": "matrix-org/matrix-react-sdk#develop",
     "modernizr": "^3.1.0",
     "q": "^1.4.1",
-    "react": "^15.2.1",
+    "react": "^15.4.0",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
-    "react-dom": "^15.2.1",
+    "react-dom": "^15.4.0",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "sanitize-html": "^1.11.1",
     "ua-parser-js": "^0.7.10",
     "url": "^0.11.0"
   },
   "devDependencies": {
+    "autoprefixer": "^6.6.0",
     "babel-cli": "^6.5.2",
     "babel-core": "^6.14.0",
     "babel-eslint": "^6.1.0",
@@ -94,11 +91,16 @@
     "babel-preset-es2017": "^6.16.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-2": "^6.17.0",
-    "catw": "^1.0.1",
+    "chokidar": "^1.6.1",
     "cpx": "^1.3.2",
     "css-raw-loader": "^0.1.1",
-    "electron-builder": "^7.23.2",
+    "electron-builder": "^11.2.4",
+    "electron-builder-squirrel-windows": "^11.2.1",
     "emojione": "^2.2.3",
+    "eslint": "^3.14.0",
+    "eslint-config-google": "^0.7.1",
+    "eslint-plugin-flowtype": "^2.30.0",
+    "eslint-plugin-react": "^6.9.0",
     "expect": "^1.16.0",
     "fs-extra": "^0.30.0",
     "html-webpack-plugin": "^2.24.0",
@@ -111,37 +113,52 @@
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
+    "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^2.4.5",
     "parallelshell": "^1.2.0",
     "phantomjs-prebuilt": "^2.1.7",
-    "react-addons-perf": "^15.0",
-    "react-addons-test-utils": "^15.0.1",
+    "postcss-extend": "^1.0.5",
+    "postcss-import": "^9.0.0",
+    "postcss-loader": "^1.2.2",
+    "postcss-mixins": "^5.4.1",
+    "postcss-nested": "^1.0.0",
+    "postcss-scss": "^0.4.0",
+    "postcss-simple-vars": "^3.0.0",
+    "postcss-strip-inline-comments": "^0.1.5",
+    "react-addons-perf": "^15.4.0",
+    "react-addons-test-utils": "^15.4.0",
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.1.5",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.16.2"
   },
   "optionalDependencies": {
-    "olm": "https://matrix.org/packages/npm/olm/olm-2.0.0.tgz"
+    "olm": "https://matrix.org/packages/npm/olm/olm-2.1.0.tgz"
   },
   "build": {
     "appId": "im.riot.app",
     "category": "Network",
-    "electronVersion": "1.4.2",
+    "electronVersion": "1.4.14",
     "//asar=false": "https://github.com/electron-userland/electron-builder/issues/675",
     "asar": false,
     "dereference": true,
     "//files": "We bundle everything, so we only need to include webapp/",
     "files": [
-      "!**/*",
       "electron/src/**",
       "electron/img/**",
       "webapp/**",
       "package.json"
     ],
-    "squirrelWindows": {
-      "iconUrl": "https://riot.im/favicon.ico"
+    "linux": {
+      "target": "deb",
+      "maintainer": "support@riot.im",
+      "desktop": {
+        "StartupWMClass": "riot-web"
+      }
+    },
+    "win": {
+      "target": "squirrel"
     }
   },
   "directories": {

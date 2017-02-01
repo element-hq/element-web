@@ -28,13 +28,21 @@ limitations under the License.
 // https://babeljs.io/docs/plugins/transform-runtime/
 require('babel-polyfill');
 
-// CSS requires: just putting them here for now as CSS is going to be
-// refactored "soon" anyway
-require('../../build/components.css');
+// Require common CSS here; this will make webpack process it into bundle.css.
+// Our own CSS (which is themed) is imported via separate webpack entry points
+// in webpack.config.js
 require('gemini-scrollbar/gemini-scrollbar.css');
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
+
+const rageshake = require("./rageshake");
+rageshake.init().then(() => {
+    console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
+    rageshake.cleanup();
+}, (err) => {
+    console.error("Failed to initialise rageshake: " + err);
+});
 
 
  // add React and ReactPerf to the global namespace, to make them easier to
@@ -54,7 +62,6 @@ var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
 
-import UAParser from 'ua-parser-js';
 import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
@@ -120,6 +127,8 @@ var lastLoadedScreen = null;
 // so a web page can update the URL bar appropriately.
 var onNewScreen = function(screen) {
     console.log("newscreen "+screen);
+    // just remember the most recent screen while we are loading, so that the
+    // user doesn't see the URL bar doing a dance
     if (!loaded) {
         lastLoadedScreen = screen;
     } else {
@@ -135,40 +144,23 @@ var onNewScreen = function(screen) {
 // click back to the client having registered.
 // It's up to us to recognise if we're loaded with
 // this URL and tell MatrixClient to resume registration.
+//
+// If we're in electron, we should never pass through a file:// URL otherwise
+// the identity server will try to 302 the browser to it, which breaks horribly.
+// so in that instance, hardcode to use riot.im/app for now instead.
 var makeRegistrationUrl = function() {
-    return window.location.protocol + '//' +
-           window.location.host +
-           window.location.pathname +
-           '#/register';
-}
-
-
-function getDefaultDeviceDisplayName() {
-    // strip query-string and fragment from uri
-    let u = url.parse(window.location.href);
-    u.search = "";
-    u.hash = "";
-    let app_name = u.format();
-
-    let ua = new UAParser();
-    return app_name + " via " + ua.getBrowser().name +
-        " on " + ua.getOS().name;
+    if (window.location.protocol === "file:") {
+        return 'https://riot.im/app/#/register';
+    }
+    else {
+        return window.location.protocol + '//' +
+               window.location.host +
+               window.location.pathname +
+               '#/register';
+    }
 }
 
 window.addEventListener('hashchange', onHashChange);
-window.onload = function() {
-    console.log("window.onload");
-    if (!validBrowser) {
-        return;
-    }
-    UpdateChecker.start();
-    routeUrl(window.location);
-    loaded = true;
-    if (lastLoadedScreen) {
-        onNewScreen(lastLoadedScreen);
-        lastLoadedScreen = null;
-    }
-}
 
 function getConfig() {
     let deferred = q.defer();
@@ -249,6 +241,7 @@ async function loadApp() {
     let configError;
     try {
         configJson = await getConfig();
+        rageshake.setBugReportEndpoint(configJson.bug_report_endpoint_url);
     } catch (e) {
         configError = e;
     }
@@ -259,6 +252,8 @@ async function loadApp() {
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser) {
+        UpdateChecker.start();
+
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
 
         window.matrixChat = ReactDOM.render(
@@ -271,10 +266,19 @@ async function loadApp() {
                 startingFragmentQueryParams={fragparts.params}
                 enableGuest={true}
                 onLoadCompleted={onLoadCompleted}
-                defaultDeviceDisplayName={getDefaultDeviceDisplayName()}
+                defaultDeviceDisplayName={PlatformPeg.get().getDefaultDeviceDisplayName()}
             />,
             document.getElementById('matrixchat')
         );
+
+        routeUrl(window.location);
+
+        // we didn't propagate screen changes to the URL bar while we were loading; do it now.
+        loaded = true;
+        if (lastLoadedScreen) {
+            onNewScreen(lastLoadedScreen);
+            lastLoadedScreen = null;
+        }
     }
     else {
         console.error("Browser is missing required features.");
@@ -285,7 +289,6 @@ async function loadApp() {
                 validBrowser = true;
                 console.log("User accepts the compatibility risks.");
                 loadApp();
-                window.onload(); // still do the same code paths for compatible clients
             }} />,
             document.getElementById('matrixchat')
         );

@@ -1,0 +1,126 @@
+
+// typical text (dark-on-white in light skin)
+$primary-fg-color: #dddddd;
+$primary-bg-color: #2d2d2d;
+
+// used for focusing form controls
+$focus-bg-color: #101010;
+
+// used for dialog box text
+$light-fg-color: #747474;
+
+// button UI (white-on-green in light skin)
+$accent-fg-color: $primary-bg-color;
+$accent-color: #76CFA6;
+
+$selection-fg-color: $primary-bg-color;
+
+// red warning colour
+$warning-color: #ff0064;
+
+// left-panel style muted accent color
+$secondary-accent-color: $primary-bg-color;
+
+// used by RoomDirectory permissions
+$plinth-bg-color: #474747;
+
+// used by RoomDropTarget
+$droptarget-bg-color: rgba(45,45,45,0.5);
+
+// used by AddressSelector
+$selected-color: #eaf5f0;
+
+// selected for hoverover & selected event tiles
+$event-selected-color: #353535;
+
+// used for the hairline dividers in RoomView
+$primary-hairline-color: #474747;
+
+// used for the border of input text fields
+$input-border-color: #3a3a3a;
+
+// apart from login forms, which have stronger border
+$strong-input-border-color: #656565;
+
+// used for UserSettings EditableText
+$input-underline-color: $primary-fg-color;
+$input-fg-color: $primary-fg-color;
+
+// context menus
+$menu-border-color: rgba(187, 187, 187, 0.5);
+$menu-bg-color: #373737;
+
+$avatar-initial-color: #2d2d2d;
+
+$h3-color: $primary-fg-color;
+
+$dialog-background-bg-color: #000;
+$lightbox-background-bg-color: #000;
+
+$greyed-fg-color: #888;
+
+$neutral-badge-color: #888;
+
+$preview-widget-bar-color: $menu-bg-color;
+$preview-widget-fg-color: $greyed-fg-color;
+
+$blockquote-bar-color: #ddd;
+$blockquote-fg-color: #777;
+
+$settings-grey-fg-color: #a2a2a2;
+
+$voip-decline-color: #f48080;
+$voip-accept-color: #80f480;
+
+// ********************
+
+$roomtile-name-color: rgba(186, 186, 186, 0.8);
+$roomtile-selected-bg-color: rgba(255, 255, 255, 0.05);
+
+$roomsublist-label-fg-color: $h3-color;
+$roomsublist-label-bg-color: #454545;
+
+// ********************
+
+// event tile lifecycle
+$event-encrypting-color: rgba(171, 221, 188, 0.4);
+$event-sending-color: #ddd;
+$event-notsent-color: #f44;
+
+// event timestamp
+$event-timestamp-color: #acacac;
+
+$edit-button-url: "../../img/icon_context_message_dark.svg";
+
+// e2e
+$e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
+$e2e-unverified-color: #e8bf37;
+$e2e-warning-color: #ba6363;
+
+/*** ImageView ***/
+$lightbox-bg-color: #454545;
+$lightbox-fg-color: #ffffff;
+$lightbox-border-color: #ffffff;
+
+// unused?
+$progressbar-color: #000;
+
+// Nasty hacks to apply a filter to arbitrary monochrome artwork to make it
+// better match the theme.  Typically applied to dark grey 'off' buttons or
+// light grey 'on' buttons.
+.mx_filterFlipColor {
+    filter: invert();
+}
+
+.gm-scrollbar .thumb {
+    filter: invert();
+}
+
+.mx_EventTile_content .markdown-body pre,
+.mx_EventTile_content .markdown-body code {
+    filter: invert();
+}
+
+.mx_EventTile_content .markdown-body pre code {
+    filter: none;
+}

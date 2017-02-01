@@ -26,11 +26,13 @@ if (check_squirrel_hooks()) return;
 const electron = require('electron');
 const url = require('url');
 
+const tray = require('./tray');
+
 const VectorMenu = require('./vectormenu');
 
 let vectorConfig = {};
 try {
-    vectorConfig = require('../../vector/config.json');
+    vectorConfig = require('../../webapp/config.json');
 } catch (e) {
     // it would be nice to check the error code here and bail if the config
     // is unparseable, but we get MODULE_NOT_FOUND in the case of a missing
@@ -101,9 +103,9 @@ function pollForUpdates() {
     }
 }
 
-function startAutoUpdate(update_url) {
-    if (update_url.slice(-1) !== '/') {
-        update_url = update_url + '/';
+function startAutoUpdate(update_base_url) {
+    if (update_base_url.slice(-1) !== '/') {
+        update_base_url = update_base_url + '/';
     }
     try {
         // For reasons best known to Squirrel, the way it checks for updates
@@ -112,9 +114,18 @@ function startAutoUpdate(update_url) {
         // 204 No Content. On windows it takes a base path and looks for
         // files under that path.
         if (process.platform == 'darwin') {
-            electron.autoUpdater.setFeedURL(update_url);
+            // include the current version in the URL we hit. Electron doesn't add
+            // it anywhere (apart from the User-Agent) so it's up to us. We could
+            // (and previously did) just use the User-Agent, but this doesn't
+            // rely on NSURLConnection setting the User-Agent to what we expect,
+            // and also acts as a convenient cache-buster to ensure that when the
+            // app updates it always gets a fresh value to avoid update-looping.
+            electron.autoUpdater.setFeedURL(
+                update_base_url +
+                'macos/?localVersion=' + encodeURIComponent(electron.app.getVersion())
+            );
         } else if (process.platform == 'win32') {
-            electron.autoUpdater.setFeedURL(update_url + 'win32/');
+            electron.autoUpdater.setFeedURL(update_base_url + 'win32/' + process.arch + '/');
         } else {
             // Squirrel / electron only supports auto-update on these two platforms.
             // I'm not even going to try to guess which feed style they'd use if they
@@ -148,26 +159,56 @@ process.on('uncaughtException', function (error) {
 
 electron.ipcMain.on('install_update', installUpdate);
 
+electron.app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
+
+const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+        if (!mainWindow.isVisible()) mainWindow.show();
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus();
+    }
+});
+
+if (shouldQuit) {
+    electron.app.quit()
+}
+
 electron.app.on('ready', () => {
-    if (vectorConfig.update_url) {
-        console.log("Starting auto update with URL: " + vectorConfig.update_url);
-        startAutoUpdate(vectorConfig.update_url);
+    if (vectorConfig.update_base_url) {
+        console.log("Starting auto update with base URL: " + vectorConfig.update_base_url);
+        startAutoUpdate(vectorConfig.update_base_url);
     } else {
-        console.log("No update_url is defined: auto update is disabled");
+        console.log("No update_base_url is defined: auto update is disabled");
     }
 
+    const icon_path = `${__dirname}/../img/riot.` + (
+        process.platform == 'win32' ? 'ico' : 'png'
+    );
+
     mainWindow = new electron.BrowserWindow({
-        icon: `${__dirname}/../img/riot.ico`,
+        icon: icon_path,
         width: 1024, height: 768,
+        show: false,
+        autoHideMenuBar: true,
     });
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
     electron.Menu.setApplicationMenu(VectorMenu);
 
+    // Create trayIcon icon
+    tray.create(mainWindow, {
+        icon_path: icon_path,
+        brand: vectorConfig.brand || 'Riot'
+    });
+
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+    });
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
     mainWindow.on('close', (e) => {
-        if (process.platform == 'darwin' && !appQuitting) {
+        if (!appQuitting && (tray.hasTray() || process.platform == 'darwin')) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)
@@ -198,3 +239,9 @@ electron.app.on('activate', () => {
 electron.app.on('before-quit', () => {
     appQuitting = true;
 });
+
+// Set the App User Model ID to match what the squirrel
+// installer uses for the shortcut icon.
+// This makes notifications work on windows 8.1 (and is
+// a noop on other platforms).
+electron.app.setAppUserModelId('com.squirrel.riot-web.Riot');
