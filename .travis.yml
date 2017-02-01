@@ -4,4 +4,4 @@ node_js:
 install:
     - npm install
     - (cd node_modules/matrix-js-sdk && npm install)
-    - (cd node_modules/matrix-react-sdk && npm run build)
+    - (cd node_modules/matrix-react-sdk && npm install)
