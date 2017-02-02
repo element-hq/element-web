@@ -34,7 +34,7 @@ export function onSendMessageFailed(err) {
         const UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
         Modal.createDialog(UnknownDeviceDialog, {
             devices: err.devices,
-        });
+        }, "mx_Dialog_unknownDevice");
     }
     dis.dispatch({
         action: 'message_send_failed',

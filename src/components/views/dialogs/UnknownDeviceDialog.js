@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import GeminiScrollbar from 'react-gemini-scrollbar';
 
 function UserUnknownDeviceList(props) {
     const {userDevices} = props;
@@ -81,12 +82,12 @@ export default React.createClass({
                 onFinished={this.props.onFinished}
                 title='Room contains unknown devices'
             >
-                <div className="mx_Dialog_content">
+                <GeminiScrollbar autoshow={true} className="mx_Dialog_content">
                     <h4>This room contains devices which have not been
                     verified.</h4>
                     <p>
                         This means there is no guarantee that the devices belong
-                        to a valid user of the room.
+                        to a rightful user of the room.
                     </p><p>
                         We recommend you go through the verification process
                         for each device before continuing, but you can resend
@@ -94,7 +95,7 @@ export default React.createClass({
                     </p>
                     <p>Unknown devices:</p>
                     <UnknownDeviceList devices={this.props.devices} />
-                </div>
+                </GeminiScrollbar>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" autoFocus={ true }
                             onClick={ this.props.onFinished } >
