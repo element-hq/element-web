@@ -68,13 +68,13 @@ module.exports = React.createClass({
         if (this.props.collapsed) {
             toggleCollapse =
                 <div className="mx_SearchBox_maximise" onClick={ this.onToggleCollapse.bind(this, true) }>
-                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt="&lt;"/>
+                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt="Expand panel"/>
                 </div>
         }
         else {
             toggleCollapse =
                 <div className="mx_SearchBox_minimise" onClick={ this.onToggleCollapse.bind(this, false) }>
-                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt="&lt;"/>
+                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt="Collapse panel"/>
                 </div>
         }
 
