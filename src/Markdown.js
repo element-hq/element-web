@@ -27,8 +27,6 @@ export default class Markdown {
 
         const parser = new commonmark.Parser();
         this.parsed = parser.parse(this.input);
-
-        this.renderer = new commonmark.HtmlRenderer({safe: false});
     }
 
     isPlainText() {
@@ -58,9 +56,10 @@ export default class Markdown {
     }
 
     toHTML() {
-        const real_paragraph = this.renderer.paragraph;
+        const renderer = new commonmark.HtmlRenderer({safe: false});
+        const real_paragraph = renderer.paragraph;
 
-        this.renderer.paragraph = function(node, entering) {
+        renderer.paragraph = function(node, entering) {
             // If there is only one top level node, just return the
             // bare text: it's a single line of text and so should be
             // 'inline', rather than unnecessarily wrapped in its own
@@ -75,11 +74,7 @@ export default class Markdown {
             }
         };
 
-        var rendered = this.renderer.render(this.parsed);
-
-        this.renderer.paragraph = real_paragraph;
-
-        return rendered;
+        return renderer.render(this.parsed);
     }
 
     /*
@@ -89,17 +84,18 @@ export default class Markdown {
      * (to fix https://github.com/vector-im/riot-web/issues/2870)
      */
     toPlaintext() {
-        const real_paragraph = this.renderer.paragraph;
+        const renderer = new commonmark.HtmlRenderer({safe: false});
+        const real_paragraph = renderer.paragraph;
 
         // The default `out` function only sends the input through an XML
         // escaping function, which causes messages to be entity encoded,
         // which we don't want in this case.
-        this.renderer.out = function(s) {
+        renderer.out = function(s) {
             // The `lit` function adds a string literal to the output buffer.
             this.lit(s);
         };
 
-        this.renderer.paragraph = function(node, entering) {
+        renderer.paragraph = function(node, entering) {
             // If there is only one top level node, just return the
             // bare text: it's a single line of text and so should be
             // 'inline', rather than unnecessarily wrapped in its own
@@ -117,10 +113,6 @@ export default class Markdown {
             }
         };
 
-        var rendered = this.renderer.render(this.parsed);
-
-        this.renderer.paragraph = real_paragraph;
-
-        return rendered;
+        return renderer.render(this.parsed);
     }
 }
