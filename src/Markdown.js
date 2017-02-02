@@ -24,7 +24,10 @@ import commonmark from 'commonmark';
 export default class Markdown {
     constructor(input) {
         this.input = input;
-        this.parser = new commonmark.Parser();
+
+        const parser = new commonmark.Parser();
+        this.parsed = parser.parse(this.input);
+
         this.renderer = new commonmark.HtmlRenderer({safe: false});
     }
 
@@ -49,8 +52,7 @@ export default class Markdown {
         dummy_renderer.softbreak = function(t) { return t; };
         dummy_renderer.paragraph = function(t) { return t; };
 
-        const dummy_parser = new commonmark.Parser();
-        dummy_renderer.render(dummy_parser.parse(this.input));
+        dummy_renderer.render(this.parsed);
 
         return is_plain;
     }
@@ -73,8 +75,7 @@ export default class Markdown {
             }
         };
 
-        var parsed = this.parser.parse(this.input);
-        var rendered = this.renderer.render(parsed);
+        var rendered = this.renderer.render(this.parsed);
 
         this.renderer.paragraph = real_paragraph;
 
@@ -116,8 +117,7 @@ export default class Markdown {
             }
         };
 
-        var parsed = this.parser.parse(this.input);
-        var rendered = this.renderer.render(parsed);
+        var rendered = this.renderer.render(this.parsed);
 
         this.renderer.paragraph = real_paragraph;
 
