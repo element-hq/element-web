@@ -14,6 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// CSS voodoo to support a gemini-scrollbar for the contents of the dialog
+.mx_Dialog_unknownDevice .mx_Dialog {
+    // ideally we'd shrink the height to fit when needed, but in practice this
+    // is a pain in the ass. plus might as well make the dialog big given how
+    // important it is.
+    height: 100%;
+
+    // position the gemini scrollbar nicely
+    padding-right: 58px;
+}
+
+.mx_UnknownDeviceDialog {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_UnknownDeviceDialog .mx_Dialog_content {
+    margin-bottom: 24px;
+}
+
 .mx_UnknownDeviceDialog .mx_MemberDeviceInfo {
     float: right;
     clear: both;
