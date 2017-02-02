@@ -102,7 +102,7 @@ export function decryptMegolmKeyFile(data, password) {
  */
 export function encryptMegolmKeyFile(data, password, options) {
     options = options || {};
-    const kdf_rounds = options.kdf_rounds || 100000;
+    const kdf_rounds = options.kdf_rounds || 500000;
 
     const salt = new Uint8Array(16);
     window.crypto.getRandomValues(salt);
@@ -164,6 +164,7 @@ export function encryptMegolmKeyFile(data, password, options) {
  * @return {Promise<[CryptoKey, CryptoKey]>} promise for [aes key, hmac key]
  */
 function deriveKeys(salt, iterations, password) {
+    const start = new Date();
     return subtleCrypto.importKey(
         'raw',
         new TextEncoder().encode(password),
@@ -182,6 +183,9 @@ function deriveKeys(salt, iterations, password) {
             512
         );
     }).then((keybits) => {
+        const now = new Date();
+        console.log("E2e import/export: deriveKeys took " + (now - start) + "ms");
+
         const aes_key = keybits.slice(0, 32);
         const hmac_key = keybits.slice(32);
 
