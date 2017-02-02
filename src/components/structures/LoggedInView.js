@@ -196,6 +196,7 @@ export default React.createClass({
             case PageTypes.HomePage:
                 page_element = <HomePage
                     collapsedRhs={this.props.collapse_rhs}
+                    teamServerUrl={this.props.config.teamServerConfig.teamServerUrl}
                     teamToken={window.localStorage.getItem("mx_team_token")}
                 />
                 if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
