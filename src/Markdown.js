@@ -17,7 +17,7 @@ limitations under the License.
 import commonmark from 'commonmark';
 
 /**
- * Class that wraps marked, adding the ability to see whether
+ * Class that wraps commonmark, adding the ability to see whether
  * a given message actually uses any markdown syntax or whether
  * it's plain text.
  */
@@ -33,11 +33,7 @@ export default class Markdown {
         // running the parser on the tokens with a dummy
         // rendered and seeing if any of the renderer's
         // functions are called other than those noted below.
-        // In case you were wondering, no we can't just examine
-        // the tokens because the tokens we have are only the
-        // output of the *first* tokenizer: any line-based
-        // markdown is processed by marked within Parser by
-        // the 'inline lexer'...
+        // TODO: can't we just examine the output of the parser?
         let is_plain = true;
 
         function setNotPlain() {
@@ -85,6 +81,12 @@ export default class Markdown {
         return rendered;
     }
 
+    /*
+     * Render the mrkdown message to plain text. That is, essentially
+     * just remove any backslashes escaping what would otherwise be
+     * markdown syntax
+     * (to fix https://github.com/vector-im/riot-web/issues/2870)
+     */
     toPlaintext() {
         const real_paragraph = this.renderer.paragraph;
 
