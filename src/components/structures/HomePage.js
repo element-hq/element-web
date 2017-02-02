@@ -30,9 +30,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        // const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
-        // <SimpleRoomHeader title="Welcome to Riot" collapsedRhs={ this.props.collapsedRhs }/>
-
         return (
         <div className="mx_HomePage">
             <iframe src={`${this.props.teamServerUrl}/static/${this.props.teamToken}/welcome.html`} style={{width: '100%', border: 'none'}}/>
