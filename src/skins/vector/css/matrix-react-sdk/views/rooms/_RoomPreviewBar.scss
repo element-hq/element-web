@@ -17,7 +17,7 @@ limitations under the License.
 .mx_RoomPreviewBar {
     text-align: center;
     height: 176px;
-
+    background-color: $event-selected-color;
     align-items: center;
     flex-direction: column;
     justify-content: center;

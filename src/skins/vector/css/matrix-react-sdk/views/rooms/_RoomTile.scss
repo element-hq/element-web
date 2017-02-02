@@ -190,6 +190,11 @@ limitations under the License.
     background-color: $roomtile-selected-bg-color;
 }
 
+.mx_RoomTile:focus {
+    outline: 0;
+    background-color: $roomtile-focused-bg-color;
+}
+
 .mx_RoomTile .mx_RoomTile_name.mx_RoomTile_badgeShown {
     width: 140px;
 }
