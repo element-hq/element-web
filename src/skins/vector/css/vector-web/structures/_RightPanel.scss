@@ -34,14 +34,15 @@ limitations under the License.
 
 .mx_RightPanel_headerButtonGroup {
     margin-top: 6px;
-    float: left;
+    display: flex;
+    width: 100%;
     background-color: $primary-bg-color;
     margin-left: 0px;
 }
 
 .mx_RightPanel_headerButton {
     cursor: pointer;
-    display: table-cell;
+    flex: 0;
     vertical-align: top;
     padding-left: 4px;
     padding-right: 5px;
@@ -67,6 +68,12 @@ limitations under the License.
     color: $accent-color;
     font-weight: bold;
     padding-bottom: 2px;
+}
+
+.mx_RightPanel_collapsebutton {
+    flex: 1;
+    text-align: right;
+    margin-top: 20px;
 }
 
 .mx_RightPanel .mx_MemberList,

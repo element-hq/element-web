@@ -69,45 +69,21 @@ module.exports = React.createClass({
     },
 
     onMemberListButtonClick: function() {
-        if (this.props.collapsed || this.state.phase !== this.Phase.MemberList) {
-            this.setState({ phase: this.Phase.MemberList });
-            dis.dispatch({
-                action: 'show_right_panel',
-            });
-        }
-        else {
-            dis.dispatch({
-                action: 'hide_right_panel',
-            });
-        }
+        this.setState({ phase: this.Phase.MemberList });
     },
 
     onFileListButtonClick: function() {
-        if (this.props.collapsed || this.state.phase !== this.Phase.FilePanel) {
-            this.setState({ phase: this.Phase.FilePanel });
-            dis.dispatch({
-                action: 'show_right_panel',
-            });
-        }
-        else {
-            dis.dispatch({
-                action: 'hide_right_panel',
-            });
-        }
+        this.setState({ phase: this.Phase.FilePanel });
     },
 
     onNotificationListButtonClick: function() {
-        if (this.props.collapsed || this.state.phase !== this.Phase.NotificationPanel) {
-            this.setState({ phase: this.Phase.NotificationPanel });
-            dis.dispatch({
-                action: 'show_right_panel',
-            });
-        }
-        else {
-            dis.dispatch({
-                action: 'hide_right_panel',
-            });
-        }
+        this.setState({ phase: this.Phase.NotificationPanel });
+    },
+
+    onCollapseClick: function() {
+        dis.dispatch({
+            action: 'hide_right_panel',
+        });
     },
 
     onInviteButtonClick: function() {
@@ -234,6 +210,9 @@ module.exports = React.createClass({
                             <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                             <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
                             { notificationsHighlight }
+                        </div>
+                        <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" title="Hide panel" onClick={ this.onCollapseClick }>
+                            <TintableSvg src="img/minimise.svg" width="10" height="16"/>
                         </div>
                     </div>;
         }
