@@ -74,6 +74,7 @@ module.exports = React.createClass({
         // callback for when the status bar can be hidden from view, as it is
         // not displaying anything
         onHidden: React.PropTypes.func,
+
         // callback for when the status bar is displaying something and should
         // be visible
         onVisible: React.PropTypes.func,
@@ -113,7 +114,9 @@ module.exports = React.createClass({
                 clearTimeout(this.hideDebouncer);
             }
             this.hideDebouncer = setTimeout(() => {
-                this.props.onHidden();
+                // temporarily stop hiding the statusbar as per
+                // https://github.com/vector-im/riot-web/issues/1991#issuecomment-276953915
+                // this.props.onHidden();
             }, HIDE_DEBOUNCE_MS);
         }
     },
