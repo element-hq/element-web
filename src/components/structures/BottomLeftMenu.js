@@ -20,7 +20,6 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
-var SdkConfig = require('matrix-react-sdk/lib/SdkConfig');
 
 module.exports = React.createClass({
     displayName: 'BottomLeftMenu',
