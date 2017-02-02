@@ -107,6 +107,16 @@ limitations under the License.
     justify-content: flex-start;
 }
 
+.mx_RoomView_empty {
+    flex: 1 1 auto;
+    font-size: 13px;
+    padding-left: 3em;
+    padding-right: 3em;
+    margin-right: 20px;
+    margin-top: 33%;
+    text-align: center;
+}
+
 .mx_RoomView_MessageList {
     width: 100%;
     list-style-type: none;
