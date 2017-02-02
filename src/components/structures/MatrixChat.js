@@ -694,7 +694,7 @@ module.exports = React.createClass({
                         )[0].roomId;
                         self.setState({ready: true, currentRoomId: firstRoom, page_type: PageTypes.RoomView});
                     } else {
-                        if (self.props.config.home_page) {
+                        if (window.localStorage.getItem('mx_team_token')) {
                             self.setState({ready: true, page_type: PageTypes.HomePage});
                         }
                         else {
