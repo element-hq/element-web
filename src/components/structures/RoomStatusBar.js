@@ -241,7 +241,7 @@ module.exports = React.createClass({
 
         if (othersCount > 0) {
             avatars.push(
-                <span className="mx_RoomStatusBar_typingIndicatorRemaining">
+                <span className="mx_RoomStatusBar_typingIndicatorRemaining" key="others">
                     +{othersCount}
                 </span>
             );
