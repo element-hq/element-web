@@ -24,6 +24,7 @@ module.exports = React.createClass({
     displayName: 'HomePage',
 
     propTypes: {
+        teamServerUrl: React.PropTypes.string.isRequired,
         teamToken: React.PropTypes.string.isRequired,
         collapsedRhs: React.PropTypes.bool,
     },
@@ -34,7 +35,7 @@ module.exports = React.createClass({
 
         return (
         <div className="mx_HomePage">
-            <iframe src={`http://localhost:7000/static/${this.props.teamToken}/welcome.html`} style={{width: '100%', border: 'none'}}/>
+            <iframe src={`${this.props.teamServerUrl}/static/${this.props.teamToken}/welcome.html`} style={{width: '100%', border: 'none'}}/>
         </div>
         );
     }
