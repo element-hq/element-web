@@ -177,7 +177,7 @@ class ModalManager {
 
         var modal = this._modals[0];
         var dialog = (
-            <div className={"mx_Dialog_wrapper " + modal.className}>
+            <div className={"mx_Dialog_wrapper " + (modal.className ? modal.className : '') }>
                 <div className="mx_Dialog">
                     {modal.elem}
                 </div>

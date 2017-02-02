@@ -34,7 +34,7 @@ module.exports = {
                 Modal.createDialog(UnknownDeviceDialog, {
                     devices: err.devices,
                     room: MatrixClientPeg.get().getRoom(event.getRoomId()),
-                });
+                }, "mx_Dialog_unknownDevice");
             }
 
             dis.dispatch({

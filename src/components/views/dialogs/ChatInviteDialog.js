@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require("react");
-var classNames = require('classnames');
-var sdk = require("../../../index");
-var Invite = require("../../../Invite");
-var createRoom = require("../../../createRoom");
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var DMRoomMap = require('../../../utils/DMRoomMap');
-var rate_limited_func = require("../../../ratelimitedfunc");
-var dis = require("../../../dispatcher");
-var Modal = require('../../../Modal');
+import React from 'react';
+import classNames from 'classnames';
+import sdk from '../../../index';
+import { getAddressType, inviteMultipleToRoom } from '../../../Invite';
+import createRoom from '../../../createRoom';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import DMRoomMap from '../../../utils/DMRoomMap';
+import rate_limited_func from '../../../ratelimitedfunc';
+import dis from '../../../dispatcher';
+import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
+import q from 'q';
 
 const TRUNCATE_QUERY_LIST = 40;
 
@@ -186,13 +187,17 @@ module.exports = React.createClass({
             // If the query isn't a user we know about, but is a
             // valid address, add an entry for that
             if (queryList.length == 0) {
-                const addrType = Invite.getAddressType(query);
+                const addrType = getAddressType(query);
                 if (addrType !== null) {
-                    queryList.push({
+                    queryList[0] = {
                         addressType: addrType,
                         address: query,
                         isKnown: false,
-                    });
+                    };
+                    if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+                    if (addrType == 'email') {
+                        this._lookupThreepid(addrType, query).done();
+                    }
                 }
             }
         }
@@ -212,6 +217,7 @@ module.exports = React.createClass({
                 inviteList: inviteList,
                 queryList: [],
             });
+            if (this._cancelThreepidLookup) this._cancelThreepidLookup();
         };
     },
 
@@ -229,6 +235,7 @@ module.exports = React.createClass({
             inviteList: inviteList,
             queryList: [],
         });
+        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
     },
 
     _getDirectMessageRoom: function(addr) {
@@ -266,7 +273,7 @@ module.exports = React.createClass({
         if (this.props.roomId) {
             // Invite new user to a room
             var self = this;
-            Invite.inviteMultipleToRoom(this.props.roomId, addrTexts)
+            inviteMultipleToRoom(this.props.roomId, addrTexts)
             .then(function(addrs) {
                 var room = MatrixClientPeg.get().getRoom(self.props.roomId);
                 return self._showAnyInviteErrors(addrs, room);
@@ -300,7 +307,7 @@ module.exports = React.createClass({
             var room;
             createRoom().then(function(roomId) {
                 room = MatrixClientPeg.get().getRoom(roomId);
-                return Invite.inviteMultipleToRoom(roomId, addrTexts);
+                return inviteMultipleToRoom(roomId, addrTexts);
             })
             .then(function(addrs) {
                 return self._showAnyInviteErrors(addrs, room);
@@ -380,7 +387,7 @@ module.exports = React.createClass({
     },
 
     _isDmChat: function(addrs) {
-        if (addrs.length === 1 && Invite.getAddressType(addrs[0]) === "mx" && !this.props.roomId) {
+        if (addrs.length === 1 && getAddressType(addrs[0]) === "mx" && !this.props.roomId) {
             return true;
         } else {
             return false;
@@ -408,7 +415,7 @@ module.exports = React.createClass({
 
     _addInputToList: function() {
         const addressText = this.refs.textinput.value.trim();
-        const addrType = Invite.getAddressType(addressText);
+        const addrType = getAddressType(addressText);
         const addrObj = {
             addressType: addrType,
             address: addressText,
@@ -432,7 +439,43 @@ module.exports = React.createClass({
             inviteList: inviteList,
             queryList: [],
         });
+        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
         return inviteList;
+    },
+
+    _lookupThreepid: function(medium, address) {
+        let cancelled = false;
+        // Note that we can't safely remove this after we're done
+        // because we don't know that it's the same one, so we just
+        // leave it: it's replacing the old one each time so it's
+        // not like they leak.
+        this._cancelThreepidLookup = function() {
+            cancelled = true;
+        }
+
+        // wait a bit to let the user finish typing
+        return q.delay(500).then(() => {
+            if (cancelled) return null;
+            return MatrixClientPeg.get().lookupThreePid(medium, address);
+        }).then((res) => {
+            if (res === null || !res.mxid) return null;
+            if (cancelled) return null;
+
+            return MatrixClientPeg.get().getProfileInfo(res.mxid);
+        }).then((res) => {
+            if (res === null) return null;
+            if (cancelled) return null;
+            this.setState({
+                queryList: [{
+                    // an InviteAddressType
+                    addressType: medium,
+                    address: address,
+                    displayName: res.displayname,
+                    avatarMxc: res.avatar_url,
+                    isKnown: true,
+                }]
+            });
+        });
     },
 
     render: function() {

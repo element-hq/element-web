@@ -105,6 +105,7 @@ var FilePanel = React.createClass({
                     showUrlPreview = { false }
                     tileShape="file_grid"
                     opacity={ this.props.opacity }
+                    empty="There are no visible files in this room"
                 />
             );
         }

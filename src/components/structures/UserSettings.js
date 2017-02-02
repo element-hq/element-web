@@ -104,6 +104,9 @@ module.exports = React.createClass({
         // True to show the 'labs' section of experimental features
         enableLabs: React.PropTypes.bool,
 
+        // The base URL to use in the referral link. Defaults to window.location.origin.
+        referralBaseUrl: React.PropTypes.string,
+
         // true if RightPanel is collapsed
         collapsedRhs: React.PropTypes.bool,
     },
@@ -455,6 +458,27 @@ module.exports = React.createClass({
             }, {
                 matrixClient: MatrixClientPeg.get(),
             }
+        );
+    },
+
+    _renderReferral: function() {
+        const teamToken = window.localStorage.getItem('mx_team_token');
+        if (!teamToken) {
+            return null;
+        }
+        if (typeof teamToken !== 'string') {
+            console.warn('Team token not a string');
+            return null;
+        }
+        const href = (this.props.referralBaseUrl || window.location.origin) +
+            `/#/register?referrer=${this._me}&team_token=${teamToken}`;
+        return (
+            <div>
+                <h3>Referral</h3>
+                <div className="mx_UserSettings_section">
+                    Refer a friend to Riot: <a href={href}>{href}</a>
+                </div>
+            </div>
         );
     },
 
@@ -856,6 +880,8 @@ module.exports = React.createClass({
 
                     {accountJsx}
                 </div>
+
+                {this._renderReferral()}
 
                 {notification_area}
 

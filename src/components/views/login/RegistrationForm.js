@@ -44,8 +44,8 @@ module.exports = React.createClass({
             teams: React.PropTypes.arrayOf(React.PropTypes.shape({
                 // The displayed name of the team
                 "name": React.PropTypes.string,
-                // The suffix with which every team email address ends
-                "emailSuffix": React.PropTypes.string,
+                // The domain of team email addresses
+                "domain": React.PropTypes.string,
             })).required,
         }),
 
@@ -117,9 +117,6 @@ module.exports = React.createClass({
 
     _doSubmit: function() {
         let email = this.refs.email.value.trim();
-        if (this.state.selectedTeam) {
-            email += "@" + this.state.selectedTeam.emailSuffix;
-        }
         var promise = this.props.onRegisterClick({
             username: this.refs.username.value.trim() || this.props.guestUsername,
             password: this.refs.password.value.trim(),
@@ -132,25 +129,6 @@ module.exports = React.createClass({
                 ev.target.disabled = false;
             });
         }
-    },
-
-    onSelectTeam: function(teamIndex) {
-        let team = this._getSelectedTeam(teamIndex);
-        if (team) {
-            this.refs.email.value = this.refs.email.value.split("@")[0];
-        }
-        this.setState({
-            selectedTeam: team,
-            showSupportEmail: teamIndex === "other",
-        });
-    },
-
-    _getSelectedTeam: function(teamIndex) {
-        if (this.props.teamsConfig &&
-            this.props.teamsConfig.teams[teamIndex]) {
-            return this.props.teamsConfig.teams[teamIndex];
-        }
-        return null;
     },
 
     /**
@@ -167,20 +145,36 @@ module.exports = React.createClass({
         return true;
     },
 
+    _isUniEmail: function(email) {
+        return email.endsWith('.ac.uk') || email.endsWith('.edu');
+    },
+
     validateField: function(field_id) {
         var pwd1 = this.refs.password.value.trim();
         var pwd2 = this.refs.passwordConfirm.value.trim();
 
         switch (field_id) {
             case FIELD_EMAIL:
-                let email = this.refs.email.value;
-                if (this.props.teamsConfig) {
-                    let team = this.state.selectedTeam;
-                    if (team) {
-                        email = email + "@" + team.emailSuffix;
-                    }
+                const email = this.refs.email.value;
+                if (this.props.teamsConfig && this._isUniEmail(email)) {
+                    const matchingTeam = this.props.teamsConfig.teams.find(
+                        (team) => {
+                            return email.split('@').pop() === team.domain;
+                        }
+                    ) || null;
+                    this.setState({
+                        selectedTeam: matchingTeam,
+                        showSupportEmail: !matchingTeam,
+                    });
+                    this.props.onTeamSelected(matchingTeam);
+                } else {
+                    this.props.onTeamSelected(null);
+                    this.setState({
+                        selectedTeam: null,
+                        showSupportEmail: false,
+                    });
                 }
-                let valid = email === '' || Email.looksValid(email);
+                const valid = email === '' || Email.looksValid(email);
                 this.markFieldValid(field_id, valid, "RegistrationForm.ERR_EMAIL_INVALID");
                 break;
             case FIELD_USERNAME:
@@ -260,61 +254,35 @@ module.exports = React.createClass({
         return cls;
     },
 
-    _renderEmailInputSuffix: function() {
-        let suffix = null;
-        if (!this.state.selectedTeam) {
-            return suffix;
-        }
-        let team = this.state.selectedTeam;
-        if (team) {
-            suffix = "@" + team.emailSuffix;
-        }
-        return suffix;
-    },
-
     render: function() {
         var self = this;
-        var emailSection, teamSection, teamAdditionSupport, registerButton;
+        var emailSection, belowEmailSection, registerButton;
         if (this.props.showEmail) {
-            let emailSuffix = this._renderEmailInputSuffix();
             emailSection = (
-                <div>
-                    <input type="text" ref="email"
-                        autoFocus={true} placeholder="Email address (optional)"
-                        defaultValue={this.props.defaultEmail}
-                        className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_EMAIL);}}
-                        value={self.state.email}/>
-                    {emailSuffix ? <input className="mx_Login_field" value={emailSuffix} disabled/> : null }
-                </div>
+                <input type="text" ref="email"
+                    autoFocus={true} placeholder="Email address (optional)"
+                    defaultValue={this.props.defaultEmail}
+                    className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
+                    onBlur={function() {self.validateField(FIELD_EMAIL);}}
+                    value={self.state.email}/>
             );
             if (this.props.teamsConfig) {
-                teamSection = (
-                    <select
-                        defaultValue="-1"
-                        className="mx_Login_field"
-                        onBlur={function() {self.validateField(FIELD_EMAIL);}}
-                        onChange={function(ev) {self.onSelectTeam(ev.target.value);}}
-                    >
-                        <option key="-1" value="-1">No team</option>
-                        {this.props.teamsConfig.teams.map((t, index) => {
-                            return (
-                                <option key={index} value={index}>
-                                    {t.name}
-                                </option>
-                            );
-                        })}
-                        <option key="-2" value="other">Other</option>
-                    </select>
-                );
                 if (this.props.teamsConfig.supportEmail && this.state.showSupportEmail) {
-                    teamAdditionSupport = (
-                        <span>
-                            If your team is not listed, email&nbsp;
+                    belowEmailSection = (
+                        <p className="mx_Login_support">
+                            Sorry, but your university is not registered with us just yet.&nbsp;
+                            Email us on&nbsp;
                             <a href={"mailto:" + this.props.teamsConfig.supportEmail}>
                                 {this.props.teamsConfig.supportEmail}
-                            </a>
-                        </span>
+                            </a>&nbsp;
+                            to get your university signed up. Or continue to register with Riot to enjoy our open source platform.
+                        </p>
+                    );
+                } else if (this.state.selectedTeam) {
+                    belowEmailSection = (
+                        <p className="mx_Login_support">
+                            You are registering with {this.state.selectedTeam.name}
+                        </p>
                     );
                 }
             }
@@ -333,11 +301,8 @@ module.exports = React.createClass({
         return (
             <div>
                 <form onSubmit={this.onSubmit}>
-                    {teamSection}
-                    {teamAdditionSupport}
-                    <br />
                     {emailSection}
-                    <br />
+                    {belowEmailSection}
                     <input type="text" ref="username"
                         placeholder={ placeholderUserName } defaultValue={this.props.defaultUsername}
                         className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}

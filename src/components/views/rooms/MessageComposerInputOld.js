@@ -35,7 +35,7 @@ export function onSendMessageFailed(err, room) {
         Modal.createDialog(UnknownDeviceDialog, {
             devices: err.devices,
             room: room,
-        });
+        }, "mx_Dialog_unknownDevice");
     }
     dis.dispatch({
         action: 'message_send_failed',

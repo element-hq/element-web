@@ -170,15 +170,15 @@ module.exports = React.createClass({
 
         let title;
         if (this.props.timestamp) {
-            let suffix = " (" + this.props.member.userId + ")";
+            const prefix = "Seen by " + this.props.member.userId + " at ";
             let ts = new Date(this.props.timestamp);
             if (this.props.showFullTimestamp) {
                 // "15/12/2016, 7:05:45 PM (@alice:matrix.org)"
-                title = ts.toLocaleString() + suffix;
+                title = prefix + ts.toLocaleString();
             }
             else {
                 // "7:05:45 PM (@alice:matrix.org)"
-                title = ts.toLocaleTimeString() + suffix;
+                title = prefix + ts.toLocaleTimeString();
             }
         }
 
@@ -192,9 +192,9 @@ module.exports = React.createClass({
                     width={14} height={14} resizeMethod="crop"
                     style={style}
                     title={title}
+                    onClick={this.props.onClick}
                 />
             </Velociraptor>
         );
-        /* onClick={this.props.onClick} */
     },
 });

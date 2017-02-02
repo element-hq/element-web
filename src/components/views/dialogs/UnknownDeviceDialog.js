@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import GeminiScrollbar from 'react-gemini-scrollbar';
 
 function DeviceListEntry(props) {
     const {userId, device} = props;
@@ -118,7 +119,19 @@ export default React.createClass({
                 </h4>
             );
         } else {
-            warning = <h4>We strongly recommend you verify them before continuing.</h4>;
+            warning = (
+                <div>
+                    <p>
+                        This means there is no guarantee that the devices belong
+                        to a rightful user of the room.
+                    </p>
+                    <p>
+                        We recommend you go through the verification process
+                        for each device before continuing, but you can resend
+                        the message without verifying if you prefer.
+                    </p>
+                </div>
+            );
         }
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
@@ -127,15 +140,16 @@ export default React.createClass({
                 onFinished={this.props.onFinished}
                 title='Room contains unknown devices'
             >
-                <div className="mx_Dialog_content">
+                <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
                     <h4>
                         This room contains unknown devices which have not been
                         verified.
                     </h4>
                     { warning }
                     Unknown devices:
+
                     <UnknownDeviceList devices={this.props.devices} />
-                </div>
+                </GeminiScrollbar>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" autoFocus={ true }
                             onClick={ this.props.onFinished } >
