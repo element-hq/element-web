@@ -20,6 +20,11 @@ limitations under the License.
     margin-left: auto;
     margin-right: auto;
 }
+.mx_HomePage iframe {
+	width: 100%;
+	height: 90%;
+	border: 0px;
+}
 
 .mx_HomePage_body {
     margin-left: 63px;

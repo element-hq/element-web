@@ -16,8 +16,6 @@ limitations under the License.
 
 'use strict';
 
-import 'isomorphic-fetch';
-
 var React = require("react");
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk');
@@ -26,30 +24,8 @@ module.exports = React.createClass({
     displayName: 'HomePage',
 
     propTypes: {
-        config: React.PropTypes.object.isRequired,
+        teamToken: React.PropTypes.string.isRequired,
         collapsedRhs: React.PropTypes.bool,
-    },
-
-    getInitialState: function() {
-        return {
-            page: ""
-        };
-    },
-
-    componentWillMount: function() {
-        fetch(this.props.config.home_page).then(
-            (response)=>{
-                return response.text();
-            },
-            (error)=>{
-                console.log(error);
-                this.setState({ page: "Couldn't load home page" });
-            }
-        ).done(
-            (body)=>{
-                this.setState({ page: body });
-            }
-        );
     },
 
     render: function() {
@@ -58,8 +34,7 @@ module.exports = React.createClass({
 
         return (
         <div className="mx_HomePage">
-            <div className="mx_HomePage_body" dangerouslySetInnerHTML={{ __html: this.state.page }}>
-            </div>
+            <iframe src={`http://localhost:7000/static/${this.props.teamToken}/welcome.html`} style={{width: '100%', border: 'none'}}/>
         </div>
         );
     }
