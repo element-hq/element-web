@@ -159,13 +159,14 @@ module.exports = React.createClass({
         }
         if (onClick != null) {
             return (
-                <AccessibleButton className="mx_BaseAvatar" onClick={onClick}>
-                    <img className="mx_BaseAvatar_image" src={imageUrl}
-                        onError={this.onError}
-                        width={width} height={height}
-                        title={title} alt=""
-                        {...otherProps} />
-                </AccessibleButton>
+                <AccessibleButton className="mx_BaseAvatar mx_BaseAvatar_image"
+                    element='img'
+                    src={imageUrl}
+                    onClick={onClick}
+                    onError={this.onError}
+                    width={width} height={height}
+                    title={title} alt=""
+                    {...otherProps} />
             );
         } else {
             return (
