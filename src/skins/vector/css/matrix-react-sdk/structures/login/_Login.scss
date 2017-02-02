@@ -163,3 +163,16 @@ limitations under the License.
     margin-bottom: 12px;
 }
 
+.mx_Login_phoneSection {
+    display: table;
+}
+
+.mx_Login_phoneCountry {
+    display: table-cell;
+    width: 70px;
+}
+
+.mx_Login_phoneNumberField {
+    width: 210px;
+    margin-left: 3px;
+}
