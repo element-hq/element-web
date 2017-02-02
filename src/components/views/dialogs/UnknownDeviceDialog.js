@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ export default React.createClass({
                 onFinished={this.props.onFinished}
                 title='Room contains unknown devices'
             >
-                <GeminiScrollbar autoshow={true} className="mx_Dialog_content">
+                <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
                     <h4>This room contains devices which have not been
                     verified.</h4>
                     <p>
