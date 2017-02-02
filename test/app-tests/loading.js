@@ -193,6 +193,7 @@ describe('loading:', function () {
                     expect(req.data.password).toEqual('pass');
                 }).respond(200, {
                     user_id: '@user:id',
+                    device_id: 'DEVICE_ID',
                     access_token: 'access_token',
                 });
                 login.onPasswordLogin("user", "pass")
@@ -393,6 +394,7 @@ describe('loading:', function () {
                     expect(req.data.token).toEqual("secretToken");
                 }).respond(200, {
                     user_id: "@user:localhost",
+                    device_id: 'DEVICE_ID',
                     access_token: "access_token",
                 });
 
