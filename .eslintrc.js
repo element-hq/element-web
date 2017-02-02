@@ -57,6 +57,8 @@ module.exports = {
             // apparently people believe the length limit shouldn't apply
             // to JSX.
             ignorePattern: '^\\s*<',
+            ignoreComments: true,
+            code: 90,
         }],
         "valid-jsdoc": ["warn"],
         "new-cap": ["warn"],
