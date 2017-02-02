@@ -16,17 +16,26 @@ limitations under the License.
 
 var MatrixClientPeg = require('./MatrixClientPeg');
 var dis = require('./dispatcher');
+var sdk = require('./index');
+var Modal = require('./Modal');
 
 module.exports = {
     resend: function(event) {
         MatrixClientPeg.get().resendEvent(
             event, MatrixClientPeg.get().getRoom(event.getRoomId())
-        ).done(function() {
+        ).done(function(res) {
             dis.dispatch({
                 action: 'message_sent',
                 event: event
             });
-        }, function() {
+        }, function(err) {
+            if (err.name === "UnknownDeviceError") {
+                var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
+                Modal.createDialog(UnknownDeviceDialog, {
+                    devices: err.devices
+                }, "mx_Dialog_unknownDevice");
+            }
+
             dis.dispatch({
                 action: 'message_send_failed',
                 event: event
