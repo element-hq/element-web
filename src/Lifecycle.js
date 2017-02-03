@@ -228,6 +228,11 @@ function _restoreFromLocalStorage() {
         return false;
     }
 }
+const RtsClient = require("./RtsClient");
+let rtsClient = null;
+export function initRtsClient(url) {
+    rtsClient = new RtsClient(url);
+}
 
 /**
  * Transitions to a logged-in state using the given credentials
@@ -260,6 +265,17 @@ export function setLoggedIn(credentials) {
             console.log("Session persisted for %s", credentials.userId);
         } catch (e) {
             console.warn("Error using local storage: can't persist session!", e);
+        }
+
+        if (rtsClient) {
+            rtsClient.login(credentials.userId).then((teamToken) => {
+                localStorage.setItem("mx_team_token", teamToken);
+            }, (err) =>{
+                console.error(
+                    "Failed to get team token on login, not persisting to localStorage",
+                    err
+                );
+            });
         }
     } else {
         console.warn("No local storage available: can't persist session!");

@@ -77,4 +77,14 @@ export default class RtsClient {
             }
         );
     }
+
+    login(userId) {
+        return request(this._url + '/login',
+            {
+                qs: {
+                    user_id: userId,
+                },
+            }
+        );
+    }
 }
