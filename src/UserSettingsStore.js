@@ -149,6 +149,23 @@ module.exports = {
         return MatrixClientPeg.get().setAccountData("im.vector.web.settings", settings);
     },
 
+    getLocalSettings: function() {
+        var localSettingsString = localStorage.getItem('mx_local_settings') || '{}';
+        return JSON.parse(localSettingsString);
+    },
+
+    getLocalSetting: function(type, defaultValue = null) {
+        var settings = this.getLocalSettings();
+        return settings.hasOwnProperty(type) ? settings[type] : null;
+    },
+
+    setLocalSetting: function(type, value) {
+        var settings = this.getLocalSettings();
+        settings[type] = value;
+        // FIXME: handle errors
+        localStorage.setItem('mx_local_settings', JSON.stringify(settings));
+    },
+
     isFeatureEnabled: function(feature: string): boolean {
         // Disable labs for guests.
         if (MatrixClientPeg.get().isGuest()) return false;

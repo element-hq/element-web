@@ -558,7 +558,7 @@ export default class MessageComposerInput extends React.Component {
             dis.dispatch({
                 action: 'message_sent',
             });
-        }, onSendMessageFailed);
+        }, (e) => onSendMessageFailed(e, this.props.room));
 
         this.setState({
             editorState: this.createEditorState(),

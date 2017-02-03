@@ -19,19 +19,47 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
+function DeviceListEntry(props) {
+    const {userId, device} = props;
+
+    const DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
+
+    return (
+        <li>
+            <DeviceVerifyButtons device={ device } userId={ userId } />
+            { device.deviceId }
+            <br/>
+            { device.getDisplayName() }
+        </li>
+    );
+}
+
+DeviceListEntry.propTypes = {
+    userId: React.PropTypes.string.isRequired,
+
+    // deviceinfo
+    device: React.PropTypes.object.isRequired,
+};
+
+
 function UserUnknownDeviceList(props) {
-    const {userDevices} = props;
+    const {userId, userDevices} = props;
 
     const deviceListEntries = Object.keys(userDevices).map((deviceId) =>
-        <li key={ deviceId }>
-            { deviceId } ( { userDevices[deviceId].getDisplayName() } )
-        </li>,
+       <DeviceListEntry key={ deviceId } userId={ userId }
+           device={ userDevices[deviceId] } />,
     );
 
-    return <ul>{deviceListEntries}</ul>;
+    return (
+        <ul className="mx_UnknownDeviceDialog_deviceList">
+            {deviceListEntries}
+        </ul>
+    );
 }
 
 UserUnknownDeviceList.propTypes = {
+    userId: React.PropTypes.string.isRequired,
+
     // map from deviceid -> deviceinfo
     userDevices: React.PropTypes.object.isRequired,
 };
@@ -43,7 +71,7 @@ function UnknownDeviceList(props) {
     const userListEntries = Object.keys(devices).map((userId) =>
         <li key={ userId }>
             <p>{ userId }:</p>
-            <UserUnknownDeviceList userDevices={devices[userId]} />
+            <UserUnknownDeviceList userId={ userId } userDevices={ devices[userId] } />
         </li>,
     );
 
@@ -60,6 +88,8 @@ export default React.createClass({
     displayName: 'UnknownEventDialog',
 
     propTypes: {
+        room: React.PropTypes.object.isRequired,
+
         // map from userid -> deviceid -> deviceinfo
         devices: React.PropTypes.object.isRequired,
         onFinished: React.PropTypes.func.isRequired,
@@ -76,6 +106,34 @@ export default React.createClass({
     },
 
     render: function() {
+        const client = MatrixClientPeg.get();
+        const blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices() ||
+              this.props.room.getBlacklistUnverifiedDevices();
+
+        let warning;
+        if (blacklistUnverified) {
+            warning = (
+                <h4>
+                    You are currently blacklisting unverified devices; to send
+                    messages to these devices you must verify them.
+                </h4>
+            );
+        } else {
+            warning = (
+                <div>
+                    <p>
+                        This means there is no guarantee that the devices
+                        belong to the users they claim to.
+                    </p>
+                    <p>
+                        We recommend you go through the verification process
+                        for each device before continuing, but you can resend
+                        the message without verifying if you prefer.
+                    </p>
+                </div>
+            );
+        }
+
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className='mx_UnknownDeviceDialog'
@@ -83,17 +141,13 @@ export default React.createClass({
                 title='Room contains unknown devices'
             >
                 <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
-                    <h4>This room contains devices which have not been
-                    verified.</h4>
-                    <p>
-                        This means there is no guarantee that the devices belong
-                        to a rightful user of the room.
-                    </p><p>
-                        We recommend you go through the verification process
-                        for each device before continuing, but you can resend
-                        the message without verifying if you prefer.
-                    </p>
-                    <p>Unknown devices:</p>
+                    <h4>
+                        This room contains unknown devices which have not been
+                        verified.
+                    </h4>
+                    { warning }
+                    Unknown devices:
+
                     <UnknownDeviceList devices={this.props.devices} />
                 </GeminiScrollbar>
                 <div className="mx_Dialog_buttons">
@@ -104,5 +158,7 @@ export default React.createClass({
                 </div>
             </BaseDialog>
         );
+        // XXX: do we want to give the user the option to enable blacklistUnverifiedDevices for this room (or globally) at this point?
+        // It feels like confused users will likely turn it on and then disappear in a cloud of UISIs...
     },
 });

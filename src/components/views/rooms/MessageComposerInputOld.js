@@ -29,11 +29,12 @@ var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
 var MARKDOWN_ENABLED = true;
 
-export function onSendMessageFailed(err) {
+export function onSendMessageFailed(err, room) {
     if (err.name === "UnknownDeviceError") {
         const UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
         Modal.createDialog(UnknownDeviceDialog, {
             devices: err.devices,
+            room: room,
         }, "mx_Dialog_unknownDevice");
     }
     dis.dispatch({
@@ -353,7 +354,7 @@ export default React.createClass({
             dis.dispatch({
                 action: 'message_sent'
             });
-        }, onSendMessageFailed);
+        }, (e) => onSendMessageFailed(e, this.props.room));
 
         this.refs.textarea.value = '';
         this.resizeInput();
