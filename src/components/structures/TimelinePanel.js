@@ -993,7 +993,7 @@ var TimelinePanel = React.createClass({
             );
         }
 
-        if (this.state.events.length == 0) {
+        if (this.state.events.length == 0 && !this.state.canBackPaginate && this.props.empty) {
             return (
                     <div className={ this.props.className + " mx_RoomView_messageListWrapper" }>
                         <div className="mx_RoomView_empty">{ this.props.empty }</div>
