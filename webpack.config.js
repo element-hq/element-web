@@ -132,6 +132,11 @@ module.exports = {
     devServer: {
         // serve unwebpacked assets from webapp.
         contentBase: './webapp',
+
+        stats: {
+            // don't fill the console up with a mahoosive list of modules
+            chunks: false,
+        },
     },
 };
 
