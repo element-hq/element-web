@@ -190,6 +190,11 @@ module.exports = React.createClass({
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
+
+        // Use the locally-stored team token first, then as a fall-back, check to see if
+        // a referral link was used, which will contain a query parameter `team_token`.
+        this._teamToken = window.localStorage.getItem('mx_team_token') ||
+            startingFragmentQueryParams.team_token;
     },
 
     componentDidMount: function() {
@@ -694,7 +699,7 @@ module.exports = React.createClass({
                         )[0].roomId;
                         self.setState({ready: true, currentRoomId: firstRoom, page_type: PageTypes.RoomView});
                     } else {
-                        if (window.localStorage.getItem('mx_team_token')) {
+                        if (this._teamToken) {
                             self.setState({ready: true, page_type: PageTypes.HomePage});
                         }
                         else {
@@ -1051,6 +1056,7 @@ module.exports = React.createClass({
                     onRoomIdResolved={this.onRoomIdResolved}
                     onRoomCreated={this.onRoomCreated}
                     onUserSettingsClose={this.onUserSettingsClose}
+                    teamToken={this._teamToken}
                     {...this.props}
                     {...this.state}
                 />

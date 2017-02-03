@@ -42,6 +42,8 @@ export default React.createClass({
         onRoomCreated: React.PropTypes.func,
         onUserSettingsClose: React.PropTypes.func,
 
+        teamToken: React.PropTypes.string,
+
         // and lots and lots of other stuff.
     },
 
@@ -197,7 +199,7 @@ export default React.createClass({
                 page_element = <HomePage
                     collapsedRhs={this.props.collapse_rhs}
                     teamServerUrl={this.props.config.teamServerConfig.teamServerURL}
-                    teamToken={window.localStorage.getItem("mx_team_token")}
+                    teamToken={this.props.teamToken}
                 />
                 if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
                 break;
