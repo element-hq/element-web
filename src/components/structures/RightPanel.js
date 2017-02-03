@@ -197,27 +197,26 @@ module.exports = React.createClass({
         if (this.props.roomId) {
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
-                        <div className="mx_RightPanel_headerButton">
-                        <AccessibleButton title="Members" onClick={ this.onMemberListButtonClick }>
+                        <AccessibleButton className="mx_RightPanel_headerButton"
+                                title="Members" onClick={ this.onMemberListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">{ membersBadge ? membersBadge : <span>&nbsp;</span>}</div>
                             <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
                             { membersHighlight }
                         </AccessibleButton>
-                        </div>
-                        <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton">
-                        <AccessibleButton title="Files" onClick={ this.onFileListButtonClick }>
+                        <AccessibleButton
+                                className="mx_RightPanel_headerButton mx_RightPanel_filebutton"
+                                title="Files" onClick={ this.onFileListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                             <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
                             { filesHighlight }
                         </AccessibleButton>
-                        </div>
-                        <div className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton">
-                        <AccessibleButton title="Notifications" onClick={ this.onNotificationListButtonClick }>
+                        <AccessibleButton
+                                className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton"
+                                title="Notifications" onClick={ this.onNotificationListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                             <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
                             { notificationsHighlight }
                         </AccessibleButton>
-                        </div>
                         <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" title="Hide panel" onClick={ this.onCollapseClick }>
                             <TintableSvg src="img/minimise.svg" width="10" height="16"/>
                         </div>
@@ -262,4 +261,3 @@ module.exports = React.createClass({
         );
     }
 });
-
