@@ -43,9 +43,9 @@ export default React.createClass({
         cli.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
     },
 
-    onDeviceVerificationChanged: function(userId, deviceId) {
+    onDeviceVerificationChanged: function(userId, deviceId, deviceInfo) {
         if (userId === this.props.userId && deviceId === this.props.device.deviceId) {
-            this.setState({ device: MatrixClientPeg.get().getStoredDevice(userId, deviceId) });
+            this.setState({ device: deviceInfo });
         }
     },
 
