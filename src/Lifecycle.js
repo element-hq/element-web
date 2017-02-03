@@ -268,8 +268,8 @@ export function setLoggedIn(credentials) {
         }
 
         if (rtsClient) {
-            rtsClient.login(credentials.userId).then((teamToken) => {
-                localStorage.setItem("mx_team_token", teamToken);
+            rtsClient.login(credentials.userId).then((body) => {
+                localStorage.setItem("mx_team_token", body.team_token);
             }, (err) =>{
                 console.error(
                     "Failed to get team token on login, not persisting to localStorage",
