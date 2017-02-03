@@ -128,7 +128,7 @@ module.exports = React.createClass({
             draggingFile: false,
             searching: false,
             searchResults: null,
-            hasUnsentMessages: false,
+            unsentMessageError: '',
             callState: null,
             guestsCanJoin: false,
             canPeek: false,
@@ -182,7 +182,7 @@ module.exports = React.createClass({
                     room: room,
                     roomId: result.room_id,
                     roomLoading: !room,
-                    hasUnsentMessages: this._hasUnsentMessages(room),
+                    unsentMessageError: this._getUnsentMessageError(room),
                 }, this._onHaveRoom);
             }, (err) => {
                 this.setState({
@@ -196,7 +196,7 @@ module.exports = React.createClass({
                 roomId: this.props.roomAddress,
                 room: room,
                 roomLoading: !room,
-                hasUnsentMessages: this._hasUnsentMessages(room),
+                unsentMessageError: this._getUnsentMessageError(room),
             }, this._onHaveRoom);
         }
     },
@@ -397,7 +397,7 @@ module.exports = React.createClass({
             case 'message_sent':
             case 'message_send_cancelled':
                 this.setState({
-                    hasUnsentMessages: this._hasUnsentMessages(this.state.room)
+                    unsentMessageError: this._getUnsentMessageError(this.state.room),
                 });
                 break;
             case 'notifier_enabled':
@@ -636,8 +636,15 @@ module.exports = React.createClass({
         }
     }, 500),
 
-    _hasUnsentMessages: function(room) {
-        return this._getUnsentMessages(room).length > 0;
+    _getUnsentMessageError: function(room) {
+        const unsentMessages = this._getUnsentMessages(room);
+        if (!unsentMessages.length) return "";
+        for (const event of unsentMessages) {
+            if (!event.error || event.error.name !== "UnknownDeviceError") {
+                return "Some of your messages have not been sent.";
+            }
+        }
+        return "Message not sent due to unknown devices being present";
     },
 
     _getUnsentMessages: function(room) {
@@ -1521,7 +1528,7 @@ module.exports = React.createClass({
                 room={this.state.room}
                 tabComplete={this.tabComplete}
                 numUnreadMessages={this.state.numUnreadMessages}
-                hasUnsentMessages={this.state.hasUnsentMessages}
+                unsentMessageError={this.state.unsentMessageError}
                 atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
                 hasActiveCall={inCall}
                 onResendAllClick={this.onResendAllClick}
