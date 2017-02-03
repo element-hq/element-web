@@ -122,8 +122,8 @@ export default React.createClass({
             warning = (
                 <div>
                     <p>
-                        This means there is no guarantee that the devices belong
-                        to a rightful user of the room.
+                        This means there is no guarantee that the devices
+                        belong to their rightful owner.
                     </p>
                     <p>
                         We recommend you go through the verification process
