@@ -1,3 +1,11 @@
+Changes in [0.9.7-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.7-rc.2) (2017-02-03)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7-rc.1...v0.9.7-rc.2)
+
+ * Update matrix-js-sdk to get new device change
+   notifications interface for more reliable e2e crypto
+
+
 Changes in [0.9.7-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.7-rc.1) (2017-02-03)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.6...v0.9.7-rc.1)
