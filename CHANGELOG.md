@@ -1,3 +1,10 @@
+Changes in [0.8.6-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.6-rc.2) (2017-02-03)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.6-rc.1...v0.8.6-rc.2)
+
+ * Update to new matrix-js-sdk to get support for new device change notifications interface
+
+
 Changes in [0.8.6-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.6-rc.1) (2017-02-03)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.5...v0.8.6-rc.1)
