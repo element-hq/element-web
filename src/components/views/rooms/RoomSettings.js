@@ -260,7 +260,7 @@ module.exports = React.createClass({
         if (!this.refs.encrypt) { return q(); }
 
         var encrypt = this.refs.encrypt.checked;
-        if (encrypt) { return q(); }
+        if (!encrypt) { return q(); }
 
         var roomId = this.props.room.roomId;
         return MatrixClientPeg.get().sendStateEvent(
