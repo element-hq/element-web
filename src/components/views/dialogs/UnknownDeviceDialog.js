@@ -123,7 +123,7 @@ export default React.createClass({
                 <div>
                     <p>
                         This means there is no guarantee that the devices
-                        belong to their rightful owner.
+                        belong to the users they claim to.
                     </p>
                     <p>
                         We recommend you go through the verification process
