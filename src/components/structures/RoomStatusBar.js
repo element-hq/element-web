@@ -39,8 +39,8 @@ module.exports = React.createClass({
         // the number of messages which have arrived since we've been scrolled up
         numUnreadMessages: React.PropTypes.number,
 
-        // true if there are messages in the room which had errors on send
-        hasUnsentMessages: React.PropTypes.bool,
+        // string to display when there are messages in the room which had errors on send
+        unsentMessageError: React.PropTypes.string,
 
         // this is true if we are fully scrolled-down, and are looking at
         // the end of the live timeline.
@@ -160,7 +160,7 @@ module.exports = React.createClass({
             return STATUS_BAR_EXPANDED;
         } else if (props.tabCompleteEntries) {
             return STATUS_BAR_HIDDEN;
-        } else if (props.hasUnsentMessages) {
+        } else if (props.unsentMessageError) {
             return STATUS_BAR_EXPANDED_LARGE;
         }
         return STATUS_BAR_HIDDEN;
@@ -288,12 +288,12 @@ module.exports = React.createClass({
             );
         }
 
-        if (this.props.hasUnsentMessages) {
+        if (this.props.unsentMessageError) {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
                     <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
                     <div className="mx_RoomStatusBar_connectionLostBar_title">
-                        Some of your messages have not been sent.
+                        { this.props.unsentMessageError }
                     </div>
                     <div className="mx_RoomStatusBar_connectionLostBar_desc">
                         <a className="mx_RoomStatusBar_resend_link"
