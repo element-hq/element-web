@@ -28,13 +28,21 @@ limitations under the License.
 // https://babeljs.io/docs/plugins/transform-runtime/
 require('babel-polyfill');
 
-// CSS requires: just putting them here for now as CSS is going to be
-// refactored "soon" anyway
-require('../../build/components.css');
+// Require common CSS here; this will make webpack process it into bundle.css.
+// Our own CSS (which is themed) is imported via separate webpack entry points
+// in webpack.config.js
 require('gemini-scrollbar/gemini-scrollbar.css');
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
+
+const rageshake = require("./rageshake");
+rageshake.init().then(() => {
+    console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
+    rageshake.cleanup();
+}, (err) => {
+    console.error("Failed to initialise rageshake: " + err);
+});
 
 
  // add React and ReactPerf to the global namespace, to make them easier to
@@ -233,6 +241,7 @@ async function loadApp() {
     let configError;
     try {
         configJson = await getConfig();
+        rageshake.setBugReportEndpoint(configJson.bug_report_endpoint_url);
     } catch (e) {
         configError = e;
     }

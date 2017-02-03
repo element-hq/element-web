@@ -58,6 +58,7 @@ function platformFriendlyName() {
 
 export default class ElectronPlatform extends VectorBasePlatform {
     setNotificationCount(count: number) {
+        if (this.notificationCount === count) return;
         super.setNotificationCount(count);
         // this sometimes throws because electron is made of fail:
         // https://github.com/electron/electron/issues/7351
@@ -97,7 +98,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
                 room_id: room.roomId
             });
             global.focus();
-            electron.remote.getCurrentWindow().restore();
+            const currentWin = electron.remote.getCurrentWindow();
+            currentWin.show();
+            currentWin.restore();
+            currentWin.focus();
         };
 
         return notification;
@@ -130,5 +134,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     screenCaptureErrorString() {
         return null;
+    }
+
+    requestNotificationPermission() : Promise {
+        return q('granted');
     }
 }

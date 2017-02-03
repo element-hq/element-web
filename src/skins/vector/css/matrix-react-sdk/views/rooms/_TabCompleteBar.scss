@@ -1,0 +1,56 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_TabCompleteBar {
+    overflow: hidden;
+}
+
+.mx_TabCompleteBar_item {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+.mx_TabCompleteBar_command {
+    margin-right: 8px;
+    background-color: $accent-color;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-bottom: 6px;
+    border-radius: 30px;
+    position: relative;
+    top: 1px;
+}
+
+.mx_TabCompleteBar_command .mx_TabCompleteBar_text {
+    opacity: 1.0;
+    vertical-align: initial;
+    color: $accent-fg-color;
+}
+
+.mx_TabCompleteBar_item img {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.mx_TabCompleteBar_text {
+    color: $primary-fg-color;
+    vertical-align: middle;
+    opacity: 0.5;
+}

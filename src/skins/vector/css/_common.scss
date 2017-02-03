@@ -1,0 +1,291 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+html {
+    /* hack to stop overscroll bounce on OSX and iOS.
+       N.B. Breaks things when we have legitimate horizontal overscroll */
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    /* Open Sans lacks combining diacritics, so these will fall through
+       to the next font.  Helevetica's diacritics however do not combine
+       nicely with Open Sans (on OSX, at least) and result in a huge
+       horizontal mess.  Arial empirically gets it right, hence prioritising
+       Arial here. */
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-size: 15px;
+    background-color: $primary-bg-color;
+    color: $primary-fg-color;
+    border: 0px;
+    margin: 0px;
+    /* This should render the fonts the same accross browsers */
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+div.error {
+    color: red;
+}
+
+h2 {
+    color: $primary-fg-color;
+    font-weight: 400;
+    font-size: 18px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+a:hover,
+a:link,
+a:visited {
+    color: $accent-color;
+}
+
+input[type=text], input[type=password], textarea {
+    background-color: transparent;
+    color: $primary-fg-color;
+}
+
+input[type=text].error, input[type=password].error {
+    border: 1px solid $warning-color;
+}
+
+input[type=text]:focus, textarea:focus {
+    border: 1px solid $accent-color;
+    outline: none;
+    box-shadow: none;
+}
+
+/* Required by Firefox */
+textarea {
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+}
+
+/* Prevent ugly dotted highlight around selected elements in Firefox */
+::-moz-focus-inner {
+    border: 0;
+}
+
+/* applied to side-panels and messagepanel when in RoomSettings */
+.mx_fadable {
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.
+   Stop the scrollbar view from pushing out the container's overall sizing, which causes
+   flexbox to adapt to the new size and cause the view to keep growing.
+ */
+.gm-scrollbar-container .gm-scroll-view {
+    position: absolute;
+}
+
+/* Expand thumbs on hoverover */
+.gm-scrollbar {
+    border-radius: 5px ! important;
+}
+.gm-scrollbar.-vertical {
+    width: 6px;
+    transition: width 120ms ease-out ! important;
+}
+.gm-scrollbar.-vertical:hover,
+.gm-scrollbar.-vertical:active {
+    width: 8px;
+    transition: width 120ms ease-out ! important;
+}
+.gm-scrollbar.-horizontal {
+    height: 6px;
+    transition: height 120ms ease-out ! important;
+}
+.gm-scrollbar.-horizontal:hover,
+.gm-scrollbar.-horizontal:active {
+    height: 8px;
+    transition: height 120ms ease-out ! important;
+}
+
+.mx_Dialog_wrapper {
+    position: fixed;
+    z-index: 4000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Spinner Dialog overide */
+.mx_Dialog_wrapper.mx_Dialog_spinner .mx_Dialog {
+    width: auto;
+    border-radius: 8px;
+    padding-left: 0px;
+    box-shadow: none;
+}
+
+/* View Source Dialog overide */
+.mx_Dialog_wrapper.mx_Dialog_viewsource .mx_Dialog {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.mx_Dialog {
+    background-color: $primary-bg-color;
+    color: $light-fg-color;
+    z-index: 4010;
+    font-weight: 300;
+    font-size: 15px;
+    position: relative;
+    padding-left: 58px;
+    width: 60%;
+    max-width: 704px;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+.mx_Dialog_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $dialog-background-bg-color;
+    opacity: 0.8;
+}
+
+.mx_Dialog_lightbox .mx_Dialog_background {
+    opacity: 0.85;
+    background-color: $lightbox-background-bg-color;
+}
+
+.mx_Dialog_lightbox .mx_Dialog {
+    border-radius: 0px;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    pointer-events: none;
+}
+
+.mx_Dialog_content {
+    margin: 24px 58px 68px 0;
+    font-size: 14px;
+    color: $primary-fg-color;
+    word-wrap: break-word;
+}
+
+.mx_Dialog_buttons {
+    padding-bottom: 36px;
+}
+
+.mx_Dialog button, .mx_Dialog input[type="submit"] {
+    border: 0px;
+    height: 36px;
+    border-radius: 40px;
+    border: solid 1px $accent-color;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    margin-left: 0px;
+    margin-right: 8px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    outline: none;
+    cursor: pointer;
+    color: $accent-color;
+    background-color: $primary-bg-color;
+
+    /* align images in buttons (eg spinners) */
+    vertical-align: middle;
+}
+
+.mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
+    color: $accent-fg-color;
+    background-color: $accent-color;
+}
+
+.mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger {
+    background-color: $warning-color;
+    border: solid 1px $warning-color;
+}
+
+.mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled {
+    background-color: $light-fg-color;
+    border: solid 1px $light-fg-color;
+    opacity: 0.7;
+}
+
+.mx_Dialog_title {
+    min-height: 16px;
+    padding-top: 40px;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 1.4;
+    color: $primary-fg-color;
+}
+
+.mx_Dialog_title.danger {
+    color: $warning-color;
+}
+
+.mx_TextInputDialog_label {
+    text-align: left;
+    padding-bottom: 12px;
+}
+
+.mx_TextInputDialog_input {
+    font-size: 15px;
+    border-radius: 3px;
+    border: 1px solid $input-border-color;
+    padding: 9px;
+    color: $primary-fg-color;
+    background-color: $primary-bg-color;
+}
+
+.mx_emojione {
+    height: 1em;
+    vertical-align: middle;
+}
+
+::-moz-selection {
+    background-color: $accent-color;
+    color: $selection-fg-color;
+}
+
+::selection {
+    background-color: $accent-color;
+    color: $selection-fg-color;
+}
+
+/** green button with rounded corners */
+.mx_textButton {
+    color: $accent-fg-color;
+    background-color: $accent-color;
+    border-radius: 17px;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    cursor: pointer;
+    display: inline;
+}
+
+.changelog_text {
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+}
