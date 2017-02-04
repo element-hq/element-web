@@ -1,3 +1,10 @@
+Changes in [0.9.7](https://github.com/vector-im/riot-web/releases/tag/v0.9.7) (2017-02-04)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7-rc.3...v0.9.7)
+
+ * Update to matrix-js-sdk 0.7.5 (no changes from 0.7.5-rc.3)
+ * Update to matrix-react-sdk 0.8.6 (no changes from 0.8.6-rc.3)
+
 Changes in [0.9.7-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.9.7-rc.3) (2017-02-03)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7-rc.2...v0.9.7-rc.3)
