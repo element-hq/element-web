@@ -906,7 +906,7 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_UserSettings_advanced">
                         matrix-react-sdk version: {REACT_SDK_VERSION}<br/>
-                        vector-web version: {this.state.vectorVersion !== null ? this.state.vectorVersion : 'unknown'}<br/>
+                        riot-web version: {this.state.vectorVersion !== null ? this.state.vectorVersion : 'unknown'}<br/>
                         olm version: {olmVersionString}<br/>
                     </div>
                 </div>
