@@ -30,11 +30,19 @@ var TYPING_SERVER_TIMEOUT = 30000;
 var MARKDOWN_ENABLED = true;
 
 export function onSendMessageFailed(err, room) {
+    // XXX: temporary logging to try to diagnose
+    // https://github.com/vector-im/riot-web/issues/3148
+    console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
     if (err.name === "UnknownDeviceError") {
         const UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
         Modal.createDialog(UnknownDeviceDialog, {
             devices: err.devices,
             room: room,
+            onFinished: (r) => {
+                // XXX: temporary logging to try to diagnose
+                // https://github.com/vector-im/riot-web/issues/3148
+                console.log('UnknownDeviceDialog closed with '+r);
+            },
         }, "mx_Dialog_unknownDevice");
     }
     dis.dispatch({

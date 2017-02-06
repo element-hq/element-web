@@ -29,11 +29,19 @@ module.exports = {
                 event: event
             });
         }, function(err) {
+            // XXX: temporary logging to try to diagnose
+            // https://github.com/vector-im/riot-web/issues/3148
+            console.log('Resend got send failure: ' + err.name + '('+err+')');
             if (err.name === "UnknownDeviceError") {
                 var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
                 Modal.createDialog(UnknownDeviceDialog, {
                     devices: err.devices,
                     room: MatrixClientPeg.get().getRoom(event.getRoomId()),
+                    onFinished: (r) => {
+                        // XXX: temporary logging to try to diagnose
+                        // https://github.com/vector-im/riot-web/issues/3148
+                        console.log('UnknownDeviceDialog closed with '+r);
+                    },
                 }, "mx_Dialog_unknownDevice");
             }
 
