@@ -13,6 +13,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 )
@@ -36,9 +37,10 @@ func respond(code int, w http.ResponseWriter) {
 	w.Write([]byte("{}"))
 }
 
-func gzipAndSave(data []byte, filepath string) error {
-    filepath = "bugs/" + filepath
-	if _, err := os.Stat(filepath); err == nil {
+func gzipAndSave(data []byte, fpath string) error {
+	fpath = filepath.Join("bugs", fpath)
+
+	if _, err := os.Stat(fpath); err == nil {
 		return fmt.Errorf("file already exists") // the user can just retry
 	}
 	var b bytes.Buffer
@@ -52,14 +54,14 @@ func gzipAndSave(data []byte, filepath string) error {
 	if err := gz.Close(); err != nil {
 		return err
 	}
-	if err := ioutil.WriteFile(filepath, b.Bytes(), 0644); err != nil {
+	if err := ioutil.WriteFile(fpath, b.Bytes(), 0644); err != nil {
 		return err
 	}
 	return nil
 }
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+	http.HandleFunc("/api/submit", func(w http.ResponseWriter, req *http.Request) {
 		if req.Method != "POST" && req.Method != "OPTIONS" {
 			respond(405, w)
 			return
