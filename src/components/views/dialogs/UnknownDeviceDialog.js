@@ -103,6 +103,10 @@ export default React.createClass({
                 MatrixClientPeg.get().setDeviceKnown(userId, deviceId, true);
             });
         });
+
+        // XXX: temporary logging to try to diagnose
+        // https://github.com/vector-im/riot-web/issues/3148
+        console.log('Opening UnknownDeviceDialog');
     },
 
     render: function() {
@@ -137,7 +141,12 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className='mx_UnknownDeviceDialog'
-                onFinished={this.props.onFinished}
+                onFinished={() => {
+                            // XXX: temporary logging to try to diagnose
+                            // https://github.com/vector-im/riot-web/issues/3148
+                            console.log("UnknownDeviceDialog closed by escape");
+                            this.props.onFinished();
+                }}
                 title='Room contains unknown devices'
             >
                 <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
@@ -152,7 +161,12 @@ export default React.createClass({
                 </GeminiScrollbar>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" autoFocus={ true }
-                            onClick={ this.props.onFinished } >
+                            onClick={() => {
+                                // XXX: temporary logging to try to diagnose
+                                // https://github.com/vector-im/riot-web/issues/3148
+                                console.log("UnknownDeviceDialog closed by OK");
+                                this.props.onFinished();
+                            }}>
                         OK
                     </button>
                 </div>
