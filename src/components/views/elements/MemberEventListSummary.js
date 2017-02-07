@@ -385,7 +385,7 @@ module.exports = React.createClass({
             }
             userEvents[userId].push({
                 mxEvent: e,
-                displayName: e.target.name || userId,
+                displayName: (e.target ? e.target.name : null) || userId,
                 index: index,
             });
         });
