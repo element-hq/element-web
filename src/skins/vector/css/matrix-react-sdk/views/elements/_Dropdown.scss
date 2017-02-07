@@ -77,7 +77,7 @@ input.mx_Dropdown_option, input.mx_Dropdown_option:focus {
     overflow-y: scroll;
 }
 
-.mx_Dropdown_menu .mx_Dropdown_option:hover {
+.mx_Dropdown_menu .mx_Dropdown_option_highlight {
     background-color: $focus-bg-color;
 }
 
