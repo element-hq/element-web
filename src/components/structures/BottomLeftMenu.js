@@ -35,7 +35,12 @@ module.exports = React.createClass({
             homeHover: false,
             peopleHover : false,
             settingsHover : false,
+            teamToken: null,
         });
+    },
+
+    componentWillMount: function() {
+        this.teamToken = window.localStorage.getItem('mx_team_token');
     },
 
     // Room events
@@ -114,7 +119,7 @@ module.exports = React.createClass({
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
 
         var homeButton;
-        if (window.localStorage.getItem('mx_team_token')) {
+        if (this.state.teamToken) {
             homeButton = (
                 <div className="mx_BottomLeftMenu_homePage" onClick={ this.onHomeClick } onMouseEnter={ this.onHomeMouseEnter } onMouseLeave={ this.onHomeMouseLeave } >
                     <TintableSvg src="img/icons-home.svg" width="25" height="25" />
