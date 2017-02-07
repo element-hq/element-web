@@ -181,7 +181,10 @@ export default class NetworkDropdown extends React.Component {
             span_class = 'mx_NetworkDropdown_menu_network';
         } else {
             key = server + '_inst_' + instance.instance_id;
-            icon = <img src={instance.icon || DEFAULT_ICON_URL} />;
+            const imgUrl = instance.icon ?
+                MatrixClientPeg.get().mxcUrlToHttp(instance.icon, 25, 25, 'crop', true) :
+                DEFAULT_ICON_URL;
+            icon = <img src={imgUrl} />;
             name = instance.desc;
             span_class = 'mx_NetworkDropdown_menu_network';
         }

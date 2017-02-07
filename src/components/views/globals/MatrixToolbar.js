@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var Notifier = require("matrix-react-sdk/lib/Notifier");
 var sdk = require('matrix-react-sdk')
+var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
 module.exports = React.createClass({
     displayName: 'MatrixToolbar',
@@ -38,7 +39,7 @@ module.exports = React.createClass({
                 <div className="mx_MatrixToolbar_content">
                     You are not receiving desktop notifications. <a className="mx_MatrixToolbar_link" onClick={ this.onClick }>Enable them now</a>
                 </div>
-                <div className="mx_MatrixToolbar_close"><img src="img/cancel.svg" width="18" height="18" onClick={ this.hideToolbar } /></div>
+                <AccessibleButton className="mx_MatrixToolbar_close" onClick={ this.hideToolbar } ><img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
             </div>
         );
     }

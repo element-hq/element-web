@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron/src/electron-main.js",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "A feature-rich client for Matrix.org",
   "author": "Vector Creations Ltd.",
   "repository": {
@@ -46,7 +46,7 @@
     "clean": "rimraf lib webapp electron/dist",
     "prepublish": "npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
-    "test:multi": "karma start"
+    "test-multi": "karma start"
   },
   "dependencies": {
     "babel-polyfill": "^6.5.0",
@@ -111,7 +111,6 @@
     "karma-junit-reporter": "^0.4.1",
     "karma-mocha": "^0.2.2",
     "karma-phantomjs-launcher": "^1.0.0",
-    "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
@@ -134,7 +133,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "optionalDependencies": {
-    "olm": "https://matrix.org/packages/npm/olm/olm-2.1.0.tgz"
+    "olm": "https://matrix.org/packages/npm/olm/olm-2.2.1.tgz"
   },
   "build": {
     "appId": "im.riot.app",
