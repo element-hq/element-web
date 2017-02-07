@@ -20,13 +20,25 @@ Describe here the problem that you are experiencing, or the feature you are requ
 
 Describe how what happens differs from what you expected.
 
-Include screenshots if possible: you can drag and drop images below.
+Log: sent/not sent?    <!-- You can send us the app's logs via the 'Report bug'
+link on the 'Settings' page. Very important for hard-to-reproduce bugs. Please
+file a bug here too! -->
+
+<!-- Include screenshots if possible: you can drag and drop images below. -->
 
 ### Version information
 
 <!-- IMPORTANT: please answer the following questions, to help us narrow down the problem -->
 
 - **Platform**: web (in-browser) or desktop?
-- **Browser**: Chrome, Safari, Firefox? which version? <!-- n/a for desktop app -->
+
+For the web app:
+
+- **Browser**: Chrome, Safari, Firefox? which version?
 - **OS**: Windows, macOS, Ubuntu, Arch Linux, etc?
-- **Version**: <!-- riot-web version from the user settings panel -->
+- **URL**: riot.im/develop / riot.im/app / somewhere else?
+
+For the desktop app:
+
+- **OS**: Windows, macOS, Ubuntu, Arch Linux, etc?
+- **Version**: 0.x.y <!-- check the user settings panel if unsure -->
