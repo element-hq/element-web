@@ -23,6 +23,7 @@ import UserActivity from './UserActivity';
 import Presence from './Presence';
 import dis from './dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
+import RtsClient from './RtsClient';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -228,7 +229,7 @@ function _restoreFromLocalStorage() {
         return false;
     }
 }
-const RtsClient = require("./RtsClient");
+
 let rtsClient = null;
 export function initRtsClient(url) {
     rtsClient = new RtsClient(url);
