@@ -33,7 +33,7 @@ module.exports = React.createClass({
     render: function() {
         return (
         <div className="mx_HomePage">
-            <iframe src={`${this.props.teamServerUrl}/static/${this.props.teamToken}/welcome.html`}/>
+            <iframe src={`${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`}/>
         </div>
         );
     }
