@@ -42,6 +42,8 @@ export default React.createClass({
         onRoomCreated: React.PropTypes.func,
         onUserSettingsClose: React.PropTypes.func,
 
+        teamToken: React.PropTypes.string,
+
         // and lots and lots of other stuff.
     },
 
@@ -137,6 +139,7 @@ export default React.createClass({
         var UserSettings = sdk.getComponent('structures.UserSettings');
         var CreateRoom = sdk.getComponent('structures.CreateRoom');
         var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
+        var HomePage = sdk.getComponent('structures.HomePage');
         var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         var GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
         var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
@@ -191,6 +194,16 @@ export default React.createClass({
                 />;
                 if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>;
                 break;
+
+            case PageTypes.HomePage:
+                page_element = <HomePage
+                    collapsedRhs={this.props.collapse_rhs}
+                    teamServerUrl={this.props.config.teamServerConfig.teamServerURL}
+                    teamToken={this.props.teamToken}
+                />
+                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
+                break;
+
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
                 right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.sideOpacity} />;
