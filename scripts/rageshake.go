@@ -37,8 +37,9 @@ func respond(code int, w http.ResponseWriter) {
 	w.Write([]byte("{}"))
 }
 
-func gzipAndSave(data []byte, fpath string) error {
-	fpath = filepath.Join("bugs", fpath)
+func gzipAndSave(data []byte, dirname, fpath string) error {
+	_ = os.MkdirAll(filepath.Join("bugs", dirname), os.ModePerm)
+	fpath = filepath.Join("bugs", dirname, fpath)
 
 	if _, err := os.Stat(fpath); err == nil {
 		return fmt.Errorf("file already exists") // the user can just retry
@@ -89,22 +90,25 @@ func main() {
 		//  "bugreport-20170115-112233-1.log.gz" => ...
 		//  "bugreport-20170115-112233-N.log.gz" => oldest log
 		t := time.Now().UTC()
-		prefix := t.Format("bugreport-20060102-150405")
+		prefix := t.Format("2006-01-02/150405")
 		summary := fmt.Sprintf(
 			"%s\n\nNumber of logs: %d\nVersion: %s\nUser-Agent: %s\n", p.Text, len(p.Logs), p.Version, p.UserAgent,
 		)
-		if err := gzipAndSave([]byte(summary), prefix+".log.gz"); err != nil {
+		if err := gzipAndSave([]byte(summary), prefix, "details.log.gz"); err != nil {
 			respond(500, w)
 			return
 		}
 		for i, log := range p.Logs {
-			if err := gzipAndSave([]byte(log.Lines), fmt.Sprintf("%s-%d.log.gz", prefix, i)); err != nil {
+			if err := gzipAndSave([]byte(log.Lines), prefix, fmt.Sprintf("logs-%d.log.gz", i)); err != nil {
 				respond(500, w)
 				return // TODO: Rollback?
 			}
 		}
 		respond(200, w)
 	})
+
+	// Make sure bugs directory exists
+	_ = os.Mkdir("bugs", os.ModePerm)
 
 	port := os.Args[1]
 	log.Fatal(http.ListenAndServe(":"+port, nil))
