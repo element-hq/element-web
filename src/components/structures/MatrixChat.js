@@ -210,7 +210,11 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
 
-        Lifecycle.initRtsClient(this.props.config.teamServerConfig.teamServerURL);
+        if (this.props.config.teamServerConfig &&
+            this.props.config.teamServerConfig.teamServerURL
+        ) {
+            Lifecycle.initRtsClient(this.props.config.teamServerConfig.teamServerURL);
+        }
 
         // the extra q() ensures that synchronous exceptions hit the same codepath as
         // asynchronous ones.
