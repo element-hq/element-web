@@ -3,4 +3,5 @@ node_js:
     - 6   # node v6, to match jenkins
 install:
     - npm install
-    - (cd node_modules/matrix-react-sdk && npm run build)
+    - (cd node_modules/matrix-js-sdk && npm install)
+    - (cd node_modules/matrix-react-sdk && npm install)

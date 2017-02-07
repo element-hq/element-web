@@ -1,0 +1,103 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_LeftPanel {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_LeftPanel_hideButton {
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.mx_LeftPanel_callView {
+
+}
+
+.mx_LeftPanel .mx_RoomList_scrollbar {
+    order: 1;
+
+    flex: 1 1 0;
+
+    overflow-y: auto;
+    z-index: 6;
+}
+
+.mx_LeftPanel.collapsed .mx_BottomLeftMenu {
+   flex: 0 0 160px;
+}
+
+.mx_LeftPanel .mx_BottomLeftMenu {
+    order: 3;
+
+    border-top: 1px solid rgba(118, 207, 166, 0.2);
+    margin-left: 16px; /* gutter */
+    margin-right: 16px; /* gutter */
+    flex: 0 0 60px;
+    z-index: 1;
+}
+
+.mx_LeftPanel .mx_BottomLeftMenu_options {
+    margin-top: 18px;
+}
+
+.mx_BottomLeftMenu_options object {
+    pointer-events: none;
+}
+
+.mx_LeftPanel .mx_BottomLeftMenu_directory,
+.mx_LeftPanel .mx_BottomLeftMenu_createRoom,
+.mx_LeftPanel .mx_BottomLeftMenu_people,
+.mx_LeftPanel .mx_BottomLeftMenu_settings {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.collapsed .mx_BottomLeftMenu_directory,
+.collapsed .mx_BottomLeftMenu_createRoom,
+.collapsed .mx_BottomLeftMenu_people,
+.collapsed .mx_BottomLeftMenu_settings {
+    margin-right: 0px ! important;
+    padding-top: 3px ! important;
+    padding-bottom: 3px ! important;
+}
+
+.mx_LeftPanel .mx_BottomLeftMenu_directory,
+.mx_LeftPanel .mx_BottomLeftMenu_createRoom,
+.mx_LeftPanel .mx_BottomLeftMenu_people {
+    margin-right: 10px;
+}
+
+.mx_LeftPanel .mx_BottomLeftMenu_settings {
+    float: right;
+}
+
+.mx_LeftPanel.collapsed .mx_BottomLeftMenu_settings {
+    float: none;
+}
+
+.mx_LeftPanel .mx_BottomLeftMenu_tooltip {
+    display: inline-block;
+    position: relative;
+    top: -25px;
+    left: 6px;
+}

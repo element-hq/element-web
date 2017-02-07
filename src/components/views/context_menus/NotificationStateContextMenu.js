@@ -120,22 +120,22 @@ module.exports = React.createClass({
                 </div>
                 <div className={ alertMeClasses } onClick={this._onClickAlertMe} >
                     <img className="mx_NotificationStateContextMenu_activeIcon" src="img/notif-active.svg" width="12" height="12" />
-                    <img className="mx_NotificationStateContextMenu_icon" src="img/icon-context-mute-off-copy.svg" width="16" height="12" />
+                    <img className="mx_NotificationStateContextMenu_icon mx_filterFlipColor" src="img/icon-context-mute-off-copy.svg" width="16" height="12" />
                     All messages (loud)
                 </div>
                 <div className={ allNotifsClasses } onClick={this._onClickAllNotifs} >
                     <img className="mx_NotificationStateContextMenu_activeIcon" src="img/notif-active.svg" width="12" height="12" />
-                    <img className="mx_NotificationStateContextMenu_icon" src="img/icon-context-mute-off.svg" width="16" height="12" />
+                    <img className="mx_NotificationStateContextMenu_icon mx_filterFlipColor" src="img/icon-context-mute-off.svg" width="16" height="12" />
                     All messages
                 </div>
                 <div className={ mentionsClasses } onClick={this._onClickMentions} >
                     <img className="mx_NotificationStateContextMenu_activeIcon" src="img/notif-active.svg" width="12" height="12" />
-                    <img className="mx_NotificationStateContextMenu_icon" src="img/icon-context-mute-mentions.svg" width="16" height="12" />
+                    <img className="mx_NotificationStateContextMenu_icon mx_filterFlipColor" src="img/icon-context-mute-mentions.svg" width="16" height="12" />
                     Mentions only
                 </div>
                 <div className={ muteNotifsClasses } onClick={this._onClickMute} >
                     <img className="mx_NotificationStateContextMenu_activeIcon" src="img/notif-active.svg" width="12" height="12" />
-                    <img className="mx_NotificationStateContextMenu_icon" src="img/icon-context-mute.svg" width="16" height="12" />
+                    <img className="mx_NotificationStateContextMenu_icon mx_filterFlipColor" src="img/icon-context-mute.svg" width="16" height="12" />
                     Mute
                 </div>
             </div>

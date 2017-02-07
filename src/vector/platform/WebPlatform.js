@@ -60,11 +60,13 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     setNotificationCount(count: number) {
+        if (this.notificationCount === count) return;
         super.setNotificationCount(count);
         this._updateFavicon();
     }
 
     setErrorStatus(errorDidOccur: boolean) {
+        if (this.errorDidOccur === errorDidOccur) return;
         super.setErrorStatus(errorDidOccur);
         this._updateFavicon();
     }
@@ -195,5 +197,13 @@ export default class WebPlatform extends VectorBasePlatform {
         let ua = new UAParser();
         return app_name + " via " + ua.getBrowser().name +
             " on " + ua.getOS().name;
+    }
+
+    screenCaptureErrorString() {
+        // it won't work at all if you're not on HTTPS so whine whine whine
+        if (!global.window || global.window.location.protocol !== "https:") {
+            return "You need to be using HTTPS to place a screen-sharing call.";
+        }
+        return null;
     }
 }

@@ -23,11 +23,14 @@ module.exports = React.createClass({
     statics: {
         replaces: 'LoginHeader',
     },
+    propTypes: {
+        icon: React.PropTypes.string,
+    },
 
     render: function() {
         return (
             <div className="mx_Login_logo">
-                <img src="img/logo.png" width="195" height="195" alt="Riot"/>
+                <img src={this.props.icon || "img/logo.png"} alt="Riot"/>
             </div>
         );
     }

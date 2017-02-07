@@ -19,11 +19,15 @@ tar -C olm -xz < olm/olm-*.tgz
 rm -r node_modules/olm
 cp -r olm/package node_modules/olm
 
-# we may be using a dev branch of react-sdk, in which case we need to build it
-(cd node_modules/matrix-react-sdk && npm run build)
+# we may be using dev branches of js-sdk and react-sdk, in which case we need to build them
+(cd node_modules/matrix-js-sdk && npm install)
+(cd node_modules/matrix-react-sdk && npm install)
 
 # run the mocha tests
 npm run test
+
+# run eslint
+npm run lintall -- -f checkstyle -o eslint.xml || true
 
 rm dist/vector-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
 

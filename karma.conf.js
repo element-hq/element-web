@@ -2,13 +2,14 @@
 
 var path = require('path');
 var webpack = require('webpack');
+var webpack_config = require('./webpack.config');
 
 /*
  * We use webpack to build our tests. It's a pain to have to wait for webpack
  * to build everything; however it's the easiest way to load our dependencies
  * from node_modules.
  *
- * If you run karma in multi-run mode (with `npm run test:multi`), it will watch
+ * If you run karma in multi-run mode (with `npm run test-multi`), it will watch
  * the tests for changes, and webpack will rebuild using a cache. This is much quicker
  * than a clean rebuild.
  */
@@ -19,8 +20,41 @@ var testFile = process.env.KARMA_TEST_FILE || 'test/all-tests.js';
 process.env.PHANTOMJS_BIN = 'node_modules/.bin/phantomjs';
 process.env.Q_DEBUG = 1;
 
+/* the webpack config is based on the real one, to (a) try to simulate the
+ * deployed environment as closely as possible, and (b) to avoid a shedload of
+ * cut-and-paste.
+ */
+
+// find out if we're shipping olm, and where it is, if so.
+const olm_entry = webpack_config.entry['olm'];
+
+// remove the default entries - karma provides its own (via the 'files' and
+// 'preprocessors' config below)
+delete webpack_config['entry'];
+
+// add ./test as a search path for js
+webpack_config.module.loaders.unshift({
+    test: /\.js$/, loader: "babel",
+    include: [path.resolve('./src'), path.resolve('./test')],
+});
+
+// disable parsing for sinon, because it
+// tries to do voodoo with 'require' which upsets
+// webpack (https://github.com/webpack/webpack/issues/304)
+webpack_config.module.noParse.push(/sinon\/pkg\/sinon\.js$/);
+
+// ?
+webpack_config.resolve.alias['sinon'] = 'sinon/pkg/sinon.js';
+
+webpack_config.resolve.root = [
+    path.resolve('./src'),
+    path.resolve('./test'),
+];
+
+webpack_config.devtool = 'inline-source-map';
+
 module.exports = function (config) {
-    config.set({
+    const myconfig = {
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['mocha'],
@@ -29,19 +63,29 @@ module.exports = function (config) {
         files: [
             'node_modules/babel-polyfill/browser.js',
             testFile,
-            {pattern: 'vector/img/*', watched: false, included: false, served: true, nocache: false},
+
+            // make the images available via our httpd. They will be avaliable
+            // below http://localhost:[PORT]/base/. See also `proxies` which
+            // defines alternative URLs for them.
+            //
+            // This isn't required by any of the tests, but it stops karma
+            // logging warnings when it serves a 404 for them.
+            {
+                pattern: 'src/skins/vector/img/*',
+                watched: false, included: false, served: true, nocache: false,
+            },
         ],
 
-        // redirect img links to the karma server
         proxies: {
-            "/img/": "/base/vector/img/",
+            // redirect img links to the karma server. See above.
+            "/img/": "/base/src/skins/vector/img/",
         },
 
         // preprocess matching files before serving them to the browser
         // available preprocessors:
         // https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'test/**/*.js': ['webpack', 'sourcemap']
+            '{src,test}/**/*.js': ['webpack'],
         },
 
         // test results reporter to use
@@ -84,53 +128,20 @@ module.exports = function (config) {
             outputDir: 'karma-reports',
         },
 
-        webpack: {
-            module: {
-                loaders: [
-                    { test: /\.json$/, loader: "json" },
-                    {
-                        test: /\.js$/, loader: "babel",
-                        include: [path.resolve('./src'),
-                                  path.resolve('./test'),
-                                 ]
-                    },
-                ],
-                noParse: [
-                    // don't parse the languages within highlight.js. They
-                    // cause stack overflows
-                    // (https://github.com/webpack/webpack/issues/1721), and
-                    // there is no need for webpack to parse them - they can
-                    // just be included as-is.
-                    /highlight\.js\/lib\/languages/,
+        webpack: webpack_config,
 
-                    // also disable parsing for sinon, because it
-                    // tries to do voodoo with 'require' which upsets
-                    // webpack (https://github.com/webpack/webpack/issues/304)
-                    /sinon\/pkg\/sinon\.js$/,
-                ],
+        webpackMiddleware: {
+            stats: {
+                // don't fill the console up with a mahoosive list of modules
+                chunks: false,
             },
-            resolve: {
-                alias: {
-                    // alias any requires to the react module to the one in our path, otherwise
-                    // we tend to get the react source included twice when using npm link.
-                    react: path.resolve('./node_modules/react'),
-
-                    // same goes for js-sdk
-                    "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
-
-                    sinon: 'sinon/pkg/sinon.js',
-                },
-                root: [
-                    path.resolve('./src'),
-                    path.resolve('./test'),
-                ],
-            },
-            plugins: [
-                // olm may not be installed, so avoid webpack warnings by
-                // ignoring it.
-                new webpack.IgnorePlugin(/^olm$/),
-            ],
-            devtool: 'inline-source-map',
         },
-    });
+    };
+
+    // include the olm loader if we have it.
+    if (olm_entry) {
+        myconfig.files.unshift(olm_entry);
+    }
+
+    config.set(myconfig);
 };

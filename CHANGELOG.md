@@ -1,3 +1,135 @@
+Changes in [0.9.7](https://github.com/vector-im/riot-web/releases/tag/v0.9.7) (2017-02-04)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7-rc.3...v0.9.7)
+
+ * Update to matrix-js-sdk 0.7.5 (no changes from 0.7.5-rc.3)
+ * Update to matrix-react-sdk 0.8.6 (no changes from 0.8.6-rc.3)
+
+Changes in [0.9.7-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.9.7-rc.3) (2017-02-03)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7-rc.2...v0.9.7-rc.3)
+ * Update to latest Olm to fix key import/export and use of megolm sessions
+   created on more recent versions
+ * Update to latest matrix-react-sdk and matrix-js-sdk to fix e2e device
+   handling
+
+Changes in [0.9.7-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.7-rc.2) (2017-02-03)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7-rc.1...v0.9.7-rc.2)
+
+ * Update matrix-js-sdk to get new device change
+   notifications interface for more reliable e2e crypto
+
+Changes in [0.9.7-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.7-rc.1) (2017-02-03)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.6...v0.9.7-rc.1)
+
+ * Better user interface for screen readers and keyboard navigation
+   [\#2946](https://github.com/vector-im/riot-web/pull/2946)
+ * Allow mxc: URLs for icons in the NetworkDropdown
+   [\#3118](https://github.com/vector-im/riot-web/pull/3118)
+ * make TopRightMenu more intuitive
+   [\#3117](https://github.com/vector-im/riot-web/pull/3117)
+ * Handle icons with width > height
+   [\#3110](https://github.com/vector-im/riot-web/pull/3110)
+ * Fix jenkins build
+   [\#3105](https://github.com/vector-im/riot-web/pull/3105)
+ * Add CSS for a support box in login
+   [\#3081](https://github.com/vector-im/riot-web/pull/3081)
+ * Allow a custom login logo to be displayed on login
+   [\#3082](https://github.com/vector-im/riot-web/pull/3082)
+ * Fix the width of input fields within login/reg box
+   [\#3080](https://github.com/vector-im/riot-web/pull/3080)
+ * Set BaseAvatar_image bg colour = #fff
+   [\#3057](https://github.com/vector-im/riot-web/pull/3057)
+ * only recalculate favicon if it changes
+   [\#3067](https://github.com/vector-im/riot-web/pull/3067)
+ * CSS tweak for email address lookup
+   [\#3064](https://github.com/vector-im/riot-web/pull/3064)
+ * Glue the dialog to rageshake: honour sendLogs flag.
+   [\#3061](https://github.com/vector-im/riot-web/pull/3061)
+ * Don't use hash-named directory for dev server
+   [\#3049](https://github.com/vector-im/riot-web/pull/3049)
+ * Implement bug reporting logic
+   [\#3000](https://github.com/vector-im/riot-web/pull/3000)
+ * Add css for bug report dialog
+   [\#3045](https://github.com/vector-im/riot-web/pull/3045)
+ * Increase the max-height of the expanded status bar
+   [\#3043](https://github.com/vector-im/riot-web/pull/3043)
+ * Hopefully, fix intermittent test failure
+   [\#3040](https://github.com/vector-im/riot-web/pull/3040)
+ * CSS for 'searching known users'
+   [\#2971](https://github.com/vector-im/riot-web/pull/2971)
+ * Animate status bar max-height and margin-top
+   [\#2981](https://github.com/vector-im/riot-web/pull/2981)
+ * Add eslint config
+   [\#3032](https://github.com/vector-im/riot-web/pull/3032)
+ * Re-position typing avatars relative to "is typing"
+   [\#3030](https://github.com/vector-im/riot-web/pull/3030)
+ * CSS for avatars that appear when users are typing
+   [\#2998](https://github.com/vector-im/riot-web/pull/2998)
+ * Add StartupWMClass
+   [\#3001](https://github.com/vector-im/riot-web/pull/3001)
+ * Fix link to image for event options menu
+   [\#3002](https://github.com/vector-im/riot-web/pull/3002)
+ * Make riot desktop single instance
+   [\#2999](https://github.com/vector-im/riot-web/pull/2999)
+ * Add electron tray icon
+   [\#2997](https://github.com/vector-im/riot-web/pull/2997)
+ * Fixes to electron desktop notifs
+   [\#2994](https://github.com/vector-im/riot-web/pull/2994)
+ * Auto-hide the electron menu bar
+   [\#2975](https://github.com/vector-im/riot-web/pull/2975)
+ * A couple of tweaks to the karma config
+   [\#2987](https://github.com/vector-im/riot-web/pull/2987)
+ * Deploy script
+   [\#2974](https://github.com/vector-im/riot-web/pull/2974)
+ * Use the postcss-webpack-loader
+   [\#2990](https://github.com/vector-im/riot-web/pull/2990)
+ * Switch CSS to using postcss, and implement a dark theme.
+   [\#2973](https://github.com/vector-im/riot-web/pull/2973)
+ * Update redeploy script to keep old bundles
+   [\#2969](https://github.com/vector-im/riot-web/pull/2969)
+ * Include current version in update check explicitly
+   [\#2967](https://github.com/vector-im/riot-web/pull/2967)
+ * Add another layer of directory to webpack chunks
+   [\#2966](https://github.com/vector-im/riot-web/pull/2966)
+ * Fix links to fonts and images from CSS
+   [\#2965](https://github.com/vector-im/riot-web/pull/2965)
+ * Put parent build hash in webpack output filenames
+   [\#2961](https://github.com/vector-im/riot-web/pull/2961)
+ * update README to point to new names/locations
+   [\#2846](https://github.com/vector-im/riot-web/pull/2846)
+
+Changes in [0.9.6](https://github.com/vector-im/riot-web/releases/tag/v0.9.6) (2017-01-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.6-rc.1...v0.9.6)
+
+ * Update to matrix-js-sdk 0.9.6 for video calling fix
+
+Changes in [0.9.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.6-rc.1) (2017-01-13)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.5...v0.9.6-rc.1)
+
+ * Build the js-sdk in the CI script
+   [\#2920](https://github.com/vector-im/riot-web/pull/2920)
+ * Hopefully fix Windows shortcuts
+   [\#2917](https://github.com/vector-im/riot-web/pull/2917)
+ * Update README now the js-sdk has a transpile step
+   [\#2921](https://github.com/vector-im/riot-web/pull/2921)
+ * Use the role for 'toggle dev tools'
+   [\#2915](https://github.com/vector-im/riot-web/pull/2915)
+ * Enable screen sharing easter-egg in desktop app
+   [\#2909](https://github.com/vector-im/riot-web/pull/2909)
+ * make electron send email validation URLs with a nextlink of riot.im
+   [\#2808](https://github.com/vector-im/riot-web/pull/2808)
+ * add Debian Stretch install steps to readme
+   [\#2809](https://github.com/vector-im/riot-web/pull/2809)
+ * Update desktop build instructions fixes #2792
+   [\#2793](https://github.com/vector-im/riot-web/pull/2793)
+ * CSS for the delete threepid button
+   [\#2784](https://github.com/vector-im/riot-web/pull/2784)
+
 Changes in [0.9.5](https://github.com/vector-im/riot-web/releases/tag/v0.9.5) (2016-12-24)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.4...v0.9.5)
