@@ -22,6 +22,10 @@ limitations under the License.
     flex-direction: column;
     justify-content: center;
     display: flex;
+
+    /* For welcome pages */
+    background-color: #f7f7f7;
+    -webkit-align-items: center;
 }
 
 .mx_RoomPreviewBar_wrapper {
