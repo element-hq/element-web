@@ -723,7 +723,7 @@ module.exports = React.createClass({
                 } else {
                     // There is no information on presentedId
                     // so point user to fallback like /directory
-                    if (self.props.config.home_page) {
+                    if (self._teamToken) {
                         self.notifyNewScreen('home');
                     } else {
                         self.notifyNewScreen('directory');
