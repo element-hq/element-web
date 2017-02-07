@@ -194,7 +194,7 @@ module.exports = React.createClass({
         // Use the locally-stored team token first, then as a fall-back, check to see if
         // a referral link was used, which will contain a query parameter `team_token`.
         this._teamToken = window.localStorage.getItem('mx_team_token') ||
-            startingFragmentQueryParams.team_token;
+            this.props.startingFragmentQueryParams.team_token;
     },
 
     componentDidMount: function() {
@@ -699,10 +699,9 @@ module.exports = React.createClass({
                         )[0].roomId;
                         self.setState({ready: true, currentRoomId: firstRoom, page_type: PageTypes.RoomView});
                     } else {
-                        if (this._teamToken) {
+                        if (self._teamToken) {
                             self.setState({ready: true, page_type: PageTypes.HomePage});
-                        }
-                        else {
+                        } else {
                             self.setState({ready: true, page_type: PageTypes.RoomDirectory});
                         }
                     }
@@ -726,8 +725,7 @@ module.exports = React.createClass({
                     // so point user to fallback like /directory
                     if (self.props.config.home_page) {
                         self.notifyNewScreen('home');
-                    }
-                    else {
+                    } else {
                         self.notifyNewScreen('directory');
                     }
                 }
