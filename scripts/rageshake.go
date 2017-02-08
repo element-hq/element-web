@@ -1,12 +1,13 @@
 // Run a web server capable of dumping bug reports sent by Riot.
 // Requires Go 1.5+
-// Usage:   go run rageshake.go PORT
-// Example: go run rageshake.go 8080
+// Usage:   BUGS_USER=user BUGS_PASS=password go run rageshake.go PORT
+// Example: BUGS_USER=alice BUGS_PASS=secret go run rageshake.go 8080
 package main
 
 import (
 	"bytes"
 	"compress/gzip"
+	"crypto/subtle"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -61,6 +62,22 @@ func gzipAndSave(data []byte, dirname, fpath string) error {
 	return nil
 }
 
+func basicAuth(handler http.Handler, username, password, realm string) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, pass, ok := r.BasicAuth() // pull creds from the request
+
+		// check user and pass securely
+		if !ok || subtle.ConstantTimeCompare([]byte(user), []byte(username)) != 1 || subtle.ConstantTimeCompare([]byte(pass), []byte(password)) != 1 {
+			w.Header().Set("WWW-Authenticate", `Basic realm="`+realm+`"`)
+			w.WriteHeader(401)
+			w.Write([]byte("Unauthorised.\n"))
+			return
+		}
+
+		handler.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	http.HandleFunc("/api/submit", func(w http.ResponseWriter, req *http.Request) {
 		if req.Method != "POST" && req.Method != "OPTIONS" {
@@ -109,6 +126,20 @@ func main() {
 
 	// Make sure bugs directory exists
 	_ = os.Mkdir("bugs", os.ModePerm)
+
+	// serve files under "bugs"
+	fs := http.FileServer(http.Dir("bugs"))
+	fs = http.StripPrefix("/api/listing/", fs)
+
+	// set auth if env vars exist
+	usr := os.Getenv("BUGS_USER")
+	pass := os.Getenv("BUGS_PASS")
+	if usr == "" || pass == "" {
+		fmt.Println("BUGS_USER and BUGS_PASS env vars not found. No authentication is running for /api/listing")
+	} else {
+		fs = basicAuth(fs, usr, pass, "Enter username and password")
+	}
+	http.Handle("/api/listing/", fs)
 
 	port := os.Args[1]
 	log.Fatal(http.ListenAndServe(":"+port, nil))
