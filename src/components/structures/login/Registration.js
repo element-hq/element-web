@@ -98,6 +98,9 @@ module.exports = React.createClass({
         this.registerLogic.setRegistrationUrl(this.props.registrationUrl);
         this.registerLogic.setIdSid(this.props.idSid);
         this.registerLogic.setGuestAccessToken(this.props.guestAccessToken);
+        if (this.props.referrer) {
+            this.registerLogic.setReferrer(this.props.referrer);
+        }
         this.registerLogic.recheckState();
 
         if (
