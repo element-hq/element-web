@@ -117,11 +117,23 @@ $progressbar-color: #000;
     filter: invert();
 }
 
-.mx_EventTile_content .markdown-body pre,
-.mx_EventTile_content .markdown-body code {
-    filter: invert();
-}
+// markdown overrides:
+.mx_EventTile_content .markdown-body {
+    pre, code {
+        filter: invert();
+    }
 
-.mx_EventTile_content .markdown-body pre code {
-    filter: none;
+    pre code {
+        filter: none;
+    }
+
+    table {
+        tr {
+            background-color: #000000;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #080808;
+        }
+    }
 }
