@@ -137,7 +137,7 @@ func main() {
 	if usr == "" || pass == "" {
 		fmt.Println("BUGS_USER and BUGS_PASS env vars not found. No authentication is running for /api/listing")
 	} else {
-		fs = basicAuth(fs, usr, pass, "Enter username and password")
+		fs = basicAuth(fs, usr, pass, "Riot bug reports")
 	}
 	http.Handle("/api/listing/", fs)
 
