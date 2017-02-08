@@ -41,7 +41,9 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this.teamToken = window.localStorage.getItem('mx_team_token');
+        this.setState({
+            teamToken: window.localStorage.getItem('mx_team_token'),
+        });
     },
 
     // Room events
