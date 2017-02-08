@@ -77,4 +77,21 @@ export default class RtsClient {
             }
         );
     }
+
+    /**
+     * Signal to the RTS that a login has occurred and that a user requires their team's
+     * token.
+     * @param {string} userId the user ID of the user who is a member of a team.
+     * @returns {Promise} a promise that resolves to { team_token: 'sometoken' } upon
+     * success.
+     */
+    login(userId) {
+        return request(this._url + '/login',
+            {
+                qs: {
+                    user_id: userId,
+                },
+            }
+        );
+    }
 }
