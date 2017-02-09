@@ -103,7 +103,7 @@ module.exports = React.createClass({
             this.props.onResize();
         }
 
-        const size = this._getSize(this.state, this.props);
+        const size = this._getSize(this.props, this.state);
         if (size > 0) {
             this.props.onVisible();
         } else {
@@ -145,7 +145,7 @@ module.exports = React.createClass({
     // We don't need the actual height - just whether it is likely to have
     // changed - so we use '0' to indicate normal size, and other values to
     // indicate other sizes.
-    _getSize: function(state, props) {
+    _getSize: function(props, state) {
         if (state.syncState === "ERROR" ||
             (state.usersTyping.length > 0) ||
             props.numUnreadMessages ||
@@ -163,7 +163,8 @@ module.exports = React.createClass({
     // determine if we need to call onResize
     _checkForResize: function(prevProps, prevState) {
         // figure out the old height and the new height of the status bar.
-        return this._getSize(prevProps, prevState) !== this._getSize(this.props, this.state);
+        return this._getSize(prevProps, prevState)
+            !== this._getSize(this.props, this.state);
     },
 
     // return suitable content for the image on the left of the status bar.
