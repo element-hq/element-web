@@ -101,6 +101,15 @@ limitations under the License.
     padding-right: 1em;
 }
 
+.mx_UserSettings_importExportButtons {
+    padding-top: 10px;
+    padding-left: 40px;
+}
+
+.mx_UserSettings_importExportButtons .mx_UserSettings_button {
+    margin-right: 1em;
+}
+
 .mx_UserSettings_toggle input {
     width: 16px;
     margin-right: 8px;
