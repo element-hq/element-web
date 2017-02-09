@@ -90,8 +90,8 @@ module.exports = React.createClass({displayName: 'UploadBar',
                 <div className="mx_UploadBar_uploadProgressOuter">
                     <div className="mx_UploadBar_uploadProgressInner" style={innerProgressStyle}></div>
                 </div>
-                <img className="mx_UploadBar_uploadIcon" src="img/fileicon.png" width="17" height="22"/>
-                <img className="mx_UploadBar_uploadCancel" src="img/cancel.svg" width="18" height="18"
+                <img className="mx_UploadBar_uploadIcon mx_filterFlipColor" src="img/fileicon.png" width="17" height="22"/>
+                <img className="mx_UploadBar_uploadCancel mx_filterFlipColor" src="img/cancel.svg" width="18" height="18"
                     onClick={function() { ContentMessages.cancelUpload(upload.promise); }}
                 />
                 <div className="mx_UploadBar_uploadBytes">
