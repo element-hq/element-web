@@ -428,7 +428,7 @@ module.exports = React.createClass({
                 <div className="mx_Login_box">
                     <LoginHeader
                         icon={this.state.teamSelected ?
-                            "https://riot.im/rts/static/common/" +
+                            this.props.teamServerConfig.teamServerURL + "/static/common/" +
                             this.state.teamSelected.domain + "/icon.png" :
                             null}
                     />
