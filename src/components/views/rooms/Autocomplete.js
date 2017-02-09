@@ -58,7 +58,7 @@ export default class Autocomplete extends React.Component {
             return;
         }
 
-        const completionList = flatMap(completions, provider => provider.completions);
+        const completionList = flatMap(completions, (provider) => provider.completions);
 
         // Reset selection when completion list becomes empty.
         let selectionOffset = COMPOSER_SELECTED;
@@ -69,7 +69,7 @@ export default class Autocomplete extends React.Component {
             const currentSelection = this.state.selectionOffset === 0 ? null :
                 this.state.completionList[this.state.selectionOffset - 1].completion;
             selectionOffset = completionList.findIndex(
-                completion => completion.completion === currentSelection);
+                (completion) => completion.completion === currentSelection);
             if (selectionOffset === -1) {
                 selectionOffset = COMPOSER_SELECTED;
             } else {
@@ -82,8 +82,8 @@ export default class Autocomplete extends React.Component {
 
         let hide = this.state.hide;
         // These are lists of booleans that indicate whether whether the corresponding provider had a matching pattern
-        const oldMatches = this.state.completions.map(completion => !!completion.command.command),
-            newMatches = completions.map(completion => !!completion.command.command);
+        const oldMatches = this.state.completions.map((completion) => !!completion.command.command),
+            newMatches = completions.map((completion) => !!completion.command.command);
 
         // So, essentially, we re-show autocomplete if any provider finds a new pattern or stops finding an old one
         if (!isEqual(oldMatches, newMatches)) {
@@ -170,7 +170,7 @@ export default class Autocomplete extends React.Component {
     }
 
     setSelection(selectionOffset: number) {
-        this.setState({selectionOffset});
+        this.setState({selectionOffset, hide: false});
     }
 
     componentDidUpdate() {
@@ -195,17 +195,16 @@ export default class Autocomplete extends React.Component {
         const EmojiText = sdk.getComponent('views.elements.EmojiText');
 
         let position = 1;
-        let renderedCompletions = this.state.completions.map((completionResult, i) => {
-            let completions = completionResult.completions.map((completion, i) => {
-
+        const renderedCompletions = this.state.completions.map((completionResult, i) => {
+            const completions = completionResult.completions.map((completion, i) => {
                 const className = classNames('mx_Autocomplete_Completion', {
                     'selected': position === this.state.selectionOffset,
                 });
-                let componentPosition = position;
+                const componentPosition = position;
                 position++;
 
-                let onMouseOver = () => this.setSelection(componentPosition);
-                let onClick = () => {
+                const onMouseOver = () => this.setSelection(componentPosition);
+                const onClick = () => {
                     this.setSelection(componentPosition);
                     this.onCompletionClicked();
                 };
@@ -226,7 +225,7 @@ export default class Autocomplete extends React.Component {
                     {completionResult.provider.renderCompletions(completions)}
                 </div>
             ) : null;
-        }).filter(completion => !!completion);
+        }).filter((completion) => !!completion);
 
         return !this.state.hide && renderedCompletions.length > 0 ? (
             <div className="mx_Autocomplete" ref={(e) => this.container = e}>

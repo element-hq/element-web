@@ -414,6 +414,8 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
+        console.log(state);
+
         super.setState(state, () => {
             if (callback != null) {
                 callback();
@@ -425,7 +427,7 @@ export default class MessageComposerInput extends React.Component {
                 const selection = RichText.selectionStateToTextOffsets(
                     this.state.editorState.getSelection(),
                     this.state.editorState.getCurrentContent().getBlocksAsArray());
-
+                console.log(textContent);
                 this.props.onContentChanged(textContent, selection);
             }
         });
@@ -629,12 +631,12 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
-    onEscape = (e) => {
+    onEscape = async (e) => {
         e.preventDefault();
         if (this.autocomplete) {
             this.autocomplete.onEscape(e);
         }
-        this.setDisplayedCompletion(null); // restore originalEditorState
+        await this.setDisplayedCompletion(null); // restore originalEditorState
     };
 
     /* If passed null, restores the original editor content from state.originalEditorState.
@@ -645,7 +647,14 @@ export default class MessageComposerInput extends React.Component {
 
         if (displayedCompletion == null) {
             if (this.state.originalEditorState) {
-                this.setState({editorState: this.state.originalEditorState});
+                console.log('setting editorState to originalEditorState');
+                let editorState = this.state.originalEditorState;
+                // This is a workaround from https://github.com/facebook/draft-js/issues/458
+                // Due to the way we swap editorStates, Draft does not rerender at times
+                editorState = EditorState.forceSelection(editorState,
+                    editorState.getSelection());
+                this.setState({editorState});
+
             }
             return false;
         }
@@ -663,7 +672,7 @@ export default class MessageComposerInput extends React.Component {
         this.setState({editorState, originalEditorState: activeEditorState});
 
         // for some reason, doing this right away does not update the editor :(
-        setTimeout(() => this.refs.editor.focus(), 50);
+        // setTimeout(() => this.refs.editor.focus(), 50);
         return true;
     };
 
