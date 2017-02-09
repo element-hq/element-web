@@ -400,7 +400,8 @@ export default class MessageComposerInput extends React.Component {
      */
     setState(state, callback) {
         if (state.editorState != null) {
-            state.editorState = RichText.attachImmutableEntitiesToEmoji(state.editorState);
+            state.editorState = RichText.attachImmutableEntitiesToEmoji(
+                state.editorState);
 
             if (state.editorState.getCurrentContent().hasText()) {
                 this.onTypingActivity();
@@ -413,15 +414,17 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
-        super.setState(state, (state, props, context) => {
+        super.setState(state, () => {
             if (callback != null) {
-                callback(state, props, context);
+                callback();
             }
 
             if (this.props.onContentChanged) {
-                const textContent = state.editorState.getCurrentContent().getPlainText();
-                const selection = RichText.selectionStateToTextOffsets(state.editorState.getSelection(),
-                    state.editorState.getCurrentContent().getBlocksAsArray());
+                const textContent = this.state.editorState
+                    .getCurrentContent().getPlainText();
+                const selection = RichText.selectionStateToTextOffsets(
+                    this.state.editorState.getSelection(),
+                    this.state.editorState.getCurrentContent().getBlocksAsArray());
 
                 this.props.onContentChanged(textContent, selection);
             }
@@ -616,11 +619,13 @@ export default class MessageComposerInput extends React.Component {
 
     // tab and shift-tab are mapped to down and up arrow respectively
     onTab = async (e) => {
+        console.log('onTab');
         e.preventDefault(); // we *never* want tab's default to happen, but we do want up/down sometimes
-        const didTab = await (e.shiftKey ? this.onUpArrow : this.onDownArrow)(e);
-        if (!didTab && this.autocomplete) {
+        if (this.autocomplete.state.completionList.length === 0) {
             await this.autocomplete.forceComplete();
             this.onDownArrow(e);
+        } else {
+            await (e.shiftKey ? this.onUpArrow : this.onDownArrow)(e);
         }
     };
 

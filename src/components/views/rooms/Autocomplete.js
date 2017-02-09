@@ -149,6 +149,7 @@ export default class Autocomplete extends React.Component {
         const done = Q.defer();
         this.setState({
             forceComplete: true,
+            hide: false,
         }, () => {
             this.complete(this.props.query, this.props.selection).then(() => {
                 done.resolve();
@@ -183,6 +184,11 @@ export default class Autocomplete extends React.Component {
                 this.container.scrollTop = offsetTop - this.container.offsetTop;
             }
         }
+    }
+
+    setState(state, func) {
+        super.setState(state, func);
+        console.log(state);
     }
 
     render() {
