@@ -61,14 +61,24 @@ export default class FuzzyMatcher {
             .algorithm('transposition')
             .sort_candidates(false)
             .case_insensitive_sort(true)
-            .include_distance(false)
+            .include_distance(true)
             .maximum_candidates(this.options.resultCount || DEFAULT_RESULT_COUNT) // result count 0 doesn't make much sense
             .build();
     }
 
     match(query: String): Array<Object> {
         const candidates = this.matcher.transduce(query, this.options.distance || DEFAULT_DISTANCE);
-        return _sortedUniq(_sortBy(_flatMap(candidates, candidate => this.keyMap.objectMap[candidate]),
-            candidate => this.keyMap.priorityMap[candidate]));
+        // TODO FIXME This is hideous. Clean up when possible.
+        const val =  _sortedUniq(_sortBy(_flatMap(candidates, candidate => {
+                return this.keyMap.objectMap[candidate[0]].map(value => {
+                    return {
+                        distance: candidate[1],
+                        ...value,
+                    };
+                });
+            }),
+            [candidate => candidate.distance, candidate => this.keyMap.priorityMap[candidate]]));
+        console.log(val);
+        return val;
     }
 }
