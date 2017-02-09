@@ -64,7 +64,7 @@ module.exports.getKeyValueArrayDiffs = function(before, after) {
                     } else if (itemDelta[item] === -1) {
                         results.push({ place: "del", key: muxedKey, val: item });
                     } else {
-                        // itemDelta of 0 means it was unchanged between before/after                     
+                        // itemDelta of 0 means it was unchanged between before/after
                     }
                 });
                 break;

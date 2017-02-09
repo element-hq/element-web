@@ -1,3 +1,9 @@
 language: node_js
 node_js:
     - node # Latest stable version of nodejs.
+install:
+    - npm install
+    - (cd node_modules/matrix-js-sdk && npm install)
+script:
+    - npm run test
+    - ./.travis-test-riot.sh

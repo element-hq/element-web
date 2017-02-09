@@ -21,6 +21,7 @@ import KeyCode from '../../KeyCode';
 import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
 import sdk from '../../index';
+import dis from '../../dispatcher';
 
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
@@ -40,6 +41,8 @@ export default React.createClass({
         onRoomIdResolved: React.PropTypes.func,
         onRoomCreated: React.PropTypes.func,
         onUserSettingsClose: React.PropTypes.func,
+
+        teamToken: React.PropTypes.string,
 
         // and lots and lots of other stuff.
     },
@@ -136,6 +139,7 @@ export default React.createClass({
         var UserSettings = sdk.getComponent('structures.UserSettings');
         var CreateRoom = sdk.getComponent('structures.CreateRoom');
         var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
+        var HomePage = sdk.getComponent('structures.HomePage');
         var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         var GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
         var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
@@ -160,8 +164,8 @@ export default React.createClass({
                         collapsedRhs={this.props.collapse_rhs}
                         ConferenceHandler={this.props.ConferenceHandler}
                         scrollStateMap={this._scrollStateMap}
-                    />
-                if (!this.props.collapse_rhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.sideOpacity} />
+                    />;
+                if (!this.props.collapse_rhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.sideOpacity} />;
                 break;
 
             case PageTypes.UserSettings:
@@ -170,28 +174,39 @@ export default React.createClass({
                     brand={this.props.config.brand}
                     collapsedRhs={this.props.collapse_rhs}
                     enableLabs={this.props.config.enableLabs}
-                />
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
+                    referralBaseUrl={this.props.config.referralBaseUrl}
+                />;
+                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>;
                 break;
 
             case PageTypes.CreateRoom:
                 page_element = <CreateRoom
                     onRoomCreated={this.props.onRoomCreated}
                     collapsedRhs={this.props.collapse_rhs}
-                />
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
+                />;
+                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>;
                 break;
 
             case PageTypes.RoomDirectory:
                 page_element = <RoomDirectory
                     collapsedRhs={this.props.collapse_rhs}
                     config={this.props.config.roomDirectory}
+                />;
+                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>;
+                break;
+
+            case PageTypes.HomePage:
+                page_element = <HomePage
+                    collapsedRhs={this.props.collapse_rhs}
+                    teamServerUrl={this.props.config.teamServerConfig.teamServerURL}
+                    teamToken={this.props.teamToken}
                 />
                 if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
                 break;
+
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
-                right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.sideOpacity} />
+                right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.sideOpacity} />;
                 break;
         }
 

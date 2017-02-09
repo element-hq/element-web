@@ -18,7 +18,9 @@ limitations under the License.
 
 var React = require('react');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
+var Modal = require("../../../Modal");
 var sdk = require("../../../index");
+import AccessibleButton from '../elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'ChangePassword',
@@ -59,32 +61,48 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             phase: this.Phases.Edit
-        }
+        };
     },
 
     changePassword: function(old_password, new_password) {
         var cli = MatrixClientPeg.get();
 
-        var authDict = {
-            type: 'm.login.password',
-            user: cli.credentials.userId,
-            password: old_password
-        };
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createDialog(QuestionDialog, {
+            title: "Warning",
+            description:
+                <div>
+                    Changing password will currently reset any end-to-end encryption keys on all devices,
+                    making encrypted chat history unreadable.
+                    This will be <a href="https://github.com/vector-im/riot-web/issues/2671">improved shortly</a>,
+                    but for now be warned.
+                </div>,
+            button: "Continue",
+            onFinished: (confirmed) => {
+                if (confirmed) {
+                    var authDict = {
+                        type: 'm.login.password',
+                        user: cli.credentials.userId,
+                        password: old_password
+                    };
 
-        this.setState({
-            phase: this.Phases.Uploading
+                    this.setState({
+                        phase: this.Phases.Uploading
+                    });
+
+                    var self = this;
+                    cli.setPassword(authDict, new_password).then(function() {
+                        self.props.onFinished();
+                    }, function(err) {
+                        self.props.onError(err);
+                    }).finally(function() {
+                        self.setState({
+                            phase: self.Phases.Edit
+                        });
+                    }).done();
+                }
+            },
         });
-
-        var self = this;
-        cli.setPassword(authDict, new_password).then(function() {
-            self.props.onFinished();
-        }, function(err) {
-            self.props.onError(err);
-        }).finally(function() {
-            self.setState({
-                phase: self.Phases.Edit
-            });
-        }).done();
     },
 
     onClickChange: function() {
@@ -105,7 +123,7 @@ module.exports = React.createClass({
     render: function() {
         var rowClassName = this.props.rowClassName;
         var rowLabelClassName = this.props.rowLabelClassName;
-        var rowInputClassName = this.props.rowInputClassName
+        var rowInputClassName = this.props.rowInputClassName;
         var buttonClassName = this.props.buttonClassName;
 
         switch (this.state.phase) {
@@ -136,9 +154,10 @@ module.exports = React.createClass({
                                 <input id="password2" type="password" ref="confirm_input" />
                             </div>
                         </div>
-                        <div className={buttonClassName} onClick={this.onClickChange}>
+                        <AccessibleButton className={buttonClassName}
+                                onClick={this.onClickChange}>
                             Change Password
-                        </div>
+                        </AccessibleButton>
                     </div>
                 );
             case this.Phases.Uploading:

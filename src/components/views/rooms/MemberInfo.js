@@ -35,6 +35,7 @@ var DMRoomMap = require('../../../utils/DMRoomMap');
 var Unread = require('../../../Unread');
 var Receipt = require('../../../utils/Receipt');
 var WithMatrixClient = require('../../../wrappers/WithMatrixClient');
+import AccessibleButton from '../elements/AccessibleButton';
 
 module.exports = WithMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -64,7 +65,7 @@ module.exports = WithMatrixClient(React.createClass({
             updating: 0,
             devicesLoading: true,
             devices: null,
-        }
+        };
     },
 
     componentWillMount: function() {
@@ -202,7 +203,7 @@ module.exports = WithMatrixClient(React.createClass({
         }
 
         var cancelled = false;
-        this._cancelDeviceList = function() { cancelled = true; }
+        this._cancelDeviceList = function() { cancelled = true; };
 
         var client = this.props.matrixClient;
         var self = this;
@@ -376,6 +377,7 @@ module.exports = WithMatrixClient(React.createClass({
                 // get out of sync if we force setState here!
                 console.log("Power change success");
             }, function(err) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Failure to change power level",
                     description: err.message
@@ -383,7 +385,7 @@ module.exports = WithMatrixClient(React.createClass({
             }
         ).finally(()=>{
             this.setState({ updating: this.state.updating - 1 });
-        });
+        }).done();
         this.props.onFinished();
     },
 
@@ -528,7 +530,7 @@ module.exports = WithMatrixClient(React.createClass({
         });
     },
 
-    onMemberAvatarClick: function () {
+    onMemberAvatarClick: function() {
         var avatarUrl = this.props.member.user ? this.props.member.user.avatarUrl : this.props.member.events.member.getContent().avatar_url;
         if(!avatarUrl) return;
 
@@ -611,7 +613,7 @@ module.exports = WithMatrixClient(React.createClass({
                 mx_MemberInfo_createRoom_label: true,
                 mx_RoomTile_name: true,
             });
-            const startNewChat = <div
+            const startNewChat = <AccessibleButton
                 className="mx_MemberInfo_createRoom"
                 onClick={this.onNewDMClick}
             >
@@ -619,7 +621,7 @@ module.exports = WithMatrixClient(React.createClass({
                     <img src="img/create-big.svg" width="26" height="26" />
                 </div>
                 <div className={labelClasses}><i>Start new chat</i></div>
-            </div>
+            </AccessibleButton>;
 
             startChat = <div>
                 <h3>Direct chats</h3>
@@ -634,26 +636,37 @@ module.exports = WithMatrixClient(React.createClass({
         }
 
         if (this.state.can.kick) {
-            kickButton = <div className="mx_MemberInfo_field" onClick={this.onKick}>
-                { this.props.member.membership === "invite" ? "Disinvite" : "Kick" }
-            </div>;
+            const membership = this.props.member.membership;
+            const kickLabel = membership === "invite" ? "Disinvite" : "Kick";
+            kickButton = (
+                <AccessibleButton className="mx_MemberInfo_field"
+                        onClick={this.onKick}>
+                    {kickLabel}
+                </AccessibleButton>
+            );
         }
         if (this.state.can.ban) {
-            banButton = <div className="mx_MemberInfo_field" onClick={this.onBan}>
-                Ban
-            </div>;
+            banButton = (
+                <AccessibleButton className="mx_MemberInfo_field"
+                        onClick={this.onBan}>
+                    Ban
+                </AccessibleButton>
+            );
         }
         if (this.state.can.mute) {
-            var muteLabel = this.state.muted ? "Unmute" : "Mute";
-            muteButton = <div className="mx_MemberInfo_field" onClick={this.onMuteToggle}>
-                {muteLabel}
-            </div>;
+            const muteLabel = this.state.muted ? "Unmute" : "Mute";
+            muteButton = (
+                <AccessibleButton className="mx_MemberInfo_field"
+                        onClick={this.onMuteToggle}>
+                    {muteLabel}
+                </AccessibleButton>
+            );
         }
         if (this.state.can.toggleMod) {
             var giveOpLabel = this.state.isTargetMod ? "Revoke Moderator" : "Make Moderator";
-            giveModButton = <div className="mx_MemberInfo_field" onClick={this.onModToggle}>
+            giveModButton = <AccessibleButton className="mx_MemberInfo_field" onClick={this.onModToggle}>
                 {giveOpLabel}
-            </div>
+            </AccessibleButton>;
         }
 
         // TODO: we should have an invite button if this MemberInfo is showing a user who isn't actually in the current room yet
@@ -671,7 +684,7 @@ module.exports = WithMatrixClient(React.createClass({
                         {banButton}
                         {giveModButton}
                     </div>
-                </div>
+                </div>;
         }
 
         const memberName = this.props.member.name;
@@ -681,7 +694,7 @@ module.exports = WithMatrixClient(React.createClass({
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
-                <img className="mx_MemberInfo_cancel" src="img/cancel.svg" width="18" height="18" onClick={this.onCancel}/>
+                <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18"/></AccessibleButton>
                 <div className="mx_MemberInfo_avatar">
                     <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
                 </div>

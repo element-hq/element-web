@@ -111,7 +111,7 @@ module.exports = React.createClass({
                     this.props.onWidgetLoad();
                 });
             }).catch((err) => {
-                console.warn("Unable to decrypt attachment: ", err)
+                console.warn("Unable to decrypt attachment: ", err);
                 // Set a placeholder image when we can't decrypt the image.
                 this.setState({
                     error: err,

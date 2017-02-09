@@ -20,6 +20,7 @@ module.exports = {
     TAB: 9,
     ENTER: 13,
     SHIFT: 16,
+    ESCAPE: 27,
     PAGE_UP: 33,
     PAGE_DOWN: 34,
     END: 35,

@@ -19,7 +19,7 @@ var ReactDOM = require("react-dom");
 var dis = require("../../dispatcher");
 var sdk = require('../../index');
 
-var MatrixClientPeg = require('../../MatrixClientPeg')
+var MatrixClientPeg = require('../../MatrixClientPeg');
 
 const MILLIS_IN_DAY = 86400000;
 
@@ -281,8 +281,7 @@ module.exports = React.createClass({
 
         var isMembershipChange = (e) =>
             e.getType() === 'm.room.member'
-            && ['join', 'leave'].indexOf(e.getContent().membership) !== -1
-            && (!e.getPrevContent() || e.getContent().membership  !== e.getPrevContent().membership);
+            && (!e.getPrevContent() || e.getContent().membership !== e.getPrevContent().membership);
 
         for (i = 0; i < this.props.events.length; i++) {
             var mxEv = this.props.events[i];
@@ -295,8 +294,8 @@ module.exports = React.createClass({
 
             var last = (i == lastShownEventIndex);
 
-            // Wrap consecutive member events in a ListSummary
-            if (isMembershipChange(mxEv)) {
+            // Wrap consecutive member events in a ListSummary, ignore if redacted
+            if (isMembershipChange(mxEv) && EventTile.haveTileForEvent(mxEv)) {
                 let ts1 = mxEv.getTs();
                 // Ensure that the key of the MemberEventListSummary does not change with new
                 // member events. This will prevent it from being re-created unnecessarily, and
@@ -317,6 +316,11 @@ module.exports = React.createClass({
                 for (;i + 1 < this.props.events.length; i++) {
                     let collapsedMxEv = this.props.events[i + 1];
 
+                    // Ignore redacted member events
+                    if (!EventTile.haveTileForEvent(collapsedMxEv)) {
+                        continue;
+                    }
+
                     if (!isMembershipChange(collapsedMxEv) ||
                         this._wantsDateSeparator(this.props.events[i], collapsedMxEv.getDate())) {
                         break;
@@ -335,7 +339,7 @@ module.exports = React.createClass({
                         prevEvent = e;
                         return ret;
                     }
-                ).reduce((a,b) => a.concat(b));
+                ).reduce((a, b) => a.concat(b));
 
                 if (eventTiles.length === 0) {
                     eventTiles = null;

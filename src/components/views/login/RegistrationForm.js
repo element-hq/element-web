@@ -38,6 +38,16 @@ module.exports = React.createClass({
         defaultEmail: React.PropTypes.string,
         defaultUsername: React.PropTypes.string,
         defaultPassword: React.PropTypes.string,
+        teamsConfig: React.PropTypes.shape({
+            // Email address to request new teams
+            supportEmail: React.PropTypes.string,
+            teams: React.PropTypes.arrayOf(React.PropTypes.shape({
+                // The displayed name of the team
+                "name": React.PropTypes.string,
+                // The domain of team email addresses
+                "domain": React.PropTypes.string,
+            })).required,
+        }),
 
         // A username that will be used if no username is entered.
         // Specifying this param will also warn the user that entering
@@ -62,7 +72,8 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            fieldValid: {}
+            fieldValid: {},
+            selectedTeam: null,
         };
     },
 
@@ -105,10 +116,11 @@ module.exports = React.createClass({
     },
 
     _doSubmit: function() {
+        let email = this.refs.email.value.trim();
         var promise = this.props.onRegisterClick({
             username: this.refs.username.value.trim() || this.props.guestUsername,
             password: this.refs.password.value.trim(),
-            email: this.refs.email.value.trim()
+            email: email,
         });
 
         if (promise) {
@@ -133,17 +145,37 @@ module.exports = React.createClass({
         return true;
     },
 
+    _isUniEmail: function(email) {
+        return email.endsWith('.ac.uk') || email.endsWith('.edu') || email.endsWith('matrix.org');
+    },
+
     validateField: function(field_id) {
         var pwd1 = this.refs.password.value.trim();
-        var pwd2 = this.refs.passwordConfirm.value.trim()
+        var pwd2 = this.refs.passwordConfirm.value.trim();
 
         switch (field_id) {
             case FIELD_EMAIL:
-                this.markFieldValid(
-                    field_id,
-                    this.refs.email.value == '' || Email.looksValid(this.refs.email.value),
-                    "RegistrationForm.ERR_EMAIL_INVALID"
-                );
+                const email = this.refs.email.value;
+                if (this.props.teamsConfig && this._isUniEmail(email)) {
+                    const matchingTeam = this.props.teamsConfig.teams.find(
+                        (team) => {
+                            return email.split('@').pop() === team.domain;
+                        }
+                    ) || null;
+                    this.setState({
+                        selectedTeam: matchingTeam,
+                        showSupportEmail: !matchingTeam,
+                    });
+                    this.props.onTeamSelected(matchingTeam);
+                } else {
+                    this.props.onTeamSelected(null);
+                    this.setState({
+                        selectedTeam: null,
+                        showSupportEmail: false,
+                    });
+                }
+                const valid = email === '' || Email.looksValid(email);
+                this.markFieldValid(field_id, valid, "RegistrationForm.ERR_EMAIL_INVALID");
                 break;
             case FIELD_USERNAME:
                 // XXX: SPEC-1
@@ -224,15 +256,36 @@ module.exports = React.createClass({
 
     render: function() {
         var self = this;
-        var emailSection, registerButton;
+        var emailSection, belowEmailSection, registerButton;
         if (this.props.showEmail) {
             emailSection = (
                 <input type="text" ref="email"
                     autoFocus={true} placeholder="Email address (optional)"
                     defaultValue={this.props.defaultEmail}
                     className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
-                    onBlur={function() {self.validateField(FIELD_EMAIL)}} />
+                    onBlur={function() {self.validateField(FIELD_EMAIL);}}
+                    value={self.state.email}/>
             );
+            if (this.props.teamsConfig) {
+                if (this.props.teamsConfig.supportEmail && this.state.showSupportEmail) {
+                    belowEmailSection = (
+                        <p className="mx_Login_support">
+                            Sorry, but your university is not registered with us just yet.&nbsp;
+                            Email us on&nbsp;
+                            <a href={"mailto:" + this.props.teamsConfig.supportEmail}>
+                                {this.props.teamsConfig.supportEmail}
+                            </a>&nbsp;
+                            to get your university signed up. Or continue to register with Riot to enjoy our open source platform.
+                        </p>
+                    );
+                } else if (this.state.selectedTeam) {
+                    belowEmailSection = (
+                        <p className="mx_Login_support">
+                            You are registering with {this.state.selectedTeam.name}
+                        </p>
+                    );
+                }
+            }
         }
         if (this.props.onRegisterClick) {
             registerButton = (
@@ -242,31 +295,31 @@ module.exports = React.createClass({
 
         var placeholderUserName = "User name";
         if (this.props.guestUsername) {
-            placeholderUserName += " (default: " + this.props.guestUsername + ")"
+            placeholderUserName += " (default: " + this.props.guestUsername + ")";
         }
 
         return (
             <div>
                 <form onSubmit={this.onSubmit}>
                     {emailSection}
-                    <br />
+                    {belowEmailSection}
                     <input type="text" ref="username"
                         placeholder={ placeholderUserName } defaultValue={this.props.defaultUsername}
                         className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_USERNAME)}} />
+                        onBlur={function() {self.validateField(FIELD_USERNAME);}} />
                     <br />
                     { this.props.guestUsername ?
                         <div className="mx_Login_fieldLabel">Setting a user name will create a fresh account</div> : null
                     }
                     <input type="password" ref="password"
                         className={this._classForField(FIELD_PASSWORD, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_PASSWORD)}}
+                        onBlur={function() {self.validateField(FIELD_PASSWORD);}}
                         placeholder="Password" defaultValue={this.props.defaultPassword} />
                     <br />
                     <input type="password" ref="passwordConfirm"
                         placeholder="Confirm password"
                         className={this._classForField(FIELD_PASSWORD_CONFIRM, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM)}}
+                        onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM);}}
                         defaultValue={this.props.defaultPassword} />
                     <br />
                     {registerButton}

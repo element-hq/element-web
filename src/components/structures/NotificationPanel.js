@@ -48,6 +48,7 @@ var NotificationPanel = React.createClass({
                     showUrlPreview = { false }
                     opacity={ this.props.opacity }
                     tileShape="notif"
+                    empty="You have no visible notifications"
                 />
             );
         }

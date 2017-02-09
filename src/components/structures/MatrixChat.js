@@ -77,7 +77,7 @@ module.exports = React.createClass({
     getChildContext: function() {
         return {
             appConfig: this.props.config,
-        }
+        };
     },
 
     getInitialState: function() {
@@ -190,6 +190,11 @@ module.exports = React.createClass({
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
+
+        // Use the locally-stored team token first, then as a fall-back, check to see if
+        // a referral link was used, which will contain a query parameter `team_token`.
+        this._teamToken = window.localStorage.getItem('mx_team_token') ||
+            this.props.startingFragmentQueryParams.team_token;
     },
 
     componentDidMount: function() {
@@ -209,6 +214,12 @@ module.exports = React.createClass({
 
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
+
+        if (this.props.config.teamServerConfig &&
+            this.props.config.teamServerConfig.teamServerURL
+        ) {
+            Lifecycle.initRtsClient(this.props.config.teamServerConfig.teamServerURL);
+        }
 
         // the extra q() ensures that synchronous exceptions hit the same codepath as
         // asynchronous ones.
@@ -421,6 +432,10 @@ module.exports = React.createClass({
                 this._setPage(PageTypes.RoomDirectory);
                 this.notifyNewScreen('directory');
                 break;
+            case 'view_home_page':
+                this._setPage(PageTypes.HomePage);
+                this.notifyNewScreen('home');
+                break;
             case 'view_create_chat':
                 this._createChat();
                 break;
@@ -455,6 +470,9 @@ module.exports = React.createClass({
                     sideOpacity: payload.sideOpacity,
                     middleOpacity: payload.middleOpacity,
                 });
+                break;
+            case 'set_theme':
+                this._onSetTheme(payload.value);
                 break;
             case 'on_logged_in':
                 this._onLoggedIn();
@@ -587,6 +605,50 @@ module.exports = React.createClass({
     },
 
     /**
+     * Called whenever someone changes the theme
+     */
+    _onSetTheme: function(theme) {
+        if (!theme) {
+            theme = 'light';
+        }
+
+        // look for the stylesheet elements.
+        // styleElements is a map from style name to HTMLLinkElement.
+        var styleElements = Object.create(null);
+        var i, a;
+        for (i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
+            var href = a.getAttribute("href");
+            // shouldn't we be using the 'title' tag rather than the href?
+            var match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
+            if (match) {
+                styleElements[match[1]] = a;
+            }
+        }
+
+        if (!(theme in styleElements)) {
+            throw new Error("Unknown theme " + theme);
+        }
+
+        // disable all of them first, then enable the one we want. Chrome only
+        // bothers to do an update on a true->false transition, so this ensures
+        // that we get exactly one update, at the right time.
+
+        Object.values(styleElements).forEach((a) => {
+            a.disabled = true;
+        });
+        styleElements[theme].disabled = false;
+
+        if (theme === 'dark') {
+            // abuse the tinter to change all the SVG's #fff to #2d2d2d
+            // XXX: obviously this shouldn't be hardcoded here.
+            Tinter.tintSvgWhite('#2d2d2d');
+        }
+        else {
+            Tinter.tintSvgWhite('#ffffff');
+        }
+    },
+
+    /**
      * Called when a new logged in session has started
      */
     _onLoggedIn: function(credentials) {
@@ -643,7 +705,11 @@ module.exports = React.createClass({
                         )[0].roomId;
                         self.setState({ready: true, currentRoomId: firstRoom, page_type: PageTypes.RoomView});
                     } else {
-                        self.setState({ready: true, page_type: PageTypes.RoomDirectory});
+                        if (self._teamToken) {
+                            self.setState({ready: true, page_type: PageTypes.HomePage});
+                        } else {
+                            self.setState({ready: true, page_type: PageTypes.RoomDirectory});
+                        }
                     }
                 } else {
                     self.setState({ready: true, page_type: PageTypes.RoomView});
@@ -663,7 +729,11 @@ module.exports = React.createClass({
                 } else {
                     // There is no information on presentedId
                     // so point user to fallback like /directory
-                    self.notifyNewScreen('directory');
+                    if (self._teamToken) {
+                        self.notifyNewScreen('home');
+                    } else {
+                        self.notifyNewScreen('directory');
+                    }
                 }
 
                 dis.dispatch({action: 'focus_composer'});
@@ -686,6 +756,16 @@ module.exports = React.createClass({
             dis.dispatch({
                 action: 'logout'
             });
+        });
+        cli.on("accountData", function(ev) {
+            if (ev.getType() === 'im.vector.web.settings') {
+                if (ev.getContent() && ev.getContent().theme) {
+                    dis.dispatch({
+                        action: 'set_theme',
+                        value: ev.getContent().theme,
+                    });
+                }
+            }
         });
     },
 
@@ -716,6 +796,10 @@ module.exports = React.createClass({
         } else if (screen == 'settings') {
             dis.dispatch({
                 action: 'view_user_settings',
+            });
+        } else if (screen == 'home') {
+            dis.dispatch({
+                action: 'view_home_page',
             });
         } else if (screen == 'directory') {
             dis.dispatch({
@@ -976,10 +1060,11 @@ module.exports = React.createClass({
                     onRoomIdResolved={this.onRoomIdResolved}
                     onRoomCreated={this.onRoomCreated}
                     onUserSettingsClose={this.onUserSettingsClose}
+                    teamToken={this._teamToken}
                     {...this.props}
                     {...this.state}
                 />
-            )
+            );
         } else if (this.state.logged_in) {
             // we think we are logged in, but are still waiting for the /sync to complete
             var Spinner = sdk.getComponent('elements.Spinner');
@@ -998,11 +1083,13 @@ module.exports = React.createClass({
                     sessionId={this.state.register_session_id}
                     idSid={this.state.register_id_sid}
                     email={this.props.startingFragmentQueryParams.email}
+                    referrer={this.props.startingFragmentQueryParams.referrer}
                     username={this.state.upgradeUsername}
                     guestAccessToken={this.state.guestAccessToken}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
                     brand={this.props.config.brand}
+                    teamServerConfig={this.props.config.teamServerConfig}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     registrationUrl={this.props.registrationUrl}

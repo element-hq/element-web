@@ -111,20 +111,9 @@ export default React.createClass({
         });
     },
 
-    _onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
-            e.stopPropagation();
-            e.preventDefault();
-            if (!this.state.busy) {
-                this._onCancel();
-            }
-        }
-        else if (e.keyCode === 13) { // enter
-            e.stopPropagation();
-            e.preventDefault();
-            if (this.state.submitButtonEnabled && !this.state.busy) {
-                this._onSubmit();
-            }
+    _onEnterPressed: function(e) {
+        if (this.state.submitButtonEnabled && !this.state.busy) {
+            this._onSubmit();
         }
     },
 
@@ -171,6 +160,7 @@ export default React.createClass({
 
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
         let error = null;
         if (this.state.errorText) {
@@ -200,10 +190,11 @@ export default React.createClass({
         );
 
         return (
-            <div className="mx_InteractiveAuthDialog" onKeyDown={this._onKeyDown}>
-                <div className="mx_Dialog_title">
-                    {this.props.title}
-                </div>
+            <BaseDialog className="mx_InteractiveAuthDialog"
+                onEnterPressed={this._onEnterPressed}
+                onFinished={this.props.onFinished}
+                title={this.props.title}
+            >
                 <div className="mx_Dialog_content">
                     <p>This operation requires additional authentication.</p>
                     {this._renderCurrentStage()}
@@ -213,7 +204,7 @@ export default React.createClass({
                     {submitButton}
                     {cancelButton}
                 </div>
-            </div>
+            </BaseDialog>
         );
     },
 });

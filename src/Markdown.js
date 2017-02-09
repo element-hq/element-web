@@ -14,115 +14,144 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import marked from 'marked';
+import commonmark from 'commonmark';
+import escape from 'lodash/escape';
 
-// marked only applies the default options on the high
-// level marked() interface, so we do it here.
-const marked_options = Object.assign({}, marked.defaults, {
-    gfm: true,
-    tables: true,
-    breaks: true,
-    pedantic: false,
-    sanitize: true,
-    smartLists: true,
-    smartypants: false,
-    xhtml: true, // return self closing tags (ie. <br /> not <br>)
-});
+const ALLOWED_HTML_TAGS = ['del'];
+
+// These types of node are definitely text
+const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
+
+function is_allowed_html_tag(node) {
+    // Regex won't work for tags with attrs, but we only
+    // allow <del> anyway.
+    const matches = /^<\/?(.*)>$/.exec(node.literal);
+    if (matches && matches.length == 2) {
+        const tag = matches[1];
+        return ALLOWED_HTML_TAGS.indexOf(tag) > -1;
+    }
+    return false;
+}
+
+function html_if_tag_allowed(node) {
+    if (is_allowed_html_tag(node)) {
+        this.lit(node.literal);
+        return;
+    } else {
+        this.lit(escape(node.literal));
+    }
+}
+
+/*
+ * Returns true if the parse output containing the node
+ * comprises multiple block level elements (ie. lines),
+ * or false if it is only a single line.
+ */
+function is_multi_line(node) {
+    var par = node;
+    while (par.parent) {
+        par = par.parent;
+    }
+    return par.firstChild != par.lastChild;
+}
 
 /**
- * Class that wraps marked, adding the ability to see whether
+ * Class that wraps commonmark, adding the ability to see whether
  * a given message actually uses any markdown syntax or whether
  * it's plain text.
  */
 export default class Markdown {
     constructor(input) {
-        const lexer = new marked.Lexer(marked_options);
-        this.tokens = lexer.lex(input);
-    }
+        this.input = input;
 
-    _copyTokens() {
-        // copy tokens (the parser modifies its input arg)
-        const tokens_copy = this.tokens.slice();
-        // it also has a 'links' property, because this is javascript
-        // and why wouldn't you have an array that also has properties?
-        return Object.assign(tokens_copy, this.tokens);
+        const parser = new commonmark.Parser();
+        this.parsed = parser.parse(this.input);
     }
 
     isPlainText() {
-        // we determine if the message requires markdown by
-        // running the parser on the tokens with a dummy
-        // rendered and seeing if any of the renderer's
-        // functions are called other than those noted below.
-        // In case you were wondering, no we can't just examine
-        // the tokens because the tokens we have are only the
-        // output of the *first* tokenizer: any line-based
-        // markdown is processed by marked within Parser by
-        // the 'inline lexer'...
-        let is_plain = true;
+        const walker = this.parsed.walker();
 
-        function setNotPlain() {
-            is_plain = false;
-        }
-
-        const dummy_renderer = {};
-        for (const k of Object.keys(marked.Renderer.prototype)) {
-            dummy_renderer[k] = setNotPlain;
-        }
-        // text and paragraph are just text
-        dummy_renderer.text = function(t){return t;}
-        dummy_renderer.paragraph = function(t){return t;}
-
-        // ignore links where text is just the url:
-        // this ignores plain URLs that markdown has
-        // detected whilst preserving markdown syntax links
-        dummy_renderer.link = function(href, title, text) {
-            if (text != href) {
-                is_plain = false;
+        let ev;
+        while ( (ev = walker.next()) ) {
+            const node = ev.node;
+            if (TEXT_NODES.indexOf(node.type) > -1) {
+                // definitely text
+                continue;
+            } else if (node.type == 'html_inline' || node.type == 'html_block') {
+                // if it's an allowed html tag, we need to render it and therefore
+                // we will need to use HTML. If it's not allowed, it's not HTML since
+                // we'll just be treating it as text.
+                if (is_allowed_html_tag(node)) {
+                    return false;
+                }
+            } else {
+                return false;
             }
         }
-
-        const dummy_options = Object.assign({}, marked_options, {
-            renderer: dummy_renderer,
-        });
-        const dummy_parser = new marked.Parser(dummy_options);
-        dummy_parser.parse(this._copyTokens());
-
-        return is_plain;
+        return true;
     }
 
     toHTML() {
-        const real_renderer = new marked.Renderer();
-        real_renderer.link = function(href, title, text) {
-            // prevent marked from turning plain URLs
-            // into links, because its algorithm is fairly
-            // poor. Let's send plain URLs rather than
-            // badly linkified ones (the linkifier Vector
-            // uses on message display is way better, eg.
-            // handles URLs with closing parens at the end).
-            if (text == href) {
-                return href;
-            }
-            return marked.Renderer.prototype.link.apply(this, arguments);
-        }
+        const renderer = new commonmark.HtmlRenderer({safe: false});
+        const real_paragraph = renderer.paragraph;
 
-        real_renderer.paragraph = (text) => {
-            // The tokens at the top level are the 'blocks', so if we
-            // have more than one, there are multiple 'paragraphs'.
-            // If there is only one top level token, just return the
+        renderer.paragraph = function(node, entering) {
+            // If there is only one top level node, just return the
             // bare text: it's a single line of text and so should be
-            // 'inline', rather than necessarily wrapped in its own
-            // p tag. If, however, we have multiple tokens, each gets
+            // 'inline', rather than unnecessarily wrapped in its own
+            // p tag. If, however, we have multiple nodes, each gets
             // its own p tag to keep them as separate paragraphs.
-            if (this.tokens.length == 1) {
-                return text;
+            if (is_multi_line(node)) {
+                real_paragraph.call(this, node, entering);
             }
-            return '<p>' + text + '</p>';
+        };
+
+        renderer.html_inline = html_if_tag_allowed;
+        renderer.html_block = function(node) {
+            // as with `paragraph`, we only insert line breaks
+            // if there are multiple lines in the markdown.
+            const isMultiLine = is_multi_line(node);
+
+            if (isMultiLine) this.cr();
+            html_if_tag_allowed.call(this, node);
+            if (isMultiLine) this.cr();
         }
 
-        const real_options = Object.assign({}, marked_options, {
-            renderer: real_renderer,
-        });
-        const real_parser = new marked.Parser(real_options);
-        return real_parser.parse(this._copyTokens());
+        return renderer.render(this.parsed);
+    }
+
+    /*
+     * Render the markdown message to plain text. That is, essentially
+     * just remove any backslashes escaping what would otherwise be
+     * markdown syntax
+     * (to fix https://github.com/vector-im/riot-web/issues/2870)
+     */
+    toPlaintext() {
+        const renderer = new commonmark.HtmlRenderer({safe: false});
+        const real_paragraph = renderer.paragraph;
+
+        // The default `out` function only sends the input through an XML
+        // escaping function, which causes messages to be entity encoded,
+        // which we don't want in this case.
+        renderer.out = function(s) {
+            // The `lit` function adds a string literal to the output buffer.
+            this.lit(s);
+        };
+
+        renderer.paragraph = function(node, entering) {
+            // as with toHTML, only append lines to paragraphs if there are
+            // multiple paragraphs
+            if (is_multi_line(node)) {
+                if (!entering && node.next) {
+                    this.lit('\n\n');
+                }
+            }
+        };
+        renderer.html_block = function(node) {
+            this.lit(node.literal);
+            if (is_multi_line(node) && node.next) this.lit('\n\n');
+        }
+
+        return renderer.render(this.parsed);
     }
 }

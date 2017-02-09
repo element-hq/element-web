@@ -64,10 +64,10 @@ module.exports = React.createClass({
             hs_url: this.props.customHsUrl,
             is_url: this.props.customIsUrl,
             // if withToggleButton is false, then show the config all the time given we have no way otherwise of making it visible
-            configVisible: !this.props.withToggleButton || 
+            configVisible: !this.props.withToggleButton ||
                            (this.props.customHsUrl !== this.props.defaultHsUrl) ||
                            (this.props.customIsUrl !== this.props.defaultIsUrl)
-        }
+        };
     },
 
     onHomeserverChanged: function(ev) {

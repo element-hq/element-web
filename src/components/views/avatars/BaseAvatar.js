@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var AvatarLogic = require("../../../Avatar");
 import sdk from '../../../index';
+import AccessibleButton from '../elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'BaseAvatar',
@@ -41,7 +42,7 @@ module.exports = React.createClass({
             height: 40,
             resizeMethod: 'crop',
             defaultToInitialLetter: true
-        }
+        };
     },
 
     getInitialState: function() {
@@ -138,30 +139,63 @@ module.exports = React.createClass({
 
         const {
             name, idName, title, url, urls, width, height, resizeMethod,
-            defaultToInitialLetter,
+            defaultToInitialLetter, onClick,
             ...otherProps
         } = this.props;
 
         if (imageUrl === this.state.defaultImageUrl) {
             const initialLetter = this._getInitialLetter(name);
+            const textNode = (
+                <EmojiText className="mx_BaseAvatar_initial" aria-hidden="true"
+                    style={{ fontSize: (width * 0.65) + "px",
+                    width: width + "px",
+                    lineHeight: height + "px" }}
+                >
+                    {initialLetter}
+                </EmojiText>
+            );
+            const imgNode = (
+                <img className="mx_BaseAvatar_image" src={imageUrl}
+                    alt="" title={title} onError={this.onError}
+                    width={width} height={height} />
+            );
+            if (onClick != null) {
+                return (
+                    <AccessibleButton element='span' className="mx_BaseAvatar"
+                        onClick={onClick} {...otherProps}
+                    >
+                        {textNode}
+                        {imgNode}
+                    </AccessibleButton>
+                );
+            } else {
+                return (
+                    <span className="mx_BaseAvatar" {...otherProps}>
+                        {textNode}
+                        {imgNode}
+                    </span>
+                );
+            }
+        }
+        if (onClick != null) {
             return (
-                <span className="mx_BaseAvatar" {...otherProps}>
-                    <EmojiText className="mx_BaseAvatar_initial" aria-hidden="true"
-                            style={{ fontSize: (width * 0.65) + "px",
-                                    width: width + "px",
-                                    lineHeight: height + "px" }}>{initialLetter}</EmojiText>
-                    <img className="mx_BaseAvatar_image" src={imageUrl}
-                        alt="" title={title} onError={this.onError}
-                        width={width} height={height} />
-                </span>
+                <AccessibleButton className="mx_BaseAvatar mx_BaseAvatar_image"
+                    element='img'
+                    src={imageUrl}
+                    onClick={onClick}
+                    onError={this.onError}
+                    width={width} height={height}
+                    title={title} alt=""
+                    {...otherProps} />
+            );
+        } else {
+            return (
+                <img className="mx_BaseAvatar mx_BaseAvatar_image" src={imageUrl}
+                    onError={this.onError}
+                    width={width} height={height}
+                    title={title} alt=""
+                    {...otherProps} />
             );
         }
-        return (
-            <img className="mx_BaseAvatar mx_BaseAvatar_image" src={imageUrl}
-                onError={this.onError}
-                width={width} height={height}
-                title={title} alt=""
-                {...otherProps} />
-        );
     }
 });

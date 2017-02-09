@@ -14,7 +14,15 @@ var MatrixEvent = jssdk.MatrixEvent;
  */
 export function beforeEach(context) {
     var desc = context.currentTest.fullTitle();
+
     console.log();
+
+    // this puts a mark in the chrome devtools timeline, which can help
+    // figure out what's been going on.
+    if (console.timeStamp) {
+        console.timeStamp(desc);
+    }
+
     console.log(desc);
     console.log(new Array(1 + desc.length).join("="));
 };
@@ -108,6 +116,7 @@ export function mkEvent(opts) {
         room_id: opts.room,
         sender: opts.user,
         content: opts.content,
+        prev_content: opts.prev_content,
         event_id: "$" + Math.random() + "-" + Math.random(),
         origin_server_ts: opts.ts,
     };
@@ -150,7 +159,9 @@ export function mkPresence(opts) {
  * @param {Object} opts Values for the membership.
  * @param {string} opts.room The room ID for the event.
  * @param {string} opts.mship The content.membership for the event.
+ * @param {string} opts.prevMship The prev_content.membership for the event.
  * @param {string} opts.user The user ID for the event.
+ * @param {RoomMember} opts.target The target of the event.
  * @param {string} opts.skey The other user ID for the event if applicable
  * e.g. for invites/bans.
  * @param {string} opts.name The content.displayname for the event.
@@ -169,9 +180,16 @@ export function mkMembership(opts) {
     opts.content = {
         membership: opts.mship
     };
+    if (opts.prevMship) {
+        opts.prev_content = { membership: opts.prevMship };
+    }
     if (opts.name) { opts.content.displayname = opts.name; }
     if (opts.url) { opts.content.avatar_url = opts.url; }
-    return mkEvent(opts);
+    let e = mkEvent(opts);
+    if (opts.target) {
+        e.target = opts.target;
+    }
+    return e;
 };
 
 /**

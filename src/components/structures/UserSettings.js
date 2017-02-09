@@ -26,11 +26,72 @@ var UserSettingsStore = require('../../UserSettingsStore');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
+var SdkConfig = require('../../SdkConfig');
+import AccessibleButton from '../views/elements/AccessibleButton';
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha.
 const REACT_SDK_VERSION =
       'dist' in package_json ? package_json.version : package_json.gitHead || "<local>";
+
+
+// Enumerate some simple 'flip a bit' UI settings (if any).
+// 'id' gives the key name in the im.vector.web.settings account data event
+// 'label' is how we describe it in the UI.
+const SETTINGS_LABELS = [
+/*
+    {
+        id: 'alwaysShowTimestamps',
+        label: 'Always show message timestamps',
+    },
+    {
+        id: 'showTwelveHourTimestamps',
+        label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
+    },
+    {
+        id: 'useCompactLayout',
+        label: 'Use compact timeline layout',
+    },
+    {
+        id: 'useFixedWidthFont',
+        label: 'Use fixed width font',
+    },
+*/
+];
+
+const CRYPTO_SETTINGS_LABELS = [
+    {
+        id: 'blacklistUnverifiedDevices',
+        label: 'Never send encrypted messages to unverified devices from this device',
+    },
+    // XXX: this is here for documentation; the actual setting is managed via RoomSettings
+    // {
+    //     id: 'blacklistUnverifiedDevicesPerRoom'
+    //     label: 'Never send encrypted messages to unverified devices in this room',
+    // }
+];
+
+// Enumerate the available themes, with a nice human text label.
+// 'id' gives the key name in the im.vector.web.settings account data event
+// 'value' is the value for that key in the event
+// 'label' is how we describe it in the UI.
+//
+// XXX: Ideally we would have a theme manifest or something and they'd be nicely
+// packaged up in a single directory, and/or located at the application layer.
+// But for now for expedience we just hardcode them here.
+const THEMES = [
+    {
+        id: 'theme',
+        label: 'Light theme',
+        value: 'light',
+    },
+    {
+        id: 'theme',
+        label: 'Dark theme',
+        value: 'dark',
+    }
+];
+
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
@@ -42,6 +103,9 @@ module.exports = React.createClass({
 
         // True to show the 'labs' section of experimental features
         enableLabs: React.PropTypes.bool,
+
+        // The base URL to use in the referral link. Defaults to window.location.origin.
+        referralBaseUrl: React.PropTypes.string,
 
         // true if RightPanel is collapsed
         collapsedRhs: React.PropTypes.bool,
@@ -93,6 +157,14 @@ module.exports = React.createClass({
             middleOpacity: 0.3,
         });
         this._refreshFromServer();
+
+        var syncedSettings = UserSettingsStore.getSyncedSettings();
+        if (!syncedSettings.theme) {
+            syncedSettings.theme = 'light';
+        }
+        this._syncedSettings = syncedSettings;
+
+        this._localSettings = UserSettingsStore.getLocalSettings();
     },
 
     componentDidMount: function() {
@@ -175,8 +247,26 @@ module.exports = React.createClass({
     },
 
     onLogoutClicked: function(ev) {
-        var LogoutPrompt = sdk.getComponent('dialogs.LogoutPrompt');
-        this.logoutModal = Modal.createDialog(LogoutPrompt);
+        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createDialog(QuestionDialog, {
+            title: "Sign out?",
+            description:
+                <div>
+                    For security, logging out will delete any end-to-end encryption keys from this browser,
+                    making previous encrypted chat history unreadable if you log back in.
+                    In future this <a href="https://github.com/vector-im/riot-web/issues/2108">will be improved</a>,
+                    but for now be warned.
+                </div>,
+            button: "Sign out",
+            onFinished: (confirmed) => {
+                if (confirmed) {
+                    dis.dispatch({action: 'logout'});
+                    if (this.props.onFinished) {
+                        this.props.onFinished();
+                    }
+                }
+            },
+        });
     },
 
     onPasswordChangeError: function(err) {
@@ -293,8 +383,8 @@ module.exports = React.createClass({
             this.setState({email_add_pending: false});
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                var message = "Unable to verify email address. "
-                message += "Please check your email and click on the link it contains. Once this is done, click continue."
+                var message = "Unable to verify email address. ";
+                message += "Please check your email and click on the link it contains. Once this is done, click continue.";
                 Modal.createDialog(QuestionDialog, {
                     title: "Verification Pending",
                     description: message,
@@ -314,6 +404,14 @@ module.exports = React.createClass({
     _onDeactivateAccountClicked: function() {
         const DeactivateAccountDialog = sdk.getComponent("dialogs.DeactivateAccountDialog");
         Modal.createDialog(DeactivateAccountDialog, {});
+    },
+
+    _onBugReportClicked: function() {
+        const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
+        if (!BugReportDialog) {
+            return;
+        }
+        Modal.createDialog(BugReportDialog, {});
     },
 
     _onInviteStateChange: function(event, member, oldMembership) {
@@ -339,61 +437,114 @@ module.exports = React.createClass({
         }).done();
     },
 
+    _onExportE2eKeysClicked: function() {
+        Modal.createDialogAsync(
+            (cb) => {
+                require.ensure(['../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
+                    cb(require('../../async-components/views/dialogs/ExportE2eKeysDialog'));
+                }, "e2e-export");
+            }, {
+                matrixClient: MatrixClientPeg.get(),
+            }
+        );
+    },
+
+    _onImportE2eKeysClicked: function() {
+        Modal.createDialogAsync(
+            (cb) => {
+                require.ensure(['../../async-components/views/dialogs/ImportE2eKeysDialog'], () => {
+                    cb(require('../../async-components/views/dialogs/ImportE2eKeysDialog'));
+                }, "e2e-export");
+            }, {
+                matrixClient: MatrixClientPeg.get(),
+            }
+        );
+    },
+
+    _renderReferral: function() {
+        const teamToken = window.localStorage.getItem('mx_team_token');
+        if (!teamToken) {
+            return null;
+        }
+        if (typeof teamToken !== 'string') {
+            console.warn('Team token not a string');
+            return null;
+        }
+        const href = (this.props.referralBaseUrl || window.location.origin) +
+            `/#/register?referrer=${this._me}&team_token=${teamToken}`;
+        return (
+            <div>
+                <h3>Referral</h3>
+                <div className="mx_UserSettings_section">
+                    Refer a friend to Riot: <a href={href}>{href}</a>
+                </div>
+            </div>
+        );
+    },
+
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
-
-        var settingsLabels = [
-        /*
-            {
-                id: 'alwaysShowTimestamps',
-                label: 'Always show message timestamps',
-            },
-            {
-                id: 'showTwelveHourTimestamps',
-                label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
-            },
-            {
-                id: 'useCompactLayout',
-                label: 'Use compact timeline layout',
-            },
-            {
-                id: 'useFixedWidthFont',
-                label: 'Use fixed width font',
-            },
-        */
-        ];
-
-        var syncedSettings = UserSettingsStore.getSyncedSettings();
 
         return (
             <div>
                 <h3>User Interface</h3>
                 <div className="mx_UserSettings_section">
-                    <div className="mx_UserSettings_toggle">
-                        <input id="urlPreviewsDisabled"
-                               type="checkbox"
-                               defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
-                               onChange={ e => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
-                        />
-                        <label htmlFor="urlPreviewsDisabled">
-                            Disable inline URL previews by default
-                        </label>
-                    </div>
+                    { this._renderUrlPreviewSelector() }
+                    { SETTINGS_LABELS.map( this._renderSyncedSetting ) }
+                    { THEMES.map( this._renderThemeSelector ) }
                 </div>
-                { settingsLabels.forEach( setting => {
-                    <div className="mx_UserSettings_toggle">
-                        <input id={ setting.id }
-                               type="checkbox"
-                               defaultChecked={ syncedSettings[setting.id] }
-                               onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
-                        />
-                        <label htmlFor={ setting.id }>
-                            { settings.label }
-                        </label>
-                    </div>
-                })}
             </div>
         );
+    },
+
+    _renderUrlPreviewSelector: function() {
+        return <div className="mx_UserSettings_toggle">
+            <input id="urlPreviewsDisabled"
+                   type="checkbox"
+                   defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
+                   onChange={ e => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
+            />
+            <label htmlFor="urlPreviewsDisabled">
+                Disable inline URL previews by default
+            </label>
+        </div>;
+    },
+
+    _renderSyncedSetting: function(setting) {
+        return <div className="mx_UserSettings_toggle" key={ setting.id }>
+            <input id={ setting.id }
+                   type="checkbox"
+                   defaultChecked={ this._syncedSettings[setting.id] }
+                   onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
+            />
+            <label htmlFor={ setting.id }>
+                { setting.label }
+            </label>
+        </div>;
+    },
+
+    _renderThemeSelector: function(setting) {
+        return <div className="mx_UserSettings_toggle" key={ setting.id + "_" + setting.value }>
+            <input id={ setting.id + "_" + setting.value }
+                   type="radio"
+                   name={ setting.id }
+                   value={ setting.value }
+                   defaultChecked={ this._syncedSettings[setting.id] === setting.value }
+                   onChange={ e => {
+                            if (e.target.checked) {
+                                UserSettingsStore.setSyncedSetting(setting.id, setting.value);
+                            }
+                            dis.dispatch({
+                                action: 'set_theme',
+                                value: setting.value,
+                            });
+                        }
+                   }
+            />
+            <label htmlFor={ setting.id + "_" + setting.value }>
+                { setting.label }
+            </label>
+        </div>;
     },
 
     _renderCryptoInfo: function() {
@@ -401,17 +552,58 @@ module.exports = React.createClass({
         const deviceId = client.deviceId;
         const identityKey = client.getDeviceEd25519Key() || "<not supported>";
 
+        let importExportButtons = null;
+
+        if (client.isCryptoEnabled) {
+            importExportButtons = (
+                <div className="mx_UserSettings_importExportButtons">
+                    <AccessibleButton className="mx_UserSettings_button"
+                            onClick={this._onExportE2eKeysClicked}>
+                        Export E2E room keys
+                    </AccessibleButton>
+                    <AccessibleButton className="mx_UserSettings_button"
+                            onClick={this._onImportE2eKeysClicked}>
+                        Import E2E room keys
+                    </AccessibleButton>
+                </div>
+            );
+        }
         return (
             <div>
                 <h3>Cryptography</h3>
                 <div className="mx_UserSettings_section mx_UserSettings_cryptoSection">
                     <ul>
-                        <li><label>Device ID:</label>   <span><code>{deviceId}</code></span></li>
-                        <li><label>Device key:</label>  <span><code><b>{identityKey}</b></code></span></li>
+                        <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
+                        <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
+                    { importExportButtons }
+                </div>
+                <div className="mx_UserSettings_section">
+                    { CRYPTO_SETTINGS_LABELS.map( this._renderLocalSetting ) }
                 </div>
             </div>
         );
+    },
+
+    _renderLocalSetting: function(setting) {
+        const client = MatrixClientPeg.get();
+        return <div className="mx_UserSettings_toggle" key={ setting.id }>
+            <input id={ setting.id }
+                   type="checkbox"
+                   defaultChecked={ this._localSettings[setting.id] }
+                   onChange={
+                        e => {
+                            UserSettingsStore.setLocalSetting(setting.id, e.target.checked)
+                            if (setting.id === 'blacklistUnverifiedDevices') { // XXX: this is a bit ugly
+                                client.setGlobalBlacklistUnverifiedDevices(e.target.checked);
+                            }
+                        }
+                    }
+            />
+            <label htmlFor={ setting.id }>
+                { setting.label }
+            </label>
+        </div>;
     },
 
     _renderDevicesPanel: function() {
@@ -424,7 +616,24 @@ module.exports = React.createClass({
         );
     },
 
-    _renderLabs: function () {
+    _renderBugReport: function() {
+        if (!SdkConfig.get().bug_report_endpoint_url) {
+            return <div />
+        }
+        return (
+            <div>
+                <h3>Bug Report</h3>
+                <div className="mx_UserSettings_section">
+                    <p>Found a bug?</p>
+                    <button className="mx_UserSettings_button danger"
+                        onClick={this._onBugReportClicked}>Report it
+                    </button>
+                </div>
+            </div>
+        );
+    },
+
+    _renderLabs: function() {
         // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
 
@@ -460,7 +669,7 @@ module.exports = React.createClass({
                     {features}
                 </div>
             </div>
-        )
+        );
     },
 
     _renderDeactivateAccount: function() {
@@ -470,9 +679,9 @@ module.exports = React.createClass({
         return <div>
             <h3>Deactivate Account</h3>
                 <div className="mx_UserSettings_section">
-                    <button className="mx_UserSettings_button danger"
+                    <AccessibleButton className="mx_UserSettings_button danger"
                         onClick={this._onDeactivateAccountClicked}>Deactivate my account
-                    </button>
+                    </AccessibleButton>
                 </div>
         </div>;
     },
@@ -492,10 +701,10 @@ module.exports = React.createClass({
             // bind() the invited rooms so any new invites that may come in as this button is clicked
             // don't inadvertently get rejected as well.
             reject = (
-                <button className="mx_UserSettings_button danger"
+                <AccessibleButton className="mx_UserSettings_button danger"
                 onClick={this._onRejectAllInvitesClicked.bind(this, invitedRooms)}>
                     Reject all {invitedRooms.length} invites
-                </button>
+                </AccessibleButton>
             );
         }
 
@@ -544,10 +753,10 @@ module.exports = React.createClass({
                         <label htmlFor={id}>{this.nameForMedium(val.medium)}</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
-                        <input key={val.address} id={id} value={val.address} disabled />
+                        <input type="text" key={val.address} id={id} value={val.address} disabled />
                     </div>
-                    <div className="mx_UserSettings_threepidButton">
-                        <img src="img/icon_context_delete.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
+                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
+                        <img src="img/cancel-small.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
                     </div>
                 </div>
             );
@@ -569,7 +778,7 @@ module.exports = React.createClass({
                             blurToCancel={ false }
                             onValueChanged={ this.onAddThreepidClicked } />
                     </div>
-                    <div className="mx_UserSettings_threepidButton">
+                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
                          <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked.bind(this, undefined, true) }/>
                     </div>
                 </div>
@@ -650,7 +859,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserSettings_avatarPicker_edit">
                             <label htmlFor="avatarInput" ref="file_label">
-                                <img src="img/camera.svg"
+                                <img src="img/camera.svg" className="mx_filterFlipColor"
                                     alt="Upload avatar" title="Upload avatar"
                                     width="17" height="15" />
                             </label>
@@ -663,12 +872,14 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_section">
 
-                    <div className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
+                    <AccessibleButton className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
                         Sign out
-                    </div>
+                    </AccessibleButton>
 
                     {accountJsx}
                 </div>
+
+                {this._renderReferral()}
 
                 {notification_area}
 
@@ -677,6 +888,7 @@ module.exports = React.createClass({
                 {this._renderDevicesPanel()}
                 {this._renderCryptoInfo()}
                 {this._renderBulkOptions()}
+                {this._renderBugReport()}
 
                 <h3>Advanced</h3>
 
@@ -692,7 +904,7 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_UserSettings_advanced">
                         matrix-react-sdk version: {REACT_SDK_VERSION}<br/>
-                        vector-web version: {this.state.vectorVersion !== null ? this.state.vectorVersion : 'unknown'}<br/>
+                        riot-web version: {this.state.vectorVersion !== null ? this.state.vectorVersion : 'unknown'}<br/>
                         olm version: {olmVersionString}<br/>
                     </div>
                 </div>

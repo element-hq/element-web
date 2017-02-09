@@ -42,17 +42,12 @@ describe('RoomView', function () {
     it('resolves a room alias to a room id', function (done) {
         peg.get().getRoomIdForAlias.returns(q({room_id: "!randomcharacters:aser.ver"}));
 
-        var onRoomIdResolved = sinon.spy();
+        function onRoomIdResolved(room_id) {
+            expect(room_id).toEqual("!randomcharacters:aser.ver");
+            done();
+        }
 
         ReactDOM.render(<RoomView roomAddress="#alias:ser.ver" onRoomIdResolved={onRoomIdResolved} />, parentDiv);
-
-        process.nextTick(function() {
-            // These expect()s don't read very well and don't give very good failure
-            // messages, but expect's toHaveBeenCalled only takes an expect spy object,
-            // not a sinon spy object.
-            expect(onRoomIdResolved.called).toExist();
-            done();
-        });
     });
 
     it('joins by alias if given an alias', function (done) {

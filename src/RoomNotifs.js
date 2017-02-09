@@ -146,7 +146,7 @@ function isRuleForRoom(roomId, rule) {
     }
     const cond = rule.conditions[0];
     if (
-        cond.kind == 'event_match'  &&
+        cond.kind == 'event_match' &&
         cond.key == 'room_id' &&
         cond.pattern == roomId
     ) {
