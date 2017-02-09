@@ -48,8 +48,7 @@ module.exports = {
         return whoIsTyping;
     },
 
-    whoIsTypingString: function(room, limit) {
-        const whoIsTyping = this.usersTypingApartFromMe(room);
+    whoIsTypingString: function(whoIsTyping, limit) {
         const othersCount = limit === undefined ?
             0 : Math.max(whoIsTyping.length - limit, 0);
         if (whoIsTyping.length == 0) {

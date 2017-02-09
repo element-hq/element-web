@@ -89,10 +89,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
-            whoisTypingString: WhoIsTyping.whoIsTypingString(
-                this.props.room,
-                this.props.whoIsTypingLimit
-            ),
+            usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
         };
     },
 
@@ -141,10 +138,7 @@ module.exports = React.createClass({
 
     onRoomMemberTyping: function(ev, member) {
         this.setState({
-            whoisTypingString: WhoIsTyping.whoIsTypingString(
-                this.props.room,
-                this.props.whoIsTypingLimit
-            ),
+            usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
         });
     },
 
@@ -153,7 +147,7 @@ module.exports = React.createClass({
     // indicate other sizes.
     _getSize: function(state, props) {
         if (state.syncState === "ERROR" ||
-            state.whoisTypingString ||
+            (state.usersTyping.length > 0) ||
             props.numUnreadMessages ||
             !props.atEndOfLiveTimeline ||
             props.hasActiveCall) {
@@ -220,7 +214,7 @@ module.exports = React.createClass({
     },
 
     _renderTypingIndicatorAvatars: function(limit) {
-        let users = WhoIsTyping.usersTypingApartFromMe(this.props.room);
+        let users = this.state.usersTyping;
 
         let othersCount = Math.max(users.length - limit, 0);
         users = users.slice(0, limit);
@@ -324,7 +318,10 @@ module.exports = React.createClass({
             );
         }
 
-        var typingString = this.state.whoisTypingString;
+        const typingString = WhoIsTyping.whoIsTypingString(
+            this.state.usersTyping,
+            this.props.whoIsTypingLimit
+        );
         if (typingString) {
             return (
                 <div className="mx_RoomStatusBar_typingBar">
@@ -347,7 +344,7 @@ module.exports = React.createClass({
 
     render: function() {
         var content = this._getContent();
-        var indicator = this._getIndicator(this.state.whoisTypingString !== null);
+        var indicator = this._getIndicator(this.state.usersTyping.length > 0);
 
         return (
             <div className="mx_RoomStatusBar">
