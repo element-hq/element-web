@@ -82,17 +82,14 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            whoIsTypingLimit: 2,
+            whoIsTypingLimit: 3,
         };
     },
 
     getInitialState: function() {
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
-            whoisTypingString: WhoIsTyping.whoIsTypingString(
-                this.props.room,
-                this.props.whoIsTypingLimit
-            ),
+            usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
         };
     },
 
@@ -106,7 +103,7 @@ module.exports = React.createClass({
             this.props.onResize();
         }
 
-        const size = this._getSize(this.state, this.props);
+        const size = this._getSize(this.props, this.state);
         if (size > 0) {
             this.props.onVisible();
         } else {
@@ -141,19 +138,16 @@ module.exports = React.createClass({
 
     onRoomMemberTyping: function(ev, member) {
         this.setState({
-            whoisTypingString: WhoIsTyping.whoIsTypingString(
-                this.props.room,
-                this.props.whoIsTypingLimit
-            ),
+            usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
         });
     },
 
     // We don't need the actual height - just whether it is likely to have
     // changed - so we use '0' to indicate normal size, and other values to
     // indicate other sizes.
-    _getSize: function(state, props) {
+    _getSize: function(props, state) {
         if (state.syncState === "ERROR" ||
-            state.whoisTypingString ||
+            (state.usersTyping.length > 0) ||
             props.numUnreadMessages ||
             !props.atEndOfLiveTimeline ||
             props.hasActiveCall) {
@@ -169,7 +163,8 @@ module.exports = React.createClass({
     // determine if we need to call onResize
     _checkForResize: function(prevProps, prevState) {
         // figure out the old height and the new height of the status bar.
-        return this._getSize(prevProps, prevState) !== this._getSize(this.props, this.state);
+        return this._getSize(prevProps, prevState)
+            !== this._getSize(this.props, this.state);
     },
 
     // return suitable content for the image on the left of the status bar.
@@ -220,10 +215,13 @@ module.exports = React.createClass({
     },
 
     _renderTypingIndicatorAvatars: function(limit) {
-        let users = WhoIsTyping.usersTypingApartFromMe(this.props.room);
+        let users = this.state.usersTyping;
 
-        let othersCount = Math.max(users.length - limit, 0);
-        users = users.slice(0, limit);
+        let othersCount = 0;
+        if (users.length > limit) {
+            othersCount = users.length - limit + 1;
+            users = users.slice(0, limit - 1);
+        }
 
         let avatars = users.map((u, index) => {
             let showInitial = othersCount === 0 && index === users.length - 1;
@@ -324,7 +322,10 @@ module.exports = React.createClass({
             );
         }
 
-        var typingString = this.state.whoisTypingString;
+        const typingString = WhoIsTyping.whoIsTypingString(
+            this.state.usersTyping,
+            this.props.whoIsTypingLimit
+        );
         if (typingString) {
             return (
                 <div className="mx_RoomStatusBar_typingBar">
@@ -347,7 +348,7 @@ module.exports = React.createClass({
 
     render: function() {
         var content = this._getContent();
-        var indicator = this._getIndicator(this.state.whoisTypingString !== null);
+        var indicator = this._getIndicator(this.state.usersTyping.length > 0);
 
         return (
             <div className="mx_RoomStatusBar">
