@@ -552,21 +552,20 @@ module.exports = React.createClass({
         const deviceId = client.deviceId;
         const identityKey = client.getDeviceEd25519Key() || "<not supported>";
 
-        let exportButton = null,
-            importButton = null;
+        let importExportButtons = null;
 
         if (client.isCryptoEnabled) {
-            exportButton = (
-                <AccessibleButton className="mx_UserSettings_button"
-                        onClick={this._onExportE2eKeysClicked}>
-                    Export E2E room keys
-                </AccessibleButton>
-            );
-            importButton = (
-                <AccessibleButton className="mx_UserSettings_button"
-                        onClick={this._onImportE2eKeysClicked}>
-                    Import E2E room keys
-                </AccessibleButton>
+            importExportButtons = (
+                <div className="mx_UserSettings_importExportButtons">
+                    <AccessibleButton className="mx_UserSettings_button"
+                            onClick={this._onExportE2eKeysClicked}>
+                        Export E2E room keys
+                    </AccessibleButton>
+                    <AccessibleButton className="mx_UserSettings_button"
+                            onClick={this._onImportE2eKeysClicked}>
+                        Import E2E room keys
+                    </AccessibleButton>
+                </div>
             );
         }
         return (
@@ -577,8 +576,7 @@ module.exports = React.createClass({
                         <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
                         <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
-                    {exportButton}
-                    {importButton}
+                    { importExportButtons }
                 </div>
                 <div className="mx_UserSettings_section">
                     { CRYPTO_SETTINGS_LABELS.map( this._renderLocalSetting ) }
