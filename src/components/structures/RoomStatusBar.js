@@ -82,7 +82,7 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            whoIsTypingLimit: 2,
+            whoIsTypingLimit: 3,
         };
     },
 
@@ -217,8 +217,11 @@ module.exports = React.createClass({
     _renderTypingIndicatorAvatars: function(limit) {
         let users = this.state.usersTyping;
 
-        let othersCount = Math.max(users.length - limit, 0);
-        users = users.slice(0, limit);
+        let othersCount = 0;
+        if (users.length > limit) {
+            othersCount = users.length - limit + 1;
+            users = users.slice(0, limit - 1);
+        }
 
         let avatars = users.map((u, index) => {
             let showInitial = othersCount === 0 && index === users.length - 1;

@@ -49,8 +49,10 @@ module.exports = {
     },
 
     whoIsTypingString: function(whoIsTyping, limit) {
-        const othersCount = limit === undefined ?
-            0 : Math.max(whoIsTyping.length - limit, 0);
+        let othersCount = 0;
+        if (whoIsTyping.length > limit) {
+            othersCount = whoIsTyping.length - limit + 1;
+        }
         if (whoIsTyping.length == 0) {
             return '';
         } else if (whoIsTyping.length == 1) {
@@ -61,7 +63,7 @@ module.exports = {
         });
         if (othersCount) {
             const other = ' other' + (othersCount > 1 ? 's' : '');
-            return names.slice(0, limit).join(', ') + ' and ' +
+            return names.slice(0, limit - 1).join(', ') + ' and ' +
                 othersCount + other + ' are typing';
         } else {
             const lastPerson = names.pop();
