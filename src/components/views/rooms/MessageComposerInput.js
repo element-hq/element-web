@@ -159,12 +159,12 @@ export default class MessageComposerInput extends React.Component {
             // The textarea element to set text to.
             element: null,
 
-            init: function (element, roomId) {
+            init: function(element, roomId) {
                 this.roomId = roomId;
                 this.element = element;
                 this.position = -1;
-                var storedData = window.sessionStorage.getItem(
-                    "mx_messagecomposer_history_" + roomId
+                const storedData = window.sessionStorage.getItem(
+                    "mx_messagecomposer_history_" + roomId,
                 );
                 if (storedData) {
                     this.data = JSON.parse(storedData);
@@ -174,12 +174,12 @@ export default class MessageComposerInput extends React.Component {
                 }
             },
 
-            push: function (text) {
+            push: function(text) {
                 // store a message in the sent history
                 this.data.unshift(text);
                 window.sessionStorage.setItem(
                     "mx_messagecomposer_history_" + this.roomId,
-                    JSON.stringify(this.data)
+                    JSON.stringify(this.data),
                 );
                 // reset history position
                 this.position = -1;
@@ -187,12 +187,11 @@ export default class MessageComposerInput extends React.Component {
             },
 
             // move in the history. Returns true if we managed to move.
-            next: function (offset) {
+            next: function(offset) {
                 if (this.position === -1) {
                     // user is going into the history, save the current line.
                     this.originalText = this.element.value;
-                }
-                else {
+                } else {
                     // user may have modified this line in the history; remember it.
                     this.data[this.position] = this.element.value;
                 }
@@ -203,7 +202,7 @@ export default class MessageComposerInput extends React.Component {
                 }
 
                 // retrieve the next item (bounded).
-                var newPosition = this.position + offset;
+                let newPosition = this.position + offset;
                 newPosition = Math.max(-1, newPosition);
                 newPosition = Math.min(newPosition, this.data.length - 1);
                 this.position = newPosition;
@@ -211,8 +210,7 @@ export default class MessageComposerInput extends React.Component {
                 if (this.position !== -1) {
                     // show the message
                     this.element.value = this.data[this.position];
-                }
-                else if (this.originalText !== undefined) {
+                } else if (this.originalText !== undefined) {
                     // restore the original text the user was typing.
                     this.element.value = this.originalText;
                 }
@@ -220,20 +218,20 @@ export default class MessageComposerInput extends React.Component {
                 return true;
             },
 
-            saveLastTextEntry: function () {
+            saveLastTextEntry: function() {
                 // save the currently entered text in order to restore it later.
                 // NB: This isn't 'originalText' because we want to restore
                 // sent history items too!
-                let contentJSON = JSON.stringify(convertToRaw(component.state.editorState.getCurrentContent()));
+                const contentJSON = JSON.stringify(convertToRaw(component.state.editorState.getCurrentContent()));
                 window.sessionStorage.setItem("mx_messagecomposer_input_" + this.roomId, contentJSON);
             },
 
-            setLastTextEntry: function () {
-                let contentJSON = window.sessionStorage.getItem("mx_messagecomposer_input_" + this.roomId);
+            setLastTextEntry: function() {
+                const contentJSON = window.sessionStorage.getItem("mx_messagecomposer_input_" + this.roomId);
                 if (contentJSON) {
-                    let content = convertFromRaw(JSON.parse(contentJSON));
+                    const content = convertFromRaw(JSON.parse(contentJSON));
                     component.setState({
-                        editorState: component.createEditorState(component.state.isRichtextEnabled, content)
+                        editorState: component.createEditorState(component.state.isRichtextEnabled, content),
                     });
                 }
             },
@@ -244,7 +242,7 @@ export default class MessageComposerInput extends React.Component {
         this.dispatcherRef = dis.register(this.onAction);
         this.sentHistory.init(
             this.refs.editor,
-            this.props.room.roomId
+            this.props.room.roomId,
         );
     }
 
@@ -262,8 +260,8 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    onAction = payload => {
-        let editor = this.refs.editor;
+    onAction = (payload) => {
+        const editor = this.refs.editor;
         let contentState = this.state.editorState.getCurrentContent();
 
         switch (payload.action) {
@@ -277,7 +275,7 @@ export default class MessageComposerInput extends React.Component {
                 contentState = Modifier.replaceText(
                     contentState,
                     this.state.editorState.getSelection(),
-                    `${payload.displayname}: `
+                    `${payload.displayname}: `,
                 );
                 let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
                 editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
@@ -306,7 +304,7 @@ export default class MessageComposerInput extends React.Component {
                     if (this.state.isRichtextEnabled) {
                         contentState = Modifier.setBlockType(contentState, startSelection, 'blockquote');
                     }
-                    let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
+                    const editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
                     this.onEditorContentChanged(editorState);
                     editor.focus();
                 }
@@ -333,8 +331,8 @@ export default class MessageComposerInput extends React.Component {
 
     startUserTypingTimer() {
         this.stopUserTypingTimer();
-        var self = this;
-        this.userTypingTimer = setTimeout(function () {
+        const self = this;
+        this.userTypingTimer = setTimeout(function() {
             self.isTyping = false;
             self.sendTyping(self.isTyping);
             self.userTypingTimer = null;
@@ -350,8 +348,8 @@ export default class MessageComposerInput extends React.Component {
 
     startServerTypingTimer() {
         if (!this.serverTypingTimer) {
-            var self = this;
-            this.serverTypingTimer = setTimeout(function () {
+            const self = this;
+            this.serverTypingTimer = setTimeout(function() {
                 if (self.isTyping) {
                     self.sendTyping(self.isTyping);
                     self.startServerTypingTimer();
@@ -370,7 +368,7 @@ export default class MessageComposerInput extends React.Component {
     sendTyping(isTyping) {
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
-            this.isTyping, TYPING_SERVER_TIMEOUT
+            this.isTyping, TYPING_SERVER_TIMEOUT,
         ).done();
     }
 
@@ -465,34 +463,34 @@ export default class MessageComposerInput extends React.Component {
 
             if (blockCommands.includes(command)) {
                 this.setState({
-                    editorState: RichUtils.toggleBlockType(this.state.editorState, command)
+                    editorState: RichUtils.toggleBlockType(this.state.editorState, command),
                 });
             } else if (command === 'strike') {
                 // this is the only inline style not handled by Draft by default
                 this.setState({
-                    editorState: RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH')
+                    editorState: RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'),
                 });
             }
         } else {
             let contentState = this.state.editorState.getCurrentContent(),
                 selection = this.state.editorState.getSelection();
 
-            let modifyFn = {
-                'bold': text => `**${text}**`,
-                'italic': text => `*${text}*`,
-                'underline': text => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
-                'strike': text => `~~${text}~~`,
-                'code': text => `\`${text}\``,
-                'blockquote': text => text.split('\n').map(line => `> ${line}\n`).join(''),
-                'unordered-list-item': text => text.split('\n').map(line => `- ${line}\n`).join(''),
-                'ordered-list-item': text => text.split('\n').map((line, i) => `${i + 1}. ${line}\n`).join(''),
+            const modifyFn = {
+                'bold': (text) => `**${text}**`,
+                'italic': (text) => `*${text}*`,
+                'underline': (text) => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
+                'strike': (text) => `~~${text}~~`,
+                'code': (text) => `\`${text}\``,
+                'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join(''),
+                'unordered-list-item': (text) => text.split('\n').map((line) => `- ${line}\n`).join(''),
+                'ordered-list-item': (text) => text.split('\n').map((line, i) => `${i + 1}. ${line}\n`).join(''),
             }[command];
 
             if (modifyFn) {
                 newState = EditorState.push(
                     this.state.editorState,
                     RichText.modifyText(contentState, selection, modifyFn),
-                    'insert-characters'
+                    'insert-characters',
                 );
             }
         }
@@ -509,7 +507,7 @@ export default class MessageComposerInput extends React.Component {
         return false;
     };
 
-    handleReturn = ev => {
+    handleReturn = (ev) => {
         if (ev.shiftKey) {
             this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
             return true;
@@ -523,31 +521,30 @@ export default class MessageComposerInput extends React.Component {
 
         let contentText = contentState.getPlainText(), contentHTML;
 
-        var cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
+        const cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
         if (cmd) {
             if (!cmd.error) {
                 this.setState({
-                    editorState: this.createEditorState()
+                    editorState: this.createEditorState(),
                 });
             }
             if (cmd.promise) {
-                cmd.promise.then(function () {
+                cmd.promise.then(function() {
                     console.log("Command success.");
-                }, function (err) {
+                }, function(err) {
                     console.error("Command failure: %s", err);
-                    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
                         title: "Server error",
-                        description: err.message
+                        description: err.message,
                     });
                 });
-            }
-            else if (cmd.error) {
+            } else if (cmd.error) {
                 console.error(cmd.error);
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: "Command error",
-                    description: cmd.error
+                    description: cmd.error,
                 });
             }
             return true;
@@ -555,7 +552,7 @@ export default class MessageComposerInput extends React.Component {
 
         if (this.state.isRichtextEnabled) {
             contentHTML = HtmlUtils.stripParagraphs(
-                RichText.contentStateToHTML(contentState)
+                RichText.contentStateToHTML(contentState),
             );
         } else {
             const md = new Markdown(contentText);
@@ -582,7 +579,7 @@ export default class MessageComposerInput extends React.Component {
         let sendMessagePromise;
         if (contentHTML) {
             sendMessagePromise = sendHtmlFn.call(
-                this.client, this.props.room.roomId, contentText, contentHTML
+                this.client, this.props.room.roomId, contentText, contentHTML,
             );
         } else {
             sendMessagePromise = sendTextFn.call(this.client, this.props.room.roomId, contentText);
@@ -603,7 +600,7 @@ export default class MessageComposerInput extends React.Component {
         return true;
     };
 
-    onUpArrow = async e => {
+    onUpArrow = async (e) => {
         const completion = this.autocomplete.onUpArrow();
         if (completion != null) {
             e.preventDefault();
@@ -611,14 +608,14 @@ export default class MessageComposerInput extends React.Component {
         return await this.setDisplayedCompletion(completion);
     };
 
-    onDownArrow = async e => {
+    onDownArrow = async (e) => {
         const completion = this.autocomplete.onDownArrow();
         e.preventDefault();
         return await this.setDisplayedCompletion(completion);
     };
 
     // tab and shift-tab are mapped to down and up arrow respectively
-    onTab = async e => {
+    onTab = async (e) => {
         e.preventDefault(); // we *never* want tab's default to happen, but we do want up/down sometimes
         const didTab = await (e.shiftKey ? this.onUpArrow : this.onDownArrow)(e);
         if (!didTab && this.autocomplete) {
@@ -627,7 +624,7 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
-    onEscape = e => {
+    onEscape = (e) => {
         e.preventDefault();
         if (this.autocomplete) {
             this.autocomplete.onEscape(e);
@@ -650,10 +647,10 @@ export default class MessageComposerInput extends React.Component {
 
         const {range = {}, completion = ''} = displayedCompletion;
 
-        let contentState = Modifier.replaceText(
+        const contentState = Modifier.replaceText(
             activeEditorState.getCurrentContent(),
             RichText.textOffsetsToSelectionState(range, activeEditorState.getCurrentContent().getBlocksAsArray()),
-            completion
+            completion,
         );
 
         let editorState = EditorState.push(activeEditorState, contentState, 'insert-characters');
@@ -688,8 +685,8 @@ export default class MessageComposerInput extends React.Component {
 
         const originalStyle = editorState.getCurrentInlineStyle().toArray();
         const style = originalStyle
-            .map(style => styleName[style] || null)
-            .filter(styleName => !!styleName);
+            .map((style) => styleName[style] || null)
+            .filter((styleName) => !!styleName);
 
         const blockName = {
             'code-block': 'code',
@@ -708,7 +705,7 @@ export default class MessageComposerInput extends React.Component {
         };
     }
 
-    onMarkdownToggleClicked = e => {
+    onMarkdownToggleClicked = (e) => {
         e.preventDefault(); // don't steal focus from the editor!
         this.handleKeyCommand('toggle-mode');
     };
