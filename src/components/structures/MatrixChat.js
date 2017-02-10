@@ -191,10 +191,18 @@ module.exports = React.createClass({
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
 
+        // Persist the team token across refreshes
+        if (this.props.startingFragmentQueryParams.team_token) {
+            window.sessionStorage.setItem(
+                'mx_team_token',
+                this.props.startingFragmentQueryParams.team_token,
+            );
+        }
+
         // Use the locally-stored team token first, then as a fall-back, check to see if
         // a referral link was used, which will contain a query parameter `team_token`.
         this._teamToken = window.localStorage.getItem('mx_team_token') ||
-            this.props.startingFragmentQueryParams.team_token;
+            window.sessionStorage.getItem('mx_team_token');
     },
 
     componentDidMount: function() {
