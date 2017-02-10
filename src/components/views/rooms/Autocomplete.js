@@ -75,10 +75,10 @@ export default class Autocomplete extends React.Component {
             } else {
                 selectionOffset++; // selectionOffset is 1-indexed!
             }
-        } else {
-            // If no completions were returned, we should turn off force completion.
-            forceComplete = false;
         }
+
+        // If no completions were returned, we should turn off force completion.
+        forceComplete = false;
 
         let hide = this.state.hide;
         // These are lists of booleans that indicate whether whether the corresponding provider had a matching pattern
