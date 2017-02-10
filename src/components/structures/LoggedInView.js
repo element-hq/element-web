@@ -232,7 +232,12 @@ export default React.createClass({
             <div className='mx_MatrixChat_wrapper'>
                 {topBar}
                 <div className={bodyClasses}>
-                    <LeftPanel selectedRoom={this.props.currentRoomId} collapsed={this.props.collapse_lhs || false} opacity={this.props.sideOpacity}/>
+                    <LeftPanel
+                        selectedRoom={this.props.currentRoomId}
+                        collapsed={this.props.collapse_lhs || false}
+                        opacity={this.props.sideOpacity}
+                        teamToken={this.props.teamToken}
+                    />
                     <main className='mx_MatrixChat_middlePanel'>
                         {page_element}
                     </main>
