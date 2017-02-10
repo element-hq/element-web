@@ -79,6 +79,7 @@ class MatrixClientPeg {
             console.log("Loading history from IndexedDB.");
             promise = this.matrixClient.store.startup();
         }
+        promise.catch((err) => { console.error(err); });
 
         promise.finally(() => {
             this.get().startClient(opts);
@@ -124,7 +125,8 @@ class MatrixClientPeg {
         }
         if (window.indexedDB && localStorage) {
             opts.store = new Matrix.IndexedDBStore(
-                new Matrix.IndexedDBStoreBackend(window.indexedDB), {
+                new Matrix.IndexedDBStoreBackend(window.indexedDB),
+                new Matrix.SyncAccumulator(), {
                     localStorage: localStorage,
                 }
             );

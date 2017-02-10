@@ -329,8 +329,19 @@ export function startMatrixClient() {
  */
 export function onLoggedOut() {
     _clearLocalStorage();
+    _clearIndexedDB();
     stopMatrixClient();
     dis.dispatch({action: 'on_logged_out'});
+}
+
+function _clearIndexedDB() {
+    // remove indexeddb instances
+    if (!window.indexedDB) {
+        return;
+    }
+    console.log("Clearing indexeddb");
+    window.indexedDB.deleteDatabase("matrix-js-sdk");
+    window.indexedDB.deleteDatabase("logs");
 }
 
 function _clearLocalStorage() {
