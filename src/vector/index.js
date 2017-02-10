@@ -135,7 +135,6 @@ var onNewScreen = function(screen) {
         var hash = '#/' + screen;
         lastLocationHashSet = hash;
         window.location.hash = hash;
-        if (ga) ga('send', 'pageview', window.location.pathname + window.location.search + window.location.hash);
     }
 }
 
