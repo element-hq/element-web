@@ -1,0 +1,6 @@
+[include]
+src/**/*.js
+test/**/*.js
+
+[ignore]
+node_modules/

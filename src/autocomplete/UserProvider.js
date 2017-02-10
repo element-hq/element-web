@@ -1,20 +1,27 @@
+//@flow
 import React from 'react';
 import AutocompleteProvider from './AutocompleteProvider';
 import Q from 'q';
 import {PillCompletion} from './Components';
 import sdk from '../index';
 import FuzzyMatcher from './FuzzyMatcher';
+import _pull from 'lodash/pull';
+import _sortBy from 'lodash/sortBy';
+import MatrixClientPeg from '../MatrixClientPeg';
+
+import type {Room, RoomMember} from 'matrix-js-sdk';
 
 const USER_REGEX = /@\S*/g;
 
 let instance = null;
 
 export default class UserProvider extends AutocompleteProvider {
+    users: Array<RoomMember> = [];
+
     constructor() {
         super(USER_REGEX, {
             keys: ['name', 'userId'],
         });
-        this.users = [];
         this.matcher = new FuzzyMatcher([], {
             keys: ['name', 'userId'],
         });
@@ -53,8 +60,30 @@ export default class UserProvider extends AutocompleteProvider {
         return '👥 Users';
     }
 
-    setUserList(users) {
-        this.users = users;
+    setUserListFromRoom(room: Room) {
+        const events = room.getLiveTimeline().getEvents();
+        const lastSpoken = {};
+
+        for(const event of events) {
+            lastSpoken[event.getSender()] = event.getTs();
+        }
+
+        const currentUserId = MatrixClientPeg.get().credentials.userId;
+        this.users = room.getJoinedMembers().filter((member) => {
+            if (member.userId !== currentUserId) return true;
+        });
+
+        this.users = _sortBy(this.users, (user) => 1E20 - lastSpoken[user.userId] || 1E20);
+
+        this.matcher.setObjects(this.users);
+    }
+
+    onUserSpoke(user: RoomMember) {
+        if(user.userId === MatrixClientPeg.get().credentials.userId) return;
+
+        // Probably unsafe to compare by reference here?
+        _pull(this.users, user);
+        this.users.splice(0, 0, user);
         this.matcher.setObjects(this.users);
     }
 

@@ -14,7 +14,12 @@ class KeyMap {
 const DEFAULT_RESULT_COUNT = 10;
 const DEFAULT_DISTANCE = 5;
 
-export default class FuzzyMatcher {
+// FIXME Until Fuzzy matching works better, we use prefix matching.
+
+import PrefixMatcher from './QueryMatcher';
+export default PrefixMatcher;
+
+class FuzzyMatcher {
     /**
      * Given an array of objects and keys, returns a KeyMap
      * Keys can refer to object properties by name and as in JavaScript (for nested properties)
