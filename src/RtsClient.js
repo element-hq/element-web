@@ -50,18 +50,18 @@ export default class RtsClient {
      * Track a referral with the Riot Team Server. This should be called once a referred
      * user has been successfully registered.
      * @param {string} referrer the user ID of one who referred the user to Riot.
-     * @param {string} userId the user ID of the user being referred.
-     * @param {string} userEmail the email address linked to `userId`.
+     * @param {string} sid the sign-up identity server session ID .
+     * @param {string} clientSecret the sign-up client secret.
      * @returns {Promise} a promise that resolves to { team_token: 'sometoken' } upon
      * success.
      */
-    trackReferral(referrer, userId, userEmail) {
+    trackReferral(referrer, sid, clientSecret) {
         return request(this._url + '/register',
             {
                 body: {
                     referrer: referrer,
-                    user_id: userId,
-                    user_email: userEmail,
+                    session_id: sid,
+                    client_secret: clientSecret,
                 },
                 method: 'POST',
             }
