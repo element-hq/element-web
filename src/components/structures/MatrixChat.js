@@ -191,6 +191,17 @@ module.exports = React.createClass({
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
 
+        // To enable things like riot.im/geektime in a nicer way than rewriting the URL
+        // and appending a team token query parameter, use the first path segment to
+        // indicate a team, with "public" team tokens stored in the config teamTokenMap.
+        let routedTeamToken = null;
+        if (this.props.config.teamTokenMap) {
+            const teamName = window.location.pathname.split('/')[1];
+            if (this.props.config.teamTokenMap.hasOwnProperty(teamName)) {
+                routedTeamToken = this.props.config.teamTokenMap[teamName];
+            }
+        }
+
         // Persist the team token across refreshes using sessionStorage. A new window or
         // tab will not persist sessionStorage, but refreshes will.
         if (this.props.startingFragmentQueryParams.team_token) {
@@ -202,8 +213,13 @@ module.exports = React.createClass({
 
         // Use the locally-stored team token first, then as a fall-back, check to see if
         // a referral link was used, which will contain a query parameter `team_token`.
-        this._teamToken = window.localStorage.getItem('mx_team_token') ||
+        this._teamToken = routedTeamToken ||
+            window.localStorage.getItem('mx_team_token') ||
             window.sessionStorage.getItem('mx_team_token');
+
+        if (this._teamToken) {
+            console.info(`Team token set to ${this._teamToken}`);
+        }
     },
 
     componentDidMount: function() {
