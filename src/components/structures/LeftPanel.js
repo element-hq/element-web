@@ -28,6 +28,11 @@ var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
 
+    propTypes: {
+        collapsed: React.PropTypes.bool.isRequired,
+        teamToken: React.PropTypes.string,
+    },
+
     getInitialState: function() {
         return {
             showCallElement: null,
@@ -124,7 +129,7 @@ var LeftPanel = React.createClass({
                     collapsed={this.props.collapsed}
                     searchFilter={this.state.searchFilter}
                     ConferenceHandler={VectorConferenceHandler} />
-                <BottomLeftMenu collapsed={this.props.collapsed}/>
+                <BottomLeftMenu collapsed={this.props.collapsed} teamToken={this.props.teamToken}/>
             </aside>
         );
     }

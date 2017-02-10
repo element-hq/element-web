@@ -27,6 +27,7 @@ module.exports = React.createClass({
 
     propTypes: {
         collapsed: React.PropTypes.bool.isRequired,
+        teamToken: React.PropTypes.string,
     },
 
     getInitialState: function() {
@@ -36,13 +37,6 @@ module.exports = React.createClass({
             homeHover: false,
             peopleHover : false,
             settingsHover : false,
-            teamToken: null,
-        });
-    },
-
-    componentWillMount: function() {
-        this.setState({
-            teamToken: window.localStorage.getItem('mx_team_token'),
         });
     },
 
@@ -122,7 +116,7 @@ module.exports = React.createClass({
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
 
         var homeButton;
-        if (this.state.teamToken) {
+        if (this.props.teamToken) {
             homeButton = (
                 <AccessibleButton className="mx_BottomLeftMenu_homePage" onClick={ this.onHomeClick } onMouseEnter={ this.onHomeMouseEnter } onMouseLeave={ this.onHomeMouseLeave } >
                     <TintableSvg src="img/icons-home.svg" width="25" height="25" />
