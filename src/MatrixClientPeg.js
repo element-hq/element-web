@@ -79,8 +79,11 @@ class MatrixClientPeg {
             console.log("Loading history from IndexedDB.");
             promise = this.matrixClient.store.startup();
         }
+        // log any errors when starting up the database
         promise.catch((err) => { console.error(err); });
 
+        // regardless of errors, start the client. If we did error out, we'll
+        // just end up doing a full initial /sync.
         promise.finally(() => {
             this.get().startClient(opts);
         });
