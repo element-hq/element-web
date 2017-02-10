@@ -426,7 +426,12 @@ module.exports = React.createClass({
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
-                    <LoginHeader icon={this.state.teamSelected ? this.state.teamSelected.icon : null}/>
+                    <LoginHeader
+                        icon={this.state.teamSelected ?
+                            this.props.teamServerConfig.teamServerURL + "/static/common/" +
+                            this.state.teamSelected.domain + "/icon.png" :
+                            null}
+                    />
                     {this._getRegisterContentJsx()}
                     <LoginFooter />
                 </div>
