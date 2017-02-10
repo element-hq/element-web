@@ -23,6 +23,7 @@ import UserActivity from './UserActivity';
 import Presence from './Presence';
 import dis from './dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
+import RtsClient from './RtsClient';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -229,6 +230,11 @@ function _restoreFromLocalStorage() {
     }
 }
 
+let rtsClient = null;
+export function initRtsClient(url) {
+    rtsClient = new RtsClient(url);
+}
+
 /**
  * Transitions to a logged-in state using the given credentials
  * @param {MatrixClientCreds} credentials The credentials to use
@@ -260,6 +266,19 @@ export function setLoggedIn(credentials) {
             console.log("Session persisted for %s", credentials.userId);
         } catch (e) {
             console.warn("Error using local storage: can't persist session!", e);
+        }
+
+        if (rtsClient) {
+            rtsClient.login(credentials.userId).then((body) => {
+                if (body.team_token) {
+                    localStorage.setItem("mx_team_token", body.team_token);
+                }
+            }, (err) =>{
+                console.error(
+                    "Failed to get team token on login, not persisting to localStorage",
+                    err
+                );
+            });
         }
     } else {
         console.warn("No local storage available: can't persist session!");

@@ -29,10 +29,31 @@ var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
 var MARKDOWN_ENABLED = true;
 
+export function onSendMessageFailed(err, room) {
+    // XXX: temporary logging to try to diagnose
+    // https://github.com/vector-im/riot-web/issues/3148
+    console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
+    if (err.name === "UnknownDeviceError") {
+        const UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
+        Modal.createDialog(UnknownDeviceDialog, {
+            devices: err.devices,
+            room: room,
+            onFinished: (r) => {
+                // XXX: temporary logging to try to diagnose
+                // https://github.com/vector-im/riot-web/issues/3148
+                console.log('UnknownDeviceDialog closed with '+r);
+            },
+        }, "mx_Dialog_unknownDevice");
+    }
+    dis.dispatch({
+        action: 'message_send_failed',
+    });
+}
+
 /*
  * The textInput part of the MessageComposer
  */
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'MessageComposerInput',
 
     statics: {
@@ -331,21 +352,18 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().sendHtmlMessage(this.props.room.roomId, contentText, htmlText);
         }
         else {
-            const contentText = mdown.toPlaintext();
+            if (mdown) contentText = mdown.toPlaintext();
             sendMessagePromise = isEmote ?
                 MatrixClientPeg.get().sendEmoteMessage(this.props.room.roomId, contentText) :
                 MatrixClientPeg.get().sendTextMessage(this.props.room.roomId, contentText);
         }
 
-        sendMessagePromise.done(function() {
+        sendMessagePromise.done(function(res) {
             dis.dispatch({
                 action: 'message_sent'
             });
-        }, function() {
-            dis.dispatch({
-                action: 'message_send_failed'
-            });
-        });
+        }, (e) => onSendMessageFailed(e, this.props.room));
+
         this.refs.textarea.value = '';
         this.resizeInput();
         ev.preventDefault();

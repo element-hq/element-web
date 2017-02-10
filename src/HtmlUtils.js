@@ -290,7 +290,7 @@ export function bodyToHtml(content, highlights, opts) {
     }
 
     EMOJI_REGEX.lastIndex = 0;
-    let contentBodyTrimmed = content.body.trim();
+    let contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
     let match = EMOJI_REGEX.exec(contentBodyTrimmed);
     let emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
 

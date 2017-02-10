@@ -91,6 +91,10 @@ class Register extends Signup {
         this.params.idSid = idSid;
     }
 
+    setReferrer(referrer) {
+        this.params.referrer = referrer;
+    }
+
     setGuestAccessToken(token) {
         this.guestAccessToken = token;
     }

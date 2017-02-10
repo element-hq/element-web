@@ -136,6 +136,11 @@ class EmailIdentityStage extends Stage {
                        "&session_id=" +
                        encodeURIComponent(this.signupInstance.getServerData().session);
 
+        // Add the user ID of the referring user, if set
+        if (this.signupInstance.params.referrer) {
+            nextLink += "&referrer=" + encodeURIComponent(this.signupInstance.params.referrer);
+        }
+
         var self = this;
         return this.client.requestRegisterEmailToken(
             this.signupInstance.email,

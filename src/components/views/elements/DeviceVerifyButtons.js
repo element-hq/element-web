@@ -27,6 +27,28 @@ export default React.createClass({
         device: React.PropTypes.object.isRequired,
     },
 
+    getInitialState: function() {
+        return {
+            device: this.props.device
+        };
+    },
+
+    componentWillMount: function() {
+        const cli = MatrixClientPeg.get();
+        cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
+    },
+
+    componentWillUnmount: function() {
+        const cli = MatrixClientPeg.get();
+        cli.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
+    },
+
+    onDeviceVerificationChanged: function(userId, deviceId, deviceInfo) {
+        if (userId === this.props.userId && deviceId === this.props.device.deviceId) {
+            this.setState({ device: deviceInfo });
+        }
+    },
+
     onVerifyClick: function() {
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
@@ -41,9 +63,9 @@ export default React.createClass({
                     </p>
                     <div className="mx_UserSettings_cryptoSection">
                         <ul>
-                            <li><label>Device name:</label> <span>{ this.props.device.getDisplayName() }</span></li>
-                            <li><label>Device ID:</label>             <span><code>{ this.props.device.deviceId}</code></span></li>
-                            <li><label>Device key:</label>            <span><code><b>{ this.props.device.getFingerprint() }</b></code></span></li>
+                            <li><label>Device name:</label> <span>{ this.state.device.getDisplayName() }</span></li>
+                            <li><label>Device ID:</label>   <span><code>{ this.state.device.deviceId}</code></span></li>
+                            <li><label>Device key:</label>  <span><code><b>{ this.state.device.getFingerprint() }</b></code></span></li>
                         </ul>
                     </div>
                     <p>
@@ -60,7 +82,7 @@ export default React.createClass({
             onFinished: confirm=>{
                 if (confirm) {
                     MatrixClientPeg.get().setDeviceVerified(
-                        this.props.userId, this.props.device.deviceId, true
+                        this.props.userId, this.state.device.deviceId, true
                     );
                 }
             },
@@ -69,26 +91,26 @@ export default React.createClass({
 
     onUnverifyClick: function() {
         MatrixClientPeg.get().setDeviceVerified(
-            this.props.userId, this.props.device.deviceId, false
+            this.props.userId, this.state.device.deviceId, false
         );
     },
 
     onBlacklistClick: function() {
         MatrixClientPeg.get().setDeviceBlocked(
-            this.props.userId, this.props.device.deviceId, true
+            this.props.userId, this.state.device.deviceId, true
         );
     },
 
     onUnblacklistClick: function() {
         MatrixClientPeg.get().setDeviceBlocked(
-            this.props.userId, this.props.device.deviceId, false
+            this.props.userId, this.state.device.deviceId, false
         );
     },
 
     render: function() {
         var blacklistButton = null, verifyButton = null;
 
-        if (this.props.device.isBlocked()) {
+        if (this.state.device.isBlocked()) {
             blacklistButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unblacklist"
                   onClick={this.onUnblacklistClick}>
@@ -104,7 +126,7 @@ export default React.createClass({
             );
         }
 
-        if (this.props.device.isVerified()) {
+        if (this.state.device.isVerified()) {
             verifyButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unverify"
                   onClick={this.onUnverifyClick}>

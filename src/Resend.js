@@ -16,17 +16,35 @@ limitations under the License.
 
 var MatrixClientPeg = require('./MatrixClientPeg');
 var dis = require('./dispatcher');
+var sdk = require('./index');
+var Modal = require('./Modal');
 
 module.exports = {
     resend: function(event) {
         MatrixClientPeg.get().resendEvent(
             event, MatrixClientPeg.get().getRoom(event.getRoomId())
-        ).done(function() {
+        ).done(function(res) {
             dis.dispatch({
                 action: 'message_sent',
                 event: event
             });
-        }, function() {
+        }, function(err) {
+            // XXX: temporary logging to try to diagnose
+            // https://github.com/vector-im/riot-web/issues/3148
+            console.log('Resend got send failure: ' + err.name + '('+err+')');
+            if (err.name === "UnknownDeviceError") {
+                var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
+                Modal.createDialog(UnknownDeviceDialog, {
+                    devices: err.devices,
+                    room: MatrixClientPeg.get().getRoom(event.getRoomId()),
+                    onFinished: (r) => {
+                        // XXX: temporary logging to try to diagnose
+                        // https://github.com/vector-im/riot-web/issues/3148
+                        console.log('UnknownDeviceDialog closed with '+r);
+                    },
+                }, "mx_Dialog_unknownDevice");
+            }
+
             dis.dispatch({
                 action: 'message_send_failed',
                 event: event

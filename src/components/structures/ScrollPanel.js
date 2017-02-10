@@ -25,7 +25,7 @@ var DEBUG_SCROLL = false;
 
 // The amount of extra scroll distance to allow prior to unfilling.
 // See _getExcessHeight.
-const UNPAGINATION_PADDING = 1500;
+const UNPAGINATION_PADDING = 3000;
 // The number of milliseconds to debounce calls to onUnfillRequest, to prevent
 // many scroll events causing many unfilling requests.
 const UNFILL_REQUEST_DEBOUNCE_MS = 200;
@@ -570,7 +570,7 @@ module.exports = React.createClass({
         var boundingRect = node.getBoundingClientRect();
         var scrollDelta = boundingRect.bottom + pixelOffset - wrapperRect.bottom;
 
-        debuglog("Scrolling to token '" + node.dataset.scrollToken + "'+" +
+        debuglog("ScrollPanel: scrolling to token '" + node.dataset.scrollToken + "'+" +
                  pixelOffset + " (delta: "+scrollDelta+")");
 
         if(scrollDelta != 0) {
@@ -582,7 +582,7 @@ module.exports = React.createClass({
     _saveScrollState: function() {
         if (this.props.stickyBottom && this.isAtBottom()) {
             this.scrollState = { stuckAtBottom: true };
-            debuglog("Saved scroll state", this.scrollState);
+            debuglog("ScrollPanel: Saved scroll state", this.scrollState);
             return;
         }
 
@@ -601,12 +601,12 @@ module.exports = React.createClass({
                     trackedScrollToken: node.dataset.scrollToken,
                     pixelOffset: wrapperRect.bottom - boundingRect.bottom,
                 };
-                debuglog("Saved scroll state", this.scrollState);
+                debuglog("ScrollPanel: saved scroll state", this.scrollState);
                 return;
             }
         }
 
-        debuglog("Unable to save scroll state: found no children in the viewport");
+        debuglog("ScrollPanel: unable to save scroll state: found no children in the viewport");
     },
 
     _restoreSavedScrollState: function() {
@@ -640,7 +640,7 @@ module.exports = React.createClass({
             this._lastSetScroll = scrollNode.scrollTop;
         }
 
-        debuglog("Set scrollTop:", scrollNode.scrollTop,
+        debuglog("ScrollPanel: set scrollTop:", scrollNode.scrollTop,
                  "requested:", scrollTop,
                  "_lastSetScroll:", this._lastSetScroll);
     },

@@ -145,27 +145,48 @@ module.exports = React.createClass({
 
         if (imageUrl === this.state.defaultImageUrl) {
             const initialLetter = this._getInitialLetter(name);
-            return (
-                <span className="mx_BaseAvatar" {...otherProps}>
-                    <EmojiText className="mx_BaseAvatar_initial" aria-hidden="true"
-                            style={{ fontSize: (width * 0.65) + "px",
-                                    width: width + "px",
-                                    lineHeight: height + "px" }}>{initialLetter}</EmojiText>
-                    <img className="mx_BaseAvatar_image" src={imageUrl}
-                        alt="" title={title} onError={this.onError}
-                        width={width} height={height} />
-                </span>
+            const textNode = (
+                <EmojiText className="mx_BaseAvatar_initial" aria-hidden="true"
+                    style={{ fontSize: (width * 0.65) + "px",
+                    width: width + "px",
+                    lineHeight: height + "px" }}
+                >
+                    {initialLetter}
+                </EmojiText>
             );
+            const imgNode = (
+                <img className="mx_BaseAvatar_image" src={imageUrl}
+                    alt="" title={title} onError={this.onError}
+                    width={width} height={height} />
+            );
+            if (onClick != null) {
+                return (
+                    <AccessibleButton element='span' className="mx_BaseAvatar"
+                        onClick={onClick} {...otherProps}
+                    >
+                        {textNode}
+                        {imgNode}
+                    </AccessibleButton>
+                );
+            } else {
+                return (
+                    <span className="mx_BaseAvatar" {...otherProps}>
+                        {textNode}
+                        {imgNode}
+                    </span>
+                );
+            }
         }
         if (onClick != null) {
             return (
-                <AccessibleButton className="mx_BaseAvatar" onClick={onClick}>
-                    <img className="mx_BaseAvatar_image" src={imageUrl}
-                        onError={this.onError}
-                        width={width} height={height}
-                        title={title} alt=""
-                        {...otherProps} />
-                </AccessibleButton>
+                <AccessibleButton className="mx_BaseAvatar mx_BaseAvatar_image"
+                    element='img'
+                    src={imageUrl}
+                    onClick={onClick}
+                    onError={this.onError}
+                    width={width} height={height}
+                    title={title} alt=""
+                    {...otherProps} />
             );
         } else {
             return (

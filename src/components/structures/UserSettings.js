@@ -59,6 +59,18 @@ const SETTINGS_LABELS = [
 */
 ];
 
+const CRYPTO_SETTINGS_LABELS = [
+    {
+        id: 'blacklistUnverifiedDevices',
+        label: 'Never send encrypted messages to unverified devices from this device',
+    },
+    // XXX: this is here for documentation; the actual setting is managed via RoomSettings
+    // {
+    //     id: 'blacklistUnverifiedDevicesPerRoom'
+    //     label: 'Never send encrypted messages to unverified devices in this room',
+    // }
+];
+
 // Enumerate the available themes, with a nice human text label.
 // 'id' gives the key name in the im.vector.web.settings account data event
 // 'value' is the value for that key in the event
@@ -91,6 +103,9 @@ module.exports = React.createClass({
 
         // True to show the 'labs' section of experimental features
         enableLabs: React.PropTypes.bool,
+
+        // The base URL to use in the referral link. Defaults to window.location.origin.
+        referralBaseUrl: React.PropTypes.string,
 
         // true if RightPanel is collapsed
         collapsedRhs: React.PropTypes.bool,
@@ -148,6 +163,8 @@ module.exports = React.createClass({
             syncedSettings.theme = 'light';
         }
         this._syncedSettings = syncedSettings;
+
+        this._localSettings = UserSettingsStore.getLocalSettings();
     },
 
     componentDidMount: function() {
@@ -444,6 +461,27 @@ module.exports = React.createClass({
         );
     },
 
+    _renderReferral: function() {
+        const teamToken = window.localStorage.getItem('mx_team_token');
+        if (!teamToken) {
+            return null;
+        }
+        if (typeof teamToken !== 'string') {
+            console.warn('Team token not a string');
+            return null;
+        }
+        const href = (this.props.referralBaseUrl || window.location.origin) +
+            `/#/register?referrer=${this._me}&team_token=${teamToken}`;
+        return (
+            <div>
+                <h3>Referral</h3>
+                <div className="mx_UserSettings_section">
+                    Refer a friend to Riot: <a href={href}>{href}</a>
+                </div>
+            </div>
+        );
+    },
+
     _renderUserInterfaceSettings: function() {
         var client = MatrixClientPeg.get();
 
@@ -514,21 +552,20 @@ module.exports = React.createClass({
         const deviceId = client.deviceId;
         const identityKey = client.getDeviceEd25519Key() || "<not supported>";
 
-        let exportButton = null,
-            importButton = null;
+        let importExportButtons = null;
 
         if (client.isCryptoEnabled) {
-            exportButton = (
-                <AccessibleButton className="mx_UserSettings_button"
-                        onClick={this._onExportE2eKeysClicked}>
-                    Export E2E room keys
-                </AccessibleButton>
-            );
-            importButton = (
-                <AccessibleButton className="mx_UserSettings_button"
-                        onClick={this._onImportE2eKeysClicked}>
-                    Import E2E room keys
-                </AccessibleButton>
+            importExportButtons = (
+                <div className="mx_UserSettings_importExportButtons">
+                    <AccessibleButton className="mx_UserSettings_button"
+                            onClick={this._onExportE2eKeysClicked}>
+                        Export E2E room keys
+                    </AccessibleButton>
+                    <AccessibleButton className="mx_UserSettings_button"
+                            onClick={this._onImportE2eKeysClicked}>
+                        Import E2E room keys
+                    </AccessibleButton>
+                </div>
             );
         }
         return (
@@ -539,11 +576,34 @@ module.exports = React.createClass({
                         <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
                         <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
-                    {exportButton}
-                    {importButton}
+                    { importExportButtons }
+                </div>
+                <div className="mx_UserSettings_section">
+                    { CRYPTO_SETTINGS_LABELS.map( this._renderLocalSetting ) }
                 </div>
             </div>
         );
+    },
+
+    _renderLocalSetting: function(setting) {
+        const client = MatrixClientPeg.get();
+        return <div className="mx_UserSettings_toggle" key={ setting.id }>
+            <input id={ setting.id }
+                   type="checkbox"
+                   defaultChecked={ this._localSettings[setting.id] }
+                   onChange={
+                        e => {
+                            UserSettingsStore.setLocalSetting(setting.id, e.target.checked)
+                            if (setting.id === 'blacklistUnverifiedDevices') { // XXX: this is a bit ugly
+                                client.setGlobalBlacklistUnverifiedDevices(e.target.checked);
+                            }
+                        }
+                    }
+            />
+            <label htmlFor={ setting.id }>
+                { setting.label }
+            </label>
+        </div>;
     },
 
     _renderDevicesPanel: function() {
@@ -819,6 +879,8 @@ module.exports = React.createClass({
                     {accountJsx}
                 </div>
 
+                {this._renderReferral()}
+
                 {notification_area}
 
                 {this._renderUserInterfaceSettings()}
@@ -842,7 +904,7 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_UserSettings_advanced">
                         matrix-react-sdk version: {REACT_SDK_VERSION}<br/>
-                        vector-web version: {this.state.vectorVersion !== null ? this.state.vectorVersion : 'unknown'}<br/>
+                        riot-web version: {this.state.vectorVersion !== null ? this.state.vectorVersion : 'unknown'}<br/>
                         olm version: {olmVersionString}<br/>
                     </div>
                 </div>

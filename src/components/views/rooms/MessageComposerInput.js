@@ -40,6 +40,7 @@ import * as HtmlUtils from '../../../HtmlUtils';
 import Autocomplete from './Autocomplete';
 import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
+import {onSendMessageFailed} from './MessageComposerInputOld';
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
@@ -553,15 +554,11 @@ export default class MessageComposerInput extends React.Component {
             sendMessagePromise = sendTextFn.call(this.client, this.props.room.roomId, contentText);
         }
 
-        sendMessagePromise.then(() => {
+        sendMessagePromise.done((res) => {
             dis.dispatch({
                 action: 'message_sent',
             });
-        }, () => {
-            dis.dispatch({
-                action: 'message_send_failed',
-            });
-        });
+        }, (e) => onSendMessageFailed(e, this.props.room));
 
         this.setState({
             editorState: this.createEditorState(),

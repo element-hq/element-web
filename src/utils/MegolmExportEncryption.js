@@ -50,7 +50,7 @@ export function decryptMegolmKeyFile(data, password) {
     }
 
     const ciphertextLength = body.length-(1+16+16+4+32);
-    if (body.length < 0) {
+    if (ciphertextLength < 0) {
         throw new Error('Invalid file: too short');
     }
 
@@ -102,18 +102,18 @@ export function decryptMegolmKeyFile(data, password) {
  */
 export function encryptMegolmKeyFile(data, password, options) {
     options = options || {};
-    const kdf_rounds = options.kdf_rounds || 100000;
+    const kdf_rounds = options.kdf_rounds || 500000;
 
     const salt = new Uint8Array(16);
     window.crypto.getRandomValues(salt);
 
-    // clear bit 63 of the salt to stop us hitting the 64-bit counter boundary
-    // (which would mean we wouldn't be able to decrypt on Android). The loss
-    // of a single bit of salt is a price we have to pay.
-    salt[9] &= 0x7f;
-
     const iv = new Uint8Array(16);
     window.crypto.getRandomValues(iv);
+
+    // clear bit 63 of the IV to stop us hitting the 64-bit counter boundary
+    // (which would mean we wouldn't be able to decrypt on Android). The loss
+    // of a single bit of iv is a price we have to pay.
+    iv[9] &= 0x7f;
 
     return deriveKeys(salt, kdf_rounds, password).then((keys) => {
         const [aes_key, hmac_key] = keys;
@@ -164,6 +164,7 @@ export function encryptMegolmKeyFile(data, password, options) {
  * @return {Promise<[CryptoKey, CryptoKey]>} promise for [aes key, hmac key]
  */
 function deriveKeys(salt, iterations, password) {
+    const start = new Date();
     return subtleCrypto.importKey(
         'raw',
         new TextEncoder().encode(password),
@@ -182,6 +183,9 @@ function deriveKeys(salt, iterations, password) {
             512
         );
     }).then((keybits) => {
+        const now = new Date();
+        console.log("E2e import/export: deriveKeys took " + (now - start) + "ms");
+
         const aes_key = keybits.slice(0, 32);
         const hmac_key = keybits.slice(32);
 

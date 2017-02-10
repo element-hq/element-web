@@ -99,7 +99,11 @@ describe('TimelinePanel', function() {
         // the document so that we can interact with it properly.
         parentDiv = document.createElement('div');
         parentDiv.style.width = '800px';
-        parentDiv.style.height = '600px';
+
+        // This has to be slightly carefully chosen. We expect to have to do
+        // exactly one pagination to fill it.
+        parentDiv.style.height = '500px';
+
         parentDiv.style.overflow = 'hidden';
         document.body.appendChild(parentDiv);
     });
@@ -235,7 +239,7 @@ describe('TimelinePanel', function() {
                 expect(client.paginateEventTimeline.callCount).toEqual(0);
                 done();
             }, 0);
-        }, 0);
+        }, 10);
     });
 
     it("should let you scroll down to the bottom after you've scrolled up", function(done) {

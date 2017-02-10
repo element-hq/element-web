@@ -43,7 +43,13 @@ const AsyncWrapper = React.createClass({
 
     componentWillMount: function() {
         this._unmounted = false;
+        // XXX: temporary logging to try to diagnose
+        // https://github.com/vector-im/riot-web/issues/3148
+        console.log('Starting load of AsyncWrapper for modal');
         this.props.loader((e) => {
+            // XXX: temporary logging to try to diagnose
+            // https://github.com/vector-im/riot-web/issues/3148
+            console.log('AsyncWrapper load completed with '+e.displayName);
             if (this._unmounted) {
                 return;
             }
@@ -177,7 +183,7 @@ class ModalManager {
 
         var modal = this._modals[0];
         var dialog = (
-            <div className={"mx_Dialog_wrapper " + modal.className}>
+            <div className={"mx_Dialog_wrapper " + (modal.className ? modal.className : '') }>
                 <div className="mx_Dialog">
                     {modal.elem}
                 </div>

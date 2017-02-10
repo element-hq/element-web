@@ -96,6 +96,9 @@ var TimelinePanel = React.createClass({
 
         // shape property to be passed to EventTiles
         tileShape: React.PropTypes.string,
+
+        // placeholder text to use if the timeline is empty
+        empty: React.PropTypes.string,
     },
 
     statics: {
@@ -986,6 +989,14 @@ var TimelinePanel = React.createClass({
             return (
                     <div className={ this.props.className + " mx_RoomView_messageListWrapper" }>
                         <Loader />
+                    </div>
+            );
+        }
+
+        if (this.state.events.length == 0 && !this.state.canBackPaginate && this.props.empty) {
+            return (
+                    <div className={ this.props.className + " mx_RoomView_messageListWrapper" }>
+                        <div className="mx_RoomView_empty">{ this.props.empty }</div>
                     </div>
             );
         }

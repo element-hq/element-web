@@ -24,6 +24,8 @@ var ObjectUtils = require("../../../ObjectUtils");
 var dis = require("../../../dispatcher");
 var ScalarAuthClient = require("../../../ScalarAuthClient");
 var ScalarMessaging = require('../../../ScalarMessaging');
+var UserSettingsStore = require('../../../UserSettingsStore');
+
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
 // as an integer, return a default.
@@ -228,10 +230,12 @@ module.exports = React.createClass({
         }
 
         // encryption
-        p = this.saveEncryption();
+        p = this.saveEnableEncryption();
         if (!q.isFulfilled(p)) {
             promises.push(p);
         }
+
+        this.saveBlacklistUnverifiedDevicesPerRoom();
 
         console.log("Performing %s operations: %s", promises.length, JSON.stringify(promises));
         return promises;
@@ -252,7 +256,7 @@ module.exports = React.createClass({
         return this.refs.url_preview_settings.saveSettings();
     },
 
-    saveEncryption: function() {
+    saveEnableEncryption: function() {
         if (!this.refs.encrypt) { return q(); }
 
         var encrypt = this.refs.encrypt.checked;
@@ -263,6 +267,29 @@ module.exports = React.createClass({
             roomId, "m.room.encryption",
             { algorithm: "m.megolm.v1.aes-sha2" }
         );
+    },
+
+    saveBlacklistUnverifiedDevicesPerRoom: function() {
+        if (!this.refs.blacklistUnverified) return;
+        if (this._isRoomBlacklistUnverified() !== this.refs.blacklistUnverified.checked) {
+            this._setRoomBlacklistUnverified(this.refs.blacklistUnverified.checked);
+        }
+    },
+
+    _isRoomBlacklistUnverified: function() {
+        var blacklistUnverifiedDevicesPerRoom = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevicesPerRoom;
+        if (blacklistUnverifiedDevicesPerRoom) {
+            return blacklistUnverifiedDevicesPerRoom[this.props.room.roomId];
+        }
+        return false;
+    },
+
+    _setRoomBlacklistUnverified: function(value) {
+        var blacklistUnverifiedDevicesPerRoom = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevicesPerRoom || {};
+        blacklistUnverifiedDevicesPerRoom[this.props.room.roomId] = value;
+        UserSettingsStore.setLocalSetting('blacklistUnverifiedDevicesPerRoom', blacklistUnverifiedDevicesPerRoom);
+
+        this.props.room.setBlacklistUnverifiedDevices(value);
     },
 
     _hasDiff: function(strA, strB) {
@@ -477,26 +504,42 @@ module.exports = React.createClass({
         var cli = MatrixClientPeg.get();
         var roomState = this.props.room.currentState;
         var isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
+        var isGlobalBlacklistUnverified = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevices;
+        var isRoomBlacklistUnverified = this._isRoomBlacklistUnverified();
+
+        var settings =
+            <label>
+                <input type="checkbox" ref="blacklistUnverified"
+                       defaultChecked={ isGlobalBlacklistUnverified || isRoomBlacklistUnverified }
+                       disabled={ isGlobalBlacklistUnverified || (this.refs.encrypt && !this.refs.encrypt.checked) }/>
+                Never send encrypted messages to unverified devices in this room from this device.
+            </label>;
 
         if (!isEncrypted &&
                 roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
             return (
-                <label>
-                    <input type="checkbox" ref="encrypt" onClick={ this.onEnableEncryptionClick }/>
-                    <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
-                    Enable encryption (warning: cannot be disabled again!)
-                </label>
+                <div>
+                    <label>
+                        <input type="checkbox" ref="encrypt" onClick={ this.onEnableEncryptionClick }/>
+                        <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                        Enable encryption (warning: cannot be disabled again!)
+                    </label>
+                    { settings }
+                </div>
             );
         }
         else {
             return (
-                <label>
-                { isEncrypted
-                  ? <img className="mx_RoomSettings_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" />
-                  : <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
-                }
-                Encryption is { isEncrypted ? "" : "not " } enabled in this room.
-                </label>
+                <div>
+                    <label>
+                    { isEncrypted
+                      ? <img className="mx_RoomSettings_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" />
+                      : <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                    }
+                    Encryption is { isEncrypted ? "" : "not " } enabled in this room.
+                    </label>
+                    { settings }
+                </div>
             );
         }
     },
