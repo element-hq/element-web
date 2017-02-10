@@ -191,7 +191,8 @@ module.exports = React.createClass({
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
 
-        // Persist the team token across refreshes
+        // Persist the team token across refreshes using sessionStorage. A new window or
+        // tab will not persist sessionStorage, but refreshes will.
         if (this.props.startingFragmentQueryParams.team_token) {
             window.sessionStorage.setItem(
                 'mx_team_token',
