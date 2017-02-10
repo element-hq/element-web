@@ -7,14 +7,20 @@ import {PillCompletion} from './Components';
 import type {SelectionRange, Completion} from './Autocompleter';
 
 const EMOJI_REGEX = /:\w*:?/g;
-const EMOJI_SHORTNAMES = Object.keys(emojioneList);
+const EMOJI_SHORTNAMES = Object.keys(emojioneList).map(shortname => {
+    return {
+        shortname,
+    };
+});
 
 let instance = null;
 
 export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
-        this.matcher = new FuzzyMatcher(EMOJI_SHORTNAMES);
+        this.matcher = new FuzzyMatcher(EMOJI_SHORTNAMES, {
+            keys: 'shortname',
+        });
     }
 
     async getCompletions(query: string, selection: SelectionRange) {
@@ -24,7 +30,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         let {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
             completions = this.matcher.match(command[0]).map(result => {
-                const shortname = EMOJI_SHORTNAMES[result];
+                const {shortname} = result;
                 const unicode = shortnameToUnicode(shortname);
                 return {
                     completion: unicode,
