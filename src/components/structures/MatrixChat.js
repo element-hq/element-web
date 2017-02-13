@@ -975,6 +975,11 @@ module.exports = React.createClass({
         this._setPage(PageTypes.UserSettings);
     },
 
+    onTeamMemberRegistered: function(teamToken) {
+        this._teamToken = teamToken;
+        this._setPage(PageTypes.HomePage);
+    },
+
     onFinishPostRegistration: function() {
         // Don't confuse this with "PageType" which is the middle window to show
         this.setState({
@@ -1103,6 +1108,7 @@ module.exports = React.createClass({
                     customIsUrl={this.getCurrentIsUrl()}
                     registrationUrl={this.props.registrationUrl}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
+                    onTeamMemberRegistered={this.onTeamMemberRegistered}
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
                     onRegisterClick={this.onRegisterClick}

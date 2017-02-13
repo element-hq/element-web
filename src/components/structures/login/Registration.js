@@ -58,6 +58,7 @@ module.exports = React.createClass({
             teamServerURL: React.PropTypes.string.isRequired,
         }),
         teamSelected: React.PropTypes.object,
+        onTeamMemberRegistered: React.PropTypes.func.isRequired,
 
         defaultDeviceDisplayName: React.PropTypes.string,
 
@@ -227,9 +228,7 @@ module.exports = React.createClass({
                     const teamToken = data.team_token;
                     // Store for use /w welcome pages
                     window.localStorage.setItem('mx_team_token', teamToken);
-                    // Set the team token and view homepage
-                    window.matrixChat._teamToken = teamToken;
-                    window.mxDispatcher.dispatch({action: 'view_home_page'});
+                    self.props.onTeamMemberRegistered(teamToken);
 
                     self._rtsClient.getTeam(teamToken).then((team) => {
                         console.log(
