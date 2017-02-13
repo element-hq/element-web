@@ -49,10 +49,6 @@ export default React.createClass({
         };
     },
 
-    _onCancelClick: function() {
-        this.props.onFinished(false);
-    },
-
     render: function() {
         const InteractiveAuth = sdk.getComponent("structures.InteractiveAuth");
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');

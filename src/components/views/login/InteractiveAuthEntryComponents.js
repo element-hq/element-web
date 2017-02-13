@@ -21,7 +21,7 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
 /* This file contains a collection of components which are used by the
- * InteractiveAuthDialog to prompt the user to enter the information needed
+ * InteractiveAuth to prompt the user to enter the information needed
  * for an auth stage. (The intention is that they could also be used for other
  * components, such as the registration flow).
  *
@@ -187,7 +187,7 @@ export const FallbackAuthEntry = React.createClass({
         }
     },
 
-    onSubmitClick: function() {
+    _onShowFallbackClick: function() {
         var url = MatrixClientPeg.get().getFallbackAuthUrl(
             this.props.loginType,
             this.props.authSessionId
@@ -207,7 +207,7 @@ export const FallbackAuthEntry = React.createClass({
     render: function() {
         return (
             <div>
-                Click "Submit" to authenticate
+                <a onClick={this._onShowFallbackClick}>Start authentication</a>
                 <div className="error">
                     {this.props.errorText}
                 </div>

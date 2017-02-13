@@ -38,6 +38,10 @@ export default React.createClass({
         // callback
         makeRequest: React.PropTypes.func.isRequired,
 
+        // callback called when the auth process has finished
+        // @param {bool} status True if the operation requiring
+        //     auth was completed sucessfully, false if canceled.
+        // @param result The result of the authenticated call
         onFinished: React.PropTypes.func.isRequired,
     },
 
@@ -107,10 +111,6 @@ export default React.createClass({
         }
     },
 
-    _onCancel: function() {
-        this.props.onFinished(false);
-    },
-
     _submitAuthDict: function(authData) {
         this._authLogic.submitAuthDict(authData);
     },
@@ -131,8 +131,6 @@ export default React.createClass({
     },
 
     render: function() {
-        const Loader = sdk.getComponent("elements.Spinner");
-
         let error = null;
         if (this.state.errorText) {
             error = (

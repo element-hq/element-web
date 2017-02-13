@@ -61,8 +61,6 @@ export default React.createClass({
     },
 
     _onCancelClick: function(e) {
-        e.stopPropagation();
-        e.preventDefault();
         this.props.onFinished();
     },
 
