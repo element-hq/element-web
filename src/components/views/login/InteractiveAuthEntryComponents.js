@@ -49,11 +49,14 @@ export const PasswordAuthEntry = React.createClass({
     propTypes: {
         submitAuthDict: React.PropTypes.func.isRequired,
         errorText: React.PropTypes.string,
+        // is the auth logic currently waiting for something to
+        // happen?
+        busy: React.PropTypes.bool,
     },
 
     getInitialState: function() {
         return {
-            enableSubmit: false,
+            passwordValid: false,
         };
     },
 
@@ -63,7 +66,10 @@ export const PasswordAuthEntry = React.createClass({
         }
     },
 
-    _onSubmit: function() {
+    _onSubmit: function(e) {
+        e.preventDefault();
+        if (this.props.busy) return;
+
         this.props.submitAuthDict({
             type: PasswordAuthEntry.LOGIN_TYPE,
             user: MatrixClientPeg.get().credentials.userId,
@@ -74,7 +80,7 @@ export const PasswordAuthEntry = React.createClass({
     _onPasswordFieldChange: function(ev) {
         // enable the submit button iff the password is non-empty
         this.setState({
-            enableSubmit: Boolean(this.refs.passwordField.value),
+            passwordValid: Boolean(this.refs.passwordField.value),
         });
     },
 
@@ -83,6 +89,19 @@ export const PasswordAuthEntry = React.createClass({
 
         if (this.props.errorText) {
             passwordBoxClass = 'error';
+        }
+
+        let submitButtonOrSpinner;
+        if (this.props.busy) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            submitButtonOrSpinner = <Loader />;
+        } else {
+            submitButtonOrSpinner = (
+                <input type="submit"
+                    className="mx_Dialog_primary"
+                    disabled={!this.state.passwordValid}
+                />
+            );
         }
 
         return (
@@ -97,10 +116,7 @@ export const PasswordAuthEntry = React.createClass({
                         type="password"
                     />
                     <div className="mx_button_row">
-                        <input type="submit"
-                            className="mx_Dialog_primary"
-                            disabled={!this.state.enableSubmit}
-                        />
+                        {submitButtonOrSpinner}
                     </div>
                 </form>
                 <div className="error">

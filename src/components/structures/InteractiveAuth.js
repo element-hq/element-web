@@ -125,6 +125,7 @@ export default React.createClass({
                 stageParams={this._authLogic.getStageParams(stage)}
                 submitAuthDict={this._submitAuthDict}
                 errorText={this.state.stageErrorText}
+                busy={this.state.busy}
             />
         );
     },
