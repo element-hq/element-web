@@ -197,7 +197,7 @@ module.exports = React.createClass({
         let routedTeamToken = null;
         if (this.props.config.teamTokenMap) {
             const teamName = window.location.pathname.split('/')[1];
-            if (this.props.config.teamTokenMap.hasOwnProperty(teamName)) {
+            if (teamName && this.props.config.teamTokenMap.hasOwnProperty(teamName)) {
                 routedTeamToken = this.props.config.teamTokenMap[teamName];
             }
         }
