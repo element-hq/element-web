@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 
 import * as KeyCode from '../../../KeyCode';
+import AccessibleButton from '../elements/AccessibleButton';
 
 /**
  * Basic container for modal dialogs.
@@ -59,9 +60,23 @@ export default React.createClass({
         }
     },
 
+    _onCancelClick: function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.props.onFinished();
+    },
+
     render: function() {
         return (
             <div onKeyDown={this._onKeyDown} className={this.props.className}>
+                <AccessibleButton onClick={this._onCancelClick}
+                    className="mx_Dialog_cancelButton"
+                >
+                    <img
+                        src="img/cancel.svg" width="18" height="18"
+                        alt="Cancel" title="Cancel"
+                    />
+                </AccessibleButton>
                 <div className='mx_Dialog_title'>
                     { this.props.title }
                 </div>

@@ -32,7 +32,6 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
  * stageParams:            params from the server for the stage being attempted
  * errorText:              error message from a previous attempt to authenticate
  * submitAuthDict:         a function which will be called with the new auth dict
- * setSubmitButtonEnabled: a function which will enable/disable the 'submit' button
  *
  * Each component may also provide the following functions (beyond the standard React ones):
  *    onSubmitClick: handle a 'submit' button click
@@ -48,12 +47,13 @@ export const PasswordAuthEntry = React.createClass({
 
     propTypes: {
         submitAuthDict: React.PropTypes.func.isRequired,
-        setSubmitButtonEnabled: React.PropTypes.func.isRequired,
         errorText: React.PropTypes.string,
     },
 
-    componentWillMount: function() {
-        this.props.setSubmitButtonEnabled(false);
+    getInitialState: function() {
+        return {
+            enableSubmit: false,
+        };
     },
 
     focus: function() {
@@ -62,7 +62,7 @@ export const PasswordAuthEntry = React.createClass({
         }
     },
 
-    onSubmitClick: function() {
+    _onSubmit: function() {
         this.props.submitAuthDict({
             type: PasswordAuthEntry.LOGIN_TYPE,
             user: MatrixClientPeg.get().credentials.userId,
@@ -72,7 +72,9 @@ export const PasswordAuthEntry = React.createClass({
 
     _onPasswordFieldChange: function(ev) {
         // enable the submit button iff the password is non-empty
-        this.props.setSubmitButtonEnabled(Boolean(ev.target.value));
+        this.setState({
+            enableSubmit: Boolean(this.refs.passwordField.value),
+        });
     },
 
     render: function() {
@@ -86,12 +88,20 @@ export const PasswordAuthEntry = React.createClass({
             <div>
                 <p>To continue, please enter your password.</p>
                 <p>Password:</p>
-                <input
-                    ref="passwordField"
-                    className={passwordBoxClass}
-                    onChange={this._onPasswordFieldChange}
-                    type="password"
-                />
+                <form onSubmit={this._onSubmit}>
+                    <input
+                        ref="passwordField"
+                        className={passwordBoxClass}
+                        onChange={this._onPasswordFieldChange}
+                        type="password"
+                    />
+                    <div className="mx_button_row">
+                        <input type="submit"
+                            className="mx_Dialog_primary"
+                            disabled={!this.state.enableSubmit}
+                        />
+                    </div>
+                </form>
                 <div className="error">
                     {this.props.errorText}
                 </div>
@@ -110,12 +120,7 @@ export const RecaptchaAuthEntry = React.createClass({
     propTypes: {
         submitAuthDict: React.PropTypes.func.isRequired,
         stageParams: React.PropTypes.object.isRequired,
-        setSubmitButtonEnabled: React.PropTypes.func.isRequired,
         errorText: React.PropTypes.string,
-    },
-
-    componentWillMount: function() {
-        this.props.setSubmitButtonEnabled(false);
     },
 
     _onCaptchaResponse: function(response) {
@@ -148,7 +153,6 @@ export const FallbackAuthEntry = React.createClass({
         authSessionId: React.PropTypes.string.isRequired,
         loginType: React.PropTypes.string.isRequired,
         submitAuthDict: React.PropTypes.func.isRequired,
-        setSubmitButtonEnabled: React.PropTypes.func.isRequired,
         errorText: React.PropTypes.string,
     },
 
@@ -156,7 +160,6 @@ export const FallbackAuthEntry = React.createClass({
         // we have to make the user click a button, as browsers will block
         // the popup if we open it immediately.
         this._popupWindow = null;
-        this.props.setSubmitButtonEnabled(true);
         window.addEventListener("message", this._onReceiveMessage);
     },
 
@@ -173,7 +176,6 @@ export const FallbackAuthEntry = React.createClass({
             this.props.authSessionId
         );
         this._popupWindow = window.open(url);
-        this.props.setSubmitButtonEnabled(false);
     },
 
     _onReceiveMessage: function(event) {
