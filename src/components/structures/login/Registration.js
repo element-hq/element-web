@@ -213,16 +213,19 @@ module.exports = React.createClass({
                 accessToken: response.access_token
             });
 
+            // Done regardless of `teamSelected`. People registering with non-team emails
+            // will just nop. The point of this being we might not have the email address
+            // that the user registered with at this stage (depending on whether this
+            // is the client they initiated registration).
             if (
                 self._rtsClient &&
-                self.props.referrer &&
-                self.state.teamSelected
+                self.props.referrer
             ) {
                 // Track referral, get team_token in order to retrieve team config
                 self._rtsClient.trackReferral(
                     self.props.referrer,
-                    response.user_id,
-                    self.state.formVals.email
+                    self.registerLogic.params.idSid,
+                    self.registerLogic.params.clientSecret
                 ).then((data) => {
                     const teamToken = data.team_token;
                     // Store for use /w welcome pages
