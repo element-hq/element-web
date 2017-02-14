@@ -20,6 +20,7 @@ limitations under the License.
 }
 
 .mx_RoomSettings_leaveButton,
+.mx_RoomSettings_unbanButton,
 .mx_RoomSettings_integrationsButton,
 .mx_RoomSettings_integrationsButton_error {
     position: relative;
@@ -30,10 +31,14 @@ limitations under the License.
     color: $accent-fg-color;
     line-height: 34px;
     text-align: center;
-    float: right;
     cursor: pointer;
     padding-left: 12px;
     padding-right: 12px;
+}
+.mx_RoomSettings_leaveButton,
+.mx_RoomSettings_integrationsButton,
+.mx_RoomSettings_integrationsButton_error {
+    float: right;
 }
 .mx_RoomSettings_integrationsButton_error {
     pointer: not-allowed;
@@ -49,6 +54,9 @@ limitations under the License.
     border-radius: 5px;
     background-color: $accent-color;
     color: $accent-fg-color;
+}
+.mx_RoomSettings_unbanButton {
+    display: inline;
 }
 
 .mx_RoomSettings_e2eIcon {
@@ -227,4 +235,7 @@ limitations under the License.
     padding: 6px;
     padding-left: 1em;
     padding-right: 1em;
+}
+
+.mx_RoomSettings_unban_button {
 }
