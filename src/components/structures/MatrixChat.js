@@ -217,6 +217,12 @@ module.exports = React.createClass({
             window.localStorage.getItem('mx_team_token') ||
             window.sessionStorage.getItem('mx_team_token');
 
+        // Some users have ended up with "undefined" as their local storage team token,
+        // treat that as undefined.
+        if (this._teamToken === "undefined") {
+            this._teamToken = undefined;
+        }
+
         if (this._teamToken) {
             console.info(`Team token set to ${this._teamToken}`);
         }
