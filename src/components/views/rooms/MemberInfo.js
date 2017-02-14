@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,16 +26,16 @@ limitations under the License.
  * 'muted': boolean,
  * 'isTargetMod': boolean
  */
-var React = require('react');
-var classNames = require('classnames');
-var dis = require("../../../dispatcher");
-var Modal = require("../../../Modal");
-var sdk = require('../../../index');
-var createRoom = require('../../../createRoom');
-var DMRoomMap = require('../../../utils/DMRoomMap');
-var Unread = require('../../../Unread');
-var Receipt = require('../../../utils/Receipt');
-var WithMatrixClient = require('../../../wrappers/WithMatrixClient');
+import React from 'react';
+import classNames from 'classnames';
+import dis from '../../../dispatcher';
+import Modal from '../../../Modal';
+import sdk from '../../../index';
+import createRoom from '../../../createRoom';
+import DMRoomMap from '../../../utils/DMRoomMap';
+import Unread from '../../../Unread';
+import { findReadReceiptFromUserId } from '../../../utils/Receipt';
+import WithMatrixClient from '../../../wrappers/WithMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
 
 module.exports = WithMatrixClient(React.createClass({
@@ -43,13 +44,6 @@ module.exports = WithMatrixClient(React.createClass({
     propTypes: {
         matrixClient: React.PropTypes.object.isRequired,
         member: React.PropTypes.object.isRequired,
-        onFinished: React.PropTypes.func,
-    },
-
-    getDefaultProps: function() {
-        return {
-            onFinished: function() {}
-        };
     },
 
     getInitialState: function() {
@@ -164,7 +158,7 @@ module.exports = WithMatrixClient(React.createClass({
     onRoomReceipt: function(receiptEvent, room) {
         // because if we read a notification, it will affect notification count
         // only bother updating if there's a receipt from us
-        if (Receipt.findReadReceiptFromUserId(receiptEvent, this.props.matrixClient.credentials.userId)) {
+        if (findReadReceiptFromUserId(receiptEvent, this.props.matrixClient.credentials.userId)) {
             this.forceUpdate();
         }
     },
@@ -224,46 +218,64 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     onKick: function() {
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        var roomId = this.props.member.roomId;
-        var target = this.props.member.userId;
-        this.setState({ updating: this.state.updating + 1 });
-        this.props.matrixClient.kick(roomId, target).then(function() {
-                // NO-OP; rely on the m.room.member event coming down else we could
-                // get out of sync if we force setState here!
-                console.log("Kick success");
-            }, function(err) {
-                Modal.createDialog(ErrorDialog, {
-                    title: "Kick error",
-                    description: err.message
+        const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
+        Modal.createDialog(ConfirmUserActionDialog, {
+            member: this.props.member,
+            action: 'Kick',
+            danger: true,
+            onFinished: (proceed) => {
+                if (!proceed) return;
+
+                this.setState({ updating: this.state.updating + 1 });
+                this.props.matrixClient.kick(
+                    this.props.member.roomId, this.props.member.userId,
+                ).then(function() {
+                        // NO-OP; rely on the m.room.member event coming down else we could
+                        // get out of sync if we force setState here!
+                        console.log("Kick success");
+                    }, function(err) {
+                        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Kick error",
+                            description: err.message
+                        });
+                    }
+                ).finally(()=>{
+                    this.setState({ updating: this.state.updating - 1 });
                 });
             }
-        ).finally(()=>{
-            this.setState({ updating: this.state.updating - 1 });
         });
-        this.props.onFinished();
     },
 
     onBan: function() {
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        var roomId = this.props.member.roomId;
-        var target = this.props.member.userId;
-        this.setState({ updating: this.state.updating + 1 });
-        this.props.matrixClient.ban(roomId, target).then(
-            function() {
-                // NO-OP; rely on the m.room.member event coming down else we could
-                // get out of sync if we force setState here!
-                console.log("Ban success");
-            }, function(err) {
-                Modal.createDialog(ErrorDialog, {
-                    title: "Ban error",
-                    description: err.message
+        const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
+        Modal.createDialog(ConfirmUserActionDialog, {
+            member: this.props.member,
+            action: 'Ban',
+            danger: true,
+            onFinished: (proceed) => {
+                if (!proceed) return;
+
+                this.setState({ updating: this.state.updating + 1 });
+                this.props.matrixClient.ban(
+                    this.props.member.roomId, this.props.member.userId,
+                ).then(
+                    function() {
+                        // NO-OP; rely on the m.room.member event coming down else we could
+                        // get out of sync if we force setState here!
+                        console.log("Ban success");
+                    }, function(err) {
+                        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        Modal.createDialog(ErrorDialog, {
+                            title: "Ban error",
+                            description: err.message,
+                        });
+                    }
+                ).finally(()=>{
+                    this.setState({ updating: this.state.updating - 1 });
                 });
-            }
-        ).finally(()=>{
-            this.setState({ updating: this.state.updating - 1 });
+            },
         });
-        this.props.onFinished();
     },
 
     onMuteToggle: function() {
@@ -272,14 +284,12 @@ module.exports = WithMatrixClient(React.createClass({
         var target = this.props.member.userId;
         var room = this.props.matrixClient.getRoom(roomId);
         if (!room) {
-            this.props.onFinished();
             return;
         }
         var powerLevelEvent = room.currentState.getStateEvents(
             "m.room.power_levels", ""
         );
         if (!powerLevelEvent) {
-            this.props.onFinished();
             return;
         }
         var isMuted = this.state.muted;
@@ -314,7 +324,6 @@ module.exports = WithMatrixClient(React.createClass({
                 this.setState({ updating: this.state.updating - 1 });
             });
         }
-        this.props.onFinished();
     },
 
     onModToggle: function() {
@@ -323,19 +332,16 @@ module.exports = WithMatrixClient(React.createClass({
         var target = this.props.member.userId;
         var room = this.props.matrixClient.getRoom(roomId);
         if (!room) {
-            this.props.onFinished();
             return;
         }
         var powerLevelEvent = room.currentState.getStateEvents(
             "m.room.power_levels", ""
         );
         if (!powerLevelEvent) {
-            this.props.onFinished();
             return;
         }
         var me = room.getMember(this.props.matrixClient.credentials.userId);
         if (!me) {
-            this.props.onFinished();
             return;
         }
         var defaultLevel = powerLevelEvent.getContent().users_default;
@@ -366,7 +372,6 @@ module.exports = WithMatrixClient(React.createClass({
         ).finally(()=>{
             this.setState({ updating: this.state.updating - 1 });
         });
-        this.props.onFinished();
     },
 
     _applyPowerChange: function(roomId, target, powerLevel, powerLevelEvent) {
@@ -386,7 +391,6 @@ module.exports = WithMatrixClient(React.createClass({
         ).finally(()=>{
             this.setState({ updating: this.state.updating - 1 });
         }).done();
-        this.props.onFinished();
     },
 
     onPowerChange: function(powerLevel) {
@@ -396,14 +400,12 @@ module.exports = WithMatrixClient(React.createClass({
         var room = this.props.matrixClient.getRoom(roomId);
         var self = this;
         if (!room) {
-            this.props.onFinished();
             return;
         }
         var powerLevelEvent = room.currentState.getStateEvents(
             "m.room.power_levels", ""
         );
         if (!powerLevelEvent) {
-            this.props.onFinished();
             return;
         }
         if (powerLevelEvent.getContent().users) {
@@ -422,9 +424,6 @@ module.exports = WithMatrixClient(React.createClass({
                         if (confirmed) {
                             self._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
                         }
-                        else {
-                            self.props.onFinished();
-                        }
                     },
                 });
             }
@@ -440,7 +439,6 @@ module.exports = WithMatrixClient(React.createClass({
     onNewDMClick: function() {
         this.setState({ updating: this.state.updating + 1 });
         createRoom({dmUserId: this.props.member.userId}).finally(() => {
-            this.props.onFinished();
             this.setState({ updating: this.state.updating - 1 });
         }).done();
     },
@@ -450,7 +448,6 @@ module.exports = WithMatrixClient(React.createClass({
             action: 'leave_room',
             room_id: this.props.member.roomId,
         });
-        this.props.onFinished();
     },
 
     _calculateOpsPermissions: function(member) {

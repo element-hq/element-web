@@ -217,6 +217,12 @@ module.exports = React.createClass({
             window.localStorage.getItem('mx_team_token') ||
             window.sessionStorage.getItem('mx_team_token');
 
+        // Some users have ended up with "undefined" as their local storage team token,
+        // treat that as undefined.
+        if (this._teamToken === "undefined") {
+            this._teamToken = undefined;
+        }
+
         if (this._teamToken) {
             console.info(`Team token set to ${this._teamToken}`);
         }
@@ -903,14 +909,6 @@ module.exports = React.createClass({
 
     onUserClick: function(event, userId) {
         event.preventDefault();
-
-        // var MemberInfo = sdk.getComponent('rooms.MemberInfo');
-        // var member = new Matrix.RoomMember(null, userId);
-        // ContextualMenu.createMenu(MemberInfo, {
-        //     member: member,
-        //     right: window.innerWidth - event.pageX,
-        //     top: event.pageY
-        // });
 
         var member = new Matrix.RoomMember(null, userId);
         if (!member) { return; }
