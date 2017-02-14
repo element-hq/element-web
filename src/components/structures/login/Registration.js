@@ -58,6 +58,7 @@ module.exports = React.createClass({
             teamServerURL: React.PropTypes.string.isRequired,
         }),
         teamSelected: React.PropTypes.object,
+        onTeamMemberRegistered: React.PropTypes.func.isRequired,
 
         defaultDeviceDisplayName: React.PropTypes.string,
 
@@ -230,6 +231,7 @@ module.exports = React.createClass({
                     const teamToken = data.team_token;
                     // Store for use /w welcome pages
                     window.localStorage.setItem('mx_team_token', teamToken);
+                    self.props.onTeamMemberRegistered(teamToken);
 
                     self._rtsClient.getTeam(teamToken).then((team) => {
                         console.log(
