@@ -149,6 +149,7 @@ class EmailIdentityStage extends Stage {
             nextLink
         ).then(function(response) {
             self.sid = response.sid;
+            self.signupInstance.setIdSid(self.sid);
             return self._completeVerify();
         }).then(function(request) {
             request.poll_for_success = true;
