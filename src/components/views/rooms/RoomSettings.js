@@ -35,6 +35,47 @@ function parseIntWithDefault(val, def) {
     return isNaN(res) ? def : res;
 }
 
+const BannedUser = React.createClass({
+    propTypes: {
+        member: React.PropTypes.string.isRequired,
+    },
+
+    _onUnbanClick: function() {
+        const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
+        Modal.createDialog(ConfirmUserActionDialog, {
+            member: this.props.member,
+            action: 'Unban',
+            danger: false,
+            onFinished: (proceed) => {
+                if (!proceed) return;
+
+                MatrixClientPeg.get().unban(
+                    this.props.member.roomId, this.props.member.userId,
+                ).catch((err) => {
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Failed to unban",
+                        description: err.message,
+                    });
+                }).done();
+            },
+        });
+    },
+
+    render: function() {
+        return (
+            <li>
+                <AccessibleButton className="mx_RoomSettings_unbanButton"
+                    onClick={this._onUnbanClick}
+                >
+                    Unban
+                </AccessibleButton>
+                {this.props.member.userId}
+            </li>
+        );
+    }
+});
+
 module.exports = React.createClass({
     displayName: 'RoomSettings',
 
@@ -74,6 +115,9 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         ScalarMessaging.startListening();
+
+        MatrixClientPeg.get().on("RoomMember.membership", this._onRoomMemberMembership);
+
         MatrixClientPeg.get().getRoomDirectoryVisibility(
             this.props.room.roomId
         ).done((result) => {
@@ -101,6 +145,8 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         ScalarMessaging.stopListening();
+
+        MatrixClientPeg.get().removeListener("RoomMember.membership", this._onRoomMemberMembership);
 
         dis.dispatch({
             action: 'ui_opacity',
@@ -501,6 +547,11 @@ module.exports = React.createClass({
         });
     },
 
+    _onRoomMemberMembership: function() {
+        // Update, since our banned user list may have changed
+        this.forceUpdate();
+    },
+
     _renderEncryptionSection: function() {
         var cli = MatrixClientPeg.get();
         var roomState = this.props.room.currentState;
@@ -611,11 +662,9 @@ module.exports = React.createClass({
                 <div>
                     <h3>Banned users</h3>
                     <ul className="mx_RoomSettings_banned">
-                        {banned.map(function(member, i) {
+                        {banned.map(function(member) {
                             return (
-                                <li key={i}>
-                                    {member.userId}
-                                </li>
+                                <BannedUser key={member.userId} member={member} />
                             );
                         })}
                     </ul>
