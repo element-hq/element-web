@@ -34,7 +34,7 @@ import sdk from '../../../index';
 import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import Unread from '../../../Unread';
-import findReadReceiptFromUserId from '../../../utils/Receipt';
+import { findReadReceiptFromUserId } from '../../../utils/Receipt';
 import WithMatrixClient from '../../../wrappers/WithMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
 
