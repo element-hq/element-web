@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
 /* This file contains a collection of components which are used by the
- * InteractiveAuthDialog to prompt the user to enter the information needed
+ * InteractiveAuth to prompt the user to enter the information needed
  * for an auth stage. (The intention is that they could also be used for other
  * components, such as the registration flow).
  *
@@ -32,10 +33,10 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
  * stageParams:            params from the server for the stage being attempted
  * errorText:              error message from a previous attempt to authenticate
  * submitAuthDict:         a function which will be called with the new auth dict
- * setSubmitButtonEnabled: a function which will enable/disable the 'submit' button
+ * busy:                   a boolean indicating whether the auth logic is doing something
+ *                         the user needs to wait for.
  *
  * Each component may also provide the following functions (beyond the standard React ones):
- *    onSubmitClick: handle a 'submit' button click
  *    focus: set the input focus appropriately in the form.
  */
 
@@ -48,12 +49,16 @@ export const PasswordAuthEntry = React.createClass({
 
     propTypes: {
         submitAuthDict: React.PropTypes.func.isRequired,
-        setSubmitButtonEnabled: React.PropTypes.func.isRequired,
         errorText: React.PropTypes.string,
+        // is the auth logic currently waiting for something to
+        // happen?
+        busy: React.PropTypes.bool,
     },
 
-    componentWillMount: function() {
-        this.props.setSubmitButtonEnabled(false);
+    getInitialState: function() {
+        return {
+            passwordValid: false,
+        };
     },
 
     focus: function() {
@@ -62,7 +67,10 @@ export const PasswordAuthEntry = React.createClass({
         }
     },
 
-    onSubmitClick: function() {
+    _onSubmit: function(e) {
+        e.preventDefault();
+        if (this.props.busy) return;
+
         this.props.submitAuthDict({
             type: PasswordAuthEntry.LOGIN_TYPE,
             user: MatrixClientPeg.get().credentials.userId,
@@ -72,7 +80,9 @@ export const PasswordAuthEntry = React.createClass({
 
     _onPasswordFieldChange: function(ev) {
         // enable the submit button iff the password is non-empty
-        this.props.setSubmitButtonEnabled(Boolean(ev.target.value));
+        this.setState({
+            passwordValid: Boolean(this.refs.passwordField.value),
+        });
     },
 
     render: function() {
@@ -82,16 +92,34 @@ export const PasswordAuthEntry = React.createClass({
             passwordBoxClass = 'error';
         }
 
+        let submitButtonOrSpinner;
+        if (this.props.busy) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            submitButtonOrSpinner = <Loader />;
+        } else {
+            submitButtonOrSpinner = (
+                <input type="submit"
+                    className="mx_Dialog_primary"
+                    disabled={!this.state.passwordValid}
+                />
+            );
+        }
+
         return (
             <div>
                 <p>To continue, please enter your password.</p>
                 <p>Password:</p>
-                <input
-                    ref="passwordField"
-                    className={passwordBoxClass}
-                    onChange={this._onPasswordFieldChange}
-                    type="password"
-                />
+                <form onSubmit={this._onSubmit}>
+                    <input
+                        ref="passwordField"
+                        className={passwordBoxClass}
+                        onChange={this._onPasswordFieldChange}
+                        type="password"
+                    />
+                    <div className="mx_button_row">
+                        {submitButtonOrSpinner}
+                    </div>
+                </form>
                 <div className="error">
                     {this.props.errorText}
                 </div>
@@ -110,12 +138,7 @@ export const RecaptchaAuthEntry = React.createClass({
     propTypes: {
         submitAuthDict: React.PropTypes.func.isRequired,
         stageParams: React.PropTypes.object.isRequired,
-        setSubmitButtonEnabled: React.PropTypes.func.isRequired,
         errorText: React.PropTypes.string,
-    },
-
-    componentWillMount: function() {
-        this.props.setSubmitButtonEnabled(false);
     },
 
     _onCaptchaResponse: function(response) {
@@ -148,7 +171,6 @@ export const FallbackAuthEntry = React.createClass({
         authSessionId: React.PropTypes.string.isRequired,
         loginType: React.PropTypes.string.isRequired,
         submitAuthDict: React.PropTypes.func.isRequired,
-        setSubmitButtonEnabled: React.PropTypes.func.isRequired,
         errorText: React.PropTypes.string,
     },
 
@@ -156,7 +178,6 @@ export const FallbackAuthEntry = React.createClass({
         // we have to make the user click a button, as browsers will block
         // the popup if we open it immediately.
         this._popupWindow = null;
-        this.props.setSubmitButtonEnabled(true);
         window.addEventListener("message", this._onReceiveMessage);
     },
 
@@ -167,13 +188,12 @@ export const FallbackAuthEntry = React.createClass({
         }
     },
 
-    onSubmitClick: function() {
+    _onShowFallbackClick: function() {
         var url = MatrixClientPeg.get().getFallbackAuthUrl(
             this.props.loginType,
             this.props.authSessionId
         );
         this._popupWindow = window.open(url);
-        this.props.setSubmitButtonEnabled(false);
     },
 
     _onReceiveMessage: function(event) {
@@ -188,7 +208,7 @@ export const FallbackAuthEntry = React.createClass({
     render: function() {
         return (
             <div>
-                Click "Submit" to authenticate
+                <a onClick={this._onShowFallbackClick}>Start authentication</a>
                 <div className="error">
                     {this.props.errorText}
                 </div>
