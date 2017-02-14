@@ -35,7 +35,6 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
  * submitAuthDict:         a function which will be called with the new auth dict
  *
  * Each component may also provide the following functions (beyond the standard React ones):
- *    onSubmitClick: handle a 'submit' button click
  *    focus: set the input focus appropriately in the form.
  */
 
