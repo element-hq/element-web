@@ -21,7 +21,7 @@ import classnames from 'classnames';
 /*
  * A dialog for confirming an operation on another user.
  * Takes a user ID and a verb, displays the target user prominently
- * such that it should be easy to confirm that tne operation is being
+ * such that it should be easy to confirm that the operation is being
  * performed on the right person, and displays the operation prominently
  * to make it obvious what is going to happen.
  * Also tweaks the style for 'dangerous' actions (albeit only with colour)
@@ -29,7 +29,7 @@ import classnames from 'classnames';
 export default React.createClass({
     displayName: 'ConfirmUserActionDialog',
     propTypes: {
-        member: React.PropTypes.object.isRequired, // member object
+        member: React.PropTypes.object.isRequired, // matrix-js-sdk member object
         action: React.PropTypes.string.isRequired, // eg. 'Ban'
         danger: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired,
