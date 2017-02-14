@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -152,6 +153,7 @@ textarea {
     font-size: 15px;
     position: relative;
     padding-left: 58px;
+    padding-bottom: 36px;
     width: 60%;
     max-width: 704px;
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
@@ -184,15 +186,18 @@ textarea {
     pointer-events: none;
 }
 
+.mx_Dialog_cancelButton {
+    float: right;
+    margin-top: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
 .mx_Dialog_content {
     margin: 24px 58px 68px 0;
     font-size: 14px;
     color: $primary-fg-color;
     word-wrap: break-word;
-}
-
-.mx_Dialog_buttons {
-    padding-bottom: 36px;
 }
 
 .mx_Dialog button, .mx_Dialog input[type="submit"] {
@@ -284,6 +289,10 @@ textarea {
     padding-right: 1em;
     cursor: pointer;
     display: inline;
+}
+
+.mx_button_row {
+    margin-top: 69px;
 }
 
 .changelog_text {
