@@ -33,6 +33,8 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
  * stageParams:            params from the server for the stage being attempted
  * errorText:              error message from a previous attempt to authenticate
  * submitAuthDict:         a function which will be called with the new auth dict
+ * busy:                   a boolean indicating whether the auth logic is doing something
+ *                         the user needs to wait for.
  *
  * Each component may also provide the following functions (beyond the standard React ones):
  *    focus: set the input focus appropriately in the form.
