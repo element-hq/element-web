@@ -34,7 +34,7 @@ import sdk from '../../../index';
 import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import Unread from '../../../Unread';
-import Receipt from '../../../utils/Receipt';
+import findReadReceiptFromUserId from '../../../utils/Receipt';
 import WithMatrixClient from '../../../wrappers/WithMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
 
@@ -158,7 +158,7 @@ module.exports = WithMatrixClient(React.createClass({
     onRoomReceipt: function(receiptEvent, room) {
         // because if we read a notification, it will affect notification count
         // only bother updating if there's a receipt from us
-        if (Receipt.findReadReceiptFromUserId(receiptEvent, this.props.matrixClient.credentials.userId)) {
+        if (findReadReceiptFromUserId(receiptEvent, this.props.matrixClient.credentials.userId)) {
             this.forceUpdate();
         }
     },
