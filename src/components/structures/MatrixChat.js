@@ -910,14 +910,6 @@ module.exports = React.createClass({
     onUserClick: function(event, userId) {
         event.preventDefault();
 
-        // var MemberInfo = sdk.getComponent('rooms.MemberInfo');
-        // var member = new Matrix.RoomMember(null, userId);
-        // ContextualMenu.createMenu(MemberInfo, {
-        //     member: member,
-        //     right: window.innerWidth - event.pageX,
-        //     top: event.pageY
-        // });
-
         var member = new Matrix.RoomMember(null, userId);
         if (!member) { return; }
         dis.dispatch({
