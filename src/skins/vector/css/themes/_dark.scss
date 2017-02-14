@@ -13,7 +13,7 @@ $light-fg-color: #747474;
 $accent-fg-color: $primary-bg-color;
 $accent-color: #76CFA6;
 
-$selection-fg-color: $primary-bg-color;
+$selection-fg-color: $primary-fg-color;
 
 // red warning colour
 $warning-color: #ff0064;
@@ -28,7 +28,7 @@ $plinth-bg-color: #474747;
 $droptarget-bg-color: rgba(45,45,45,0.5);
 
 // used by AddressSelector
-$selected-color: #eaf5f0;
+$selected-color: #000000;
 
 // selected for hoverover & selected event tiles
 $event-selected-color: #353535;
@@ -85,7 +85,7 @@ $roomsublist-label-bg-color: #454545;
 
 // event tile lifecycle
 $event-encrypting-color: rgba(171, 221, 188, 0.4);
-$event-sending-color: #ddd;
+$event-sending-color: #888;
 $event-notsent-color: #f44;
 
 // event timestamp
@@ -117,11 +117,23 @@ $progressbar-color: #000;
     filter: invert();
 }
 
-.mx_EventTile_content .markdown-body pre,
-.mx_EventTile_content .markdown-body code {
-    filter: invert();
-}
+// markdown overrides:
+.mx_EventTile_content .markdown-body {
+    pre, code {
+        filter: invert();
+    }
 
-.mx_EventTile_content .markdown-body pre code {
-    filter: none;
+    pre code {
+        filter: none;
+    }
+
+    table {
+        tr {
+            background-color: #000000;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #080808;
+        }
+    }
 }

@@ -1,4 +1,4 @@
-Contributing code to Vector
-===========================
+Contributing code to Riot
+=========================
 
-Vector follows the same pattern as https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.rst
+Riot follows the same pattern as https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.rst.

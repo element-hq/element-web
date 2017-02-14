@@ -26,6 +26,7 @@ var Unread = require('matrix-react-sdk/lib/Unread');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
+var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
 // turn this on for drop & drag console debugging galore
 var debug = false;
@@ -417,15 +418,17 @@ var RoomSubList = React.createClass({
             }
         }
 
+        var tabindex = this.props.searchFilter === "" ? "0" : "-1";
+
         return (
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
-                <div onClick={ this.onClick } className="mx_RoomSubList_label">
+                <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
                     { this.props.collapsed ? '' : this.props.label }
                     <div className="mx_RoomSubList_roomCount">{ roomCount }</div>
                     <div className={chevronClasses}></div>
                     { badge }
                     { incomingCall }
-                </div>
+                </AccessibleButton>
             </div>
         );
     },
@@ -447,11 +450,11 @@ var RoomSubList = React.createClass({
         });
 
         return (
-            <div className="mx_RoomSubList_ellipsis" onClick={this._showFullMemberList}>
+            <AccessibleButton className="mx_RoomSubList_ellipsis" onClick={this._showFullMemberList}>
                 <div className="mx_RoomSubList_line"></div>
                 <div className="mx_RoomSubList_more">more</div>
-            <div className={ badgeClasses }>{ content }</div>
-            </div>
+                <div className={ badgeClasses }>{ content }</div>
+            </AccessibleButton>
         );
     },
 

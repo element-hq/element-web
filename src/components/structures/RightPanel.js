@@ -23,6 +23,7 @@ var dis = require('matrix-react-sdk/lib/dispatcher');
 var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
 var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 var Modal = require('matrix-react-sdk/lib/Modal');
+var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
 module.exports = React.createClass({
     displayName: 'RightPanel',
@@ -69,45 +70,21 @@ module.exports = React.createClass({
     },
 
     onMemberListButtonClick: function() {
-        if (this.props.collapsed || this.state.phase !== this.Phase.MemberList) {
-            this.setState({ phase: this.Phase.MemberList });
-            dis.dispatch({
-                action: 'show_right_panel',
-            });
-        }
-        else {
-            dis.dispatch({
-                action: 'hide_right_panel',
-            });
-        }
+        this.setState({ phase: this.Phase.MemberList });
     },
 
     onFileListButtonClick: function() {
-        if (this.props.collapsed || this.state.phase !== this.Phase.FilePanel) {
-            this.setState({ phase: this.Phase.FilePanel });
-            dis.dispatch({
-                action: 'show_right_panel',
-            });
-        }
-        else {
-            dis.dispatch({
-                action: 'hide_right_panel',
-            });
-        }
+        this.setState({ phase: this.Phase.FilePanel });
     },
 
     onNotificationListButtonClick: function() {
-        if (this.props.collapsed || this.state.phase !== this.Phase.NotificationPanel) {
-            this.setState({ phase: this.Phase.NotificationPanel });
-            dis.dispatch({
-                action: 'show_right_panel',
-            });
-        }
-        else {
-            dis.dispatch({
-                action: 'hide_right_panel',
-            });
-        }
+        this.setState({ phase: this.Phase.NotificationPanel });
+    },
+
+    onCollapseClick: function() {
+        dis.dispatch({
+            action: 'hide_right_panel',
+        });
     },
 
     onInviteButtonClick: function() {
@@ -207,12 +184,12 @@ module.exports = React.createClass({
 
             if (user_is_in_room) {
                 inviteGroup =
-                    <div className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
+                    <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
                         <div className="mx_RightPanel_icon" >
                             <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
                         </div>
                         <div className="mx_RightPanel_message">Invite to this room</div>
-                    </div>;
+                    </AccessibleButton>;
             }
 
         }
@@ -220,20 +197,28 @@ module.exports = React.createClass({
         if (this.props.roomId) {
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
-                        <div className="mx_RightPanel_headerButton" title="Members" onClick={ this.onMemberListButtonClick }>
+                        <AccessibleButton className="mx_RightPanel_headerButton"
+                                title="Members" onClick={ this.onMemberListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">{ membersBadge ? membersBadge : <span>&nbsp;</span>}</div>
                             <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
                             { membersHighlight }
-                        </div>
-                        <div className="mx_RightPanel_headerButton mx_RightPanel_filebutton" title="Files" onClick={ this.onFileListButtonClick }>
+                        </AccessibleButton>
+                        <AccessibleButton
+                                className="mx_RightPanel_headerButton mx_RightPanel_filebutton"
+                                title="Files" onClick={ this.onFileListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                             <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
                             { filesHighlight }
-                        </div>
-                        <div className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton" title="Notifications" onClick={ this.onNotificationListButtonClick }>
+                        </AccessibleButton>
+                        <AccessibleButton
+                                className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton"
+                                title="Notifications" onClick={ this.onNotificationListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                             <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
                             { notificationsHighlight }
+                        </AccessibleButton>
+                        <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" title="Hide panel" onClick={ this.onCollapseClick }>
+                            <TintableSvg src="img/minimise.svg" width="10" height="16"/>
                         </div>
                     </div>;
         }
@@ -276,4 +261,3 @@ module.exports = React.createClass({
         );
     }
 });
-
