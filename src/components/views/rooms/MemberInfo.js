@@ -247,7 +247,7 @@ module.exports = WithMatrixClient(React.createClass({
         });
     },
 
-    onBan: function() {
+    onBanOrUnban: function() {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
             member: this.props.member,
@@ -657,7 +657,7 @@ module.exports = WithMatrixClient(React.createClass({
             }
             banButton = (
                 <AccessibleButton className="mx_MemberInfo_field"
-                        onClick={this.onBan}>
+                        onClick={this.onBanOrUnban}>
                     {label}
                 </AccessibleButton>
             );
