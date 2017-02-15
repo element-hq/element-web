@@ -38,7 +38,7 @@ function parseIntWithDefault(val, def) {
 
 const BannedUser = React.createClass({
     propTypes: {
-        member: React.PropTypes.string.isRequired,
+        member: React.PropTypes.object.isRequired, // js-sdk RoomMember
     },
 
     _onUnbanClick: function() {
@@ -147,7 +147,10 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         ScalarMessaging.stopListening();
 
-        MatrixClientPeg.get().removeListener("RoomMember.membership", this._onRoomMemberMembership);
+        const cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("RoomMember.membership", this._onRoomMemberMembership);
+        }
 
         dis.dispatch({
             action: 'ui_opacity',
