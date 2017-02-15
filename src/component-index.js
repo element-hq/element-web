@@ -89,6 +89,8 @@ import views$dialogs$NeedToRegisterDialog from './components/views/dialogs/NeedT
 views$dialogs$NeedToRegisterDialog && (module.exports.components['views.dialogs.NeedToRegisterDialog'] = views$dialogs$NeedToRegisterDialog);
 import views$dialogs$QuestionDialog from './components/views/dialogs/QuestionDialog';
 views$dialogs$QuestionDialog && (module.exports.components['views.dialogs.QuestionDialog'] = views$dialogs$QuestionDialog);
+import views$dialogs$SessionRestoreErrorDialog from './components/views/dialogs/SessionRestoreErrorDialog';
+views$dialogs$SessionRestoreErrorDialog && (module.exports.components['views.dialogs.SessionRestoreErrorDialog'] = views$dialogs$SessionRestoreErrorDialog);
 import views$dialogs$SetDisplayNameDialog from './components/views/dialogs/SetDisplayNameDialog';
 views$dialogs$SetDisplayNameDialog && (module.exports.components['views.dialogs.SetDisplayNameDialog'] = views$dialogs$SetDisplayNameDialog);
 import views$dialogs$TextInputDialog from './components/views/dialogs/TextInputDialog';
