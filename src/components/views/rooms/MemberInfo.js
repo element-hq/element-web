@@ -247,19 +247,27 @@ module.exports = WithMatrixClient(React.createClass({
         });
     },
 
-    onBan: function() {
+    onBanOrUnban: function() {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
             member: this.props.member,
-            action: 'Ban',
-            danger: true,
+            action: this.props.member.membership == 'ban' ? 'Unban' : 'Ban',
+            danger: this.props.member.membership != 'ban',
             onFinished: (proceed) => {
                 if (!proceed) return;
 
                 this.setState({ updating: this.state.updating + 1 });
-                this.props.matrixClient.ban(
-                    this.props.member.roomId, this.props.member.userId,
-                ).then(
+                let promise;
+                if (this.props.member.membership == 'ban') {
+                    promise = this.props.matrixClient.unban(
+                        this.props.member.roomId, this.props.member.userId,
+                    );
+                } else {
+                    promise = this.props.matrixClient.ban(
+                        this.props.member.roomId, this.props.member.userId,
+                    );
+                }
+                promise.then(
                     function() {
                         // NO-OP; rely on the m.room.member event coming down else we could
                         // get out of sync if we force setState here!
@@ -451,26 +459,26 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     _calculateOpsPermissions: function(member) {
-        var defaultPerms = {
+        const defaultPerms = {
             can: {},
             muted: false,
             modifyLevel: false
         };
-        var room = this.props.matrixClient.getRoom(member.roomId);
+        const room = this.props.matrixClient.getRoom(member.roomId);
         if (!room) {
             return defaultPerms;
         }
-        var powerLevels = room.currentState.getStateEvents(
+        const powerLevels = room.currentState.getStateEvents(
             "m.room.power_levels", ""
         );
         if (!powerLevels) {
             return defaultPerms;
         }
-        var me = room.getMember(this.props.matrixClient.credentials.userId);
+        const me = room.getMember(this.props.matrixClient.credentials.userId);
         if (!me) {
             return defaultPerms;
         }
-        var them = member;
+        const them = member;
         return {
             can: this._calculateCanPermissions(
                 me, them, powerLevels.getContent()
@@ -481,22 +489,22 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     _calculateCanPermissions: function(me, them, powerLevels) {
-        var can = {
+        const can = {
             kick: false,
             ban: false,
             mute: false,
             modifyLevel: false
         };
-        var canAffectUser = them.powerLevel < me.powerLevel;
+        const canAffectUser = them.powerLevel < me.powerLevel;
         if (!canAffectUser) {
             //console.log("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
             return can;
         }
-        var editPowerLevel = (
+        const editPowerLevel = (
             (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
             powerLevels.state_default
         );
-        var levelToSend = (
+        const levelToSend = (
             (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
             powerLevels.events_default
         );
@@ -643,10 +651,14 @@ module.exports = WithMatrixClient(React.createClass({
             );
         }
         if (this.state.can.ban) {
+            let label = 'Ban';
+            if (this.props.member.membership == 'ban') {
+                label = 'Unban';
+            }
             banButton = (
                 <AccessibleButton className="mx_MemberInfo_field"
-                        onClick={this.onBan}>
-                    Ban
+                        onClick={this.onBanOrUnban}>
+                    {label}
                 </AccessibleButton>
             );
         }
