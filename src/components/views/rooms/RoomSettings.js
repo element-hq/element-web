@@ -17,7 +17,6 @@ limitations under the License.
 
 import q from 'q';
 import React from 'react';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 import SdkConfig from '../../../SdkConfig';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
@@ -27,6 +26,7 @@ import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
 import UserSettingsStore from '../../../UserSettingsStore';
 import AccessibleButton from '../elements/AccessibleButton';
+import WithMatrixClient from '../../../wrappers/WithMatrixClient';
 
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -36,9 +36,12 @@ function parseIntWithDefault(val, def) {
     return isNaN(res) ? def : res;
 }
 
-const BannedUser = React.createClass({
+const BannedUser = WithMatrixClient(React.createClass({
     propTypes: {
-        member: React.PropTypes.string.isRequired,
+        /* MatrixClient instance */
+        matrixClient: React.PropTypes.object.isRequired,
+
+        member: React.PropTypes.object.isRequired, // js-sdk member object
     },
 
     _onUnbanClick: function() {
@@ -50,7 +53,7 @@ const BannedUser = React.createClass({
             onFinished: (proceed) => {
                 if (!proceed) return;
 
-                MatrixClientPeg.get().unban(
+                this.props.matrixClient.unban(
                     this.props.member.roomId, this.props.member.userId,
                 ).catch((err) => {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -75,12 +78,15 @@ const BannedUser = React.createClass({
             </li>
         );
     }
-});
+}));
 
-module.exports = React.createClass({
+module.exports = WithMatrixClient(React.createClass({
     displayName: 'RoomSettings',
 
     propTypes: {
+        /* MatrixClient instance */
+        matrixClient: React.PropTypes.object.isRequired,
+
         room: React.PropTypes.object.isRequired,
         onSaveClick: React.PropTypes.func,
         onCancelClick: React.PropTypes.func,
@@ -117,9 +123,9 @@ module.exports = React.createClass({
     componentWillMount: function() {
         ScalarMessaging.startListening();
 
-        MatrixClientPeg.get().on("RoomMember.membership", this._onRoomMemberMembership);
+        this.props.matrixClient.on("RoomMember.membership", this._onRoomMemberMembership);
 
-        MatrixClientPeg.get().getRoomDirectoryVisibility(
+        this.props.matrixClient.getRoomDirectoryVisibility(
             this.props.room.roomId
         ).done((result) => {
             this.setState({ isRoomPublished: result.visibility === "public" });
@@ -147,7 +153,7 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         ScalarMessaging.stopListening();
 
-        MatrixClientPeg.get().removeListener("RoomMember.membership", this._onRoomMemberMembership);
+        this.props.matrixClient.removeListener("RoomMember.membership", this._onRoomMemberMembership);
 
         dis.dispatch({
             action: 'ui_opacity',
@@ -195,14 +201,14 @@ module.exports = React.createClass({
 
         // name and topic
         if (this._hasDiff(this.state.name, originalState.name)) {
-            promises.push(MatrixClientPeg.get().setRoomName(roomId, this.state.name));
+            promises.push(this.props.matrixClient.setRoomName(roomId, this.state.name));
         }
         if (this._hasDiff(this.state.topic, originalState.topic)) {
-            promises.push(MatrixClientPeg.get().setRoomTopic(roomId, this.state.topic));
+            promises.push(this.props.matrixClient.setRoomTopic(roomId, this.state.topic));
         }
 
         if (this.state.history_visibility !== originalState.history_visibility) {
-            promises.push(MatrixClientPeg.get().sendStateEvent(
+            promises.push(this.props.matrixClient.sendStateEvent(
                 roomId, "m.room.history_visibility",
                 { history_visibility: this.state.history_visibility },
                 ""
@@ -210,14 +216,14 @@ module.exports = React.createClass({
         }
 
         if (this.state.isRoomPublished !== originalState.isRoomPublished) {
-            promises.push(MatrixClientPeg.get().setRoomDirectoryVisibility(
+            promises.push(this.props.matrixClient.setRoomDirectoryVisibility(
                 roomId,
                 this.state.isRoomPublished ? "public" : "private"
             ));
         }
 
         if (this.state.join_rule !== originalState.join_rule) {
-            promises.push(MatrixClientPeg.get().sendStateEvent(
+            promises.push(this.props.matrixClient.sendStateEvent(
                 roomId, "m.room.join_rules",
                 { join_rule: this.state.join_rule },
                 ""
@@ -225,7 +231,7 @@ module.exports = React.createClass({
         }
 
         if (this.state.guest_access !== originalState.guest_access) {
-            promises.push(MatrixClientPeg.get().sendStateEvent(
+            promises.push(this.props.matrixClient.sendStateEvent(
                 roomId, "m.room.guest_access",
                 { guest_access: this.state.guest_access },
                 ""
@@ -236,7 +242,7 @@ module.exports = React.createClass({
         // power levels
         var powerLevels = this._getPowerLevels();
         if (powerLevels) {
-            promises.push(MatrixClientPeg.get().sendStateEvent(
+            promises.push(this.props.matrixClient.sendStateEvent(
                 roomId, "m.room.power_levels", powerLevels, ""
             ));
         }
@@ -249,12 +255,12 @@ module.exports = React.createClass({
                 switch (diff.place) {
                     case "add":
                         promises.push(
-                            MatrixClientPeg.get().setRoomTag(roomId, diff.key, {})
+                            this.props.matrixClient.setRoomTag(roomId, diff.key, {})
                         );
                         break;
                     case "del":
                         promises.push(
-                            MatrixClientPeg.get().deleteRoomTag(roomId, diff.key)
+                            this.props.matrixClient.deleteRoomTag(roomId, diff.key)
                         );
                         break;
                     default:
@@ -311,7 +317,7 @@ module.exports = React.createClass({
         if (!encrypt) { return q(); }
 
         var roomId = this.props.room.roomId;
-        return MatrixClientPeg.get().sendStateEvent(
+        return this.props.matrixClient.sendStateEvent(
             roomId, "m.room.encryption",
             { algorithm: "m.megolm.v1.aes-sha2" }
         );
@@ -476,7 +482,7 @@ module.exports = React.createClass({
     },
 
     mayChangeRoomAccess: function() {
-        var cli = MatrixClientPeg.get();
+        var cli = this.props.matrixClient;
         var roomState = this.props.room.currentState;
         return (roomState.mayClientSendStateEvent("m.room.join_rules", cli) &&
                 roomState.mayClientSendStateEvent("m.room.guest_access", cli));
@@ -513,7 +519,7 @@ module.exports = React.createClass({
 
     onForgetClick() {
         // FIXME: duplicated with RoomTagContextualMenu (and dead code in RoomView)
-        MatrixClientPeg.get().forget(this.props.room.roomId).done(function() {
+        this.props.matrixClient.forget(this.props.room.roomId).done(function() {
             dis.dispatch({ action: 'view_next_room' });
         }, function(err) {
             var errCode = err.errcode || "unknown error code";
@@ -554,7 +560,7 @@ module.exports = React.createClass({
     },
 
     _renderEncryptionSection: function() {
-        var cli = MatrixClientPeg.get();
+        var cli = this.props.matrixClient;
         var roomState = this.props.room.currentState;
         var isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
         var isGlobalBlacklistUnverified = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevices;
@@ -608,7 +614,7 @@ module.exports = React.createClass({
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
         var Loader = sdk.getComponent("elements.Spinner");
 
-        var cli = MatrixClientPeg.get();
+        var cli = this.props.matrixClient;
         var roomState = this.props.room.currentState;
         var user_id = cli.credentials.userId;
 
@@ -833,7 +839,7 @@ module.exports = React.createClass({
                             <input type="checkbox" disabled={ !roomState.mayClientSendStateEvent("m.room.aliases", cli) }
                                    onChange={ this._onToggle.bind(this, "isRoomPublished", true, false)}
                                    checked={this.state.isRoomPublished}/>
-                            List this room in { MatrixClientPeg.get().getDomain() }'s room directory?
+                            List this room in { this.props.matrixClient.getDomain() }'s room directory?
                         </label>
                     </div>
                     <div className="mx_RoomSettings_settings">
@@ -943,4 +949,4 @@ module.exports = React.createClass({
             </div>
         );
     }
-});
+}));
