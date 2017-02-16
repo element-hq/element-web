@@ -26,7 +26,7 @@ var Notifier = require("./Notifier");
 module.exports = {
     LABS_FEATURES: [
         {
-            name: 'Rich Text Editor',
+            name: 'New Composer & Autocomplete',
             id: 'rich_text_editor',
             default: false,
         },

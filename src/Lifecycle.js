@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,6 +25,8 @@ import Presence from './Presence';
 import dis from './dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import RtsClient from './RtsClient';
+import Modal from './Modal';
+import sdk from './index';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -109,16 +112,17 @@ export function loadSession(opts) {
         return q();
     }
 
-    if (_restoreFromLocalStorage()) {
-        return q();
-    }
+    return _restoreFromLocalStorage().then((success) => {
+        if (success) {
+            return;
+        }
 
-    if (enableGuest) {
-        return _registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
-    }
+        if (enableGuest) {
+            return _registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
+        }
 
-    // fall back to login screen
-    return q();
+        // fall back to login screen
+    });
 }
 
 function _loginWithToken(queryParams, defaultDeviceDisplayName) {
@@ -178,10 +182,11 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     });
 }
 
-// returns true if a session is found in localstorage
+// returns a promise which resolves to true if a session is found in
+// localstorage
 function _restoreFromLocalStorage() {
     if (!localStorage) {
-        return false;
+        return q(false);
     }
     const hs_url = localStorage.getItem("mx_hs_url");
     const is_url = localStorage.getItem("mx_is_url") || 'https://matrix.org';
@@ -208,26 +213,53 @@ function _restoreFromLocalStorage() {
                 identityServerUrl: is_url,
                 guest: is_guest,
             });
-            return true;
+            return q(true);
         } catch (e) {
-            console.log("Unable to restore session", e);
-
-            var msg = e.message;
-            if (msg == "OLM.BAD_LEGACY_ACCOUNT_PICKLE") {
-                msg = "You need to log back in to generate end-to-end encryption keys "
-                    + "for this device and submit the public key to your homeserver. "
-                    + "This is a once off; sorry for the inconvenience.";
-            }
-
-            // don't leak things into the new session
-            _clearLocalStorage();
-
-            throw new Error("Unable to restore previous session: " + msg);
+            return _handleRestoreFailure(e);
         }
     } else {
         console.log("No previous session found.");
-        return false;
+        return q(false);
     }
+}
+
+function _handleRestoreFailure(e) {
+    console.log("Unable to restore session", e);
+
+    let msg = e.message;
+    if (msg == "OLM.BAD_LEGACY_ACCOUNT_PICKLE") {
+        msg = "You need to log back in to generate end-to-end encryption keys "
+            + "for this device and submit the public key to your homeserver. "
+            + "This is a once off; sorry for the inconvenience.";
+
+        _clearLocalStorage();
+
+        return q.reject(new Error(
+            "Unable to restore previous session: " + msg,
+        ));
+    }
+
+    const def = q.defer();
+    const SessionRestoreErrorDialog =
+          sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
+
+    Modal.createDialog(SessionRestoreErrorDialog, {
+        error: msg,
+        onFinished: (success) => {
+            def.resolve(success);
+        },
+    });
+
+    return def.promise.then((success) => {
+        if (success) {
+            // user clicked continue.
+            _clearLocalStorage();
+            return false;
+        }
+
+        // try, try again
+        return _restoreFromLocalStorage();
+    });
 }
 
 let rtsClient = null;

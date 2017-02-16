@@ -67,16 +67,24 @@ describe('InteractiveAuthDialog', function () {
                 onFinished={onFinished}
             />, parentDiv);
 
-        // at this point there should be a password box
-        const passwordNode = ReactTestUtils.findRenderedDOMComponentWithTag(
+        // at this point there should be a password box and a submit button
+        const formNode = ReactTestUtils.findRenderedDOMComponentWithTag(dlg, "form");
+        const inputNodes = ReactTestUtils.scryRenderedDOMComponentsWithTag(
             dlg, "input"
         );
-        expect(passwordNode.type).toEqual("password");
+        let passwordNode;
+        let submitNode;
+        for (const node of inputNodes) {
+            if (node.type == 'password') {
+                passwordNode = node;
+            } else if (node.type == 'submit') {
+                submitNode = node;
+            }
+        }
+        expect(passwordNode).toExist();
+        expect(submitNode).toExist();
 
         // submit should be disabled
-        const submitNode = ReactTestUtils.findRenderedDOMComponentWithClass(
-            dlg, "mx_Dialog_primary"
-        );
         expect(submitNode.disabled).toBe(true);
 
         // put something in the password box, and hit enter; that should
@@ -84,9 +92,7 @@ describe('InteractiveAuthDialog', function () {
         passwordNode.value = "s3kr3t";
         ReactTestUtils.Simulate.change(passwordNode);
         expect(submitNode.disabled).toBe(false);
-        ReactTestUtils.Simulate.keyDown(passwordNode, {
-            key: "Enter", keyCode: 13, which: 13,
-        });
+        ReactTestUtils.Simulate.submit(formNode, {});
 
         expect(doRequest.callCount).toEqual(1);
         expect(doRequest.calledWithExactly({
@@ -96,8 +102,10 @@ describe('InteractiveAuthDialog', function () {
             user: "@user:id",
         })).toBe(true);
 
-        // the submit button should now be disabled (and be a spinner)
-        expect(submitNode.disabled).toBe(true);
+        // there should now be a spinner
+        ReactTestUtils.findRenderedComponentWithType(
+            dlg, sdk.getComponent('elements.Spinner'),
+        );
 
         // let the request complete
         q.delay(1).then(() => {

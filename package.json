@@ -90,6 +90,7 @@
     "babel-preset-react": "^6.11.1",
     "eslint": "^3.13.1",
     "eslint-config-google": "^0.7.1",
+    "eslint-plugin-babel": "^4.0.1",
     "eslint-plugin-flowtype": "^2.30.0",
     "eslint-plugin-react": "^6.9.0",
     "expect": "^1.16.0",

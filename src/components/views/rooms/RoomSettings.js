@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var q = require("q");
-var React = require('react');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var SdkConfig = require('../../../SdkConfig');
-var sdk = require('../../../index');
-var Modal = require('../../../Modal');
-var ObjectUtils = require("../../../ObjectUtils");
-var dis = require("../../../dispatcher");
-var ScalarAuthClient = require("../../../ScalarAuthClient");
-var ScalarMessaging = require('../../../ScalarMessaging');
-var UserSettingsStore = require('../../../UserSettingsStore');
+import q from 'q';
+import React from 'react';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import SdkConfig from '../../../SdkConfig';
+import sdk from '../../../index';
+import Modal from '../../../Modal';
+import ObjectUtils from '../../../ObjectUtils';
+import dis from '../../../dispatcher';
+import ScalarAuthClient from '../../../ScalarAuthClient';
+import ScalarMessaging from '../../../ScalarMessaging';
+import UserSettingsStore from '../../../UserSettingsStore';
+import AccessibleButton from '../elements/AccessibleButton';
 
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -635,16 +636,16 @@ module.exports = React.createClass({
         if (myMember) {
             if (myMember.membership === "join") {
                 leaveButton = (
-                    <div className="mx_RoomSettings_leaveButton" onClick={ this.onLeaveClick }>
+                    <AccessibleButton className="mx_RoomSettings_leaveButton" onClick={ this.onLeaveClick }>
                         Leave room
-                    </div>
+                    </AccessibleButton>
                 );
             }
             else if (myMember.membership === "leave") {
                 leaveButton = (
-                    <div className="mx_RoomSettings_leaveButton" onClick={ this.onForgetClick }>
+                    <AccessibleButton className="mx_RoomSettings_leaveButton" onClick={ this.onForgetClick }>
                         Forget room
-                    </div>
+                    </AccessibleButton>
                 );
             }
         }

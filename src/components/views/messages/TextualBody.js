@@ -222,7 +222,8 @@ module.exports = React.createClass({
                 title: "Add an Integration",
                 description:
                     <div>
-                        You are about to taken to a third-party site so you can authenticate your account for use with {integrationsUrl}.<br/>
+                        You are about to be taken to a third-party site so you can
+                        authenticate your account for use with {integrationsUrl}.<br/>
                         Do you wish to continue?
                     </div>,
                 button: "Continue",

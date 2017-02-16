@@ -58,6 +58,7 @@ module.exports = React.createClass({
             teamServerURL: React.PropTypes.string.isRequired,
         }),
         teamSelected: React.PropTypes.object,
+        onTeamMemberRegistered: React.PropTypes.func.isRequired,
 
         defaultDeviceDisplayName: React.PropTypes.string,
 
@@ -213,20 +214,22 @@ module.exports = React.createClass({
                 accessToken: response.access_token
             });
 
-            if (
-                self._rtsClient &&
-                self.props.referrer &&
-                self.state.teamSelected
-            ) {
-                // Track referral, get team_token in order to retrieve team config
+            // Done regardless of `teamSelected`. People registering with non-team emails
+            // will just nop. The point of this being we might not have the email address
+            // that the user registered with at this stage (depending on whether this
+            // is the client they initiated registration).
+            if (self._rtsClient) {
+                // Track referral if self.props.referrer set, get team_token in order to
+                // retrieve team config and see welcome page etc.
                 self._rtsClient.trackReferral(
-                    self.props.referrer,
-                    response.user_id,
-                    self.state.formVals.email
+                    self.props.referrer || '', // Default to empty string = not referred
+                    self.registerLogic.params.idSid,
+                    self.registerLogic.params.clientSecret
                 ).then((data) => {
                     const teamToken = data.team_token;
                     // Store for use /w welcome pages
                     window.localStorage.setItem('mx_team_token', teamToken);
+                    self.props.onTeamMemberRegistered(teamToken);
 
                     self._rtsClient.getTeam(teamToken).then((team) => {
                         console.log(
@@ -426,7 +429,12 @@ module.exports = React.createClass({
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
-                    <LoginHeader icon={this.state.teamSelected ? this.state.teamSelected.icon : null}/>
+                    <LoginHeader
+                        icon={this.state.teamSelected ?
+                            this.props.teamServerConfig.teamServerURL + "/static/common/" +
+                            this.state.teamSelected.domain + "/icon.png" :
+                            null}
+                    />
                     {this._getRegisterContentJsx()}
                     <LoginFooter />
                 </div>
