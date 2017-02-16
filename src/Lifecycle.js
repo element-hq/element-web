@@ -360,7 +360,7 @@ function _clearIndexedDB() {
     }
     console.log("Clearing indexeddb");
     window.indexedDB.deleteDatabase("matrix-js-sdk");
-    window.indexedDB.deleteDatabase("logs");
+    // TODO: Remove logs db as well.
 }
 
 function _clearLocalStorage() {
