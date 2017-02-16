@@ -1,0 +1,24 @@
+.mx_MessageComposer_ptt {
+  padding-right: 5px;
+  cursor: pointer;
+  padding-top: 4px;
+
+  object {
+    pointer-events: none;
+  }
+}
+
+.mx_MessageComposer_ptt--recording {
+  transition: 1s all ease;
+  animation: pulse 1s alternate infinite;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.5;
+  }
+}
