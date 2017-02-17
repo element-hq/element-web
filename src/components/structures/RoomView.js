@@ -159,6 +159,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
+        MatrixClientPeg.get().on("RoomMember.membership", this.onRoomMemberMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
 
         this.tabComplete = new TabComplete({
@@ -347,6 +348,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
+            MatrixClientPeg.get().removeListener("RoomMember.membership", this.onRoomMemberMembership);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
         }
 
@@ -610,6 +612,12 @@ module.exports = React.createClass({
         }
 
         this._updateRoomMembers();
+    },
+
+    onRoomMemberMembership: function(ev, member, oldMembership) {
+        if (member.userId == MatrixClientPeg.get().credentials.userId) {
+            this.forceUpdate();
+        }
     },
 
     // rate limited because a power level change will emit an event for every
@@ -1456,6 +1464,7 @@ module.exports = React.createClass({
                             />
                             <div className="mx_RoomView_auxPanel">
                                 <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked }
+                                                onForgetClick={ this.onForgetClick }
                                                 onRejectClick={ this.onRejectThreepidInviteButtonClicked }
                                                 canPreview={ false } error={ this.state.roomLoadError }
                                                 roomAlias={room_alias}
@@ -1498,6 +1507,7 @@ module.exports = React.createClass({
                         />
                         <div className="mx_RoomView_auxPanel">
                             <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked }
+                                            onForgetClick={ this.onForgetClick }
                                             onRejectClick={ this.onRejectButtonClicked }
                                             inviterName={ inviterName }
                                             canPreview={ false }
@@ -1573,6 +1583,7 @@ module.exports = React.createClass({
             }
             aux = (
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                                onForgetClick={ this.onForgetClick }
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
                                 spinner={this.state.joining}
                                 inviterName={inviterName}
