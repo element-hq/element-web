@@ -152,15 +152,15 @@ module.exports = React.createClass({
             }
             let rejoinBlock;
             if (!banned) {
-                rejoinBlock = <a onClick={ this.props.onJoinClick }><b>Rejoin</b></a>;
+                rejoinBlock = <div><a onClick={ this.props.onJoinClick }><b>Rejoin</b></a></div>;
             }
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_join_text">
                         You have been {verb} from {roomName} by {kicker.displayName}.<br />
                         {reason}
-                        <a onClick={ this.props.onForgetClick }><b>Forget</b></a><br />
                         {rejoinBlock}
+                        <a onClick={ this.props.onForgetClick }><b>Forget</b></a>
                     </div>
                 </div>
             );
