@@ -419,7 +419,7 @@ module.exports = React.createClass({
     },
 
     _onClearCacheClicked: function() {
-        MatrixClientPeg.get().store.deleteAllData().then(() => {
+        MatrixClientPeg.get().store.deleteAllData().done(() => {
             // forceReload=false since we don't really need new HTML/JS files
             // we just need to restart the JS runtime.
             window.location.reload(false);
@@ -704,7 +704,7 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_section">
                     <AccessibleButton className="mx_UserSettings_button danger"
                         onClick={this._onClearCacheClicked}>
-                        Clear Cache (triggers page refresh)
+                        Clear Cache and Reload
                     </AccessibleButton>
                 </div>
         </div>;
