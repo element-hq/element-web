@@ -31,20 +31,38 @@ export default React.createClass({
     propTypes: {
         member: React.PropTypes.object.isRequired, // matrix-js-sdk member object
         action: React.PropTypes.string.isRequired, // eg. 'Ban'
+
+        // Whether to display a text field for a reason
+        // If true, the second argument to onFinished will
+        // be the string entered.
+        askReason: React.PropTypes.bool,
         danger: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired,
     },
 
     defaultProps: {
         danger: false,
+        askReason: false,
+    },
+
+    componentWillMount: function() {
+        this._reasonField = null;
     },
 
     onOk: function() {
-        this.props.onFinished(true);
+        let reason;
+        if (this._reasonField) {
+            reason = this._reasonField.value;
+        }
+        this.props.onFinished(true, reason);
     },
 
     onCancel: function() {
         this.props.onFinished(false);
+    },
+
+    _collectReasonField: function(e) {
+        this._reasonField = e;
     },
 
     render: function() {
@@ -56,8 +74,24 @@ export default React.createClass({
             'mx_Dialog_primary': true,
             'danger': this.props.danger,
         });
+
+        let reasonBox;
+        if (this.props.askReason) {
+            reasonBox = (
+                <div>
+                    <form onSubmit={this.onOk}>
+                        <input className="mx_ConfirmUserActionDialog_reasonField"
+                            ref={this._collectReasonField}
+                            placeholder="Reason"
+                            autoFocus={true}
+                        />
+                    </form>
+                </div>
+            );
+        }
+
         return (
-            <BaseDialog className="mx_UserActionConfirmDialog" onFinished={this.props.onFinished}
+            <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
                 onEnterPressed={ this.onOk }
                 title={title}
             >
@@ -68,8 +102,11 @@ export default React.createClass({
                     <div className="mx_ConfirmUserActionDialog_name">{this.props.member.name}</div>
                     <div className="mx_ConfirmUserActionDialog_userId">{this.props.member.userId}</div>
                 </div>
+                {reasonBox}
                 <div className="mx_Dialog_buttons">
-                    <button className={confirmButtonClass} onClick={this.onOk} autoFocus={true}>
+                    <button className={confirmButtonClass}
+                        onClick={this.onOk} autoFocus={!this.props.askReason}
+                    >
                         {this.props.action}
                     </button>
 
