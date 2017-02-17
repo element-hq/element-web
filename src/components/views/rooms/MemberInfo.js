@@ -222,13 +222,15 @@ module.exports = WithMatrixClient(React.createClass({
         Modal.createDialog(ConfirmUserActionDialog, {
             member: this.props.member,
             action: 'Kick',
+            askReason: true,
             danger: true,
-            onFinished: (proceed) => {
+            onFinished: (proceed, reason) => {
                 if (!proceed) return;
 
                 this.setState({ updating: this.state.updating + 1 });
                 this.props.matrixClient.kick(
                     this.props.member.roomId, this.props.member.userId,
+                    reason || undefined
                 ).then(function() {
                         // NO-OP; rely on the m.room.member event coming down else we could
                         // get out of sync if we force setState here!
@@ -252,8 +254,9 @@ module.exports = WithMatrixClient(React.createClass({
         Modal.createDialog(ConfirmUserActionDialog, {
             member: this.props.member,
             action: this.props.member.membership == 'ban' ? 'Unban' : 'Ban',
+            askReason: this.props.member.membership != 'ban',
             danger: this.props.member.membership != 'ban',
-            onFinished: (proceed) => {
+            onFinished: (proceed, reason) => {
                 if (!proceed) return;
 
                 this.setState({ updating: this.state.updating + 1 });
@@ -265,6 +268,7 @@ module.exports = WithMatrixClient(React.createClass({
                 } else {
                     promise = this.props.matrixClient.ban(
                         this.props.member.roomId, this.props.member.userId,
+                        reason || undefined
                     );
                 }
                 promise.then(
