@@ -73,13 +73,8 @@ class MatrixClientPeg {
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
 
-        let promise = q();
-        if (this.matrixClient.store instanceof Matrix.IndexedDBStore) {
-            // load from storage before starting up.
-            console.log("Loading history from IndexedDB.");
-            promise = this.matrixClient.store.startup();
-        }
-        // log any errors when starting up the database
+        let promise = this.matrixClient.store.startup();
+        // log any errors when starting up the database (if one exists)
         promise.catch((err) => { console.error(err); });
 
         // regardless of errors, start the client. If we did error out, we'll
