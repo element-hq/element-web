@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ module.exports = React.createClass({
     propTypes: {
         onJoinClick: React.PropTypes.func,
         onRejectClick: React.PropTypes.func,
+        onForgetClick: React.PropTypes.func,
 
         // if inviterName is specified, the preview bar will shown an invite to the room.
         // You should also specify onRejectClick if specifiying inviterName
@@ -79,6 +81,12 @@ module.exports = React.createClass({
         }
     },
 
+    _roomNameElement: function(fallback) {
+        fallback = fallback || 'a room';
+        const name = this.props.room ? this.props.room.name : (this.props.room_alias || "");
+        return name ? <b>{ name }</b> : fallback;
+    },
+
     render: function() {
         var joinBlock, previewBlock;
 
@@ -88,6 +96,16 @@ module.exports = React.createClass({
                 <Spinner />
             </div>);
         }
+
+        const myMember = this.props.room ? this.props.room.currentState.members[
+            MatrixClientPeg.get().credentials.userId
+        ] : null;
+        const kicked = (
+            myMember &&
+            myMember.membership == 'leave' &&
+            myMember.events.member.getSender() != MatrixClientPeg.get().credentials.userId
+        );
+        const banned = myMember && myMember.membership == 'ban';
 
         if (this.props.inviterName) {
             var emailMatchBlock;
@@ -122,8 +140,33 @@ module.exports = React.createClass({
                 </div>
             );
 
-        }
-        else if (this.props.error) {
+        } else if (kicked || banned) {
+            const verb = kicked ? 'kicked' : 'banned';
+            const roomName = this._roomNameElement('this room');
+            const kickerMember = this.props.room.currentState.getMember(
+                myMember.events.member.getSender()
+            );
+            const kickerName = kickerMember ?
+                kickerMember.name : myMember.events.member.getSender();
+            let reason;
+            if (myMember.events.member.getContent().reason) {
+                reason = <div>Reason: {myMember.events.member.getContent().reason}</div>
+            }
+            let rejoinBlock;
+            if (!banned) {
+                rejoinBlock = <div><a onClick={ this.props.onJoinClick }><b>Rejoin</b></a></div>;
+            }
+            joinBlock = (
+                <div>
+                    <div className="mx_RoomPreviewBar_join_text">
+                        You have been {verb} from {roomName} by {kickerName}.<br />
+                        {reason}
+                        {rejoinBlock}
+                        <a onClick={ this.props.onForgetClick }><b>Forget</b></a>
+                    </div>
+                </div>
+            );
+        } else if (this.props.error) {
             var name = this.props.roomAlias || "This room";
             var error;
             if (this.props.error.errcode == 'M_NOT_FOUND') {
@@ -138,10 +181,8 @@ module.exports = React.createClass({
                     </div>
                 </div>
             );
-        }
-        else {
-            var name = this.props.room ? this.props.room.name : (this.props.room_alias || "");
-            name = name ? <b>{ name }</b> : "a room";
+        } else {
+            const name = this._roomNameElement();
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_join_text">

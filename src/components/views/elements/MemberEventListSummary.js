@@ -381,7 +381,7 @@ module.exports = React.createClass({
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = [];
-                avatarMembers.push(e.target);
+                if (e.target) avatarMembers.push(e.target);
             }
             userEvents[userId].push({
                 mxEvent: e,
