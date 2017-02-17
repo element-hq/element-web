@@ -143,7 +143,7 @@ module.exports = React.createClass({
         } else if (kicked || banned) {
             const verb = kicked ? 'kicked' : 'banned';
             const roomName = this._roomNameElement('this room');
-            const kicker = MatrixClientPeg.get().getUser(
+            const kicker = this.props.room.currentState.getMember(
                 myMember.events.member.getSender()
             );
             let reason;
@@ -157,7 +157,7 @@ module.exports = React.createClass({
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_join_text">
-                        You have been {verb} from {roomName} by {kicker.displayName}.<br />
+                        You have been {verb} from {roomName} by {kicker.name}.<br />
                         {reason}
                         {rejoinBlock}
                         <a onClick={ this.props.onForgetClick }><b>Forget</b></a>
