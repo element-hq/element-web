@@ -109,6 +109,10 @@ module.exports = React.createClass({
 
         // true if RightPanel is collapsed
         collapsedRhs: React.PropTypes.bool,
+
+        // Team token for the referral link. If falsy, the referral section will
+        // not appear
+        teamToken: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -462,7 +466,7 @@ module.exports = React.createClass({
     },
 
     _renderReferral: function() {
-        const teamToken = window.localStorage.getItem('mx_team_token');
+        const teamToken = this.props.teamToken;
         if (!teamToken) {
             return null;
         }

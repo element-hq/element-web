@@ -464,6 +464,10 @@ module.exports = React.createClass({
                 this.notifyNewScreen('directory');
                 break;
             case 'view_home_page':
+                if (!this._teamToken) {
+                    dis.dispatch({action: 'view_room_directory'});
+                    return;
+                }
                 this._setPage(PageTypes.HomePage);
                 this.notifyNewScreen('home');
                 break;
