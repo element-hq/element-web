@@ -92,7 +92,16 @@ export default class Markdown {
     }
 
     toHTML() {
-        const renderer = new commonmark.HtmlRenderer({safe: false});
+        const renderer = new commonmark.HtmlRenderer({
+            safe: false,
+
+            // Set soft breaks to hard HTML breaks: commonmark
+            // puts softbreaks in for multiple lines in a blockquote,
+            // so if these are just newline characters then the
+            // block quote ends up all on one line
+            // (https://github.com/vector-im/riot-web/issues/3154)
+            softbreak: '<br />',
+        });
         const real_paragraph = renderer.paragraph;
 
         renderer.paragraph = function(node, entering) {
