@@ -95,7 +95,10 @@ describe('joining a room', function () {
             });
 
             var roomView;
-            httpBackend.flush().then(() => {
+            // wait for /sync to happen
+            return q.delay(1).then(() => {
+                return httpBackend.flush();
+            }).then(() => {
                 var roomDir = ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, RoomDirectory);
 
