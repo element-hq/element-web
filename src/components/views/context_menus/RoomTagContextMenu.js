@@ -16,13 +16,15 @@ limitations under the License.
 
 'use strict';
 
-var q = require("q");
-var React = require('react');
-var classNames = require('classnames');
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var DMRoomMap = require('matrix-react-sdk/lib/utils/DMRoomMap');
-var Rooms = require('matrix-react-sdk/lib/Rooms');
+import q from 'q';
+import React from 'react';
+import classNames from 'classnames';
+import sdk from 'matrix-react-sdk';
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import DMRoomMap from 'matrix-react-sdk/lib/utils/DMRoomMap';
+import Rooms from 'matrix-react-sdk/lib/Rooms';
+import Modal from 'matrix-react-sdk/lib/Modal';
 
 module.exports = React.createClass({
     displayName: 'RoomTagContextMenu',
@@ -214,7 +216,7 @@ module.exports = React.createClass({
             'mx_RoomTagContextMenu_fieldDisabled': false,
         });
 
-        if (myMember && myMember.membership === "leave") {
+        if (myMember && (myMember.membership === "leave" || myMember.membership === "ban")) {
             return (
                 <div>
                     <div className={ leaveClasses } onClick={ this._onClickForget } >
