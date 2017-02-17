@@ -143,9 +143,11 @@ module.exports = React.createClass({
         } else if (kicked || banned) {
             const verb = kicked ? 'kicked' : 'banned';
             const roomName = this._roomNameElement('this room');
-            const kicker = this.props.room.currentState.getMember(
+            const kickerMember = this.props.room.currentState.getMember(
                 myMember.events.member.getSender()
             );
+            const kickerName = kickerMember ?
+                kickerMember.name : myMember.events.member.getSender();
             let reason;
             if (myMember.events.member.getContent().reason) {
                 reason = <div>Reason: {myMember.events.member.getContent().reason}</div>
@@ -157,7 +159,7 @@ module.exports = React.createClass({
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_join_text">
-                        You have been {verb} from {roomName} by {kicker.name}.<br />
+                        You have been {verb} from {roomName} by {kickerName}.<br />
                         {reason}
                         {rejoinBlock}
                         <a onClick={ this.props.onForgetClick }><b>Forget</b></a>
