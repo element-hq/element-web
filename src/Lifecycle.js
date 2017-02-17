@@ -412,6 +412,7 @@ export function stopMatrixClient() {
     if (cli) {
         cli.stopClient();
         cli.removeAllListeners();
+        cli.store.deleteAllData();
         MatrixClientPeg.unset();
     }
 }

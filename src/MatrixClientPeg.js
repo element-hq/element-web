@@ -16,6 +16,7 @@ limitations under the License.
 
 'use strict';
 
+import q from "q";
 import Matrix from 'matrix-js-sdk';
 import utils from 'matrix-js-sdk/lib/utils';
 import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
@@ -71,7 +72,16 @@ class MatrixClientPeg {
         const opts = utils.deepCopy(this.opts);
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
-        this.get().startClient(opts);
+
+        let promise = this.matrixClient.store.startup();
+        // log any errors when starting up the database (if one exists)
+        promise.catch((err) => { console.error(err); });
+
+        // regardless of errors, start the client. If we did error out, we'll
+        // just end up doing a full initial /sync.
+        promise.finally(() => {
+            this.get().startClient(opts);
+        });
     }
 
     getCredentials(): MatrixClientCreds {
@@ -110,6 +120,14 @@ class MatrixClientPeg {
 
         if (localStorage) {
             opts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
+        }
+        if (window.indexedDB && localStorage) {
+            opts.store = new Matrix.IndexedDBStore(
+                new Matrix.IndexedDBStoreBackend(window.indexedDB),
+                new Matrix.SyncAccumulator(), {
+                    localStorage: localStorage,
+                }
+            );
         }
 
         this.matrixClient = Matrix.createClient(opts);
