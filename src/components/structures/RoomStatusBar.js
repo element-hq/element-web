@@ -194,8 +194,9 @@ module.exports = React.createClass({
         }
 
         if (this.props.hasActiveCall) {
+            var TintableSvg = sdk.getComponent("elements.TintableSvg");
             return (
-                <img src="img/sound-indicator.svg" width="23" height="20"/>
+                <TintableSvg src="img/sound-indicator.svg" width="23" height="20"/>
             );
         }
 

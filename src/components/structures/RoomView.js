@@ -1639,14 +1639,14 @@ module.exports = React.createClass({
 
                 videoMuteButton =
                     <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
-                        <img src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"}
+                        <TintableSvg src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"}
                              alt={call.isLocalVideoMuted() ? "Click to unmute video" : "Click to mute video"}
                              width="31" height="27"/>
                     </div>;
             }
             voiceMuteButton =
                 <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
-                    <img src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"}
+                    <TintableSvg src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"}
                          alt={call.isMicrophoneMuted() ? "Click to unmute audio" : "Click to mute audio"}
                          width="21" height="26"/>
                 </div>;
