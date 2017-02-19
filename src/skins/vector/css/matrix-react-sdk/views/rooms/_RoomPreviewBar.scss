@@ -22,9 +22,7 @@ limitations under the License.
     flex-direction: column;
     justify-content: center;
     display: flex;
-
-    /* For welcome pages */
-    background-color: #f7f7f7;
+    background-color: $preview-bar-bg-color;
     -webkit-align-items: center;
 }
 
