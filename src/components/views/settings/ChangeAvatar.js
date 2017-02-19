@@ -128,7 +128,7 @@ module.exports = React.createClass({
             uploadSection = (
                 <div className={this.props.className}>
                     Upload new:
-                    <input type="file" onChange={this.onFileSelected}/>
+                    <input type="file" accept="image/*" onChange={this.onFileSelected}/>
                     {this.state.errorText}
                 </div>
             );
