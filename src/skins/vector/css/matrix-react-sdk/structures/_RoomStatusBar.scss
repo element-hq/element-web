@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_RoomStatusBar {
     margin-left: 65px;
-    min-height: 50px;
+    min-height: 48px;
 }
 
 /* position the indicator in the same place horizontally as .mx_EventTile_avatar. */
@@ -31,8 +31,8 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_callBar {
-    height: 50px;
-    line-height: 50px;
+    height: 48px;
+    line-height: 48px;
 }
 
 .mx_RoomStatusBar_placeholderIndicator span {
@@ -146,8 +146,8 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_typingBar {
-    height: 50px;
-    line-height: 50px;
+    height: 48px;
+    line-height: 48px;
 
     color: $primary-fg-color;
     opacity: 0.5;
