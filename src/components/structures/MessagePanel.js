@@ -237,6 +237,7 @@ module.exports = React.createClass({
         this.eventNodes = {};
 
         var i;
+        let melsIndex = 0;
 
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
@@ -302,10 +303,10 @@ module.exports = React.createClass({
                 // instead will allow new props to be provided. In turn, the shouldComponentUpdate
                 // method on MELS can be used to prevent unnecessary renderings.
                 //
-                // Whilst back-paginating with a MELS at the top of the panel, prevEvent will be null,
-                // so use the key "membereventlistsummary-initial". Otherwise, use the ID of the first
-                // membership event, which will not change during forward pagination.
-                const key = "membereventlistsummary-" + (prevEvent ? mxEv.getId() : "initial");
+                // melsIndex is deliberately unrelated to the contained events so that pagination
+                // will not cause it to be recreated.
+                const key = "membereventlistsummary-" + melsIndex;
+                melsIndex++;
 
                 if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
                     let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1}/></li>;
@@ -349,7 +350,9 @@ module.exports = React.createClass({
                     <MemberEventListSummary
                         key={key}
                         events={summarisedEvents}
-                        data-scroll-token={eventId}>
+                        data-scroll-token={eventId}
+                        onToggle={this._onWidgetLoad} // Update scroll state
+                    >
                             {eventTiles}
                     </MemberEventListSummary>
                 );
