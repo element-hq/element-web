@@ -117,7 +117,8 @@ built it yourself.
 
 To run as a desktop app:
 
-1. Follow the instructions in 'Building From Source' above
+1. Follow the instructions in 'Building From Source' above, but run
+   `npm run build` instead of `npm run dist` (since we don't need the tarball).
 2. Install electron and run it:
 
    ```
