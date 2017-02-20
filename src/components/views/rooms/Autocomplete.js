@@ -6,6 +6,7 @@ import isEqual from 'lodash/isEqual';
 import sdk from '../../../index';
 import type {Completion, SelectionRange} from '../../../autocomplete/Autocompleter';
 import Q from 'q';
+import UserSettingsStore from '../../../UserSettingsStore';
 
 import {getCompletions} from '../../../autocomplete/Autocompleter';
 
@@ -77,9 +78,6 @@ export default class Autocomplete extends React.Component {
             }
         }
 
-        // If no completions were returned, we should turn off force completion.
-        forceComplete = false;
-
         let hide = this.state.hide;
         // These are lists of booleans that indicate whether whether the corresponding provider had a matching pattern
         const oldMatches = this.state.completions.map((completion) => !!completion.command.command),
@@ -89,6 +87,17 @@ export default class Autocomplete extends React.Component {
         if (!isEqual(oldMatches, newMatches)) {
             hide = false;
         }
+
+        const autocompleteDelay = UserSettingsStore.getSyncedSetting('autocompleteDelay', 200);
+
+        // We had no completions before, but do now, so we should apply our display delay here
+        if (this.state.completionList.length === 0 && completionList.length > 0 &&
+            !forceComplete && autocompleteDelay > 0) {
+            await Q.delay(autocompleteDelay);
+        }
+
+        // Force complete is turned off each time since we can't edit the query in that case
+        forceComplete = false;
 
         this.setState({
             completions,

@@ -139,7 +139,7 @@ module.exports = {
 
     getSyncedSetting: function(type, defaultValue = null) {
         var settings = this.getSyncedSettings();
-        return settings.hasOwnProperty(type) ? settings[type] : null;
+        return settings.hasOwnProperty(type) ? settings[type] : defaultValue;
     },
 
     setSyncedSetting: function(type, value) {
@@ -156,7 +156,7 @@ module.exports = {
 
     getLocalSetting: function(type, defaultValue = null) {
         var settings = this.getLocalSettings();
-        return settings.hasOwnProperty(type) ? settings[type] : null;
+        return settings.hasOwnProperty(type) ? settings[type] : defaultValue;
     },
 
     setLocalSetting: function(type, value) {

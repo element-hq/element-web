@@ -508,6 +508,15 @@ module.exports = React.createClass({
                     { this._renderUrlPreviewSelector() }
                     { SETTINGS_LABELS.map( this._renderSyncedSetting ) }
                     { THEMES.map( this._renderThemeSelector ) }
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td><strong>Autocomplete Delay (ms): </strong></td>
+                            <td><input type="number" defaultValue={UserSettingsStore.getLocalSetting('autocompleteDelay', 200)}
+                                       onChange={(e) => UserSettingsStore.setLocalSetting('autocompleteDelay', +e.target.value)} /> </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         );

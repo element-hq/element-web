@@ -43,7 +43,7 @@ export async function getCompletions(query: string, selection: SelectionRange, f
         PROVIDERS.map(provider => {
             return Q(provider.getCompletions(query, selection, force))
                 .timeout(PROVIDER_COMPLETION_TIMEOUT);
-        })
+        }),
     );
 
     return completionsList
