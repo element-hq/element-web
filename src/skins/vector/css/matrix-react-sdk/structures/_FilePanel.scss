@@ -61,6 +61,12 @@ limitations under the License.
     color: $light-fg-color;
 }
 
+.mx_FilePanel .mx_EventTile .mx_MImageBody_shredLink {
+    background: url(/img/cancel.svg) no-repeat 50% 50%;
+    height: 22px;
+    width: 22px;
+}
+
 .mx_FilePanel .mx_EventTile .mx_MImageBody_size {
     flex: 1 0 0;
     font-size: 11px;
@@ -112,4 +118,3 @@ limitations under the License.
 .mx_FilePanel .mx_EventTile_selected .mx_EventTile_line {
     padding-left: 0px;
 }
-
