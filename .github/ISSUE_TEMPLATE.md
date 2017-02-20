@@ -36,7 +36,7 @@ For the web app:
 
 - **Browser**: Chrome, Safari, Firefox? which version?
 - **OS**: Windows, macOS, Ubuntu, Arch Linux, etc?
-- **URL**: riot.im/develop / riot.im/app / somewhere else?
+- **URL**: riot.im/develop / riot.im/app / somewhere else? If a private server, what version of riot-web?
 
 For the desktop app:
 
