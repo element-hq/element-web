@@ -122,8 +122,11 @@ class MatrixClientPeg {
             opts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
         }
         if (window.indexedDB && localStorage) {
+            // FIXME: bodge to remove old database. Remove this after a few weeks.
+            window.indexedDB.deleteDatabase("matrix-js-sdk:default");
+
             opts.store = new Matrix.IndexedDBStore(
-                new Matrix.IndexedDBStoreBackend(window.indexedDB),
+                new Matrix.IndexedDBStoreBackend(window.indexedDB, "riot-web-sync"),
                 new Matrix.SyncAccumulator(), {
                     localStorage: localStorage,
                 }
