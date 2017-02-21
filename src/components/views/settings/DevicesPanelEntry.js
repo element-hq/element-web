@@ -19,6 +19,11 @@ import React from 'react';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
+import DateUtils from '../../../DateUtils';
+import utils from 'matrix-js-sdk/lib/utils';
+
+
+const AUTH_CACHE_AGE = 5 * 60 * 1000; // 5 minutes
 
 export default class DevicesPanelEntry extends React.Component {
     constructor(props, context) {
@@ -30,7 +35,6 @@ export default class DevicesPanelEntry extends React.Component {
         };
 
         this._unmounted = false;
-
         this._onDeleteClick = this._onDeleteClick.bind(this);
         this._onDisplayNameChanged = this._onDisplayNameChanged.bind(this);
         this._makeDeleteRequest = this._makeDeleteRequest.bind(this);
@@ -53,8 +57,12 @@ export default class DevicesPanelEntry extends React.Component {
     _onDeleteClick() {
         this.setState({deleting: true});
 
-        // try without interactive auth to start off
-        this._makeDeleteRequest(null).catch((error) => {
+        if (this.context.authCache.lastUpdate < Date.now() - AUTH_CACHE_AGE) {
+            this.context.authCache.auth = null;
+        }
+
+        // try with auth cache (which is null, so no interactive auth, to start off)
+        this._makeDeleteRequest(this.context.authCache.auth).catch((error) => {
             if (this._unmounted) { return; }
             if (error.httpStatus !== 401 || !error.data || !error.data.flows) {
                 // doesn't look like an interactive-auth failure
@@ -83,6 +91,9 @@ export default class DevicesPanelEntry extends React.Component {
     }
 
     _makeDeleteRequest(auth) {
+        this.context.authCache.auth = auth;
+        this.context.authCache.lastUpdate = Date.now();
+
         const device = this.props.device;
         return MatrixClientPeg.get().deleteDevice(device.device_id, auth).then(
             () => {
@@ -110,8 +121,7 @@ export default class DevicesPanelEntry extends React.Component {
 
         let lastSeen = "";
         if (device.last_seen_ts) {
-            // todo: format the timestamp as "5 minutes ago" or whatever.
-            const lastSeenDate = new Date(device.last_seen_ts);
+            const lastSeenDate = DateUtils.formatDate(new Date(device.last_seen_ts));
             lastSeen = device.last_seen_ip + " @ " +
                 lastSeenDate.toLocaleString();
         }
@@ -158,6 +168,10 @@ export default class DevicesPanelEntry extends React.Component {
 DevicesPanelEntry.propTypes = {
     device: React.PropTypes.object.isRequired,
     onDeleted: React.PropTypes.func,
+};
+
+DevicesPanelEntry.contextTypes = {
+    authCache: React.PropTypes.object,
 };
 
 DevicesPanelEntry.defaultProps = {
