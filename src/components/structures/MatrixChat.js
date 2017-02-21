@@ -518,6 +518,18 @@ module.exports = React.createClass({
             case 'set_theme':
                 this._onSetTheme(payload.value);
                 break;
+            case 'unknown_device_error':
+                var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
+                Modal.createDialog(UnknownDeviceDialog, {
+                    devices: payload.err.devices,
+                    room: payload.room,
+                    onFinished: (r) => {
+                        // XXX: temporary logging to try to diagnose
+                        // https://github.com/vector-im/riot-web/issues/3148
+                        console.log('UnknownDeviceDialog closed with '+r);
+                    },
+                }, "mx_Dialog_unknownDevice");
+                break;
             case 'on_logged_in':
                 this._onLoggedIn();
                 break;

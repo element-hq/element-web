@@ -85,7 +85,7 @@ UnknownDeviceList.propTypes = {
 
 
 export default React.createClass({
-    displayName: 'UnknownEventDialog',
+    displayName: 'UnknownDeviceDialog',
 
     propTypes: {
         room: React.PropTypes.object.isRequired,
