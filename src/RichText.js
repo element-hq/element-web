@@ -30,7 +30,15 @@ const USERNAME_REGEX = /@\S+:\S+/g;
 const ROOM_REGEX = /#\S+:\S+/g;
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
 
-export const contentStateToHTML = stateToHTML;
+export const contentStateToHTML = (contentState: ContentState) => {
+    return stateToHTML(contentState, {
+        inlineStyles: {
+            UNDERLINE: {
+                element: 'u'
+            }
+        }
+    });
+};
 
 export function HTMLtoContentState(html: string): ContentState {
     return ContentState.createFromBlockArray(convertFromHTML(html));
