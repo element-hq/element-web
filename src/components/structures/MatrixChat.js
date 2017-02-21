@@ -226,6 +226,15 @@ module.exports = React.createClass({
         if (this._teamToken) {
             console.info(`Team token set to ${this._teamToken}`);
         }
+
+        // Set a default HS with query param `hs_url`
+        const paramHs = this.props.startingFragmentQueryParams.hs_url;
+        if (paramHs) {
+            console.log('Setting register_hs_url ', paramHs);
+            this.setState({
+                register_hs_url: paramHs,
+            });
+        }
     },
 
     componentDidMount: function() {
