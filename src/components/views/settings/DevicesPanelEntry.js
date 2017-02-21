@@ -20,8 +20,6 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import DateUtils from '../../../DateUtils';
-import utils from 'matrix-js-sdk/lib/utils';
-
 
 const AUTH_CACHE_AGE = 5 * 60 * 1000; // 5 minutes
 
