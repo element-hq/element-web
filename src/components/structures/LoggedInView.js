@@ -49,11 +49,16 @@ export default React.createClass({
 
     childContextTypes: {
         matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient),
+        authCache: React.PropTypes.object,
     },
 
     getChildContext: function() {
         return {
             matrixClient: this._matrixClient,
+            authCache: {
+                auth: {},
+                lastUpdate: 0,
+            },
         };
     },
 
