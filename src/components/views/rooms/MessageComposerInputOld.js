@@ -70,6 +70,9 @@ export default React.createClass({
 
         // js-sdk Room object
         room: React.PropTypes.object.isRequired,
+
+        // The text to use a placeholder in the input box
+        placeholder: React.PropTypes.string.isRequired,
     },
 
     componentWillMount: function() {
@@ -442,7 +445,7 @@ export default React.createClass({
     render: function() {
         return (
             <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
-                <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
+                <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder={this.props.placeholder} />
             </div>
         );
     }

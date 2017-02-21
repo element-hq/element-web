@@ -223,8 +223,8 @@ export default class MessageComposer extends React.Component {
         );
 
         let e2eImg, e2eTitle, e2eClass;
-
-        if (MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId)) {
+        const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
+        if (roomIsEncrypted) {
             // FIXME: show a /!\ if there are untrusted devices in the room...
             e2eImg = 'img/e2e-verified.svg';
             e2eTitle = 'Encrypted room';
@@ -286,12 +286,16 @@ export default class MessageComposer extends React.Component {
                      key="controls_formatting" />
             );
 
+            const placeholderText = roomIsEncrypted ?
+                "Send an encrypted message…" : "Send a plaintext message…";
+
             controls.push(
                 <MessageComposerInput
                     ref={c => this.messageComposerInput = c}
                     key="controls_input"
                     onResize={this.props.onResize}
                     room={this.props.room}
+                    placeholder={placeholderText}
                     tryComplete={this._tryComplete}
                     onUpArrow={this.onUpArrow}
                     onDownArrow={this.onDownArrow}
