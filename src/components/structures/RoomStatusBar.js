@@ -150,7 +150,9 @@ module.exports = React.createClass({
             (state.usersTyping.length > 0) ||
             props.numUnreadMessages ||
             !props.atEndOfLiveTimeline ||
-            props.hasActiveCall) {
+            props.hasActiveCall ||
+            props.tabComplete.isTabCompleting()
+        ) {
             return STATUS_BAR_EXPANDED;
         } else if (props.tabCompleteEntries) {
             return STATUS_BAR_HIDDEN;
