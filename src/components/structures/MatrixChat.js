@@ -42,6 +42,7 @@ var Lifecycle = require('../../Lifecycle');
 var PageTypes = require('../../PageTypes');
 
 var createRoom = require("../../createRoom");
+var UDEHandler = require("../../UnknownDeviceErrorHandler");
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
@@ -240,6 +241,7 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        UDEHandler.startListening();
 
         this.focusComposer = false;
         window.addEventListener("focus", this.onFocus);
@@ -286,6 +288,7 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
+        UDEHandler.stopListening();
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
     },
@@ -518,18 +521,6 @@ module.exports = React.createClass({
                 break;
             case 'set_theme':
                 this._onSetTheme(payload.value);
-                break;
-            case 'unknown_device_error':
-                var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
-                Modal.createDialog(UnknownDeviceDialog, {
-                    devices: payload.err.devices,
-                    room: payload.room,
-                    onFinished: (r) => {
-                        // XXX: temporary logging to try to diagnose
-                        // https://github.com/vector-im/riot-web/issues/3148
-                        console.log('UnknownDeviceDialog closed with '+r);
-                    },
-                }, "mx_Dialog_unknownDevice");
                 break;
             case 'resend_all_events':
                 payload.room.getPendingEvents().filter(function(ev) {

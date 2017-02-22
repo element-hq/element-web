@@ -132,7 +132,7 @@ export default React.createClass({
                     </p>
                     <p>
                         We recommend you go through the verification process
-                        for each device before continuing, but you can retry
+                        for each device before continuing, but you can send
                         without verifying if you prefer.
                     </p>
                 </div>
