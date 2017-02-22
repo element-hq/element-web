@@ -169,7 +169,7 @@ export default React.createClass({
                                     room: this.props.room,
                                 });
                             }}>
-                        Retry
+                        Send anyway
                     </button>
                     <button className="mx_Dialog_primary" autoFocus={ true }
                             onClick={() => {
