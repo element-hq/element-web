@@ -127,13 +127,9 @@ export default React.createClass({
             warning = (
                 <div>
                     <p>
-                        This means there is no guarantee that the devices
-                        belong to the users they claim to.
-                    </p>
-                    <p>
                         We recommend you go through the verification process
-                        for each device before continuing, but you can send
-                        without verifying if you prefer.
+                        for each device to confirm they belong to their legitimate owner,
+                        but you can resend the message without verifying if you prefer.
                     </p>
                 </div>
             );
@@ -152,8 +148,7 @@ export default React.createClass({
             >
                 <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
                     <h4>
-                        This room contains unknown devices which have not been
-                        verified.
+                        This room contains devices that you haven't seen before.
                     </h4>
                     { warning }
                     Unknown devices:
