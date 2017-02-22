@@ -100,18 +100,19 @@ function pause(audioId) {
 
 function _setCallListeners(call) {
     call.on("error", function(err) {
+        console.error("Call error: %s", err);
+        console.error(err.stack);
+        call.hangup();
+        _setCallState(undefined, call.roomId, "ended");
+    });
+    call.on('send_event_error', function(err) {
         if (err.name === "UnknownDeviceError") {
             dis.dispatch({
                 action: 'unknown_device_error',
                 err: err,
                 room: MatrixClientPeg.get().getRoom(call.roomId),
             });
-        } else {
-            console.error("Call error: %s", err);
-            console.error(err.stack);
         }
-        call.hangup();
-        _setCallState(undefined, call.roomId, "ended");
     });
     call.on("hangup", function() {
         _setCallState(undefined, call.roomId, "ended");
