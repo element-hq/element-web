@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
+import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
@@ -131,8 +132,8 @@ export default React.createClass({
                     </p>
                     <p>
                         We recommend you go through the verification process
-                        for each device before continuing, but you can resend
-                        the message without verifying if you prefer.
+                        for each device before continuing, but you can retry
+                        without verifying if you prefer.
                     </p>
                 </div>
             );
@@ -160,6 +161,16 @@ export default React.createClass({
                     <UnknownDeviceList devices={this.props.devices} />
                 </GeminiScrollbar>
                 <div className="mx_Dialog_buttons">
+                    <button className="mx_Dialog_primary" autoFocus={ true }
+                            onClick={() => {
+                                this.props.onFinished();
+                                dis.dispatch({
+                                    action: 'resend_all_events',
+                                    room: this.props.room,
+                                });
+                            }}>
+                        Retry
+                    </button>
                     <button className="mx_Dialog_primary" autoFocus={ true }
                             onClick={() => {
                                 // XXX: temporary logging to try to diagnose

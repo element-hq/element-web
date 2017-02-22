@@ -716,16 +716,16 @@ module.exports = React.createClass({
     },
 
     onResendAllClick: function() {
-        var eventsToResend = this._getUnsentMessages(this.state.room);
-        eventsToResend.forEach(function(event) {
-            Resend.resend(event);
+        dis.dispatch({
+            action: 'resend_all_events',
+            room: this.state.room,
         });
     },
 
     onCancelAllClick: function() {
-        var eventsToResend = this._getUnsentMessages(this.state.room);
-        eventsToResend.forEach(function(event) {
-            Resend.removeFromQueue(event);
+        dis.dispatch({
+            action: 'cancel_all_events',
+            room: this.state.room,
         });
     },
 

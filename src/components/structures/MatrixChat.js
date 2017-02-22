@@ -26,6 +26,7 @@ var ContextualMenu = require("./ContextualMenu");
 var RoomListSorter = require("../../RoomListSorter");
 var UserActivity = require("../../UserActivity");
 var Presence = require("../../Presence");
+var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
 
 var Login = require("./login/Login");
@@ -529,6 +530,20 @@ module.exports = React.createClass({
                         console.log('UnknownDeviceDialog closed with '+r);
                     },
                 }, "mx_Dialog_unknownDevice");
+                break;
+            case 'resend_all_events':
+                payload.room.getPendingEvents().filter(function(ev) {
+                    return ev.status === Matrix.EventStatus.NOT_SENT;
+                }).forEach(function(event) {
+                    Resend.resend(event);
+                });
+                break;
+            case 'cancel_all_events':
+                payload.room.getPendingEvents().filter(function(ev) {
+                    return ev.status === Matrix.EventStatus.NOT_SENT;
+                }).forEach(function(event) {
+                    Resend.removeFromQueue(event);
+                });
                 break;
             case 'on_logged_in':
                 this._onLoggedIn();
