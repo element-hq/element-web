@@ -518,6 +518,9 @@ module.exports = React.createClass({
             case 'set_theme':
                 this._onSetTheme(payload.value);
                 break;
+            case 'set_team_token':
+                this._onSetTeamToken(payload.value);
+                break;
             case 'on_logged_in':
                 this._onLoggedIn();
                 break;
@@ -690,6 +693,16 @@ module.exports = React.createClass({
         else {
             Tinter.tintSvgWhite('#ffffff');
         }
+    },
+
+    /**
+     * Called when the team token is acquired at registration or login. This
+     * should only happen if the configured RTS (see config.json teamServerURL)
+     * recognises the user as having an email address that matches a team.
+     */
+    _onSetTeamToken: function(teamToken) {
+        this._teamToken = teamToken;
+        this._setPage(PageTypes.HomePage);
     },
 
     /**
@@ -1003,8 +1016,7 @@ module.exports = React.createClass({
     },
 
     onTeamMemberRegistered: function(teamToken) {
-        this._teamToken = teamToken;
-        this._setPage(PageTypes.HomePage);
+        this._onSetTeamToken(teamToken);
     },
 
     onFinishPostRegistration: function() {

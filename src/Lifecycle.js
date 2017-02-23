@@ -304,6 +304,10 @@ export function setLoggedIn(credentials) {
             rtsClient.login(credentials.userId).then((body) => {
                 if (body.team_token) {
                     localStorage.setItem("mx_team_token", body.team_token);
+                    dis.dispatch({
+                        action: 'set_team_token',
+                        value: body.team_token,
+                    })
                 }
             }, (err) =>{
                 console.error(
