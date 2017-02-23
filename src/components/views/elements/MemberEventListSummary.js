@@ -30,6 +30,8 @@ module.exports = React.createClass({
         avatarsMaxLength: React.PropTypes.number,
         // The minimum number of events needed to trigger summarisation
         threshold: React.PropTypes.number,
+        // Called when the MELS expansion is toggled
+        onToggle: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -63,6 +65,7 @@ module.exports = React.createClass({
         this.setState({
             expanded: !this.state.expanded,
         });
+        this.props.onToggle();
     },
 
     /**
