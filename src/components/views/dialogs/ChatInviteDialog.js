@@ -167,45 +167,55 @@ module.exports = React.createClass({
         const query = ev.target.value;
         let queryList = [];
 
-        // Only do search if there is something to search
-        if (query.length > 0 && query != '@') {
-            // filter the known users list
-            queryList = this._userList.filter((user) => {
-                return this._matches(query, user);
-            }).map((user) => {
-                // Return objects, structure of which is defined
-                // by InviteAddressType
-                return {
-                    addressType: 'mx',
-                    address: user.userId,
-                    displayName: user.displayName,
-                    avatarMxc: user.avatarUrl,
-                    isKnown: true,
-                }
-            });
+        if (query.length < 2) {
+            return;
+        }
 
-            // If the query isn't a user we know about, but is a
-            // valid address, add an entry for that
-            if (queryList.length == 0) {
-                const addrType = getAddressType(query);
-                if (addrType !== null) {
-                    queryList[0] = {
-                        addressType: addrType,
-                        address: query,
-                        isKnown: false,
-                    };
-                    if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-                    if (addrType == 'email') {
-                        this._lookupThreepid(addrType, query).done();
+        if (this.queryChangedDebouncer) {
+            clearTimeout(this.queryChangedDebouncer);
+        }
+        this.queryChangedDebouncer = setTimeout(() => {
+            // Only do search if there is something to search
+            if (query.length > 0 && query != '@') {
+                // filter the known users list
+                queryList = this._userList.filter((user) => {
+                    return this._matches(query, user);
+                }).sort((userA, userB) => {
+                    return this._sortedMatches(query, userA, userB);
+                }).map((user) => {
+                    // Return objects, structure of which is defined
+                    // by InviteAddressType
+                    return {
+                        addressType: 'mx',
+                        address: user.userId,
+                        displayName: user.displayName,
+                        avatarMxc: user.avatarUrl,
+                        isKnown: true,
+                    }
+                });
+
+                // If the query isn't a user we know about, but is a
+                // valid address, add an entry for that
+                if (queryList.length == 0) {
+                    const addrType = getAddressType(query);
+                    if (addrType !== null) {
+                        queryList[0] = {
+                            addressType: addrType,
+                            address: query,
+                            isKnown: false,
+                        };
+                        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+                        if (addrType == 'email') {
+                            this._lookupThreepid(addrType, query).done();
+                        }
                     }
                 }
             }
-        }
-
-        this.setState({
-            queryList: queryList,
-            error: false,
-        });
+            this.setState({
+                queryList: queryList,
+                error: false,
+            });
+        }, 200);
     },
 
     onDismissed: function(index) {
@@ -349,8 +359,8 @@ module.exports = React.createClass({
             return false;
         }
 
-        // direct prefix matches
-        if (name.indexOf(query) === 0 || uid.indexOf(query) === 0) {
+        // positional matches
+        if (name.indexOf(query) !== -1 || uid.indexOf(query) !== -1) {
             return true;
         }
 
@@ -372,6 +382,16 @@ module.exports = React.createClass({
         }
 
         return false;
+    },
+
+    _sortedMatches: function(query, userA, userB) {
+        if (userA.displayName.startsWith(query) || userA.userId.startsWith(query)) {
+            return -1;
+        }
+        if (userA.displayName.length === query.length) {
+            return -1;
+        }
+        return 0;
     },
 
     _isOnInviteList: function(uid) {
