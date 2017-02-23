@@ -26,6 +26,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
 import q from 'q';
+import Fuse from 'fuse.js';
 
 const TRUNCATE_QUERY_LIST = 40;
 
@@ -84,6 +85,21 @@ module.exports = React.createClass({
         if (this.props.focus) {
             // Set the cursor at the end of the text input
             this.refs.textinput.value = this.props.value;
+        }
+        // Create a Fuse instance for fuzzy searching this._userList
+        if (!this._fuse) {
+            this._fuse = new Fuse(
+                // Use an empty list at first that will later be populated
+                // (see this._updateUserList)
+                [],
+                {
+                    shouldSort: true,
+                    location: 0, // The index of the query in the test string
+                    distance: 5, // The distance away from location the query can be
+                    // 0.0 = exact match, 1.0 = match anything
+                    threshold: 0.3,
+                }
+            );
         }
         this._updateUserList();
     },
@@ -177,12 +193,15 @@ module.exports = React.createClass({
         this.queryChangedDebouncer = setTimeout(() => {
             // Only do search if there is something to search
             if (query.length > 0 && query != '@') {
-                // filter the known users list
-                queryList = this._userList.filter((user) => {
-                    return this._matches(query, user);
-                }).sort((userA, userB) => {
-                    return this._sortedMatches(query, userA, userB);
-                }).map((user) => {
+                // Weighted keys prefer to match userIds when first char is @
+                this._fuse.options.keys = [{
+                    name: 'displayName',
+                    weight: query[0] === '@' ? 0.1 : 0.9,
+                },{
+                    name: 'userId',
+                    weight: query[0] === '@' ? 0.9 : 0.1,
+                }];
+                queryList = this._fuse.search(query).map((user) => {
                     // Return objects, structure of which is defined
                     // by InviteAddressType
                     return {
@@ -214,6 +233,8 @@ module.exports = React.createClass({
             this.setState({
                 queryList: queryList,
                 error: false,
+            }, () => {
+                this.addressSelector.moveSelectionTop();
             });
         }, 200);
     },
@@ -341,58 +362,14 @@ module.exports = React.createClass({
     _updateUserList: new rate_limited_func(function() {
         // Get all the users
         this._userList = MatrixClientPeg.get().getUsers();
+        // Remove current user
+        const meIx = this._userList.findIndex((u) => {
+            return u.userId === MatrixClientPeg.get().credentials.userId;
+        });
+        this._userList.splice(meIx, 1);
+
+        this._fuse.set(this._userList);
     }, 500),
-
-    // This is the search algorithm for matching users
-    _matches: function(query, user) {
-        var name = user.displayName.toLowerCase();
-        var uid = user.userId.toLowerCase();
-        query = query.toLowerCase();
-
-        // don't match any that are already on the invite list
-        if (this._isOnInviteList(uid)) {
-            return false;
-        }
-
-        // ignore current user
-        if (uid === MatrixClientPeg.get().credentials.userId) {
-            return false;
-        }
-
-        // positional matches
-        if (name.indexOf(query) !== -1 || uid.indexOf(query) !== -1) {
-            return true;
-        }
-
-        // strip @ on uid and try matching again
-        if (uid.length > 1 && uid[0] === "@" && uid.substring(1).indexOf(query) === 0) {
-            return true;
-        }
-
-        // Try to find the query following a "word boundary", except that
-        // this does avoids using \b because it only considers letters from
-        // the roman alphabet to be word characters.
-        // Instead, we look for the query following either:
-        //  * The start of the string
-        //  * Whitespace, or
-        //  * A fixed number of punctuation characters
-        const expr = new RegExp("(?:^|[\\s\\(\)'\",\.-_@\?;:{}\\[\\]\\#~`\\*\\&\\$])" + escapeRegExp(query));
-        if (expr.test(name)) {
-            return true;
-        }
-
-        return false;
-    },
-
-    _sortedMatches: function(query, userA, userB) {
-        if (userA.displayName.startsWith(query) || userA.userId.startsWith(query)) {
-            return -1;
-        }
-        if (userA.displayName.length === query.length) {
-            return -1;
-        }
-        return 0;
-    },
 
     _isOnInviteList: function(uid) {
         for (let i = 0; i < this.state.inviteList.length; i++) {

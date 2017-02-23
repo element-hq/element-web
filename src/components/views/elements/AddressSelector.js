@@ -61,6 +61,15 @@ export default React.createClass({
         }
     },
 
+    moveSelectionTop: function() {
+        if (this.state.selected > 0) {
+            this.setState({
+                selected: 0,
+                hover: false,
+            });
+        }
+    },
+
     moveSelectionUp: function() {
         if (this.state.selected > 0) {
             this.setState({
@@ -124,7 +133,14 @@ export default React.createClass({
                 // Saving the addressListElement so we can use it to work out, in the componentDidUpdate
                 // method, how far to scroll when using the arrow keys
                 addressList.push(
-                    <div className={classes} onClick={this.onClick.bind(this, i)} onMouseEnter={this.onMouseEnter.bind(this, i)} onMouseLeave={this.onMouseLeave} key={i} ref={(ref) => { this.addressListElement = ref; }} >
+                    <div
+                        className={classes}
+                        onClick={this.onClick.bind(this, i)}
+                        onMouseEnter={this.onMouseEnter.bind(this, i)}
+                        onMouseLeave={this.onMouseLeave}
+                        key={this.props.addressList[i].userId}
+                        ref={(ref) => { this.addressListElement = ref; }}
+                    >
                         <AddressTile address={this.props.addressList[i]} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
                     </div>
                 );
