@@ -287,7 +287,7 @@ export default class MessageComposer extends React.Component {
             );
 
             const placeholderText = roomIsEncrypted ?
-                "Send a message (unencrypted)…" : "Send a message…";
+                "Send an encrypted message…" : "Send a message (unencrypted)…";
 
             controls.push(
                 <MessageComposerInput
