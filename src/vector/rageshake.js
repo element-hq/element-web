@@ -314,6 +314,9 @@ class IndexedDBLogStore {
         let size = 0;
         for (let i = 0; i < allLogIds.length; i++) {
             let lines = await fetchLogs(allLogIds[i]);
+
+            // always include at least one log file, but only include
+            // subsequent ones if they won't take us over the MAX_LOG_SIZE
             if (i > 0 && size + lines.length > MAX_LOG_SIZE) {
                 // the remaining log IDs should be removed. If we go out of
                 // bounds this is just []
@@ -323,6 +326,7 @@ class IndexedDBLogStore {
                 removeLogIds = allLogIds.slice(i + 1);
                 break;
             }
+
             logs.push({
                 lines: lines,
                 id: allLogIds[i],
