@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 
 import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -28,6 +27,9 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
  * Call getEntryComponentForLoginType() to get a component suitable for a
  * particular login type. Each component requires the same properties:
  *
+ * matrixClient:           A matrix client. May be a different one to the one
+ *                         currently being used generally (eg. to register with
+ *                         one HS whilst beign a guest on another).
  * loginType:              the login type of the auth stage being attempted
  * authSessionId:          session id from the server
  * stageParams:            params from the server for the stage being attempted
@@ -35,6 +37,10 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
  * submitAuthDict:         a function which will be called with the new auth dict
  * busy:                   a boolean indicating whether the auth logic is doing something
  *                         the user needs to wait for.
+ * inputs                  Object of inputs provided by the user, as in js-sdk
+ *                         interactive-auth
+ * stageState              Stage-specific object used for communicating state information
+ *                         to the UI from the state-specific auth logic.
  *
  * Each component may also provide the following functions (beyond the standard React ones):
  *    focus: set the input focus appropriately in the form.
@@ -48,6 +54,7 @@ export const PasswordAuthEntry = React.createClass({
     },
 
     propTypes: {
+        matrixClient: React.PropTypes.object,
         submitAuthDict: React.PropTypes.func.isRequired,
         errorText: React.PropTypes.string,
         // is the auth logic currently waiting for something to
@@ -73,7 +80,7 @@ export const PasswordAuthEntry = React.createClass({
 
         this.props.submitAuthDict({
             type: PasswordAuthEntry.LOGIN_TYPE,
-            user: MatrixClientPeg.get().credentials.userId,
+            user: this.props.matrixClient.credentials.userId,
             password: this.refs.passwordField.value,
         });
     },
@@ -164,6 +171,39 @@ export const RecaptchaAuthEntry = React.createClass({
     },
 });
 
+export const EmailIdentityAuthEntry = React.createClass({
+    displayName: 'EmailIdentityAuthEntry',
+
+    statics: {
+        LOGIN_TYPE: "m.login.email.identity",
+    },
+
+    propTypes: {
+        matrixClient: React.PropTypes.object,
+        submitAuthDict: React.PropTypes.func.isRequired,
+        errorText: React.PropTypes.string,
+        authSessionId: React.PropTypes.string.isRequired,
+        inputs: React.PropTypes.object.isRequired,
+    },
+
+    render: function() {
+        // XXX: we now have 2 separate 'busy's - get rid of one
+        // why can't InteractiveAuth manage whether the general
+        // auth logic is busy?
+        if (this.props.stageState.busy) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            return <Loader />;
+        } else {
+            return (
+                <div>
+                    <p>An email has been sent to <i>{this.props.inputs.emailAddress}</i></p>
+                    <p>Please check your email to continue registration.</p>
+                </div>
+            );
+        }
+    },
+});
+
 export const FallbackAuthEntry = React.createClass({
     displayName: 'FallbackAuthEntry',
 
@@ -189,7 +229,7 @@ export const FallbackAuthEntry = React.createClass({
     },
 
     _onShowFallbackClick: function() {
-        var url = MatrixClientPeg.get().getFallbackAuthUrl(
+        var url = this.props.matrixClient.getFallbackAuthUrl(
             this.props.loginType,
             this.props.authSessionId
         );
@@ -199,7 +239,7 @@ export const FallbackAuthEntry = React.createClass({
     _onReceiveMessage: function(event) {
         if (
             event.data === "authDone" &&
-            event.origin === MatrixClientPeg.get().getHomeserverUrl()
+            event.origin === this.props.matrixClient.getHomeserverUrl()
         ) {
             this.props.submitAuthDict({});
         }
@@ -220,6 +260,7 @@ export const FallbackAuthEntry = React.createClass({
 const AuthEntryComponents = [
     PasswordAuthEntry,
     RecaptchaAuthEntry,
+    EmailIdentityAuthEntry,
 ];
 
 export function getEntryComponentForLoginType(loginType) {

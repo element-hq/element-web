@@ -19,13 +19,13 @@ limitations under the License.
 var React = require('react');
 var ReactDOM = require('react-dom');
 var sdk = require('../../../index');
-var Signup = require("../../../Signup");
+var Login = require("../../../Login");
 var PasswordLogin = require("../../views/login/PasswordLogin");
 var CasLogin = require("../../views/login/CasLogin");
 var ServerConfig = require("../../views/login/ServerConfig");
 
 /**
- * A wire component which glues together login UI components and Signup logic
+ * A wire component which glues together login UI components and Login logic
  */
 module.exports = React.createClass({
     displayName: 'Login',
@@ -146,7 +146,7 @@ module.exports = React.createClass({
 
         var fallbackHsUrl = hsUrl == this.props.defaultHsUrl ? this.props.fallbackHsUrl : null;
 
-        var loginLogic = new Signup.Login(hsUrl, isUrl, fallbackHsUrl, {
+        var loginLogic = new Login(hsUrl, isUrl, fallbackHsUrl, {
             defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
         });
         this._loginLogic = loginLogic;

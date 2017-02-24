@@ -92,6 +92,7 @@ export function createTestClient() {
         sendTextMessage: () => q({}),
         sendHtmlMessage: () => q({}),
         getSyncState: () => "SYNCING",
+        generateClientSecret: () => "t35tcl1Ent5ECr3T",
     };
 }
 

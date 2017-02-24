@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,13 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import Matrix from 'matrix-js-sdk';
 
 var React = require('react');
 
 var sdk = require('../../../index');
-var dis = require('../../../dispatcher');
-var Signup = require("../../../Signup");
 var ServerConfig = require("../../views/login/ServerConfig");
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var RegistrationForm = require("../../views/login/RegistrationForm");
@@ -40,7 +39,7 @@ module.exports = React.createClass({
         onLoggedIn: React.PropTypes.func.isRequired,
         clientSecret: React.PropTypes.string,
         sessionId: React.PropTypes.string,
-        registrationUrl: React.PropTypes.string,
+        makeRegistrationUrl: React.PropTypes.func,
         idSid: React.PropTypes.string,
         customHsUrl: React.PropTypes.string,
         customIsUrl: React.PropTypes.string,
@@ -82,27 +81,20 @@ module.exports = React.createClass({
             formVals: {
                 email: this.props.email,
             },
+            // true if we're waiting for the user to complete
+            // user-interactive auth
+            // If we've been given a session ID, we're resuming
+            // straight back into UI auth
+            doingUIAuth: Boolean(this.props.sessionId),
         };
     },
 
     componentWillMount: function() {
         this._unmounted = false;
-        this.dispatcherRef = dis.register(this.onAction);
-        // attach this to the instance rather than this.state since it isn't UI
-        this.registerLogic = new Signup.Register(
-            this.props.customHsUrl, this.props.customIsUrl, {
-                defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
-            }
-        );
-        this.registerLogic.setClientSecret(this.props.clientSecret);
-        this.registerLogic.setSessionId(this.props.sessionId);
-        this.registerLogic.setRegistrationUrl(this.props.registrationUrl);
-        this.registerLogic.setIdSid(this.props.idSid);
-        this.registerLogic.setGuestAccessToken(this.props.guestAccessToken);
-        if (this.props.referrer) {
-            this.registerLogic.setReferrer(this.props.referrer);
-        }
-        this.registerLogic.recheckState();
+
+        this._hsUrl = this.props.customHsUrl;
+        this._isUrl = this.props.customIsUrl;
+        this._replaceClient();
 
         if (
             this.props.teamServerConfig &&
@@ -134,37 +126,20 @@ module.exports = React.createClass({
         }
     },
 
-    componentWillUnmount: function() {
-        dis.unregister(this.dispatcherRef);
-        this._unmounted = true;
-    },
-
-    componentDidMount: function() {
-        // may have already done an HTTP hit (e.g. redirect from an email) so
-        // check for any pending response
-        var promise = this.registerLogic.getPromise();
-        if (promise) {
-            this.onProcessingRegistration(promise);
-        }
-    },
-
     onHsUrlChanged: function(newHsUrl) {
-        this.registerLogic.setHomeserverUrl(newHsUrl);
+        this._hsUrl = newHsUrl;
+        this._replaceClient();
     },
 
     onIsUrlChanged: function(newIsUrl) {
-        this.registerLogic.setIdentityServerUrl(newIsUrl);
+        this._isUrl = newIsUrl;
+        this._replaceClient();
     },
 
-    onAction: function(payload) {
-        if (payload.action !== "registration_step_update") {
-            return;
-        }
-        // If the registration state has changed, this means the
-        // user now needs to do something. It would be better
-        // to expose the explicitly in the register logic.
-        this.setState({
-            busy: false
+    _replaceClient: function() {
+        this._matrixClient = Matrix.createClient({
+            baseUrl: this._hsUrl,
+            idBaseUrl: this._isUrl,
         });
     },
 
@@ -174,115 +149,82 @@ module.exports = React.createClass({
             errorText: "",
             busy: true,
             formVals: formVals,
+            doingUIAuth: true,
         });
-
-        if (formVals.username !== this.props.username) {
-            // don't try to upgrade if we changed our username
-            this.registerLogic.setGuestAccessToken(null);
-        }
-
-        this.onProcessingRegistration(this.registerLogic.register(formVals));
     },
 
-    // Promise is resolved when the registration process is FULLY COMPLETE
-    onProcessingRegistration: function(promise) {
-        var self = this;
-        promise.done(function(response) {
-            self.setState({
-                busy: false
-            });
-            if (!response || !response.access_token) {
-                console.warn(
-                    "FIXME: Register fulfilled without a final response, " +
-                    "did you break the promise chain?"
-                );
-                // no matter, we'll grab it direct
-                response = self.registerLogic.getCredentials();
-            }
-            if (!response || !response.user_id || !response.access_token) {
-                console.error("Final response is missing keys.");
-                self.setState({
-                    errorText: "Registration failed on server"
-                });
-                return;
-            }
-            self.props.onLoggedIn({
-                userId: response.user_id,
-                deviceId: response.device_id,
-                homeserverUrl: self.registerLogic.getHomeserverUrl(),
-                identityServerUrl: self.registerLogic.getIdentityServerUrl(),
-                accessToken: response.access_token
-            });
+    _onRegistered: function(success, response) {
+        this.setState({
+            // we're still busy until we get unmounted: don't show the registration form again
+            busy: true,
+            doingUIAuth: false,
+        });
+        this.props.onLoggedIn({
+            userId: response.user_id,
+            deviceId: response.device_id,
+            homeserverUrl: this._hsUrl,
+            identityServerUrl: this._isUrl,
+            accessToken: response.access_token,
+        });
 
-            // Done regardless of `teamSelected`. People registering with non-team emails
-            // will just nop. The point of this being we might not have the email address
-            // that the user registered with at this stage (depending on whether this
-            // is the client they initiated registration).
-            if (self._rtsClient) {
-                // Track referral if self.props.referrer set, get team_token in order to
-                // retrieve team config and see welcome page etc.
-                self._rtsClient.trackReferral(
-                    self.props.referrer || '', // Default to empty string = not referred
-                    self.registerLogic.params.idSid,
-                    self.registerLogic.params.clientSecret
-                ).then((data) => {
-                    const teamToken = data.team_token;
-                    // Store for use /w welcome pages
-                    window.localStorage.setItem('mx_team_token', teamToken);
-                    self.props.onTeamMemberRegistered(teamToken);
+        // Done regardless of `teamSelected`. People registering with non-team emails
+        // will just nop. The point of this being we might not have the email address
+        // that the user registered with at this stage (depending on whether this
+        // is the client they initiated registration).
+        if (self._rtsClient) {
+            // Track referral if self.props.referrer set, get team_token in order to
+            // retrieve team config and see welcome page etc.
+            self._rtsClient.trackReferral(
+                self.props.referrer || '', // Default to empty string = not referred
+                self.registerLogic.params.idSid,
+                self.registerLogic.params.clientSecret
+            ).then((data) => {
+                const teamToken = data.team_token;
+                // Store for use /w welcome pages
+                window.localStorage.setItem('mx_team_token', teamToken);
+                self.props.onTeamMemberRegistered(teamToken);
 
-                    self._rtsClient.getTeam(teamToken).then((team) => {
-                        console.log(
-                            `User successfully registered with team ${team.name}`
-                        );
-                        if (!team.rooms) {
-                            return;
+                self._rtsClient.getTeam(teamToken).then((team) => {
+                    console.log(
+                        `User successfully registered with team ${team.name}`
+                    );
+                    if (!team.rooms) {
+                        return;
+                    }
+                    // Auto-join rooms
+                    team.rooms.forEach((room) => {
+                        if (room.auto_join && room.room_id) {
+                            console.log(`Auto-joining ${room.room_id}`);
+                            MatrixClientPeg.get().joinRoom(room.room_id);
                         }
-                        // Auto-join rooms
-                        team.rooms.forEach((room) => {
-                            if (room.auto_join && room.room_id) {
-                                console.log(`Auto-joining ${room.room_id}`);
-                                MatrixClientPeg.get().joinRoom(room.room_id);
-                            }
-                        });
-                    }, (err) => {
-                        console.error('Error getting team config', err);
                     });
                 }, (err) => {
-                    console.error('Error tracking referral', err);
+                    console.error('Error getting team config', err);
                 });
-            }
-
-            if (self.props.brand) {
-                MatrixClientPeg.get().getPushers().done((resp)=>{
-                    var pushers = resp.pushers;
-                    for (var i = 0; i < pushers.length; ++i) {
-                        if (pushers[i].kind == 'email') {
-                            var emailPusher = pushers[i];
-                            emailPusher.data = { brand: self.props.brand };
-                            MatrixClientPeg.get().setPusher(emailPusher).done(() => {
-                                console.log("Set email branding to " + self.props.brand);
-                            }, (error) => {
-                                console.error("Couldn't set email branding: " + error);
-                            });
-                        }
-                    }
-                }, (error) => {
-                    console.error("Couldn't get pushers: " + error);
-                });
-            }
-
-        }, function(err) {
-            if (err.message) {
-                self.setState({
-                    errorText: err.message
-                });
-            }
-            self.setState({
-                busy: false
+            }, (err) => {
+                console.error('Error tracking referral', err);
             });
-            console.log(err);
-        });
+        }
+
+        // Set approipriate branding on the email pusher
+        if (self.props.brand) {
+            MatrixClientPeg.get().getPushers().done((resp)=>{
+                var pushers = resp.pushers;
+                for (var i = 0; i < pushers.length; ++i) {
+                    if (pushers[i].kind == 'email') {
+                        var emailPusher = pushers[i];
+                        emailPusher.data = { brand: self.props.brand };
+                        MatrixClientPeg.get().setPusher(emailPusher).done(() => {
+                            console.log("Set email branding to " + self.props.brand);
+                        }, (error) => {
+                            console.error("Couldn't set email branding: " + error);
+                        });
+                    }
+                }
+            }, (error) => {
+                console.error("Couldn't get pushers: " + error);
+            });
+        }
     },
 
     onFormValidationFailed: function(errCode) {
@@ -316,116 +258,79 @@ module.exports = React.createClass({
         });
     },
 
-    onCaptchaResponse: function(response) {
-        this.registerLogic.tellStage("m.login.recaptcha", {
-            response: response
-        });
-    },
-
     onTeamSelected: function(teamSelected) {
         if (!this._unmounted) {
             this.setState({ teamSelected });
         }
     },
 
-    _getRegisterContentJsx: function() {
-        const Spinner = sdk.getComponent("elements.Spinner");
+    _makeRegisterRequest: function(auth) {
+        let guestAccessToken = this.props.guestAccessToken;
 
-        var currStep = this.registerLogic.getStep();
-        var registerStep;
-        switch (currStep) {
-            case "Register.COMPLETE":
-                break; // NOP
-            case "Register.START":
-            case "Register.STEP_m.login.dummy":
-                // NB. Our 'username' prop is specifically for upgrading
-                // a guest account
-                if (this.state.teamServerBusy) {
-                    registerStep = <Spinner />;
-                    break;
-                }
-                registerStep = (
-                    <RegistrationForm
-                        showEmail={true}
-                        defaultUsername={this.state.formVals.username}
-                        defaultEmail={this.state.formVals.email}
-                        defaultPassword={this.state.formVals.password}
-                        teamsConfig={this.state.teamsConfig}
-                        guestUsername={this.props.username}
-                        minPasswordLength={MIN_PASSWORD_LENGTH}
-                        onError={this.onFormValidationFailed}
-                        onRegisterClick={this.onFormSubmit}
-                        onTeamSelected={this.onTeamSelected}
-                    />
-                );
-                break;
-            case "Register.STEP_m.login.email.identity":
-                registerStep = (
-                    <div>
-                        Please check your email to continue registration.
-                    </div>
-                );
-                break;
-            case "Register.STEP_m.login.recaptcha":
-                var publicKey;
-                var serverParams = this.registerLogic.getServerData().params;
-                if (serverParams && serverParams["m.login.recaptcha"]) {
-                    publicKey = serverParams["m.login.recaptcha"].public_key;
-                }
-
-                registerStep = (
-                    <CaptchaForm sitePublicKey={publicKey}
-                        onCaptchaResponse={this.onCaptchaResponse}
-                    />
-                );
-                break;
-            default:
-                console.error("Unknown register state: %s", currStep);
-                break;
-        }
-        var busySpinner;
-        if (this.state.busy) {
-            busySpinner = (
-                <Spinner />
-            );
+        if (this.state.formVals.username !== this.props.username) {
+            // don't try to upgrade if we changed our username
+            guestAccessToken = null;
         }
 
-        var returnToAppJsx;
-        if (this.props.onCancelClick) {
-            returnToAppJsx =
-                <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
-                    Return to app
-                </a>;
-        }
-
-        return (
-            <div>
-                <h2>Create an account</h2>
-                {registerStep}
-                <div className="mx_Login_error">{this.state.errorText}</div>
-                {busySpinner}
-                <ServerConfig ref="serverConfig"
-                    withToggleButton={ this.registerLogic.getStep() === "Register.START" }
-                    customHsUrl={this.props.customHsUrl}
-                    customIsUrl={this.props.customIsUrl}
-                    defaultHsUrl={this.props.defaultHsUrl}
-                    defaultIsUrl={this.props.defaultIsUrl}
-                    onHsUrlChanged={this.onHsUrlChanged}
-                    onIsUrlChanged={this.onIsUrlChanged}
-                    delayTimeMs={1000} />
-                <div className="mx_Login_error">
-                </div>
-                <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
-                    I already have an account
-                </a>
-                { returnToAppJsx }
-            </div>
+        return this._matrixClient.register(
+            this.state.formVals.username,
+            this.state.formVals.password,
+            undefined, // session id: included in the auth dict already
+            auth,
+            // Only send the bind_email param if we're sending username / pw params
+            // (Since we need to send no params at all to use the ones saved in the
+            // session).
+            Boolean(this.state.formVals.username) || undefined,
+            guestAccessToken,
         );
     },
 
+    _getUIAuthInputs() {
+        return {
+            emailAddress: this.state.formVals.email,
+            phoneCountry: this.state.formVals.phoneCountry,
+            phoneNumber: this.state.formVals.phoneNumber,
+        }
+    },
+
     render: function() {
-        var LoginHeader = sdk.getComponent('login.LoginHeader');
-        var LoginFooter = sdk.getComponent('login.LoginFooter');
+        const LoginHeader = sdk.getComponent('login.LoginHeader');
+        const LoginFooter = sdk.getComponent('login.LoginFooter');
+        const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
+        const Spinner = sdk.getComponent("elements.Spinner");
+
+        let registerBody;
+        if (this.state.doingUIAuth) {
+            registerBody = (
+                <InteractiveAuth
+                    matrixClient={this._matrixClient}
+                    makeRequest={this._makeRegisterRequest}
+                    onFinished={this._onRegistered}
+                    inputs={this._getUIAuthInputs()}
+                    makeRegistrationUrl={this.props.makeRegistrationUrl}
+                    sessionId={this.props.sessionId}
+                    clientSecret={this.props.clientSecret}
+                    emailSid={this.props.idSid}
+                />
+            );
+        } else if (this.state.busy || this.state.teamServerBusy) {
+            registerBody = <Spinner />;
+        } else {
+            registerBody = (
+                <RegistrationForm
+                    defaultUsername={this.state.formVals.username}
+                    defaultEmail={this.state.formVals.email}
+                    defaultPassword={this.state.formVals.password}
+                    teamsConfig={this.state.teamsConfig}
+                    guestUsername={this.props.username}
+                    minPasswordLength={MIN_PASSWORD_LENGTH}
+                    onError={this.onFormValidationFailed}
+                    onRegisterClick={this.onFormSubmit}
+                    onTeamSelected={this.onTeamSelected}
+                />
+            );
+        }
+
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
@@ -435,7 +340,7 @@ module.exports = React.createClass({
                             this.state.teamSelected.domain + "/icon.png" :
                             null}
                     />
-                    {this._getRegisterContentJsx()}
+                    {registerBody}
                     <LoginFooter />
                 </div>
             </div>

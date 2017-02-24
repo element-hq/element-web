@@ -27,6 +27,9 @@ export default React.createClass({
     displayName: 'InteractiveAuthDialog',
 
     propTypes: {
+        // matrix client to use for UI auth requests
+        matrixClient: React.PropTypes.object.isRequired,
+
         // response from initial request. If not supplied, will do a request on
         // mount.
         authData: React.PropTypes.shape({
@@ -60,6 +63,7 @@ export default React.createClass({
             >
                 <div>
                     <InteractiveAuth ref={this._collectInteractiveAuth}
+                        matrixClient={this.props.matrixClient}
                         authData={this.props.authData}
                         makeRequest={this.props.makeRequest}
                         onFinished={this.props.onFinished}

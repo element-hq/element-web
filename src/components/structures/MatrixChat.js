@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -321,23 +322,19 @@ module.exports = React.createClass({
                 Lifecycle.logout();
                 break;
             case 'start_registration':
-                var newState = payload.params || {};
-                newState.screen = 'register';
-                if (
-                    payload.params &&
-                    payload.params.client_secret &&
-                    payload.params.session_id &&
-                    payload.params.hs_url &&
-                    payload.params.is_url &&
-                    payload.params.sid
-                ) {
-                    newState.register_client_secret = payload.params.client_secret;
-                    newState.register_session_id = payload.params.session_id;
-                    newState.register_hs_url = payload.params.hs_url;
-                    newState.register_is_url = payload.params.is_url;
-                    newState.register_id_sid = payload.params.sid;
-                }
-                this.setStateForNewScreen(newState);
+                const params = payload.params || {};
+                this.setStateForNewScreen({
+                    screen: 'register',
+                    // these params may be undefined, but if they are,
+                    // unset them from our state: we don't want to
+                    // resume a previous registration session if the
+                    // user just clicked 'register'
+                    register_client_secret: params.client_secret,
+                    register_session_id: params.session_id,
+                    register_hs_url: params.hs_url,
+                    register_is_url: params.is_url,
+                    register_id_sid: params.sid,
+                });
                 this.notifyNewScreen('register');
                 break;
             case 'start_login':
@@ -1070,6 +1067,13 @@ module.exports = React.createClass({
         this.setState({currentRoomId: room_id});
     },
 
+    _makeRegistrationUrl: function(params) {
+        if (this.props.startingFragmentQueryParams.referrer) {
+            params.referrer = this.props.startingFragmentQueryParams.referrer;
+        }
+        return this.props.makeRegistrationUrl(params);
+    },
+
     render: function() {
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
         var LoggedInView = sdk.getComponent('structures.LoggedInView');
@@ -1124,7 +1128,6 @@ module.exports = React.createClass({
                     sessionId={this.state.register_session_id}
                     idSid={this.state.register_id_sid}
                     email={this.props.startingFragmentQueryParams.email}
-                    referrer={this.props.startingFragmentQueryParams.referrer}
                     username={this.state.upgradeUsername}
                     guestAccessToken={this.state.guestAccessToken}
                     defaultHsUrl={this.getDefaultHsUrl()}
@@ -1133,7 +1136,7 @@ module.exports = React.createClass({
                     teamServerConfig={this.props.config.teamServerConfig}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
-                    registrationUrl={this.props.registrationUrl}
+                    makeRegistrationUrl={this.props.makeRegistrationUrl}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onTeamMemberRegistered={this.onTeamMemberRegistered}
                     onLoggedIn={this.onRegistered}

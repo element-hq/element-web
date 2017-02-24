@@ -27,6 +27,9 @@ export default React.createClass({
     displayName: 'InteractiveAuth',
 
     propTypes: {
+        // matrix client to use for UI auth requests
+        matrixClient: React.PropTypes.object.isRequired,
+
         // response from initial request. If not supplied, will do a request on
         // mount.
         authData: React.PropTypes.shape({
@@ -43,6 +46,17 @@ export default React.createClass({
         //     auth was completed sucessfully, false if canceled.
         // @param result The result of the authenticated call
         onFinished: React.PropTypes.func.isRequired,
+
+        // Inputs provided by the user to the auth process
+        // and used by various stages. As passed to js-sdk
+        // interactive-auth
+        inputs: React.PropTypes.object,
+
+        // As js-sdk interactive-auth
+        makeRegistrationUrl: React.PropTypes.func,
+        sessionId: React.PropTypes.string,
+        clientSecret: React.PropTypes.string,
+        emailSid: React.PropTypes.string,
     },
 
     getInitialState: function() {
@@ -61,6 +75,13 @@ export default React.createClass({
             authData: this.props.authData,
             doRequest: this._requestCallback,
             startAuthStage: this._startAuthStage,
+            inputs: this.props.inputs,
+            stateUpdated: this._authStateUpdated,
+            makeRegistrationUrl: this.props.makeRegistrationUrl,
+            matrixClient: this.props.matrixClient,
+            sessionId: this.props.sessionId,
+            clientSecret: this.props.clientSecret,
+            emailSid: this.props.emailSid,
         });
 
         this._authLogic.attemptAuth().then((result) => {
@@ -82,11 +103,14 @@ export default React.createClass({
         this._unmounted = true;
     },
 
-    _startAuthStage: function(stageType, error) {
+    _authStateUpdated: function(stageType, stageState) {
+        const oldStage = this.state.authStage;
         this.setState({
             authStage: stageType,
-            errorText: error ? error.error : null,
-        }, this._setFocus);
+            stageState: stageState,
+        }, () => {
+            if (oldStage != stageType) this._setFocus();
+        });
     },
 
     _requestCallback: function(auth) {
@@ -117,15 +141,20 @@ export default React.createClass({
 
     _renderCurrentStage: function() {
         const stage = this.state.authStage;
-        var StageComponent = getEntryComponentForLoginType(stage);
+        if (!stage) return null;
+
+        const StageComponent = getEntryComponentForLoginType(stage);
         return (
             <StageComponent ref="stageComponent"
                 loginType={stage}
+                matrixClient={this.props.matrixClient}
                 authSessionId={this._authLogic.getSessionId()}
                 stageParams={this._authLogic.getStageParams(stage)}
                 submitAuthDict={this._submitAuthDict}
                 errorText={this.state.stageErrorText}
                 busy={this.state.busy}
+                inputs={this.props.inputs}
+                stageState={this.state.stageState}
             />
         );
     },
