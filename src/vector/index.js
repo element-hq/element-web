@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -147,16 +148,30 @@ var onNewScreen = function(screen) {
 // If we're in electron, we should never pass through a file:// URL otherwise
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use riot.im/app for now instead.
-var makeRegistrationUrl = function() {
+var makeRegistrationUrl = function(params) {
+    let url;
     if (window.location.protocol === "file:") {
-        return 'https://riot.im/app/#/register';
+        url = 'https://riot.im/app/#/register';
+    } else {
+        url = (
+            window.location.protocol + '//' +
+            window.location.host +
+            window.location.pathname +
+            '#/register'
+        );
     }
-    else {
-        return window.location.protocol + '//' +
-               window.location.host +
-               window.location.pathname +
-               '#/register';
+
+    const keys = Object.keys(params);
+    for (let i = 0; i < keys.length; ++i) {
+        if (i == 0) {
+            url += '?';
+        } else {
+            url += '&';
+        }
+        const k = keys[i];
+        url += k + '=' + encodeURIComponent(params[k]);
     }
+    return url;
 }
 
 window.addEventListener('hashchange', onHashChange);
@@ -258,7 +273,7 @@ async function loadApp() {
         window.matrixChat = ReactDOM.render(
             <MatrixChat
                 onNewScreen={onNewScreen}
-                registrationUrl={makeRegistrationUrl()}
+                makeRegistrationUrl={makeRegistrationUrl}
                 ConferenceHandler={VectorConferenceHandler}
                 config={configJson}
                 realQueryParams={params}
