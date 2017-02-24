@@ -184,6 +184,7 @@ export const EmailIdentityAuthEntry = React.createClass({
         errorText: React.PropTypes.string,
         authSessionId: React.PropTypes.string.isRequired,
         inputs: React.PropTypes.object.isRequired,
+        stageState: React.PropTypes.object.isRequired,
     },
 
     render: function() {

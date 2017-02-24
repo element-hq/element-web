@@ -57,6 +57,10 @@ export default React.createClass({
         sessionId: React.PropTypes.string,
         clientSecret: React.PropTypes.string,
         emailSid: React.PropTypes.string,
+
+        // If true, poll to see if the auth flow has been completed
+        // out-of-band
+        poll: React.PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -97,10 +101,21 @@ export default React.createClass({
                 errorText: msg
             });
         }).done();
+
+        this._intervalId = null;
+        if (this.props.poll) {
+            this._intervalId = setInterval(() => {
+                this._authLogic.poll();
+            }, 2000);
+        }
     },
 
     componentWillUnmount: function() {
         this._unmounted = true;
+
+        if (this._intervalId !== null) {
+            clearInterval(this._intervalId);
+        }
     },
 
     _authStateUpdated: function(stageType, stageState) {

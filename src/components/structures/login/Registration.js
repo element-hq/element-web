@@ -311,6 +311,7 @@ module.exports = React.createClass({
                     sessionId={this.props.sessionId}
                     clientSecret={this.props.clientSecret}
                     emailSid={this.props.idSid}
+                    poll={true}
                 />
             );
         } else if (this.state.busy || this.state.teamServerBusy) {
