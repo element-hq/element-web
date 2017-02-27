@@ -251,9 +251,9 @@ limitations under the License.
     padding-left: 60px;
 }
 
-.mx_EventTile_selected .mx_EventTile_info .mx_EventTile_line,
-.mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_info .mx_EventTile_line,
-.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_info .mx_EventTile_line {
+.mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line,
+.mx_EventTile:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
+.mx_EventTile:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line {
     padding-left: 78px;
 }
 
