@@ -318,8 +318,12 @@ module.exports = WithMatrixClient(React.createClass({
                     this.props.readReceiptMap[userId] = readReceiptInfo;
                 }
             }
+            // TODO: we keep the extra read avatars in the dom to make animation simpler
+            // we could optimise this to reduce the dom size.
+            if (!hidden) {
+                left -= 15;
+            }
 
-            //console.log("i = " + i + ", MAX_READ_AVATARS = " + MAX_READ_AVATARS + ", allReadAvatars = " + this.state.allReadAvatars + " visibility = " + style.visibility);
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
                 <ReadReceiptMarker key={userId} member={receipt.roomMember}
@@ -332,12 +336,6 @@ module.exports = WithMatrixClient(React.createClass({
                     showFullTimestamp={receipt.ts >= dayAfterEventTime}
                 />
             );
-
-            // TODO: we keep the extra read avatars in the dom to make animation simpler
-            // we could optimise this to reduce the dom size.
-            if (!hidden) {
-                left -= 15;
-            }
         }
         var remText;
         if (!this.state.allReadAvatars) {
@@ -345,9 +343,8 @@ module.exports = WithMatrixClient(React.createClass({
             if (remainder > 0) {
                 remText = <span className="mx_EventTile_readAvatarRemainder"
                     onClick={this.toggleAllReadAvatars}
-                    style={{ left: left }}>{ remainder }+
+                    style={{ right: -(left - 15) }}>{ remainder }+
                 </span>;
-                left -= 15;
             }
         }
 
