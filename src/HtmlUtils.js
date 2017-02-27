@@ -141,18 +141,20 @@ var sanitizeHtmlParams = {
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
             return { tagName: tagName, attribs : attribs };
         },
-        'font': function(tagName, attribs) {
+        '*': function(tagName, attribs) {
             // Only allow certain CSS attributes to avoid XSS attacks
             // Sanitizing values to avoid `url(...)` and `expression(...)` attacks
             if (!attribs.style) {
-                return { tagName: tagName, attribs : attribs };
+                return { tagName: tagName, attribs: attribs };
             }
 
             const pairs = attribs.style.split(';');
             let sanitisedStyle = "";
             for (let i = 0; i < pairs.length; i++) {
                 const pair = pairs[i].split(':');
-                if (!Object.keys(ALLOWED_CSS).includes(pair[0]) || !ALLOWED_CSS[pair[0]].test(pair[1])) {
+                if (!Object.keys(ALLOWED_CSS).includes(pair[0]) ||
+                    !ALLOWED_CSS[pair[0]].test(pair[1])
+                ) {
                     continue;
                 }
                 sanitisedStyle += pair[0] + ":" + pair[1] + ";";
@@ -164,7 +166,7 @@ var sanitizeHtmlParams = {
                 delete attribs.style;
             }
 
-            return { tagName: tagName, attribs : attribs };
+            return { tagName: tagName, attribs: attribs };
         },
     },
 };
