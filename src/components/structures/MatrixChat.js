@@ -350,13 +350,21 @@ module.exports = React.createClass({
                 });
                 break;
             case 'start_upgrade_registration':
-                // stash our guest creds so we can backout if needed
+                // also stash our credentials, then if we restore the session,
+                // we can just do it the same way whether we started upgrade
+                // registration or explicitly logged out
                 this.guestCreds = MatrixClientPeg.getCredentials();
                 this.setStateForNewScreen({
                     screen: "register",
                     upgradeUsername: MatrixClientPeg.get().getUserIdLocalpart(),
                     guestAccessToken: MatrixClientPeg.get().getAccessToken(),
                 });
+
+                // stop the client: if we are syncing whilst the registration
+                // is completed in another browser, we'll be 401ed for using
+                // a guest access token for a non-guest account.
+                Lifecycle.stopMatrixClient();
+
                 this.notifyNewScreen('register');
                 break;
             case 'start_password_recovery':
