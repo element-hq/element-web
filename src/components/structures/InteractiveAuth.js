@@ -91,6 +91,7 @@ export default React.createClass({
         this._authLogic.attemptAuth().then((result) => {
             this.props.onFinished(true, result);
         }).catch((error) => {
+            this.props.onFinished(false, error);
             console.error("Error during user-interactive auth:", error);
             if (this._unmounted) {
                 return;

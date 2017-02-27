@@ -20,7 +20,6 @@ import Matrix from 'matrix-js-sdk';
 var React = require('react');
 
 var sdk = require('../../../index');
-var ServerConfig = require("../../views/login/ServerConfig");
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var RegistrationForm = require("../../views/login/RegistrationForm");
 var CaptchaForm = require("../../views/login/CaptchaForm");
@@ -86,14 +85,14 @@ module.exports = React.createClass({
             // If we've been given a session ID, we're resuming
             // straight back into UI auth
             doingUIAuth: Boolean(this.props.sessionId),
+            hsUrl: this.props.customHsUrl,
+            isUrl: this.props.customIsUrl,
         };
     },
 
     componentWillMount: function() {
         this._unmounted = false;
 
-        this._hsUrl = this.props.customHsUrl;
-        this._isUrl = this.props.customIsUrl;
         this._replaceClient();
 
         if (
@@ -127,24 +126,27 @@ module.exports = React.createClass({
     },
 
     onHsUrlChanged: function(newHsUrl) {
-        this._hsUrl = newHsUrl;
+        this.setState({
+            hsUrl: newHsUrl,
+        });
         this._replaceClient();
     },
 
     onIsUrlChanged: function(newIsUrl) {
-        this._isUrl = newIsUrl;
+        this.setState({
+            isUrl: newIsUrl,
+        });
         this._replaceClient();
     },
 
     _replaceClient: function() {
         this._matrixClient = Matrix.createClient({
-            baseUrl: this._hsUrl,
-            idBaseUrl: this._isUrl,
+            baseUrl: this.state.hsUrl,
+            idBaseUrl: this.state.isUrl,
         });
     },
 
     onFormSubmit: function(formVals) {
-        var self = this;
         this.setState({
             errorText: "",
             busy: true,
@@ -153,7 +155,16 @@ module.exports = React.createClass({
         });
     },
 
-    _onRegistered: function(success, response) {
+    _onUIAuthFinished: function(success, response) {
+        if (!success) {
+            this.setState({
+                busy: false,
+                doingUIAuth: false,
+                errorText: response.message || response.toString(),
+            });
+            return;
+        }
+
         this.setState({
             // we're still busy until we get unmounted: don't show the registration form again
             busy: true,
@@ -162,8 +173,8 @@ module.exports = React.createClass({
         this.props.onLoggedIn({
             userId: response.user_id,
             deviceId: response.device_id,
-            homeserverUrl: this._hsUrl,
-            identityServerUrl: this._isUrl,
+            homeserverUrl: this.state.hsUrl,
+            identityServerUrl: this.state.isUrl,
             accessToken: response.access_token,
         });
 
@@ -267,8 +278,12 @@ module.exports = React.createClass({
     _makeRegisterRequest: function(auth) {
         let guestAccessToken = this.props.guestAccessToken;
 
-        if (this.state.formVals.username !== this.props.username) {
+        if (
+            this.state.formVals.username !== this.props.username ||
+            this.state.hsUrl != this.props.defaultHsUrl
+        ) {
             // don't try to upgrade if we changed our username
+            // or are registering on a different HS
             guestAccessToken = null;
         }
 
@@ -298,6 +313,7 @@ module.exports = React.createClass({
         const LoginFooter = sdk.getComponent('login.LoginFooter');
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
         const Spinner = sdk.getComponent("elements.Spinner");
+        const ServerConfig = sdk.getComponent('views.login.ServerConfig');
 
         let registerBody;
         if (this.state.doingUIAuth) {
@@ -305,7 +321,7 @@ module.exports = React.createClass({
                 <InteractiveAuth
                     matrixClient={this._matrixClient}
                     makeRequest={this._makeRegisterRequest}
-                    onFinished={this._onRegistered}
+                    onFinished={this._onUIAuthFinished}
                     inputs={this._getUIAuthInputs()}
                     makeRegistrationUrl={this.props.makeRegistrationUrl}
                     sessionId={this.props.sessionId}
@@ -317,21 +333,50 @@ module.exports = React.createClass({
         } else if (this.state.busy || this.state.teamServerBusy) {
             registerBody = <Spinner />;
         } else {
+            let guestUsername = this.props.username;
+            if (this.state.hsUrl != this.props.defaultHsUrl) {
+                guestUsername = null;
+            }
+            let errorSection;
+            if (this.state.errorText) {
+                errorSection = <div className="mx_Login_error">{this.state.errorText}</div>;
+            }
             registerBody = (
-                <RegistrationForm
-                    defaultUsername={this.state.formVals.username}
-                    defaultEmail={this.state.formVals.email}
-                    defaultPassword={this.state.formVals.password}
-                    teamsConfig={this.state.teamsConfig}
-                    guestUsername={this.props.username}
-                    minPasswordLength={MIN_PASSWORD_LENGTH}
-                    onError={this.onFormValidationFailed}
-                    onRegisterClick={this.onFormSubmit}
-                    onTeamSelected={this.onTeamSelected}
-                />
+                <div>
+                    <RegistrationForm
+                        defaultUsername={this.state.formVals.username}
+                        defaultEmail={this.state.formVals.email}
+                        defaultPassword={this.state.formVals.password}
+                        teamsConfig={this.state.teamsConfig}
+                        guestUsername={guestUsername}
+                        minPasswordLength={MIN_PASSWORD_LENGTH}
+                        onError={this.onFormValidationFailed}
+                        onRegisterClick={this.onFormSubmit}
+                        onTeamSelected={this.onTeamSelected}
+                    />
+                    {errorSection}
+                    <ServerConfig ref="serverConfig"
+                        withToggleButton={true}
+                        customHsUrl={this.props.customHsUrl}
+                        customIsUrl={this.props.customIsUrl}
+                        defaultHsUrl={this.props.defaultHsUrl}
+                        defaultIsUrl={this.props.defaultIsUrl}
+                        onHsUrlChanged={this.onHsUrlChanged}
+                        onIsUrlChanged={this.onIsUrlChanged}
+                        delayTimeMs={1000}
+                    />
+                </div>
             );
         }
 
+        let returnToAppJsx;
+        if (this.props.onCancelClick) {
+            returnToAppJsx = (
+                <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
+                    Return to app
+                </a>
+            );
+        }
         return (
             <div className="mx_Login">
                 <div className="mx_Login_box">
@@ -341,7 +386,12 @@ module.exports = React.createClass({
                             this.state.teamSelected.domain + "/icon.png" :
                             null}
                     />
+                    <h2>Create an account</h2>
                     {registerBody}
+                    <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
+                        I already have an account
+                    </a>
+                    {returnToAppJsx}
                     <LoginFooter />
                 </div>
             </div>
