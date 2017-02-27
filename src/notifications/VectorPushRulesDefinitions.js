@@ -63,10 +63,20 @@ class VectorPushRuleDefinition {
  */
 module.exports = {
     // Messages containing user's display name
-    // (skip contains_user_name which is too geeky)
     ".m.rule.contains_display_name": new VectorPushRuleDefinition({
         kind: "override",
-        description: "Messages containing my name",
+        description: "Messages containing my display name",
+        vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DISABLED
+        }
+    }),
+
+    // Messages containing user's username (localpart/MXID)
+    ".m.rule.contains_user_name": new VectorPushRuleDefinition({
+        kind: "override",
+        description: "Messages containing my username",
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
             on: StandardActions.ACTION_NOTIFY,
             loud: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
